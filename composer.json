@@ -14,11 +14,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.40",
         "laravel/horizon": "^5.7",
-        "laravel/nova": "~3.0",
         "laravel/tinker": "^2.5",
-        "predis/predis": "^1.1",
-        "robograding/nova-theme": "*",
-        "titasgailius/search-relations": "^2.0"
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",
@@ -66,15 +63,5 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://nova.laravel.com"
-        },
-        {
-            "type": "path",
-            "url": "./nova-components/NovaTheme"
-        }
-    ]
+    "prefer-stable": true
 }

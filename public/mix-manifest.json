@@ -1,6 +1,5 @@
 {
-    "/js/index.js": "/js/index.js",
-    "/js/manifest.js": "/js/manifest.js",
-    "/css/app.css": "/css/app.css",
-    "/js/vendor.js": "/js/vendor.js"
+    "/apps/dashboard/index.js": "/apps/dashboard/index.d7cd8e11258e13e319a7.js",
+    "/apps/dashboard/manifest.js": "/apps/dashboard/manifest.9bea14aa7ce2fccbe8b2.js",
+    "/apps/dashboard/vendor.js": "/apps/dashboard/vendor.837df7528214edd87350.js"
 }

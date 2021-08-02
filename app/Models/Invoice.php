@@ -14,10 +14,7 @@ class Invoice extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'invoice_number',
-        'path',
-    ];
+    protected $fillable = ['invoice_number', 'path'];
 
     /**
      * The attributes that should be cast to native types.

@@ -14,12 +14,7 @@ class OrderItemShipment extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'shipment_date',
-        'tracking_number',
-        'tracking_url',
-        'shipping_method_id',
-    ];
+    protected $fillable = ['shipment_date', 'tracking_number', 'tracking_url', 'shipping_method_id'];
 
     /**
      * The attributes that should be cast to native types.
@@ -31,7 +26,6 @@ class OrderItemShipment extends Model
         'shipment_date' => 'timestamp',
         'shipping_method_id' => 'integer',
     ];
-
 
     public function shippingMethod()
     {

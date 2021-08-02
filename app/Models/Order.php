@@ -48,7 +48,6 @@ class Order extends Model
         'arrived_at' => 'date',
     ];
 
-
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);

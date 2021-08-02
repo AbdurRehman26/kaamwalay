@@ -14,6 +14,8 @@ class ShippingMethodSeeder extends Seeder
      */
     public function run()
     {
-        ShippingMethod::factory()->count(5)->create();
+        ShippingMethod::factory()
+            ->count(5)
+            ->create();
     }
 }

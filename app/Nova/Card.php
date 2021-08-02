@@ -28,9 +28,7 @@ class Card extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'name',
-    ];
+    public static $search = ['id', 'name'];
 
     /**
      * Get the fields displayed by the resource.
@@ -40,10 +38,7 @@ class Card extends Resource
      */
     public function fields(Request $request)
     {
-        return [
-            ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name'),
-        ];
+        return [ID::make(__('ID'), 'id')->sortable(), Text::make('Name')];
     }
 
     /**

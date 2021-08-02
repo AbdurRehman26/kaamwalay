@@ -32,9 +32,7 @@ class Submission extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'order_number'
-    ];
+    public static $search = ['id', 'order_number'];
 
     /**
      * The relationship columns that should be searched.
@@ -56,7 +54,9 @@ class Submission extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('Order #', 'order_number')->exceptOnForms(),
-            BelongsTo::make('User')->showCreateRelationButton()->searchable(),
+            BelongsTo::make('User')
+                ->showCreateRelationButton()
+                ->searchable(),
             Currency::make('Grand Total', 'grand_total'),
             Date::make('Date Placed', 'created_at')->exceptOnForms(),
             Date::make('Date Arrived', 'arrived_at')->exceptOnForms(),
@@ -106,7 +106,7 @@ class Submission extends Resource
     public function actions(Request $request)
     {
         return [
-            (new Actions\MarkSubmissionAsArrived)
+            (new Actions\MarkSubmissionAsArrived())
                 ->confirmText('Are you sure you want to mark this submission as arrived?')
                 ->confirmButtonText('Yes')
                 ->cancelButtonText("Don't mark"),

@@ -14,9 +14,7 @@ class PaymentMethod extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-    ];
+    protected $fillable = ['name'];
 
     /**
      * The attributes that should be cast to native types.

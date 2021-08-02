@@ -1,6 +1,5 @@
 const mix = require('laravel-mix');
-const pkg = require("./package.json");
-const deps = Object.keys(pkg.dependencies);
+const convertToFileHash = require('laravel-mix-make-file-hash');
 
 /*
  |--------------------------------------------------------------------------
@@ -13,9 +12,25 @@ const deps = Object.keys(pkg.dependencies);
  |
  */
 
-mix.ts("resources/js/index.tsx", "public/js")
+mix.ts('resources/ts/dashboard/index.tsx', 'public/apps/dashboard')
     .react()
-    .postCss("resources/css/app.css", "public/css", [
-        //
-    ])
-    .extract(deps);
+    .extract()
+    .browserSync(process.env.APP_URL || 'http://laravel.test')
+    .override((webpackConfig) => {
+        webpackConfig.module.rules[1].test = /\.(png|jpe?g|gif|webp)$/;
+        webpackConfig.module.rules.push({
+            test: /\.svg$/,
+            use: ['@svgr/webpack', 'url-loader'],
+        });
+    })
+    .sourceMaps(false);
+
+if (mix.inProduction()) {
+    mix.version();
+    mix.then(async () => {
+        await convertToFileHash({
+            publicPath: 'public',
+            manifestFilePath: 'public/mix-manifest.json',
+        });
+    });
+}

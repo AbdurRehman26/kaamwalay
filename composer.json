@@ -11,22 +11,22 @@
         "php": "^7.3|^8.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.40",
+        "guzzlehttp/guzzle": "^7.3",
+        "laravel/framework": "^8.52",
         "laravel/horizon": "^5.7",
-        "laravel/tinker": "^2.5",
+        "laravel/tinker": "^2.6",
         "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",
         "brianium/paratest": "^6.3",
-        "facade/ignition": "^2.5",
-        "fakerphp/faker": "^1.9.1",
+        "facade/ignition": "^2.11",
+        "fakerphp/faker": "^1.15",
         "laravel-shift/blueprint": "^1.24",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3"
+        "laravel/sail": "^1.8",
+        "mockery/mockery": "^1.4",
+        "nunomaduro/collision": "^5.6",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {

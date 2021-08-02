@@ -41,7 +41,6 @@ class OrderItem extends Model
         'declared_value' => 'decimal:2',
     ];
 
-
     public function order()
     {
         return $this->belongsTo(\App\Models\Order::class);

@@ -14,6 +14,8 @@ class PaymentPlanSeeder extends Seeder
      */
     public function run()
     {
-        PaymentPlan::factory()->count(5)->create();
+        PaymentPlan::factory()
+            ->count(5)
+            ->create();
     }
 }

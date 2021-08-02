@@ -14,11 +14,7 @@ class OrderStatus extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'description',
-        'order_state_id',
-    ];
+    protected $fillable = ['name', 'description', 'order_state_id'];
 
     /**
      * The attributes that should be cast to native types.
@@ -29,7 +25,6 @@ class OrderStatus extends Model
         'id' => 'integer',
         'order_state_id' => 'integer',
     ];
-
 
     public function orderState()
     {

@@ -30,9 +30,7 @@ class OrderItem extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id',
-    ];
+    public static $search = ['id'];
 
     public static $displayInNavigation = false;
 

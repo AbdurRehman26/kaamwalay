@@ -14,6 +14,8 @@ class CustomerAddressSeeder extends Seeder
      */
     public function run()
     {
-        CustomerAddress::factory()->count(5)->create();
+        CustomerAddress::factory()
+            ->count(5)
+            ->create();
     }
 }

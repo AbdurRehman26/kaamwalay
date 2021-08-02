@@ -29,9 +29,7 @@ class User extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'name', 'email',
-    ];
+    public static $search = ['id', 'name', 'email'];
 
     /**
      * Get the fields displayed by the resource.

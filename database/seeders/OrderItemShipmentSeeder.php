@@ -14,6 +14,8 @@ class OrderItemShipmentSeeder extends Seeder
      */
     public function run()
     {
-        OrderItemShipment::factory()->count(5)->create();
+        OrderItemShipment::factory()
+            ->count(5)
+            ->create();
     }
 }

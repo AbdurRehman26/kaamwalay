@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Namespace
@@ -14,7 +13,6 @@ return [
     |
     */
     'namespace' => 'App',
-
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +27,6 @@ return [
     */
     'models_namespace' => 'Models',
     'controllers_namespace' => 'Http\\Controllers',
-
 
     /*
     |--------------------------------------------------------------------------
@@ -74,7 +71,6 @@ return [
 
     'on_delete' => 'cascade',
     'on_update' => 'cascade',
-
 
     /*
     |--------------------------------------------------------------------------
@@ -159,5 +155,4 @@ return [
         'resource' => \Blueprint\Generators\Statements\ResourceGenerator::class,
         'view' => \Blueprint\Generators\Statements\ViewGenerator::class,
     ],
-
 ];

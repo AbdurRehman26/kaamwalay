@@ -14,6 +14,8 @@ class OrderAddressSeeder extends Seeder
      */
     public function run()
     {
-        OrderAddress::factory()->count(5)->create();
+        OrderAddress::factory()
+            ->count(5)
+            ->create();
     }
 }

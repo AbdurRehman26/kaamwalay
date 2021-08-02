@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Nova\Actions\Actionable;
 
 class Order extends Model
 {
-    use HasFactory;
+    use Actionable, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -44,7 +45,7 @@ class Order extends Model
         'payment_method_id' => 'integer',
         'shipping_method_id' => 'integer',
         'invoice_id' => 'integer',
-        'arrived_at' => 'timestamp',
+        'arrived_at' => 'date',
     ];
 
 
@@ -81,5 +82,10 @@ class Order extends Model
     public function invoice()
     {
         return $this->belongsTo(\App\Models\Invoice::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

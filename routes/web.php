@@ -19,4 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'getDashboard']);
-Route::get('/dashboard/{path*}', [DashboardController::class, 'getDashboard'])->where(['path' => '.*']);
+Route::get('/dashboard/{path}', [DashboardController::class, 'getDashboard'])->where(['path' => '.*']);

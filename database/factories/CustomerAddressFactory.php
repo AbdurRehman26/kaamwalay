@@ -25,7 +25,7 @@ class CustomerAddressFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::factory()->withRole(config('permission.roles.customer')),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'address' => $this->faker->address,

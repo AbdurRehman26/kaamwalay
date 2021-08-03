@@ -23,8 +23,9 @@ class PaymentPlan extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'price' => 'decimal:2',
-        'max_protection_amount' => 'decimal:2',
+        'price' => 'float',
+        'turnaround' => 'string',
+        'max_protection_amount' => 'float',
         'display_position' => 'integer',
     ];
 }

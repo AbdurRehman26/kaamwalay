@@ -1,6 +1,6 @@
 import Container from '@material-ui/core/Container';
-import React, { PropsWithChildren } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { PropsWithChildren, useMemo } from 'react';
+import { matchPath, useLocation } from 'react-router-dom';
 
 import LayoutHeader from './LayoutHeader';
 import LayoutSidebar from './LayoutSidebar';
@@ -14,7 +14,16 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
     const { children, exclude } = props;
     const location = useLocation();
 
-    if (location.pathname === exclude) {
+    const isExcluded = useMemo(
+        () =>
+            !!matchPath(location.pathname, {
+                path: exclude,
+                exact: true,
+            }),
+        [exclude, location.pathname],
+    );
+
+    if (isExcluded) {
         return children as any;
     }
 

@@ -1,31 +1,39 @@
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import InputBase from '@material-ui/core/InputBase';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import { SubmissionsTable } from '@dashboard/components/Submissions/SubmissionsTable';
 
 const useStyles = makeStyles(
     {
-        pageTitle: {
-            fontStyle: 'normal',
-            fontWeight: 'bold',
-            fontSize: '32px',
-            lineHeight: '44px',
-            color: 'rgba(0, 0, 0, 0.87)',
+        header: {
+            marginBottom: 24,
         },
-        pageHeader: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
+        headline: {
+            fontWeight: 500,
         },
         newSubmissionBtn: {
-            color: '#fff',
-            borderRadius: '24px',
-            padding: '12px',
-            paddingLeft: '22px',
-            paddingRight: '22px',
+            borderRadius: 24,
+            padding: '12px 24px',
+        },
+        searchBarHolder: {
+            padding: '0 20px',
+        },
+        searchBar: {
+            width: '100%',
+            height: 48,
+            border: '1px solid #ddd',
+            backgroundColor: '#fff',
+            borderRadius: 24,
+        },
+        searchBarIcon: {
+            margin: '0 14px',
         },
     },
     {
@@ -35,20 +43,31 @@ const useStyles = makeStyles(
 
 export function ListSubmissionsPage() {
     const classes = useStyles();
-    const history = useHistory();
+
     return (
-        <div className={classes.pageHeader}>
-            <Typography variant={'h1'} className={classes.pageTitle}>
-                Submissions
-            </Typography>
-            <Button
-                variant={'contained'}
-                color={'primary'}
-                onClick={() => history.push('/submissions/new')}
-                className={classes.newSubmissionBtn}
-            >
-                New Submission
-            </Button>
-        </div>
+        <>
+            <Grid container direction={'row'} alignItems={'center'} className={classes.header}>
+                <Typography variant={'h5'} className={classes.headline}>
+                    Submissions
+                </Typography>
+                <Box flexGrow={1} className={classes.searchBarHolder}>
+                    <InputBase
+                        className={classes.searchBar}
+                        placeholder="Search…"
+                        startAdornment={<SearchIcon className={classes.searchBarIcon} />}
+                    />
+                </Box>
+                <Button
+                    component={Link}
+                    to={'/submissions/new'}
+                    variant={'contained'}
+                    color={'primary'}
+                    className={classes.newSubmissionBtn}
+                >
+                    New Submission
+                </Button>
+            </Grid>
+            <SubmissionsTable />
+        </>
     );
 }

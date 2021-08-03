@@ -18,4 +18,5 @@ export const ContentHolder = styled('main')({
     justifyContent: 'flex-start',
     maxWidth: 'calc(100% - 364px)',
     marginLeft: 24,
+    width: '100%',
 });

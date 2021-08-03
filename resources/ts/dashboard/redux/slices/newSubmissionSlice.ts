@@ -30,12 +30,29 @@ export interface AddCardsToSubmission {
     selectedCards: SearchResultItemCardProps[];
 }
 
+export interface SubmissionAddress {
+    firstName: string;
+    lastName: string;
+    address: string;
+    apt?: string;
+    city: string;
+    state: { name: string; id: number };
+    zipCode: string;
+    phoneNumber: string;
+}
+export interface ShippingSubmissionState {
+    existingAddresses?: SubmissionAddress[];
+    selectedAddress: SubmissionAddress;
+    saveForLater: boolean;
+}
+
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     currentStep: number;
     step01Status: any;
     step01Data: Step01Data;
     step02Data: AddCardsToSubmission;
+    step03Data: ShippingSubmissionState;
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -57,6 +74,20 @@ const initialState: NewSubmissionSliceState = {
         searchValue: '',
         searchResults: [],
         selectedCards: [],
+    },
+    step03Data: {
+        existingAddresses: [],
+        selectedAddress: {
+            firstName: '',
+            lastName: '',
+            address: '',
+            apt: '',
+            city: '',
+            state: { name: '', id: 0 },
+            zipCode: '',
+            phoneNumber: '',
+        },
+        saveForLater: true,
     },
 };
 
@@ -158,6 +189,13 @@ const newSubmissionSlice = createSlice({
         setIsNextDisabled: (state, action: PayloadAction<boolean>) => {
             state.isNextDisabled = action.payload;
         },
+        setSaveShippingAddress: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.saveForLater = action.payload;
+        },
+        updateShippingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
+            // @ts-ignore
+            state.step03Data.selectedAddress[action.payload.fieldName] = action.payload.newValue;
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state, action) => {
@@ -181,6 +219,8 @@ export const {
     setServiceLevel,
     setIsNextDisabled,
     setCardsSearchValue,
+    setSaveShippingAddress,
+    updateShippingAddressField,
     markCardAsSelected,
     markCardAsUnselected,
     changeSelectedCardQty,

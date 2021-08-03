@@ -118,6 +118,11 @@ function SubmissionSummary() {
         dispatch(setCustomStep(0));
     }
 
+    let totalDeclaredValue = 0;
+    selectedCards.forEach((selectedCard) => {
+        // @ts-ignore
+        totalDeclaredValue += selectedCard?.qty * selectedCard?.value;
+    });
     return (
         <Paper variant={'outlined'} square className={classes.container}>
             <div className={classes.titleContainer}>
@@ -162,7 +167,7 @@ function SubmissionSummary() {
                         <div className={classes.rowsContainer}>
                             <div className={classes.row}>
                                 <Typography className={classes.rowRightBoldText}>
-                                    $400.00 Total Declared Value
+                                    ${totalDeclaredValue} Total Declared Value
                                 </Typography>
                             </div>
                             <div className={classes.row} style={{ marginTop: '12px' }}>
@@ -213,8 +218,8 @@ function SubmissionSummary() {
                                             thousandSeparator
                                             decimalSeparator={'.'}
                                             prefix={'$'}
-                                        />
-                                        x {numberOfSelectedCards}) =
+                                        />{' '}
+                                        x {numberOfSelectedCards}) ={' '}
                                     </span>
                                     <NumberFormat
                                         value={numberOfSelectedCards * formattedLevelPrice}
@@ -246,7 +251,17 @@ function SubmissionSummary() {
                         <div className={classes.rowsContainer}>
                             <div className={classes.row}>
                                 <Typography className={classes.rowLeftText}>Total:</Typography>
-                                <Typography className={classes.rowRightBoldText}>$34.00</Typography>
+                                <Typography className={classes.rowRightBoldText}>
+                                    {' '}
+                                    <NumberFormat
+                                        value={numberOfSelectedCards * formattedLevelPrice + 14.0}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </Typography>
                             </div>
                         </div>
                         <Divider light />
@@ -269,7 +284,7 @@ function SubmissionSummary() {
                                             decimalSeparator={'.'}
                                             prefix={'$'}
                                         />
-                                        x {numberOfSelectedCards}) =
+                                        x {numberOfSelectedCards}) ={' '}
                                     </span>
                                     <NumberFormat
                                         value={numberOfSelectedCards * formattedLevelPrice}

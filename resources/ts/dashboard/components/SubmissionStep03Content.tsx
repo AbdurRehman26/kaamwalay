@@ -18,7 +18,11 @@ import Alert from '@material-ui/lab/Alert';
 import React, { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getServiceLevels } from '../redux/slices/newSubmissionSlice';
+import {
+    getServiceLevels,
+    setSaveShippingAddress,
+    updateShippingAddressField,
+} from '../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';
 import CardSubmissionSearchField from './CardSubmissionSearchField';
 import CardsSearchResults from './CardsSearchResults';
@@ -117,6 +121,24 @@ const GreenCheckbox = withStyles({
 export function SubmissionStep03Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
+    const saveForLater = useAppSelector((state) => state.newSubmission.step03Data.saveForLater);
+
+    const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
+    const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
+    const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
+    const apt = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.apt);
+    const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
+    const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
+    const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
+    const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
+
+    function onSaveForLater() {
+        dispatch(setSaveShippingAddress(!saveForLater));
+    }
+
+    function updateField(fieldName: any, newValue: any) {
+        dispatch(updateShippingAddressField({ fieldName, newValue }));
+    }
 
     return (
         <Container>
@@ -135,33 +157,11 @@ export function SubmissionStep03Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
-                        <div className={classes.shippingMethodContainer}>
-                            <Typography className={classes.sectionLabel}> Return Shipping Method </Typography>
-                            <div className={classes.shippingMethodItemContainer}>
-                                <Typography className={classes.methodDescription}>
-                                    Robograding Shipping (Recommended)
-                                </Typography>
-                                <ShippingMethodItem isSelected={true} methodName={'Insured Shipping'} />
-                            </div>
-                            <div className={classes.shippingMethodItemContainer}>
-                                <Typography className={classes.methodDescription} style={{ marginTop: '12px' }}>
-                                    Alternate Shipping Methods
-                                </Typography>
-                                <ShippingMethodItem isSelected={false} methodName={'USPS Express Mail'} />
-                            </div>
-                            <div className={classes.shippingMethodItemContainer}>
-                                <ShippingMethodItem isSelected={false} methodName={'FedEx'} />
-                            </div>
-                            <div className={classes.shippingMethodItemContainer}>
-                                <ShippingMethodItem isSelected={false} methodName={'UPS'} />
-                            </div>
-                        </div>
-                        <Divider light />
                         <div className={classes.shippingAddressContainer}>
                             <div className={classes.shippingAddressSectionHeader}>
                                 <Typography className={classes.sectionLabel}>Shipping Address</Typography>
                                 <FormControlLabel
-                                    control={<GreenCheckbox checked={true} onChange={() => ''} name="checkedG" />}
+                                    control={<GreenCheckbox checked={saveForLater} onChange={onSaveForLater} />}
                                     label="Save for later"
                                 />
                             </div>
@@ -172,6 +172,8 @@ export function SubmissionStep03Content() {
                                     <TextField
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter First Name"
+                                        value={firstName}
+                                        onChange={(e: any) => updateField('firstName', e.target.value)}
                                         fullWidth
                                         size={'small'}
                                         variant={'outlined'}
@@ -186,6 +188,8 @@ export function SubmissionStep03Content() {
                                     <TextField
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Last Name"
+                                        value={lastName}
+                                        onChange={(e: any) => updateField('lastName', e.target.value)}
                                         fullWidth
                                         size={'small'}
                                         variant={'outlined'}
@@ -204,6 +208,8 @@ export function SubmissionStep03Content() {
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Street Address"
                                         fullWidth
+                                        value={address}
+                                        onChange={(e: any) => updateField('address', e.target.value)}
                                         size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
@@ -218,6 +224,8 @@ export function SubmissionStep03Content() {
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Apt #"
                                         fullWidth
+                                        value={apt}
+                                        onChange={(e: any) => updateField('apt', e.target.value)}
                                         size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
@@ -233,6 +241,8 @@ export function SubmissionStep03Content() {
                                     <Typography className={classes.methodDescription}>City</Typography>
                                     <TextField
                                         style={{ margin: 8, marginLeft: 0 }}
+                                        value={city}
+                                        onChange={(e: any) => updateField('city', e.target.value)}
                                         placeholder="Enter City"
                                         fullWidth
                                         size={'small'}
@@ -246,12 +256,17 @@ export function SubmissionStep03Content() {
                                 <div className={classes.fieldContainer} style={{ width: '32%', marginTop: '4px' }}>
                                     <Typography className={classes.methodDescription}>State</Typography>
                                     <Select
-                                        value={'23'}
                                         fullWidth
+                                        value={state}
+                                        onChange={(e: any) =>
+                                            updateField('state', {
+                                                name: e.target.value,
+                                                id: e.target.value,
+                                            })
+                                        }
                                         placeholder={'Select State'}
                                         variant={'outlined'}
                                         style={{ height: '43px' }}
-                                        onChange={() => ''}
                                     >
                                         <MenuItem value="">
                                             <em>None</em>
@@ -265,8 +280,10 @@ export function SubmissionStep03Content() {
                                     <Typography className={classes.methodDescription}>Zip Code</Typography>
                                     <TextField
                                         style={{ margin: 8, marginLeft: 0 }}
-                                        placeholder="Select Zip Code"
+                                        placeholder="Enter Zip Code"
                                         fullWidth
+                                        value={zipCode}
+                                        onChange={(e: any) => updateField('zipCode', e.target.value)}
                                         size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
@@ -284,6 +301,8 @@ export function SubmissionStep03Content() {
                                         id="standard-full-width"
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Phone Number"
+                                        value={phoneNumber}
+                                        onChange={(e: any) => updateField('phoneNumber', e.target.value)}
                                         fullWidth
                                         size={'small'}
                                         variant={'outlined'}

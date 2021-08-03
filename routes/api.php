@@ -20,3 +20,5 @@ Route::post('login', [LoginController::class, 'login']);
 Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::resource('/customer/order/payment-plans', \App\Http\Controllers\API\Customer\Order\PaymentPlanController::class);

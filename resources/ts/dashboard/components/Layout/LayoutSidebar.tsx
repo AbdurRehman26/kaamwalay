@@ -1,7 +1,7 @@
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import MuiLink from '@material-ui/core/Link';
+import Link from '@material-ui/core/Link';
+import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,11 +11,9 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PaymentOutlinedIcon from '@material-ui/icons/PaymentOutlined';
 import StyleIcon from '@material-ui/icons/Style';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
 import UserAvatar from '../../assets/dummyLargeAvatar.png';
-import SideBarMenuItem from '../SidebarMenuItem';
+import LayoutSidebarItem from './LayoutSidebarItem';
 
 const useStyles = makeStyles(
     {
@@ -32,6 +30,9 @@ const useStyles = makeStyles(
 
         headerSignOut: {
             marginTop: 6,
+            fontWeight: 500,
+            textTransform: 'uppercase',
+            cursor: 'pointer',
         },
 
         headerAvatarHolder: {
@@ -59,7 +60,6 @@ const useStyles = makeStyles(
 
 function LayoutSidebar() {
     const classes = useStyles();
-    const location = useLocation();
 
     return (
         <Paper variant={'outlined'} className={classes.root}>
@@ -69,49 +69,19 @@ function LayoutSidebar() {
                 </div>
                 <div className={classes.headerInfoHolder}>
                     <Typography variant={'h6'}>James Smith</Typography>
-                    <Button variant={'text'} color={'primary'} className={classes.headerSignOut}>
+                    <Link variant={'body2'} color={'primary'} className={classes.headerSignOut}>
                         Sign Out
-                    </Button>
+                    </Link>
                 </div>
             </Grid>
 
-            <div>
-                <SideBarMenuItem
-                    icon={<AllInboxIcon htmlColor={'#000000'} />}
-                    active={location.pathname === '/submissions'}
-                    activeIcon={<AllInboxIcon htmlColor={'#20BFB8'} />}
-                    title={'Submissions'}
-                    link={'/submissions'}
-                />
-                <SideBarMenuItem
-                    icon={<StyleIcon htmlColor={'#000000'} />}
-                    activeIcon={<StyleIcon htmlColor={'#20BFB8'} />}
-                    title={'Your Cards'}
-                    active={location.pathname === '/your-cards'}
-                    link={'/your-cards'}
-                />
-                <SideBarMenuItem
-                    icon={<AccountCircleOutlinedIcon htmlColor={'#000000'} />}
-                    activeIcon={<AccountCircleOutlinedIcon htmlColor={'#20BFB8'} />}
-                    title={'Profile'}
-                    active={location.pathname === '/profile'}
-                    link={'/profile'}
-                />
-                <SideBarMenuItem
-                    icon={<PaymentOutlinedIcon htmlColor={'#000000'} />}
-                    activeIcon={<PaymentOutlinedIcon htmlColor={'#20BFB8'} />}
-                    title={'Saved Credit Cards'}
-                    active={location.pathname === '/saved-credit-cards'}
-                    link={'/saved-credit-cards'}
-                />
-                <SideBarMenuItem
-                    icon={<HomeOutlinedIcon htmlColor={'#000000'} />}
-                    activeIcon={<HomeOutlinedIcon htmlColor={'#20BFB8'} />}
-                    title={'Address Book'}
-                    active={location.pathname === '/address-book'}
-                    link={'/address-book'}
-                />
-            </div>
+            <List>
+                <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
+                <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} href={'/cards'} />
+                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Profile'} href={'/profile'} />
+                <LayoutSidebarItem icon={PaymentOutlinedIcon} title={'Saved Credit Cards'} href={'/profile/payments'} />
+                <LayoutSidebarItem icon={HomeOutlinedIcon} title={'Address Book'} href={'/profile/address'} />
+            </List>
         </Paper>
     );
 }

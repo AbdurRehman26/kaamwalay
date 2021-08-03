@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Models\Country;
 use App\Models\CustomerAddress;
 use App\Models\User;
+use App\Models\Role;
 
 class CustomerAddressFactory extends Factory
 {
@@ -25,7 +26,7 @@ class CustomerAddressFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::factory()->withRole(Role::CUSTOMER_ROLE_ID),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'address' => $this->faker->address,

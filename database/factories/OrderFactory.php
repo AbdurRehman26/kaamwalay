@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Invoice;
@@ -33,7 +34,7 @@ class OrderFactory extends Factory
             'order_number' => $this->faker->uuid,
             'shipping_amount' => $this->faker->randomFloat(2, 10, 99999999.99),
             'grand_total' => $this->faker->randomFloat(2, 10, 99999999.99),
-            'user_id' => User::factory(),
+            'user_id' => User::factory()->withRole(Role::CUSTOMER_ROLE_ID),
             'payment_plan_id' => PaymentPlan::factory(),
             'order_status_id' => OrderStatus::factory(),
             'order_address_id' => OrderAddress::factory(),

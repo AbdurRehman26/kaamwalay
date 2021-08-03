@@ -103,6 +103,7 @@ function SubmissionSummary() {
     );
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
+    const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
 
     const formattedLevelPrice = Number(serviceLevelPrice.replace(/[^0-9\.-]+/g, ''));
     const numberOfSelectedCards =
@@ -116,6 +117,7 @@ function SubmissionSummary() {
     function onLevelEditPress() {
         dispatch(setCustomStep(0));
     }
+
     return (
         <Paper variant={'outlined'} square className={classes.container}>
             <div className={classes.titleContainer}>
@@ -124,76 +126,163 @@ function SubmissionSummary() {
                 </Typography>
             </div>
             <div className={classes.bodyContainer}>
-                <div className={classes.rowsContainer}>
-                    <div className={classes.row}>
-                        <Typography className={classes.rowLeftText}>Service Level</Typography>
-                        <Typography className={classes.rowRightBoldText}>
-                            <span>
-                                <NumberFormat
-                                    value={formattedLevelPrice}
-                                    displayType={'text'}
-                                    thousandSeparator
-                                    decimalSeparator={'.'}
-                                    prefix={'$'}
-                                />
-                            </span>
-                            / Card
-                        </Typography>
-                    </div>
-                    <div className={classes.row} style={{ marginTop: '12px' }}>
-                        <Typography className={classes.clickableGreenText} onClick={onLevelEditPress}>
-                            EDIT
-                        </Typography>
-                        <Typography
-                            className={classes.rowRightRegularText}
-                        >{`${protectionLimit} Max. Value Per Card`}</Typography>
-                    </div>
-                </div>
-                <Divider light />
-                <div className={classes.rowsContainer}>
-                    <div className={classes.row}>
-                        <Typography className={classes.rowLeftText}>Number of Cards:</Typography>
-                        <Typography className={classes.rowRightBoldText}>{numberOfSelectedCards}</Typography>
-                    </div>
-                    <div className={classes.row} style={{ marginTop: '16px' }}>
-                        <Typography className={classes.rowLeftText}>Price / Card:</Typography>
-                        <NumberFormat
-                            value={serviceLevelPrice}
-                            className={classes.rowRightBoldText}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'$'}
-                        />
-                    </div>
-                </div>
-                <Divider light />
-                <div className={classes.rowsContainer}>
-                    <div className={classes.row}>
-                        <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
+                {currentStep === 1 ? (
+                    <>
+                        <div className={classes.rowsContainer}>
+                            <div className={classes.row}>
+                                <Typography className={classes.rowLeftText}>Service Level</Typography>
+                                <Typography className={classes.rowRightBoldText}>
+                                    <span>
+                                        <NumberFormat
+                                            value={formattedLevelPrice}
+                                            displayType={'text'}
+                                            thousandSeparator
+                                            decimalSeparator={'.'}
+                                            prefix={'$'}
+                                        />
+                                    </span>
+                                    / Card
+                                </Typography>
+                            </div>
+                            <div className={classes.row} style={{ marginTop: '12px' }}>
+                                <Typography className={classes.clickableGreenText} onClick={onLevelEditPress}>
+                                    EDIT
+                                </Typography>
+                                <Typography
+                                    className={classes.rowRightRegularText}
+                                >{`${protectionLimit} Max. Value Per Card`}</Typography>
+                            </div>
+                        </div>
+                        <Divider light />
+                    </>
+                ) : null}
 
-                        <Typography className={classes.rowRightBoldText}>
-                            <span style={{ fontWeight: 400, color: '#757575' }}>
-                                (
+                {currentStep === 2 || currentStep === 3 ? (
+                    <>
+                        <div className={classes.rowsContainer}>
+                            <div className={classes.row}>
+                                <Typography className={classes.rowRightBoldText}>
+                                    $400.00 Total Declared Value
+                                </Typography>
+                            </div>
+                            <div className={classes.row} style={{ marginTop: '12px' }}>
+                                <Typography className={classes.clickableGreenText} onClick={onLevelEditPress}>
+                                    EDIT
+                                </Typography>
+                            </div>
+                        </div>
+                        <Divider light />
+                    </>
+                ) : null}
+
+                {currentStep === 1 ? (
+                    <>
+                        <div className={classes.rowsContainer}>
+                            <div className={classes.row}>
+                                <Typography className={classes.rowLeftText}>Number of Cards:</Typography>
+                                <Typography className={classes.rowRightBoldText}>{numberOfSelectedCards}</Typography>
+                            </div>
+                            <div className={classes.row} style={{ marginTop: '16px' }}>
+                                <Typography className={classes.rowLeftText}>Price / Card:</Typography>
                                 <NumberFormat
                                     value={serviceLevelPrice}
+                                    className={classes.rowRightBoldText}
                                     displayType={'text'}
                                     thousandSeparator
                                     decimalSeparator={'.'}
                                     prefix={'$'}
                                 />
-                                x {numberOfSelectedCards}) =
-                            </span>
-                            <NumberFormat
-                                value={numberOfSelectedCards * formattedLevelPrice}
-                                displayType={'text'}
-                                thousandSeparator
-                                decimalSeparator={'.'}
-                                prefix={'$'}
-                            />
-                        </Typography>
-                    </div>
-                </div>
+                            </div>
+                        </div>
+                        <Divider light />
+                    </>
+                ) : null}
+
+                {currentStep == 2 || currentStep == 3 ? (
+                    <>
+                        <div className={classes.rowsContainer}>
+                            <div className={classes.row}>
+                                <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
+
+                                <Typography className={classes.rowRightBoldText}>
+                                    <span style={{ fontWeight: 400, color: '#757575' }}>
+                                        (
+                                        <NumberFormat
+                                            value={serviceLevelPrice}
+                                            displayType={'text'}
+                                            thousandSeparator
+                                            decimalSeparator={'.'}
+                                            prefix={'$'}
+                                        />
+                                        x {numberOfSelectedCards}) =
+                                    </span>
+                                    <NumberFormat
+                                        value={numberOfSelectedCards * formattedLevelPrice}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </Typography>
+                            </div>
+                            <div className={classes.row} style={{ marginTop: '16px' }}>
+                                <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                <NumberFormat
+                                    value={'$14.00'}
+                                    className={classes.rowRightBoldText}
+                                    displayType={'text'}
+                                    thousandSeparator
+                                    decimalSeparator={'.'}
+                                    prefix={'$'}
+                                />
+                            </div>
+                        </div>
+                        <Divider light />
+                    </>
+                ) : null}
+
+                {currentStep == 2 || currentStep == 3 ? (
+                    <>
+                        <div className={classes.rowsContainer}>
+                            <div className={classes.row}>
+                                <Typography className={classes.rowLeftText}>Total:</Typography>
+                                <Typography className={classes.rowRightBoldText}>$34.00</Typography>
+                            </div>
+                        </div>
+                        <Divider light />
+                    </>
+                ) : null}
+
+                {currentStep === 1 ? (
+                    <>
+                        <div className={classes.rowsContainer}>
+                            <div className={classes.row}>
+                                <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
+
+                                <Typography className={classes.rowRightBoldText}>
+                                    <span style={{ fontWeight: 400, color: '#757575' }}>
+                                        (
+                                        <NumberFormat
+                                            value={serviceLevelPrice}
+                                            displayType={'text'}
+                                            thousandSeparator
+                                            decimalSeparator={'.'}
+                                            prefix={'$'}
+                                        />
+                                        x {numberOfSelectedCards}) =
+                                    </span>
+                                    <NumberFormat
+                                        value={numberOfSelectedCards * formattedLevelPrice}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </Typography>
+                            </div>
+                        </div>
+                    </>
+                ) : null}
             </div>
         </Paper>
     );

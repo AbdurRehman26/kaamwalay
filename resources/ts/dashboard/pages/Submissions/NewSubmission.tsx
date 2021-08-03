@@ -4,11 +4,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
 
-import SubmissionHeader from '../components/SubmissionHeader';
-import SubmissionStep01Content from '../components/SubmissionStep01Content';
-import SubmissionStep02Content from '../components/SubmissionStep02Content';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { nextStep, backStep, setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
+import SubmissionHeader from '../../components/SubmissionHeader';
+import SubmissionStep01Content from '../../components/SubmissionStep01Content';
+import SubmissionStep02Content from '../../components/SubmissionStep02Content';
+import SubmissionStep03Content from '../../components/SubmissionStep03Content';
+import SubmissionStep04Content from '../../components/SubmissionStep04Content';
+import SubmissionStep05Content from '../../components/SubmissionStep05Content';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { nextStep, backStep, setIsNextDisabled } from '../../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
     pageContentContainer: {
@@ -36,7 +39,7 @@ const useStyles = makeStyles({
     },
 });
 
-function NewSubmissionPage() {
+function NewSubmission() {
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const classes = useStyles({ currentStep });
@@ -49,6 +52,12 @@ function NewSubmissionPage() {
                 return <SubmissionStep01Content />;
             case 1:
                 return <SubmissionStep02Content />;
+            case 2:
+                return <SubmissionStep03Content />;
+            case 3:
+                return <SubmissionStep04Content />;
+            case 4:
+                return <SubmissionStep05Content />;
             default:
                 return <h2>yo</h2>;
         }
@@ -105,4 +114,4 @@ function NewSubmissionPage() {
     );
 }
 
-export default NewSubmissionPage;
+export default NewSubmission;

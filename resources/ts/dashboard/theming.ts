@@ -11,6 +11,12 @@ const theme = createTheme({
             main: purple[500],
         },
     },
+
+    overrides: {
+        MuiButton: {
+            root: {},
+        },
+    },
 });
 
 export default theme;

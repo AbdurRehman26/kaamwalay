@@ -1,3 +1,4 @@
+const path = require('path');
 const mix = require('laravel-mix');
 const convertToFileHash = require('laravel-mix-make-file-hash');
 
@@ -11,7 +12,6 @@ const convertToFileHash = require('laravel-mix-make-file-hash');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
 mix.ts('resources/ts/dashboard/index.tsx', 'public/apps/dashboard')
     .react()
     .extract()
@@ -22,6 +22,11 @@ mix.ts('resources/ts/dashboard/index.tsx', 'public/apps/dashboard')
             test: /\.svg$/,
             use: ['@svgr/webpack', 'url-loader'],
         });
+    })
+    .alias({
+        // Applications
+        '@shared': path.join(__dirname, 'resources/ts/shared'),
+        '@dashboard': path.join(__dirname, 'resources/ts/dashboard'),
     })
     .sourceMaps(false);
 

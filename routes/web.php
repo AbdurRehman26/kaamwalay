@@ -18,5 +18,4 @@ Route::get('/', function () {
     return redirect('/dashboard');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'getDashboard']);
-Route::get('/dashboard/{path}', [DashboardController::class, 'getDashboard'])->where(['path' => '.*']);
+Route::get('/dashboard{path}', [DashboardController::class, 'getDashboard'])->where(['path' => '.*']);

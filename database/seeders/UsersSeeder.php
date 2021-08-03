@@ -16,6 +16,7 @@ class UsersSeeder extends Seeder
     {
         User::factory()
             ->admin()
+            ->withRole(config('permission.roles.admin'))
             ->create();
     }
 }

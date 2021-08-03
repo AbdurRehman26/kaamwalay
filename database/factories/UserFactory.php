@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 class UserFactory extends Factory
 {
@@ -37,5 +38,19 @@ class UserFactory extends Factory
             'name' => 'Carlos Morales',
             'email' => 'admin@robograding.com',
         ]);
+    }
+
+    /**
+     * Adds questions to the questionnaire
+     *
+     * @param string $role
+     * @return  $this
+     */
+    public function withRole(string $role)
+    {
+        return $this->afterCreating(function (User $user) use ($role) {
+            $role = Role::where('name', $role)->first();
+            $user->assignRole($role);
+        });
     }
 }

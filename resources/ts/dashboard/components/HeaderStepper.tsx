@@ -91,9 +91,8 @@ const useStyles = makeStyles((theme: Theme) =>
         stepper: {
             background: 'none',
             border: 'none',
-            marginTop: '10px',
+            marginTop: '-5px !important',
             maxWidth: '552px',
-
             width: '100%',
         },
         stepperContainer: {

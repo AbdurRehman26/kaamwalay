@@ -4,7 +4,7 @@ import React, { FunctionComponent } from 'react';
 
 type StepDescriptionProps = {
     title: string;
-    description: string;
+    description: any;
 };
 
 const useStyles = makeStyles({

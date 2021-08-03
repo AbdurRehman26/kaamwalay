@@ -36,18 +36,6 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * The relations that should be returned with model.
-     *
-     * @var array
-     */
-    protected $with = ['roles:id,name'];
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class)->withTimestamps();
-    }
-
-    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

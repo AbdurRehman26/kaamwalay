@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +16,6 @@ class UsersSeeder extends Seeder
     {
         User::factory()
             ->admin()
-            ->withRole(Role::ADMIN_ROLE_ID)
             ->create();
     }
 }

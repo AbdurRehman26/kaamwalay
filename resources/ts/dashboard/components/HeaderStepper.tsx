@@ -91,7 +91,6 @@ const useStyles = makeStyles((theme: Theme) =>
         stepper: {
             background: 'none',
             border: 'none',
-            marginTop: '-5px !important',
             maxWidth: '552px',
             width: '100%',
         },
@@ -100,6 +99,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'row',
             width: '100%',
             justifyContent: 'center',
+            transform: 'translate(0, 88px)',
         },
         instructions: {
             marginTop: theme.spacing(1),
@@ -118,21 +118,19 @@ export default function CustomizedSteppers() {
     const steps = getSteps();
 
     return (
-        <>
-            <div className={classes.stepperContainer}>
-                <Stepper
-                    alternativeLabel
-                    className={classes.stepper}
-                    activeStep={currentStep}
-                    connector={<ColorlibConnector />}
-                >
-                    {steps.map((label) => (
-                        <Step key={label}>
-                            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
-                        </Step>
-                    ))}
-                </Stepper>
-            </div>
-        </>
+        <div className={classes.stepperContainer}>
+            <Stepper
+                alternativeLabel
+                className={classes.stepper}
+                activeStep={currentStep}
+                connector={<ColorlibConnector />}
+            >
+                {steps.map((label) => (
+                    <Step key={label}>
+                        <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+                    </Step>
+                ))}
+            </Stepper>
+        </div>
     );
 }

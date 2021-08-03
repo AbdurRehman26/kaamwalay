@@ -1,5 +1,6 @@
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import RobogradingAvatar from '../assets/DummyAvatar.png';
 import Logo from '../assets/robograding-logo.png';
@@ -10,7 +11,6 @@ const useStyles = makeStyles(
         root: {
             width: '100vw',
             minWidth: '100vw',
-            height: '244px',
             paddingTop: '14px',
             display: 'flex',
             flexDirection: 'column',
@@ -51,7 +51,9 @@ function SubmissionHeader() {
         <div className={classes.root}>
             <Container>
                 <div className={classes.logoAndAvatarContainer}>
-                    <img src={Logo} alt={'Robograding Logo'} />
+                    <Link to={'/'}>
+                        <img src={Logo} alt={'Robograding Logo'} />
+                    </Link>
                     <img src={RobogradingAvatar} alt={'Robograding Avatar'} />
                 </div>
                 <div className={classes.headerTitleContainer}>

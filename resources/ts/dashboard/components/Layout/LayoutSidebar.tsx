@@ -1,4 +1,4 @@
-import { Paper } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
@@ -9,10 +9,13 @@ import StyleIcon from '@material-ui/icons/Style';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-import UserAvatar from '../assets/dummyLargeAvatar.png';
-import SideBarMenuItem from './SidebarMenuItem';
+import UserAvatar from '../../assets/dummyLargeAvatar.png';
+import SideBarMenuItem from '../SidebarMenuItem';
 
 const useStyles = makeStyles({
+    root: {
+        width: '100%',
+    },
     userDetailsContainer: {
         width: '100%',
         minHeight: '120px',
@@ -59,11 +62,12 @@ const useStyles = makeStyles({
     },
 });
 
-function AppSidebar() {
+function LayoutSidebar() {
     const classes = useStyles();
     const location = useLocation();
+
     return (
-        <Paper variant={'outlined'}>
+        <Paper variant={'outlined'} className={classes.root}>
             <Paper elevation={0} className={classes.userDetailsContainer}>
                 <div className={classes.avatarContainer}>
                     <img src={UserAvatar} alt={'Your Avatar'} />
@@ -119,4 +123,4 @@ function AppSidebar() {
     );
 }
 
-export default AppSidebar;
+export default LayoutSidebar;

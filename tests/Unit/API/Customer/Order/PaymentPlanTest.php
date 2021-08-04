@@ -20,7 +20,7 @@ class PaymentPlanTest extends TestCase
         PaymentPlan::factory()
             ->count(5)
             ->create();
-        $response = $this->getJson('/api/customer/order/payment-plans/');
+        $response = $this->getJson('/api/customer/orders/payment-plans/');
 
         $response->assertJsonCount(5, 'data');
         $response->assertJsonStructure([
@@ -40,7 +40,7 @@ class PaymentPlanTest extends TestCase
         PaymentPlan::factory()
             ->count(1)
             ->create();
-        $response = $this->getJson('/api/customer/order/payment-plans/1');
+        $response = $this->getJson('/api/customer/orders/payment-plans/1');
 
         $response->assertJsonCount(4, 'data');
         $response->assertJsonStructure([

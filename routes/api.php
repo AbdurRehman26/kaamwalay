@@ -25,7 +25,7 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 });
 
 Route::prefix('customer')->group(function () {
-    Route::apiResource('/order/payment-plans', PaymentPlanController::class)
+    Route::apiResource('/orders/payment-plans', PaymentPlanController::class)
         ->only(['index', 'show']);
     Route::resource('/addresses/states', StateController::class);
     Route::middleware('auth')->group(function() {

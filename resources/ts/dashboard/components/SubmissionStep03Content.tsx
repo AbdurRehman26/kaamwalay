@@ -26,11 +26,6 @@ import {
     setSaveShippingAddress,
     updateShippingAddressField,
 } from '../redux/slices/newSubmissionSlice';
-import AddedSubmissionCards from './AddedSubmissionCards';
-import CardSubmissionSearchField from './CardSubmissionSearchField';
-import CardsSearchResults from './CardsSearchResults';
-import ServiceLevelItem from './ServiceLevelItem';
-import ShippingMethodItem from './ShippingMethodItems';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 

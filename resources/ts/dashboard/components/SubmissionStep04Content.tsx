@@ -184,6 +184,7 @@ export function SubmissionStep04Content() {
     const useBillingAddressSameAsShipping = useAppSelector(
         (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
     );
+    const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
 
     function onSaveCardForLater() {
         dispatch(setSaveCardForLater(!saveCardForLater));
@@ -327,10 +328,167 @@ export function SubmissionStep04Content() {
                                 }
                                 label="Billing address same as shipping"
                             />
-                            <Typography className={classes.billingAddressTitle}>Billing Address</Typography>
-                            <Typography className={classes.billingAddressItem}>James Smith</Typography>
-                            <Typography className={classes.billingAddressItem}>727 Amsterdam Blvd.</Typography>
-                            <Typography className={classes.billingAddressItem}>New York, NY 10301, US</Typography>
+                            {useBillingAddressSameAsShipping ? (
+                                <>
+                                    <Typography className={classes.billingAddressTitle}>Billing Address</Typography>
+                                    <Typography
+                                        className={classes.billingAddressItem}
+                                    >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
+                                    <Typography className={classes.billingAddressItem}>{`${shippingAddress.address} ${
+                                        shippingAddress?.apt ? `apt: ${shippingAddress.apt}` : null
+                                    }`}</Typography>
+                                    <Typography
+                                        className={classes.billingAddressItem}
+                                    >{`${shippingAddress.city}, ${shippingAddress.state.name} ${shippingAddress.zipCode}, US`}</Typography>
+                                </>
+                            ) : (
+                                <>
+                                    <Divider light />
+                                    <div className={classes.shippingAddressContainer}>
+                                        <div className={classes.shippingAddressSectionHeader}>
+                                            <Typography className={classes.sectionLabel}>Billing Address</Typography>
+                                        </div>
+
+                                        <div className={classes.inputsRow01}>
+                                            <div className={classes.fieldContainer} style={{ width: '47%' }}>
+                                                <Typography className={classes.methodDescription}>
+                                                    First Name
+                                                </Typography>
+                                                <TextField
+                                                    style={{ margin: 8, marginLeft: 0 }}
+                                                    placeholder="Enter First Name"
+                                                    // value={firstName}
+                                                    // onChange={(e: any) => updateField('firstName', e.target.value)}
+                                                    fullWidth
+                                                    size={'small'}
+                                                    variant={'outlined'}
+                                                    margin="normal"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className={classes.fieldContainer} style={{ width: '47%' }}>
+                                                <Typography className={classes.methodDescription}>Last Name</Typography>
+                                                <TextField
+                                                    style={{ margin: 8, marginLeft: 0 }}
+                                                    placeholder="Enter Last Name"
+                                                    // value={lastName}
+                                                    // onChange={(e: any) => updateField('lastName', e.target.value)}
+                                                    fullWidth
+                                                    size={'small'}
+                                                    variant={'outlined'}
+                                                    margin="normal"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className={classes.inputsRow02}>
+                                            <div className={classes.fieldContainer} style={{ width: '80%' }}>
+                                                <Typography className={classes.methodDescription}>Address</Typography>
+                                                <TextField
+                                                    style={{ margin: 8, marginLeft: 0 }}
+                                                    placeholder="Enter Street Address"
+                                                    fullWidth
+                                                    // value={address}
+                                                    // onChange={(e: any) => updateField('address', e.target.value)}
+                                                    size={'small'}
+                                                    variant={'outlined'}
+                                                    margin="normal"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
+                                            </div>
+                                            <div
+                                                className={classes.fieldContainer}
+                                                style={{ width: '18%', marginTop: '4px' }}
+                                            >
+                                                <Typography className={classes.methodDescription}>
+                                                    Apt # (optional)
+                                                </Typography>
+                                                <TextField
+                                                    style={{ margin: 8, marginLeft: 0 }}
+                                                    placeholder="Apt #"
+                                                    fullWidth
+                                                    // value={apt}
+                                                    // onChange={(e: any) => updateField('apt', e.target.value)}
+                                                    size={'small'}
+                                                    variant={'outlined'}
+                                                    margin="normal"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className={classes.inputsRow03}>
+                                            <div className={classes.fieldContainer} style={{ width: '30%' }}>
+                                                <Typography className={classes.methodDescription}>City</Typography>
+                                                <TextField
+                                                    style={{ margin: 8, marginLeft: 0 }}
+                                                    // value={city}
+                                                    // onChange={(e: any) => updateField('city', e.target.value)}
+                                                    placeholder="Enter City"
+                                                    fullWidth
+                                                    size={'small'}
+                                                    variant={'outlined'}
+                                                    margin="normal"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
+                                            </div>
+                                            <div
+                                                className={classes.fieldContainer}
+                                                style={{ width: '32%', marginTop: '4px' }}
+                                            >
+                                                <Typography className={classes.methodDescription}>State</Typography>
+                                                <Select
+                                                    fullWidth
+                                                    // value={state}
+                                                    // onChange={(e: any) =>
+                                                    //     updateField('state', {
+                                                    //         name: e.target.value,
+                                                    //         id: e.target.value,
+                                                    //     })
+                                                    // }
+                                                    placeholder={'Select State'}
+                                                    variant={'outlined'}
+                                                    style={{ height: '43px' }}
+                                                >
+                                                    <MenuItem value="">
+                                                        <em>None</em>
+                                                    </MenuItem>
+                                                    <MenuItem value={10}>Ten</MenuItem>
+                                                    <MenuItem value={20}>Twenty</MenuItem>
+                                                    <MenuItem value={30}>Thirty</MenuItem>
+                                                </Select>
+                                            </div>
+                                            <div className={classes.fieldContainer} style={{ width: '32%' }}>
+                                                <Typography className={classes.methodDescription}>Zip Code</Typography>
+                                                <TextField
+                                                    style={{ margin: 8, marginLeft: 0 }}
+                                                    placeholder="Enter Zip Code"
+                                                    fullWidth
+                                                    // value={zipCode}
+                                                    // onChange={(e: any) => updateField('zipCode', e.target.value)}
+                                                    size={'small'}
+                                                    variant={'outlined'}
+                                                    margin="normal"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </Grid>

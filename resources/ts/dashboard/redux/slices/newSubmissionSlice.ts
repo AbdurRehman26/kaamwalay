@@ -30,7 +30,7 @@ export interface AddCardsToSubmission {
     selectedCards: SearchResultItemCardProps[];
 }
 
-export interface SubmissionAddress {
+export interface Address {
     firstName: string;
     lastName: string;
     address: string;
@@ -50,7 +50,9 @@ export interface CreditCard {
 export interface ShippingSubmissionState {
     existingAddresses?: Address[];
     selectedAddress: Address;
+    availableStatesList: { name: string; id: number }[];
     saveForLater: boolean;
+    fetchingStatus: string | null;
 }
 
 export interface PaymentSubmissionState {
@@ -121,6 +123,7 @@ const initialState: NewSubmissionSliceState = {
     step04Data: {
         paymentMethodId: 0,
         existingCreditCards: [],
+        availableStatesList: [],
         selectedCreditCard: {
             cardNumber: '',
             expirationDate: '',
@@ -139,6 +142,7 @@ const initialState: NewSubmissionSliceState = {
             phoneNumber: '',
         },
         existingBillingAddresses: [],
+        fetchingStatus: null,
     },
 };
 
@@ -304,5 +308,9 @@ export const {
     markCardAsUnselected,
     changeSelectedCardQty,
     changeSelectedCardValue,
+    updatePaymentMethodId,
+    setSaveCardForLater,
+    setUseShippingAddressAsBilling,
+    updatePaymentMethodField,
 } = newSubmissionSlice.actions;
 export default newSubmissionSlice.reducer;

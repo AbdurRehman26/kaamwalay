@@ -15,9 +15,12 @@
         "isolatedModules": true,
         "jsx": "react-jsx",
         "baseUrl": ".",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "paths": {
             "@shared/*": ["resources/ts/shared/*"],
-            "@dashboard/*": ["resources/ts/dashboard/*"]
+            "@dashboard/*": ["resources/ts/dashboard/*"],
+            "@admin/*": ["resources/ts/admin/*"]
         }
     },
     "include": ["resources/ts"]

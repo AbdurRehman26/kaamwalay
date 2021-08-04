@@ -21,4 +21,5 @@ Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/customer/order/payment-plans', \App\Http\Controllers\API\Customer\Order\PaymentPlanController::class);
+Route::resource('/customer/orders/payment-plans', \App\Http\Controllers\API\Customer\Order\PaymentPlanController::class);
+Route::resource('/customer/addresses/states', \App\Http\Controllers\API\Customer\Address\StateController::class);

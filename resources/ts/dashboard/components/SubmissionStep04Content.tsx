@@ -18,7 +18,7 @@ import Alert from '@material-ui/lab/Alert';
 import React, { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getServiceLevels, setSaveCardForLater } from '../redux/slices/newSubmissionSlice';
+import { getServiceLevels, setSaveCardForLater, updatePaymentMethodField } from '../redux/slices/newSubmissionSlice';
 import CardsSearchResults from './CardsSearchResults';
 import PaymentMethodItem from './PaymentMethodItem';
 import ServiceLevelItem from './ServiceLevelItem';
@@ -143,10 +143,18 @@ export function SubmissionStep04Content() {
 
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const saveCardForLater = useAppSelector((state) => state.newSubmission.step04Data.saveForLater);
+    const cardNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.cardNumber);
+    const cvv = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.cvv);
+    const expirationDate = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expirationDate);
 
     function onSaveCardForLater() {
         dispatch(setSaveCardForLater(!saveCardForLater));
     }
+
+    function updateCardData(fieldName: string, newValue: any) {
+        dispatch(updatePaymentMethodField({ fieldName, newValue }));
+    }
+
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -197,6 +205,8 @@ export function SubmissionStep04Content() {
                                     <TextField
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Card Number"
+                                        value={cardNumber}
+                                        onChange={(e) => updateCardData('cardNumber', e.target.value)}
                                         fullWidth
                                         size={'small'}
                                         variant={'outlined'}
@@ -214,6 +224,8 @@ export function SubmissionStep04Content() {
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="MM/YY"
                                         fullWidth
+                                        value={expirationDate}
+                                        onChange={(e) => updateCardData('expirationDate', e.target.value)}
                                         size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
@@ -228,6 +240,8 @@ export function SubmissionStep04Content() {
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="XXX"
                                         fullWidth
+                                        value={cvv}
+                                        onChange={(e) => updateCardData('cvv', e.target.value)}
                                         size={'small'}
                                         variant={'outlined'}
                                         margin="normal"

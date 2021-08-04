@@ -46,6 +46,7 @@ export interface CreditCard {
     expirationDate: string;
     cvv: string;
 }
+
 export interface ShippingSubmissionState {
     existingAddresses?: Address[];
     selectedAddress: Address;
@@ -55,7 +56,7 @@ export interface ShippingSubmissionState {
 export interface PaymentSubmissionState {
     paymentMethodId: number;
     existingCreditCards?: CreditCard[];
-    selectedCreditCard?: CreditCard;
+    selectedCreditCard: CreditCard;
     saveForLater: boolean;
     useShippingAddressAsBillingAddress: boolean;
     selectedBillingAddress: Address;
@@ -241,6 +242,10 @@ const newSubmissionSlice = createSlice({
         setSaveCardForLater: (state, action: PayloadAction<boolean>) => {
             state.step04Data.saveForLater = action.payload;
         },
+        updatePaymentMethodField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
+            // @ts-ignore
+            state.step04Data.selectedCreditCard[action.payload.fieldName] = action.payload.newValue;
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state, action) => {
@@ -272,5 +277,6 @@ export const {
     changeSelectedCardValue,
     setSaveCardForLater,
     updatePaymentMethodId,
+    updatePaymentMethodField,
 } = newSubmissionSlice.actions;
 export default newSubmissionSlice.reducer;

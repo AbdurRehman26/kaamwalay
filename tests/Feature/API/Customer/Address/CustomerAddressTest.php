@@ -10,6 +10,7 @@ use Tests\TestCase;
 class CustomerAddressTest extends TestCase
 {
     use RefreshDatabase;
+    
     private User $user;
 
     public function setUp(): void

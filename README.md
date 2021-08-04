@@ -1,72 +1,151 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Robgrading
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The project it's based on Laravel 8 and React for the frontend.
 
-## About Laravel
+### Requirements
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and
-creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in
-many web projects, such as:
+-   Docker
+-   Composer
+-   PHP >= 7.4 (only CLI)
 
--   [Simple, fast routing engine](https://laravel.com/docs/routing).
--   [Powerful dependency injection container](https://laravel.com/docs/container).
--   Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache)
-    storage.
--   Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
--   Database agnostic [schema migrations](https://laravel.com/docs/migrations).
--   [Robust background job processing](https://laravel.com/docs/queues).
--   [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Setup
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+$ composer install
+$ yarn install
 
-## Learning Laravel
+# Add host entry to be able to access the app via laravel.test domain
+127.0.0.1 laravel.test
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all
-modern web application frameworks, making it a breeze to get started with the framework.
+### Getting things started
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video
-tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging
-into our comprehensive video library.
+```bash
+# Starting the backend
+$ ./vendor/bin/sail up    # or docker-compose up
 
-## Laravel Sponsors
+# Starting the frontend
+# 1. Dashboard application
+$ yarn start
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in
-becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+# 2. Admin application
+$ yarn admin:start        # or BUILD_PRESET=admin yarn start
+```
 
-### Premium Partners
+### File structure
 
--   **[Vehikl](https://vehikl.com/)**
--   **[Tighten Co.](https://tighten.co)**
--   **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
--   **[64 Robots](https://64robots.com)**
--   **[Cubet Techno Labs](https://cubettech.com)**
--   **[Cyber-Duck](https://cyber-duck.co.uk)**
--   **[Many](https://www.many.co.uk)**
--   **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
--   **[DevSquad](https://devsquad.com)**
--   **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
--   **[OP.GG](https://op.gg)**
+**(frontend only)**
 
-## Contributing
+Laravel structure and all the other things related to it are on their documentation, for the frontend, everything it's
+organized into apps, currently:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the
-[Laravel documentation](https://laravel.com/docs/contributions).
+-   `resources/ts/dashboard` responsible with all logics related to the dashboard pages (`/dashboard*`)
+-   `resources/ts/admin` responsible with all logics related to the admin pages (`/admin*`)
+-   `resources/ts/landings` will be created in future to handle static pages.
 
-## Code of Conduct
+In addition to these apps we have a shared directory (`resources/ts/shared`) which will contain all logics that will be
+shared across applications. To satisfy these apps we have alias for them
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the
-[Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+-   `@shared`
+-   `@dashboard`
+-   `@admin`
+-   `@landings`
 
-## Security Vulnerabilities
+#### Rules:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via
-[taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Each file name will be respecting a naming convention based on:
+    - The file it's a component, `camelCase.tsx`
+    - The file it's a class, `PascalCase.ts`
+    - The file it's a function, collection of functions or util, `camelCase.ts`
+    - The file it's an interface, `PascalCase.ts`
+    - The file it's an enum, `PascalCase.ts`
+    - The file it's an entity/model, `PascalCase.ts`
+    - The file it's a page, `PascalCase.ts`
+    - The file it's a hook, `useCamelCase.ts`
+    - The file it's a style:
+        - Normal scss style, `camelCase.scss`
+        - Module scss style, `camelCase.module.scss`
+        - Component css-in-js style, `style.ts` or `camelCaseStyle.ts` (preferable first one)
+    - The file it's a redux slice. `camelCaseSlice.ts`
+    - The file it's an asset, `camelCase.[extension]`
+    - The file it's a blade file, `dash-case.blade.php`
+2. Each application will follow the group by file type pattern, so if your file it's a page should be placed to the
+   pages, if it's a component to components and so on.
+3. Each component should have all files to the right path, example:
 
-## License
+    - If our component it's a simple component, the suggested structure:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```
+     [app]
+     ├── ...
+     └── components
+         ├── ...
+         └── Foo.tsx
+    ```
+
+    - If our component it's an advanced component, meaning, that we will have nested components, styles and so on.
+      Considering that we are building a `List` component, that has a nested component `ListItem`, the suggested
+      structure:
+
+    ```
+     [app]
+     ├── ...
+     └── components
+         ├── ...
+         ├── List
+         │   ├── index.ts # export { List } from './List';
+         │   ├── styles.ts
+         │   └── List.tsx
+         └── ListItem
+             ├── index.ts # export { ListItem } from './ListItem';
+             ├── styles.ts
+             ├── ListItem.tsx
+             └── ListItemText.tsx # Note that it's a private component that will be used only on ListItem.tsx
+    ```
+
+4. Avoid too long nesting levels like `components/Layout/Page/Header/Brand.tsx`, try to minimize as much as possible.
+5. Use the right visibility for your component, meaning that if your components it's a nested component that will be
+   used only inside that component, there's no reason to create an extra component for it.
+
+    So following same List example, we will have 3 components List, ListItem, ListItemText. Only 2 of them are public,
+    List and ListItem, because the usage will be:
+
+    ```
+    <List>
+      <ListItem>Item</ListItem>
+    </List
+    ```
+
+    The ListItemText will be used only inside ListItemText so, we will say that this component it's a private component
+    so instead to create:
+
+    - components/List/List.tsx
+    - components/ListItem/ListItem.tsx
+    - components/ListItemText/ListItemText.tsx
+
+    We will create:
+
+    - components/List/List.tsx
+    - components/ListItem/ListItem.tsx
+    - components/ListItem/ListItemText.tsx
+
+    And of course all the other related files.
+
+6. We like reusable & maintainable code, so if we already have the logics written by us or by the vendors, just reuse
+   it, don't try to reinvent the wheel.
+7. If the page/components and code in general it's complex, don't try to compress everything inside 1 file, split the
+   code, using the visibility rule we talked about above (public/private), in that way we can easily understand and
+   navigate through it.
+8. Make sure you configured all development tools and write code according rules and code style.
+
+**Note <sup>1</sup>**: Applications cannot directly import files from one to another. If we share files between the apps
+we will have to create the file to the right directory and then use it accordingly.
+
+**Note <sup>2</sup>**: To avoid wrong imports, at build time of each preset only the `@shared` and `@[BUILD_PRESET]`
+paths are mounted, for example building admin app, we will have access to only `@shared` and `@admin` import paths.
+
+## FAQ
+
+```
+# @TODO
+```

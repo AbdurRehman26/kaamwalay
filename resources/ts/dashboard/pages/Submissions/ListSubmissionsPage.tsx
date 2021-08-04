@@ -8,7 +8,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { SubmissionsTable } from '@dashboard/components/Submissions/SubmissionsTable';
+import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 
 const useStyles = makeStyles(
     {

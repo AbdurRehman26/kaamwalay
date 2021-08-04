@@ -2,8 +2,8 @@ import { Container, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import RobogradingAvatar from '../assets/DummyAvatar.png';
-import Logo from '../assets/robograding-logo.png';
+import RobogradingAvatar from '../assets/dummyAvatar.png';
+import Logo from '../assets/robogradingLogo.png';
 import CustomizedSteppers from './HeaderStepper';
 
 const useStyles = makeStyles(

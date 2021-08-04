@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-class DashboardController extends Controller
+class AdminController extends Controller
 {
     public function getView()
     {
-        return view('dashboard');
+        return view('admin');
     }
 }

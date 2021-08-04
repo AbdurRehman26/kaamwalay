@@ -46,7 +46,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             <TableCell>{serviceLevel}</TableCell>
             <TableCell>{cardsNumber}</TableCell>
             <TableCell>{status}</TableCell>
-            <TableCell>
+            <TableCell align={'right'}>
                 <IconButton onClick={handleClickOptions}>
                     <MoreIcon />
                 </IconButton>

@@ -2,7 +2,7 @@
     "private": true,
     "scripts": {
         "format": "prettier -w .",
-        "dev": "yarn development",
+        "dev": "mix",
         "watch": "mix watch",
         "hot": "mix watch --hot",
         "prod": "mix --production",

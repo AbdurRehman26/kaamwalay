@@ -6,7 +6,7 @@ import React, { HTMLAttributes } from 'react';
 import { ReactComponent as ColoredCC } from '../assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '../assets/paypalLogo.svg';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
+import { setServiceLevel, SubmissionService, updatePaymentMethodId } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
     {
@@ -21,6 +21,8 @@ const useStyles = makeStyles(
             marginBottom: '12px',
             borderRadius: '2px',
             padding: '10px 8px 10px 6px',
+            borderColor: ({ isSelected }: any) => (isSelected ? '#20BFB8' : '#DDDDDD'),
+            borderWidth: ({ isSelected }: any) => (isSelected ? '2px' : '1px'),
             '&:hover': {
                 cursor: 'pointer',
             },
@@ -51,7 +53,7 @@ const useStyles = makeStyles(
             fontFamily: 'Roboto',
             transform: 'translateZ(0)',
             fontStyle: 'normal',
-            fontWeight: 'bold',
+            fontWeight: ({ isSelected }: any) => (isSelected ? 'bold' : 'normal'),
             fontSize: '16px',
             marginLeft: '12px',
             lineHeight: '24px',
@@ -103,33 +105,28 @@ const GreenRadio = withStyles({
 type PaymentMethodItemProps = {
     isSelected: boolean;
     methodName: string;
+    methodId: number;
 };
 
 function PaymentMethodItem(props: PaymentMethodItemProps) {
-    const classes = useStyles();
+    const classes = useStyles(props);
     const dispatch = useAppDispatch();
-    const { isSelected, methodName } = props;
+    const { isSelected, methodName, methodId } = props;
+
+    function handleOnChange() {
+        dispatch(updatePaymentMethodId(methodId));
+    }
+
     return (
-        <div
-            className={classes.root}
-            style={{
-                borderColor: isSelected ? '#20BFB8' : '#DDDDDD',
-                borderWidth: isSelected ? '2px' : '1px',
-            }}
-        >
+        <div className={classes.root} onClick={handleOnChange}>
             <div className={classes.leftSide}>
                 <div className={classes.radioBtnContainer}>
                     <GreenRadio checked={isSelected} />
                 </div>
-                {methodName === 'Credit or Debit Card' ? <ColoredCC /> : <PaypalLogo />}
-
-                {methodName === 'Credit or Debit Card' ? (
+                {methodId === 0 ? <ColoredCC /> : <PaypalLogo />}
+                {methodId === 0 ? (
                     <div className={classes.rightSide}>
-                        <Typography
-                            variant={'subtitle2'}
-                            className={classes.levelTitle}
-                            style={{ fontWeight: isSelected ? 'bold' : 'normal' }}
-                        >
+                        <Typography variant={'subtitle2'} className={classes.levelTitle}>
                             {methodName}
                         </Typography>
                     </div>

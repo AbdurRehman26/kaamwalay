@@ -16,6 +16,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import Alert from '@material-ui/lab/Alert';
 import React, { useEffect } from 'react';
+import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -26,11 +27,6 @@ import {
     setSaveShippingAddress,
     updateShippingAddressField,
 } from '../redux/slices/newSubmissionSlice';
-import AddedSubmissionCards from './AddedSubmissionCards';
-import CardSubmissionSearchField from './CardSubmissionSearchField';
-import CardsSearchResults from './CardsSearchResults';
-import ServiceLevelItem from './ServiceLevelItem';
-import ShippingMethodItem from './ShippingMethodItems';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 
@@ -185,7 +181,7 @@ export function SubmissionStep03Content() {
             dispatch(
                 updateShippingAddressField({
                     fieldName: 'state',
-                    newValue: { name: stateLookup.name, id: stateLookup.id },
+                    newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
                 }),
             );
         }
@@ -308,15 +304,13 @@ export function SubmissionStep03Content() {
                                     <Typography className={classes.methodDescription}>State</Typography>
                                     <Select
                                         fullWidth
-                                        value={state.id}
+                                        value={state.id || 'none'}
                                         onChange={(e: any) => updateShippingState(e.target.value)}
                                         placeholder={'Select State'}
                                         variant={'outlined'}
                                         style={{ height: '43px' }}
                                     >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
+                                        <MenuItem value="none">Select a state</MenuItem>
                                         {availableStates.map((item, index) => (
                                             <MenuItem key={item.id} value={item.id}>
                                                 {item.name}
@@ -345,14 +339,15 @@ export function SubmissionStep03Content() {
                             <div className={classes.inputsRow04}>
                                 <div className={classes.fieldContainer} style={{ width: '100%', marginTop: '4px' }}>
                                     <Typography className={classes.methodDescription}>Phone Number</Typography>
-                                    <TextField
-                                        id="standard-full-width"
+                                    <NumberFormat
+                                        customInput={TextField}
+                                        format="+1 (###) ###-####"
+                                        mask=""
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Phone Number"
                                         value={phoneNumber}
                                         onChange={(e: any) => updateField('phoneNumber', e.target.value)}
                                         fullWidth
-                                        size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
                                         InputLabelProps={{

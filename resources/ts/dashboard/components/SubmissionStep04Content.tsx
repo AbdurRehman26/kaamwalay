@@ -15,16 +15,26 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import Alert from '@material-ui/lab/Alert';
-import React, { useEffect } from 'react';
+import CardValidator from 'card-validator';
+import React, { useEffect, useState } from 'react';
+import NumberFormat from 'react-number-format';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getServiceLevels, setSaveCardForLater, updatePaymentMethodField } from '../redux/slices/newSubmissionSlice';
+import {
+    getServiceLevels,
+    setIsNextDisabled,
+    setSaveCardForLater,
+    setUseShippingAddressAsBilling,
+    updatePaymentMethodField,
+} from '../redux/slices/newSubmissionSlice';
 import CardsSearchResults from './CardsSearchResults';
 import PaymentMethodItem from './PaymentMethodItem';
 import ServiceLevelItem from './ServiceLevelItem';
 import ShippingMethodItem from './ShippingMethodItems';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
+
+[{ id: 22, name: 'California', isoCode: 223 }];
 
 const useStyles = makeStyles({
     stepDescriptionContainer: {
@@ -137,6 +147,31 @@ const GreenCheckbox = withStyles({
     checked: {},
 })((props: any) => <Checkbox color="default" {...props} />);
 
+function limit(val: any, max: any) {
+    if (val.length === 1 && val[0] > max[0]) {
+        val = '0' + val;
+    }
+
+    if (val.length === 2) {
+        if (Number(val) === 0) {
+            val = '01';
+
+            //this can happen when user paste number
+        } else if (val > max) {
+            val = max;
+        }
+    }
+
+    return val;
+}
+
+function cardExpiry(val: any) {
+    let month = limit(val.substring(0, 2), '12');
+    let year = val.substring(2, 4);
+
+    return month + (year.length ? '/' + year : '');
+}
+
 export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -146,20 +181,43 @@ export function SubmissionStep04Content() {
     const cardNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.cardNumber);
     const cvv = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.cvv);
     const expirationDate = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expirationDate);
+    const useBillingAddressSameAsShipping = useAppSelector(
+        (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
+    );
 
     function onSaveCardForLater() {
         dispatch(setSaveCardForLater(!saveCardForLater));
+    }
+
+    function onUseShippingAddressAsBilling() {
+        dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
     }
 
     function updateCardData(fieldName: string, newValue: any) {
         dispatch(updatePaymentMethodField({ fieldName, newValue }));
     }
 
+    useEffect(() => {
+        dispatch(setIsNextDisabled(true));
+    }, [dispatch]);
+
+    useEffect(() => {
+        const isNumberValid = CardValidator.number(cardNumber).isValid;
+        const isCvvValid = CardValidator.cvv(cvv).isValid;
+        const isExpirationValid = CardValidator.expirationDate(expirationDate).isValid;
+
+        if (isNumberValid && isCvvValid && isExpirationValid) {
+            dispatch(setIsNextDisabled(false));
+        } else {
+            dispatch(setIsNextDisabled(true));
+        }
+    }, [cvv, expirationDate, cardNumber]);
+
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
                 <StepDescription
-                    title="Enter payment details"
+                    title={`Enter your Payment Details`}
                     description={'Select your payment method and enter details.'}
                 />
             </div>
@@ -202,13 +260,14 @@ export function SubmissionStep04Content() {
                             <div className={classes.inputsRow01}>
                                 <div className={classes.fieldContainer} style={{ width: '100%' }}>
                                     <Typography className={classes.methodDescription}>Card Number</Typography>
-                                    <TextField
+                                    <NumberFormat
+                                        format="#### #### #### ####"
+                                        customInput={TextField}
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Card Number"
                                         value={cardNumber}
                                         onChange={(e) => updateCardData('cardNumber', e.target.value)}
                                         fullWidth
-                                        size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
                                         InputLabelProps={{
@@ -220,13 +279,15 @@ export function SubmissionStep04Content() {
                             <div className={classes.inputsRow02}>
                                 <div className={classes.fieldContainer} style={{ width: '65%' }}>
                                     <Typography className={classes.methodDescription}>Expiration Date</Typography>
-                                    <TextField
+
+                                    <NumberFormat
+                                        format={cardExpiry}
+                                        customInput={TextField}
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="MM/YY"
                                         fullWidth
                                         value={expirationDate}
                                         onChange={(e) => updateCardData('expirationDate', e.target.value)}
-                                        size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
                                         InputLabelProps={{
@@ -242,9 +303,13 @@ export function SubmissionStep04Content() {
                                         fullWidth
                                         value={cvv}
                                         onChange={(e) => updateCardData('cvv', e.target.value)}
-                                        size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
+                                        InputProps={{
+                                            inputProps: {
+                                                maxLength: 3,
+                                            },
+                                        }}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -254,7 +319,12 @@ export function SubmissionStep04Content() {
                         </div>
                         <div className={classes.billingAddressAsShippingContainer}>
                             <FormControlLabel
-                                control={<GreenCheckbox checked={true} onChange={() => ''} name="checkedG" />}
+                                control={
+                                    <GreenCheckbox
+                                        checked={useBillingAddressSameAsShipping}
+                                        onChange={onUseShippingAddressAsBilling}
+                                    />
+                                }
                                 label="Billing address same as shipping"
                             />
                             <Typography className={classes.billingAddressTitle}>Billing Address</Typography>

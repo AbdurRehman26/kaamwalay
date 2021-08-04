@@ -75,7 +75,7 @@ export interface NewSubmissionSliceState {
 
 const initialState: NewSubmissionSliceState = {
     isNextDisabled: false,
-    currentStep: 0,
+    currentStep: 2,
     step01Status: null,
     step01Data: {
         availableServiceLevels: [],
@@ -246,6 +246,9 @@ const newSubmissionSlice = createSlice({
             // @ts-ignore
             state.step04Data.selectedCreditCard[action.payload.fieldName] = action.payload.newValue;
         },
+        setUseShippingAddressAsBilling: (state, action: PayloadAction<boolean>) => {
+            state.step04Data.useShippingAddressAsBillingAddress = action.payload;
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state, action) => {
@@ -278,5 +281,6 @@ export const {
     setSaveCardForLater,
     updatePaymentMethodId,
     updatePaymentMethodField,
+    setUseShippingAddressAsBilling,
 } = newSubmissionSlice.actions;
 export default newSubmissionSlice.reducer;

@@ -3,9 +3,10 @@ import { ThemeProvider } from '@material-ui/styles';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import 'reflect-metadata';
 
 import App from './App';
-import './index.css';
+import './index.scss';
 import { store } from './redux/store';
 import theme from './theming';
 

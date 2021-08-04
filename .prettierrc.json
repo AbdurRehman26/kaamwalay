@@ -11,7 +11,7 @@
     "arrowParens": "always",
     "endOfLine": "lf",
     "proseWrap": "always",
-    "importOrder": ["^@shared/(.*)$", "^@dashboard/(.*)$", "^[./]"],
+    "importOrder": ["^@shared/(.*)$", "^@dashboard/(.*)$", "^@admin/(.*)$", "^[./]"],
     "importOrderSeparation": true,
     "overrides": [
         {

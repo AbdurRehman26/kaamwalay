@@ -9,8 +9,8 @@ import CustomizedSteppers from './HeaderStepper';
 const useStyles = makeStyles(
     {
         root: {
-            width: '100vw',
-            minWidth: '100vw',
+            width: '100%',
+            minWidth: '100%',
             paddingTop: '14px',
             display: 'flex',
             flexDirection: 'column',

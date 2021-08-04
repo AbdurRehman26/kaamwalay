@@ -16,10 +16,13 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import Alert from '@material-ui/lab/Alert';
 import React, { useEffect } from 'react';
+import * as yup from 'yup';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     getServiceLevels,
+    getStatesList,
+    setIsNextDisabled,
     setSaveShippingAddress,
     updateShippingAddressField,
 } from '../redux/slices/newSubmissionSlice';
@@ -118,10 +121,28 @@ const GreenCheckbox = withStyles({
     checked: {},
 })((props: any) => <Checkbox color="default" {...props} />);
 
+let schema = yup.object().shape({
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    address: yup.string().required(),
+    apt: yup.string().optional(),
+    city: yup.string().required(),
+    state: yup.object().shape({
+        name: yup.string().required(),
+        id: yup.number().required(),
+    }),
+    zipCode: yup.string().required(),
+    phoneNumber: yup.string().required(),
+});
+
 export function SubmissionStep03Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const saveForLater = useAppSelector((state) => state.newSubmission.step03Data.saveForLater);
+
+    useEffect(() => {
+        dispatch(getStatesList());
+    }, [dispatch]);
 
     const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
@@ -131,6 +152,24 @@ export function SubmissionStep03Content() {
     const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
+    const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
+
+    useEffect(() => {
+        schema
+            .isValid({
+                firstName,
+                lastName,
+                address,
+                apt,
+                city,
+                state,
+                zipCode,
+                phoneNumber,
+            })
+            .then((valid) => {
+                dispatch(setIsNextDisabled(!valid));
+            });
+    }, [firstName, lastName, address, apt, city, state, zipCode, phoneNumber]);
 
     function onSaveForLater() {
         dispatch(setSaveShippingAddress(!saveForLater));
@@ -138,6 +177,18 @@ export function SubmissionStep03Content() {
 
     function updateField(fieldName: any, newValue: any) {
         dispatch(updateShippingAddressField({ fieldName, newValue }));
+    }
+
+    function updateShippingState(stateId: number) {
+        const stateLookup = availableStates.find((state) => state.id === stateId);
+        if (stateLookup) {
+            dispatch(
+                updateShippingAddressField({
+                    fieldName: 'state',
+                    newValue: { name: stateLookup.name, id: stateLookup.id },
+                }),
+            );
+        }
     }
 
     return (
@@ -257,13 +308,8 @@ export function SubmissionStep03Content() {
                                     <Typography className={classes.methodDescription}>State</Typography>
                                     <Select
                                         fullWidth
-                                        value={state}
-                                        onChange={(e: any) =>
-                                            updateField('state', {
-                                                name: e.target.value,
-                                                id: e.target.value,
-                                            })
-                                        }
+                                        value={state.id}
+                                        onChange={(e: any) => updateShippingState(e.target.value)}
                                         placeholder={'Select State'}
                                         variant={'outlined'}
                                         style={{ height: '43px' }}
@@ -271,9 +317,11 @@ export function SubmissionStep03Content() {
                                         <MenuItem value="">
                                             <em>None</em>
                                         </MenuItem>
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
+                                        {availableStates.map((item, index) => (
+                                            <MenuItem key={item.id} value={item.id}>
+                                                {item.name}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                 </div>
                                 <div className={classes.fieldContainer} style={{ width: '32%' }}>

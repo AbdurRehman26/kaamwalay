@@ -30,6 +30,6 @@ class CustomerAddressPolicy
      */
     public function view(User $user, CustomerAddress $customerAddress)
     {
-        return $user->id === $customerAddress->user_id;
+        return $customerAddress->user->is($user);
     }
 }

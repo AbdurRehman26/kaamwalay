@@ -20,4 +20,6 @@ const theme = createTheme({
     },
 });
 
+export type DashboardTheme = typeof theme;
+
 export default theme;

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Customer\Address\State\StateCollection;
 use App\Http\Resources\API\Customer\Address\State\StateResource;
 use App\Models\State;
-use Illuminate\Http\Request;
 
 class StateController extends Controller
 {

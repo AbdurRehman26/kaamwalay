@@ -18,9 +18,7 @@ import Alert from '@material-ui/lab/Alert';
 import React, { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getServiceLevels } from '../redux/slices/newSubmissionSlice';
-import AddedSubmissionCards from './AddedSubmissionCards';
-import CardSubmissionSearchField from './CardSubmissionSearchField';
+import { getServiceLevels, setSaveCardForLater } from '../redux/slices/newSubmissionSlice';
 import CardsSearchResults from './CardsSearchResults';
 import PaymentMethodItem from './PaymentMethodItem';
 import ServiceLevelItem from './ServiceLevelItem';
@@ -142,6 +140,13 @@ const GreenCheckbox = withStyles({
 export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
+
+    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const saveCardForLater = useAppSelector((state) => state.newSubmission.step04Data.saveForLater);
+
+    function onSaveCardForLater() {
+        dispatch(setSaveCardForLater(!saveCardForLater));
+    }
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -158,8 +163,16 @@ export function SubmissionStep04Content() {
                         <div className={classes.shippingMethodContainer}>
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
                             <div className={classes.shippingMethodItemContainer}>
-                                <PaymentMethodItem isSelected={true} methodName={'Credit or Debit Card'} />
-                                <PaymentMethodItem isSelected={false} methodName={'Paypal'} />
+                                <PaymentMethodItem
+                                    isSelected={paymentMethodId === 0}
+                                    methodName={'Credit or Debit Card'}
+                                    methodId={0}
+                                />
+                                <PaymentMethodItem
+                                    isSelected={paymentMethodId === 1}
+                                    methodName={'Paypal'}
+                                    methodId={1}
+                                />
                             </div>
                         </div>
                         <Divider light />
@@ -167,7 +180,13 @@ export function SubmissionStep04Content() {
                             <div className={classes.shippingAddressSectionHeader}>
                                 <Typography className={classes.sectionLabel}>Add Card</Typography>
                                 <FormControlLabel
-                                    control={<GreenCheckbox checked={true} onChange={() => ''} name="checkedG" />}
+                                    control={
+                                        <GreenCheckbox
+                                            checked={saveCardForLater}
+                                            onChange={onSaveCardForLater}
+                                            name="checkedG"
+                                        />
+                                    }
                                     label="Save for later"
                                 />
                             </div>

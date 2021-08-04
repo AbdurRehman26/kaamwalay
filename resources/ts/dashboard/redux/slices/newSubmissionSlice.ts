@@ -30,7 +30,7 @@ export interface AddCardsToSubmission {
     selectedCards: SearchResultItemCardProps[];
 }
 
-export interface SubmissionAddress {
+export interface Address {
     firstName: string;
     lastName: string;
     address: string;
@@ -40,10 +40,26 @@ export interface SubmissionAddress {
     zipCode: string;
     phoneNumber: string;
 }
+
+export interface CreditCard {
+    cardNumber: string;
+    expirationDate: string;
+    cvv: string;
+}
 export interface ShippingSubmissionState {
-    existingAddresses?: SubmissionAddress[];
-    selectedAddress: SubmissionAddress;
+    existingAddresses?: Address[];
+    selectedAddress: Address;
     saveForLater: boolean;
+}
+
+export interface PaymentSubmissionState {
+    paymentMethodId: number;
+    existingCreditCards?: CreditCard[];
+    selectedCreditCard?: CreditCard;
+    saveForLater: boolean;
+    useShippingAddressAsBillingAddress: boolean;
+    selectedBillingAddress: Address;
+    existingBillingAddresses: Address[];
 }
 
 export interface NewSubmissionSliceState {
@@ -53,6 +69,7 @@ export interface NewSubmissionSliceState {
     step01Data: Step01Data;
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
+    step04Data: PaymentSubmissionState;
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -88,6 +105,28 @@ const initialState: NewSubmissionSliceState = {
             phoneNumber: '',
         },
         saveForLater: true,
+    },
+    step04Data: {
+        paymentMethodId: 0,
+        existingCreditCards: [],
+        selectedCreditCard: {
+            cardNumber: '',
+            expirationDate: '',
+            cvv: '',
+        },
+        saveForLater: true,
+        useShippingAddressAsBillingAddress: true,
+        selectedBillingAddress: {
+            firstName: '',
+            lastName: '',
+            address: '',
+            apt: '',
+            city: '',
+            state: { name: '', id: 0 },
+            zipCode: '',
+            phoneNumber: '',
+        },
+        existingBillingAddresses: [],
     },
 };
 
@@ -196,6 +235,12 @@ const newSubmissionSlice = createSlice({
             // @ts-ignore
             state.step03Data.selectedAddress[action.payload.fieldName] = action.payload.newValue;
         },
+        updatePaymentMethodId: (state, action: PayloadAction<number>) => {
+            state.step04Data.paymentMethodId = action.payload;
+        },
+        setSaveCardForLater: (state, action: PayloadAction<boolean>) => {
+            state.step04Data.saveForLater = action.payload;
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state, action) => {
@@ -225,5 +270,7 @@ export const {
     markCardAsUnselected,
     changeSelectedCardQty,
     changeSelectedCardValue,
+    setSaveCardForLater,
+    updatePaymentMethodId,
 } = newSubmissionSlice.actions;
 export default newSubmissionSlice.reducer;

@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\LoginController;
+use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
+use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +23,12 @@ Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/customer/order/payment-plans', \App\Http\Controllers\API\Customer\Order\PaymentPlanController::class);
+Route::prefix('customer')->group(function () {
+    Route::apiResource('/order/payment-plans', PaymentPlanController::class)
+        ->only(['index', 'show']);
+
+    Route::middleware('auth')->group(function() {
+        Route::apiResource('/addresses', CustomerAddressController::class)
+            ->only(['index', 'show']);
+    });
+});

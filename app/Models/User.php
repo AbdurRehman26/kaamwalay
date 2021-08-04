@@ -43,6 +43,16 @@ class User extends Authenticatable implements JWTSubject
     protected $with = ['roles:id,name'];
 
     /**
+     * Relation of customer addresses
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function customer_addresses()
+    {
+        return $this->hasMany(CustomerAddress::class, 'user_id');
+    }
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

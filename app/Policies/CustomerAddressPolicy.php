@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies\API\Customer\Address;
+namespace App\Policies;
 
 use App\Models\CustomerAddress;
 use App\Models\User;

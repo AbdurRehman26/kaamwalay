@@ -16,13 +16,13 @@ class CustomerAddressTest extends TestCase
     {
         $this->seed();
         $customerAddressA = CustomerAddress::factory()->create([
-            'user_id' => 2
+            'user_id' => 2,
         ]);
         $customerAddressB = CustomerAddress::factory()->create([
-            'user_id' => 2
+            'user_id' => 2,
         ]);
         $customerAddressC = CustomerAddress::factory()->create([
-            'user_id' => 3
+            'user_id' => 3,
         ]);
 
         $addresses = CustomerAddress::forUser(User::findOrFail(2))->get();

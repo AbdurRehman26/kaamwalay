@@ -31,6 +31,7 @@ class CustomerAddressController extends Controller
     public function show(CustomerAddress $address)
     {
         $this->authorize('view', $address);
+
         return new CustomerAddressResource($address);
     }
 }

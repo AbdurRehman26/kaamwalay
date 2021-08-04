@@ -124,8 +124,8 @@ const GreenCheckbox = withStyles({
 let schema = yup.object().shape({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
-    address: yup.string().optional(),
-    apt: yup.string().required(),
+    address: yup.string().required(),
+    apt: yup.string().optional(),
     city: yup.string().required(),
     state: yup.object().shape({
         name: yup.string().required(),

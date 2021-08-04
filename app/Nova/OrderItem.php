@@ -7,7 +7,6 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class OrderItem extends Resource
 {

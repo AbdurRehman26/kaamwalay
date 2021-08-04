@@ -30,7 +30,7 @@ export interface AddCardsToSubmission {
     selectedCards: SearchResultItemCardProps[];
 }
 
-export interface Address {
+export interface SubmissionAddress {
     firstName: string;
     lastName: string;
     address: string;
@@ -51,6 +51,15 @@ export interface ShippingSubmissionState {
     existingAddresses?: Address[];
     selectedAddress: Address;
     saveForLater: boolean;
+}
+
+export interface PaymentSubmissionState {
+    paymentMethodId: number;
+    existingCreditCards?: CreditCard[];
+    selectedCreditCard: CreditCard;
+    availableStatesList: { name: string; id: number }[];
+    saveForLater: boolean;
+    fetchingStatus: string | null;
 }
 
 export interface PaymentSubmissionState {
@@ -105,6 +114,8 @@ const initialState: NewSubmissionSliceState = {
             zipCode: '',
             phoneNumber: '',
         },
+        availableStatesList: [{ name: '', id: 0 }],
+        fetchingStatus: null,
         saveForLater: true,
     },
     step04Data: {
@@ -133,6 +144,10 @@ const initialState: NewSubmissionSliceState = {
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
     return fetch('https://run.mocky.io/v3/78b56c6d-fd1b-4140-a1b1-31203dad1a3d').then((res) => res.json());
+});
+
+export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
+    return fetch('https://run.mocky.io/v3/f308debb-0ab3-41b6-89ad-62ca5338d81c').then((res) => res.json());
 });
 
 const newSubmissionSlice = createSlice({
@@ -262,6 +277,17 @@ const newSubmissionSlice = createSlice({
         [getServiceLevels.rejected as any]: (state, action) => {
             state.step01Data.status = 'failed';
         },
+        [getStatesList.pending as any]: (state, action) => {
+            state.step03Data.fetchingStatus = 'loading';
+        },
+        [getStatesList.fulfilled as any]: (state, action) => {
+            state.step03Data.availableStatesList = action.payload;
+            state.step03Data.fetchingStatus = 'success';
+        },
+        [getStatesList.rejected as any]: (state, action) => {
+            console.log(action);
+            state.step03Data.fetchingStatus = 'failed';
+        },
     },
 });
 
@@ -278,9 +304,5 @@ export const {
     markCardAsUnselected,
     changeSelectedCardQty,
     changeSelectedCardValue,
-    setSaveCardForLater,
-    updatePaymentMethodId,
-    updatePaymentMethodField,
-    setUseShippingAddressAsBilling,
 } = newSubmissionSlice.actions;
 export default newSubmissionSlice.reducer;

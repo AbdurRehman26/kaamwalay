@@ -31,7 +31,7 @@ function SubmissionStep05Content() {
     const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const protectionLimit = useAppSelector(
-        (state) => state.newSubmission?.step01Data?.selectedServiceLevel.max_protection_amount,
+        (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();

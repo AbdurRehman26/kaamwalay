@@ -4,7 +4,7 @@ import axios from 'axios';
 export interface SubmissionService {
     id: number;
     type: 'card';
-    max_protection_amount: number;
+    maxProtectionAmount: number;
     turnaround: string;
     price: number;
 }
@@ -94,7 +94,7 @@ const initialState: NewSubmissionSliceState = {
         selectedServiceLevel: {
             id: 1,
             type: 'card',
-            max_protection_amount: 500,
+            maxProtectionAmount: 500,
             turnaround: '28-39 Day',
             price: 1000,
         },
@@ -149,7 +149,17 @@ const initialState: NewSubmissionSliceState = {
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
     const serviceLevels = await axios.get('http://robograding.test/api/customer/orders/payment-plans/');
-    return serviceLevels.data.data;
+    const formatedServiceLevels = serviceLevels.data.data.map((serviceLevel: any) => {
+        return {
+            id: serviceLevel.id,
+            type: 'card',
+            maxProtectionAmount: serviceLevel.max_protection_amount,
+            turnaround: serviceLevel.turnaround,
+            price: serviceLevel.price,
+        };
+    });
+
+    return formatedServiceLevels;
 });
 
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {

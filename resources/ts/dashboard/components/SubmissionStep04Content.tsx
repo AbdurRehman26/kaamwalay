@@ -16,7 +16,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import Alert from '@material-ui/lab/Alert';
 import CardValidator from 'card-validator';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
 
@@ -37,8 +37,6 @@ import ServiceLevelItem from './ServiceLevelItem';
 import ShippingMethodItem from './ShippingMethodItems';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
-
-[{ id: 22, name: 'California', isoCode: 223 }];
 
 const useStyles = makeStyles({
     stepDescriptionContainer: {
@@ -151,26 +149,14 @@ const GreenCheckbox = withStyles({
     checked: {},
 })((props: any) => <Checkbox color="default" {...props} />);
 
-function limit(val: any, max: any) {
-    if (val.length === 1 && val[0] > max[0]) {
-        val = '0' + val;
-    }
-
-    if (val.length === 2) {
-        if (Number(val) === 0) {
-            val = '01';
-
-            //this can happen when user paste number
-        } else if (val > max) {
-            val = max;
-        }
-    }
-
-    return val;
+function limit(value: string | number, max: number) {
+    const numberValue = parseInt(`${value}`); // Make sure that the value it's a number
+    const inRangeValue = Math.min(Math.max(1, Number(value)), max); // limit value to [1 ... $max]
+    return `${inRangeValue}`.padStart(2, '0'); // return number as 01...09, 10, 11, .etc
 }
 
 function cardExpiry(val: any) {
-    let month = limit(val.substring(0, 2), '12');
+    let month = limit(val.substring(0, 2), Number('12'));
     let year = val.substring(2, 4);
 
     return month + (year.length ? '/' + year : '');
@@ -240,23 +226,23 @@ export function SubmissionStep04Content() {
         }
     }, [dispatch, useBillingAddressSameAsShipping]);
 
-    function onSaveCardForLater() {
+    const onSaveCardForLater = useCallback(() => {
         dispatch(setSaveCardForLater(!saveCardForLater));
-    }
+    }, []);
 
-    function onUseShippingAddressAsBilling() {
+    const onUseShippingAddressAsBilling = useCallback(() => {
         dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
-    }
+    }, []);
 
-    function updateCardData(fieldName: string, newValue: any) {
+    const updateCardData = useCallback((fieldName: string, newValue: any) => {
         dispatch(updatePaymentMethodField({ fieldName, newValue }));
-    }
+    }, []);
 
-    function updateField(fieldName: any, newValue: any) {
+    const updateField = useCallback((fieldName: any, newValue: any) => {
         dispatch(updateBillingAddressField({ fieldName, newValue }));
-    }
+    }, []);
 
-    function updateBillingState(stateId: number) {
+    const updateBillingState = useCallback((stateId: number) => {
         const stateLookup = availableStates.find((state) => state.id === stateId);
         if (stateLookup) {
             dispatch(
@@ -266,7 +252,7 @@ export function SubmissionStep04Content() {
                 }),
             );
         }
-    }
+    }, []);
 
     useEffect(() => {
         dispatch(setIsNextDisabled(true));

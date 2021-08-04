@@ -1,7 +1,7 @@
 import Radio, { RadioProps } from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, useCallback } from 'react';
 import NumberFormat from 'react-number-format';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -22,6 +22,9 @@ const useStyles = makeStyles(
             '&:hover': {
                 cursor: 'pointer',
             },
+            borderColor: ({ currentSelectedLevelId, id }: any) =>
+                currentSelectedLevelId === id ? '#20BFB8' : '#DDDDDD',
+            borderWidth: ({ currentSelectedLevelId, id }: any) => (currentSelectedLevelId?.id === id ? '2px' : '1px'),
         },
         leftSide: {
             display: 'flex',
@@ -81,6 +84,7 @@ const useStyles = makeStyles(
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.54)',
         },
+        cardText: { fontWeight: 400 },
     },
     { name: 'ServiceLevelItemStyle' },
 );
@@ -95,22 +99,17 @@ const GreenRadio = withStyles({
 })((props: RadioProps) => <Radio color="default" {...props} />);
 
 function ServiceLevelItem(props: SubmissionService & { key: any }) {
-    const classes = useStyles();
-    const dispatch = useAppDispatch();
     const currentSelectedLevel = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel);
-    const { id, price, turnaround, type, max_protection_amount } = props;
+    const classes = useStyles({ id: props.id, currentSelectedLevelId: currentSelectedLevel?.id });
+    const dispatch = useAppDispatch();
+    const { id, price, turnaround, type, maxProtectionAmount } = props;
+
+    const handleSetServiceLevel = useCallback(() => {
+        dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount }));
+    }, []);
 
     return (
-        <div
-            onClick={() =>
-                dispatch(setServiceLevel({ id, price, turnaround, type, max_protection_amount: max_protection_amount }))
-            }
-            className={classes.root}
-            style={{
-                borderColor: currentSelectedLevel?.id === id ? '#20BFB8' : '#DDDDDD',
-                borderWidth: currentSelectedLevel?.id === id ? '2px' : '1px',
-            }}
-        >
+        <div onClick={handleSetServiceLevel} className={classes.root}>
             <div className={classes.leftSide}>
                 <div className={classes.radioBtnContainer}>
                     <GreenRadio checked={currentSelectedLevel?.id === id} />
@@ -123,15 +122,15 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                             thousandSeparator
                             decimalSeparator={'.'}
                             prefix={'$'}
-                        />{' '}
-                        <span style={{ fontWeight: 400 }}> / Card </span>
+                        />
+                        &nbsp;<span className={classes.cardText}> / Card </span>
                     </Typography>
                 </div>
             </div>
 
             <div className={classes.maxValueContainer}>
                 <NumberFormat
-                    value={max_protection_amount}
+                    value={maxProtectionAmount}
                     displayType={'text'}
                     thousandSeparator
                     decimalSeparator={'.'}

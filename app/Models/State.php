@@ -22,6 +22,6 @@ class State extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id' => 'integer'
     ];
 }

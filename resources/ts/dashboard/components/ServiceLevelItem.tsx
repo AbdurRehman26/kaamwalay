@@ -2,6 +2,7 @@ import Radio, { RadioProps } from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { HTMLAttributes } from 'react';
+import NumberFormat from 'react-number-format';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
@@ -97,11 +98,13 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const currentSelectedLevel = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel);
-    const { id, price, turnaround, type, protectionLimit } = props;
+    const { id, price, turnaround, type, max_protection_amount } = props;
 
     return (
         <div
-            onClick={() => dispatch(setServiceLevel({ id, price, turnaround, type, protectionLimit }))}
+            onClick={() =>
+                dispatch(setServiceLevel({ id, price, turnaround, type, max_protection_amount: max_protection_amount }))
+            }
             className={classes.root}
             style={{
                 borderColor: currentSelectedLevel?.id === id ? '#20BFB8' : '#DDDDDD',
@@ -114,16 +117,27 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                 </div>
                 <div className={classes.rightSide}>
                     <Typography variant={'subtitle2'} className={classes.levelTitle}>
-                        {price} <span style={{ fontWeight: 400 }}> / Card </span>
+                        <NumberFormat
+                            value={price}
+                            displayType={'text'}
+                            thousandSeparator
+                            decimalSeparator={'.'}
+                            prefix={'$'}
+                        />{' '}
+                        <span style={{ fontWeight: 400 }}> / Card </span>
                     </Typography>
                 </div>
             </div>
 
             <div className={classes.maxValueContainer}>
-                <Typography
-                    variant={'subtitle2'}
+                <NumberFormat
+                    value={max_protection_amount}
+                    displayType={'text'}
+                    thousandSeparator
+                    decimalSeparator={'.'}
+                    prefix={'$'}
                     className={classes.protectionText}
-                >{`Protection up to ${protectionLimit}`}</Typography>
+                />
                 <Typography
                     variant={'subtitle2'}
                     className={classes.turnaround}

@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 export interface SubmissionService {
     id: number;
     type: 'card';
-    protectionLimit: string;
+    max_protection_amount: number;
     turnaround: string;
-    price: string;
+    price: number;
 }
 
 export interface Step01Data {
@@ -36,7 +37,7 @@ export interface Address {
     address: string;
     apt?: string;
     city: string;
-    state: { name: string; id: number };
+    state: { name: string; code: string; id: number };
     zipCode: string;
     phoneNumber: string;
 }
@@ -50,7 +51,7 @@ export interface CreditCard {
 export interface ShippingSubmissionState {
     existingAddresses?: Address[];
     selectedAddress: Address;
-    availableStatesList: { name: string; id: number }[];
+    availableStatesList: { name: string; code: string; id: number }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
 }
@@ -86,16 +87,16 @@ export interface NewSubmissionSliceState {
 
 const initialState: NewSubmissionSliceState = {
     isNextDisabled: false,
-    currentStep: 2,
+    currentStep: 0,
     step01Status: null,
     step01Data: {
         availableServiceLevels: [],
         selectedServiceLevel: {
             id: 1,
             type: 'card',
-            protectionLimit: '$500',
+            max_protection_amount: 500,
             turnaround: '28-39 Day',
-            price: '$20',
+            price: 1000,
         },
         status: null,
     },
@@ -112,11 +113,11 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             apt: '',
             city: '',
-            state: { name: '', id: 0 },
+            state: { name: '', code: '', id: 0 },
             zipCode: '',
             phoneNumber: '',
         },
-        availableStatesList: [{ name: '', id: 0 }],
+        availableStatesList: [{ name: '', code: '', id: 0 }],
         fetchingStatus: null,
         saveForLater: true,
     },
@@ -137,7 +138,7 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             apt: '',
             city: '',
-            state: { name: '', id: 0 },
+            state: { name: '', code: '', id: 0 },
             zipCode: '',
             phoneNumber: '',
         },
@@ -147,11 +148,13 @@ const initialState: NewSubmissionSliceState = {
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
-    return fetch('https://run.mocky.io/v3/78b56c6d-fd1b-4140-a1b1-31203dad1a3d').then((res) => res.json());
+    const serviceLevels = await axios.get('http://robograding.test/api/customer/orders/payment-plans/');
+    return serviceLevels.data.data;
 });
 
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
-    return fetch('https://run.mocky.io/v3/f308debb-0ab3-41b6-89ad-62ca5338d81c').then((res) => res.json());
+    const americanStates = await axios.get('http://robograding.test/api/customer/addresses/states');
+    return americanStates.data.data;
 });
 
 const newSubmissionSlice = createSlice({
@@ -268,6 +271,13 @@ const newSubmissionSlice = createSlice({
         setUseShippingAddressAsBilling: (state, action: PayloadAction<boolean>) => {
             state.step04Data.useShippingAddressAsBillingAddress = action.payload;
         },
+        updateBillingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
+            // @ts-ignore
+            state.step04Data.selectedBillingAddress[action.payload.fieldName] = action.payload.newValue;
+        },
+        setBillingAddressEqualToShippingAddress: (state, action: PayloadAction<void>) => {
+            state.step04Data.selectedBillingAddress = state.step03Data.selectedAddress;
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state, action) => {
@@ -312,5 +322,7 @@ export const {
     setSaveCardForLater,
     setUseShippingAddressAsBilling,
     updatePaymentMethodField,
+    updateBillingAddressField,
+    setBillingAddressEqualToShippingAddress,
 } = newSubmissionSlice.actions;
 export default newSubmissionSlice.reducer;

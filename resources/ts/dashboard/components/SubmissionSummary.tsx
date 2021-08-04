@@ -99,13 +99,12 @@ function SubmissionSummary() {
     const classes = useStyles();
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const protectionLimit = useAppSelector(
-        (state) => state.newSubmission?.step01Data?.selectedServiceLevel.protectionLimit,
+        (state) => state.newSubmission?.step01Data?.selectedServiceLevel.max_protection_amount,
     );
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
 
-    const formattedLevelPrice = Number(serviceLevelPrice.replace(/[^0-9\.-]+/g, ''));
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -139,13 +138,13 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowRightBoldText}>
                                     <span>
                                         <NumberFormat
-                                            value={formattedLevelPrice}
+                                            value={serviceLevelPrice}
                                             displayType={'text'}
                                             thousandSeparator
                                             decimalSeparator={'.'}
                                             prefix={'$'}
                                         />
-                                    </span>
+                                    </span>{' '}
                                     / Card
                                 </Typography>
                             </div>
@@ -153,9 +152,17 @@ function SubmissionSummary() {
                                 <Typography className={classes.clickableGreenText} onClick={onLevelEditPress}>
                                     EDIT
                                 </Typography>
-                                <Typography
-                                    className={classes.rowRightRegularText}
-                                >{`${protectionLimit} Max. Value Per Card`}</Typography>
+                                <div style={{ flexDirection: 'row' }}>
+                                    <NumberFormat
+                                        value={protectionLimit}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                        className={classes.rowRightRegularText}
+                                    />
+                                    <span className={classes.rowRightRegularText}> Max. Value Per Card</span>
+                                </div>
                             </div>
                         </div>
                         <Divider light />
@@ -222,7 +229,7 @@ function SubmissionSummary() {
                                         x {numberOfSelectedCards}) ={' '}
                                     </span>
                                     <NumberFormat
-                                        value={numberOfSelectedCards * formattedLevelPrice}
+                                        value={numberOfSelectedCards * serviceLevelPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}
@@ -254,7 +261,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowRightBoldText}>
                                     {' '}
                                     <NumberFormat
-                                        value={numberOfSelectedCards * formattedLevelPrice + 14.0}
+                                        value={numberOfSelectedCards * serviceLevelPrice + 14.0}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator
@@ -283,11 +290,11 @@ function SubmissionSummary() {
                                             thousandSeparator
                                             decimalSeparator={'.'}
                                             prefix={'$'}
-                                        />
+                                        />{' '}
                                         x {numberOfSelectedCards}) ={' '}
                                     </span>
                                     <NumberFormat
-                                        value={numberOfSelectedCards * formattedLevelPrice}
+                                        value={numberOfSelectedCards * serviceLevelPrice}
                                         displayType={'text'}
                                         thousandSeparator
                                         decimalSeparator={'.'}

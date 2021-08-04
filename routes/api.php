@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
+use App\Http\Controllers\API\Customer\Address\StateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,7 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 Route::prefix('customer')->group(function () {
     Route::apiResource('/order/payment-plans', PaymentPlanController::class)
         ->only(['index', 'show']);
-
+    Route::resource('/addresses/states', StateController::class);
     Route::middleware('auth')->group(function() {
         Route::apiResource('/addresses', CustomerAddressController::class)
             ->only(['index', 'show']);

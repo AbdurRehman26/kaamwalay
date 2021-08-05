@@ -16,7 +16,7 @@ class CustomerAddressPolicy
      * @param  User  $user
      * @return Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
         return true;
     }
@@ -28,7 +28,7 @@ class CustomerAddressPolicy
      * @param  CustomerAddress  $customerAddress
      * @return Response|bool
      */
-    public function view(User $user, CustomerAddress $customerAddress)
+    public function view(User $user, CustomerAddress $customerAddress): bool
     {
         return $customerAddress->user->is($user);
     }

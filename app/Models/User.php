@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -42,12 +43,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $with = ['roles:id,name'];
 
-    /**
-     * Relation of customer addresses
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function customer_addresses()
+    public function customer_addresses(): HasMany
     {
         return $this->hasMany(CustomerAddress::class, 'user_id');
     }

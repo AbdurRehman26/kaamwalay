@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\API\Customer\Address;
 
-use Tests\TestCase;
 use App\Models\CustomerAddress;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CustomerAddressTest extends TestCase
 {

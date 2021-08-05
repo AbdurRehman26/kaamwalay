@@ -9,23 +9,12 @@ use App\Models\PaymentPlan;
 
 class PaymentPlanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): PaymentPlanCollection
     {
         return new PaymentPlanCollection(PaymentPlan::orderBy('display_position')->get());
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show(int $id): PaymentPlanResource
     {
         return new PaymentPlanResource(PaymentPlan::findOrFail($id));
     }

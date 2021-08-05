@@ -39,8 +39,8 @@ class CustomerAddress extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'is_default_shipping' => 'integer',
-        'is_default_billing' => 'integer',
+        'is_default_shipping' => 'boolean',
+        'is_default_billing' => 'boolean',
         'country_id' => 'integer',
     ];
 

@@ -232,7 +232,7 @@ export function SubmissionStep04Content() {
 
     const onUseShippingAddressAsBilling = useCallback(() => {
         dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
-    }, []);
+    }, [useBillingAddressSameAsShipping]);
 
     const updateCardData = useCallback((fieldName: string, newValue: any) => {
         dispatch(updatePaymentMethodField({ fieldName, newValue }));
@@ -265,13 +265,9 @@ export function SubmissionStep04Content() {
         }
 
         if (paymentMethodId == 1) {
-            if (isAddressDataValid) {
-                dispatch(setIsNextDisabled(false));
-            } else {
-                dispatch(setIsNextDisabled(true));
-            }
+            dispatch(setIsNextDisabled(false));
         }
-    }, [dispatch, isAddressDataValid, isCardDataValid, paymentMethodId]);
+    }, [dispatch, isAddressDataValid, isCardDataValid, paymentMethodId, useBillingAddressSameAsShipping]);
 
     useEffect(() => {
         const isNumberValid = CardValidator.number(cardNumber).isValid;
@@ -289,7 +285,7 @@ export function SubmissionStep04Content() {
         <Container>
             <div className={classes.stepDescriptionContainer}>
                 <StepDescription
-                    title={`Enter your Payment Details`}
+                    title={`Enter Payment Details`}
                     description={'Select your payment method and enter details.'}
                 />
             </div>

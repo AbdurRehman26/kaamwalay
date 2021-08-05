@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API\Customer\Address;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\API\Customer\Address\CustomerAddressCollection;
-use App\Http\Resources\API\Customer\Address\CustomerAddressResource;
 use App\Models\CustomerAddress;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\API\Customer\Address\CustomerAddressResource;
+use App\Http\Resources\API\Customer\Address\CustomerAddressCollection;
 
 class CustomerAddressController extends Controller
 {

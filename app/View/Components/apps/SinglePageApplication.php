@@ -34,6 +34,16 @@ class SinglePageApplication extends Component
         $this->app = $app;
         $this->title = $title;
         $this->lang = $lang ?? str_replace('_', '-', app()->getLocale());
+
+        $this->setPublicPath();
+    }
+
+    private function setPublicPath(): void
+    {
+        $this->publicPath = '/apps/' . $this->app . '/';
+        if (app()->environment("production")) {
+            $this->publicPath = config('app.mix_url') . "/apps/" . $this->app ;
+        }
     }
 
     /**
@@ -41,11 +51,6 @@ class SinglePageApplication extends Component
      */
     public function render(): View
     {
-        $this->publicPath = '/apps/' . $this->app . '/';
-        if (app()->environment("production")) {
-            $this->publicPath = config('app.mix_url') . "/apps/" . $this->app ;
-        }
-
         return view('components.apps.single-page-application');
     }
 }

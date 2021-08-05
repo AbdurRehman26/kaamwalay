@@ -550,7 +550,7 @@ export function SubmissionStep04Content() {
                                                             <MenuItem value="none">Select a state</MenuItem>
                                                             {availableStates.map((item, index) => (
                                                                 <MenuItem key={item.id} value={item.id}>
-                                                                    {item.name}
+                                                                    {item.code}
                                                                 </MenuItem>
                                                             ))}
                                                         </Select>

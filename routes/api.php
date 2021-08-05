@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\LoginController;
+use App\Http\Controllers\API\Customer\Address\StateController;
 use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
-use App\Http\Controllers\API\Customer\Address\StateController;
 
 /*
 |--------------------------------------------------------------------------

@@ -46,3 +46,13 @@ const foo = resolve(Foo);
 // ...
 foo.sayHi();
 ```
+
+### Dialogs
+#### Confirmation dialog
+```js
+// Usage inside component
+const confirm = useConfirmation();
+
+const result = await confirm('your message');
+// returning a boolean depending on pressed button
+```

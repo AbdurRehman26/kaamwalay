@@ -21,6 +21,7 @@ interface ViewSubmissionStatusProps {
 export function ViewSubmissionStatus({ currentStep }: ViewSubmissionStatusProps) {
     const classes = useViewSubmissionStatusStyles();
     const details = useMemo(() => SubmissionDetails[currentStep], [currentStep]);
+    const steps = useMemo(() => Object.values(SubmissionSteps), []);
 
     return (
         <Grid container direction={'column'} className={classes.root}>
@@ -40,7 +41,7 @@ export function ViewSubmissionStatus({ currentStep }: ViewSubmissionStatusProps)
                 {currentStep === 'Shipped' && <Link href={'#'}>LS9383980923098328238920</Link>}
             </Typography>
 
-            <ViewSubmissionStatusBar steps={SubmissionSteps as any} currentStep={currentStep} />
+            <ViewSubmissionStatusBar steps={steps} currentStep={currentStep} />
         </Grid>
     );
 }

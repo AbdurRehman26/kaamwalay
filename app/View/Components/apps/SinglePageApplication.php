@@ -19,6 +19,10 @@ class SinglePageApplication extends Component
      * @var string
      */
     public $lang;
+    /**
+     * @var string
+     */
+    public $publicPath;
 
     /**
      * @param string $app
@@ -37,6 +41,11 @@ class SinglePageApplication extends Component
      */
     public function render(): View
     {
+        $this->publicPath = '/apps/' . $this->app . '/';
+        if (app()->environment("production")) {
+            $this->publicPath = config('app.mix_url') . "/apps/" . $this->app ;
+        }
+
         return view('components.apps.single-page-application');
     }
 }

@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,6 +54,9 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
+    'mix_url' => env('APP_ENV') === 'production'
+        ? env('MIX_ASSET_URL', "https://d2eli1wrotxo1h.cloudfront.net/apps/robograding/latest")
+        : null,
 
     /*
     |--------------------------------------------------------------------------

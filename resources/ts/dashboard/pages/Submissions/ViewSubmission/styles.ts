@@ -111,10 +111,60 @@ export const useViewSubmissionStatusBarStyles = makeStyles(
 );
 
 export const useViewSubmissionInformationStyles = makeStyles(
-    () => ({
-        root: {},
+    (theme) => ({
+        root: {
+            padding: theme.spacing(2, 0),
+            '& .table-info td, & .table-info th': {
+                paddingTop: 2,
+                paddingBottom: 2,
+                paddingLeft: 0,
+                border: 'none',
+            },
+        },
     }),
     {
         name: 'ViewSubmissionInformation',
+    },
+);
+
+export const useViewSubmissionBillingStyles = makeStyles(
+    (theme) => ({
+        root: {
+            padding: theme.spacing(2, 0),
+        },
+        paymentAvatar: {
+            width: 52,
+            height: 52,
+        },
+    }),
+    {
+        name: 'ViewSubmissionBilling',
+    },
+);
+
+export const useViewSubmissionDetailsStyles = makeStyles(
+    (theme) => ({
+        root: {
+            marginTop: theme.spacing(4),
+            borderRadius: 3,
+            border: '1px solid #e0e0e0',
+            '& $header, & $footer': {
+                backgroundColor: '#f9f9f9',
+            },
+        },
+        header: {},
+        footer: {},
+        gutterRight: {
+            marginRight: theme.spacing(1),
+        },
+        cardImage: {
+            width: 40,
+            height: 56,
+            objectFit: 'contain',
+            objectPosition: 'center center',
+        },
+    }),
+    {
+        name: 'ViewSubmissionDetails',
     },
 );

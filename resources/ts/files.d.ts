@@ -1,7 +1,12 @@
 declare module '*.svg' {
-    import { SVGAttributes } from 'react';
+    import { ComponentType, SVGAttributes } from 'react';
     const content: string;
-    export const ReactComponent: React.ComponentType<SVGAttributes<SVGElement>>;
+    export const ReactComponent: ComponentType<SVGAttributes<SVGElement>>;
+    export default content;
+}
+
+declare module '*.scss' {
+    const content: Record<string, string>;
     export default content;
 }
 

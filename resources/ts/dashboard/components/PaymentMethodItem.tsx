@@ -3,8 +3,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { HTMLAttributes } from 'react';
 
-import { ReactComponent as ColoredCC } from '../assets/coloredCC.svg';
-import { ReactComponent as PaypalLogo } from '../assets/paypalLogo.svg';
+import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
+import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
 

@@ -7,6 +7,8 @@ use Illuminate\View\Component;
 
 class SinglePageApplication extends Component
 {
+    public $componentName = 'sap';
+
     /**
      * @var string
      */
@@ -42,7 +44,7 @@ class SinglePageApplication extends Component
     {
         $this->publicPath = '/apps/' . $this->app . '/';
         if (app()->environment("production")) {
-            $this->publicPath = config('app.mix_url') . "/apps/" . $this->app ;
+            $this->publicPath = config('app.mix_url') . "/apps/" . $this->app;
         }
     }
 

@@ -1,0 +1,10 @@
+{
+    "name": "Robograding API",
+    "description": "API for Robograding platform",
+    "title": "Robograding API",
+    "url": "https://robograding.com/api",
+    "header": {
+        "title": "Introduction",
+        "filename": "header.md"
+    }
+}

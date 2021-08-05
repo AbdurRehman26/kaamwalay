@@ -1,28 +1,53 @@
 # Robgrading
 
-The project it's based on Laravel 8 and React for the frontend.
+The project is based on
+
+-   PHP 8
+-   Laravel 8
+-   MySQL 8
+-   React
+-   Material UI
 
 ### Requirements
 
 -   Docker
+-   Docker Compose
 -   Composer
 -   PHP >= 7.4 (only CLI)
+-   NPM
+-   Yarn
 
 ### Setup
 
 ```bash
+$ git clone
 $ composer install
 $ yarn install
 
-# Add host entry to be able to access the app via laravel.test domain
-127.0.0.1 laravel.test
+# Add host entry to be able to access the app via robograding.test domain
+127.0.0.1 robograding.test
+
+# Since we use Laravel Sail for local development environment, it is recommended to add this to your bash aliases
+alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 ```
 
 ### Getting things started
 
 ```bash
+# Create .env
+$ cp .env.example .env
+
+# Change values for these variables
+APP_NAME=Robograding
+APP_URL=http://robograding.test
+DB_CONNECTION=mysql
+DB_DATABASE=robograding
+
 # Starting the backend
 $ ./vendor/bin/sail up    # or docker-compose up
+
+# Migrations and Seeders
+$ ./vendor/bin/sail artisan migrate --seed
 
 # Starting the frontend
 # 1. Dashboard application
@@ -32,11 +57,42 @@ $ yarn start
 $ yarn admin:start        # or BUILD_PRESET=admin yarn start
 ```
 
-### File structure
+### Backend
 
-**(frontend only)**
+#### Architecture
 
-Laravel structure and all the other things related to it are on their documentation, for the frontend, everything it's
+[Presentation](https://docs.google.com/presentation/d/1OCxnv5yxMzO24-4yooT55rqQbnNgyyDy6rvpyQiYozE/edit?usp=sharing)
+
+##### ERD
+
+[Diagram](https://drawsql.app/none-404/diagrams/xyz)
+
+#### Development Flow
+
+-   Git branch flow for branches (Wooter standard flow)
+-   Follow REST principles for API development
+-   Create tests, and run them before submitting PR
+-   Write documentation for API
+-   For code styling, we use PHP CS Fixer. It is already installed with composer. So you can integrate in your IDE for
+    local inspection and automatic fixes.
+-   When PR is created, our GitHub Action also runs to fix code styling automatically.
+-   Once tests are passing and code styling is fixed, then you can request review on your PR.
+
+#### API Documentation
+
+For API documentation, we are using apiDocjs. Once you have written the documentation source files, you can use this
+command to regenerate it:
+
+```bash
+# Change project's absolute path accordingly
+$ docker run --name apidocjs --rm -v "/home/joe/Projects/robograding/:/var/docs/" d3c0d3dpt/apidoc -i resources/apidocs  -o public/apidocs
+```
+
+### Frontend
+
+#### File Structure:
+
+Backend structure and all the other things related to it are on their documentation, for the frontend, everything it's
 organized into apps, currently:
 
 -   `resources/ts/dashboard` responsible with all logics related to the dashboard pages (`/dashboard*`)
@@ -150,7 +206,7 @@ we will have to create the file to the right directory and then use it according
 **Note <sup>2</sup>**: To avoid wrong imports, at build time of each preset only the `@shared` and `@[BUILD_PRESET]`
 paths are mounted, for example building admin app, we will have access to only `@shared` and `@admin` import paths.
 
-## FAQ
+### FAQ
 
 ```
 # @TODO

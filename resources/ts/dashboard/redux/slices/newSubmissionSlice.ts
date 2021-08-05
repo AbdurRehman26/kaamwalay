@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 export interface SubmissionService {
     id: number;
     type: 'card';
-    protectionLimit: string;
+    maxProtectionAmount: number;
     turnaround: string;
-    price: string;
+    price: number;
 }
 
 export interface Step01Data {
@@ -30,20 +31,48 @@ export interface AddCardsToSubmission {
     selectedCards: SearchResultItemCardProps[];
 }
 
-export interface SubmissionAddress {
+export interface Address {
     firstName: string;
     lastName: string;
     address: string;
     apt?: string;
     city: string;
-    state: { name: string; id: number };
+    state: { name: string; code: string; id: number };
     zipCode: string;
     phoneNumber: string;
 }
+
+export interface CreditCard {
+    cardNumber: string;
+    expirationDate: string;
+    cvv: string;
+}
+
 export interface ShippingSubmissionState {
-    existingAddresses?: SubmissionAddress[];
-    selectedAddress: SubmissionAddress;
+    existingAddresses?: Address[];
+    selectedAddress: Address;
+    availableStatesList: { name: string; code: string; id: number }[];
     saveForLater: boolean;
+    fetchingStatus: string | null;
+}
+
+export interface PaymentSubmissionState {
+    paymentMethodId: number;
+    existingCreditCards?: CreditCard[];
+    selectedCreditCard: CreditCard;
+    availableStatesList: { name: string; id: number }[];
+    saveForLater: boolean;
+    fetchingStatus: string | null;
+}
+
+export interface PaymentSubmissionState {
+    paymentMethodId: number;
+    existingCreditCards?: CreditCard[];
+    selectedCreditCard: CreditCard;
+    saveForLater: boolean;
+    useShippingAddressAsBillingAddress: boolean;
+    selectedBillingAddress: Address;
+    existingBillingAddresses: Address[];
 }
 
 export interface NewSubmissionSliceState {
@@ -53,6 +82,7 @@ export interface NewSubmissionSliceState {
     step01Data: Step01Data;
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
+    step04Data: PaymentSubmissionState;
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -64,9 +94,9 @@ const initialState: NewSubmissionSliceState = {
         selectedServiceLevel: {
             id: 1,
             type: 'card',
-            protectionLimit: '$500',
+            maxProtectionAmount: 500,
             turnaround: '28-39 Day',
-            price: '$20',
+            price: 1000,
         },
         status: null,
     },
@@ -83,16 +113,58 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             apt: '',
             city: '',
-            state: { name: '', id: 0 },
+            state: { name: '', code: '', id: 0 },
             zipCode: '',
             phoneNumber: '',
         },
+        availableStatesList: [{ name: '', code: '', id: 0 }],
+        fetchingStatus: null,
         saveForLater: true,
+    },
+    step04Data: {
+        paymentMethodId: 0,
+        existingCreditCards: [],
+        availableStatesList: [],
+        selectedCreditCard: {
+            cardNumber: '',
+            expirationDate: '',
+            cvv: '',
+        },
+        saveForLater: true,
+        useShippingAddressAsBillingAddress: true,
+        selectedBillingAddress: {
+            firstName: '',
+            lastName: '',
+            address: '',
+            apt: '',
+            city: '',
+            state: { name: '', code: '', id: 0 },
+            zipCode: '',
+            phoneNumber: '',
+        },
+        existingBillingAddresses: [],
+        fetchingStatus: null,
     },
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
-    return fetch('https://run.mocky.io/v3/78b56c6d-fd1b-4140-a1b1-31203dad1a3d').then((res) => res.json());
+    const serviceLevels = await axios.get('http://robograding.test/api/customer/orders/payment-plans/');
+    const formatedServiceLevels = serviceLevels.data.data.map((serviceLevel: any) => {
+        return {
+            id: serviceLevel.id,
+            type: 'card',
+            maxProtectionAmount: serviceLevel.max_protection_amount,
+            turnaround: serviceLevel.turnaround,
+            price: serviceLevel.price,
+        };
+    });
+
+    return formatedServiceLevels;
+});
+
+export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
+    const americanStates = await axios.get('http://robograding.test/api/customer/addresses/states');
+    return americanStates.data.data;
 });
 
 const newSubmissionSlice = createSlice({
@@ -196,6 +268,26 @@ const newSubmissionSlice = createSlice({
             // @ts-ignore
             state.step03Data.selectedAddress[action.payload.fieldName] = action.payload.newValue;
         },
+        updatePaymentMethodId: (state, action: PayloadAction<number>) => {
+            state.step04Data.paymentMethodId = action.payload;
+        },
+        setSaveCardForLater: (state, action: PayloadAction<boolean>) => {
+            state.step04Data.saveForLater = action.payload;
+        },
+        updatePaymentMethodField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
+            // @ts-ignore
+            state.step04Data.selectedCreditCard[action.payload.fieldName] = action.payload.newValue;
+        },
+        setUseShippingAddressAsBilling: (state, action: PayloadAction<boolean>) => {
+            state.step04Data.useShippingAddressAsBillingAddress = action.payload;
+        },
+        updateBillingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
+            // @ts-ignore
+            state.step04Data.selectedBillingAddress[action.payload.fieldName] = action.payload.newValue;
+        },
+        setBillingAddressEqualToShippingAddress: (state, action: PayloadAction<void>) => {
+            state.step04Data.selectedBillingAddress = state.step03Data.selectedAddress;
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state, action) => {
@@ -208,6 +300,17 @@ const newSubmissionSlice = createSlice({
         },
         [getServiceLevels.rejected as any]: (state, action) => {
             state.step01Data.status = 'failed';
+        },
+        [getStatesList.pending as any]: (state, action) => {
+            state.step03Data.fetchingStatus = 'loading';
+        },
+        [getStatesList.fulfilled as any]: (state, action) => {
+            state.step03Data.availableStatesList = action.payload;
+            state.step03Data.fetchingStatus = 'success';
+        },
+        [getStatesList.rejected as any]: (state, action) => {
+            console.log(action);
+            state.step03Data.fetchingStatus = 'failed';
         },
     },
 });
@@ -225,5 +328,11 @@ export const {
     markCardAsUnselected,
     changeSelectedCardQty,
     changeSelectedCardValue,
+    updatePaymentMethodId,
+    setSaveCardForLater,
+    setUseShippingAddressAsBilling,
+    updatePaymentMethodField,
+    updateBillingAddressField,
+    setBillingAddressEqualToShippingAddress,
 } = newSubmissionSlice.actions;
 export default newSubmissionSlice.reducer;

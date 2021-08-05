@@ -6,6 +6,9 @@ import { transparentize } from 'polished';
 import React, { ElementType, useMemo } from 'react';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 
+import { cx } from '@shared/lib/utils/cx';
+import font from '@shared/styles/font.module.scss';
+
 type SidebarMenuItemProps = {
     icon: ElementType;
     title: string;
@@ -43,7 +46,7 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, exact = true } = props;
+    const { icon: Icon, title, href, exact } = props;
 
     const location = useLocation();
     const classes = useStyles();
@@ -70,7 +73,15 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
             <ListItemIcon className={classes.iconHolder}>
                 <Icon className={classes.icon} />
             </ListItemIcon>
-            <ListItemText primary={title} className={classes.title} />
+            <ListItemText
+                primary={title}
+                className={classes.title}
+                primaryTypographyProps={{
+                    className: cx({
+                        [font.fontWeightMedium]: isActive,
+                    }),
+                }}
+            />
         </ListItem>
     );
 }

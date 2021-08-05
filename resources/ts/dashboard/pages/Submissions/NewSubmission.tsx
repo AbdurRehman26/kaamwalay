@@ -39,7 +39,7 @@ const useStyles = makeStyles({
     },
 });
 
-function NewSubmission() {
+export function NewSubmission() {
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const classes = useStyles({ currentStep });
@@ -75,7 +75,9 @@ function NewSubmission() {
         if (selectedCards.length === 0 && currentStep === 1) {
             dispatch(setIsNextDisabled(true));
         } else {
-            dispatch(setIsNextDisabled(false));
+            if (currentStep !== 3) {
+                dispatch(setIsNextDisabled(false));
+            }
         }
     }, [selectedCards, currentStep]);
 

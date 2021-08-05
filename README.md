@@ -61,6 +61,8 @@ shared across applications. To satisfy these apps we have alias for them
     - The file it's an enum, `PascalCase.ts`
     - The file it's an entity/model, `PascalCase.ts`
     - The file it's a page, `PascalCase.ts`
+    - The file it's a repository, `PascalCase.ts`
+    - The file it's a service, `PascalCase.ts`
     - The file it's a hook, `useCamelCase.ts`
     - The file it's a style:
         - Normal scss style, `camelCase.scss`
@@ -137,6 +139,10 @@ shared across applications. To satisfy these apps we have alias for them
    code, using the visibility rule we talked about above (public/private), in that way we can easily understand and
    navigate through it.
 8. Make sure you configured all development tools and write code according rules and code style.
+9. Each API call should be living into a Repository.
+10. Each Entity, Service, Repository should be created under `shared` application.
+11. Each known data of any api should have an entity (model) defined.
+12. Make sure there's no red in terminal, IDE or browser console.
 
 **Note <sup>1</sup>**: Applications cannot directly import files from one to another. If we share files between the apps
 we will have to create the file to the right directory and then use it accordingly.

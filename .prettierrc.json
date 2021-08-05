@@ -1,5 +1,4 @@
 {
-    "phpVersion": "7.4",
     "tabWidth": 4,
     "printWidth": 120,
     "semi": true,
@@ -11,7 +10,7 @@
     "arrowParens": "always",
     "endOfLine": "lf",
     "proseWrap": "always",
-    "importOrder": ["^@shared/(.*)$", "^@dashboard/(.*)$", "^[./]"],
+    "importOrder": ["^@shared/(.*)$", "^@dashboard/(.*)$", "^@admin/(.*)$", "^[./]"],
     "importOrderSeparation": true,
     "overrides": [
         {

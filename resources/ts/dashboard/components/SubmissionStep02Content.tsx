@@ -31,17 +31,16 @@ function SubmissionStep02Content() {
     const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const protectionLimit = useAppSelector(
-        (state) => state.newSubmission?.step01Data?.selectedServiceLevel.protectionLimit,
+        (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
-    const formattedProtectionLimit = Number(protectionLimit.replace(/[^0-9\.-]+/g, ''));
     const dispatch = useAppDispatch();
 
     function areSelectedCardsValuesValid() {
         if (selectedCards.length > 0) {
             // @ts-ignore
             const cardsWithValueHigherThanProtection = selectedCards.filter(
-                (card: Record<string, any>) => card?.value > formattedProtectionLimit,
+                (card: Record<string, any>) => card?.value > protectionLimit,
             );
             if (currentStep === 1) {
                 cardsWithValueHigherThanProtection.length !== 0

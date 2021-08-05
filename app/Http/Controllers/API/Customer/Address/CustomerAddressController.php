@@ -9,12 +9,12 @@ use App\Models\CustomerAddress;
 
 class CustomerAddressController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return CustomerAddressCollection
-     */
-    public function index()
+    public function __construct()
+    {
+        $this->authorizeResource(CustomerAddress::class, 'address');
+    }
+
+    public function index(): CustomerAddressCollection
     {
         $user = auth()->user();
         $addresses = CustomerAddress::forUser($user)->get();
@@ -22,16 +22,8 @@ class CustomerAddressController extends Controller
         return new CustomerAddressCollection($addresses);
     }
 
-
-    /**
-     * @param $address
-     * @return CustomerAddressResource
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function show(CustomerAddress $address)
+    public function show(CustomerAddress $address): CustomerAddressResource
     {
-        $this->authorize('view', $address);
-
         return new CustomerAddressResource($address);
     }
 }

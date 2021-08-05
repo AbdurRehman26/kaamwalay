@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CustomerAddress extends Model
 {
@@ -43,30 +44,17 @@ class CustomerAddress extends Model
         'country_id' => 'integer',
     ];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function country()
+    public function country(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Country::class);
+        return $this->belongsTo(Country::class);
     }
 
-    /**
-     * Query scope to fetch only specific user's addresses.
-     *
-     * @param Builder $query
-     * @param User $user
-     * @return Builder
-     */
-    public function scopeForUser(Builder $query, User $user)
+    public function scopeForUser(Builder $query, User $user): Builder
     {
         return $query->where('user_id', $user->id);
     }

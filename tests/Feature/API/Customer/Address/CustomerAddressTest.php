@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\API\Customer\Address;
 
-use App\Models\CustomerAddress;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\CustomerAddress;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CustomerAddressTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     private User $user;
 
     public function setUp(): void
@@ -22,7 +22,7 @@ class CustomerAddressTest extends TestCase
     }
 
     /** @test */
-    public function user_can_receive_addresses()
+    public function user_can_receive_addresses(): void
     {
         $response = $this->getJson('/api/customer/addresses');
         $response->assertJsonStructure([
@@ -31,7 +31,7 @@ class CustomerAddressTest extends TestCase
     }
 
     /** @test */
-    public function user_can_receive_single_address()
+    public function user_can_receive_single_address(): void
     {
         $response = $this->getJson('/api/customer/addresses/1');
         $response->assertJsonStructure([
@@ -40,7 +40,7 @@ class CustomerAddressTest extends TestCase
     }
 
     /** @test */
-    public function user_can_not_receive_other_user_address()
+    public function user_can_not_receive_other_user_address(): void
     {
         $response = $this->getJson('/api/customer/addresses/2');
         $response->assertStatus(403);

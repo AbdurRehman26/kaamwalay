@@ -18,6 +18,7 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "paths": {
+            "@publicPath": ["resources/ts/shared/publicPath.ts"],
             "@shared/*": ["resources/ts/shared/*"],
             "@dashboard/*": ["resources/ts/dashboard/*"],
             "@admin/*": ["resources/ts/admin/*"]

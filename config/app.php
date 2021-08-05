@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,6 +54,9 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
+    'mix_url' => env('APP_ENV') === 'production'
+        ? env('MIX_ASSET_URL', "https://d2eli1wrotxo1h.cloudfront.net/apps/robograding/latest")
+        : null,
 
     /*
     |--------------------------------------------------------------------------
@@ -173,7 +176,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\ComponentsProvider::class,
     ],
 
     /*
@@ -183,7 +185,7 @@ return [
     |
     | This array of class aliases will be registered when this application
     | is started. However, feel free to register as many as you wish as
-    | the aliases are "lazy" loaded so they don't hinder performance.
+    | the aliases are "lazy" loaded, so they don't hinder performance.
     |
     */
 

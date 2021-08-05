@@ -6,6 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { formatDate } from '@shared/lib/datetime/formatDate';
 
@@ -27,15 +28,24 @@ enum Options {
 export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const { id, datePlaced, dateArrived, serviceLevel, cardsNumber, status } = props;
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-
+    const history = useHistory();
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback<MouseEventHandler>(() => setAnchorEl(null), [setAnchorEl]);
 
     const handleOption = useCallback(
         (option: Options) => () => {
-            console.log('selected', option);
+            switch (option) {
+                case Options.View:
+                    history.push(`/submissions/${id}/view`);
+                    break;
+                case Options.Edit:
+                    history.push(`/submissions/${id}/edit`);
+                    break;
+                case Options.Delete:
+                    break;
+            }
         },
-        [],
+        [id],
     );
 
     return (

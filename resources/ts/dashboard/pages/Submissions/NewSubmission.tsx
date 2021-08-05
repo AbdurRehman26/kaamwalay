@@ -39,7 +39,7 @@ const useStyles = makeStyles({
     },
 });
 
-function NewSubmission() {
+export function NewSubmission() {
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const classes = useStyles({ currentStep });

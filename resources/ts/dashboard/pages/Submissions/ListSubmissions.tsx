@@ -41,7 +41,7 @@ const useStyles = makeStyles(
     },
 );
 
-export function ListSubmissionsPage() {
+export function ListSubmissions() {
     const classes = useStyles();
 
     return (

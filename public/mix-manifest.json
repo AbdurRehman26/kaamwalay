@@ -1,8 +1,0 @@
-{
-    "/apps/admin/index.js": "/apps/admin/index.js",
-    "/apps/dashboard/index.js": "/apps/dashboard/index.js",
-    "/apps/dashboard/manifest.js": "/apps/dashboard/manifest.js",
-    "/apps/dashboard/vendor.js": "/apps/dashboard/vendor.js",
-    "/apps/admin/manifest.js": "/apps/admin/manifest.js",
-    "/apps/admin/vendor.js": "/apps/admin/vendor.js"
-}

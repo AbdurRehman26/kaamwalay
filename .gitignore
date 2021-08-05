@@ -18,3 +18,4 @@ yarn-error.log
 draft.yaml
 .blueprint
 .php-cs-fixer.cache
+/coverage

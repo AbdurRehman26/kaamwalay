@@ -12,7 +12,8 @@ import PaymentOutlinedIcon from '@material-ui/icons/PaymentOutlined';
 import StyleIcon from '@material-ui/icons/Style';
 import React from 'react';
 
-import UserAvatar from '../../assets/dummyLargeAvatar.png';
+import UserAvatar from '@shared/assets/dummyLargeAvatar.png';
+
 import LayoutSidebarItem from './LayoutSidebarItem';
 
 const useStyles = makeStyles(
@@ -79,8 +80,13 @@ function LayoutSidebar() {
                 <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
                 <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} href={'/cards'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Profile'} href={'/profile'} />
-                <LayoutSidebarItem icon={PaymentOutlinedIcon} title={'Saved Credit Cards'} href={'/profile/payments'} />
-                <LayoutSidebarItem icon={HomeOutlinedIcon} title={'Address Book'} href={'/profile/address'} />
+                <LayoutSidebarItem
+                    exact
+                    icon={PaymentOutlinedIcon}
+                    title={'Saved Credit Cards'}
+                    href={'/profile/payments'}
+                />
+                <LayoutSidebarItem exact icon={HomeOutlinedIcon} title={'Address Book'} href={'/profile/address'} />
             </List>
         </Paper>
     );

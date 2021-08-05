@@ -7,6 +7,8 @@ use Illuminate\View\Component;
 
 class SinglePageApplication extends Component
 {
+    public $componentName = 'sap';
+
     /**
      * @var string
      */
@@ -19,6 +21,10 @@ class SinglePageApplication extends Component
      * @var string
      */
     public $lang;
+    /**
+     * @var string
+     */
+    public $publicPath;
 
     /**
      * @param string $app
@@ -30,6 +36,16 @@ class SinglePageApplication extends Component
         $this->app = $app;
         $this->title = $title;
         $this->lang = $lang ?? str_replace('_', '-', app()->getLocale());
+
+        $this->setPublicPath();
+    }
+
+    private function setPublicPath(): void
+    {
+        $this->publicPath = '/apps/' . $this->app . '/';
+        if (app()->environment("production")) {
+            $this->publicPath = config('app.mix_url') . "/apps/" . $this->app;
+        }
     }
 
     /**

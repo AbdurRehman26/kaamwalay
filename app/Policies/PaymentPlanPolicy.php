@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies\API\Customer\Order;
+namespace App\Policies;
 
 use App\Models\PaymentPlan;
 use App\Models\User;

@@ -75,7 +75,9 @@ export function NewSubmission() {
         if (selectedCards.length === 0 && currentStep === 1) {
             dispatch(setIsNextDisabled(true));
         } else {
-            dispatch(setIsNextDisabled(false));
+            if (currentStep !== 3) {
+                dispatch(setIsNextDisabled(false));
+            }
         }
     }, [selectedCards, currentStep]);
 

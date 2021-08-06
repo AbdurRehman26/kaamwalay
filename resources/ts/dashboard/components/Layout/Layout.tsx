@@ -2,6 +2,8 @@ import Container from '@material-ui/core/Container';
 import React, { PropsWithChildren, useMemo } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 
+import { ConfirmationDialog } from '@shared/components/ConfirmationDialog';
+
 import LayoutHeader from './LayoutHeader';
 import LayoutSidebar from './LayoutSidebar';
 import { Content, SidebarHolder, ContentHolder } from './styles';
@@ -38,6 +40,8 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
                     <ContentHolder>{children}</ContentHolder>
                 </Content>
             </Container>
+
+            <ConfirmationDialog />
         </>
     );
 }

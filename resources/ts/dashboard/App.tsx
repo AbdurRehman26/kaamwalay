@@ -6,7 +6,7 @@ import { LayoutOptions } from '@dashboard/components/Layout/LayoutOptions';
 import { Dashboard } from './Dashboard';
 import { Layout } from './components/Layout';
 
-const PlainLayoutOnRoutes = {
+const RoutesOptions = {
     '/submissions/new': LayoutOptions.empty(),
     '/submissions/:id/confirmation': LayoutOptions.build().withoutSidebar(),
 };
@@ -14,7 +14,7 @@ const PlainLayoutOnRoutes = {
 function App() {
     return (
         <BrowserRouter basename={'/dashboard'}>
-            <Layout routeOptions={PlainLayoutOnRoutes}>
+            <Layout routeOptions={RoutesOptions}>
                 <Switch>
                     <Route path={'/'} component={Dashboard} />
                 </Switch>

@@ -129,3 +129,22 @@ const filteredData = useRepositoryMethod(CustomerAddressStatesRepository, 'list'
 // so the hook it's smart enough to get method arguments as a tuple type so we can do
 // typecheck for the arguments passed to the method.
 ```
+
+### Layout
+
+#### Hiding parts of layout
+
+Layout components support hiding parts of layout via LayoutOptions, that can be passed to Layout as property via
+`routeOptions` which is a typeof `Record<string, LayoutOptions>`. Map which contain key string that's referring to the
+route path, and LayoutOptions which it's a class that has methods for setting and checking options of the layout.
+
+```tsx
+// Current usage
+const RoutesOptions = {
+    '/submissions/new': LayoutOptions.empty(), // Will have no elements, returning children as it is
+    '/submissions/:id/confirmation': LayoutOptions.build().withoutSidebar(), // WIll have all elements excluding the sidebar
+};
+
+// ...
+<Layout routeOptions={RoutesOptions}>...</Layout>;
+```

@@ -7,50 +7,36 @@ use Illuminate\View\Component;
 
 class SinglePageApplication extends Component
 {
-    public $componentName = 'sap';
+    public string $app;
+    public string $title;
+    public ?string $lang;
+    public ?string $publicPath;
 
-    /**
-     * @var string
-     */
-    public $app;
-    /**
-     * @var string
-     */
-    public $title;
-    /**
-     * @var string
-     */
-    public $lang;
-    /**
-     * @var string
-     */
-    public $publicPath;
-
-    /**
-     * @param string $app
-     * @param string $title
-     * @param string|null $lang
-     */
-    public function __construct(string $app, string $title, ?string $lang = null)
+    public function __construct(string $app, string $title, ?string $publicPath = null, ?string $lang = null)
     {
         $this->app = $app;
         $this->title = $title;
-        $this->lang = $lang ?? str_replace('_', '-', app()->getLocale());
-
-        $this->setPublicPath();
+        $this->lang = $lang;
+        $this->publicPath = $publicPath;
     }
 
-    private function setPublicPath(): void
+    public function getLang(): string
     {
-        $this->publicPath = '/apps/' . $this->app . '/';
-        if (app()->environment("production")) {
-            $this->publicPath = config('app.mix_url') . "/apps/" . $this->app;
-        }
+        return $this->lang ?? str_replace('_', '-', app()->getLocale());
     }
 
-    /**
-     * @return View
-     */
+    public function getPublicPath(): string
+    {
+        if (!$this->publicPath) {
+            $this->publicPath = '/apps/' . $this->app . '/';
+            if (app()->environment("production")) {
+                $this->publicPath = config('app.mix_url') . "/apps/" . $this->app;
+            }
+        }
+
+        return $this->publicPath;
+    }
+
     public function render(): View
     {
         return view('components.apps.single-page-application');

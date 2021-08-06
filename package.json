@@ -20,7 +20,7 @@
         "coverage": "yarn test --collect-coverage --coverage",
         "coverage:serve": "serve ./coverage/jest/lcov-report",
         "apidoc:build": "apidoc -i resources/apidocs/src -o resources/apidocs/output",
-        "apidoc:serve": "serve ./public/apidocs",
+        "apidoc:serve": "serve ./resources/apidocs/output",
         "apidoc:start": "yarn apidoc:build && yarn apidoc:serve",
         "backup": "aws s3 mv s3://apparel-cdn/apps/robograding/latest s3://apparel-cdn/apps/robograding/v$(node -e \"process.stdout.write(require('./package.json').version)\") --recursive",
         "deploy": "aws s3 cp ./public/apps s3://apparel-cdn/apps/robograding/latest/apps --recursive"

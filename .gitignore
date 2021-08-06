@@ -20,3 +20,4 @@ draft.yaml
 .php-cs-fixer.cache
 /coverage
 /resources/apidocs/out
+/resources/apidocs/output

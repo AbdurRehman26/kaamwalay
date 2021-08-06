@@ -8,6 +8,7 @@ import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 
 interface SubmissionTableRowProps {
@@ -27,13 +28,18 @@ enum Options {
 
 export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const { id, datePlaced, dateArrived, serviceLevel, cardsNumber, status } = props;
-    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+
     const history = useHistory();
+    const confirm = useConfirmation();
+
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
-    const handleCloseOptions = useCallback<MouseEventHandler>(() => setAnchorEl(null), [setAnchorEl]);
+    const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
 
     const handleOption = useCallback(
-        (option: Options) => () => {
+        (option: Options) => async () => {
+            handleCloseOptions();
+
             switch (option) {
                 case Options.View:
                     history.push(`/submissions/${id}/view`);
@@ -42,10 +48,14 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     history.push(`/submissions/${id}/edit`);
                     break;
                 case Options.Delete:
+                    const result = await confirm();
+                    if (result) {
+                        console.log('Delete submission');
+                    }
                     break;
             }
         },
-        [id],
+        [id, confirm, handleCloseOptions],
     );
 
     return (

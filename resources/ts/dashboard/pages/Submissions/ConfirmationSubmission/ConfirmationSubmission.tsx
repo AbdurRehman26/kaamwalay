@@ -71,7 +71,7 @@ export function ConfirmationSubmission() {
                     </Typography>
                 </Box>
                 <Divider />
-                <Box paddingY={4}>
+                <Box paddingTop={4} paddingBottom={10}>
                     <Button variant={'contained'} size={'large'} color={'primary'} className={classes.detailsButton}>
                         Go to submission details page
                     </Button>

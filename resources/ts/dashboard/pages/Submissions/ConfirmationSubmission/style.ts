@@ -7,8 +7,8 @@ export const useConfirmationSubmissionStyles = makeStyles(
         },
         content: {
             flex: '1 1 auto',
-            maxWidth: 600,
-            padding: theme.spacing(0, 2.5),
+            maxWidth: 640,
+            padding: theme.spacing(0, 3),
         },
         detailsButton: {
             borderRadius: 3,

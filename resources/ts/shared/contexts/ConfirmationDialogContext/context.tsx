@@ -5,8 +5,8 @@ import { ConfirmationDialogContextMethods, ConfirmationDialogContextState, initi
 export const ConfirmationDialogContext = React.createContext<
     ConfirmationDialogContextState & ConfirmationDialogContextMethods
 >({
-    open(): void {},
     ...initialState,
+    open(): void {},
     reject(): void {},
     resolve(): void {},
 });

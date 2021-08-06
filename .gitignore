@@ -21,3 +21,5 @@ draft.yaml
 /coverage
 /resources/apidocs/out
 /resources/apidocs/output
+/public/apidocs
+/public/coverage

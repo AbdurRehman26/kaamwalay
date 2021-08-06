@@ -85,7 +85,7 @@ command to regenerate it:
 
 ```bash
 # Change project's absolute path accordingly
-$ yarn apidoc:serve # Build and start the server
+$ yarn apidoc:start # Build and start the server
 ```
 
 ### Frontend

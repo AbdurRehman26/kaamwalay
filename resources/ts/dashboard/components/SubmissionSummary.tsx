@@ -1,4 +1,5 @@
 import { Divider, Paper } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
@@ -93,6 +94,43 @@ const useStyles = makeStyles({
             color: '#288480',
         },
     },
+    greyDescriptionText: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        fontSize: '12px',
+        lineHeight: '16px',
+        textAlign: 'center',
+        letterSpacing: '0.1px',
+        color: 'rgba(0, 0, 0, 0.54)',
+        marginTop: '12px',
+        marginBottom: '12px',
+    },
+    darkDescriptionText: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        fontSize: '12px',
+        lineHeight: '16px',
+        textAlign: 'center',
+        letterSpacing: '0.1px',
+        color: '#000',
+    },
+    paymentActionsContainer: {
+        marginTop: '12px',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    boldDarkText: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 500,
+        fontSize: '16px',
+        lineHeight: '24px',
+        letterSpacing: '0.1px',
+        color: 'rgba(0, 0, 0, 0.87)',
+        marginBottom: '12px',
+    },
 });
 
 function SubmissionSummary() {
@@ -130,6 +168,87 @@ function SubmissionSummary() {
                 </Typography>
             </div>
             <div className={classes.bodyContainer}>
+                {currentStep === 4 ? (
+                    <div className={classes.paymentActionsContainer}>
+                        <Button variant="contained" color="primary">
+                            Complete Submission
+                        </Button>
+                        <Typography className={classes.greyDescriptionText}>
+                            By clicking the “Complete Submission”, you are agreeing to the Robograding{' '}
+                            <span className={classes.darkDescriptionText}>Terms and Conditions.</span>
+                        </Typography>
+                    </div>
+                ) : null}
+
+                {currentStep == 4 ? (
+                    <>
+                        <Divider light />
+                        <div className={classes.rowsContainer}>
+                            <div className={classes.row}>
+                                <Typography className={classes.boldDarkText}>Price Summary</Typography>
+                            </div>
+                            <div className={classes.row}>
+                                <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
+
+                                <Typography className={classes.rowRightBoldText}>
+                                    <span style={{ fontWeight: 400, color: '#757575' }}>
+                                        (
+                                        <NumberFormat
+                                            value={serviceLevelPrice}
+                                            displayType={'text'}
+                                            thousandSeparator
+                                            decimalSeparator={'.'}
+                                            prefix={'$'}
+                                        />
+                                        &nbsp; x {numberOfSelectedCards}) =&nbsp;
+                                    </span>
+                                    <NumberFormat
+                                        value={numberOfSelectedCards * serviceLevelPrice}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </Typography>
+                            </div>
+                            <div className={classes.row} style={{ marginTop: '16px' }}>
+                                <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                <NumberFormat
+                                    value={'$14.00'}
+                                    className={classes.rowRightBoldText}
+                                    displayType={'text'}
+                                    thousandSeparator
+                                    decimalSeparator={'.'}
+                                    prefix={'$'}
+                                />
+                            </div>
+                        </div>
+                        <Divider light />
+                    </>
+                ) : null}
+
+                {currentStep === 4 ? (
+                    <>
+                        <div className={classes.rowsContainer}>
+                            <div className={classes.row}>
+                                <Typography className={classes.rowLeftText}>Total:</Typography>
+                                <Typography className={classes.rowRightBoldText}>
+                                    &nbsp;
+                                    <NumberFormat
+                                        value={numberOfSelectedCards * serviceLevelPrice + 14.0}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                    />
+                                </Typography>
+                            </div>
+                        </div>
+                        <Divider light />
+                    </>
+                ) : null}
+
                 {currentStep === 1 ? (
                     <>
                         <div className={classes.rowsContainer}>

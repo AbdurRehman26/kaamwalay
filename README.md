@@ -85,7 +85,7 @@ command to regenerate it:
 
 ```bash
 # Change project's absolute path accordingly
-$ docker run --name apidocjs --rm -v "/home/joe/Projects/robograding/:/var/docs/" d3c0d3dpt/apidoc -i resources/apidocs  -o public/apidocs
+$ yarn apidoc:serve # Build and start the server
 ```
 
 ### Frontend
@@ -205,6 +205,8 @@ we will have to create the file to the right directory and then use it according
 
 **Note <sup>2</sup>**: To avoid wrong imports, at build time of each preset only the `@shared` and `@[BUILD_PRESET]`
 paths are mounted, for example building admin app, we will have access to only `@shared` and `@admin` import paths.
+
+More about frontend on [/resources/docs/frontend.md](resources/docs/frontend.md)
 
 ### FAQ
 

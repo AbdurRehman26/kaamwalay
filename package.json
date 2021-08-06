@@ -19,7 +19,8 @@
         "test": "jest",
         "coverage": "yarn test --collect-coverage --coverage",
         "coverage:serve": "serve ./coverage/jest/lcov-report",
-        "apidocs:serve": "serve ./public/apidocs",
+        "apidoc": "apidoc -i resources/apidocs/src -o resources/apidocs/out",
+        "apidoc:serve": "yarn apidoc && serve ./public/apidocs",
         "backup": "aws s3 mv s3://apparel-cdn/apps/robograding/latest s3://apparel-cdn/apps/robograding/v$(node -e \"process.stdout.write(require('./package.json').version)\") --recursive",
         "deploy": "aws s3 cp ./public/apps s3://apparel-cdn/apps/robograding/latest/apps --recursive"
     },
@@ -58,6 +59,7 @@
         "@types/react": "^17.0.0",
         "@types/react-dom": "^17.0.0",
         "@types/react-router-dom": "^5.1.8",
+        "apidoc": "^0.29.0",
         "browser-sync": "^2.27.5",
         "browser-sync-webpack-plugin": "^2.3.0",
         "cross-env": "^7.0.3",

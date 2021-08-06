@@ -40,7 +40,7 @@ $ cp .env.example .env
 # Change values for these variables
 APP_NAME=Robograding
 APP_URL=http://robograding.test
-DB_CONNECTION=mysql
+DB_HOST=mysql
 DB_DATABASE=robograding
 
 # Starting the backend

@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import React from 'react';
 
+import OrderReviewSection from '@dashboard/components/SubmissionOrderReview/OrderReviewSection';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';
@@ -70,7 +72,8 @@ function SubmissionStep05Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
-                        <AddedSubmissionCards />
+                        <AddedSubmissionCards reviewMode />
+                        <OrderReviewSection />
                     </div>
                 </Grid>
                 <Grid item xs={12} md={4}>

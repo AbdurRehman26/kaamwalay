@@ -16,6 +16,7 @@ const useStyles = makeStyles({
     container: {
         display: 'flex',
         flexDirection: 'row',
+        width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingBottom: '8px',

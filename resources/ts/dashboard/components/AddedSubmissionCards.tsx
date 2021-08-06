@@ -64,6 +64,34 @@ const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
+    editBtn: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.35px',
+        marginLeft: '12px',
+        '&:hover': {
+            cursor: 'pointer',
+        },
+        color: '#20BFB8',
+    },
+    titleContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    tableRowText: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        lineHeight: '20px',
+        textAlign: 'right',
+        letterSpacing: '0.2px',
+        color: 'rgba(0, 0, 0, 0.87)',
+    },
 });
 
 interface NumberFormatCustomProps {
@@ -93,10 +121,16 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
     );
 }
 
-function AddedSubmissionCards() {
+type AddedSubmissionCardsProps = {
+    reviewMode?: boolean;
+};
+
+function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const classes = useStyles();
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
+
+    const { reviewMode } = props;
 
     function onDeselectCard(row: SearchResultItemCardProps) {
         dispatch(markCardAsUnselected(row));
@@ -127,9 +161,12 @@ function AddedSubmissionCards() {
 
     return (
         <Paper className={classes.addedCardsContainer} variant={'outlined'}>
-            <Typography variant={'subtitle2'} className={classes.label}>
-                Added Card(s)
-            </Typography>
+            <div className={classes.titleContainer}>
+                <Typography variant={'subtitle2'} className={classes.label}>
+                    {reviewMode ? 'Card(s) in Submission' : 'Added Card(s)'}
+                </Typography>
+                <Typography className={classes.editBtn}>EDIT</Typography>
+            </div>
 
             <Table className={classes.table} aria-label="simple table">
                 <TableHead>
@@ -144,20 +181,26 @@ function AddedSubmissionCards() {
                     {selectedCards.map((row: SearchResultItemCardProps) => (
                         <TableRow key={row.id}>
                             <TableCell component="th" scope="row">
-                                <TextField
-                                    onChange={(e) => onChangeCardQty(row, Number(e.target.value))}
-                                    type="number"
-                                    size={'small'}
-                                    value={row.qty}
-                                    InputProps={{
-                                        inputProps: { min: 1 },
-                                    }}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    className={classes.qtyField}
-                                    variant="outlined"
-                                />
+                                {!reviewMode ? (
+                                    <TextField
+                                        onChange={(e) => onChangeCardQty(row, Number(e.target.value))}
+                                        type="number"
+                                        size={'small'}
+                                        value={row.qty}
+                                        InputProps={{
+                                            inputProps: { min: 1 },
+                                        }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        className={classes.qtyField}
+                                        variant="outlined"
+                                    />
+                                ) : (
+                                    <Typography variant={'subtitle1'} className={classes.tableRowText}>
+                                        {row.qty}
+                                    </Typography>
+                                )}
                             </TableCell>
                             <TableCell align="left">
                                 <SearchResultItemCard
@@ -170,25 +213,38 @@ function AddedSubmissionCards() {
                                 />
                             </TableCell>
                             <TableCell align="left">
-                                <TextField
-                                    value={row.value}
-                                    onChange={(e) => onChangeCardValue(row, Number(e.target.value))}
-                                    name="numberformat"
-                                    size="small"
-                                    id="formatted-numberformat-input"
-                                    variant="outlined"
-                                    InputProps={{
-                                        inputComponent: NumberFormatCustom as any,
-                                        inputProps: { min: 1 },
-                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                    }}
-                                />
+                                {!reviewMode ? (
+                                    <TextField
+                                        value={row.value}
+                                        onChange={(e) => onChangeCardValue(row, Number(e.target.value))}
+                                        name="numberformat"
+                                        size="small"
+                                        id="formatted-numberformat-input"
+                                        variant="outlined"
+                                        InputProps={{
+                                            inputComponent: NumberFormatCustom as any,
+                                            inputProps: { min: 1 },
+                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                        }}
+                                    />
+                                ) : (
+                                    <NumberFormat
+                                        value={row.value}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'$'}
+                                        className={classes.tableRowText}
+                                    />
+                                )}
                             </TableCell>
-                            <TableCell align="left">
-                                <IconButton aria-label="delete" onClick={() => onDeselectCard(row)}>
-                                    <DeleteIcon fontSize="medium" />
-                                </IconButton>
-                            </TableCell>
+                            {!reviewMode ? (
+                                <TableCell align="left">
+                                    <IconButton aria-label="delete" onClick={() => onDeselectCard(row)}>
+                                        <DeleteIcon fontSize="medium" />
+                                    </IconButton>
+                                </TableCell>
+                            ) : null}
                         </TableRow>
                     ))}
                 </TableBody>

@@ -1,4 +1,5 @@
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { Map } from 'immutable';
 
 import { Injectable } from '@shared/decorators/Injectable';
 import { Log4ts } from '@shared/decorators/Log4ts';
@@ -81,6 +82,12 @@ export class APIService {
      */
     private responseErrorInterceptor(error: AxiosError) {
         error.response = this.responseInterceptor(error.response!);
-        return error;
+        throw error;
+    }
+
+    mergeConfig(base?: AxiosRequestConfig, ...partial: (AxiosRequestConfig | undefined)[]) {
+        const base$ = Map(base ?? {});
+
+        return partial.reduce((target, partialConfig) => target.mergeDeep(Map(partialConfig ?? {})), base$).toJS();
     }
 }

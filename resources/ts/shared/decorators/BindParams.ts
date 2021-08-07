@@ -25,10 +25,12 @@ export function BindParams(): MethodDecorator {
         if (bindOptions) {
             return;
         }
-        const oldValue = descriptor.value;
+
         Reflect.defineMetadata(BindParamsDecoratorOptions, {}, target, propertyKey);
-        descriptor.value = (...args: any[]) => {
-            return oldValue(...bindParams(args, { target, propertyKey }));
+
+        const oldValue = descriptor.value;
+        descriptor.value = function (...args: any[]) {
+            return oldValue.apply(this, bindParams(args, { target, propertyKey }));
         };
     };
 }

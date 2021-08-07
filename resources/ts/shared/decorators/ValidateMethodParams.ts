@@ -11,7 +11,7 @@ export function ValidateMethodParams(options?: ValidatorOptions): MethodDecorato
         const name = (target as any).name || target.constructor.name;
         const oldValue = descriptor.value;
 
-        descriptor.value = (...args: any[]) => {
+        descriptor.value = function (...args: any[]) {
             const newArgs = bindParams(args, { target, propertyKey }).map((arg, index) => {
                 if (!arg || typeof arg !== 'object') {
                     return arg;
@@ -25,7 +25,7 @@ export function ValidateMethodParams(options?: ValidatorOptions): MethodDecorato
                 return arg;
             });
 
-            return oldValue(...newArgs);
+            return oldValue.apply(this, newArgs);
         };
     };
 }
@@ -46,7 +46,7 @@ export function ValidateMethodParamsAsync(options?: ValidatorOptions): MethodDec
             throw new Exception('Use ValidateMethodParamsAsync only for async methods!');
         }
 
-        descriptor.value = async (...args: any[]) => {
+        descriptor.value = async function (...args: any[]) {
             const newArgs = bindParams(args, { target, propertyKey }).map(async (arg, index) => {
                 if (!arg || typeof arg !== 'object') {
                     return arg;
@@ -61,7 +61,7 @@ export function ValidateMethodParamsAsync(options?: ValidatorOptions): MethodDec
             });
 
             const result = await Promise.all(newArgs);
-            return oldValue(...result);
+            return oldValue.apply(this, result);
         };
     };
 }

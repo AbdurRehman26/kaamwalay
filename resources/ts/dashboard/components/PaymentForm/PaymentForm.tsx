@@ -18,7 +18,7 @@ import { getPaymentIcon } from '@shared/lib/payments';
 import CustomerStripeCardItem from '@dashboard/components/PaymentForm/CustomerStripeCardItem';
 import useStyles from '@dashboard/components/PaymentForm/style';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { saveStripeCustomerCards, setStripePaymentMethodId } from '@dashboard/redux/slices/newSubmissionSlice';
+import { saveStripeCustomerCards } from '@dashboard/redux/slices/newSubmissionSlice';
 
 const CARD_OPTIONS = {
     iconStyle: 'solid',

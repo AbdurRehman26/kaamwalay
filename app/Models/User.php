@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
@@ -42,6 +43,11 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $with = ['roles:id,name'];
+
+    public function customer_addresses(): HasMany
+    {
+        return $this->hasMany(CustomerAddress::class, 'user_id');
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

@@ -13,7 +13,7 @@ const useStyles = makeStyles(
     {
         root: {
             background: 'linear-gradient(106.54deg, #140078 -4.67%, #6C31BC 112.32%)',
-            marginBottom: 32,
+            marginBottom: 28,
         },
         brand: {
             display: 'block',

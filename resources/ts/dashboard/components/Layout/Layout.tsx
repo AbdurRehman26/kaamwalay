@@ -1,43 +1,57 @@
 import Container from '@material-ui/core/Container';
-import React, { PropsWithChildren, useMemo } from 'react';
+import React, { Fragment, PropsWithChildren, useMemo } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 
+import { ConfirmationDialog } from '@shared/components/ConfirmationDialog';
+
+import { LayoutFlags, LayoutOptions } from '@dashboard/components/Layout/LayoutOptions';
+import LayoutSidebar from '@dashboard/components/Layout/LayoutSidebar';
+
+import { ContentHolder } from './ContentHolder';
 import LayoutHeader from './LayoutHeader';
-import LayoutSidebar from './LayoutSidebar';
-import { Content, SidebarHolder, ContentHolder } from './styles';
+import { Content, SidebarHolder } from './styles';
 
 interface LayoutProps {
-    exclude?: string;
+    routeOptions?: Record<string, LayoutOptions>;
 }
 
 export function Layout(props: PropsWithChildren<LayoutProps>) {
-    const { children, exclude } = props;
+    const { children, routeOptions } = props;
     const location = useLocation();
 
-    const isExcluded = useMemo(
-        () =>
-            !!matchPath(location.pathname, {
-                path: exclude,
-                exact: true,
-            }),
-        [exclude, location.pathname],
-    );
+    const options = useMemo(() => {
+        const routes = routeOptions || {};
+        const currentRoute = Object.keys(routes).find((path) => !!matchPath(location.pathname, { path, exact: true }));
+        return currentRoute ? routes[currentRoute] : LayoutOptions.build();
+    }, [routeOptions, location.pathname]);
 
-    if (isExcluded) {
+    const ContainerComponent = options.has(LayoutFlags.Container) ? (Container as any) : Fragment;
+    const ContentComponent = options.has(LayoutFlags.Content) ? Content : Fragment;
+
+    if (options.isEmpty()) {
         return children as any;
     }
 
     return (
         <>
-            <LayoutHeader />
-            <Container>
-                <Content>
-                    <SidebarHolder>
-                        <LayoutSidebar />
-                    </SidebarHolder>
-                    <ContentHolder>{children}</ContentHolder>
-                </Content>
-            </Container>
+            {options.has(LayoutFlags.Header) && <LayoutHeader />}
+            <ContainerComponent>
+                <ContentComponent>
+                    {options.has(LayoutFlags.Sidebar) && (
+                        <SidebarHolder>
+                            <LayoutSidebar />
+                        </SidebarHolder>
+                    )}
+                    <ContentHolder
+                        hasSidebar={options.has(LayoutFlags.Sidebar)}
+                        hasContent={options.has(LayoutFlags.Sidebar, LayoutFlags.Content)}
+                    >
+                        {children}
+                    </ContentHolder>
+                </ContentComponent>
+            </ContainerComponent>
+
+            <ConfirmationDialog />
         </>
     );
 }

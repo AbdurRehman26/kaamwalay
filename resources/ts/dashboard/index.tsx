@@ -6,6 +6,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import 'reflect-metadata';
 
+import { ConfirmationDialogProvider } from '@shared/contexts/ConfirmationDialogContext';
+
 import App from './App';
 import './index.scss';
 import { store } from './redux/store';
@@ -17,7 +19,9 @@ ReactDOM.render(
             <ThemeProvider theme={theme}>
                 <>
                     <CssBaseline />
-                    <App />
+                    <ConfirmationDialogProvider>
+                        <App />
+                    </ConfirmationDialogProvider>
                 </>
             </ThemeProvider>
         </Provider>

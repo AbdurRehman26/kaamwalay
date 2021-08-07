@@ -11,15 +11,21 @@ class PaymentMethodController extends Controller
 {
     public function index()
     {
+        /**
+         * @var User $user
+         */
         $user = auth()->user();
 
         return response()->json([
             'data' => $user->paymentMethods()
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function getSetupIntent()
     {
+        /**
+         * @var User $user
+         */
         $user = auth()->user();
 
         return response()->json([

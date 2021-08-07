@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Customer\Address\StateController;
 use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
+use App\Http\Controllers\API\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 
 /*
@@ -31,5 +32,7 @@ Route::prefix('customer')->group(function () {
     Route::middleware('auth')->group(function() {
         Route::apiResource('/addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
+        Route::get('orders/payment-methods', [PaymentMethodController::class, 'index']);
+        Route::get('orders/payment-methods/setup', [PaymentMethodController::class, 'getSetupIntent']);
     });
 });

@@ -3,7 +3,6 @@
 
 namespace App\Http\Resources\API\Customer\User;
 
-
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class UserCollection extends ResourceCollection

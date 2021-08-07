@@ -42,7 +42,7 @@ class RegisterRequest extends FormRequest
     {
         $this->merge(
             [
-                'password'  => bcrypt($this->get('password')),
+                'password' => bcrypt($this->get('password')),
             ]
         );
     }

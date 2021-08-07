@@ -1,0 +1,34 @@
+import { plainToClass } from 'class-transformer';
+
+import { BindParamsDecoratorOptions, ReflectParamsType } from '@shared/constants/ReflectMetadata';
+
+export function bindParams(args: any[], { target, propertyKey }: Record<string, any>) {
+    const paramTypes = Reflect.getMetadata(ReflectParamsType, target, propertyKey);
+
+    return args.map((arg, index) => {
+        const type = paramTypes[index];
+        if (!type || !arg || typeof arg !== 'object') {
+            return arg;
+        }
+
+        return plainToClass(type, arg);
+    });
+}
+
+/**
+ * Bind plain objects to the defined type.
+ * @constructor
+ */
+export function BindParams(): MethodDecorator {
+    return (target, propertyKey, descriptor: TypedPropertyDescriptor<any>): any => {
+        const bindOptions = Reflect.getMetadata(BindParamsDecoratorOptions, target, propertyKey);
+        if (bindOptions) {
+            return;
+        }
+        const oldValue = descriptor.value;
+        Reflect.defineMetadata(BindParamsDecoratorOptions, {}, target, propertyKey);
+        descriptor.value = (...args: any[]) => {
+            return oldValue(...bindParams(args, { target, propertyKey }));
+        };
+    };
+}

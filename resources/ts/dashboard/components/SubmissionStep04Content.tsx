@@ -20,6 +20,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
 
+import PaymentForm from '@dashboard/components/PaymentForm/PaymentForm';
+import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     getServiceLevels,
@@ -31,10 +34,7 @@ import {
     updatePaymentMethodField,
     updateShippingAddressField,
 } from '../redux/slices/newSubmissionSlice';
-import CardsSearchResults from './CardsSearchResults';
 import PaymentMethodItem from './PaymentMethodItem';
-import ServiceLevelItem from './ServiceLevelItem';
-import ShippingMethodItem from './ShippingMethodItems';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 
@@ -182,9 +182,8 @@ export function SubmissionStep04Content() {
 
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const saveCardForLater = useAppSelector((state) => state.newSubmission.step04Data.saveForLater);
-    const cardNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.cardNumber);
-    const cvv = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.cvv);
-    const expirationDate = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expirationDate);
+    const currentSelectedStripeCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
+
     const useBillingAddressSameAsShipping = useAppSelector(
         (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
     );
@@ -200,7 +199,6 @@ export function SubmissionStep04Content() {
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
 
-    const [isCardDataValid, setIsCardDataValid] = useState(false);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
 
     useEffect(() => {
@@ -255,9 +253,11 @@ export function SubmissionStep04Content() {
     }, []);
 
     useEffect(() => {
+        console.log('yo');
         dispatch(setIsNextDisabled(true));
         if (paymentMethodId == 0) {
-            if (isCardDataValid && isAddressDataValid) {
+            console.log('inside here');
+            if (currentSelectedStripeCardId.length !== 0 && isAddressDataValid) {
                 dispatch(setIsNextDisabled(false));
             } else {
                 dispatch(setIsNextDisabled(true));
@@ -267,19 +267,7 @@ export function SubmissionStep04Content() {
         if (paymentMethodId == 1) {
             dispatch(setIsNextDisabled(false));
         }
-    }, [dispatch, isAddressDataValid, isCardDataValid, paymentMethodId, useBillingAddressSameAsShipping]);
-
-    useEffect(() => {
-        const isNumberValid = CardValidator.number(cardNumber).isValid;
-        const isCvvValid = CardValidator.cvv(cvv).isValid;
-        const isExpirationValid = CardValidator.expirationDate(expirationDate).isValid;
-
-        if (isNumberValid && isCvvValid && isExpirationValid) {
-            setIsCardDataValid(true);
-        } else {
-            setIsCardDataValid(false);
-        }
-    }, [cvv, expirationDate, cardNumber]);
+    }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
 
     return (
         <Container>
@@ -313,81 +301,7 @@ export function SubmissionStep04Content() {
                         {paymentMethodId === 0 ? (
                             <>
                                 <div className={classes.sectionContainer}>
-                                    <div className={classes.shippingAddressSectionHeader}>
-                                        <Typography className={classes.sectionLabel}>Add Card</Typography>
-                                        <FormControlLabel
-                                            control={
-                                                <GreenCheckbox
-                                                    checked={saveCardForLater}
-                                                    onChange={onSaveCardForLater}
-                                                    name="checkedG"
-                                                />
-                                            }
-                                            label="Save for later"
-                                        />
-                                    </div>
-
-                                    <div className={classes.inputsRow01}>
-                                        <div className={classes.fieldContainer} style={{ width: '100%' }}>
-                                            <Typography className={classes.methodDescription}>Card Number</Typography>
-                                            <NumberFormat
-                                                format="#### #### #### ####"
-                                                customInput={TextField}
-                                                style={{ margin: 8, marginLeft: 0 }}
-                                                placeholder="Enter Card Number"
-                                                value={cardNumber}
-                                                onChange={(e) => updateCardData('cardNumber', e.target.value)}
-                                                fullWidth
-                                                variant={'outlined'}
-                                                margin="normal"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className={classes.inputsRow02}>
-                                        <div className={classes.fieldContainer} style={{ width: '65%' }}>
-                                            <Typography className={classes.methodDescription}>
-                                                Expiration Date
-                                            </Typography>
-
-                                            <NumberFormat
-                                                format={cardExpiry}
-                                                customInput={TextField}
-                                                style={{ margin: 8, marginLeft: 0 }}
-                                                placeholder="MM/YY"
-                                                fullWidth
-                                                value={expirationDate}
-                                                onChange={(e) => updateCardData('expirationDate', e.target.value)}
-                                                variant={'outlined'}
-                                                margin="normal"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={classes.fieldContainer} style={{ width: '28%' }}>
-                                            <Typography className={classes.methodDescription}>CVV</Typography>
-                                            <TextField
-                                                style={{ margin: 8, marginLeft: 0 }}
-                                                placeholder="XXX"
-                                                fullWidth
-                                                value={cvv}
-                                                onChange={(e) => updateCardData('cvv', e.target.value)}
-                                                variant={'outlined'}
-                                                margin="normal"
-                                                InputProps={{
-                                                    inputProps: {
-                                                        maxLength: 3,
-                                                    },
-                                                }}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
+                                    <PaymentForm />
                                 </div>
                                 <div className={classes.billingAddressAsShippingContainer}>
                                     <FormControlLabel

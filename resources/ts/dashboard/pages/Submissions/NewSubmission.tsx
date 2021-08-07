@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
 
+import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
+
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
 import SubmissionStep02Content from '../../components/SubmissionStep02Content';
@@ -84,34 +86,36 @@ export function NewSubmission() {
     return (
         <>
             <SubmissionHeader />
-            <Container>
-                <div className={classes.pageContentContainer}>
-                    {getStepContent()}
+            <StripeContainer>
+                <Container>
+                    <div className={classes.pageContentContainer}>
+                        {getStepContent()}
 
-                    <div className={classes.buttonsContainer}>
-                        {currentStep !== 0 ? (
+                        <div className={classes.buttonsContainer}>
+                            {currentStep !== 0 ? (
+                                <Button
+                                    variant={'text'}
+                                    color={'secondary'}
+                                    className={classes.backBtn}
+                                    startIcon={<ArrowBackIcon />}
+                                    onClick={handleBack}
+                                >
+                                    Back
+                                </Button>
+                            ) : null}
                             <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                startIcon={<ArrowBackIcon />}
-                                onClick={handleBack}
+                                variant={'contained'}
+                                disabled={isNextDisabled}
+                                color={'primary'}
+                                onClick={handleNext}
+                                className={classes.nextBtn}
                             >
-                                Back
+                                Next
                             </Button>
-                        ) : null}
-                        <Button
-                            variant={'contained'}
-                            disabled={isNextDisabled}
-                            color={'primary'}
-                            onClick={handleNext}
-                            className={classes.nextBtn}
-                        >
-                            Next
-                        </Button>
+                        </div>
                     </div>
-                </div>
-            </Container>
+                </Container>
+            </StripeContainer>
         </>
     );
 }

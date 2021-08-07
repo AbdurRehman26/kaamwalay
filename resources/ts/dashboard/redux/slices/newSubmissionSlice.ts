@@ -43,9 +43,11 @@ export interface Address {
 }
 
 export interface CreditCard {
-    cardNumber: string;
-    expirationDate: string;
-    cvv: string;
+    expMonth: number;
+    expYear: number;
+    last4: string;
+    brand: string;
+    id: string;
 }
 
 export interface ShippingSubmissionState {
@@ -60,19 +62,12 @@ export interface PaymentSubmissionState {
     paymentMethodId: number;
     existingCreditCards?: CreditCard[];
     selectedCreditCard: CreditCard;
-    availableStatesList: { name: string; id: number }[];
-    saveForLater: boolean;
-    fetchingStatus: string | null;
-}
-
-export interface PaymentSubmissionState {
-    paymentMethodId: number;
-    existingCreditCards?: CreditCard[];
-    selectedCreditCard: CreditCard;
     saveForLater: boolean;
     useShippingAddressAsBillingAddress: boolean;
     selectedBillingAddress: Address;
     existingBillingAddresses: Address[];
+    availableStatesList: { name: string; code: string; id: number }[];
+    fetchingStatus: string | null;
 }
 
 export interface NewSubmissionSliceState {
@@ -87,7 +82,7 @@ export interface NewSubmissionSliceState {
 
 const initialState: NewSubmissionSliceState = {
     isNextDisabled: false,
-    currentStep: 0,
+    currentStep: 3,
     step01Status: null,
     step01Data: {
         availableServiceLevels: [],
@@ -126,9 +121,11 @@ const initialState: NewSubmissionSliceState = {
         existingCreditCards: [],
         availableStatesList: [],
         selectedCreditCard: {
-            cardNumber: '',
-            expirationDate: '',
-            cvv: '',
+            expMonth: 0,
+            expYear: 0,
+            last4: '',
+            brand: '',
+            id: '',
         },
         saveForLater: true,
         useShippingAddressAsBillingAddress: true,
@@ -288,6 +285,15 @@ const newSubmissionSlice = createSlice({
         setBillingAddressEqualToShippingAddress: (state, action: PayloadAction<void>) => {
             state.step04Data.selectedBillingAddress = state.step03Data.selectedAddress;
         },
+        saveStripeCustomerCards: (state, action: PayloadAction<CreditCard[]>) => {
+            state.step04Data.existingCreditCards = action.payload;
+        },
+        setSelectedStripeCard: (state, action: PayloadAction<string>) => {
+            const lookup = state.step04Data?.existingCreditCards?.find((card) => card.id == action.payload);
+            if (lookup) {
+                state.step04Data.selectedCreditCard = lookup;
+            }
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state, action) => {
@@ -333,6 +339,8 @@ export const {
     setUseShippingAddressAsBilling,
     updatePaymentMethodField,
     updateBillingAddressField,
+    saveStripeCustomerCards,
     setBillingAddressEqualToShippingAddress,
+    setSelectedStripeCard,
 } = newSubmissionSlice.actions;
 export default newSubmissionSlice.reducer;

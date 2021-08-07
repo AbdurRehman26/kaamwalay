@@ -2,8 +2,11 @@ import { Divider, Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useStripe } from '@stripe/react-stripe-js';
+import axios from 'axios';
 import React from 'react';
 import NumberFormat from 'react-number-format';
+import { useHistory } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCustomStep } from '../redux/slices/newSubmissionSlice';
@@ -142,6 +145,10 @@ function SubmissionSummary() {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
+    const existingStripeCustomerID = 'cus_JznJFVaa5nnDfj';
+    const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
+    const stripe = useStripe();
+    const history = useHistory();
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -160,6 +167,34 @@ function SubmissionSummary() {
         // @ts-ignore
         totalDeclaredValue += selectedCard?.qty * selectedCard?.value;
     });
+
+    const handleConfirmStripePayment = () => {
+        if (!stripe) {
+            return;
+        }
+        axios
+            .get(`http://localhost:1337/create-payment-intent/${existingStripeCustomerID}/${stripePaymentMethod}`)
+            .then((r) => {
+                history.push('/submissions/123/confirmation');
+            })
+            .catch((err) => {
+                const intent = err.response.data.paymentIntentRetrieved;
+                stripe
+                    .confirmCardPayment(intent.client_secret, {
+                        payment_method: intent.last_payment_error.payment_method.id,
+                    })
+                    .then(function (result) {
+                        if (result.error) {
+                            // Show error to your customer
+                            console.log(result.error.message);
+                        } else {
+                            if (result.paymentIntent.status === 'succeeded') {
+                                history.push('/submissions/123/confirmation');
+                            }
+                        }
+                    });
+            });
+    };
     return (
         <Paper variant={'outlined'} square className={classes.container}>
             <div className={classes.titleContainer}>
@@ -170,7 +205,7 @@ function SubmissionSummary() {
             <div className={classes.bodyContainer}>
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={handleConfirmStripePayment}>
                             Complete Submission
                         </Button>
                         <Typography className={classes.greyDescriptionText}>

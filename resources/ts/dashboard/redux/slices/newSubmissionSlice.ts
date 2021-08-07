@@ -82,7 +82,7 @@ export interface NewSubmissionSliceState {
 
 const initialState: NewSubmissionSliceState = {
     isNextDisabled: false,
-    currentStep: 3,
+    currentStep: 0,
     step01Status: null,
     step01Data: {
         availableServiceLevels: [],

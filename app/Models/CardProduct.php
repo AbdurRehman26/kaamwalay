@@ -14,7 +14,18 @@ class CardProduct extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable= [
+        'set_id',
+        'name',
+        'rarity',
+        'card_number',
+        'set_name',
+        'image_path',
+        'card_url',
+        'image_bucket_path',
+        'card_number_order',
+        'category_id',
+    ];
 
     /**
      * The attributes that should be cast to native types.
@@ -24,4 +35,12 @@ class CardProduct extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function set(){
+        return $this->belongsTo(Set::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 }

@@ -27,7 +27,7 @@ class SinglePageApplication extends Component
 
     public function getPublicPath(): string
     {
-        if (!$this->publicPath) {
+        if (! $this->publicPath) {
             $this->publicPath = '/apps/' . $this->app . '/';
             if (app()->environment("production")) {
                 $this->publicPath = config('app.mix_url') . "/apps/" . $this->app;

@@ -72,4 +72,19 @@ class LoginTest extends TestCase
         $response->assertJsonStructure([ 'error' ]);
         $response->assertJsonPath('error', 'Unauthorized');
     }
+
+    /**
+     * @group auth
+     * @test
+    */
+    public function user_receives_his_own_information()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $response = $this->getJson('api/auth/me');
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => ['user']]);
+        $response->assertJsonPath('data.user.email', $user->email);
+        $response->assertJsonPath('data.user.id', $user->id);
+    }
 }

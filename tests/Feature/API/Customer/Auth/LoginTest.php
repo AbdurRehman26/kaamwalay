@@ -20,19 +20,17 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->postJson('api/login', [
+        $response = $this->postJson('api/auth/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'data' => [
-                'token',
-                'user',
-            ],
+            'access_token',
+            'type',
+            'expiry'
         ]);
-        $response->assertJsonPath('data.user.email', $user->email);
     }
 
     /**
@@ -44,7 +42,7 @@ class LoginTest extends TestCase
      */
     public function user_can_not_login_with_invalid_email()
     {
-        $response = $this->postJson('api/login', [
+        $response = $this->postJson('api/auth/login', [
             'email' => 'test@test.test',
             'password' => 'password',
         ]);
@@ -65,7 +63,7 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->postJson('api/login', [
+        $response = $this->postJson('api/auth/login', [
             'email' => $user->email,
             'password' => 'password1',
         ]);

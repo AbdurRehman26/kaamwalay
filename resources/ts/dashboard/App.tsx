@@ -9,6 +9,7 @@ import { Layout } from './components/Layout';
 const RoutesOptions = {
     '/submissions/new': LayoutOptions.empty(),
     '/signup': LayoutOptions.empty(),
+    '/signin': LayoutOptions.empty(),
     '/submissions/:id/confirmation': LayoutOptions.build().withoutSidebar(),
 };
 

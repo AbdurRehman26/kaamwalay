@@ -16,8 +16,8 @@ class CustomerAddressTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        CustomerAddress::factory()->count(5)->create();
-        $this->user = User::firstOrFail();
+        $addresses = CustomerAddress::factory()->count(2)->create();
+        $this->user = $addresses->first()->user;
         $this->actingAs($this->user);
     }
 

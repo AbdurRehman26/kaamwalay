@@ -80,7 +80,6 @@ class RegisterTest extends TestCase
             'email' => $this->faker->safeEmail(),
             'username' => $existingUser->username,
             'password' => 'password',
-            'password_confirmation' => 'password',
             'phone' => '',
         ]);
 

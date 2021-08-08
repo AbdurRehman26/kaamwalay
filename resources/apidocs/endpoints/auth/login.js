@@ -8,7 +8,9 @@
  * @apiParam { String } email email of the user
  * @apiParam { String } password password of the user
  *
- * @apiSuccess {Array} data containing token and user object
+ * @apiSuccess { String } data.token authentication token
+ * @apiSuccess { String } data.type  type of authentication token
+ * @apiSuccess { Number } data.expiry time to live for this token
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK

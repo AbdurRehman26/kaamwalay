@@ -257,3 +257,35 @@ const RoutesOptions = {
 // ...
 <Layout routeOptions={RoutesOptions}>...</Layout>;
 ```
+
+### UI
+#### Notifications
+Notifications are handled by MaterialUI for frontend part (Snackbar component) and redux for the backend part,
+we store them in a queue, and show one by one until the queue it's empty.
+
+Usage:
+
+```ts
+// Via hook inside components
+import { useNotifications } from "@shared/hooks/useNotifications";
+import { NotificationType } from "@shared/constants/NotificationType";
+
+const notifications = useNotifications();
+notifications.notify(NotificationType.Success, "This is a notification message", "This is an optional notification title")
+
+// Aliases
+notifications.info('This is a info notification.', 'Optional title');
+notifications.success('This is a success notification.', 'Optional title');
+notifications.warning('This is a warning notification.', 'Optional title');
+notifications.error('This is a error notification.', 'Optional title');
+
+// Protected properties & methods for building a notifications container.
+notifications.notifications // a `Notification[]` which contain all active notifications.
+notifications.close // a method that accept a `Notification | string` as parameter used to close the notification and remove it from queue.
+
+// Via Redux
+// TODO: implement & research
+
+// Via NotificationsService
+// TODO: implement
+```

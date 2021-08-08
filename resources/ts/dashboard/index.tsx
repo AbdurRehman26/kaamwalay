@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import 'reflect-metadata';
 
+import { NotificationsContainer } from '@shared/components/NotificationsContainer';
 import { ConfirmationDialogProvider } from '@shared/contexts/ConfirmationDialogContext';
 
 import App from './App';
@@ -18,6 +19,7 @@ ReactDOM.render(
         <Provider store={store}>
             <ThemeProvider theme={theme}>
                 <>
+                    <NotificationsContainer />
                     <CssBaseline />
                     <ConfirmationDialogProvider>
                         <App />

@@ -8,6 +8,7 @@ import { Layout } from './components/Layout';
 
 const RoutesOptions = {
     '/submissions/new': LayoutOptions.empty(),
+    '/signup': LayoutOptions.empty(),
     '/submissions/:id/confirmation': LayoutOptions.build().withoutSidebar(),
 };
 

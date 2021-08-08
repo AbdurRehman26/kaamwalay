@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1383f0cea29decf0c61a1eea64096de5",
+    "content-hash": "28958d8dcddadb7dde14c0b15299f43a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5005,7 +5005,6 @@
             "suggest": {
                 "symfony/service-implementation": ""
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -5443,6 +5442,7 @@
                 "phpunit/phpunit": "^8.5|^9.4",
                 "yoast/phpunit-polyfills": "^0.2.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {

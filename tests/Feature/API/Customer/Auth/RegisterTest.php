@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\API\Customer\Auth;
 
+use App\Events\API\Auth\CustomerRegistered;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -17,6 +19,7 @@ class RegisterTest extends TestCase
     {
         parent::setUp();
         $this->seed(RolesSeeder::class);
+        Event::fake();
     }
 
     /**
@@ -87,5 +90,26 @@ class RegisterTest extends TestCase
         $response->assertJsonStructure([
             'errors' => ['username'],
         ]);
+    }
+
+    /**
+     * @test
+     *
+     * @group auth
+     */
+    public function user_registration_triggers_registered_event()
+    {
+        $email = $this->faker->safeEmail();
+        $this->postJson('/api/auth/register', [
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'email' => $email,
+            'username' => $this->faker->userName(),
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'phone' => '',
+        ]);
+
+        Event::assertDispatched(CustomerRegistered::class);
     }
 }

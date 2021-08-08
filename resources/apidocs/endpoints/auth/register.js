@@ -10,7 +10,6 @@
  * @apiParam { String } email Unique Email of the User
  * @apiParam { String } username Unique Username of the User
  * @apiParam { String } password Password of the User
- * @apiParam { String } password_confirmation Confirm password of the User
  * @apiParam { String } [phone] Optional phone number of the User
  *
  * @apiSuccess {Array} data containing token and user object

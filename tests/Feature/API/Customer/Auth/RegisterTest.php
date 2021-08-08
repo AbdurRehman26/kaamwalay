@@ -57,7 +57,6 @@ class RegisterTest extends TestCase
             'email' => $existingUser->email,
             'username' => $this->faker->userName(),
             'password' => 'password',
-            'password_confirmation' => 'password',
             'phone' => '',
         ]);
 

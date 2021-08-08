@@ -9,15 +9,15 @@ class InsuredShippingFeeCalculator
 {
     public static float $shippingFee;
 
-    public static function calculate(Order $order): float
+    public static function calculateForOrder(Order $order): float
     {
-        return self::calculateShipping(
+        return self::calculate(
             self::calculateTotalDeclaredValue($order->orderItems),
             self::calculateTotalNumberOfItems($order->orderItems)
         );
     }
 
-    public static function calculateShipping(int $totalDeclaredValue, int $totalNumberOfItems): float
+    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems): float
     {
         self::$shippingFee = self::calculateBasicShippingFee($totalDeclaredValue, $totalNumberOfItems);
 

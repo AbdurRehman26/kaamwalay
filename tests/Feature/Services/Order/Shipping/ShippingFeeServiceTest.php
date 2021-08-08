@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Services\Order;
+namespace Tests\Feature\Services\Order\Shipping;
 
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -12,9 +12,7 @@ class ShippingFeeServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     */
+    /** @test */
     public function shipping_fee_is_calculated_correctly()
     {
         /** @var Order $order */
@@ -35,6 +33,6 @@ class ShippingFeeServiceTest extends TestCase
                 'quantity' => 2,
             ]);
 
-        $this->assertEquals(172, ShippingFeeService::calculate($order));
+        $this->assertEquals(172, ShippingFeeService::calculateForOrder($order));
     }
 }

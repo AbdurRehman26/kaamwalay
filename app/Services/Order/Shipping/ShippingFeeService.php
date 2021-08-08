@@ -7,8 +7,13 @@ use App\Services\Order\Shipping\Calculators\InsuredShippingFeeCalculator;
 
 class ShippingFeeService
 {
-    public static function calculate(Order $order): float
+    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems): float
     {
-        return InsuredShippingFeeCalculator::calculate($order);
+        return InsuredShippingFeeCalculator::calculate($totalDeclaredValue, $totalNumberOfItems);
+    }
+
+    public static function calculateForOrder(Order $order): float
+    {
+        return InsuredShippingFeeCalculator::calculateForOrder($order);
     }
 }

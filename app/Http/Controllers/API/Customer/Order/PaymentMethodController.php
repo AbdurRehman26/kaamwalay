@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Customer\Order;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class PaymentMethodController extends Controller
          */
         $user = auth()->user();
 
-        return response()->json([
+        return new JsonResponse([
             'data' => $user->paymentMethods()
         ], Response::HTTP_OK);
     }
@@ -29,7 +30,7 @@ class PaymentMethodController extends Controller
          */
         $user = auth()->user();
 
-        return response()->json([
+        return new JsonResponse([
             'intent' => $user->createSetupIntent(),
         ], Response::HTTP_OK);
     }
@@ -48,19 +49,17 @@ class PaymentMethodController extends Controller
         $user = auth()->user();
          try {
              $response = $user->charge(123, request('payment_method_id'));
-             return response()->json([
+             return new JsonResponse([
                  'success' => true,
                  'data' => $response,
              ], Response::HTTP_CREATED);
          } catch (IncompletePayment $exception) {
              if($exception->payment->requiresAction()) {
-                 return response()->json([
+                 return new JsonResponse([
                      'payment_intent' => $exception->payment
                  ], Response::HTTP_PAYMENT_REQUIRED);
              }
+             throw $exception;
          }
-         return response()->json([
-             'message' => 'Some error occurred.'
-         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

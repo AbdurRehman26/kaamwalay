@@ -16,7 +16,9 @@ class RegisterController extends Controller
     public function register(RegisterRequest $request)
     {
         event(
-            new CustomerRegistered($user = User::createCustomer($request->validated()))
+            new CustomerRegistered(
+                $user = User::createCustomer($request->only($this->formFields()))
+            )
         );
 
         $token = auth()->guard()->login($user);
@@ -27,5 +29,17 @@ class RegisterController extends Controller
                 'user' => new UserResource($user),
             ]
         ], Response::HTTP_CREATED);
+    }
+
+    public function formFields()
+    {
+        return [
+            'last_name',
+            'first_name',
+            'email',
+            'username',
+            'phone',
+            'password',
+        ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\LoginRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
@@ -20,10 +21,12 @@ class LoginController extends Controller
             );
         }
 
-        return response()->json(
+        return new JsonResponse(
             [
-                'access_token' => $token,
-                'user' => new UserResource(auth()->user()),
+                'data' => [
+                    'token' => $token,
+                    'user' => auth()->user(),
+                ],
             ],
             Response::HTTP_OK,
         );

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -11,6 +12,12 @@ const RoutesOptions = {
     '/signup': LayoutOptions.empty(),
     '/signin': LayoutOptions.empty(),
     '/submissions/:id/confirmation': LayoutOptions.build().withoutSidebar(),
+};
+
+const userToken = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!).authToken : '';
+axios.defaults.headers.common = {
+    Authorization: 'Bearer ' + userToken,
+    Accept: 'application/json',
 };
 
 function App() {

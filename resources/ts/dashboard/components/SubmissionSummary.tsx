@@ -177,18 +177,22 @@ function SubmissionSummary() {
         }
         try {
             // Try to charge the customer
-            const stripePaymentIntent = await axios.get(
-                `http://localhost:1337/create-payment-intent/${existingStripeCustomerID}/${stripePaymentMethod}`,
+            const stripePaymentIntent = await axios.post(
+                `http://robograding.test/api/customer/payment-methods/charge`,
+                {
+                    payment_method_id: stripePaymentMethod,
+                },
             );
             history.push('/submissions/123/confirmation');
         } catch (err) {
             // Charge was failed by back-end so we try to charge him on the front-end
             // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
 
-            const intent = err.response.data.paymentIntentRetrieved;
+            const intent = err.response.data.payment_intent;
+            console.log(intent);
             // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
             const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {
-                payment_method: intent.last_payment_error.payment_method.id,
+                payment_method: intent.payment_method,
             });
 
             // Checking if something else failed.

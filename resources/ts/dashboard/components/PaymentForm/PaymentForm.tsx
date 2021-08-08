@@ -42,7 +42,6 @@ export default function PaymentForm() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     // This will be coming from a redux slice, it will be put there when the user logs in
-    const existingStripeCustomerID = 'cus_JznJFVaa5nnDfj';
     const existingCustomerStripeCards = useAppSelector((state) => state.newSubmission.step04Data.existingCreditCards);
     const stripe = useStripe();
     const elements = useElements();
@@ -54,9 +53,10 @@ export default function PaymentForm() {
         try {
             setIsCardsListLoading(true);
             const existingStripeCardsForCustomer = await axios.get(
-                `http://localhost:1337/stripe-cards/${existingStripeCustomerID}`,
+                `http://robograding.test/api/customer/payment-methods`,
             );
-            const formattedStripeCards = existingStripeCardsForCustomer.data.paymentMethods.data.map((item: any) => {
+            console.log('a', existingStripeCardsForCustomer);
+            const formattedStripeCards = existingStripeCardsForCustomer.data?.data?.map((item: any) => {
                 return {
                     expMonth: item.card.exp_month,
                     expYear: item.card.exp_year,
@@ -65,10 +65,15 @@ export default function PaymentForm() {
                     id: item.id,
                 };
             });
-            dispatch(saveStripeCustomerCards(formattedStripeCards));
+            if (existingStripeCardsForCustomer?.data?.data?.length === 0) {
+                dispatch(saveStripeCustomerCards([]));
+            } else {
+                dispatch(saveStripeCustomerCards(formattedStripeCards));
+            }
             setIsCardsListLoading(false);
             setShowAddCardModal(false);
         } catch (error) {
+            console.log(error);
             setIsCardsListLoading(false);
             notifications.error("We weren't able to get your existing cards", 'Error');
         }
@@ -95,12 +100,10 @@ export default function PaymentForm() {
         }
         setSaveBtnLoading(true);
         // Get stripe client secret from back-end in order to use it to save the card
-        const requestClientSecret = await axios.get(
-            `http://localhost:1337/stripe-client-secret/${existingStripeCustomerID}`,
-        );
+        const requestClientSecret = await axios.get(`http://robograding.test/api/customer/payment-methods/setup`);
 
         // We're using the client secret now in order to save the card for the customer on stripe
-        const result = await stripe.confirmCardSetup(requestClientSecret.data.clientSecret, {
+        const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.client_secret, {
             payment_method: {
                 card: elements.getElement(CardElement) as any,
             },
@@ -145,7 +148,7 @@ export default function PaymentForm() {
                     </div>
                 ) : (
                     <>
-                        {existingCustomerStripeCards!.length === 0 ? (
+                        {existingCustomerStripeCards?.length === 0 ? (
                             <div className={classes.missingStripeCardsContainer}>
                                 <Typography variant={'subtitle1'}>You don't have any saved cards</Typography>
                                 <Button variant={'contained'} color={'primary'} onClick={handleClickOpen}>
@@ -154,7 +157,7 @@ export default function PaymentForm() {
                             </div>
                         ) : (
                             <>
-                                {existingCustomerStripeCards!.map((item) => {
+                                {existingCustomerStripeCards?.map((item) => {
                                     return <CustomerStripeCardItem key={item.id} {...item} />;
                                 })}
                                 <div className={classes.addNewCardItemContainer}>

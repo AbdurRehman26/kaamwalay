@@ -3,6 +3,7 @@
     "description": "API for Robograding platform",
     "title": "Robograding API",
     "url": "https://robograding.com/api",
+    "sampleUrl": "http://robograding.test/api",
     "header": {
         "title": "Introduction",
         "filename": "header.md"

@@ -55,7 +55,6 @@ class InsuredShippingFeeCalculator
             return array_key_last(InsuredShippingBasicMatrix::DECLARED_VALUE_RANGE);
         }
 
-
         throw new \Exception();
     }
 

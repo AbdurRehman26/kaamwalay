@@ -11,7 +11,7 @@ export default {
     collectCoverageFrom: ['<rootDir>/resources/ts/**/*.{ts,tsx}'],
 
     // The directory where Jest should output its coverage files
-    coverageDirectory: 'coverage/jest',
+    coverageDirectory: 'public/coverage',
 
     // An array of regexp pattern strings used to skip coverage collection
     coveragePathIgnorePatterns: ['/node_modules/'],

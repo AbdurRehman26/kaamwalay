@@ -19,3 +19,7 @@ draft.yaml
 .blueprint
 .php-cs-fixer.cache
 /coverage
+/resources/apidocs/out
+/resources/apidocs/output
+/public/apidocs
+/public/coverage

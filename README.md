@@ -20,9 +20,12 @@ The project is based on
 ### Setup
 
 ```bash
-$ git clone
+$ cp .env.example .env
 $ composer install
 $ yarn install
+
+# Migrations and Seeders
+$ ./vendor/bin/sail artisan migrate --seed
 
 # Add host entry to be able to access the app via robograding.test domain
 127.0.0.1 robograding.test
@@ -34,20 +37,8 @@ alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 ### Getting things started
 
 ```bash
-# Create .env
-$ cp .env.example .env
-
-# Change values for these variables
-APP_NAME=Robograding
-APP_URL=http://robograding.test
-DB_HOST=mysql
-DB_DATABASE=robograding
-
 # Starting the backend
 $ ./vendor/bin/sail up    # or docker-compose up
-
-# Migrations and Seeders
-$ ./vendor/bin/sail artisan migrate --seed
 
 # Starting the frontend
 # 1. Dashboard application
@@ -85,7 +76,7 @@ command to regenerate it:
 
 ```bash
 # Change project's absolute path accordingly
-$ docker run --name apidocjs --rm -v "/home/joe/Projects/robograding/:/var/docs/" d3c0d3dpt/apidoc -i resources/apidocs  -o public/apidocs
+$ yarn apidoc:start # Build and start the server
 ```
 
 ### Frontend
@@ -205,6 +196,8 @@ we will have to create the file to the right directory and then use it according
 
 **Note <sup>2</sup>**: To avoid wrong imports, at build time of each preset only the `@shared` and `@[BUILD_PRESET]`
 paths are mounted, for example building admin app, we will have access to only `@shared` and `@admin` import paths.
+
+More about frontend on [/resources/docs/frontend.md](resources/docs/frontend.md)
 
 ### FAQ
 

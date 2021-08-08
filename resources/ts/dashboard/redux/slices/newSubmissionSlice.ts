@@ -149,17 +149,13 @@ const initialState: NewSubmissionSliceState = {
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
     const serviceLevels = await axios.get('http://robograding.test/api/customer/orders/payment-plans/');
-    const formatedServiceLevels = serviceLevels.data.data.map((serviceLevel: any) => {
-        return {
-            id: serviceLevel.id,
-            type: 'card',
-            maxProtectionAmount: serviceLevel.max_protection_amount,
-            turnaround: serviceLevel.turnaround,
-            price: serviceLevel.price,
-        };
-    });
-
-    return formatedServiceLevels;
+    return serviceLevels.data.data.map((serviceLevel: any) => ({
+        id: serviceLevel.id,
+        type: 'card',
+        maxProtectionAmount: serviceLevel.max_protection_amount,
+        turnaround: serviceLevel.turnaround,
+        price: serviceLevel.price,
+    }));
 });
 
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
@@ -167,7 +163,7 @@ export const getStatesList = createAsyncThunk('newSubmission/getStatesList', asy
     return americanStates.data.data;
 });
 
-const newSubmissionSlice = createSlice({
+export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
     initialState,
     reducers: {
@@ -285,12 +281,12 @@ const newSubmissionSlice = createSlice({
             // @ts-ignore
             state.step04Data.selectedBillingAddress[action.payload.fieldName] = action.payload.newValue;
         },
-        setBillingAddressEqualToShippingAddress: (state, action: PayloadAction<void>) => {
+        setBillingAddressEqualToShippingAddress: (state) => {
             state.step04Data.selectedBillingAddress = state.step03Data.selectedAddress;
         },
     },
     extraReducers: {
-        [getServiceLevels.pending as any]: (state, action) => {
+        [getServiceLevels.pending as any]: (state) => {
             state.step01Data.status = 'loading';
         },
         [getServiceLevels.fulfilled as any]: (state, action: any) => {
@@ -298,10 +294,10 @@ const newSubmissionSlice = createSlice({
             state.step01Data.selectedServiceLevel = action.payload[0];
             state.step01Data.status = 'success';
         },
-        [getServiceLevels.rejected as any]: (state, action) => {
+        [getServiceLevels.rejected as any]: (state) => {
             state.step01Data.status = 'failed';
         },
-        [getStatesList.pending as any]: (state, action) => {
+        [getStatesList.pending as any]: (state) => {
             state.step03Data.fetchingStatus = 'loading';
         },
         [getStatesList.fulfilled as any]: (state, action) => {
@@ -335,4 +331,3 @@ export const {
     updateBillingAddressField,
     setBillingAddressEqualToShippingAddress,
 } = newSubmissionSlice.actions;
-export default newSubmissionSlice.reducer;

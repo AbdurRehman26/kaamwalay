@@ -9,7 +9,7 @@ use Laravel\Scout\Searchable;
 class CardProduct extends Model
 {
     use HasFactory;
-    use Searchable;
+        use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +28,16 @@ class CardProduct extends Model
         'card_number_order',
         'category_id',
     ];
+
+   /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'local_card_products';
+    }
 
     /**
      * The attributes that should be cast to native types.

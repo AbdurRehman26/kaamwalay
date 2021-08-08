@@ -13,7 +13,7 @@ class RegisterController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        $user = User::createCustomer($request->only($request->validated()));
+        $user = User::createCustomer($request->validated());
 
         CustomerRegistered::dispatch($user);
 

@@ -8,7 +8,6 @@ use App\Http\Requests\API\Auth\RegisterRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
@@ -27,7 +26,7 @@ class RegisterController extends Controller
             'data' => [
                 'token' => $token,
                 'user' => new UserResource($user),
-            ]
+            ],
         ], Response::HTTP_CREATED);
     }
 

@@ -36,7 +36,7 @@ class LoginController extends Controller
         return new JsonResponse([
             'data' => [
                 'user' => new UserResource(auth()->user()),
-            ]
+            ],
         ], Response::HTTP_OK);
     }
 }

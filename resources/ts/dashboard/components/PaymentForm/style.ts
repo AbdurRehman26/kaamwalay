@@ -58,6 +58,12 @@ const useStyles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'center',
     },
+    loadingContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
 
 export default useStyles;

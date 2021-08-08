@@ -1,19 +1,16 @@
-import { Paper } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
+import { CircularProgress, Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { getPaymentIcon } from '@shared/lib/payments';
+import { useNotifications } from '@shared/hooks/useNotifications';
 
 import CustomerStripeCardItem from '@dashboard/components/PaymentForm/CustomerStripeCardItem';
 import useStyles from '@dashboard/components/PaymentForm/style';
@@ -41,8 +38,6 @@ const CARD_OPTIONS = {
 
 // noinspection JSIgnoredPromiseFromCall
 export default function PaymentForm() {
-    const { success, setSuccess }: any = useState(false);
-    const [clientSecret, setClientSecret]: any = useState('');
     const [showAddCardModal, setShowAddCardModal] = useState(false);
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -51,10 +46,17 @@ export default function PaymentForm() {
     const existingCustomerStripeCards = useAppSelector((state) => state.newSubmission.step04Data.existingCreditCards);
     const stripe = useStripe();
     const elements = useElements();
+    const [isSaveBtnLoading, setSaveBtnLoading] = useState(false);
+    const [isCardsListLoading, setIsCardsListLoading] = useState(false);
+    const notifications = useNotifications();
 
-    const saveExistingStripeCards = useCallback(async () => {
-        await axios.get(`http://localhost:1337/stripe-cards/${existingStripeCustomerID}`).then((r) => {
-            const formattedStripeCards = r.data.paymentMethods.data.map((item: any) => {
+    const saveExistingStripeCards = async () => {
+        try {
+            setIsCardsListLoading(true);
+            const existingStripeCardsForCustomer = await axios.get(
+                `http://localhost:1337/stripe-cards/${existingStripeCustomerID}`,
+            );
+            const formattedStripeCards = existingStripeCardsForCustomer.data.paymentMethods.data.map((item: any) => {
                 return {
                     expMonth: item.card.exp_month,
                     expYear: item.card.exp_year,
@@ -64,9 +66,13 @@ export default function PaymentForm() {
                 };
             });
             dispatch(saveStripeCustomerCards(formattedStripeCards));
+            setIsCardsListLoading(false);
             setShowAddCardModal(false);
-        });
-    }, []);
+        } catch (error) {
+            setIsCardsListLoading(false);
+            notifications.error("We weren't able to get your existing cards", 'Error');
+        }
+    };
 
     useEffect(() => {
         // noinspection JSIgnoredPromiseFromCall
@@ -87,24 +93,29 @@ export default function PaymentForm() {
             // Make sure to disable submission until it loaded ;).
             return;
         }
+        setSaveBtnLoading(true);
+        // Get stripe client secret from back-end in order to use it to save the card
+        const requestClientSecret = await axios.get(
+            `http://localhost:1337/stripe-client-secret/${existingStripeCustomerID}`,
+        );
 
-        await axios.get(`http://localhost:1337/stripe-client-secret/${existingStripeCustomerID}`).then((r) => {
-            setClientSecret(r.data.clientSecret);
-        });
-
-        const result = await stripe.confirmCardSetup(clientSecret, {
+        // We're using the client secret now in order to save the card for the customer on stripe
+        const result = await stripe.confirmCardSetup(requestClientSecret.data.clientSecret, {
             payment_method: {
                 card: elements.getElement(CardElement) as any,
             },
         });
+        // The card couldn't be saved to stripe
         if (result.error) {
-            // Display result.error.message in your UI.
-            console.log(result.error);
+            // Let the user know we couldn't save his card
+            setSaveBtnLoading(false);
+            notifications.error(result.error.message!, 'Error');
         } else {
-            // The setup has succeeded. Display a success message and send
-            // result.setupIntent.payment_method to your server to save the
-            // card to a Customer
+            // The card has been successfully saved to stripe, now we ask the back-end to send us all the stripe cards for this customer
+            // we're then listing them on the page
             await saveExistingStripeCards();
+            notifications.success('Your card was successfully saved', 'Card saved');
+            setSaveBtnLoading(false);
         }
     };
 
@@ -121,30 +132,42 @@ export default function PaymentForm() {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSaveCard} color="primary">
-                        Save
+                    <Button onClick={handleSaveCard} color="primary" disabled={isSaveBtnLoading}>
+                        {isSaveBtnLoading ? 'Loading...' : 'Save'}
                     </Button>
                 </DialogActions>
             </Dialog>
             <Typography className={classes.cardsListTitle}>Your cards</Typography>
             <Paper variant="outlined" className={classes.cardsListContainer}>
-                {existingCustomerStripeCards!.length === 0 ? (
-                    <div className={classes.missingStripeCardsContainer}>
-                        <Typography variant={'subtitle1'}>You don't have any saved cards</Typography>
-                        <Button variant={'contained'} color={'primary'} onClick={handleClickOpen}>
-                            Add credit/debit card
-                        </Button>
+                {isCardsListLoading ? (
+                    <div className={classes.loadingContainer}>
+                        <CircularProgress color="secondary" />
                     </div>
                 ) : (
                     <>
-                        {existingCustomerStripeCards!.map((item) => {
-                            return <CustomerStripeCardItem key={item.id} {...item} />;
-                        })}
-                        <div className={classes.addNewCardItemContainer}>
-                            <Button color="secondary" onClick={handleClickOpen} startIcon={<AddCircleOutlineIcon />}>
-                                Add a new debit / credit card
-                            </Button>
-                        </div>
+                        {existingCustomerStripeCards!.length === 0 ? (
+                            <div className={classes.missingStripeCardsContainer}>
+                                <Typography variant={'subtitle1'}>You don't have any saved cards</Typography>
+                                <Button variant={'contained'} color={'primary'} onClick={handleClickOpen}>
+                                    Add credit/debit card
+                                </Button>
+                            </div>
+                        ) : (
+                            <>
+                                {existingCustomerStripeCards!.map((item) => {
+                                    return <CustomerStripeCardItem key={item.id} {...item} />;
+                                })}
+                                <div className={classes.addNewCardItemContainer}>
+                                    <Button
+                                        color="secondary"
+                                        onClick={handleClickOpen}
+                                        startIcon={<AddCircleOutlineIcon />}
+                                    >
+                                        Add a new debit / credit card
+                                    </Button>
+                                </div>
+                            </>
+                        )}
                     </>
                 )}
             </Paper>

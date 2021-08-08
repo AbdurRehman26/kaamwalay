@@ -8,6 +8,8 @@ import React from 'react';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
 
+import { useNotifications } from '@shared/hooks/useNotifications';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCustomStep } from '../redux/slices/newSubmissionSlice';
 
@@ -149,7 +151,7 @@ function SubmissionSummary() {
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const stripe = useStripe();
     const history = useHistory();
-
+    const notifications = useNotifications();
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -168,32 +170,38 @@ function SubmissionSummary() {
         totalDeclaredValue += selectedCard?.qty * selectedCard?.value;
     });
 
-    const handleConfirmStripePayment = () => {
+    const handleConfirmStripePayment = async () => {
         if (!stripe) {
+            // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
             return;
         }
-        axios
-            .get(`http://localhost:1337/create-payment-intent/${existingStripeCustomerID}/${stripePaymentMethod}`)
-            .then((r) => {
-                history.push('/submissions/123/confirmation');
-            })
-            .catch((err) => {
-                const intent = err.response.data.paymentIntentRetrieved;
-                stripe
-                    .confirmCardPayment(intent.client_secret, {
-                        payment_method: intent.last_payment_error.payment_method.id,
-                    })
-                    .then(function (result) {
-                        if (result.error) {
-                            // Show error to your customer
-                            console.log(result.error.message);
-                        } else {
-                            if (result.paymentIntent.status === 'succeeded') {
-                                history.push('/submissions/123/confirmation');
-                            }
-                        }
-                    });
+        try {
+            // Try to charge the customer
+            const stripePaymentIntent = await axios.get(
+                `http://localhost:1337/create-payment-intent/${existingStripeCustomerID}/${stripePaymentMethod}`,
+            );
+            history.push('/submissions/123/confirmation');
+        } catch (err) {
+            // Charge was failed by back-end so we try to charge him on the front-end
+            // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
+
+            const intent = err.response.data.paymentIntentRetrieved;
+            // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
+            const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {
+                payment_method: intent.last_payment_error.payment_method.id,
             });
+
+            // Checking if something else failed.
+            // Eg: Insufficient funds, 3d auth failed by user, etc
+            if (chargeResult.error) {
+                notifications.error(chargeResult?.error?.message!, 'Error');
+            } else {
+                // We're all good!
+                if (chargeResult.paymentIntent.status === 'succeeded') {
+                    history.push('/submissions/123/confirmation');
+                }
+            }
+        }
     };
     return (
         <Paper variant={'outlined'} square className={classes.container}>

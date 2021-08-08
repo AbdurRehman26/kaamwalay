@@ -103,15 +103,17 @@ export function NewSubmission() {
                                     Back
                                 </Button>
                             ) : null}
-                            <Button
-                                variant={'contained'}
-                                disabled={isNextDisabled}
-                                color={'primary'}
-                                onClick={handleNext}
-                                className={classes.nextBtn}
-                            >
-                                Next
-                            </Button>
+                            {currentStep !== 4 ? (
+                                <Button
+                                    variant={'contained'}
+                                    disabled={isNextDisabled}
+                                    color={'primary'}
+                                    onClick={handleNext}
+                                    className={classes.nextBtn}
+                                >
+                                    Next
+                                </Button>
+                            ) : null}
                         </div>
                     </div>
                 </Container>

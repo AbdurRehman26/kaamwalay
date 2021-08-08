@@ -56,13 +56,9 @@ class PaymentMethodController extends Controller
                  'data' => $response,
              ], Response::HTTP_CREATED);
         } catch (IncompletePayment $exception) {
-            if ($exception->payment->requiresAction()) {
-                return new JsonResponse([
-                     'payment_intent' => $exception->payment,
-                 ], Response::HTTP_PAYMENT_REQUIRED);
-            }
-
-            throw $exception;
+            return new JsonResponse([
+                 'payment_intent' => $exception->payment,
+             ], Response::HTTP_PAYMENT_REQUIRED);
         }
     }
 }

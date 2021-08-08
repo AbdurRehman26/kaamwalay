@@ -31,7 +31,7 @@ class PaymentMethodController extends Controller
         $user = auth()->user();
 
         return new JsonResponse([
-            'intent' => $user->createSetupIntent(),
+            'intent' => $user->createSetupIntent(['customer' => $user->stripe_id]),
         ], Response::HTTP_OK);
     }
 

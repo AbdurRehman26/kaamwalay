@@ -16,8 +16,8 @@ class AddCardsInfoColumnsToCardProducts extends Migration
         Schema::disableForeignKeyConstraints();
         
         Schema::table('card_products', function (Blueprint $table) {
-            $table->foreignId('set_id')->constrained();
-            $table->foreignId('category_id')->constrained();
+            $table->foreignId('set_id')->constrained()->nullable();
+            $table->foreignId('category_id')->constrained()->nullable();
             $table->string('rarity')->nullable();
             $table->string('card_number')->nullable();
             $table->string('image_path',1000)->nullable();

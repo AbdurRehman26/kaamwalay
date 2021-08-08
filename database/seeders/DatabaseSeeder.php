@@ -31,5 +31,9 @@ class DatabaseSeeder extends Seeder
             ShippingMethodSeeder::class,
             StateSeeder::class,
         ]);
+        $this->call(CategoriesTableSeeder::class);
+        $this->call(SeriesTableSeeder::class);
+        $this->call(SetsTableSeeder::class);
+        $this->call(CardsTableSeeder::class);
     }
 }

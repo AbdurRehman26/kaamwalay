@@ -19,7 +19,7 @@ class PaymentMethodController extends Controller
         $user = auth()->user();
 
         return new JsonResponse([
-            'data' => $user->paymentMethods()
+            'data' => $user->paymentMethods(),
         ], Response::HTTP_OK);
     }
 
@@ -47,19 +47,22 @@ class PaymentMethodController extends Controller
          * @var User $user
          */
         $user = auth()->user();
-         try {
-             $response = $user->charge(123, request('payment_method_id'));
-             return new JsonResponse([
+
+        try {
+            $response = $user->charge(123, request('payment_method_id'));
+
+            return new JsonResponse([
                  'success' => true,
                  'data' => $response,
              ], Response::HTTP_CREATED);
-         } catch (IncompletePayment $exception) {
-             if($exception->payment->requiresAction()) {
-                 return new JsonResponse([
-                     'payment_intent' => $exception->payment
+        } catch (IncompletePayment $exception) {
+            if ($exception->payment->requiresAction()) {
+                return new JsonResponse([
+                     'payment_intent' => $exception->payment,
                  ], Response::HTTP_PAYMENT_REQUIRED);
-             }
-             throw $exception;
-         }
+            }
+
+            throw $exception;
+        }
     }
 }

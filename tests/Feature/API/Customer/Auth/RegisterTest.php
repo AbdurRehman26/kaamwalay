@@ -39,7 +39,7 @@ class RegisterTest extends TestCase
 
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
-            'access_token', 'type', 'expiry'
+            'access_token', 'type', 'expiry',
         ]);
     }
 

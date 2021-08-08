@@ -29,7 +29,7 @@ class LoginTest extends TestCase
         $response->assertJsonStructure([
             'access_token',
             'type',
-            'expiry'
+            'expiry',
         ]);
     }
 

@@ -32,18 +32,4 @@ class RegisterRequest extends FormRequest
             'username' => ['required', 'string', 'unique:users', 'max:50'],
         ];
     }
-
-    /**
-     * Handle a passed validation attempt.
-     *
-     * @return void
-     */
-    protected function passedValidation()
-    {
-        $this->merge(
-            [
-                'password' => bcrypt($this->get('password')),
-            ]
-        );
-    }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Unit\API\Customer\User;
 
 use App\Models\User;
+use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
@@ -15,7 +16,7 @@ class UserTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        Artisan::call('db:seed', ['--class' => 'RolesSeeder']);
+        $this->seed(RolesSeeder::class);
     }
     /**
      * A basic unit test example.
@@ -31,6 +32,6 @@ class UserTest extends TestCase
             'username' => $this->faker->userName,
             'password' => bcrypt('password'),
         ]);
-        $this->assertTrue($user->hasRole(config('permission.roles.customer'), 'api'));
+        $this->assertTrue($user->hasRole(config('permission.roles.customer')));
     }
 }

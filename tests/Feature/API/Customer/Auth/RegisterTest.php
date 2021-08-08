@@ -3,6 +3,7 @@
 namespace Tests\Feature\API\Customer\Auth;
 
 use App\Models\User;
+use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
@@ -16,7 +17,7 @@ class RegisterTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        Artisan::call('db:seed', ['--class' => 'RolesSeeder']);
+        $this->seed(RolesSeeder::class);
     }
 
     /**
@@ -24,7 +25,7 @@ class RegisterTest extends TestCase
      *
      * @group auth
      */
-    public function user_can_register_as_customer(): void
+    public function user_can_register_as_customer()
     {
         $email = $this->faker->safeEmail();
         $response = $this->postJson('/api/register', [
@@ -50,7 +51,7 @@ class RegisterTest extends TestCase
      *
      * @group auth
      */
-    public function user_can_register_as_customer_and_has_stripe_id(): void
+    public function user_can_register_as_customer_and_has_stripe_id()
     {
         $email = $this->faker->safeEmail();
         $response = $this->postJson('/api/register', [
@@ -82,7 +83,7 @@ class RegisterTest extends TestCase
      *
      * @group auth
      */
-    public function user_can_not_register_with_duplicate_email(): void
+    public function user_can_not_register_with_duplicate_email()
     {
         $existingUser = User::factory()->create();
         $response = $this->postJson('/api/register', [
@@ -106,7 +107,7 @@ class RegisterTest extends TestCase
      *
      * @group auth
      */
-    public function user_can_not_register_with_duplicate_username(): void
+    public function user_can_not_register_with_duplicate_username()
     {
         $existingUser = User::factory()->create();
         $response = $this->postJson('/api/register', [
@@ -123,10 +124,5 @@ class RegisterTest extends TestCase
         $response->assertJsonStructure([
             'errors' => ['username'],
         ]);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
     }
 }

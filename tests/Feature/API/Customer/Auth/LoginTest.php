@@ -42,7 +42,7 @@ class LoginTest extends TestCase
      *
      * @return void
      */
-    public function user_can_not_login_with_invalid_email(): void
+    public function user_can_not_login_with_invalid_email()
     {
         $response = $this->postJson('api/login', [
             'email' => 'test@test.test',
@@ -61,7 +61,7 @@ class LoginTest extends TestCase
      *
      * @return void
      */
-    public function user_can_not_login_with_invalid_password(): void
+    public function user_can_not_login_with_invalid_password()
     {
         $user = User::factory()->create();
 

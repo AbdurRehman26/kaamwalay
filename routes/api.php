@@ -34,8 +34,8 @@ Route::prefix('customer')->group(function () {
     Route::middleware('auth')->group(function() {
         Route::apiResource('/addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
-        Route::get('orders/payment-methods', [PaymentMethodController::class, 'index']);
-        Route::get('orders/payment-methods/setup', [PaymentMethodController::class, 'getSetupIntent']);
-        Route::post('orders/payment-methods/charge', [PaymentMethodController::class, 'charge']);
+        Route::get('payment-methods', [PaymentMethodController::class, 'index']);
+        Route::get('payment-methods/setup', [PaymentMethodController::class, 'getSetupIntent']);
+        Route::post('payment-methods/charge', [PaymentMethodController::class, 'charge']);
     });
 });

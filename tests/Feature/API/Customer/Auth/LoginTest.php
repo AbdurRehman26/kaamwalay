@@ -30,7 +30,7 @@ class LoginTest extends TestCase
             'data' => [
                 'token',
                 'user',
-            ]
+            ],
         ]);
         $response->assertJsonPath('data.user.email', $user->email);
     }

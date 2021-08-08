@@ -17,7 +17,6 @@ class RegisterTest extends TestCase
     {
         parent::setUp();
         Artisan::call('db:seed', ['--class' => 'RolesSeeder']);
-
     }
 
     /**
@@ -35,12 +34,12 @@ class RegisterTest extends TestCase
             'username' => $this->faker->userName(),
             'password' => 'password',
             'password_confirmation' => 'password',
-            'phone' => ''
+            'phone' => '',
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
-            'data' => ['token', 'user']
+            'data' => ['token', 'user'],
         ]);
         $response->assertJsonPath('data.user.email', $email);
         $response->assertJsonPath('data.user.roles.0.name', config('permission.roles.customer'));
@@ -61,12 +60,12 @@ class RegisterTest extends TestCase
             'username' => $this->faker->userName(),
             'password' => 'password',
             'password_confirmation' => 'password',
-            'phone' => ''
+            'phone' => '',
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
-            'data' => ['token', 'user']
+            'data' => ['token', 'user'],
         ]);
         $response->assertJsonPath('data.user.email', $email);
         $response->assertJsonPath('data.user.roles.0.name', config('permission.roles.customer'));
@@ -93,12 +92,12 @@ class RegisterTest extends TestCase
             'username' => $this->faker->userName(),
             'password' => 'password',
             'password_confirmation' => 'password',
-            'phone' => ''
+            'phone' => '',
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $response->assertJsonStructure([
-            'errors' => ['email']
+            'errors' => ['email'],
         ]);
     }
 
@@ -117,12 +116,12 @@ class RegisterTest extends TestCase
             'username' => $existingUser->username,
             'password' => 'password',
             'password_confirmation' => 'password',
-            'phone' => ''
+            'phone' => '',
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $response->assertJsonStructure([
-            'errors' => ['username']
+            'errors' => ['username'],
         ]);
     }
 

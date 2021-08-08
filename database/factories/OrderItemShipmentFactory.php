@@ -25,8 +25,8 @@ class OrderItemShipmentFactory extends Factory
     {
         return [
             'shipment_date' => $this->faker->dateTime(),
-            'tracking_number' => $this->faker->uuid,
-            'tracking_url' => $this->faker->url,
+            'tracking_number' => $this->faker->uuid(),
+            'tracking_url' => $this->faker->url(),
             'shipping_method_id' => ShippingMethod::factory(),
         ];
     }

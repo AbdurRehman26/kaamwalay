@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         if (! ($token = auth()->attempt($request->validated()))) {
             return response()->json(
@@ -23,12 +23,20 @@ class LoginController extends Controller
 
         return new JsonResponse(
             [
-                'data' => [
-                    'token' => $token,
-                    'user' => new UserResource(auth()->user()),
-                ],
+                'access_token' => $token,
+                'type' => 'bearer',
+                'expiry' => config('jwt.ttl'),
             ],
             Response::HTTP_OK,
         );
+    }
+
+    public function me(): JsonResponse
+    {
+        return new JsonResponse([
+            'data' => [
+                'user' => new UserResource(auth()->user()),
+            ]
+        ], Response::HTTP_OK);
     }
 }

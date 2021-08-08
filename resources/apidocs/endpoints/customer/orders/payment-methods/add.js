@@ -1,5 +1,5 @@
 /**
- * @api {get} /customer/payment-methods/setup Setup Payment Method
+ * @api {post} /customer/payment-methods/setup Setup Payment Method
  * @apiName Setup a new Payment Method
  * @apiGroup Payment-Methods
  *

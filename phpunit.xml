@@ -28,7 +28,5 @@
         <server name="SESSION_DRIVER" value="array"/>
         <server name="TELESCOPE_ENABLED" value="false"/>
         <server name="JWT_SECRET" value="test_jwt_secret"/>
-        <server name="STRIPE_KEY" value="pk_test"/>
-        <server name="STRIPE_SECRET" value="sk_test"/>
     </php>
 </phpunit>

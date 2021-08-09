@@ -224,17 +224,9 @@ export function SubmissionStep04Content() {
         }
     }, [dispatch, useBillingAddressSameAsShipping]);
 
-    const onSaveCardForLater = useCallback(() => {
-        dispatch(setSaveCardForLater(!saveCardForLater));
-    }, []);
-
     const onUseShippingAddressAsBilling = useCallback(() => {
         dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
     }, [useBillingAddressSameAsShipping]);
-
-    const updateCardData = useCallback((fieldName: string, newValue: any) => {
-        dispatch(updatePaymentMethodField({ fieldName, newValue }));
-    }, []);
 
     const updateField = useCallback((fieldName: any, newValue: any) => {
         dispatch(updateBillingAddressField({ fieldName, newValue }));

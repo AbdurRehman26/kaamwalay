@@ -155,6 +155,8 @@ function SubmissionSummary() {
     const notifications = useNotifications();
     const apiService = useInjectable(APIService);
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
+    const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
+
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -270,7 +272,7 @@ function SubmissionSummary() {
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
                                 <NumberFormat
-                                    value={'$14.00'}
+                                    value={shippingFee}
                                     className={classes.rowRightBoldText}
                                     displayType={'text'}
                                     thousandSeparator
@@ -415,7 +417,7 @@ function SubmissionSummary() {
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
                                 <NumberFormat
-                                    value={'$14.00'}
+                                    value={shippingFee}
                                     className={classes.rowRightBoldText}
                                     displayType={'text'}
                                     thousandSeparator
@@ -436,7 +438,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
                                     <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice + 14.0}
+                                        value={numberOfSelectedCards * serviceLevelPrice + shippingFee}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

@@ -45,11 +45,11 @@ trait AuthenticatableWithAGS
         return auth()->guard()->login($user);
     }
 
-    public function validateResponse($response)
+    public function validateResponse($response): void
     {
         throw_unless(
             $response->status() === Response::HTTP_OK
-            && Arr::has($userData = $response->json(), 'access_token'),
+            && Arr::has($response->json(), 'access_token'),
             AuthenticationException::class,
             'Unauthorized'
         );

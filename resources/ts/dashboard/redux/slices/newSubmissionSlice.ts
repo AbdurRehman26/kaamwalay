@@ -338,9 +338,6 @@ export const newSubmissionSlice = createSlice({
         [getShippingFee.fulfilled as any]: (state, action) => {
             state.step02Data.shippingFee = action.payload;
         },
-        [getShippingFee.rejected as any]: (state, action) => {
-            console.log(action.payload);
-        },
     },
 });
 

@@ -7,5 +7,5 @@ export class AuthenticatedUserEntity {
     public user!: UserEntity;
 
     @Expose({ name: 'access_token' })
-    public accessToken!: Date;
+    public accessToken!: string;
 }

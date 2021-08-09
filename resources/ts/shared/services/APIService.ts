@@ -1,19 +1,19 @@
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Map } from 'immutable';
 
+import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
-import { Log4ts } from '@shared/decorators/Log4ts';
-import { LogChannel } from '@shared/lib/log/LogChannel';
+import { AuthenticationService } from '@shared/services/AuthenticationService';
 
 @Injectable({ name: 'APIService' })
 export class APIService {
-    @Log4ts() private log!: LogChannel;
+    constructor(@Inject() private authenticationService: AuthenticationService) {}
 
     /**
      * Create an axios instance configured to send requests to /api/{path}
      * @example
      * ```
-     * const api = resolve(APIService);
+     * const api = resolveInjectable(APIService);
      * const users$ = api.createEndpoint('users');
      * ...
      * users$.get('').then(..);
@@ -34,7 +34,7 @@ export class APIService {
      * Create an axios instance configured to send requests to /api/{path}
      * @example
      * ```
-     * const api = resolve(APIService);
+     * const api = resolveInjectable(APIService);
      * const users$ = api.createAxios({ baseURL: '/api/users' });
      * ...
      * users$.get('').then(...);
@@ -58,7 +58,12 @@ export class APIService {
      * @param config
      * @private
      */
-    private requestInterceptor(config: AxiosRequestConfig) {
+    private async requestInterceptor(config: AxiosRequestConfig) {
+        const accessToken = await this.authenticationService.getAccessToken();
+        if (this.isNotExternal(config) && accessToken && !config.headers.Authorization) {
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+
         return config;
     }
 
@@ -85,9 +90,14 @@ export class APIService {
         throw error;
     }
 
-    mergeConfig(base?: AxiosRequestConfig, ...partial: (AxiosRequestConfig | undefined)[]) {
+    public mergeConfig(base?: AxiosRequestConfig, ...partial: (AxiosRequestConfig | undefined)[]) {
         const base$ = Map(base ?? {});
 
         return partial.reduce((target, partialConfig) => target.mergeDeep(Map(partialConfig ?? {})), base$).toJS();
+    }
+
+    private isNotExternal(config: AxiosRequestConfig): boolean {
+        const baseURL = config.baseURL || '';
+        return baseURL.startsWith('/') || baseURL.startsWith(window.location.origin);
     }
 }

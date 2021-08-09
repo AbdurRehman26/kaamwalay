@@ -2,17 +2,20 @@ import { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { ClassConstructor, ClassTransformOptions, plainToClass } from 'class-transformer';
 
 import { PaginatedData } from '@shared/classes/PaginatedData';
-import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
+import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
 import { APIService } from '@shared/services/APIService';
 
 @Injectable()
 export abstract class Repository<T> {
     protected abstract readonly endpointPath: string;
     protected abstract readonly model: ClassConstructor<T>;
+    private readonly apiService: APIService;
     private _endpoint!: AxiosInstance;
 
-    constructor(@Inject() private apiService: APIService) {}
+    constructor() {
+        this.apiService = resolveInjectable(APIService);
+    }
 
     protected get endpoint() {
         if (!this._endpoint) {

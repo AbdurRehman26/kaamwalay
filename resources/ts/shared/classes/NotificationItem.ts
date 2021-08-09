@@ -1,7 +1,7 @@
 import { NotificationType } from '@shared/constants/NotificationType';
 import { sha256 } from '@shared/lib/hash';
 
-export class Notification {
+export class NotificationItem {
     public wait!: boolean;
 
     constructor(

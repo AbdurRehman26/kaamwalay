@@ -18,10 +18,11 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "paths": {
-            "@publicPath": ["resources/ts/shared/publicPath.ts"],
-            "@shared/*": ["resources/ts/shared/*"],
+            "@admin/*": ["resources/ts/admin/*"],
+            "@auth/*": ["resources/ts/auth/*"],
             "@dashboard/*": ["resources/ts/dashboard/*"],
-            "@admin/*": ["resources/ts/admin/*"]
+            "@publicPath": ["resources/ts/shared/publicPath.ts"],
+            "@shared/*": ["resources/ts/shared/*"]
         }
     },
     "include": ["resources/ts"]

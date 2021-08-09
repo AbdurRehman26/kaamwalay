@@ -22,7 +22,7 @@ The project is based on
 ```bash
 $ cp .env.example .env
 $ composer install
-$ yarn install
+$ yarn install && yarn setup # it will install the dependencies and build the apps
 
 # Migrations and Seeders
 $ ./vendor/bin/sail artisan migrate --seed
@@ -46,7 +46,12 @@ $ yarn start
 
 # 2. Admin application
 $ yarn admin:start        # or BUILD_PRESET=admin yarn start
+
+# 3. Auth application
+$ yarn auth:start        # or BUILD_PRESET=auth yarn start
 ```
+**Note:** Since the frontend it's modular you don't have to start all the application at one, you can start only the
+one you are working on.
 
 ### Backend
 

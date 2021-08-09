@@ -11,6 +11,7 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PaymentOutlinedIcon from '@material-ui/icons/PaymentOutlined';
 import StyleIcon from '@material-ui/icons/Style';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import UserAvatar from '@shared/assets/dummyLargeAvatar.png';
 
@@ -62,6 +63,13 @@ const useStyles = makeStyles(
 function LayoutSidebar() {
     const classes = useStyles();
 
+    const history = useHistory();
+    const handleSignOut = () => {
+        localStorage.removeItem('userAuthData');
+        localStorage.removeItem('userPersonalDetails');
+        history.push('/signin');
+    };
+
     return (
         <Paper variant={'outlined'} className={classes.root}>
             <Grid container direction={'row'} alignItems={'center'} className={classes.header}>
@@ -70,7 +78,7 @@ function LayoutSidebar() {
                 </div>
                 <div className={classes.headerInfoHolder}>
                     <Typography variant={'h6'}>James Smith</Typography>
-                    <Link variant={'body2'} color={'primary'} className={classes.headerSignOut}>
+                    <Link variant={'body2'} color={'primary'} onClick={handleSignOut} className={classes.headerSignOut}>
                         Sign Out
                     </Link>
                 </div>

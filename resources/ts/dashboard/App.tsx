@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { LayoutOptions } from '@dashboard/components/Layout/LayoutOptions';
@@ -14,13 +14,15 @@ const RoutesOptions = {
     '/submissions/:id/confirmation': LayoutOptions.build().withoutSidebar(),
 };
 
-const userToken = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!).authToken : '';
-axios.defaults.headers.common = {
-    Authorization: 'Bearer ' + userToken,
-    Accept: 'application/json',
-};
-
 function App() {
+    const userToken = localStorage.getItem('userAuthData')
+        ? JSON.parse(localStorage.getItem('userAuthData')!).token
+        : '';
+    axios.defaults.headers.common = {
+        Authorization: 'Bearer ' + userToken,
+        Accept: 'application/json',
+    };
+
     return (
         <BrowserRouter basename={'/dashboard'}>
             <Layout routeOptions={RoutesOptions}>

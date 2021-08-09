@@ -72,23 +72,28 @@ export default function SignInPage() {
             })
             .then(async (valid) => {
                 try {
-                    const loggedUser = await axios.post('http://robograding.test/api/login', {
+                    const loggedUserAuthDetails = await axios.post('http://robograding.test/api/auth/login', {
                         email,
                         password,
                     });
-
-                    const formattedResponse = {
-                        id: loggedUser.data.data.user.id,
-                        firstName: loggedUser.data.data.user.first_name,
-                        lastName: loggedUser.data.data.user.last_name,
-                        email: loggedUser.data.data.user.email,
-                        username: loggedUser.data.data.user.username,
-                        phone: loggedUser.data.data.user.phone,
-                        stripeID: loggedUser.data.data.user.stripe_id,
-                        roles: loggedUser.data.data.user.roles,
-                        authToken: loggedUser.data.data.token,
+                    const formattedUserAuthDetails = {
+                        token: loggedUserAuthDetails.data.access_token,
+                        type: loggedUserAuthDetails.data.type,
+                        expiry: loggedUserAuthDetails.data.expiry,
                     };
-                    localStorage.setItem('userData', JSON.stringify(formattedResponse));
+                    localStorage.setItem('userAuthData', JSON.stringify(formattedUserAuthDetails));
+                    const loggedUserPersonalDetails = await axios.get('http://robograding.test/api/auth/me');
+                    const formattedUserPersonalDetails = {
+                        id: loggedUserPersonalDetails.data.data.user.id,
+                        firstName: loggedUserPersonalDetails.data.data.user.first_name,
+                        lastName: loggedUserPersonalDetails.data.data.user.last_name,
+                        email: loggedUserPersonalDetails.data.data.user.email,
+                        username: loggedUserPersonalDetails.data.data.user.username,
+                        phone: loggedUserPersonalDetails.data.data.user.phone,
+                        stripeID: loggedUserPersonalDetails.data.data.user.stripe_id,
+                        roles: loggedUserPersonalDetails.data.data.user.roles,
+                    };
+                    localStorage.setItem('userPersonalDetails', JSON.stringify(formattedUserPersonalDetails));
                     history.push('/submissions');
                 } catch (error) {
                     notifications.error('Invalid data', 'Error');

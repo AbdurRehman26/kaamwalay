@@ -10,7 +10,9 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
 
+import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { APIService } from '@shared/services/APIService';
 
 import CustomerStripeCardItem from '@dashboard/components/PaymentForm/CustomerStripeCardItem';
 import useStyles from '@dashboard/components/PaymentForm/style';
@@ -49,13 +51,14 @@ export default function PaymentForm() {
     const [isCardsListLoading, setIsCardsListLoading] = useState(false);
     const notifications = useNotifications();
 
+    const apiService = useInjectable(APIService);
+
     const saveExistingStripeCards = async () => {
+        const endpoint = apiService.createEndpoint('customer/payment-methods');
         try {
             setIsCardsListLoading(true);
-            const existingStripeCardsForCustomer = await axios.get(
-                `http://robograding.test/api/customer/payment-methods`,
-            );
-            const formattedStripeCards = existingStripeCardsForCustomer.data?.data?.map((item: any) => {
+            const existingStripeCardsForCustomer = await endpoint.get('');
+            const formattedStripeCards = existingStripeCardsForCustomer.data?.map((item: any) => {
                 return {
                     expMonth: item.card.exp_month,
                     expYear: item.card.exp_year,
@@ -64,7 +67,7 @@ export default function PaymentForm() {
                     id: item.id,
                 };
             });
-            if (existingStripeCardsForCustomer?.data?.data?.length === 0) {
+            if (existingStripeCardsForCustomer?.data?.length === 0) {
                 dispatch(saveStripeCustomerCards([]));
             } else {
                 dispatch(saveStripeCustomerCards(formattedStripeCards));
@@ -92,6 +95,7 @@ export default function PaymentForm() {
     };
 
     const handleSaveCard = async (e: any) => {
+        const endpoint = apiService.createEndpoint('customer/payment-methods/setup');
         if (!stripe || !elements) {
             // Stripe.js has not yet loaded.
             // Make sure to disable submission until it loaded ;).
@@ -99,7 +103,7 @@ export default function PaymentForm() {
         }
         setSaveBtnLoading(true);
         // Get stripe client secret from back-end in order to use it to save the card
-        const requestClientSecret = await axios.post(`http://robograding.test/api/customer/payment-methods/setup`);
+        const requestClientSecret = await endpoint.post('');
 
         // We're using the client secret now in order to save the card for the customer on stripe
         const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.client_secret, {

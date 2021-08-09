@@ -8,7 +8,9 @@ import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
 
+import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { APIService } from '@shared/services/APIService';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCustomStep } from '../redux/slices/newSubmissionSlice';
@@ -151,7 +153,7 @@ function SubmissionSummary() {
     const stripe = useStripe();
     const history = useHistory();
     const notifications = useNotifications();
-
+    const apiService = useInjectable(APIService);
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -172,6 +174,7 @@ function SubmissionSummary() {
     });
 
     const handleConfirmStripePayment = async () => {
+        const endpoint = apiService.createEndpoint('customer/payment-methods/charge');
         if (!stripe) {
             // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
             return;
@@ -180,12 +183,9 @@ function SubmissionSummary() {
             setIsStripePaymentLoading(true);
 
             // Try to charge the customer
-            const stripePaymentIntent = await axios.post(
-                `http://robograding.test/api/customer/payment-methods/charge`,
-                {
-                    payment_method_id: stripePaymentMethod,
-                },
-            );
+            const stripePaymentIntent = await endpoint.post('', {
+                payment_method_id: stripePaymentMethod,
+            });
 
             setIsStripePaymentLoading(false);
             history.push('/submissions/123/confirmation');

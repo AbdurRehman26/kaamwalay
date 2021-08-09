@@ -14,6 +14,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import UserAvatar from '@shared/assets/dummyLargeAvatar.png';
+import { useAuth } from '@shared/hooks/useAuth';
 
 import LayoutSidebarItem from './LayoutSidebarItem';
 
@@ -62,13 +63,7 @@ const useStyles = makeStyles(
 
 function LayoutSidebar() {
     const classes = useStyles();
-
-    const history = useHistory();
-    const handleSignOut = () => {
-        localStorage.removeItem('userAuthData');
-        localStorage.removeItem('userPersonalDetails');
-        history.push('/signin');
-    };
+    const { logout } = useAuth();
 
     return (
         <Paper variant={'outlined'} className={classes.root}>
@@ -78,7 +73,7 @@ function LayoutSidebar() {
                 </div>
                 <div className={classes.headerInfoHolder}>
                     <Typography variant={'h6'}>James Smith</Typography>
-                    <Link variant={'body2'} color={'primary'} onClick={handleSignOut} className={classes.headerSignOut}>
+                    <Link variant={'body2'} color={'primary'} onClick={logout} className={classes.headerSignOut}>
                         Sign Out
                     </Link>
                 </div>

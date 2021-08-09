@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
-    username: String;
+    username: string;
+    stripeID: string;
 }
 
 const initialState: UserState = {
     username: '',
+    stripeID: 'cus_JznJFVaa5nnDfj',
 };
 
 export const userSlice = createSlice({

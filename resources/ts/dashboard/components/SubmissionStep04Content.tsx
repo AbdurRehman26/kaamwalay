@@ -20,7 +20,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
 
-import PaymentForm from '@dashboard/components/PaymentForm/PaymentForm';
+import Index from '@dashboard/components/PaymentForm';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -253,15 +253,9 @@ export function SubmissionStep04Content() {
     }, []);
 
     useEffect(() => {
-        console.log('yo');
         dispatch(setIsNextDisabled(true));
         if (paymentMethodId == 0) {
-            console.log('inside here');
-            if (currentSelectedStripeCardId.length !== 0 && isAddressDataValid) {
-                dispatch(setIsNextDisabled(false));
-            } else {
-                dispatch(setIsNextDisabled(true));
-            }
+            dispatch(setIsNextDisabled(currentSelectedStripeCardId.length === 0 || !isAddressDataValid));
         }
 
         if (paymentMethodId == 1) {
@@ -301,7 +295,7 @@ export function SubmissionStep04Content() {
                         {paymentMethodId === 0 ? (
                             <>
                                 <div className={classes.sectionContainer}>
-                                    <PaymentForm />
+                                    <Index />
                                 </div>
                                 <div className={classes.billingAddressAsShippingContainer}>
                                     <FormControlLabel

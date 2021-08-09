@@ -39,18 +39,18 @@ const CARD_OPTIONS = {
 };
 
 // noinspection JSIgnoredPromiseFromCall
-export default function PaymentForm() {
+export default function Index() {
     const [showAddCardModal, setShowAddCardModal] = useState(false);
-    const classes = useStyles();
-    const dispatch = useAppDispatch();
-    // This will be coming from a redux slice, it will be put there when the user logs in
-    const existingCustomerStripeCards = useAppSelector((state) => state.newSubmission.step04Data.existingCreditCards);
-    const stripe = useStripe();
-    const elements = useElements();
     const [isSaveBtnLoading, setSaveBtnLoading] = useState(false);
     const [isCardsListLoading, setIsCardsListLoading] = useState(false);
-    const notifications = useNotifications();
+    const classes = useStyles();
+    const dispatch = useAppDispatch();
+    const existingCustomerStripeCards = useAppSelector((state) => state.newSubmission.step04Data.existingCreditCards);
 
+    const stripe = useStripe();
+    const elements = useElements();
+
+    const notifications = useNotifications();
     const apiService = useInjectable(APIService);
 
     const saveExistingStripeCards = async () => {
@@ -80,11 +80,6 @@ export default function PaymentForm() {
             notifications.error("We weren't able to get your existing cards", 'Error');
         }
     };
-
-    useEffect(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        saveExistingStripeCards();
-    }, []);
 
     const handleClickOpen = () => {
         setShowAddCardModal(true);
@@ -125,6 +120,11 @@ export default function PaymentForm() {
         }
     };
 
+    useEffect(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        saveExistingStripeCards();
+    }, []);
+
     return (
         <>
             <Dialog open={showAddCardModal} onClose={handleClose}>
@@ -160,9 +160,9 @@ export default function PaymentForm() {
                             </div>
                         ) : (
                             <>
-                                {existingCustomerStripeCards?.map((item) => {
-                                    return <CustomerStripeCardItem key={item.id} {...item} />;
-                                })}
+                                {existingCustomerStripeCards?.map((item) => (
+                                    <CustomerStripeCardItem key={item.id} {...item} />
+                                ))}
                                 <div className={classes.addNewCardItemContainer}>
                                     <Button
                                         color="secondary"

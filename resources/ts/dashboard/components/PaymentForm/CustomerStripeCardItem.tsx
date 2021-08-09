@@ -2,7 +2,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Radio, { RadioProps } from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
 
@@ -114,7 +114,12 @@ const GreenRadio = withStyles({
 
 function CustomerStripeCardItem(props: CreditCard) {
     const currentSelectedCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
-    const classes = useStyles({ ...props, isSelected: props.id === currentSelectedCardId });
+
+    const styleProps = useMemo(
+        () => ({ isSelected: props.id === currentSelectedCardId }),
+        [props.id, currentSelectedCardId],
+    );
+    const classes = useStyles(styleProps);
     const dispatch = useAppDispatch();
 
     const { expMonth, expYear, last4, brand, id } = props;
@@ -127,7 +132,7 @@ function CustomerStripeCardItem(props: CreditCard) {
         <div className={classes.root} onClick={handleOnChange}>
             <div className={classes.leftSide}>
                 <div className={classes.radioBtnContainer}>
-                    <GreenRadio checked={currentSelectedCardId === id} />
+                    <Radio color={'primary'} checked={currentSelectedCardId === id} />
                 </div>
                 <div className={classes.rightSide}>
                     <Avatar src={getPaymentIcon(brand)!} />

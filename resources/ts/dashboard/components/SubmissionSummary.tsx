@@ -169,8 +169,7 @@ function SubmissionSummary() {
 
     let totalDeclaredValue = 0;
     selectedCards.forEach((selectedCard) => {
-        // @ts-ignore
-        totalDeclaredValue += selectedCard?.qty * selectedCard?.value;
+        totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
     const handleConfirmStripePayment = async () => {

@@ -12,8 +12,7 @@ import useStyles from '@dashboard/components/SubmissionOrderReview/style';
 import { useAppSelector } from '@dashboard/redux/hooks';
 
 function OrderReviewSection() {
-    // @ts-ignore
-    const classes = useStyles();
+    const classes = useStyles({});
 
     // Service level data
     const serviceLevelPricePerCard = useAppSelector(
@@ -49,7 +48,7 @@ function OrderReviewSection() {
                         &nbsp;/&nbsp;Card
                     </Typography>
                     <Typography className={classes.greyBodyText}>
-                        {`Protection up to`}&nbsp;
+                        Protection up to&nbsp;
                         <NumberFormat
                             value={maxProtectionAmount}
                             displayType={'text'}

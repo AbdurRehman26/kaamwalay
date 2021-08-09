@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStripe } from '@stripe/react-stripe-js';
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
 
@@ -147,11 +147,12 @@ function SubmissionSummary() {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
-    const existingStripeCustomerID = 'cus_JznJFVaa5nnDfj';
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const stripe = useStripe();
     const history = useHistory();
     const notifications = useNotifications();
+
+    const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -176,6 +177,8 @@ function SubmissionSummary() {
             return;
         }
         try {
+            setIsStripePaymentLoading(true);
+
             // Try to charge the customer
             const stripePaymentIntent = await axios.post(
                 `http://robograding.test/api/customer/payment-methods/charge`,
@@ -183,13 +186,13 @@ function SubmissionSummary() {
                     payment_method_id: stripePaymentMethod,
                 },
             );
+
+            setIsStripePaymentLoading(false);
             history.push('/submissions/123/confirmation');
         } catch (err) {
             // Charge was failed by back-end so we try to charge him on the front-end
             // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
-
             const intent = err.response.data.payment_intent;
-            console.log(intent);
             // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
             const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {
                 payment_method: intent.payment_method,
@@ -199,9 +202,11 @@ function SubmissionSummary() {
             // Eg: Insufficient funds, 3d auth failed by user, etc
             if (chargeResult.error) {
                 notifications.error(chargeResult?.error?.message!, 'Error');
+                setIsStripePaymentLoading(false);
             } else {
                 // We're all good!
                 if (chargeResult.paymentIntent.status === 'succeeded') {
+                    setIsStripePaymentLoading(false);
                     history.push('/submissions/123/confirmation');
                 }
             }
@@ -217,8 +222,13 @@ function SubmissionSummary() {
             <div className={classes.bodyContainer}>
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
-                        <Button variant="contained" color="primary" onClick={handleConfirmStripePayment}>
-                            Complete Submission
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            disabled={isStripePaymentLoading}
+                            onClick={handleConfirmStripePayment}
+                        >
+                            {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
                         </Button>
                         <Typography className={classes.greyDescriptionText}>
                             By clicking the “Complete Submission”, you are agreeing to the Robograding{' '}

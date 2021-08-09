@@ -55,7 +55,6 @@ export default function PaymentForm() {
             const existingStripeCardsForCustomer = await axios.get(
                 `http://robograding.test/api/customer/payment-methods`,
             );
-            console.log('a', existingStripeCardsForCustomer);
             const formattedStripeCards = existingStripeCardsForCustomer.data?.data?.map((item: any) => {
                 return {
                     expMonth: item.card.exp_month,
@@ -100,7 +99,7 @@ export default function PaymentForm() {
         }
         setSaveBtnLoading(true);
         // Get stripe client secret from back-end in order to use it to save the card
-        const requestClientSecret = await axios.get(`http://robograding.test/api/customer/payment-methods/setup`);
+        const requestClientSecret = await axios.post(`http://robograding.test/api/customer/payment-methods/setup`);
 
         // We're using the client secret now in order to save the card for the customer on stripe
         const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.client_secret, {

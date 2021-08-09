@@ -20,9 +20,11 @@ use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 |
 */
 
-Route::post('auth/login', [LoginController::class, 'login']);
-Route::post('auth/register', [RegisterController::class, 'register']);
-Route::get('auth/me', [LoginController::class, 'me'])->middleware('auth');
+Route::prefix('auth')->group(function () {
+    Route::post('login', [LoginController::class, 'login']);
+    Route::post('register', [RegisterController::class, 'register']);
+    Route::get('me', [LoginController::class, 'me'])->middleware('auth');
+});
 
 Route::prefix('customer')->group(function () {
     Route::apiResource('/orders/payment-plans', PaymentPlanController::class)

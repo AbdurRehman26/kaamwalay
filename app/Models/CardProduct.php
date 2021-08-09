@@ -18,6 +18,7 @@ class CardProduct extends Model
      */
     protected $fillable = [
         'card_set_id',
+        'card_category_id',
         'name',
         'rarity',
         'card_number',
@@ -26,7 +27,6 @@ class CardProduct extends Model
         'card_url',
         'image_bucket_path',
         'card_number_order',
-        'card_category_id',
     ];
 
     /**
@@ -48,11 +48,6 @@ class CardProduct extends Model
     {
         return config('app.env'). '_' . $this->getTable();
     }
-
-    // public function shouldBeSearchable()
-    // {
-    //     return $this->id < 1001;
-    // }
 
     /**
      * Get the indexable data array for the model.

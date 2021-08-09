@@ -10,10 +10,10 @@ class CardSeries extends Model
     use HasFactory;
 
     protected $fillable = [
+        'card_category_id',
         'name',
         'image_path',
         'image_bucket_path',
-        'card_category_id',
     ];
 
     public function cardSets()

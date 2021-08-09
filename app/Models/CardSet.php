@@ -12,6 +12,7 @@ class CardSet extends Model
     protected $fillable = [
         'id',
         'card_series_id',
+        'card_category_id',
         'name',
         'description',
         'cards_number',
@@ -22,7 +23,6 @@ class CardSet extends Model
         'image_path',
         'image_bucket_path',
         'set_url',
-        'card_category_id',
     ];
 
     public function cardSeries()

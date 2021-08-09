@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class CardSeriesTableSeeder extends Seeder
+class CardSeriesSeeder extends Seeder
 {
 
     /**
@@ -14,9 +14,8 @@ class CardSeriesTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('card_series')->insert(array (
-            0 => 
-            array (
+        \DB::table('card_series')->insert([
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 1,
@@ -24,9 +23,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Sword-Shield.logo.286.png',
                 'name' => 'Sword & Shield Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            1 => 
-            array (
+            ],
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 2,
@@ -34,9 +32,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Sun-Moon.logo.205.png',
                 'name' => 'Sun & Moon Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            2 => 
-            array (
+            ],
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 3,
@@ -44,9 +41,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/XY.logo.142.png',
                 'name' => 'XY Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            3 => 
-            array (
+            ],
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 4,
@@ -54,9 +50,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Black-White.logo.1.png',
                 'name' => 'Black & White Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            4 => 
-            array (
+            ],
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 5,
@@ -64,9 +59,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Black-White-Promos.logo.9.png',
                 'name' => 'Black & White Promos Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            5 => 
-            array (
+            ],
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 6,
@@ -74,9 +68,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Call-of-Legends.logo.33.png',
                 'name' => 'Call of Legends Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            6 => 
-            array (
+            ],
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 7,
@@ -84,9 +77,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/HeartGold-SoulSilver.logo.34.png',
                 'name' => 'HeartGold SoulSilver Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            7 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 8,
@@ -94,9 +86,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Platinum.logo.38.png',
                 'name' => 'Platinum Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            8 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 9,
@@ -104,9 +95,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Nintendo-Promos.logo.50.png',
                 'name' => 'Nintendo Promos Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            9 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 10,
@@ -114,9 +104,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Diamond-Pearl.logo.42.png',
                 'name' => 'Diamond & Pearl Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            10 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 11,
@@ -124,9 +113,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Ruby-Sapphire.logo.49.png',
                 'name' => 'EX Ruby & Sapphire Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            11 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 12,
@@ -134,9 +122,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/e-Card.logo.108.png',
                 'name' => 'e-Card Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            12 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 13,
@@ -144,9 +131,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Legendary-Collection.logo.112.png',
                 'name' => 'Legendary Collection Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            13 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 14,
@@ -154,9 +140,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Neo-Genesis.logo.113.png',
                 'name' => 'Neo Genesis Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            14 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 15,
@@ -164,9 +149,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Gym-Heroes.logo.117.png',
                 'name' => 'Gym Heroes Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-            15 => 
-            array (
+            ],             
+            [
                 'card_category_id' => 1,
                 'created_at' => '2021-08-07 19:10:36',
                 'id' => 16,
@@ -174,8 +158,8 @@ class CardSeriesTableSeeder extends Seeder
                 'image_path' => 'https://den-media.pokellector.com/logos/Base-Set.logo.119.png',
                 'name' => 'Base Set Series',
                 'updated_at' => '2021-08-07 19:10:36',
-            ),
-        ));
+            ],
+        ]);
         
         
     }

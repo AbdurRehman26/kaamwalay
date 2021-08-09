@@ -17,9 +17,8 @@ class CardProductSeeder extends Seeder
         \DB::table('order_items')->delete();
         \DB::table('card_products')->delete();
 
-        \DB::table('card_products')->insert(array (
-            0 => 
-            array (
+        \DB::table('card_products')->insert([
+            [
                 'card_number' => '1/163',
                 'card_number_order' => 1,
                 'card_url' => 'https://www.pokellector.com/card/Bellsprout-Battle-Styles-SWSH05-1',
@@ -32,9 +31,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            1 => 
-            array (
+            ],             
+            [
                 'card_number' => '2/163',
                 'card_number_order' => 2,
                 'card_url' => 'https://www.pokellector.com/card/Weepinbell-Battle-Styles-SWSH05-2',
@@ -47,9 +45,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            2 => 
-            array (
+            ],             
+            [
                 'card_number' => '3/163',
                 'card_number_order' => 3,
                 'card_url' => 'https://www.pokellector.com/card/Victreebel-Battle-Styles-SWSH05-3',
@@ -62,9 +59,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            3 => 
-            array (
+            ],             
+            [
                 'card_number' => '4/163',
                 'card_number_order' => 4,
                 'card_url' => 'https://www.pokellector.com/card/Cacnea-Battle-Styles-SWSH05-4',
@@ -77,9 +73,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            4 => 
-            array (
+            ],             
+            [
                 'card_number' => '5/163',
                 'card_number_order' => 5,
                 'card_url' => 'https://www.pokellector.com/card/Cacturne-Battle-Styles-SWSH05-5',
@@ -92,9 +87,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            5 => 
-            array (
+            ],             
+            [
                 'card_number' => '6/163',
                 'card_number_order' => 6,
                 'card_url' => 'https://www.pokellector.com/card/Kricketune-V-Battle-Styles-SWSH05-6',
@@ -107,9 +101,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            6 => 
-            array (
+            ],             
+            [
                 'card_number' => '7/163',
                 'card_number_order' => 7,
                 'card_url' => 'https://www.pokellector.com/card/Cherubi-Battle-Styles-SWSH05-7',
@@ -122,9 +115,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            7 => 
-            array (
+            ],             
+            [
                 'card_number' => '8/163',
                 'card_number_order' => 8,
                 'card_url' => 'https://www.pokellector.com/card/Cherrim-Battle-Styles-SWSH05-8',
@@ -137,9 +129,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            8 => 
-            array (
+            ],             
+            [
                 'card_number' => '9/163',
                 'card_number_order' => 9,
                 'card_url' => 'https://www.pokellector.com/card/Carnivine-Battle-Styles-SWSH05-9',
@@ -152,9 +143,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            9 => 
-            array (
+            ],             
+            [
                 'card_number' => '10/163',
                 'card_number_order' => 10,
                 'card_url' => 'https://www.pokellector.com/card/Durant-Battle-Styles-SWSH05-10',
@@ -167,9 +157,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            10 => 
-            array (
+            ],             
+            [
                 'card_number' => '11/163',
                 'card_number_order' => 11,
                 'card_url' => 'https://www.pokellector.com/card/Scatterbug-Battle-Styles-SWSH05-11',
@@ -182,9 +171,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            11 => 
-            array (
+            ],             
+            [
                 'card_number' => '12/163',
                 'card_number_order' => 12,
                 'card_url' => 'https://www.pokellector.com/card/Spewpa-Battle-Styles-SWSH05-12',
@@ -197,9 +185,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            12 => 
-            array (
+            ],             
+            [
                 'card_number' => '13/163',
                 'card_number_order' => 13,
                 'card_url' => 'https://www.pokellector.com/card/Vivillon-Battle-Styles-SWSH05-13',
@@ -212,9 +199,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            13 => 
-            array (
+            ],             
+            [
                 'card_number' => '14/163',
                 'card_number_order' => 14,
                 'card_url' => 'https://www.pokellector.com/card/Fomantis-Battle-Styles-SWSH05-14',
@@ -227,9 +213,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            14 => 
-            array (
+            ],             
+            [
                 'card_number' => '15/163',
                 'card_number_order' => 15,
                 'card_url' => 'https://www.pokellector.com/card/Lurantis-Battle-Styles-SWSH05-15',
@@ -242,9 +227,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            15 => 
-            array (
+            ],             
+            [
                 'card_number' => '16/163',
                 'card_number_order' => 16,
                 'card_url' => 'https://www.pokellector.com/card/Tapu-Bulu-Battle-Styles-SWSH05-16',
@@ -257,9 +241,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            16 => 
-            array (
+            ],             
+            [
                 'card_number' => '17/163',
                 'card_number_order' => 17,
                 'card_url' => 'https://www.pokellector.com/card/Blipbug-Battle-Styles-SWSH05-17',
@@ -272,9 +255,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            17 => 
-            array (
+            ],             
+            [
                 'card_number' => '18/163',
                 'card_number_order' => 18,
                 'card_url' => 'https://www.pokellector.com/card/Flapple-V-Battle-Styles-SWSH05-18',
@@ -287,9 +269,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            18 => 
-            array (
+            ],             
+            [
                 'card_number' => '19/163',
                 'card_number_order' => 19,
                 'card_url' => 'https://www.pokellector.com/card/Flapple-VMAX-Battle-Styles-SWSH05-19',
@@ -302,9 +283,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            19 => 
-            array (
+            ],             
+            [
                 'card_number' => '20/163',
                 'card_number_order' => 20,
                 'card_url' => 'https://www.pokellector.com/card/Entei-Battle-Styles-SWSH05-20',
@@ -317,9 +297,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            20 => 
-            array (
+            ],             
+            [
                 'card_number' => '21/163',
                 'card_number_order' => 21,
                 'card_url' => 'https://www.pokellector.com/card/Victini-V-Battle-Styles-SWSH05-21',
@@ -332,9 +311,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            21 => 
-            array (
+            ],             
+            [
                 'card_number' => '22/163',
                 'card_number_order' => 22,
                 'card_url' => 'https://www.pokellector.com/card/Victini-VMAX-Battle-Styles-SWSH05-22',
@@ -347,9 +325,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            22 => 
-            array (
+            ],             
+            [
                 'card_number' => '23/163',
                 'card_number_order' => 23,
                 'card_url' => 'https://www.pokellector.com/card/Tepig-Battle-Styles-SWSH05-23',
@@ -362,9 +339,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            23 => 
-            array (
+            ],             
+            [
                 'card_number' => '24/163',
                 'card_number_order' => 24,
                 'card_url' => 'https://www.pokellector.com/card/Pignite-Battle-Styles-SWSH05-24',
@@ -377,9 +353,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ),
-            24 => 
-            array (
+            ],             
+            [
                 'card_number' => '25/163',
                 'card_number_order' => 25,
                 'card_url' => 'https://www.pokellector.com/card/Emboar-Battle-Styles-SWSH05-25',
@@ -392,9 +367,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            25 => 
-            array (
+            ],             
+            [
                 'card_number' => '26/163',
                 'card_number_order' => 26,
                 'card_url' => 'https://www.pokellector.com/card/Heatmor-Battle-Styles-SWSH05-26',
@@ -407,9 +381,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            26 => 
-            array (
+            ],             
+            [
                 'card_number' => '27/163',
                 'card_number_order' => 27,
                 'card_url' => 'https://www.pokellector.com/card/Salandit-Battle-Styles-SWSH05-27',
@@ -422,9 +395,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            27 => 
-            array (
+            ],             
+            [
                 'card_number' => '28/163',
                 'card_number_order' => 28,
                 'card_url' => 'https://www.pokellector.com/card/Salazzle-Battle-Styles-SWSH05-28',
@@ -437,9 +409,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            28 => 
-            array (
+            ],             
+            [
                 'card_number' => '29/163',
                 'card_number_order' => 29,
                 'card_url' => 'https://www.pokellector.com/card/Sizzlipede-Battle-Styles-SWSH05-29',
@@ -452,9 +423,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            29 => 
-            array (
+            ],             
+            [
                 'card_number' => '30/163',
                 'card_number_order' => 30,
                 'card_url' => 'https://www.pokellector.com/card/Centiskorch-Battle-Styles-SWSH05-30',
@@ -467,9 +437,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            30 => 
-            array (
+            ],             
+            [
                 'card_number' => '31/163',
                 'card_number_order' => 31,
                 'card_url' => 'https://www.pokellector.com/card/Horsea-Battle-Styles-SWSH05-31',
@@ -482,9 +451,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            31 => 
-            array (
+            ],             
+            [
                 'card_number' => '32/163',
                 'card_number_order' => 32,
                 'card_url' => 'https://www.pokellector.com/card/Seadra-Battle-Styles-SWSH05-32',
@@ -497,9 +465,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            32 => 
-            array (
+            ],             
+            [
                 'card_number' => '33/163',
                 'card_number_order' => 33,
                 'card_url' => 'https://www.pokellector.com/card/Kingdra-Battle-Styles-SWSH05-33',
@@ -512,9 +479,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            33 => 
-            array (
+            ],             
+            [
                 'card_number' => '34/163',
                 'card_number_order' => 34,
                 'card_url' => 'https://www.pokellector.com/card/Galarian-Mr-Mime-Battle-Styles-SWSH05-34',
@@ -527,9 +493,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            34 => 
-            array (
+            ],             
+            [
                 'card_number' => '35/163',
                 'card_number_order' => 35,
                 'card_url' => 'https://www.pokellector.com/card/Galarian-Mr-Rime-Battle-Styles-SWSH05-35',
@@ -542,9 +507,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            35 => 
-            array (
+            ],             
+            [
                 'card_number' => '36/163',
                 'card_number_order' => 36,
                 'card_url' => 'https://www.pokellector.com/card/Remoraid-Battle-Styles-SWSH05-36',
@@ -557,9 +521,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            36 => 
-            array (
+            ],             
+            [
                 'card_number' => '37/163',
                 'card_number_order' => 37,
                 'card_url' => 'https://www.pokellector.com/card/Octillery-Battle-Styles-SWSH05-37',
@@ -572,9 +535,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            37 => 
-            array (
+            ],             
+            [
                 'card_number' => '38/163',
                 'card_number_order' => 38,
                 'card_url' => 'https://www.pokellector.com/card/Corphish-Battle-Styles-SWSH05-38',
@@ -587,9 +549,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            38 => 
-            array (
+            ],             
+            [
                 'card_number' => '39/163',
                 'card_number_order' => 39,
                 'card_url' => 'https://www.pokellector.com/card/Crawdaunt-Battle-Styles-SWSH05-39',
@@ -602,9 +563,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            39 => 
-            array (
+            ],             
+            [
                 'card_number' => '40/163',
                 'card_number_order' => 40,
                 'card_url' => 'https://www.pokellector.com/card/Empoleon-V-Battle-Styles-SWSH05-40',
@@ -617,9 +577,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            40 => 
-            array (
+            ],             
+            [
                 'card_number' => '41/163',
                 'card_number_order' => 41,
                 'card_url' => 'https://www.pokellector.com/card/Frillish-Battle-Styles-SWSH05-41',
@@ -632,9 +591,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            41 => 
-            array (
+            ],             
+            [
                 'card_number' => '42/163',
                 'card_number_order' => 42,
                 'card_url' => 'https://www.pokellector.com/card/Jellicent-Battle-Styles-SWSH05-42',
@@ -647,9 +605,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            42 => 
-            array (
+            ],             
+            [
                 'card_number' => '43/163',
                 'card_number_order' => 43,
                 'card_url' => 'https://www.pokellector.com/card/Bruxish-Battle-Styles-SWSH05-43',
@@ -662,9 +619,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            43 => 
-            array (
+            ],             
+            [
                 'card_number' => '44/163',
                 'card_number_order' => 44,
                 'card_url' => 'https://www.pokellector.com/card/Electabuzz-Battle-Styles-SWSH05-44',
@@ -677,9 +633,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            44 => 
-            array (
+            ],             
+            [
                 'card_number' => '45/163',
                 'card_number_order' => 45,
                 'card_url' => 'https://www.pokellector.com/card/Electivire-Battle-Styles-SWSH05-45',
@@ -692,9 +647,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            45 => 
-            array (
+            ],             
+            [
                 'card_number' => '46/163',
                 'card_number_order' => 46,
                 'card_url' => 'https://www.pokellector.com/card/Shinx-Battle-Styles-SWSH05-46',
@@ -707,9 +661,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            46 => 
-            array (
+            ],             
+            [
                 'card_number' => '47/163',
                 'card_number_order' => 47,
                 'card_url' => 'https://www.pokellector.com/card/Luxio-Battle-Styles-SWSH05-47',
@@ -722,9 +675,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            47 => 
-            array (
+            ],             
+            [
                 'card_number' => '48/163',
                 'card_number_order' => 48,
                 'card_url' => 'https://www.pokellector.com/card/Luxray-Battle-Styles-SWSH05-48',
@@ -737,9 +689,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            48 => 
-            array (
+            ],             
+            [
                 'card_number' => '49/163',
                 'card_number_order' => 49,
                 'card_url' => 'https://www.pokellector.com/card/Pachirisu-Battle-Styles-SWSH05-49',
@@ -752,9 +703,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            49 => 
-            array (
+            ],             
+            [
                 'card_number' => '50/163',
                 'card_number_order' => 50,
                 'card_url' => 'https://www.pokellector.com/card/Tapu-Koko-V-Battle-Styles-SWSH05-50',
@@ -767,9 +717,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            50 => 
-            array (
+            ],             
+            [
                 'card_number' => '51/163',
                 'card_number_order' => 51,
                 'card_url' => 'https://www.pokellector.com/card/Tapu-Koko-VMAX-Battle-Styles-SWSH05-51',
@@ -782,9 +731,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            51 => 
-            array (
+            ],             
+            [
                 'card_number' => '52/163',
                 'card_number_order' => 52,
                 'card_url' => 'https://www.pokellector.com/card/Yamper-Battle-Styles-SWSH05-52',
@@ -797,9 +745,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            52 => 
-            array (
+            ],             
+            [
                 'card_number' => '53/163',
                 'card_number_order' => 53,
                 'card_url' => 'https://www.pokellector.com/card/Boltund-Battle-Styles-SWSH05-53',
@@ -812,9 +759,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            53 => 
-            array (
+            ],             
+            [
                 'card_number' => '54/163',
                 'card_number_order' => 54,
                 'card_url' => 'https://www.pokellector.com/card/Galarian-Slowpoke-Battle-Styles-SWSH05-54',
@@ -827,9 +773,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            54 => 
-            array (
+            ],             
+            [
                 'card_number' => '55/163',
                 'card_number_order' => 55,
                 'card_url' => 'https://www.pokellector.com/card/Spoink-Battle-Styles-SWSH05-55',
@@ -842,9 +787,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            55 => 
-            array (
+            ],             
+            [
                 'card_number' => '56/163',
                 'card_number_order' => 56,
                 'card_url' => 'https://www.pokellector.com/card/Grumpig-Battle-Styles-SWSH05-56',
@@ -857,9 +801,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            56 => 
-            array (
+            ],             
+            [
                 'card_number' => '57/163',
                 'card_number_order' => 57,
                 'card_url' => 'https://www.pokellector.com/card/Baltoy-Battle-Styles-SWSH05-57',
@@ -872,9 +815,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            57 => 
-            array (
+            ],             
+            [
                 'card_number' => '58/163',
                 'card_number_order' => 58,
                 'card_url' => 'https://www.pokellector.com/card/Claydol-Battle-Styles-SWSH05-58',
@@ -887,9 +829,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            58 => 
-            array (
+            ],             
+            [
                 'card_number' => '59/163',
                 'card_number_order' => 59,
                 'card_url' => 'https://www.pokellector.com/card/Chimecho-Battle-Styles-SWSH05-59',
@@ -902,9 +843,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            59 => 
-            array (
+            ],             
+            [
                 'card_number' => '60/163',
                 'card_number_order' => 60,
                 'card_url' => 'https://www.pokellector.com/card/Espurr-Battle-Styles-SWSH05-60',
@@ -917,9 +857,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            60 => 
-            array (
+            ],             
+            [
                 'card_number' => '61/163',
                 'card_number_order' => 61,
                 'card_url' => 'https://www.pokellector.com/card/Meowstic-Battle-Styles-SWSH05-61',
@@ -932,9 +871,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            61 => 
-            array (
+            ],             
+            [
                 'card_number' => '62/163',
                 'card_number_order' => 62,
                 'card_url' => 'https://www.pokellector.com/card/Mimikyu-V-Battle-Styles-SWSH05-62',
@@ -947,9 +885,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            62 => 
-            array (
+            ],             
+            [
                 'card_number' => '63/163',
                 'card_number_order' => 63,
                 'card_url' => 'https://www.pokellector.com/card/Necrozma-V-Battle-Styles-SWSH05-63',
@@ -962,9 +899,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            63 => 
-            array (
+            ],             
+            [
                 'card_number' => '64/163',
                 'card_number_order' => 64,
                 'card_url' => 'https://www.pokellector.com/card/Dottler-Battle-Styles-SWSH05-64',
@@ -977,9 +913,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            64 => 
-            array (
+            ],             
+            [
                 'card_number' => '65/163',
                 'card_number_order' => 65,
                 'card_url' => 'https://www.pokellector.com/card/Orbeetle-Battle-Styles-SWSH05-65',
@@ -992,9 +927,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ),
-            65 => 
-            array (
+            ],             
+            [
                 'card_number' => '66/163',
                 'card_number_order' => 66,
                 'card_url' => 'https://www.pokellector.com/card/Mankey-Battle-Styles-SWSH05-66',
@@ -1007,9 +941,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            66 => 
-            array (
+            ],             
+            [
                 'card_number' => '67/163',
                 'card_number_order' => 67,
                 'card_url' => 'https://www.pokellector.com/card/Primeape-Battle-Styles-SWSH05-67',
@@ -1022,9 +955,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            67 => 
-            array (
+            ],             
+            [
                 'card_number' => '68/163',
                 'card_number_order' => 68,
                 'card_url' => 'https://www.pokellector.com/card/Onix-Battle-Styles-SWSH05-68',
@@ -1037,9 +969,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            68 => 
-            array (
+            ],             
+            [
                 'card_number' => '69/163',
                 'card_number_order' => 69,
                 'card_url' => 'https://www.pokellector.com/card/Cubone-Battle-Styles-SWSH05-69',
@@ -1052,9 +983,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            69 => 
-            array (
+            ],             
+            [
                 'card_number' => '70/163',
                 'card_number_order' => 70,
                 'card_url' => 'https://www.pokellector.com/card/Marowak-Battle-Styles-SWSH05-70',
@@ -1067,9 +997,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            70 => 
-            array (
+            ],             
+            [
                 'card_number' => '71/163',
                 'card_number_order' => 71,
                 'card_url' => 'https://www.pokellector.com/card/Gligar-Battle-Styles-SWSH05-71',
@@ -1082,9 +1011,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            71 => 
-            array (
+            ],             
+            [
                 'card_number' => '72/163',
                 'card_number_order' => 72,
                 'card_url' => 'https://www.pokellector.com/card/Gliscor-Battle-Styles-SWSH05-72',
@@ -1097,9 +1025,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            72 => 
-            array (
+            ],             
+            [
                 'card_number' => '73/163',
                 'card_number_order' => 73,
                 'card_url' => 'https://www.pokellector.com/card/Timburr-Battle-Styles-SWSH05-73',
@@ -1112,9 +1039,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            73 => 
-            array (
+            ],             
+            [
                 'card_number' => '74/163',
                 'card_number_order' => 74,
                 'card_url' => 'https://www.pokellector.com/card/Gurdurr-Battle-Styles-SWSH05-74',
@@ -1127,9 +1053,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            74 => 
-            array (
+            ],             
+            [
                 'card_number' => '75/163',
                 'card_number_order' => 75,
                 'card_url' => 'https://www.pokellector.com/card/Conkeldurr-Battle-Styles-SWSH05-75',
@@ -1142,9 +1067,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            75 => 
-            array (
+            ],             
+            [
                 'card_number' => '76/163',
                 'card_number_order' => 76,
                 'card_url' => 'https://www.pokellector.com/card/Mienfoo-Battle-Styles-SWSH05-76',
@@ -1157,9 +1081,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            76 => 
-            array (
+            ],             
+            [
                 'card_number' => '77/163',
                 'card_number_order' => 77,
                 'card_url' => 'https://www.pokellector.com/card/Mienshao-Battle-Styles-SWSH05-77',
@@ -1172,9 +1095,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            77 => 
-            array (
+            ],             
+            [
                 'card_number' => '78/163',
                 'card_number_order' => 78,
                 'card_url' => 'https://www.pokellector.com/card/Rolycoly-Battle-Styles-SWSH05-78',
@@ -1187,9 +1109,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            78 => 
-            array (
+            ],             
+            [
                 'card_number' => '79/163',
                 'card_number_order' => 79,
                 'card_url' => 'https://www.pokellector.com/card/Carkol-Battle-Styles-SWSH05-79',
@@ -1202,9 +1123,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            79 => 
-            array (
+            ],             
+            [
                 'card_number' => '80/163',
                 'card_number_order' => 80,
                 'card_url' => 'https://www.pokellector.com/card/Coalossal-Battle-Styles-SWSH05-80',
@@ -1217,9 +1137,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            80 => 
-            array (
+            ],             
+            [
                 'card_number' => '81/163',
                 'card_number_order' => 81,
                 'card_url' => 'https://www.pokellector.com/card/Silicobra-Battle-Styles-SWSH05-81',
@@ -1232,9 +1151,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            81 => 
-            array (
+            ],             
+            [
                 'card_number' => '82/163',
                 'card_number_order' => 82,
                 'card_url' => 'https://www.pokellector.com/card/Sandaconda-Battle-Styles-SWSH05-82',
@@ -1247,9 +1165,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            82 => 
-            array (
+            ],             
+            [
                 'card_number' => '83/163',
                 'card_number_order' => 83,
                 'card_url' => 'https://www.pokellector.com/card/Falinks-Battle-Styles-SWSH05-83',
@@ -1262,9 +1179,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            83 => 
-            array (
+            ],             
+            [
                 'card_number' => '84/163',
                 'card_number_order' => 84,
                 'card_url' => 'https://www.pokellector.com/card/Stonjourner-Battle-Styles-SWSH05-84',
@@ -1277,9 +1193,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            84 => 
-            array (
+            ],             
+            [
                 'card_number' => '85/163',
                 'card_number_order' => 85,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Urshifu-V-Battle-Styles-SWSH05-85',
@@ -1292,9 +1207,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            85 => 
-            array (
+            ],             
+            [
                 'card_number' => '86/163',
                 'card_number_order' => 86,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Urshifu-VMAX-Battle-Styles-SWSH05-86',
@@ -1307,9 +1221,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            86 => 
-            array (
+            ],             
+            [
                 'card_number' => '87/163',
                 'card_number_order' => 87,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Urshifu-V-Battle-Styles-SWSH05-87',
@@ -1322,9 +1235,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            87 => 
-            array (
+            ],             
+            [
                 'card_number' => '88/163',
                 'card_number_order' => 88,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Urshifu-VMAX-Battle-Styles-SWSH05-88',
@@ -1337,9 +1249,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            88 => 
-            array (
+            ],             
+            [
                 'card_number' => '89/163',
                 'card_number_order' => 89,
                 'card_url' => 'https://www.pokellector.com/card/Zubat-Battle-Styles-SWSH05-89',
@@ -1352,9 +1263,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            89 => 
-            array (
+            ],             
+            [
                 'card_number' => '90/163',
                 'card_number_order' => 90,
                 'card_url' => 'https://www.pokellector.com/card/Golbat-Battle-Styles-SWSH05-90',
@@ -1367,9 +1277,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            90 => 
-            array (
+            ],             
+            [
                 'card_number' => '91/163',
                 'card_number_order' => 91,
                 'card_url' => 'https://www.pokellector.com/card/Crobat-Battle-Styles-SWSH05-91',
@@ -1382,9 +1291,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            91 => 
-            array (
+            ],             
+            [
                 'card_number' => '92/163',
                 'card_number_order' => 92,
                 'card_url' => 'https://www.pokellector.com/card/Galarian-Slowbro-Battle-Styles-SWSH05-92',
@@ -1397,9 +1305,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            92 => 
-            array (
+            ],             
+            [
                 'card_number' => '93/163',
                 'card_number_order' => 93,
                 'card_url' => 'https://www.pokellector.com/card/Murkrow-Battle-Styles-SWSH05-93',
@@ -1412,9 +1319,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            93 => 
-            array (
+            ],             
+            [
                 'card_number' => '94/163',
                 'card_number_order' => 94,
                 'card_url' => 'https://www.pokellector.com/card/Honchkrow-Battle-Styles-SWSH05-94',
@@ -1427,9 +1333,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            94 => 
-            array (
+            ],             
+            [
                 'card_number' => '95/163',
                 'card_number_order' => 95,
                 'card_url' => 'https://www.pokellector.com/card/Houndour-Battle-Styles-SWSH05-95',
@@ -1442,9 +1347,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            95 => 
-            array (
+            ],             
+            [
                 'card_number' => '96/163',
                 'card_number_order' => 96,
                 'card_url' => 'https://www.pokellector.com/card/Houndoom-Battle-Styles-SWSH05-96',
@@ -1457,9 +1361,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            96 => 
-            array (
+            ],             
+            [
                 'card_number' => '97/163',
                 'card_number_order' => 97,
                 'card_url' => 'https://www.pokellector.com/card/Tyranitar-V-Battle-Styles-SWSH05-97',
@@ -1472,9 +1375,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            97 => 
-            array (
+            ],             
+            [
                 'card_number' => '98/163',
                 'card_number_order' => 98,
                 'card_url' => 'https://www.pokellector.com/card/Morpeko-Battle-Styles-SWSH05-98',
@@ -1487,9 +1389,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            98 => 
-            array (
+            ],             
+            [
                 'card_number' => '99/163',
                 'card_number_order' => 99,
                 'card_url' => 'https://www.pokellector.com/card/Steelix-Battle-Styles-SWSH05-99',
@@ -1502,9 +1403,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            99 => 
-            array (
+            ],             
+            [
                 'card_number' => '100/163',
                 'card_number_order' => 100,
                 'card_url' => 'https://www.pokellector.com/card/Mawile-Battle-Styles-SWSH05-100',
@@ -1517,9 +1417,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            100 => 
-            array (
+            ],             
+            [
                 'card_number' => '101/163',
                 'card_number_order' => 101,
                 'card_url' => 'https://www.pokellector.com/card/Bronzor-Battle-Styles-SWSH05-101',
@@ -1532,9 +1431,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            101 => 
-            array (
+            ],             
+            [
                 'card_number' => '102/163',
                 'card_number_order' => 102,
                 'card_url' => 'https://www.pokellector.com/card/Bronzong-Battle-Styles-SWSH05-102',
@@ -1547,9 +1445,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            102 => 
-            array (
+            ],             
+            [
                 'card_number' => '103/163',
                 'card_number_order' => 103,
                 'card_url' => 'https://www.pokellector.com/card/Pawniard-Battle-Styles-SWSH05-103',
@@ -1562,9 +1459,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            103 => 
-            array (
+            ],             
+            [
                 'card_number' => '104/163',
                 'card_number_order' => 104,
                 'card_url' => 'https://www.pokellector.com/card/Bisharp-Battle-Styles-SWSH05-104',
@@ -1577,9 +1473,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            104 => 
-            array (
+            ],             
+            [
                 'card_number' => '105/163',
                 'card_number_order' => 105,
                 'card_url' => 'https://www.pokellector.com/card/Honedge-Battle-Styles-SWSH05-105',
@@ -1592,9 +1487,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            105 => 
-            array (
+            ],             
+            [
                 'card_number' => '106/163',
                 'card_number_order' => 106,
                 'card_url' => 'https://www.pokellector.com/card/Doublade-Battle-Styles-SWSH05-106',
@@ -1607,9 +1501,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            106 => 
-            array (
+            ],             
+            [
                 'card_number' => '107/163',
                 'card_number_order' => 107,
                 'card_url' => 'https://www.pokellector.com/card/Aegislash-Battle-Styles-SWSH05-107',
@@ -1622,9 +1515,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            107 => 
-            array (
+            ],             
+            [
                 'card_number' => '108/163',
                 'card_number_order' => 108,
                 'card_url' => 'https://www.pokellector.com/card/Aegislash-Battle-Styles-SWSH05-108',
@@ -1637,9 +1529,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            108 => 
-            array (
+            ],             
+            [
                 'card_number' => '109/163',
                 'card_number_order' => 109,
                 'card_url' => 'https://www.pokellector.com/card/Corviknight-V-Battle-Styles-SWSH05-109',
@@ -1652,9 +1543,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            109 => 
-            array (
+            ],             
+            [
                 'card_number' => '110/163',
                 'card_number_order' => 110,
                 'card_url' => 'https://www.pokellector.com/card/Corviknight-VMAX-Battle-Styles-SWSH05-110',
@@ -1667,9 +1557,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            110 => 
-            array (
+            ],             
+            [
                 'card_number' => '111/163',
                 'card_number_order' => 111,
                 'card_url' => 'https://www.pokellector.com/card/Spearow-Battle-Styles-SWSH05-111',
@@ -1682,9 +1571,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            111 => 
-            array (
+            ],             
+            [
                 'card_number' => '112/163',
                 'card_number_order' => 112,
                 'card_url' => 'https://www.pokellector.com/card/Fearow-Battle-Styles-SWSH05-112',
@@ -1697,9 +1585,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            112 => 
-            array (
+            ],             
+            [
                 'card_number' => '113/163',
                 'card_number_order' => 113,
                 'card_url' => 'https://www.pokellector.com/card/Lickitung-Battle-Styles-SWSH05-113',
@@ -1712,9 +1599,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            113 => 
-            array (
+            ],             
+            [
                 'card_number' => '114/163',
                 'card_number_order' => 114,
                 'card_url' => 'https://www.pokellector.com/card/Lickilicky-Battle-Styles-SWSH05-114',
@@ -1727,9 +1613,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            114 => 
-            array (
+            ],             
+            [
                 'card_number' => '115/163',
                 'card_number_order' => 115,
                 'card_url' => 'https://www.pokellector.com/card/Glameow-Battle-Styles-SWSH05-115',
@@ -1742,9 +1627,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            115 => 
-            array (
+            ],             
+            [
                 'card_number' => '116/163',
                 'card_number_order' => 116,
                 'card_url' => 'https://www.pokellector.com/card/Purugly-Battle-Styles-SWSH05-116',
@@ -1757,9 +1641,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            116 => 
-            array (
+            ],             
+            [
                 'card_number' => '117/163',
                 'card_number_order' => 117,
                 'card_url' => 'https://www.pokellector.com/card/Stoutland-V-Battle-Styles-SWSH05-117',
@@ -1772,9 +1655,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            117 => 
-            array (
+            ],             
+            [
                 'card_number' => '118/163',
                 'card_number_order' => 118,
                 'card_url' => 'https://www.pokellector.com/card/Bouffalant-Battle-Styles-SWSH05-118',
@@ -1787,9 +1669,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            118 => 
-            array (
+            ],             
+            [
                 'card_number' => '119/163',
                 'card_number_order' => 119,
                 'card_url' => 'https://www.pokellector.com/card/Drampa-Battle-Styles-SWSH05-119',
@@ -1802,9 +1683,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            119 => 
-            array (
+            ],             
+            [
                 'card_number' => '120/163',
                 'card_number_order' => 120,
                 'card_url' => 'https://www.pokellector.com/card/Indeedee-Battle-Styles-SWSH05-120',
@@ -1817,9 +1697,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            120 => 
-            array (
+            ],             
+            [
                 'card_number' => '121/163',
                 'card_number_order' => 121,
                 'card_url' => 'https://www.pokellector.com/card/Bruno-Battle-Styles-SWSH05-121',
@@ -1832,9 +1711,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            121 => 
-            array (
+            ],             
+            [
                 'card_number' => '122/163',
                 'card_number_order' => 122,
                 'card_url' => 'https://www.pokellector.com/card/Camping-Gear-Battle-Styles-SWSH05-122',
@@ -1847,9 +1725,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            122 => 
-            array (
+            ],             
+            [
                 'card_number' => '123/163',
                 'card_number_order' => 123,
                 'card_url' => 'https://www.pokellector.com/card/Cheryl-Battle-Styles-SWSH05-123',
@@ -1862,9 +1739,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            123 => 
-            array (
+            ],             
+            [
                 'card_number' => '124/163',
                 'card_number_order' => 124,
                 'card_url' => 'https://www.pokellector.com/card/Energy-Recycler-Battle-Styles-SWSH05-124',
@@ -1877,9 +1753,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            124 => 
-            array (
+            ],             
+            [
                 'card_number' => '125/163',
                 'card_number_order' => 125,
                 'card_url' => 'https://www.pokellector.com/card/Escape-Rope-Battle-Styles-SWSH05-125',
@@ -1892,9 +1767,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            125 => 
-            array (
+            ],             
+            [
                 'card_number' => '126/163',
                 'card_number_order' => 126,
                 'card_url' => 'https://www.pokellector.com/card/Exp-Share-Battle-Styles-SWSH05-126',
@@ -1907,9 +1781,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            126 => 
-            array (
+            ],             
+            [
                 'card_number' => '127/163',
                 'card_number_order' => 127,
                 'card_url' => 'https://www.pokellector.com/card/Fan-of-Waves-Battle-Styles-SWSH05-127',
@@ -1922,9 +1795,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            127 => 
-            array (
+            ],             
+            [
                 'card_number' => '128/163',
                 'card_number_order' => 128,
                 'card_url' => 'https://www.pokellector.com/card/Korrinas-Focus-Battle-Styles-SWSH05-128',
@@ -1937,9 +1809,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            128 => 
-            array (
+            ],             
+            [
                 'card_number' => '129/163',
                 'card_number_order' => 129,
                 'card_url' => 'https://www.pokellector.com/card/Level-Ball-Battle-Styles-SWSH05-129',
@@ -1952,9 +1823,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            129 => 
-            array (
+            ],             
+            [
                 'card_number' => '130/163',
                 'card_number_order' => 130,
                 'card_url' => 'https://www.pokellector.com/card/Phoebe-Battle-Styles-SWSH05-130',
@@ -1967,9 +1837,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            130 => 
-            array (
+            ],             
+            [
                 'card_number' => '131/163',
                 'card_number_order' => 131,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Scroll-of-Swirls-Battle-Styles-SWSH05-131',
@@ -1982,9 +1851,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            131 => 
-            array (
+            ],             
+            [
                 'card_number' => '132/163',
                 'card_number_order' => 132,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Style-Mustard-Battle-Styles-SWSH05-132',
@@ -1997,9 +1865,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            132 => 
-            array (
+            ],             
+            [
                 'card_number' => '133/163',
                 'card_number_order' => 133,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Scroll-of-Scorn-Battle-Styles-SWSH05-133',
@@ -2012,9 +1879,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            133 => 
-            array (
+            ],             
+            [
                 'card_number' => '134/163',
                 'card_number_order' => 134,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Style-Mustard-Battle-Styles-SWSH05-134',
@@ -2027,9 +1893,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            134 => 
-            array (
+            ],             
+            [
                 'card_number' => '135/163',
                 'card_number_order' => 135,
                 'card_url' => 'https://www.pokellector.com/card/Sordward-and-Shielbert-Battle-Styles-SWSH05-135',
@@ -2042,9 +1907,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ),
-            135 => 
-            array (
+            ],             
+            [
                 'card_number' => '136/163',
                 'card_number_order' => 136,
                 'card_url' => 'https://www.pokellector.com/card/Tool-Jammer-Battle-Styles-SWSH05-136',
@@ -2057,9 +1921,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            136 => 
-            array (
+            ],             
+            [
                 'card_number' => '137/163',
                 'card_number_order' => 137,
                 'card_url' => 'https://www.pokellector.com/card/Tower-of-Darkness-Battle-Styles-SWSH05-137',
@@ -2072,9 +1935,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            137 => 
-            array (
+            ],             
+            [
                 'card_number' => '138/163',
                 'card_number_order' => 138,
                 'card_url' => 'https://www.pokellector.com/card/Tower-of-Waters-Battle-Styles-SWSH05-138',
@@ -2087,9 +1949,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            138 => 
-            array (
+            ],             
+            [
                 'card_number' => '139/163',
                 'card_number_order' => 139,
                 'card_url' => 'https://www.pokellector.com/card/Urn-of-Vitality-Battle-Styles-SWSH05-139',
@@ -2102,9 +1963,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            139 => 
-            array (
+            ],             
+            [
                 'card_number' => '140/163',
                 'card_number_order' => 140,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Energy-Battle-Styles-SWSH05-140',
@@ -2117,9 +1977,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            140 => 
-            array (
+            ],             
+            [
                 'card_number' => '141/163',
                 'card_number_order' => 141,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Energy-Battle-Styles-SWSH05-141',
@@ -2132,9 +1991,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            141 => 
-            array (
+            ],             
+            [
                 'card_number' => '142/163',
                 'card_number_order' => 142,
                 'card_url' => 'https://www.pokellector.com/card/Kricketune-V-Battle-Styles-SWSH05-142',
@@ -2147,9 +2005,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            142 => 
-            array (
+            ],             
+            [
                 'card_number' => '143/163',
                 'card_number_order' => 143,
                 'card_url' => 'https://www.pokellector.com/card/Flapple-V-Battle-Styles-SWSH05-143',
@@ -2162,9 +2019,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            143 => 
-            array (
+            ],             
+            [
                 'card_number' => '144/163',
                 'card_number_order' => 144,
                 'card_url' => 'https://www.pokellector.com/card/Victini-V-Battle-Styles-SWSH05-144',
@@ -2177,9 +2033,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            144 => 
-            array (
+            ],             
+            [
                 'card_number' => '145/163',
                 'card_number_order' => 145,
                 'card_url' => 'https://www.pokellector.com/card/Empoleon-V-Battle-Styles-SWSH05-145',
@@ -2192,9 +2047,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            145 => 
-            array (
+            ],             
+            [
                 'card_number' => '146/163',
                 'card_number_order' => 146,
                 'card_url' => 'https://www.pokellector.com/card/Empoleon-V-Battle-Styles-SWSH05-146',
@@ -2207,9 +2061,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            146 => 
-            array (
+            ],             
+            [
                 'card_number' => '147/163',
                 'card_number_order' => 147,
                 'card_url' => 'https://www.pokellector.com/card/Tapu-Koko-V-Battle-Styles-SWSH05-147',
@@ -2222,9 +2075,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            147 => 
-            array (
+            ],             
+            [
                 'card_number' => '148/163',
                 'card_number_order' => 148,
                 'card_url' => 'https://www.pokellector.com/card/Mimikyu-V-Battle-Styles-SWSH05-148',
@@ -2237,9 +2089,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            148 => 
-            array (
+            ],             
+            [
                 'card_number' => '149/163',
                 'card_number_order' => 149,
                 'card_url' => 'https://www.pokellector.com/card/Necrozma-V-Battle-Styles-SWSH05-149',
@@ -2252,9 +2103,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            149 => 
-            array (
+            ],             
+            [
                 'card_number' => '150/163',
                 'card_number_order' => 150,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Urshifu-V-Battle-Styles-SWSH05-150',
@@ -2267,9 +2117,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            150 => 
-            array (
+            ],             
+            [
                 'card_number' => '151/163',
                 'card_number_order' => 151,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Urshifu-V-Battle-Styles-SWSH05-151',
@@ -2282,9 +2131,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            151 => 
-            array (
+            ],             
+            [
                 'card_number' => '152/163',
                 'card_number_order' => 152,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Urshifu-V-Battle-Styles-SWSH05-152',
@@ -2297,9 +2145,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            152 => 
-            array (
+            ],             
+            [
                 'card_number' => '153/163',
                 'card_number_order' => 153,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Urshifu-V-Battle-Styles-SWSH05-153',
@@ -2312,9 +2159,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            153 => 
-            array (
+            ],             
+            [
                 'card_number' => '154/163',
                 'card_number_order' => 154,
                 'card_url' => 'https://www.pokellector.com/card/Tyranitar-V-Battle-Styles-SWSH05-154',
@@ -2327,9 +2173,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            154 => 
-            array (
+            ],             
+            [
                 'card_number' => '155/163',
                 'card_number_order' => 155,
                 'card_url' => 'https://www.pokellector.com/card/Tyranitar-V-Battle-Styles-SWSH05-155',
@@ -2342,9 +2187,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            155 => 
-            array (
+            ],             
+            [
                 'card_number' => '156/163',
                 'card_number_order' => 156,
                 'card_url' => 'https://www.pokellector.com/card/Corviknight-V-Battle-Styles-SWSH05-156',
@@ -2357,9 +2201,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            156 => 
-            array (
+            ],             
+            [
                 'card_number' => '157/163',
                 'card_number_order' => 157,
                 'card_url' => 'https://www.pokellector.com/card/Stoutland-V-Battle-Styles-SWSH05-157',
@@ -2372,9 +2215,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            157 => 
-            array (
+            ],             
+            [
                 'card_number' => '158/163',
                 'card_number_order' => 158,
                 'card_url' => 'https://www.pokellector.com/card/Bruno-Battle-Styles-SWSH05-158',
@@ -2387,9 +2229,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            158 => 
-            array (
+            ],             
+            [
                 'card_number' => '159/163',
                 'card_number_order' => 159,
                 'card_url' => 'https://www.pokellector.com/card/Cheryl-Battle-Styles-SWSH05-159',
@@ -2402,9 +2243,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            159 => 
-            array (
+            ],             
+            [
                 'card_number' => '160/163',
                 'card_number_order' => 160,
                 'card_url' => 'https://www.pokellector.com/card/Korrinas-Focus-Battle-Styles-SWSH05-160',
@@ -2417,9 +2257,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            160 => 
-            array (
+            ],             
+            [
                 'card_number' => '161/163',
                 'card_number_order' => 161,
                 'card_url' => 'https://www.pokellector.com/card/Phoebe-Battle-Styles-SWSH05-161',
@@ -2432,9 +2271,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            161 => 
-            array (
+            ],             
+            [
                 'card_number' => '162/163',
                 'card_number_order' => 162,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Style-Mustard-Battle-Styles-SWSH05-162',
@@ -2447,9 +2285,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            162 => 
-            array (
+            ],             
+            [
                 'card_number' => '163/163',
                 'card_number_order' => 163,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Style-Mustard-Battle-Styles-SWSH05-163',
@@ -2462,9 +2299,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            163 => 
-            array (
+            ],             
+            [
                 'card_number' => '164/163',
                 'card_number_order' => 164,
                 'card_url' => 'https://www.pokellector.com/card/Flapple-VMAX-Battle-Styles-SWSH05-164',
@@ -2477,9 +2313,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            164 => 
-            array (
+            ],             
+            [
                 'card_number' => '165/163',
                 'card_number_order' => 165,
                 'card_url' => 'https://www.pokellector.com/card/Victini-VMAX-Battle-Styles-SWSH05-165',
@@ -2492,9 +2327,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            165 => 
-            array (
+            ],             
+            [
                 'card_number' => '166/163',
                 'card_number_order' => 166,
                 'card_url' => 'https://www.pokellector.com/card/Tapu-Koko-VMAX-Battle-Styles-SWSH05-166',
@@ -2507,9 +2341,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            166 => 
-            array (
+            ],             
+            [
                 'card_number' => '167/163',
                 'card_number_order' => 167,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Urshifu-VMAX-Battle-Styles-SWSH05-167',
@@ -2522,9 +2355,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            167 => 
-            array (
+            ],             
+            [
                 'card_number' => '168/163',
                 'card_number_order' => 168,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Urshifu-VMAX-Battle-Styles-SWSH05-168',
@@ -2537,9 +2369,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            168 => 
-            array (
+            ],             
+            [
                 'card_number' => '169/163',
                 'card_number_order' => 169,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Urshifu-VMAX-Battle-Styles-SWSH05-169',
@@ -2552,9 +2383,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            169 => 
-            array (
+            ],             
+            [
                 'card_number' => '170/163',
                 'card_number_order' => 170,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Urshifu-VMAX-Battle-Styles-SWSH05-170',
@@ -2567,9 +2397,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            170 => 
-            array (
+            ],             
+            [
                 'card_number' => '171/163',
                 'card_number_order' => 171,
                 'card_url' => 'https://www.pokellector.com/card/Corviknight-VMAX-Battle-Styles-SWSH05-171',
@@ -2582,9 +2411,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            171 => 
-            array (
+            ],             
+            [
                 'card_number' => '172/163',
                 'card_number_order' => 172,
                 'card_url' => 'https://www.pokellector.com/card/Bruno-Battle-Styles-SWSH05-172',
@@ -2597,9 +2425,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            172 => 
-            array (
+            ],             
+            [
                 'card_number' => '173/163',
                 'card_number_order' => 173,
                 'card_url' => 'https://www.pokellector.com/card/Cheryl-Battle-Styles-SWSH05-173',
@@ -2612,9 +2439,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            173 => 
-            array (
+            ],             
+            [
                 'card_number' => '174/163',
                 'card_number_order' => 174,
                 'card_url' => 'https://www.pokellector.com/card/Korrinas-Focus-Battle-Styles-SWSH05-174',
@@ -2627,9 +2453,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            174 => 
-            array (
+            ],             
+            [
                 'card_number' => '175/163',
                 'card_number_order' => 175,
                 'card_url' => 'https://www.pokellector.com/card/Phoebe-Battle-Styles-SWSH05-175',
@@ -2642,9 +2467,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            175 => 
-            array (
+            ],             
+            [
                 'card_number' => '176/163',
                 'card_number_order' => 176,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Style-Mustard-Battle-Styles-SWSH05-176',
@@ -2657,9 +2481,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            176 => 
-            array (
+            ],             
+            [
                 'card_number' => '177/163',
                 'card_number_order' => 177,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Style-Mustard-Battle-Styles-SWSH05-177',
@@ -2672,9 +2495,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            177 => 
-            array (
+            ],             
+            [
                 'card_number' => '178/163',
                 'card_number_order' => 178,
                 'card_url' => 'https://www.pokellector.com/card/Octillery-Battle-Styles-SWSH05-178',
@@ -2687,9 +2509,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            178 => 
-            array (
+            ],             
+            [
                 'card_number' => '179/163',
                 'card_number_order' => 179,
                 'card_url' => 'https://www.pokellector.com/card/Houndoom-Battle-Styles-SWSH05-179',
@@ -2702,9 +2523,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            179 => 
-            array (
+            ],             
+            [
                 'card_number' => '180/163',
                 'card_number_order' => 180,
                 'card_url' => 'https://www.pokellector.com/card/Exp-Share-Battle-Styles-SWSH05-180',
@@ -2717,9 +2537,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            180 => 
-            array (
+            ],             
+            [
                 'card_number' => '181/163',
                 'card_number_order' => 181,
                 'card_url' => 'https://www.pokellector.com/card/Level-Ball-Battle-Styles-SWSH05-181',
@@ -2732,9 +2551,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            181 => 
-            array (
+            ],             
+            [
                 'card_number' => '182/163',
                 'card_number_order' => 182,
                 'card_url' => 'https://www.pokellector.com/card/Rapid-Strike-Energy-Battle-Styles-SWSH05-182',
@@ -2747,9 +2565,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            182 => 
-            array (
+            ],             
+            [
                 'card_number' => '183/163',
                 'card_number_order' => 183,
                 'card_url' => 'https://www.pokellector.com/card/Single-Strike-Energy-Battle-Styles-SWSH05-183',
@@ -2762,9 +2579,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Secret Rare',
                 'set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            183 => 
-            array (
+            ],             
+            [
                 'card_number' => '1/72',
                 'card_number_order' => 1,
                 'card_url' => 'https://www.pokellector.com/card/Yanma-Shining-Fates-SWSH45-1',
@@ -2777,9 +2593,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            184 => 
-            array (
+            ],             
+            [
                 'card_number' => '2/72',
                 'card_number_order' => 2,
                 'card_url' => 'https://www.pokellector.com/card/Yanmega-Shining-Fates-SWSH45-2',
@@ -2792,9 +2607,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            185 => 
-            array (
+            ],             
+            [
                 'card_number' => '3/72',
                 'card_number_order' => 3,
                 'card_url' => 'https://www.pokellector.com/card/Celebi-Shining-Fates-SWSH45-3',
@@ -2807,9 +2621,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            186 => 
-            array (
+            ],             
+            [
                 'card_number' => '4/72',
                 'card_number_order' => 4,
                 'card_url' => 'https://www.pokellector.com/card/Cacnea-Shining-Fates-SWSH45-4',
@@ -2822,9 +2635,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            187 => 
-            array (
+            ],             
+            [
                 'card_number' => '5/72',
                 'card_number_order' => 5,
                 'card_url' => 'https://www.pokellector.com/card/Tropius-Shining-Fates-SWSH45-5',
@@ -2837,9 +2649,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            188 => 
-            array (
+            ],             
+            [
                 'card_number' => '6/72',
                 'card_number_order' => 6,
                 'card_url' => 'https://www.pokellector.com/card/Rowlet-Shining-Fates-SWSH45-6',
@@ -2852,9 +2663,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            189 => 
-            array (
+            ],             
+            [
                 'card_number' => '7/72',
                 'card_number_order' => 7,
                 'card_url' => 'https://www.pokellector.com/card/Dartrix-Shining-Fates-SWSH45-7',
@@ -2867,9 +2677,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            190 => 
-            array (
+            ],             
+            [
                 'card_number' => '8/72',
                 'card_number_order' => 8,
                 'card_url' => 'https://www.pokellector.com/card/Decidueye-Shining-Fates-SWSH45-8',
@@ -2882,9 +2691,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            191 => 
-            array (
+            ],             
+            [
                 'card_number' => '9/72',
                 'card_number_order' => 9,
                 'card_url' => 'https://www.pokellector.com/card/Dhelmise-V-Shining-Fates-SWSH45-9',
@@ -2897,9 +2705,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            192 => 
-            array (
+            ],             
+            [
                 'card_number' => '10/72',
                 'card_number_order' => 10,
                 'card_url' => 'https://www.pokellector.com/card/Dhelmise-VMAX-Shining-Fates-SWSH45-10',
@@ -2912,9 +2719,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            193 => 
-            array (
+            ],             
+            [
                 'card_number' => '11/72',
                 'card_number_order' => 11,
                 'card_url' => 'https://www.pokellector.com/card/Grookey-Shining-Fates-SWSH45-11',
@@ -2927,9 +2733,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            194 => 
-            array (
+            ],             
+            [
                 'card_number' => '12/72',
                 'card_number_order' => 12,
                 'card_url' => 'https://www.pokellector.com/card/Thwackey-Shining-Fates-SWSH45-12',
@@ -2942,9 +2747,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            195 => 
-            array (
+            ],             
+            [
                 'card_number' => '13/72',
                 'card_number_order' => 13,
                 'card_url' => 'https://www.pokellector.com/card/Rillaboom-Shining-Fates-SWSH45-13',
@@ -2957,9 +2761,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            196 => 
-            array (
+            ],             
+            [
                 'card_number' => '14/72',
                 'card_number_order' => 14,
                 'card_url' => 'https://www.pokellector.com/card/Gossifleur-Shining-Fates-SWSH45-14',
@@ -2972,9 +2775,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            197 => 
-            array (
+            ],             
+            [
                 'card_number' => '15/72',
                 'card_number_order' => 15,
                 'card_url' => 'https://www.pokellector.com/card/Eldegoss-Shining-Fates-SWSH45-15',
@@ -2987,9 +2789,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            198 => 
-            array (
+            ],             
+            [
                 'card_number' => '16/72',
                 'card_number_order' => 16,
                 'card_url' => 'https://www.pokellector.com/card/Zarude-Shining-Fates-SWSH45-16',
@@ -3002,9 +2803,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            199 => 
-            array (
+            ],             
+            [
                 'card_number' => '17/72',
                 'card_number_order' => 17,
                 'card_url' => 'https://www.pokellector.com/card/Reshiram-Shining-Fates-SWSH45-17',
@@ -3017,9 +2817,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Amazing Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            200 => 
-            array (
+            ],             
+            [
                 'card_number' => '18/72',
                 'card_number_order' => 18,
                 'card_url' => 'https://www.pokellector.com/card/Cinderace-V-Shining-Fates-SWSH45-18',
@@ -3032,9 +2831,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            201 => 
-            array (
+            ],             
+            [
                 'card_number' => '19/72',
                 'card_number_order' => 19,
                 'card_url' => 'https://www.pokellector.com/card/Cinderace-VMAX-Shining-Fates-SWSH45-19',
@@ -3047,9 +2845,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            202 => 
-            array (
+            ],             
+            [
                 'card_number' => '20/72',
                 'card_number_order' => 20,
                 'card_url' => 'https://www.pokellector.com/card/Horsea-Shining-Fates-SWSH45-20',
@@ -3062,9 +2859,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:52',
-            ),
-            203 => 
-            array (
+            ],             
+            [
                 'card_number' => '21/72',
                 'card_number_order' => 21,
                 'card_url' => 'https://www.pokellector.com/card/Kyogre-Shining-Fates-SWSH45-21',
@@ -3077,9 +2873,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Amazing Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            204 => 
-            array (
+            ],             
+            [
                 'card_number' => '22/72',
                 'card_number_order' => 22,
                 'card_url' => 'https://www.pokellector.com/card/Buizel-Shining-Fates-SWSH45-22',
@@ -3092,9 +2887,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            205 => 
-            array (
+            ],             
+            [
                 'card_number' => '23/72',
                 'card_number_order' => 23,
                 'card_url' => 'https://www.pokellector.com/card/Floatzel-Shining-Fates-SWSH45-23',
@@ -3107,9 +2901,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            206 => 
-            array (
+            ],             
+            [
                 'card_number' => '24/72',
                 'card_number_order' => 24,
                 'card_url' => 'https://www.pokellector.com/card/Manaphy-Shining-Fates-SWSH45-24',
@@ -3122,9 +2915,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            207 => 
-            array (
+            ],             
+            [
                 'card_number' => '25/72',
                 'card_number_order' => 25,
                 'card_url' => 'https://www.pokellector.com/card/Volcanion-Shining-Fates-SWSH45-25',
@@ -3137,9 +2929,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            208 => 
-            array (
+            ],             
+            [
                 'card_number' => '26/72',
                 'card_number_order' => 26,
                 'card_url' => 'https://www.pokellector.com/card/Chewtle-Shining-Fates-SWSH45-26',
@@ -3152,9 +2943,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            209 => 
-            array (
+            ],             
+            [
                 'card_number' => '27/72',
                 'card_number_order' => 27,
                 'card_url' => 'https://www.pokellector.com/card/Drednaw-Shining-Fates-SWSH45-27',
@@ -3167,9 +2957,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            210 => 
-            array (
+            ],             
+            [
                 'card_number' => '28/72',
                 'card_number_order' => 28,
                 'card_url' => 'https://www.pokellector.com/card/Cramorant-Shining-Fates-SWSH45-28',
@@ -3182,9 +2971,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            211 => 
-            array (
+            ],             
+            [
                 'card_number' => '29/72',
                 'card_number_order' => 29,
                 'card_url' => 'https://www.pokellector.com/card/Snom-Shining-Fates-SWSH45-29',
@@ -3197,9 +2985,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            212 => 
-            array (
+            ],             
+            [
                 'card_number' => '30/72',
                 'card_number_order' => 30,
                 'card_url' => 'https://www.pokellector.com/card/Frosmoth-Shining-Fates-SWSH45-30',
@@ -3212,9 +2999,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            213 => 
-            array (
+            ],             
+            [
                 'card_number' => '31/72',
                 'card_number_order' => 31,
                 'card_url' => 'https://www.pokellector.com/card/Shinx-Shining-Fates-SWSH45-31',
@@ -3227,9 +3013,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            214 => 
-            array (
+            ],             
+            [
                 'card_number' => '32/72',
                 'card_number_order' => 32,
                 'card_url' => 'https://www.pokellector.com/card/Luxio-Shining-Fates-SWSH45-32',
@@ -3242,9 +3027,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            215 => 
-            array (
+            ],             
+            [
                 'card_number' => '33/72',
                 'card_number_order' => 33,
                 'card_url' => 'https://www.pokellector.com/card/Luxray-Shining-Fates-SWSH45-33',
@@ -3257,9 +3041,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            216 => 
-            array (
+            ],             
+            [
                 'card_number' => '34/72',
                 'card_number_order' => 34,
                 'card_url' => 'https://www.pokellector.com/card/Rotom-Shining-Fates-SWSH45-34',
@@ -3272,9 +3055,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            217 => 
-            array (
+            ],             
+            [
                 'card_number' => '35/72',
                 'card_number_order' => 35,
                 'card_url' => 'https://www.pokellector.com/card/Morpeko-Shining-Fates-SWSH45-35',
@@ -3287,9 +3069,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            218 => 
-            array (
+            ],             
+            [
                 'card_number' => '36/72',
                 'card_number_order' => 36,
                 'card_url' => 'https://www.pokellector.com/card/Morpeko-Shining-Fates-SWSH45-36',
@@ -3302,9 +3083,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            219 => 
-            array (
+            ],             
+            [
                 'card_number' => '37/72',
                 'card_number_order' => 37,
                 'card_url' => 'https://www.pokellector.com/card/Morpeko-V-Shining-Fates-SWSH45-37',
@@ -3317,9 +3097,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            220 => 
-            array (
+            ],             
+            [
                 'card_number' => '38/72',
                 'card_number_order' => 38,
                 'card_url' => 'https://www.pokellector.com/card/Morpeko-VMAX-Shining-Fates-SWSH45-38',
@@ -3332,9 +3111,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            221 => 
-            array (
+            ],             
+            [
                 'card_number' => '39/72',
                 'card_number_order' => 39,
                 'card_url' => 'https://www.pokellector.com/card/Indeedee-V-Shining-Fates-SWSH45-39',
@@ -3347,9 +3125,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            222 => 
-            array (
+            ],             
+            [
                 'card_number' => '40/72',
                 'card_number_order' => 40,
                 'card_url' => 'https://www.pokellector.com/card/Trapinch-Shining-Fates-SWSH45-40',
@@ -3362,9 +3139,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            223 => 
-            array (
+            ],             
+            [
                 'card_number' => '41/72',
                 'card_number_order' => 41,
                 'card_url' => 'https://www.pokellector.com/card/Koffing-Shining-Fates-SWSH45-41',
@@ -3377,9 +3153,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            224 => 
-            array (
+            ],             
+            [
                 'card_number' => '42/72',
                 'card_number_order' => 42,
                 'card_url' => 'https://www.pokellector.com/card/Galarian-Weezing-Shining-Fates-SWSH45-42',
@@ -3392,9 +3167,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            225 => 
-            array (
+            ],             
+            [
                 'card_number' => '43/72',
                 'card_number_order' => 43,
                 'card_url' => 'https://www.pokellector.com/card/Spinarak-Shining-Fates-SWSH45-43',
@@ -3407,9 +3181,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            226 => 
-            array (
+            ],             
+            [
                 'card_number' => '44/72',
                 'card_number_order' => 44,
                 'card_url' => 'https://www.pokellector.com/card/Crobat-V-Shining-Fates-SWSH45-44',
@@ -3422,9 +3195,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            227 => 
-            array (
+            ],             
+            [
                 'card_number' => '45/72',
                 'card_number_order' => 45,
                 'card_url' => 'https://www.pokellector.com/card/Crobat-VMAX-Shining-Fates-SWSH45-45',
@@ -3437,9 +3209,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            228 => 
-            array (
+            ],             
+            [
                 'card_number' => '46/72',
                 'card_number_order' => 46,
                 'card_url' => 'https://www.pokellector.com/card/Yveltal-Shining-Fates-SWSH45-46',
@@ -3452,9 +3223,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Amazing Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            229 => 
-            array (
+            ],             
+            [
                 'card_number' => '47/72',
                 'card_number_order' => 47,
                 'card_url' => 'https://www.pokellector.com/card/Nickit-Shining-Fates-SWSH45-47',
@@ -3467,9 +3237,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            230 => 
-            array (
+            ],             
+            [
                 'card_number' => '48/72',
                 'card_number_order' => 48,
                 'card_url' => 'https://www.pokellector.com/card/Thievul-Shining-Fates-SWSH45-48',
@@ -3482,9 +3251,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            231 => 
-            array (
+            ],             
+            [
                 'card_number' => '49/72',
                 'card_number_order' => 49,
                 'card_url' => 'https://www.pokellector.com/card/Cufant-Shining-Fates-SWSH45-49',
@@ -3497,9 +3265,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            232 => 
-            array (
+            ],             
+            [
                 'card_number' => '50/72',
                 'card_number_order' => 50,
                 'card_url' => 'https://www.pokellector.com/card/Ditto-V-Shining-Fates-SWSH45-50',
@@ -3512,9 +3279,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            233 => 
-            array (
+            ],             
+            [
                 'card_number' => '51/72',
                 'card_number_order' => 51,
                 'card_url' => 'https://www.pokellector.com/card/Ditto-VMAX-Shining-Fates-SWSH45-51',
@@ -3527,9 +3293,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            234 => 
-            array (
+            ],             
+            [
                 'card_number' => '52/72',
                 'card_number_order' => 52,
                 'card_url' => 'https://www.pokellector.com/card/Eevee-Shining-Fates-SWSH45-52',
@@ -3542,9 +3307,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            235 => 
-            array (
+            ],             
+            [
                 'card_number' => '53/72',
                 'card_number_order' => 53,
                 'card_url' => 'https://www.pokellector.com/card/Greedent-V-Shining-Fates-SWSH45-53',
@@ -3557,9 +3321,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            236 => 
-            array (
+            ],             
+            [
                 'card_number' => '54/72',
                 'card_number_order' => 54,
                 'card_url' => 'https://www.pokellector.com/card/Cramorant-V-Shining-Fates-SWSH45-54',
@@ -3572,9 +3335,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            237 => 
-            array (
+            ],             
+            [
                 'card_number' => '55/72',
                 'card_number_order' => 55,
                 'card_url' => 'https://www.pokellector.com/card/Cramorant-VMAX-Shining-Fates-SWSH45-55',
@@ -3587,9 +3349,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            238 => 
-            array (
+            ],             
+            [
                 'card_number' => '56/72',
                 'card_number_order' => 56,
                 'card_url' => 'https://www.pokellector.com/card/Indeedee-Shining-Fates-SWSH45-56',
@@ -3602,9 +3363,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            239 => 
-            array (
+            ],             
+            [
                 'card_number' => '57/72',
                 'card_number_order' => 57,
                 'card_url' => 'https://www.pokellector.com/card/Ball-Guy-Shining-Fates-SWSH45-57',
@@ -3617,9 +3377,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            240 => 
-            array (
+            ],             
+            [
                 'card_number' => '58/72',
                 'card_number_order' => 58,
                 'card_url' => 'https://www.pokellector.com/card/Bosss-Orders-Shining-Fates-SWSH45-58',
@@ -3632,9 +3391,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            241 => 
-            array (
+            ],             
+            [
                 'card_number' => '59/72',
                 'card_number_order' => 59,
                 'card_url' => 'https://www.pokellector.com/card/Gym-Trainer-Shining-Fates-SWSH45-59',
@@ -3647,9 +3405,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            242 => 
-            array (
+            ],             
+            [
                 'card_number' => '60/72',
                 'card_number_order' => 60,
                 'card_url' => 'https://www.pokellector.com/card/Professors-Research-Shining-Fates-SWSH45-60',
@@ -3662,9 +3419,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            243 => 
-            array (
+            ],             
+            [
                 'card_number' => '61/72',
                 'card_number_order' => 61,
                 'card_url' => 'https://www.pokellector.com/card/Rusted-Shield-Shining-Fates-SWSH45-61',
@@ -3677,9 +3433,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            244 => 
-            array (
+            ],             
+            [
                 'card_number' => '62/72',
                 'card_number_order' => 62,
                 'card_url' => 'https://www.pokellector.com/card/Rusted-Sword-Shining-Fates-SWSH45-62',
@@ -3692,9 +3447,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            245 => 
-            array (
+            ],             
+            [
                 'card_number' => '63/72',
                 'card_number_order' => 63,
                 'card_url' => 'https://www.pokellector.com/card/Team-Yell-Towel-Shining-Fates-SWSH45-63',
@@ -3707,9 +3461,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            246 => 
-            array (
+            ],             
+            [
                 'card_number' => '64/72',
                 'card_number_order' => 64,
                 'card_url' => 'https://www.pokellector.com/card/Alcremie-V-Shining-Fates-SWSH45-64',
@@ -3722,9 +3475,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            247 => 
-            array (
+            ],             
+            [
                 'card_number' => '65/72',
                 'card_number_order' => 65,
                 'card_url' => 'https://www.pokellector.com/card/Ball-Guy-Shining-Fates-SWSH45-65',
@@ -3737,9 +3489,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            248 => 
-            array (
+            ],             
+            [
                 'card_number' => '66/72',
                 'card_number_order' => 66,
                 'card_url' => 'https://www.pokellector.com/card/Bird-Keeper-Shining-Fates-SWSH45-66',
@@ -3752,9 +3503,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            249 => 
-            array (
+            ],             
+            [
                 'card_number' => '67/72',
                 'card_number_order' => 67,
                 'card_url' => 'https://www.pokellector.com/card/Cara-Liss-Shining-Fates-SWSH45-67',
@@ -3767,9 +3517,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            ),
-            250 => 
-            array (
+            ],             
+            [
                 'card_number' => '68/72',
                 'card_number_order' => 68,
                 'card_url' => 'https://www.pokellector.com/card/Gym-Trainer-Shining-Fates-SWSH45-68',
@@ -3782,8 +3531,8 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'set_id' => 2,
                 'updated_at' => '2021-08-07 20:27:53',
-            )
-        ));
+            ]
+        ]);
         
     }
 }

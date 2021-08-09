@@ -18,6 +18,7 @@ class CreateCardSetsTable extends Migration
         Schema::create('card_sets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('card_series_id')->constrained();
+            $table->foreignId('card_category_id')->constrained();
             $table->string('name', 200);
             $table->string('description', 1000);
             $table->integer('cards_number')->nullable();
@@ -28,7 +29,6 @@ class CreateCardSetsTable extends Migration
             $table->string('set_url', 1000)->nullable();
             $table->date('release_date')->nullable();
             $table->integer('release_year')->nullable();
-            $table->foreignId('card_category_id')->constrained();
             $table->timestamps();
 
         });

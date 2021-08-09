@@ -125,6 +125,34 @@ export default function Index() {
         saveExistingStripeCards();
     }, []);
 
+    if (isCardsListLoading) {
+        return (
+            <div className={classes.loadingContainer}>
+                <CircularProgress color="secondary" />
+            </div>
+        );
+    }
+
+    if (existingCustomerStripeCards?.length === 0) {
+        return (
+            <div className={classes.missingStripeCardsContainer}>
+                <Typography className={classes.cardsListTitle}>Add debit / credit card</Typography>
+                <div className={classes.firstTimeCardContainer}>
+                    <CardElement options={CARD_OPTIONS as any} className={classes.cardForm} />
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        disabled={isSaveBtnLoading}
+                        onClick={handleSaveCard}
+                        className={classes.addCardBtn}
+                    >
+                        {isSaveBtnLoading ? 'Loading...' : 'Add credit/debit card'}
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
             <Dialog open={showAddCardModal} onClose={handleClose}>
@@ -145,37 +173,14 @@ export default function Index() {
             </Dialog>
             <Typography className={classes.cardsListTitle}>Your cards</Typography>
             <Paper variant="outlined" className={classes.cardsListContainer}>
-                {isCardsListLoading ? (
-                    <div className={classes.loadingContainer}>
-                        <CircularProgress color="secondary" />
-                    </div>
-                ) : (
-                    <>
-                        {existingCustomerStripeCards?.length === 0 ? (
-                            <div className={classes.missingStripeCardsContainer}>
-                                <Typography variant={'subtitle1'}>You don't have any saved cards</Typography>
-                                <Button variant={'contained'} color={'primary'} onClick={handleClickOpen}>
-                                    Add credit/debit card
-                                </Button>
-                            </div>
-                        ) : (
-                            <>
-                                {existingCustomerStripeCards?.map((item) => (
-                                    <CustomerStripeCardItem key={item.id} {...item} />
-                                ))}
-                                <div className={classes.addNewCardItemContainer}>
-                                    <Button
-                                        color="secondary"
-                                        onClick={handleClickOpen}
-                                        startIcon={<AddCircleOutlineIcon />}
-                                    >
-                                        Add a new debit / credit card
-                                    </Button>
-                                </div>
-                            </>
-                        )}
-                    </>
-                )}
+                {existingCustomerStripeCards?.map((item) => (
+                    <CustomerStripeCardItem key={item.id} {...item} />
+                ))}
+                <div className={classes.addNewCardItemContainer}>
+                    <Button color="secondary" onClick={handleClickOpen} startIcon={<AddCircleOutlineIcon />}>
+                        Add a new debit / credit card
+                    </Button>
+                </div>
             </Paper>
         </>
     );

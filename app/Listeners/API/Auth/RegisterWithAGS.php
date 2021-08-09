@@ -21,6 +21,7 @@ class RegisterWithAGS
 
         if (! $ags->isEnabled()) {
             logger('Skipping AGS as it is disabled.');
+
             return;
         }
         $password = $event->request->get('password');
@@ -38,6 +39,7 @@ class RegisterWithAGS
 
         if ($response->status() === Response::HTTP_CREATED) {
             logger('User created on AGS successfully.', ['user_id' => $user->id]);
+
             return;
         }
         logger()->error('Error occurred while creating user on AGS', ['user_id' => $user->id]);

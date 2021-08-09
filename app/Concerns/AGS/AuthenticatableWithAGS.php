@@ -24,7 +24,6 @@ trait AuthenticatableWithAGS
         $userData = $response->json()['user'];
 
         return $this->authenticateAgsUser($this->manageAgsUser($request, $userData));
-
     }
 
     public function manageAgsUser(LoginRequest $request, array $userData): User

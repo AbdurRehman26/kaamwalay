@@ -19,5 +19,6 @@ class CustomerRegistered
     public function __construct(
         public User $user,
         public RegisterRequest $request
-    ) {}
+    ) {
+    }
 }

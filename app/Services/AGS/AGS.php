@@ -15,7 +15,7 @@ class AGS
     public function client(): PendingRequest
     {
         return Http::baseUrl(config('services.ags.base_url'))->withHeaders([
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
         ]);
     }
 }

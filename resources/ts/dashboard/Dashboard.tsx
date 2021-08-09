@@ -1,7 +1,7 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Switch } from 'react-router-dom';
 
-import ProtectedRoute from '@shared/components/ProtectedRoute';
+import { ProtectedRoute } from '@shared/components/ProtectedRoute';
 
 import { Submissions } from './pages/Submissions';
 

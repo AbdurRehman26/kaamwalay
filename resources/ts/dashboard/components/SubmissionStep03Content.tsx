@@ -1,27 +1,19 @@
-import {
-    Container,
-    Divider,
-    FormControl,
-    FormControlLabel,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-} from '@material-ui/core';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import Alert from '@material-ui/lab/Alert';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
-    getServiceLevels,
     getStatesList,
     setIsNextDisabled,
     setSaveShippingAddress,
@@ -311,7 +303,7 @@ export function SubmissionStep03Content() {
                                         style={{ height: '43px' }}
                                     >
                                         <MenuItem value="none">Select a state</MenuItem>
-                                        {availableStates.map((item, index) => (
+                                        {availableStates.map((item) => (
                                             <MenuItem key={item.id} value={item.id}>
                                                 {item.code}
                                             </MenuItem>

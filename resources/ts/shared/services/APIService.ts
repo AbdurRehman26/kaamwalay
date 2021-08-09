@@ -87,6 +87,12 @@ export class APIService {
      */
     private responseErrorInterceptor(error: AxiosError) {
         error.response = this.responseInterceptor(error.response!);
+
+        const message = error.response?.data?.message || error.response?.data?.error;
+        if (message) {
+            error.message = message;
+        }
+
         throw error;
     }
 

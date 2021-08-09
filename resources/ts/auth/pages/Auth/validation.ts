@@ -18,3 +18,7 @@ export const SignUpValidationRules = yup.object().shape({
         .required(RequiredMessage)
         .oneOf([yup.ref('password'), null], "Passwords doesn't match!"),
 });
+
+export const ForgotPasswordValidationRules = yup.object().shape({
+    email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
+});

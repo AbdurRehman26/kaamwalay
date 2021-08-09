@@ -9,6 +9,8 @@ import { AuthenticationRepository } from '@shared/repositories/AuthenticationRep
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 
+import { SignUpRequestDto } from '../../dto/SignUpRequestDto';
+
 interface StateType {
     checking: boolean;
     authenticated: boolean;
@@ -32,6 +34,33 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
     } catch (e) {
         if (e.errors) {
             NotificationsService.error('Validation errors.');
+        } else if (e.isAxiosError) {
+            NotificationsService.error(e.message);
+        } else {
+            NotificationsService.error('Unable to login.');
+        }
+
+        throw e;
+    }
+});
+
+export const registerAction = createAsyncThunk('auth/register', async (input: SignUpRequestDto, thunkAPI) => {
+    const authenticationService = resolveInjectable(AuthenticationService);
+    const authenticationRepository = resolveInjectable(AuthenticationRepository);
+
+    try {
+        const authenticatedUser = await authenticationRepository.postRegister(input);
+        NotificationsService.success('Register successfully!');
+        await authenticationService.setAccessToken(authenticatedUser.accessToken);
+
+        thunkAPI.dispatch(authenticateCheckAction());
+    } catch (e) {
+        if (e.errors) {
+            NotificationsService.error('Validation errors.');
+        } else if (e.isAxiosError) {
+            NotificationsService.error(e.message);
+        } else {
+            NotificationsService.error('Unable to register.');
         }
 
         throw e;
@@ -42,16 +71,15 @@ export const authenticateCheckAction = createAsyncThunk('auth/check', async () =
     const authenticationService = resolveInjectable(AuthenticationService);
     const authenticationRepository = resolveInjectable(AuthenticationRepository);
     const accessToken = await authenticationService.getAccessToken();
-
-    if (accessToken) {
-        const user = await authenticationRepository.whoami();
-        return {
-            accessToken,
-            user: classToPlain(user),
-        };
+    if (!accessToken) {
+        return null;
     }
 
-    return null;
+    const user = await authenticationRepository.whoami();
+    return {
+        accessToken,
+        user: classToPlain(user),
+    };
 });
 
 export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {

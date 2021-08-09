@@ -3,7 +3,7 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import { Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -34,9 +34,8 @@ export function SignIn() {
     );
 
     const handleSubmit = useCallback(
-        ({ email, password }, { setSubmitting }: FormikHelpers<any>) => {
-            setSubmitting(true);
-            login(email, password);
+        async ({ email, password }) => {
+            await login(email, password);
         },
         [login],
     );

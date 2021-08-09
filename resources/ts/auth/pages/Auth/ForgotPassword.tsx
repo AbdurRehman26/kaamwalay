@@ -3,7 +3,7 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import { Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ import { font } from '@shared/styles/utils';
 import { FormInput } from './FormInput';
 import { SubmitButton } from './SubmitButton';
 import { useStyles } from './style';
+import { ForgotPasswordValidationRules } from './validation';
 
 /**
  *
@@ -32,15 +33,20 @@ export function ForgotPassword() {
     );
 
     const handleSubmit = useCallback(
-        ({ email, password }, { setSubmitting }: FormikHelpers<any>) => {
-            setSubmitting(true);
+        async ({ email }) => {
+            console.log(email);
             // Request
         },
         [login],
     );
 
     return (
-        <Formik initialValues={initialState} onSubmit={handleSubmit}>
+        <Formik
+            initialValues={initialState}
+            onSubmit={handleSubmit}
+            validationSchema={ForgotPasswordValidationRules}
+            validateOnChange
+        >
             <Form className={classes.root}>
                 <Grid container direction={'column'} className={classes.content}>
                     <Box marginBottom={4}>

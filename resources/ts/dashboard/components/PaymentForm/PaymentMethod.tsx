@@ -1,14 +1,14 @@
-import { CircularProgress, Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import axios from 'axios';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -39,7 +39,7 @@ const CARD_OPTIONS = {
 };
 
 // noinspection JSIgnoredPromiseFromCall
-export default function Index() {
+export function PaymentForm() {
     const [showAddCardModal, setShowAddCardModal] = useState(false);
     const [isSaveBtnLoading, setSaveBtnLoading] = useState(false);
     const [isCardsListLoading, setIsCardsListLoading] = useState(false);
@@ -89,7 +89,7 @@ export default function Index() {
         setShowAddCardModal(false);
     };
 
-    const handleSaveCard = async (e: any) => {
+    const handleSaveCard = async () => {
         const endpoint = apiService.createEndpoint('customer/payment-methods/setup');
         if (!stripe || !elements) {
             // Stripe.js has not yet loaded.
@@ -185,3 +185,5 @@ export default function Index() {
         </>
     );
 }
+
+export default PaymentForm;

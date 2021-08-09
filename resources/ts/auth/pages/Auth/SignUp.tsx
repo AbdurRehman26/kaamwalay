@@ -3,10 +3,11 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import { Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
+import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
 import { font } from '@shared/styles/utils';
 
@@ -24,8 +25,8 @@ import { SignUpValidationRules } from './validation';
  */
 export function SignUp() {
     const classes = useStyles();
-    const { login } = useAuth();
-    const initialState = useMemo(
+    const { register } = useAuth();
+    const initialState = useMemo<SignUpRequestDto>(
         () => ({
             fullName: '',
             username: '',
@@ -37,11 +38,10 @@ export function SignUp() {
     );
 
     const handleSubmit = useCallback(
-        ({ email, password }, { setSubmitting }: FormikHelpers<any>) => {
-            setSubmitting(true);
-            // Request
+        async (values) => {
+            await register(values);
         },
-        [login],
+        [register],
     );
 
     return (

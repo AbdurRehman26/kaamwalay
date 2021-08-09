@@ -32,13 +32,9 @@ export function ForgotPassword() {
         [],
     );
 
-    const handleSubmit = useCallback(
-        async ({ email }) => {
-            console.log(email);
-            // Request
-        },
-        [login],
-    );
+    const handleSubmit = useCallback(async () => {
+        // Request
+    }, [login]);
 
     return (
         <Formik

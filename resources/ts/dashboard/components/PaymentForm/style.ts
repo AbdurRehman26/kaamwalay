@@ -36,8 +36,6 @@ const useStyles = makeStyles(
             height: '220px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
         },
         newCardFormContainer: {
             width: '550px',
@@ -64,6 +62,17 @@ const useStyles = makeStyles(
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
+        },
+        firstTimeCardContainer: {
+            width: '100%',
+            backgroundColor: '#f9f9f9',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '16px',
+            borderRadius: '12px',
+        },
+        addCardBtn: {
+            marginTop: '12px',
         },
     },
     { name: 'PaymentFormStyles' },

@@ -304,6 +304,9 @@ export const newSubmissionSlice = createSlice({
         },
         saveStripeCustomerCards: (state, action: PayloadAction<CreditCard[]>) => {
             state.step04Data.existingCreditCards = action.payload;
+            if (action.payload.length > 0) {
+                state.step04Data.selectedCreditCard = action.payload[0];
+            }
         },
         setSelectedStripeCard: (state, action: PayloadAction<string>) => {
             const lookup = state.step04Data?.existingCreditCards?.find((card) => card.id == action.payload);

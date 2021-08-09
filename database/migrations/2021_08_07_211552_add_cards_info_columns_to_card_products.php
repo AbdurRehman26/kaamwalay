@@ -16,14 +16,14 @@ class AddCardsInfoColumnsToCardProducts extends Migration
         Schema::disableForeignKeyConstraints();
         
         Schema::table('card_products', function (Blueprint $table) {
-            $table->foreignId('set_id')->constrained()->nullable();
-            $table->foreignId('category_id')->constrained()->nullable();
+            $table->foreignId('card_set_id')->constrained()->nullable();
+            $table->foreignId('card_category_id')->constrained()->nullable();
             $table->string('rarity')->nullable();
             $table->string('card_number')->nullable();
             $table->string('image_path',1000)->nullable();
             $table->string('card_url',1000)->nullable();
             $table->string('image_bucket_path',1000)->nullable();
-            $table->integer('card_number_order')->nullable();
+            $table->string('card_number_order')->nullable();
 
         });
         Schema::enableForeignKeyConstraints();
@@ -38,14 +38,14 @@ class AddCardsInfoColumnsToCardProducts extends Migration
     {
         Schema::table('card_products', function (Blueprint $table) {
 
-            $table->dropForeign('card_products_category_id_foreign');
-            $table->dropIndex('card_products_category_id_foreign');
+            $table->dropForeign('card_products_card_category_id_foreign');
+            $table->dropIndex('card_products_card_category_id_foreign');
 
-            $table->dropForeign('card_products_set_id_foreign');
-            $table->dropIndex('card_products_set_id_foreign');
+            $table->dropForeign('card_products_card_set_id_foreign');
+            $table->dropIndex('card_products_card_set_id_foreign');
 
-            $table->dropColumn('set_id');
-            $table->dropColumn('category_id');
+            $table->dropColumn('card_set_id');
+            $table->dropColumn('card_category_id');
             $table->dropColumn('rarity');
             $table->dropColumn('card_number');
             $table->dropColumn('image_path');

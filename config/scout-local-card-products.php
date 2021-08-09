@@ -18,11 +18,10 @@ return [
 
     'searchableAttributes' => [
         'name',
-        'category_name',
-        'set_name',
-        'serie_name',
+        'card_category_name',
+        'card_set_name',
+        'card_series_name',
         'release_year',
-        'card_number',
         'card_number_order',
     ],
 
@@ -40,7 +39,7 @@ return [
     |
     */
 
-    'customRanking' => ['asc(card_number)','asc(name)'],
+    'customRanking' => ['asc(card_number_order)','asc(name)'],
 
     /*
     |--------------------------------------------------------------------------
@@ -87,7 +86,7 @@ return [
     |
     */
 
-    'attributesForFaceting' => ['category_name','serie_name','set_name','release_year'],
+    'attributesForFaceting' => ['card_category_name','card_series_name','card_set_name','release_year'],
 
     /*
     |--------------------------------------------------------------------------

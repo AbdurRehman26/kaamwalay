@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             UsersSeeder::class,
+            CardCategoriesTableSeeder::class,
+            CardSeriesTableSeeder::class,
+            CardSetsTableSeeder::class,
             CardProductSeeder::class,
             CountrySeeder::class,
             CustomerAddressSeeder::class,
@@ -31,9 +34,5 @@ class DatabaseSeeder extends Seeder
             ShippingMethodSeeder::class,
             StateSeeder::class,
         ]);
-        $this->call(CategoriesTableSeeder::class);
-        $this->call(SeriesTableSeeder::class);
-        $this->call(SetsTableSeeder::class);
-        $this->call(CardsTableSeeder::class);
     }
 }

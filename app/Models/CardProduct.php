@@ -17,7 +17,7 @@ class CardProduct extends Model
      * @var array
      */
     protected $fillable= [
-        'set_id',
+        'card_set_id',
         'name',
         'rarity',
         'card_number',
@@ -26,7 +26,7 @@ class CardProduct extends Model
         'card_url',
         'image_bucket_path',
         'card_number_order',
-        'category_id',
+        'card_category_id',
     ];
 
     /**
@@ -49,6 +49,11 @@ class CardProduct extends Model
         return config('app.env'). '_' . $this->getTable();
     }
 
+    // public function shouldBeSearchable()
+    // {
+    //     return $this->id < 1001;
+    // }
+
     /**
      * Get the indexable data array for the model.
      *
@@ -59,30 +64,22 @@ class CardProduct extends Model
         $array = [
             "id" => $this->id,
             "name" => $this->name,
-            "category_id" => $this->category_id,
-            "category_name" => $this->category->name,
-            "set_id" => $this->set_id,
-            "set_name" => $this->set->name,
-            "serie_id" => $this->set->serie_id,
-            "serie_name" => $this->set->serie->name,
-            "release_date" => $this->set->release_date,
-            "release_year" => $this->set->release_year,
-            "rarity" => $this->rarity,
-            "card_number" => $this->card_number,
-            "card_number_order" => $this->card_number_order,
+            "card_category_name" => $this->cardCategory->name,
+            "card_set_name" => $this->cardSet->name,
+            "card_series_name" => $this->cardSet->cardSeries->name,
+            "release_year" => $this->cardSet->release_year,
+            "card_number_order" => is_numeric($this->card_number_order) ? \Str::padLeft($this->card_number_order,3,'0') : $this->card_number_order,
             "image_path" => $this->image_path,
-            "image_bucket_path" => $this->image_bucket_path,
-            "card_url" => $this->card_url,
         ];
 
         return $array;
     }
     
-    public function set(){
-        return $this->belongsTo(Set::class);
+    public function cardSet(){
+        return $this->belongsTo(CardSet::class);
     }
 
-    public function category(){
-        return $this->belongsTo(Category::class);
+    public function cardCategory(){
+        return $this->belongsTo(CardCategory::class);
     }
 }

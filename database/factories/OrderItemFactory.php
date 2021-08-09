@@ -34,7 +34,8 @@ class OrderItemFactory extends Factory
             'total_price' => $this->faker->randomFloat(2, 10, 99999999.99),
             'name' => $this->faker->name,
             'description' => $this->faker->text,
-            'declared_value' => $this->faker->randomFloat(2, 1, 99999999.99),
+            'declared_value_per_unit' => $this->faker->randomFloat(2, 1, 99999999.99),
+            'declared_value_total' => $this->faker->randomFloat(2, 1, 99999999.99),
         ];
     }
 }

@@ -10,7 +10,7 @@ import { ConfirmationDialogContext } from '../../contexts/ConfirmationDialogCont
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.com>
+ * @author: Dumitrana Alinus <alinus@wooter.comm>
  * @component: ConfirmationDialog
  * @date: 05.08.2021
  * @time: 17:32

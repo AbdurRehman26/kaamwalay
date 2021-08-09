@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\LoginController;
+use App\Http\Controllers\API\Auth\RegisterController;
 use App\Http\Controllers\API\Customer\Address\StateController;
 use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
+use App\Http\Controllers\API\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 
 /*
@@ -18,18 +21,22 @@ use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 |
 */
 
-Route::post('login', [LoginController::class, 'login']);
-
-Route::middleware('auth')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('auth')->group(function () {
+    Route::post('login', [LoginController::class, 'login']);
+    Route::post('register', [RegisterController::class, 'register']);
+    Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 
 Route::prefix('customer')->group(function () {
     Route::apiResource('/orders/payment-plans', PaymentPlanController::class)
         ->only(['index', 'show']);
+    Route::post('/orders/shipping-fee', ShippingFeeController::class);
     Route::apiResource('/addresses/states', StateController::class);
-    Route::middleware('auth')->group(function() {
+    Route::middleware('auth')->group(function () {
         Route::apiResource('/addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
+        Route::get('payment-methods', [PaymentMethodController::class, 'index']);
+        Route::post('payment-methods/setup', [PaymentMethodController::class, 'createSetupIntent']);
+        Route::post('payment-methods/charge', [PaymentMethodController::class, 'charge']);
     });
 });

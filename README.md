@@ -20,9 +20,12 @@ The project is based on
 ### Setup
 
 ```bash
-$ git clone
+$ cp .env.example .env
 $ composer install
-$ yarn install
+$ yarn install && yarn setup # it will install the dependencies and build the apps
+
+# Migrations and Seeders
+$ ./vendor/bin/sail artisan migrate --seed
 
 # Add host entry to be able to access the app via robograding.test domain
 127.0.0.1 robograding.test
@@ -34,20 +37,8 @@ alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 ### Getting things started
 
 ```bash
-# Create .env
-$ cp .env.example .env
-
-# Change values for these variables
-APP_NAME=Robograding
-APP_URL=http://robograding.test
-DB_HOST=mysql
-DB_DATABASE=robograding
-
 # Starting the backend
 $ ./vendor/bin/sail up    # or docker-compose up
-
-# Migrations and Seeders
-$ ./vendor/bin/sail artisan migrate --seed
 
 # Starting the frontend
 # 1. Dashboard application
@@ -55,7 +46,12 @@ $ yarn start
 
 # 2. Admin application
 $ yarn admin:start        # or BUILD_PRESET=admin yarn start
+
+# 3. Auth application
+$ yarn auth:start        # or BUILD_PRESET=auth yarn start
 ```
+**Note:** Since the frontend it's modular you don't have to start all the application at one, you can start only the
+one you are working on.
 
 ### Backend
 

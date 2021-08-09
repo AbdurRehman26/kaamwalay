@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
-    username: String;
+    username: string;
+    stripeID: string;
 }
 
 const initialState: UserState = {
     username: '',
+    stripeID: 'cus_JznJFVaa5nnDfj',
 };
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
@@ -19,4 +21,3 @@ const userSlice = createSlice({
 });
 
 export const { login } = userSlice.actions;
-export default userSlice.reducer;

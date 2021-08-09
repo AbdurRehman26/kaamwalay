@@ -6,7 +6,7 @@ import { SectionHeader } from './SectionHeader';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.co>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: PackingInstructions
  * @date: 07.08.2021
  * @time: 00:22

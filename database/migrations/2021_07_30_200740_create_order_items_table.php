@@ -25,7 +25,8 @@ class CreateOrderItemsTable extends Migration
             $table->decimal('total_price', 10, 2);
             $table->string('name')->nullable();
             $table->string('description')->nullable();
-            $table->decimal('declared_value', 10, 2);
+            $table->decimal('declared_value_per_unit', 10, 2);
+            $table->decimal('declared_value_total', 10, 2);
             $table->timestamps();
         });
 

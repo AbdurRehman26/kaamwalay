@@ -9,7 +9,7 @@ interface ConfirmationDialogProviderProps {}
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.com>
+ * @author: Dumitrana Alinus <alinus@wooter.comm>
  * @component: Provider
  * @date: 05.08.2021
  * @time: 17:44

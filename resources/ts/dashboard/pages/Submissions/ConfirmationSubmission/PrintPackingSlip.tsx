@@ -11,7 +11,7 @@ import { usePrintPackingSlipStyles } from './style';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.co>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: PrintPackingSlip
  * @date: 07.08.2021
  * @time: 01:33

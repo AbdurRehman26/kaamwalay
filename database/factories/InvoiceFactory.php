@@ -23,8 +23,8 @@ class InvoiceFactory extends Factory
     public function definition()
     {
         return [
-            'invoice_number' => $this->faker->uuid,
-            'path' => $this->faker->url,
+            'invoice_number' => $this->faker->uuid(),
+            'path' => $this->faker->url(),
         ];
     }
 }

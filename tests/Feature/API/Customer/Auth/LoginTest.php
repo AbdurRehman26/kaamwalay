@@ -48,8 +48,8 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertStatus(401);
-        $response->assertJsonStructure([ 'error' ]);
-        $response->assertJsonPath('error', 'Unauthorized');
+        $response->assertJsonStructure([ 'message' ]);
+        $response->assertJsonPath('message', 'Unauthorized');
     }
 
     /**
@@ -69,8 +69,8 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertStatus(401);
-        $response->assertJsonStructure([ 'error' ]);
-        $response->assertJsonPath('error', 'Unauthorized');
+        $response->assertJsonStructure([ 'message' ]);
+        $response->assertJsonPath('message', 'Unauthorized');
     }
 
     /**

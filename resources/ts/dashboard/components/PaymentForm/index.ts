@@ -1,1 +1,1 @@
-export { PaymentMethod } from './PaymentMethod';
+export { PaymentForm } from './PaymentForm';

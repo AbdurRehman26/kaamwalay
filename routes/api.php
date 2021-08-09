@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\LoginController;
@@ -29,8 +30,9 @@ Route::prefix('auth')->group(function () {
 Route::prefix('customer')->group(function () {
     Route::apiResource('/orders/payment-plans', PaymentPlanController::class)
         ->only(['index', 'show']);
+    Route::post('/orders/shipping-fee', ShippingFeeController::class);
     Route::apiResource('/addresses/states', StateController::class);
-    Route::middleware('auth')->group(function() {
+    Route::middleware('auth')->group(function () {
         Route::apiResource('/addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
         Route::get('payment-methods', [PaymentMethodController::class, 'index']);

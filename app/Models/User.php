@@ -45,6 +45,11 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $with = ['roles:id,name'];
 
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
     public static function createCustomer(array $data): self
     {
         $user = self::create($data);

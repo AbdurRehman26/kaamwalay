@@ -23,7 +23,7 @@ class PaymentMethodController extends Controller
         ], Response::HTTP_OK);
     }
 
-    public function getSetupIntent()
+    public function createSetupIntent()
     {
         /**
          * @var User $user

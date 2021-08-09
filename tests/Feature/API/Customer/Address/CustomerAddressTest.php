@@ -22,7 +22,7 @@ class CustomerAddressTest extends TestCase
     }
 
     /** @test */
-    public function user_can_receive_addresses(): void
+    public function user_can_receive_addresses()
     {
         $response = $this->getJson('/api/customer/addresses');
         $response->assertJsonStructure([
@@ -31,7 +31,7 @@ class CustomerAddressTest extends TestCase
     }
 
     /** @test */
-    public function user_can_receive_single_address(): void
+    public function user_can_receive_single_address()
     {
         $response = $this->getJson('/api/customer/addresses/1');
         $response->assertJsonStructure([
@@ -40,7 +40,7 @@ class CustomerAddressTest extends TestCase
     }
 
     /** @test */
-    public function user_can_not_receive_other_user_address(): void
+    public function user_can_not_receive_other_user_address()
     {
         $response = $this->getJson('/api/customer/addresses/2');
         $response->assertStatus(403);

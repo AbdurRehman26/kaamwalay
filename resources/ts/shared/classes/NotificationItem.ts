@@ -11,9 +11,9 @@ export class NotificationItem {
         public key: string = '',
     ) {}
 
-    async checksum() {
+    checksum() {
         if (!this.key) {
-            this.key = await sha256(`${this.type}:${this.title}-${this.message}`);
+            this.key = sha256(`${this.type}:${this.title}-${this.message}`);
         }
         return this;
     }

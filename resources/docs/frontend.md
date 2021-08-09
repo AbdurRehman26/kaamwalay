@@ -42,7 +42,7 @@ function Bar() {
 }
 
 // 3. Into plain typescript code
-const foo = resolve(Foo);
+const foo = resolveInjectable(Foo);
 // ...
 foo.sayHi();
 ```
@@ -88,7 +88,7 @@ export class MyRepository extends Repository<MyEntity> {
 }
 
 // later in the code
-const repository = resolve(MyRepository); // Visit Dependency Injection docs
+const repository = resolveInjectable(MyRepository); // Visit Dependency Injection docs
 const listData: PaginatedData<MyEntity> = await repository.list(); // send `GET /api/my/endpoint`
 const listAllData: MyEntity[] = await repository.listAll(); // send `GET /api/my/endpoint?all=true`
 const showData: MyEntity = await repository.show(1); // send `GET /api/my/endpoint/1`
@@ -174,7 +174,7 @@ export class MyRepository extends Repository<MyEntity> {
 }
 
 // Later in the code
-const repository = resolve(MyRepository);
+const repository = resolveInjectable(MyRepository);
 // Will fail and throw `ValidationException`
 repository.sendFoo({ email: 'test' }) 
 
@@ -258,6 +258,28 @@ const RoutesOptions = {
 <Layout routeOptions={RoutesOptions}>...</Layout>;
 ```
 
+#### Protected Routes
+A protected route it's used to hide a page for a user that is not logged in. For that we have two components, the main one 
+`ProtectedRoute` it's used to allow only logged user to view the request page, and `GuestOnlyRoute` which it's used to show the 
+page as it says, to only guest users (sign in page for example, if you are logged in, you don't have to view the page again).
+
+Usage:
+
+```tsx
+// Behind the sceene you will have same Route of react-router-dom package, but under the hood,
+// the component it's doing all the checks and wait for the auth, deciding what to do when it's completed.
+// In case of Loading, the page will show a circular progress
+// In case of no auth, the user will be redirected to the default specified route, or in case we want a custom route, 
+// we can provide it via prop like `redirectRoute={'/my/new/route'}`
+// At the end if there's no check and auth it's there, the route will render the desired component.
+<ProtectedRoute exact path={'/my/path'} component={MyCompnent} />
+
+// It's doing same thing as the one above, the only difference being that, in case of auth, the component wil take you
+// to the default path or the one provided as prop.
+<GuestOnlyRoute exact path={'/my/path'} component={MyCompnent} /> 
+```
+
+
 ### UI
 #### Notifications
 Notifications are handled by MaterialUI for frontend part (Snackbar component) and redux for the backend part,
@@ -269,6 +291,8 @@ Usage:
 // Via hook inside components
 import { useNotifications } from "@shared/hooks/useNotifications";
 import { NotificationType } from "@shared/constants/NotificationType";
+import { resolveInjectable } from "@shared/lib/dependencyInjection/resolveInjectable";
+import { NotificationsService } from "@shared/services/NotificationsService";
 
 const notifications = useNotifications();
 notifications.notify(NotificationType.Success, "This is a notification message", "This is an optional notification title")
@@ -280,12 +304,62 @@ notifications.warning('This is a warning notification.', 'Optional title');
 notifications.error('This is a error notification.', 'Optional title');
 
 // Protected properties & methods for building a notifications container.
-notifications.notifications // a `Notification[]` which contain all active notifications.
-notifications.close // a method that accept a `Notification | string` as parameter used to close the notification and remove it from queue.
+notifications.notifications // a `NotificationItem[]` which contain all active notifications.
+notifications.close // a method that accept a `NotificationItem | string` as parameter used to close the notification and remove it from queue.
 
-// Via Redux
-// TODO: implement & research
+// Outside components
+// via static methods
+NotificationsService.info('This is a info notification.', 'Optional title');
+NotificationsService.success('This is a success notification.', 'Optional title');
+NotificationsService.warning('This is a warning notification.', 'Optional title');
+NotificationsService.error('This is a error notification.', 'Optional title');
 
-// Via NotificationsService
+// via injectable
+const notificationsService = resolveInjectable(NotificationsService);
+notificationsService.info('This is a info notification.', 'Optional title');
+// ...
+
+// in injectable classes
+@Injectable
+class Foo {
+    constructor(
+        @Inject() private notificationsService: NotificationsService
+    ) {
+    }
+    
+    bar () {
+        this.notificationsService.info('This is a info notification.', 'Optional title');
+    }
+}
+```
+
+### Authentication
+Authentication it's done with redux and the access token it's stored in the storage with the help of [localforage](https://localforage.github.io/localForage/#localforage)
+package.
+
+Usage:
+
+```ts
+import { useAuth } from "@shared/hooks/useAuth";
+
+// Inside react components
+function Foo() {
+    const {
+        user,           // UserEntity object of logged user
+        authCheck,      // Send the auth check request and see if the user it's still logged in
+        login,          // Send the login request and obtain session for the user
+        logout,         // revoke current auth session
+        accessToken,    // access token used for authorization
+        authenticated,  // authentification state value
+        checking,       // loading value, if the checking it's true means that the auth wasn't loaded yet.
+    } = useAuth();
+}
+
+// Inside the plain logics
+// TODO: implement
+```
+
+## Storage
+```ts
 // TODO: implement
 ```

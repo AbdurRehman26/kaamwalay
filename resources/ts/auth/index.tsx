@@ -3,10 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'reflect-metadata';
 
-import ApplicationProvider from '@shared/components/ApplicationProvider';
+import { ApplicationProvider } from '@shared/components/ApplicationProvider';
 
 import App from './App';
-import './index.scss';
 import { store } from './redux/store';
 
 ReactDOM.render(

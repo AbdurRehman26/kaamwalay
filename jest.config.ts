@@ -21,9 +21,10 @@ export default {
 
     // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
     moduleNameMapper: {
-        '@shared/(.*)$': '<rootDir>/resources/ts/shared/$1',
-        '@dashboard/(.*)$': '<rootDir>/resources/ts/dashboard/$1',
+        '@auth/(.*)$': '<rootDir>/resources/ts/auth/$1',
         '@admin/(.*)$': '<rootDir>/resources/ts/admin/$1',
+        '@dashboard/(.*)$': '<rootDir>/resources/ts/dashboard/$1',
+        '@shared/(.*)$': '<rootDir>/resources/ts/shared/$1',
     },
 
     // Activates notifications for test results

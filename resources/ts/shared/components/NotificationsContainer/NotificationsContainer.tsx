@@ -4,12 +4,12 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import { plainToClass } from 'class-transformer';
 import { useCallback, useEffect, useState } from 'react';
 
-import { Notification } from '@shared/classes/Notification';
+import { NotificationItem } from '@shared/classes/NotificationItem';
 import { NotificationType } from '@shared/constants/NotificationType';
 import { useNotifications } from '@shared/hooks/useNotifications';
 
 export function NotificationsContainer() {
-    const [active, setActive] = useState<null | Notification>(null);
+    const [active, setActive] = useState<null | NotificationItem>(null);
     const { notifications, close } = useNotifications();
 
     const handleClose = useCallback(() => {
@@ -22,7 +22,7 @@ export function NotificationsContainer() {
     useEffect(() => {
         setActive((previous) => {
             if (!previous && notifications && notifications.length > 0) {
-                return plainToClass(Notification, notifications[0]);
+                return plainToClass(NotificationItem, notifications[0]);
             }
 
             return previous;

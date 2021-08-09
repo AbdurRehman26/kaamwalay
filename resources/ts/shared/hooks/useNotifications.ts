@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { Notification } from '@shared/classes/Notification';
+import { NotificationItem } from '@shared/classes/NotificationItem';
 import { NotificationType } from '@shared/constants/NotificationType';
 import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
 import { dequeueNotification, enqueueNotification } from '@shared/redux/slices/notificationsSlice';
@@ -13,13 +13,13 @@ export function useNotifications() {
 
     const notify = useCallback(
         (type: NotificationType, message: string, title: string = '') => {
-            dispatch(enqueueNotification(new Notification(type, message, title)));
+            dispatch(enqueueNotification(new NotificationItem(type, message, title)));
         },
         [dispatch],
     );
 
     const close = useCallback(
-        (notification: string | Notification) => {
+        (notification: string | NotificationItem) => {
             dispatch(dequeueNotification(notification));
         },
         [dispatch],

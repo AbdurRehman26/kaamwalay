@@ -34,7 +34,7 @@ export class Defer<T = any> {
      *     console.log('Done!');
      * };
      *
-     * const onClick = () => q.resolve();
+     * const onClick = () => q.resolveInjectable();
      * ```
      */
     public async wait(): Promise<T> {

@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
 
-import { Notification } from '@shared/classes/Notification';
+import { NotificationItem } from '@shared/classes/NotificationItem';
 
 interface StateType {
-    queue: Notification[];
+    queue: NotificationItem[];
 }
 
 export const enqueueNotification = createAsyncThunk(
     'notifications/enqueueNotification',
-    async (notification: Notification) => {
+    async (notification: NotificationItem) => {
         await notification.checksum();
         return classToPlain(notification);
     },
@@ -17,10 +17,10 @@ export const enqueueNotification = createAsyncThunk(
 
 export const dequeueNotification = createAsyncThunk(
     'notifications/dequeueNotification',
-    async (notification: string | Notification) => {
+    async (notification: string | NotificationItem) => {
         if (typeof notification !== 'string') {
             // noinspection SuspiciousTypeOfGuard
-            if (notification instanceof Notification) {
+            if (notification instanceof NotificationItem) {
                 await notification.checksum();
                 return classToPlain(notification);
             }
@@ -39,13 +39,13 @@ export const notificationsSlice = createSlice({
     } as StateType,
     reducers: {},
     extraReducers: {
-        [enqueueNotification.fulfilled as any]: (state, { payload }: PayloadAction<Notification>) => {
+        [enqueueNotification.fulfilled as any]: (state, { payload }: PayloadAction<NotificationItem>) => {
             const item = state.queue.find((item) => item.key === payload.key);
             if (!item) {
                 state.queue.push(payload);
             }
         },
-        [dequeueNotification.fulfilled as any]: (state, { payload }: PayloadAction<Notification>) => {
+        [dequeueNotification.fulfilled as any]: (state, { payload }: PayloadAction<NotificationItem>) => {
             state.queue = state.queue.filter((notification) => notification.key !== payload.key);
         },
     },

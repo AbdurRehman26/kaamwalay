@@ -51,7 +51,6 @@
             font-weight: 500;
         }
         .info-box-header{
-            width: 100%;
             padding: 8px;
         }
         .items-table thead th{
@@ -71,11 +70,14 @@
         .info-box-content{
             padding: 8px;
             line-height: 24px;
-            width: 100%;
         }
         .total-declared-section{
-            padding: 25px 5px;
-            justify-content: end;
+            padding: 25px 0px;
+            justify-content: flex-end;
+            border-bottom: 1px solid rgba(30, 30, 30, 0.2);;
+        }
+        .total-declared-section b{
+            margin-left: 5px;
         }
         .info-list, .customer-info-list{
             display: flex;
@@ -84,6 +86,7 @@
         .info-list, .info-list dt, .info-list dd, .customer-info-list{
             width:50%;
             margin: 2px 0;
+            line-height: 24px;
         }
         .info-list dt{
             font-weight: 500;
@@ -108,6 +111,25 @@
         .items-table{
             border-spacing: 0;
             width:100%;
+        }
+
+        .items-table .item-row td{
+            padding: 25px 0;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(30, 30, 30, 0.2);;
+        }
+        .items-table .item-row td.card-no{
+            padding-left: 8px;
+        }
+
+        .items-table .item-row td.value{
+            padding-right: 8px;
+        }
+        .items-table .item-row td.description{
+            line-height: 20px;
+        }
+        .items-table .item-row td.description .item-name{
+            font-weight: 500;
         }
         .pr-20{
             padding-right: 20px;

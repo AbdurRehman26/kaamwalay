@@ -13,7 +13,7 @@ import SubmissionStep03Content from '../../components/SubmissionStep03Content';
 import SubmissionStep04Content from '../../components/SubmissionStep04Content';
 import SubmissionStep05Content from '../../components/SubmissionStep05Content';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { nextStep, backStep, setIsNextDisabled } from '../../redux/slices/newSubmissionSlice';
+import { nextStep, backStep, setIsNextDisabled, getShippingFee } from '../../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
     pageContentContainer: {
@@ -47,7 +47,6 @@ export function NewSubmission() {
     const classes = useStyles({ currentStep });
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-
     const getStepContent = useCallback(() => {
         switch (currentStep) {
             case 0:
@@ -66,6 +65,9 @@ export function NewSubmission() {
     }, [currentStep]);
 
     const handleNext = () => {
+        if (currentStep === 1) {
+            dispatch(getShippingFee(selectedCards));
+        }
         dispatch(nextStep());
     };
 

@@ -20,7 +20,7 @@ import { useConfirmationSubmissionSidebarStyles } from './style';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.co>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: ConfirmationSubmissionSidebar
  * @date: 07.08.2021
  * @time: 00:11

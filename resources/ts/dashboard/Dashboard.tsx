@@ -1,13 +1,15 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
+import ProtectedRoute from '@shared/components/ProtectedRoute';
+
 import { Submissions } from './pages/Submissions';
 
 export function Dashboard() {
     return (
         <Switch>
             <Redirect exact from="/" to="/submissions" />
-            <Route path={'/submissions'} component={Submissions} />
+            <ProtectedRoute path={'/submissions'} component={Submissions} />
         </Switch>
     );
 }

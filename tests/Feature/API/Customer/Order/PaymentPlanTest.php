@@ -10,10 +10,7 @@ class PaymentPlanTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @return void
-     */
+    /** @test */
     public function a_user_can_see_payment_plans()
     {
         // @TODO Authenticate user and call on his behalf
@@ -30,10 +27,7 @@ class PaymentPlanTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @return void
-     */
+    /** @test */
     public function a_user_can_see_specific_payment_plan()
     {
         // @TODO Authenticate user and call on his behalf

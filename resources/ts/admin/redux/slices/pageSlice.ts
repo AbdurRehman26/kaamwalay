@@ -8,7 +8,7 @@ const initialState: PageState = {
     drawerOpened: true,
 };
 
-const pageSlice = createSlice({
+export const pageSlice = createSlice({
     name: 'page',
     initialState,
     reducers: {
@@ -19,4 +19,3 @@ const pageSlice = createSlice({
 });
 
 export const { drawerVisibility } = pageSlice.actions;
-export default pageSlice.reducer;

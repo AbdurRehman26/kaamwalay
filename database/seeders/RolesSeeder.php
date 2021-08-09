@@ -14,7 +14,7 @@ class RolesSeeder extends Seeder
      */
     public function run()
     {
-        foreach (['Admin', 'Customer'] as $role) {
+        foreach (config('permission.roles') as $role) {
             Role::create([
                 'name' => $role,
             ]);

@@ -2,7 +2,7 @@ import { purple } from '@material-ui/core/colors';
 import { createTheme } from '@material-ui/core/styles';
 
 //TODO: Pick right colors over here
-const theme = createTheme({
+export const materialUiTheme = createTheme({
     palette: {
         primary: {
             main: '#20BFB8',
@@ -20,6 +20,6 @@ const theme = createTheme({
     },
 });
 
-export type DashboardTheme = typeof theme;
+export type DashboardTheme = typeof materialUiTheme;
 
-export default theme;
+export default materialUiTheme;

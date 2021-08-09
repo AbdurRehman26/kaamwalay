@@ -11,7 +11,7 @@ class CustomerAddressTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function model_scope_returns_only_specific_user_data(): void
+    public function model_scope_returns_only_specific_user_data()
     {
         $customerAddressA = CustomerAddress::factory()->create();
         $customerAddressB = CustomerAddress::factory()->create();

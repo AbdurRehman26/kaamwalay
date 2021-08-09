@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { resolve } from '@shared/lib/dependencyInjection/resolve';
+import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
 
 export function useInjectable<T>(classDefinition: { new (...args: any): T }): T {
-    return useMemo(() => resolve<T>(classDefinition), [classDefinition]);
+    return useMemo(() => resolveInjectable<T>(classDefinition), [classDefinition]);
 }

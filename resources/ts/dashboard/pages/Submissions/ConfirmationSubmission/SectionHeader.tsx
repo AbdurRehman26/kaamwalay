@@ -14,7 +14,7 @@ interface SectionHeaderProps {
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.co>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: SectionHeader
  * @date: 07.08.2021
  * @time: 01:06

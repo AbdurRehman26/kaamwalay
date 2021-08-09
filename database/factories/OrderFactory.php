@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -12,6 +10,7 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
 {
@@ -30,7 +29,7 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'order_number' => $this->faker->uuid,
+            'order_number' => $this->faker->uuid(),
             'shipping_amount' => $this->faker->randomFloat(2, 10, 99999999.99),
             'grand_total' => $this->faker->randomFloat(2, 10, 99999999.99),
             'user_id' => User::factory()->withRole(config('permission.roles.customer')),

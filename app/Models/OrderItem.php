@@ -23,7 +23,8 @@ class OrderItem extends Model
         'total_price',
         'name',
         'description',
-        'declared_value',
+        'declared_value_per_unit',
+        'declared_value_total',
     ];
 
     /**
@@ -38,7 +39,8 @@ class OrderItem extends Model
         'order_item_shipment_id' => 'integer',
         'unit_price' => 'decimal:2',
         'total_price' => 'decimal:2',
-        'declared_value' => 'decimal:2',
+        'declared_value_per_unit' => 'decimal:2',
+        'declared_value_total' => 'decimal:2',
     ];
 
     public function order()

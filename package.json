@@ -44,6 +44,8 @@
         "class-validator": "^0.13.1",
         "classnames": "^2.3.1",
         "debug": "^4.3.2",
+        "formik": "^2.2.9",
+        "hash.js": "^1.1.7",
         "immutable": "^4.0.0-rc.14",
         "inversify": "^5.1.1",
         "localforage": "^1.9.0",

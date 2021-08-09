@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::createCustomer($request->validated());
 
-        CustomerRegistered::dispatch($user);
+        CustomerRegistered::dispatch($user, $request);
 
         $token = auth()->guard()->login($user);
 

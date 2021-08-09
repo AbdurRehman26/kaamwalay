@@ -9,20 +9,22 @@ class CardCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable= [
+    protected $fillable = [
         'name',
     ];
 
-    public function cardSeries(){
+    public function cardSeries()
+    {
         return $this->hasMany(CardSeries::class);
     }
 
-    public function cardSets(){
+    public function cardSets()
+    {
         return $this->hasMany(CardSet::class);
     }
 
-    public function cardProducts(){
+    public function cardProducts()
+    {
         return $this->hasMany(CardProduct::class);
     }
-
 }

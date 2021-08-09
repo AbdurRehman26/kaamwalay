@@ -9,18 +9,20 @@ class CardSeries extends Model
 {
     use HasFactory;
 
-    protected $fillable= [
+    protected $fillable = [
         'name',
         'image_path',
         'image_bucket_path',
         'card_category_id',
     ];
 
-    public function cardSets(){
+    public function cardSets()
+    {
         return $this->hasMany(CardSet::class);
     }
 
-    public function cardCategory(){
+    public function cardCategory()
+    {
         return $this->belongsTo(CardCategory::class);
     }
 }

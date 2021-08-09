@@ -16,7 +16,7 @@ class CardProduct extends Model
      *
      * @var array
      */
-    protected $fillable= [
+    protected $fillable = [
         'card_set_id',
         'name',
         'rarity',
@@ -68,18 +68,20 @@ class CardProduct extends Model
             "card_set_name" => $this->cardSet->name,
             "card_series_name" => $this->cardSet->cardSeries->name,
             "release_year" => $this->cardSet->release_year,
-            "card_number_order" => is_numeric($this->card_number_order) ? \Str::padLeft($this->card_number_order,3,'0') : $this->card_number_order,
+            "card_number_order" => is_numeric($this->card_number_order) ? \Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order,
             "image_path" => $this->image_path,
         ];
 
         return $array;
     }
     
-    public function cardSet(){
+    public function cardSet()
+    {
         return $this->belongsTo(CardSet::class);
     }
 
-    public function cardCategory(){
+    public function cardCategory()
+    {
         return $this->belongsTo(CardCategory::class);
     }
 }

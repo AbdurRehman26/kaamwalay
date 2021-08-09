@@ -9,7 +9,7 @@ class CardSet extends Model
 {
     use HasFactory;
 
-    protected $fillable= [
+    protected $fillable = [
         'id',
         'card_series_id',
         'name',
@@ -25,15 +25,18 @@ class CardSet extends Model
         'card_category_id',
     ];
 
-    public function cardSeries(){
+    public function cardSeries()
+    {
         return $this->belongsTo(CardSeries::class);
     }
 
-    public function cardProducts(){
+    public function cardProducts()
+    {
         return $this->hasMany(CardProduct::class);
     }
 
-    public function cardCategory(){
+    public function cardCategory()
+    {
         return $this->belongsTo(CardCategory::class);
     }
 }

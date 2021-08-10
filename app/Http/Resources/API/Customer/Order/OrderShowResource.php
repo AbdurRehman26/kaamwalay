@@ -3,6 +3,9 @@
 namespace App\Http\Resources\API\Customer\Order;
 
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
+use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodShowResource;
+use App\Http\Resources\API\Customer\User\UserResource;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderShowResource extends JsonResource
@@ -18,13 +21,13 @@ class OrderShowResource extends JsonResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
-            'shipping_method' => $this->shippingMethod->name,
             'number_of_cards' => $this->orderItems->count(),
-            'created_at' => $this->created_at,
             'total_declared_value' => $this->grand_total,
+            'created_at' => Carbon::parse($this->created_at)->toDate(),
+            'customer' => new UserResource($this->user),
+            'shipping_method' => new ShippingMethodShowResource($this->shippingMethod),
             'service_level' => new PaymentPlanResource($this->paymentPlan),
             'order_address' => new OrderAddressResource($this->orderAddress),
-
         ];
     }
 }

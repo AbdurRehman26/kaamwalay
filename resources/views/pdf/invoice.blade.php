@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Submission Invoice</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <style>
         body{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Roboto';
             font-size: 14px;
             padding: 36px;
         }
@@ -25,12 +26,35 @@
         .logo, .barcode, .general-info-holder, .customer-id-holder{
             width:50%;
         }
+        .logo img{
+            width: 400px;
+            height: 96px;
+        }
+        .barcode{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: flex-end;
+        }
+        .barcode-container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+        }
+        .barcode img{
+            width: 241px;
+            height: 45px;
+        }
+        .barcode span{
+            font-family: 'DDT';
+            font-size: 45px;
+            font-weight: bold;
+            line-height: 60px;
+            margin: 0;
+        }
         .general-info-holder{
             display: inline-flex;
-        }
-        .barcode {
-            justify-content: end;
-            text-align: end;
         }
         .customer-id-holder{
             display: flex;
@@ -149,10 +173,14 @@
 <body>
     <div class="heading">
         <div class="logo">
-            Logo
+            <img src="{{$logoData}}" />
+
         </div>
         <div class="barcode">
-            Barcode
+            <div class="barcode-container">
+                <img src="data:image/png;base64, {!! DNS1D::getBarcodePNG('RG290183', 'C128') !!}" />
+                <span>RG290183</span>
+            </div>
         </div>
     </div>
     <div class="general-info-section">
@@ -200,7 +228,7 @@
                 (718) 999-1910
             </div>
         </div>
-        <div class="info-box pr-20 pl-20">
+        <div class="info-box pr-20">
             <div class="info-box-header">
                 Payment Method
             </div>
@@ -209,7 +237,7 @@
                 Exp. 08/24
             </div>
         </div>
-        <div class="info-box pr-20 pl-20">
+        <div class="info-box pr-20">
             <div class="info-box-header">
                 Billing Address
             </div>
@@ -217,7 +245,7 @@
                 Same as shipping
             </div>
         </div>
-        <div class="info-box pl-20">
+        <div class="info-box">
             <div class="info-box-header">
                 Price Summary
             </div>

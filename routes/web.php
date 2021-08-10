@@ -23,5 +23,8 @@ Route::get('/auth{path}', [AuthController::class, 'getView'])->where(['path' => 
 Route::get('/dashboard{path}', [DashboardController::class, 'getView'])->where(['path' => '.*'])->name('dashboard.main');
 
 Route::get('/invoice', function(Request $request){
-    return view('pdf.invoice');
+    $logoContent = file_get_contents(storage_path('app/public/images/invoiceLogo.svg'));
+    $logoData = 'data:image/svg+xml;base64, '.base64_encode($logoContent);
+
+    return view('pdf.invoice',compact('logoData'));
 });

@@ -141,7 +141,7 @@ let schema = yup.object().shape({
     address: yup.string().required(),
     apt: yup.string().optional(),
     city: yup.string().required(),
-    state: yup.object().shape({
+    country: yup.object().shape({
         name: yup.string().required(),
         id: yup.number().required(),
     }),
@@ -165,9 +165,9 @@ export function SubmissionStep04Content() {
     const lastName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.lastName);
     const address = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.address);
     const city = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.city);
-    const state = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.state);
+    const country = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.country);
     const zipCode = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.zipCode);
-    const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.apt);
+    const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
 
@@ -181,14 +181,14 @@ export function SubmissionStep04Content() {
                 address,
                 apt,
                 city,
-                state,
+                country,
                 zipCode,
                 phoneNumber,
             })
             .then((valid) => {
                 setIsAddressDataValid(valid);
             });
-    }, [firstName, lastName, address, apt, city, state, zipCode, phoneNumber]);
+    }, [firstName, lastName, address, apt, city, country, zipCode, phoneNumber]);
 
     useEffect(() => {
         if (useBillingAddressSameAsShipping) {
@@ -209,7 +209,7 @@ export function SubmissionStep04Content() {
         if (stateLookup) {
             dispatch(
                 updateBillingAddressField({
-                    fieldName: 'state',
+                    fieldName: 'country',
                     newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
                 }),
             );
@@ -282,11 +282,11 @@ export function SubmissionStep04Content() {
                                             <Typography className={classes.billingAddressItem}>{`${
                                                 shippingAddress.address
                                             } ${
-                                                shippingAddress?.apt ? `apt: ${shippingAddress.apt}` : null
+                                                shippingAddress?.flat ? `apt: ${shippingAddress.flat}` : null
                                             }`}</Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${shippingAddress.city}, ${shippingAddress.state.name} ${shippingAddress.zipCode}, US`}</Typography>
+                                            >{`${shippingAddress.city}, ${shippingAddress.country.name} ${shippingAddress.zipCode}, US`}</Typography>
                                         </>
                                     ) : (
                                         <>
@@ -374,7 +374,7 @@ export function SubmissionStep04Content() {
                                                             placeholder="Apt #"
                                                             fullWidth
                                                             value={apt}
-                                                            onChange={(e: any) => updateField('apt', e.target.value)}
+                                                            onChange={(e: any) => updateField('flat', e.target.value)}
                                                             size={'small'}
                                                             variant={'outlined'}
                                                             margin="normal"
@@ -413,7 +413,7 @@ export function SubmissionStep04Content() {
                                                         </Typography>
                                                         <Select
                                                             fullWidth
-                                                            value={state.id || 'none'}
+                                                            value={country.id || 'none'}
                                                             onChange={(e: any) => updateBillingState(e.target.value)}
                                                             placeholder={'Select State'}
                                                             variant={'outlined'}

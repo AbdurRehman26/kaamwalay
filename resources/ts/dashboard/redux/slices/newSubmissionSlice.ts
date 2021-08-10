@@ -39,11 +39,16 @@ export interface Address {
     firstName: string;
     lastName: string;
     address: string;
-    apt?: string;
+    flat?: string;
     city: string;
-    state: { name: string; code: string; id: number };
+    country: { name: string; code: string; id: number };
+    state: string;
     zipCode: string;
     phoneNumber: string;
+    id: number;
+    userId: number;
+    isDefaultShipping: boolean;
+    isDefaultBilling: boolean;
 }
 
 export interface CreditCard {
@@ -111,11 +116,16 @@ const initialState: NewSubmissionSliceState = {
             firstName: '',
             lastName: '',
             address: '',
-            apt: '',
+            flat: '',
             city: '',
-            state: { name: '', code: '', id: 0 },
+            state: '',
             zipCode: '',
             phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            id: 0,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
         },
         availableStatesList: [{ name: '', code: '', id: 0 }],
         fetchingStatus: null,
@@ -138,11 +148,16 @@ const initialState: NewSubmissionSliceState = {
             firstName: '',
             lastName: '',
             address: '',
-            apt: '',
+            flat: '',
             city: '',
-            state: { name: '', code: '', id: 0 },
+            state: '',
             zipCode: '',
             phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            id: 0,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
         },
         existingBillingAddresses: [],
         fetchingStatus: null,
@@ -184,6 +199,13 @@ export const getShippingFee = createAsyncThunk(
         return shippingFeeResponse.data.shipping_fee;
     },
 );
+
+export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async () => {
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/addresses');
+    const customerAddresses = await endpoint.get('');
+    return customerAddresses.data;
+});
 
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',

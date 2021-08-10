@@ -115,7 +115,7 @@ let schema = yup.object().shape({
     address: yup.string().required(),
     apt: yup.string().optional(),
     city: yup.string().required(),
-    state: yup.object().shape({
+    country: yup.object().shape({
         name: yup.string().required(),
         id: yup.number().required(),
     }),
@@ -135,9 +135,9 @@ export function SubmissionStep03Content() {
     const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
     const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
-    const apt = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.apt);
+    const apt = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.flat);
     const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
-    const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
+    const country = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.country);
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
@@ -150,14 +150,14 @@ export function SubmissionStep03Content() {
                 address,
                 apt,
                 city,
-                state,
+                country,
                 zipCode,
                 phoneNumber,
             })
             .then((valid) => {
                 dispatch(setIsNextDisabled(!valid));
             });
-    }, [firstName, lastName, address, apt, city, state, zipCode, phoneNumber]);
+    }, [firstName, lastName, address, apt, city, country, zipCode, phoneNumber]);
 
     function onSaveForLater() {
         dispatch(setSaveShippingAddress(!saveForLater));
@@ -172,7 +172,7 @@ export function SubmissionStep03Content() {
         if (stateLookup) {
             dispatch(
                 updateShippingAddressField({
-                    fieldName: 'state',
+                    fieldName: 'country',
                     newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
                 }),
             );
@@ -264,7 +264,7 @@ export function SubmissionStep03Content() {
                                         placeholder="Apt #"
                                         fullWidth
                                         value={apt}
-                                        onChange={(e: any) => updateField('apt', e.target.value)}
+                                        onChange={(e: any) => updateField('flat', e.target.value)}
                                         size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
@@ -296,7 +296,7 @@ export function SubmissionStep03Content() {
                                     <Typography className={classes.methodDescription}>State</Typography>
                                     <Select
                                         fullWidth
-                                        value={state.id || 'none'}
+                                        value={country.id || 'none'}
                                         onChange={(e: any) => updateShippingState(e.target.value)}
                                         placeholder={'Select State'}
                                         variant={'outlined'}

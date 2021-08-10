@@ -9,6 +9,11 @@ import { AuthenticationService } from '@shared/services/AuthenticationService';
 export class APIService {
     constructor(@Inject() private authenticationService: AuthenticationService) {}
 
+    public attach() {
+        Axios.interceptors.request.use(this.requestInterceptor.bind(this));
+        Axios.interceptors.response.use(this.responseInterceptor.bind(this), this.responseErrorInterceptor.bind(this));
+    }
+
     /**
      * Create an axios instance configured to send requests to /api/{path}
      * @example

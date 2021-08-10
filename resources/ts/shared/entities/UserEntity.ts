@@ -15,4 +15,8 @@ export class UserEntity extends Entity {
 
     @Expose({ name: 'email_verified_at' })
     public emailVerifiedAt!: Date;
+
+    getFullName() {
+        return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
+    }
 }

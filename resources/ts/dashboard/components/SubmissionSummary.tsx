@@ -1,9 +1,9 @@
-import { Divider, Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStripe } from '@stripe/react-stripe-js';
-import axios from 'axios';
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
@@ -155,6 +155,8 @@ function SubmissionSummary() {
     const notifications = useNotifications();
     const apiService = useInjectable(APIService);
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
+    const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
+
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -270,7 +272,7 @@ function SubmissionSummary() {
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
                                 <NumberFormat
-                                    value={'$14.00'}
+                                    value={shippingFee}
                                     className={classes.rowRightBoldText}
                                     displayType={'text'}
                                     thousandSeparator
@@ -415,7 +417,7 @@ function SubmissionSummary() {
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
                                 <NumberFormat
-                                    value={'$14.00'}
+                                    value={shippingFee}
                                     className={classes.rowRightBoldText}
                                     displayType={'text'}
                                     thousandSeparator
@@ -436,7 +438,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
                                     <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice + 14.0}
+                                        value={numberOfSelectedCards * serviceLevelPrice + shippingFee}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

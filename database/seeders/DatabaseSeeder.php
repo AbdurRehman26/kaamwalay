@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\CardProduct;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,9 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        CardProduct::disableSearchSyncing();
+
         $this->call([
             RolesSeeder::class,
             UsersSeeder::class,
+            CardCategoriesSeeder::class,
+            CardSeriesSeeder::class,
+            CardSetsSeeder::class,
             CardProductSeeder::class,
             CountrySeeder::class,
             CustomerAddressSeeder::class,
@@ -31,5 +37,7 @@ class DatabaseSeeder extends Seeder
             ShippingMethodSeeder::class,
             StateSeeder::class,
         ]);
+
+        CardProduct::enableSearchSyncing();
     }
 }

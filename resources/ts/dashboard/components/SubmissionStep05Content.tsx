@@ -1,15 +1,13 @@
-import { Container, Divider, Grid } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
 import React from 'react';
 
 import OrderReviewSection from '@dashboard/components/SubmissionOrderReview/OrderReviewSection';
 
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';
-import CardSubmissionSearchField from './CardSubmissionSearchField';
-import CardsSearchResults from './CardsSearchResults';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 
@@ -30,29 +28,6 @@ const useStyles = makeStyles({
 
 function SubmissionStep05Content() {
     const classes = useStyles();
-    const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
-    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-    const protectionLimit = useAppSelector(
-        (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
-    );
-    const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
-    const dispatch = useAppDispatch();
-
-    function areSelectedCardsValuesValid() {
-        if (selectedCards.length > 0) {
-            // @ts-ignore
-            const cardsWithValueHigherThanProtection = selectedCards.filter(
-                (card: Record<string, any>) => card?.value > protectionLimit,
-            );
-            if (currentStep === 1) {
-                cardsWithValueHigherThanProtection.length !== 0
-                    ? dispatch(setIsNextDisabled(true))
-                    : dispatch(setIsNextDisabled(false));
-            }
-            return cardsWithValueHigherThanProtection.length === 0;
-        }
-        return true;
-    }
 
     return (
         <Container>
@@ -60,10 +35,10 @@ function SubmissionStep05Content() {
                 <StepDescription
                     title="Review your submission"
                     description={
-                        <div style={{ maxWidth: '342px' }}>
+                        <Box maxWidth={342}>
                             Go through all the information you input in the previous steps, and click submit to finish
                             submission.
-                        </div>
+                        </Box>
                     }
                 />
             </div>

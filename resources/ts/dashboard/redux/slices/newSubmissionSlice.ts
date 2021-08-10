@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
+import { APIService } from '@shared/services/APIService';
+
 export interface SubmissionService {
     id: number;
     type: 'card';
@@ -29,6 +32,7 @@ export interface AddCardsToSubmission {
     searchValue: any;
     searchResults: SearchResultItemCardProps[];
     selectedCards: SearchResultItemCardProps[];
+    shippingFee: number;
 }
 
 export interface Address {
@@ -99,6 +103,7 @@ const initialState: NewSubmissionSliceState = {
         searchValue: '',
         searchResults: [],
         selectedCards: [],
+        shippingFee: 0,
     },
     step03Data: {
         existingAddresses: [],
@@ -159,6 +164,22 @@ export const getStatesList = createAsyncThunk('newSubmission/getStatesList', asy
     const americanStates = await axios.get('http://robograding.test/api/customer/addresses/states');
     return americanStates.data.data;
 });
+
+export const getShippingFee = createAsyncThunk(
+    'newSubmission/getShippingFee',
+    async (selectedCards: SearchResultItemCardProps[]) => {
+        const apiService = resolveInjectable(APIService);
+        const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
+        const DTO = {
+            items: selectedCards.map((item) => ({
+                quantity: item.qty,
+                declared_value_per_unit: item.value,
+            })),
+        };
+        const shippingFeeResponse = await endpoint.post('', DTO);
+        return shippingFeeResponse.data.shipping_fee;
+    },
+);
 
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
@@ -283,6 +304,9 @@ export const newSubmissionSlice = createSlice({
         },
         saveStripeCustomerCards: (state, action: PayloadAction<CreditCard[]>) => {
             state.step04Data.existingCreditCards = action.payload;
+            if (action.payload.length > 0) {
+                state.step04Data.selectedCreditCard = action.payload[0];
+            }
         },
         setSelectedStripeCard: (state, action: PayloadAction<string>) => {
             const lookup = state.step04Data?.existingCreditCards?.find((card) => card.id == action.payload);
@@ -313,6 +337,9 @@ export const newSubmissionSlice = createSlice({
         [getStatesList.rejected as any]: (state, action) => {
             console.log(action);
             state.step03Data.fetchingStatus = 'failed';
+        },
+        [getShippingFee.fulfilled as any]: (state, action) => {
+            state.step02Data.shippingFee = action.payload;
         },
     },
 });

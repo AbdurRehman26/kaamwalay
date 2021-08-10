@@ -1,38 +1,24 @@
-import {
-    Container,
-    Divider,
-    FormControl,
-    FormControlLabel,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-} from '@material-ui/core';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import Alert from '@material-ui/lab/Alert';
-import CardValidator from 'card-validator';
 import React, { useCallback, useEffect, useState } from 'react';
-import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
 
-import Index from '@dashboard/components/PaymentForm';
-import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
+import { PaymentForm } from '@dashboard/components/PaymentForm';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
-    getServiceLevels,
     setBillingAddressEqualToShippingAddress,
     setIsNextDisabled,
-    setSaveCardForLater,
     setUseShippingAddressAsBilling,
     updateBillingAddressField,
-    updatePaymentMethodField,
-    updateShippingAddressField,
 } from '../redux/slices/newSubmissionSlice';
 import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
@@ -149,19 +135,6 @@ const GreenCheckbox = withStyles({
     checked: {},
 })((props: any) => <Checkbox color="default" {...props} />);
 
-function limit(value: string | number, max: number) {
-    const numberValue = parseInt(`${value}`); // Make sure that the value it's a number
-    const inRangeValue = Math.min(Math.max(1, Number(value)), max); // limit value to [1 ... $max]
-    return `${inRangeValue}`.padStart(2, '0'); // return number as 01...09, 10, 11, .etc
-}
-
-function cardExpiry(val: any) {
-    let month = limit(val.substring(0, 2), Number('12'));
-    let year = val.substring(2, 4);
-
-    return month + (year.length ? '/' + year : '');
-}
-
 let schema = yup.object().shape({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
@@ -181,7 +154,6 @@ export function SubmissionStep04Content() {
     const dispatch = useAppDispatch();
 
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
-    const saveCardForLater = useAppSelector((state) => state.newSubmission.step04Data.saveForLater);
     const currentSelectedStripeCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
 
     const useBillingAddressSameAsShipping = useAppSelector(
@@ -224,17 +196,9 @@ export function SubmissionStep04Content() {
         }
     }, [dispatch, useBillingAddressSameAsShipping]);
 
-    const onSaveCardForLater = useCallback(() => {
-        dispatch(setSaveCardForLater(!saveCardForLater));
-    }, []);
-
     const onUseShippingAddressAsBilling = useCallback(() => {
         dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
     }, [useBillingAddressSameAsShipping]);
-
-    const updateCardData = useCallback((fieldName: string, newValue: any) => {
-        dispatch(updatePaymentMethodField({ fieldName, newValue }));
-    }, []);
 
     const updateField = useCallback((fieldName: any, newValue: any) => {
         dispatch(updateBillingAddressField({ fieldName, newValue }));
@@ -295,7 +259,7 @@ export function SubmissionStep04Content() {
                         {paymentMethodId === 0 ? (
                             <>
                                 <div className={classes.sectionContainer}>
-                                    <Index />
+                                    <PaymentForm />
                                 </div>
                                 <div className={classes.billingAddressAsShippingContainer}>
                                     <FormControlLabel
@@ -456,7 +420,7 @@ export function SubmissionStep04Content() {
                                                             style={{ height: '43px' }}
                                                         >
                                                             <MenuItem value="none">Select a state</MenuItem>
-                                                            {availableStates.map((item, index) => (
+                                                            {availableStates.map((item) => (
                                                                 <MenuItem key={item.id} value={item.id}>
                                                                     {item.code}
                                                                 </MenuItem>

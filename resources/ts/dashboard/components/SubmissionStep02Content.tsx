@@ -1,4 +1,6 @@
-import { Container, Divider, Grid } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import algoliasearch from 'algoliasearch';

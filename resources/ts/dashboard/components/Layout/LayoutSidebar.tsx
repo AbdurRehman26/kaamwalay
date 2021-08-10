@@ -11,7 +11,6 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PaymentOutlinedIcon from '@material-ui/icons/PaymentOutlined';
 import StyleIcon from '@material-ui/icons/Style';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 import UserAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { useAuth } from '@shared/hooks/useAuth';
@@ -73,7 +72,7 @@ function LayoutSidebar() {
                 </div>
                 <div className={classes.headerInfoHolder}>
                     <Typography variant={'h6'}>James Smith</Typography>
-                    <Link variant={'body2'} color={'primary'} onClick={logout} className={classes.headerSignOut}>
+                    <Link onClick={logout} variant={'body2'} color={'primary'} className={classes.headerSignOut}>
                         Sign Out
                     </Link>
                 </div>

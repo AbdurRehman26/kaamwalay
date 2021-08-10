@@ -1,9 +1,9 @@
-import { Divider, Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStripe } from '@stripe/react-stripe-js';
-import axios from 'axios';
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';

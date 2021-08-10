@@ -47,8 +47,8 @@ export interface Address {
     phoneNumber: string;
     id: number;
     userId: number;
-    isDefaultShipping: boolean;
-    isDefaultBilling: boolean;
+    isDefaultShipping?: boolean;
+    isDefaultBilling?: boolean;
 }
 
 export interface CreditCard {
@@ -65,6 +65,9 @@ export interface ShippingSubmissionState {
     availableStatesList: { name: string; code: string; id: number }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
+    disableAllShippingInputs: boolean;
+    useCustomShippingAddress: boolean;
+    selectedExistingAddress: Address;
 }
 
 export interface PaymentSubmissionState {
@@ -91,7 +94,7 @@ export interface NewSubmissionSliceState {
 
 const initialState: NewSubmissionSliceState = {
     isNextDisabled: false,
-    currentStep: 0,
+    currentStep: 2,
     step01Status: null,
     step01Data: {
         availableServiceLevels: [],
@@ -111,8 +114,69 @@ const initialState: NewSubmissionSliceState = {
         shippingFee: 0,
     },
     step03Data: {
-        existingAddresses: [],
+        existingAddresses: [
+            {
+                firstName: 'John',
+                lastName: 'Smith',
+                address: '263 Bujorilor',
+                flat: '',
+                city: 'Timisoara',
+                state: 'CA',
+                zipCode: '23',
+                phoneNumber: '',
+                country: { id: 0, code: 'CA', name: 'New York' },
+                id: 0,
+                userId: 0,
+                isDefaultShipping: false,
+                isDefaultBilling: false,
+            },
+            {
+                firstName: 'John',
+                lastName: 'Dorel Mondialu',
+                address: '263 Bujorilor asdasd',
+                flat: '',
+                city: 'Timisoara',
+                state: 'CA',
+                zipCode: '23',
+                phoneNumber: '',
+                country: { id: 0, code: 'CA', name: 'New York' },
+                id: 2,
+                userId: 0,
+                isDefaultShipping: false,
+                isDefaultBilling: false,
+            },
+            {
+                firstName: 'John',
+                lastName: 'Dorel Bestialu',
+                address: '123 Bujorilor asdasd',
+                flat: '',
+                city: 'New York',
+                state: 'CA',
+                zipCode: '23',
+                phoneNumber: '',
+                country: { id: 0, code: 'CA', name: 'New York' },
+                id: 3,
+                userId: 0,
+                isDefaultShipping: false,
+                isDefaultBilling: false,
+            },
+        ],
         selectedAddress: {
+            firstName: '',
+            lastName: '',
+            address: '',
+            flat: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            id: 0,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
+        },
+        selectedExistingAddress: {
             firstName: '',
             lastName: '',
             address: '',
@@ -130,6 +194,8 @@ const initialState: NewSubmissionSliceState = {
         availableStatesList: [{ name: '', code: '', id: 0 }],
         fetchingStatus: null,
         saveForLater: true,
+        disableAllShippingInputs: true,
+        useCustomShippingAddress: false,
     },
     step04Data: {
         paymentMethodId: 0,
@@ -233,44 +299,7 @@ export const newSubmissionSlice = createSlice({
         setCardsSearchValue: (state, action: PayloadAction<string>) => {
             state.step02Data.searchValue = action.payload;
             // TODO: This will be replaced with search integration
-            state.step02Data.searchResults = [
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 1,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 2',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 2,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 3',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 4,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 4',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 5,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 5',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 6,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 6',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 8,
-                },
-            ];
+            state.step02Data.searchResults = [];
         },
         markCardAsSelected: (state, action: PayloadAction<SearchResultItemCardProps>) => {
             state.step02Data.selectedCards = [
@@ -340,6 +369,15 @@ export const newSubmissionSlice = createSlice({
                 state.step04Data.selectedCreditCard = lookup;
             }
         },
+        setDisableAllShippingInputs: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.disableAllShippingInputs = action.payload;
+        },
+        setSelectedExistingAddress: (state, action: PayloadAction<number>) => {
+            const lookup = state.step03Data?.existingAddresses?.find((address) => address.id == action.payload);
+            if (lookup) {
+                state.step03Data.selectedExistingAddress = lookup;
+            }
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state) => {
@@ -391,4 +429,6 @@ export const {
     saveStripeCustomerCards,
     setBillingAddressEqualToShippingAddress,
     setSelectedStripeCard,
+    setDisableAllShippingInputs,
+    setSelectedExistingAddress,
 } = newSubmissionSlice.actions;

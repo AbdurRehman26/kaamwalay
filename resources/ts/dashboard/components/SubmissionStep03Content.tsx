@@ -12,6 +12,8 @@ import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
 
+import ExistingAddress from '@dashboard/components/ExistingAddress';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     getStatesList,
@@ -97,17 +99,11 @@ const useStyles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-});
-
-const GreenCheckbox = withStyles({
-    root: {
-        color: '#20BFB8',
-        '&$checked': {
-            color: '#20BFB8',
-        },
+    existingAddressesContainer: {
+        display: 'flex',
+        flexDirection: 'row',
     },
-    checked: {},
-})((props: any) => <Checkbox color="default" {...props} />);
+});
 
 let schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -132,6 +128,7 @@ export function SubmissionStep03Content() {
         dispatch(getStatesList());
     }, [dispatch]);
 
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
     const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
@@ -141,7 +138,7 @@ export function SubmissionStep03Content() {
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
-
+    const disableAllInputs = useAppSelector((state) => state.newSubmission.step03Data.disableAllShippingInputs);
     useEffect(() => {
         schema
             .isValid({
@@ -196,11 +193,34 @@ export function SubmissionStep03Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
+                        <div className={classes.existingAddressesContainer}>
+                            {existingAddresses?.map((address) => (
+                                <ExistingAddress
+                                    key={address.id}
+                                    firstName={address.firstName}
+                                    lastName={address.lastName}
+                                    address={address.address}
+                                    flat={address.flat ?? ''}
+                                    city={address.city}
+                                    country={address.country.code}
+                                    id={address.id}
+                                    zip={address.zipCode}
+                                />
+                            ))}
+                        </div>
+
                         <div className={classes.shippingAddressContainer}>
                             <div className={classes.shippingAddressSectionHeader}>
                                 <Typography className={classes.sectionLabel}>Shipping Address</Typography>
                                 <FormControlLabel
-                                    control={<GreenCheckbox checked={saveForLater} onChange={onSaveForLater} />}
+                                    control={
+                                        <Checkbox
+                                            color={'primary'}
+                                            checked={saveForLater}
+                                            disabled={disableAllInputs}
+                                            onChange={onSaveForLater}
+                                        />
+                                    }
                                     label="Save for later"
                                 />
                             </div>
@@ -211,6 +231,7 @@ export function SubmissionStep03Content() {
                                     <TextField
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter First Name"
+                                        disabled={disableAllInputs}
                                         value={firstName}
                                         onChange={(e: any) => updateField('firstName', e.target.value)}
                                         fullWidth
@@ -227,6 +248,7 @@ export function SubmissionStep03Content() {
                                     <TextField
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Last Name"
+                                        disabled={disableAllInputs}
                                         value={lastName}
                                         onChange={(e: any) => updateField('lastName', e.target.value)}
                                         fullWidth
@@ -247,6 +269,7 @@ export function SubmissionStep03Content() {
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Street Address"
                                         fullWidth
+                                        disabled={disableAllInputs}
                                         value={address}
                                         onChange={(e: any) => updateField('address', e.target.value)}
                                         size={'small'}
@@ -263,6 +286,7 @@ export function SubmissionStep03Content() {
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Apt #"
                                         fullWidth
+                                        disabled={disableAllInputs}
                                         value={apt}
                                         onChange={(e: any) => updateField('flat', e.target.value)}
                                         size={'small'}
@@ -284,6 +308,7 @@ export function SubmissionStep03Content() {
                                         onChange={(e: any) => updateField('city', e.target.value)}
                                         placeholder="Enter City"
                                         fullWidth
+                                        disabled={disableAllInputs}
                                         size={'small'}
                                         variant={'outlined'}
                                         margin="normal"
@@ -296,6 +321,7 @@ export function SubmissionStep03Content() {
                                     <Typography className={classes.methodDescription}>State</Typography>
                                     <Select
                                         fullWidth
+                                        disabled={disableAllInputs}
                                         value={country.id || 'none'}
                                         onChange={(e: any) => updateShippingState(e.target.value)}
                                         placeholder={'Select State'}
@@ -316,6 +342,7 @@ export function SubmissionStep03Content() {
                                         style={{ margin: 8, marginLeft: 0 }}
                                         placeholder="Enter Zip Code"
                                         fullWidth
+                                        disabled={disableAllInputs}
                                         value={zipCode}
                                         onChange={(e: any) => updateField('zipCode', e.target.value)}
                                         size={'small'}
@@ -340,6 +367,7 @@ export function SubmissionStep03Content() {
                                         value={phoneNumber}
                                         onChange={(e: any) => updateField('phoneNumber', e.target.value)}
                                         fullWidth
+                                        disabled={disableAllInputs}
                                         variant={'outlined'}
                                         margin="normal"
                                         InputLabelProps={{

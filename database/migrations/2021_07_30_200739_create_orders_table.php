@@ -17,17 +17,17 @@ class CreateOrdersTable extends Migration
 
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('order_number');
-            $table->decimal('shipping_amount', 10, 2);
-            $table->decimal('grand_total', 10, 2);
+            $table->string('order_number')->unique()->nullable();
+            $table->decimal('shipping_amount', 10, 2)->nullable();
+            $table->decimal('grand_total', 10, 2)->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('payment_plan_id')->constrained();
             $table->foreignId('order_status_id')->constrained();
             $table->foreignId('order_address_id')->constrained();
             $table->foreignId('payment_method_id')->constrained();
             $table->foreignId('shipping_method_id')->constrained();
-            $table->foreignId('invoice_id')->constrained();
-            $table->timestamp('arrived_at');
+            $table->foreignId('invoice_id')->nullable();
+            $table->timestamp('arrived_at')->nullable();
             $table->timestamps();
         });
 

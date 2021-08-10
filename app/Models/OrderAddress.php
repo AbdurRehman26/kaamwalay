@@ -9,6 +9,8 @@ class OrderAddress extends Model
 {
     use HasFactory;
 
+    protected const DEFAULT_COUNTRY_ID = 1;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,6 +26,10 @@ class OrderAddress extends Model
     protected $casts = [
         'id' => 'integer',
         'country_id' => 'integer',
+    ];
+
+    protected $attributes = [
+        'country_id' => self::DEFAULT_COUNTRY_ID,
     ];
 
     public function country()

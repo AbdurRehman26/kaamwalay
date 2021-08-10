@@ -2,14 +2,28 @@
 
 namespace Tests\Feature\API\Customer\Order;
 
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ShippingFeeTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     /** @test */
     public function a_user_can_get_shipping_fee()
     {
-        // @TODO Authenticate user and call on his behalf
+        $this->actingAs($this->user);
+
         $response = $this->postJson('/api/customer/orders/shipping-fee/', [
             'items' => [
                 [
@@ -31,7 +45,8 @@ class ShippingFeeTest extends TestCase
     /** @test */
     public function shipping_fee_needs_items()
     {
-        // @TODO Authenticate user and call on his behalf
+        $this->actingAs($this->user);
+
         $response = $this->postJson('/api/customer/orders/shipping-fee/');
 
         $response->assertJsonValidationErrors([
@@ -42,6 +57,8 @@ class ShippingFeeTest extends TestCase
     /** @test */
     public function a_guest_cannot_get_shipping_fee()
     {
-        $this->markTestSkipped();
+        $response = $this->postJson('/api/customer/orders/shipping-fee/');
+
+        $response->assertUnauthorized();
     }
 }

@@ -30,8 +30,8 @@ class OrderFactory extends Factory
     {
         return [
             'order_number' => $this->faker->uuid(),
-            'shipping_amount' => $this->faker->randomFloat(2, 10, 99999999.99),
-            'grand_total' => $this->faker->randomFloat(2, 10, 99999999.99),
+            'shipping_amount' => $this->faker->randomFloat(2, 50, 500),
+            'grand_total' => $this->faker->randomFloat(2, 20, 10000),
             'user_id' => User::factory()->withRole(config('permission.roles.customer')),
             'payment_plan_id' => PaymentPlan::factory(),
             'order_status_id' => OrderStatus::factory(),

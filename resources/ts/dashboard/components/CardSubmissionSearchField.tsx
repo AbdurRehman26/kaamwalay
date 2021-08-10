@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     },
 });
 
-const AlogliaSearchWrapper = (props: any) => {
+function AlogliaSearchWrapper(props: any) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
 
@@ -70,7 +70,7 @@ const AlogliaSearchWrapper = (props: any) => {
             }}
         />
     );
-};
+}
 const CustomSearchBox = connectSearchBox(AlogliaSearchWrapper);
 
 function CardSubmissionSearchField() {

@@ -1,7 +1,9 @@
 import { Container, Divider, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
+import algoliasearch from 'algoliasearch';
 import React from 'react';
+import { InstantSearch, connectSearchBox, SearchBox, Configure } from 'react-instantsearch-dom';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
@@ -25,6 +27,8 @@ const useStyles = makeStyles({
         marginTop: '16px',
     },
 });
+
+const searchClient = algoliasearch(process.env.MIX_ALGOLIA_APP_ID!, process.env.MIX_ALGOLIA_PUBLIC_KEY!);
 
 function SubmissionStep02Content() {
     const classes = useStyles();
@@ -65,15 +69,21 @@ function SubmissionStep02Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
-                        <CardSubmissionSearchField />
-                        {searchValue !== '' ? <CardsSearchResults /> : null}
-                        <AddedSubmissionCards />
+                        <InstantSearch
+                            searchClient={searchClient}
+                            indexName={`${process.env.MIX_APP_ENV}_card_products`}
+                        >
+                            <CardSubmissionSearchField />
+                            {searchValue !== '' ? <CardsSearchResults /> : null}
+                            <AddedSubmissionCards />
 
-                        {!areSelectedCardsValuesValid() ? (
-                            <Alert severity="error" className={classes.valueAlert}>
-                                Card's value can't be higher than the protection level.
-                            </Alert>
-                        ) : null}
+                            {!areSelectedCardsValuesValid() ? (
+                                <Alert severity="error" className={classes.valueAlert}>
+                                    Card's value can't be higher than the protection level.
+                                </Alert>
+                            ) : null}
+                            <Configure hitsPerPage={20} />
+                        </InstantSearch>
                     </div>
                 </Grid>
                 <Grid item xs={12} md={4}>

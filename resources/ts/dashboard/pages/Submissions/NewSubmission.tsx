@@ -64,9 +64,12 @@ export function NewSubmission() {
         }
     }, [currentStep]);
 
-    const handleNext = () => {
+    const handleNext = async () => {
+        // Executing different stuff before next step loads
         if (currentStep === 1) {
-            dispatch(getShippingFee(selectedCards));
+            await dispatch(getShippingFee(selectedCards));
+            dispatch(nextStep());
+            return;
         }
         dispatch(nextStep());
     };

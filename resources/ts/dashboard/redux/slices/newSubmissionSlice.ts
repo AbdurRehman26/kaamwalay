@@ -150,8 +150,10 @@ const initialState: NewSubmissionSliceState = {
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
-    const serviceLevels = await axios.get('http://robograding.test/api/customer/orders/payment-plans/');
-    return serviceLevels.data.data.map((serviceLevel: any) => ({
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
+    const serviceLevels = await endpoint.get('');
+    return serviceLevels.data.map((serviceLevel: any) => ({
         id: serviceLevel.id,
         type: 'card',
         maxProtectionAmount: serviceLevel.max_protection_amount,
@@ -161,8 +163,10 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
 });
 
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
-    const americanStates = await axios.get('http://robograding.test/api/customer/addresses/states');
-    return americanStates.data.data;
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/addresses/states');
+    const americanStates = await endpoint.get('');
+    return americanStates.data;
 });
 
 export const getShippingFee = createAsyncThunk(

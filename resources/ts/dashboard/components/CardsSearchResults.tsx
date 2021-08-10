@@ -65,7 +65,7 @@ function CardsSearchResults() {
                             // This condition will be true when we'll implement different filtering methods for cards
                             return areHitsSorted && nbHits !== nbSortedHits
                                 ? `${nbSortedHits!.toLocaleString()} relevant results sorted out of ${nbHits.toLocaleString()} found in ${processingTimeMS.toLocaleString()}ms`
-                                : `${nbHits.toLocaleString()} results found in ${processingTimeMS.toLocaleString()}ms`;
+                                : `${nbHits.toLocaleString()} results found`;
                         },
                     }}
                 />

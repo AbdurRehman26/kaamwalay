@@ -84,6 +84,10 @@ const useStyles = makeStyles(
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.54)',
         },
+        protectionTextContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+        },
         cardText: { fontWeight: 400 },
     },
     { name: 'ServiceLevelItemStyle' },
@@ -129,14 +133,21 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
             </div>
 
             <div className={classes.maxValueContainer}>
-                <NumberFormat
-                    value={maxProtectionAmount}
-                    displayType={'text'}
-                    thousandSeparator
-                    decimalSeparator={'.'}
-                    prefix={'$'}
-                    className={classes.protectionText}
-                />
+                <div className={classes.protectionTextContainer}>
+                    <Typography className={classes.protectionText}>
+                        Protection up to&nbsp;
+                        <span>
+                            <NumberFormat
+                                value={maxProtectionAmount}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                                className={classes.protectionText}
+                            />
+                        </span>
+                    </Typography>
+                </div>
                 <Typography
                     variant={'subtitle2'}
                     className={classes.turnaround}

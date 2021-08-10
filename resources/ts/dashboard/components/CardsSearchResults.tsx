@@ -2,8 +2,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
+import { Hits, Stats } from 'react-instantsearch-dom';
 
-import { useAppSelector } from '../redux/hooks';
+import CustomPagination from '@dashboard/components/CustomPagination';
+
 import SearchResultItemCard from './SearchResultItemCard';
 
 const useStyles = makeStyles({
@@ -18,6 +20,10 @@ const useStyles = makeStyles({
     },
     container: {
         marginTop: '24px',
+        '& ais-highlight-0000000000': {
+            color: '#000',
+            fontWeight: 'bold',
+        },
     },
     resultsContainer: {
         paddingTop: '16px',
@@ -25,28 +31,48 @@ const useStyles = makeStyles({
         paddingRight: '16px',
         maxHeight: '454px',
         overflowY: 'scroll',
+        '& ul': {
+            listStyle: 'none',
+            padding: 0,
+        },
     },
 });
 
+function ResultWrapper(props: any) {
+    return (
+        <SearchResultItemCard
+            image={props.hit.image_path}
+            title={props.hit.name}
+            subtitle={`${props.hit._highlightResult.release_year.value}
+                                             ${props.hit._highlightResult.card_category_name.value}
+                                             ${props.hit._highlightResult.card_series_name.value}
+                                             ${props.hit._highlightResult.card_set_name.value}
+                                             ${props.hit._highlightResult.card_number_order.value}
+                                             ${props.hit._highlightResult.name.value}`}
+            id={props.hit.id}
+        />
+    );
+}
+
 function CardsSearchResults() {
     const classes = useStyles();
-    const searchResults = useAppSelector((state) => state.newSubmission.step02Data.searchResults);
-
     return (
         <div className={classes.container}>
             <Typography variant={'subtitle2'} className={classes.searchLabel}>
-                88 Results
+                <Stats
+                    translations={{
+                        stats(nbHits, processingTimeMS, nbSortedHits, areHitsSorted) {
+                            // This condition will be true when we'll implement different filtering methods for cards
+                            return areHitsSorted && nbHits !== nbSortedHits
+                                ? `${nbSortedHits!.toLocaleString()} relevant results sorted out of ${nbHits.toLocaleString()} found in ${processingTimeMS.toLocaleString()}ms`
+                                : `${nbHits.toLocaleString()} results found`;
+                        },
+                    }}
+                />
             </Typography>
             <Paper className={classes.resultsContainer} variant={'outlined'}>
-                {searchResults.map((result: Record<string, any>) => (
-                    <SearchResultItemCard
-                        key={result.id}
-                        id={result.id}
-                        image={result.image}
-                        subtitle={result.subtitle}
-                        title={result.title}
-                    />
-                ))}
+                <Hits hitComponent={ResultWrapper} />
+                <CustomPagination />
             </Paper>
         </div>
     );

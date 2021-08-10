@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
+import { connectSearchBox } from 'react-instantsearch-dom';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCardsSearchValue } from '../redux/slices/newSubmissionSlice';
@@ -30,47 +31,56 @@ const useStyles = makeStyles({
     },
 });
 
-function CardSubmissionSearchField() {
+function AlogliaSearchWrapper(props: any) {
     const classes = useStyles();
-
     const dispatch = useAppDispatch();
-    const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
-
-    function handleSearchChange(searchValue: any) {
-        dispatch(setCardsSearchValue(searchValue));
-    }
 
     function handleClearSearch() {
         dispatch(setCardsSearchValue(''));
+        props.refine('');
     }
+
+    function handleSearch(e: any) {
+        dispatch(setCardsSearchValue(e.currentTarget.value));
+        props.refine(e.currentTarget.value);
+    }
+
+    return (
+        <TextField
+            size="small"
+            className={classes.searchInput}
+            value={props.currentRefinement}
+            placeholder={'Search for a card...'}
+            onChange={(e) => handleSearch(e)}
+            variant="outlined"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <SearchIcon htmlColor={'#757575'} />
+                    </InputAdornment>
+                ),
+                endAdornment:
+                    props.currentRefinement !== '' ? (
+                        <InputAdornment position="end">
+                            <IconButton aria-label="clear" onClick={handleClearSearch}>
+                                <CloseIcon />
+                            </IconButton>
+                        </InputAdornment>
+                    ) : null,
+            }}
+        />
+    );
+}
+const CustomSearchBox = connectSearchBox(AlogliaSearchWrapper);
+
+function CardSubmissionSearchField() {
+    const classes = useStyles();
     return (
         <div className={classes.searchContainer}>
             <Typography variant={'subtitle2'} className={classes.label}>
                 Search
             </Typography>
-            <TextField
-                size="small"
-                className={classes.searchInput}
-                value={searchValue}
-                placeholder={'Search for a card...'}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                variant="outlined"
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon htmlColor={'#757575'} />
-                        </InputAdornment>
-                    ),
-                    endAdornment:
-                        searchValue !== '' ? (
-                            <InputAdornment position="end">
-                                <IconButton aria-label="clear" onClick={handleClearSearch}>
-                                    <CloseIcon />
-                                </IconButton>
-                            </InputAdornment>
-                        ) : null,
-                }}
-            />
+            <CustomSearchBox />
         </div>
     );
 }

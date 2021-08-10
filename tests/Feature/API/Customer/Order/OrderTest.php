@@ -26,7 +26,7 @@ class OrderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $orders = Order::factory()->count(2)->create();
+        $orders = Order::factory()->for()->count(2)->create();
         $this->user = $orders->first()->user;
         $this->paymentPlan = PaymentPlan::factory()->create();
         $this->cardProduct = CardProduct::factory()->create();
@@ -146,7 +146,6 @@ class OrderTest extends TestCase
 
         $response = $this->getJson('/api/customer/orders/1');
         $response->assertStatus(200);
-        dd($response);
         $response->assertJsonStructure([
             'data' => ['id', 'order_number', 'shipping_method'],
         ]);

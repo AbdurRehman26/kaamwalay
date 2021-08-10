@@ -4,6 +4,7 @@ namespace Tests\Feature\API\Customer\Order;
 
 use App\Models\CardProduct;
 use App\Models\Country;
+use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
@@ -25,8 +26,8 @@ class OrderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->user = User::factory()->create();
+        $orders = Order::factory()->count(2)->create();
+        $this->user = $orders->first()->user;
         $this->paymentPlan = PaymentPlan::factory()->create();
         $this->cardProduct = CardProduct::factory()->create();
         $this->shippingMethod = ShippingMethod::factory()->create();
@@ -119,4 +120,36 @@ class OrderTest extends TestCase
 
         $response->assertUnauthorized();
     }
+
+    /** @test */
+    public function a_guest_cannot_see_order()
+    {
+        $response = $this->getJson('/api/customer/orders/1');
+
+        $response->assertUnauthorized();
+    }
+
+    /** @test */
+    public function user_can_not_see_other_user_order()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/customer/orders/2');
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function user_can_see_his_order()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/customer/orders/1');
+        $response->assertStatus(200);
+        dd($response);
+        $response->assertJsonStructure([
+            'data' => ['id', 'order_number', 'shipping_method'],
+        ]);
+    }
+
 }

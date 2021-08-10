@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Customer\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
+use App\Http\Resources\API\Customer\Order\OrderShowResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Order\CreateOrderService;
@@ -37,11 +38,11 @@ class OrderController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
+     * @return OrderShowResource
      */
     public function show(Order $order)
     {
-        //
+        return new OrderShowResource(Order::findOrFail($order['id']));
     }
 
     /**

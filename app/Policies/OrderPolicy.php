@@ -17,7 +17,7 @@ class OrderPolicy
 
     public function view(User $user, Order $order)
     {
-        //
+        return $order->user()->is($user) ;
     }
 
     public function create(User $user)

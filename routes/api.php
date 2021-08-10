@@ -20,7 +20,6 @@ use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class, 'login']);
     Route::post('register', [RegisterController::class, 'register']);
@@ -40,6 +39,7 @@ Route::prefix('customer')->group(function () {
             Route::apiResource('payment-plans', PaymentPlanController::class)
                 ->only(['index', 'show']);
             Route::post('shipping-fee', ShippingFeeController::class);
+            Route::get('/{order}', [OrderController::class, 'show']);
             Route::post('/', [OrderController::class, 'store']);
         });
     });

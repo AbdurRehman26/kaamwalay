@@ -15,7 +15,7 @@ import { PaymentForm } from '@dashboard/components/PaymentForm';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
-    setBillingAddressEqualToShippingAddress,
+    setBillingAddress,
     setIsNextDisabled,
     setUseShippingAddressAsBilling,
     updateBillingAddressField,
@@ -160,7 +160,9 @@ export function SubmissionStep04Content() {
         (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
     );
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
-
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const firstName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.lastName);
     const address = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.address);
@@ -172,6 +174,10 @@ export function SubmissionStep04Content() {
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
 
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
+    const finalShippingAddress =
+        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+            ? selectedExistingAddress
+            : shippingAddress;
 
     useEffect(() => {
         schema
@@ -186,18 +192,29 @@ export function SubmissionStep04Content() {
                 phoneNumber,
             })
             .then((valid) => {
+                console.log(valid);
                 setIsAddressDataValid(valid);
             });
-    }, [firstName, lastName, address, apt, city, state, zipCode, phoneNumber]);
-
-    useEffect(() => {
-        if (useBillingAddressSameAsShipping) {
-            dispatch(setBillingAddressEqualToShippingAddress());
-        }
-    }, [dispatch, useBillingAddressSameAsShipping]);
+    }, [
+        firstName,
+        lastName,
+        address,
+        apt,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+        selectedExistingAddress,
+        useCustomShippingAddress,
+        existingAddresses,
+        useBillingAddressSameAsShipping,
+    ]);
 
     const onUseShippingAddressAsBilling = useCallback(() => {
         dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
+        if (!useBillingAddressSameAsShipping) {
+            dispatch(setBillingAddress(finalShippingAddress));
+        }
     }, [useBillingAddressSameAsShipping]);
 
     const updateField = useCallback((fieldName: any, newValue: any) => {
@@ -227,6 +244,11 @@ export function SubmissionStep04Content() {
         }
     }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
 
+    useEffect(() => {
+        if (useBillingAddressSameAsShipping) {
+            dispatch(setBillingAddress(finalShippingAddress));
+        }
+    }, [dispatch]);
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -278,15 +300,15 @@ export function SubmissionStep04Content() {
                                             </Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
+                                            >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
                                             <Typography className={classes.billingAddressItem}>{`${
-                                                shippingAddress.address
+                                                finalShippingAddress.address
                                             } ${
-                                                shippingAddress?.flat ? `apt: ${shippingAddress.flat}` : null
+                                                finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
                                             }`}</Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${shippingAddress.city}, ${shippingAddress.state.name} ${shippingAddress.zipCode}, US`}</Typography>
+                                            >{`${finalShippingAddress.city}, ${finalShippingAddress.state.name} ${finalShippingAddress.zipCode}, US`}</Typography>
                                         </>
                                     ) : (
                                         <>

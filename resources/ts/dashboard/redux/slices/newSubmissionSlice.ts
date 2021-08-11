@@ -233,15 +233,17 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             lastName: address.last_name,
             address: address.address,
             zipCode: address.zip,
-            phone: address.phone,
+            phoneNumber: address.phone,
             flat: address.flat,
             city: address.city,
             isDefaultShipping: address.is_default_shipping,
             isDefaultBilling: address.is_default_billing,
+            // Doing this because the back-end can't give me this full object for the state
+            // so I need to hardcode the data in order to keep my types integrity
             state: {
-                id: address.state.id,
-                code: address.state.code,
-                name: address.state.name,
+                id: 0,
+                code: address.state,
+                name: address.state,
             },
             country: {
                 id: address.country.id,
@@ -337,6 +339,9 @@ export const newSubmissionSlice = createSlice({
         setBillingAddressEqualToShippingAddress: (state) => {
             state.step04Data.selectedBillingAddress = state.step03Data.selectedAddress;
         },
+        setBillingAddress: (state, action: PayloadAction<Address>) => {
+            state.step04Data.selectedBillingAddress = action.payload;
+        },
         saveStripeCustomerCards: (state, action: PayloadAction<CreditCard[]>) => {
             state.step04Data.existingCreditCards = action.payload;
             if (action.payload.length > 0) {
@@ -422,4 +427,5 @@ export const {
     setSelectedExistingAddress,
     setUseCustomShippingAddress,
     resetSelectedExistingAddress,
+    setBillingAddress,
 } = newSubmissionSlice.actions;

@@ -3,8 +3,6 @@
 namespace Tests\Feature\API\Customer\Order;
 
 use App\Models\CardProduct;
-use App\Models\Country;
-use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -31,8 +29,6 @@ class OrderTest extends TestCase
         $this->cardProduct = CardProduct::factory()->create();
         $this->shippingMethod = ShippingMethod::factory()->create();
         $this->paymentMethod = PaymentMethod::factory()->create();
-        OrderStatus::factory()->create();
-        Country::factory()->create();
     }
 
     /** @test */
@@ -50,14 +46,14 @@ class OrderTest extends TestCase
                         'id' => $this->cardProduct->id,
                     ],
                     'quantity' => 1,
-                    'declared_value_per_unit' => 10000,
+                    'declared_value_per_unit' => 500,
                 ],
                 [
                     'card_product' => [
                         'id' => $this->cardProduct->id,
                     ],
                     'quantity' => 1,
-                    'declared_value_per_unit' => 10000,
+                    'declared_value_per_unit' => 500,
                 ],
             ],
             'shipping_address' => [

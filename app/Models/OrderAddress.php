@@ -25,7 +25,7 @@ class OrderAddress extends Model
         'zip',
         'phone',
         'flat',
-        'country_id'
+        'country_id',
     ];
 
     /**

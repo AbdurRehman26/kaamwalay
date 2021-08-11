@@ -9,6 +9,8 @@ class OrderStatus extends Model
 {
     use HasFactory;
 
+    public const DEFAULT_ORDER_STATUS = 1;
+
     /**
      * The attributes that are mass assignable.
      *

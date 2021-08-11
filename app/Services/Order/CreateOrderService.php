@@ -7,32 +7,23 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
-use App\Models\PaymentPlan;
 use App\Services\Order\Shipping\ShippingFeeService;
+use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CreateOrderService
 {
     protected static Order $order;
+    protected static array $data;
 
     public static function create(array $data): Order
     {
+        self::$data = $data;
+
         try {
-            DB::beginTransaction();
-
-            self::startOrder();
-            self::storePaymentPlan($data['payment_plan']);
-            self::storeShippingMethod($data['shipping_method']);
-            self::storePaymentMethod($data['payment_method']);
-            self::storeOrderAddresses($data['shipping_address'], $data['billing_address']);
-            self::storeCustomerAddress($data['shipping_address']);
-            self::saveOrder();
-            self::storeOrderItems($data['items']);
-            self::storeShippingFee();
-            self::storeGrandTotal();
-
-            DB::commit();
+            self::validate();
+            self::process();
 
             return self::$order;
         } catch (\Exception $e) {
@@ -41,6 +32,29 @@ class CreateOrderService
 
             throw new \Exception('Order could not be placed.');
         }
+    }
+
+    protected static function validate()
+    {
+        ItemsDeclaredValueValidator::validate(self::$data);
+    }
+
+    protected static function process()
+    {
+        DB::beginTransaction();
+
+        self::startOrder();
+        self::storePaymentPlan(self::$data['payment_plan']);
+        self::storeShippingMethod(self::$data['shipping_method']);
+        self::storePaymentMethod(self::$data['payment_method']);
+        self::storeOrderAddresses(self::$data['shipping_address'], self::$data['billing_address']);
+        self::storeCustomerAddress(self::$data['shipping_address']);
+        self::saveOrder();
+        self::storeOrderItems(self::$data['items']);
+        self::storeShippingFee();
+        self::storeGrandTotal();
+
+        DB::commit();
     }
 
     protected static function startOrder()
@@ -91,7 +105,7 @@ class CreateOrderService
     protected static function saveOrder()
     {
         self::$order->user()->associate(auth()->user());
-        self::$order->orderStatus()->associate(OrderStatus::find(1));
+        self::$order->order_status_id = OrderStatus::DEFAULT_ORDER_STATUS;
         self::$order->save();
         self::$order->order_number = OrderNumberGeneratorService::generate(self::$order);
         self::$order->save();

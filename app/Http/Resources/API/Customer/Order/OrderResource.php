@@ -16,7 +16,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
-            'number_of_cards' => $this->orderItems->count(),
+            'number_of_cards' => $this->orderItems->sum('quantity'),
             'total_declared_value' => $this->grand_total,
             'created_at' => Carbon::parse($this->created_at)->toDate(),
             'customer' => new UserResource($this->user),

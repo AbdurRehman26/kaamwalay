@@ -1,6 +1,9 @@
 const path = require('path');
 const mix = require('laravel-mix');
 const convertToFileHash = require('laravel-mix-make-file-hash');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const webpack = require('webpack');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports.createApp = function createApp(name) {
     const appPath = `public/apps/${name}`;
@@ -12,6 +15,18 @@ module.exports.createApp = function createApp(name) {
             test: /\.svg$/,
             use: ['@svgr/webpack', 'url-loader'],
         });
+
+        webpackConfig.plugins.push(
+            new LodashModuleReplacementPlugin(),
+            new webpack.IgnorePlugin({
+                resourceRegExp: /^\.\/locale$/,
+                contextRegExp: /moment$/,
+            }),
+        );
+
+        if (process.env.ANALYZE_WEBPACK) {
+            webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+        }
     }
 
     // noinspection JSUnresolvedFunction

@@ -192,7 +192,6 @@ export function SubmissionStep04Content() {
                 phoneNumber,
             })
             .then((valid) => {
-                console.log(valid);
                 setIsAddressDataValid(valid);
             });
     }, [

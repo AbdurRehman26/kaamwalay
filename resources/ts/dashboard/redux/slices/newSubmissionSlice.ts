@@ -221,7 +221,8 @@ export const getShippingFee = createAsyncThunk(
     },
 );
 
-export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async () => {
+export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
+    const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
     const apiService = resolveInjectable(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses');
     const customerAddresses = await endpoint.get('');
@@ -239,12 +240,8 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             isDefaultShipping: address.is_default_shipping,
             isDefaultBilling: address.is_default_billing,
             // Doing this because the back-end can't give me this full object for the state
-            // so I need to hardcode the data in order to keep my types integrity
-            state: {
-                id: 0,
-                code: address.state,
-                name: address.state,
-            },
+            // so I'll just search for the complete object inside the existing states
+            state: availableStatesList.find((item: any) => item.name === address.state),
             country: {
                 id: address.country.id,
                 code: address.country.code,
@@ -252,6 +249,8 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             },
         };
     });
+
+    console.log(formattedAddresses);
     return formattedAddresses;
 });
 

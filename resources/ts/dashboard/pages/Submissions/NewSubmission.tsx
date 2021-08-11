@@ -17,6 +17,7 @@ import {
     backStep,
     getSavedAddresses,
     getShippingFee,
+    getStatesList,
     nextStep,
     setIsNextDisabled,
 } from '../../redux/slices/newSubmissionSlice';
@@ -74,6 +75,7 @@ export function NewSubmission() {
         // Executing different stuff before next step loads
         if (currentStep === 1) {
             await dispatch(getShippingFee(selectedCards));
+            await dispatch(getStatesList());
             await dispatch(getSavedAddresses());
             dispatch(nextStep());
             return;

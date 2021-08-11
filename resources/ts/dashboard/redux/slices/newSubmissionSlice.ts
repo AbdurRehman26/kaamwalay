@@ -60,7 +60,7 @@ export interface CreditCard {
 }
 
 export interface ShippingSubmissionState {
-    existingAddresses?: Address[];
+    existingAddresses: Address[] | [];
     selectedAddress: Address;
     availableStatesList: { name: string; code: string; id: number }[];
     saveForLater: boolean;
@@ -171,7 +171,8 @@ const initialState: NewSubmissionSliceState = {
             zipCode: '',
             phoneNumber: '',
             country: { id: 0, code: '', name: '' },
-            id: 0,
+            // Setting it to -1 so we know for sure this isn't a real address
+            id: -1,
             userId: 0,
             isDefaultShipping: false,
             isDefaultBilling: false,
@@ -186,7 +187,7 @@ const initialState: NewSubmissionSliceState = {
             zipCode: '',
             phoneNumber: '',
             country: { id: 0, code: '', name: '' },
-            id: 0,
+            id: -1,
             userId: 0,
             isDefaultShipping: false,
             isDefaultBilling: false,
@@ -194,7 +195,7 @@ const initialState: NewSubmissionSliceState = {
         availableStatesList: [{ name: '', code: '', id: 0 }],
         fetchingStatus: null,
         saveForLater: true,
-        disableAllShippingInputs: true,
+        disableAllShippingInputs: false,
         useCustomShippingAddress: false,
     },
     step04Data: {
@@ -378,6 +379,13 @@ export const newSubmissionSlice = createSlice({
                 state.step03Data.selectedExistingAddress = lookup;
             }
         },
+        resetSelectedExistingAddress: (state) => {
+            state.step03Data.selectedExistingAddress = initialState.step03Data.selectedExistingAddress;
+        },
+        setUseCustomShippingAddress: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.useCustomShippingAddress = action.payload;
+            state.step03Data.selectedAddress = initialState.step03Data.selectedAddress;
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state) => {
@@ -431,4 +439,6 @@ export const {
     setSelectedStripeCard,
     setDisableAllShippingInputs,
     setSelectedExistingAddress,
+    setUseCustomShippingAddress,
+    resetSelectedExistingAddress,
 } = newSubmissionSlice.actions;

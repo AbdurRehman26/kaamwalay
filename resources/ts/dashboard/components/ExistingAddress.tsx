@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { setSelectedExistingAddress } from '@dashboard/redux/slices/newSubmissionSlice';
+import { setSelectedExistingAddress, setUseCustomShippingAddress } from '@dashboard/redux/slices/newSubmissionSlice';
 
 type ExistingAddressProps = {
     firstName: string;
@@ -46,7 +46,8 @@ const useStyles = makeStyles(
         radioBtnContainer: {
             display: 'flex',
             flexDirection: 'row',
-            width: '105%',
+            // Doing this (110%) because the radio btn has some kind of space on the right which doesn't allow me to push it all the way to the right side
+            width: '110%',
             height: '25px',
             justifyContent: 'flex-end',
         },
@@ -64,6 +65,12 @@ function ExistingAddress(props: ExistingAddressProps) {
 
     function handleRadioPress() {
         dispatch(setSelectedExistingAddress(id));
+
+        // We disable the custom shipping checkbox when he presses on an existing address
+        // As a side effect of this, all the inputs will get disabled too
+        // This will protect us from the scenario of having the user complete both the text fields and also select an address
+        // And, since this component is only rendered if the user has multiple saved addresses, it won't affect the first time user
+        dispatch(setUseCustomShippingAddress(false));
     }
 
     return (

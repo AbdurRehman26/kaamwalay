@@ -17,8 +17,12 @@ import ExistingAddress from '@dashboard/components/ExistingAddress';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     getStatesList,
+    resetSelectedExistingAddress,
+    setDisableAllShippingInputs,
     setIsNextDisabled,
     setSaveShippingAddress,
+    setSelectedExistingAddress,
+    setUseCustomShippingAddress,
     updateShippingAddressField,
 } from '../redux/slices/newSubmissionSlice';
 import StepDescription from './StepDescription';
@@ -102,6 +106,7 @@ const useStyles = makeStyles({
     existingAddressesContainer: {
         display: 'flex',
         flexDirection: 'row',
+        marginBottom: '32px',
     },
 });
 
@@ -124,10 +129,11 @@ export function SubmissionStep03Content() {
     const dispatch = useAppDispatch();
     const saveForLater = useAppSelector((state) => state.newSubmission.step03Data.saveForLater);
 
-    useEffect(() => {
-        dispatch(getStatesList());
-    }, [dispatch]);
-
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const selectedExistingAddressId = useAppSelector(
+        (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
+    );
+    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
@@ -164,6 +170,16 @@ export function SubmissionStep03Content() {
         dispatch(updateShippingAddressField({ fieldName, newValue }));
     }
 
+    function handleUseCustomShippingAddress() {
+        dispatch(setUseCustomShippingAddress(!useCustomShippingAddress));
+        dispatch(setDisableAllShippingInputs(useCustomShippingAddress));
+
+        // If the user is about to disable the checkbox, we'll select the first existing address on the list
+        if (useCustomShippingAddress) {
+            dispatch(setSelectedExistingAddress(existingAddresses[0].id));
+        }
+    }
+
     function updateShippingState(stateId: number) {
         const stateLookup = availableStates.find((state) => state.id === stateId);
         if (stateLookup) {
@@ -175,6 +191,31 @@ export function SubmissionStep03Content() {
             );
         }
     }
+
+    useEffect(() => {
+        dispatch(getStatesList());
+        // If the user has existing addresses but none of them is selected and he didn't pick a custom address either
+        // we'll check the first address in the list
+        if (existingAddresses.length !== 0 && selectedExistingAddressId == -1 && !useCustomShippingAddress) {
+            dispatch(setSelectedExistingAddress(existingAddresses[0].id));
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        // Did the user check the 'Use custom address" checkbox?
+        // If he did select it, we'll enable all the text fields and clear everything about the existing selected address
+        // If he didn't check the checkbox and he has multiple saved addresses we'll disable all the inputs until he presses on the checkbox
+        // We only disable the inputs if the user has existing addresses so we don't stop him from adding an address as a first time user, when he has nothing.
+
+        if (useCustomShippingAddress) {
+            dispatch(setDisableAllShippingInputs(false));
+            dispatch(resetSelectedExistingAddress());
+        } else {
+            if (existingAddresses.length !== 0) {
+                dispatch(setDisableAllShippingInputs(true));
+            }
+        }
+    }, [disableAllInputs, useCustomShippingAddress, selectedExistingAddressId]);
 
     return (
         <Container>
@@ -193,6 +234,7 @@ export function SubmissionStep03Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
+                        <Typography className={classes.sectionLabel}>Existing Addresses</Typography>
                         <div className={classes.existingAddressesContainer}>
                             {existingAddresses?.map((address) => (
                                 <ExistingAddress
@@ -208,9 +250,21 @@ export function SubmissionStep03Content() {
                                 />
                             ))}
                         </div>
+                        <Divider light />
 
                         <div className={classes.shippingAddressContainer}>
                             <div className={classes.shippingAddressSectionHeader}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={useCustomShippingAddress}
+                                            onChange={handleUseCustomShippingAddress}
+                                            name="checkedB"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Primary"
+                                />
                                 <Typography className={classes.sectionLabel}>Shipping Address</Typography>
                                 <FormControlLabel
                                     control={

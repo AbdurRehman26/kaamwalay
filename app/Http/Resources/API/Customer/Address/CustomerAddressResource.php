@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\Customer\Address;
 
 use App\Http\Resources\API\Country\CountryResource;
+use App\Http\Resources\API\Customer\Address\State\StateResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CustomerAddressResource extends JsonResource
@@ -20,7 +21,8 @@ class CustomerAddressResource extends JsonResource
             'user_id' => $this->user_id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'address' => $this->city,
+            'address' => $this->address,
+            'city' => $this->city,
             'state' => $this->state,
             'zip' => $this->zip,
             'phone' => $this->phone,

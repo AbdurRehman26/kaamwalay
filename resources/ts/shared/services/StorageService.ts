@@ -2,7 +2,7 @@ import { StorageBucket } from '@shared/classes/StorageBucket';
 import { Injectable } from '@shared/decorators/Injectable';
 import { StorageBucketInterface } from '@shared/interfaces/StorageBucketInterface';
 
-@Injectable()
+@Injectable('StorageService')
 export class StorageService implements StorageBucketInterface {
     private bucket: StorageBucket;
     private buckets: Record<string, StorageBucket> = {};

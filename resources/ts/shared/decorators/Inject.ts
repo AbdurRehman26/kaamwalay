@@ -7,14 +7,14 @@ import { InjectableMetaOptions, ReflectParamsType } from '@shared/constants/Refl
  * @example
  * ```typescript
  *
- * @Injectable()
+ * @Injectable('BarService')
  * class BarService {
  *     public sayHi () {
  *         console.log("Hi there!");
  *     }
  * }
  *
- * @injectable()
+ * @injectable({name: Foo})
  * class Foo () {
  *     constructor (
  *         @Inject() private barService: BarService

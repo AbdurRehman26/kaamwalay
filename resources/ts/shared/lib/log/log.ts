@@ -1,10 +1,9 @@
 import { Injectable } from '@shared/decorators/Injectable';
 
 import { LogChannel } from './LogChannel';
-import { DebugAdapter } from './adapters/DebugAdapter';
-import { LogAdapterClass } from './adapters/LogAdapter';
+import { DebugAdapter, LogAdapterClass } from './adapters';
 
-@Injectable()
+@Injectable('Log')
 export class Log {
     private static channels: Record<string, LogChannel> = {};
 

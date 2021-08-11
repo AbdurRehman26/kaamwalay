@@ -4,3 +4,4 @@
 *.php
 README.md
 resources/docs/frontend.md
+*.d.ts

@@ -8,7 +8,7 @@ import { Repository } from '@shared/repositories/Repository';
 
 class Bar extends Entity {}
 
-@Injectable()
+@Injectable('Foo')
 class Foo extends Repository<Bar> {
     protected endpointPath: string = 'customer/addresses/states';
     protected model = Bar;

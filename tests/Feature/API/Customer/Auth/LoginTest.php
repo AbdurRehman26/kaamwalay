@@ -92,7 +92,7 @@ class LoginTest extends TestCase
     /** @test @group auth */
     public function ags_user_can_login()
     {
-        if(!config('services.ags.is_platform_enabled')) {
+        if (! config('services.ags.is_platform_enabled')) {
             $this->markTestSkipped('AGS platform is not enabled.');
         }
         $testEmail = 'test@test.test';
@@ -102,7 +102,7 @@ class LoginTest extends TestCase
                 'user' => [
                     'username' => 'test',
                     'email' => $testEmail,
-                ]
+                ],
             ], 200),
         ]);
         $response = $this->postJson('api/auth/login', [

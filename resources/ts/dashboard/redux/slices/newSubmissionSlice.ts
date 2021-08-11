@@ -94,7 +94,7 @@ export interface NewSubmissionSliceState {
 
 const initialState: NewSubmissionSliceState = {
     isNextDisabled: false,
-    currentStep: 2,
+    currentStep: 0,
     step01Status: null,
     step01Data: {
         availableServiceLevels: [],
@@ -114,53 +114,7 @@ const initialState: NewSubmissionSliceState = {
         shippingFee: 0,
     },
     step03Data: {
-        existingAddresses: [
-            {
-                firstName: 'John',
-                lastName: 'Smith',
-                address: '263 Bujorilor',
-                flat: '',
-                city: 'Timisoara',
-                state: 'CA',
-                zipCode: '23',
-                phoneNumber: '',
-                country: { id: 0, code: 'CA', name: 'New York' },
-                id: 0,
-                userId: 0,
-                isDefaultShipping: false,
-                isDefaultBilling: false,
-            },
-            {
-                firstName: 'John',
-                lastName: 'Dorel Mondialu',
-                address: '263 Bujorilor asdasd',
-                flat: '',
-                city: 'Timisoara',
-                state: 'CA',
-                zipCode: '23',
-                phoneNumber: '',
-                country: { id: 0, code: 'CA', name: 'New York' },
-                id: 2,
-                userId: 0,
-                isDefaultShipping: false,
-                isDefaultBilling: false,
-            },
-            {
-                firstName: 'John',
-                lastName: 'Dorel Bestialu',
-                address: '123 Bujorilor asdasd',
-                flat: '',
-                city: 'New York',
-                state: 'CA',
-                zipCode: '23',
-                phoneNumber: '',
-                country: { id: 0, code: 'CA', name: 'New York' },
-                id: 3,
-                userId: 0,
-                isDefaultShipping: false,
-                isDefaultBilling: false,
-            },
-        ],
+        existingAddresses: [],
         selectedAddress: {
             firstName: '',
             lastName: '',
@@ -171,7 +125,7 @@ const initialState: NewSubmissionSliceState = {
             zipCode: '',
             phoneNumber: '',
             country: { id: 0, code: '', name: '' },
-            // Setting it to -1 so we know for sure this isn't a real address
+            // Setting it to -1 so we know for sure this isn't a real address id by default
             id: -1,
             userId: 0,
             isDefaultShipping: false,
@@ -271,7 +225,28 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
     const apiService = resolveInjectable(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses');
     const customerAddresses = await endpoint.get('');
-    return customerAddresses.data;
+    const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
+        return {
+            id: address.id,
+            userId: address.user_id,
+            firstName: address.first_name,
+            lastName: address.last_name,
+            address: address.address,
+            state: address.state,
+            zipCode: address.zip,
+            phone: address.phone,
+            flat: address.flat,
+            city: address.city,
+            isDefaultShipping: address.is_default_shipping,
+            isDefaultBilling: address.is_default_billing,
+            country: {
+                id: address.country.id,
+                code: address.country.code,
+                name: address.country.name,
+            },
+        };
+    });
+    return formattedAddresses;
 });
 
 export const newSubmissionSlice = createSlice({
@@ -407,11 +382,13 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.fetchingStatus = 'success';
         },
         [getStatesList.rejected as any]: (state, action) => {
-            console.log(action);
             state.step03Data.fetchingStatus = 'failed';
         },
         [getShippingFee.fulfilled as any]: (state, action) => {
             state.step02Data.shippingFee = action.payload;
+        },
+        [getSavedAddresses.fulfilled as any]: (state, action) => {
+            state.step03Data.existingAddresses = action.payload;
         },
     },
 });

@@ -21,7 +21,7 @@ type ExistingAddressProps = {
 const useStyles = makeStyles(
     {
         container: {
-            width: 'auto',
+            width: '200px',
             padding: '12px',
             paddingTop: '7px',
             display: 'flex',
@@ -33,6 +33,7 @@ const useStyles = makeStyles(
                 cursor: 'pointer',
             },
             marginRight: '12px',
+            marginBottom: '12px',
         },
         addressLineText: {
             fontFamily: 'Roboto',

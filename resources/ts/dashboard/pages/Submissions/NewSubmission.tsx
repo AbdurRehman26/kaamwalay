@@ -13,7 +13,14 @@ import SubmissionStep03Content from '../../components/SubmissionStep03Content';
 import SubmissionStep04Content from '../../components/SubmissionStep04Content';
 import SubmissionStep05Content from '../../components/SubmissionStep05Content';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { backStep, getShippingFee, nextStep, setIsNextDisabled } from '../../redux/slices/newSubmissionSlice';
+import {
+    backStep,
+    getSavedAddresses,
+    getShippingFee,
+    getStatesList,
+    nextStep,
+    setIsNextDisabled,
+} from '../../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
     pageContentContainer: {
@@ -64,9 +71,14 @@ export function NewSubmission() {
         }
     }, [currentStep]);
 
-    const handleNext = () => {
+    const handleNext = async () => {
+        // Executing different stuff before next step loads
         if (currentStep === 1) {
-            dispatch(getShippingFee(selectedCards));
+            await dispatch(getShippingFee(selectedCards));
+            await dispatch(getStatesList());
+            await dispatch(getSavedAddresses());
+            dispatch(nextStep());
+            return;
         }
         dispatch(nextStep());
     };

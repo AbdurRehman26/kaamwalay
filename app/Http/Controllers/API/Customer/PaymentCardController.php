@@ -32,6 +32,7 @@ class PaymentCardController extends Controller
         $this->validate(request(), [
             'payment_method_id' => ['required'],
         ]);
+
         return $stripeService->charge();
     }
 }

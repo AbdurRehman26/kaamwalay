@@ -7,6 +7,7 @@ use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
@@ -60,6 +61,7 @@ class CreateOrderService
         $this->storeOrderItems($this->data['items']);
         $this->storeShippingFee();
         $this->storeGrandTotal();
+        $this->storeOrderPayment($this->data['payment_provider_reference']);
 
         DB::commit();
     }
@@ -145,5 +147,17 @@ class CreateOrderService
 
         $this->order->grand_total = $serviceFee + $this->order->shipping_fee;
         $this->order->save();
+    }
+
+    protected function storeOrderPayment(array $data)
+    {
+        $response = $this->order->user->findPaymentMethod($data['id']);
+
+        OrderPayment::create([
+            'response' => json_encode($response),
+            'order_id' => $this->order->id,
+            'payment_method_id' => $this->order->paymentMethod->id,
+            'payment_provider_reference_id' => $data['id'],
+        ]);
     }
 }

@@ -34,6 +34,8 @@ class OrderTest extends TestCase
     /** @test */
     public function a_user_can_place_order()
     {
+        $this->markTestIncomplete('Stripe actual call needs to be mocked.');
+
         $this->actingAs($this->user);
 
         $response = $this->postJson('/api/customer/orders/', [

@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\Customer\Address;
 
 use App\Http\Resources\API\Country\CountryResource;
-use App\Http\Resources\API\Customer\Address\State\StateResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CustomerAddressResource extends JsonResource

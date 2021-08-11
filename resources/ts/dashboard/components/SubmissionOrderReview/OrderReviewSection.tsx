@@ -28,11 +28,17 @@ function OrderReviewSection() {
     const paymentExpMonth = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expMonth);
     const paymentExpYear = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expYear);
     const paymentLast4 = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.last4);
-
     const billingAddress = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress);
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
+    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
     const returnShippingMethod = 'Insured Shipping';
 
+    const finalShippingAddress =
+        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+            ? selectedExistingAddress
+            : shippingAddress;
     return (
         <Paper variant={'outlined'} className={classes.orderReviewSection}>
             <div className={classes.orderItemsColumn}>
@@ -63,11 +69,11 @@ function OrderReviewSection() {
                 <OrderDetailItem title={'Shipping Address'} editStep={2}>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
-                    <Typography className={classes.darkBodyText}>{`${shippingAddress.address}`}</Typography>
+                    >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
+                    <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address}`}</Typography>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${shippingAddress.city}, ${shippingAddress.state.code} ${shippingAddress.zipCode}, US`}</Typography>
+                    >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
                 </OrderDetailItem>
             </div>
 
@@ -90,11 +96,11 @@ function OrderReviewSection() {
                 <OrderDetailItem title={'Billing Address'} editStep={3}>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${billingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
+                    >{`${billingAddress.firstName} ${billingAddress.lastName}`}</Typography>
                     <Typography className={classes.darkBodyText}>{`${billingAddress.address}`}</Typography>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${billingAddress.city}, ${shippingAddress.state.code} ${shippingAddress.zipCode}, US`}</Typography>
+                    >{`${billingAddress.city}, ${billingAddress.state.code} ${billingAddress.zipCode}, US`}</Typography>
                 </OrderDetailItem>
             </div>
         </Paper>

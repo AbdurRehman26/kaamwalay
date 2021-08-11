@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class AddInitialCountries extends Migration
+class AddInitialPaymentMethods extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,16 @@ class AddInitialCountries extends Migration
      */
     public function up()
     {
-        DB::table('countries')->insert([
+        DB::table('payment_methods')->insert([
             [
-                'code' => 'US',
-                'name' => 'United States',
+                'code' => 'stripe',
+                'name' => 'Credit or Debit Card',
+                'created_at' => new \Datetime(),
+                'updated_at' => new \Datetime(),
+            ],
+            [
+                'code' => 'paypal',
+                'name' => 'Paypal',
                 'created_at' => new \Datetime(),
                 'updated_at' => new \Datetime(),
             ],
@@ -31,6 +37,6 @@ class AddInitialCountries extends Migration
      */
     public function down()
     {
-        DB::table('countries')->truncate();
+        DB::table('payment_methods')->truncate();
     }
 }

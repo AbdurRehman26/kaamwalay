@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\Customer\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
+use App\Http\Resources\API\Customer\Order\OrderCollection;
+use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Order\CreateOrderService;
@@ -16,32 +18,21 @@ class OrderController extends Controller
         $this->authorizeResource(Order::class, 'order');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): OrderCollection
     {
-        //
+        return new OrderCollection(Order::forUser(auth()->user())->paginate());
     }
 
-    public function store(StoreOrderRequest $request): OrderResource
+    public function store(StoreOrderRequest $request): OrderCreateResource
     {
         $order = CreateOrderService::create($request->validated());
 
-        return new OrderResource($order);
+        return new OrderCreateResource($order);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Order $order)
+    public function show(Order $order): OrderResource
     {
-        //
+        return new OrderResource($order);
     }
 
     /**

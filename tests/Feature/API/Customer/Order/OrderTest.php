@@ -3,6 +3,7 @@
 namespace Tests\Feature\API\Customer\Order;
 
 use App\Models\CardProduct;
+use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -113,6 +114,53 @@ class OrderTest extends TestCase
     public function a_guest_cannot_place_order()
     {
         $response = $this->postJson('/api/customer/orders/');
+
+        $response->assertUnauthorized();
+    }
+
+    /** @test */
+    public function a_customer_can_see_orders()
+    {
+        $this->actingAs($this->user);
+        $response = $this->getJson('/api/customer/orders/');
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => ['id'],
+            ],
+        ]);
+    }
+
+    /** @test */
+    public function a_customer_only_see_own_orders()
+    {
+        $someOtherCustomer = User::factory()->create();
+        Order::factory()->for($someOtherCustomer)->create();
+
+        $this->actingAs($this->user);
+        $response = $this->getJson('/api/customer/orders/');
+
+        $response->assertOk();
+        $response->assertJsonCount(0, ['data']);
+    }
+
+    /** @test */
+    public function a_customer_cannot_see_order_by_another_customer()
+    {
+        $someOtherCustomer = User::factory()->create();
+        $order = Order::factory()->for($someOtherCustomer)->create();
+
+        $this->actingAs($this->user);
+        $response = $this->getJson('/api/customer/orders/' . $order->id);
+
+        $response->assertForbidden();
+    }
+
+    /** @test */
+    public function a_guest_cannot_see_orders()
+    {
+        $response = $this->getJson('/api/customer/orders/');
 
         $response->assertUnauthorized();
     }

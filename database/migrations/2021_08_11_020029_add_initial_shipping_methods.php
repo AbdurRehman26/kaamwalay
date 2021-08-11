@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class AddInitialCountries extends Migration
+class AddInitialShippingMethods extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class AddInitialCountries extends Migration
      */
     public function up()
     {
-        DB::table('countries')->insert([
+        DB::table('shipping_methods')->insert([
             [
-                'code' => 'US',
-                'name' => 'United States',
+                'code' => 'insured_shipping',
+                'name' => 'Insured Shipping',
                 'created_at' => new \Datetime(),
                 'updated_at' => new \Datetime(),
             ],
@@ -31,6 +31,6 @@ class AddInitialCountries extends Migration
      */
     public function down()
     {
-        DB::table('countries')->truncate();
+        DB::table('shipping_methods')->truncate();
     }
 }

@@ -11,7 +11,7 @@ class AuthenticationException extends Exception
     public function render($request)
     {
         return new JsonResponse([
-            'error' => 'Incorrect Email or Password'
+            'error' => 'Incorrect Email or Password',
         ], Response::HTTP_UNAUTHORIZED);
     }
 }

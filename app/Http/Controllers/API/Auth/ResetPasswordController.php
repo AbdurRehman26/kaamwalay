@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -19,8 +18,12 @@ class ResetPasswordController extends Controller
     {
         $response = $this->broker()->reset(
             $request->only(
-                'email', 'password', 'password_confirmation', 'token'
-            ), fn ($user, $password) => $this->resetPassword($user, $password)
+                'email',
+                'password',
+                'password_confirmation',
+                'token'
+            ),
+            fn ($user, $password) => $this->resetPassword($user, $password)
         );
 
         return $response == Password::PASSWORD_RESET

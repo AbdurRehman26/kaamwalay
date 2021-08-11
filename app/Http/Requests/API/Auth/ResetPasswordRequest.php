@@ -4,7 +4,6 @@ namespace App\Http\Requests\API\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
-use JetBrains\PhpStorm\ArrayShape;
 
 class ResetPasswordRequest extends FormRequest
 {

@@ -30,7 +30,7 @@ class CustomerAddressFactory extends Factory
             'last_name' => $this->faker->lastName,
             'address' => $this->faker->address,
             'city' => $this->faker->city,
-            'state' => $this->faker->word,
+            'state' => $this->faker->state,
             'zip' => $this->faker->postcode,
             'phone' => $this->faker->phoneNumber,
             'flat' => $this->faker->numberBetween(1, 10),

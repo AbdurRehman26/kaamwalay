@@ -120,7 +120,7 @@ let schema = yup.object().shape({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
     address: yup.string().required(),
-    apt: yup.string().optional(),
+    flat: yup.string().optional(),
     city: yup.string().required(),
     state: yup.object().shape({
         name: yup.string().required(),
@@ -144,7 +144,7 @@ export function SubmissionStep03Content() {
     const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
     const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
-    const apt = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.flat);
+    const flat = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.flat);
     const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
     const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
@@ -157,7 +157,7 @@ export function SubmissionStep03Content() {
                     firstName,
                     lastName,
                     address,
-                    apt,
+                    flat,
                     city,
                     state,
                     zipCode,
@@ -174,7 +174,7 @@ export function SubmissionStep03Content() {
                     firstName,
                     lastName,
                     address,
-                    apt,
+                    flat,
                     city,
                     state,
                     zipCode,
@@ -192,7 +192,7 @@ export function SubmissionStep03Content() {
         firstName,
         lastName,
         address,
-        apt,
+        flat,
         city,
         state,
         zipCode,
@@ -397,7 +397,7 @@ export function SubmissionStep03Content() {
                                             placeholder="Apt #"
                                             fullWidth
                                             disabled={disableAllInputs}
-                                            value={apt}
+                                            value={flat}
                                             onChange={(e: any) => updateField('flat', e.target.value)}
                                             size={'small'}
                                             variant={'outlined'}

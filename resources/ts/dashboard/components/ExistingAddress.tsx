@@ -80,9 +80,7 @@ function ExistingAddress(props: ExistingAddressProps) {
                 <Radio color={'primary'} onClick={handleRadioPress} checked={selectedExistingAddressID === id} />
             </div>
             <Typography className={classes.addressLineText}>{`${firstName} ${lastName}`}</Typography>
-            <Typography className={classes.addressLineText}>{`${address} ${
-                flat.length !== 0 ? `Apt: ${flat}` : ''
-            }`}</Typography>
+            <Typography className={classes.addressLineText}>{`${address} ${flat ? `Apt: ${flat}` : ''}`}</Typography>
             <Typography className={classes.addressLineText}>{`${city}, ${state} ${zip}, US`}</Typography>
         </Paper>
     );

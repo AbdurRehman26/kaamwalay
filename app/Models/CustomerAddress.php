@@ -3,16 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CustomerAddress extends Model
+class CustomerAddress extends Address
 {
-    use HasFactory;
-
-    protected const DEFAULT_COUNTRY_ID = 1;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -40,10 +34,6 @@ class CustomerAddress extends Model
         'id' => 'integer',
         'user_id' => 'integer',
         'country_id' => 'integer',
-    ];
-
-    protected $attributes = [
-        'country_id' => self::DEFAULT_COUNTRY_ID,
     ];
 
     public function user(): BelongsTo

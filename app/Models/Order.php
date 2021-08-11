@@ -37,8 +37,8 @@ class Order extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'shipping_fee' => 'decimal:2',
-        'grand_total' => 'decimal:2',
+        'shipping_fee' => 'float',
+        'grand_total' => 'float',
         'user_id' => 'integer',
         'payment_plan_id' => 'integer',
         'order_status_id' => 'integer',

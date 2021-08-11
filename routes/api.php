@@ -23,8 +23,8 @@ use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 |
 */
 Route::prefix('auth')->group(function () {
-    Route::post('login', [LoginController::class, 'login']);
-    Route::post('register', [RegisterController::class, 'register']);
+    Route::post('login', [LoginController::class, 'login'])->middleware('guest');
+    Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 
@@ -46,7 +46,6 @@ Route::prefix('customer')->group(function () {
             Route::get('{order}', [OrderController::class, 'show']);
             Route::apiResource('/', OrderController::class)
                 ->only(['index', 'store']);
-
         });
     });
 });

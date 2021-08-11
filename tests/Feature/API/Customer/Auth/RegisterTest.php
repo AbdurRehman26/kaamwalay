@@ -112,4 +112,15 @@ class RegisterTest extends TestCase
 
         Event::assertDispatched(CustomerRegistered::class);
     }
+
+    /** @test */
+    public function a_logged_in_customer_cannot_register()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->postJson('api/auth/register');
+        $response->assertRedirect();
+    }
 }

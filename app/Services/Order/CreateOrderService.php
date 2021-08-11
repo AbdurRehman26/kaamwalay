@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -14,83 +15,89 @@ use Illuminate\Support\Facades\Log;
 
 class CreateOrderService
 {
-    protected static Order $order;
-    protected static array $data;
+    protected Order $order;
+    protected array $data;
 
-    public static function create(array $data): Order
+    /**
+     * @throws OrderNotPlaced
+     */
+    public function create(array $data): Order
     {
-        self::$data = $data;
+        $this->data = $data;
 
         try {
-            self::validate();
-            self::process();
+            $this->validate();
+            $this->process();
 
-            return self::$order;
+            return $this->order;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
 
-            throw new \Exception('Order could not be placed.');
+            throw new OrderNotPlaced;
         }
     }
 
-    protected static function validate()
+    /**
+     * @throws \Exception
+     */
+    protected function validate()
     {
-        ItemsDeclaredValueValidator::validate(self::$data);
+        ItemsDeclaredValueValidator::validate($this->data);
     }
 
-    protected static function process()
+    protected function process()
     {
         DB::beginTransaction();
 
-        self::startOrder();
-        self::storePaymentPlan(self::$data['payment_plan']);
-        self::storeShippingMethod(self::$data['shipping_method']);
-        self::storePaymentMethod(self::$data['payment_method']);
-        self::storeOrderAddresses(self::$data['shipping_address'], self::$data['billing_address']);
-        self::storeCustomerAddress(self::$data['shipping_address']);
-        self::saveOrder();
-        self::storeOrderItems(self::$data['items']);
-        self::storeShippingFee();
-        self::storeGrandTotal();
+        $this->startOrder();
+        $this->storePaymentPlan($this->data['payment_plan']);
+        $this->storeShippingMethod($this->data['shipping_method']);
+        $this->storePaymentMethod($this->data['payment_method']);
+        $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address']);
+        $this->storeCustomerAddress($this->data['shipping_address']);
+        $this->saveOrder();
+        $this->storeOrderItems($this->data['items']);
+        $this->storeShippingFee();
+        $this->storeGrandTotal();
 
         DB::commit();
     }
 
-    protected static function startOrder()
+    protected function startOrder()
     {
-        self::$order = new Order();
+        $this->order = new Order();
     }
 
-    protected static function storePaymentPlan(array $paymentPlan)
+    protected function storePaymentPlan(array $paymentPlan)
     {
-        self::$order->payment_plan_id = $paymentPlan['id'];
+        $this->order->payment_plan_id = $paymentPlan['id'];
     }
 
-    protected static function storeShippingMethod(array $shippingMethod)
+    protected function storeShippingMethod(array $shippingMethod)
     {
-        self::$order->shipping_method_id = $shippingMethod['id'];
+        $this->order->shipping_method_id = $shippingMethod['id'];
     }
 
-    protected static function storePaymentMethod(array $paymentMethod)
+    protected function storePaymentMethod(array $paymentMethod)
     {
-        self::$order->payment_method_id = $paymentMethod['id'];
+        $this->order->payment_method_id = $paymentMethod['id'];
     }
 
-    protected static function storeOrderAddresses(array $shippingAddress, array $billingAddress)
+    protected function storeOrderAddresses(array $shippingAddress, array $billingAddress)
     {
         $shippingAddress = OrderAddress::create($shippingAddress);
-        self::$order->shippingAddress()->associate($shippingAddress);
+        $this->order->shippingAddress()->associate($shippingAddress);
 
         if ($billingAddress['same_as_shipping']) {
-            self::$order->billingAddress()->associate($shippingAddress);
+            $this->order->billingAddress()->associate($shippingAddress);
         } else {
             $billingAddress = OrderAddress::create($billingAddress);
-            self::$order->billingAddress()->associate($billingAddress);
+            $this->order->billingAddress()->associate($billingAddress);
         }
     }
 
-    protected static function storeCustomerAddress(array $shippingAddress)
+    protected function storeCustomerAddress(array $shippingAddress)
     {
         if ($shippingAddress['save_for_later']) {
             CustomerAddress::create(array_merge(
@@ -102,20 +109,20 @@ class CreateOrderService
         }
     }
 
-    protected static function saveOrder()
+    protected function saveOrder()
     {
-        self::$order->user()->associate(auth()->user());
-        self::$order->order_status_id = OrderStatus::DEFAULT_ORDER_STATUS;
-        self::$order->save();
-        self::$order->order_number = OrderNumberGeneratorService::generate(self::$order);
-        self::$order->save();
+        $this->order->user()->associate(auth()->user());
+        $this->order->order_status_id = OrderStatus::DEFAULT_ORDER_STATUS;
+        $this->order->save();
+        $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
+        $this->order->save();
     }
 
-    protected static function storeOrderItems(array $items)
+    protected function storeOrderItems(array $items)
     {
         foreach ($items as $item) {
             OrderItem::create([
-                'order_id' => self::$order->id,
+                'order_id' => $this->order->id,
                 'card_product_id' => $item['card_product']['id'],
                 'quantity' => $item['quantity'],
                 'declared_value_per_unit' => $item['declared_value_per_unit'],
@@ -124,19 +131,19 @@ class CreateOrderService
         }
     }
 
-    protected static function storeShippingFee()
+    protected function storeShippingFee()
     {
-        $shippingFee = ShippingFeeService::calculateForOrder(self::$order);
+        $shippingFee = ShippingFeeService::calculateForOrder($this->order);
 
-        self::$order->shipping_fee = $shippingFee;
-        self::$order->save();
+        $this->order->shipping_fee = $shippingFee;
+        $this->order->save();
     }
 
-    protected static function storeGrandTotal()
+    protected function storeGrandTotal()
     {
-        $serviceFee = self::$order->paymentPlan->price * self::$order->orderItems()->sum('quantity');
+        $serviceFee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
 
-        self::$order->grand_total = $serviceFee + self::$order->shipping_fee;
-        self::$order->save();
+        $this->order->grand_total = $serviceFee + $this->order->shipping_fee;
+        $this->order->save();
     }
 }

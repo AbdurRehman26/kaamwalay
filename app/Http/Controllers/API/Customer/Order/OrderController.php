@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Customer\Order;
 
+use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
 use App\Http\Resources\API\Customer\Order\OrderCollection;
@@ -9,7 +10,9 @@ use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Order\CreateOrderService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
@@ -20,19 +23,32 @@ class OrderController extends Controller
 
     public function index(): OrderCollection
     {
-        return new OrderCollection(Order::forUser(auth()->user())->paginate());
+        return new OrderCollection(
+            Order::forUser(auth()->user())
+                ->latest()
+                ->paginate()
+        );
     }
 
-    public function store(StoreOrderRequest $request): OrderCreateResource
+    public function store(StoreOrderRequest $request, CreateOrderService $createOrderService): OrderCreateResource|JsonResponse
     {
-        $order = CreateOrderService::create($request->validated());
+        try {
+            $order = $createOrderService->create($request->validated());
+        } catch (OrderNotPlaced $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
 
         return new OrderCreateResource($order);
     }
 
     public function show(Order $order): OrderResource
     {
-        return new OrderResource(Order::findOrFail($order['id']));
+        return new OrderResource($order);
     }
 
     /**

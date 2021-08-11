@@ -59,7 +59,7 @@ class CardProduct extends Model
 
         return $array;
     }
-    
+
     public function cardSet()
     {
         return $this->belongsTo(CardSet::class);

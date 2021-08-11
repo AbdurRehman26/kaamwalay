@@ -34,8 +34,6 @@ class CustomerAddressFactory extends Factory
             'zip' => $this->faker->postcode,
             'phone' => $this->faker->phoneNumber,
             'flat' => $this->faker->numberBetween(1, 10),
-            'is_default_shipping' => $this->faker->numberBetween(0, 1),
-            'is_default_billing' => $this->faker->numberBetween(0, 1),
             'country_id' => Country::factory(),
         ];
     }

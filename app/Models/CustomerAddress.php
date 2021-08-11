@@ -3,14 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CustomerAddress extends Model
+class CustomerAddress extends Address
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -26,8 +22,6 @@ class CustomerAddress extends Model
         'zip',
         'phone',
         'flat',
-        'is_default_shipping',
-        'is_default_billing',
         'country_id',
     ];
 
@@ -39,8 +33,6 @@ class CustomerAddress extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'is_default_shipping' => 'boolean',
-        'is_default_billing' => 'boolean',
         'country_id' => 'integer',
     ];
 

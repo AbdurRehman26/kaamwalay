@@ -11,6 +11,8 @@ class CustomerAddress extends Model
 {
     use HasFactory;
 
+    protected const DEFAULT_COUNTRY_ID = 1;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,8 +28,6 @@ class CustomerAddress extends Model
         'zip',
         'phone',
         'flat',
-        'is_default_shipping',
-        'is_default_billing',
         'country_id',
     ];
 
@@ -39,9 +39,11 @@ class CustomerAddress extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'is_default_shipping' => 'boolean',
-        'is_default_billing' => 'boolean',
         'country_id' => 'integer',
+    ];
+
+    protected $attributes = [
+        'country_id' => self::DEFAULT_COUNTRY_ID,
     ];
 
     public function user(): BelongsTo

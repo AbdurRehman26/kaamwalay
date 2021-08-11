@@ -80,6 +80,7 @@ class OrderTest extends TestCase
                 'zip' => '12345',
                 'phone' => '1234567890',
                 'flat' => '43',
+                'same_as_shipping' => true,
             ],
             'shipping_method' => [
                 'id' => $this->shippingMethod->id,

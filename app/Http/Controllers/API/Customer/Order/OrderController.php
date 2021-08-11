@@ -30,7 +30,7 @@ class OrderController extends Controller
         );
     }
 
-    public function store(StoreOrderRequest $request, CreateOrderService $createOrderService): OrderCreateResource|JsonResponse
+    public function store(StoreOrderRequest $request, CreateOrderService $createOrderService): OrderCreateResource | JsonResponse
     {
         try {
             $order = $createOrderService->create($request->validated());

@@ -22,9 +22,6 @@ class StripeService
     //part can be incorporated in that API.
     public function charge()
     {
-        $this->validate(request(), [
-            'payment_method_id' => ['required'],
-        ]);
         /**
          * @var User $user
          */

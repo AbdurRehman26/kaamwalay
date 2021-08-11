@@ -10,9 +10,9 @@
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *      {
- *          "data": [
- *              {
+         {
+            "data": [
+                {
                     "id": 3,
                     "order_number": "b67ae96f-ff60-393e-b363-23844f311a18",
                     "created_at": {
@@ -33,29 +33,39 @@
                     },
                     "number_of_cards": 2553,
                     "status": "Elenora"
-                },
-                {
-                    "id": 4,
-                    "order_number": "8ff12998-cbed-3718-9712-15f8cc7c94fa",
-                    "created_at": {
-                        "date": "2021-08-11 15:40:24.000000",
-                        "timezone_type": 3,
-                        "timezone": "UTC"
+                }
+            ],
+            "links": {
+                "first": "http://localhost/api/customer/orders?page=1",
+                "last": "http://localhost/api/customer/orders?page=1",
+                "prev": null,
+                "next": null
+            },
+            "meta": {
+                "current_page": 1,
+                "from": 1,
+                "last_page": 1,
+                "links": [
+                    {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
                     },
-                    "arrived_at": {
-                        "date": "1995-12-23 00:00:00.000000",
-                        "timezone_type": 3,
-                        "timezone": "UTC"
+                    {
+                        "url": "http://localhost/api/customer/orders?page=1",
+                        "label": "1",
+                        "active": true
                     },
-                    "payment_plan": {
-                        "id": 11,
-                        "price": 3475,
-                        "max_protection_amount": 5205,
-                        "turnaround": "7 Day Turnaround"
-                    },
-                    "number_of_cards": 8081,
-                    "status": "Isac"
-                },
- *          ]
- *      }
+                    {
+                        "url": null,
+                        "label": "Next &raquo;",
+                        "active": false
+                    }
+                ],
+                "path": "http://localhost/api/customer/orders",
+                "per_page": 15,
+                "to": 5,
+                "total": 5
+            }
+        }
  */

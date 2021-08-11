@@ -10,7 +10,7 @@ import { Inject } from '@shared/decorators/Inject';
 import { useInjectable } from '@shared/hooks/useInjectable';
 
 // Define an injectable service
-@Injectable()
+@Injectable('Foo')
 class Foo {
     sayHi() {
         console.log("Hello world!");
@@ -19,7 +19,7 @@ class Foo {
 
 // To use the service foo there are multiple ways
 // 1. Into another class/service/injectable
-@Injectable()
+@Injectable('Bar')
 class Bar {
     @Inject() private foo: Foo;
 
@@ -74,7 +74,7 @@ class MyEntity extends Entity {
 }
 
 // shared/repositories/MyRepository.ts
-@Injectable()
+@Injectable('MyRepository')
 export class MyRepository extends Repository<MyEntity> {
     readonly endpointPath: string = 'my/endpoint';
     readonly model = MyEntity;
@@ -155,7 +155,7 @@ export class MyRequestDto {
 }
 
 // shared/repositories/MyRepository.ts
-@Injectable()
+@Injectable('MyRepository')
 export class MyRepository extends Repository<MyEntity> {
     readonly endpointPath: string = 'my/endpoint';
     readonly model = MyEntity;

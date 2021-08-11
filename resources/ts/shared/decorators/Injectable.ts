@@ -11,11 +11,20 @@ interface InjectableOptions {
 
 /**
  *
+ * @param name
  * @param options
  * @constructor
  */
-export function Injectable(options: InjectableOptions = {}): ClassDecorator {
+export function Injectable(name: string | InjectableOptions, options: InjectableOptions = {}): ClassDecorator {
     return (target) => {
+        if (name && typeof name === 'object') {
+            options = name;
+        }
+
+        if (name && typeof name === 'string') {
+            options.name = name;
+        }
+
         if (!options.name) {
             const getInjectableName =
                 (target as any as GetInjectableName).getInjectableName ||

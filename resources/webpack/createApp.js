@@ -41,7 +41,7 @@ module.exports.createApp = function createApp(name) {
             '@publicPath': path.join(__dirname, '../ts/shared/publicPath.ts'),
             [`@${name}`]: path.join(__dirname, `../ts/${name}`),
         })
-        .sourceMaps(false);
+        .sourceMaps();
 
     if (mix.inProduction()) {
         mix.version();

@@ -5,7 +5,7 @@ import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 
-@Injectable({ name: 'APIService' })
+@Injectable('APIService')
 export class APIService {
     constructor(@Inject() private authenticationService: AuthenticationService) {}
 

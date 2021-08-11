@@ -122,7 +122,7 @@ let schema = yup.object().shape({
     address: yup.string().required(),
     apt: yup.string().optional(),
     city: yup.string().required(),
-    country: yup.object().shape({
+    state: yup.object().shape({
         name: yup.string().required(),
         id: yup.number().required(),
     }),
@@ -146,7 +146,7 @@ export function SubmissionStep03Content() {
     const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
     const apt = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.flat);
     const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
-    const country = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.country);
+    const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
@@ -159,7 +159,7 @@ export function SubmissionStep03Content() {
                     address,
                     apt,
                     city,
-                    country,
+                    state,
                     zipCode,
                     phoneNumber,
                 })
@@ -176,7 +176,7 @@ export function SubmissionStep03Content() {
                     address,
                     apt,
                     city,
-                    country,
+                    state,
                     zipCode,
                     phoneNumber,
                 })
@@ -194,7 +194,7 @@ export function SubmissionStep03Content() {
         address,
         apt,
         city,
-        country,
+        state,
         zipCode,
         phoneNumber,
         useCustomShippingAddress,
@@ -225,7 +225,7 @@ export function SubmissionStep03Content() {
         if (stateLookup) {
             dispatch(
                 updateShippingAddressField({
-                    fieldName: 'country',
+                    fieldName: 'state',
                     newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
                 }),
             );
@@ -287,7 +287,7 @@ export function SubmissionStep03Content() {
                                             address={address.address}
                                             flat={address.flat ?? ''}
                                             city={address.city}
-                                            country={address.country.code}
+                                            state={address.state.code}
                                             id={address.id}
                                             zip={address.zipCode}
                                         />
@@ -432,7 +432,7 @@ export function SubmissionStep03Content() {
                                         <Select
                                             fullWidth
                                             disabled={disableAllInputs}
-                                            value={country.id || 'none'}
+                                            value={state.id || 'none'}
                                             onChange={(e: any) => updateShippingState(e.target.value)}
                                             placeholder={'Select State'}
                                             variant={'outlined'}

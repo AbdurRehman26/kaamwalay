@@ -42,7 +42,7 @@ export interface Address {
     flat?: string;
     city: string;
     country: { name: string; code: string; id: number };
-    state: string;
+    state: { name: string; code: string; id: number };
     zipCode: string;
     phoneNumber: string;
     id: number;
@@ -121,7 +121,7 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             flat: '',
             city: '',
-            state: '',
+            state: { id: 0, code: '', name: '' },
             zipCode: '',
             phoneNumber: '',
             country: { id: 0, code: '', name: '' },
@@ -137,7 +137,7 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             flat: '',
             city: '',
-            state: '',
+            state: { id: 0, code: '', name: '' },
             zipCode: '',
             phoneNumber: '',
             country: { id: 0, code: '', name: '' },
@@ -171,7 +171,7 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             flat: '',
             city: '',
-            state: '',
+            state: { id: 0, code: '', name: '' },
             zipCode: '',
             phoneNumber: '',
             country: { id: 0, code: '', name: '' },
@@ -232,13 +232,17 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             firstName: address.first_name,
             lastName: address.last_name,
             address: address.address,
-            state: address.state,
             zipCode: address.zip,
             phone: address.phone,
             flat: address.flat,
             city: address.city,
             isDefaultShipping: address.is_default_shipping,
             isDefaultBilling: address.is_default_billing,
+            state: {
+                id: address.state.id,
+                code: address.state.code,
+                name: address.state.name,
+            },
             country: {
                 id: address.country.id,
                 code: address.country.code,

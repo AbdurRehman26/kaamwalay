@@ -67,7 +67,7 @@ function OrderReviewSection() {
                     <Typography className={classes.darkBodyText}>{`${shippingAddress.address}`}</Typography>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${shippingAddress.city}, ${shippingAddress.country.code} ${shippingAddress.zipCode}, US`}</Typography>
+                    >{`${shippingAddress.city}, ${shippingAddress.state.code} ${shippingAddress.zipCode}, US`}</Typography>
                 </OrderDetailItem>
             </div>
 
@@ -94,7 +94,7 @@ function OrderReviewSection() {
                     <Typography className={classes.darkBodyText}>{`${billingAddress.address}`}</Typography>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${billingAddress.city}, ${shippingAddress.country.code} ${shippingAddress.zipCode}, US`}</Typography>
+                    >{`${billingAddress.city}, ${shippingAddress.state.code} ${shippingAddress.zipCode}, US`}</Typography>
                 </OrderDetailItem>
             </div>
         </Paper>

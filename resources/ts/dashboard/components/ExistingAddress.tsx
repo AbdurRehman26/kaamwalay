@@ -14,7 +14,7 @@ type ExistingAddressProps = {
     flat: string;
     zip: string;
     city: string;
-    country: string;
+    state: string;
     id: number;
 };
 
@@ -61,7 +61,7 @@ function ExistingAddress(props: ExistingAddressProps) {
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
     const dispatch = useAppDispatch();
-    const { firstName, lastName, address, flat, zip, city, country, id } = props;
+    const { firstName, lastName, address, flat, zip, city, state, id } = props;
     const classes = useStyles({ isSelected: selectedExistingAddressID === id });
 
     function handleRadioPress() {
@@ -83,7 +83,7 @@ function ExistingAddress(props: ExistingAddressProps) {
             <Typography className={classes.addressLineText}>{`${address} ${
                 flat.length !== 0 ? `Apt: ${flat}` : ''
             }`}</Typography>
-            <Typography className={classes.addressLineText}>{`${city}, ${country} ${zip}, US`}</Typography>
+            <Typography className={classes.addressLineText}>{`${city}, ${state} ${zip}, US`}</Typography>
         </Paper>
     );
 }

@@ -2,10 +2,10 @@
 
 namespace App\Concerns\AGS;
 
+use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Requests\API\Auth\LoginRequest;
 use App\Models\User;
 use App\Services\AGS\AGS;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +15,7 @@ trait AuthenticatableWithAGS
     {
         $ags = new AGS();
 
-        throw_if(! $ags->isEnabled(), AuthenticationException::class, 'Unauthorized');
+        throw_unless($ags->isEnabled(), AuthenticationException::class);
 
         $response = $ags->client()->post('/login/', $request->validated());
 
@@ -49,8 +49,7 @@ trait AuthenticatableWithAGS
         throw_unless(
             $response->status() === Response::HTTP_OK
             && Arr::has($response->json(), 'access_token'),
-            AuthenticationException::class,
-            'Unauthorized'
+            AuthenticationException::class
         );
     }
 }

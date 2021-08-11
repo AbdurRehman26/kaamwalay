@@ -18,6 +18,7 @@ import { font } from '@shared/styles/utils';
 import { CardPreview } from '@dashboard/components/CardPreview';
 import { CardGradeScore } from '@dashboard/pages/Cards/ViewCard/CardGradeScore';
 
+import CardGradeImages from './CardGradeImages';
 import { GradePendingMessage } from './GradePendingMessage';
 import { GradeStatus } from './GradeStatus';
 
@@ -127,7 +128,14 @@ export function ViewCard() {
                     </TableContainer>
                 </Grid>
             </Grid>
-            {!isGraded ? <GradePendingMessage /> : <CardGradeScore />}
+            {!isGraded ? (
+                <GradePendingMessage />
+            ) : (
+                <>
+                    <CardGradeScore />
+                    <CardGradeImages />
+                </>
+            )}
         </Grid>
     );
 }

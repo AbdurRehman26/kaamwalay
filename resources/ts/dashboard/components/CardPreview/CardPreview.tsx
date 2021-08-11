@@ -1,6 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 
 import { cx } from '@shared/lib/utils/cx';
@@ -83,8 +83,8 @@ const useStyles = makeStyles(
  * @date: 10.08.2021
  * @time: 02:55
  */
-export function CardPreview(props: CardPreviewOnlyImageProps | CardPreviewProps) {
-    const { onlyImage } = props as CardPreviewOnlyImageProps;
+export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps | CardPreviewProps>) {
+    const { children, onlyImage } = props as PropsWithChildren<CardPreviewOnlyImageProps>;
     const { id, image, grade, certification, name, description } = props as CardPreviewProps;
     const classes = useStyles();
     const isGraded = !!grade && certification;
@@ -133,6 +133,7 @@ export function CardPreview(props: CardPreviewOnlyImageProps | CardPreviewProps)
                     </Typography>
                 </div>
             ) : null}
+            {children}
         </LinkComponent>
     );
 }

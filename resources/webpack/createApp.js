@@ -6,7 +6,8 @@ const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports.createApp = function createApp(name) {
-    const appPath = `public/apps/${name}`;
+    const appUrl = `apps/${name}`;
+    const appPath = `public/${appUrl}`;
 
     function extendWebpack(webpackConfig) {
         webpackConfig.module.rules[1].use[0].options.publicPath = `/apps/${name}`;

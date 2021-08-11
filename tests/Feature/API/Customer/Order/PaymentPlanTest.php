@@ -24,13 +24,9 @@ class PaymentPlanTest extends TestCase
     public function a_user_can_see_payment_plans()
     {
         $this->actingAs($this->user);
-
-        PaymentPlan::factory()
-            ->count(5)
-            ->create();
         $response = $this->getJson('/api/customer/orders/payment-plans/');
 
-        $response->assertJsonCount(5, 'data');
+        $response->assertJsonCount(7, 'data');
         $response->assertJsonStructure([
             'data' => [
                 '*' => ['id', 'price', 'max_protection_amount', 'turnaround'],

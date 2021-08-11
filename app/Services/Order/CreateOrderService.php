@@ -2,39 +2,28 @@
 
 namespace App\Services\Order;
 
-use App\Models\CardProduct;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
-use App\Models\PaymentMethod;
-use App\Models\PaymentPlan;
-use App\Models\ShippingMethod;
+use App\Services\Order\Shipping\ShippingFeeService;
+use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CreateOrderService
 {
     protected static Order $order;
+    protected static array $data;
 
     public static function create(array $data): Order
     {
-        if (! self::validateData($data)) {
-            throw new \Exception('Order could not be placed.');
-        }
+        self::$data = $data;
 
         try {
-            DB::beginTransaction();
-
-            self::startOrder();
-            self::storePaymentPlan($data['payment_plan']);
-            self::storeShippingMethod($data['shipping_method']);
-            self::storePaymentMethod($data['payment_method']);
-            self::storeOrderAddress($data['shipping_address']);
-            self::saveOrder();
-            self::storeOrderItems($data['items']);
-
-            DB::commit();
+            self::validate();
+            self::process();
 
             return self::$order;
         } catch (\Exception $e) {
@@ -43,6 +32,29 @@ class CreateOrderService
 
             throw new \Exception('Order could not be placed.');
         }
+    }
+
+    protected static function validate()
+    {
+        ItemsDeclaredValueValidator::validate(self::$data);
+    }
+
+    protected static function process()
+    {
+        DB::beginTransaction();
+
+        self::startOrder();
+        self::storePaymentPlan(self::$data['payment_plan']);
+        self::storeShippingMethod(self::$data['shipping_method']);
+        self::storePaymentMethod(self::$data['payment_method']);
+        self::storeOrderAddresses(self::$data['shipping_address'], self::$data['billing_address']);
+        self::storeCustomerAddress(self::$data['shipping_address']);
+        self::saveOrder();
+        self::storeOrderItems(self::$data['items']);
+        self::storeShippingFee();
+        self::storeGrandTotal();
+
+        DB::commit();
     }
 
     protected static function startOrder()
@@ -65,18 +77,37 @@ class CreateOrderService
         self::$order->payment_method_id = $paymentMethod['id'];
     }
 
-    protected static function storeOrderAddress(array $shippingAddress)
+    protected static function storeOrderAddresses(array $shippingAddress, array $billingAddress)
     {
-        $orderAddress = OrderAddress::create($shippingAddress);
+        $shippingAddress = OrderAddress::create($shippingAddress);
+        self::$order->shippingAddress()->associate($shippingAddress);
 
-        self::$order->orderAddress()->associate($orderAddress);
+        if ($billingAddress['same_as_shipping']) {
+            self::$order->billingAddress()->associate($shippingAddress);
+        } else {
+            $billingAddress = OrderAddress::create($billingAddress);
+            self::$order->billingAddress()->associate($billingAddress);
+        }
+    }
+
+    protected static function storeCustomerAddress(array $shippingAddress)
+    {
+        if ($shippingAddress['save_for_later']) {
+            CustomerAddress::create(array_merge(
+                $shippingAddress,
+                [
+                    'user_id' => auth()->user()->id,
+                ]
+            ));
+        }
     }
 
     protected static function saveOrder()
     {
-        self::$order->order_number = OrderNumberGeneratorService::generate();
         self::$order->user()->associate(auth()->user());
-        self::$order->orderStatus()->associate(OrderStatus::find(1));
+        self::$order->order_status_id = OrderStatus::DEFAULT_ORDER_STATUS;
+        self::$order->save();
+        self::$order->order_number = OrderNumberGeneratorService::generate(self::$order);
         self::$order->save();
     }
 
@@ -93,21 +124,19 @@ class CreateOrderService
         }
     }
 
-    protected static function validateData(array $data): bool
+    protected static function storeShippingFee()
     {
-        try {
-            PaymentPlan::findOrFail($data['payment_plan']['id']);
+        $shippingFee = ShippingFeeService::calculateForOrder(self::$order);
 
-            foreach ($data['items'] as $item) {
-                CardProduct::firstOrFail($item['card_product']['id']);
-            }
+        self::$order->shipping_fee = $shippingFee;
+        self::$order->save();
+    }
 
-            ShippingMethod::findOrFail($data['shipping_method']['id']);
-            PaymentMethod::findOrFail($data['payment_method']['id']);
-        } catch (\Exception) {
-            return false;
-        }
+    protected static function storeGrandTotal()
+    {
+        $serviceFee = self::$order->paymentPlan->price * self::$order->orderItems()->sum('quantity');
 
-        return true;
+        self::$order->grand_total = $serviceFee + self::$order->shipping_fee;
+        self::$order->save();
     }
 }

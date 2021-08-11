@@ -3,9 +3,7 @@
 namespace Tests\Feature\API\Customer\Order;
 
 use App\Models\CardProduct;
-use App\Models\Country;
 use App\Models\Order;
-use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -26,14 +24,11 @@ class OrderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $orders = Order::factory()->for()->count(2)->create();
-        $this->user = $orders->first()->user;
+        $this->user = User::factory()->create();
         $this->paymentPlan = PaymentPlan::factory()->create();
         $this->cardProduct = CardProduct::factory()->create();
         $this->shippingMethod = ShippingMethod::factory()->create();
         $this->paymentMethod = PaymentMethod::factory()->create();
-        OrderStatus::factory()->create();
-        Country::factory()->create();
     }
 
     /** @test */
@@ -51,14 +46,14 @@ class OrderTest extends TestCase
                         'id' => $this->cardProduct->id,
                     ],
                     'quantity' => 1,
-                    'declared_value_per_unit' => 10000,
+                    'declared_value_per_unit' => 500,
                 ],
                 [
                     'card_product' => [
                         'id' => $this->cardProduct->id,
                     ],
                     'quantity' => 1,
-                    'declared_value_per_unit' => 10000,
+                    'declared_value_per_unit' => 500,
                 ],
             ],
             'shipping_address' => [
@@ -81,6 +76,7 @@ class OrderTest extends TestCase
                 'zip' => '12345',
                 'phone' => '1234567890',
                 'flat' => '43',
+                'same_as_shipping' => true,
             ],
             'shipping_method' => [
                 'id' => $this->shippingMethod->id,
@@ -124,31 +120,68 @@ class OrderTest extends TestCase
     /** @test */
     public function a_guest_cannot_see_order()
     {
+        Order::factory()->for($this->user)->create();
+
         $response = $this->getJson('/api/customer/orders/1');
 
         $response->assertUnauthorized();
     }
 
     /** @test */
-    public function user_can_not_see_other_user_order()
-    {
-        $this->actingAs($this->user);
-
-        $response = $this->getJson('/api/customer/orders/2');
-
-        $response->assertStatus(403);
-    }
-
-    /** @test */
     public function user_can_see_his_order()
     {
         $this->actingAs($this->user);
-
-        $response = $this->getJson('/api/customer/orders/1');
+        $order = Order::factory()->for($this->user)->create();
+        $response = $this->getJson('/api/customer/orders/' . $order->id);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => ['id', 'order_number', 'shipping_method'],
         ]);
     }
 
+    public function a_customer_can_see_orders()
+    {
+        $this->actingAs($this->user);
+        $response = $this->getJson('/api/customer/orders/');
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => ['id'],
+            ],
+        ]);
+    }
+
+    /** @test */
+    public function a_customer_only_see_own_orders()
+    {
+        $someOtherCustomer = User::factory()->create();
+        Order::factory()->for($someOtherCustomer)->create();
+
+        $this->actingAs($this->user);
+        $response = $this->getJson('/api/customer/orders/');
+
+        $response->assertOk();
+        $response->assertJsonCount(0, ['data']);
+    }
+
+    /** @test */
+    public function a_customer_cannot_see_order_by_another_customer()
+    {
+        $someOtherCustomer = User::factory()->create();
+        $order = Order::factory()->for($someOtherCustomer)->create();
+
+        $this->actingAs($this->user);
+        $response = $this->getJson('/api/customer/orders/' . $order->id);
+
+        $response->assertForbidden();
+    }
+
+    /** @test */
+    public function a_guest_cannot_see_orders()
+    {
+        $response = $this->getJson('/api/customer/orders/');
+
+        $response->assertUnauthorized();
+    }
 }

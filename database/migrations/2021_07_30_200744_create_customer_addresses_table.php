@@ -26,8 +26,6 @@ class CreateCustomerAddressesTable extends Migration
             $table->string('zip');
             $table->string('phone');
             $table->string('flat')->nullable();
-            $table->tinyInteger('is_default_shipping')->default(0);
-            $table->tinyInteger('is_default_billing')->default(0);
             $table->foreignId('country_id')->constrained();
             $table->timestamps();
         });

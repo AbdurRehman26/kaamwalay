@@ -16,7 +16,17 @@ class OrderAddress extends Model
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'address', 'city', 'state', 'zip', 'phone', 'flat', 'country_id'];
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'address',
+        'city',
+        'state',
+        'zip',
+        'phone',
+        'flat',
+        'country_id',
+    ];
 
     /**
      * The attributes that should be cast to native types.

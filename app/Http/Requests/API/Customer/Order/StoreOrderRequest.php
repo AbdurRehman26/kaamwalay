@@ -15,7 +15,7 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'payment_plan' => 'required|array',
-            'payment_plan.id' => 'required|integer',
+            'payment_plan.id' => 'required|integer|exists:payment_plans,id',
             'items' => 'required|array',
             'items.*.card_product' => 'required|array',
             'items.*.card_product.id' => 'required|integer',
@@ -40,10 +40,11 @@ class StoreOrderRequest extends FormRequest
             'billing_address.zip' => 'required|string',
             'billing_address.phone' => 'required|string',
             'billing_address.flat' => 'nullable|string',
+            'billing_address.same_as_shipping' => 'required|boolean',
             'shipping_method' => 'required|array',
-            'shipping_method.id' => 'required|integer',
+            'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
             'payment_method' => 'required|array',
-            'payment_method.id' => 'required|integer',
+            'payment_method.id' => 'required|integer|exists:payment_methods,id',
         ];
     }
 }

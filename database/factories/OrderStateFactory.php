@@ -23,7 +23,7 @@ class OrderStateFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'code' => $this->faker->firstName(),
             'description' => $this->faker->text,
         ];
     }

@@ -24,7 +24,8 @@ class OrderStatusFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'code' => $this->faker->firstName(),
+            'name' => $this->faker->firstName(),
             'description' => $this->faker->text,
             'order_state_id' => OrderState::factory(),
         ];

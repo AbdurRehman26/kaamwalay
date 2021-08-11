@@ -23,7 +23,8 @@ class CreateOrdersTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('payment_plan_id')->constrained();
             $table->foreignId('order_status_id')->constrained();
-            $table->foreignId('order_address_id')->constrained();
+            $table->foreignId('shipping_order_address_id')->constrained('order_addresses');
+            $table->foreignId('billing_order_address_id')->constrained('order_addresses');
             $table->foreignId('payment_method_id')->constrained();
             $table->foreignId('shipping_method_id')->constrained();
             $table->foreignId('invoice_id')->nullable();

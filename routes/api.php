@@ -38,7 +38,6 @@ Route::prefix('customer')->group(function () {
         Route::apiResource('addresses/states', StateController::class);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
-        Route::post('payment-cards/charge', [PaymentCardController::class, 'charge']);
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
 

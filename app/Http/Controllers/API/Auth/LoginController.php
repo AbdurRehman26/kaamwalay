@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Concerns\AGS\AuthenticatableWithAGS;
-use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\LoginRequest;
 use App\Http\Resources\API\Customer\User\UserResource;

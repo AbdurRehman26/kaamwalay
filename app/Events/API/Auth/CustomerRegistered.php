@@ -2,7 +2,6 @@
 
 namespace App\Events\API\Auth;
 
-use App\Http\Requests\API\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;

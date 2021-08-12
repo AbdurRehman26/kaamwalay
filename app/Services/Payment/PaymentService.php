@@ -16,4 +16,14 @@ class PaymentService
 
         throw new \Exception('Payment provider did not match.');
     }
+
+    public function verify(Order $order, string $paymentIntentId)
+    {
+        switch ($order->paymentMethod->code) {
+            case 'stripe':
+                return (new StripeService)->verify($order, $paymentIntentId);
+        }
+
+        throw new \Exception('Payment provider did not match.');
+    }
 }

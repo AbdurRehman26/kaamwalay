@@ -8,27 +8,23 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <style>
         @page {
-            margin: 0.9525cm 0.9525cm;
+            margin: 4.3cm 0.9525cm 3cm 0.9525cm;
         }
-        
+
         header {
             position: fixed;
-            top: 0px;
+            top: -113px;
             left: 0px;
             right: 0px;
         }
         footer {
-            position: fixed; 
-            bottom: 80px; 
-            left: 0px; 
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
             right: 0px;
             text-align: start;
         }
-        
-        main{
-            margin-top: 120px;
-            margin-bottom: 50px;
-        }
+
         body{
             font-family: 'Roboto';
             font-size: 13px;
@@ -57,7 +53,7 @@
             float:right;
             clear: right;
             text-align: center;
-            
+
         }
         .barcode img{
             width: 241px;
@@ -72,7 +68,6 @@
         }
 
         .general-info-section{
-            margin-top: 33px;
             width: 100%;
         }
         .general-info-holder{
@@ -139,7 +134,7 @@
             width: 24%;
             float: left;
         }
-        .info-box-header, .items-table .header-row td{
+        .info-box-header, .items-table .header-row th{
             background-color: black;
             color: white;
             font-weight: 500;
@@ -166,14 +161,14 @@
             border-spacing: 0;
             width:100%;
         }
-        .items-table .header-row td{
+        .items-table .header-row th{
             padding: 8px 0;
             text-align: left;
         }
-        .items-table .header-row td:first-child{
+        .items-table .header-row th:first-child{
             padding-left: 8px;
         }
-        .items-table .header-row td:last-child{
+        .items-table .header-row th:last-child{
             padding-right: 8px;
             text-align: right;
         }
@@ -181,6 +176,9 @@
             text-align: right;
         }
 
+        .items-table{
+            page-break-inside: always;
+        }
         .items-table .item-row td{
             padding: 25px 0;
             vertical-align: top;
@@ -194,9 +192,10 @@
             padding-right: 8px;
         }
         .items-table .item-row td.description{
-            line-height: 20px;
+            line-height: 16px;
         }
         .items-table .item-row td.description .item-name{
+            line-height: 14px;
             font-weight: 500;
         }
         .pr-10{
@@ -297,7 +296,7 @@
                             Customer ID:
                             <p class="customer-id">
                                 {{$customer->id}}
-                            </p> 
+                            </p>
                         </td>
                     </tr>
                 </tbody>
@@ -392,10 +391,10 @@
             <table class="items-table">
                 <tbody>
                     <tr class="header-row">
-                        <td>Card No.</td>
-                        <td>Description</td>
-                        <td>Qty</td>
-                        <td>Declared Value (USD)</td>
+                        <th>Card No.</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Declared Value (USD)</th>
                     </tr>
                     @foreach ($orderItems as $item)
                         <tr class="item-row">

@@ -60,7 +60,7 @@ class CreateOrderService
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
         $this->storeShippingFee();
-        $this->storeGrandTotal();
+        $this->storeShippingFeeAndGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
 
         DB::commit();
@@ -141,11 +141,10 @@ class CreateOrderService
         $this->order->save();
     }
 
-    protected function storeGrandTotal()
+    protected function storeShippingFeeAndGrandTotal()
     {
-        $serviceFee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
-
-        $this->order->grand_total = $serviceFee + $this->order->shipping_fee;
+        $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
+        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee;
         $this->order->save();
     }
 

@@ -89,7 +89,14 @@ export function NewSubmission() {
         dispatch(nextStep());
     };
 
-    const handleBack = () => {
+    const handleBack = async () => {
+        if (currentStep === 3) {
+            await dispatch(getShippingFee(selectedCards));
+            await dispatch(getStatesList());
+            await dispatch(getSavedAddresses());
+            dispatch(backStep());
+            return;
+        }
         dispatch(backStep());
     };
 

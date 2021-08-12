@@ -124,8 +124,8 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
                 <div className={classes.radioBtnContainer}>
                     <GreenRadio checked={isSelected} />
                 </div>
-                {methodId === 0 ? <ColoredCC /> : <PaypalLogo />}
-                {methodId === 0 ? (
+                {methodId === 1 ? <ColoredCC /> : <PaypalLogo />}
+                {methodId === 1 ? (
                     <div className={classes.rightSide}>
                         <Typography variant={'subtitle2'} className={classes.levelTitle}>
                             {methodName}

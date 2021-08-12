@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Customer\Order\OrderController;
+use App\Http\Controllers\API\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\Customer\Order\ShippingMethodController;
@@ -11,6 +12,8 @@ use App\Http\Controllers\API\Customer\Address\StateController;
 use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\PaymentCardController;
 use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
+use App\Http\Controllers\API\Auth\ForgotPasswordController;
+use App\Http\Controllers\API\Auth\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +28,8 @@ use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class, 'login'])->middleware('guest');
     Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
+    Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('password/reset', [ResetPasswordController::class, 'reset']);
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 
@@ -44,6 +49,8 @@ Route::prefix('customer')->group(function () {
             Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
             Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
             Route::get('{order}', [OrderController::class, 'show']);
+            Route::post('{order}/payments', [OrderPaymentController::class, 'pay']);
+            Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::apiResource('/', OrderController::class)
                 ->only(['index', 'store']);
         });

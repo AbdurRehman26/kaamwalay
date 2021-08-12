@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Payment\InvoiceService;
 
 class StripeService implements PaymentProviderServiceInterface
 {
@@ -49,6 +50,8 @@ class StripeService implements PaymentProviderServiceInterface
                 'response' => json_encode($response->toArray()),
             ]);
 
+            InvoiceService::saveInvoicePDF($order);
+
             return new JsonResponse([
                 'success' => true,
                 'data' => $response,
@@ -81,6 +84,8 @@ class StripeService implements PaymentProviderServiceInterface
             && $charge->outcome->type === 'authorized'
         ) {
             $order->markAsPlaced();
+
+            InvoiceService::saveInvoicePDF($order);
 
             return new JsonResponse([
                 'message' => 'Payment verified successfully',

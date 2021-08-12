@@ -78,6 +78,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'message' => 'Payment verified successfully',
             ], Response::HTTP_OK);
         }
+
         return new JsonResponse([
             'message' => 'Payment could not be verified.',
         ], Response::HTTP_BAD_REQUEST);

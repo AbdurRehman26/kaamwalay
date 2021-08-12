@@ -107,4 +107,17 @@ class Order extends Model
     {
         return $query->where('user_id', $user->id);
     }
+
+    public function isPayable(): bool
+    {
+        return $this->orderStatus->code === 'pending_payment';
+    }
+
+    public function markAsPlaced(): self
+    {
+        $this->order_status_id = 2;
+        $this->save();
+
+        return $this;
+    }
 }

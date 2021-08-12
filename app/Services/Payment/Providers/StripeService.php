@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\Payment\Providers;
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Symfony\Component\HttpFoundation\Response;
 
-class StripeService
+class StripeService implements PaymentProviderServiceInterface
 {
     public function createSetupIntent(): \Stripe\SetupIntent
     {
@@ -17,18 +18,16 @@ class StripeService
         return $user->createSetupIntent(['customer' => $user->stripe_id]);
     }
 
-    // this is a test API to ensure the integration is in place and working.
-    // once we have the submission API with all of its flows then this
-    //part can be incorporated in that API.
-    public function charge()
+    public function charge(Order $order)
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = auth()->user();
 
         try {
-            $response = $user->charge(123, request('payment_method_id'));
+            $response = $user->charge(
+                $order->grand_total,
+                $order->orderPayment->payment_provider_reference_id
+            );
 
             return new JsonResponse([
                 'success' => true,

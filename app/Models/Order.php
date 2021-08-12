@@ -105,4 +105,9 @@ class Order extends Model
     {
         return $query->where('user_id', $user->id);
     }
+
+    public function isPayable(): bool
+    {
+        return $this->orderStatus->code === 'pending_payment';
+    }
 }

@@ -13,9 +13,10 @@ class AGSServiceTest extends TestCase
      * @test
      * @group services
      */
-    public function ensure_ags_service_is_up()
+    public function check_if_service_is_enabled()
     {
-        $response = Http::get(Str::replace('/api/', '', config('services.ags.base_url')));
-        $this->assertTrue($response->status() === 200);
+        config(['services.ags.is_platform_enabled' => true]);
+        $ags = new AGS();
+        $this->assertTrue($ags->isEnabled());
     }
 }

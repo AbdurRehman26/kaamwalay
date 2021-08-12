@@ -112,4 +112,17 @@ class Order extends Model
     public function getDateAttribute(){
         return Carbon::parse($this->created_at)->format('m/d/Y');
     }
+
+    public function isPayable(): bool
+    {
+        return $this->orderStatus->code === 'pending_payment';
+    }
+
+    public function markAsPlaced(): self
+    {
+        $this->order_status_id = 2;
+        $this->save();
+
+        return $this;
+    }
 }

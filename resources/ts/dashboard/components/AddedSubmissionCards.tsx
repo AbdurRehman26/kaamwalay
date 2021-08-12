@@ -13,6 +13,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import React from 'react';
 import NumberFormat from 'react-number-format';
 
+import { useNotifications } from '@shared/hooks/useNotifications';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     changeSelectedCardQty,
@@ -127,7 +129,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const classes = useStyles();
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
-
+    const notifications = useNotifications();
     const { reviewMode } = props;
 
     function onDeselectCard(row: SearchResultItemCardProps) {
@@ -135,11 +137,19 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     }
 
     function onChangeCardQty(card: SearchResultItemCardProps, qty: number) {
-        dispatch(changeSelectedCardQty({ card, qty }));
+        if (qty >= 1) {
+            dispatch(changeSelectedCardQty({ card, qty }));
+        } else {
+            notifications.warning("Card's quantity can not be less than 1", 'Warning');
+        }
     }
 
     function onChangeCardValue(card: SearchResultItemCardProps, newValue: number) {
-        dispatch(changeSelectedCardValue({ card, newValue }));
+        if (newValue > 0) {
+            dispatch(changeSelectedCardValue({ card, newValue }));
+        } else {
+            notifications.warning("Card's value can not be less than $1", 'Warning');
+        }
     }
 
     if (selectedCards.length === 0) {

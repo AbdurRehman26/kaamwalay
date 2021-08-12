@@ -26,6 +26,7 @@ class OrderResource extends JsonResource
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),
             'billing_address' => new OrderAddressResource($this->billingAddress),
+            'order_payment' => new OrderPaymentResource($this->orderPayment),
             'order_items' => new OrderItemCollection($this->orderItems),
         ];
     }

@@ -23,8 +23,29 @@ Route::get('/auth{path}', [AuthController::class, 'getView'])->where(['path' => 
 Route::get('/dashboard{path}', [DashboardController::class, 'getView'])->where(['path' => '.*'])->name('dashboard.main');
 
 Route::get('/invoice', function(Request $request){
-    $logoContent = file_get_contents(storage_path('app/public/images/invoiceLogo.svg'));
-    $logoData = 'data:image/svg+xml;base64, '.base64_encode($logoContent);
+    $logoContent = file_get_contents(storage_path('app/public/images/invoiceLogo.png'));
+    $logoData = 'data:image/png;base64,'.base64_encode($logoContent);
 
-    return view('pdf.invoice',compact('logoData'));
+    $agsLogoContent = file_get_contents(storage_path('app/public/images/agsLogo.png'));
+    $agsLogo = 'data:image/png;base64,'.base64_encode($agsLogoContent);
+
+    return view('pdf.invoice',compact('logoData','agsLogo'));
+});
+
+Route::get('/invoice2', function(Request $request){
+    $logoContent = file_get_contents(storage_path('app/public/images/invoiceLogo.png'));
+    $logoData = 'data:image/png;base64,'.base64_encode($logoContent);
+
+    $agsLogoContent = file_get_contents(storage_path('app/public/images/agsLogo.png'));
+    $agsLogo = 'data:image/png;base64,'.base64_encode($agsLogoContent);
+
+    $data = [
+        'logoData' => $logoData,
+        'agsLogo' => $agsLogo,
+    ];
+    $pdf = PDF::loadView('pdf.invoice',$data);
+    $pdf->setPaper('A4');
+    return $pdf->stream();
+    // return $pdf->download('test.pdf');
+
 });

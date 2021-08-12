@@ -71,20 +71,16 @@
             width: 100%;
         }
         .general-info-holder{
-            /* float: left; */
-            /* width: 50%; */
             width: 40%;
             vertical-align: top;
         }
         .customer-id-holder{
-            /* float: left; */
             width: 20%;
             text-align: right;
             vertical-align: bottom;
         }
         .info-list-table, .info-list-table .dt, .info-list-table .dd{
             width: 50%;
-            /* float: left; */
             margin: 2px 0;
             line-height: 18px;
         }
@@ -95,9 +91,6 @@
             width: 100%;
         }
         .customer-info-list-table{
-            /* float: right; */
-            /* width: 50%; */
-
             width: 100%;
             margin: 2px 0;
             line-height: 18px;
@@ -105,9 +98,6 @@
 
         .info-list-table .dt, .customer-info-list-table .dt{
             font-weight: 500;
-        }
-        .customer-info-list-table{
-            /* clear:right; */
         }
         .customer-info-list-table .dt{
             margin: 0;
@@ -203,10 +193,6 @@
         }
         .info-box-content table{
             width: 100%;
-        }
-        .info-line{
-            /* display: flex;
-            flex-direction: row; */
         }
         .info-line .info-title{
             width: 83.5%;

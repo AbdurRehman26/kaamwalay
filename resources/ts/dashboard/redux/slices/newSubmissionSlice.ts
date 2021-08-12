@@ -473,6 +473,7 @@ export const newSubmissionSlice = createSlice({
             state.step04Data.selectedBillingAddress.lastName = action.payload.billing_address.last_name;
             state.step04Data.selectedBillingAddress.flat = action.payload.billing_address.flat;
             state.step04Data.selectedBillingAddress.id = action.payload.billing_address.id;
+            state.step04Data.selectedCreditCard.expMonth = action.payload.order_payment.card.exp_month;
             state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billing_address.phone;
             state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
                 (currentState: any) => currentState.code === action.payload.billing_address.state,

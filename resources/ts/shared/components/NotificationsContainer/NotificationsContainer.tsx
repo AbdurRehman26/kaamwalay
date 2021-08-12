@@ -14,8 +14,11 @@ export function NotificationsContainer() {
 
     const handleClose = useCallback(() => {
         setActive((previous) => {
-            close(previous!);
-            return previous!.withWait();
+            if (previous) {
+                close(previous);
+                return previous.withWait();
+            }
+            return null;
         });
     }, [close, setActive]);
 

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
 
-import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
+import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
 import { newSubmission } from '@dashboard/redux/slices/index';
@@ -192,7 +191,7 @@ const initialState: NewSubmissionSliceState = {
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
-    const apiService = resolveInjectable(APIService);
+    const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
     const serviceLevels = await endpoint.get('');
     return serviceLevels.data.map((serviceLevel: any) => ({
@@ -205,7 +204,7 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
 });
 
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
-    const apiService = resolveInjectable(APIService);
+    const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses/states');
     const americanStates = await endpoint.get('');
     return americanStates.data;
@@ -214,7 +213,7 @@ export const getStatesList = createAsyncThunk('newSubmission/getStatesList', asy
 export const getShippingFee = createAsyncThunk(
     'newSubmission/getShippingFee',
     async (selectedCards: SearchResultItemCardProps[]) => {
-        const apiService = resolveInjectable(APIService);
+        const apiService = app(APIService);
         const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
         const DTO = {
             items: selectedCards.map((item) => ({
@@ -229,7 +228,7 @@ export const getShippingFee = createAsyncThunk(
 
 export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
     const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
-    const apiService = resolveInjectable(APIService);
+    const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses');
     const customerAddresses = await endpoint.get('');
     const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
@@ -314,7 +313,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             id: currentSubmission.step04Data.selectedCreditCard.id,
         },
     };
-    const apiService = resolveInjectable(APIService);
+    const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
@@ -455,7 +454,7 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.availableStatesList = action.payload;
             state.step03Data.fetchingStatus = 'success';
         },
-        [getStatesList.rejected as any]: (state, action) => {
+        [getStatesList.rejected as any]: (state) => {
             state.step03Data.fetchingStatus = 'failed';
         },
         [getShippingFee.fulfilled as any]: (state, action) => {

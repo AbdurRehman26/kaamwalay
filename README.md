@@ -79,7 +79,7 @@ For cloud storage on local, we use MinIO. MinIO provides an S3 compatible API th
 It is already setup with Sail. If you need to see uploaded files you can visit:
 
 ```
-http://127.0.0.1:8900
+http://robograding.test:8900
 Username: sail 
 Password: password
 ```

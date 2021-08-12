@@ -156,7 +156,7 @@ function SubmissionSummary() {
     const apiService = useInjectable(APIService);
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
-
+    const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -293,7 +293,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
                                     <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice + 14.0}
+                                        value={grandTotal}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

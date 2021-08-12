@@ -37,8 +37,7 @@ class StripeService implements PaymentProviderServiceInterface
                 ]
             );
 
-            $order->order_status_id = 2;
-            $order->save();
+            $order->markAsPlaced();
 
             return new JsonResponse([
                 'success' => true,
@@ -71,8 +70,7 @@ class StripeService implements PaymentProviderServiceInterface
             $charge->amount == ($order->grand_total * 100)
             && $charge->outcome->type === 'authorized'
         ) {
-            $order->order_status_id = 2;
-            $order->save();
+            $order->markAsPlaced();
 
             return new JsonResponse([
                 'message' => 'Payment verified successfully',

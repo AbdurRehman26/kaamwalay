@@ -110,4 +110,12 @@ class Order extends Model
     {
         return $this->orderStatus->code === 'pending_payment';
     }
+
+    public function markAsPlaced(): self
+    {
+        $this->order_status_id = 2;
+        $this->save();
+
+        return $this;
+    }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Services\PDFService;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +44,8 @@ Route::get('/invoice2', function(Request $request){
         'logoData' => $logoData,
         'agsLogo' => $agsLogo,
     ];
-    $pdf = PDF::loadView('pdf.invoice',$data);
-    $pdf->setPaper('A4');
+
+    $pdf = PDFService::generate('pdf.invoice',$data);
     return $pdf->stream();
     // return $pdf->download('test.pdf');
 

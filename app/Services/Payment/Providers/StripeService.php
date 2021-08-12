@@ -44,7 +44,7 @@ class StripeService implements PaymentProviderServiceInterface
             );
 
             $order->markAsPlaced();
-            $order->paymentMethod->update([
+            $order->orderPayment->update([
                 'request' => json_encode($paymentData),
                 'response' => json_encode($response->toArray()),
             ]);

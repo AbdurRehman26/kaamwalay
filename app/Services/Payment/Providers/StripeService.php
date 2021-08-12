@@ -4,11 +4,11 @@ namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
 use App\Models\User;
+use App\Services\Payment\InvoiceService;
 use Illuminate\Http\JsonResponse;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\Payment\InvoiceService;
 
 class StripeService implements PaymentProviderServiceInterface
 {

@@ -4,7 +4,6 @@ namespace App\Services\Order;
 
 use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Models\CustomerAddress;
-use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
@@ -160,5 +159,4 @@ class CreateOrderService
             'payment_provider_reference_id' => $data['id'],
         ]);
     }
-
 }

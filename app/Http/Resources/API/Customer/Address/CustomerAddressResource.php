@@ -20,13 +20,12 @@ class CustomerAddressResource extends JsonResource
             'user_id' => $this->user_id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'address' => $this->city,
+            'address' => $this->address,
+            'city' => $this->city,
             'state' => $this->state,
             'zip' => $this->zip,
             'phone' => $this->phone,
             'flat' => $this->flat,
-            'is_default_shipping' => $this->is_default_shipping,
-            'is_default_billing' => $this->is_default_billing,
             'country' => new CountryResource($this->country),
         ];
     }

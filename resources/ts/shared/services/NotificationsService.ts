@@ -4,7 +4,7 @@ import { Injectable } from '@shared/decorators/Injectable';
 import { enqueueNotification } from '@shared/redux/slices/notificationsSlice';
 import { GlobalDispatch } from '@shared/redux/store';
 
-@Injectable()
+@Injectable('NotificationsService')
 export class NotificationsService {
     private static notify(type: NotificationType, message: string, title: string = '') {
         GlobalDispatch(enqueueNotification(new NotificationItem(type, message, title)));

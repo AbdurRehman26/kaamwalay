@@ -23,9 +23,9 @@ class PaymentPlanFactory extends Factory
     public function definition()
     {
         return [
-            'price' => $this->faker->randomFloat(2, 10, 99999999.99),
-            'max_protection_amount' => $this->faker->randomFloat(2, 10, 99999999.99),
-            'turnaround' => $this->faker->word,
+            'price' => $this->faker->numberBetween(20, 5000),
+            'max_protection_amount' => $this->faker->numberBetween(500, 10000),
+            'turnaround' => $this->faker->numberBetween(1, 30) . ' Day Turnaround',
             'display_position' => $this->faker->numberBetween(1, 8),
         ];
     }

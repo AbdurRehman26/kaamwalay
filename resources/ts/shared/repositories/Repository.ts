@@ -6,7 +6,7 @@ import { Injectable } from '@shared/decorators/Injectable';
 import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
 import { APIService } from '@shared/services/APIService';
 
-@Injectable()
+@Injectable('Repository')
 export abstract class Repository<T> {
     protected abstract readonly endpointPath: string;
     protected abstract readonly model: ClassConstructor<T>;

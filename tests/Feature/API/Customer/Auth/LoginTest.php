@@ -87,4 +87,15 @@ class LoginTest extends TestCase
         $response->assertJsonPath('data.user.email', $user->email);
         $response->assertJsonPath('data.user.id', $user->id);
     }
+
+    /** @test */
+    public function a_logged_in_customer_cannot_login()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->postJson('api/auth/login');
+        $response->assertRedirect();
+    }
 }

@@ -24,7 +24,7 @@ class StateFactory extends Factory
     {
         return [
             'code' => $this->faker->word(),
-            'name' => $this->faker->name(),
+            'name' => $this->faker->state,
         ];
     }
 }

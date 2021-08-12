@@ -54,7 +54,7 @@ export function PaymentForm() {
     const apiService = useInjectable(APIService);
 
     const saveExistingStripeCards = async () => {
-        const endpoint = apiService.createEndpoint('customer/payment-methods');
+        const endpoint = apiService.createEndpoint('customer/payment-cards');
         try {
             setIsCardsListLoading(true);
             const existingStripeCardsForCustomer = await endpoint.get('');
@@ -90,7 +90,7 @@ export function PaymentForm() {
     };
 
     const handleSaveCard = async () => {
-        const endpoint = apiService.createEndpoint('customer/payment-methods/setup');
+        const endpoint = apiService.createEndpoint('customer/payment-cards/setup');
         if (!stripe || !elements) {
             // Stripe.js has not yet loaded.
             // Make sure to disable submission until it loaded ;).

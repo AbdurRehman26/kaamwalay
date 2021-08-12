@@ -26,7 +26,7 @@ class OrderController extends Controller
         return new OrderCollection(
             Order::forUser(auth()->user())
                 ->latest()
-                ->paginate()
+                ->paginate(request('per_page'))
         );
     }
 

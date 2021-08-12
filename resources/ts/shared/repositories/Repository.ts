@@ -3,7 +3,7 @@ import { ClassConstructor, ClassTransformOptions, plainToClass } from 'class-tra
 
 import { PaginatedData } from '@shared/classes/PaginatedData';
 import { Injectable } from '@shared/decorators/Injectable';
-import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
+import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
 @Injectable('Repository')
@@ -14,7 +14,7 @@ export abstract class Repository<T> {
     private _endpoint!: AxiosInstance;
 
     constructor() {
-        this.apiService = resolveInjectable(APIService);
+        this.apiService = app(APIService);
     }
 
     protected get endpoint() {
@@ -24,13 +24,16 @@ export abstract class Repository<T> {
         return this._endpoint;
     }
 
-    public async list<R>(config?: AxiosRequestConfig, transformModel?: ClassConstructor<R>): Promise<PaginatedData<R>> {
-        let { data } = await this.endpoint.get('', config);
-        if (!(data?.meta && data?.links && data?.data)) {
-            data = { data };
+    public static callMethod<T extends Repository<any>, K extends keyof T>(
+        repository: T,
+        method: K,
+        ...args: T[K] extends (...args: infer P) => any ? P : never
+    ) {
+        if (typeof repository[method] === 'function') {
+            return (repository[method] as any)(...(args ?? []));
+        } else {
+            throw new Error(`Undefined method '${method}' on repository '${(repository as any)?.name || 'Unknown'}'`);
         }
-        data.data = this.toEntities(data.data, null, transformModel);
-        return plainToClass(PaginatedData, data) as any;
     }
 
     public async listAll<R = T>(config?: AxiosRequestConfig, transformModel?: ClassConstructor<R>): Promise<R[]> {
@@ -97,5 +100,17 @@ export abstract class Repository<T> {
         transformModel?: ClassConstructor<R>,
     ): R[] {
         return plainToClass((transformModel || this.model) as ClassConstructor<R>, data, options || {});
+    }
+
+    public async list<R = T>(
+        config?: AxiosRequestConfig,
+        transformModel?: ClassConstructor<R>,
+    ): Promise<PaginatedData<R>> {
+        let { data } = await this.endpoint.get('', config);
+        if (!(data?.meta && data?.links && data?.data)) {
+            data = { data: data };
+        }
+
+        return PaginatedData.from(this.toEntities(data.data, null, transformModel), data.links, data.meta) as any;
     }
 }

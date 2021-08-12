@@ -36,6 +36,9 @@ export class OrderEntity extends Entity {
     @Field('shipping_fee')
     public shippingFee!: number;
 
+    @Field('service_fee')
+    public serviceFee!: number;
+
     @Field('payment_plan', { type: () => PaymentPlanEntity })
     public paymentPlan!: PaymentPlanEntity;
 

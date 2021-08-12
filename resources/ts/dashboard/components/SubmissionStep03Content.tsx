@@ -390,7 +390,7 @@ export function SubmissionStep03Content() {
                                             }}
                                         />
                                     </div>
-                                    <div className={classes.fieldContainer} style={{ width: '18%', marginTop: '4px' }}>
+                                    <div className={classes.fieldContainer} style={{ width: '18%' }}>
                                         <Typography className={classes.methodDescription}>Apt # (optional)</Typography>
                                         <TextField
                                             style={{ margin: 8, marginLeft: 0 }}
@@ -427,7 +427,7 @@ export function SubmissionStep03Content() {
                                             }}
                                         />
                                     </div>
-                                    <div className={classes.fieldContainer} style={{ width: '32%', marginTop: '4px' }}>
+                                    <div className={classes.fieldContainer} style={{ width: '32%', marginTop: '6px' }}>
                                         <Typography className={classes.methodDescription}>State</Typography>
                                         <Select
                                             fullWidth

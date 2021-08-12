@@ -20,6 +20,7 @@ class OrderCreateResource extends JsonResource
             'billing_address' => new OrderAddressResource($this->billingAddress),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),
+            'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
         ];

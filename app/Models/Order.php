@@ -18,6 +18,7 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'shipping_fee',
+        'service_fee',
         'grand_total',
         'user_id',
         'payment_plan_id',
@@ -38,6 +39,7 @@ class Order extends Model
     protected $casts = [
         'id' => 'integer',
         'shipping_fee' => 'float',
+        'service_fee' => 'float',
         'grand_total' => 'float',
         'user_id' => 'integer',
         'payment_plan_id' => 'integer',
@@ -104,5 +106,18 @@ class Order extends Model
     public function scopeForUser(Builder $query, User $user): Builder
     {
         return $query->where('user_id', $user->id);
+    }
+
+    public function isPayable(): bool
+    {
+        return $this->orderStatus->code === 'pending_payment';
+    }
+
+    public function markAsPlaced(): self
+    {
+        $this->order_status_id = 2;
+        $this->save();
+
+        return $this;
     }
 }

@@ -158,7 +158,7 @@ const initialState: NewSubmissionSliceState = {
         useCustomShippingAddress: false,
     },
     step04Data: {
-        paymentMethodId: 0,
+        paymentMethodId: 1,
         existingCreditCards: [],
         availableStatesList: [],
         selectedCreditCard: {
@@ -246,7 +246,7 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             isDefaultBilling: address.is_default_billing,
             // Doing this because the back-end can't give me this full object for the state
             // so I'll just search for the complete object inside the existing states
-            state: availableStatesList.find((item: any) => item.name === address.state),
+            state: availableStatesList.find((item: any) => item.code === address.state),
             country: {
                 id: address.country.id,
                 code: address.country.code,
@@ -254,8 +254,6 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             },
         };
     });
-
-    console.log(formattedAddresses);
     return formattedAddresses;
 });
 
@@ -290,7 +288,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             phone: finalShippingAddress.phoneNumber,
             flat: finalShippingAddress.flat,
             save_for_later:
-                currentSubmission.step03Data.selectedExistingAddress.id !== 0
+                currentSubmission.step03Data.selectedExistingAddress.id !== -1
                     ? false
                     : currentSubmission.step03Data.saveForLater,
         },
@@ -309,7 +307,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             id: 1,
         },
         payment_method: {
-            id: 1,
+            id: currentSubmission.step04Data.paymentMethodId,
         },
         payment_provider_reference: {
             id: currentSubmission.step04Data.selectedCreditCard.id,
@@ -491,22 +489,6 @@ export const newSubmissionSlice = createSlice({
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
                 (plan) => plan.id === action.payload.payment_plan.id,
             ) as any;
-            state.step03Data[
-                state.step03Data.selectedExistingAddress.id !== -1 ? 'selectedExistingAddress' : 'selectedAddress'
-            ] = {
-                address: action.payload.shipping_address.address,
-                country: action.payload.shipping_address.country,
-                firstName: action.payload.shipping_address.first_name,
-                flat: action.payload.shipping_address.flat,
-                id: action.payload.shipping_address.id,
-                lastName: action.payload.shipping_address.last_name,
-                phoneNumber: action.payload.shipping_address.phone,
-                state: state.step03Data.availableStatesList.find(
-                    (currentState: any) => currentState.code === action.payload.shipping_address.state,
-                ) as any,
-                zipCode: action.payload.shipping_address.zip,
-                city: action.payload.shipping_address.city,
-            };
         },
         [createOrder.rejected as any]: (state, action) => {
             console.log(action.payload);

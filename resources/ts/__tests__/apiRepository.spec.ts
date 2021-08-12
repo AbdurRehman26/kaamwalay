@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import { PaginatedData } from '@shared/classes/PaginatedData';
 import { Injectable } from '@shared/decorators/Injectable';
 import { Entity } from '@shared/entities/Entity';
-import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
+import { app } from '@shared/lib/app';
 import { Repository } from '@shared/repositories/Repository';
 
 class Bar extends Entity {}
@@ -16,7 +16,7 @@ class Foo extends Repository<Bar> {
 
 describe('API Repositories', () => {
     it('should correctly send list request', async () => {
-        const foo = resolveInjectable(Foo);
+        const foo = app(Foo);
 
         const data = await foo.list();
         expect(data).toBeDefined();

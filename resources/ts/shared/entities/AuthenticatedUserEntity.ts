@@ -1,11 +1,10 @@
-import { Expose, Type } from 'class-transformer';
-
+import { Field } from '../decorators/Field';
 import { UserEntity } from './UserEntity';
 
 export class AuthenticatedUserEntity {
-    @Type()
+    @Field()
     public user!: UserEntity;
 
-    @Expose({ name: 'access_token' })
+    @Field('access_token')
     public accessToken!: string;
 }

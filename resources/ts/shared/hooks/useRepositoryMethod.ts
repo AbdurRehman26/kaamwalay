@@ -7,12 +7,12 @@ import useSWR, { SWRResponse } from 'swr';
 import { useRepository } from '@shared/hooks/useRepository';
 import { Repository } from '@shared/repositories/Repository';
 
-type RepositoryKeys<T extends Repository<any>> = keyof Omit<
+export type RepositoryKeys<T extends Repository<any>> = keyof Omit<
     T,
     'toEntities' | 'toEntity' | 'model' | 'apiService' | 'endpoint' | '_endpoint' | 'endpointPath'
 >;
 
-type PromiseValue<T> = T extends Promise<infer P> ? P : unknown;
+export type PromiseValue<T> = T extends Promise<infer P> ? P : unknown;
 
 export function useRepositoryMethod<
     T extends Repository<any>,
@@ -32,17 +32,10 @@ export function useRepositoryMethod<
         return `${classDefinition.name}@${method}/${argsHash}`;
     }, [options]);
 
-    const fetcher = useCallback((): any => {
-        if (repository[method]) {
-            const methodFunc = repository[method];
-            if (typeof methodFunc === 'function') {
-                const caller = methodFunc.bind(repository);
-                return caller(...(options?.args ?? []));
-            } else {
-                throw new Error(`Undefined method '${method}' on repository '${classDefinition.name}'`);
-            }
-        }
-    }, [key]);
+    const fetcher = useCallback(
+        (): any => Repository.callMethod(repository, method, ...((options?.args as any) || [])),
+        [key],
+    );
 
     return useSWR(key, fetcher);
 }

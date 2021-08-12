@@ -2,23 +2,25 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import PrintIcon from '@material-ui/icons/Print';
-import { useParams } from 'react-router-dom';
 
 import { useViewSubmissionHeaderStyles } from './styles';
+
+interface ViewSubmissionHeaderProps {
+    orderNumber: string;
+}
 
 /**
  * @parent ViewSubmissionHeader
  * @private
  * @constructor
  */
-export function ViewSubmissionHeader() {
-    const params = useParams<{ id: string }>();
+export function ViewSubmissionHeader({ orderNumber }: ViewSubmissionHeaderProps) {
     const classes = useViewSubmissionHeaderStyles();
     return (
         <Grid container alignItems={'center'} className={classes.root}>
             <Grid item xs>
                 <Typography variant={'h5'}>
-                    Submission <i>#</i> <b>{params.id}</b>
+                    Submission <i>#</i> <b>{orderNumber}</b>
                 </Typography>
             </Grid>
 

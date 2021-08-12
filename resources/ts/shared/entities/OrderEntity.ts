@@ -18,8 +18,8 @@ export class OrderEntity extends Entity {
     @Type()
     public customer!: UserEntity;
 
-    @Type(() => OrderItemEntity)
-    public items!: OrderItemEntity[];
+    @Field('order_items', () => OrderItemEntity)
+    public orderItems!: OrderItemEntity[];
 
     @Field('order_number')
     public orderNumber!: string;
@@ -53,6 +53,9 @@ export class OrderEntity extends Entity {
 
     @Field('billing_address')
     public billingAddress!: AddressEntity;
+
+    @Field('service_level')
+    public serviceLevel!: string;
 
     @DateField('arrived_at')
     public arrivedAt!: Date;

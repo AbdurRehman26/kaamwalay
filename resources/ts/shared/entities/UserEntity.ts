@@ -25,7 +25,7 @@ export class UserEntity extends Entity {
     @Type(() => RoleEntity)
     public roles!: RoleEntity[];
 
-    getFullName() {
+    public getFullName() {
         return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
     }
 }

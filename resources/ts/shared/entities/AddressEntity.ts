@@ -3,19 +3,32 @@ import { CountryEntity } from './CountryEntity';
 import { Entity } from './Entity';
 
 export class AddressEntity extends Entity {
-    public address!: number;
-    public city!: number;
-    public state!: number;
-    public zip!: number;
-    public phone!: number;
-    public flat!: number;
+    public address!: string;
+    public city!: string;
+    public state!: string;
+    public zip!: string;
+    public phone!: string;
+    public flat!: string;
 
     @Field('first_name')
-    public firstName!: number;
+    public firstName!: string;
 
     @Field('last_name')
-    public lastName!: number;
+    public lastName!: string;
 
     @Field()
     public country!: CountryEntity;
+
+    public getFullName() {
+        return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
+    }
+
+    public getAddressLine2() {
+        const lines = [this.city, `${this.state ?? ''} ${this.zip ?? ''}`, this.country.code];
+        return lines.map((line) => `${line ?? ''}`.trim()).filter(Boolean);
+    }
+
+    public getAddress() {
+        return this.address;
+    }
 }

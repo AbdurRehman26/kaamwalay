@@ -19,6 +19,7 @@ class OrderResource extends JsonResource
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
             'grand_total' => $this->grand_total,
+            'status' => $this->orderStatus->name ?? null,
             'shipping_fee' => $this->shipping_fee,
             'created_at' => Carbon::parse($this->created_at)->toDate(),
             'customer' => new UserResource($this->user),

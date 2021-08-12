@@ -7,12 +7,31 @@
     <title>Submission Invoice</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <style>
-        html{
-            margin: 36px;
+        @page {
+            margin: 0.9525cm 0.9525cm;
+        }
+        
+        header {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+        }
+        footer {
+            position: fixed; 
+            bottom: 80px; 
+            left: 0px; 
+            right: 0px;
+            text-align: start;
+        }
+        
+        main{
+            margin-top: 120px;
+            margin-bottom: 50px;
         }
         body{
             font-family: 'Roboto';
-            font-size: 14px;
+            font-size: 13px;
             margin: 0;
         }
         .heading,.general-info-section,.order-details-section,.order-items-section, .total-declared-section{
@@ -45,11 +64,11 @@
             height: 45px;
         }
         .barcode span{
-            font-family: 'DDT';
-            font-size: 45px;
+            font-family: 'Roboto';
+            font-size: 30px;
             font-weight: bold;
-            line-height: 50px;
             margin: 0;
+            line-height: 20px;
         }
 
         .general-info-section{
@@ -59,12 +78,12 @@
         .general-info-holder{
             /* float: left; */
             /* width: 50%; */
-            width: 25%;
+            width: 40%;
             vertical-align: top;
         }
         .customer-id-holder{
             /* float: left; */
-            width: 50%;
+            width: 20%;
             text-align: right;
             vertical-align: bottom;
         }
@@ -104,10 +123,10 @@
             width: 66%;
         }
         .customer-id{
-            font-family: 'DDT';
+            font-family: 'Roboto';
             font-size: 30px;
             font-weight: 700;
-            line-height: 36px;
+            line-height: 30px;
             letter-spacing: 0.2px;
             margin: 0;
         }
@@ -117,7 +136,7 @@
             width: 100%;
         }
         .order-details-section .info-box{
-            width: 23.5%;
+            width: 24%;
             float: left;
         }
         .info-box-header, .items-table .header-row td{
@@ -142,7 +161,7 @@
             margin-left: 5px;
         }
         .items-table{
-            margin-top: 90px;
+            margin-top: 50px;
 
             border-spacing: 0;
             width:100%;
@@ -180,11 +199,8 @@
         .items-table .item-row td.description .item-name{
             font-weight: 500;
         }
-        .pr-20{
-            padding-right: 20px;
-        }
-        .pl-20{
-            padding-left: 20px;
+        .pr-10{
+            padding-right: 10px;
         }
         .info-box-content table{
             width: 100%;
@@ -197,252 +213,22 @@
             width: 83.5%;
         }
 
-
-        footer {
-            position: fixed; 
-            bottom: 80px; 
-            left: 0px; 
-            right: 0px;
-            text-align: start;
-
-        }
     </style>
 </head>
 <body>
-    <div class="heading">
+    <header class="heading">
         <div class="logo">
             <img src="{{$logoData}}"/>
 
         </div>
         <div class="barcode">
             <div class="barcode-container">
-                <img src="data:image/png;base64, {!! DNS1D::getBarcodePNG('RG290183', 'C128') !!}" />
+                <img src="data:image/png;base64, {!! DNS1D::getBarcodePNG('{{$order->order_number}}', 'C128') !!}" />
                 <br/>
-                <span>RG290183</span>
+                <span>{{$order->order_number}}</span>
             </div>
         </div>
-    </div>
-    <div class="general-info-section">
-        <table style="width: 100%;">
-            <tbody>
-                <tr>
-                    <td class="general-info-holder">
-                        <table class="info-list-table">
-                            <tbody>
-                                <tr>
-                                    <td class="dt">Submission #:</td>
-                                    <td class="dd">RG290183</td>
-                                </tr>
-                                <tr>
-                                    <td class="dt">Service level:</td>
-                                    <td class="dd">$20 / Card</td>
-                                </tr>
-                                <tr>
-                                    <td class="dt">No. of Cards: </td>
-                                    <td class="dd">1</td>
-                                </tr>
-                                <tr>
-                                    <td class="dt">Shipping Method:</td>
-                                    <td class="dd">Insured</td>
-                                </tr>
-                                <tr>
-                                    <td class="dt">Date:</td>
-                                    <td class="dd">8/24/2021</td>
-                                </tr>
-                                <tr>
-                                    <td class="dt">Declared Value:</td>
-                                    <td class="dd">$400.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td class="general-info-holder" >
-                        <table class="customer-info-list-table">
-                            <tbody>
-                                <tr>
-                                    <td class="dt">Customer:</td>
-                                    <td class="dd">
-                                        James Smith
-                                        jsmith@email.com
-                                        (718) 999-1910
-                                        Customer ID: C925486
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td class="customer-id-holder">
-                        Customer ID:
-                        <p class="customer-id">
-                            C925486
-                        </p> 
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        {{-- <div class="general-info-holder">
-            <table class="info-list-table">
-                <tbody>
-                    <tr>
-                        <td class="dt">Submission #:</td>
-                        <td class="dd">RG290183</td>
-                    </tr>
-                    <tr>
-                        <td class="dt">Service level:</td>
-                        <td class="dd">$20 / Card</td>
-                    </tr>
-                    <tr>
-                        <td class="dt">No. of Cards: </td>
-                        <td class="dd">1</td>
-                    </tr>
-                    <tr>
-                        <td class="dt">Shipping Method:</td>
-                        <td class="dd">Insured</td>
-                    </tr>
-                    <tr>
-                        <td class="dt">Date:</td>
-                        <td class="dd">8/24/2021</td>
-                    </tr>
-                    <tr>
-                        <td class="dt">Declared Value:</td>
-                        <td class="dd">$400.00</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="customer-info-list-table">
-                <tbody>
-                    <tr>
-                        <td class="dt">Customer:</td>
-                        <td class="dd">
-                            James Smith
-                            jsmith@email.com
-                            (718) 999-1910
-                            Customer ID: C925486
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="customer-id-holder">
-                Customer ID:
-                <p class="customer-id">
-                    C925486
-                </p>
-        </div> --}}
-    </div>
-    <div class="order-details-section">
-        <div class="info-box pr-20">
-            <div class="info-box-header">
-                Shipping Address
-            </div>
-            <div class="info-box-content">
-                James Smith
-                <br/>
-                727 Amsterdam Blvd.
-                <br/>
-                New York, NY 10301, US
-                <br/>
-                (718) 999-1910
-            </div>
-        </div>
-        <div class="info-box pr-20">
-            <div class="info-box-header">
-                Payment Method
-            </div>
-            <div class="info-box-content">
-                Visa ending in 7972
-                <br/>
-                Exp. 08/24
-            </div>
-        </div>
-        <div class="info-box pr-20">
-            <div class="info-box-header">
-                Billing Address
-            </div>
-            <div class="info-box-content">
-                Same as shipping
-            </div>
-        </div>
-        <div class="info-box">
-            <div class="info-box-header">
-                Price Summary
-            </div>
-            <div class="info-box-content">
-                <table>
-                    <tbody>
-                        <tr class="info-line">
-                            <td class="info-title">
-                                Service Fee:
-                            </td>
-                            <td class="info-content">
-                                $20.00
-                            </td>
-                        </tr>
-                        <tr class="info-line">
-                            <td class="info-title">
-                                Insured Shipping:
-                            </td>
-                            <td class="info-content">
-                                $14.00
-                            </td>
-                        </tr>
-                        <tr class="info-line">
-                            <td class="info-title">
-                                Total:
-                            </td>
-                            <td class="info-content">
-                                $34.00
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="order-items-section">
-        <table class="items-table">
-            <tbody>
-                <tr class="header-row">
-                    <td>Card No.</td>
-                    <td>Description</td>
-                    <td>Qty</td>
-                    <td>Declared Value (USD)</td>
-                </tr>
-                <tr class="item-row">
-                    <td class="card-no">
-                        89897080
-                    </td>
-                    <td class="description">
-                        <div class="item-name">
-                            Charizard
-                        </div>
-                        <div class="item-desc">
-                            2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard
-                        </div>
-                    </td>
-                    <td class="qty">
-                        1
-                    </td>
-                    <td class="value">
-                        $400.00
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        {{-- <table>
-            <tbody>
-                <tr>
-                    <td>
-                        asd
-                    </td>
-                    <td>lkasf</td>
-                </tr>
-            </tbody>
-        </table> --}}
-    </div>
-    <div class="total-declared-section">
-        Total Declared Value: <b>$400.00</b>
-    </div>
+    </header>
     <footer>
         <img src="{{$agsLogo}}"/>
         <br/>
@@ -452,5 +238,192 @@
         <br/>
         (718) 999-1910
     </footer>
+    <main>
+        <div class="general-info-section">
+            <table style="width: 100%;">
+                <tbody>
+                    <tr>
+                        <td class="general-info-holder">
+                            <table class="info-list-table">
+                                <tbody>
+                                    <tr>
+                                        <td class="dt">Submission #:</td>
+                                        <td class="dd">{{$order->order_number}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dt">Service level:</td>
+                                        <td class="dd">${{$order->paymentPlan->price}} / Card</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dt">No. of Cards: </td>
+                                        <td class="dd">{{$orderItems->sum('quantity')}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dt">Shipping Method:</td>
+                                        <td class="dd">{{$order->shippingMethod->name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dt">Date:</td>
+                                        <td class="dd">{{$order->date}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dt">Declared Value:</td>
+                                        <td class="dd">${{number_format($orderItems->sum('declared_value_total'),2)}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="general-info-holder" >
+                            <table class="customer-info-list-table">
+                                <tbody>
+                                    <tr>
+                                        <td class="dt">Customer:</td>
+                                        <td class="dd">
+                                            {{$customer->full_name}}
+                                            <br/>
+                                            {{$customer->email}}
+                                            @if($customer->phone)
+                                            <br/>
+                                            {{$customer->phone}}
+                                            @endif
+                                            <br/>
+                                            Customer ID: {{$customer->id}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="customer-id-holder">
+                            Customer ID:
+                            <p class="customer-id">
+                                {{$customer->id}}
+                            </p> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="order-details-section">
+            <div class="info-box pr-10">
+                <div class="info-box-header">
+                    Shipping Address
+                </div>
+                <div class="info-box-content">
+                    {{$shippingAddress->full_name}}
+                    <br/>
+                    {{$shippingAddress->address}}
+                    <br/>
+                    {{$shippingAddress->city}}, {{$shippingAddress->state}} {{$shippingAddress->zip}}, {{$shippingAddress->country->code}}
+                    <br/>
+                    {{$shippingAddress->phone}}
+                </div>
+            </div>
+            <div class="info-box pr-10">
+                <div class="info-box-header">
+                    Payment Method
+                </div>
+                <div class="info-box-content">
+                    @if($orderPayment)
+                        @if($orderPayment->card)
+                            {{ucfirst($orderPayment->card->brand)}} ending in {{$orderPayment->card->last4}}
+                            <br/>
+                            Exp. {{$orderPayment->card->exp_month}}/{{$orderPayment->card->exp_year}}
+                        @endif
+                    @else
+                        No payment found
+                    @endif
+                </div>
+            </div>
+            <div class="info-box pr-10">
+                <div class="info-box-header">
+                    Billing Address
+                </div>
+                <div class="info-box-content">
+                    @if($shippingAddress->id === $billingAddress->id)
+                        Same as shipping
+                    @else
+                        {{$billingAddress->full_name}}
+                        <br/>
+                        {{$billingAddress->address}}
+                        <br/>
+                        {{$billingAddress->city}}, {{$billingAddress->state}} {{$billingAddress->zip}}, {{$billingAddress->country->code}}
+                        <br/>
+                        {{$billingAddress->phone}}
+                    @endif
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-header">
+                    Price Summary
+                </div>
+                <div class="info-box-content">
+                    <table>
+                        <tbody>
+                            <tr class="info-line">
+                                <td class="info-title">
+                                    Service Fee:
+                                </td>
+                                <td class="info-content">
+                                    ${{number_format($order->service_fee,2)}}
+                                </td>
+                            </tr>
+                            <tr class="info-line">
+                                <td class="info-title">
+                                    Insured Shipping:
+                                </td>
+                                <td class="info-content">
+                                    ${{number_format($order->shipping_fee,2)}}
+                                </td>
+                            </tr>
+                            <tr class="info-line">
+                                <td class="info-title">
+                                    Total:
+                                </td>
+                                <td class="info-content">
+                                    ${{number_format($order->grand_total,2)}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="order-items-section">
+            <table class="items-table">
+                <tbody>
+                    <tr class="header-row">
+                        <td>Card No.</td>
+                        <td>Description</td>
+                        <td>Qty</td>
+                        <td>Declared Value (USD)</td>
+                    </tr>
+                    @foreach ($orderItems as $item)
+                        <tr class="item-row">
+                            <td class="card-no">
+                                {{$item->id}}
+                            </td>
+                            <td class="description">
+                                <div class="item-name">
+                                    {{$item->cardProduct->name}}
+                                </div>
+                                <div class="item-desc">
+                                    {{$item->cardProduct->identifier_string}}
+                                </div>
+                            </td>
+                            <td class="qty">
+                                {{$item->quantity}}
+                            </td>
+                            <td class="value">
+                                ${{number_format($item->declared_value_per_unit,2)}}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="total-declared-section">
+            Total Declared Value: <b>${{number_format($orderItems->sum('declared_value_total'),2)}}</b>
+        </div>
+    </main>
 </body>
 </html>

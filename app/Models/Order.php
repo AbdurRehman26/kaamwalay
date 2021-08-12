@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Order extends Model
 {
@@ -104,5 +105,9 @@ class Order extends Model
     public function scopeForUser(Builder $query, User $user): Builder
     {
         return $query->where('user_id', $user->id);
+    }
+
+    public function getDateAttribute(){
+        return Carbon::parse($this->created_at)->format('m/d/Y');
     }
 }

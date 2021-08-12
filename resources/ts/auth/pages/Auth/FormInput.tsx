@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOffOutlined';
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
 import { useFormikContext } from 'formik';
-import { kebabCase } from 'lodash-es';
+import { kebabCase } from 'lodash';
 import { transparentize } from 'polished';
 import React, { HTMLAttributes, useCallback, useMemo, useState } from 'react';
 

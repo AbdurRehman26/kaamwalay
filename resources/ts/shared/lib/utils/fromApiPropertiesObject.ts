@@ -1,4 +1,4 @@
-import { camelCase } from 'lodash-es';
+import { camelCase } from 'lodash';
 
 import { propertyNaming, PropertyNamingOptions } from './propertyNaming';
 

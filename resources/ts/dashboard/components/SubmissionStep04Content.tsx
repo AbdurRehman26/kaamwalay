@@ -303,7 +303,7 @@ export function SubmissionStep04Content() {
                                             <Typography className={classes.billingAddressItem}>{`${
                                                 finalShippingAddress.address
                                             } ${
-                                                finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
+                                                finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
                                             }`}</Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}

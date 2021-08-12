@@ -24,20 +24,30 @@ class StripeService implements PaymentProviderServiceInterface
         /** @var User $user */
         $user = auth()->user();
 
+        $paymentData = [
+            'amount' => $order->grand_total * 100,
+            'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
+            'additional_data' => [
+                'description' => "Payment for Order # {$order->id}",
+                'metadata' => [
+                    'Order ID' => $order->id,
+                    'User Email' => $order->user->email,
+                ],
+            ],
+        ];
+
         try {
             $response = $user->charge(
-                $order->grand_total * 100,
-                $order->orderPayment->payment_provider_reference_id,
-                [
-                    'description' => "Payment for Order # {$order->id}",
-                    'metadata' => [
-                        'Order ID' => $order->id,
-                        'User Email' => $order->user->email,
-                    ],
-                ]
+                $paymentData['amount'],
+                $paymentData['payment_intent_id'],
+                $paymentData['additional_data']
             );
 
             $order->markAsPlaced();
+            $order->paymentMethod->update([
+                'request' => json_encode($paymentData),
+                'response' => json_encode($response->toArray()),
+            ]);
 
             return new JsonResponse([
                 'success' => true,

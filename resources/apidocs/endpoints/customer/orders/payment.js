@@ -1,5 +1,5 @@
 /**
- * @api {post} /customer/orders/{order}/pay Order Payment
+ * @api {post} /customer/orders/{order}/payments Order Payment
  * @apiName Order Payment
  * @apiGroup Customer-Orders
  *

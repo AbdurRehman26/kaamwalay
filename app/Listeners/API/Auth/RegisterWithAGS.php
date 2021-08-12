@@ -4,10 +4,12 @@ namespace App\Listeners\API\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Services\AGS\AGS;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
-class RegisterWithAGS
+class RegisterWithAGS implements ShouldQueue, ShouldBeEncrypted
 {
     /**
      * Handle the event.
@@ -24,7 +26,7 @@ class RegisterWithAGS
 
             return;
         }
-        $password = $event->request->get('password');
+        $password = $event->request['password'];
         $passwordKeysForAgs = ['password1', 'password2'];
         $user = $event->user;
 

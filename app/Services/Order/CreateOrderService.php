@@ -4,17 +4,17 @@ namespace App\Services\Order;
 
 use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Models\CustomerAddress;
-use App\Models\Order;
 use App\Models\Invoice;
+use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
+use App\Services\PDFService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\PDFService;
 
 class CreateOrderService
 {
@@ -163,7 +163,8 @@ class CreateOrderService
         ]);
     }
 
-    protected function getInvoiceData(){
+    protected function getInvoiceData()
+    {
         $logoContent = file_get_contents(resource_path('assets/logos/invoiceLogo.png'));
         $logoData = 'data:image/png;base64,'.base64_encode($logoContent);
 
@@ -177,16 +178,17 @@ class CreateOrderService
         $billingAddress = $order->billingAddress;
         $orderPayment = $order->orderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
-        if($paymentResponse){
+        if ($paymentResponse) {
             $orderPayment = json_decode(json_encode([
                 'card' => [
                     'brand' => $paymentResponse->card->brand,
-                    'exp_month' => \Str::padLeft($paymentResponse->card->exp_month,2,'0'),
-                    'exp_year' => substr($paymentResponse->card->exp_year,2),
+                    'exp_month' => \Str::padLeft($paymentResponse->card->exp_month, 2, '0'),
+                    'exp_year' => substr($paymentResponse->card->exp_year, 2),
                     'last4' => $paymentResponse->card->last4,
                 ],
             ]));
         }
+
         return [
             'logoData' => $logoData,
             'agsLogo' => $agsLogo,
@@ -198,11 +200,11 @@ class CreateOrderService
             'billingAddress' => $billingAddress,
         ];
     }
-    protected function saveInvoicePDF(){
-
+    protected function saveInvoicePDF()
+    {
         $data = $this->getInvoiceData();
 
-        $pdf = PDFService::generate('pdf.invoice',$data);
+        $pdf = PDFService::generate('pdf.invoice', $data);
         \Storage::disk('s3')
             ->put(
                 'invoice/invoice-'.$this->order->order_number.'.pdf',
@@ -213,8 +215,8 @@ class CreateOrderService
         $this->createAndStoreInvoiceRecord($url);
     }
 
-    protected function createAndStoreInvoiceRecord(string $url){
-            
+    protected function createAndStoreInvoiceRecord(string $url)
+    {
         $invoice = new Invoice();
         $invoice->invoice_number = $this->order->order_number;
         $invoice->path = $url;

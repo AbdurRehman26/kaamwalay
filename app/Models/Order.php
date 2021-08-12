@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Order extends Model
 {
@@ -109,7 +109,8 @@ class Order extends Model
         return $query->where('user_id', $user->id);
     }
 
-    public function getDateAttribute(){
+    public function getDateAttribute()
+    {
         return Carbon::parse($this->created_at)->format('m/d/Y');
     }
 

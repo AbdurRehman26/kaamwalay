@@ -84,7 +84,8 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function getFullNameAttribute(){
+    public function getFullNameAttribute()
+    {
         return trim($this->first_name.' '.$this->last_name);
     }
 }

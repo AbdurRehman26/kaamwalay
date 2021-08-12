@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
+import { APIService } from '@shared/services/APIService';
+
 export interface SubmissionService {
     id: number;
     type: 'card';
@@ -29,40 +32,42 @@ export interface AddCardsToSubmission {
     searchValue: any;
     searchResults: SearchResultItemCardProps[];
     selectedCards: SearchResultItemCardProps[];
+    shippingFee: number;
 }
 
 export interface Address {
     firstName: string;
     lastName: string;
     address: string;
-    apt?: string;
+    flat?: string;
     city: string;
+    country: { name: string; code: string; id: number };
     state: { name: string; code: string; id: number };
     zipCode: string;
     phoneNumber: string;
+    id: number;
+    userId: number;
+    isDefaultShipping?: boolean;
+    isDefaultBilling?: boolean;
 }
 
 export interface CreditCard {
-    cardNumber: string;
-    expirationDate: string;
-    cvv: string;
+    expMonth: number;
+    expYear: number;
+    last4: string;
+    brand: string;
+    id: string;
 }
 
 export interface ShippingSubmissionState {
-    existingAddresses?: Address[];
+    existingAddresses: Address[] | [];
     selectedAddress: Address;
     availableStatesList: { name: string; code: string; id: number }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
-}
-
-export interface PaymentSubmissionState {
-    paymentMethodId: number;
-    existingCreditCards?: CreditCard[];
-    selectedCreditCard: CreditCard;
-    availableStatesList: { name: string; id: number }[];
-    saveForLater: boolean;
-    fetchingStatus: string | null;
+    disableAllShippingInputs: boolean;
+    useCustomShippingAddress: boolean;
+    selectedExistingAddress: Address;
 }
 
 export interface PaymentSubmissionState {
@@ -73,6 +78,8 @@ export interface PaymentSubmissionState {
     useShippingAddressAsBillingAddress: boolean;
     selectedBillingAddress: Address;
     existingBillingAddresses: Address[];
+    availableStatesList: { name: string; code: string; id: number }[];
+    fetchingStatus: string | null;
 }
 
 export interface NewSubmissionSliceState {
@@ -104,6 +111,7 @@ const initialState: NewSubmissionSliceState = {
         searchValue: '',
         searchResults: [],
         selectedCards: [],
+        shippingFee: 0,
     },
     step03Data: {
         existingAddresses: [],
@@ -111,24 +119,49 @@ const initialState: NewSubmissionSliceState = {
             firstName: '',
             lastName: '',
             address: '',
-            apt: '',
+            flat: '',
             city: '',
-            state: { name: '', code: '', id: 0 },
+            state: { id: 0, code: '', name: '' },
             zipCode: '',
             phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            // Setting it to -1 so we know for sure this isn't a real address id by default
+            id: -1,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
+        },
+        selectedExistingAddress: {
+            firstName: '',
+            lastName: '',
+            address: '',
+            flat: '',
+            city: '',
+            state: { id: 0, code: '', name: '' },
+            zipCode: '',
+            phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            id: -1,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
         },
         availableStatesList: [{ name: '', code: '', id: 0 }],
         fetchingStatus: null,
         saveForLater: true,
+        disableAllShippingInputs: false,
+        useCustomShippingAddress: false,
     },
     step04Data: {
         paymentMethodId: 0,
         existingCreditCards: [],
         availableStatesList: [],
         selectedCreditCard: {
-            cardNumber: '',
-            expirationDate: '',
-            cvv: '',
+            expMonth: 0,
+            expYear: 0,
+            last4: '',
+            brand: '',
+            id: '',
         },
         saveForLater: true,
         useShippingAddressAsBillingAddress: true,
@@ -136,11 +169,16 @@ const initialState: NewSubmissionSliceState = {
             firstName: '',
             lastName: '',
             address: '',
-            apt: '',
+            flat: '',
             city: '',
-            state: { name: '', code: '', id: 0 },
+            state: { id: 0, code: '', name: '' },
             zipCode: '',
             phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            id: 0,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
         },
         existingBillingAddresses: [],
         fetchingStatus: null,
@@ -148,26 +186,75 @@ const initialState: NewSubmissionSliceState = {
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
-    const serviceLevels = await axios.get('http://robograding.test/api/customer/orders/payment-plans/');
-    const formatedServiceLevels = serviceLevels.data.data.map((serviceLevel: any) => {
-        return {
-            id: serviceLevel.id,
-            type: 'card',
-            maxProtectionAmount: serviceLevel.max_protection_amount,
-            turnaround: serviceLevel.turnaround,
-            price: serviceLevel.price,
-        };
-    });
-
-    return formatedServiceLevels;
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
+    const serviceLevels = await endpoint.get('');
+    return serviceLevels.data.map((serviceLevel: any) => ({
+        id: serviceLevel.id,
+        type: 'card',
+        maxProtectionAmount: serviceLevel.max_protection_amount,
+        turnaround: serviceLevel.turnaround,
+        price: serviceLevel.price,
+    }));
 });
 
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
-    const americanStates = await axios.get('http://robograding.test/api/customer/addresses/states');
-    return americanStates.data.data;
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/addresses/states');
+    const americanStates = await endpoint.get('');
+    return americanStates.data;
 });
 
-const newSubmissionSlice = createSlice({
+export const getShippingFee = createAsyncThunk(
+    'newSubmission/getShippingFee',
+    async (selectedCards: SearchResultItemCardProps[]) => {
+        const apiService = resolveInjectable(APIService);
+        const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
+        const DTO = {
+            items: selectedCards.map((item) => ({
+                quantity: item.qty,
+                declared_value_per_unit: item.value,
+            })),
+        };
+        const shippingFeeResponse = await endpoint.post('', DTO);
+        return shippingFeeResponse.data.shipping_fee;
+    },
+);
+
+export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
+    const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/addresses');
+    const customerAddresses = await endpoint.get('');
+    const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
+        return {
+            id: address.id,
+            userId: address.user_id,
+            firstName: address.first_name,
+            lastName: address.last_name,
+            address: address.address,
+            zipCode: address.zip,
+            phoneNumber: address.phone,
+            flat: address.flat,
+            city: address.city,
+            isDefaultShipping: address.is_default_shipping,
+            isDefaultBilling: address.is_default_billing,
+            // Doing this because the back-end can't give me this full object for the state
+            // so I'll just search for the complete object inside the existing states
+            state: availableStatesList.find((item: any) => item.name === address.state),
+            country: {
+                id: address.country.id,
+                code: address.country.code,
+                name: address.country.name,
+            },
+        };
+    });
+
+    console.log(formattedAddresses);
+    return formattedAddresses;
+});
+
+export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
     initialState,
     reducers: {
@@ -193,44 +280,7 @@ const newSubmissionSlice = createSlice({
         setCardsSearchValue: (state, action: PayloadAction<string>) => {
             state.step02Data.searchValue = action.payload;
             // TODO: This will be replaced with search integration
-            state.step02Data.searchResults = [
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 1,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 2',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 2,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 3',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 4,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 4',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 5,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 5',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 6,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 6',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 8,
-                },
-            ];
+            state.step02Data.searchResults = [];
         },
         markCardAsSelected: (state, action: PayloadAction<SearchResultItemCardProps>) => {
             state.step02Data.selectedCards = [
@@ -285,12 +335,43 @@ const newSubmissionSlice = createSlice({
             // @ts-ignore
             state.step04Data.selectedBillingAddress[action.payload.fieldName] = action.payload.newValue;
         },
-        setBillingAddressEqualToShippingAddress: (state, action: PayloadAction<void>) => {
+        setBillingAddressEqualToShippingAddress: (state) => {
             state.step04Data.selectedBillingAddress = state.step03Data.selectedAddress;
+        },
+        setBillingAddress: (state, action: PayloadAction<Address>) => {
+            state.step04Data.selectedBillingAddress = action.payload;
+        },
+        saveStripeCustomerCards: (state, action: PayloadAction<CreditCard[]>) => {
+            state.step04Data.existingCreditCards = action.payload;
+            if (action.payload.length > 0) {
+                state.step04Data.selectedCreditCard = action.payload[0];
+            }
+        },
+        setSelectedStripeCard: (state, action: PayloadAction<string>) => {
+            const lookup = state.step04Data?.existingCreditCards?.find((card) => card.id == action.payload);
+            if (lookup) {
+                state.step04Data.selectedCreditCard = lookup;
+            }
+        },
+        setDisableAllShippingInputs: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.disableAllShippingInputs = action.payload;
+        },
+        setSelectedExistingAddress: (state, action: PayloadAction<number>) => {
+            const lookup = state.step03Data?.existingAddresses?.find((address) => address.id == action.payload);
+            if (lookup) {
+                state.step03Data.selectedExistingAddress = lookup;
+            }
+        },
+        resetSelectedExistingAddress: (state) => {
+            state.step03Data.selectedExistingAddress = initialState.step03Data.selectedExistingAddress;
+        },
+        setUseCustomShippingAddress: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.useCustomShippingAddress = action.payload;
+            state.step03Data.selectedAddress = initialState.step03Data.selectedAddress;
         },
     },
     extraReducers: {
-        [getServiceLevels.pending as any]: (state, action) => {
+        [getServiceLevels.pending as any]: (state) => {
             state.step01Data.status = 'loading';
         },
         [getServiceLevels.fulfilled as any]: (state, action: any) => {
@@ -298,10 +379,10 @@ const newSubmissionSlice = createSlice({
             state.step01Data.selectedServiceLevel = action.payload[0];
             state.step01Data.status = 'success';
         },
-        [getServiceLevels.rejected as any]: (state, action) => {
+        [getServiceLevels.rejected as any]: (state) => {
             state.step01Data.status = 'failed';
         },
-        [getStatesList.pending as any]: (state, action) => {
+        [getStatesList.pending as any]: (state) => {
             state.step03Data.fetchingStatus = 'loading';
         },
         [getStatesList.fulfilled as any]: (state, action) => {
@@ -309,8 +390,13 @@ const newSubmissionSlice = createSlice({
             state.step03Data.fetchingStatus = 'success';
         },
         [getStatesList.rejected as any]: (state, action) => {
-            console.log(action);
             state.step03Data.fetchingStatus = 'failed';
+        },
+        [getShippingFee.fulfilled as any]: (state, action) => {
+            state.step02Data.shippingFee = action.payload;
+        },
+        [getSavedAddresses.fulfilled as any]: (state, action) => {
+            state.step03Data.existingAddresses = action.payload;
         },
     },
 });
@@ -333,6 +419,12 @@ export const {
     setUseShippingAddressAsBilling,
     updatePaymentMethodField,
     updateBillingAddressField,
+    saveStripeCustomerCards,
     setBillingAddressEqualToShippingAddress,
+    setSelectedStripeCard,
+    setDisableAllShippingInputs,
+    setSelectedExistingAddress,
+    setUseCustomShippingAddress,
+    resetSelectedExistingAddress,
+    setBillingAddress,
 } = newSubmissionSlice.actions;
-export default newSubmissionSlice.reducer;

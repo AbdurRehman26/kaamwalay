@@ -1,40 +1,26 @@
-import {
-    Container,
-    Divider,
-    FormControl,
-    FormControlLabel,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-} from '@material-ui/core';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import Alert from '@material-ui/lab/Alert';
-import CardValidator from 'card-validator';
 import React, { useCallback, useEffect, useState } from 'react';
-import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
+
+import { PaymentForm } from '@dashboard/components/PaymentForm';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
-    getServiceLevels,
-    setBillingAddressEqualToShippingAddress,
+    setBillingAddress,
     setIsNextDisabled,
-    setSaveCardForLater,
     setUseShippingAddressAsBilling,
     updateBillingAddressField,
-    updatePaymentMethodField,
-    updateShippingAddressField,
 } from '../redux/slices/newSubmissionSlice';
-import CardsSearchResults from './CardsSearchResults';
 import PaymentMethodItem from './PaymentMethodItem';
-import ServiceLevelItem from './ServiceLevelItem';
-import ShippingMethodItem from './ShippingMethodItems';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 
@@ -149,19 +135,6 @@ const GreenCheckbox = withStyles({
     checked: {},
 })((props: any) => <Checkbox color="default" {...props} />);
 
-function limit(value: string | number, max: number) {
-    const numberValue = parseInt(`${value}`); // Make sure that the value it's a number
-    const inRangeValue = Math.min(Math.max(1, Number(value)), max); // limit value to [1 ... $max]
-    return `${inRangeValue}`.padStart(2, '0'); // return number as 01...09, 10, 11, .etc
-}
-
-function cardExpiry(val: any) {
-    let month = limit(val.substring(0, 2), Number('12'));
-    let year = val.substring(2, 4);
-
-    return month + (year.length ? '/' + year : '');
-}
-
 let schema = yup.object().shape({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
@@ -181,27 +154,30 @@ export function SubmissionStep04Content() {
     const dispatch = useAppDispatch();
 
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
-    const saveCardForLater = useAppSelector((state) => state.newSubmission.step04Data.saveForLater);
-    const cardNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.cardNumber);
-    const cvv = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.cvv);
-    const expirationDate = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expirationDate);
+    const currentSelectedStripeCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
+
     const useBillingAddressSameAsShipping = useAppSelector(
         (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
     );
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
-
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const firstName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.lastName);
     const address = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.address);
     const city = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.city);
     const state = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.state);
     const zipCode = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.zipCode);
-    const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.apt);
+    const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
 
-    const [isCardDataValid, setIsCardDataValid] = useState(false);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
+    const finalShippingAddress =
+        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+            ? selectedExistingAddress
+            : shippingAddress;
 
     useEffect(() => {
         schema
@@ -218,25 +194,27 @@ export function SubmissionStep04Content() {
             .then((valid) => {
                 setIsAddressDataValid(valid);
             });
-    }, [firstName, lastName, address, apt, city, state, zipCode, phoneNumber]);
-
-    useEffect(() => {
-        if (useBillingAddressSameAsShipping) {
-            dispatch(setBillingAddressEqualToShippingAddress());
-        }
-    }, [dispatch, useBillingAddressSameAsShipping]);
-
-    const onSaveCardForLater = useCallback(() => {
-        dispatch(setSaveCardForLater(!saveCardForLater));
-    }, []);
+    }, [
+        firstName,
+        lastName,
+        address,
+        apt,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+        selectedExistingAddress,
+        useCustomShippingAddress,
+        existingAddresses,
+        useBillingAddressSameAsShipping,
+    ]);
 
     const onUseShippingAddressAsBilling = useCallback(() => {
         dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
+        if (!useBillingAddressSameAsShipping) {
+            dispatch(setBillingAddress(finalShippingAddress));
+        }
     }, [useBillingAddressSameAsShipping]);
-
-    const updateCardData = useCallback((fieldName: string, newValue: any) => {
-        dispatch(updatePaymentMethodField({ fieldName, newValue }));
-    }, []);
 
     const updateField = useCallback((fieldName: any, newValue: any) => {
         dispatch(updateBillingAddressField({ fieldName, newValue }));
@@ -257,30 +235,19 @@ export function SubmissionStep04Content() {
     useEffect(() => {
         dispatch(setIsNextDisabled(true));
         if (paymentMethodId == 0) {
-            if (isCardDataValid && isAddressDataValid) {
-                dispatch(setIsNextDisabled(false));
-            } else {
-                dispatch(setIsNextDisabled(true));
-            }
+            dispatch(setIsNextDisabled(currentSelectedStripeCardId.length === 0 || !isAddressDataValid));
         }
 
         if (paymentMethodId == 1) {
             dispatch(setIsNextDisabled(false));
         }
-    }, [dispatch, isAddressDataValid, isCardDataValid, paymentMethodId, useBillingAddressSameAsShipping]);
+    }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
 
     useEffect(() => {
-        const isNumberValid = CardValidator.number(cardNumber).isValid;
-        const isCvvValid = CardValidator.cvv(cvv).isValid;
-        const isExpirationValid = CardValidator.expirationDate(expirationDate).isValid;
-
-        if (isNumberValid && isCvvValid && isExpirationValid) {
-            setIsCardDataValid(true);
-        } else {
-            setIsCardDataValid(false);
+        if (useBillingAddressSameAsShipping) {
+            dispatch(setBillingAddress(finalShippingAddress));
         }
-    }, [cvv, expirationDate, cardNumber]);
-
+    }, [dispatch]);
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -313,81 +280,7 @@ export function SubmissionStep04Content() {
                         {paymentMethodId === 0 ? (
                             <>
                                 <div className={classes.sectionContainer}>
-                                    <div className={classes.shippingAddressSectionHeader}>
-                                        <Typography className={classes.sectionLabel}>Add Card</Typography>
-                                        <FormControlLabel
-                                            control={
-                                                <GreenCheckbox
-                                                    checked={saveCardForLater}
-                                                    onChange={onSaveCardForLater}
-                                                    name="checkedG"
-                                                />
-                                            }
-                                            label="Save for later"
-                                        />
-                                    </div>
-
-                                    <div className={classes.inputsRow01}>
-                                        <div className={classes.fieldContainer} style={{ width: '100%' }}>
-                                            <Typography className={classes.methodDescription}>Card Number</Typography>
-                                            <NumberFormat
-                                                format="#### #### #### ####"
-                                                customInput={TextField}
-                                                style={{ margin: 8, marginLeft: 0 }}
-                                                placeholder="Enter Card Number"
-                                                value={cardNumber}
-                                                onChange={(e) => updateCardData('cardNumber', e.target.value)}
-                                                fullWidth
-                                                variant={'outlined'}
-                                                margin="normal"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className={classes.inputsRow02}>
-                                        <div className={classes.fieldContainer} style={{ width: '65%' }}>
-                                            <Typography className={classes.methodDescription}>
-                                                Expiration Date
-                                            </Typography>
-
-                                            <NumberFormat
-                                                format={cardExpiry}
-                                                customInput={TextField}
-                                                style={{ margin: 8, marginLeft: 0 }}
-                                                placeholder="MM/YY"
-                                                fullWidth
-                                                value={expirationDate}
-                                                onChange={(e) => updateCardData('expirationDate', e.target.value)}
-                                                variant={'outlined'}
-                                                margin="normal"
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={classes.fieldContainer} style={{ width: '28%' }}>
-                                            <Typography className={classes.methodDescription}>CVV</Typography>
-                                            <TextField
-                                                style={{ margin: 8, marginLeft: 0 }}
-                                                placeholder="XXX"
-                                                fullWidth
-                                                value={cvv}
-                                                onChange={(e) => updateCardData('cvv', e.target.value)}
-                                                variant={'outlined'}
-                                                margin="normal"
-                                                InputProps={{
-                                                    inputProps: {
-                                                        maxLength: 3,
-                                                    },
-                                                }}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
+                                    <PaymentForm />
                                 </div>
                                 <div className={classes.billingAddressAsShippingContainer}>
                                     <FormControlLabel
@@ -406,15 +299,15 @@ export function SubmissionStep04Content() {
                                             </Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
+                                            >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
                                             <Typography className={classes.billingAddressItem}>{`${
-                                                shippingAddress.address
+                                                finalShippingAddress.address
                                             } ${
-                                                shippingAddress?.apt ? `apt: ${shippingAddress.apt}` : null
+                                                finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
                                             }`}</Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${shippingAddress.city}, ${shippingAddress.state.name} ${shippingAddress.zipCode}, US`}</Typography>
+                                            >{`${finalShippingAddress.city}, ${finalShippingAddress.state.name} ${finalShippingAddress.zipCode}, US`}</Typography>
                                         </>
                                     ) : (
                                         <>
@@ -502,7 +395,7 @@ export function SubmissionStep04Content() {
                                                             placeholder="Apt #"
                                                             fullWidth
                                                             value={apt}
-                                                            onChange={(e: any) => updateField('apt', e.target.value)}
+                                                            onChange={(e: any) => updateField('flat', e.target.value)}
                                                             size={'small'}
                                                             variant={'outlined'}
                                                             margin="normal"
@@ -548,7 +441,7 @@ export function SubmissionStep04Content() {
                                                             style={{ height: '43px' }}
                                                         >
                                                             <MenuItem value="none">Select a state</MenuItem>
-                                                            {availableStates.map((item, index) => (
+                                                            {availableStates.map((item) => (
                                                                 <MenuItem key={item.id} value={item.id}>
                                                                     {item.code}
                                                                 </MenuItem>

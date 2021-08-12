@@ -5,7 +5,7 @@ import { ConfirmationDialogContext, ConfirmationDialogContextState } from '../co
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.com>
+ * @author: Dumitrana Alinus <alinus@wooter.comm>
  * @date: 05.08.2021
  * @time: 18:18
  */

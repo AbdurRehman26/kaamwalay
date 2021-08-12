@@ -16,7 +16,7 @@ import { useConfirmationSubmissionStyles } from './style';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.co>
+ * @author: Dumitrana Alinus <alinus@wooter.comm>
  * @component: ConfirmationSubmission
  * @date: 06.08.2021
  * @time: 23:14

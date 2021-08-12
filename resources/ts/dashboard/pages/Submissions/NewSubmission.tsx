@@ -1,8 +1,10 @@
-import { Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
+
+import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
@@ -11,7 +13,14 @@ import SubmissionStep03Content from '../../components/SubmissionStep03Content';
 import SubmissionStep04Content from '../../components/SubmissionStep04Content';
 import SubmissionStep05Content from '../../components/SubmissionStep05Content';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { nextStep, backStep, setIsNextDisabled } from '../../redux/slices/newSubmissionSlice';
+import {
+    backStep,
+    getSavedAddresses,
+    getShippingFee,
+    getStatesList,
+    nextStep,
+    setIsNextDisabled,
+} from '../../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
     pageContentContainer: {
@@ -45,7 +54,6 @@ export function NewSubmission() {
     const classes = useStyles({ currentStep });
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-
     const getStepContent = useCallback(() => {
         switch (currentStep) {
             case 0:
@@ -63,7 +71,15 @@ export function NewSubmission() {
         }
     }, [currentStep]);
 
-    const handleNext = () => {
+    const handleNext = async () => {
+        // Executing different stuff before next step loads
+        if (currentStep === 1) {
+            await dispatch(getShippingFee(selectedCards));
+            await dispatch(getStatesList());
+            await dispatch(getSavedAddresses());
+            dispatch(nextStep());
+            return;
+        }
         dispatch(nextStep());
     };
 
@@ -84,34 +100,38 @@ export function NewSubmission() {
     return (
         <>
             <SubmissionHeader />
-            <Container>
-                <div className={classes.pageContentContainer}>
-                    {getStepContent()}
+            <StripeContainer>
+                <Container>
+                    <div className={classes.pageContentContainer}>
+                        {getStepContent()}
 
-                    <div className={classes.buttonsContainer}>
-                        {currentStep !== 0 ? (
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                startIcon={<ArrowBackIcon />}
-                                onClick={handleBack}
-                            >
-                                Back
-                            </Button>
-                        ) : null}
-                        <Button
-                            variant={'contained'}
-                            disabled={isNextDisabled}
-                            color={'primary'}
-                            onClick={handleNext}
-                            className={classes.nextBtn}
-                        >
-                            Next
-                        </Button>
+                        <div className={classes.buttonsContainer}>
+                            {currentStep !== 0 ? (
+                                <Button
+                                    variant={'text'}
+                                    color={'secondary'}
+                                    className={classes.backBtn}
+                                    startIcon={<ArrowBackIcon />}
+                                    onClick={handleBack}
+                                >
+                                    Back
+                                </Button>
+                            ) : null}
+                            {currentStep !== 4 ? (
+                                <Button
+                                    variant={'contained'}
+                                    disabled={isNextDisabled}
+                                    color={'primary'}
+                                    onClick={handleNext}
+                                    className={classes.nextBtn}
+                                >
+                                    Next
+                                </Button>
+                            ) : null}
+                        </div>
                     </div>
-                </div>
-            </Container>
+                </Container>
+            </StripeContainer>
         </>
     );
 }

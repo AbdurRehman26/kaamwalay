@@ -3,6 +3,7 @@
 namespace Tests\Feature\API\Customer\Order;
 
 use App\Models\PaymentPlan;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -10,19 +11,22 @@ class PaymentPlanTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @return void
-     */
+    protected User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
+    /** @test */
     public function a_user_can_see_payment_plans()
     {
-        // @TODO Authenticate user and call on his behalf
-        PaymentPlan::factory()
-            ->count(5)
-            ->create();
+        $this->actingAs($this->user);
         $response = $this->getJson('/api/customer/orders/payment-plans/');
 
-        $response->assertJsonCount(5, 'data');
+        $response->assertJsonCount(7, 'data');
         $response->assertJsonStructure([
             'data' => [
                 '*' => ['id', 'price', 'max_protection_amount', 'turnaround'],
@@ -30,13 +34,11 @@ class PaymentPlanTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @return void
-     */
+    /** @test */
     public function a_user_can_see_specific_payment_plan()
     {
-        // @TODO Authenticate user and call on his behalf
+        $this->actingAs($this->user);
+
         PaymentPlan::factory()
             ->count(1)
             ->create();
@@ -46,5 +48,13 @@ class PaymentPlanTest extends TestCase
         $response->assertJsonStructure([
             'data' => ['id', 'price', 'max_protection_amount', 'turnaround'],
         ]);
+    }
+
+    /** @test */
+    public function a_guest_cannot_get_payment_plans()
+    {
+        $response = $this->getJson('/api/customer/orders/payment-plans');
+
+        $response->assertUnauthorized();
     }
 }

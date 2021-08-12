@@ -3,7 +3,7 @@ import { CustomerAddressStateEntity } from '@shared/entities/CustomerAddressStat
 
 import { Repository } from './Repository';
 
-@Injectable()
+@Injectable('CustomerAddressStatesRepository')
 export class CustomerAddressStatesRepository extends Repository<CustomerAddressStateEntity> {
     readonly endpointPath: string = 'customer/addresses/states';
     readonly model = CustomerAddressStateEntity;

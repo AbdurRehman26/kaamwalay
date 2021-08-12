@@ -1,5 +1,5 @@
-import { Box } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -20,7 +20,7 @@ import { useConfirmationSubmissionSidebarStyles } from './style';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.co>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: ConfirmationSubmissionSidebar
  * @date: 07.08.2021
  * @time: 00:11

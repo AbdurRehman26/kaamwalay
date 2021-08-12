@@ -1,4 +1,6 @@
-import { Divider, IconButton, Tooltip } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -6,11 +8,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import {
-    markCardAsSelected,
-    markCardAsUnselected,
-    SearchResultItemCardProps,
-} from '../redux/slices/newSubmissionSlice';
+import { markCardAsSelected, markCardAsUnselected } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
     container: {
@@ -60,6 +58,13 @@ const useStyles = makeStyles({
     },
 });
 
+type SearchResultItemCardProps = {
+    image: string;
+    subtitle: any;
+    title: string;
+    addedMode?: boolean;
+    id: any;
+};
 function SearchResultItemCard(props: SearchResultItemCardProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -85,9 +90,16 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                         <Typography variant={'subtitle2'} className={classes.title}>
                             {title}
                         </Typography>
-                        <Typography variant={'subtitle2'} className={classes.subtitle}>
-                            {subtitle}
-                        </Typography>
+
+                        {/* Using dangerouslySetInnerHTML is completely safe here, because this data is coming from algolia
+                            the client has no control over this data, therefore it won't result in an XSS.
+                            We're using this because algolia is giving us the highlighted elements wrapper in <ais-highlight-0000000000 />
+                            which we can then style to display the searched term bolded in the results*/}
+                        <Typography
+                            variant={'subtitle2'}
+                            className={classes.subtitle}
+                            dangerouslySetInnerHTML={{ __html: props.subtitle }}
+                        ></Typography>
                     </div>
                 </div>
                 {!addedMode ? (

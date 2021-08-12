@@ -23,7 +23,8 @@ class ShippingMethodFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'name' => $this->faker->firstName(),
+            'code' => $this->faker->word(),
         ];
     }
 }

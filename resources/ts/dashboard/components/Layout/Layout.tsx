@@ -3,6 +3,7 @@ import React, { Fragment, PropsWithChildren, useMemo } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 
 import { ConfirmationDialog } from '@shared/components/ConfirmationDialog';
+import { useAuth } from '@shared/hooks/useAuth';
 
 import { LayoutFlags, LayoutOptions } from '@dashboard/components/Layout/LayoutOptions';
 import LayoutSidebar from '@dashboard/components/Layout/LayoutSidebar';
@@ -18,7 +19,7 @@ interface LayoutProps {
 export function Layout(props: PropsWithChildren<LayoutProps>) {
     const { children, routeOptions } = props;
     const location = useLocation();
-
+    const { authenticated } = useAuth();
     const options = useMemo(() => {
         const routes = routeOptions || {};
         const currentRoute = Object.keys(routes).find((path) => !!matchPath(location.pathname, { path, exact: true }));
@@ -28,7 +29,7 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
     const ContainerComponent = options.has(LayoutFlags.Container) ? (Container as any) : Fragment;
     const ContentComponent = options.has(LayoutFlags.Content) ? Content : Fragment;
 
-    if (options.isEmpty()) {
+    if (!authenticated || options.isEmpty()) {
         return children as any;
     }
 

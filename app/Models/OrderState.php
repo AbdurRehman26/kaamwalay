@@ -14,7 +14,7 @@ class OrderState extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['code', 'description'];
 
     /**
      * The attributes that should be cast to native types.

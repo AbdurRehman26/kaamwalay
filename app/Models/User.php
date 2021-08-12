@@ -6,19 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasRoles, HasFactory, Notifiable;
+    use HasRoles, HasFactory, Notifiable, Billable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -42,6 +44,20 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $with = ['roles:id,name'];
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    public static function createCustomer(array $data): self
+    {
+        $user = self::create($data);
+
+        $user->assignRole(Role::findByName(config('permission.roles.customer')));
+
+        return $user;
+    }
 
     public function customer_addresses(): HasMany
     {

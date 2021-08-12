@@ -1,14 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import pageSlice from './slices/pageSlice';
+import * as globalSlices from '@shared/redux/slices';
+import { slicesToReducer } from '@shared/redux/slicesToReducer';
+import { setGlobalStore } from '@shared/redux/store';
+
+import * as slices from './slices';
 
 export const store = configureStore({
-    reducer: {
-        page: pageSlice,
-    },
+    reducer: slicesToReducer({
+        ...slices,
+        ...globalSlices,
+    }),
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+setGlobalStore(store);
+
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

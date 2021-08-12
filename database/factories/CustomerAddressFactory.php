@@ -30,12 +30,10 @@ class CustomerAddressFactory extends Factory
             'last_name' => $this->faker->lastName,
             'address' => $this->faker->address,
             'city' => $this->faker->city,
-            'state' => $this->faker->word,
+            'state' => $this->faker->state,
             'zip' => $this->faker->postcode,
             'phone' => $this->faker->phoneNumber,
             'flat' => $this->faker->numberBetween(1, 10),
-            'is_default_shipping' => $this->faker->numberBetween(0, 1),
-            'is_default_billing' => $this->faker->numberBetween(0, 1),
             'country_id' => Country::factory(),
         ];
     }

@@ -1,9 +1,13 @@
 const path = require('path');
 const mix = require('laravel-mix');
 const convertToFileHash = require('laravel-mix-make-file-hash');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const webpack = require('webpack');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports.createApp = function createApp(name) {
-    const appPath = `public/apps/${name}`;
+    const appUrl = `apps/${name}`;
+    const appPath = `public/${appUrl}`;
 
     function extendWebpack(webpackConfig) {
         webpackConfig.module.rules[1].use[0].options.publicPath = `/apps/${name}`;
@@ -12,6 +16,18 @@ module.exports.createApp = function createApp(name) {
             test: /\.svg$/,
             use: ['@svgr/webpack', 'url-loader'],
         });
+
+        webpackConfig.plugins.push(
+            new LodashModuleReplacementPlugin(),
+            new webpack.IgnorePlugin({
+                resourceRegExp: /^\.\/locale$/,
+                contextRegExp: /moment$/,
+            }),
+        );
+
+        if (process.env.ANALYZE_WEBPACK) {
+            webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+        }
     }
 
     // noinspection JSUnresolvedFunction
@@ -26,7 +42,7 @@ module.exports.createApp = function createApp(name) {
             '@publicPath': path.join(__dirname, '../ts/shared/publicPath.ts'),
             [`@${name}`]: path.join(__dirname, `../ts/${name}`),
         })
-        .sourceMaps(false);
+        .sourceMaps();
 
     if (mix.inProduction()) {
         mix.version();

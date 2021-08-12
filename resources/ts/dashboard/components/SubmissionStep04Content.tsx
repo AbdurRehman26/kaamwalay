@@ -15,7 +15,7 @@ import { PaymentForm } from '@dashboard/components/PaymentForm';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
-    setBillingAddressEqualToShippingAddress,
+    setBillingAddress,
     setIsNextDisabled,
     setUseShippingAddressAsBilling,
     updateBillingAddressField,
@@ -160,18 +160,24 @@ export function SubmissionStep04Content() {
         (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
     );
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
-
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const firstName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.lastName);
     const address = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.address);
     const city = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.city);
     const state = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.state);
     const zipCode = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.zipCode);
-    const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.apt);
+    const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
 
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
+    const finalShippingAddress =
+        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+            ? selectedExistingAddress
+            : shippingAddress;
 
     useEffect(() => {
         schema
@@ -188,16 +194,26 @@ export function SubmissionStep04Content() {
             .then((valid) => {
                 setIsAddressDataValid(valid);
             });
-    }, [firstName, lastName, address, apt, city, state, zipCode, phoneNumber]);
-
-    useEffect(() => {
-        if (useBillingAddressSameAsShipping) {
-            dispatch(setBillingAddressEqualToShippingAddress());
-        }
-    }, [dispatch, useBillingAddressSameAsShipping]);
+    }, [
+        firstName,
+        lastName,
+        address,
+        apt,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+        selectedExistingAddress,
+        useCustomShippingAddress,
+        existingAddresses,
+        useBillingAddressSameAsShipping,
+    ]);
 
     const onUseShippingAddressAsBilling = useCallback(() => {
         dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
+        if (!useBillingAddressSameAsShipping) {
+            dispatch(setBillingAddress(finalShippingAddress));
+        }
     }, [useBillingAddressSameAsShipping]);
 
     const updateField = useCallback((fieldName: any, newValue: any) => {
@@ -218,15 +234,20 @@ export function SubmissionStep04Content() {
 
     useEffect(() => {
         dispatch(setIsNextDisabled(true));
-        if (paymentMethodId == 0) {
+        if (paymentMethodId == 1) {
             dispatch(setIsNextDisabled(currentSelectedStripeCardId.length === 0 || !isAddressDataValid));
         }
 
-        if (paymentMethodId == 1) {
+        if (paymentMethodId == 2) {
             dispatch(setIsNextDisabled(false));
         }
     }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
 
+    useEffect(() => {
+        if (useBillingAddressSameAsShipping) {
+            dispatch(setBillingAddress(finalShippingAddress));
+        }
+    }, [dispatch]);
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -244,19 +265,19 @@ export function SubmissionStep04Content() {
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
                             <div className={classes.shippingMethodItemContainer}>
                                 <PaymentMethodItem
-                                    isSelected={paymentMethodId === 0}
+                                    isSelected={paymentMethodId === 1}
                                     methodName={'Credit or Debit Card'}
-                                    methodId={0}
+                                    methodId={1}
                                 />
                                 <PaymentMethodItem
-                                    isSelected={paymentMethodId === 1}
+                                    isSelected={paymentMethodId === 2}
                                     methodName={'Paypal'}
-                                    methodId={1}
+                                    methodId={2}
                                 />
                             </div>
                         </div>
                         <Divider light />
-                        {paymentMethodId === 0 ? (
+                        {paymentMethodId === 1 ? (
                             <>
                                 <div className={classes.sectionContainer}>
                                     <PaymentForm />
@@ -278,15 +299,15 @@ export function SubmissionStep04Content() {
                                             </Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
+                                            >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
                                             <Typography className={classes.billingAddressItem}>{`${
-                                                shippingAddress.address
+                                                finalShippingAddress.address
                                             } ${
-                                                shippingAddress?.apt ? `apt: ${shippingAddress.apt}` : null
+                                                finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
                                             }`}</Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${shippingAddress.city}, ${shippingAddress.state.name} ${shippingAddress.zipCode}, US`}</Typography>
+                                            >{`${finalShippingAddress.city}, ${finalShippingAddress.state.name} ${finalShippingAddress.zipCode}, US`}</Typography>
                                         </>
                                     ) : (
                                         <>
@@ -362,10 +383,7 @@ export function SubmissionStep04Content() {
                                                             }}
                                                         />
                                                     </div>
-                                                    <div
-                                                        className={classes.fieldContainer}
-                                                        style={{ width: '18%', marginTop: '4px' }}
-                                                    >
+                                                    <div className={classes.fieldContainer} style={{ width: '18%' }}>
                                                         <Typography className={classes.methodDescription}>
                                                             Apt # (optional)
                                                         </Typography>
@@ -374,7 +392,7 @@ export function SubmissionStep04Content() {
                                                             placeholder="Apt #"
                                                             fullWidth
                                                             value={apt}
-                                                            onChange={(e: any) => updateField('apt', e.target.value)}
+                                                            onChange={(e: any) => updateField('flat', e.target.value)}
                                                             size={'small'}
                                                             variant={'outlined'}
                                                             margin="normal"
@@ -406,7 +424,7 @@ export function SubmissionStep04Content() {
                                                     </div>
                                                     <div
                                                         className={classes.fieldContainer}
-                                                        style={{ width: '32%', marginTop: '4px' }}
+                                                        style={{ width: '32%', marginTop: '6px' }}
                                                     >
                                                         <Typography className={classes.methodDescription}>
                                                             State

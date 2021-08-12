@@ -17,6 +17,7 @@ class CreateOrderStatusesTable extends Migration
 
         Schema::create('order_statuses', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->string('name');
             $table->string('description');
             $table->foreignId('order_state_id')->constrained();

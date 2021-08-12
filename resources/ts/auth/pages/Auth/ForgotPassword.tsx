@@ -47,12 +47,12 @@ export function ForgotPassword() {
                 <Grid container direction={'column'} className={classes.content}>
                     <Box marginBottom={4}>
                         <Typography variant={'h6'} align={'center'}>
-                            Recover login to your AGS Account and Access Robograding
+                            Enter the email associated with your account in order to reset your password.
                         </Typography>
                     </Box>
                     <FormInput type={'text'} label={'Email'} name={'email'} />
 
-                    <SubmitButton>Submit</SubmitButton>
+                    <SubmitButton>Send Link</SubmitButton>
 
                     <Divider />
 

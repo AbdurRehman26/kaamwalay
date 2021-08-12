@@ -1,9 +1,8 @@
 import { Injectable } from '@shared/decorators/Injectable';
-import { DebugAdapter } from '@shared/lib/log/adapters';
 
-import { LogAdapter, LogAdapterClass } from './adapters/LogAdapter';
+import { DebugAdapter, LogAdapter, LogAdapterClass } from './adapters';
 
-@Injectable()
+@Injectable('LogChannel')
 export class LogChannel {
     private readonly adapter: LogAdapter;
 

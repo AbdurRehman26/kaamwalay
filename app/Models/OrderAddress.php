@@ -2,19 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class OrderAddress extends Model
+class OrderAddress extends Address
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'address', 'city', 'state', 'zip', 'phone', 'flat', 'country_id'];
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'address',
+        'city',
+        'state',
+        'zip',
+        'phone',
+        'flat',
+        'country_id',
+    ];
 
     /**
      * The attributes that should be cast to native types.

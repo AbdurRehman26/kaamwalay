@@ -49,8 +49,8 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertStatus(401);
-        $response->assertJsonStructure([ 'message' ]);
-        $response->assertJsonPath('message', 'Unauthorized');
+        $response->assertJsonStructure([ 'error' ]);
+        $response->assertJsonPath('error', 'Incorrect Email or Password');
     }
 
     /**
@@ -66,12 +66,12 @@ class LoginTest extends TestCase
 
         $response = $this->postJson('api/auth/login', [
             'email' => $user->email,
-            'password' => 'password1',
+            'password' => 'passWord12',
         ]);
 
         $response->assertStatus(401);
-        $response->assertJsonStructure([ 'message' ]);
-        $response->assertJsonPath('message', 'Unauthorized');
+        $response->assertJsonStructure([ 'error' ]);
+        $response->assertJsonPath('error', 'Incorrect Email or Password');
     }
 
     /**
@@ -111,7 +111,17 @@ class LoginTest extends TestCase
         ]);
         $user = User::firstOrFail();
         $response->assertStatus(200);
-        $response->assertJsonStructure([ 'access_token', 'type', 'expiry' ]);
+        $response->assertJsonStructure(['access_token', 'type', 'expiry']);
         $this->assertSame($testEmail, $user->email);
+    }
+    /** @test */
+    public function a_logged_in_customer_cannot_login()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->postJson('api/auth/login');
+        $response->assertRedirect();
     }
 }

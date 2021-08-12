@@ -13,7 +13,7 @@ import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { SignUpRequestDto } from '../dto/SignUpRequestDto';
 import { Repository } from './Repository';
 
-@Injectable()
+@Injectable('AuthenticationRepository')
 export class AuthenticationRepository extends Repository<CustomerOrdersPaymentPlanEntity> {
     readonly endpointPath: string = '/auth';
     readonly model = CustomerOrdersPaymentPlanEntity;

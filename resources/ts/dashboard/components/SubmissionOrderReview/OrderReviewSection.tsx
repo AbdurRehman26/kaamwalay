@@ -24,15 +24,22 @@ function OrderReviewSection() {
     const turnaround = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround);
 
     // Payment method data
+    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const paymentCardBrandName = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.brand);
     const paymentExpMonth = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expMonth);
     const paymentExpYear = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expYear);
     const paymentLast4 = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.last4);
-
     const billingAddress = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress);
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
+    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
     const returnShippingMethod = 'Insured Shipping';
 
+    const finalShippingAddress =
+        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+            ? selectedExistingAddress
+            : shippingAddress;
     return (
         <Paper variant={'outlined'} className={classes.orderReviewSection}>
             <div className={classes.orderItemsColumn}>
@@ -63,22 +70,31 @@ function OrderReviewSection() {
                 <OrderDetailItem title={'Shipping Address'} editStep={2}>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
-                    <Typography className={classes.darkBodyText}>{`${shippingAddress.address}`}</Typography>
+                    >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
+                    <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
+                        finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
+                    }`}</Typography>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${shippingAddress.city}, ${shippingAddress.state.code} ${shippingAddress.zipCode}, US`}</Typography>
+                    >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
                 </OrderDetailItem>
             </div>
 
             <div className={classes.orderItemsColumn}>
                 <OrderDetailItem title={'Payment Method'} editStep={3} spaced>
-                    <Typography className={classes.darkBodyText}>{`${getPaymentTitle(
-                        paymentCardBrandName,
-                    )} Ending in ${paymentLast4}`}</Typography>
-                    <Typography
-                        className={classes.greyBodyText}
-                    >{`Expires ${paymentExpMonth}/${paymentExpYear}`}</Typography>
+                    {paymentMethodId === 1 ? (
+                        <>
+                            {' '}
+                            <Typography className={classes.darkBodyText}>{`${getPaymentTitle(
+                                paymentCardBrandName,
+                            )} Ending in ${paymentLast4}`}</Typography>
+                            <Typography
+                                className={classes.greyBodyText}
+                            >{`Expires ${paymentExpMonth}/${paymentExpYear}`}</Typography>
+                        </>
+                    ) : (
+                        <Typography className={classes.darkBodyText}>PayPal</Typography>
+                    )}
                 </OrderDetailItem>
                 <Spacer top={'48px'} />
                 <OrderDetailItem title={'Return Shipping Method'} editStep={2} spaced>
@@ -90,11 +106,13 @@ function OrderReviewSection() {
                 <OrderDetailItem title={'Billing Address'} editStep={3}>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${billingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
-                    <Typography className={classes.darkBodyText}>{`${billingAddress.address}`}</Typography>
+                    >{`${billingAddress.firstName} ${billingAddress.lastName}`}</Typography>
+                    <Typography className={classes.darkBodyText}>{`${billingAddress.address} ${
+                        billingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
+                    }`}</Typography>
                     <Typography
                         className={classes.darkBodyText}
-                    >{`${billingAddress.city}, ${shippingAddress.state.code} ${shippingAddress.zipCode}, US`}</Typography>
+                    >{`${billingAddress.city}, ${billingAddress.state.code} ${billingAddress.zipCode}, US`}</Typography>
                 </OrderDetailItem>
             </div>
         </Paper>

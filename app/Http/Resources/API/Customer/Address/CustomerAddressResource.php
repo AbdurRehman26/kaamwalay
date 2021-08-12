@@ -26,8 +26,6 @@ class CustomerAddressResource extends JsonResource
             'zip' => $this->zip,
             'phone' => $this->phone,
             'flat' => $this->flat,
-            'is_default_shipping' => $this->is_default_shipping,
-            'is_default_billing' => $this->is_default_billing,
             'country' => new CountryResource($this->country),
         ];
     }

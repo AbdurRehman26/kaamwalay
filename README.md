@@ -74,6 +74,16 @@ one you are working on.
 -   When PR is created, our GitHub Action also runs to fix code styling automatically.
 -   Once tests are passing and code styling is fixed, then you can request review on your PR.
 
+#### File Storage
+For cloud storage on local, we use MinIO. MinIO provides an S3 compatible API that you may use to develop locally using Laravel's s3 file storage driver. 
+It is already setup with Sail. If you need to see uploaded files you can visit:
+
+```
+http://127.0.0.1:8900
+Username: sail 
+Password: password
+```
+
 #### API Documentation
 
 For API documentation, we are using apiDocjs. Once you have written the documentation source files, you can use this

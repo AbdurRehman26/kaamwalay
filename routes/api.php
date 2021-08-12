@@ -12,6 +12,8 @@ use App\Http\Controllers\API\Customer\Address\StateController;
 use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\PaymentCardController;
 use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
+use App\Http\Controllers\API\Auth\ForgotPasswordController;
+use App\Http\Controllers\API\Auth\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +28,8 @@ use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class, 'login'])->middleware('guest');
     Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
+    Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('password/reset', [ResetPasswordController::class, 'reset']);
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 

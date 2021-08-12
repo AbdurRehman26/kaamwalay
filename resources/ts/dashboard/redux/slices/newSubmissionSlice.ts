@@ -87,6 +87,7 @@ export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     currentStep: number;
     step01Status: any;
+    orderID: number;
     grandTotal: number;
     orderNumber: string;
     step01Data: Step01Data;
@@ -96,6 +97,7 @@ export interface NewSubmissionSliceState {
 }
 
 const initialState: NewSubmissionSliceState = {
+    orderID: -1,
     grandTotal: 0,
     orderNumber: '',
     isNextDisabled: false,
@@ -240,7 +242,7 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             address: address.address,
             zipCode: address.zip,
             phoneNumber: address.phone,
-            flat: address.flat,
+            flat: address.flat ?? '',
             city: address.city,
             isDefaultShipping: address.is_default_shipping,
             isDefaultBilling: address.is_default_billing,
@@ -434,6 +436,7 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.useCustomShippingAddress = action.payload;
             state.step03Data.selectedAddress = initialState.step03Data.selectedAddress;
         },
+        clearSubmissionState: (state) => initialState,
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state) => {
@@ -466,6 +469,7 @@ export const newSubmissionSlice = createSlice({
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grand_total;
             state.orderNumber = action.payload.order_number;
+            state.orderID = action.payload.id;
             state.step04Data.selectedBillingAddress.address = action.payload.billing_address.address;
             state.step04Data.selectedBillingAddress.country = action.payload.billing_address.country;
             state.step04Data.selectedBillingAddress.firstName = action.payload.billing_address.first_name;
@@ -522,4 +526,5 @@ export const {
     setUseCustomShippingAddress,
     resetSelectedExistingAddress,
     setBillingAddress,
+    clearSubmissionState,
 } = newSubmissionSlice.actions;

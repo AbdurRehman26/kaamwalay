@@ -62,7 +62,7 @@ const useStyles = makeStyles(
 
 function LayoutSidebar() {
     const classes = useStyles();
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
 
     return (
         <Paper variant={'outlined'} className={classes.root}>
@@ -71,7 +71,7 @@ function LayoutSidebar() {
                     <Avatar src={UserAvatar} className={classes.headerAvatar} />
                 </div>
                 <div className={classes.headerInfoHolder}>
-                    <Typography variant={'h6'}>James Smith</Typography>
+                    <Typography variant={'h6'}>{user.getFullName()}</Typography>
                     <Link onClick={logout} variant={'body2'} color={'primary'} className={classes.headerSignOut}>
                         Sign Out
                     </Link>

@@ -1,5 +1,5 @@
 /**
- * @api {post} /customer/payment-methods/charge Charge the user
+ * @api {post} /customer/payment-cards/charge Charge the user
  * @apiName Charge Customer
  * @apiGroup Payment-Methods
  *

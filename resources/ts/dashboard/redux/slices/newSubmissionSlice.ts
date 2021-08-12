@@ -4,6 +4,8 @@ import axios from 'axios';
 import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
 import { APIService } from '@shared/services/APIService';
 
+import { newSubmission } from '@dashboard/redux/slices/index';
+
 export interface SubmissionService {
     id: number;
     type: 'card';
@@ -39,11 +41,16 @@ export interface Address {
     firstName: string;
     lastName: string;
     address: string;
-    apt?: string;
+    flat?: string;
     city: string;
+    country: { name: string; code: string; id: number };
     state: { name: string; code: string; id: number };
     zipCode: string;
     phoneNumber: string;
+    id: number;
+    userId?: number;
+    isDefaultShipping?: boolean;
+    isDefaultBilling?: boolean;
 }
 
 export interface CreditCard {
@@ -55,11 +62,14 @@ export interface CreditCard {
 }
 
 export interface ShippingSubmissionState {
-    existingAddresses?: Address[];
+    existingAddresses: Address[] | [];
     selectedAddress: Address;
     availableStatesList: { name: string; code: string; id: number }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
+    disableAllShippingInputs: boolean;
+    useCustomShippingAddress: boolean;
+    selectedExistingAddress: Address;
 }
 
 export interface PaymentSubmissionState {
@@ -78,6 +88,8 @@ export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     currentStep: number;
     step01Status: any;
+    grandTotal: number;
+    orderNumber: string;
     step01Data: Step01Data;
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
@@ -85,6 +97,8 @@ export interface NewSubmissionSliceState {
 }
 
 const initialState: NewSubmissionSliceState = {
+    grandTotal: 0,
+    orderNumber: '',
     isNextDisabled: false,
     currentStep: 0,
     step01Status: null,
@@ -111,18 +125,41 @@ const initialState: NewSubmissionSliceState = {
             firstName: '',
             lastName: '',
             address: '',
-            apt: '',
+            flat: '',
             city: '',
-            state: { name: '', code: '', id: 0 },
+            state: { id: 0, code: '', name: '' },
             zipCode: '',
             phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            // Setting it to -1 so we know for sure this isn't a real address id by default
+            id: -1,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
+        },
+        selectedExistingAddress: {
+            firstName: '',
+            lastName: '',
+            address: '',
+            flat: '',
+            city: '',
+            state: { id: 0, code: '', name: '' },
+            zipCode: '',
+            phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            id: -1,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
         },
         availableStatesList: [{ name: '', code: '', id: 0 }],
         fetchingStatus: null,
         saveForLater: true,
+        disableAllShippingInputs: false,
+        useCustomShippingAddress: false,
     },
     step04Data: {
-        paymentMethodId: 0,
+        paymentMethodId: 1,
         existingCreditCards: [],
         availableStatesList: [],
         selectedCreditCard: {
@@ -138,11 +175,16 @@ const initialState: NewSubmissionSliceState = {
             firstName: '',
             lastName: '',
             address: '',
-            apt: '',
+            flat: '',
             city: '',
-            state: { name: '', code: '', id: 0 },
+            state: { id: 0, code: '', name: '' },
             zipCode: '',
             phoneNumber: '',
+            country: { id: 0, code: '', name: '' },
+            id: 0,
+            userId: 0,
+            isDefaultShipping: false,
+            isDefaultBilling: false,
         },
         existingBillingAddresses: [],
         fetchingStatus: null,
@@ -150,8 +192,10 @@ const initialState: NewSubmissionSliceState = {
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
-    const serviceLevels = await axios.get('http://robograding.test/api/customer/orders/payment-plans/');
-    return serviceLevels.data.data.map((serviceLevel: any) => ({
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
+    const serviceLevels = await endpoint.get('');
+    return serviceLevels.data.map((serviceLevel: any) => ({
         id: serviceLevel.id,
         type: 'card',
         maxProtectionAmount: serviceLevel.max_protection_amount,
@@ -161,8 +205,10 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
 });
 
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
-    const americanStates = await axios.get('http://robograding.test/api/customer/addresses/states');
-    return americanStates.data.data;
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/addresses/states');
+    const americanStates = await endpoint.get('');
+    return americanStates.data;
 });
 
 export const getShippingFee = createAsyncThunk(
@@ -180,6 +226,99 @@ export const getShippingFee = createAsyncThunk(
         return shippingFeeResponse.data.shipping_fee;
     },
 );
+
+export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
+    const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/addresses');
+    const customerAddresses = await endpoint.get('');
+    const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
+        return {
+            id: address.id,
+            userId: address.user_id,
+            firstName: address.first_name,
+            lastName: address.last_name,
+            address: address.address,
+            zipCode: address.zip,
+            phoneNumber: address.phone,
+            flat: address.flat,
+            city: address.city,
+            isDefaultShipping: address.is_default_shipping,
+            isDefaultBilling: address.is_default_billing,
+            // Doing this because the back-end can't give me this full object for the state
+            // so I'll just search for the complete object inside the existing states
+            state: availableStatesList.find((item: any) => item.code === address.state),
+            country: {
+                id: address.country.id,
+                code: address.country.code,
+                name: address.country.name,
+            },
+        };
+    });
+    return formattedAddresses;
+});
+
+export const createOrder = createAsyncThunk('newSubmission/createOrder', async (_, { getState }: any) => {
+    const currentSubmission: any = getState().newSubmission;
+    const finalShippingAddress =
+        currentSubmission.step03Data.existingAddresses.length !== 0 &&
+        !currentSubmission.step03Data.useCustomShippingAddress &&
+        currentSubmission.step03Data.selectedExistingAddress.id !== 0
+            ? currentSubmission.step03Data.selectedExistingAddress
+            : currentSubmission.step03Data.selectedAddress;
+    const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
+
+    const orderDTO = {
+        payment_plan: {
+            id: currentSubmission.step01Data.selectedServiceLevel.id,
+        },
+        items: currentSubmission.step02Data.selectedCards.map((selectedCard: any) => ({
+            card_product: {
+                id: selectedCard.id,
+            },
+            quantity: selectedCard.qty,
+            declared_value_per_unit: selectedCard.value,
+        })),
+        shipping_address: {
+            first_name: finalShippingAddress.firstName,
+            last_name: finalShippingAddress.lastName,
+            address: finalShippingAddress.address,
+            city: finalShippingAddress.city,
+            state: finalShippingAddress.state.code,
+            zip: finalShippingAddress.zipCode,
+            phone: finalShippingAddress.phoneNumber,
+            flat: finalShippingAddress.flat,
+            save_for_later:
+                currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                    ? false
+                    : currentSubmission.step03Data.saveForLater,
+        },
+        billing_address: {
+            first_name: billingAddress.firstName,
+            last_name: billingAddress.lastName,
+            address: billingAddress.address,
+            city: billingAddress.city,
+            state: billingAddress.state.code,
+            zip: billingAddress.zipCode,
+            phone: finalShippingAddress.phoneNumber,
+            flat: billingAddress.flat,
+            same_as_shipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
+        },
+        shipping_method: {
+            id: 1,
+        },
+        payment_method: {
+            id: currentSubmission.step04Data.paymentMethodId,
+        },
+        payment_provider_reference: {
+            id: currentSubmission.step04Data.selectedCreditCard.id,
+        },
+    };
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/orders');
+    const newOrder = await endpoint.post('', orderDTO);
+    return newOrder.data;
+});
 
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
@@ -207,44 +346,7 @@ export const newSubmissionSlice = createSlice({
         setCardsSearchValue: (state, action: PayloadAction<string>) => {
             state.step02Data.searchValue = action.payload;
             // TODO: This will be replaced with search integration
-            state.step02Data.searchResults = [
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 1,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 2',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 2,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 3',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 4,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 4',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 5,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 5',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 6,
-                },
-                {
-                    image: 'https://i.ibb.co/8b0CskT/Dummy-Charizard.png',
-                    title: 'Charizard 6',
-                    subtitle: '2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard',
-                    id: 8,
-                },
-            ];
+            state.step02Data.searchResults = [];
         },
         markCardAsSelected: (state, action: PayloadAction<SearchResultItemCardProps>) => {
             state.step02Data.selectedCards = [
@@ -302,6 +404,9 @@ export const newSubmissionSlice = createSlice({
         setBillingAddressEqualToShippingAddress: (state) => {
             state.step04Data.selectedBillingAddress = state.step03Data.selectedAddress;
         },
+        setBillingAddress: (state, action: PayloadAction<Address>) => {
+            state.step04Data.selectedBillingAddress = action.payload;
+        },
         saveStripeCustomerCards: (state, action: PayloadAction<CreditCard[]>) => {
             state.step04Data.existingCreditCards = action.payload;
             if (action.payload.length > 0) {
@@ -313,6 +418,22 @@ export const newSubmissionSlice = createSlice({
             if (lookup) {
                 state.step04Data.selectedCreditCard = lookup;
             }
+        },
+        setDisableAllShippingInputs: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.disableAllShippingInputs = action.payload;
+        },
+        setSelectedExistingAddress: (state, action: PayloadAction<number>) => {
+            const lookup = state.step03Data?.existingAddresses?.find((address) => address.id == action.payload);
+            if (lookup) {
+                state.step03Data.selectedExistingAddress = lookup;
+            }
+        },
+        resetSelectedExistingAddress: (state) => {
+            state.step03Data.selectedExistingAddress = initialState.step03Data.selectedExistingAddress;
+        },
+        setUseCustomShippingAddress: (state, action: PayloadAction<boolean>) => {
+            state.step03Data.useCustomShippingAddress = action.payload;
+            state.step03Data.selectedAddress = initialState.step03Data.selectedAddress;
         },
     },
     extraReducers: {
@@ -335,11 +456,43 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.fetchingStatus = 'success';
         },
         [getStatesList.rejected as any]: (state, action) => {
-            console.log(action);
             state.step03Data.fetchingStatus = 'failed';
         },
         [getShippingFee.fulfilled as any]: (state, action) => {
             state.step02Data.shippingFee = action.payload;
+        },
+        [getSavedAddresses.fulfilled as any]: (state, action) => {
+            state.step03Data.existingAddresses = action.payload;
+        },
+        [createOrder.fulfilled as any]: (state, action) => {
+            state.grandTotal = action.payload.grand_total;
+            state.orderNumber = action.payload.order_number;
+            state.step04Data.selectedBillingAddress.address = action.payload.billing_address.address;
+            state.step04Data.selectedBillingAddress.country = action.payload.billing_address.country;
+            state.step04Data.selectedBillingAddress.firstName = action.payload.billing_address.first_name;
+            state.step04Data.selectedBillingAddress.lastName = action.payload.billing_address.last_name;
+            state.step04Data.selectedBillingAddress.flat = action.payload.billing_address.flat;
+            state.step04Data.selectedBillingAddress.id = action.payload.billing_address.id;
+            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billing_address.phone;
+            state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
+                (currentState: any) => currentState.code === action.payload.billing_address.state,
+            ) as any;
+            state.step04Data.selectedBillingAddress.zipCode = action.payload.billing_address.zip;
+            state.step04Data.selectedBillingAddress.city = action.payload.billing_address.city;
+            state.step02Data.selectedCards = action.payload.order_items.map((orderItem: any) => ({
+                image: orderItem.card_product.image_path,
+                title: orderItem.card_product.name,
+                subtitle: `${orderItem.card_product.release_year} ${orderItem.card_product.card_category_name} ${orderItem.card_product.card_series_name} ${orderItem.card_product.card_series_name} ${orderItem.card_product.card_number_order} ${orderItem.card_product.name}`,
+                id: orderItem.card_product.id,
+                qty: orderItem.quantity,
+                value: orderItem.declared_value_per_unit,
+            }));
+            state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
+                (plan) => plan.id === action.payload.payment_plan.id,
+            ) as any;
+        },
+        [createOrder.rejected as any]: (state, action) => {
+            console.log(action.payload);
         },
     },
 });
@@ -365,4 +518,9 @@ export const {
     saveStripeCustomerCards,
     setBillingAddressEqualToShippingAddress,
     setSelectedStripeCard,
+    setDisableAllShippingInputs,
+    setSelectedExistingAddress,
+    setUseCustomShippingAddress,
+    resetSelectedExistingAddress,
+    setBillingAddress,
 } = newSubmissionSlice.actions;

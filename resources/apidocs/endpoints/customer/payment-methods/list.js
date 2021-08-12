@@ -1,5 +1,5 @@
 /**
- * @api {get} /customer/payment-methods Users Payment Methods
+ * @api {get} /customer/payment-cards Users Payment Methods
  * @apiName List Payment Methods
  * @apiGroup Payment-Methods
  *

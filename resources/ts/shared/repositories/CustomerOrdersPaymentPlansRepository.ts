@@ -3,7 +3,7 @@ import { CustomerOrdersPaymentPlanEntity } from '@shared/entities/CustomerOrders
 
 import { Repository } from './Repository';
 
-@Injectable()
+@Injectable('CustomerOrdersPaymentPlansRepository')
 export class CustomerOrdersPaymentPlansRepository extends Repository<CustomerOrdersPaymentPlanEntity> {
     readonly endpointPath: string = 'customer/orders/payment-plans';
     readonly model = CustomerOrdersPaymentPlanEntity;

@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import algoliasearch from 'algoliasearch';
 import React from 'react';
-import { InstantSearch, connectSearchBox, SearchBox, Configure } from 'react-instantsearch-dom';
+import { Configure, InstantSearch } from 'react-instantsearch-dom';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';

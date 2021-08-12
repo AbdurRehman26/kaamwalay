@@ -4,7 +4,7 @@ import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
 import { StorageService } from '@shared/services/StorageService';
 
-@Injectable()
+@Injectable('AuthenticationService')
 export class AuthenticationService {
     private storage: StorageBucket;
 

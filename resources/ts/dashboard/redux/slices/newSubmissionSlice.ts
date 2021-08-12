@@ -4,6 +4,8 @@ import axios from 'axios';
 import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
 import { APIService } from '@shared/services/APIService';
 
+import { newSubmission } from '@dashboard/redux/slices/index';
+
 export interface SubmissionService {
     id: number;
     type: 'card';
@@ -46,7 +48,7 @@ export interface Address {
     zipCode: string;
     phoneNumber: string;
     id: number;
-    userId: number;
+    userId?: number;
     isDefaultShipping?: boolean;
     isDefaultBilling?: boolean;
 }
@@ -86,6 +88,8 @@ export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     currentStep: number;
     step01Status: any;
+    grandTotal: number;
+    orderNumber: string;
     step01Data: Step01Data;
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
@@ -93,6 +97,8 @@ export interface NewSubmissionSliceState {
 }
 
 const initialState: NewSubmissionSliceState = {
+    grandTotal: 0,
+    orderNumber: '',
     isNextDisabled: false,
     currentStep: 0,
     step01Status: null,
@@ -254,6 +260,68 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
     return formattedAddresses;
 });
 
+export const createOrder = createAsyncThunk('newSubmission/createOrder', async (_, { getState }: any) => {
+    const currentSubmission: any = getState().newSubmission;
+    const finalShippingAddress =
+        currentSubmission.step03Data.existingAddresses.length !== 0 &&
+        !currentSubmission.step03Data.useCustomShippingAddress &&
+        currentSubmission.step03Data.selectedExistingAddress.id !== 0
+            ? currentSubmission.step03Data.selectedExistingAddress
+            : currentSubmission.step03Data.selectedAddress;
+    const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
+
+    const orderDTO = {
+        payment_plan: {
+            id: currentSubmission.step01Data.selectedServiceLevel.id,
+        },
+        items: currentSubmission.step02Data.selectedCards.map((selectedCard: any) => ({
+            card_product: {
+                id: selectedCard.id,
+            },
+            quantity: selectedCard.qty,
+            declared_value_per_unit: selectedCard.value,
+        })),
+        shipping_address: {
+            first_name: finalShippingAddress.firstName,
+            last_name: finalShippingAddress.lastName,
+            address: finalShippingAddress.address,
+            city: finalShippingAddress.city,
+            state: finalShippingAddress.state.code,
+            zip: finalShippingAddress.zipCode,
+            phone: finalShippingAddress.phoneNumber,
+            flat: finalShippingAddress.flat,
+            save_for_later:
+                currentSubmission.step03Data.selectedExistingAddress.id !== 0
+                    ? false
+                    : currentSubmission.step03Data.saveForLater,
+        },
+        billing_address: {
+            first_name: billingAddress.firstName,
+            last_name: billingAddress.lastName,
+            address: billingAddress.address,
+            city: billingAddress.city,
+            state: billingAddress.state.code,
+            zip: billingAddress.zipCode,
+            phone: finalShippingAddress.phoneNumber,
+            flat: billingAddress.flat,
+            same_as_shipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
+        },
+        shipping_method: {
+            id: 1,
+        },
+        payment_method: {
+            id: 1,
+        },
+        payment_provider_reference: {
+            id: currentSubmission.step04Data.selectedCreditCard.id,
+        },
+    };
+    const apiService = resolveInjectable(APIService);
+    const endpoint = apiService.createEndpoint('customer/orders');
+    const newOrder = await endpoint.post('', orderDTO);
+    return newOrder.data;
+});
+
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
     initialState,
@@ -397,6 +465,52 @@ export const newSubmissionSlice = createSlice({
         },
         [getSavedAddresses.fulfilled as any]: (state, action) => {
             state.step03Data.existingAddresses = action.payload;
+        },
+        [createOrder.fulfilled as any]: (state, action) => {
+            state.grandTotal = action.payload.grand_total;
+            state.orderNumber = action.payload.order_number;
+            state.step04Data.selectedBillingAddress.address = action.payload.billing_address.address;
+            state.step04Data.selectedBillingAddress.country = action.payload.billing_address.country;
+            state.step04Data.selectedBillingAddress.firstName = action.payload.billing_address.first_name;
+            state.step04Data.selectedBillingAddress.lastName = action.payload.billing_address.last_name;
+            state.step04Data.selectedBillingAddress.flat = action.payload.billing_address.flat;
+            state.step04Data.selectedBillingAddress.id = action.payload.billing_address.id;
+            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billing_address.phone;
+            state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
+                (currentState: any) => currentState.code === action.payload.billing_address.state,
+            ) as any;
+            state.step04Data.selectedBillingAddress.zipCode = action.payload.billing_address.zip;
+            state.step04Data.selectedBillingAddress.city = action.payload.billing_address.city;
+            state.step02Data.selectedCards = action.payload.order_items.map((orderItem: any) => ({
+                image: orderItem.card_product.image_path,
+                title: orderItem.card_product.name,
+                subtitle: `${orderItem.card_product.release_year} ${orderItem.card_product.card_category_name} ${orderItem.card_product.card_series_name} ${orderItem.card_product.card_series_name} ${orderItem.card_product.card_number_order} ${orderItem.card_product.name}`,
+                id: orderItem.card_product.id,
+                qty: orderItem.quantity,
+                value: orderItem.declared_value_per_unit,
+            }));
+            state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
+                (plan) => plan.id === action.payload.payment_plan.id,
+            ) as any;
+            state.step03Data[
+                state.step03Data.selectedExistingAddress.id !== -1 ? 'selectedExistingAddress' : 'selectedAddress'
+            ] = {
+                address: action.payload.shipping_address.address,
+                country: action.payload.shipping_address.country,
+                firstName: action.payload.shipping_address.first_name,
+                flat: action.payload.shipping_address.flat,
+                id: action.payload.shipping_address.id,
+                lastName: action.payload.shipping_address.last_name,
+                phoneNumber: action.payload.shipping_address.phone,
+                state: state.step03Data.availableStatesList.find(
+                    (currentState: any) => currentState.code === action.payload.shipping_address.state,
+                ) as any,
+                zipCode: action.payload.shipping_address.zip,
+                city: action.payload.shipping_address.city,
+            };
+        },
+        [createOrder.rejected as any]: (state, action) => {
+            console.log(action.payload);
         },
     },
 });

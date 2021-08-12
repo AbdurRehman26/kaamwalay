@@ -71,10 +71,7 @@ function SubmissionStep02Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
-                        <InstantSearch
-                            searchClient={searchClient}
-                            indexName={`${process.env.MIX_APP_ENV}_card_products`}
-                        >
+                        <InstantSearch searchClient={searchClient} indexName={`${process.env.NODE_ENV}_card_products`}>
                             <CardSubmissionSearchField />
                             {searchValue !== '' ? <CardsSearchResults /> : null}
                             <AddedSubmissionCards />

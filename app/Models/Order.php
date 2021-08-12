@@ -96,6 +96,11 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function orderPayment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(OrderPayment::class);
+    }
+
     public function scopeForUser(Builder $query, User $user): Builder
     {
         return $query->where('user_id', $user->id);

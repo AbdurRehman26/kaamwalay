@@ -15,6 +15,7 @@ import SubmissionStep05Content from '../../components/SubmissionStep05Content';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     backStep,
+    createOrder,
     getSavedAddresses,
     getShippingFee,
     getStatesList,
@@ -77,6 +78,11 @@ export function NewSubmission() {
             await dispatch(getShippingFee(selectedCards));
             await dispatch(getStatesList());
             await dispatch(getSavedAddresses());
+            dispatch(nextStep());
+            return;
+        }
+        if (currentStep === 3) {
+            await dispatch(createOrder());
             dispatch(nextStep());
             return;
         }

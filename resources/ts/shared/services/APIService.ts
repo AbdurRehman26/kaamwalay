@@ -18,7 +18,7 @@ export class APIService {
      * Create an axios instance configured to send requests to /api/{path}
      * @example
      * ```
-     * const api = resolveInjectable(APIService);
+     * const api = app(APIService);
      * const users$ = api.createEndpoint('users');
      * ...
      * users$.get('').then(..);
@@ -39,7 +39,7 @@ export class APIService {
      * Create an axios instance configured to send requests to /api/{path}
      * @example
      * ```
-     * const api = resolveInjectable(APIService);
+     * const api = app(APIService);
      * const users$ = api.createAxios({ baseURL: '/api/users' });
      * ...
      * users$.get('').then(...);

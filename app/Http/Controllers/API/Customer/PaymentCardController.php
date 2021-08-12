@@ -26,13 +26,4 @@ class PaymentCardController extends Controller
             'intent' => $stripeService->createSetupIntent(),
         ], Response::HTTP_OK);
     }
-
-    public function charge(StripeService $stripeService): JsonResponse
-    {
-        $this->validate(request(), [
-            'payment_method_id' => ['required'],
-        ]);
-
-        return $stripeService->charge();
-    }
 }

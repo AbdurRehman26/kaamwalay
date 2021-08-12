@@ -13,7 +13,7 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setCustomStep } from '../redux/slices/newSubmissionSlice';
+import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
     container: {
@@ -157,6 +157,7 @@ function SubmissionSummary() {
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
+    const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -175,7 +176,7 @@ function SubmissionSummary() {
     });
 
     const handleConfirmStripePayment = async () => {
-        const endpoint = apiService.createEndpoint('customer/payment-methods/charge');
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
         if (!stripe) {
             // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
             return;
@@ -189,7 +190,8 @@ function SubmissionSummary() {
             });
 
             setIsStripePaymentLoading(false);
-            history.push('/submissions/123/confirmation');
+            dispatch(clearSubmissionState());
+            history.push(`/submissions/${orderID}/confirmation`);
         } catch (err) {
             // Charge was failed by back-end so we try to charge him on the front-end
             // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
@@ -207,8 +209,14 @@ function SubmissionSummary() {
             } else {
                 // We're all good!
                 if (chargeResult.paymentIntent.status === 'succeeded') {
-                    setIsStripePaymentLoading(false);
-                    history.push('/submissions/123/confirmation');
+                    const verifyOrderEndpoint = apiService.createEndpoint(
+                        `customer/orders/${orderID}/payments/${chargeResult.paymentIntent.id}`,
+                    );
+                    verifyOrderEndpoint.post('').then((r) => {
+                        setIsStripePaymentLoading(false);
+                        dispatch(clearSubmissionState());
+                        history.push(`/submissions/${orderID}/confirmation`);
+                    });
                 }
             }
         }

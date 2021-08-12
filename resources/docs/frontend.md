@@ -42,7 +42,7 @@ function Bar() {
 }
 
 // 3. Into plain typescript code
-const foo = resolveInjectable(Foo);
+const foo = app(Foo);
 // ...
 foo.sayHi();
 ```
@@ -88,7 +88,7 @@ export class MyRepository extends Repository<MyEntity> {
 }
 
 // later in the code
-const repository = resolveInjectable(MyRepository); // Visit Dependency Injection docs
+const repository = app(MyRepository); // Visit Dependency Injection docs
 const listData: PaginatedData<MyEntity> = await repository.list(); // send `GET /api/my/endpoint`
 const listAllData: MyEntity[] = await repository.listAll(); // send `GET /api/my/endpoint?all=true`
 const showData: MyEntity = await repository.show(1); // send `GET /api/my/endpoint/1`
@@ -114,10 +114,10 @@ const fetchData = useCallback(async () => {
 }, []);
 
 // Hook method helper, used to call a defined method
-const listData = useRepositoryMethod(CustomerAddressStatesRepository, 'list');
+const listData = useRepositoryMethod(AddressStatesRepository, 'list');
 
 // call a method and pass options to it
-const filteredData = useRepositoryMethod(CustomerAddressStatesRepository, 'list', {
+const filteredData = useRepositoryMethod(AddressStatesRepository, 'list', {
     args: [{ params: { user_id: 1 } }],
 });
 
@@ -174,7 +174,7 @@ export class MyRepository extends Repository<MyEntity> {
 }
 
 // Later in the code
-const repository = resolveInjectable(MyRepository);
+const repository = app(MyRepository);
 // Will fail and throw `ValidationException`
 repository.sendFoo({ email: 'test' }) 
 
@@ -291,8 +291,8 @@ Usage:
 // Via hook inside components
 import { useNotifications } from "@shared/hooks/useNotifications";
 import { NotificationType } from "@shared/constants/NotificationType";
-import { resolveInjectable } from "@shared/lib/dependencyInjection/resolveInjectable";
 import { NotificationsService } from "@shared/services/NotificationsService";
+import { app } from "@shared/lib/app";
 
 const notifications = useNotifications();
 notifications.notify(NotificationType.Success, "This is a notification message", "This is an optional notification title")
@@ -315,7 +315,7 @@ NotificationsService.warning('This is a warning notification.', 'Optional title'
 NotificationsService.error('This is a error notification.', 'Optional title');
 
 // via injectable
-const notificationsService = resolveInjectable(NotificationsService);
+const notificationsService = app(NotificationsService);
 notificationsService.info('This is a info notification.', 'Optional title');
 // ...
 

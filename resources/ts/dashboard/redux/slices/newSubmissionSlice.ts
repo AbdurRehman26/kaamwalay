@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
 
-import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
+import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
 import { newSubmission } from '@dashboard/redux/slices/index';
@@ -88,6 +87,7 @@ export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     currentStep: number;
     step01Status: any;
+    orderID: number;
     grandTotal: number;
     orderNumber: string;
     step01Data: Step01Data;
@@ -97,6 +97,7 @@ export interface NewSubmissionSliceState {
 }
 
 const initialState: NewSubmissionSliceState = {
+    orderID: -1,
     grandTotal: 0,
     orderNumber: '',
     isNextDisabled: false,
@@ -192,7 +193,7 @@ const initialState: NewSubmissionSliceState = {
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
-    const apiService = resolveInjectable(APIService);
+    const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
     const serviceLevels = await endpoint.get('');
     return serviceLevels.data.map((serviceLevel: any) => ({
@@ -205,7 +206,7 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
 });
 
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
-    const apiService = resolveInjectable(APIService);
+    const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses/states');
     const americanStates = await endpoint.get('');
     return americanStates.data;
@@ -214,7 +215,7 @@ export const getStatesList = createAsyncThunk('newSubmission/getStatesList', asy
 export const getShippingFee = createAsyncThunk(
     'newSubmission/getShippingFee',
     async (selectedCards: SearchResultItemCardProps[]) => {
-        const apiService = resolveInjectable(APIService);
+        const apiService = app(APIService);
         const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
         const DTO = {
             items: selectedCards.map((item) => ({
@@ -229,7 +230,7 @@ export const getShippingFee = createAsyncThunk(
 
 export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
     const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
-    const apiService = resolveInjectable(APIService);
+    const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses');
     const customerAddresses = await endpoint.get('');
     const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
@@ -241,7 +242,7 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             address: address.address,
             zipCode: address.zip,
             phoneNumber: address.phone,
-            flat: address.flat,
+            flat: address.flat ?? '',
             city: address.city,
             isDefaultShipping: address.is_default_shipping,
             isDefaultBilling: address.is_default_billing,
@@ -314,7 +315,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             id: currentSubmission.step04Data.selectedCreditCard.id,
         },
     };
-    const apiService = resolveInjectable(APIService);
+    const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
@@ -435,6 +436,7 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.useCustomShippingAddress = action.payload;
             state.step03Data.selectedAddress = initialState.step03Data.selectedAddress;
         },
+        clearSubmissionState: (state) => initialState,
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state) => {
@@ -455,7 +457,7 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.availableStatesList = action.payload;
             state.step03Data.fetchingStatus = 'success';
         },
-        [getStatesList.rejected as any]: (state, action) => {
+        [getStatesList.rejected as any]: (state) => {
             state.step03Data.fetchingStatus = 'failed';
         },
         [getShippingFee.fulfilled as any]: (state, action) => {
@@ -467,6 +469,7 @@ export const newSubmissionSlice = createSlice({
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grand_total;
             state.orderNumber = action.payload.order_number;
+            state.orderID = action.payload.id;
             state.step04Data.selectedBillingAddress.address = action.payload.billing_address.address;
             state.step04Data.selectedBillingAddress.country = action.payload.billing_address.country;
             state.step04Data.selectedBillingAddress.firstName = action.payload.billing_address.first_name;
@@ -524,4 +527,5 @@ export const {
     setUseCustomShippingAddress,
     resetSelectedExistingAddress,
     setBillingAddress,
+    clearSubmissionState,
 } = newSubmissionSlice.actions;

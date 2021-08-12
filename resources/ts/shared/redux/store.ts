@@ -4,7 +4,7 @@ import * as slices from './slices';
 import { StateType } from './types';
 
 type SlicesType = typeof slices;
-
+export type GlobalStateType = StateType<SlicesType>;
 export type GlobalStoreType = EnhancedStore<StateType<SlicesType>, any>;
 let globalReduxStore: GlobalStoreType;
 

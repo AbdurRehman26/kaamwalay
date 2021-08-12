@@ -18,6 +18,7 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'shipping_fee',
+        'service_fee',
         'grand_total',
         'user_id',
         'payment_plan_id',
@@ -38,6 +39,7 @@ class Order extends Model
     protected $casts = [
         'id' => 'integer',
         'shipping_fee' => 'float',
+        'service_fee' => 'float',
         'grand_total' => 'float',
         'user_id' => 'integer',
         'payment_plan_id' => 'integer',

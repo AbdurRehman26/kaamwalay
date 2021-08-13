@@ -5,8 +5,8 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
-use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 use PayPalHttp\HttpException;
 
 class PaypalService implements PaymentProviderServiceInterface
@@ -60,8 +60,7 @@ class PaypalService implements PaymentProviderServiceInterface
 
     public function verify(Order $order, string $paypalOrderId): bool
     {
-        $orderRequest = new OrdersCaptureRequest($paypalOrderId);
-        $orderRequest->prefer('return=representation');
+        $orderRequest = new OrdersGetRequest($paypalOrderId);
         try {
             $response = $this->client->execute($orderRequest);
 
@@ -73,7 +72,7 @@ class PaypalService implements PaymentProviderServiceInterface
 
     public function validateOrderIsPaid(Order $order, array $data): bool
     {
-        $paymentIntent = $data['purchase_units'][0]['payments']['captures'];
+        $paymentIntent = $data['purchase_units'][0]['payments']['captures'][0];
         if (
             $paymentIntent['amount']['value'] == $order->grand_total
             && $paymentIntent['status'] === 'COMPLETED'

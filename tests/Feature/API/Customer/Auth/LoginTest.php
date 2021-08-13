@@ -92,8 +92,6 @@ class LoginTest extends TestCase
     /** @test @group auth */
     public function ags_user_can_login()
     {
-        config(['services.ags.is_platform_enabled' => true]);
-
         $testEmail = 'test@test.test';
         Http::fake([
             config('services.ags.base_url') . '/login/' => Http::response([
@@ -108,7 +106,7 @@ class LoginTest extends TestCase
             'email' => $testEmail,
             'password' => 'Asdasd1',
         ]);
-        $user = User::firstOrFail();
+        $user = User::first();
         $response->assertStatus(200);
         $response->assertJsonStructure(['access_token', 'type', 'expiry']);
         $this->assertSame($testEmail, $user->email);

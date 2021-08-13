@@ -5,6 +5,7 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
+use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 use PayPalHttp\HttpException;
@@ -60,7 +61,8 @@ class PaypalService implements PaymentProviderServiceInterface
 
     public function verify(Order $order, string $paypalOrderId): bool
     {
-        $orderRequest = new OrdersGetRequest($paypalOrderId);
+        $orderRequest = new OrdersCaptureRequest($paypalOrderId);
+        $orderRequest->prefer('return=representation');
         try {
             $response = $this->client->execute($orderRequest);
 

@@ -45,6 +45,7 @@ export function SubmissionsTable({}: SubmissionsTableProps) {
                     <TableBody>
                         {data.map((data: OrderEntity, index) => (
                             <SubmissionTableRow
+                                disabled
                                 key={index}
                                 id={data.id}
                                 orderNumber={data.orderNumber}

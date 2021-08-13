@@ -66,6 +66,18 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
     },
+    cardDetailsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    cardIconContainer: {
+        display: 'flex',
+        marginRight: '12px',
+    },
+    cardTextDetails: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
 });
 
 export default useStyles;

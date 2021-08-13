@@ -84,13 +84,19 @@ function OrderReviewSection() {
                 <OrderDetailItem title={'Payment Method'} editStep={3} spaced>
                     {paymentMethodId === 1 ? (
                         <>
-                            {' '}
-                            <Typography className={classes.darkBodyText}>{`${getPaymentTitle(
-                                paymentCardBrandName,
-                            )} Ending in ${paymentLast4}`}</Typography>
-                            <Typography
-                                className={classes.greyBodyText}
-                            >{`Expires ${paymentExpMonth}/${paymentExpYear}`}</Typography>
+                            <div className={classes.cardDetailsContainer}>
+                                <div className={classes.cardIconContainer}>
+                                    <Avatar src={getPaymentIcon(paymentCardBrandName)!} />
+                                </div>
+                                <div className={classes.cardTextDetails}>
+                                    <Typography className={classes.darkBodyText}>{`${getPaymentTitle(
+                                        paymentCardBrandName,
+                                    )} Ending in ${paymentLast4}`}</Typography>
+                                    <Typography
+                                        className={classes.greyBodyText}
+                                    >{`Expires ${paymentExpMonth}/${paymentExpYear}`}</Typography>
+                                </div>
+                            </div>
                         </>
                     ) : (
                         <Typography className={classes.darkBodyText}>PayPal</Typography>

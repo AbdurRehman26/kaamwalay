@@ -92,6 +92,8 @@ class LoginTest extends TestCase
     /** @test @group auth */
     public function ags_user_can_login()
     {
+        config(['services.ags.is_platform_enabled' => true]);
+
         $testEmail = 'test@test.test';
         Http::fake([
             config('services.ags.base_url') . '/login/' => Http::response([

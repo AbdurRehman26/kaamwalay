@@ -56,7 +56,7 @@
 
         }
         .barcode img{
-            width: 241px;
+            width: 250px;
             height: 45px;
         }
         .barcode span{
@@ -208,7 +208,7 @@
         </div>
         <div class="barcode">
             <div class="barcode-container">
-                <img src="data:image/png;base64, {!! DNS1D::getBarcodePNG('{{$order->order_number}}', 'C39') !!}" />
+                <img src="{{$barcode}}" alt="{{$order->order_number}}">
                 <br/>
                 <span>{{$order->order_number}}</span>
             </div>

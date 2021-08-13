@@ -5,6 +5,8 @@ namespace App\Services\Payment;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Services\PDFService;
+use App\Services\BarcodeService;
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Storage;
 use Str;
 
@@ -30,6 +32,7 @@ class InvoiceService
     {
         $logoData = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/invoiceLogo.png')));
         $agsLogo = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/agsLogo.png')));
+        $barcode = 'data:image/png;base64,' . BarcodeService::generate($order->order_number,BarcodeGenerator::Code39,'');
 
         $orderItems = $order->orderItems;
         $customer = $order->user;
@@ -56,6 +59,7 @@ class InvoiceService
         return [
             'logoData' => $logoData,
             'agsLogo' => $agsLogo,
+            'barcode' => $barcode,
             'order' => $order,
             'orderItems' => $orderItems,
             'customer' => $customer,

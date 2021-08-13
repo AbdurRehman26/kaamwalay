@@ -4,6 +4,7 @@ namespace App\Listeners\API\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Services\AGS\AGS;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,8 +29,8 @@ class RegisterWithAGS
         $passwordKeysForAgs = ['password1', 'password2'];
         $user = $event->user;
 
-        $response = $ags->client()->post(
-            '/registration/',
+        $response = Http::post(
+            $ags->baseUrl() . '/registration/',
             array_merge(
                 $user->only('username', 'email'),
                 array_fill_keys($passwordKeysForAgs, $password),

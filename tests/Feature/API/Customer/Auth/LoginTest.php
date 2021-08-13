@@ -92,9 +92,6 @@ class LoginTest extends TestCase
     /** @test @group auth */
     public function ags_user_can_login()
     {
-        if (! config('services.ags.is_platform_enabled')) {
-            $this->markTestSkipped('AGS platform is not enabled.');
-        }
         $testEmail = 'test@test.test';
         Http::fake([
             config('services.ags.base_url') . '/login/' => Http::response([

@@ -12,10 +12,8 @@ class AGS
         return (bool) config('services.ags.is_platform_enabled');
     }
 
-    public function client(): PendingRequest
+    public function baseUrl(): string
     {
-        return Http::baseUrl(config('services.ags.base_url'))->withHeaders([
-            'Accept' => 'application/json',
-        ]);
+        return config('services.ags.base_url');
     }
 }

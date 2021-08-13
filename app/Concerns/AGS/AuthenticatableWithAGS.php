@@ -7,6 +7,7 @@ use App\Http\Requests\API\Auth\LoginRequest;
 use App\Models\User;
 use App\Services\AGS\AGS;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 
 trait AuthenticatableWithAGS
@@ -17,7 +18,7 @@ trait AuthenticatableWithAGS
 
         throw_unless($ags->isEnabled(), AuthenticationException::class);
 
-        $response = $ags->client()->post('/login/', $request->validated());
+        $response = Http::post($ags->baseUrl() . '/login/', $request->validated());
 
         $this->validateResponse($response);
 

@@ -305,6 +305,12 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             flat: billingAddress.flat,
             same_as_shipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
         },
+        customer_address: {
+            id:
+                currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                    ? currentSubmission.step03Data.selectedExistingAddress.id
+                    : null,
+        },
         shipping_method: {
             id: 1,
         },

@@ -65,6 +65,7 @@ type SearchResultItemCardProps = {
     addedMode?: boolean;
     id: any;
 };
+
 function SearchResultItemCard(props: SearchResultItemCardProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -79,6 +80,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
         dispatch(markCardAsUnselected({ image, title, subtitle, id }));
     }
 
+    const isCardSelected = selectedCards.find((card: Record<string, any>) => card.id === id);
     return (
         <>
             <div className={classes.container}>
@@ -103,15 +105,15 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                     </div>
                 </div>
                 {!addedMode ? (
-                    <div className={classes.rightSide}>
+                    <div className={classes.rightSide} onClick={isCardSelected ? deselectCard : selectCard}>
                         <IconButton aria-label="delete">
-                            {selectedCards.find((card: Record<string, any>) => card.id === id) ? (
+                            {isCardSelected ? (
                                 <Tooltip title="Remove">
-                                    <CheckCircleIcon htmlColor={'#20BFB8'} onClick={deselectCard} />
+                                    <CheckCircleIcon htmlColor={'#20BFB8'} />
                                 </Tooltip>
                             ) : (
                                 <Tooltip title="Add">
-                                    <AddCircleOutlineIcon htmlColor={'#20BFB8'} onClick={selectCard} />
+                                    <AddCircleOutlineIcon htmlColor={'#20BFB8'} />
                                 </Tooltip>
                             )}
                         </IconButton>

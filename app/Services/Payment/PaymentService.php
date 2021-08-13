@@ -30,7 +30,7 @@ class PaymentService
         throw new \Exception('Payment provider did not match.');
     }
 
-    public function createOrder(Order $order)
+    public function createOrder(Order $order): array
     {
         $data = (new PaypalService)->createOrder($order);
         if (is_array($data)) {

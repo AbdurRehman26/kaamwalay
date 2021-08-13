@@ -11,6 +11,7 @@ use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 class OrderFactory extends Factory
 {
@@ -37,7 +38,7 @@ class OrderFactory extends Factory
             'order_status_id' => OrderStatus::factory(),
             'shipping_order_address_id' => OrderAddress::factory(),
             'billing_order_address_id' => OrderAddress::factory(),
-            'payment_method_id' => PaymentMethod::factory(),
+            'payment_method_id' => Arr::random([1, 2]),
             'shipping_method_id' => ShippingMethod::factory(),
             'invoice_id' => Invoice::factory(),
             'arrived_at' => $this->faker->dateTime(),

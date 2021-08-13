@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\Customer\Order;
 
+use App\Exceptions\API\Customer\Order\UnpayableOrder;
+use App\Exceptions\Services\Payment\UnverifiedPayment;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\Payment\PaymentService;
@@ -14,26 +16,42 @@ class OrderPaymentController extends Controller
     {
         $this->authorize('view', $order);
 
-        if (! $order->isPayable()) {
-            return new JsonResponse([
-                'data' => [
-                    'error' => 'Order is not payable',
-                ],
-            ], Response::HTTP_BAD_REQUEST);
-        }
+        throw_unless($order->isPayable(), UnpayableOrder::class);
 
-        return $paymentService->charge($order);
+        $response = $paymentService->charge($order);
+
+        if (isset($response['success']) && $response['success']) {
+            $paymentService->updateOrderStatus();
+
+            return new JsonResponse($response);
+        }
+        return new JsonResponse($response, Response::HTTP_PAYMENT_REQUIRED);
     }
 
     public function verify(Order $order, $paymentIntentId, PaymentService $paymentService): JsonResponse
     {
         $this->authorize('view', $order);
 
-        return $paymentService->verify($order, $paymentIntentId);
+        throw_unless(
+            $paymentService->verify($order, $paymentIntentId),
+            UnverifiedPayment::class
+        );
+
+        $paymentService->updateOrderStatus();
+
+        return new JsonResponse([
+            'message' => 'Payment verified successfully',
+        ], Response::HTTP_OK);
     }
 
     public function createOrder(Order $order, PaymentService $paymentService)
     {
-        return $paymentService->createOrder($order);
+        $response = $paymentService->createOrder($order);
+        return new JsonResponse(
+            $response,
+            isset($response['error'])
+                ? Response::HTTP_BAD_REQUEST
+                : Response::HTTP_CREATED
+        );
     }
 }

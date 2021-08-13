@@ -23,7 +23,7 @@ class PaymentService
         switch ($order->paymentMethod->code) {
             case 'stripe':
                 return (new StripeService)->verify($order, $paymentIntentId);
-            default:
+            case 'paypal':
                 return (new PaypalService)->verify($order, $paymentIntentId);
         }
 
@@ -32,6 +32,27 @@ class PaymentService
 
     public function createOrder(Order $order)
     {
-        return (new PaypalService)->createOrder($order);
+        $data = (new PaypalService)->createOrder($order);
+        if (is_array($data)) {
+            $order->orderPayment->update([
+                'request' => json_encode($data['request']),
+                'response' => json_encode($data['response']),
+                'payment_provider_reference_id' => $data['payment_provider_reference_id'],
+            ]);
+
+            return [
+                'data' => $data['response'],
+            ];
+        }
+        return [
+            'error' => $data,
+        ];
+    }
+
+    public function updateOrderStatus(Order $order): bool
+    {
+        $order->markAsPlaced();
+
+        return true;
     }
 }

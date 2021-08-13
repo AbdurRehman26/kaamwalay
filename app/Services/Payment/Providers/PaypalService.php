@@ -3,7 +3,6 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
-use Illuminate\Http\JsonResponse;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
@@ -29,56 +28,61 @@ class PaypalService implements PaymentProviderServiceInterface
         //
     }
 
-    public function createOrder(Order $order): JsonResponse
+    public function createOrder(Order $order): array|string
     {
         $orderRequest = new OrdersCreateRequest();
         $orderRequest->prefer('return=representation');
-        $orderRequest->body = [
+        $requestData = [
             "intent" => "CAPTURE",
             "purchase_units" => [[
-                "reference_id" => "test_ref_id1",
+                "reference_id" => $order->order_number,
                 "amount" => [
-                    "value" => "100.00",
+                    "value" => $order->grand_total,
                     "currency_code" => "USD",
                 ],
             ]],
         ];
+
+        $orderRequest->body = $requestData;
+
         try {
-            // Call API with your client and get a response for your call
             $response = $this->client->execute($orderRequest);
 
-            // If call returns body in response, you can get the deserialized version from the result attribute of the response
-            return new JsonResponse([
-                'success' => true,
-                'data' => $response->result,
-            ]);
+            return [
+                'request' => $requestData,
+                'response' => $response->result,
+                'payment_provider_reference_id' => $response->result->id,
+            ];
         } catch (HttpException $e) {
-            echo $e->statusCode;
-            return new JsonResponse([
-                'success' => false,
-                'data' => $e->getMessage(),
-            ]);
+            return $e->getMessage();
         }
     }
 
-    public function verify(Order $order, string $paypalOrderId)
+    public function verify(Order $order, string $paypalOrderId): bool
     {
         $orderRequest = new OrdersCaptureRequest($paypalOrderId);
         $orderRequest->prefer('return=representation');
         try {
-            // Call API with your client and get a response for your call
             $response = $this->client->execute($orderRequest);
 
-            // If call returns body in response, you can get the deserialized version from the result attribute of the response
-            return new JsonResponse([
-                'success' => true,
-                'data' => $response->result,
-            ]);
+            return $this->validateOrderIsPaid($order, $response->result);
         } catch (HttpException $e) {
-            return new JsonResponse([
-                'success' => false,
-                'data' => $e->getMessage(),
-            ]);
+            return false;
         }
+    }
+
+    public function validateOrderIsPaid(Order $order, array $data): bool
+    {
+        $paymentIntent = $data['purchase_units'][0]['payments']['captures'];
+        if (
+            $paymentIntent['amount']['value'] == $order->grand_total
+            && $paymentIntent['status'] === 'COMPLETED'
+        ) {
+            $order->orderPayment->update([
+                'response' => json_encode($data),
+            ]);
+            return true;
+        }
+        return false;
     }
 }

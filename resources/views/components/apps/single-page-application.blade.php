@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
         <title>{{ $title }}</title>
         <script>window.__public_path__ = '{{$getPublicPath()}}';</script>
+        <script src="https://www.paypal.com/sdk/js?client-id=AX9ZHY8KdbMzR-jHXY8jQ-Hu2d5K28xWIflv6M5ZJswdu9tfU_To6kKEuGpun3b2weR4HSA2pujRSUnx"></script>
         <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
     </head>

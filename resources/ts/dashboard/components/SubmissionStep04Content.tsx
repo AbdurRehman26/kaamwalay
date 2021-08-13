@@ -307,7 +307,7 @@ export function SubmissionStep04Content() {
                                             }`}</Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${finalShippingAddress.city}, ${finalShippingAddress.state.name} ${finalShippingAddress.zipCode}, US`}</Typography>
+                                            >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
                                         </>
                                     ) : (
                                         <>

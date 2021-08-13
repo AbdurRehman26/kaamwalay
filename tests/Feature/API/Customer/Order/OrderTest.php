@@ -8,6 +8,7 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -130,27 +131,15 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function user_can_see_his_order()
+    public function a_customer_can_see_his_order()
     {
         $this->actingAs($this->user);
         $order = Order::factory()->for($this->user)->create();
         $response = $this->getJson('/api/customer/orders/' . $order->id);
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => ['id', 'order_number', 'shipping_method'],
-        ]);
-    }
-
-    public function a_customer_can_see_orders()
-    {
-        $this->actingAs($this->user);
-        $response = $this->getJson('/api/customer/orders/');
-
-        $response->assertOk();
-        $response->assertJsonStructure([
-            'data' => [
-                '*' => ['id'],
-            ],
         ]);
     }
 
@@ -165,6 +154,28 @@ class OrderTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonCount(0, ['data']);
+    }
+
+    /** @test */
+    public function a_customer_can_filter_orders_by_order_number()
+    {
+        $this->actingAs($this->user);
+
+        Order::factory()
+            ->count(2)
+            ->for($this->user)
+            ->state(new Sequence(
+                ['order_number' => 'RG000000001'],
+                ['order_number' => 'RG000000002'],
+            ))
+            ->create();
+
+        $response = $this->getJson('/api/customer/orders?filter[order_number]=RG000000001');
+
+        dd($response->getContent());
+
+        $response->assertOk();
+        $response->assertJsonCount(1, ['data']);
     }
 
     /** @test */

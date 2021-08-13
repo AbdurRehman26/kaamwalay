@@ -42,8 +42,8 @@
             float: left;
         }
         .logo img{
-            width: 400px;
-            height: 96px;
+            width: 300px;
+            height: 72px;
         }
         .barcode{
             float: right;
@@ -56,15 +56,14 @@
 
         }
         .barcode img{
-            width: 250px;
-            height: 45px;
+            width: 200px;
         }
         .barcode span{
             font-family: 'Roboto';
-            font-size: 30px;
+            font-size: 20px;
             font-weight: bold;
             margin: 0;
-            line-height: 20px;
+            line-height: 18px;
         }
 
         .general-info-section{

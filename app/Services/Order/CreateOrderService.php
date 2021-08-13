@@ -58,7 +58,7 @@ class CreateOrderService
         $this->storeShippingMethod($this->data['shipping_method']);
         $this->storePaymentMethod($this->data['payment_method']);
         $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address'], $this->data['customer_address']);
-        $this->storeCustomerAddress($this->data['shipping_address']);
+        $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
         $this->storeShippingFee();
@@ -106,9 +106,9 @@ class CreateOrderService
         }
     }
 
-    protected function storeCustomerAddress(array $shippingAddress)
+    protected function storeCustomerAddress(array $shippingAddress, $customerAddress)
     {
-        if ($shippingAddress['save_for_later']) {
+        if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [

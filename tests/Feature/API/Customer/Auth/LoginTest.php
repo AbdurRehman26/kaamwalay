@@ -11,12 +11,11 @@ use Tests\TestCase;
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * @test
      *
      * @group auth
-     *
-     * @return void
      */
     public function user_can_login_with_valid_credentials()
     {

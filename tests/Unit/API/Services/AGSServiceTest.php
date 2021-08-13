@@ -3,8 +3,6 @@
 namespace Tests\Unit\API\Services;
 
 use App\Services\AGS\AGS;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class AGSServiceTest extends TestCase

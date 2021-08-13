@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\Validators;
 
+use App\Exceptions\API\Customer\Order\ErrorInDeclaredValue;
 use App\Models\PaymentPlan;
 
 class ItemsDeclaredValueValidator
@@ -12,7 +13,7 @@ class ItemsDeclaredValueValidator
 
         foreach ($data['items'] as $item) {
             if ($item['declared_value_per_unit'] > $paymentPlanMaxProtectionAmount) {
-                throw new \Exception('Error in declared value');
+                throw new ErrorInDeclaredValue;
             }
         }
     }

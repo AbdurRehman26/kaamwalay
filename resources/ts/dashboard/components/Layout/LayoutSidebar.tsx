@@ -80,15 +80,22 @@ function LayoutSidebar() {
 
             <List>
                 <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
-                <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} href={'/cards'} />
-                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Profile'} href={'/profile'} />
+                <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} disabled href={'/cards'} />
+                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} disabled title={'Profile'} href={'/profile'} />
                 <LayoutSidebarItem
                     exact
                     icon={PaymentOutlinedIcon}
                     title={'Saved Credit Cards'}
                     href={'/profile/payments'}
+                    disabled
                 />
-                <LayoutSidebarItem exact icon={HomeOutlinedIcon} title={'Address Book'} href={'/profile/address'} />
+                <LayoutSidebarItem
+                    exact
+                    icon={HomeOutlinedIcon}
+                    disabled
+                    title={'Address Book'}
+                    href={'/profile/address'}
+                />
             </List>
         </Paper>
     );

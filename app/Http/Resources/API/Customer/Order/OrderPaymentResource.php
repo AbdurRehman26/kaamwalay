@@ -16,12 +16,18 @@ class OrderPaymentResource extends JsonResource
     {
         $providerResponse = json_decode($this->response);
 
+        if (! empty($providerResponse->card)) {
+            $card = $providerResponse->card;
+        } else {
+            $card = $providerResponse->charges->data[0]->payment_method_details->card;
+        }
+
         return [
             'card' => [
-                'brand' => $providerResponse->card->brand,
-                'exp_month' => $providerResponse->card->exp_month,
-                'exp_year' => $providerResponse->card->exp_year,
-                'last4' => $providerResponse->card->last4,
+                'brand' => $card->brand,
+                'exp_month' => $card->exp_month,
+                'exp_year' => $card->exp_year,
+                'last4' => $card->last4,
             ],
         ];
     }

@@ -1,3 +1,4 @@
+import { NativeSelect } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
@@ -220,8 +221,8 @@ export function SubmissionStep04Content() {
         dispatch(updateBillingAddressField({ fieldName, newValue }));
     }, []);
 
-    const updateBillingState = useCallback((stateId: number) => {
-        const stateLookup = availableStates.find((state) => state.id === stateId);
+    const updateBillingState = useCallback((stateId: any) => {
+        const stateLookup = availableStates.find((state) => state.id == stateId);
         if (stateLookup) {
             dispatch(
                 updateBillingAddressField({
@@ -307,7 +308,7 @@ export function SubmissionStep04Content() {
                                             }`}</Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
-                                            >{`${finalShippingAddress.city}, ${finalShippingAddress.state.name} ${finalShippingAddress.zipCode}, US`}</Typography>
+                                            >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
                                         </>
                                     ) : (
                                         <>
@@ -431,17 +432,20 @@ export function SubmissionStep04Content() {
                                                         </Typography>
                                                         <Select
                                                             fullWidth
+                                                            native
                                                             value={state.id || 'none'}
-                                                            onChange={(e: any) => updateBillingState(e.target.value)}
+                                                            onChange={(e: any) =>
+                                                                updateBillingState(e.nativeEvent.target.value)
+                                                            }
                                                             placeholder={'Select State'}
                                                             variant={'outlined'}
                                                             style={{ height: '43px' }}
                                                         >
-                                                            <MenuItem value="none">Select a state</MenuItem>
+                                                            <option value="none">Select a state</option>
                                                             {availableStates.map((item) => (
-                                                                <MenuItem key={item.id} value={item.id}>
+                                                                <option key={item.id} value={item.id}>
                                                                     {item.code}
-                                                                </MenuItem>
+                                                                </option>
                                                             ))}
                                                         </Select>
                                                     </div>

@@ -120,4 +120,9 @@ class Order extends Model
 
         return $this;
     }
+
+    public function scopePlaced(Builder $query): Builder
+    {
+        return $query->where('order_status_id', 2);
+    }
 }

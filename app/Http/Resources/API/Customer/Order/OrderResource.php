@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
+use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
-use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\User\UserResource;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;

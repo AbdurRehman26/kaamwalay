@@ -7,7 +7,6 @@ use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
-use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 use PayPalHttp\HttpException;
 
 class PaypalService implements PaymentProviderServiceInterface
@@ -29,7 +28,7 @@ class PaypalService implements PaymentProviderServiceInterface
         //
     }
 
-    public function createOrder(Order $order): array|string
+    public function createOrder(Order $order): array | string
     {
         $orderRequest = new OrdersCreateRequest();
         $orderRequest->prefer('return=representation');
@@ -63,6 +62,7 @@ class PaypalService implements PaymentProviderServiceInterface
     {
         $orderRequest = new OrdersCaptureRequest($paypalOrderId);
         $orderRequest->prefer('return=representation');
+
         try {
             $response = $this->client->execute($orderRequest);
 
@@ -86,8 +86,10 @@ class PaypalService implements PaymentProviderServiceInterface
             $order->orderPayment->update([
                 'response' => json_encode($data),
             ]);
+
             return true;
         }
+
         return false;
     }
 }

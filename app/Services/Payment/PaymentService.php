@@ -44,6 +44,7 @@ class PaymentService
                 'data' => $data['response'],
             ];
         }
+
         return [
             'error' => $data,
         ];

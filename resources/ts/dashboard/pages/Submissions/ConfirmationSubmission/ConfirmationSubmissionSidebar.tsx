@@ -75,7 +75,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        {data.serviceLevel}
+                                        {formatCurrency(data.paymentPlan.price)}&nbsp;/ Card
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -137,7 +137,8 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'caption'} align={'right'} color={'textSecondary'}>
-                                        ($20.00 × 1) = &nbsp;
+                                        ({formatCurrency(data.paymentPlan.price)}&nbsp;×&nbsp;{data.numberOfCards}) =
+                                        &nbsp;
                                         <Typography
                                             component={'span'}
                                             variant={'body2'}
@@ -145,7 +146,7 @@ export function ConfirmationSubmissionSidebar() {
                                             color={'textPrimary'}
                                             className={font.fontWeightMedium}
                                         >
-                                            20$
+                                            {formatCurrency(data.paymentPlan.price * data.numberOfCards)}
                                         </Typography>
                                     </Typography>
                                 </TableCell>

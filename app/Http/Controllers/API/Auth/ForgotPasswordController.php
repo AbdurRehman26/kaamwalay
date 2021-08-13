@@ -17,7 +17,7 @@ class ForgotPasswordController extends Controller
         );
 
         return new JsonResponse([
-            'message' => 'Successfully sent Password Reset Email',
+            'message' => 'We sent you details, check your email and follow the link to reset your password.',
         ]);
     }
 

@@ -12,6 +12,6 @@
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *      {
- *          "message": "Successfully sent Password Reset Email"
+ *          "message": "We sent you details, vheck your email and follow the link to reset your password."
  *      }
  */

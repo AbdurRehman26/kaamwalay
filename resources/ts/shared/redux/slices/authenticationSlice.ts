@@ -10,6 +10,8 @@ import { AuthenticationRepository } from '@shared/repositories/AuthenticationRep
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 
+import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
+
 interface StateType {
     checking: boolean;
     authenticated: boolean;
@@ -84,6 +86,24 @@ export const authenticateCheckAction = createAsyncThunk('auth/check', async () =
 export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {
     const authenticationService = app(AuthenticationService);
     await authenticationService.removeAccessToken();
+});
+
+export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', async (email: string) => {
+    const authenticationRepository = app(AuthenticationRepository);
+    return authenticationRepository.forgotPassword(email);
+});
+
+export const resetPasswordAction = createAsyncThunk('auth/password/reset', async (input: ResetPasswordRequestDto) => {
+    const authenticationRepository = app(AuthenticationRepository);
+    try {
+        return await authenticationRepository.resetPassword(input);
+    } catch (e) {
+        if (e.errors) {
+            throw new Error('Validation error.');
+        }
+
+        throw e;
+    }
 });
 
 export const authenticationSlice = createSlice({

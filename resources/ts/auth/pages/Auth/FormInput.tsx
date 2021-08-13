@@ -59,6 +59,7 @@ const useStyles = makeStyles(
         },
         errorMessage: {
             marginLeft: theme.spacing(2.5),
+            display: 'inline-flex',
         },
 
         sensitiveToggle: {

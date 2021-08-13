@@ -50,7 +50,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'response' => json_encode($response->toArray()),
             ]);
 
-            InvoiceService::saveInvoicePDF($order);
+            $this->createOrderInvoice($order);
 
             return new JsonResponse([
                 'success' => true,
@@ -85,7 +85,7 @@ class StripeService implements PaymentProviderServiceInterface
         ) {
             $order->markAsPlaced();
 
-            InvoiceService::saveInvoicePDF($order);
+            $this->createOrderInvoice($order);
 
             return new JsonResponse([
                 'message' => 'Payment verified successfully',
@@ -95,5 +95,9 @@ class StripeService implements PaymentProviderServiceInterface
         return new JsonResponse([
             'message' => 'Payment could not be verified.',
         ], Response::HTTP_BAD_REQUEST);
+    }
+
+    protected function createOrderInvoice(Order $order){
+        (new InvoiceService())->saveInvoicePDF($order);
     }
 }

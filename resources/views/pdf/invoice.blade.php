@@ -264,7 +264,7 @@
                                     <tr>
                                         <td class="dt">Customer:</td>
                                         <td class="dd">
-                                            {{$customer->full_name}}
+                                            {{$customer->getFullName()}}
                                             <br/>
                                             {{$customer->email}}
                                             @if($customer->phone)
@@ -294,7 +294,7 @@
                     Shipping Address
                 </div>
                 <div class="info-box-content">
-                    {{$shippingAddress->full_name}}
+                    {{$shippingAddress->getFullName()}}
                     <br/>
                     {{$shippingAddress->address}}
                     <br/>
@@ -327,7 +327,7 @@
                     @if($shippingAddress->id === $billingAddress->id)
                         Same as shipping
                     @else
-                        {{$billingAddress->full_name}}
+                        {{$billingAddress->getFullName()}}
                         <br/>
                         {{$billingAddress->address}}
                         <br/>
@@ -392,7 +392,7 @@
                                     {{$item->cardProduct->name}}
                                 </div>
                                 <div class="item-desc">
-                                    {{$item->cardProduct->identifier_string}}
+                                    {{$item->cardProduct->getSearchableName()}}
                                 </div>
                             </td>
                             <td class="qty">

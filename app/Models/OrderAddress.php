@@ -36,7 +36,7 @@ class OrderAddress extends Address
         return $this->belongsTo(\App\Models\Country::class);
     }
 
-    public function getFullNameAttribute()
+    public function getFullName()
     {
         return trim($this->first_name.' '.$this->last_name);
     }

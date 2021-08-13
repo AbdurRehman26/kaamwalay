@@ -70,8 +70,8 @@ class CardProduct extends Model
         return $this->belongsTo(CardCategory::class);
     }
 
-    public function getIdentifierStringAttribute()
+    public function getSearchableName()
     {
-        return $this->cardSet->release_year.' '.$this->cardCategory->name.' '.$this->cardSet->cardSeries->name.' '.$this->cardSet->name.' '.$this->card_number_order.' '.$this->name;
+        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->card_number_order . ' ' . $this->name;
     }
 }

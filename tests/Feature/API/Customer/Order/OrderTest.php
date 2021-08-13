@@ -157,28 +157,6 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function a_customer_can_filter_orders_by_order_number()
-    {
-        $this->actingAs($this->user);
-
-        Order::factory()
-            ->count(2)
-            ->for($this->user)
-            ->state(new Sequence(
-                ['order_number' => 'RG000000001'],
-                ['order_number' => 'RG000000002'],
-            ))
-            ->create();
-
-        $response = $this->getJson('/api/customer/orders?filter[order_number]=RG000000001');
-
-        dd($response->getContent());
-
-        $response->assertOk();
-        $response->assertJsonCount(1, ['data']);
-    }
-
-    /** @test */
     public function a_customer_cannot_see_order_by_another_customer()
     {
         $someOtherCustomer = User::factory()->create();
@@ -196,5 +174,38 @@ class OrderTest extends TestCase
         $response = $this->getJson('/api/customer/orders/');
 
         $response->assertUnauthorized();
+    }
+
+
+    /** @test */
+    public function a_customer_can_filter_orders_by_order_number()
+    {
+        $this->actingAs($this->user);
+
+        Order::factory()
+            ->count(2)
+            ->for($this->user)
+            ->state(new Sequence(
+                [
+                    'order_number' => 'RG000000001',
+                    'order_status_id' => 2,
+                ],
+                [
+                    'order_number' => 'RG000000002',
+                    'order_status_id' => 2,
+                ],
+            ))
+            ->create();
+
+        $response = $this->getJson('/api/customer/orders?filter[order_number]=RG000000001');
+
+        $response->assertOk();
+        $response->assertJsonCount(1, ['data']);
+        $response->assertJsonFragment([
+            'order_number' => 'RG000000001',
+        ]);
+        $response->assertJsonMissing([
+            'order_number' => 'RG000000002',
+        ]);
     }
 }

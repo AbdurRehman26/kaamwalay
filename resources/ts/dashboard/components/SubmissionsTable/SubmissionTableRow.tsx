@@ -1,9 +1,5 @@
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import MoreIcon from '@material-ui/icons/MoreVert';
 import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -17,6 +13,7 @@ interface SubmissionTableRowProps {
     serviceLevel: string;
     cardsNumber: number;
     status: string;
+    disabled?: boolean;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
 }
@@ -28,7 +25,7 @@ enum Options {
 }
 
 export function SubmissionTableRow(props: SubmissionTableRowProps) {
-    const { id, orderNumber, datePlaced, dateArrived, serviceLevel, cardsNumber, status } = props;
+    const { id, orderNumber, datePlaced, dateArrived, serviceLevel, cardsNumber, status, disabled } = props;
 
     const history = useHistory();
     const confirm = useConfirmation();
@@ -67,16 +64,17 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             <TableCell>{serviceLevel}</TableCell>
             <TableCell>{cardsNumber}</TableCell>
             <TableCell>{status}</TableCell>
-            <TableCell align={'right'}>
-                <IconButton onClick={handleClickOptions}>
-                    <MoreIcon />
-                </IconButton>
-                <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                    <MenuItem onClick={handleOption(Options.View)}>View</MenuItem>
-                    <MenuItem onClick={handleOption(Options.Edit)}>Edit</MenuItem>
-                    <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
-                </Menu>
-            </TableCell>
+            {/*<TableCell align={'right'}>*/}
+            {/*    <IconButton onClick={handleClickOptions}>*/}
+            {/*        <MoreIcon />*/}
+            {/*    </IconButton>*/}
+
+            {/*    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>*/}
+            {/*        <MenuItem onClick={handleOption(Options.View)}>View</MenuItem>*/}
+            {/*        <MenuItem onClick={handleOption(Options.Edit)}>Edit</MenuItem>*/}
+            {/*        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>*/}
+            {/*    </Menu>*/}
+            {/*</TableCell>*/}
         </TableRow>
     );
 }

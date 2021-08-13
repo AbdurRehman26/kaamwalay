@@ -6,7 +6,7 @@ import GuestOnlyRoute from '@shared/components/GuestOnlyRoute';
 
 import { AuthBanner } from './components/AuthBanner';
 import { Page } from './components/Page';
-import { ForgotPassword, SignIn, SignUp } from './pages/Auth';
+import { ForgotPassword, ResetPassword, SignIn, SignUp } from './pages/Auth';
 
 /**
  *
@@ -28,7 +28,8 @@ export function Auth() {
                     <Redirect exact from={'/'} to={'/sign-in'} />
                     <GuestOnlyRoute exact path={'/sign-in'} component={SignIn} />
                     <GuestOnlyRoute exact path={'/sign-up'} component={SignUp} />
-                    <GuestOnlyRoute exact path={'/forgot-password'} component={ForgotPassword} />
+                    <GuestOnlyRoute exact path={'/password/forgot'} component={ForgotPassword} />
+                    <GuestOnlyRoute exact path={'/password/reset'} component={ResetPassword} />
                 </Switch>
             </Grid>
         </Page>

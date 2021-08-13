@@ -115,6 +115,7 @@ class LoginTest extends TestCase
         $response->assertJsonStructure(['access_token', 'type', 'expiry']);
         $this->assertSame($testEmail, $user->email);
     }
+
     /** @test */
     public function a_logged_in_customer_cannot_login()
     {

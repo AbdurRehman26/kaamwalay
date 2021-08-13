@@ -42,7 +42,7 @@ export function useShowQuery<
         () => ({
             data,
             error,
-            isLoading: isLoading || (!data && typeof isLoading === 'undefined'),
+            isLoading: isLoading || typeof isLoading === 'undefined',
             isError: !!error,
         }),
         [data, error, isLoading],

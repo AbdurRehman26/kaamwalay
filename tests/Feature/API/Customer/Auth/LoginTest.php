@@ -4,6 +4,7 @@ namespace Tests\Feature\API\Customer\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -92,6 +93,8 @@ class LoginTest extends TestCase
     /** @test @group auth */
     public function ags_user_can_login()
     {
+        Config::set('services.ags.is_platform_enabled', true);
+
         $testEmail = 'test@test.test';
         Http::fake([
             config('services.ags.base_url') . '/login/' => Http::response([

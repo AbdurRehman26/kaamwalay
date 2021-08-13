@@ -1,3 +1,5 @@
+import { ListItemSecondaryAction } from '@material-ui/core';
+import Chip from '@material-ui/core/Chip';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -14,6 +16,7 @@ type SidebarMenuItemProps = {
     title: string;
     href: string;
     exact?: boolean;
+    disabled?: boolean;
 };
 
 const useStyles = makeStyles(
@@ -39,6 +42,9 @@ const useStyles = makeStyles(
         iconHolder: {
             minWidth: 42,
         },
+        chip: {
+            opacity: '1 !important',
+        },
     }),
     {
         name: 'SidebarMenuItem',
@@ -46,10 +52,10 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, exact } = props;
+    const { icon: Icon, title, href, exact, disabled } = props;
 
     const location = useLocation();
-    const classes = useStyles();
+    const classes = useStyles({ disabled });
 
     const itemClasses = useMemo(
         () => ({
@@ -69,7 +75,7 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
     );
 
     return (
-        <ListItem selected={isActive} button component={Link} to={href} classes={itemClasses}>
+        <ListItem selected={isActive} button component={Link} to={!disabled ? href : '#'} classes={itemClasses}>
             <ListItemIcon className={classes.iconHolder}>
                 <Icon className={classes.icon} />
             </ListItemIcon>
@@ -82,6 +88,11 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
                     }),
                 }}
             />
+            {disabled ? (
+                <ListItemSecondaryAction>
+                    <Chip size="small" label="Coming Soon" color={'secondary'} />
+                </ListItemSecondaryAction>
+            ) : null}
         </ListItem>
     );
 }

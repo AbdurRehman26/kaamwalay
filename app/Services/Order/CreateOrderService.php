@@ -10,6 +10,7 @@ use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Order\Shipping\ShippingFeeService;
+use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -45,6 +46,7 @@ class CreateOrderService
     protected function validate()
     {
         ItemsDeclaredValueValidator::validate($this->data);
+        CustomerAddressValidator::validate($this->data);
     }
 
     protected function process()
@@ -55,8 +57,8 @@ class CreateOrderService
         $this->storePaymentPlan($this->data['payment_plan']);
         $this->storeShippingMethod($this->data['shipping_method']);
         $this->storePaymentMethod($this->data['payment_method']);
-        $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address']);
-        $this->storeCustomerAddress($this->data['shipping_address']);
+        $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address'], $this->data['customer_address']);
+        $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
         $this->storeShippingFee();
@@ -86,9 +88,14 @@ class CreateOrderService
         $this->order->payment_method_id = $paymentMethod['id'];
     }
 
-    protected function storeOrderAddresses(array $shippingAddress, array $billingAddress)
+    protected function storeOrderAddresses(array $shippingAddress, array $billingAddress, array $customerAddress)
     {
-        $shippingAddress = OrderAddress::create($shippingAddress);
+        if (! empty($customerAddress['id'])) {
+            $shippingAddress = OrderAddress::create(CustomerAddress::find($customerAddress['id'])->toArray());
+        } else {
+            $shippingAddress = OrderAddress::create($shippingAddress);
+        }
+
         $this->order->shippingAddress()->associate($shippingAddress);
 
         if ($billingAddress['same_as_shipping']) {
@@ -99,9 +106,9 @@ class CreateOrderService
         }
     }
 
-    protected function storeCustomerAddress(array $shippingAddress)
+    protected function storeCustomerAddress(array $shippingAddress, $customerAddress)
     {
-        if ($shippingAddress['save_for_later']) {
+        if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [

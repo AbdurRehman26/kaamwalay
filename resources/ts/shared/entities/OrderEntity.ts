@@ -57,9 +57,6 @@ export class OrderEntity extends Entity {
     @Field('billing_address')
     public billingAddress!: AddressEntity;
 
-    @Field('service_level')
-    public serviceLevel!: string;
-
     @DateField('arrived_at')
     public arrivedAt!: Date;
 }

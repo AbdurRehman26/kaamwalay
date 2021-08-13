@@ -17,7 +17,7 @@ import { SignInValidationRules } from './validation';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.comm>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: SignIn
  * @date: 09.08.2021
  * @time: 05:52
@@ -61,7 +61,7 @@ export function SignIn() {
 
                     <MuiLink
                         component={Link}
-                        to={'/forgot-password'}
+                        to={'/password/forgot'}
                         variant={'subtitle1'}
                         color={'textPrimary'}
                         align={'center'}

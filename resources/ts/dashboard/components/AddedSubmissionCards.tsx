@@ -21,6 +21,7 @@ import {
     changeSelectedCardValue,
     markCardAsUnselected,
     SearchResultItemCardProps,
+    setCustomStep,
 } from '../redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
 
@@ -167,13 +168,20 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         );
     }
 
+    function onEditPress() {
+        dispatch(setCustomStep(1));
+    }
     return (
         <Paper className={classes.addedCardsContainer} variant={'outlined'}>
             <div className={classes.titleContainer}>
                 <Typography variant={'subtitle2'} className={classes.label}>
                     {reviewMode ? 'Card(s) in Submission' : 'Added Card(s)'}
                 </Typography>
-                <Typography className={classes.editBtn}>EDIT</Typography>
+                {reviewMode ? (
+                    <Typography className={classes.editBtn} onClick={onEditPress}>
+                        EDIT
+                    </Typography>
+                ) : null}
             </div>
 
             <Table className={classes.table} aria-label="simple table">

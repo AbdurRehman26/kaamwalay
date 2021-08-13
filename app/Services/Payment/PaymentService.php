@@ -3,6 +3,7 @@
 namespace App\Services\Payment;
 
 use App\Models\Order;
+use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
 
 class PaymentService
@@ -25,5 +26,10 @@ class PaymentService
         }
 
         throw new \Exception('Payment provider did not match.');
+    }
+
+    public function createOrder(Order $order)
+    {
+        return (new PaypalService)->createOrder($order);
     }
 }

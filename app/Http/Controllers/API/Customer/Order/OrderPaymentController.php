@@ -31,4 +31,9 @@ class OrderPaymentController extends Controller
 
         return $paymentService->verify($order, $paymentIntentId);
     }
+
+    public function createOrder(Order $order, PaymentService $paymentService)
+    {
+        return $paymentService->createOrder($order);
+    }
 }

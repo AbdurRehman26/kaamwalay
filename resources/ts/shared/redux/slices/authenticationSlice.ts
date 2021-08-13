@@ -58,10 +58,8 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
     } catch (e) {
         if (e.errors) {
             NotificationsService.error('Validation errors.');
-        } else if (e.isAxiosError) {
-            NotificationsService.error(e.message);
         } else {
-            NotificationsService.error('Unable to register.');
+            NotificationsService.exception(e);
         }
 
         throw e;
@@ -90,7 +88,12 @@ export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {
 
 export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', async (email: string) => {
     const authenticationRepository = app(AuthenticationRepository);
-    return authenticationRepository.forgotPassword(email);
+    try {
+        return await authenticationRepository.forgotPassword(email);
+    } catch (e) {
+        NotificationsService.exception(e);
+        throw e;
+    }
 });
 
 export const resetPasswordAction = createAsyncThunk('auth/password/reset', async (input: ResetPasswordRequestDto) => {

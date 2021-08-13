@@ -50,7 +50,7 @@ class PaypalService implements PaymentProviderServiceInterface
 
             return [
                 'request' => $requestData,
-                'response' => $response->result,
+                'response' => get_object_vars($response->result),
                 'payment_provider_reference_id' => $response->result->id,
             ];
         } catch (HttpException $e) {
@@ -65,7 +65,7 @@ class PaypalService implements PaymentProviderServiceInterface
         try {
             $response = $this->client->execute($orderRequest);
 
-            return $this->validateOrderIsPaid($order, $response->result);
+            return $this->validateOrderIsPaid($order, get_object_vars($response->result));
         } catch (HttpException $e) {
             return false;
         }

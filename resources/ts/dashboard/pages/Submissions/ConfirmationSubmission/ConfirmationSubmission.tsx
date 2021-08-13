@@ -23,6 +23,7 @@ import { useConfirmationSubmissionStyles } from './style';
  */
 export function ConfirmationSubmission() {
     const classes = useConfirmationSubmissionStyles();
+
     return (
         <Grid container>
             <Grid item className={classes.sidebar}>

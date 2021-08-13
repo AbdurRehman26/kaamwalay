@@ -12,7 +12,8 @@ import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 
 interface SubmissionTableRowProps {
-    id: string;
+    id: number;
+    orderNumber: string;
     serviceLevel: string;
     cardsNumber: number;
     status: string;
@@ -27,7 +28,7 @@ enum Options {
 }
 
 export function SubmissionTableRow(props: SubmissionTableRowProps) {
-    const { id, datePlaced, dateArrived, serviceLevel, cardsNumber, status } = props;
+    const { id, orderNumber, datePlaced, dateArrived, serviceLevel, cardsNumber, status } = props;
 
     const history = useHistory();
     const confirm = useConfirmation();
@@ -60,7 +61,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
 
     return (
         <TableRow>
-            <TableCell>{id}</TableCell>
+            <TableCell>{orderNumber}</TableCell>
             <TableCell>{datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}</TableCell>
             <TableCell>{dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}</TableCell>
             <TableCell>{serviceLevel}</TableCell>

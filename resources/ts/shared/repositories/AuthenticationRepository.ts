@@ -5,7 +5,6 @@ import { Injectable } from '@shared/decorators/Injectable';
 import { ValidateMethodParamsAsync } from '@shared/decorators/ValidateMethodParams';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
-import { CustomerOrdersPaymentPlanEntity } from '@shared/entities/CustomerOrdersPaymentPlanEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
@@ -14,9 +13,9 @@ import { SignUpRequestDto } from '../dto/SignUpRequestDto';
 import { Repository } from './Repository';
 
 @Injectable('AuthenticationRepository')
-export class AuthenticationRepository extends Repository<CustomerOrdersPaymentPlanEntity> {
+export class AuthenticationRepository extends Repository<AuthenticatedUserEntity> {
     readonly endpointPath: string = '/auth';
-    readonly model = CustomerOrdersPaymentPlanEntity;
+    readonly model = AuthenticatedUserEntity;
 
     constructor(@Inject() public authenticationService: AuthenticationService) {
         super();

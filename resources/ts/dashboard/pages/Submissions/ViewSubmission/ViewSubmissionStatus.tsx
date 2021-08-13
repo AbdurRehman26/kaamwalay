@@ -10,7 +10,7 @@ import { SubmissionDetails, SubmissionSteps } from './data';
 import { useViewSubmissionStatusStyles } from './styles';
 
 interface ViewSubmissionStatusProps {
-    currentStep: SubmissionSteps;
+    orderStatus: string | SubmissionSteps;
 }
 
 /**
@@ -18,9 +18,12 @@ interface ViewSubmissionStatusProps {
  * @private
  * @constructor
  */
-export function ViewSubmissionStatus({ currentStep }: ViewSubmissionStatusProps) {
+export function ViewSubmissionStatus({ orderStatus }: ViewSubmissionStatusProps) {
     const classes = useViewSubmissionStatusStyles();
-    const details = useMemo(() => SubmissionDetails[currentStep], [currentStep]);
+    const details = useMemo<string[]>(
+        () => (SubmissionDetails as Record<string, any>)[orderStatus] ?? [],
+        [orderStatus],
+    );
     const steps = useMemo(() => Object.values(SubmissionSteps), []);
 
     return (
@@ -29,7 +32,7 @@ export function ViewSubmissionStatus({ currentStep }: ViewSubmissionStatusProps)
                 Status:
             </Typography>
             <Typography variant={'h6'} color={'primary'} className={cx(classes.fontMedium, classes.textGutter)}>
-                Placed
+                {orderStatus}
             </Typography>
             <Typography variant={'caption'}>
                 {details.map((line, index) => (
@@ -38,10 +41,10 @@ export function ViewSubmissionStatus({ currentStep }: ViewSubmissionStatusProps)
                         <br />
                     </React.Fragment>
                 ))}
-                {currentStep === 'Shipped' && <Link href={'#'}>LS9383980923098328238920</Link>}
+                {orderStatus === 'Shipped' && <Link href={'#'}>LS9383980923098328238920</Link>}
             </Typography>
 
-            <ViewSubmissionStatusBar steps={steps} currentStep={currentStep} />
+            <ViewSubmissionStatusBar steps={steps} currentStep={orderStatus} />
         </Grid>
     );
 }

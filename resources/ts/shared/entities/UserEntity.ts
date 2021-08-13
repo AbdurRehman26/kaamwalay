@@ -1,22 +1,31 @@
-import { Expose } from 'class-transformer';
+import { Type } from 'class-transformer';
 
 import { Entity } from '@shared/entities/Entity';
+
+import { Field } from '../decorators/Field';
+import { RoleEntity } from './RoleEntity';
 
 export class UserEntity extends Entity {
     public username!: string;
     public email!: string;
     public phone!: string;
 
-    @Expose({ name: 'first_name' })
+    @Field('first_name')
     public firstName!: string;
 
-    @Expose({ name: 'last_name' })
+    @Field('last_name')
     public lastName!: string;
 
-    @Expose({ name: 'email_verified_at' })
+    @Field('email_verified_at')
     public emailVerifiedAt!: Date;
 
-    getFullName() {
+    @Field('stripe_id')
+    public stripeId!: string;
+
+    @Type(() => RoleEntity)
+    public roles!: RoleEntity[];
+
+    public getFullName() {
         return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
     }
 }

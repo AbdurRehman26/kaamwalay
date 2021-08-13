@@ -1,13 +1,11 @@
-import { Expose, Type } from 'class-transformer';
+import { DateField } from '../decorators/DateField';
 
-export abstract class Entity {
-    public id!: string;
+export abstract class Entity<T extends string | number = number> {
+    public id!: T;
 
-    @Type(() => Date)
-    @Expose({ name: 'created_at' })
+    @DateField('created_at')
     public createdAt!: Date;
 
-    @Type(() => Date)
-    @Expose({ name: 'updated_at' })
+    @DateField('updated_at')
     public updatedAt!: Date;
 }

@@ -19,5 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'getView'])->name('home');
 Route::get('/admin{path}', [AdminController::class, 'getView'])->where(['path' => '.*'])->name('admin.main');
+Route::get('/auth/password/reset', [AuthController::class, 'getView'])->where(['path' => '.*'])->name('password.reset');
 Route::get('/auth{path}', [AuthController::class, 'getView'])->where(['path' => '.*'])->name('auth.main');
 Route::get('/dashboard{path}', [DashboardController::class, 'getView'])->where(['path' => '.*'])->name('dashboard.main');

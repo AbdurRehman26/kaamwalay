@@ -234,11 +234,11 @@ export function SubmissionStep04Content() {
 
     useEffect(() => {
         dispatch(setIsNextDisabled(true));
-        if (paymentMethodId == 0) {
+        if (paymentMethodId == 1) {
             dispatch(setIsNextDisabled(currentSelectedStripeCardId.length === 0 || !isAddressDataValid));
         }
 
-        if (paymentMethodId == 1) {
+        if (paymentMethodId == 2) {
             dispatch(setIsNextDisabled(false));
         }
     }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
@@ -265,19 +265,19 @@ export function SubmissionStep04Content() {
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
                             <div className={classes.shippingMethodItemContainer}>
                                 <PaymentMethodItem
-                                    isSelected={paymentMethodId === 0}
+                                    isSelected={paymentMethodId === 1}
                                     methodName={'Credit or Debit Card'}
-                                    methodId={0}
+                                    methodId={1}
                                 />
                                 <PaymentMethodItem
-                                    isSelected={paymentMethodId === 1}
+                                    isSelected={paymentMethodId === 2}
                                     methodName={'Paypal'}
-                                    methodId={1}
+                                    methodId={2}
                                 />
                             </div>
                         </div>
                         <Divider light />
-                        {paymentMethodId === 0 ? (
+                        {paymentMethodId === 1 ? (
                             <>
                                 <div className={classes.sectionContainer}>
                                     <PaymentForm />
@@ -303,7 +303,7 @@ export function SubmissionStep04Content() {
                                             <Typography className={classes.billingAddressItem}>{`${
                                                 finalShippingAddress.address
                                             } ${
-                                                finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
+                                                finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
                                             }`}</Typography>
                                             <Typography
                                                 className={classes.billingAddressItem}
@@ -383,10 +383,7 @@ export function SubmissionStep04Content() {
                                                             }}
                                                         />
                                                     </div>
-                                                    <div
-                                                        className={classes.fieldContainer}
-                                                        style={{ width: '18%', marginTop: '4px' }}
-                                                    >
+                                                    <div className={classes.fieldContainer} style={{ width: '18%' }}>
                                                         <Typography className={classes.methodDescription}>
                                                             Apt # (optional)
                                                         </Typography>
@@ -427,7 +424,7 @@ export function SubmissionStep04Content() {
                                                     </div>
                                                     <div
                                                         className={classes.fieldContainer}
-                                                        style={{ width: '32%', marginTop: '4px' }}
+                                                        style={{ width: '32%', marginTop: '6px' }}
                                                     >
                                                         <Typography className={classes.methodDescription}>
                                                             State

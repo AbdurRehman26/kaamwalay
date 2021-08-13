@@ -2,15 +2,14 @@
 
 namespace App\Services\Payment;
 
-use App\Models\Order;
 use App\Models\Invoice;
+use App\Models\Order;
 use App\Services\PDFService;
 use Storage;
 use Str;
 
 class InvoiceService
 {
-
     public function saveInvoicePDF(Order $order)
     {
         $data = $this->getInvoiceData($order);
@@ -38,9 +37,9 @@ class InvoiceService
         $orderPayment = $order->orderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
         if ($paymentResponse) {
-            if(property_exists($paymentResponse,'card')){
+            if (property_exists($paymentResponse, 'card')) {
                 $card = $paymentResponse->card;
-            } else{
+            } else {
                 $card = $paymentResponse->charges->data[0]->payment_method_details->card;
             }
             $orderPayment = json_decode(json_encode([

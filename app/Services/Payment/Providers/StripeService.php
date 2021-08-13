@@ -97,7 +97,8 @@ class StripeService implements PaymentProviderServiceInterface
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    protected function createOrderInvoice(Order $order){
+    protected function createOrderInvoice(Order $order)
+    {
         (new InvoiceService())->saveInvoicePDF($order);
     }
 }

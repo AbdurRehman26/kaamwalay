@@ -18,7 +18,7 @@ import { SignUpValidationRules } from './validation';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.comm>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: SignUp
  * @date: 09.08.2021
  * @time: 05:52

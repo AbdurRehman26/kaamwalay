@@ -72,6 +72,10 @@ class PaypalService implements PaymentProviderServiceInterface
 
     public function validateOrderIsPaid(Order $order, array $data): bool
     {
+        if ($data['status'] === 'APPROVED') {
+            return false;
+        }
+
         $paymentIntent = $data['purchase_units'][0]['payments']['captures'][0];
         if (
             $paymentIntent['amount']['value'] == $order->grand_total

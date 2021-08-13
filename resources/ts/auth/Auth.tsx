@@ -10,7 +10,7 @@ import { ForgotPassword, ResetPassword, SignIn, SignUp } from './pages/Auth';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.comm>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: pages
  * @date: 09.08.2021
  * @time: 05:51

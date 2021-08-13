@@ -42,7 +42,6 @@ export function ForgotPassword() {
             const { error, payload } = data as any;
 
             if (error) {
-                notifications.error(error.message);
                 return;
             }
 

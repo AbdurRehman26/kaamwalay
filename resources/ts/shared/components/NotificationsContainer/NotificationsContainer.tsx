@@ -2,7 +2,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import { plainToClass } from 'class-transformer';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 
 import { NotificationItem } from '@shared/classes/NotificationItem';
 import { NotificationType } from '@shared/constants/NotificationType';
@@ -53,7 +53,12 @@ export function NotificationsContainer() {
                 severity={active?.type === NotificationType.Wait ? 'info' : active?.type}
             >
                 {active?.title ? <AlertTitle>{active.title}</AlertTitle> : null}
-                {active?.message}
+                {active?.message.split('\n').map((line, index) => (
+                    <Fragment key={index}>
+                        {line}
+                        <br />
+                    </Fragment>
+                ))}
             </Alert>
         </Snackbar>
     );

@@ -4,6 +4,7 @@ namespace App\Http\Requests\API\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
+use JetBrains\PhpStorm\ArrayShape;
 
 class RegisterRequest extends FormRequest
 {
@@ -37,6 +38,14 @@ class RegisterRequest extends FormRequest
                     ->numbers(),
             ],
             'username' => ['required', 'string', 'unique:users', 'max:50'],
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'first_name' => 'first name',
+            'last_name' => 'last name',
         ];
     }
 }

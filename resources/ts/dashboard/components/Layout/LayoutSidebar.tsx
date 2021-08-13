@@ -25,6 +25,7 @@ const useStyles = makeStyles(
         },
 
         header: {
+            flexWrap: 'nowrap',
             backgroundColor: '#f9f9f9',
             padding: '16px 0',
             borderBottom: '1px solid #e0e0e0',
@@ -53,6 +54,10 @@ const useStyles = makeStyles(
             alignItems: 'flex-start',
             justifyContent: 'center',
             flexGrow: 1,
+            maxWidth: 'calc(100% - 100px)',
+        },
+        headerUserName: {
+            width: '100%',
         },
     },
     {
@@ -64,6 +69,8 @@ function LayoutSidebar() {
     const classes = useStyles();
     const { logout, user } = useAuth();
 
+    const userFullName = user.getFullName();
+
     return (
         <Paper variant={'outlined'} className={classes.root}>
             <Grid container direction={'row'} alignItems={'center'} className={classes.header}>
@@ -71,7 +78,9 @@ function LayoutSidebar() {
                     <Avatar src={UserAvatar} className={classes.headerAvatar} />
                 </div>
                 <div className={classes.headerInfoHolder}>
-                    <Typography variant={'h6'}>{user.getFullName()}</Typography>
+                    <Typography variant={'h6'} noWrap title={userFullName} className={classes.headerUserName}>
+                        {userFullName}
+                    </Typography>
                     <Link onClick={logout} variant={'body2'} color={'primary'} className={classes.headerSignOut}>
                         Sign Out
                     </Link>

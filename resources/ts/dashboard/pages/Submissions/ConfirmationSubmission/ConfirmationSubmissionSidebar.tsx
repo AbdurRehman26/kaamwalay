@@ -8,10 +8,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/Check';
-import InfoIcon from '@material-ui/icons/InfoOutlined';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -156,9 +154,9 @@ export function ConfirmationSubmissionSidebar() {
                                     <Typography variant={'body2'}>
                                         <Box component={'span'} display={'inline-flex'} alignItems={'center'}>
                                             Insured Shipping:
-                                            <Tooltip title={'Insured Shipping'} placement={'top'}>
-                                                <InfoIcon color={'disabled'} className={classes.tooltipIcon} />
-                                            </Tooltip>
+                                            {/*<Tooltip title={'Insured Shipping'} placement={'top'}>*/}
+                                            {/*    <InfoIcon color={'disabled'} className={classes.tooltipIcon} />*/}
+                                            {/*</Tooltip>*/}
                                         </Box>
                                     </Typography>
                                 </TableCell>

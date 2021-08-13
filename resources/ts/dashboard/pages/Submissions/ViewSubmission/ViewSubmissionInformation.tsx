@@ -1,6 +1,7 @@
 import Grid from '@material-ui/core/Grid';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import { Moment } from 'moment';
 import React from 'react';
 
 import { formatDate } from '@shared/lib/datetime/formatDate';
@@ -14,7 +15,7 @@ interface ViewSubmissionInformationProps {
     serviceLevel: string;
     numberOfCards: number;
     shippingMethod: string;
-    createdAt: Date;
+    createdAt: Moment | Date;
     declaredValue: number;
     customerName: string;
     customerEmail: string;

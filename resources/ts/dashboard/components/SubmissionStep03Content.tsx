@@ -220,8 +220,8 @@ export function SubmissionStep03Content() {
         }
     }
 
-    function updateShippingState(stateId: number) {
-        const stateLookup = availableStates.find((state) => state.id === stateId);
+    function updateShippingState(stateId: any) {
+        const stateLookup = availableStates.find((state) => state.id == stateId);
         if (stateLookup) {
             dispatch(
                 updateShippingAddressField({
@@ -431,18 +431,19 @@ export function SubmissionStep03Content() {
                                         <Typography className={classes.methodDescription}>State</Typography>
                                         <Select
                                             fullWidth
+                                            native
                                             disabled={disableAllInputs}
                                             value={state.id || 'none'}
-                                            onChange={(e: any) => updateShippingState(e.target.value)}
+                                            onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
                                             placeholder={'Select State'}
                                             variant={'outlined'}
                                             style={{ height: '43px' }}
                                         >
-                                            <MenuItem value="none">Select a state</MenuItem>
+                                            <option value="none">Select a state</option>
                                             {availableStates.map((item) => (
-                                                <MenuItem key={item.id} value={item.id}>
+                                                <option key={item.id} value={item.id}>
                                                     {item.code}
-                                                </MenuItem>
+                                                </option>
                                             ))}
                                         </Select>
                                     </div>

@@ -8,10 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationException extends Exception
 {
-    public function render($request)
+    protected $message = 'The email or password it\'s invalid.';
+    protected $code = Response::HTTP_UNAUTHORIZED;
+
+    public function render($request): JsonResponse
     {
-        return new JsonResponse([
-            'error' => 'Incorrect Email or Password',
-        ], Response::HTTP_UNAUTHORIZED);
+        return new JsonResponse([ 'error' => $this->message ], $this->code);
     }
 }

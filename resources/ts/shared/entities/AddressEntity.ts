@@ -25,7 +25,10 @@ export class AddressEntity extends Entity {
 
     public getAddressLine2() {
         const lines = [this.city, `${this.state ?? ''} ${this.zip ?? ''}`, this.country.code];
-        return lines.map((line) => `${line ?? ''}`.trim()).filter(Boolean);
+        return lines
+            .map((line) => `${line ?? ''}`.trim())
+            .filter(Boolean)
+            .join(', ');
     }
 
     public getAddress() {

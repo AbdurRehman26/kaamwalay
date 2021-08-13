@@ -28,7 +28,7 @@ use App\Http\Controllers\API\Auth\ResetPasswordController;
 Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class, 'login'])->middleware('guest');
     Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
-    Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });

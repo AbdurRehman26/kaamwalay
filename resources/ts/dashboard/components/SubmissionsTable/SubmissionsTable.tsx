@@ -48,7 +48,7 @@ export function SubmissionsTable({}: SubmissionsTableProps) {
                                 key={index}
                                 id={data.id}
                                 orderNumber={data.orderNumber}
-                                serviceLevel={data.serviceLevel}
+                                serviceLevel={`${data.paymentPlan.price} / Card`}
                                 cardsNumber={data.numberOfCards}
                                 status={data.status}
                                 datePlaced={data.createdAt}

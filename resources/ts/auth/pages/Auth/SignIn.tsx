@@ -61,7 +61,7 @@ export function SignIn() {
 
                     <MuiLink
                         component={Link}
-                        to={'/forgot-password'}
+                        to={'/password/forgot'}
                         variant={'subtitle1'}
                         color={'textPrimary'}
                         align={'center'}

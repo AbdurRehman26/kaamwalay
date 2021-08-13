@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller
 {
+
+
     public function sendResetLinkEmail(ForgotPasswordRequest $request): JsonResponse
     {
         $this->broker()->sendResetLink(
@@ -17,7 +19,7 @@ class ForgotPasswordController extends Controller
         );
 
         return new JsonResponse([
-            'message' => 'Successfully sent Password Reset Email',
+            'message' => 'We sent you details, check your email and follow the link to reset your password.',
         ]);
     }
 

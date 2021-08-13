@@ -22,7 +22,6 @@ class OrderResource extends JsonResource
             'status' => $this->orderStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
-            'grand_total' => $this->grand_total,
             'created_at' => Carbon::parse($this->created_at)->toDate(),
             'customer' => new UserResource($this->user),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),

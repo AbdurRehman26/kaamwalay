@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 
 import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
@@ -9,6 +9,7 @@ import { UserEntity } from '@shared/entities/UserEntity';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 
+import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
 import { SignUpRequestDto } from '../dto/SignUpRequestDto';
 import { Repository } from './Repository';
 
@@ -40,6 +41,17 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
     public async whoami() {
         const { data } = await this.endpoint.get('/me');
         return plainToClass(UserEntity, data.user);
+    }
+
+    public async forgotPassword(email: string) {
+        const { data } = await this.endpoint.post<{ message: string }>('/password/forgot', { email });
+        return data;
+    }
+
+    @ValidateMethodParamsAsync()
+    public async resetPassword(input: ResetPasswordRequestDto) {
+        const { data } = await this.endpoint.post<{ message: string }>('/password/reset', classToPlain(input));
+        return data;
     }
 
     private parseName(fullName: string) {

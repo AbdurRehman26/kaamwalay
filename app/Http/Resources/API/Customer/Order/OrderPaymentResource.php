@@ -16,6 +16,10 @@ class OrderPaymentResource extends JsonResource
     {
         $providerResponse = json_decode($this->response);
 
+        if (is_null($providerResponse)) {
+            return [];
+        }
+
         if (! empty($providerResponse->card)) {
             $card = $providerResponse->card;
         } else {

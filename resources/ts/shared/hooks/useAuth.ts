@@ -8,10 +8,13 @@ import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
 import {
     authenticateAction,
     authenticateCheckAction,
+    forgotPasswordAction,
     registerAction,
+    resetPasswordAction,
     revokeAuthAction,
 } from '@shared/redux/slices/authenticationSlice';
 
+import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
 import { SignUpRequestDto } from '../dto/SignUpRequestDto';
 
 export function useAuth() {
@@ -30,6 +33,11 @@ export function useAuth() {
     const register = useCallback((input: SignUpRequestDto) => dispatch(registerAction(input)), [dispatch]);
     const authCheck = useCallback(() => dispatch(authenticateCheckAction()), [dispatch]);
     const logout = useCallback(() => dispatch(revokeAuthAction()), [dispatch]);
+    const forgotPassword = useCallback((email: string) => dispatch(forgotPasswordAction(email)), [dispatch]);
+    const resetPassword = useCallback(
+        (input: ResetPasswordRequestDto) => dispatch(resetPasswordAction(input)),
+        [dispatch],
+    );
 
     return {
         user: user$,
@@ -37,6 +45,8 @@ export function useAuth() {
         login,
         register,
         logout,
+        forgotPassword,
+        resetPassword,
         accessToken,
         authenticated,
         checking,

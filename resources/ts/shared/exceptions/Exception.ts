@@ -1,1 +1,7 @@
-export class Exception extends Error {}
+export class Exception extends Error {
+    constructor(message: string) {
+        super(message);
+
+        Error.captureStackTrace(this, this.constructor);
+    }
+}

@@ -4,43 +4,47 @@ import Grid from '@material-ui/core/Grid';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { Form, Formik } from 'formik';
-import React, { useCallback, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useCallback, useMemo } from 'react';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 
+import { ResetPasswordRequestDto } from '@shared/dto/ResetPasswordRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
+import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { font } from '@shared/styles/utils';
 
 import { FormInput } from './FormInput';
 import { SubmitButton } from './SubmitButton';
 import { useStyles } from './style';
-import { ForgotPasswordValidationRules } from './validation';
+import { ResetPasswordValidationRules } from './validation';
 
 /**
  *
  * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: ForgotPassword
+ * @component: ResetPassword
  * @date: 09.08.2021
  * @time: 05:52
  */
-export function ForgotPassword() {
-    const [confirmationEmail, setConfirmationEmail] = useState('');
-
-    const classes = useStyles();
+export function ResetPassword() {
+    const { token, email } = useLocationQuery<{ token: string; email: string }>();
     const notifications = useNotifications();
-    const { forgotPassword } = useAuth();
-    const initialState = useMemo(
+    const history = useHistory();
+    const classes = useStyles();
+    const { resetPassword } = useAuth();
+    const initialState = useMemo<ResetPasswordRequestDto>(
         () => ({
-            email: '',
+            token,
+            email,
+            password: '',
+            passwordConfirmation: '',
         }),
-        [],
+        [token],
     );
 
     const handleSubmit = useCallback(
-        async ({ email }) => {
-            const data = await forgotPassword(email);
+        async (values: ResetPasswordRequestDto) => {
+            const data = await resetPassword(values);
             const { error, payload } = data as any;
-
             if (error) {
                 notifications.error(error.message);
                 return;
@@ -50,16 +54,21 @@ export function ForgotPassword() {
                 notifications.success(payload?.message);
             }
 
-            setConfirmationEmail(email);
+            history.push('/sign-in');
         },
-        [forgotPassword],
+        [resetPassword],
     );
+
+    if (!email || !token) {
+        return <Redirect to={'/password/forgot'} />;
+    }
 
     return (
         <Formik
             initialValues={initialState}
             onSubmit={handleSubmit}
-            validationSchema={ForgotPasswordValidationRules}
+            validationSchema={ResetPasswordValidationRules}
+            enableReinitialize
             validateOnChange
         >
             <Form className={classes.root}>
@@ -68,28 +77,15 @@ export function ForgotPassword() {
                         <Typography variant={'h6'} align={'center'}>
                             Reset Password
                         </Typography>
-                        {!confirmationEmail ? (
-                            <Typography variant={'body1'} align={'center'}>
-                                Enter the email associated with your account in order to reset your password.
-                            </Typography>
-                        ) : null}
+                        <Typography variant={'body1'} align={'center'}>
+                            Enter a new password and confirm to reset your password for&nbsp;{email}.
+                        </Typography>
                     </Box>
-                    {confirmationEmail ? (
-                        <>
-                            <Typography variant={'body1'} align={'center'}>
-                                Email sent to: {confirmationEmail}
-                            </Typography>
-                            <Box my={3}>
-                                <Typography variant={'body1'} align={'center'}>
-                                    Check your email and follow the link to reset your password.
-                                </Typography>
-                            </Box>
-                        </>
-                    ) : (
-                        <FormInput type={'text'} label={'Email'} name={'email'} />
-                    )}
 
-                    <SubmitButton>Send Link</SubmitButton>
+                    <FormInput type={'password'} label={'Create Password'} name={'password'} />
+                    <FormInput type={'password'} label={'Confirm Password'} name={'passwordConfirmation'} />
+
+                    <SubmitButton>Reset Password</SubmitButton>
 
                     <Divider />
 
@@ -120,4 +116,4 @@ export function ForgotPassword() {
     );
 }
 
-export default ForgotPassword;
+export default ResetPassword;

@@ -18,7 +18,7 @@ import { SignUpValidationRules } from './validation';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.comm>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: SignUp
  * @date: 09.08.2021
  * @time: 05:52
@@ -32,7 +32,7 @@ export function SignUp() {
             username: '',
             email: '',
             password: '',
-            confirmationPassword: '',
+            passwordConfirmation: '',
         }),
         [],
     );
@@ -62,7 +62,7 @@ export function SignUp() {
                     <FormInput type={'text'} label={'Create Username'} name={'username'} />
                     <FormInput type={'text'} label={'Email'} name={'email'} />
                     <FormInput type={'password'} label={'Create Password'} name={'password'} />
-                    <FormInput type={'password'} label={'Confirm Password'} name={'confirmationPassword'} />
+                    <FormInput type={'password'} label={'Confirm Password'} name={'passwordConfirmation'} />
 
                     <SubmitButton>Sign up</SubmitButton>
 

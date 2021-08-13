@@ -45,10 +45,11 @@ export function SubmissionsTable({}: SubmissionsTableProps) {
                     <TableBody>
                         {data.map((data: OrderEntity, index) => (
                             <SubmissionTableRow
+                                disabled
                                 key={index}
                                 id={data.id}
                                 orderNumber={data.orderNumber}
-                                serviceLevel={data.serviceLevel}
+                                serviceLevel={data.paymentPlan.price}
                                 cardsNumber={data.numberOfCards}
                                 status={data.status}
                                 datePlaced={data.createdAt}

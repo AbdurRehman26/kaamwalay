@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 export const useConfirmationSubmissionStyles = makeStyles(
     (theme) => ({
         sidebar: {
+            width: '100%',
             maxWidth: 360,
         },
         content: {

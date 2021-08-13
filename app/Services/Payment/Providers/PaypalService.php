@@ -6,6 +6,7 @@ use App\Models\Order;
 use Illuminate\Http\JsonResponse;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
+use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalHttp\HttpException;
 
@@ -56,7 +57,28 @@ class PaypalService implements PaymentProviderServiceInterface
             return new JsonResponse([
                 'success' => false,
                 'data' => $e->getMessage(),
-            ], );
+            ]);
+        }
+    }
+
+    public function verify(Order $order, string $paypalOrderId)
+    {
+        $orderRequest = new OrdersCaptureRequest($paypalOrderId);
+        $orderRequest->prefer('return=representation');
+        try {
+            // Call API with your client and get a response for your call
+            $response = $this->client->execute($orderRequest);
+
+            // If call returns body in response, you can get the deserialized version from the result attribute of the response
+            return new JsonResponse([
+                'success' => true,
+                'data' => $response->result,
+            ]);
+        } catch (HttpException $e) {
+            return new JsonResponse([
+                'success' => false,
+                'data' => $e->getMessage(),
+            ]);
         }
     }
 }

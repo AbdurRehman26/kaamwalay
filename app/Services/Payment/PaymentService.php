@@ -23,6 +23,8 @@ class PaymentService
         switch ($order->paymentMethod->code) {
             case 'stripe':
                 return (new StripeService)->verify($order, $paymentIntentId);
+            default:
+                return (new PaypalService)->verify($order, $paymentIntentId);
         }
 
         throw new \Exception('Payment provider did not match.');

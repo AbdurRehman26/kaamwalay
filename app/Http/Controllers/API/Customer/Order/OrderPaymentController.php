@@ -21,7 +21,7 @@ class OrderPaymentController extends Controller
         $response = $paymentService->charge($order);
 
         if (isset($response['success']) && $response['success']) {
-            $paymentService->updateOrderStatus();
+            $paymentService->updateOrderStatus($order);
 
             return new JsonResponse($response);
         }
@@ -37,7 +37,7 @@ class OrderPaymentController extends Controller
             UnverifiedPayment::class
         );
 
-        $paymentService->updateOrderStatus();
+        $paymentService->updateOrderStatus($order);
 
         return new JsonResponse([
             'message' => 'Payment verified successfully',

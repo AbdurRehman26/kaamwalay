@@ -5,9 +5,12 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\PDFService;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PDFServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_generate_pdf()
     {

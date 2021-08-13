@@ -16,13 +16,14 @@ import { useConfirmationSubmissionStyles } from './style';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.comm>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: ConfirmationSubmission
  * @date: 06.08.2021
  * @time: 23:14
  */
 export function ConfirmationSubmission() {
     const classes = useConfirmationSubmissionStyles();
+
     return (
         <Grid container>
             <Grid item className={classes.sidebar}>

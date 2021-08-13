@@ -2,14 +2,13 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
+use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\Customer\User\UserResource;
-use Carbon\Carbon;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class OrderResource extends BaseResource
 {
     public function toArray($request): array
     {
@@ -18,10 +17,11 @@ class OrderResource extends JsonResource
             'order_number' => $this->order_number,
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
+            'status' => $this->orderStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
-            'created_at' => Carbon::parse($this->created_at)->toDate(),
+            'created_at' => $this->formatDate($this->created_at),
             'customer' => new UserResource($this->user),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),

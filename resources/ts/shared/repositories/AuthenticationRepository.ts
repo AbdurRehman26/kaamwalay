@@ -1,22 +1,22 @@
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 
 import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
 import { ValidateMethodParamsAsync } from '@shared/decorators/ValidateMethodParams';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
-import { CustomerOrdersPaymentPlanEntity } from '@shared/entities/CustomerOrdersPaymentPlanEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 
+import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
 import { SignUpRequestDto } from '../dto/SignUpRequestDto';
 import { Repository } from './Repository';
 
 @Injectable('AuthenticationRepository')
-export class AuthenticationRepository extends Repository<CustomerOrdersPaymentPlanEntity> {
+export class AuthenticationRepository extends Repository<AuthenticatedUserEntity> {
     readonly endpointPath: string = '/auth';
-    readonly model = CustomerOrdersPaymentPlanEntity;
+    readonly model = AuthenticatedUserEntity;
 
     constructor(@Inject() public authenticationService: AuthenticationService) {
         super();
@@ -41,6 +41,17 @@ export class AuthenticationRepository extends Repository<CustomerOrdersPaymentPl
     public async whoami() {
         const { data } = await this.endpoint.get('/me');
         return plainToClass(UserEntity, data.user);
+    }
+
+    public async forgotPassword(email: string) {
+        const { data } = await this.endpoint.post<{ message: string }>('/password/forgot', { email });
+        return data;
+    }
+
+    @ValidateMethodParamsAsync()
+    public async resetPassword(input: ResetPasswordRequestDto) {
+        const { data } = await this.endpoint.post<{ message: string }>('/password/reset', classToPlain(input));
+        return data;
     }
 
     private parseName(fullName: string) {

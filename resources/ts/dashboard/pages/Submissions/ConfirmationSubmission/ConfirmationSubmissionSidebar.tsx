@@ -1,5 +1,6 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -12,8 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/Check';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
+import { useOrderQuery } from '@shared/hooks/useOrderQuery';
 import { formatDate } from '@shared/lib/datetime/formatDate';
+import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 
 import { useConfirmationSubmissionSidebarStyles } from './style';
@@ -27,7 +31,16 @@ import { useConfirmationSubmissionSidebarStyles } from './style';
  */
 export function ConfirmationSubmissionSidebar() {
     const classes = useConfirmationSubmissionSidebarStyles();
+    const { id } = useParams<{ id: string }>();
+    const { isLoading, isError, data } = useOrderQuery(id);
 
+    if (isLoading || isError) {
+        return (
+            <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
+                {isLoading ? <CircularProgress /> : <Typography color={'error'}>Error loading submission</Typography>}
+            </Box>
+        );
+    }
     return (
         <Paper variant={'outlined'} className={classes.root}>
             <Box paddingY={3} display={'flex'} flexDirection={'column'} alignItems={'center'}>
@@ -52,7 +65,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        RG008938390
+                                        {data.orderNumber}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -62,17 +75,17 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        Basic
+                                        {formatCurrency(data.paymentPlan.price)}&nbsp;/ Card
                                     </Typography>
                                 </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>
-                                    <Typography variant={'body2'}>No. of Cards: </Typography>
+                                    <Typography variant={'body2'}>No. of Cards:</Typography>
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        1
+                                        {data.numberOfCards}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -82,7 +95,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        Insured
+                                        {data.shippingMethod.name}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -92,7 +105,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        {formatDate(new Date(), 'M/DD/YYYY')}
+                                        {formatDate(data.createdAt, 'M/DD/YYYY')}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -102,7 +115,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        $400.00
+                                        {formatCurrency(data.totalDeclaredValue)}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -124,7 +137,8 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'caption'} align={'right'} color={'textSecondary'}>
-                                        ($20.00 × 1) = &nbsp;
+                                        ({formatCurrency(data.paymentPlan.price)}&nbsp;×&nbsp;{data.numberOfCards}) =
+                                        &nbsp;
                                         <Typography
                                             component={'span'}
                                             variant={'body2'}
@@ -132,7 +146,7 @@ export function ConfirmationSubmissionSidebar() {
                                             color={'textPrimary'}
                                             className={font.fontWeightMedium}
                                         >
-                                            20$
+                                            {formatCurrency(data.paymentPlan.price * data.numberOfCards)}
                                         </Typography>
                                     </Typography>
                                 </TableCell>
@@ -150,7 +164,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        $14.00
+                                        {formatCurrency(data.shippingFee)}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -169,7 +183,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        $34.00
+                                        {formatCurrency(data.grandTotal)}
                                     </Typography>
                                 </TableCell>
                             </TableRow>

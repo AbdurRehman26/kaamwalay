@@ -50,7 +50,7 @@ class LoginTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJsonStructure([ 'error' ]);
-        $response->assertJsonPath('error', 'Incorrect Email or Password');
+        $response->assertJsonPath('error', 'The email or password is invalid.');
     }
 
     /**
@@ -71,7 +71,7 @@ class LoginTest extends TestCase
 
         $response->assertStatus(401);
         $response->assertJsonStructure([ 'error' ]);
-        $response->assertJsonPath('error', 'Incorrect Email or Password');
+        $response->assertJsonPath('error', 'The email or password is invalid.');
     }
 
     /**

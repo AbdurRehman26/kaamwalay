@@ -28,7 +28,7 @@ use App\Http\Controllers\API\Auth\ResetPasswordController;
 Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class, 'login'])->middleware('guest');
     Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
-    Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
@@ -38,7 +38,6 @@ Route::prefix('customer')->group(function () {
         Route::apiResource('addresses/states', StateController::class);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
-        Route::post('payment-cards/charge', [PaymentCardController::class, 'charge']);
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
 

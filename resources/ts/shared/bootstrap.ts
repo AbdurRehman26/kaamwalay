@@ -1,4 +1,4 @@
-import { resolveInjectable } from './lib/dependencyInjection/resolveInjectable';
+import { app } from './lib/app';
 import { APIService } from './services/APIService';
 
-resolveInjectable(APIService).attach();
+app(APIService).attach();

@@ -1,0 +1,19 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Http\Resources\API\BaseResource;
+
+class {{ class }} extends BaseResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        return parent::toArray($request);
+    }
+}

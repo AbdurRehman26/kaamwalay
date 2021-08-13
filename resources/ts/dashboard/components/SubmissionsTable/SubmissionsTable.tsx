@@ -1,27 +1,31 @@
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { useCallback, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
+
+import { OrderEntity } from '@shared/entities/OrderEntity';
+import { useListOrdersQuery } from '@shared/hooks/useOrdersQuery';
 
 import { SubmissionTableRow } from './SubmissionTableRow';
 import { Table, TablePagination } from './styles';
 
-// TODO: implement RTK Query
-interface SubmissionsTableProps {
-    items?: Object[];
-    totals?: number;
-}
+interface SubmissionsTableProps {}
 
-export function SubmissionsTable({ totals }: SubmissionsTableProps) {
-    const [page, setPage] = useState(0);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+export function SubmissionsTable({}: SubmissionsTableProps) {
+    const { isLoading, isError, data, paginationProps } = useListOrdersQuery();
 
-    const handleChangePage = useCallback((e, page) => setPage(page), [setPage]);
-    const handleChangeRowsPerPage = useCallback((e) => setItemsPerPage(e.target.value), [setItemsPerPage]);
-
+    if (isLoading || isError) {
+        return (
+            <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
+                {isLoading ? <CircularProgress /> : <Typography color={'error'}>Error loading submissions</Typography>}
+            </Box>
+        );
+    }
     return (
         <>
             <TableContainer>
@@ -39,24 +43,23 @@ export function SubmissionsTable({ totals }: SubmissionsTableProps) {
                     </TableHead>
 
                     <TableBody>
-                        <SubmissionTableRow
-                            id={'RG808078787'}
-                            serviceLevel={'Basic'}
-                            cardsNumber={1}
-                            status={'Placed'}
-                            datePlaced={new Date()}
-                            dateArrived={null}
-                        />
+                        {data.map((data: OrderEntity, index) => (
+                            <SubmissionTableRow
+                                disabled
+                                key={index}
+                                id={data.id}
+                                orderNumber={data.orderNumber}
+                                serviceLevel={data.paymentPlan.price}
+                                cardsNumber={data.numberOfCards}
+                                status={data.status}
+                                datePlaced={data.createdAt}
+                                dateArrived={data.arrivedAt}
+                            />
+                        ))}
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                            <TablePagination
-                                count={totals || 0}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                rowsPerPage={itemsPerPage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
+                            <TablePagination {...paginationProps} />
                         </TableRow>
                     </TableFooter>
                 </Table>

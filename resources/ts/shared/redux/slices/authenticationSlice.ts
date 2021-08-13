@@ -2,14 +2,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
 
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
+import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
-import { resolveInjectable } from '@shared/lib/dependencyInjection/resolveInjectable';
+import { app } from '@shared/lib/app';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 
-import { SignUpRequestDto } from '../../dto/SignUpRequestDto';
+import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
 
 interface StateType {
     checking: boolean;
@@ -21,8 +22,8 @@ interface StateType {
 type AuthenticatePayload = PayloadAction<AuthenticatedUserEntity, string, any, Error>;
 
 export const authenticateAction = createAsyncThunk('auth/authenticate', async (input: LoginRequestDto) => {
-    const authenticationService = resolveInjectable(AuthenticationService);
-    const authenticationRepository = resolveInjectable(AuthenticationRepository);
+    const authenticationService = app(AuthenticationService);
+    const authenticationRepository = app(AuthenticationRepository);
 
     try {
         const authenticatedUser = await authenticationRepository.postLogin(input);
@@ -45,8 +46,8 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
 });
 
 export const registerAction = createAsyncThunk('auth/register', async (input: SignUpRequestDto, thunkAPI) => {
-    const authenticationService = resolveInjectable(AuthenticationService);
-    const authenticationRepository = resolveInjectable(AuthenticationRepository);
+    const authenticationService = app(AuthenticationService);
+    const authenticationRepository = app(AuthenticationRepository);
 
     try {
         const authenticatedUser = await authenticationRepository.postRegister(input);
@@ -68,8 +69,8 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
 });
 
 export const authenticateCheckAction = createAsyncThunk('auth/check', async () => {
-    const authenticationService = resolveInjectable(AuthenticationService);
-    const authenticationRepository = resolveInjectable(AuthenticationRepository);
+    const authenticationService = app(AuthenticationService);
+    const authenticationRepository = app(AuthenticationRepository);
     const accessToken = await authenticationService.getAccessToken();
     if (!accessToken) {
         return null;
@@ -83,8 +84,26 @@ export const authenticateCheckAction = createAsyncThunk('auth/check', async () =
 });
 
 export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {
-    const authenticationService = resolveInjectable(AuthenticationService);
+    const authenticationService = app(AuthenticationService);
     await authenticationService.removeAccessToken();
+});
+
+export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', async (email: string) => {
+    const authenticationRepository = app(AuthenticationRepository);
+    return authenticationRepository.forgotPassword(email);
+});
+
+export const resetPasswordAction = createAsyncThunk('auth/password/reset', async (input: ResetPasswordRequestDto) => {
+    const authenticationRepository = app(AuthenticationRepository);
+    try {
+        return await authenticationRepository.resetPassword(input);
+    } catch (e) {
+        if (e.errors) {
+            throw new Error('Validation error.');
+        }
+
+        throw e;
+    }
 });
 
 export const authenticationSlice = createSlice({

@@ -1,20 +1,22 @@
-import { Expose } from 'class-transformer';
+import { Type } from 'class-transformer';
 
 import { PaginationLink } from '@shared/classes/PaginationLink';
+import { Field } from '@shared/decorators/Field';
 
 export class PaginationMeta {
-    public from!: number;
+    @Type(() => PaginationLink)
     public links!: PaginationLink[];
+    public from!: number;
     public path!: string;
     public to!: number;
     public total!: number;
 
-    @Expose({ name: 'current_page' })
+    @Field('current_page')
     public currentPage!: number;
 
-    @Expose({ name: 'last_page' })
+    @Field('last_page')
     public lastPage!: number;
 
-    @Expose({ name: 'per_page' })
+    @Field('per_page')
     public perPage!: number;
 }

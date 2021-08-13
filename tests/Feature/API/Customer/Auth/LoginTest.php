@@ -94,6 +94,7 @@ class LoginTest extends TestCase
     public function ags_user_can_login()
     {
         Config::set('services.ags.is_platform_enabled', true);
+        Config::set('services.ags.base_url', 'http://test.test');
 
         $testEmail = 'test@test.test';
         Http::fake([

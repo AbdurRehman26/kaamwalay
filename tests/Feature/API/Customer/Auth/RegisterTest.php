@@ -35,7 +35,7 @@ class RegisterTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => $email,
             'username' => $this->faker->userName(),
-            'password' => 'password',
+            'password' => 'passWord1',
             'password_confirmation' => 'password',
             'phone' => '',
         ]);
@@ -99,13 +99,14 @@ class RegisterTest extends TestCase
      */
     public function user_registration_triggers_registered_event()
     {
+        Event::fake();
         $email = $this->faker->safeEmail();
         $this->postJson('/api/auth/register', [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'email' => $email,
             'username' => $this->faker->userName(),
-            'password' => 'password',
+            'password' => 'passWord1',
             'password_confirmation' => 'password',
             'phone' => '',
         ]);

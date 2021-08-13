@@ -4,17 +4,18 @@ namespace Tests\Feature\API\Customer\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * @test
      *
      * @group auth
-     *
-     * @return void
      */
     public function user_can_login_with_valid_credentials()
     {
@@ -65,7 +66,7 @@ class LoginTest extends TestCase
 
         $response = $this->postJson('api/auth/login', [
             'email' => $user->email,
-            'password' => 'password1',
+            'password' => 'passWord12',
         ]);
 
         $response->assertStatus(401);
@@ -86,6 +87,32 @@ class LoginTest extends TestCase
         $response->assertJsonStructure(['data' => ['user']]);
         $response->assertJsonPath('data.user.email', $user->email);
         $response->assertJsonPath('data.user.id', $user->id);
+    }
+
+    /** @test @group auth */
+    public function ags_user_can_login()
+    {
+        Config::set('services.ags.is_platform_enabled', true);
+        Config::set('services.ags.base_url', 'http://test.test');
+
+        $testEmail = 'test@test.test';
+        Http::fake([
+            config('services.ags.base_url') . '/login/' => Http::response([
+                'access_token' => 'token',
+                'user' => [
+                    'username' => 'test',
+                    'email' => $testEmail,
+                ],
+            ], 200),
+        ]);
+        $response = $this->postJson('api/auth/login', [
+            'email' => $testEmail,
+            'password' => 'Asdasd1',
+        ]);
+        $user = User::first();
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['access_token', 'type', 'expiry']);
+        $this->assertSame($testEmail, $user->email);
     }
 
     /** @test */

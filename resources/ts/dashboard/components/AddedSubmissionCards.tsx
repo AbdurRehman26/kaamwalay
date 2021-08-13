@@ -137,20 +137,17 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         dispatch(markCardAsUnselected(row));
     }
 
-    function onChangeCardQty(card: SearchResultItemCardProps, qty: number) {
-        if (qty >= 1) {
-            dispatch(changeSelectedCardQty({ card, qty }));
-        } else {
-            notifications.warning("Card's quantity can not be less than 1", 'Warning');
-        }
+    function onChangeCardQty(card: SearchResultItemCardProps, qty: any) {
+        const newValue = Math.min(Math.max(qty, 1), 100);
+        dispatch(changeSelectedCardQty({ card, qty: newValue }));
     }
 
-    function onChangeCardValue(card: SearchResultItemCardProps, newValue: number) {
-        if (newValue > 0) {
-            dispatch(changeSelectedCardValue({ card, newValue }));
-        } else {
-            notifications.warning("Card's value can not be less than $1", 'Warning');
-        }
+    function onChangeCardValue(card: SearchResultItemCardProps, newValue: any) {
+        //replace non-digits with, if user enters a decimal
+        const receivedValue = String(newValue).replace(/[^\d]/, '');
+        const valueAsInt = parseInt(receivedValue);
+        const finalValue = Math.min(Math.max(valueAsInt, 1), 1000000);
+        dispatch(changeSelectedCardValue({ card, newValue: finalValue }));
     }
 
     if (selectedCards.length === 0) {

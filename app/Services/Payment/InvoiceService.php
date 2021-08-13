@@ -14,13 +14,14 @@ class InvoiceService
     {
         $data = $this->getInvoiceData($order);
 
+        $fileName = Str::uuid();
         $pdf = PDFService::generate('pdf.invoice', $data);
         Storage::disk('s3')
             ->put(
-                'invoice/invoice-' . $order->order_number . '.pdf',
+                'invoice/invoice-' . $fileName . '.pdf',
                 $pdf->output()
             );
-        $url = Storage::disk('s3')->url('invoice/invoice-' . $order->order_number . '.pdf');
+        $url = Storage::disk('s3')->url('invoice/invoice-' . $fileName . '.pdf');
 
         $this->createAndStoreInvoiceRecord($order, $url);
     }

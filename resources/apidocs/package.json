@@ -1,0 +1,16 @@
+{
+    "name": "apidocs",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "build": "apidoc -e node_modules -i ./ -o ../../public/apidocs",
+        "watch": "yarn build --watch",
+        "serve": "serve ../../public/apidocs",
+        "start": "yarn build && yarn serve"
+    },
+    "devDependencies": {
+        "apidoc": "^0.29.0",
+        "serve": "^12.0.0"
+    }
+}

@@ -14,6 +14,10 @@ export function setGlobalStore(store: EnhancedStore) {
     return globalReduxStore;
 }
 
+export function getGlobalStore() {
+    return globalReduxStore;
+}
+
 export function GlobalDispatch(
     ...args: Parameters<GlobalStoreType['dispatch']>
 ): ReturnType<GlobalStoreType['dispatch']> {

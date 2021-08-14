@@ -9,6 +9,9 @@ import { NotificationsContainer } from '@shared/components/NotificationsContaine
 import { ConfirmationDialogProvider } from '@shared/contexts/ConfirmationDialogContext';
 import { materialUiTheme } from '@shared/styles/theme';
 
+import { ConfigurationLoad } from './ConfigurationLoad';
+import { SplashScreen } from './SplashScreen';
+
 interface ApplicationProviderProps {
     store: EnhancedStore;
 }
@@ -25,10 +28,13 @@ export function ApplicationProvider({ children, store }: PropsWithChildren<Appli
         <Provider store={store}>
             <ThemeProvider theme={materialUiTheme}>
                 <>
+                    <ConfigurationLoad />
                     <AuthenticationCheck />
                     <NotificationsContainer />
                     <CssBaseline />
-                    <ConfirmationDialogProvider>{children}</ConfirmationDialogProvider>
+                    <ConfirmationDialogProvider>
+                        <SplashScreen>{children}</SplashScreen>
+                    </ConfirmationDialogProvider>
                 </>
             </ThemeProvider>
         </Provider>

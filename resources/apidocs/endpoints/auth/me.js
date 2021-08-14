@@ -4,7 +4,7 @@
  * @apiGroup Authentication
  *
  * @apiUse header_main
- * @apiUse authorization
+ * @apiUse Authorization
  *
  * @apiSuccess {Object} data containing token and user object
  *

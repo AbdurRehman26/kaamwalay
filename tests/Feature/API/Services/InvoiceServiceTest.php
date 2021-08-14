@@ -2,19 +2,17 @@
 
 namespace Tests\Feature\API\Services;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-
 use App\Models\CardProduct;
+use App\Models\CustomerAddress;
+
 use App\Models\Order;
-use App\Models\User;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
-use App\Services\Payment\InvoiceService;
+use App\Models\User;
 use App\Services\PDFService;
-use App\Models\CustomerAddress;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class InvoiceServiceTest extends TestCase
 {
@@ -96,7 +94,7 @@ class InvoiceServiceTest extends TestCase
             ],
             'payment_provider_reference' => [
                 'id' => 'pm_1JOC5XJCai8r8pbf1AaP079z',
-            ]
+            ],
         ]);
         
         $response->assertStatus(201);
@@ -126,7 +124,5 @@ class InvoiceServiceTest extends TestCase
         $pdf = PDFService::generate('pdf.invoice', $data);
     
         $this->assertTrue($pdf instanceof \Barryvdh\DomPDF\PDF);
-
     }
-
 }

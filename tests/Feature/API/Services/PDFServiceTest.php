@@ -4,8 +4,8 @@ namespace Tests\Unit\API\Services;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\PDFService;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class PDFServiceTest extends TestCase
 {

@@ -85,5 +85,4 @@ class StripeService implements PaymentProviderServiceInterface
 
         return false;
     }
-
 }

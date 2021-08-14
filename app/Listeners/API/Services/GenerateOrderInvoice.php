@@ -22,6 +22,5 @@ class GenerateOrderInvoice
         $order = $event->order;
         
         (new InvoiceService())->saveInvoicePDF($order);
-        
     }
 }

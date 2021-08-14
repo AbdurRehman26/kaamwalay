@@ -57,6 +57,7 @@ class ConfigurationValue
     public function setKey(string $key): self
     {
         $this->getter->setKey($key);
+
         return $this;
     }
 

@@ -312,6 +312,10 @@
                             {{ucfirst($orderPayment->card->brand)}} ending in {{$orderPayment->card->last4}}
                             <br/>
                             Exp. {{$orderPayment->card->exp_month}}/{{$orderPayment->card->exp_year}}
+                        @elseif($orderPayment->payer)
+                            {{$orderPayment->payer->email}}
+                            <br/>
+                            {{$orderPayment->payer->name}}
                         @endif
                     @else
                         No payment found

@@ -1,5 +1,6 @@
 // noinspection BadExpressionStatementJS
 import React, { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -7,6 +8,7 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
 
 import { useAppSelector } from '@dashboard/redux/hooks';
+import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
 
 function PaypalBtn() {
     const paypal = useRef();
@@ -14,6 +16,7 @@ function PaypalBtn() {
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const notifications = useNotifications();
     const history = useHistory();
+    const dispatch = useDispatch();
     useEffect(() => {
         // @ts-ignore
         window.paypal
@@ -41,6 +44,7 @@ function PaypalBtn() {
                     }
 
                     notifications.success('Order paid!', 'Success!');
+                    dispatch(clearSubmissionState());
                     history.push(`/submissions/${orderID}/confirmation`);
                 },
             })

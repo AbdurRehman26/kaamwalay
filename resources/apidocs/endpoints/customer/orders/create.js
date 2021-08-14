@@ -4,7 +4,7 @@
  * @apiGroup Customer-Orders
  *
  * @apiUse header_main
- * @apiUse authorization
+ * @apiUse Authorization
  *
  *  @apiParamExample {json} Request-Example:
  *      {

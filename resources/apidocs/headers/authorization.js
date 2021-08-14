@@ -1,5 +1,11 @@
 /**
- * @apiDefine authorization
+ * @apiDefine Authorization
  *
- * @apiHeader {String} Authorization Bearer {token}
+ * @apiHeader (Headers) {String="Bearer abc123"}  Authorization Authorization token.
+ */
+
+/**
+ * @apiDefine AuthorizationOptional
+ *
+ * @apiHeader (Headers) {String="Bearer abc123"}  [Authorization] Authorization token.
  */

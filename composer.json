@@ -33,7 +33,7 @@
         "fakerphp/faker": "^1.15",
         "friendsofphp/php-cs-fixer": "^3.0",
         "laravel-shift/blueprint": "^1.24",
-        "laravel/sail": "^1.8",
+        "laravel/sail": "^1.9",
         "mockery/mockery": "^1.4",
         "nunomaduro/collision": "^5.6",
         "phpunit/phpunit": "^9.5"

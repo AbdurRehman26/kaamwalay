@@ -1,10 +1,12 @@
+import { AxiosError } from 'axios';
 import { useCallback, useMemo } from 'react';
 
 import { NotificationItem } from '@shared/classes/NotificationItem';
 import { NotificationType } from '@shared/constants/NotificationType';
 import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
-import { dequeueNotification, enqueueNotification } from '@shared/redux/slices/notificationsSlice';
 
+import { Exception } from '../exceptions/Exception';
+import { NotificationsService } from '../services/NotificationsService';
 import { useSharedSelector } from './useSharedDispatch';
 
 export function useNotifications() {
@@ -13,35 +15,40 @@ export function useNotifications() {
 
     const notify = useCallback(
         (type: NotificationType, message: string, title: string = '') => {
-            dispatch(enqueueNotification(new NotificationItem(type, message, title)));
+            NotificationsService.notify(type, message, title);
         },
         [dispatch],
     );
 
     const close = useCallback(
         (notification: string | NotificationItem) => {
-            dispatch(dequeueNotification(notification));
+            NotificationsService.close(notification);
         },
         [dispatch],
     );
 
     const info = useCallback(
-        (message: string, title: string = '') => notify(NotificationType.Info, message, title),
+        (message: string, title: string = '') => NotificationsService.info(message, title),
         [notify],
     );
 
     const success = useCallback(
-        (message: string, title: string = '') => notify(NotificationType.Success, message, title),
+        (message: string, title: string = '') => NotificationsService.success(message, title),
         [notify],
     );
 
     const warning = useCallback(
-        (message: string, title: string = '') => notify(NotificationType.Warning, message, title),
+        (message: string, title: string = '') => NotificationsService.warning(message, title),
         [notify],
     );
 
     const error = useCallback(
-        (message: string, title: string = '') => notify(NotificationType.Error, message, title),
+        (message: string, title: string = '') => NotificationsService.error(message, title),
+        [notify],
+    );
+
+    const exception = useCallback(
+        (error: Error | Exception | AxiosError, title: string = '') => NotificationsService.exception(error, title),
         [notify],
     );
 
@@ -51,10 +58,11 @@ export function useNotifications() {
             success,
             warning,
             error,
+            exception,
             notify,
             close,
             notifications,
         }),
-        [info, success, warning, error, notify, close, notifications],
+        [info, success, warning, error, exception, notify, close, notifications],
     );
 }

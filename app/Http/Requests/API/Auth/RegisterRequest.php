@@ -39,4 +39,12 @@ class RegisterRequest extends FormRequest
             'username' => ['required', 'string', 'unique:users', 'max:50'],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'first_name' => 'first name',
+            'last_name' => 'last name',
+        ];
+    }
 }

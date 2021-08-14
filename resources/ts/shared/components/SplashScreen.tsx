@@ -2,7 +2,7 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { PropsWithChildren } from 'react';
 
-import { useAppSelector } from '@dashboard/redux/hooks';
+import { useSharedSelector } from '../hooks/useSharedDispatch';
 
 /**
  *
@@ -12,7 +12,7 @@ import { useAppSelector } from '@dashboard/redux/hooks';
  * @time: 02:49
  */
 export function SplashScreen({ children }: PropsWithChildren<any>) {
-    const isConfigLoading = useAppSelector((state) => state.configuration.isLoading);
+    const isConfigLoading = useSharedSelector((state) => state.configuration.isLoading);
     if (isConfigLoading) {
         return (
             <Box minHeight={'100vh'} display={'flex'} alignItems={'center'} justifyContent={'center'}>

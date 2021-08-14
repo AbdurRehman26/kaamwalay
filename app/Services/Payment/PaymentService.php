@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Events\API\Customer\Order\OrderPaid;
 use App\Models\Order;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
@@ -57,6 +58,8 @@ class PaymentService
     public function updateOrderStatus(Order $order): bool
     {
         $order->markAsPlaced();
+
+        OrderPaid::dispatch($order);
 
         return true;
     }

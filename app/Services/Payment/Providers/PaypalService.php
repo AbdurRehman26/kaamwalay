@@ -4,6 +4,7 @@ namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
@@ -11,15 +12,22 @@ use PayPalHttp\HttpException;
 
 class PaypalService implements PaymentProviderServiceInterface
 {
-    protected SandboxEnvironment $environment;
+    protected $environment;
     protected PayPalHttpClient $client;
 
     public function __construct()
     {
-        $this->environment = new SandboxEnvironment(
-            config('services.paypal.client_id'),
-            config('services.paypal.client_secret'),
-        );
+        if (app()->environment(['local', 'staging'])) {
+            $this->environment = new SandboxEnvironment(
+                config('services.paypal.client_id'),
+                config('services.paypal.client_secret'),
+            );
+        } else {
+            $this->environment = new ProductionEnvironment(
+                config('services.paypal.client_id'),
+                config('services.paypal.client_secret'),
+            );
+        }
         $this->client = new PayPalHttpClient($this->environment);
     }
 

@@ -12,16 +12,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderPaymentController extends Controller
 {
-    public function pay(Order $order, PaymentService $paymentService)
+    public function __construct(protected PaymentService $paymentService)
+    {
+    }
+
+    public function pay(Order $order)
     {
         $this->authorize('view', $order);
 
         throw_unless($order->isPayable(), UnpayableOrder::class);
 
-        $response = $paymentService->charge($order);
+        $response = $this->paymentService->charge($order);
 
         if (isset($response['success']) && $response['success']) {
-            $paymentService->updateOrderStatus($order);
+            $this->paymentService->updateOrderStatus($order);
 
             return new JsonResponse($response);
         }
@@ -29,25 +33,25 @@ class OrderPaymentController extends Controller
         return new JsonResponse($response, Response::HTTP_PAYMENT_REQUIRED);
     }
 
-    public function verify(Order $order, $paymentIntentId, PaymentService $paymentService): JsonResponse
+    public function verify(Order $order, $paymentIntentId): JsonResponse
     {
         $this->authorize('view', $order);
 
         throw_unless(
-            $paymentService->verify($order, $paymentIntentId),
+            $this->paymentService->verify($order, $paymentIntentId),
             UnverifiedPayment::class
         );
 
-        $paymentService->updateOrderStatus($order);
+        $this->paymentService->updateOrderStatus($order);
 
         return new JsonResponse([
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);
     }
 
-    public function createOrder(Order $order, PaymentService $paymentService)
+    public function createOrder(Order $order)
     {
-        $response = $paymentService->createOrder($order);
+        $response = $this->paymentService->createOrder($order);
 
         return new JsonResponse(
             $response,

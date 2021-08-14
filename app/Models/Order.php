@@ -125,12 +125,4 @@ class Order extends Model
     {
         return $query->where('order_status_id', 2);
     }
-
-    public function identifyPaymentMethod(): string
-    {
-        return match ($this->payment_method_id) {
-            1 => 'stripe',
-            2 => 'paypal'
-        };
-    }
 }

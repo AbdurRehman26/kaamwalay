@@ -4,7 +4,7 @@
  * @apiGroup Payment-Methods
  *
  * @apiUse header_main
- * @apiUse authorization
+ * @apiUse Authorization
  *
  * @apiSuccess {Array} data payment methods
  *

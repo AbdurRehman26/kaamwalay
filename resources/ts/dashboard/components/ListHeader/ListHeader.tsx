@@ -65,9 +65,8 @@ export function ListHeader({ children, headline, noSearch, noMargin }: PropsWith
                 <Typography component={'h2'} variant={'h5'} className={font.fontWeightMedium}>
                     {headline}
                 </Typography>
-             
                 <Box flexGrow={1} className={classes.searchBarHolder}>
-                   {!noSearch && (
+                    {!noSearch && (
                         <InputBase
                             placeholder="Search…"
                             className={classes.searchBar}

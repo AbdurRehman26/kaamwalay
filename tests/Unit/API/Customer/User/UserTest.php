@@ -17,9 +17,7 @@ class UserTest extends TestCase
         parent::setUp();
         $this->seed(RolesSeeder::class);
     }
-    /**
-     * @test
-     */
+    /** @test */
     public function customer_can_be_created_with_role()
     {
         $user = User::createCustomer([

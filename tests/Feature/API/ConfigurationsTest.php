@@ -9,14 +9,14 @@ use Tests\TestCase;
 class ConfigurationsTest extends TestCase
 {
     use RefreshDatabase;
+
     private User $user;
 
     /** @test */
     public function it_should_not_return_any_keys_on_empty_configuration(): void
     {
         config([
-            'configuration.guest_environment_keys' => [],
-            'configuration.auth_environment_keys' => [],
+            'configuration.keys' => [],
         ]);
 
         $response = $this->post('/api/configurations');
@@ -29,8 +29,7 @@ class ConfigurationsTest extends TestCase
     public function it_should_return_correct_configuration(): void
     {
         config([
-            'configuration.guest_environment_keys' => ['APP_ENV'],
-            'configuration.auth_environment_keys' => ['APP_URL'],
+            'configuration.keys' => ['APP_ENV', 'APP_URL:auth'],
         ]);
 
         $response = $this->post('/api/configurations');
@@ -46,9 +45,9 @@ class ConfigurationsTest extends TestCase
     public function it_should_return_correct_configuration_when_using_alias(): void
     {
         config([
-            'configuration.guest_environment_keys' => [
+            'configuration.keys' => [
                 'APP_URL',
-                'ENVIRONMENT' => 'APP_ENV',
+                'APP_ENV:env,environment',
             ],
         ]);
 
@@ -67,8 +66,7 @@ class ConfigurationsTest extends TestCase
     public function it_should_correctly_include_auth_keys_for_authenticated_user(): void
     {
         config([
-            'configuration.guest_environment_keys' => ['APP_ENV'],
-            'configuration.auth_environment_keys' => ['APP_URL'],
+            'configuration.keys' => ['APP_ENV', 'APP_URL:auth'],
         ]);
 
         $this->actingAs($this->user);
@@ -87,8 +85,7 @@ class ConfigurationsTest extends TestCase
     public function it_should_not_include_auth_keys_for_guest_user(): void
     {
         config([
-            'configuration.guest_environment_keys' => ['APP_ENV'],
-            'configuration.auth_environment_keys' => ['APP_URL'],
+            'configuration.keys' => ['APP_ENV', 'APP_URL:auth'],
         ]);
 
         $response = $this->post('/api/configurations');

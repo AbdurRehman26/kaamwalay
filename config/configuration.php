@@ -16,26 +16,33 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Guest environment keys
+    | Cache TTL
     |--------------------------------------------------------------------------
-    | This option will provide an array of environment keys that will be
-    | included for any session.
+    | This option will provide the Time to leave value to the cache
     */
-    'guest_environment_keys' => [
-        'APP_ENV',
-        'APP_URL',
-    ],
+    'ttl' => env('CONFIGURATION_CACHE_TTL', 86400),
 
     /*
     |--------------------------------------------------------------------------
-    | Auth environment keys
+    | Guest environment keys
     |--------------------------------------------------------------------------
-    | This option will provide an array of environment keys that will be
-    | included for any auth session.
+    | This option will provide an array of environment keys that will be used
+    | to fill the configuration object.
+    |
+    | Template: '$key[:$option,$arg1,$arg2]'
+    | Examples:
+    | [
+    |    'APP_ENV:env'      // Get the APP_ENV from environment.
+    |    'APP_ENV:auth'     // Include the key only if user it's authenticated.
+    |    'APP_ENV:env:auth' // Include the key on auth from env.
+    |    'APP_ENV'          // Similar to 'APP_ENV' one.
+    | ]
     */
-    'auth_environment_keys' => [
-        'ALGOLIA_APP_ID',
-        'ALGOLIA_PUBLIC_KEY',
-        'STRIPE_KEY',
+    'keys' => [
+        'APP_ENV',
+        'APP_URL',
+        'STRIPE_KEY:auth',
+        'ALGOLIA_APP_ID:auth',
+        'ALGOLIA_PUBLIC_KEY:auth',
     ],
 ];

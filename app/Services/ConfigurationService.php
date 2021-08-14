@@ -2,85 +2,70 @@
 
 namespace App\Services;
 
+use App\Classes\ConfigurationValue\ConfigurationValue;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 class ConfigurationService
 {
-    public const STORE_GUEST = 'guest';
-    public const STORE_AUTH = 'auth';
-    private const KEY = "config";
-
     public function getAllConfigurations(): array
     {
-        return array_merge($this->getGuestConfigurations(), $this->getAuthConfigurations());
+        $keys = config('configuration.keys');
+
+        return $this->getConfigurationForKeys($keys);
     }
 
-    public function getGuestConfigurations(): array
-    {
-        $keys = config('configuration.guest_environment_keys', []);
-
-        return $this->getConfigurationForKeys(self::STORE_GUEST, $keys);
-    }
-
-    private function getConfigurationForKeys(string $name, array $keys): array
+    private function getConfigurationForKeys(array $keys): array
     {
         if (! app()->environment('production')) {
             return $this->computeConfiguration($keys);
         }
 
-        $tags = $this->cacheTags($name);
-        return Cache::tags($tags)->remember(self::KEY, 3600, function () use ($keys) {
+        $tags = $this->cacheTags();
+        $hash = $this->hashKeys($keys);
+
+        return Cache::tags($tags)->remember($hash, env('CONFIGURATION_CACHE_TTL', 86400), function () use ($keys) {
             return $this->computeConfiguration($keys);
         });
     }
 
-    private function computeConfiguration(array $keys)
+    private function computeConfiguration(array $keys): array
     {
         $config = [];
 
         foreach ($keys as $key => $value) {
-            if (is_numeric($key)) {
-                $key = $value;
+            $configValue = $this->computeConfigKey($key, $value);
+            if ($configValue->canBeInclude()) {
+                $config[$configValue->getKey()] = $configValue->getValue();
             }
-
-            $key = Str::lower($key);
-            $config[$key] = env($value);
         }
 
         return $config;
     }
 
-    private function cacheTags(string $name): array
+    private function cacheTags(): array
     {
-        $tags = ['configurations'];
-        if ($name && $name !== 'all') {
-            $tags [] = $name;
-        }
-
-        return $tags;
+        return ['configurations'];
     }
 
-    public function getAuthConfigurations(): array
+    public function invalidateConfigurations(): void
     {
-        if (! auth()->check()) {
-            return [];
-        }
-
-        $keys = config('configuration.auth_environment_keys', []);
-
-        return $this->getConfigurationForKeys(self::STORE_AUTH, $keys);
-    }
-
-    public function invalidateConfigurations(string $name): void
-    {
-        $tags = $this->cacheTags($name);
+        $tags = $this->cacheTags();
         $store = Cache::tags($tags);
+        $store->clear();
+    }
 
-        if ($name === 'all') {
-            $store->clear();
-        } else {
-            $store->forget(self::KEY);
+    private function computeConfigKey($key, $value): ConfigurationValue
+    {
+        $configValue = ConfigurationValue::from($value);
+        if (! is_numeric($key)) {
+            $configValue->setKey($key);
         }
+
+        return $configValue;
+    }
+
+    private function hashKeys(array $keys): string
+    {
+        return md5(implode(',', $keys));
     }
 }

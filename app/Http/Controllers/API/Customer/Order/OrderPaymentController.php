@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API\Customer\Order;
 
-use App\Exceptions\API\Customer\Order\UnpayableOrder;
-use App\Exceptions\Services\Payment\UnverifiedPayment;
+use App\Exceptions\API\Customer\Order\OrderNotPayable;
+use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\Payment\PaymentService;
@@ -20,17 +20,20 @@ class OrderPaymentController extends Controller
     {
         $this->authorize('view', $order);
 
-        throw_unless($order->isPayable(), UnpayableOrder::class);
+        throw_unless($order->isPayable(), OrderNotPayable::class);
 
         $response = $this->paymentService->charge($order);
 
-        if (isset($response['success']) && $response['success']) {
+        if (! empty($response['success'])) {
             $this->paymentService->updateOrderStatus($order);
 
             return new JsonResponse($response);
         }
 
-        return new JsonResponse($response, Response::HTTP_PAYMENT_REQUIRED);
+        return new JsonResponse(
+            $response,
+            $response['provider'] === 'stripe' ? Response::HTTP_PAYMENT_REQUIRED : Response::HTTP_CREATED
+        );
     }
 
     public function verify(Order $order, $paymentIntentId): JsonResponse
@@ -39,7 +42,7 @@ class OrderPaymentController extends Controller
 
         throw_unless(
             $this->paymentService->verify($order, $paymentIntentId),
-            UnverifiedPayment::class
+            PaymentNotVerified::class
         );
 
         $this->paymentService->updateOrderStatus($order);
@@ -47,17 +50,5 @@ class OrderPaymentController extends Controller
         return new JsonResponse([
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);
-    }
-
-    public function createOrder(Order $order)
-    {
-        $response = $this->paymentService->createOrder($order);
-
-        return new JsonResponse(
-            $response,
-            isset($response['error'])
-                ? Response::HTTP_BAD_REQUEST
-                : Response::HTTP_CREATED
-        );
     }
 }

@@ -42,14 +42,11 @@ class StripeService implements PaymentProviderServiceInterface
                 $paymentData['additional_data']
             );
 
-            $order->orderPayment->update([
-                'request' => json_encode($paymentData),
-                'response' => json_encode($response->toArray()),
-            ]);
-
             return [
                 'success' => true,
-                'data' => $response,
+                'request' => $paymentData,
+                'response' => $response->toArray(),
+                'payment_provider_reference_id' => $order->orderPayment->payment_provider_reference_id,
             ];
         } catch (IncompletePayment $exception) {
             return [

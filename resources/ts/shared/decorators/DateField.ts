@@ -5,6 +5,10 @@ export function DateField(name?: string): PropertyDecorator {
     return (target, propertyName) => {
         Expose({ name })(target, propertyName);
         Transform(({ value, type }) => {
+            if (!value) {
+                return null;
+            }
+
             if (type === TransformationType.CLASS_TO_PLAIN) {
                 try {
                     if (value instanceof Date) {

@@ -14,7 +14,7 @@ class OrderPaymentResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($this->payment_method_id == 2) {
+        if ($this->order->paymentMethod->code === 'paypal') {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
         }
         $providerResponse = json_decode($this->response);

@@ -11,8 +11,26 @@ class PaymentService
     public function charge(Order $order)
     {
         switch ($order->paymentMethod->code) {
-            case 'stripe':
-                return (new StripeService)->charge($order);
+            case 'stripe': {
+                $response = (new StripeService)->charge($order);
+                if (! empty($response['success'])) {
+                    $data = $this->updateOrderPayment($order, $response);
+
+                    return array_merge($data, ['provider' => $order->paymentMethod->code]);
+                }
+
+                return $response;
+            }
+            case 'paypal': {
+                $response = (new PaypalService)->charge($order);
+                if (is_array($response)) {
+                    $data = $this->updateOrderPayment($order, $response);
+
+                    return array_merge($data, ['provider' => $order->paymentMethod->code]);
+                }
+
+                return $response;
+            }
         }
 
         throw new \Exception('Payment provider did not match.');
@@ -30,24 +48,15 @@ class PaymentService
         throw new \Exception('Payment provider did not match.');
     }
 
-    public function createOrder(Order $order): array
+    public function updateOrderPayment(Order $order, array $data): array
     {
-        $data = (new PaypalService)->createOrder($order);
-        if (is_array($data)) {
-            $order->orderPayment->update([
-                'request' => json_encode($data['request']),
-                'response' => json_encode($data['response']),
-                'payment_provider_reference_id' => $data['payment_provider_reference_id'],
-            ]);
+        $order->orderPayment->update([
+            'request' => json_encode($data['request']),
+            'response' => json_encode($data['response']),
+            'payment_provider_reference_id' => $data['payment_provider_reference_id'],
+        ]);
 
-            return [
-                'data' => $data['response'],
-            ];
-        }
-
-        return [
-            'error' => $data,
-        ];
+        return ['data' => $data['response']];
     }
 
     public function updateOrderStatus(Order $order): bool

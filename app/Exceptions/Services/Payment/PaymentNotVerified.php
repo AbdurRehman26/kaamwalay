@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class UnverifiedPayment extends Exception
+class PaymentNotVerified extends Exception
 {
     protected $message = 'Payment could not be verified.';
     protected $code = Response::HTTP_BAD_REQUEST;

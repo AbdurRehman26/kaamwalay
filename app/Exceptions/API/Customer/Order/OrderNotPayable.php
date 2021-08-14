@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class UnpayableOrder extends Exception
+class OrderNotPayable extends Exception
 {
     protected $message = 'Order is not payable.';
     protected $code = Response::HTTP_BAD_REQUEST;

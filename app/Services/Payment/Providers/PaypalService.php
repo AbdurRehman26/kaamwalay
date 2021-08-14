@@ -25,11 +25,6 @@ class PaypalService implements PaymentProviderServiceInterface
 
     public function charge(Order $order)
     {
-        //
-    }
-
-    public function createOrder(Order $order): array | string
-    {
         $orderRequest = new OrdersCreateRequest();
         $orderRequest->prefer('return=representation');
         $requestData = [
@@ -49,12 +44,13 @@ class PaypalService implements PaymentProviderServiceInterface
             $response = $this->client->execute($orderRequest);
 
             return [
+                'success' => true,
                 'request' => $requestData,
                 'response' => json_decode(json_encode($response->result), associative: true),
                 'payment_provider_reference_id' => $response->result->id,
             ];
         } catch (HttpException $e) {
-            return $e->getMessage();
+            return ['error' => $e->getMessage()];
         }
     }
 

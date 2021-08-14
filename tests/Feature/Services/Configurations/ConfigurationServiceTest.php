@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Feature\Services\Configurations;
 
-use App\Services\ConfigurationService;
+use App\Services\ConfigurationService\ConfigurationService;
 use Tests\TestCase;
 
 class ConfigurationServiceTest extends TestCase

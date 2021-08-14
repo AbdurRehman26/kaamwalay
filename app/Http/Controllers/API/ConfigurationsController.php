@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Services\ConfigurationService;
+use App\Services\ConfigurationService\ConfigurationService;
 use Dompdf\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;

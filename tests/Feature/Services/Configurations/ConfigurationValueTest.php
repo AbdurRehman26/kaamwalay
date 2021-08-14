@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\Classes;
+namespace Tests\Feature\Services\Configurations;
 
-use App\Classes\ConfigurationValue\ConfigurationValue;
+use App\Services\ConfigurationService\ConfigurationValue;
 use Tests\TestCase;
 
 class ConfigurationValueTest extends TestCase

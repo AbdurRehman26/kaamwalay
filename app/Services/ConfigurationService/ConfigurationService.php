@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\ConfigurationService;
 
-use App\Classes\ConfigurationValue\ConfigurationValue;
 use Illuminate\Support\Facades\Cache;
 
 class ConfigurationService

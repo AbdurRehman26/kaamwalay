@@ -25,6 +25,7 @@ class OrderPaymentController extends Controller
 
             return new JsonResponse($response);
         }
+
         return new JsonResponse($response, Response::HTTP_PAYMENT_REQUIRED);
     }
 
@@ -47,6 +48,7 @@ class OrderPaymentController extends Controller
     public function createOrder(Order $order, PaymentService $paymentService)
     {
         $response = $paymentService->createOrder($order);
+
         return new JsonResponse(
             $response,
             isset($response['error'])

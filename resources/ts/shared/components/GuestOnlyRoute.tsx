@@ -37,6 +37,10 @@ export function GuestOnlyRoute({ redirectRoute, ...rest }: GuestOnlyRouteProps) 
         );
     }
 
+    if (authenticated) {
+        return null;
+    }
+
     return <Route {...rest} />;
 }
 

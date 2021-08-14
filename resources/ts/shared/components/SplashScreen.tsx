@@ -13,6 +13,7 @@ import { useSharedSelector } from '../hooks/useSharedDispatch';
  */
 export function SplashScreen({ children }: PropsWithChildren<any>) {
     const isConfigLoading = useSharedSelector((state) => state.configuration.isLoading);
+
     if (isConfigLoading) {
         return (
             <Box minHeight={'100vh'} display={'flex'} alignItems={'center'} justifyContent={'center'}>

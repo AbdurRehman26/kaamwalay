@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class ConfigurationServiceTest extends TestCase
 {
-
     private ConfigurationService $configurationService;
 
     /** @test */

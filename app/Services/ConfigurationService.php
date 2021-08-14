@@ -30,6 +30,7 @@ class ConfigurationService
         }
 
         $tags = $this->cacheTags($name);
+
         return Cache::tags($tags)->remember(self::KEY, 3600, function () use ($keys) {
             return $this->computeConfiguration($keys);
         });

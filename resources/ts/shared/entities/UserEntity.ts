@@ -1,4 +1,5 @@
 import { Type } from 'class-transformer';
+import { Moment } from 'moment';
 
 import { Entity } from '@shared/entities/Entity';
 
@@ -17,7 +18,7 @@ export class UserEntity extends Entity {
     public lastName!: string;
 
     @Field('email_verified_at')
-    public emailVerifiedAt!: Date;
+    public emailVerifiedAt!: Moment;
 
     @Field('stripe_id')
     public stripeId!: string;

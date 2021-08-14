@@ -136,6 +136,11 @@
             padding: 8px;
             line-height: 18px;
         }
+        
+        .info-box-content.payment-method {
+            word-wrap: break-word;
+        }
+
         .total-declared-section{
             text-align: right;
             padding: 25px 0px;
@@ -306,12 +311,16 @@
                 <div class="info-box-header">
                     Payment Method
                 </div>
-                <div class="info-box-content">
+                <div class="info-box-content payment-method">
                     @if($orderPayment)
-                        @if($orderPayment->card)
+                        @if(property_exists($orderPayment,'card'))
                             {{ucfirst($orderPayment->card->brand)}} ending in {{$orderPayment->card->last4}}
                             <br/>
                             Exp. {{$orderPayment->card->exp_month}}/{{$orderPayment->card->exp_year}}
+                        @elseif(property_exists($orderPayment,'payer'))
+                            {{$orderPayment->payer->email}}
+                            <br/>
+                            {{$orderPayment->payer->name}}
                         @endif
                     @else
                         No payment found

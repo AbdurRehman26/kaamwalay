@@ -47,8 +47,8 @@ class StoreOrderRequest extends FormRequest
             'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
             'payment_method' => 'required|array',
             'payment_method.id' => 'required|integer|exists:payment_methods,id',
-            'payment_provider_reference' => 'required|array',
-            'payment_provider_reference.id' => 'required|string',
+            'payment_provider_reference' => 'nullable|array',
+            'payment_provider_reference.id' => 'nullable|string',
         ];
     }
 }

@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Services\Order\CreateOrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -24,9 +25,11 @@ class OrderController extends Controller
     public function index(): OrderCollection
     {
         return new OrderCollection(
-            Order::forUser(auth()->user())
+            QueryBuilder::for(Order::class)
+                ->forUser(auth()->user())
                 ->placed()
                 ->latest()
+                ->allowedFilters('order_number')
                 ->paginate(request('per_page'))
         );
     }

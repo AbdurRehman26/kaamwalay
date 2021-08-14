@@ -4,7 +4,9 @@
  * @apiGroup Customer-Orders
  *
  * @apiUse header_main
- * @apiUse authorization
+ * @apiUse Authorization
+ *
+ * @apiParam {Array} [filter[order_number]] For filtering records by order number. E.g. filter[order_number]=RG000000001
  *
  * @apiSuccess {Object} data Orders data
  *

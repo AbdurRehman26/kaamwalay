@@ -16,16 +16,20 @@ class PaymentService
                 $response = (new StripeService)->charge($order);
                 if (! empty($response['success'])) {
                     $data = $this->updateOrderPayment($order, $response);
+
                     return array_merge($data, ['provider' => $order->paymentMethod->code]);
                 }
+
                 return $response;
             }
             case 'paypal': {
                 $response = (new PaypalService)->charge($order);
                 if (is_array($response)) {
                     $data = $this->updateOrderPayment($order, $response);
+
                     return array_merge($data, ['provider' => $order->paymentMethod->code]);
                 }
+
                 return $response;
             }
         }
@@ -52,6 +56,7 @@ class PaymentService
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
         ]);
+
         return ['data' => $data['response']];
     }
 

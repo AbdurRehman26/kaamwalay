@@ -186,4 +186,17 @@ class OrderTest extends TestCase
 
         $response->assertUnauthorized();
     }
+
+    /** @test */
+    public function a_customer_can_see_invoice_in_order()
+    {
+        $this->actingAs($this->user);
+        $order = Order::factory()->for($this->user)->create();
+        $response = $this->getJson('/api/customer/orders/' . $order->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => ['invoice' => ['path']],
+        ]);
+    }
 }

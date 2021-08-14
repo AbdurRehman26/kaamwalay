@@ -41,19 +41,26 @@ class InvoiceService
         $orderPayment = $order->orderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
         if ($paymentResponse) {
-            if (property_exists($paymentResponse, 'card')) {
-                $card = $paymentResponse->card;
+
+            if ($order->paymentMethod->code === 'paypal') {
+                $orderPayment = json_decode(json_encode($this->paypalData(json_decode($orderPayment->response, associative: true) ?? [])));
             } else {
-                $card = $paymentResponse->charges->data[0]->payment_method_details->card;
+
+                if (property_exists($paymentResponse, 'card')) {
+                    $card = $paymentResponse->card;
+                } else {
+                    $card = $paymentResponse->charges->data[0]->payment_method_details->card;
+                }
+                $orderPayment = json_decode(json_encode([
+                    'card' => [
+                        'brand' => $card->brand,
+                        'exp_month' => Str::padLeft($card->exp_month, 2, '0'),
+                        'exp_year' => substr($card->exp_year, 2),
+                        'last4' => $card->last4,
+                    ],
+                ]));
             }
-            $orderPayment = json_decode(json_encode([
-                'card' => [
-                    'brand' => $card->brand,
-                    'exp_month' => Str::padLeft($card->exp_month, 2, '0'),
-                    'exp_year' => substr($card->exp_year, 2),
-                    'last4' => $card->last4,
-                ],
-            ]));
+    
         }
 
         return [
@@ -78,5 +85,15 @@ class InvoiceService
 
         $order->invoice_id = $invoice->id;
         $order->save();
+    }
+
+    protected function paypalData(array $response): array
+    {
+        return [
+            'payer' => [
+                "email" => $response['payer']['email_address'] ?? "N/A",
+                "name" => $response['payer']['name']['given_name'] ?? "N/A",
+            ],
+        ];
     }
 }

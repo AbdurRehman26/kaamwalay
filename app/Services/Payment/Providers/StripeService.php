@@ -86,8 +86,4 @@ class StripeService implements PaymentProviderServiceInterface
         return false;
     }
 
-    protected function createOrderInvoice(Order $order)
-    {
-        (new InvoiceService())->saveInvoicePDF($order);
-    }
 }

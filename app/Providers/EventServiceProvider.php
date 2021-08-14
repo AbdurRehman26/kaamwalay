@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Listeners\API\GenerateOrderInvoice;
+use App\Listeners\API\Services\GenerateOrderInvoice;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

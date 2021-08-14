@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\API;
+namespace App\Listeners\API\Services;
 
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\Payment\InvoiceService;

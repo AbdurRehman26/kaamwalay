@@ -19,9 +19,7 @@ function PaypalBtn() {
         window.paypal
             .Buttons({
                 createOrder: async function (data: any, actions: any) {
-                    const endpoint = apiService.createEndpoint(
-                        `customer/orders/${orderID}/payments/paypal/create-order`,
-                    );
+                    const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
                     const response = await endpoint.post('');
                     return response.data.id;
                 },

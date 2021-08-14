@@ -7,7 +7,6 @@
         "hot": "mix watch --hot",
         "prod": "mix --production",
         "start": "yarn watch",
-        "build:icons": "yarn svgo -f resources/assets/icons/payments -o resources/ts/shared/assets/icons/payments",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "setup": "yarn dev && yarn admin:dev && yarn auth:dev",
         "admin:dev": "cross-env BUILD_PRESET=admin yarn dev",

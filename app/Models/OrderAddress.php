@@ -31,13 +31,13 @@ class OrderAddress extends Address
         'country_id' => 'integer',
     ];
 
-    public function country()
+    public function country(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\Country::class);
     }
 
-    public function getFullName()
+    public function getFullName(): string
     {
-        return trim($this->first_name.' '.$this->last_name);
+        return trim($this->first_name . ' ' . $this->last_name);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use PDF;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class PDFService
 {

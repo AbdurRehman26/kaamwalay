@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
 class CardProduct extends Model
@@ -53,24 +54,24 @@ class CardProduct extends Model
             "card_set_name" => $this->cardSet->name,
             "card_series_name" => $this->cardSet->cardSeries->name,
             "release_year" => $this->cardSet->release_year,
-            "card_number_order" => is_numeric($this->card_number_order) ? \Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order,
+            "card_number_order" => is_numeric($this->card_number_order) ? Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order,
             "image_path" => $this->image_path,
         ];
 
         return $array;
     }
 
-    public function cardSet()
+    public function cardSet(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(CardSet::class);
     }
 
-    public function cardCategory()
+    public function cardCategory(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(CardCategory::class);
     }
 
-    public function getSearchableName()
+    public function getSearchableName(): string
     {
         return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->card_number_order . ' ' . $this->name;
     }

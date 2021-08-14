@@ -6,38 +6,28 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Services\BarcodeService;
 use App\Services\PDFService;
+use Carbon\Carbon;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Storage;
-use Str;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class InvoiceService
 {
-    public function saveInvoicePDF(Order $order)
+    public function saveInvoicePDF(Order $order): void
     {
         $data = $this->getInvoiceData($order);
 
-        $fileName = Str::uuid();
-        $pdf = PDFService::generate('pdf.invoice', $data);
-        Storage::disk('s3')
-            ->put(
-                'invoice/invoice-' . $fileName . '.pdf',
-                $pdf->output()
-            );
-        $url = Storage::disk('s3')->url('invoice/invoice-' . $fileName . '.pdf');
+        $url = $this->uploadToCloud($data);
 
         $this->createAndStoreInvoiceRecord($order, $url);
     }
 
-    protected function getInvoiceData(Order $order)
+    protected function getInvoiceData(Order $order): array
     {
         $logoData = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/invoiceLogo.png')));
         $agsLogo = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/agsLogo.png')));
         $barcode = 'data:image/png;base64,' . BarcodeService::generate($order->order_number, BarcodeGenerator::Code39, '', 2);
 
-        $orderItems = $order->orderItems;
-        $customer = $order->user;
-        $shippingAddress = $order->shippingAddress;
-        $billingAddress = $order->billingAddress;
         $orderPayment = $order->orderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
         if ($paymentResponse) {
@@ -65,11 +55,12 @@ class InvoiceService
             'agsLogo' => $agsLogo,
             'barcode' => $barcode,
             'order' => $order,
-            'orderItems' => $orderItems,
-            'customer' => $customer,
-            'shippingAddress' => $shippingAddress,
+            'orderDate' => Carbon::parse($order->created_at)->format('m/d/Y'),
+            'orderItems' => $order->orderItems,
+            'customer' => $order->user,
+            'shippingAddress' => $order->shippingAddress,
             'orderPayment' => $orderPayment,
-            'billingAddress' => $billingAddress,
+            'billingAddress' => $order->billingAddress,
         ];
     }
 
@@ -92,5 +83,15 @@ class InvoiceService
                 "name" => $response['payer']['name']['given_name'] ?? "N/A",
             ],
         ];
+    }
+
+    protected function uploadToCloud(array $data): string
+    {
+        $filePath = 'invoice/' . Str::uuid() . '.pdf';
+        $pdf = PDFService::generate('pdf.invoice', $data);
+
+        Storage::disk('s3')->put($filePath, $pdf->output());
+
+        return Storage::disk('s3')->url($filePath);
     }
 }

@@ -1,9 +1,11 @@
 <?php
-namespace Tests\Unit\API\Services;
+
+namespace Tests\Feature\API\Services;
 
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\PDFService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -24,6 +26,7 @@ class PDFServiceTest extends TestCase
             'agsLogo' => '',
             'barcode' => '',
             'order' => $order,
+            'orderDate' => Carbon::parse($order->created_at)->format('m/d/Y'),
             'orderItems' => collect(new OrderItem),
             'customer' => $customer,
             'shippingAddress' => $shipping,
@@ -33,6 +36,6 @@ class PDFServiceTest extends TestCase
 
         $pdf = PDFService::generate('pdf.invoice', $data);
 
-        $this->assertTrue($pdf instanceof \Barryvdh\DomPDF\PDF);
+        $this->assertInstanceOf(\Barryvdh\DomPDF\PDF::class, $pdf);
     }
 }

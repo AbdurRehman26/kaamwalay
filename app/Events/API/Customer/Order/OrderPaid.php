@@ -4,12 +4,10 @@ namespace App\Events\API\Customer\Order;
 
 use App\Models\Order;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderPaid implements ShouldQueue, ShouldBeEncrypted
+class OrderPaid
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

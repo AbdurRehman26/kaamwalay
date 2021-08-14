@@ -7,20 +7,13 @@ use App\Services\Payment\InvoiceService;
 
 class GenerateOrderInvoice
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function __construct(public InvoiceService $invoiceService)
     {
         //
     }
 
     public function handle(OrderPaid $event): void
     {
-        $order = $event->order;
-        
-        (new InvoiceService())->saveInvoicePDF($order);
+        $this->invoiceService->saveInvoicePDF($event->order);
     }
 }

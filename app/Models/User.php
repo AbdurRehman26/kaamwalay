@@ -85,11 +85,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function getFullName()
+    public function getFullName(): string
     {
-        return trim($this->first_name.' '.$this->last_name);
+        return trim($this->first_name . ' ' . $this->last_name);
     }
-    
+
     public function isAdmin(): bool
     {
         return $this->hasRole(config('permission.roles.admin'));

@@ -14,14 +14,14 @@
         header {
             position: fixed;
             top: -113px;
-            left: 0px;
-            right: 0px;
+            left: 0;
+            right: 0;
         }
         footer {
             position: fixed;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
+            bottom: 0;
+            left: 0;
+            right: 0;
             text-align: start;
         }
 
@@ -136,14 +136,14 @@
             padding: 8px;
             line-height: 18px;
         }
-        
+
         .info-box-content.payment-method {
             word-wrap: break-word;
         }
 
         .total-declared-section{
             text-align: right;
-            padding: 25px 0px;
+            padding: 25px 0;
             border-bottom: 1px solid rgba(30, 30, 30, 0.2);;
         }
         .total-declared-section b{
@@ -170,9 +170,6 @@
             text-align: right;
         }
 
-        .items-table{
-            page-break-inside: always;
-        }
         .items-table .item-row td{
             padding: 25px 0;
             vertical-align: top;
@@ -253,7 +250,7 @@
                                     </tr>
                                     <tr>
                                         <td class="dt">Date:</td>
-                                        <td class="dd">{{$order->date}}</td>
+                                        <td class="dd">{{ $orderDate }}</td>
                                     </tr>
                                     <tr>
                                         <td class="dt">Declared Value:</td>

@@ -86,7 +86,7 @@
  *                "invoice": {
  *                    id: 28
  *                    invoice_number: "RG000000042"
- *                    path: "http://minio:9000/robograding/invoice/invoice-223b76c6-1f7c-49fb-a8cc-993ebeb753b6.pdf"
+ *                    path: "http://minio:9000/local/invoice/89a79cd1-48a6-4ee6-a606-c62d83f80f50.pdf"
  *                },
  *                "order_payment": {
  *                    "card": {

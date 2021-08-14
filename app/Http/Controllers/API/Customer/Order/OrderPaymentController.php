@@ -32,7 +32,7 @@ class OrderPaymentController extends Controller
 
         return new JsonResponse(
             $response,
-            $response['provider'] === 'stripe' ? Response::HTTP_PAYMENT_REQUIRED : Response::HTTP_CREATED
+            $order->paymentMethod->code === 'stripe' ? Response::HTTP_PAYMENT_REQUIRED : Response::HTTP_CREATED
         );
     }
 

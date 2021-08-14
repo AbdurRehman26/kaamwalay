@@ -23,7 +23,7 @@ export function ListSubmissions() {
 
     return (
         <>
-            <ListHeader headline={'Submissions'} noMargin>
+            <ListHeader headline={'Submissions'} noMargin noSearch>
                 <Button
                     component={Link}
                     to={'/submissions/new'}

@@ -83,9 +83,11 @@ class PaypalService implements PaymentProviderServiceInterface
         }
 
         $paymentIntent = $data['purchase_units'][0]['payments']['captures'][0];
+        $captureStatus = $data['status'];
+
         if (
             $paymentIntent['amount']['value'] == $order->grand_total
-            && $paymentIntent['status'] === 'COMPLETED'
+            && $captureStatus === 'COMPLETED'
         ) {
             $order->orderPayment->update([
                 'response' => json_encode($data),

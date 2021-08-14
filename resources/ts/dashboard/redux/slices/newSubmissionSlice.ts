@@ -318,7 +318,10 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             id: currentSubmission.step04Data.paymentMethodId,
         },
         payment_provider_reference: {
-            id: currentSubmission.step04Data.selectedCreditCard.id,
+            id:
+                currentSubmission.step04Data.paymentMethodId === 1
+                    ? currentSubmission.step04Data.selectedCreditCard.id
+                    : null,
         },
     };
     const apiService = app(APIService);

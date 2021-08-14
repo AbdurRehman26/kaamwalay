@@ -26,6 +26,7 @@ class OrderController extends Controller
     {
         return new OrderCollection(
             QueryBuilder::for(Order::class)
+                ->forUser(auth()->user())
                 ->placed()
                 ->latest()
                 ->allowedFilters('order_number')

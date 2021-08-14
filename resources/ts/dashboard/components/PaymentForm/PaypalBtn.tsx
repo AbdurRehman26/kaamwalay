@@ -1,5 +1,6 @@
 // noinspection BadExpressionStatementJS
 import React, { useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -12,6 +13,7 @@ function PaypalBtn() {
     const apiService = useInjectable(APIService);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const notifications = useNotifications();
+    const history = useHistory();
     useEffect(() => {
         // @ts-ignore
         window.paypal
@@ -36,11 +38,12 @@ function PaypalBtn() {
                     if (errorDetail) {
                         let msg = 'Sorry, your transaction could not be processed.';
                         if (errorDetail.description) msg += '\n\n' + errorDetail.description;
-                        return notifications.error(msg, 'Error');
+                        notifications.error(msg, 'Error');
+                        return;
                     }
 
-                    console.log(JSON.stringify(orderData));
                     notifications.success('Order paid!', 'Success!');
+                    history.push(`/submissions/${orderID}/confirmation`);
                 },
             })
             .render(paypal.current);

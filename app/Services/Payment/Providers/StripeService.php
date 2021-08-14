@@ -4,10 +4,9 @@ namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
-use Symfony\Component\HttpFoundation\Response;
+use Stripe\PaymentIntent;
 
 class StripeService implements PaymentProviderServiceInterface
 {
@@ -19,7 +18,7 @@ class StripeService implements PaymentProviderServiceInterface
         return $user->createSetupIntent(['customer' => $user->stripe_id]);
     }
 
-    public function charge(Order $order)
+    public function charge(Order $order): array
     {
         /** @var User $user */
         $user = auth()->user();
@@ -43,52 +42,47 @@ class StripeService implements PaymentProviderServiceInterface
                 $paymentData['additional_data']
             );
 
-            $order->markAsPlaced();
-            $order->orderPayment->update([
-                'request' => json_encode($paymentData),
-                'response' => json_encode($response->toArray()),
-            ]);
-
-            return new JsonResponse([
+            return [
                 'success' => true,
-                'data' => $response,
-            ], Response::HTTP_CREATED);
+                'request' => $paymentData,
+                'response' => $response->toArray(),
+                'payment_provider_reference_id' => $order->orderPayment->payment_provider_reference_id,
+            ];
         } catch (IncompletePayment $exception) {
-            return new JsonResponse([
+            return [
                 'payment_intent' => $exception->payment,
-            ], Response::HTTP_PAYMENT_REQUIRED);
+            ];
         }
     }
 
-    public function verify(Order $order, string $paymentIntentId): JsonResponse
+    public function verify(Order $order, string $paymentIntentId): bool
     {
         /** @var User $user */
         $user = auth()->user();
 
         try {
             $paymentIntent = $user->stripe()->paymentIntents->retrieve($paymentIntentId);
+
+            return $this->validateOrderIsPaid($order, $paymentIntent);
         } catch (ApiErrorException $e) {
-            return new JsonResponse([
-                'message' => 'Payment could not be verified.',
-            ], Response::HTTP_BAD_REQUEST);
+            return false;
         }
+    }
 
-        abort_if($paymentIntent->charges->count() === 0, Response::HTTP_UNPROCESSABLE_ENTITY);
-
+    public function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
+    {
         $charge = $paymentIntent->charges->first();
         if (
             $charge->amount == ($order->grand_total * 100)
             && $charge->outcome->type === 'authorized'
         ) {
-            $order->markAsPlaced();
+            $order->orderPayment->update([
+                'response' => json_encode($paymentIntent->toArray()),
+            ]);
 
-            return new JsonResponse([
-                'message' => 'Payment verified successfully',
-            ], Response::HTTP_OK);
+            return true;
         }
 
-        return new JsonResponse([
-            'message' => 'Payment could not be verified.',
-        ], Response::HTTP_BAD_REQUEST);
+        return false;
     }
 }

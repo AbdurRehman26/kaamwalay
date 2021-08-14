@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\Customer\Order;
 
+use App\Exceptions\API\Customer\Order\OrderNotPayable;
+use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\Payment\PaymentService;
@@ -10,25 +12,43 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderPaymentController extends Controller
 {
-    public function pay(Order $order, PaymentService $paymentService)
+    public function __construct(protected PaymentService $paymentService)
     {
-        $this->authorize('view', $order);
-
-        if (! $order->isPayable()) {
-            return new JsonResponse([
-                'data' => [
-                    'error' => 'Order is not payable',
-                ],
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        return $paymentService->charge($order);
     }
 
-    public function verify(Order $order, $paymentIntentId, PaymentService $paymentService): JsonResponse
+    public function pay(Order $order)
     {
         $this->authorize('view', $order);
 
-        return $paymentService->verify($order, $paymentIntentId);
+        throw_unless($order->isPayable(), OrderNotPayable::class);
+
+        $response = $this->paymentService->charge($order);
+
+        if (! empty($response['success'])) {
+            $this->paymentService->updateOrderStatus($order);
+
+            return new JsonResponse($response);
+        }
+
+        return new JsonResponse(
+            $response,
+            $response['provider'] === 'stripe' ? Response::HTTP_PAYMENT_REQUIRED : Response::HTTP_CREATED
+        );
+    }
+
+    public function verify(Order $order, $paymentIntentId): JsonResponse
+    {
+        $this->authorize('view', $order);
+
+        throw_unless(
+            $this->paymentService->verify($order, $paymentIntentId),
+            PaymentNotVerified::class
+        );
+
+        $this->paymentService->updateOrderStatus($order);
+
+        return new JsonResponse([
+            'message' => 'Payment verified successfully',
+        ], Response::HTTP_OK);
     }
 }

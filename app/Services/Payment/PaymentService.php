@@ -15,9 +15,9 @@ class PaymentService
             case 'stripe': {
                 $response = (new StripeService)->charge($order);
                 if (! empty($response['success'])) {
-                    $data = $this->updateOrderPayment($order, $response);
+                    $this->updateOrderPayment($order, $response);
 
-                    return array_merge($data, ['provider' => $order->paymentMethod->code]);
+                    return array_merge($response, ['provider' => $order->paymentMethod->code]);
                 }
 
                 return $response;

@@ -72,7 +72,7 @@ function OrderReviewSection() {
                         className={classes.darkBodyText}
                     >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
                     <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
-                        finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
+                        finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
                     }`}</Typography>
                     <Typography
                         className={classes.darkBodyText}
@@ -114,7 +114,7 @@ function OrderReviewSection() {
                         className={classes.darkBodyText}
                     >{`${billingAddress.firstName} ${billingAddress.lastName}`}</Typography>
                     <Typography className={classes.darkBodyText}>{`${billingAddress.address} ${
-                        billingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : null
+                        billingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
                     }`}</Typography>
                     <Typography
                         className={classes.darkBodyText}

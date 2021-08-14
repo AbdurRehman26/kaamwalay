@@ -18,7 +18,7 @@ import { ForgotPasswordValidationRules } from './validation';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.comm>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: ForgotPassword
  * @date: 09.08.2021
  * @time: 05:52
@@ -42,7 +42,6 @@ export function ForgotPassword() {
             const { error, payload } = data as any;
 
             if (error) {
-                notifications.error(error.message);
                 return;
             }
 

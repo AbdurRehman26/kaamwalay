@@ -58,7 +58,7 @@ class CreateOrderService
         $this->storeShippingMethod($this->data['shipping_method']);
         $this->storePaymentMethod($this->data['payment_method']);
         $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address'], $this->data['customer_address']);
-        $this->storeCustomerAddress($this->data['shipping_address']);
+        $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
         $this->storeShippingFee();
@@ -106,9 +106,9 @@ class CreateOrderService
         }
     }
 
-    protected function storeCustomerAddress(array $shippingAddress)
+    protected function storeCustomerAddress(array $shippingAddress, $customerAddress)
     {
-        if ($shippingAddress['save_for_later']) {
+        if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [
@@ -157,13 +157,21 @@ class CreateOrderService
 
     protected function storeOrderPayment(array $data)
     {
-        $response = $this->order->user->findPaymentMethod($data['id']);
-
-        OrderPayment::create([
-            'response' => json_encode($response),
+        $orderPaymentData = [
             'order_id' => $this->order->id,
             'payment_method_id' => $this->order->paymentMethod->id,
-            'payment_provider_reference_id' => $data['id'],
-        ]);
+        ];
+        if ($this->order->paymentMethod->code === 'stripe') {
+            $response = $this->order->user->findPaymentMethod($data['id']);
+            $orderPaymentData = array_merge(
+                $orderPaymentData,
+                [
+                    'response' => json_encode($response),
+                    'payment_provider_reference_id' => $data['id'],
+                ]
+            );
+        }
+
+        OrderPayment::create($orderPaymentData);
     }
 }

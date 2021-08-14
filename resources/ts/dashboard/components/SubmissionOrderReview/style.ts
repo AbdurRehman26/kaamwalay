@@ -12,6 +12,7 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         marginTop: '12px',
+        overflowWrap: 'break-word',
     },
     orderDetailItemContainer: {
         display: 'flex',
@@ -65,6 +66,7 @@ const useStyles = makeStyles({
     orderItemsColumn: {
         display: 'flex',
         flexDirection: 'column',
+        maxWidth: '180px',
     },
     cardDetailsContainer: {
         display: 'flex',

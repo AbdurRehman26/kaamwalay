@@ -28,4 +28,14 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+
+    'ags' => [
+        'is_platform_enabled' => env('AGS_PLATFORM_ENABLED', false),
+        'base_url' => env('AGS_BASE_URL'),
+    ],
+
+    'paypal' => [
+        'client_id' => env('PAYPAL_CLIENT_ID'),
+        'client_secret' => env('PAYPAL_CLIENT_SECRET'),
+    ],
 ];

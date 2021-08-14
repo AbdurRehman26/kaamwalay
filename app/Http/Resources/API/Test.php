@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources\API;
 
-use App\Http\Resources\API\BaseResource;
-
 class Test extends BaseResource
 {
     /**

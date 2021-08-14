@@ -2,9 +2,10 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
+import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { font } from '@shared/styles/utils';
 
@@ -16,7 +17,7 @@ import { useConfirmationSubmissionStyles } from './style';
 
 /**
  *
- * @author: Dumitrana Alinus <alinus@wooter.comm>
+ * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: ConfirmationSubmission
  * @date: 06.08.2021
  * @time: 23:14
@@ -65,16 +66,23 @@ export function ConfirmationSubmission() {
                             our turnaround times are not guaranteed. For more on this, please read the Robograding
                         </span>
                         &nbsp;
-                        <Link color={'inherit'} className={font.fontWeightMedium} underline={'always'}>
+                        <MuiLink color={'inherit'} className={font.fontWeightMedium} underline={'always'}>
                             Terms and Conditions
-                        </Link>
+                        </MuiLink>
                         .
                     </Typography>
                 </Box>
                 <Divider />
                 <Box paddingTop={4} paddingBottom={10}>
-                    <Button variant={'contained'} size={'large'} color={'primary'} className={classes.detailsButton}>
-                        Go to submission details page
+                    <Button
+                        component={Link}
+                        to={'/'}
+                        variant={'contained'}
+                        size={'large'}
+                        color={'primary'}
+                        className={classes.detailsButton}
+                    >
+                        Go to Dashboard
                     </Button>
                 </Box>
             </Grid>

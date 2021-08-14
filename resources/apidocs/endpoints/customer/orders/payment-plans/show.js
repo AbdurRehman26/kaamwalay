@@ -4,7 +4,7 @@
  * @apiGroup Customer-Orders
  *
  * @apiUse header_main
- * @apiUse authorization
+ * @apiUse Authorization
  *
  * @apiParam {Integer} id Payment Plan unique ID
  *

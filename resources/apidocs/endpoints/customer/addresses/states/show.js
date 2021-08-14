@@ -4,7 +4,7 @@
  * @apiGroup Customer-Addresses
  *
  * @apiUse header_main
- * @apiUse authorization
+ * @apiUse Authorization
  *
  * @apiParam {Integer} id State unique ID
  *

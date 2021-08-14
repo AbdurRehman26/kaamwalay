@@ -38,7 +38,6 @@ export function SubmissionsTable({}: SubmissionsTableProps) {
                             <TableCell variant={'head'}>Service Level</TableCell>
                             <TableCell variant={'head'}># Cards</TableCell>
                             <TableCell variant={'head'}>Status</TableCell>
-                            <TableCell variant={'head'} />
                         </TableRow>
                     </TableHead>
 

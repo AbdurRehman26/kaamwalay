@@ -65,15 +65,15 @@ export function ListHeader({ children, headline, noSearch, noMargin }: PropsWith
                 <Typography component={'h2'} variant={'h5'} className={font.fontWeightMedium}>
                     {headline}
                 </Typography>
-                {!noSearch && (
-                    <Box flexGrow={1} className={classes.searchBarHolder}>
+                <Box flexGrow={1} className={classes.searchBarHolder}>
+                    {!noSearch && (
                         <InputBase
                             placeholder="Search…"
                             className={classes.searchBar}
                             startAdornment={<SearchIcon className={classes.searchBarIcon} />}
                         />
-                    </Box>
-                )}
+                    )}
+                </Box>
                 {children}
             </Grid>
             <Divider className={classes.divider} />

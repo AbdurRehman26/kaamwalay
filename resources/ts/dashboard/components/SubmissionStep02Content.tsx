@@ -3,9 +3,11 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
-import algoliasearch from 'algoliasearch';
-import React from 'react';
+import algoliaSearch from 'algoliasearch';
+import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
+
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
@@ -30,8 +32,6 @@ const useStyles = makeStyles({
     },
 });
 
-const searchClient = algoliasearch(process.env.MIX_ALGOLIA_APP_ID!, process.env.MIX_ALGOLIA_PUBLIC_KEY!);
-
 function SubmissionStep02Content() {
     const classes = useStyles();
     const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
@@ -41,6 +41,12 @@ function SubmissionStep02Content() {
     );
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
+    const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
+
+    const searchClient = useMemo(
+        () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
+        [algoliaAppId, algoliaPublicKey],
+    );
 
     function areSelectedCardsValuesValid() {
         if (selectedCards.length > 0) {
@@ -63,7 +69,9 @@ function SubmissionStep02Content() {
             <div className={classes.stepDescriptionContainer}>
                 <StepDescription
                     title="Add cards to your submission"
-                    description="Search for a card below and click the “+” icon, then enter the quantity and value for each card."
+                    description={
+                        'Search for a card below and click the "+" icon, then enter the quantity and value for each card.'
+                    }
                 />
             </div>
 
@@ -71,10 +79,7 @@ function SubmissionStep02Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
-                        <InstantSearch
-                            searchClient={searchClient}
-                            indexName={`${process.env.MIX_APP_ENV}_card_products`}
-                        >
+                        <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
                             <CardSubmissionSearchField />
                             {searchValue !== '' ? <CardsSearchResults /> : null}
                             <AddedSubmissionCards />

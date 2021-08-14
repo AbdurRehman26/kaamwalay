@@ -12,6 +12,8 @@ import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
 
+import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 
@@ -146,6 +148,7 @@ function SubmissionSummary() {
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
+    const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
@@ -238,16 +241,23 @@ function SubmissionSummary() {
             <div className={classes.bodyContainer}>
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            disabled={isStripePaymentLoading}
-                            onClick={handleConfirmStripePayment}
-                        >
-                            {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
-                        </Button>
+                        <>
+                            {paymentMethodID === 1 ? (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isStripePaymentLoading}
+                                    onClick={handleConfirmStripePayment}
+                                >
+                                    {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
+                                </Button>
+                            ) : (
+                                <PaypalBtn />
+                            )}
+                        </>
+
                         <Typography className={classes.greyDescriptionText}>
-                            By clicking the “Complete Submission”, you are agreeing to the Robograding{' '}
+                            By clicking the above button, you are agreeing to the Robograding{' '}
                             <span className={classes.darkDescriptionText}>Terms and Conditions.</span>
                         </Typography>
                     </div>

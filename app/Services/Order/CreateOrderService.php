@@ -157,13 +157,21 @@ class CreateOrderService
 
     protected function storeOrderPayment(array $data)
     {
-        $response = $this->order->user->findPaymentMethod($data['id']);
-
-        OrderPayment::create([
-            'response' => json_encode($response),
+        $orderPaymentData = [
             'order_id' => $this->order->id,
             'payment_method_id' => $this->order->paymentMethod->id,
-            'payment_provider_reference_id' => $data['id'],
-        ]);
+        ];
+        if ($this->order->paymentMethod->code === 'stripe') {
+            $response = $this->order->user->findPaymentMethod($data['id']);
+            $orderPaymentData = array_merge(
+                $orderPaymentData,
+                [
+                    'response' => json_encode($response),
+                    'payment_provider_reference_id' => $data['id'],
+                ]
+            );
+        }
+
+        OrderPayment::create($orderPaymentData);
     }
 }

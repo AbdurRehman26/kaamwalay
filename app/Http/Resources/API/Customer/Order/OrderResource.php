@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\Customer\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
@@ -29,6 +30,7 @@ class OrderResource extends BaseResource
             'billing_address' => new OrderAddressResource($this->billingAddress),
             'order_payment' => new OrderPaymentResource($this->orderPayment),
             'order_items' => new OrderItemCollection($this->orderItems),
+            'invoice' => new InvoiceResource($this->invoice),
         ];
     }
 }

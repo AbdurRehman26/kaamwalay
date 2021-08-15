@@ -50,7 +50,7 @@ Route::prefix('customer')->group(function () {
             Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
             Route::get('{order}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'pay']);
-            Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
+            Route::post('{order}/payments/verify', [OrderPaymentController::class, 'verify']);
             Route::apiResource('/', OrderController::class)
                 ->only(['index', 'store']);
         });

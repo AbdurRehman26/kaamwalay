@@ -36,12 +36,12 @@ class OrderPaymentController extends Controller
         );
     }
 
-    public function verify(Order $order, $paymentIntentId): JsonResponse
+    public function verify(Order $order): JsonResponse
     {
         $this->authorize('view', $order);
 
         throw_unless(
-            $this->paymentService->verify($order, $paymentIntentId),
+            $this->paymentService->verify($order),
             PaymentNotVerified::class
         );
 

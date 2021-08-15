@@ -15,19 +15,19 @@ class PaymentService
             case 'stripe': {
                 $response = (new StripeService)->charge($order);
                 if (! empty($response['success'])) {
-                    $this->updateOrderPayment($order, $response);
-
-                    return array_merge($response, ['provider' => $order->paymentMethod->code]);
+                    $data = $this->updateOrderPayment($order, $response);
+                    $this->updateOrderStatus($order);
+                    return $data;
                 }
 
                 return $response;
             }
             case 'paypal': {
                 $response = (new PaypalService)->charge($order);
-                if (is_array($response)) {
+                if (empty($response['error'])) {
                     $data = $this->updateOrderPayment($order, $response);
 
-                    return array_merge($data, ['provider' => $order->paymentMethod->code]);
+                    return $data;
                 }
 
                 return $response;
@@ -37,13 +37,18 @@ class PaymentService
         throw new \Exception('Payment provider did not match.');
     }
 
-    public function verify(Order $order, string $paymentIntentId)
+    public function verify(Order $order): bool
     {
         switch ($order->paymentMethod->code) {
             case 'stripe':
-                return (new StripeService)->verify($order, $paymentIntentId);
-            case 'paypal':
-                return (new PaypalService)->verify($order, $paymentIntentId);
+                return (new StripeService)->verify($order);
+            case 'paypal': {
+                $response = (new PaypalService)->verify($order);
+                if ($response) {
+                    $this->updateOrderStatus($order);
+                }
+                return $response;
+            }
         }
 
         throw new \Exception('Payment provider did not match.');
@@ -62,9 +67,12 @@ class PaymentService
 
     public function updateOrderStatus(Order $order): bool
     {
-        $order->markAsPlaced();
+        // only update order if its status is in pending state
+        if ($order->isPayable()) {
+            $order->markAsPlaced();
 
-        OrderPaid::dispatch($order);
+            OrderPaid::dispatch($order);
+        }
 
         return true;
     }

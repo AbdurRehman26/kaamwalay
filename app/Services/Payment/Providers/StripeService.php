@@ -55,13 +55,15 @@ class StripeService implements PaymentProviderServiceInterface
         }
     }
 
-    public function verify(Order $order, string $paymentIntentId): bool
+    public function verify(Order $order): bool
     {
         /** @var User $user */
         $user = auth()->user();
 
         try {
-            $paymentIntent = $user->stripe()->paymentIntents->retrieve($paymentIntentId);
+            $paymentIntent = $user->stripe()->paymentIntents->retrieve(
+                $order->orderPayment->payment_provider_reference_id
+            );
 
             return $this->validateOrderIsPaid($order, $paymentIntent);
         } catch (ApiErrorException $e) {

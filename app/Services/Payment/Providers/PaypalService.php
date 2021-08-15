@@ -52,7 +52,6 @@ class PaypalService implements PaymentProviderServiceInterface
             $response = $this->client->execute($orderRequest);
 
             return [
-                'success' => true,
                 'request' => $requestData,
                 'response' => json_decode(json_encode($response->result), associative: true),
                 'payment_provider_reference_id' => $response->result->id,
@@ -62,9 +61,11 @@ class PaypalService implements PaymentProviderServiceInterface
         }
     }
 
-    public function verify(Order $order, string $paypalOrderId): bool
+    public function verify(Order $order): bool
     {
-        $orderRequest = new OrdersCaptureRequest($paypalOrderId);
+        $orderRequest = new OrdersCaptureRequest(
+            $order->orderPayment->payment_provider_reference_id
+        );
         $orderRequest->prefer('return=representation');
 
         try {

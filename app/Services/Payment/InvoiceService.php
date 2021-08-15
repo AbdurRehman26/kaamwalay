@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Services\BarcodeService;
@@ -13,11 +14,15 @@ use Illuminate\Support\Str;
 
 class InvoiceService
 {
+    /**
+     * @throws InvoiceNotUploaded
+     */
     public function saveInvoicePDF(Order $order): void
     {
         $data = $this->getInvoiceData($order);
+        $pdf = PDFService::generate('pdf.invoice', $data);
 
-        $url = $this->uploadToCloud($data);
+        $url = $this->uploadToCloud($pdf->output());
 
         $this->createAndStoreInvoiceRecord($order, $url);
     }
@@ -85,13 +90,17 @@ class InvoiceService
         ];
     }
 
-    protected function uploadToCloud(array $data): string
+    /**
+     * @throws InvoiceNotUploaded
+     */
+    protected function uploadToCloud(string $pdfData): string
     {
         $filePath = 'invoice/' . Str::uuid() . '.pdf';
-        $pdf = PDFService::generate('pdf.invoice', $data);
 
-        Storage::disk('s3')->put($filePath, $pdf->output());
+        if (Storage::disk('s3')->put($filePath, $pdfData)) {
+            return Storage::disk('s3')->url($filePath);
+        }
 
-        return Storage::disk('s3')->url($filePath);
+        throw new InvoiceNotUploaded;
     }
 }

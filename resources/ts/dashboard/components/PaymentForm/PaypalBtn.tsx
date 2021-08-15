@@ -22,34 +22,36 @@ function PaypalBtn() {
             // @ts-ignore
             window.paypal
                 .Buttons({
-                    createOrder: async function (data: any, actions: any) {
+                    createOrder: async function () {
                         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
                         const response = await endpoint.post('');
                         return response.data.data.id;
                     },
                     onApprove: async function (data: any, actions: any) {
-                        const endpoint = apiService.createEndpoint(
-                            `customer/orders/${orderID}/payments/${data.orderID}`,
-                        );
-                        const orderData = await endpoint.post('');
-                        const errorDetail = Array.isArray(orderData.data.details ?? '') && orderData.data.details[0];
-
-                        if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
-                            return actions.restart(); // Recoverable state, per:
-                            // https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
+                        try {
+                            const endpoint = apiService.createEndpoint(
+                                `customer/orders/${orderID}/payments/${data.orderID}`,
+                            );
+                            const orderData = await endpoint.post('');
+                            const errorDetail =
+                                Array.isArray(orderData.data.details ?? '') && orderData.data.details[0];
+                            if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
+                                return actions.restart(); // Recoverable state, per:
+                                // https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
+                            }
+                            if (errorDetail) {
+                                let msg = 'Sorry, your transaction could not be processed.';
+                                if (errorDetail.description) msg += '\n\n' + errorDetail.description;
+                                notifications.error(msg, 'Error');
+                                return;
+                            }
+                            notifications.success('Order paid!', 'Success!');
+                            dispatch(clearSubmissionState());
+                            dispatch(invalidateOrders());
+                            history.push(`/submissions/${orderID}/confirmation`);
+                        } catch (err) {
+                            notifications.error('Payment could not be processed!', 'Error');
                         }
-
-                        if (errorDetail) {
-                            let msg = 'Sorry, your transaction could not be processed.';
-                            if (errorDetail.description) msg += '\n\n' + errorDetail.description;
-                            notifications.error(msg, 'Error');
-                            return;
-                        }
-
-                        notifications.success('Order paid!', 'Success!');
-                        dispatch(clearSubmissionState());
-                        dispatch(invalidateOrders());
-                        history.push(`/submissions/${orderID}/confirmation`);
                     },
                 })
                 .render(contentRef.current);

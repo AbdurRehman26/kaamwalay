@@ -105,7 +105,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                     </div>
                 </div>
                 {!addedMode ? (
-                    <div className={classes.rightSide}>
+                    <ButtonBase className={classes.rightSide} onClick={isCardSelected ? deselectCard : selectCard}>
                         <IconButton aria-label="delete">
                             {isCardSelected ? (
                                 <Tooltip title="Remove">
@@ -117,7 +117,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                                 </Tooltip>
                             )}
                         </IconButton>
-                    </div>
+                    </ButtonBase>
                 ) : null}
             </ButtonBase>
             {!addedMode ? <Divider light /> : null}

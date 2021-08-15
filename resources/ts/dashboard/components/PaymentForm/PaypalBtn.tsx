@@ -16,19 +16,6 @@ function PaypalBtn() {
     const notifications = useNotifications();
     const history = useHistory();
     const dispatch = useDispatch();
-<<<<<<< HEAD
-    useEffect(() => {
-        // @ts-ignore
-        window.paypal
-            .Buttons({
-                createOrder: async function (data: any, actions: any) {
-                    const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
-                    const response = await endpoint.post('');
-                    return response.data.data.id;
-                },
-                onApprove: async function (data: any, actions: any) {
-                    try {
-=======
 
     useEffect(
         () => {
@@ -41,7 +28,6 @@ function PaypalBtn() {
                         return response.data.data.id;
                     },
                     onApprove: async function (data: any, actions: any) {
->>>>>>> c05ac72 (add: eslint, typecheck and lint-staged)
                         const endpoint = apiService.createEndpoint(
                             `customer/orders/${orderID}/payments/${data.orderID}`,
                         );
@@ -59,18 +45,6 @@ function PaypalBtn() {
                             notifications.error(msg, 'Error');
                             return;
                         }
-<<<<<<< HEAD
-                        notifications.success('Order paid!', 'Success!');
-                        dispatch(clearSubmissionState());
-                        history.push(`/submissions/${orderID}/confirmation`);
-                    } catch (err) {
-                        notifications.error('Payment could not be processed!', 'Error');
-                    }
-                },
-            })
-            .render(paypal.current);
-    }, []);
-=======
 
                         notifications.success('Order paid!', 'Success!');
                         dispatch(clearSubmissionState());
@@ -83,7 +57,6 @@ function PaypalBtn() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
     );
->>>>>>> c05ac72 (add: eslint, typecheck and lint-staged)
 
     return (
         <div>

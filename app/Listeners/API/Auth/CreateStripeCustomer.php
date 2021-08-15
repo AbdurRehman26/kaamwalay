@@ -3,9 +3,10 @@
 namespace App\Listeners\API\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CreateStripeCustomer implements ShouldQueue
+class CreateStripeCustomer implements ShouldQueue, ShouldBeEncrypted
 {
     /**
      * Create the event listener.

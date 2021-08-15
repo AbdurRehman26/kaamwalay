@@ -162,7 +162,7 @@ return [
 
     'defaults' => [
         'supervisor-1' => [
-            'connection' => 'rabbitmq',
+            'connection' => 'redis',
             'queue' => ['default', 'sample'],
             'balance' => 'auto',
             'maxProcesses' => 1,

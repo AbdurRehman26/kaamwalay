@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cffe2fb7d3c30b832d5512f180c62110",
+    "content-hash": "f4e18ba45e4bbb22dd567d400330e6d9",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -189,16 +189,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.190.1",
+            "version": "3.190.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "5f6149b626e916dbfcd1b1b8e90c726060d5beba"
+                "reference": "8ca6a5f9834de3eb3fb84b28fc12c9088bc01293"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5f6149b626e916dbfcd1b1b8e90c726060d5beba",
-                "reference": "5f6149b626e916dbfcd1b1b8e90c726060d5beba",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8ca6a5f9834de3eb3fb84b28fc12c9088bc01293",
+                "reference": "8ca6a5f9834de3eb3fb84b28fc12c9088bc01293",
                 "shasum": ""
             },
             "require": {
@@ -260,9 +260,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.190.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.190.2"
             },
-            "time": "2021-08-12T18:14:37+00:00"
+            "time": "2021-08-13T18:12:28+00:00"
         },
         {
             "name": "barryvdh/laravel-dompdf",
@@ -1647,32 +1647,29 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "3.2.5",
+            "version": "3.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b"
+                "reference": "c1123697f6a2ec29162b82f170dd4a491f524773"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/82be04b4753f8b7693b62852b7eab30f97524f9b",
-                "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/c1123697f6a2ec29162b82f170dd4a491f524773",
+                "reference": "c1123697f6a2ec29162b82f170dd4a491f524773",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "php": ">=5.5"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
-                "mdanter/ecc": "~0.3.1",
                 "mikey179/vfsstream": "~1.5",
                 "phpmd/phpmd": "~2.2",
                 "phpunit/php-invoker": "~1.1",
-                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit": "^5.7 || ^7.3",
                 "squizlabs/php_codesniffer": "~2.3"
-            },
-            "suggest": {
-                "mdanter/ecc": "Required to use Elliptic Curves based algorithms."
             },
             "type": "library",
             "extra": {
@@ -1698,27 +1695,37 @@
             "keywords": ["JWS", "jwt"],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/3.2"
+                "source": "https://github.com/lcobucci/jwt/tree/3.3.3"
             },
-            "time": "2018-11-11T12:22:26+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/lcobucci",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/lcobucci",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-08-20T13:22:28+00:00"
         },
         {
             "name": "league/commonmark",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "0d57f20aa03129ee7ef5f690e634884315d4238c"
+                "reference": "2df87709f44b0dd733df86aef0830dce9b1f0f13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/0d57f20aa03129ee7ef5f690e634884315d4238c",
-                "reference": "0d57f20aa03129ee7ef5f690e634884315d4238c",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/2df87709f44b0dd733df86aef0830dce9b1f0f13",
+                "reference": "2df87709f44b0dd733df86aef0830dce9b1f0f13",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "league/config": "^1.1",
+                "league/config": "^1.1.1",
                 "php": "^7.4 || ^8.0",
                 "psr/event-dispatcher": "^1.0",
                 "symfony/polyfill-php80": "^1.15"
@@ -1800,24 +1807,24 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-31T19:15:22+00:00"
+            "time": "2021-08-14T14:06:04+00:00"
         },
         {
             "name": "league/config",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/config.git",
-                "reference": "20d42d88f12a76ff862e17af4f14a5a4bbfd0925"
+                "reference": "a9d39eeeb6cc49d10a6e6c36f22c4c1f4a767f3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/config/zipball/20d42d88f12a76ff862e17af4f14a5a4bbfd0925",
-                "reference": "20d42d88f12a76ff862e17af4f14a5a4bbfd0925",
+                "url": "https://api.github.com/repos/thephpleague/config/zipball/a9d39eeeb6cc49d10a6e6c36f22c4c1f4a767f3e",
+                "reference": "a9d39eeeb6cc49d10a6e6c36f22c4c1f4a767f3e",
                 "shasum": ""
             },
             "require": {
-                "dflydev/dot-access-data": "^3.0",
+                "dflydev/dot-access-data": "^3.0.1",
                 "nette/schema": "^1.2",
                 "php": "^7.4 || ^8.0"
             },
@@ -1872,7 +1879,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-19T15:52:37+00:00"
+            "time": "2021-08-14T12:15:32+00:00"
         },
         {
             "name": "league/flysystem",
@@ -6028,16 +6035,16 @@
         },
         {
             "name": "tymon/jwt-auth",
-            "version": "dev-develop",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tymondesigns/jwt-auth.git",
-                "reference": "ab00f2d7cce5f043067aef7849cdc792de2df635"
+                "reference": "e588cb719539366c0e2f6017f975379cb73e9680"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/ab00f2d7cce5f043067aef7849cdc792de2df635",
-                "reference": "ab00f2d7cce5f043067aef7849cdc792de2df635",
+                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/e588cb719539366c0e2f6017f975379cb73e9680",
+                "reference": "e588cb719539366c0e2f6017f975379cb73e9680",
                 "shasum": ""
             },
             "require": {
@@ -6048,17 +6055,15 @@
                 "lcobucci/jwt": "<3.4",
                 "namshi/jose": "^7.0",
                 "nesbot/carbon": "^1.0|^2.0",
-                "php": "^7.2|^8.0"
+                "php": "^5.5.9|^7.0"
             },
             "require-dev": {
                 "illuminate/console": "^5.2|^6|^7|^8",
                 "illuminate/database": "^5.2|^6|^7|^8",
                 "illuminate/routing": "^5.2|^6|^7|^8",
                 "mockery/mockery": ">=0.9.9",
-                "phpunit/phpunit": "^8.5|^9.4",
-                "yoast/phpunit-polyfills": "^0.2.0"
+                "phpunit/phpunit": "~4.8|~6.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -6100,7 +6105,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-02-02T14:44:28+00:00"
+            "time": "2020-11-27T12:32:42+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -7946,16 +7951,16 @@
         },
         {
             "name": "laravel-shift/blueprint",
-            "version": "v1.24.2",
+            "version": "v1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-shift/blueprint.git",
-                "reference": "9e8bd03e86aed169c64ece1bfa6e21ccb449220c"
+                "reference": "67cfc6b01c50545a5f050fa4f88633993e759f21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-shift/blueprint/zipball/9e8bd03e86aed169c64ece1bfa6e21ccb449220c",
-                "reference": "9e8bd03e86aed169c64ece1bfa6e21ccb449220c",
+                "url": "https://api.github.com/repos/laravel-shift/blueprint/zipball/67cfc6b01c50545a5f050fa4f88633993e759f21",
+                "reference": "67cfc6b01c50545a5f050fa4f88633993e759f21",
                 "shasum": ""
             },
             "require": {
@@ -7991,9 +7996,9 @@
             "keywords": ["framework", "laravel"],
             "support": {
                 "issues": "https://github.com/laravel-shift/blueprint/issues",
-                "source": "https://github.com/laravel-shift/blueprint/tree/v1.24.2"
+                "source": "https://github.com/laravel-shift/blueprint/tree/v1.25.0"
             },
-            "time": "2021-07-27T17:02:08+00:00"
+            "time": "2021-08-13T18:44:57+00:00"
         },
         {
             "name": "laravel-shift/faker-registry",

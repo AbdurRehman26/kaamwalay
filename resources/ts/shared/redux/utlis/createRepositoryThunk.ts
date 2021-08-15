@@ -1,7 +1,7 @@
 import { ActionReducerMapBuilder, AsyncThunk, createAsyncThunk, CreateSliceOptions } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
 import { ClassConstructor, classToPlain } from 'class-transformer';
-import { uniq } from 'lodash-es';
+import { uniq } from 'lodash';
 
 import { PaginatedData } from '@shared/classes/PaginatedData';
 import { Entity } from '@shared/entities/Entity';
@@ -17,6 +17,9 @@ interface CreateRepositoryThunk<N extends string, E> {
     listAction: AsyncThunk<PaginatedData<E>, AxiosRequestConfig | undefined, any>;
     showAction: AsyncThunk<E, ShowTuple, any>;
     initialState: APIState<E>;
+
+    invalidateEntities(state: APIState<E>): void;
+
     buildReducers(builder: ActionReducerMapBuilder<APIState<E>>): void;
 }
 
@@ -84,11 +87,17 @@ export function createRepositoryThunk<
             });
     };
 
+    const invalidateEntities = (state: APIState<E>) => {
+        state.entities = {};
+        state.ids = [];
+    };
+
     return {
         name,
         listAction,
         showAction,
         initialState,
+        invalidateEntities,
         buildReducers,
     };
 }

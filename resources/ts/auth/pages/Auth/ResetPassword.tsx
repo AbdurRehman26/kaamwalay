@@ -38,7 +38,7 @@ export function ResetPassword() {
             password: '',
             passwordConfirmation: '',
         }),
-        [token],
+        [email, token],
     );
 
     const handleSubmit = useCallback(
@@ -56,7 +56,7 @@ export function ResetPassword() {
 
             history.push('/sign-in');
         },
-        [resetPassword],
+        [history, notifications, resetPassword],
     );
 
     if (!email || !token) {

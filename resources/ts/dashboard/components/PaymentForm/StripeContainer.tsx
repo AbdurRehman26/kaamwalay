@@ -10,10 +10,14 @@ export default function StripeContainer({ children }: PropsWithChildren<any>) {
     const { stripeKey } = useConfiguration();
     const [stripe, setStripe] = useState<any>(null);
 
-    useEffect(() => {
-        setStripe(null);
-        loadStripe(stripeKey).then(setStripe);
-    }, [setStripe]);
+    useEffect(
+        () => {
+            setStripe(null);
+            loadStripe(stripeKey).then(setStripe);
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [setStripe],
+    );
 
     if (!stripe) {
         return (

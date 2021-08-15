@@ -1,5 +1,4 @@
 import { plainToClass } from 'class-transformer';
-import objectHash from 'object-hash';
 import { useCallback, useMemo } from 'react';
 
 import { UserEntity } from '@shared/entities/UserEntity';
@@ -24,7 +23,7 @@ export function useAuth() {
     const authenticated = useSharedSelector((state) => state.authentication.authenticated);
     const checking = useSharedSelector((state) => state.authentication.checking);
 
-    const user$ = useMemo<UserEntity>(() => plainToClass(UserEntity, user), [user && objectHash(user)]);
+    const user$ = useMemo<UserEntity>(() => plainToClass(UserEntity, user), [user]);
 
     const login = useCallback(
         (email: string, password: string) => dispatch(authenticateAction({ email, password })),

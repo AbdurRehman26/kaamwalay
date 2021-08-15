@@ -15,8 +15,10 @@ export const ordersSlice = createSlice({
     initialState: {
         ...ordersThunk.initialState,
     } as StateType,
-    reducers: {},
+    reducers: {
+        invalidateOrders: ordersThunk.invalidateEntities,
+    },
     extraReducers: ordersThunk.buildReducers,
 });
-
+export const { invalidateOrders } = ordersSlice.actions;
 export const { listAction: listOrdersAction, showAction: showOrderAction } = ordersThunk;

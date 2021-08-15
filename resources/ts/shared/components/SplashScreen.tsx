@@ -16,7 +16,7 @@ export function SplashScreen({ children }: PropsWithChildren<any>) {
 
     if (isConfigLoading) {
         return (
-            <Box minHeight={'100vh'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+            <Box minHeight={'100vh'} width={'100%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                 <CircularProgress />
             </Box>
         );

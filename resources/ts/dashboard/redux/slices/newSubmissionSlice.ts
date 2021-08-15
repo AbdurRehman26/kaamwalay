@@ -3,8 +3,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
-import { newSubmission } from '@dashboard/redux/slices/index';
-
 export interface SubmissionService {
     id: number;
     type: 'card';
@@ -370,7 +368,7 @@ export const newSubmissionSlice = createSlice({
             );
         },
         changeSelectedCardQty: (state, action: PayloadAction<{ card: SearchResultItemCardProps; qty: number }>) => {
-            const lookup = state.step02Data.selectedCards.find((card) => card.id == action.payload.card.id);
+            const lookup = state.step02Data.selectedCards.find((card) => card.id === action.payload.card.id);
             if (lookup) {
                 lookup.qty = action.payload.qty;
             }
@@ -379,7 +377,7 @@ export const newSubmissionSlice = createSlice({
             state,
             action: PayloadAction<{ card: SearchResultItemCardProps; newValue: number }>,
         ) => {
-            const lookup = state.step02Data.selectedCards.find((card) => card.id == action.payload.card.id);
+            const lookup = state.step02Data.selectedCards.find((card) => card.id === action.payload.card.id);
             if (lookup) {
                 lookup.value = action.payload.newValue;
             }
@@ -424,7 +422,7 @@ export const newSubmissionSlice = createSlice({
             }
         },
         setSelectedStripeCard: (state, action: PayloadAction<string>) => {
-            const lookup = state.step04Data?.existingCreditCards?.find((card) => card.id == action.payload);
+            const lookup = state.step04Data?.existingCreditCards?.find((card) => card.id === action.payload);
             if (lookup) {
                 state.step04Data.selectedCreditCard = lookup;
             }
@@ -433,7 +431,7 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.disableAllShippingInputs = action.payload;
         },
         setSelectedExistingAddress: (state, action: PayloadAction<number>) => {
-            const lookup = state.step03Data?.existingAddresses?.find((address) => address.id == action.payload);
+            const lookup = state.step03Data?.existingAddresses?.find((address) => address.id === action.payload);
             if (lookup) {
                 state.step03Data.selectedExistingAddress = lookup;
             }

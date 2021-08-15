@@ -40,7 +40,7 @@ export function useListQuery<
         }
 
         return plainToClass(entity, list);
-    }, [ids, entities, perPage, currentPage]);
+    }, [ids, perPage, entity, entities, currentPage]);
 
     const fetch = useCallback(
         function fetch(config?: AxiosRequestConfig) {
@@ -53,7 +53,7 @@ export function useListQuery<
 
             dispatch(action(apiService.mergeConfig(baseConfig, config, actionArg)));
         },
-        [actionArg, action],
+        [currentPage, perPage, dispatch, action, apiService, actionArg],
     );
 
     const getPage = useCallback(
@@ -100,9 +100,13 @@ export function useListQuery<
         [fetch],
     );
 
-    useEffect(() => {
-        getPage();
-    }, []);
+    useEffect(
+        () => {
+            getPage();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     return useMemo(
         () => ({
@@ -122,6 +126,18 @@ export function useListQuery<
                 rowsPerPageOptions: PaginatedData.LimitSet,
             } as TablePaginationProps,
         }),
-        [isLoading, isError, data, pagination, getPage, nextPage, previousPage, currentPage, perPage],
+        [
+            isLoading,
+            isError,
+            data,
+            pagination,
+            getPage,
+            nextPage,
+            previousPage,
+            currentPage,
+            perPage,
+            handleChangePage,
+            handleChangeRowsPerPage,
+        ],
     );
 }

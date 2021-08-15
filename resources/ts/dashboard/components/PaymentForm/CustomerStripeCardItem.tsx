@@ -1,7 +1,8 @@
 import Avatar from '@material-ui/core/Avatar';
-import Radio, { RadioProps } from '@material-ui/core/Radio';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Radio from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useMemo } from 'react';
 
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
@@ -103,15 +104,6 @@ const useStyles = makeStyles(
     { name: 'ServiceLevelItemStyle' },
 );
 
-const GreenRadio = withStyles({
-    root: {
-        '&$checked': {
-            color: '#20BFB8',
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-
 function CustomerStripeCardItem(props: CreditCard) {
     const currentSelectedCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
 
@@ -129,7 +121,7 @@ function CustomerStripeCardItem(props: CreditCard) {
     }
 
     return (
-        <div className={classes.root} onClick={handleOnChange}>
+        <ButtonBase className={classes.root} onClick={handleOnChange}>
             <div className={classes.leftSide}>
                 <div className={classes.radioBtnContainer}>
                     <Radio color={'primary'} checked={currentSelectedCardId === id} />
@@ -146,7 +138,7 @@ function CustomerStripeCardItem(props: CreditCard) {
                     </div>
                 </div>
             </div>
-        </div>
+        </ButtonBase>
     );
 }
 

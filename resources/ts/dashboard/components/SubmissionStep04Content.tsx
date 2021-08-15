@@ -1,10 +1,8 @@
-import { NativeSelect } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -136,7 +134,7 @@ const GreenCheckbox = withStyles({
     checked: {},
 })((props: any) => <Checkbox color="default" {...props} />);
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
     address: yup.string().required(),
@@ -215,40 +213,50 @@ export function SubmissionStep04Content() {
         if (!useBillingAddressSameAsShipping) {
             dispatch(setBillingAddress(finalShippingAddress));
         }
-    }, [useBillingAddressSameAsShipping]);
+    }, [dispatch, finalShippingAddress, useBillingAddressSameAsShipping]);
 
-    const updateField = useCallback((fieldName: any, newValue: any) => {
-        dispatch(updateBillingAddressField({ fieldName, newValue }));
-    }, []);
+    const updateField = useCallback(
+        (fieldName: any, newValue: any) => {
+            dispatch(updateBillingAddressField({ fieldName, newValue }));
+        },
+        [dispatch],
+    );
 
-    const updateBillingState = useCallback((stateId: any) => {
-        const stateLookup = availableStates.find((state) => state.id == stateId);
-        if (stateLookup) {
-            dispatch(
-                updateBillingAddressField({
-                    fieldName: 'state',
-                    newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
-                }),
-            );
-        }
-    }, []);
+    const updateBillingState = useCallback(
+        (stateId: any) => {
+            const stateLookup = availableStates.find((state) => state.id === stateId);
+            if (stateLookup) {
+                dispatch(
+                    updateBillingAddressField({
+                        fieldName: 'state',
+                        newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
+                    }),
+                );
+            }
+        },
+        [availableStates, dispatch],
+    );
 
     useEffect(() => {
         dispatch(setIsNextDisabled(true));
-        if (paymentMethodId == 1) {
+        if (paymentMethodId === 1) {
             dispatch(setIsNextDisabled(currentSelectedStripeCardId.length === 0 || !isAddressDataValid));
         }
 
-        if (paymentMethodId == 2) {
+        if (paymentMethodId === 2) {
             dispatch(setIsNextDisabled(false));
         }
     }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
 
-    useEffect(() => {
-        if (useBillingAddressSameAsShipping) {
-            dispatch(setBillingAddress(finalShippingAddress));
-        }
-    }, [dispatch]);
+    useEffect(
+        () => {
+            if (useBillingAddressSameAsShipping) {
+                dispatch(setBillingAddress(finalShippingAddress));
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [dispatch],
+    );
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>

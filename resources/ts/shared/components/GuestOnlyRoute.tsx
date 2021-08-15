@@ -24,7 +24,7 @@ export function GuestOnlyRoute({ redirectRoute, ...rest }: GuestOnlyRouteProps) 
         if (authenticated && !checking) {
             window.location.replace(redirectRoute ?? AuthenticationEnum.DashboardRoute);
         }
-    }, [authenticated, checking]);
+    }, [authenticated, checking, redirectRoute]);
 
     if (checking) {
         const { component, render, children, ...partial } = rest;

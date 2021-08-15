@@ -26,7 +26,7 @@ class ResetPasswordController extends Controller
             fn ($user, $password) => $this->resetPassword($user, $password)
         );
 
-        return $response == Password::PASSWORD_RESET
+        return $response === Password::PASSWORD_RESET
             ? $this->sendResetResponse($response)
             : $this->sendResetFailedResponse($response);
     }

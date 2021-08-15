@@ -1,3 +1,4 @@
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -101,11 +102,11 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                             variant={'subtitle2'}
                             className={classes.subtitle}
                             dangerouslySetInnerHTML={{ __html: props.subtitle }}
-                        ></Typography>
+                        />
                     </div>
                 </div>
                 {!addedMode ? (
-                    <div className={classes.rightSide} onClick={isCardSelected ? deselectCard : selectCard}>
+                    <ButtonBase className={classes.rightSide} onClick={isCardSelected ? deselectCard : selectCard}>
                         <IconButton aria-label="delete">
                             {isCardSelected ? (
                                 <Tooltip title="Remove">
@@ -117,7 +118,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                                 </Tooltip>
                             )}
                         </IconButton>
-                    </div>
+                    </ButtonBase>
                 ) : null}
             </div>
             {!addedMode ? <Divider light /> : null}

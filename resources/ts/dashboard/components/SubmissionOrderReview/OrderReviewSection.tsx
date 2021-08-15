@@ -34,12 +34,12 @@ function OrderReviewSection() {
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
-    const returnShippingMethod = 'Insured Shipping';
 
     const finalShippingAddress =
         existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
             ? selectedExistingAddress
             : shippingAddress;
+
     return (
         <Paper variant={'outlined'} className={classes.orderReviewSection}>
             <div className={classes.orderItemsColumn}>

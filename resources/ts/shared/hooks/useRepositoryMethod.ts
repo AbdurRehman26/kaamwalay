@@ -30,11 +30,11 @@ export function useRepositoryMethod<
     const key = useMemo(() => {
         const argsHash = options?.args ? objectHash.sha1(options.args) : '';
         return `${classDefinition.name}@${method}/${argsHash}`;
-    }, [options]);
+    }, [classDefinition.name, method, options?.args]);
 
     const fetcher = useCallback(
         (): any => Repository.callMethod(repository, method, ...((options?.args as any) || [])),
-        [key],
+        [method, options?.args, repository],
     );
 
     return useSWR(key, fetcher);

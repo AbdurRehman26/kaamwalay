@@ -14,9 +14,7 @@ import { useListOrdersQuery } from '@shared/hooks/useOrdersQuery';
 import { SubmissionTableRow } from './SubmissionTableRow';
 import { Table, TablePagination } from './styles';
 
-interface SubmissionsTableProps {}
-
-export function SubmissionsTable({}: SubmissionsTableProps) {
+export function SubmissionsTable() {
     const { isLoading, isError, data, paginationProps } = useListOrdersQuery();
 
     if (isLoading || isError) {

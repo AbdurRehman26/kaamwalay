@@ -1,6 +1,5 @@
 import Typography from '@material-ui/core/Typography';
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import useStyles from '@dashboard/components/SubmissionOrderReview/style';
 import { useAppDispatch } from '@dashboard/redux/hooks';
@@ -20,7 +19,7 @@ function OrderDetailItem(props: OrderDetailItemProps) {
 
     const handleEditPress = useCallback(() => {
         dispatch(setCustomStep(editStep));
-    }, []);
+    }, [dispatch, editStep]);
 
     return (
         <div className={classes.orderDetailItemContainer}>

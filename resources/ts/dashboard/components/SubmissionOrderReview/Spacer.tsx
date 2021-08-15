@@ -1,13 +1,8 @@
-import React from 'react';
+import { styled } from '@material-ui/core/styles';
 
 type SpacerProps = {
     top: string;
 };
 
-function Spacer(props: SpacerProps) {
-    const { top } = props;
-
-    return <div style={{ marginTop: top }}>{/*{ Silence is gold }*/}</div>;
-}
-
-export default Spacer;
+// That can be <Box mt={} /> tho ...
+export default styled('div')(({ top }: SpacerProps) => ({ marginTop: top }), { name: 'Spacer' });

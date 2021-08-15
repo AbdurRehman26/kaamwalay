@@ -11,13 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import { styled } from '@material-ui/core/styles';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-
 import cardPreview from '@shared/assets/cardPreview.png';
 import { font } from '@shared/styles/utils';
-
 import { CardPreview } from '@dashboard/components/CardPreview';
 import { CardGradeScore } from '@dashboard/pages/Cards/ViewCard/CardGradeScore';
-
 import CardGradeImages from './CardGradeImages';
 import { GradePendingMessage } from './GradePendingMessage';
 import { GradeStatus } from './GradeStatus';

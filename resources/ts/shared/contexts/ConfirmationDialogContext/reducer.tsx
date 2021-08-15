@@ -1,5 +1,4 @@
 import { Action, PayloadAction } from '@reduxjs/toolkit';
-
 import { Defer } from '@shared/classes/Defer';
 import { ConfirmationDialogContextState, initialState } from '@shared/contexts/ConfirmationDialogContext/state';
 

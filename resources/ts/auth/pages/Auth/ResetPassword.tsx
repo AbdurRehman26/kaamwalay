@@ -6,13 +6,11 @@ import Typography from '@material-ui/core/Typography';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
-
 import { ResetPasswordRequestDto } from '@shared/dto/ResetPasswordRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { font } from '@shared/styles/utils';
-
 import { FormInput } from './FormInput';
 import { SubmitButton } from './SubmitButton';
 import { useStyles } from './style';

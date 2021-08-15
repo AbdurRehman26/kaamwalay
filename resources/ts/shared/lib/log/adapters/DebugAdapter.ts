@@ -1,5 +1,4 @@
 import { debug } from 'debug';
-
 import { LogAdapter, LoggerRecord } from './LogAdapter';
 
 export class DebugAdapter implements LogAdapter {

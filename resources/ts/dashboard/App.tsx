@@ -1,8 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
 import { LayoutOptions } from '@dashboard/components/Layout/LayoutOptions';
-
 import { Dashboard } from './Dashboard';
 import { Layout } from './components/Layout';
 

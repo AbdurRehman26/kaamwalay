@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
-
 import { ConfigurationEntity } from '../../entities/ConfigurationEntity';
 import { app } from '../../lib/app';
 import { ConfigurationsRepository } from '../../repositories/ConfigurationsRepository';

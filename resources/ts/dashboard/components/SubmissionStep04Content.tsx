@@ -9,9 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
-
 import { PaymentForm } from '@dashboard/components/PaymentForm';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     setBillingAddress,
@@ -224,7 +222,7 @@ export function SubmissionStep04Content() {
 
     const updateBillingState = useCallback(
         (stateId: any) => {
-            const stateLookup = availableStates.find((state) => state.id === stateId);
+            const stateLookup = availableStates.find((state) => state.id === parseInt(stateId));
             if (stateLookup) {
                 dispatch(
                     updateBillingAddressField({

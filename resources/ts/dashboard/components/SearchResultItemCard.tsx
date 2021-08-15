@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React from 'react';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { markCardAsSelected, markCardAsUnselected } from '../redux/slices/newSubmissionSlice';
 
@@ -84,7 +83,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
     const isCardSelected = selectedCards.find((card: Record<string, any>) => card.id === id);
     return (
         <>
-            <div className={classes.container}>
+            <ButtonBase className={classes.container} onClick={isCardSelected ? deselectCard : selectCard}>
                 <div className={classes.leftSide}>
                     <div className={classes.pictureContainer}>
                         <img src={image} alt={'Charizard'} className={classes.cardImage} />
@@ -106,7 +105,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                     </div>
                 </div>
                 {!addedMode ? (
-                    <ButtonBase className={classes.rightSide} onClick={isCardSelected ? deselectCard : selectCard}>
+                    <div className={classes.rightSide}>
                         <IconButton aria-label="delete">
                             {isCardSelected ? (
                                 <Tooltip title="Remove">
@@ -118,9 +117,9 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                                 </Tooltip>
                             )}
                         </IconButton>
-                    </ButtonBase>
+                    </div>
                 ) : null}
-            </div>
+            </ButtonBase>
             {!addedMode ? <Divider light /> : null}
         </>
     );

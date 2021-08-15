@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
@@ -502,9 +501,6 @@ export const newSubmissionSlice = createSlice({
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
                 (plan) => plan.id === action.payload.payment_plan.id,
             ) as any;
-        },
-        [createOrder.rejected as any]: (state, action) => {
-            console.log(action.payload);
         },
     },
 });

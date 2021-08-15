@@ -7,7 +7,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import { connectSearchBox } from 'react-instantsearch-dom';
-
 import { useAppDispatch } from '../redux/hooks';
 import { setCardsSearchValue } from '../redux/slices/newSubmissionSlice';
 

@@ -1,7 +1,6 @@
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { PropsWithChildren } from 'react';
-
 import { useSharedSelector } from '../hooks/useSharedDispatch';
 
 /**

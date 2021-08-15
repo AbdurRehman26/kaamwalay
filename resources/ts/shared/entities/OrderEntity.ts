@@ -1,11 +1,10 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
-
 import { Entity } from '@shared/entities/Entity';
-
 import { DateField } from '../decorators/DateField';
 import { Field } from '../decorators/Field';
 import { AddressEntity } from './AddressEntity';
+import { InvoiceEntity } from './InvoiceEntity';
 import { OrderItemEntity } from './OrderItemEntity';
 import { OrderPaymentEntity } from './OrderPaymentEntity';
 import { PaymentMethodEntity } from './PaymentMethodEntity';
@@ -60,4 +59,7 @@ export class OrderEntity extends Entity {
 
     @DateField('arrived_at')
     public arrivedAt!: Moment;
+
+    @Type(() => InvoiceEntity)
+    public invoice!: InvoiceEntity | null;
 }

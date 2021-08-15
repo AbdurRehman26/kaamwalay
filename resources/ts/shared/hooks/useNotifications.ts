@@ -1,9 +1,7 @@
 import { AxiosError } from 'axios';
 import { useCallback, useMemo } from 'react';
-
 import { NotificationItem } from '@shared/classes/NotificationItem';
 import { NotificationType } from '@shared/constants/NotificationType';
-
 import { Exception } from '../exceptions/Exception';
 import { NotificationsService } from '../services/NotificationsService';
 import { useSharedSelector } from './useSharedDispatch';

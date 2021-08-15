@@ -1,5 +1,4 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
-
 import { Field } from '../decorators/Field';
 
 export class ResetPasswordRequestDto {

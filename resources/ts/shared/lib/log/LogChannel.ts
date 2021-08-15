@@ -1,5 +1,4 @@
 import { Injectable } from '@shared/decorators/Injectable';
-
 import { DebugAdapter, LogAdapter, LogAdapterClass } from './adapters';
 
 @Injectable('LogChannel')

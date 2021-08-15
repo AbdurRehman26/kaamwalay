@@ -1,5 +1,4 @@
 import { injectable } from 'inversify';
-
 import { InjectableMetaOptions } from '@shared/constants/ReflectMetadata';
 import { GetInjectableName } from '@shared/interfaces/GetInjectableName';
 import { DependencyContainer } from '@shared/lib/dependencyInjection/container';

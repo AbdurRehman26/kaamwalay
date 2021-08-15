@@ -11,9 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
-
 import ExistingAddress from '@dashboard/components/ExistingAddress';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     getStatesList,
@@ -225,7 +223,7 @@ export function SubmissionStep03Content() {
     }
 
     function updateShippingState(stateId: any) {
-        const stateLookup = availableStates.find((state) => state.id === stateId);
+        const stateLookup = availableStates.find((state) => state.id === parseInt(stateId));
         if (stateLookup) {
             dispatch(
                 updateShippingAddressField({

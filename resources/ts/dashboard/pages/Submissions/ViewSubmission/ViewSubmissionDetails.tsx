@@ -10,12 +10,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import DummyCharizard from '@shared/assets/dummyCharizard.png';
 import font from '@shared/styles/font.module.scss';
-
 import { TablePagination } from '@dashboard/components/SubmissionsTable/styles';
-
 import { useViewSubmissionDetailsStyles } from './styles';
 
 /**

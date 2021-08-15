@@ -9,10 +9,8 @@ import PaymentOutlinedIcon from '@material-ui/icons/PaymentOutlined';
 import ReceiptOutlinedIcon from '@material-ui/icons/ReceiptOutlined';
 import clsx from 'clsx';
 import React from 'react';
-
 import { ReactComponent as Step01Icon } from '@shared/assets/step01Icon.svg';
 import { ReactComponent as Step02Icon } from '@shared/assets/step02Icon.svg';
-
 import { useAppSelector } from '../redux/hooks';
 
 const ColorlibConnector = withStyles({

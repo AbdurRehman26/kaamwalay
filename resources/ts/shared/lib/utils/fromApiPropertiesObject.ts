@@ -1,5 +1,4 @@
 import { camelCase } from 'lodash';
-
 import { propertyNaming, PropertyNamingOptions } from './propertyNaming';
 
 export function fromApiPropertiesObject(

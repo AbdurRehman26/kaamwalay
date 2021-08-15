@@ -3,7 +3,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js/pure';
 import React, { PropsWithChildren, useEffect, useState } from 'react';
-
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 export default function StripeContainer({ children }: PropsWithChildren<any>) {

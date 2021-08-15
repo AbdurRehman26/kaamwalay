@@ -5,7 +5,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import RobogradingAvatar from '@shared/assets/dummyAvatar.png';
 import Logo from '@shared/assets/robogradingLogo.png';
 

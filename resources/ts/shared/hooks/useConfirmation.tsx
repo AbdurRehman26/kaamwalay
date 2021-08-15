@@ -1,5 +1,4 @@
 import { useContext, useMemo } from 'react';
-
 import { Defer } from '../classes/Defer';
 import { ConfirmationDialogContext, ConfirmationDialogContextState } from '../contexts/ConfirmationDialogContext';
 

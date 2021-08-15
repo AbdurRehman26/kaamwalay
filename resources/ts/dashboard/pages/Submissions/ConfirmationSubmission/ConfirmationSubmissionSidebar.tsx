@@ -11,14 +11,15 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/Check';
 import React from 'react';
-import { useParams } from 'react-router-dom';
-
 import { useOrderQuery } from '@shared/hooks/useOrderQuery';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
-
 import { useConfirmationSubmissionSidebarStyles } from './style';
+
+interface ConfirmationSubmissionsSidebarProps {
+    orderId: number;
+}
 
 /**
  *
@@ -27,10 +28,9 @@ import { useConfirmationSubmissionSidebarStyles } from './style';
  * @date: 07.08.2021
  * @time: 00:11
  */
-export function ConfirmationSubmissionSidebar() {
+export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissionsSidebarProps) {
     const classes = useConfirmationSubmissionSidebarStyles();
-    const { id } = useParams<{ id: string }>();
-    const { isLoading, isError, data } = useOrderQuery(id);
+    const { isLoading, isError, data } = useOrderQuery({ resourceId: orderId });
 
     if (isLoading || isError) {
         return (

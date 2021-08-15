@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { useInjectable } from '../hooks/useInjectable';
 import { ConfigurationService } from '../services/ConfigurationService';
 

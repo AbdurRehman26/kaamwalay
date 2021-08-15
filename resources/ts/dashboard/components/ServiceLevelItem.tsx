@@ -4,13 +4,13 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
 import NumberFormat from 'react-number-format';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
     {
         root: {
+            width: '100%',
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',

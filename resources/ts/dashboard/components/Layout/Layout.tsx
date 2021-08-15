@@ -1,13 +1,10 @@
 import Container from '@material-ui/core/Container';
 import React, { Fragment, PropsWithChildren, useMemo } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
-
 import { ConfirmationDialog } from '@shared/components/ConfirmationDialog';
 import { useAuth } from '@shared/hooks/useAuth';
-
 import { LayoutFlags, LayoutOptions } from '@dashboard/components/Layout/LayoutOptions';
 import LayoutSidebar from '@dashboard/components/Layout/LayoutSidebar';
-
 import { ContentHolder } from './ContentHolder';
 import LayoutHeader from './LayoutHeader';
 import { Content, SidebarHolder } from './styles';

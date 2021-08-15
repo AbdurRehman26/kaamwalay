@@ -3,7 +3,6 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import { plainToClass } from 'class-transformer';
 import { Fragment, useCallback, useEffect, useState } from 'react';
-
 import { NotificationItem } from '@shared/classes/NotificationItem';
 import { NotificationType } from '@shared/constants/NotificationType';
 import { useNotifications } from '@shared/hooks/useNotifications';

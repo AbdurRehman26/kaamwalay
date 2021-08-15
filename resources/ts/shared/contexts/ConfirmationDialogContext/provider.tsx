@@ -1,5 +1,4 @@
 import React, { PropsWithChildren, useMemo, useReducer } from 'react';
-
 import { Defer } from '@shared/classes/Defer';
 import { ConfirmationDialogContext } from '@shared/contexts/ConfirmationDialogContext/context';
 import { confirmationDialogContextReducer } from '@shared/contexts/ConfirmationDialogContext/reducer';

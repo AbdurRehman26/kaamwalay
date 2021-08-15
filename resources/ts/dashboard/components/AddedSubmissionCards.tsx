@@ -12,7 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import React from 'react';
 import NumberFormat from 'react-number-format';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     changeSelectedCardQty,

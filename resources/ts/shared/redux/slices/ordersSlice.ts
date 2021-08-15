@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
-
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 

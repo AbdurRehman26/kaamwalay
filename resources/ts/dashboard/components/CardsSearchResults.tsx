@@ -3,9 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Hits, Stats } from 'react-instantsearch-dom';
-
 import CustomPagination from '@dashboard/components/CustomPagination';
-
 import SearchResultItemCard from './SearchResultItemCard';
 
 const useStyles = makeStyles({

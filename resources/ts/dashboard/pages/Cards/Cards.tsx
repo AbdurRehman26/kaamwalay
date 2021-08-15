@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-
 import { ListCards } from './ListCards';
 import { ViewCard } from './ViewCard';
 

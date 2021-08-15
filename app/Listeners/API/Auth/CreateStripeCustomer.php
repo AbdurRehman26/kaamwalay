@@ -3,8 +3,9 @@
 namespace App\Listeners\API\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CreateStripeCustomer
+class CreateStripeCustomer implements ShouldQueue
 {
     /**
      * Create the event listener.

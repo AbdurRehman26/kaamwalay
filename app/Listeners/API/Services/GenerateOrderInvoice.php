@@ -4,12 +4,16 @@ namespace App\Listeners\API\Services;
 
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\Payment\InvoiceService;
-use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
 class GenerateOrderInvoice implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public $tries = 5;
+
     public function __construct(public InvoiceService $invoiceService)
     {
         //
@@ -17,13 +21,14 @@ class GenerateOrderInvoice implements ShouldQueue
 
     public function handle(OrderPaid $event): void
     {
-        try {
-            $this->invoiceService->saveInvoicePDF($event->order);
-        } catch (Exception $e) {
-            Log::error($e->getMessage(), [
-                'Order ID' => $event->order->id,
-                'trace' => $e->getTraceAsString(),
-            ]);
-        }
+        $this->invoiceService->saveInvoicePDF($event->order);
+    }
+
+    public function failed(OrderPaid $event, $exception)
+    {
+        Log::error($exception->getMessage(), [
+            'Invoice generation failed. Order ID: ' => $event->order->id,
+            'trace' => $exception->getTraceAsString(),
+        ]);
     }
 }

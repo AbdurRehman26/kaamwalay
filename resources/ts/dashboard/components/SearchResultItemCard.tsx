@@ -1,6 +1,5 @@
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,16 +16,19 @@ const useStyles = makeStyles({
         width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingBottom: '8px',
-        paddingTop: '8px',
+        padding: '8px 12px',
         marginTop: '8px',
     },
     leftSide: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'flex-start',
     },
-    rightSide: {},
+    rightSide: {
+        display: 'flex',
+        alignItems: 'center',
+    },
     pictureContainer: {},
     cardMetadataContainer: {
         display: 'flex',
@@ -71,25 +73,34 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
     const dispatch = useAppDispatch();
     const { image, title, subtitle, id, addedMode } = props;
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-
-    function selectCard() {
-        dispatch(markCardAsSelected({ image, title, subtitle, id }));
-    }
-
-    function deselectCard() {
-        dispatch(markCardAsUnselected({ image, title, subtitle, id }));
-    }
-
     const isCardSelected = selectedCards.find((card: Record<string, any>) => card.id === id);
+
+    function handleSelectCard() {
+        const state = { image, title, subtitle, id };
+
+        if (addedMode) {
+            return;
+        }
+
+        if (isCardSelected) {
+            dispatch(markCardAsUnselected(state));
+            return;
+        }
+
+        dispatch(markCardAsSelected(state));
+    }
+
+    const RootComponent = addedMode ? 'div' : ButtonBase;
+
     return (
         <>
-            <ButtonBase className={classes.container} onClick={isCardSelected ? deselectCard : selectCard}>
+            <RootComponent className={classes.container} onClick={handleSelectCard}>
                 <div className={classes.leftSide}>
                     <div className={classes.pictureContainer}>
                         <img src={image} alt={'Charizard'} className={classes.cardImage} />
                     </div>
                     <div className={classes.cardMetadataContainer}>
-                        <Typography variant={'subtitle2'} className={classes.title}>
+                        <Typography variant={'subtitle2'} className={classes.title} align={'left'}>
                             {title}
                         </Typography>
 
@@ -100,26 +111,25 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                         <Typography
                             variant={'subtitle2'}
                             className={classes.subtitle}
+                            align={'left'}
                             dangerouslySetInnerHTML={{ __html: props.subtitle }}
                         />
                     </div>
                 </div>
                 {!addedMode ? (
-                    <ButtonBase className={classes.rightSide} onClick={isCardSelected ? deselectCard : selectCard}>
-                        <IconButton aria-label="delete">
-                            {isCardSelected ? (
-                                <Tooltip title="Remove">
-                                    <CheckCircleIcon htmlColor={'#20BFB8'} />
-                                </Tooltip>
-                            ) : (
-                                <Tooltip title="Add">
-                                    <AddCircleOutlineIcon htmlColor={'#20BFB8'} />
-                                </Tooltip>
-                            )}
-                        </IconButton>
-                    </ButtonBase>
+                    <div className={classes.rightSide}>
+                        {isCardSelected ? (
+                            <Tooltip title="Remove">
+                                <CheckCircleIcon htmlColor={'#20BFB8'} />
+                            </Tooltip>
+                        ) : (
+                            <Tooltip title="Add">
+                                <AddCircleOutlineIcon htmlColor={'#20BFB8'} />
+                            </Tooltip>
+                        )}
+                    </div>
                 ) : null}
-            </ButtonBase>
+            </RootComponent>
             {!addedMode ? <Divider light /> : null}
         </>
     );

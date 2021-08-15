@@ -11,7 +11,7 @@
         "php": "^8.0",
         "algolia/scout-extended": "^1.20",
         "barryvdh/laravel-dompdf": "^0.9.0",
-        "codeitnowin/barcode": "^3.0",
+        "codeitnowin/barcode": "dev-master",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.3",
@@ -73,5 +73,11 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/alindesign/barcode-generator"
+        }
+    ]
 }

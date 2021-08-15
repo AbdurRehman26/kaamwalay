@@ -7,7 +7,6 @@ import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
 import { transparentize } from 'polished';
 import React, { HTMLAttributes, useCallback, useMemo, useState } from 'react';
-
 import { cx } from '@shared/lib/utils/cx';
 
 interface FormInputProps extends HTMLAttributes<HTMLInputElement> {

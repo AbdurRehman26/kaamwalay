@@ -1,5 +1,4 @@
 import { inject } from 'inversify';
-
 import { InjectableMetaOptions, ReflectParamsType } from '@shared/constants/ReflectMetadata';
 
 /**

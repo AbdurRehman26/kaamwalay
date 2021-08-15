@@ -1,11 +1,9 @@
 import { AxiosError } from 'axios';
-
 import { NotificationItem } from '@shared/classes/NotificationItem';
 import { NotificationType } from '@shared/constants/NotificationType';
 import { Injectable } from '@shared/decorators/Injectable';
 import { dequeueNotification, enqueueNotification } from '@shared/redux/slices/notificationsSlice';
 import { GlobalDispatch } from '@shared/redux/store';
-
 import { Exception } from '../exceptions/Exception';
 import { getErrorMessage } from '../lib/api/getErrorMessage';
 import { getErrorsBagArray } from '../lib/api/getErrorsBagArray';

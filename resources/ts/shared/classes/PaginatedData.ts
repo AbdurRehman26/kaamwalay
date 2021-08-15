@@ -1,5 +1,4 @@
 import { plainToClass, Type } from 'class-transformer';
-
 import { PaginationLinks } from '@shared/classes/PaginationLinks';
 import { PaginationMeta } from '@shared/classes/PaginationMeta';
 

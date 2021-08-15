@@ -1,5 +1,4 @@
 import { plainToClass } from 'class-transformer';
-
 import { BindParamsDecoratorOptions, ReflectParamsType } from '@shared/constants/ReflectMetadata';
 
 export function bindParams(args: any[], { target, propertyKey }: Record<string, any>) {

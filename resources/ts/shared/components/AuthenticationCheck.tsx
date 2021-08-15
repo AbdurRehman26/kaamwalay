@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-
+import { useEffect } from 'react';
 import { useAuth } from '@shared/hooks/useAuth';
 
 /**
@@ -11,9 +10,13 @@ import { useAuth } from '@shared/hooks/useAuth';
  */
 export function AuthenticationCheck() {
     const { authCheck } = useAuth();
-    useEffect(() => {
-        authCheck();
-    }, []);
+    useEffect(
+        () => {
+            authCheck();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
     return null;
 }
 

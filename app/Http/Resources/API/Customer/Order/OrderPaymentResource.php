@@ -14,9 +14,14 @@ class OrderPaymentResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (! $this->response) {
+            return [];
+        }
+
         if ($this->order->paymentMethod->code === 'paypal') {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
         }
+
         $providerResponse = json_decode($this->response);
 
         if (! empty($providerResponse->card)) {
@@ -35,7 +40,7 @@ class OrderPaymentResource extends JsonResource
         ];
     }
 
-    public function paypalData(array $response): array
+    protected function paypalData(array $response): array
     {
         return [
             'payer' => [

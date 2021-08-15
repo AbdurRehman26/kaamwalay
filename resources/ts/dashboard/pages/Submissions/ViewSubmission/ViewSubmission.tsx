@@ -4,9 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useParams } from 'react-router-dom';
-
 import { useOrderQuery } from '@shared/hooks/useOrderQuery';
-
 import { ViewSubmissionBilling } from './ViewSubmissionBilling';
 import { ViewSubmissionDetails } from './ViewSubmissionDetails';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
@@ -21,7 +19,7 @@ import { ViewSubmissionStatus } from './ViewSubmissionStatus';
  */
 export function ViewSubmission() {
     const { id } = useParams<{ id: string }>();
-    const { isLoading, isError, data } = useOrderQuery(id);
+    const { isLoading, isError, data } = useOrderQuery({ resourceId: id });
 
     if (isLoading || isError) {
         return (

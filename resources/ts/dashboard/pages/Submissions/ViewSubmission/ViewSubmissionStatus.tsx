@@ -2,9 +2,7 @@ import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import React, { useMemo } from 'react';
-
 import { cx } from '@shared/lib/utils/cx';
-
 import { ViewSubmissionStatusBar } from './ViewSubmissionStatusBar';
 import { SubmissionDetails, SubmissionSteps } from './data';
 import { useViewSubmissionStatusStyles } from './styles';

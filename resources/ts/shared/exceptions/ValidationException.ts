@@ -1,5 +1,4 @@
 import { ValidationError } from 'class-validator';
-
 import { Exception } from './Exception';
 
 export class ValidationException extends Exception {

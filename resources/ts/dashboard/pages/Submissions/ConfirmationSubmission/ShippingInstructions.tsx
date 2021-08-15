@@ -1,8 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-
 import { font } from '@shared/styles/utils';
-
 import { SectionHeader } from './SectionHeader';
 
 /**

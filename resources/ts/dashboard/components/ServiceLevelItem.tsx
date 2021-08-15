@@ -1,15 +1,16 @@
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Radio, { RadioProps } from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import React, { HTMLAttributes, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import NumberFormat from 'react-number-format';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
     {
         root: {
+            width: '100%',
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
@@ -110,10 +111,10 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
 
     const handleSetServiceLevel = useCallback(() => {
         dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount }));
-    }, []);
+    }, [dispatch, id, maxProtectionAmount, price, turnaround, type]);
 
     return (
-        <div onClick={handleSetServiceLevel} className={classes.root}>
+        <ButtonBase onClick={handleSetServiceLevel} className={classes.root}>
             <div className={classes.leftSide}>
                 <div className={classes.radioBtnContainer}>
                     <GreenRadio checked={currentSelectedLevel?.id === id} />
@@ -153,7 +154,7 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                     className={classes.turnaround}
                 >{`${turnaround} Turnaround`}</Typography>
             </div>
-        </div>
+        </ButtonBase>
     );
 }
 

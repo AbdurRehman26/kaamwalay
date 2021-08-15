@@ -53,47 +53,47 @@ class Order extends Model
         'arrived_at' => 'date',
     ];
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class);
     }
 
-    public function paymentPlan()
+    public function paymentPlan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\PaymentPlan::class);
     }
 
-    public function orderStatus()
+    public function orderStatus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\OrderStatus::class);
     }
 
-    public function shippingAddress()
+    public function shippingAddress(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\OrderAddress::class, 'shipping_order_address_id');
     }
 
-    public function billingAddress()
+    public function billingAddress(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\OrderAddress::class, 'billing_order_address_id');
     }
 
-    public function paymentMethod()
+    public function paymentMethod(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\PaymentMethod::class);
     }
 
-    public function shippingMethod()
+    public function shippingMethod(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\ShippingMethod::class);
     }
 
-    public function invoice()
+    public function invoice(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\Invoice::class);
     }
 
-    public function orderItems()
+    public function orderItems(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(OrderItem::class);
     }

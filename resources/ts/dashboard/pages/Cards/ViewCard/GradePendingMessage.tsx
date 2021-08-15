@@ -1,7 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import { styled } from '@material-ui/core/styles';
 import React from 'react';
-
 import { font } from '@shared/styles/utils';
 
 const Root = styled('div')(

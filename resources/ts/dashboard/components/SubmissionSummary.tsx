@@ -7,13 +7,11 @@ import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
-
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
-
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 
@@ -188,12 +186,13 @@ function SubmissionSummary() {
             setIsStripePaymentLoading(true);
 
             // Try to charge the customer
-            const stripePaymentIntent = await endpoint.post('', {
+            await endpoint.post('', {
                 payment_method_id: stripePaymentMethod,
             });
 
             setIsStripePaymentLoading(false);
             dispatch(clearSubmissionState());
+            dispatch(invalidateOrders());
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err) {
             // Charge was failed by back-end so we try to charge him on the front-end
@@ -225,6 +224,7 @@ function SubmissionSummary() {
                     verifyOrderEndpoint.post('').then((r) => {
                         setIsStripePaymentLoading(false);
                         dispatch(clearSubmissionState());
+                        dispatch(invalidateOrders());
                         history.push(`/submissions/${orderID}/confirmation`);
                     });
                 }
@@ -263,7 +263,7 @@ function SubmissionSummary() {
                     </div>
                 ) : null}
 
-                {currentStep == 4 ? (
+                {currentStep === 4 ? (
                     <>
                         <Divider light />
                         <div className={classes.rowsContainer}>
@@ -412,7 +412,7 @@ function SubmissionSummary() {
                     </>
                 ) : null}
 
-                {currentStep == 2 || currentStep == 3 ? (
+                {currentStep === 2 || currentStep === 3 ? (
                     <>
                         <div className={classes.rowsContainer}>
                             <div className={classes.row}>
@@ -455,7 +455,7 @@ function SubmissionSummary() {
                     </>
                 ) : null}
 
-                {currentStep == 2 || currentStep == 3 ? (
+                {currentStep === 2 || currentStep === 3 ? (
                     <>
                         <div className={classes.rowsContainer}>
                             <div className={classes.row}>

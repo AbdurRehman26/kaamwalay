@@ -1,6 +1,4 @@
-import { Expose, Type } from 'class-transformer';
-import { ExposeOptions } from 'class-transformer/types/interfaces';
-import { TypeOptions } from 'class-transformer/types/interfaces/decorator-options/type-options.interface';
+import { Expose, ExposeOptions, Type, TypeOptions } from 'class-transformer';
 
 interface Options extends ExposeOptions {
     type?: boolean | (() => any);

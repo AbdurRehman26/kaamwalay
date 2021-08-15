@@ -1,7 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-
 import { useAppSelector } from '@admin/redux/hooks';
-
 import LayoutHeader from './LayoutHeader';
 import LayoutSidebar from './LayoutSidebar';
 import { Content, SidebarHolder, useContentHolderStyles } from './styles';

@@ -1,5 +1,4 @@
 import { Moment } from 'moment';
-
 import { DateField } from '../decorators/DateField';
 
 export abstract class Entity<T extends string | number = number> {

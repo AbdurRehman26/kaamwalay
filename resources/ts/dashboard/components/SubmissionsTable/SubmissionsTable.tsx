@@ -7,16 +7,12 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useListOrdersQuery } from '@shared/hooks/useOrdersQuery';
-
 import { SubmissionTableRow } from './SubmissionTableRow';
 import { Table, TablePagination } from './styles';
 
-interface SubmissionsTableProps {}
-
-export function SubmissionsTable({}: SubmissionsTableProps) {
+export function SubmissionsTable() {
     const { isLoading, isError, data, paginationProps } = useListOrdersQuery();
 
     if (isLoading || isError) {
@@ -38,6 +34,7 @@ export function SubmissionsTable({}: SubmissionsTableProps) {
                             <TableCell variant={'head'}>Service Level</TableCell>
                             <TableCell variant={'head'}># Cards</TableCell>
                             <TableCell variant={'head'}>Status</TableCell>
+                            <TableCell variant={'head'} />
                         </TableRow>
                     </TableHead>
 
@@ -53,6 +50,8 @@ export function SubmissionsTable({}: SubmissionsTableProps) {
                                 status={data.status}
                                 datePlaced={data.createdAt}
                                 dateArrived={data.arrivedAt}
+                                invoice={data.invoice?.path}
+                                invoiceNumber={data.invoice?.invoiceNumber}
                             />
                         ))}
                     </TableBody>

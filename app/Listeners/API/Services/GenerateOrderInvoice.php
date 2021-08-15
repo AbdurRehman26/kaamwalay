@@ -5,9 +5,10 @@ namespace App\Listeners\API\Services;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\Payment\InvoiceService;
 use Exception;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
-class GenerateOrderInvoice
+class GenerateOrderInvoice implements ShouldQueue
 {
     public function __construct(public InvoiceService $invoiceService)
     {

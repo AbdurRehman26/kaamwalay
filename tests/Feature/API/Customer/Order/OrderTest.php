@@ -91,7 +91,19 @@ class OrderTest extends TestCase
 
         $response->assertStatus(201);
         $response->assertJsonStructure([
-            'data' => ['id', 'order_number'],
+            'data' => [
+                'id',
+                'order_number',
+                'order_items',
+                'payment_plan',
+                'order_payment',
+                'billing_address',
+                'shipping_address',
+                'shipping_method',
+                'service_fee',
+                'shipping_fee',
+                'grand_total',
+            ],
         ]);
     }
 

@@ -24,3 +24,4 @@ draft.yaml
 /resources/apidocs/output
 /public/apidocs
 /public/coverage
+.eslintcache

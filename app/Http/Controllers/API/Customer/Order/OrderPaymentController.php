@@ -16,7 +16,7 @@ class OrderPaymentController extends Controller
     {
     }
 
-    public function pay(Order $order)
+    public function pay(Order $order): JsonResponse
     {
         $this->authorize('view', $order);
 
@@ -24,9 +24,7 @@ class OrderPaymentController extends Controller
 
         $response = $this->paymentService->charge($order);
 
-        if (! empty($response['success'])) {
-            $this->paymentService->updateOrderStatus($order);
-
+        if (! empty($response['data'])) {
             return new JsonResponse($response);
         }
 

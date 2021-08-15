@@ -34,6 +34,7 @@ export function SubmissionsTable() {
                             <TableCell variant={'head'}>Service Level</TableCell>
                             <TableCell variant={'head'}># Cards</TableCell>
                             <TableCell variant={'head'}>Status</TableCell>
+                            <TableCell variant={'head'} />
                         </TableRow>
                     </TableHead>
 
@@ -49,6 +50,8 @@ export function SubmissionsTable() {
                                 status={data.status}
                                 datePlaced={data.createdAt}
                                 dateArrived={data.arrivedAt}
+                                invoice={data.invoice?.path}
+                                invoiceNumber={data.invoice?.invoiceNumber}
                             />
                         ))}
                     </TableBody>

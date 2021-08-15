@@ -4,11 +4,10 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
@@ -116,7 +115,8 @@ const useStyles = makeStyles({
     },
 });
 
-let schema = yup.object().shape({
+// TODO: Fix duplication
+const schema = yup.object().shape({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
     address: yup.string().required(),
@@ -150,57 +150,61 @@ export function SubmissionStep03Content() {
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
-    useEffect(() => {
-        if (existingAddresses.length === 0) {
-            schema
-                .isValid({
-                    firstName,
-                    lastName,
-                    address,
-                    flat,
-                    city,
-                    state,
-                    zipCode,
-                    phoneNumber,
-                })
-                .then((valid) => {
-                    dispatch(setIsNextDisabled(!valid));
-                });
-        }
+    useEffect(
+        () => {
+            if (existingAddresses.length === 0) {
+                schema
+                    .isValid({
+                        firstName,
+                        lastName,
+                        address,
+                        flat,
+                        city,
+                        state,
+                        zipCode,
+                        phoneNumber,
+                    })
+                    .then((valid) => {
+                        dispatch(setIsNextDisabled(!valid));
+                    });
+            }
 
-        if (existingAddresses.length !== 0 && useCustomShippingAddress) {
-            schema
-                .isValid({
-                    firstName,
-                    lastName,
-                    address,
-                    flat,
-                    city,
-                    state,
-                    zipCode,
-                    phoneNumber,
-                })
-                .then((valid) => {
-                    dispatch(setIsNextDisabled(!valid));
-                });
-        }
+            if (existingAddresses.length !== 0 && useCustomShippingAddress) {
+                schema
+                    .isValid({
+                        firstName,
+                        lastName,
+                        address,
+                        flat,
+                        city,
+                        state,
+                        zipCode,
+                        phoneNumber,
+                    })
+                    .then((valid) => {
+                        dispatch(setIsNextDisabled(!valid));
+                    });
+            }
 
-        if (existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddressId !== -1) {
-            dispatch(setIsNextDisabled(false));
-        }
-    }, [
-        firstName,
-        lastName,
-        address,
-        flat,
-        city,
-        state,
-        zipCode,
-        phoneNumber,
-        useCustomShippingAddress,
-        selectedExistingAddressId,
-        existingAddresses,
-    ]);
+            if (existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddressId !== -1) {
+                dispatch(setIsNextDisabled(false));
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [
+            firstName,
+            lastName,
+            address,
+            flat,
+            city,
+            state,
+            zipCode,
+            phoneNumber,
+            useCustomShippingAddress,
+            selectedExistingAddressId,
+            existingAddresses,
+        ],
+    );
 
     function onSaveForLater() {
         dispatch(setSaveShippingAddress(!saveForLater));
@@ -221,7 +225,7 @@ export function SubmissionStep03Content() {
     }
 
     function updateShippingState(stateId: any) {
-        const stateLookup = availableStates.find((state) => state.id == stateId);
+        const stateLookup = availableStates.find((state) => state.id === stateId);
         if (stateLookup) {
             dispatch(
                 updateShippingAddressField({
@@ -232,30 +236,38 @@ export function SubmissionStep03Content() {
         }
     }
 
-    useEffect(() => {
-        dispatch(getStatesList());
-        // If the user has existing addresses but none of them is selected and he didn't pick a custom address either
-        // we'll check the first address in the list
-        if (existingAddresses.length !== 0 && selectedExistingAddressId == -1 && !useCustomShippingAddress) {
-            dispatch(setSelectedExistingAddress(existingAddresses[0].id));
-        }
-    }, [dispatch]);
-
-    useEffect(() => {
-        // Did the user check the 'Use custom address" checkbox?
-        // If he did select it, we'll enable all the text fields and clear everything about the existing selected address
-        // If he didn't check the checkbox and he has multiple saved addresses we'll disable all the inputs until he presses on the checkbox
-        // We only disable the inputs if the user has existing addresses so we don't stop him from adding an address as a first time user, when he has nothing.
-
-        if (useCustomShippingAddress) {
-            dispatch(setDisableAllShippingInputs(false));
-            dispatch(resetSelectedExistingAddress());
-        } else {
-            if (existingAddresses.length !== 0) {
-                dispatch(setDisableAllShippingInputs(true));
+    useEffect(
+        () => {
+            dispatch(getStatesList());
+            // If the user has existing addresses but none of them is selected and he didn't pick a custom address either
+            // we'll check the first address in the list
+            if (existingAddresses.length !== 0 && selectedExistingAddressId === -1 && !useCustomShippingAddress) {
+                dispatch(setSelectedExistingAddress(existingAddresses[0].id));
             }
-        }
-    }, [disableAllInputs, useCustomShippingAddress, selectedExistingAddressId]);
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [dispatch],
+    );
+
+    useEffect(
+        () => {
+            // Did the user check the 'Use custom address" checkbox?
+            // If he did select it, we'll enable all the text fields and clear everything about the existing selected address
+            // If he didn't check the checkbox and he has multiple saved addresses we'll disable all the inputs until he presses on the checkbox
+            // We only disable the inputs if the user has existing addresses so we don't stop him from adding an address as a first time user, when he has nothing.
+
+            if (useCustomShippingAddress) {
+                dispatch(setDisableAllShippingInputs(false));
+                dispatch(resetSelectedExistingAddress());
+            } else {
+                if (existingAddresses.length !== 0) {
+                    dispatch(setDisableAllShippingInputs(true));
+                }
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [disableAllInputs, useCustomShippingAddress, selectedExistingAddressId],
+    );
 
     return (
         <Container>

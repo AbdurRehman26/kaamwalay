@@ -24,9 +24,10 @@ export function ProtectedRoute({ redirectRoute, ...rest }: ProtectedRouteProps) 
         if (!authenticated && !checking) {
             window.location.replace(redirectRoute ?? AuthenticationEnum.SignInRoute);
         }
-    }, [authenticated, checking]);
+    }, [authenticated, checking, redirectRoute]);
 
     if (checking || !user || !authenticated) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { component, render, children, ...partial } = rest;
         return (
             <Route {...partial}>

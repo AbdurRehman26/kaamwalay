@@ -51,7 +51,7 @@ export function ForgotPassword() {
 
             setConfirmationEmail(email);
         },
-        [forgotPassword],
+        [forgotPassword, notifications],
     );
 
     return (

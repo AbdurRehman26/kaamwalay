@@ -62,7 +62,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             <TableCell>{`${formatCurrency(serviceLevel)} / Card`}</TableCell>
             <TableCell>{cardsNumber}</TableCell>
             <TableCell>{status}</TableCell>
-            {/*<TableCell align={'right'}>*/}
+            {/* <TableCell align={'right'}> */}
             {/*    <IconButton onClick={handleClickOptions}>*/}
             {/*        <MoreIcon />*/}
             {/*    </IconButton>*/}
@@ -72,7 +72,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             {/*        <MenuItem onClick={handleOption(Options.Edit)}>Edit</MenuItem>*/}
             {/*        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>*/}
             {/*    </Menu>*/}
-            {/*</TableCell>*/}
+            {/* </TableCell> */}
         </TableRow>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useInjectable } from '../hooks/useInjectable';
 import { ConfigurationService } from '../services/ConfigurationService';
@@ -12,10 +12,14 @@ import { ConfigurationService } from '../services/ConfigurationService';
  */
 export function ConfigurationLoad() {
     const configurationService = useInjectable(ConfigurationService);
-    useEffect(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        configurationService.load();
-    }, []);
+    useEffect(
+        () => {
+            // noinspection JSIgnoredPromiseFromCall
+            configurationService.load();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
     return null;
 }
 

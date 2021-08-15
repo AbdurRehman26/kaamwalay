@@ -108,7 +108,7 @@ export function NewSubmission() {
                 dispatch(setIsNextDisabled(false));
             }
         }
-    }, [selectedCards, currentStep]);
+    }, [selectedCards, currentStep, dispatch]);
 
     return (
         <>

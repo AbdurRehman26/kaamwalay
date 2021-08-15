@@ -119,10 +119,14 @@ export function PaymentForm() {
         }
     };
 
-    useEffect(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        saveExistingStripeCards();
-    }, []);
+    useEffect(
+        () => {
+            // noinspection JSIgnoredPromiseFromCall
+            saveExistingStripeCards();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     if (isCardsListLoading) {
         return (

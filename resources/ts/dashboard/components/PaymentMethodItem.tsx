@@ -1,13 +1,14 @@
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Radio, { RadioProps } from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
 
 import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
 
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setServiceLevel, SubmissionService, updatePaymentMethodId } from '../redux/slices/newSubmissionSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { updatePaymentMethodId } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
     {
@@ -119,7 +120,7 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
     }
 
     return (
-        <div className={classes.root} onClick={handleOnChange}>
+        <ButtonBase className={classes.root} onClick={handleOnChange}>
             <div className={classes.leftSide}>
                 <div className={classes.radioBtnContainer}>
                     <GreenRadio checked={isSelected} />
@@ -133,7 +134,7 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
                     </div>
                 ) : null}
             </div>
-        </div>
+        </ButtonBase>
     );
 }
 

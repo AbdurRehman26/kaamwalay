@@ -154,9 +154,9 @@ export function ConfirmationSubmissionSidebar() {
                                     <Typography variant={'body2'}>
                                         <Box component={'span'} display={'inline-flex'} alignItems={'center'}>
                                             Insured Shipping:
-                                            {/*<Tooltip title={'Insured Shipping'} placement={'top'}>*/}
-                                            {/*    <InfoIcon color={'disabled'} className={classes.tooltipIcon} />*/}
-                                            {/*</Tooltip>*/}
+                                            {/* <Tooltip title={'Insured Shipping'} placement={'top'}> */}
+                                            {/*    <InfoIcon color={'disabled'} className={classes.tooltipIcon} /> */}
+                                            {/* </Tooltip> */}
                                         </Box>
                                     </Typography>
                                 </TableCell>

@@ -25,18 +25,22 @@ export function useShowQuery<
     const isLoading = useSharedSelector((state) => selector(state as any).isLoading[resourceId]);
     const entities = useSharedSelector((state) => selector(state as any).entities);
 
-    const data = useMemo(() => plainToClass(entity, entities[resourceId as any]), [entities, entity]);
+    const data = useMemo(() => plainToClass(entity, entities[resourceId as any]), [entities, entity, resourceId]);
 
     const request = useCallback(
         function request(requestConfig?: AxiosRequestConfig) {
             dispatch(action([resourceId, apiService.mergeConfig(config, requestConfig)]));
         },
-        [config, action],
+        [dispatch, action, resourceId, apiService, config],
     );
 
-    useEffect(() => {
-        request();
-    }, []);
+    useEffect(
+        () => {
+            request();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     return useMemo(
         () => ({

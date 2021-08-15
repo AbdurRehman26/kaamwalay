@@ -62,6 +62,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     break;
                 case Options.Download:
                     downloadFromUrl(invoice!, `robograding-${invoiceNumber}.pdf`);
+                    break;
             }
         },
         [handleCloseOptions, history, id, confirm, invoice, invoiceNumber],

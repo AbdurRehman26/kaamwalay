@@ -27,8 +27,9 @@ $ yarn install && yarn setup # it will install the dependencies and build the ap
 # Migrations and Seeders
 $ ./vendor/bin/sail artisan migrate --seed
 
-# Add host entry to be able to access the app via robograding.test domain
-127.0.0.1 robograding.test
+# Add host entries to your hosts file.
+127.0.0.1 robograding.test  # Application domain
+127.0.0.1 minio             # Minio service host entry
 
 # Since we use Laravel Sail for local development environment, it is recommended to add this to your bash aliases
 alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
@@ -48,7 +49,7 @@ $ yarn start
 $ yarn admin:start        # or BUILD_PRESET=admin yarn start
 
 # 3. Auth application
-$ yarn auth:start        # or BUILD_PRESET=auth yarn start
+$ yarn auth:start         # or BUILD_PRESET=auth yarn start
 ```
 **Note:** Since the frontend it's modular you don't have to start all the application at one, you can start only the
 one you are working on.
@@ -75,23 +76,23 @@ one you are working on.
 -   Once tests are passing and code styling is fixed, then you can request review on your PR.
 
 #### File Storage
-For cloud storage on local, we use MinIO. MinIO provides an S3 compatible API that you may use to develop locally using Laravel's s3 file storage driver. 
-It is already setup with Sail. If you need to see uploaded files you can visit:
+Sail comes already with MinIo which is a s3 compliant service, and it's already configured with the docker compose.
 
+To login to the main minio console you can go to [http://localhost:8900](http://localhost:8900), there you will need to
+add some credentials, credentials which are based on env values.
 ```
-http://robograding.test:8900
-Username: sail 
-Password: password
+username: ${AWS_ACCESS_KEY_ID}          # Default to sail
+password: ${AWS_SECRET_ACCESS_KEY}      # Defualt to password
 ```
 
 #### API Documentation
 
-For API documentation, we are using apiDocjs. Once you have written the documentation source files, you can use this
+For API documentation, we are using apiDoc. Once you have written the documentation source files, you can use this
 command to regenerate it:
 
 ```bash
-# Change project's absolute path accordingly
 $ yarn apidoc:start # Build and start the server
+$ yarn apidoc:watch # If you want to build on change
 ```
 
 ### Frontend

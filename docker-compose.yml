@@ -69,11 +69,11 @@ services:
     minio:
         image: 'minio/minio:latest'
         ports:
-            - '${FORWARD_MINIO_PORT:-9090}:9000'
+            - '${FORWARD_MINIO_PORT:-9000}:9000'
             - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
         environment:
-            MINIO_ROOT_USER: 'sail'
-            MINIO_ROOT_PASSWORD: 'password'
+            MINIO_ROOT_USER: '${AWS_ACCESS_KEY_ID:-sail}'
+            MINIO_ROOT_PASSWORD: '${AWS_SECRET_ACCESS_KEY:-password}'
         volumes:
             - 'sailminio:/data/minio'
         networks:
@@ -83,6 +83,19 @@ services:
             test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
             retries: 3
             timeout: 5s
+    minioBucket:
+        image: minio/mc
+        networks:
+            - sail
+        depends_on:
+            - minio
+        entrypoint: >
+            /bin/sh -c "
+            /usr/bin/mc config host add minio http://minio:9000 '${AWS_ACCESS_KEY_ID:-sail}' '${AWS_SECRET_ACCESS_KEY:-password}';
+            /usr/bin/mc mb minio/${AWS_BUCKET:-robograding};
+            /usr/bin/mc policy set download minio/${AWS_BUCKET:-robograding};
+            exit 0;
+            "
     mailhog:
         image: 'mailhog/mailhog:latest'
         ports:

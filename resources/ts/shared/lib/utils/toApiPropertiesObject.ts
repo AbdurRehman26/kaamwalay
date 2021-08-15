@@ -1,5 +1,4 @@
 import { snakeCase } from 'lodash';
-
 import { propertyNaming, PropertyNamingOptions } from './propertyNaming';
 
 export function toApiPropertiesObject(

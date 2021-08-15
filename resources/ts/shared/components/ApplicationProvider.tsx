@@ -3,12 +3,10 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import React, { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
-
 import AuthenticationCheck from '@shared/components/AuthenticationCheck';
 import { NotificationsContainer } from '@shared/components/NotificationsContainer';
 import { ConfirmationDialogProvider } from '@shared/contexts/ConfirmationDialogContext';
 import { materialUiTheme } from '@shared/styles/theme';
-
 import { ConfigurationLoad } from './ConfigurationLoad';
 import { SplashScreen } from './SplashScreen';
 

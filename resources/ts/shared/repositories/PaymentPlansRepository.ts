@@ -1,6 +1,5 @@
 import { Injectable } from '@shared/decorators/Injectable';
 import { PaymentPlanEntity } from '@shared/entities/PaymentPlanEntity';
-
 import { Repository } from './Repository';
 
 @Injectable('OrdersPaymentPlansRepository')

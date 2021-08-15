@@ -8,10 +8,8 @@ import { styled } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 import SortIcon from '@material-ui/icons/Sort';
 import React, { useCallback, useState } from 'react';
-
 import cardPreview from '@shared/assets/cardPreview.png';
 import { font } from '@shared/styles/utils';
-
 import { CardPreview } from '@dashboard/components/CardPreview';
 import { ListHeader } from '@dashboard/components/ListHeader';
 

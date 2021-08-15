@@ -1,5 +1,4 @@
 import { Type } from 'class-transformer';
-
 import { PaginationLink } from '@shared/classes/PaginationLink';
 import { Field } from '@shared/decorators/Field';
 

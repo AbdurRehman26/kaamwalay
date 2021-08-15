@@ -5,9 +5,7 @@ import React, { useCallback, useState } from 'react';
 import Lightbox from 'react-awesome-lightbox';
 import 'react-awesome-lightbox/build/style.css';
 import Slider from 'react-slick';
-
 import cardPreview from '@shared/assets/cardPreview.png';
-
 import { CardGradeImage } from './CardGradeImage';
 
 /**

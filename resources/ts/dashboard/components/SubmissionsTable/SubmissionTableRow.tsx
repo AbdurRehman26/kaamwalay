@@ -1,7 +1,6 @@
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Moment } from 'moment';
-
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 
@@ -62,7 +61,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             <TableCell>{`${formatCurrency(serviceLevel)} / Card`}</TableCell>
             <TableCell>{cardsNumber}</TableCell>
             <TableCell>{status}</TableCell>
-            {/*<TableCell align={'right'}>*/}
+            {/* <TableCell align={'right'}> */}
             {/*    <IconButton onClick={handleClickOptions}>*/}
             {/*        <MoreIcon />*/}
             {/*    </IconButton>*/}
@@ -72,7 +71,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             {/*        <MenuItem onClick={handleOption(Options.Edit)}>Edit</MenuItem>*/}
             {/*        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>*/}
             {/*    </Menu>*/}
-            {/*</TableCell>*/}
+            {/* </TableCell> */}
         </TableRow>
     );
 }

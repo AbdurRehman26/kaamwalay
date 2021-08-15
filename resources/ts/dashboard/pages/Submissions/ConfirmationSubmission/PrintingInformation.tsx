@@ -1,7 +1,10 @@
 import React from 'react';
-
 import { PrintPackingSlip } from './PrintPackingSlip';
 import { SectionHeader } from './SectionHeader';
+
+interface PrintingInformationProps {
+    orderId: number;
+}
 
 /**
  *
@@ -10,7 +13,7 @@ import { SectionHeader } from './SectionHeader';
  * @date: 07.08.2021
  * @time: 00:21
  */
-export function PrintingInformation() {
+export function PrintingInformation({ orderId }: PrintingInformationProps) {
     return (
         <>
             <SectionHeader order={1} headline={'Print Packing Slip'}>
@@ -18,7 +21,7 @@ export function PrintingInformation() {
                 you added to this submission. You can also save the packing slip or find it in the Submission Details
                 Page.
             </SectionHeader>
-            <PrintPackingSlip />
+            <PrintPackingSlip orderId={orderId} />
         </>
     );
 }

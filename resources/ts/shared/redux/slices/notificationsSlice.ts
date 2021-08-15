@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
-
 import { NotificationItem } from '@shared/classes/NotificationItem';
 
 interface StateType {

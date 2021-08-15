@@ -1,5 +1,4 @@
 import { Injectable } from '@shared/decorators/Injectable';
-
 import { ConfigurationEntity } from '../entities/ConfigurationEntity';
 import { Repository } from './Repository';
 

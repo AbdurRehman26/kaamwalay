@@ -1,5 +1,4 @@
 import { SerializedError } from '@reduxjs/toolkit';
-
 import { PaginatedData } from '../classes/PaginatedData';
 
 export interface APIState<T> {

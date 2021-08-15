@@ -1,7 +1,6 @@
 import { BaseQueryFn } from '@reduxjs/toolkit/query';
 import { AxiosError } from 'axios';
 import { ClassConstructor } from 'class-transformer';
-
 import { RepositoryKeys } from '../../hooks/useRepositoryMethod';
 import { app } from '../../lib/app';
 import { Repository } from '../../repositories/Repository';

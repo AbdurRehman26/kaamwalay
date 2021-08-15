@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import React, { PropsWithChildren, useMemo } from 'react';
-
 import { font } from '@shared/styles/utils';
 
 interface ListHeaderProps {

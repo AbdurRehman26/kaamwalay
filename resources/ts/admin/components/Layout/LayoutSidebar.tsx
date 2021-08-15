@@ -5,9 +5,7 @@ import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import StyleIcon from '@material-ui/icons/Style';
 import React from 'react';
-
 import { useAppSelector } from '@admin/redux/hooks';
-
 import LayoutSidebarItem from './LayoutSidebarItem';
 
 const useStyles = makeStyles(

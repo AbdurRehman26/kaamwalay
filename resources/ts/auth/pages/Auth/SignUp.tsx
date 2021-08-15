@@ -6,11 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
 import { font } from '@shared/styles/utils';
-
 import { FormInput } from './FormInput';
 import SubmitButton from './SubmitButton';
 import { useStyles } from './style';

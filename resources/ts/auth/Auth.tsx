@@ -1,9 +1,7 @@
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
-
 import GuestOnlyRoute from '@shared/components/GuestOnlyRoute';
-
 import { AuthBanner } from './components/AuthBanner';
 import { Page } from './components/Page';
 import { ForgotPassword, ResetPassword, SignIn, SignUp } from './pages/Auth';

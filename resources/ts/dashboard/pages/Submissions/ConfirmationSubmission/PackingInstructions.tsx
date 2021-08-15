@@ -1,7 +1,5 @@
 import React from 'react';
-
 import packingInstructionsPreview from '@shared/assets/packingInstructionsPreview.jpg';
-
 import { SectionHeader } from './SectionHeader';
 
 /**

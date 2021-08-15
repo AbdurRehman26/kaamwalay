@@ -3,7 +3,6 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { PropsWithChildren } from 'react';
-
 import { ReactComponent as LogoPoweredByAgs } from '@shared/assets/logoPoweredByAgs.svg';
 import robogradingBanner from '@shared/assets/robogradingBanner.png';
 

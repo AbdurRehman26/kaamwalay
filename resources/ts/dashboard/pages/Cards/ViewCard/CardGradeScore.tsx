@@ -3,9 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-
 import { font } from '@shared/styles/utils';
-
 import GradeScore from './GradeScore';
 
 const useStyles = makeStyles(

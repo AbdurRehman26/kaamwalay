@@ -1,5 +1,4 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
-
 import * as slices from './slices';
 import { StateType } from './types';
 

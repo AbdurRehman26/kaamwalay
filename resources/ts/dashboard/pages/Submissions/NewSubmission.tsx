@@ -3,9 +3,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
-
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
-
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
 import SubmissionStep02Content from '../../components/SubmissionStep02Content';
@@ -108,7 +106,7 @@ export function NewSubmission() {
                 dispatch(setIsNextDisabled(false));
             }
         }
-    }, [selectedCards, currentStep]);
+    }, [selectedCards, currentStep, dispatch]);
 
     return (
         <>

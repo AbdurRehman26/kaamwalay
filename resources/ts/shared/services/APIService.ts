@@ -1,6 +1,5 @@
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Map } from 'immutable';
-
 import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
@@ -110,5 +109,25 @@ export class APIService {
     private isNotExternal(config: AxiosRequestConfig): boolean {
         const baseURL = config.baseURL || '';
         return baseURL.startsWith('/') || baseURL.startsWith(window.location.origin);
+    }
+
+    public async download(url: string, filename?: string, config?: AxiosRequestConfig) {
+        const { data } = await Axios.get(
+            url,
+            this.mergeConfig(config, {
+                responseType: 'blob',
+            }),
+        );
+
+        const downloadHref = URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = downloadHref;
+        link.download = filename ?? '';
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(downloadHref);
     }
 }

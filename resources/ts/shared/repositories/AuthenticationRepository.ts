@@ -1,5 +1,4 @@
 import { classToPlain, plainToClass } from 'class-transformer';
-
 import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
 import { ValidateMethodParamsAsync } from '@shared/decorators/ValidateMethodParams';
@@ -8,7 +7,6 @@ import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntit
 import { UserEntity } from '@shared/entities/UserEntity';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
-
 import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
 import { SignUpRequestDto } from '../dto/SignUpRequestDto';
 import { Repository } from './Repository';

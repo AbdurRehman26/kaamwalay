@@ -3,7 +3,6 @@ import { ClassConstructor } from 'class-transformer';
 import objectHash from 'object-hash';
 import { useCallback, useMemo } from 'react';
 import useSWR, { SWRResponse } from 'swr';
-
 import { useRepository } from '@shared/hooks/useRepository';
 import { Repository } from '@shared/repositories/Repository';
 
@@ -30,11 +29,11 @@ export function useRepositoryMethod<
     const key = useMemo(() => {
         const argsHash = options?.args ? objectHash.sha1(options.args) : '';
         return `${classDefinition.name}@${method}/${argsHash}`;
-    }, [options]);
+    }, [classDefinition.name, method, options?.args]);
 
     const fetcher = useCallback(
         (): any => Repository.callMethod(repository, method, ...((options?.args as any) || [])),
-        [key],
+        [method, options?.args, repository],
     );
 
     return useSWR(key, fetcher);

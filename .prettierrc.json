@@ -11,7 +11,7 @@
     "endOfLine": "lf",
     "proseWrap": "always",
     "importOrder": ["^@shared/(.*)$", "^@admin/(.*)$", "^@auth/(.*)$", "^@dashboard/(.*)$", "^[./]"],
-    "importOrderSeparation": true,
+    "importOrderSeparation": false,
     "overrides": [
         {
             "files": ["*.js", "*.jsx"],

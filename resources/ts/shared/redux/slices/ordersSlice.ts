@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
-
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
@@ -15,8 +13,10 @@ export const ordersSlice = createSlice({
     initialState: {
         ...ordersThunk.initialState,
     } as StateType,
-    reducers: {},
+    reducers: {
+        invalidateOrders: ordersThunk.invalidateEntities,
+    },
     extraReducers: ordersThunk.buildReducers,
 });
-
+export const { invalidateOrders } = ordersSlice.actions;
 export const { listAction: listOrdersAction, showAction: showOrderAction } = ordersThunk;

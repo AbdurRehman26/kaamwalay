@@ -96,9 +96,9 @@ export const usePrintPackingSlipStyles = makeStyles(
             left: 0,
             bottom: 0,
             backgroundColor: 'rgba(66, 66, 66, 0.75)',
+            color: '#fff',
         },
         button: {
-            color: '#fff',
             flex: '1 1 auto',
         },
         buttonLabel: {

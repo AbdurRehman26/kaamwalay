@@ -22,7 +22,7 @@ class GenerateOrderInvoice implements ShouldQueue
         } catch (Exception $e) {
             Log::error($e->getMessage(), [
                 'Order ID' => $event->order->id,
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
         }
     }

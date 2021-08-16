@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
@@ -102,6 +103,7 @@ class LoginTest extends TestCase
                 'user' => [
                     'username' => 'test',
                     'email' => $testEmail,
+                    'stripe_id' => Str::random(20),
                 ],
             ], 200),
         ]);

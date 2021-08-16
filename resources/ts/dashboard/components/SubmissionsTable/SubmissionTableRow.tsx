@@ -89,9 +89,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
                         {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
                     </MenuItem>
-                    <MenuItem onClick={handleOption(Options.ViewInstructions)} disabled={!invoice}>
-                        View Instructions
-                    </MenuItem>
+                    <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
                 </Menu>
             </TableCell>
         </TableRow>

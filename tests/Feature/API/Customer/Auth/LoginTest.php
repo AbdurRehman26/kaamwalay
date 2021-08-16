@@ -112,6 +112,7 @@ class LoginTest extends TestCase
         $user = User::first();
         $response->assertStatus(200);
         $response->assertJsonStructure(['access_token', 'type', 'expiry']);
+        $this->assertTrue($user->hasStripeId());
         $this->assertSame($testEmail, $user->email);
     }
 

@@ -15,9 +15,7 @@ class ConfigurationsTest extends TestCase
     /** @test */
     public function it_should_not_return_any_keys_on_empty_configuration(): void
     {
-        config([
-            'configuration.keys' => [],
-        ]);
+        config(['configuration.keys' => []]);
 
         $response = $this->post('/api/configurations');
         $response->assertOk();
@@ -29,7 +27,16 @@ class ConfigurationsTest extends TestCase
     public function it_should_return_correct_configuration(): void
     {
         config([
-            'configuration.keys' => ['APP_ENV', 'APP_URL:auth'],
+            'configuration.keys' => [
+                'APP_ENV' => [
+                    'value' => env('APP_ENV'),
+                    'auth' => false,
+                ],
+                'APP_URL' => [
+                    'value' => env('APP_URL'),
+                    'auth' => true,
+                ],
+            ],
         ]);
 
         $response = $this->post('/api/configurations');
@@ -46,8 +53,15 @@ class ConfigurationsTest extends TestCase
     {
         config([
             'configuration.keys' => [
-                'APP_URL',
-                'APP_ENV:env,environment',
+                'APP_ENV' => [
+                    'key' => 'environment',
+                    'value' => env('APP_ENV'),
+                    'auth' => false,
+                ],
+                'APP_URL' => [
+                    'value' => env('APP_URL'),
+                    'auth' => false,
+                ],
             ],
         ]);
 
@@ -66,7 +80,16 @@ class ConfigurationsTest extends TestCase
     public function it_should_correctly_include_auth_keys_for_authenticated_user(): void
     {
         config([
-            'configuration.keys' => ['APP_ENV', 'APP_URL:auth'],
+            'configuration.keys' => [
+                'APP_ENV' => [
+                    'value' => env('APP_ENV'),
+                    'auth' => false,
+                ],
+                'APP_URL' => [
+                    'value' => env('APP_URL'),
+                    'auth' => true,
+                ],
+            ],
         ]);
 
         $this->actingAs($this->user);
@@ -85,7 +108,16 @@ class ConfigurationsTest extends TestCase
     public function it_should_not_include_auth_keys_for_guest_user(): void
     {
         config([
-            'configuration.keys' => ['APP_ENV', 'APP_URL:auth'],
+            'configuration.keys' => [
+                'APP_ENV' => [
+                    'value' => env('APP_ENV'),
+                    'auth' => false,
+                ],
+                'APP_URL' => [
+                    'value' => env('APP_URL'),
+                    'auth' => true,
+                ],
+            ],
         ]);
 
         $response = $this->post('/api/configurations');

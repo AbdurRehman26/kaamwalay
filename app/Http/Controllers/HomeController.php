@@ -8,10 +8,6 @@ class HomeController extends Controller
 {
     public function getView(): RedirectResponse
     {
-        $redirectTo = app()->environment("production")
-            ? "https://agscard.com/robograding"
-            : route('dashboard.main', ['path' => '/']);
-
-        return redirect($redirectTo);
+        return redirect()->route('dashboard.main', ['path' => '/']);
     }
 }

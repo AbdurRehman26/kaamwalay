@@ -19,7 +19,16 @@ class ConfigurationServiceTest extends TestCase
     public function it_should_get_guest_keys()
     {
         config([
-            'configuration.keys' => ['APP_ENV', 'APP_URL:auth'],
+            'configuration.keys' => [
+                'APP_ENV' => [
+                    'value' => env('APP_ENV'),
+                    'auth' => false,
+                ],
+                'APP_URL' => [
+                    'value' => env('APP_URL'),
+                    'auth' => true,
+                ],
+            ],
         ]);
 
         $data = $this->configurationService->getAllConfigurations();

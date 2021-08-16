@@ -103,7 +103,6 @@ class LoginTest extends TestCase
                 'user' => [
                     'username' => 'test',
                     'email' => $testEmail,
-                    'stripe_id' => Str::random(20),
                 ],
             ], 200),
         ]);

@@ -57,6 +57,6 @@ class ConfigurationService
     {
         $suffix = auth()->check() ? 'with-auth' : '';
 
-        return md5(implode(',', array_keys($keys)) .'_'. $suffix);
+        return md5(implode(',', $keys) .'_'. $suffix);
     }
 }

@@ -61,11 +61,9 @@ class PaypalService implements PaymentProviderServiceInterface
         }
     }
 
-    public function verify(Order $order): bool
+    public function verify(Order $order, string $paymentIntentId): bool
     {
-        $orderRequest = new OrdersCaptureRequest(
-            $order->orderPayment->payment_provider_reference_id
-        );
+        $orderRequest = new OrdersCaptureRequest($paymentIntentId);
         $orderRequest->prefer('return=representation');
 
         try {

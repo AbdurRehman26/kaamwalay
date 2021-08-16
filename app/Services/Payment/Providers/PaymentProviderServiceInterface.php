@@ -8,5 +8,5 @@ interface PaymentProviderServiceInterface
 {
     public function charge(Order $order): array;
 
-    public function verify(Order $order): bool;
+    public function verify(Order $order, string $paymentIntentId): bool;
 }

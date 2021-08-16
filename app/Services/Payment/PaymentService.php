@@ -36,14 +36,14 @@ class PaymentService
         return $this->updateOrderPayment($order, $data);
     }
 
-    public function verify(Order $order): bool
+    public function verify(Order $order, string $paymentIntentId): bool
     {
         $data = resolve($this->providers[
             $order->paymentMethod->code
-        ])->verify($order);
+        ])->verify($order, $paymentIntentId);
 
         if ($data) {
-            return $this->updateOrderStatus();
+            return $this->updateOrderStatus($order);
         }
 
         return $data;

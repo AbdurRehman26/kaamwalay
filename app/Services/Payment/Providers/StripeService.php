@@ -55,15 +55,13 @@ class StripeService implements PaymentProviderServiceInterface
         }
     }
 
-    public function verify(Order $order): bool
+    public function verify(Order $order, string $paymentIntentId): bool
     {
         /** @var User $user */
         $user = auth()->user();
 
         try {
-            $paymentIntent = $user->stripe()->paymentIntents->retrieve(
-                $order->orderPayment->payment_provider_reference_id
-            );
+            $paymentIntent = $user->stripe()->paymentIntents->retrieve($paymentIntentId);
 
             return $this->validateOrderIsPaid($order, $paymentIntent);
         } catch (ApiErrorException $e) {
@@ -74,6 +72,7 @@ class StripeService implements PaymentProviderServiceInterface
     public function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
     {
         $charge = $paymentIntent->charges->first();
+
         if (
             $charge->amount == ($order->grand_total * 100)
             && $charge->outcome->type === 'authorized'

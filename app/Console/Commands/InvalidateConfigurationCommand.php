@@ -31,6 +31,7 @@ class InvalidateConfigurationCommand extends Command
         $this->info("Invalidate configurations...");
         $configurationService->invalidateConfigurations();
         $this->info("Done.");
+
         return 0;
     }
 }

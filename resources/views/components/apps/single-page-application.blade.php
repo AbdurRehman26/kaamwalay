@@ -2,17 +2,19 @@
 <html lang="{{ $getLang() }}">
     <head>
         <title>Robograding - Card Grading by Artificial Intelligence - Faster, more accurate & ethical.</title>
+        <meta property="og:title" content="Robograding - Card Grading by Artificial Intelligence - Faster, more accurate & ethical." />
         <meta name="description" content="Robograding allows you to grade cards with the help of Artificial Intelligence. It is more economical, 100% transparent, more accurate than human-grading, and 10-times faster!">
+        <meta name="og:description" content="Robograding allows you to grade cards with the help of Artificial Intelligence. It is more economical, 100% transparent, more accurate than human-grading, and 10-times faster!">
         <meta charset="utf-8">
         <meta name="viewport" content="width=1280">
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="" />
         <link rel="shortcut icon" href="https://d2eli1wrotxo1h.cloudfront.net/assets/robograding-favicon.png" />
         <meta name="robots" content="index, follow" />
-        <meta property="og:locale" content="$getLang()" />
+        <meta property="og:locale" content="{{ $getLang() }}" />
         <link rel="home" href="{{ url('/') }}" />
         <link rel="canonical" href="{{ url('/') }}" />
         <meta itemProp="url" content="{{ url('/') }}" />
-        <meta property="og:url" content='{{ url('/') }}' />
+        <meta property="og:url" content="{{ url('/') }}" />
         <meta itemProp="image" content="https://d2eli1wrotxo1h.cloudfront.net/assets/robograding-meta-image.jpg" />
         <meta property="og:image" content="https://d2eli1wrotxo1h.cloudfront.net/assets/robograding-meta-image.jpg" />
         <meta name="twitter:image" content="https://d2eli1wrotxo1h.cloudfront.net/assets/robograding-meta-image.jpg" />

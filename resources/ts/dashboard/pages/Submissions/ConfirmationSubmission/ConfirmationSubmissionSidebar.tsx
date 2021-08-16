@@ -93,7 +93,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        {data.shippingMethod.name}
+                                        {data.shippingMethod?.name}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -135,7 +135,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'caption'} align={'right'} color={'textSecondary'}>
-                                        ({formatCurrency(data.paymentPlan.price)}&nbsp;×&nbsp;{data.numberOfCards}) =
+                                        ({formatCurrency(data.paymentPlan?.price)}&nbsp;×&nbsp;{data.numberOfCards}) =
                                         &nbsp;
                                         <Typography
                                             component={'span'}
@@ -144,7 +144,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                             color={'textPrimary'}
                                             className={font.fontWeightMedium}
                                         >
-                                            {formatCurrency(data.paymentPlan.price * data.numberOfCards)}
+                                            {formatCurrency(data.paymentPlan?.price * data.numberOfCards)}
                                         </Typography>
                                     </Typography>
                                 </TableCell>

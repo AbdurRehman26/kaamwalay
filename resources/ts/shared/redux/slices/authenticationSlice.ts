@@ -34,7 +34,7 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         if (e.errors) {
             NotificationsService.error('Validation errors.');
         } else if (e.isAxiosError) {
-            NotificationsService.error(e.message);
+            NotificationsService.exception(e.message);
         } else {
             NotificationsService.error('Unable to login.');
         }

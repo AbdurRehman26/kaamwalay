@@ -29,7 +29,8 @@ trait AuthenticatableWithAGS
 
     public function manageAgsUser(LoginRequest $request, array $userData): User
     {
-        return User::updateOrCreate(
+        /** @var User $user */
+        $user = User::updateOrCreate(
             [
                 'email' => $request->get('email'),
             ],
@@ -38,6 +39,11 @@ trait AuthenticatableWithAGS
                 ['password' => $request->get('password')]
             )
         );
+        if (! $user->hasStripeId()) {
+            $user->createAsStripeCustomer();
+        }
+
+        return $user;
     }
 
     public function authenticateAgsUser(User $user): string

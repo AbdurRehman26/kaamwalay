@@ -12,7 +12,8 @@ class StateController extends Controller
 {
     public function index(): StateCollection
     {
-        $states = Cache::remember('states', now()->addWeek(), fn() => State::all());
+        $states = Cache::remember('states', now()->addWeek(), fn () => State::all());
+
         return new StateCollection($states);
     }
 

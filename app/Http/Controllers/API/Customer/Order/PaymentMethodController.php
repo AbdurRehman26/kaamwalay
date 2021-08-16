@@ -15,8 +15,9 @@ class PaymentMethodController extends Controller
         $paymentMethods = Cache::remember(
             'payment_methods',
             now()->addWeek(),
-            fn() => PaymentMethod::all()
+            fn () => PaymentMethod::all()
         );
+
         return new PaymentMethodCollection($paymentMethods);
     }
 

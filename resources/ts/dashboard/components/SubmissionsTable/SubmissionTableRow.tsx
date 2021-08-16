@@ -30,6 +30,7 @@ enum Options {
     Edit,
     Download,
     Delete,
+    ViewInstructions,
 }
 
 export function SubmissionTableRow(props: SubmissionTableRowProps) {
@@ -50,6 +51,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             switch (option) {
                 case Options.View:
                     history.push(`/submissions/${id}/view`);
+                    break;
+                case Options.ViewInstructions:
+                    history.push(`/submissions/${id}/confirmation`);
                     break;
                 case Options.Edit:
                     history.push(`/submissions/${id}/edit`);
@@ -84,6 +88,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                     <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
                         {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                    </MenuItem>
+                    <MenuItem onClick={handleOption(Options.ViewInstructions)} disabled={!invoice}>
+                        View Instructions
                     </MenuItem>
                 </Menu>
             </TableCell>

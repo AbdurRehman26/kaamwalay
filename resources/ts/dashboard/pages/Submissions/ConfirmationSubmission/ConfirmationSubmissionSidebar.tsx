@@ -11,6 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/Check';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { useOrderQuery } from '@shared/hooks/useOrderQuery';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -30,7 +31,12 @@ interface ConfirmationSubmissionsSidebarProps {
  */
 export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissionsSidebarProps) {
     const classes = useConfirmationSubmissionSidebarStyles();
-    const { isLoading, isError, data } = useOrderQuery({ resourceId: orderId });
+    const { isLoading, isError, data, error } = useOrderQuery({ resourceId: orderId });
+    const message = (error as Error)?.message || error;
+
+    if (message === 'This action is unauthorized.') {
+        return <Redirect to={'/submissions'} />;
+    }
 
     if (isLoading || isError) {
         return (

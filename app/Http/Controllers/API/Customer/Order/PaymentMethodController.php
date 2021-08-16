@@ -6,12 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Customer\Order\PaymentMethod\PaymentMethodCollection;
 use App\Http\Resources\API\Customer\Order\PaymentMethod\PaymentMethodResource;
 use App\Models\PaymentMethod;
+use Illuminate\Support\Facades\Cache;
 
 class PaymentMethodController extends Controller
 {
     public function index()
     {
-        return new PaymentMethodCollection(PaymentMethod::all());
+        $paymentMethods = Cache::remember(
+            'payment_methods',
+            now()->addWeek(),
+            fn() => PaymentMethod::all()
+        );
+        return new PaymentMethodCollection($paymentMethods);
     }
 
     public function show(PaymentMethod $paymentMethod)

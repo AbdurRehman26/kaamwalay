@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Customer\Address\State\StateCollection;
 use App\Http\Resources\API\Customer\Address\State\StateResource;
 use App\Models\State;
+use Illuminate\Support\Facades\Cache;
 
 class StateController extends Controller
 {
     public function index(): StateCollection
     {
-        return new StateCollection(State::all());
+        $states = Cache::remember('states', now()->addWeek(), fn() => State::all());
+        return new StateCollection($states);
     }
 
     public function show(int $id): StateResource

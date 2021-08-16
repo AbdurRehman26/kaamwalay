@@ -220,9 +220,9 @@
         <br/>
         727 Page Ave
         <br/>
-        Staten Island, NY 10309, US
+        Staten Island, NY 10307, US
         <br/>
-        (718) 999-1910
+        (347) 850 2720
     </footer>
     <main>
         <div class="general-info-section">

@@ -65,6 +65,8 @@ class ConfigurationService
 
     private function hashKeys(array $keys): string
     {
-        return md5(implode(',', $keys));
+        $suffix = auth()->check() ? 'with-auth' : '';
+
+        return md5(implode(',', $keys) .'_'. $suffix);
     }
 }

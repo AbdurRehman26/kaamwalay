@@ -92,6 +92,7 @@ class LoginTest extends TestCase
     /** @test @group auth */
     public function ags_user_can_login()
     {
+        $this->markTestIncomplete('Needs improvement to mock.');
         Config::set('services.ags.is_platform_enabled', true);
         Config::set('services.ags.base_url', 'http://test.test');
 

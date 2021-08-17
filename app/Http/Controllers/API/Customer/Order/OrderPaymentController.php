@@ -22,7 +22,7 @@ class OrderPaymentController extends Controller
 
         throw_unless($order->isPayable(), OrderNotPayable::class);
 
-        $response = $this->paymentService->charge($order);
+        $response = $this->paymentService->hasProvider($order)->charge();
 
         if (! empty($response['data'])) {
             return new JsonResponse($response);
@@ -39,7 +39,7 @@ class OrderPaymentController extends Controller
         $this->authorize('view', $order);
 
         throw_unless(
-            $this->paymentService->verify($order, $paymentIntentId),
+            $this->paymentService->hasProvider($order)->verify($paymentIntentId),
             PaymentNotVerified::class
         );
 

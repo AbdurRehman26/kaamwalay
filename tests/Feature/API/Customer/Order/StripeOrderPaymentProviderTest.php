@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\API\Customer\Order;
 
+use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
@@ -57,5 +58,35 @@ class StripeOrderPaymentProviderTest extends TestCase
 
         $response->assertStatus(Response::HTTP_PAYMENT_REQUIRED);
         $response->assertJsonStructure(['payment_intent' => ['id']]);
+    }
+
+    /** @test @group payment */
+    public function user_can_verify_a_successful_payment()
+    {
+        OrderPayment::factory()->create([
+            'order_id' => $this->order->id,
+            'payment_method_id' => 1,
+            'payment_provider_reference_id' => Str::random(25),
+        ]);
+        $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments/" . Str::random(25));
+        $response->assertOk();
+        $response->assertJson([
+            'message' => 'Payment verified successfully',
+        ]);
+    }
+    /** @test @group payment */
+    public function user_cannot_verify_a_failed_payment()
+    {
+        OrderPayment::factory()->create([
+            'order_id' => $this->order->id,
+            'payment_method_id' => 1,
+            'payment_provider_reference_id' => 'incomplete',
+        ]);
+        $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments/incomplete");
+        $exception = new PaymentNotVerified();
+        $response->assertStatus($exception->getCode());
+        $response->assertJson([
+            'error' => $exception->getMessage(),
+        ]);
     }
 }

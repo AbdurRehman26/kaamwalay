@@ -40,6 +40,13 @@ class TestingStripeService implements PaymentProviderServiceInterface
 
     public function verify(Order $order, string $paymentIntentId): bool
     {
+        if ($paymentIntentId === 'incomplete') {
+            return false;
+        }
+
+        $paymentIntent = $this->paidPaymentIntent($order);
+
+        return $this->validateOrderIsPaid($order, $paymentIntent);
     }
 
     public function successfulPaymentResponse(array $data): array
@@ -97,5 +104,40 @@ class TestingStripeService implements PaymentProviderServiceInterface
         return [
             'id' => $data['payment_intent_id'],
         ];
+    }
+
+    public function paidPaymentIntent(Order $order): object
+    {
+        return (object) [
+            "charges" => collect([
+                (object) [
+                    "id" => "ch_3JPMybJCai8r8pbf0PSZNf2Y",
+                    "amount" => (int) ($order->grand_total * 100),
+                    "amount_captured" => (int) ($order->grand_total * 100),
+                    "outcome" => (object) [
+                        "type" => "authorized",
+                    ],
+                    "paid" => true,
+                ],
+            ]),
+        ];
+    }
+
+    public function validateOrderIsPaid(Order $order, object $paymentIntent): bool
+    {
+        $charge = $paymentIntent->charges->first();
+
+        if (
+            $charge->amount == ($order->grand_total * 100)
+            && $charge->outcome->type === 'authorized'
+        ) {
+            $order->orderPayment->update([
+                'response' => json_encode($paymentIntent),
+            ]);
+
+            return true;
+        }
+
+        return false;
     }
 }

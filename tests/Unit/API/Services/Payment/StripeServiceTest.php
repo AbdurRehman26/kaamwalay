@@ -7,7 +7,6 @@ use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\Providers\PaymentProviderServiceInterface;
 use App\Services\Payment\Providers\StripeService;
-use Database\Factories\OrderFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;

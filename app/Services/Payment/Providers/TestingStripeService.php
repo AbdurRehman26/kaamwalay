@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -139,5 +140,13 @@ class TestingStripeService implements PaymentProviderServiceInterface
         }
 
         return false;
+    }
+
+    public function createCustomer(User $user): void
+    {
+        if (! $user->hasStripeId()) {
+            $user->stripe_id = Str::random(25);
+            $user->save();
+        }
     }
 }

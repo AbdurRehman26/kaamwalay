@@ -7,11 +7,12 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class StripeOrderPaymentProviderTest extends TestCase
+class StripeOrderPaymentTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -29,6 +30,7 @@ class StripeOrderPaymentProviderTest extends TestCase
             'order_status_id' => 1,
         ]);
         $this->actingAs($user);
+        Event::fake();
     }
 
     /** @test @group payment */

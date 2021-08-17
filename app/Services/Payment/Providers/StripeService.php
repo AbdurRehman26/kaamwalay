@@ -86,4 +86,14 @@ class StripeService implements PaymentProviderServiceInterface
 
         return false;
     }
+
+    public function createCustomer(User $user): void
+    {
+        if (! $user->hasStripeId()) {
+            $user->createAsStripeCustomer([
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+        }
+    }
 }

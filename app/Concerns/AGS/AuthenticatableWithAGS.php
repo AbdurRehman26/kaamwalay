@@ -6,6 +6,7 @@ use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Requests\API\Auth\LoginRequest;
 use App\Models\User;
 use App\Services\AGS\AGS;
+use App\Services\Payment\Providers\StripeService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,9 +40,8 @@ trait AuthenticatableWithAGS
                 ['password' => $request->get('password')]
             )
         );
-        if (! $user->hasStripeId()) {
-            $user->createAsStripeCustomer();
-        }
+
+        (new StripeService)->createCustomer($user);
 
         return $user;
     }

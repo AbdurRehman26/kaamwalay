@@ -52,8 +52,6 @@ class TestingStripeService implements PaymentProviderServiceInterface
 
     public function successfulPaymentResponse(array $data): array
     {
-        $user = auth()->user();
-
         return [
             'id' => 'pi_3JPMybJCai8r8pbf0WsCQt1d',
             'object' => 'payment_intent',
@@ -79,7 +77,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
                         'description' => $data['additional_data']['description'],
                         'metadata' => [
                             'Order ID' => $data['additional_data']['metadata']['Order ID'],
-                            'User Email' => $user->email,
+                            'User Email' => $data['additional_data']['metadata']['User Email'],
                         ],
                         'outcome' => [
                             'type' => 'authorized',

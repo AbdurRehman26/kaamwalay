@@ -41,7 +41,7 @@ trait AuthenticatableWithAGS
             )
         );
 
-        (new StripeService)->createCustomer($user);
+        resolve(StripeService::class)->createCustomer($user);
 
         return $user;
     }

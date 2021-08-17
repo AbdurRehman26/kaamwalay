@@ -5,10 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useParams } from 'react-router-dom';
 import { font } from '@shared/styles/utils';
-
 import { ConfirmationSubmissionSidebar } from './ConfirmationSubmissionSidebar';
 import { PackingInstructions } from './PackingInstructions';
 import { PrintingInformation } from './PrintingInformation';
@@ -23,12 +21,13 @@ import { useConfirmationSubmissionStyles } from './style';
  * @time: 23:14
  */
 export function ConfirmationSubmission() {
+    const { id } = useParams<{ id: string }>();
     const classes = useConfirmationSubmissionStyles();
 
     return (
         <Grid container>
             <Grid item className={classes.sidebar}>
-                <ConfirmationSubmissionSidebar />
+                <ConfirmationSubmissionSidebar orderId={parseInt(id)} />
             </Grid>
             <Grid item className={classes.content}>
                 <Box paddingTop={3} paddingBottom={2.5}>
@@ -38,7 +37,7 @@ export function ConfirmationSubmission() {
                 </Box>
                 <Divider />
                 <Box component={'section'} paddingY={3.5}>
-                    <PrintingInformation />
+                    <PrintingInformation orderId={parseInt(id)} />
                 </Box>
                 <Box component={'section'} paddingY={3.5}>
                     <PackingInstructions />

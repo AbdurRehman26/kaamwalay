@@ -12,9 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import React from 'react';
 import NumberFormat from 'react-number-format';
-
-import { useNotifications } from '@shared/hooks/useNotifications';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     changeSelectedCardQty,
@@ -130,7 +127,6 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const classes = useStyles();
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
-    const notifications = useNotifications();
     const { reviewMode } = props;
 
     function onDeselectCard(row: SearchResultItemCardProps) {
@@ -143,7 +139,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     }
 
     function onChangeCardValue(card: SearchResultItemCardProps, newValue: any) {
-        //replace non-digits with, if user enters a decimal
+        // replace non-digits with, if user enters a decimal
         const receivedValue = String(newValue).replace(/[^\d]/, '');
         const valueAsInt = parseInt(receivedValue);
         const finalValue = Math.min(Math.max(valueAsInt, 1), 1000000);

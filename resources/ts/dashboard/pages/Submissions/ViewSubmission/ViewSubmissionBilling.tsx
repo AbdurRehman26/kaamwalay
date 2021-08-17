@@ -3,11 +3,9 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import React, { useMemo } from 'react';
-
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { getPaymentIcon } from '@shared/lib/payments';
 import font from '@shared/styles/font.module.scss';
-
 import { useViewSubmissionBillingStyles } from './styles';
 
 interface ViewSubmissionBillingProps {

@@ -1,11 +1,7 @@
 import Radio, { RadioProps } from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import React, { HTMLAttributes } from 'react';
-
-import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
-
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import React from 'react';
 
 const useStyles = makeStyles(
     {
@@ -100,8 +96,8 @@ type ShippingMethodItemProps = {
 };
 function ShippingMethodItem(props: ShippingMethodItemProps) {
     const classes = useStyles();
-    const dispatch = useAppDispatch();
     const { isSelected, methodName } = props;
+
     return (
         <div
             className={classes.root}

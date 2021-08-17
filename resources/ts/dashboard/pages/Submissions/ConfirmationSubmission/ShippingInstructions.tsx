@@ -1,8 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-
 import { font } from '@shared/styles/utils';
-
 import { SectionHeader } from './SectionHeader';
 
 /**
@@ -25,7 +23,7 @@ export function ShippingInstructions() {
                 727 Page Ave
             </Typography>
             <Typography variant={'subtitle2'} className={font.fontWeightMedium}>
-                Staten Island, NY 10309
+                Staten Island, NY 10307
             </Typography>
         </>
     );

@@ -11,14 +11,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/Check';
 import React from 'react';
-import { useParams } from 'react-router-dom';
-
+import { Redirect } from 'react-router-dom';
 import { useOrderQuery } from '@shared/hooks/useOrderQuery';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
-
 import { useConfirmationSubmissionSidebarStyles } from './style';
+
+interface ConfirmationSubmissionsSidebarProps {
+    orderId: number;
+}
 
 /**
  *
@@ -27,10 +29,14 @@ import { useConfirmationSubmissionSidebarStyles } from './style';
  * @date: 07.08.2021
  * @time: 00:11
  */
-export function ConfirmationSubmissionSidebar() {
+export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissionsSidebarProps) {
     const classes = useConfirmationSubmissionSidebarStyles();
-    const { id } = useParams<{ id: string }>();
-    const { isLoading, isError, data } = useOrderQuery(id);
+    const { isLoading, isError, data, error } = useOrderQuery({ resourceId: orderId });
+    const message = (error as Error)?.message || error;
+
+    if (message === 'This action is unauthorized.') {
+        return <Redirect to={'/submissions'} />;
+    }
 
     if (isLoading || isError) {
         return (
@@ -93,7 +99,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        {data.shippingMethod.name}
+                                        {data.shippingMethod?.name}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -135,7 +141,7 @@ export function ConfirmationSubmissionSidebar() {
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'caption'} align={'right'} color={'textSecondary'}>
-                                        ({formatCurrency(data.paymentPlan.price)}&nbsp;×&nbsp;{data.numberOfCards}) =
+                                        ({formatCurrency(data.paymentPlan?.price)}&nbsp;×&nbsp;{data.numberOfCards}) =
                                         &nbsp;
                                         <Typography
                                             component={'span'}
@@ -144,7 +150,7 @@ export function ConfirmationSubmissionSidebar() {
                                             color={'textPrimary'}
                                             className={font.fontWeightMedium}
                                         >
-                                            {formatCurrency(data.paymentPlan.price * data.numberOfCards)}
+                                            {formatCurrency(data.paymentPlan?.price * data.numberOfCards)}
                                         </Typography>
                                     </Typography>
                                 </TableCell>
@@ -154,9 +160,9 @@ export function ConfirmationSubmissionSidebar() {
                                     <Typography variant={'body2'}>
                                         <Box component={'span'} display={'inline-flex'} alignItems={'center'}>
                                             Insured Shipping:
-                                            {/*<Tooltip title={'Insured Shipping'} placement={'top'}>*/}
-                                            {/*    <InfoIcon color={'disabled'} className={classes.tooltipIcon} />*/}
-                                            {/*</Tooltip>*/}
+                                            {/* <Tooltip title={'Insured Shipping'} placement={'top'}> */}
+                                            {/*    <InfoIcon color={'disabled'} className={classes.tooltipIcon} /> */}
+                                            {/* </Tooltip> */}
                                         </Box>
                                     </Typography>
                                 </TableCell>

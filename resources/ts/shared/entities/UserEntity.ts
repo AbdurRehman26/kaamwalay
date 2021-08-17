@@ -1,8 +1,6 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
-
 import { Entity } from '@shared/entities/Entity';
-
 import { Field } from '../decorators/Field';
 import { RoleEntity } from './RoleEntity';
 

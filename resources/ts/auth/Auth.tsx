@@ -1,9 +1,8 @@
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
-
 import GuestOnlyRoute from '@shared/components/GuestOnlyRoute';
-
 import { AuthBanner } from './components/AuthBanner';
 import { Page } from './components/Page';
 import { ForgotPassword, ResetPassword, SignIn, SignUp } from './pages/Auth';
@@ -20,7 +19,11 @@ export function Auth() {
         <Page container>
             <Grid container justifyContent={'center'} className={'page-content'} item xs>
                 <AuthBanner headline={'Automated Card Grading'}>
-                    Get accurate, fast and completely transparent grades for your cards.
+                    Get accurate, fast and completely transparent grades for your cards,&nbsp;
+                    <Link color={'inherit'} href={'https://agscard.com/robograding'}>
+                        Learn More
+                    </Link>
+                    .
                 </AuthBanner>
             </Grid>
             <Grid container item xs>

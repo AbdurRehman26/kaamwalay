@@ -1,7 +1,6 @@
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { PropsWithChildren } from 'react';
-
 import { useSharedSelector } from '../hooks/useSharedDispatch';
 
 /**
@@ -16,7 +15,7 @@ export function SplashScreen({ children }: PropsWithChildren<any>) {
 
     if (isConfigLoading) {
         return (
-            <Box minHeight={'100vh'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+            <Box minHeight={'100vh'} width={'100%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                 <CircularProgress />
             </Box>
         );

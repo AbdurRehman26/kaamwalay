@@ -32,7 +32,7 @@ class ConfigurationService
         $config = [];
 
         foreach ($keys as $key => $value) {
-            $configValue = $this->computeConfigKey($key, $value);
+            $configValue = ConfigurationValue::from($key, $value);
             if ($configValue->canBeInclude()) {
                 $config[$configValue->getKey()] = $configValue->getValue();
             }
@@ -53,18 +53,10 @@ class ConfigurationService
         $store->clear();
     }
 
-    private function computeConfigKey($key, $value): ConfigurationValue
-    {
-        $configValue = ConfigurationValue::from($value);
-        if (! is_numeric($key)) {
-            $configValue->setKey($key);
-        }
-
-        return $configValue;
-    }
-
     private function hashKeys(array $keys): string
     {
-        return md5(implode(',', $keys));
+        $suffix = auth()->check() ? 'with-auth' : '';
+
+        return md5(implode(',', array_keys($keys)) .'_'. $suffix);
     }
 }

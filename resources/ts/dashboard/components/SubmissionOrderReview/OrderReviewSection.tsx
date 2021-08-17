@@ -3,9 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import NumberFormat from 'react-number-format';
-
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
-
 import OrderDetailItem from '@dashboard/components/SubmissionOrderReview/OrderDetailItem';
 import Spacer from '@dashboard/components/SubmissionOrderReview/Spacer';
 import useStyles from '@dashboard/components/SubmissionOrderReview/style';
@@ -34,12 +32,12 @@ function OrderReviewSection() {
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
-    const returnShippingMethod = 'Insured Shipping';
 
     const finalShippingAddress =
         existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
             ? selectedExistingAddress
             : shippingAddress;
+
     return (
         <Paper variant={'outlined'} className={classes.orderReviewSection}>
             <div className={classes.orderItemsColumn}>

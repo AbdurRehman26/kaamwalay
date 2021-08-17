@@ -2,9 +2,7 @@ import ButtonBase, { ButtonBaseProps } from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
-
 import { cx } from '@shared/lib/utils/cx';
-
 import { CardPreview } from '@dashboard/components/CardPreview';
 
 interface CardGradeImageProps extends Omit<ButtonBaseProps, 'onClick'> {

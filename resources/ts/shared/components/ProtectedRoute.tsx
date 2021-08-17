@@ -2,7 +2,6 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { useEffect } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
-
 import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
 import { useAuth } from '@shared/hooks/useAuth';
 
@@ -24,9 +23,10 @@ export function ProtectedRoute({ redirectRoute, ...rest }: ProtectedRouteProps) 
         if (!authenticated && !checking) {
             window.location.replace(redirectRoute ?? AuthenticationEnum.SignInRoute);
         }
-    }, [authenticated, checking]);
+    }, [authenticated, checking, redirectRoute]);
 
     if (checking || !user || !authenticated) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { component, render, children, ...partial } = rest;
         return (
             <Route {...partial}>

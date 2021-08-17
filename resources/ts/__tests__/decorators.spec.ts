@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-
 import { BindParams } from '@shared/decorators/BindParams';
 
 describe('Decorators', () => {

@@ -1,5 +1,4 @@
 import { Field } from '@shared/decorators/Field';
-
 import { Entity } from './Entity';
 
 export class CardProductEntity extends Entity {

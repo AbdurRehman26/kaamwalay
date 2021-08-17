@@ -6,9 +6,7 @@ import Alert from '@material-ui/lab/Alert';
 import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
-
 import { useConfiguration } from '@shared/hooks/useConfiguration';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';

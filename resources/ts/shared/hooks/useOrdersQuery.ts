@@ -1,5 +1,4 @@
 import { AxiosRequestConfig } from 'axios';
-
 import { OrderEntity } from '../entities/OrderEntity';
 import { listOrdersAction } from '../redux/slices/ordersSlice';
 import { useListQuery } from './useListQuery';

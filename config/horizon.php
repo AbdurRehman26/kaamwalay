@@ -66,7 +66,7 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => ['web', 'auth.basic:web'],
 
     /*
     |--------------------------------------------------------------------------
@@ -162,8 +162,8 @@ return [
 
     'defaults' => [
         'supervisor-1' => [
-            'connection' => 'rabbitmq',
-            'queue' => ['default', 'sample'],
+            'connection' => 'redis',
+            'queue' => ['default'],
             'balance' => 'auto',
             'maxProcesses' => 1,
             'memory' => 128,
@@ -178,6 +178,12 @@ return [
                 'maxProcesses' => 10,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
+            ],
+        ],
+
+        'staging' => [
+            'supervisor-1' => [
+                'maxProcesses' => 3,
             ],
         ],
 

@@ -3,12 +3,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Moment } from 'moment';
 import React from 'react';
-
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-
 import { TableInfo } from '@dashboard/pages/Submissions/ViewSubmission/TableInfo';
-
 import { useViewSubmissionInformationStyles } from './styles';
 
 interface ViewSubmissionInformationProps {

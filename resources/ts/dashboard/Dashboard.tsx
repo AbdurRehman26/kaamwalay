@@ -1,8 +1,6 @@
 import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
-
 import { ProtectedRoute } from '@shared/components/ProtectedRoute';
-
 import { Cards } from './pages/Cards/Cards';
 import { Submissions } from './pages/Submissions';
 

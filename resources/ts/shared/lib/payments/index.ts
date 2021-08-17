@@ -1,5 +1,4 @@
 import { uniq } from 'lodash';
-
 import twoCo from '../../assets/icons/payments/2co.svg';
 import amazon from '../../assets/icons/payments/amazon.svg';
 import amex from '../../assets/icons/payments/american-express.svg';

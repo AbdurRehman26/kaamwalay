@@ -1,5 +1,4 @@
 import { Injectable } from '@shared/decorators/Injectable';
-
 import { ConfigurationEntity } from '../entities/ConfigurationEntity';
 import { loadConfigurationsAction, setConfig } from '../redux/slices/configurationSlice';
 import { getGlobalStore, GlobalStoreType } from '../redux/store';

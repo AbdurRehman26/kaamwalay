@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
-
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
@@ -9,7 +8,6 @@ import { app } from '@shared/lib/app';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { NotificationsService } from '@shared/services/NotificationsService';
-
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
 
 interface StateType {
@@ -36,7 +34,7 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         if (e.errors) {
             NotificationsService.error('Validation errors.');
         } else if (e.isAxiosError) {
-            NotificationsService.error(e.message);
+            NotificationsService.exception(e);
         } else {
             NotificationsService.error('Unable to login.');
         }

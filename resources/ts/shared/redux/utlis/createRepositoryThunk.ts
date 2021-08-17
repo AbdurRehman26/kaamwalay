@@ -1,22 +1,23 @@
 import { ActionReducerMapBuilder, AsyncThunk, createAsyncThunk, CreateSliceOptions } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
 import { ClassConstructor, classToPlain } from 'class-transformer';
-import { uniq } from 'lodash-es';
-
+import { uniq } from 'lodash';
 import { PaginatedData } from '@shared/classes/PaginatedData';
 import { Entity } from '@shared/entities/Entity';
 import { app } from '@shared/lib/app';
 import { Repository } from '@shared/repositories/Repository';
 import { APIState } from '@shared/types/APIState';
-import { ShowTuple } from '@shared/types/ShowTuple';
-
+import { ThunkShowActionArg } from '../../types/ThunkShowActionArg';
 import { serializeDataList } from './serializeDataList';
 
 interface CreateRepositoryThunk<N extends string, E> {
     name: N;
     listAction: AsyncThunk<PaginatedData<E>, AxiosRequestConfig | undefined, any>;
-    showAction: AsyncThunk<E, ShowTuple, any>;
+    showAction: AsyncThunk<E, ThunkShowActionArg, any>;
     initialState: APIState<E>;
+
+    invalidateEntities(state: APIState<E>): void;
+
     buildReducers(builder: ActionReducerMapBuilder<APIState<E>>): void;
 }
 
@@ -39,9 +40,9 @@ export function createRepositoryThunk<
         return classToPlain(data) as PaginatedData<E>;
     });
 
-    const showAction = createAsyncThunk(name + '/show', async (args: ShowTuple) => {
+    const showAction = createAsyncThunk(name + '/show', async (args: ThunkShowActionArg) => {
         const repo = app(repository);
-        const data = await repo.show(...args);
+        const data = await repo.show(args.resourceId, args.config);
         return classToPlain(data) as E;
     });
 
@@ -67,12 +68,14 @@ export function createRepositoryThunk<
 
         builder
             .addCase(showAction.pending, (state, { meta }) => {
-                const id = meta.arg[0];
+                const id = meta.arg.resourceId;
                 state.errors[`show_${id}`] = null;
-                state.isLoading[id] = true;
+                if (!(id in state.isLoading)) {
+                    state.isLoading[id] = true;
+                }
             })
             .addCase(showAction.rejected, (state, { error, meta }) => {
-                const id = meta.arg[0];
+                const id = meta.arg.resourceId;
                 state.errors[`show_${id}`] = error;
                 state.isLoading[id] = false;
             })
@@ -84,11 +87,17 @@ export function createRepositoryThunk<
             });
     };
 
+    const invalidateEntities = (state: APIState<E>) => {
+        state.entities = {};
+        state.ids = [];
+    };
+
     return {
         name,
         listAction,
         showAction,
         initialState,
+        invalidateEntities,
         buildReducers,
     };
 }

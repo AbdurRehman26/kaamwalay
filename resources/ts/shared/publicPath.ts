@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * This file it's crucial in production since this will set the cdn base at the runtime
  * Because at the build time we don't know the version or the checksum of the version

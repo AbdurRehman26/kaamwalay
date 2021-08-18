@@ -22,7 +22,7 @@ class ConfigurationService
         $tags = $this->cacheTags();
         $hash = $this->hashKeys($keys);
 
-        return Cache::tags($tags)->remember($hash, env('CONFIGURATION_CACHE_TTL', 86400), function () use ($keys) {
+        return Cache::tags($tags)->remember($hash, config('configuration.ttl'), function () use ($keys) {
             return $this->computeConfiguration($keys);
         });
     }

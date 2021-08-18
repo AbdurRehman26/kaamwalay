@@ -99,7 +99,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         ];
     }
 
-    #[ArrayShape(['id' => "string"])] public function incompletePaymentResponse(array $data): array
+    public function incompletePaymentResponse(array $data): array
     {
         return [
             'id' => $data['payment_intent_id'],

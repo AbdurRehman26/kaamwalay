@@ -12,7 +12,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     {
         $paymentData = [
             'customer_id' => Str::random(25),
-            'amount' => $order->grand_total * 100,
+            'amount' => (int) ($order->grand_total * 100),
             'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->id}",

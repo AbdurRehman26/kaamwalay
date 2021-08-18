@@ -24,7 +24,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping
             'created_at',
             [
                 Carbon::parse($this->date)->startOfDay(),
-                Carbon::parse($this->date)->endOfDay()
+                Carbon::parse($this->date)->endOfDay(),
             ]
         )->get();
     }

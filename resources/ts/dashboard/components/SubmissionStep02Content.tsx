@@ -68,7 +68,6 @@ function SubmissionStep02Content() {
     ) {
         // Preventing page refresh
         e.preventDefault();
-
         dispatch(backStep());
     }
 

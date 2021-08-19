@@ -26,4 +26,3 @@ class OrderExport extends Notification
             ->content("Date : {$this->date}, File Url: {$this->filePath}");
     }
 }
-

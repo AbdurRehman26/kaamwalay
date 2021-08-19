@@ -22,7 +22,7 @@ class OrderExport extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-            ->from('Robograding', ':rocket:')
-            ->content("app/Listeners/API/Services/SendOrderExportNotificationToSlack.phpDate : {$this->date}, File Url: {$this->filePath}");
+            ->from('Robograding', ':robot_face:')
+            ->content("Date : {$this->date}, File Url: {$this->filePath}");
     }
 }

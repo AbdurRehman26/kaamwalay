@@ -2,14 +2,11 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderExport extends Notification
+class OrderExported extends Notification
 {
-    use Queueable;
-
     public function __construct(public string $filePath, public string $date)
     {
     }
@@ -23,6 +20,6 @@ class OrderExport extends Notification
     {
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
-            ->content("Date : {$this->date}, File Url: {$this->filePath}");
+            ->content("Orders Export.\n Date: {$this->date}, File: {$this->filePath}");
     }
 }

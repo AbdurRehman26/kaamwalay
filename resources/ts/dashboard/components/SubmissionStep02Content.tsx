@@ -96,7 +96,7 @@ function SubmissionStep02Content() {
                                         Card's value can't be higher than the protection level.
                                     </Alert>
                                     <Alert severity={'info'} className={classes.valueAlert}>
-                                        You can modify your service level by pressing&nbsp;
+                                        You can easily upgrade your service level by clicking&nbsp;
                                         <Link href={''} onClick={handleEditServiceLevelPress}>
                                             here
                                         </Link>

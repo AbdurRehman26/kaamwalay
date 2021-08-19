@@ -5,7 +5,7 @@ namespace App\Notifications;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderExported extends Notification
+class OrdersExported extends Notification
 {
     public function __construct(public string $filePath, public string $date)
     {

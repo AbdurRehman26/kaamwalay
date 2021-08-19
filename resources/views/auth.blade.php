@@ -1,1 +1,1 @@
-<x-sap appName="auth" title="Robograding"/>
+<x-layout appName="auth" :isSinglePageApp="true"/>

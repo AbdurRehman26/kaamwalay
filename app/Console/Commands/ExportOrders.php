@@ -47,7 +47,7 @@ class ExportOrders extends Command
 
         Log::info("Orders Export Completed for date: ". $date);
 
-        if ( app()->environment('production')) {
+        if (app()->environment('production')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new OrderExport(Storage::disk('s3')->url($filePath), $date));
         }

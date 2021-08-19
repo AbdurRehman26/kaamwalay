@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Events\API\Customer\Order\OrderExport;
 use App\Exports\Order\OrdersExport;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -31,15 +33,17 @@ class ExportOrders extends Command
      */
     public function handle()
     {
+        \Log::info("Orders Export Started ");
         $this->info('Exporting...');
-
         $date = $this->argument('date');
 
         $filePath = 'exports/orders-' . $date . '-' . Str::uuid() . '.csv';
         Excel::store(new OrdersExport($date), $filePath, 's3', \Maatwebsite\Excel\Excel::CSV);
-
         $this->info(Storage::disk('s3')->url($filePath));
         $this->info('Export completed.');
+        \Log::info("Orders Export Completed ");
+
+        OrderExport::dispatch(Storage::disk('s3')->url($filePath), Carbon::parse($date)->format("m/d/Y"));
 
         return 0;
     }

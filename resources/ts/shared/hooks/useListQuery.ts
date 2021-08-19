@@ -13,7 +13,7 @@ import { useSharedDispatch } from './useSharedSelector';
 
 export function useListQuery<
     E,
-    A extends AsyncThunk<any, AxiosRequestConfig | undefined, any>,
+    A extends AsyncThunk<any, AxiosRequestConfig | void | undefined, any>,
     R extends APIState<E> = APIState<E>,
     S = GlobalStateType,
 >(action: A, entity: ClassConstructor<E>, selector: (state: S) => R, actionArg?: AxiosRequestConfig) {

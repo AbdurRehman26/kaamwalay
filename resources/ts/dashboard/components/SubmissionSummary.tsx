@@ -172,7 +172,7 @@ function SubmissionSummary() {
     }
 
     let totalDeclaredValue = 0;
-    selectedCards.forEach((selectedCard) => {
+    selectedCards.forEach((selectedCard: any) => {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
@@ -221,7 +221,7 @@ function SubmissionSummary() {
                     const verifyOrderEndpoint = apiService.createEndpoint(
                         `customer/orders/${orderID}/payments/${chargeResult.paymentIntent.id}`,
                     );
-                    verifyOrderEndpoint.post('').then((r) => {
+                    verifyOrderEndpoint.post('').then(() => {
                         setIsStripePaymentLoading(false);
                         dispatch(clearSubmissionState());
                         dispatch(invalidateOrders());

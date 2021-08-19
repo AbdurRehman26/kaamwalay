@@ -38,4 +38,10 @@ return [
         'client_id' => env('PAYPAL_CLIENT_ID'),
         'client_secret' => env('PAYPAL_CLIENT_SECRET'),
     ],
+
+    'slack' => [
+        'channel_webhooks' => [
+            'closes_ags' => env('SLACK_CHANNEL_WEBHOOK_CLOSES_AGS', 'https://hooks.slack.com/services/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'),
+        ],
+],
 ];

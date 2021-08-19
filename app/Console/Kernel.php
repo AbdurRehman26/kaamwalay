@@ -26,7 +26,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
-
         $schedule->command("orders:export", [Carbon::now()->format('Y-m-d')])
             ->dailyAt('00:10')
             ->timezone('America/New_York');

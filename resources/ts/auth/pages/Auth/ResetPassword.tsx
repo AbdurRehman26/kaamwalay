@@ -44,7 +44,6 @@ export function ResetPassword() {
             const data = await resetPassword(values);
             const { error, payload } = data as any;
             if (error) {
-                notifications.error(error.message);
                 return;
             }
 

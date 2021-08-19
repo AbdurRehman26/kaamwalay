@@ -19,7 +19,7 @@ class SendOrderPaidNotificationToSlack implements ShouldQueue
             return;
         }
 
-        Notification::route('slack', 'https://hooks.slack.com/services/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')
+        Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
             ->notify(new \App\Notifications\OrderPaid($event->order));
     }
 }

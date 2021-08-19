@@ -1,8 +1,25 @@
 import { AxiosError } from 'axios';
+import { ValidationError } from 'class-validator';
+import { Exception } from '@shared/exceptions/Exception';
+import { ValidationException } from '@shared/exceptions/ValidationException';
+import { isAxiosError } from '@shared/lib/api/isAxiosError';
+import { isException } from '@shared/lib/errors/isException';
 
-export function getErrorsBagArray(error: AxiosError): string[] {
-    const { data } = error.response || {};
-    const errors: Record<string, string[]> = data.errors || {};
+function getErrorConstraints(error: ValidationError): string[] {
+    const constraints = error.constraints ?? {};
+    return Object.values(constraints);
+}
 
-    return Object.values(errors).flat(1);
+export function getErrorsBagArray(error: Exception | AxiosError): string[] {
+    let errors: string[] = [];
+    if (isException(error) && error instanceof ValidationException) {
+        errors = error.errors.reduce((prev, error) => {
+            return [...prev, ...getErrorConstraints(error)];
+        }, [] as string[]);
+    } else if (isAxiosError(error)) {
+        const { data } = error.response || {};
+        errors = Object.values(data.errors || {});
+    }
+
+    return errors.flat(1);
 }

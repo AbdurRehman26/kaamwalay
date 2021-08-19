@@ -4,20 +4,21 @@ import { SelfInvoker } from '../interfaces/SelfInvoker';
 import { route, RouteFunc } from '../utils/route';
 import { Controller } from './Controller';
 
+type ActionModule<C> = ClassConstructor<C> | { default: ClassConstructor<C> };
+
 export type RouteActionTuple<C extends Controller, K extends keyof C = keyof C> = [
-    controller: ClassConstructor<C>,
+    controller: ClassConstructor<C> | (() => Promise<ActionModule<C>>),
     key: K,
 ];
 
 type RouteActionStatic<C extends Controller> = ClassConstructor<C & SelfInvoker> | RouteActionTuple<C>;
-type RouteActionPromise<C extends Controller> =
-    | (() => Promise<ClassConstructor<C & SelfInvoker>>)
-    | (() => Promise<RouteActionTuple<C>>);
+type RouteActionPromise<C extends Controller> = () => Promise<ActionModule<C & SelfInvoker>>;
 
 export type RouteAction<C extends Controller> = RouteActionStatic<C> | RouteActionPromise<C>;
 
 export class Route<C extends Controller = Controller> {
     private _parent!: Route<any>;
+
     constructor(private _path: string, private _action?: RouteAction<C>, private _name?: string) {}
 
     public name<T>(name?: T): T extends string ? this : string {
@@ -74,15 +75,33 @@ export class Route<C extends Controller = Controller> {
 
     async handle(...args: any[]) {
         const action = this._action;
-        let controllerAction: RouteActionStatic<any> = action as any;
-        if (typeof action === 'function') {
-            controllerAction = await (action as RouteActionPromise<any>)();
+        const actionSlice = [action];
+
+        if (!Array.isArray(action)) {
+            if (this.isActionCallback(action)) {
+                actionSlice[0] = await (action as any)();
+            }
+        } else {
+            actionSlice[0] = action[0] as any;
+            actionSlice[1] = action[1] as any;
         }
 
-        const controller = Array.isArray(controllerAction) ? controllerAction[0] : controllerAction;
-        const method = Array.isArray(controllerAction) ? controllerAction[1] : 'invoke';
+        if (this.isActionCallback(actionSlice[0])) {
+            actionSlice[0] = await (actionSlice[0] as any)();
+        }
 
+        const controller: any = (actionSlice[0] as any).default || actionSlice[0];
+        const method: any = actionSlice[1] || 'invoke';
         const instance = new controller();
+
         instance[method](...args);
+    }
+
+    private isActionCallback(action: any) {
+        if (typeof action === 'function') {
+            return !(action.prototype instanceof Controller);
+        }
+
+        return false;
     }
 }

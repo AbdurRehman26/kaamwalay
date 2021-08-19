@@ -1,5 +1,6 @@
-import FeedController from './controllers/FeedController';
 import { route } from './utils/route';
+
+const FeedController = () => import('./controllers/FeedController');
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {

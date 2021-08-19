@@ -1,6 +1,6 @@
 import { Controller } from '../classes/Controller';
 
-export class FeedController extends Controller {
+class FeedController extends Controller {
     public feedList() {
         console.log('feed list page');
     }

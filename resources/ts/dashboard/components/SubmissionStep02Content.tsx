@@ -96,10 +96,10 @@ function SubmissionStep02Content() {
                                         Card's value can't be higher than the protection level.
                                     </Alert>
                                     <Alert severity={'info'} className={classes.valueAlert}>
-                                        You can easily upgrade your service level by clicking&nbsp;
+                                        You can easily upgrade your service level by&nbsp;
                                         <Link href={''} onClick={handleEditServiceLevelPress}>
-                                            here
-                                        </Link>
+                                            clicking here
+                                        </Link>.
                                     </Alert>
                                 </>
                             ) : null}

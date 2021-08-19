@@ -14,11 +14,12 @@ class SendOrderExportNotificationToSlack implements ShouldQueue
 
     public function handle(string $filePath, string $date)
     {
+        \Log::info("Ia maher");
         if (! app()->environment('production')) {
             return;
         }
 
-        Notification::route('slack', 'https://hooks.slack.com/services/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')
+        Notification::route('slack', 'https://hooks.slack.com/services/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')
             ->notify(new \App\Notifications\OrderExport($filePath, $date));
     }
 }

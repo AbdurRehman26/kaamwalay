@@ -1,4 +1,4 @@
-import * as localforage from 'localforage';
+import { default as localforage } from 'localforage';
 import { StorageBucketInterface } from '@shared/interfaces/StorageBucketInterface';
 
 export class StorageBucket implements StorageBucketInterface {

@@ -34,18 +34,22 @@ class ExportOrders extends Command
      */
     public function handle()
     {
-        Log::info("Orders Export Started ");
         $this->info('Exporting...');
+
         $date = $this->argument('date');
+
+        Log::info("Orders Export started for  date: ". $date);
 
         $filePath = 'exports/orders-' . $date . '-' . Str::uuid() . '.csv';
         Excel::store(new OrdersExport($date), $filePath, 's3', \Maatwebsite\Excel\Excel::CSV);
         $this->info(Storage::disk('s3')->url($filePath));
         $this->info('Export completed.');
-        Log::info("Orders Export Completed ");
-        if (app()->environment('production')) {
+
+        Log::info("Orders Export Completed for date: ". $date);
+
+        if ( app()->environment('production')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-                ->notify(new OrderExport($filePath, $date));
+                ->notify(new OrderExport(Storage::disk('s3')->url($filePath), $date));
         }
 
         return 0;

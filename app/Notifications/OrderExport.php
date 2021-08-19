@@ -23,7 +23,7 @@ class OrderExport extends Notification
     {
         return (new SlackMessage)
             ->from('Robograding', ':rocket:')
-            ->content("{$this->filePath}, {$this->date}");
+            ->content("Date : {$this->date}, File Url: {$this->filePath}");
     }
 }
 

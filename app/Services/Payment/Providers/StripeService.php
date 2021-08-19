@@ -74,7 +74,7 @@ class StripeService implements PaymentProviderServiceInterface
         $charge = $paymentIntent->charges->first();
 
         if (
-            $charge->amount === ($order->grand_total * 100)
+            $charge->amount === (int) ($order->grand_total * 100)
             && $charge->outcome->type === 'authorized'
         ) {
             $order->orderPayment->update([

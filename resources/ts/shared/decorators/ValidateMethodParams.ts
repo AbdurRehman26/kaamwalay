@@ -1,6 +1,5 @@
 import { validate, validateSync, ValidatorOptions } from 'class-validator';
 import { ReflectReturnType } from '@shared/constants/ReflectMetadata';
-import { Exception } from '@shared/exceptions/Exception';
 import { ValidationException } from '@shared/exceptions/ValidationException';
 import { bindParams } from './BindParams';
 
@@ -41,7 +40,7 @@ export function ValidateMethodParamsAsync(options?: ValidatorOptions): MethodDec
 
         const returnType = Reflect.getMetadata(ReflectReturnType, target, propertyKey);
         if (!returnType || returnType !== Promise) {
-            throw new Exception('Use ValidateMethodParamsAsync only for async methods!');
+            throw new Error('Use ValidateMethodParamsAsync only for async methods!');
         }
 
         descriptor.value = async function (...args: any[]) {

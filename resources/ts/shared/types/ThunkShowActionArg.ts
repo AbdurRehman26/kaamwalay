@@ -4,4 +4,5 @@ import { ID } from './Id';
 export type ThunkShowActionArg = {
     resourceId: ID;
     config?: AxiosRequestConfig;
+    skipLoading?: boolean;
 };

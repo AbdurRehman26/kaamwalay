@@ -7,14 +7,14 @@ use Illuminate\View\Component;
 
 class SinglePageApplication extends Component
 {
-    public string $app;
+    public string $appName;
     public string $title;
     public ?string $lang;
     public ?string $publicPath;
 
-    public function __construct(string $app, string $title, ?string $publicPath = null, ?string $lang = null)
+    public function __construct(string $appName, string $title, ?string $publicPath = null, ?string $lang = null)
     {
-        $this->app = $app;
+        $this->appName = $appName;
         $this->title = $title;
         $this->lang = $lang;
         $this->publicPath = $publicPath;
@@ -28,9 +28,9 @@ class SinglePageApplication extends Component
     public function getPublicPath(): string
     {
         if (! $this->publicPath) {
-            $this->publicPath = '/apps/' . $this->app . '/';
+            $this->publicPath = '/apps/' . $this->appName . '/';
             if (app()->environment("production")) {
-                $this->publicPath = config('app.mix_url') . "/apps/" . $this->app;
+                $this->publicPath = config('app.mix_url') . "/apps/" . $this->appName;
             }
         }
 

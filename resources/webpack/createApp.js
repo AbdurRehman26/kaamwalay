@@ -1,9 +1,12 @@
 const path = require('path');
+const fs = require('fs');
 const mix = require('laravel-mix');
 const convertToFileHash = require('laravel-mix-make-file-hash');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+
+const baseDir = path.resolve(__dirname, '../..');
 
 module.exports.createApp = function createApp(name) {
     const appUrl = `apps/${name}`;
@@ -30,9 +33,15 @@ module.exports.createApp = function createApp(name) {
         }
     }
 
+    const entry = [
+        `resources/ts/${name}/index.tsx`,
+        `resources/ts/${name}/index.ts`,
+        `resources/ts/${name}/main.ts`,
+    ].find((entry) => fs.existsSync(path.resolve(baseDir, entry)));
+
     // noinspection JSUnresolvedFunction
     mix.setPublicPath(appPath)
-        .ts(`resources/ts/${name}/index.tsx`, '')
+        .ts(entry, '')
         .react()
         .extract()
         .browserSync(process.env.APP_URL || 'http://laravel.test')

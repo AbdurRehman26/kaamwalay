@@ -1,1 +1,1 @@
-<x-sap app="dashboard" title="Dashboard | Robograding"/>
+<x-sap appName="dashboard" title="Dashboard | Robograding"/>

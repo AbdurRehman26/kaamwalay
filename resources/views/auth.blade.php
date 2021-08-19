@@ -1,1 +1,1 @@
-<x-sap app="auth" title="Robograding"/>
+<x-sap appName="auth" title="Robograding"/>

@@ -10,20 +10,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PaymentCardController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(StripeService $stripeService): JsonResponse
     {
         /** @var User $user */
         $user = auth()->user();
 
         return new JsonResponse([
-            'data' => $user->paymentMethods(),
+            'data' => $stripeService->getUserPaymentMethods($user),
         ], Response::HTTP_OK);
     }
 
     public function createSetupIntent(StripeService $stripeService): JsonResponse
     {
+        /** @var User $user */
+        $user = auth()->user();
+
         return new JsonResponse([
-            'intent' => $stripeService->createSetupIntent(),
+            'intent' => $stripeService->createSetupIntent($user),
         ], Response::HTTP_OK);
     }
 }

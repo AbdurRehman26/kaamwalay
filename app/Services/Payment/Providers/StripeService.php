@@ -4,18 +4,39 @@ namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
 
 class StripeService implements PaymentProviderServiceInterface
 {
-    public function createSetupIntent(): \Stripe\SetupIntent
-    {
-        /** @var User $user */
-        $user = auth()->user();
+    const CUSTOMER_ERROR_PARAMETER = 'customer';
 
-        return $user->createSetupIntent(['customer' => $user->stripe_id]);
+    public function createSetupIntent(User $user): \Stripe\SetupIntent
+    {
+        try {
+            return $user->createSetupIntent(['customer' => $user->stripe_id]);
+        } catch (InvalidRequestException $e) {
+            if ($this->isCustomerInvalid($e->getStripeParam())) {
+                $this->handleInvalidCustomer($user);
+                return $this->createSetupIntent($user);
+            }
+        }
+    }
+
+    public function getUserPaymentMethods(User $user): array|Collection
+    {
+        try {
+            return $user->paymentMethods();
+        } catch (InvalidRequestException $e) {
+            if ($this->isCustomerInvalid($e->getStripeParam())) {
+                $this->handleInvalidCustomer($user);
+                return $this->getUserPaymentMethods($user);
+            }
+        }
+        return [];
     }
 
     public function charge(Order $order): array
@@ -84,5 +105,32 @@ class StripeService implements PaymentProviderServiceInterface
         }
 
         return false;
+    }
+
+    protected function isCustomerInvalid(string $param): bool
+    {
+        return $param === self::CUSTOMER_ERROR_PARAMETER;
+    }
+
+    public function createCustomer(User $user): void
+    {
+        if (! $user->hasStripeId()) {
+            $user->createAsStripeCustomer([
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+        }
+    }
+
+    protected function removeOldCustomerId(User $user): void
+    {
+        $user->stripe_id = null;
+        $user->save();
+    }
+
+    protected function handleInvalidCustomer(User $user): void
+    {
+        $this->removeOldCustomerId($user);
+        $this->createCustomer($user);
     }
 }

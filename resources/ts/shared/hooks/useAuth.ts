@@ -28,7 +28,7 @@ export function useAuth() {
         [dispatch],
     );
     const register = useCallback((input: SignUpRequestDto) => dispatch(registerAction(input)), [dispatch]);
-    const authCheck = useCallback(() => dispatch(authenticateCheckAction()), [dispatch]);
+    const checkAuth = useCallback(() => dispatch(authenticateCheckAction()), [dispatch]);
     const logout = useCallback(() => dispatch(revokeAuthAction()), [dispatch]);
     const forgotPassword = useCallback((email: string) => dispatch(forgotPasswordAction(email)), [dispatch]);
     const resetPassword = useCallback(
@@ -38,7 +38,7 @@ export function useAuth() {
 
     return {
         user: user$,
-        authCheck,
+        checkAuth,
         login,
         register,
         logout,

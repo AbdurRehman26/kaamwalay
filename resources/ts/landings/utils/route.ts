@@ -1,10 +1,9 @@
 import { app } from '@shared/lib/app';
+import { Controller } from '../classes/Controller';
 import { Route, RouteAction } from '../classes/Route';
 import { RouterService } from '../services/RouterService';
 
-export type RouteFunc = <C>(url: string, action: RouteAction<C>) => Route<C>;
-
-export function route<C>(url: string, action?: RouteAction<C>) {
+export function route<C extends Controller>(url: string, action?: RouteAction<C>) {
     const router = app(RouterService);
     const routeDefinition = new Route(url, action);
 
@@ -14,3 +13,5 @@ export function route<C>(url: string, action?: RouteAction<C>) {
 
     return router.addRoute(routeDefinition);
 }
+
+export type RouteFunc = typeof route;

@@ -1,11 +1,14 @@
-<?php
+@php
     $defaultTitle = 'Robograding - Card Grading by Artificial Intelligence - Faster, more accurate & ethical.';
     $defaultDescription = 'Robograding allows you to grade cards with the help of Artificial Intelligence. It is more economical, 100% transparent, more accurate than human-grading, and 10-times faster!';
     $defaultImage = 'https://d2eli1wrotxo1h.cloudfront.net/assets/robograding-meta-image.jpg';
     $defaultFavicon = 'https://d2eli1wrotxo1h.cloudfront.net/assets/robograding-favicon.png';
-?>
-<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="" />
-<link href="https://d2eli1wrotxo1h.cloudfront.net" rel="preconnect" crossorigin="" />
+@endphp
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://d2eli1wrotxo1h.cloudfront.net" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Material+Icons&display=swap" rel="stylesheet">
 
 <title>{{ $title ?? $defaultTitle }}</title>
 <meta charset="UTF-8">

@@ -1,0 +1,37 @@
+@use "sass:map";
+@use "sass:list";
+@use "sass:meta";
+@use "sass:math";
+@use './theme';
+
+@mixin down($breakpoint) {
+    @if (meta.type-of($breakpoint) == string) {
+        $breakpoint: unquote($breakpoint);
+    }
+
+    $value: $breakpoint;
+    @if (map.has-key(theme.$breakpoints, $breakpoint)) {
+        $keys: map.keys(theme.$breakpoints);
+        $index: list.index($keys, $breakpoint);
+        $index: $index;
+
+        @if ($index == list.length($keys)) {
+            @media screen and (min-width: 0) {
+                @content;
+            }
+            $value: 0;
+        } @else {
+            $value: map.get(theme.$breakpoints, list.nth($keys, $index + 1));
+        }
+    }
+
+    @if ($value > 0) {
+        @if (math.is-unitless($value)) {
+            $value: $value * 1px;
+        }
+
+        @media screen and (max-width: $value - 0.05) {
+            @content;
+        }
+    }
+}

@@ -1,0 +1,10 @@
+$primaryColor: #42f9ff;
+$transitionTiming: cubic-bezier(0.4, 0, 0.2, 1);
+$transitionDuration: 250ms;
+$breakpoints: (
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+);

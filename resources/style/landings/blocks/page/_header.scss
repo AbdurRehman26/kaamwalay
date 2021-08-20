@@ -1,5 +1,125 @@
+@use "../../../shared/theme";
+@use "../../../shared/utils";
+@use "../../../shared/breakpoints";
+
 .page__header {
-    padding: 24px;
+    position: relative;
+    z-index: 3;
+    padding: 0 24px;
     color: #fff;
     background: linear-gradient(106.54deg, #140078 -4.67%, #6c31bc 112.32%);
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
+    @include breakpoints.down(xs) {
+        padding: 0 24px 0 8px;
+    }
+    &__brand {
+        display: block;
+        padding: 14px 24px 14px 0;
+        @include breakpoints.down(md) {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        &-holder {
+            @include breakpoints.down(xs) {
+                width: 100%;
+            }
+        }
+        &-image {
+            width: auto;
+            height: 64px;
+            @include breakpoints.down(1059px) {
+                height: 48px;
+            }
+            @include breakpoints.down(sm) {
+                height: 44px;
+            }
+            @include breakpoints.down(xs) {
+                height: 34px;
+            }
+        }
+    }
+
+    &__nav {
+        $paddingSize: 18px;
+        &,
+        &-holder {
+            display: flex;
+            @include breakpoints.down(sm) {
+                display: none;
+            }
+        }
+        &-holder {
+            align-items: stretch;
+        }
+        &-item {
+            position: relative;
+            overflow: hidden;
+            padding: 0 $paddingSize;
+            font-weight: 500;
+            letter-spacing: 0.35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            &:after {
+                content: '';
+                display: block;
+                width: calc(100% - #{$paddingSize * 2});
+                height: 4px;
+                border-radius: 2px 2px 0 0;
+                position: absolute;
+                transform: translate3d(0, 4px, 0) scale(0.5, 1);
+                bottom: 0;
+                left: $paddingSize;
+                background-color: theme.$primaryColor;
+                opacity: 0.5;
+                transition: utils.transition(('transform', 'opacity', 'background-color'));
+            }
+
+            &--active:after,
+            &:hover:after {
+                transform: translate3d(0, 0, 0) scale(1, 1);
+            }
+
+            &--active {
+                color: theme.$primaryColor;
+                &:after {
+                    opacity: 1;
+                }
+            }
+
+            &:hover:after {
+                background-color: #fff;
+                opacity: 0.8;
+            }
+        }
+    }
+
+    &__auth {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 160px;
+        @include breakpoints.down(xs) {
+            display: none;
+        }
+    }
+
+    &__drawer {
+        display: none;
+        color: #fff;
+        width: 1px;
+        margin-left: -1px;
+        @include breakpoints.down(xs) {
+            display: inline-flex;
+            align-items: center;
+        }
+    }
 }

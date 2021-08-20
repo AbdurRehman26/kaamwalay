@@ -1,5 +1,5 @@
 <footer class="page-header">
-    Header
+    {{-- Implement footer --}}
 </footer>
 
 {{ $slot }}

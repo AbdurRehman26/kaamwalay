@@ -6,15 +6,14 @@ import { Controller } from './Controller';
 
 type ActionModule<C> = ClassConstructor<C> | { default: ClassConstructor<C> };
 
-export type RouteActionTuple<C extends Controller, K extends keyof C = keyof C> = [
-    controller: ClassConstructor<C> | (() => Promise<ActionModule<C>>),
-    key: K,
-];
+type RouteActionController<T extends Controller> = ClassConstructor<T> | (() => Promise<ActionModule<T>>);
 
-type RouteActionStatic<C extends Controller> = ClassConstructor<C & SelfInvoker> | RouteActionTuple<C>;
-type RouteActionPromise<C extends Controller> = () => Promise<ActionModule<C & SelfInvoker>>;
+export type RouteActionTuple<
+    C extends Controller,
+    K extends keyof Omit<C, keyof Controller> = keyof Omit<C, keyof Controller>,
+> = [controller: RouteActionController<C>, key: K];
 
-export type RouteAction<C extends Controller> = RouteActionStatic<C> | RouteActionPromise<C>;
+export type RouteAction<C extends Controller> = RouteActionController<C & SelfInvoker> | RouteActionTuple<C>;
 
 export class Route<C extends Controller = Controller> {
     private _parent!: Route<any>;
@@ -93,6 +92,10 @@ export class Route<C extends Controller = Controller> {
         const controller: any = (actionSlice[0] as any).default || actionSlice[0];
         const method: any = actionSlice[1] || 'invoke';
         const instance = new controller();
+
+        if (instance.setup) {
+            await instance.setup(method, ...args);
+        }
 
         instance[method](...args);
     }

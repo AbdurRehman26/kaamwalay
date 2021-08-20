@@ -1,2 +1,15 @@
+.page__content,
+.page__body {
+    display: flex;
+    flex-direction: column;
+}
+
+.page__body {
+    min-height: 100vh;
+}
+
 .page__content {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto;
 }

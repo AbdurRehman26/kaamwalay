@@ -11,7 +11,7 @@
         <x-layout.css :appName="$appName"/>
         {{ $head ?? '' }}
     </head>
-    <body class="page__body">
+    <body class="page__body {{ $pageClass ?? '' }}">
         @if($isSinglePageApp)
             <noscript>You need to enable JavaScript to run this app.</noscript>
             <div id="root"></div>

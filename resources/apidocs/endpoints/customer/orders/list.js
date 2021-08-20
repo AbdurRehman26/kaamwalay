@@ -34,7 +34,12 @@
  *                        "turnaround": "28-30 Day"
  *                    },
  *                    "number_of_cards": 11,
- *                    "status": "Pending Payment"
+ *                    "status": "Pending Payment",
+ *                    "customer_shipment": {
+ *                        "id": 1,
+ *                        "shipment_provider": "usps",
+ *                        "tracking_number": "9400100000000000000000"
+ *                    }
  *                },
  *                {
  *                    "id": 28,
@@ -56,7 +61,12 @@
  *                        "turnaround": "28-30 Day"
  *                    },
  *                    "number_of_cards": 11,
- *                    "status": "Pending Payment"
+ *                    "status": "Pending Payment",
+ *                    "customer_shipment": {
+ *                        "id": 2,
+ *                        "shipment_provider": "fedex",
+ *                        "tracking_number": "020207021381215"
+ *                    }
  *                },
  *            ],
  *            "links": {

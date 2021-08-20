@@ -8,6 +8,7 @@ use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\Customer\User\UserResource;
+use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCustomerShipmentResource;
 
 class OrderResource extends BaseResource
 {
@@ -31,6 +32,7 @@ class OrderResource extends BaseResource
             'order_payment' => new OrderPaymentResource($this->orderPayment),
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
+            'customer_shipment' => count($this->orderItems) > 0 ? new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment) : null,
         ];
     }
 }

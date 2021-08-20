@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             InvoiceSeeder::class,
             OrderItemSeeder::class,
             OrderItemShipmentSeeder::class,
+            OrderItemCustomerShipmentSeeder::class,
             OrderSeeder::class,
             StateSeeder::class,
         ]);

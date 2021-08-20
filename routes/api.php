@@ -53,6 +53,7 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::apiResource('/', OrderController::class)
                 ->only(['index', 'store']);
+            Route::put('{order}/customer-shipment',[OrderController::class, 'updateCustomerShipment']);
         });
     });
 });

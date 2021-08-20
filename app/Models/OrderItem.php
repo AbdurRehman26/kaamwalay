@@ -18,6 +18,7 @@ class OrderItem extends Model
         'order_id',
         'card_product_id',
         'order_item_shipment_id',
+        'order_item_customer_shipment_id',
         'quantity',
         'unit_price',
         'total_price',
@@ -37,6 +38,7 @@ class OrderItem extends Model
         'order_id' => 'integer',
         'card_product_id' => 'integer',
         'order_item_shipment_id' => 'integer',
+        'order_item_customer_shipment_id' => 'integer',
         'unit_price' => 'decimal:2',
         'total_price' => 'decimal:2',
         'declared_value_per_unit' => 'float',
@@ -56,5 +58,10 @@ class OrderItem extends Model
     public function orderItemShipment()
     {
         return $this->belongsTo(\App\Models\OrderItemShipment::class);
+    }
+
+    public function orderItemCustomerShipment()
+    {
+        return $this->belongsTo(\App\Models\OrderItemCustomerShipment::class);
     }
 }

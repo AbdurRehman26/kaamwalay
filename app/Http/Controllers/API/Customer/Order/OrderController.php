@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Customer\Order;
 
 use App\Exceptions\API\Customer\Order\OrderNotPlaced;
+use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
 use App\Http\Resources\API\Customer\Order\OrderCollection;
@@ -14,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Order\Shipping\CustomerShipmentService;
 
 class OrderController extends Controller
 {
@@ -62,8 +64,19 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function updateCustomerShipment(Request $request, Order $order, CustomerShipmentService $customerShipmentService)
     {
-        //
+        try{
+            $order = $customerShipmentService->setItemsCustomerShipment($order,$request->shipment_provider,$request->tracking_number);
+        } catch (CustomerShipmentNotUpdated $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+        return new OrderResource($order);
     }
+
 }

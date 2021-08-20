@@ -1,13 +1,17 @@
 /**
- * @api {get} /customer/orders/1 Show Order
- * @apiName Show Order
+ * @api {put} /customer/orders/1/customer-shipment Update Customer Shipment
+ * @apiName Update Customer Shipment
  * @apiGroup Customer-Orders
  *
  * @apiUse header_main
  * @apiUse Authorization
  *
  * @apiParam {Integer} id Order unique ID
- *
+ *  @apiParamExample {json} Request-Example:
+ *      {
+ *          "shipment_provider": "usps",
+ *          "tracking_number": "9400100000000000000000"
+ *      }
  * @apiSuccess {Object} data Order object
  *
  * @apiSuccessExample Success-Response:
@@ -18,7 +22,9 @@
  *                "order_number": "RG000000029",
  *                "number_of_cards": 11,
  *                "total_declared_value": 5500,
+ *                "status": "placed",
  *                "grand_total": 263,
+ *                "service_fee": 20,
  *                "shipping_fee": 43,
  *                "created_at": {
  *                    "date": "2021-08-12 02:22:46.000000",
@@ -130,8 +136,8 @@
  *                ],
  *                "customer_shipment": {
  *                     "id": 2,
- *                     "shipment_provider": fedex,
- *                     "tracking_number": "020207021381215"
+ *                     "shipment_provider": usps,
+ *                     "tracking_number": "9400100000000000000000"
  *                 }
  *            }
  *        }

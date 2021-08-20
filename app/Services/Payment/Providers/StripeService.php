@@ -9,12 +9,14 @@ use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
+use Stripe\SetupIntent;
 
 class StripeService implements PaymentProviderServiceInterface
 {
     const CUSTOMER_ERROR_PARAMETER = 'customer';
+    const PAYMENT_METHOD_ERROR_PARAMETER = 'payment_method';
 
-    public function createSetupIntent(User $user): \Stripe\SetupIntent
+    public function createSetupIntent(User $user): array|SetupIntent
     {
         try {
             return $user->createSetupIntent(['customer' => $user->stripe_id]);
@@ -24,6 +26,7 @@ class StripeService implements PaymentProviderServiceInterface
                 return $this->createSetupIntent($user);
             }
         }
+        return [];
     }
 
     public function getUserPaymentMethods(User $user): array|Collection
@@ -73,6 +76,10 @@ class StripeService implements PaymentProviderServiceInterface
             return [
                 'payment_intent' => $exception->payment,
             ];
+        } catch (InvalidRequestException $e) {
+            if ($this->isPaymentMethodInvalid($e->getStripeParam())) {
+                return ['error' => 'Invalid Payment Method, please go back and select a valid Payment Method.'];
+            }
         }
     }
 
@@ -110,6 +117,11 @@ class StripeService implements PaymentProviderServiceInterface
     protected function isCustomerInvalid(string $param): bool
     {
         return $param === self::CUSTOMER_ERROR_PARAMETER;
+    }
+
+    protected function isPaymentMethodInvalid(string $param): bool
+    {
+        return $param === self::PAYMENT_METHOD_ERROR_PARAMETER;
     }
 
     public function createCustomer(User $user): void

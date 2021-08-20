@@ -30,10 +30,11 @@ class OrderPaymentController extends Controller
             return new JsonResponse($response);
         }
 
-        return new JsonResponse(
-            $response,
-            $order->paymentMethod->code === 'stripe' ? Response::HTTP_PAYMENT_REQUIRED : Response::HTTP_CREATED
-        );
+        if (! empty($response['error'])) {
+            return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse($response, Response::HTTP_PAYMENT_REQUIRED);
     }
 
     public function verify(Order $order, $paymentIntentId): JsonResponse

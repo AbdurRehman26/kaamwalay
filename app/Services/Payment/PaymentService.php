@@ -7,7 +7,6 @@ use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
-use JetBrains\PhpStorm\ArrayShape;
 
 class PaymentService
 {
@@ -51,7 +50,7 @@ class PaymentService
         return $data;
     }
 
-    #[ArrayShape(['data' => "mixed"])] public function updateOrderPayment(array $data): array
+    public function updateOrderPayment(array $data): array
     {
         $this->order->orderPayment->update([
             'request' => json_encode($data['request']),

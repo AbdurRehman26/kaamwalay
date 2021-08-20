@@ -24,5 +24,4 @@ class OrderItemCustomerShipment extends Model
     protected $casts = [
         'id' => 'integer',
     ];
-
 }

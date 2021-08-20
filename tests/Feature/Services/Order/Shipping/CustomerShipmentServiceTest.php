@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\Services\Order\Shipping;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemCustomerShipment;
 use App\Services\Order\Shipping\CustomerShipmentService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CustomerShipmentServiceTest extends TestCase
 {
@@ -23,11 +21,11 @@ class CustomerShipmentServiceTest extends TestCase
         $orderItem = OrderItem::factory()->create();
         $order = $orderItem->order;
 
-        $order = (new CustomerShipmentService)->setItemsCustomerShipment($order,$shipmentProvider,$trackingNumber);
+        $order = (new CustomerShipmentService)->setItemsCustomerShipment($order, $shipmentProvider, $trackingNumber);
         $firstItem = $order->orderItems[0];
 
-        $this->assertInstanceOf(OrderItemCustomerShipment::class,$firstItem->orderItemCustomerShipment);
-        $this->assertEquals($firstItem->orderItemCustomerShipment->shipment_provider,$shipmentProvider);
-        $this->assertEquals($firstItem->orderItemCustomerShipment->tracking_number,$trackingNumber);
+        $this->assertInstanceOf(OrderItemCustomerShipment::class, $firstItem->orderItemCustomerShipment);
+        $this->assertEquals($firstItem->orderItemCustomerShipment->shipment_provider, $shipmentProvider);
+        $this->assertEquals($firstItem->orderItemCustomerShipment->tracking_number, $trackingNumber);
     }
 }

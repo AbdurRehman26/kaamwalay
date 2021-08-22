@@ -1,3 +1,8 @@
 @import '../shared/tailwind';
+
+// Block imports
 @import './blocks/page/page';
+@import './blocks/pagination';
+
+// Pages imports
 @import './pages/feed/feed';

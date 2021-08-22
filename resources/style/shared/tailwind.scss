@@ -1,5 +1,14 @@
+@use "./breakpoints";
 @tailwind base;
 @tailwind components;
+
+@layer components {
+    .container {
+        @include breakpoints.down(sm) {
+            max-width: 100%;
+        }
+    }
+}
 
 // Same as the MuiBaseline to remove flashbacks
 html {

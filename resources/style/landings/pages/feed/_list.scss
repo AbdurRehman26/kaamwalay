@@ -1,3 +1,4 @@
+@use '../../../shared/breakpoints';
 @use '../../../shared/theme';
 
 .feed-list {
@@ -5,16 +6,35 @@
     background: linear-gradient(103.29deg, #140078 -18.4%, #6c31bc 112.42%);
     flex: 1 1 auto;
     color: #fff;
+
+    @include breakpoints.down(sm) {
+        padding-top: 24px;
+        padding-bottom: 0;
+    }
+
     &__table {
         @apply w-full table-fixed;
+        min-width: 900px;
+        box-sizing: border-box;
+
+        &__container {
+            @include breakpoints.down(md) {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+
+        &-holder {
+            max-width: 100%;
+            overflow-x: auto;
+        }
 
         &-row {
             border-bottom: 1px solid transparentize(#fff, 0.7);
         }
 
         &-cell {
-            padding-top: 16px;
-            padding-bottom: 16px;
+            padding: 16px;
             text-align: left;
 
             // As of 2021, colgroup>col looks deprecated on the web spec,
@@ -23,11 +43,11 @@
             &--date,
             &--certificate,
             &--owner {
-                width: 16.8%;
+                width: 140px;
             }
 
             &--grade {
-                width: 9%;
+                width: 96px;
                 text-align: right;
             }
         }

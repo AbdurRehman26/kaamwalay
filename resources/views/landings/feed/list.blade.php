@@ -29,26 +29,32 @@
                         @for($i = 0; $i < 10; $i++)
                             <tr class="feed-list__table-row">
                                 <td class="feed-list__table-cell feed-list__table-cell--card">
-                                    <div class="feed-list__table__info">
+                                    <a href="{{ route('feed.view', ['id' => $i]) }}" class="feed-list__table__info">
                                         <img class="feed-list__table__info-image" src="{{ asset('assets/images/card-preview.png') }}" alt="Card" width="52" />
                                         <div class="feed-list__table__info-text">
                                             <p class="feed-list__table__info-heading">Charizard</p>
                                             <p class="feed-list__table__info-subheading">2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard</p>
                                         </div>
-                                    </div>
+                                    </a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--date">
+                                    <a href="{{ route('feed.view', ['id' => $i]) }}">
                                     {{ \Carbon\Carbon::now()->format("m/d/Y") }}
                                     <br/>
                                     {{ \Carbon\Carbon::now()->format("h:i A") }}
+                                    </a>
                                 </td>
-                                <td class="feed-list__table-cell feed-list__table-cell--certificate">AG676739</td>
-                                <td class="feed-list__table-cell feed-list__table-cell--owner">JonDoe24</td>
+                                <td class="feed-list__table-cell feed-list__table-cell--certificate">
+                                    <a href="{{ route('feed.view', ['id' => $i]) }}">AG676739</a>
+                                </td>
+                                <td class="feed-list__table-cell feed-list__table-cell--owner">
+                                    <a href="{{ route('feed.view', ['id' => $i]) }}">JonDoe24</a>
+                                </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--grade">
-                                    <div class="feed-list__grade">
+                                    <a href="{{ route('feed.view', ['id' => $i]) }}" class="feed-list__grade">
                                         <p class="feed-list__grade__label">MINT</p>
                                         <p class="feed-list__grade__value">9.5</p>
-                                    </div>
+                                    </a>
                                 </td>
                             </tr>
                         @endfor

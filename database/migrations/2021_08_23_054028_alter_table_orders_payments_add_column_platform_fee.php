@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableOrdersAddColumnProviderFee extends Migration
+class AlterTableOrdersPaymentsAddColumnPlatformFee extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterTableOrdersAddColumnProviderFee extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('provider_fee', 10, 2)->nullable();
+        Schema::table('order_payments', function (Blueprint $table) {
+            //
         });
     }
 
@@ -25,8 +25,8 @@ class AlterTableOrdersAddColumnProviderFee extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('provider_fee');
+        Schema::table('order_payments', function (Blueprint $table) {
+            //
         });
     }
 }

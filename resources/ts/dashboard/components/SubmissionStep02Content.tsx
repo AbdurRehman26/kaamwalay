@@ -1,6 +1,7 @@
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import algoliaSearch from 'algoliasearch';
@@ -8,7 +9,7 @@ import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
+import { backStep, setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';
 import CardSubmissionSearchField from './CardSubmissionSearchField';
 import CardsSearchResults from './CardsSearchResults';
@@ -62,6 +63,14 @@ function SubmissionStep02Content() {
         return true;
     }
 
+    function handleEditServiceLevelPress(
+        e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    ) {
+        // Preventing page refresh
+        e.preventDefault();
+        dispatch(backStep());
+    }
+
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -81,11 +90,18 @@ function SubmissionStep02Content() {
                             <CardSubmissionSearchField />
                             {searchValue !== '' ? <CardsSearchResults /> : null}
                             <AddedSubmissionCards />
-
                             {!areSelectedCardsValuesValid() ? (
-                                <Alert severity="error" className={classes.valueAlert}>
-                                    Card's value can't be higher than the protection level.
-                                </Alert>
+                                <>
+                                    <Alert severity="error" className={classes.valueAlert}>
+                                        Card's value can't be higher than the protection level.
+                                    </Alert>
+                                    <Alert severity={'info'} className={classes.valueAlert}>
+                                        You can easily upgrade your service level by&nbsp;
+                                        <Link href={''} onClick={handleEditServiceLevelPress}>
+                                            clicking here
+                                        </Link>.
+                                    </Alert>
+                                </>
                             ) : null}
                             <Configure hitsPerPage={20} />
                         </InstantSearch>

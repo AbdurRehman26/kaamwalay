@@ -45,6 +45,15 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
             </Box>
         );
     }
+
+    if (!data) {
+        return (
+            <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
+                <Typography color={'error'}>Submission not found.</Typography>
+            </Box>
+        );
+    }
+
     return (
         <Paper variant={'outlined'} className={classes.root}>
             <Box paddingY={3} display={'flex'} flexDirection={'column'} alignItems={'center'}>

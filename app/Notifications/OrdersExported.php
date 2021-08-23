@@ -2,13 +2,12 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderPaid extends Notification
+class OrdersExported extends Notification
 {
-    public function __construct(public Order $order)
+    public function __construct(public string $filePath, public string $date)
     {
     }
 
@@ -19,10 +18,8 @@ class OrderPaid extends Notification
 
     public function toSlack($notifiable)
     {
-        $paymentCode = ucfirst($this->order->paymentMethod->code);
-
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
-            ->content("{$this->order->user->getFullName()}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}");
+            ->content("Orders Export.\n Date: {$this->date}, File: {$this->filePath}");
     }
 }

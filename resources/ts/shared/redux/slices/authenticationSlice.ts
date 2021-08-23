@@ -4,7 +4,9 @@ import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
 import { UserEntity } from '@shared/entities/UserEntity';
+import { isAxiosError } from '@shared/lib/api/isAxiosError';
 import { app } from '@shared/lib/app';
+import { isException } from '@shared/lib/errors/isException';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { NotificationsService } from '@shared/services/NotificationsService';
@@ -19,7 +21,7 @@ interface StateType {
 
 type AuthenticatePayload = PayloadAction<AuthenticatedUserEntity, string, any, Error>;
 
-export const authenticateAction = createAsyncThunk('auth/authenticate', async (input: LoginRequestDto) => {
+export const authenticateAction = createAsyncThunk('auth/authenticate', async (input: LoginRequestDto, thunkAPI) => {
     const authenticationService = app(AuthenticationService);
     const authenticationRepository = app(AuthenticationRepository);
 
@@ -31,15 +33,13 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         // serialize class objects to plain objects according redux toolkit error
         return classToPlain(authenticatedUser);
     } catch (e) {
-        if (e.errors) {
-            NotificationsService.error('Validation errors.');
-        } else if (e.isAxiosError) {
+        if (isAxiosError(e) || isException(e)) {
             NotificationsService.exception(e);
         } else {
             NotificationsService.error('Unable to login.');
         }
 
-        throw e;
+        return thunkAPI.rejectWithValue(e);
     }
 });
 
@@ -54,13 +54,8 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
 
         thunkAPI.dispatch(authenticateCheckAction());
     } catch (e) {
-        if (e.errors) {
-            NotificationsService.error('Validation errors.');
-        } else {
-            NotificationsService.exception(e);
-        }
-
-        throw e;
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
     }
 });
 
@@ -84,28 +79,28 @@ export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {
     await authenticationService.removeAccessToken();
 });
 
-export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', async (email: string) => {
+export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', async (email: string, thunkAPI) => {
     const authenticationRepository = app(AuthenticationRepository);
     try {
         return await authenticationRepository.forgotPassword(email);
     } catch (e) {
         NotificationsService.exception(e);
-        throw e;
+        return thunkAPI.rejectWithValue(e);
     }
 });
 
-export const resetPasswordAction = createAsyncThunk('auth/password/reset', async (input: ResetPasswordRequestDto) => {
-    const authenticationRepository = app(AuthenticationRepository);
-    try {
-        return await authenticationRepository.resetPassword(input);
-    } catch (e) {
-        if (e.errors) {
-            throw new Error('Validation error.');
+export const resetPasswordAction = createAsyncThunk(
+    'auth/password/reset',
+    async (input: ResetPasswordRequestDto, thunkAPI) => {
+        const authenticationRepository = app(AuthenticationRepository);
+        try {
+            return await authenticationRepository.resetPassword(input);
+        } catch (e) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
         }
-
-        throw e;
-    }
-});
+    },
+);
 
 export const authenticationSlice = createSlice({
     name: 'authentication',

@@ -43,6 +43,7 @@ class StripeServiceTest extends TestCase
      */
     public function is_successfully_validates_a_paid_order()
     {
+        /** @var Order $order */
         $order = Order::factory()->create();
         OrderPayment::factory()->create([
             'order_id' => $order->id,

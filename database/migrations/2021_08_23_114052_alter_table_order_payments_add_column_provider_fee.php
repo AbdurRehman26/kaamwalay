@@ -14,7 +14,7 @@ class AlterTableOrderPaymentsAddColumnProviderFee extends Migration
     public function up()
     {
         Schema::table('order_payments', function (Blueprint $table) {
-            $table->decimal('provider_fee', 10, 2)->nullable();
+            $table->decimal('provider_fee', 10, 2)->after('payment_provider_reference_id')->nullable();
         });
     }
 

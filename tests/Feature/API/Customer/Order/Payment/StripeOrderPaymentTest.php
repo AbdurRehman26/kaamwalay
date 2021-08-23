@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\API\Customer\Order;
+namespace Tests\Feature\API\Customer\Order\Payment;
 
 use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Models\Order;
@@ -33,7 +33,10 @@ class StripeOrderPaymentTest extends TestCase
         Event::fake();
     }
 
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function user_can_be_charged_successfully()
     {
         OrderPayment::factory()->create([
@@ -48,7 +51,10 @@ class StripeOrderPaymentTest extends TestCase
         $response->assertJsonPath('data.amount', (int) ($this->order->grand_total * 100));
     }
 
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function user_receives_incomplete_payment_response()
     {
         OrderPayment::factory()->create([
@@ -62,7 +68,10 @@ class StripeOrderPaymentTest extends TestCase
         $response->assertJsonStructure(['payment_intent' => ['id']]);
     }
 
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function user_can_verify_a_successful_payment()
     {
         OrderPayment::factory()->create([
@@ -76,7 +85,10 @@ class StripeOrderPaymentTest extends TestCase
             'message' => 'Payment verified successfully',
         ]);
     }
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function user_cannot_verify_a_failed_payment()
     {
         OrderPayment::factory()->create([

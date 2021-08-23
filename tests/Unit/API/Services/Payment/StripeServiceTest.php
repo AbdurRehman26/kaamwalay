@@ -25,16 +25,22 @@ class StripeServiceTest extends TestCase
         $this->stripe = resolve(StripeService::class);
     }
 
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function it_can_generate_stripe_customer_id()
     {
         $user = User::factory()->create();
-        $this->stripe->createCustomer($user);
+        $this->stripe->createCustomerIfNull($user);
         $user->refresh();
         $this->assertTrue($user->hasStripeId());
     }
 
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function is_successfully_validates_a_paid_order()
     {
         $order = Order::factory()->create();
@@ -47,7 +53,10 @@ class StripeServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function is_successfully_invalidates_unpaid_order()
     {
         $order = Order::factory()->create();
@@ -60,7 +69,10 @@ class StripeServiceTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function it_charges_user_successfully()
     {
         $order = Order::factory()->create();
@@ -74,7 +86,10 @@ class StripeServiceTest extends TestCase
         $this->assertArrayHasKey('success', $result);
     }
 
-    /** @test @group payment */
+    /**
+     * @test
+     * @group payment
+     */
     public function it_fails_to_charge_user()
     {
         $order = Order::factory()->create();

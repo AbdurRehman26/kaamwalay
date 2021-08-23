@@ -49,7 +49,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         return $this->validateOrderIsPaid($order, $paymentIntent);
     }
 
-    public function successfulPaymentResponse(array $data): array
+    protected function successfulPaymentResponse(array $data): array
     {
         return [
             'id' => 'pi_3JPMybJCai8r8pbf0WsCQt1d',
@@ -98,14 +98,14 @@ class TestingStripeService implements PaymentProviderServiceInterface
         ];
     }
 
-    public function incompletePaymentResponse(array $data): array
+    protected function incompletePaymentResponse(array $data): array
     {
         return [
             'id' => $data['payment_intent_id'],
         ];
     }
 
-    public function paidPaymentIntent(Order $order): object
+    protected function paidPaymentIntent(Order $order): object
     {
         return (object) [
             "charges" => collect([
@@ -122,7 +122,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         ];
     }
 
-    public function validateOrderIsPaid(Order $order, object $paymentIntent): bool
+    protected function validateOrderIsPaid(Order $order, object $paymentIntent): bool
     {
         $charge = $paymentIntent->charges->first();
 
@@ -140,7 +140,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         return false;
     }
 
-    public function createCustomer(User $user): void
+    public function createCustomerIfNull(User $user): void
     {
         if (! $user->hasStripeId()) {
             $user->stripe_id = Str::random(25);

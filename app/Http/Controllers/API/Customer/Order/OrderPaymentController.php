@@ -16,13 +16,13 @@ class OrderPaymentController extends Controller
     {
     }
 
-    public function pay(Order $order): JsonResponse
+    public function charge(Order $order): JsonResponse
     {
         $this->authorize('view', $order);
 
         throw_unless($order->isPayable(), OrderNotPayable::class);
 
-        $response = $this->paymentService->hasProvider($order)->charge();
+        $response = $this->paymentService->charge($order);
 
         if (! empty($response['data'])) {
             return new JsonResponse($response);
@@ -39,11 +39,11 @@ class OrderPaymentController extends Controller
         $this->authorize('view', $order);
 
         throw_unless(
-            $this->paymentService->hasProvider($order)->verify($paymentIntentId),
+            $this->paymentService->verify($order, $paymentIntentId),
             PaymentNotVerified::class
         );
 
-        $this->paymentService->updateOrderStatus($order);
+        $this->paymentService->updateOrderStatus();
 
         return new JsonResponse([
             'message' => 'Payment verified successfully',

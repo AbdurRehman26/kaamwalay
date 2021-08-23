@@ -10,7 +10,6 @@ use App\Services\Payment\Providers\StripeService;
 
 class PaymentService
 {
-    protected Order $order;
     /**
      * Payment Providers available for the application
     **/
@@ -19,9 +18,10 @@ class PaymentService
         'paypal' => PaypalService::class,
     ];
 
-
-    public function charge(): array
+    public function charge(Order $order): array
     {
+        $this->hasProvider($order);
+
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
         ])->charge($this->order);
@@ -37,8 +37,10 @@ class PaymentService
         return $this->updateOrderPayment($data);
     }
 
-    public function verify(string $paymentIntentId): bool
+    public function verify(Order $order, string $paymentIntentId): bool
     {
+        $this->hasProvider($order);
+
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
         ])->verify($this->order, $paymentIntentId);

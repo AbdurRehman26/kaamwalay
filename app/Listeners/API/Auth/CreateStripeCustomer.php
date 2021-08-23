@@ -22,6 +22,6 @@ class CreateStripeCustomer implements ShouldQueue, ShouldBeEncrypted
     public function handle(CustomerRegistered $event): void
     {
         $user = $event->user;
-        resolve(StripeService::class)->createCustomer($user);
+        resolve(StripeService::class)->createCustomerIfNull($user);
     }
 }

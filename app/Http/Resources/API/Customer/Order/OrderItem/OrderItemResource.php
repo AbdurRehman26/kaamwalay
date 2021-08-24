@@ -14,7 +14,6 @@ class OrderItemResource extends JsonResource
             'quantity' => $this->quantity,
             'declared_value_per_unit' => $this->declared_value_per_unit,
             'card_product' => new CardProductResource($this->cardProduct),
-            'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItemCustomerShipment),
         ];
     }
 }

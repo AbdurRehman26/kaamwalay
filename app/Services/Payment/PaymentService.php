@@ -16,6 +16,7 @@ class PaymentService
                 $response = (new StripeService)->charge($order);
                 if (! empty($response['success'])) {
                     $this->updateOrderPayment($order, $response);
+                    $this->calculateAndSaveFee($order);
 
                     return array_merge($response, ['provider' => $order->paymentMethod->code]);
                 }
@@ -64,8 +65,19 @@ class PaymentService
     {
         $order->markAsPlaced();
 
-        OrderPaid::dispatch($order);
+//        OrderPaid::dispatch($order);
 
         return true;
+    }
+
+    public function calculateAndSaveFee(Order $order): void
+    {
+        $orderPayment = $order->orderPayment;
+        $fee = match ($order->paymentMethod->code) {
+            'stripe' => (new StripeService)->calculateFee($order),
+            'paypal' => (new PaypalService)->calculateFee($order),
+        };
+        $orderPayment->provider_fee = $fee;
+        $orderPayment->save();
     }
 }

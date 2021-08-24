@@ -47,6 +47,8 @@ class OrderPaymentController extends Controller
 
         $this->paymentService->updateOrderStatus($order);
 
+        $this->paymentService->calculateAndSaveFee($order);
+
         return new JsonResponse([
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);

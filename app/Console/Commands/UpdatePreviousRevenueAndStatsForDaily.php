@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Order;
 use App\Models\OrderPayment;
+use App\Models\RevenueStatsDaily;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class UpdatePreviousRevenueAndStatsForDaily extends Command
@@ -31,6 +34,7 @@ class UpdatePreviousRevenueAndStatsForDaily extends Command
         parent::__construct();
     }
 
+
     /**
      * Execute the console command.
      *
@@ -38,7 +42,18 @@ class UpdatePreviousRevenueAndStatsForDaily extends Command
      */
     public function handle()
     {
-        $orderPayment = OrderPayment::first();
+        $lastRevenueDate = Carbon::now()->toDateString();
+        $revenueDaily = RevenueStatsDaily::first();
+
+        if (! empty($revenueDaily)) {
+            $lastRevenueDate = $revenueDaily->event_at;
+        }
+
+        $items = OrderPayment::select('created_at')->distinct()->get()->pluck('created_at');
+        dd($items);
+        dd(OrderPayment::all()->unique('created_at'));
+
+//        dd($orderPayment);
 
         return 0;
     }

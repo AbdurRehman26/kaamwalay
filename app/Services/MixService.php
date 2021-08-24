@@ -22,6 +22,7 @@ class MixService
     public function getFile(string $file, ?string $app = null): string
     {
         $app ??= 'landings';
+
         return  mix($file, "apps/$app");
     }
 }

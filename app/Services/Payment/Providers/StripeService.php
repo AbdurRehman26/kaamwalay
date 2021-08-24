@@ -89,10 +89,10 @@ class StripeService implements PaymentProviderServiceInterface
         return false;
     }
 
-    public function calculateFee(Order $order): float
+    public function calculateFee(float|int $amount): float
     {
         return  (float) (
-            self::STRIPE_FEE_PERCENTAGE * (int) ($order->grand_total * 100) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
+            self::STRIPE_FEE_PERCENTAGE * (int) ($amount * 100) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100;
     }
 }

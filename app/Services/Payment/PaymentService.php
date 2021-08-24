@@ -74,7 +74,7 @@ class PaymentService
     {
         $orderPayment = $order->orderPayment;
         $fee = match ($order->paymentMethod->code) {
-            'stripe' => (new StripeService)->calculateFee($order),
+            'stripe' => (new StripeService)->calculateFee($order->grand_total),
             'paypal' => (new PaypalService)->calculateFee($order),
         };
         $orderPayment->provider_fee = $fee;

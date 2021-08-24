@@ -204,6 +204,10 @@ function SubmissionSummary() {
                     'Error',
                 );
             }
+            if ('message' in err) {
+                setIsStripePaymentLoading(false);
+                notifications.error(err.message, 'Error');
+            }
             const intent = err.response.data.payment_intent;
             // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
             const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {

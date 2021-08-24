@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\CardException;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
 use Stripe\SetupIntent;
@@ -76,10 +77,12 @@ class StripeService implements PaymentProviderServiceInterface
             return [
                 'payment_intent' => $exception->payment,
             ];
-        } catch (InvalidRequestException $e) {
-            if ($this->isPaymentMethodInvalid($e->getStripeParam())) {
-                return ['error' => 'Invalid Payment Method, please go back and select a valid Payment Method.'];
+        } catch (InvalidRequestException $exception) {
+            if ($this->isPaymentMethodInvalid($exception->getStripeParam())) {
+                return ['message' => 'Invalid Payment Method, please go back and select a valid Payment Method.'];
             }
+        } catch (CardException $exception) {
+            return ['message' => $exception->getMessage()];
         }
     }
 

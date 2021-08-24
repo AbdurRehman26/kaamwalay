@@ -13,8 +13,6 @@ class CreateOrderItemCustomerShipmentsTable extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
-
         Schema::create('order_item_customer_shipments', function (Blueprint $table) {
             $table->id();
             $table->timestamp('shipment_date')->nullable();
@@ -22,8 +20,6 @@ class CreateOrderItemCustomerShipmentsTable extends Migration
             $table->string('shipment_provider');
             $table->timestamps();
         });
-
-        Schema::enableForeignKeyConstraints();
     }
 
     /**

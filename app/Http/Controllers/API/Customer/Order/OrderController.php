@@ -6,6 +6,7 @@ use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
+use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Resources\API\Customer\Order\OrderCollection;
 use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
@@ -57,17 +58,12 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function updateCustomerShipment(Request $request, Order $order, CustomerShipmentService $customerShipmentService)
+    public function updateCustomerShipment(UpdateCustomerShipmentRequest $request, Order $order, CustomerShipmentService $customerShipmentService): OrderResource
     {
+        $this->authorize('view', $order);
+
         try{
-            $order = $customerShipmentService->setItemsCustomerShipment($order,$request->shipment_provider,$request->tracking_number);
+            $order = $customerShipmentService->process($order,$request->shipment_provider,$request->tracking_number);
         } catch (CustomerShipmentNotUpdated $e) {
             return new JsonResponse(
                 [

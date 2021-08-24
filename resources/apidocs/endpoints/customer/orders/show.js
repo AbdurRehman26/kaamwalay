@@ -130,7 +130,7 @@
  *                ],
  *                "customer_shipment": {
  *                     "id": 2,
- *                     "shipment_provider": fedex,
+ *                     "shipment_provider": "fedex",
  *                     "tracking_number": "020207021381215"
  *                 }
  *            }

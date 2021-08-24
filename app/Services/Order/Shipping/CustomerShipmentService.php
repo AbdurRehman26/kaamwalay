@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class CustomerShipmentService
 {
-    public function setItemsCustomerShipment(Order $order, string $shipmentProvider, string $trackingNumber): Order
+    public function process(Order $order, string $shipmentProvider, string $trackingNumber): Order
     {
         try{
 

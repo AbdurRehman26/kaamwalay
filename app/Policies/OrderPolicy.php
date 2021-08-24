@@ -17,6 +17,8 @@ class OrderPolicy
 
     public function view(User $user, Order $order)
     {
+        \Log::debug($user->id.' '.$order->user->id);
+        \Log::debug($order->user()->is($user));
         return $order->user()->is($user) ;
     }
 

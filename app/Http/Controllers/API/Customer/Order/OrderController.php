@@ -62,7 +62,7 @@ class OrderController extends Controller
     {
         $this->authorize('view', $order);
 
-        try{
+        try {
             $order = $customerShipmentService->process($order, $request->shipment_provider, $request->tracking_number);
         } catch (CustomerShipmentNotUpdated $e) {
             return new JsonResponse(

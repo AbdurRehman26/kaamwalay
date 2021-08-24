@@ -2,14 +2,11 @@
 
 namespace Tests\Feature\API\Customer\Order\Shipping;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\OrderItemCustomerShipment;
-use App\Services\Order\Shipping\CustomerShipmentService;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class OrderCustomerShipmentTest extends TestCase
 {
@@ -33,10 +30,9 @@ class OrderCustomerShipmentTest extends TestCase
     /** @test */
     public function a_customer_can_update_order_shipment_details()
     {
-
         $this->actingAs($this->order->user);
 
-        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment',[
+        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
             'shipment_provider' => $this->shipmentProvider,
             'tracking_number' => $this->trackingNumber,
         ]);
@@ -45,13 +41,12 @@ class OrderCustomerShipmentTest extends TestCase
         $response->assertJsonStructure([
             'data' => ['customer_shipment' => ['tracking_number','shipment_provider']],
         ]);
-
     }
 
     /** @test */
     public function a_guest_cannot_update_order_shipment_details()
     {
-        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment',[
+        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
             'shipment_provider' => $this->shipmentProvider,
             'tracking_number' => $this->trackingNumber,
         ]);
@@ -66,7 +61,7 @@ class OrderCustomerShipmentTest extends TestCase
 
         $this->actingAs($otherCustomer);
 
-        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment',[
+        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
             'shipment_provider' => $this->shipmentProvider,
             'tracking_number' => $this->trackingNumber,
         ]);

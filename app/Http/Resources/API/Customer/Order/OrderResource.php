@@ -32,7 +32,7 @@ class OrderResource extends BaseResource
             'order_payment' => new OrderPaymentResource($this->orderPayment),
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
-            'customer_shipment' => count($this->orderItems) > 0 ? new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment) : null,
+            'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment),
         ];
     }
 }

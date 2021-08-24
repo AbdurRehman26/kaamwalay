@@ -4,6 +4,7 @@ namespace Tests\Feature\API\Customer\Order;
 
 use App\Models\CardProduct;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -147,6 +148,8 @@ class OrderTest extends TestCase
     {
         $this->actingAs($this->user);
         $order = Order::factory()->for($this->user)->create();
+        OrderItem::factory()->for($order)->create();
+
         $response = $this->getJson('/api/customer/orders/' . $order->id);
 
         $response->assertStatus(200);
@@ -193,6 +196,8 @@ class OrderTest extends TestCase
     {
         $this->actingAs($this->user);
         $order = Order::factory()->for($this->user)->create();
+        OrderItem::factory()->for($order)->create();
+
         $response = $this->getJson('/api/customer/orders/' . $order->id);
 
         $response->assertStatus(200);
@@ -206,7 +211,7 @@ class OrderTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        Order::factory()
+        $orders = Order::factory()
             ->count(2)
             ->for($this->user)
             ->state(new Sequence(
@@ -218,6 +223,17 @@ class OrderTest extends TestCase
                     'order_number' => 'RG000000002',
                     'order_status_id' => 2,
                 ],
+            ))
+            ->create();
+
+        OrderItem::factory()->count(2)
+            ->state(new Sequence(
+                [
+                    'order_id' => $orders[0]->id,
+                ],
+                [
+                    'order_id' => $orders[1]->id,
+                ]
             ))
             ->create();
 

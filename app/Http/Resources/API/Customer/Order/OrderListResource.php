@@ -20,7 +20,7 @@ class OrderListResource extends BaseResource
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'status' => $this->orderStatus->name,
             'invoice' => new InvoiceResource($this->invoice),
-            'customer_shipment' => count($this->orderItems) > 0 ? new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment) : null,
+            'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment),
         ];
     }
 }

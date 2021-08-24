@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\OrderPayment;
-use App\Models\RevenueStatsDaily;
+use App\Notifications\RevenueStatsUpdated;
 use App\Services\Order\RevenueStatsService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class UpdateRevenueStatsDaily extends Command
 {
@@ -33,14 +33,17 @@ class UpdateRevenueStatsDaily extends Command
     public function handle()
     {
         $currentDate = Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1);
-
         $formattedDate = $currentDate->format('Y-m-d');
 
         Log::info("Revenue Stats Daily for Date : ".$formattedDate);
 
         $revenueStatsService = new RevenueStatsService($formattedDate);
-        $revenueStatsService->addStats();
+        $revenueStats = $revenueStatsService->addStats();
 
+        if (app()->environment('production')) {
+            Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
+                ->notify(new RevenueStatsUpdated($revenueStats));
+        }
         Log::info("Revenue Stats Daily for Date : ".$formattedDate. " Completed");
 
         return 0;

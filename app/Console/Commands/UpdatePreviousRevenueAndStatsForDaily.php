@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\OrderPayment;
 use Illuminate\Console\Command;
 
 class UpdatePreviousRevenueAndStatsForDaily extends Command
@@ -37,6 +38,8 @@ class UpdatePreviousRevenueAndStatsForDaily extends Command
      */
     public function handle()
     {
+        OrderPayment::first();
+
         return 0;
     }
 }

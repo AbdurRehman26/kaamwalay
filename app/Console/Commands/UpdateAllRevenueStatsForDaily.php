@@ -25,22 +25,7 @@ class UpdateAllRevenueStatsForDaily extends Command
      */
     protected $description = 'Update Revenue and Profit Stats That Were Previously Missed';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function handle(): int
     {
         Log::info("Revenue Stats For Previously Missed Dates");
 

@@ -30,7 +30,7 @@ class UpdateRevenueStatsDaily extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $currentDate = Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1);
         $formattedDate = $currentDate->format('Y-m-d');

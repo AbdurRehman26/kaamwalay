@@ -18,7 +18,6 @@ class RevenueStatsService
     public function addStats()
     {
         $currentDate = $this->date;
-
         /*Using order payments instead of orders
         because we might take payments of some orders
         not on the same day*/

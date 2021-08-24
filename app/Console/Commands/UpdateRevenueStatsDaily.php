@@ -26,38 +26,22 @@ class UpdateRevenueStatsDaily extends Command
     protected $description = 'Update Revenue and Profit Stats Daily at 12:20 am';
 
     /**
-     * The console command option.
-     *
-     * @var string
-     */
-    protected $currentDate = 'Current date attribute which will be set to yesterday by default';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->currentDate = $this->option('date') ?? Carbon::now()->subDays(1)->toDateString();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
      */
     public function handle()
     {
-        $currentDate = $this->currentDate;
+        $currentDate = Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1);
 
-        Log::info("Revenue Stats Daily for Date : ".$currentDate);
+        $formattedDate = $currentDate->format('Y-m-d');
 
-        $revenueStatsService = new RevenueStatsService($currentDate);
+        Log::info("Revenue Stats Daily for Date : ".$formattedDate);
+
+        $revenueStatsService = new RevenueStatsService($formattedDate);
         $revenueStatsService->addStats();
 
-        Log::info("Revenue Stats Daily for Date : ".$currentDate. " Completed");
+        Log::info("Revenue Stats Daily for Date : ".$formattedDate. " Completed");
 
         return 0;
     }

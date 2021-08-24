@@ -17,5 +17,4 @@ class RevenueStatsDaily extends Model
      * @var array
      */
     protected $fillable = ['event_at', 'profit', 'revenue'];
-
 }

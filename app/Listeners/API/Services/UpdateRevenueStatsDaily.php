@@ -16,6 +16,5 @@ class UpdateRevenueStatsDaily
 
         $revenue->increment('profit', $event->order->grand_total);
         $revenue->increment('revenue', ($event->order->service_fee - $event->order->orderPayment()->provider_fee));
-
     }
 }

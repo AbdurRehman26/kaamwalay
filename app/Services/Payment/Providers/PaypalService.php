@@ -97,13 +97,15 @@ class PaypalService implements PaymentProviderServiceInterface
         return false;
     }
 
-    public function calculateFee(Order $order): float|null
+    public function calculateFee(Order $order): float | null
     {
         $paymentResponse = json_decode($order->orderPayment->response, associative: true);
         if (! empty($paymentResponse['purchase_units'][0]['payments']['captures'][0])) {
             $breakdown = $paymentResponse['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
+
             return $breakdown['paypal_fee']['value'];
         }
+
         return null;
     }
 }

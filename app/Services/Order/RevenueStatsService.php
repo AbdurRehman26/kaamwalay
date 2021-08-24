@@ -47,6 +47,7 @@ class RevenueStatsService
             $dailyRevenue->revenue = $revenueData['revenue'];
         }
         $dailyRevenue->save();
+
         return $dailyRevenue;
     }
 }

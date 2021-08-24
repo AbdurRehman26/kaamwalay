@@ -38,14 +38,12 @@ class UpdateAllRevenueStatsForDaily extends Command
         }
 
         OrderPayment::whereDate('created_at', '<', $lastRevenueDate)->select('created_at')->distinct()->get()->pluck('created_at')->map(function ($date) {
-
             Log::info("Revenue Stats for Date : ".$date->toDateString(). " Adding.");
 
             $revenueStatsService = new RevenueStatsService($date->toDateString());
             $revenueStatsService->addStats();
 
             Log::info("Revenue Stats for Date : ".$date->toDateString(). " Added.");
-
         });
 
         Log::info("Revenue Stats Daily For Previously Missed Dates Completed.");

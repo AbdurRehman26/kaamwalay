@@ -78,24 +78,32 @@ class PaypalService implements PaymentProviderServiceInterface
 
     public function validateOrderIsPaid(Order $order, array $data): bool
     {
-        if ($data['status'] === 'APPROVED') {
-            return false;
-        }
+        if (! empty($data['purchase_units'][0]['payments']['captures'][0])) {
+            $paymentIntent = $data['purchase_units'][0]['payments']['captures'][0];
+            $captureStatus = $data['status'];
 
-        $paymentIntent = $data['purchase_units'][0]['payments']['captures'][0];
-        $captureStatus = $data['status'];
+            if (
+                $paymentIntent['amount']['value'] == $order->grand_total
+                && $captureStatus === 'COMPLETED'
+            ) {
+                $order->orderPayment->update([
+                    'response' => json_encode($data),
+                ]);
 
-        if (
-            $paymentIntent['amount']['value'] == $order->grand_total
-            && $captureStatus === 'COMPLETED'
-        ) {
-            $order->orderPayment->update([
-                'response' => json_encode($data),
-            ]);
-
-            return true;
+                return true;
+            }
         }
 
         return false;
+    }
+
+    public function calculateFee(Order $order): float|null
+    {
+        $paymentResponse = json_decode($order->orderPayment->response, associative: true);
+        if (! empty($paymentResponse['purchase_units'][0]['payments']['captures'][0])) {
+            $breakdown = $paymentResponse['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
+            return $breakdown['paypal_fee']['value'];
+        }
+        return null;
     }
 }

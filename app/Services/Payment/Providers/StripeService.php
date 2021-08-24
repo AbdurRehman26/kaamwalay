@@ -10,6 +10,9 @@ use Stripe\PaymentIntent;
 
 class StripeService implements PaymentProviderServiceInterface
 {
+    const STRIPE_FEE_PERCENTAGE = 0.029;
+    const STRIPE_FEE_ADDITIONAL_AMOUNT = 30; //cents
+
     public function createSetupIntent(): \Stripe\SetupIntent
     {
         /** @var User $user */
@@ -73,7 +76,7 @@ class StripeService implements PaymentProviderServiceInterface
     {
         $charge = $paymentIntent->charges->first();
         if (
-            $charge->amount === ($order->grand_total * 100)
+            $charge->amount === (int) ($order->grand_total * 100)
             && $charge->outcome->type === 'authorized'
         ) {
             $order->orderPayment->update([
@@ -84,5 +87,12 @@ class StripeService implements PaymentProviderServiceInterface
         }
 
         return false;
+    }
+
+    public function calculateFee(Order $order): float
+    {
+        return  (float) (
+            self::STRIPE_FEE_PERCENTAGE * (int) ($order->grand_total * 100) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
+        ) / 100;
     }
 }

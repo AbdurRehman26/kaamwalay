@@ -30,12 +30,12 @@ class RevenueStatsService
             'event_at' => $currentDate,
         ];
 
-        $orderPayments->map(function ($orderPayment) use ($revenueData) {
+        foreach ($orderPayments as $orderPayment) {
             $revenueData['profit'] += $orderPayment->order->grand_total;
             $revenueData['revenue'] += ($orderPayment->order->service_fee - $orderPayment->provider_fee);
-        });
+        }
 
-        $dailyRevenue = RevenueStatsDaily::firstOrCreate('event_at', $currentDate);
+        $dailyRevenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
 
         if ($dailyRevenue['profit'] != $revenueData['profit'] || $dailyRevenue['revenue'] != $revenueData['revenue']) {
             Log::info("Discrepancy found in the revenue stats");
@@ -46,7 +46,7 @@ class RevenueStatsService
             $dailyRevenue->profit = $revenueData['profit'];
             $dailyRevenue->revenue = $revenueData['revenue'];
         }
-
-        return $dailyRevenue->save();
+        $dailyRevenue->save();
+        return $dailyRevenue;
     }
 }

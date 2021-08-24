@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\OrderPayment;
 use App\Services\Payment\PaymentService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class UpdateProviderFee extends Command
 {
@@ -23,12 +22,7 @@ class UpdateProviderFee extends Command
      */
     protected $description = 'Update All Provider Fees';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function handle(): int
     {
         $paymentService = new PaymentService();
         OrderPayment::whereNull('provider_fee')->get()->map(function ($orderPayment) use ($paymentService) {

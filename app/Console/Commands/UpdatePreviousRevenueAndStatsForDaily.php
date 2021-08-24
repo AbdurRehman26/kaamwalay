@@ -38,7 +38,7 @@ class UpdatePreviousRevenueAndStatsForDaily extends Command
      */
     public function handle()
     {
-        OrderPayment::first();
+        $orderPayment = OrderPayment::first();
 
         return 0;
     }

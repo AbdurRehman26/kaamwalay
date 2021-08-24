@@ -5,10 +5,10 @@ namespace App\Http\Resources\API\Customer\Order;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
+use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCustomerShipmentResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\Customer\User\UserResource;
-use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCustomerShipmentResource;
 
 class OrderResource extends BaseResource
 {

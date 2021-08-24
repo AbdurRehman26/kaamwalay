@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API\Customer\Order;
 
-use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
+use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
@@ -12,11 +12,11 @@ use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Order\CreateOrderService;
+use App\Services\Order\Shipping\CustomerShipmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\Order\Shipping\CustomerShipmentService;
 
 class OrderController extends Controller
 {
@@ -63,7 +63,7 @@ class OrderController extends Controller
         $this->authorize('view', $order);
 
         try{
-            $order = $customerShipmentService->process($order,$request->shipment_provider,$request->tracking_number);
+            $order = $customerShipmentService->process($order, $request->shipment_provider, $request->tracking_number);
         } catch (CustomerShipmentNotUpdated $e) {
             return new JsonResponse(
                 [
@@ -72,7 +72,7 @@ class OrderController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
+
         return new OrderResource($order);
     }
-
 }

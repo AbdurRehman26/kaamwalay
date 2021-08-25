@@ -17,7 +17,7 @@ class CreateOrderItemCustomerShipmentsTable extends Migration
             $table->id();
             $table->timestamp('shipment_date')->nullable();
             $table->string('tracking_number');
-            $table->string('shipment_provider');
+            $table->string('shipping_provider');
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@ class OrderItemCustomerShipment extends Model
      *
      * @var array
      */
-    protected $fillable = ['shipment_date', 'tracking_number', 'shipment_provider'];
+    protected $fillable = ['shipment_date', 'tracking_number', 'shipping_provider'];
 
     /**
      * The attributes that should be cast to native types.

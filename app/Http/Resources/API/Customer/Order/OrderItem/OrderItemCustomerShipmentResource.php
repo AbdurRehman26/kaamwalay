@@ -12,7 +12,7 @@ class OrderItemCustomerShipmentResource extends JsonResource
             'id' => $this->id,
             'shipment_date' => $this->shipment_date,
             'tracking_number' => $this->tracking_number,
-            'shipment_provider' => $this->shipment_provider,
+            'shipping_provider' => $this->shipping_provider,
         ];
     }
 }

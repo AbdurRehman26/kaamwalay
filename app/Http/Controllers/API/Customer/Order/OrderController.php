@@ -58,12 +58,12 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function updateCustomerShipment(UpdateCustomerShipmentRequest $request, Order $order, CustomerShipmentService $customerShipmentService): OrderResource
+    public function updateCustomerShipment(UpdateCustomerShipmentRequest $request, Order $order, CustomerShipmentService $customerShipmentService): OrderResource|JsonResponse
     {
         $this->authorize('view', $order);
 
         try {
-            $order = $customerShipmentService->process($order, $request->shipment_provider, $request->tracking_number);
+            $order = $customerShipmentService->process($order, $request->shipping_provider, $request->tracking_number);
         } catch (CustomerShipmentNotUpdated $e) {
             return new JsonResponse(
                 [

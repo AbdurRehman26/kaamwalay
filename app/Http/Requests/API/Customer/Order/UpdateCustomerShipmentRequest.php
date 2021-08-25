@@ -24,7 +24,7 @@ class UpdateCustomerShipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'shipment_provider' => 'required|string',
+            'shipping_provider' => 'required|string',
             'tracking_number' => 'required|string',
         ];
     }

@@ -9,7 +9,7 @@
  * @apiParam {Integer} id Order unique ID
  * @apiParamExample {json} Request-Example:
  *      {
- *          "shipment_provider": "usps",
+ *          "shipping_provider": "usps",
  *          "tracking_number": "9400100000000000000000"
  *      }
  *
@@ -137,7 +137,7 @@
  *                ],
  *                "customer_shipment": {
  *                     "id": 2,
- *                     "shipment_provider": "usps",
+ *                     "shipping_provider": "usps",
  *                     "tracking_number": "9400100000000000000000"
  *                 }
  *            }

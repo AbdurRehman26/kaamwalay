@@ -15,17 +15,17 @@ class CustomerShipmentServiceTest extends TestCase
     /** @test */
     public function it_can_update_order_shipment_details()
     {
-        $shipmentProvider = 'fedex';
+        $shippingProvider = 'fedex';
         $trackingNumber = '020207021381215';
 
         $orderItem = OrderItem::factory()->create();
         $order = $orderItem->order;
 
-        $order = (new CustomerShipmentService)->process($order, $shipmentProvider, $trackingNumber);
+        $order = (new CustomerShipmentService)->process($order, $shippingProvider, $trackingNumber);
         $firstItem = $order->orderItems[0];
 
         $this->assertInstanceOf(OrderItemCustomerShipment::class, $firstItem->orderItemCustomerShipment);
-        $this->assertEquals($firstItem->orderItemCustomerShipment->shipment_provider, $shipmentProvider);
+        $this->assertEquals($firstItem->orderItemCustomerShipment->shipping_provider, $shippingProvider);
         $this->assertEquals($firstItem->orderItemCustomerShipment->tracking_number, $trackingNumber);
     }
 }

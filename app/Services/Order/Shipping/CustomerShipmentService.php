@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class CustomerShipmentService
 {
-    public function process(Order $order, string $shipmentProvider, string $trackingNumber): Order
+    public function process(Order $order, string $shippingProvider, string $trackingNumber): Order
     {
         try {
             $items = $order->orderItems;
@@ -20,7 +20,7 @@ class CustomerShipmentService
                 if (! $shipment) {
                     $shipment = new OrderItemCustomerShipment();
                 }
-                $shipment->shipment_provider = $shipmentProvider;
+                $shipment->shipping_provider = $shippingProvider;
                 $shipment->tracking_number = $trackingNumber;
                 $shipment->save();
 

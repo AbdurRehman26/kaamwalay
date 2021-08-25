@@ -25,7 +25,7 @@ class OrderItemCustomerShipmentFactory extends Factory
         return [
             'shipment_date' => $this->faker->dateTime(),
             'tracking_number' => $this->faker->uuid(),
-            'shipment_provider' => $this->faker->url(),
+            'shipping_provider' => $this->faker->word(),
         ];
     }
 }

@@ -12,7 +12,7 @@ class OrderCustomerShipmentTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected string $shipmentProvider;
+    protected string $shippingProvider;
     protected string $trackingNumber;
     protected OrderItem $orderItem;
     protected Order $order;
@@ -20,7 +20,7 @@ class OrderCustomerShipmentTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->shipmentProvider = 'fedex';
+        $this->shippingProvider = 'fedex';
         $this->trackingNumber = '020207021381215';
 
         $this->orderItem = OrderItem::factory()->create();
@@ -33,13 +33,13 @@ class OrderCustomerShipmentTest extends TestCase
         $this->actingAs($this->order->user);
 
         $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
-            'shipment_provider' => $this->shipmentProvider,
+            'shipping_provider' => $this->shippingProvider,
             'tracking_number' => $this->trackingNumber,
         ]);
 
         $response->assertOk();
         $response->assertJsonStructure([
-            'data' => ['customer_shipment' => ['tracking_number','shipment_provider']],
+            'data' => ['customer_shipment' => ['tracking_number', 'shipping_provider']],
         ]);
     }
 
@@ -47,7 +47,7 @@ class OrderCustomerShipmentTest extends TestCase
     public function a_guest_cannot_update_order_shipment_details()
     {
         $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
-            'shipment_provider' => $this->shipmentProvider,
+            'shipping_provider' => $this->shippingProvider,
             'tracking_number' => $this->trackingNumber,
         ]);
 
@@ -57,12 +57,13 @@ class OrderCustomerShipmentTest extends TestCase
     /** @test */
     public function a_customer_cannot_update_order_shipment_details_from_other_user()
     {
+        /** @var User $otherCustomer */
         $otherCustomer = User::factory()->create();
 
         $this->actingAs($otherCustomer);
 
         $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
-            'shipment_provider' => $this->shipmentProvider,
+            'shipping_provider' => $this->shippingProvider,
             'tracking_number' => $this->trackingNumber,
         ]);
 

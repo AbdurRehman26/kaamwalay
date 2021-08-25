@@ -34,10 +34,8 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_place_order()
+    public function a_customer_can_place_order()
     {
-        $this->markTestIncomplete('Stripe actual call needs to be mocked.');
-
         $this->actingAs($this->user);
 
         $response = $this->postJson('/api/customer/orders/', [
@@ -82,12 +80,26 @@ class OrderTest extends TestCase
                 'flat' => '43',
                 'same_as_shipping' => true,
             ],
+            'customer_address' => [
+                'first_name' => 'First',
+                'last_name' => 'Last',
+                'address' => 'Test address',
+                'city' => 'Test',
+                'state' => 'AB',
+                'zip' => '12345',
+                'phone' => '1234567890',
+                'flat' => '43',
+                'same_as_shipping' => true,
+            ],
             'shipping_method' => [
                 'id' => $this->shippingMethod->id,
             ],
             'payment_method' => [
                 'id' => $this->paymentMethod->id,
             ],
+            'payment_provider_reference' => [
+                'id' => '12345678',
+            ]
         ]);
 
         $response->assertStatus(201);

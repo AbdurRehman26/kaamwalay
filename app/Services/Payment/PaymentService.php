@@ -78,16 +78,17 @@ class PaymentService
 
     public function calculateAndSaveFee(Order $order): void
     {
-        $orderPayment = $order->orderPayment;
-        $fee = match ($order->paymentMethod->code) {
-            'stripe' => (new StripeService)->calculateFee($order->grand_total),
-            'paypal' => (new PaypalService)->calculateFee($order),
-        };
+        $this->hasProvider($order);
+
+        $fee = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->calculateFee($this->order);
+        
+        $orderPayment = $this->order->orderPayment;
         $orderPayment->provider_fee = $fee;
         $orderPayment->save();
     }
-    
-    
+
     public function hasProvider(Order $order): self
     {
         throw_unless(

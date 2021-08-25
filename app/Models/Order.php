@@ -51,7 +51,10 @@ class Order extends Model
         'shipping_method_id' => 'integer',
         'invoice_id' => 'integer',
         'arrived_at' => 'date',
+        'grand_total_cents' => 'integer',
     ];
+
+    protected $appends = ['grand_total_cents'];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -126,8 +129,8 @@ class Order extends Model
         return $query->where('order_status_id', 2);
     }
 
-    public function getGrandTotalCents(): int
+    public function getGrandTotalCentsAttribute(): int
     {
-        return (int) ($this->grand_total * 100);
+        return $this->grand_total * 100;
     }
 }

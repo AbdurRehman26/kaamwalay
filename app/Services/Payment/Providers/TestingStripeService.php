@@ -5,9 +5,13 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Str;
+use JetBrains\PhpStorm\Pure;
 
 class TestingStripeService implements PaymentProviderServiceInterface
 {
+    const CUSTOMER_ERROR_PARAMETER = 'customer';
+    const PAYMENT_METHOD_ERROR_PARAMETER = 'payment_method';
+
     public function charge(Order $order): array
     {
         $paymentData = [
@@ -45,6 +49,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         }
 
         $paymentIntent = $this->paidPaymentIntent($order);
+//        dd((int) (100 * $order->grand_total),$paymentIntent );
 
         return $this->validateOrderIsPaid($order, $paymentIntent);
     }
@@ -125,9 +130,8 @@ class TestingStripeService implements PaymentProviderServiceInterface
     protected function validateOrderIsPaid(Order $order, object $paymentIntent): bool
     {
         $charge = $paymentIntent->charges->first();
-
         if (
-            $charge->amount == ($order->grand_total * 100)
+            $charge->amount === (int) ($order->grand_total * 100)
             && $charge->outcome->type === 'authorized'
         ) {
             $order->orderPayment->update([
@@ -146,5 +150,52 @@ class TestingStripeService implements PaymentProviderServiceInterface
             $user->stripe_id = Str::random(25);
             $user->save();
         }
+    }
+
+    protected function handleInvalidCustomer(User $user): void
+    {
+        $this->removeOldCustomerId($user);
+        $this->createCustomerIfNull($user);
+    }
+
+    protected function removeOldCustomerId(User $user): void
+    {
+        $user->stripe_id = null;
+    }
+
+    protected function isPaymentMethodInvalid(string $param): bool
+    {
+        return $param === self::PAYMENT_METHOD_ERROR_PARAMETER;
+    }
+
+    protected function isCustomerInvalid(string $param): bool
+    {
+        return $param === self::CUSTOMER_ERROR_PARAMETER;
+    }
+
+    public function createSetupIntent(User $user): array
+    {
+        return [
+            'client_secret' => Str::random(50),
+            'customer' => $user->stripe_id,
+            'object' => 'setup_intent',
+        ];
+    }
+
+    public function getUserPaymentMethods(User $user): array
+    {
+        return [
+            [
+                'id' => Str::random(35),
+                'customer' => $user->stripeId(),
+                'object' => 'payment_method',
+                'type' => 'card',
+                'card' => [
+                    'brand' => 'visa',
+                    'country' => 'US',
+                    'last4' => 4242,
+                ],
+            ],
+        ];
     }
 }

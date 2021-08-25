@@ -75,7 +75,7 @@ class PaypalService implements PaymentProviderServiceInterface
         }
     }
 
-    public function validateOrderIsPaid(Order $order, array $data): bool
+    protected function validateOrderIsPaid(Order $order, array $data): bool
     {
         if ($data['status'] === 'APPROVED') {
             return false;

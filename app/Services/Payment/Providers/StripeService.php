@@ -84,6 +84,7 @@ class StripeService implements PaymentProviderServiceInterface
         } catch (CardException $exception) {
             return ['message' => $exception->getMessage()];
         }
+        return ['message' => 'Unable to handle your request at the moment.'];
     }
 
     public function verify(Order $order, string $paymentIntentId): bool
@@ -100,7 +101,7 @@ class StripeService implements PaymentProviderServiceInterface
         }
     }
 
-    public function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
+    protected function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
     {
         $charge = $paymentIntent->charges->first();
 
@@ -141,12 +142,11 @@ class StripeService implements PaymentProviderServiceInterface
     protected function removeOldCustomerId(User $user): void
     {
         $user->stripe_id = null;
-        $user->save();
     }
 
     protected function handleInvalidCustomer(User $user): void
     {
         $this->removeOldCustomerId($user);
-        $this->createCustomer($user);
+        $this->createCustomerIfNull($user);
     }
 }

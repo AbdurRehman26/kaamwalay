@@ -195,7 +195,7 @@ function SubmissionSummary() {
             dispatch(invalidateOrders());
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err) {
-            if ('message' in err) {
+            if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
                 notifications.exception(err, 'Payment Failed');
             }

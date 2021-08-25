@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\RevenueStats;
 
 use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;

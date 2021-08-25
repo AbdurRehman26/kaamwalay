@@ -26,6 +26,6 @@ class RevenueStatsDaily extends Model
     protected $casts = [
         'id' => 'integer',
         'profit' => 'float',
-        'revenue' => 'string',
+        'revenue' => 'float',
     ];
 }

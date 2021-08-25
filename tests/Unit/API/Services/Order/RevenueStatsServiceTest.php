@@ -30,7 +30,7 @@ class RevenueStatsServiceTest extends TestCase
 
         $this->orderPayment = OrderPayment::factory()->for($this->order)->stripe()->create();
 
-        $this->paymentService->calculateAndSaveFee($this->order);
+        $this->paymentService->calculateAndSaveFee($this->orderPayment->order);
     }
 
     /**
@@ -48,7 +48,7 @@ class RevenueStatsServiceTest extends TestCase
      */
     public function it_calculates_profit()
     {
-        $this->assertSame($this->revenueStatsService->calculateProfit($this->orderPayment), (($this->order->service_fee - $this->order->orderPayment->provider_fee)));
+        $this->assertSame($this->revenueStatsService->calculateProfit($this->orderPayment), (($this->order->service_fee - $this->orderPayment->provider_fee)));
     }
 
     /**
@@ -57,11 +57,10 @@ class RevenueStatsServiceTest extends TestCase
      */
     public function it_adds_revenue_stats()
     {
-        $profit = ($this->order->service_fee - $this->orderPayment->provider_fee);
+        $profit = ($this->order->service_fee - $this->order->orderPayment->provider_fee);
         $revenue = $this->order->grand_total;
         $revenueStats = $this->revenueStatsService->addStats(Carbon::now()->toDateString());
-
-        $this->assertSame($revenueStats['profit'], $profit);
         $this->assertSame($revenueStats['revenue'], $revenue);
+        $this->assertSame($revenueStats['profit'], $profit);
     }
 }

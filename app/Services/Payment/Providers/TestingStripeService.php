@@ -15,7 +15,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     {
         $paymentData = [
             'customer_id' => Str::random(25),
-            'amount' => (int) ($order->grand_total * 100),
+            'amount' => $this->getOrderAmountInCents($order->grand_total),
             'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->id}",
@@ -114,8 +114,8 @@ class TestingStripeService implements PaymentProviderServiceInterface
             "charges" => collect([
                 (object) [
                     "id" => "ch_3JPMybJCai8r8pbf0PSZNf2Y",
-                    "amount" => (int) ($order->grand_total * 100),
-                    "amount_captured" => (int) ($order->grand_total * 100),
+                    "amount" => $this->getOrderAmountInCents($order->grand_total),
+                    "amount_captured" => $this->getOrderAmountInCents($order->grand_total),
                     "outcome" => (object) [
                         "type" => "authorized",
                     ],
@@ -129,7 +129,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     {
         $charge = $paymentIntent->charges->first();
         if (
-            $charge->amount === (int) ($order->grand_total * 100)
+            $charge->amount === $this->getOrderAmountInCents($order->grand_total)
             && $charge->outcome->type === 'authorized'
         ) {
             $order->orderPayment->update([
@@ -195,5 +195,10 @@ class TestingStripeService implements PaymentProviderServiceInterface
                 ],
             ],
         ];
+    }
+
+    public function getOrderAmountInCents(float $amount): int
+    {
+        return (int) ($amount * 100);
     }
 }

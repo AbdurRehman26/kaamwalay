@@ -55,7 +55,6 @@ class RevenueStatsService
 
         $revenue->increment('profit', $this->calculateProfit($order->orderPayment));
         $revenue->increment('revenue', $this->calculateRevenue($order->orderPayment));
-
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\API\Services\Order;
 
-
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Services\Order\RevenueStatsService;
@@ -32,7 +31,6 @@ class RevenueStatsServiceTest extends TestCase
         $this->orderPayment = OrderPayment::factory()->for($this->order)->stripe()->create();
 
         $this->paymentService->calculateAndSaveFee($this->order);
-
     }
 
     /**

@@ -3,55 +3,58 @@
 namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
+use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
 
 class PaymentService
 {
-    public function charge(Order $order)
+    /**
+     * Payment Providers available for the application
+    **/
+    protected array $providers = [
+        'stripe' => StripeService::class,
+        'paypal' => PaypalService::class,
+    ];
+
+    public function charge(Order $order): array
     {
-        switch ($order->paymentMethod->code) {
-            case 'stripe': {
-                $response = (new StripeService)->charge($order);
-                if (! empty($response['success'])) {
-                    $this->updateOrderPayment($order, $response);
+        $this->hasProvider($order);
 
-                    return array_merge($response, ['provider' => $order->paymentMethod->code]);
-                }
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->charge($this->order);
 
-                return $response;
-            }
-            case 'paypal': {
-                $response = (new PaypalService)->charge($order);
-                if (is_array($response)) {
-                    $data = $this->updateOrderPayment($order, $response);
-
-                    return array_merge($data, ['provider' => $order->paymentMethod->code]);
-                }
-
-                return $response;
-            }
+        if (! empty($data['error']) || ! empty($data['payment_intent'])) {
+            return $data;
         }
 
-        throw new \Exception('Payment provider did not match.');
-    }
-
-    public function verify(Order $order, string $paymentIntentId)
-    {
-        switch ($order->paymentMethod->code) {
-            case 'stripe':
-                return (new StripeService)->verify($order, $paymentIntentId);
-            case 'paypal':
-                return (new PaypalService)->verify($order, $paymentIntentId);
+        if (! empty($data['success'])) {
+            $this->updateOrderStatus();
         }
 
-        throw new \Exception('Payment provider did not match.');
+        return $this->updateOrderPayment($data);
     }
 
-    public function updateOrderPayment(Order $order, array $data): array
+    public function verify(Order $order, string $paymentIntentId): bool
     {
-        $order->orderPayment->update([
+        $this->hasProvider($order);
+
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->verify($this->order, $paymentIntentId);
+
+        if ($data) {
+            return $this->updateOrderStatus();
+        }
+
+        return $data;
+    }
+
+    public function updateOrderPayment(array $data): array
+    {
+        $this->order->orderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
@@ -60,12 +63,27 @@ class PaymentService
         return ['data' => $data['response']];
     }
 
-    public function updateOrderStatus(Order $order): bool
+    public function updateOrderStatus(): bool
     {
-        $order->markAsPlaced();
+        // only update order if its status is in pending state this
+        // method can be called twice and can fire event twice
+        if ($this->order->isPayable()) {
+            $this->order->markAsPlaced();
 
-        OrderPaid::dispatch($order);
+            OrderPaid::dispatch($this->order);
+        }
 
         return true;
+    }
+
+    public function hasProvider(Order $order): self
+    {
+        throw_unless(
+            array_key_exists($order->paymentMethod->code, $this->providers),
+            PaymentMethodNotSupported::class
+        );
+        $this->order = $order;
+
+        return $this;
     }
 }

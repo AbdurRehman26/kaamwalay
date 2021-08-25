@@ -8,8 +8,8 @@ use Illuminate\Support\Str;
 
 class TestingStripeService implements PaymentProviderServiceInterface
 {
-    const CUSTOMER_ERROR_PARAMETER = 'customer';
-    const PAYMENT_METHOD_ERROR_PARAMETER = 'payment_method';
+    const ERROR_PARAMETER_CUSTOMER = 'customer';
+    const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
     public function charge(Order $order): array
     {
@@ -163,12 +163,12 @@ class TestingStripeService implements PaymentProviderServiceInterface
 
     protected function isPaymentMethodInvalid(string $param): bool
     {
-        return $param === self::PAYMENT_METHOD_ERROR_PARAMETER;
+        return $param === self::ERROR_PARAMETER_PAYMENT_METHOD;
     }
 
     protected function isCustomerInvalid(string $param): bool
     {
-        return $param === self::CUSTOMER_ERROR_PARAMETER;
+        return $param === self::ERROR_PARAMETER_CUSTOMER;
     }
 
     public function createSetupIntent(User $user): array
@@ -195,10 +195,5 @@ class TestingStripeService implements PaymentProviderServiceInterface
                 ],
             ],
         ];
-    }
-
-    public function getOrderAmountInCents(float $amount): int
-    {
-        return (int) ($amount * 100);
     }
 }

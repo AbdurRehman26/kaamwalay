@@ -14,8 +14,8 @@ use Stripe\SetupIntent;
 
 class StripeService implements PaymentProviderServiceInterface
 {
-    const CUSTOMER_ERROR_PARAMETER = 'customer';
-    const PAYMENT_METHOD_ERROR_PARAMETER = 'payment_method';
+    const ERROR_PARAMETER_CUSTOMER = 'customer';
+    const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
     public function createSetupIntent(User $user): array | SetupIntent
     {
@@ -83,7 +83,7 @@ class StripeService implements PaymentProviderServiceInterface
             ];
         } catch (InvalidRequestException $exception) {
             if ($this->isPaymentMethodInvalid($exception->getStripeParam())) {
-                return ['message' => 'Invalid Payment Method, please go select a valid Payment Method.'];
+                return ['message' => 'Invalid Payment Method, please select a valid Payment Method.'];
             }
         } catch (CardException $exception) {
             return ['message' => $exception->getMessage()];
@@ -126,12 +126,12 @@ class StripeService implements PaymentProviderServiceInterface
 
     protected function isCustomerInvalid(string $param): bool
     {
-        return $param === self::CUSTOMER_ERROR_PARAMETER;
+        return $param === self::ERROR_PARAMETER_CUSTOMER;
     }
 
     protected function isPaymentMethodInvalid(string $param): bool
     {
-        return $param === self::PAYMENT_METHOD_ERROR_PARAMETER;
+        return $param === self::ERROR_PARAMETER_PAYMENT_METHOD;
     }
 
     public function createCustomerIfNull(User $user): void
@@ -153,10 +153,5 @@ class StripeService implements PaymentProviderServiceInterface
     {
         $this->removeOldCustomerId($user);
         $this->createCustomerIfNull($user);
-    }
-
-    public function getOrderAmountInCents(float $amount): int
-    {
-        return (int) ($amount * 100);
     }
 }

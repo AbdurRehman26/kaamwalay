@@ -32,7 +32,7 @@ class PaymentService
 
         if (! empty($data['success'])) {
             $this->updateOrderStatus();
-            $this->calculateAndSaveFee();
+            $this->calculateAndSaveFee($order);
         }
 
         return $this->updateOrderPayment($data);
@@ -47,7 +47,7 @@ class PaymentService
         ])->verify($this->order, $paymentIntentId);
 
         if ($data) {
-            $this->calculateAndSaveFee();
+            $this->calculateAndSaveFee($order);
 
             return $this->updateOrderStatus();
         }
@@ -79,8 +79,10 @@ class PaymentService
         return true;
     }
 
-    public function calculateAndSaveFee(): void
+    public function calculateAndSaveFee(Order $order): void
     {
+        $this->hasProvider($order);
+
         $fee = resolve($this->providers[
             $this->order->paymentMethod->code
         ])->calculateFee($this->order);

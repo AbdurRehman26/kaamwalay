@@ -48,7 +48,6 @@ class TestingStripeService implements PaymentProviderServiceInterface
         }
 
         $paymentIntent = $this->paidPaymentIntent($order);
-//        dd((int) (100 * $order->grand_total),$paymentIntent );
 
         return $this->validateOrderIsPaid($order, $paymentIntent);
     }

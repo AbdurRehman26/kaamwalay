@@ -83,7 +83,7 @@ class PaymentService
         $fee = resolve($this->providers[
             $this->order->paymentMethod->code
         ])->calculateFee($this->order);
-        
+
         $orderPayment = $this->order->orderPayment;
         $orderPayment->provider_fee = $fee;
         $orderPayment->save();

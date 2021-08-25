@@ -7,6 +7,7 @@ use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\Providers\PaymentProviderServiceInterface;
 use App\Services\Payment\Providers\StripeService;
+use App\Services\Payment\Providers\TestingStripeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -22,7 +23,7 @@ class StripeServiceTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create();
-        $this->stripe = resolve(StripeService::class);
+        $this->stripe = new TestingStripeService;
     }
 
     /**
@@ -102,5 +103,20 @@ class StripeServiceTest extends TestCase
         $result = $this->stripe->charge($order);
 
         $this->assertArrayHasKey('payment_intent', $result);
+    }
+
+    /**
+     * @test
+     * @group payment
+    */
+    public function it_calculates_fee()
+    {
+        $order = Order::factory()->create();
+        $totalAmount = (int) ($order->grand_total * 100);
+        $actualFee = (
+            (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
+        ) / 100;
+        $calculatedFee = $this->stripe->calculateFee($order);
+        $this->assertSame($calculatedFee, $actualFee);
     }
 }

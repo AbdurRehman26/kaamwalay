@@ -8,6 +8,10 @@ use Illuminate\Support\Str;
 
 class TestingStripeService implements PaymentProviderServiceInterface
 {
+    // stripe charges 2.9% x (amount) + 30cents
+    const STRIPE_FEE_PERCENTAGE = 0.029;
+    const STRIPE_FEE_ADDITIONAL_AMOUNT = 30;
+
     public function charge(Order $order): array
     {
         $paymentData = [
@@ -146,5 +150,14 @@ class TestingStripeService implements PaymentProviderServiceInterface
             $user->stripe_id = Str::random(25);
             $user->save();
         }
+    }
+
+    public function calculateFee(Order $order): float
+    {
+        $amountCharged = (int) ($order->grand_total * 100);
+
+        return  (float) (
+            (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
+        ) / 100;
     }
 }

@@ -1,3 +1,5 @@
+import { Redirect } from 'react-router-dom';
+
 export function Main() {
-    return <div>Main</div>;
+    return <Redirect to={'/submissions'} />;
 }

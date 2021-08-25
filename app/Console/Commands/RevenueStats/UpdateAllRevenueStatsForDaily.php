@@ -16,7 +16,7 @@ class UpdateAllRevenueStatsForDaily extends Command
      *
      * @var string
      */
-    protected $signature = 'revenue-stats-all:daily';
+    protected $signature = 'revenue-stats:calculate-for-missing-days';
 
     /**
      * The console command description.
@@ -42,13 +42,13 @@ class UpdateAllRevenueStatsForDaily extends Command
             ->distinct()
             ->get()
             ->pluck('created_at')
-            ->map(function ($date) use ($revenueStatsService) {
+            ->each(function (Carbon $date) use ($revenueStatsService) {
                 $formattedDate = $date->toDateString();
-                Log::info("Revenue Stats for Date : ".$formattedDate. " Adding.");
+                Log::info("Revenue Stats for Date : " . $formattedDate . " Adding.");
 
                 $revenueStatsService->addStats($formattedDate);
 
-                Log::info("Revenue Stats for Date : ".$formattedDate. " Added.");
+                Log::info("Revenue Stats for Date : " . $formattedDate . " Added.");
             });
 
         Log::info("Revenue Stats Daily For Previously Missed Dates Completed.");

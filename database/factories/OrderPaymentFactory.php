@@ -34,7 +34,7 @@ class OrderPaymentFactory extends Factory
     }
 
     /**
-     * Indicate that the user is suspended.
+     * Indicate that the stripe request/response will be added.
      *
      * @return Factory
      */
@@ -48,7 +48,7 @@ class OrderPaymentFactory extends Factory
         });
     }
     /**
-     * Indicate that the user is suspended.
+     * Indicate that the paypal request/response will be added.
      *
      * @return Factory
      */

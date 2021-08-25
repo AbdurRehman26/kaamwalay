@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class RevenueStatsService
 {
-    public function addStats($currentDate)
+    protected function addStats(string $currentDate) : RevenueStatsDaily
     {
         /*Using order payments instead of orders
         because we might take payments of some orders
@@ -30,7 +30,7 @@ class RevenueStatsService
 
         $dailyRevenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
 
-        if ($dailyRevenue['profit'] != $revenueData['profit'] || $dailyRevenue['revenue'] != $revenueData['revenue']) {
+        if ($dailyRevenue['profit'] !== $revenueData['profit'] || $dailyRevenue['revenue'] !== $revenueData['revenue']) {
             Log::info("Discrepancy found in the revenue stats");
             Log::info("Revenue stats in database -> Profit: ".$dailyRevenue['profit']. ", Revenue: ". $dailyRevenue['revenue']);
             Log::info("Revenue stats in calculated from Orders -> Profit: ".$revenueData['profit']. ", Revenue: ". $revenueData['revenue']);
@@ -44,33 +44,22 @@ class RevenueStatsService
         return $dailyRevenue;
     }
 
-
-    /**
-     * @param $currentDate
-     * @param Order $order
-     */
-    public function updateStats($currentDate, Order $order)
+    protected function updateStats(string $currentDate, Order $order) : RevenueStatsDaily
     {
-        $revenue = RevenueStatsDaily::updateOrCreate([ 'event_at' => $currentDate ]);
+        $revenue = RevenueStatsDaily::updateOrCreate(['event_at' => $currentDate]);
 
         $revenue->increment('profit', $this->calculateProfit($order->orderPayment));
         $revenue->increment('revenue', $this->calculateRevenue($order->orderPayment));
+
+        return $revenue;
     }
 
-    /**
-     * @param OrderPayment $orderPayment
-     * @return mixed
-     */
-    public function calculateRevenue(OrderPayment $orderPayment)
+    protected function calculateRevenue(OrderPayment $orderPayment) : float
     {
         return $orderPayment->order->grand_total;
     }
 
-    /**
-     * @param OrderPayment $orderPayment
-     * @return mixed
-     */
-    public function calculateProfit(OrderPayment $orderPayment)
+    protected function calculateProfit(OrderPayment $orderPayment) : float
     {
         return ($orderPayment->order->service_fee - $orderPayment->provider_fee);
     }

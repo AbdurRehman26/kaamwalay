@@ -17,4 +17,15 @@ class RevenueStatsDaily extends Model
      * @var array
      */
     protected $fillable = ['event_at', 'profit', 'revenue'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'profit' => 'float',
+        'revenue' => 'string',
+    ];
 }

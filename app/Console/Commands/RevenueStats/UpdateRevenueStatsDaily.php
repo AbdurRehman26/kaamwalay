@@ -16,7 +16,7 @@ class UpdateRevenueStatsDaily extends Command
      *
      * @var string
      */
-    protected $signature = 'revenue-stats:daily {date? : YYYY-MM-DD format}';
+    protected $signature = 'revenue-stats:calculate-for-day {date? : YYYY-MM-DD format}';
 
     /**
      * The console command description.
@@ -35,7 +35,7 @@ class UpdateRevenueStatsDaily extends Command
         $currentDate = Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1);
         $formattedDate = $currentDate->format('Y-m-d');
 
-        Log::info("Revenue Stats Daily for Date : ".$formattedDate);
+        Log::info("Revenue Stats Daily for Date : " . $formattedDate);
 
         $revenueStats = $revenueStatsService->addStats($formattedDate);
 
@@ -43,7 +43,7 @@ class UpdateRevenueStatsDaily extends Command
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new RevenueStatsUpdated($revenueStats));
         }
-        Log::info("Revenue Stats Daily for Date : ".$formattedDate. " Completed");
+        Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
 
         return 0;
     }

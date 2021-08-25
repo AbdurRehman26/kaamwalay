@@ -6,14 +6,14 @@ use App\Models\OrderPayment;
 use App\Services\Payment\PaymentService;
 use Illuminate\Console\Command;
 
-class UpdateProviderFee extends Command
+class UpdatePaymentProviderFee extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'provider-fee:update';
+    protected $signature = 'payment-provider-fee:calculate-for-missing-orders';
 
     /**
      * The console command description.
@@ -24,7 +24,7 @@ class UpdateProviderFee extends Command
 
     public function handle(PaymentService $paymentService): int
     {
-        OrderPayment::whereNull('provider_fee')->get()->map(function ($orderPayment) use ($paymentService) {
+        OrderPayment::whereNull('provider_fee')->get()->each(function (OrderPayment $orderPayment) use ($paymentService) {
             $paymentService->calculateAndSaveFee($orderPayment->order);
         });
 

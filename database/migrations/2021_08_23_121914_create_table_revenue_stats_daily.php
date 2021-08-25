@@ -16,8 +16,8 @@ class CreateTableRevenueStatsDaily extends Migration
         Schema::create('revenue_stats_daily', function (Blueprint $table) {
             $table->id();
             $table->date('event_at');
-            $table->decimal('profit', 10, 2)->default(0);
             $table->decimal('revenue', 10, 2)->default(0);
+            $table->decimal('profit', 10, 2)->default(0);
             $table->timestamps();
         });
     }

@@ -25,11 +25,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $currentDate = Carbon::now()->subDays(1)->format('Y-m-d');
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
-        $schedule->command("orders:export", [$currentDate])
+        $schedule->command("orders:export", [Carbon::now()->subDays(1)->format('Y-m-d')])
         ->dailyAt('00:10');
-        $schedule->command("revenue-stats:daily", [$currentDate])
+        $schedule->command("revenue-stats:calculate-for-day", [Carbon::now()->subDays(1)->format('Y-m-d')])
             ->dailyAt('00:20');
     }
 

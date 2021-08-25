@@ -5,7 +5,6 @@ namespace App\Services\Order;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class RevenueStatsService
@@ -45,8 +44,22 @@ class RevenueStatsService
         return $dailyRevenue;
     }
 
+
     /**
+     * @param $currentDate
      * @param Order $order
+     */
+    public function updateStats($currentDate, Order $order)
+    {
+        $revenue = RevenueStatsDaily::updateOrCreate([ 'event_at' => $currentDate ]);
+
+        $revenue->increment('profit', $this->calculateProfit($order->orderPayment));
+        $revenue->increment('revenue', $this->calculateRevenue($order->orderPayment));
+
+    }
+
+    /**
+     * @param OrderPayment $orderPayment
      * @return mixed
      */
     public function calculateRevenue(OrderPayment $orderPayment)

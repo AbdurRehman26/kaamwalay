@@ -5,7 +5,6 @@ namespace App\Services\Order;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class RevenueStatsService

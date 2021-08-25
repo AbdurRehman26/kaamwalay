@@ -14,8 +14,8 @@ use Stripe\SetupIntent;
 
 class StripeService implements PaymentProviderServiceInterface
 {
-    const ERROR_PARAMETER_CUSTOMER = 'customer';
-    const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
+    public const ERROR_PARAMETER_CUSTOMER = 'customer';
+    public const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
     public function createSetupIntent(User $user): array | SetupIntent
     {

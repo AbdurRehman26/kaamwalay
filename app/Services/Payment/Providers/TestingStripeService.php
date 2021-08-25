@@ -8,8 +8,8 @@ use Illuminate\Support\Str;
 
 class TestingStripeService implements PaymentProviderServiceInterface
 {
-    const ERROR_PARAMETER_CUSTOMER = 'customer';
-    const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
+    public const ERROR_PARAMETER_CUSTOMER = 'customer';
+    public const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
     public function charge(Order $order): array
     {

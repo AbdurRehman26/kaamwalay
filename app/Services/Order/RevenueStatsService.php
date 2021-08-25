@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\RevenueStatsDaily;
 use Carbon\Carbon;
@@ -9,15 +10,8 @@ use Illuminate\Support\Facades\Log;
 
 class RevenueStatsService
 {
-    protected string $date;
-    public function __construct($date)
+    public function addStats($currentDate)
     {
-        $this->date = Carbon::parse($date)->format('Y-m-d');
-    }
-
-    public function addStats()
-    {
-        $currentDate = $this->date;
         /*Using order payments instead of orders
         because we might take payments of some orders
         not on the same day*/
@@ -31,8 +25,8 @@ class RevenueStatsService
         ];
 
         foreach ($orderPayments as $orderPayment) {
-            $revenueData['profit'] += $orderPayment->order->grand_total;
-            $revenueData['revenue'] += ($orderPayment->order->service_fee - $orderPayment->provider_fee);
+            $revenueData['profit'] += $this->calculateProfit($orderPayment);
+            $revenueData['revenue'] += $this->calculateRevenue($orderPayment);
         }
 
         $dailyRevenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
@@ -49,5 +43,23 @@ class RevenueStatsService
         $dailyRevenue->save();
 
         return $dailyRevenue;
+    }
+
+    /**
+     * @param Order $order
+     * @return mixed
+     */
+    public function calculateRevenue(OrderPayment $orderPayment)
+    {
+        return $orderPayment->order->grand_total;
+    }
+
+    /**
+     * @param OrderPayment $orderPayment
+     * @return mixed
+     */
+    public function calculateProfit(OrderPayment $orderPayment)
+    {
+        return ($orderPayment->order->service_fee - $orderPayment->provider_fee);
     }
 }

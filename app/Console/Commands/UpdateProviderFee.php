@@ -22,9 +22,8 @@ class UpdateProviderFee extends Command
      */
     protected $description = 'Update All Provider Fees';
 
-    public function handle(): int
+    public function handle(PaymentService $paymentService): int
     {
-        $paymentService = new PaymentService();
         OrderPayment::whereNull('provider_fee')->get()->map(function ($orderPayment) use ($paymentService) {
             $paymentService->calculateAndSaveFee($orderPayment->order);
         });

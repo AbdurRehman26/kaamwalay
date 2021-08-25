@@ -30,15 +30,14 @@ class UpdateRevenueStatsDaily extends Command
      *
      * @return int
      */
-    public function handle(): int
+    public function handle(RevenueStatsService $revenueStatsService): int
     {
         $currentDate = Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1);
         $formattedDate = $currentDate->format('Y-m-d');
 
         Log::info("Revenue Stats Daily for Date : ".$formattedDate);
 
-        $revenueStatsService = new RevenueStatsService($formattedDate);
-        $revenueStats = $revenueStatsService->addStats();
+        $revenueStats = $revenueStatsService->addStats($formattedDate);
 
         if (app()->environment('production')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))

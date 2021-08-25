@@ -25,7 +25,7 @@ class UpdateAllRevenueStatsForDaily extends Command
      */
     protected $description = 'Update Revenue and Profit Stats That Were Previously Missed';
 
-    public function handle(): int
+    public function handle(RevenueStatsService $revenueStatsService): int
     {
         Log::info("Revenue Stats For Previously Missed Dates");
 
@@ -37,14 +37,19 @@ class UpdateAllRevenueStatsForDaily extends Command
             $lastRevenueDate = $revenueDaily->event_at;
         }
 
-        OrderPayment::whereDate('created_at', '<', $lastRevenueDate)->select('created_at')->distinct()->get()->pluck('created_at')->map(function ($date) {
-            Log::info("Revenue Stats for Date : ".$date->toDateString(). " Adding.");
+        OrderPayment::whereDate('created_at', '<', $lastRevenueDate)
+            ->select('created_at')
+            ->distinct()
+            ->get()
+            ->pluck('created_at')
+            ->map(function ($date) use ($revenueStatsService) {
+                $formattedDate = $date->toDateString();
+                Log::info("Revenue Stats for Date : ".$formattedDate. " Adding.");
 
-            $revenueStatsService = new RevenueStatsService($date->toDateString());
-            $revenueStatsService->addStats();
+                $revenueStatsService->addStats($formattedDate);
 
-            Log::info("Revenue Stats for Date : ".$date->toDateString(). " Added.");
-        });
+                Log::info("Revenue Stats for Date : ".$formattedDate. " Added.");
+            });
 
         Log::info("Revenue Stats Daily For Previously Missed Dates Completed.");
 

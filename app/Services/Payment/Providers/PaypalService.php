@@ -57,7 +57,7 @@ class PaypalService implements PaymentProviderServiceInterface
                 'payment_provider_reference_id' => $response->result->id,
             ];
         } catch (HttpException $e) {
-            return ['error' => $e->getMessage()];
+            return ['message' => $e->getMessage()];
         }
     }
 
@@ -75,7 +75,7 @@ class PaypalService implements PaymentProviderServiceInterface
         }
     }
 
-    public function validateOrderIsPaid(Order $order, array $data): bool
+    protected function validateOrderIsPaid(Order $order, array $data): bool
     {
         if (! empty($data['purchase_units'][0]['payments']['captures'][0])) {
             $paymentIntent = $data['purchase_units'][0]['payments']['captures'][0];
@@ -96,7 +96,7 @@ class PaypalService implements PaymentProviderServiceInterface
         return false;
     }
 
-    public function calculateFee(Order $order): float | null
+    public function calculateFee(Order $order): float
     {
         $paymentResponse = json_decode($order->orderPayment->response, associative: true);
         if (! empty($paymentResponse['purchase_units'][0]['payments']['captures'][0])) {
@@ -105,6 +105,6 @@ class PaypalService implements PaymentProviderServiceInterface
             return $breakdown['paypal_fee']['value'];
         }
 
-        return null;
+        return 0.0;
     }
 }

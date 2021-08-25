@@ -13,13 +13,9 @@ class AddCustomerShipmentToOrderItems extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
-
         Schema::table('order_items', function (Blueprint $table) {
             $table->foreignId('order_item_customer_shipment_id')->nullable();
         });
-        
-        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -30,7 +26,7 @@ class AddCustomerShipmentToOrderItems extends Migration
     public function down()
     {
         Schema::table('order_items', function (Blueprint $table) {
-            //
+            $table->dropColumn('order_item_customer_shipment_id');
         });
     }
 }

@@ -32,7 +32,7 @@ class OrderCustomerShipmentTest extends TestCase
     {
         $this->actingAs($this->order->user);
 
-        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+        $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
             'shipping_provider' => $this->shippingProvider,
             'tracking_number' => $this->trackingNumber,
         ]);
@@ -46,7 +46,7 @@ class OrderCustomerShipmentTest extends TestCase
     /** @test */
     public function a_guest_cannot_update_order_shipment_details()
     {
-        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+        $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
             'shipping_provider' => $this->shippingProvider,
             'tracking_number' => $this->trackingNumber,
         ]);
@@ -62,7 +62,7 @@ class OrderCustomerShipmentTest extends TestCase
 
         $this->actingAs($otherCustomer);
 
-        $response = $this->putJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+        $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
             'shipping_provider' => $this->shippingProvider,
             'tracking_number' => $this->trackingNumber,
         ]);

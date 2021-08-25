@@ -26,7 +26,7 @@ class PaymentService
             $this->order->paymentMethod->code
         ])->charge($this->order);
 
-        if (! empty($data['error']) || ! empty($data['payment_intent'])) {
+        if (! empty($data['message']) || ! empty($data['payment_intent'])) {
             return $data;
         }
 

@@ -48,7 +48,7 @@ class StripeOrderPaymentTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonStructure(['data' => ['id', 'charges']]);
-        $response->assertJsonPath('data.amount', (int) ($this->order->grand_total * 100));
+        $response->assertJsonPath('data.amount', $this->order->grand_total_cents);
     }
 
     /**

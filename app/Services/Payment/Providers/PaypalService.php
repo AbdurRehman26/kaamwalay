@@ -57,7 +57,7 @@ class PaypalService implements PaymentProviderServiceInterface
                 'payment_provider_reference_id' => $response->result->id,
             ];
         } catch (HttpException $e) {
-            return ['error' => $e->getMessage()];
+            return ['message' => $e->getMessage()];
         }
     }
 
@@ -75,7 +75,7 @@ class PaypalService implements PaymentProviderServiceInterface
         }
     }
 
-    public function validateOrderIsPaid(Order $order, array $data): bool
+    protected function validateOrderIsPaid(Order $order, array $data): bool
     {
         if ($data['status'] === 'APPROVED') {
             return false;

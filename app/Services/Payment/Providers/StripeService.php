@@ -83,7 +83,7 @@ class StripeService implements PaymentProviderServiceInterface
             ];
         } catch (InvalidRequestException $exception) {
             if ($this->isPaymentMethodInvalid($exception->getStripeParam())) {
-                return ['message' => 'Invalid Payment Method, please go back and select a valid Payment Method.'];
+                return ['message' => 'Invalid Payment Method, please go select a valid Payment Method.'];
             }
         } catch (CardException $exception) {
             return ['message' => $exception->getMessage()];

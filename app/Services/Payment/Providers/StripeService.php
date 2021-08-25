@@ -10,8 +10,9 @@ use Stripe\PaymentIntent;
 
 class StripeService implements PaymentProviderServiceInterface
 {
+    // stripe charges 2.9% x (amount) + 30cents
     const STRIPE_FEE_PERCENTAGE = 0.029;
-    const STRIPE_FEE_ADDITIONAL_AMOUNT = 30; //cents
+    const STRIPE_FEE_ADDITIONAL_AMOUNT = 30;
 
     public function createSetupIntent(): \Stripe\SetupIntent
     {
@@ -90,14 +91,16 @@ class StripeService implements PaymentProviderServiceInterface
         return false;
     }
 
-    public function calculateFee(float | int $amount): float
+    public function calculateFee(Order $order): float
     {
-        return  (float) (
-            self::STRIPE_FEE_PERCENTAGE * (int) ($amount * 100) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
+        $amountCharged = (int) ($order->grand_total * 100);
+
+        return (
+            (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100;
     }
 
-    
+
     public function createCustomerIfNull(User $user): void
     {
         if (! $user->hasStripeId()) {

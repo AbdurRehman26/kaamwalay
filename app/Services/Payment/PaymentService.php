@@ -32,6 +32,7 @@ class PaymentService
 
         if (! empty($data['success'])) {
             $this->updateOrderStatus();
+            $this->calculateAndSaveFee();
         }
 
         return $this->updateOrderPayment($data);
@@ -46,6 +47,8 @@ class PaymentService
         ])->verify($this->order, $paymentIntentId);
 
         if ($data) {
+            $this->calculateAndSaveFee();
+
             return $this->updateOrderStatus();
         }
 
@@ -76,18 +79,17 @@ class PaymentService
         return true;
     }
 
-    public function calculateAndSaveFee(Order $order): void
+    public function calculateAndSaveFee(): void
     {
-        $orderPayment = $order->orderPayment;
-        $fee = match ($order->paymentMethod->code) {
-            'stripe' => (new StripeService)->calculateFee($order->grand_total),
-            'paypal' => (new PaypalService)->calculateFee($order),
-        };
+        $fee = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->calculateFee($this->order);
+
+        $orderPayment = $this->order->orderPayment;
         $orderPayment->provider_fee = $fee;
         $orderPayment->save();
     }
-    
-    
+
     public function hasProvider(Order $order): self
     {
         throw_unless(

@@ -32,8 +32,8 @@ class RevenueStatsService
 
         if ($dailyRevenue['profit'] !== $revenueData['profit'] || $dailyRevenue['revenue'] !== $revenueData['revenue']) {
             Log::info("Discrepancy found in the revenue stats");
-            Log::info("Revenue stats in database -> Profit: ".$dailyRevenue['profit']. ", Revenue: ". $dailyRevenue['revenue']);
-            Log::info("Revenue stats in calculated from Orders -> Profit: ".$revenueData['profit']. ", Revenue: ". $revenueData['revenue']);
+            Log::info("Revenue stats in database -> Profit: " . $dailyRevenue['profit'] . ", Revenue: " . $dailyRevenue['revenue']);
+            Log::info("Revenue stats in calculated from Orders -> Profit: " . $revenueData['profit'] . ", Revenue: " . $revenueData['revenue']);
             Log::info("Updating Revenue Stats");
 
             $dailyRevenue->profit = $revenueData['profit'];

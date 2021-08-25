@@ -89,7 +89,10 @@ class LoginTest extends TestCase
         $response->assertJsonPath('data.user.id', $user->id);
     }
 
-    /** @test @group auth */
+    /**
+     * @test
+     * @group auth
+     */
     public function ags_user_can_login()
     {
         Config::set('services.ags.is_platform_enabled', true);

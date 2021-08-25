@@ -11,7 +11,10 @@ class ForgotPasswordTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test @group auth */
+    /**
+     * @test
+     * @group auth
+     */
     public function user_can_request_forgot_password()
     {
         $user = User::factory()->create();

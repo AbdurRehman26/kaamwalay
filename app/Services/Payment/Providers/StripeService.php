@@ -17,29 +17,33 @@ class StripeService implements PaymentProviderServiceInterface
     const CUSTOMER_ERROR_PARAMETER = 'customer';
     const PAYMENT_METHOD_ERROR_PARAMETER = 'payment_method';
 
-    public function createSetupIntent(User $user): array|SetupIntent
+    public function createSetupIntent(User $user): array | SetupIntent
     {
         try {
             return $user->createSetupIntent(['customer' => $user->stripe_id]);
         } catch (InvalidRequestException $e) {
             if ($this->isCustomerInvalid($e->getStripeParam())) {
                 $this->handleInvalidCustomer($user);
+
                 return $this->createSetupIntent($user);
             }
         }
+
         return [];
     }
 
-    public function getUserPaymentMethods(User $user): array|Collection
+    public function getUserPaymentMethods(User $user): array | Collection
     {
         try {
             return $user->paymentMethods();
         } catch (InvalidRequestException $e) {
             if ($this->isCustomerInvalid($e->getStripeParam())) {
                 $this->handleInvalidCustomer($user);
+
                 return $this->getUserPaymentMethods($user);
             }
         }
+
         return [];
     }
 
@@ -84,6 +88,7 @@ class StripeService implements PaymentProviderServiceInterface
         } catch (CardException $exception) {
             return ['message' => $exception->getMessage()];
         }
+
         return ['message' => 'Unable to handle your request at the moment.'];
     }
 

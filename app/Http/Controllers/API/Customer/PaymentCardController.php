@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PaymentCardController extends Controller
 {
-
     public function index(): JsonResponse
     {
         /** @var User $user */

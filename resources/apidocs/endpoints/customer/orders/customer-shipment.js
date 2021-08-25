@@ -1,5 +1,5 @@
 /**
- * @api {put} /customer/orders/1/customer-shipment Update Customer Shipment
+ * @api {post} /customer/orders/1/customer-shipment Update Customer Shipment
  * @apiName Update Customer Shipment
  * @apiGroup Customer-Orders
  *

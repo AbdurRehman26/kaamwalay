@@ -16,7 +16,7 @@ class UpdateRevenueStatsDaily extends Command
      *
      * @var string
      */
-    protected $signature = 'revenue-stats:daily {date : YYYY-MM-DD format}';
+    protected $signature = 'revenue-stats:daily {date? : YYYY-MM-DD format}';
 
     /**
      * The console command description.

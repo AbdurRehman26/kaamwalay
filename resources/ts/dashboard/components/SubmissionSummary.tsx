@@ -197,7 +197,7 @@ function SubmissionSummary() {
         } catch (err) {
             if ('message' in err) {
                 setIsStripePaymentLoading(false);
-                notifications.error(err.message, 'Error');
+                notifications.error(err.message, 'Payment Error');
             }
             // Charge was failed by back-end so we try to charge him on the front-end
             // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end

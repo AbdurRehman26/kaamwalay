@@ -9,9 +9,11 @@ import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
+import ReactGA from 'react-ga';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
+import { EventCategories, PaymentMethodEvents } from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import CustomerStripeCardItem from '@dashboard/components/PaymentForm/CustomerStripeCardItem';
 import useStyles from '@dashboard/components/PaymentForm/style';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -114,6 +116,10 @@ export function PaymentForm() {
             await saveExistingStripeCards();
             notifications.success('Your card was successfully saved', 'Card saved');
             setSaveBtnLoading(false);
+            ReactGA.event({
+                category: EventCategories.PaymentMethods,
+                action: PaymentMethodEvents.addedNewStripeCard,
+            });
         }
     };
 

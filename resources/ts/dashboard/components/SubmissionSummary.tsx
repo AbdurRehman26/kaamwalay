@@ -5,12 +5,14 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
+import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
+import { EventCategories, SubmissionEvents } from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
@@ -193,6 +195,10 @@ function SubmissionSummary() {
             setIsStripePaymentLoading(false);
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action: SubmissionEvents.paid,
+            });
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err) {
             // Charge was failed by back-end so we try to charge him on the front-end
@@ -221,10 +227,14 @@ function SubmissionSummary() {
                     const verifyOrderEndpoint = apiService.createEndpoint(
                         `customer/orders/${orderID}/payments/${chargeResult.paymentIntent.id}`,
                     );
-                    verifyOrderEndpoint.post('').then((r) => {
+                    verifyOrderEndpoint.post('').then(() => {
                         setIsStripePaymentLoading(false);
                         dispatch(clearSubmissionState());
                         dispatch(invalidateOrders());
+                        ReactGA.event({
+                            category: EventCategories.Submissions,
+                            action: SubmissionEvents.paid,
+                        });
                         history.push(`/submissions/${orderID}/confirmation`);
                     });
                 }

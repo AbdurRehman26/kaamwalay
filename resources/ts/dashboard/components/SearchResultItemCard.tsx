@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React from 'react';
+import ReactGA from 'react-ga';
+import { CardsSelectionEvents, EventCategories } from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { markCardAsSelected, markCardAsUnselected } from '../redux/slices/newSubmissionSlice';
 
@@ -83,10 +85,20 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
         }
 
         if (isCardSelected) {
+            ReactGA.event({
+                category: EventCategories.Cards,
+                action: CardsSelectionEvents.removed,
+                value: state.id,
+            });
             dispatch(markCardAsUnselected(state));
             return;
         }
 
+        ReactGA.event({
+            category: EventCategories.Cards,
+            action: CardsSelectionEvents.added,
+            value: state.id,
+        });
         dispatch(markCardAsSelected(state));
     }
 

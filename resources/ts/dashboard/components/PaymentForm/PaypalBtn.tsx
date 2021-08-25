@@ -1,11 +1,13 @@
 // noinspection BadExpressionStatementJS
 import React, { useEffect, useRef } from 'react';
+import ReactGA from 'react-ga';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
+import { EventCategories, SubmissionEvents } from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
 
@@ -48,6 +50,10 @@ function PaypalBtn() {
                             notifications.success('Order paid!', 'Success!');
                             dispatch(clearSubmissionState());
                             dispatch(invalidateOrders());
+                            ReactGA.event({
+                                category: EventCategories.Submissions,
+                                action: SubmissionEvents.paid,
+                            });
                             history.push(`/submissions/${orderID}/confirmation`);
                         } catch (err) {
                             notifications.error('Payment could not be processed!', 'Error');

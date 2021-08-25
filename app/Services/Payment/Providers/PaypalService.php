@@ -57,7 +57,7 @@ class PaypalService implements PaymentProviderServiceInterface
                 'payment_provider_reference_id' => $response->result->id,
             ];
         } catch (HttpException $e) {
-            return ['error' => $e->getMessage()];
+            return ['message' => $e->getMessage()];
         }
     }
 

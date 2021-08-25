@@ -99,7 +99,7 @@ class OrderTest extends TestCase
             ],
             'payment_provider_reference' => [
                 'id' => '12345678',
-            ]
+            ],
         ]);
 
         $response->assertStatus(201);

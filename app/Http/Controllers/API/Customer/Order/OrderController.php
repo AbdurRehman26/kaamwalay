@@ -58,7 +58,7 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function updateCustomerShipment(UpdateCustomerShipmentRequest $request, Order $order, CustomerShipmentService $customerShipmentService): OrderResource|JsonResponse
+    public function updateCustomerShipment(UpdateCustomerShipmentRequest $request, Order $order, CustomerShipmentService $customerShipmentService): OrderResource | JsonResponse
     {
         $this->authorize('view', $order);
 

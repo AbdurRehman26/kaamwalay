@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\Customer\Order;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCustomerShipmentResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 
 class OrderListResource extends BaseResource
@@ -19,6 +20,7 @@ class OrderListResource extends BaseResource
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'status' => $this->orderStatus->name,
             'invoice' => new InvoiceResource($this->invoice),
+            'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment),
         ];
     }
 }

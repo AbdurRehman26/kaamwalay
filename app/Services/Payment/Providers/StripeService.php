@@ -53,7 +53,7 @@ class StripeService implements PaymentProviderServiceInterface
         $user = auth()->user();
 
         $paymentData = [
-            'amount' => $this->getOrderAmountInCents($order->grand_total),
+            'amount' => $order->grand_total_cents,
             'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->id}",
@@ -111,7 +111,7 @@ class StripeService implements PaymentProviderServiceInterface
         $charge = $paymentIntent->charges->first();
 
         if (
-            $charge->amount === $this->getOrderAmountInCents($order->grand_total)
+            $charge->amount === $order->grand_total_cents
             && $charge->outcome->type === 'authorized'
         ) {
             $order->orderPayment->update([

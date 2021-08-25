@@ -125,4 +125,9 @@ class Order extends Model
     {
         return $query->where('order_status_id', 2);
     }
+
+    public function getGrandTotalCents(): int
+    {
+        return (int) ($this->grand_total * 100);
+    }
 }

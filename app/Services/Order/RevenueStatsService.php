@@ -40,7 +40,8 @@ class RevenueStatsService
             $dailyRevenue->revenue = $revenueData['revenue'];
         }
         $dailyRevenue->save();
-            return $dailyRevenue;
+
+        return $dailyRevenue;
     }
 
     public function updateStats(string $currentDate, Order $order) : RevenueStatsDaily

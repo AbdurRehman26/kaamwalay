@@ -48,6 +48,7 @@ class PaymentService
 
         if ($data) {
             $this->calculateAndSaveFee();
+
             return $this->updateOrderStatus();
         }
 

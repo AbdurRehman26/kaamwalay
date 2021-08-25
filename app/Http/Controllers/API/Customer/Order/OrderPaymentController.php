@@ -16,7 +16,7 @@ class OrderPaymentController extends Controller
     {
     }
 
-    public function pay(Order $order)
+    public function charge(Order $order): JsonResponse
     {
         $this->authorize('view', $order);
 
@@ -24,19 +24,17 @@ class OrderPaymentController extends Controller
 
         $response = $this->paymentService->charge($order);
 
-        if (! empty($response['success'])) {
-            $this->paymentService->updateOrderStatus($order);
-
+        if (! empty($response['data'])) {
             return new JsonResponse($response);
         }
 
         return new JsonResponse(
             $response,
-            $order->paymentMethod->code === 'stripe' ? Response::HTTP_PAYMENT_REQUIRED : Response::HTTP_CREATED
+            Response::HTTP_PAYMENT_REQUIRED
         );
     }
 
-    public function verify(Order $order, $paymentIntentId): JsonResponse
+    public function verify(Order $order, string $paymentIntentId): JsonResponse
     {
         $this->authorize('view', $order);
 
@@ -45,7 +43,7 @@ class OrderPaymentController extends Controller
             PaymentNotVerified::class
         );
 
-        $this->paymentService->updateOrderStatus($order);
+        $this->paymentService->updateOrderStatus();
 
         $this->paymentService->calculateAndSaveFee($order);
 

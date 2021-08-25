@@ -17,7 +17,7 @@ export function ShippingInstructions() {
                 Ship the package to:
             </SectionHeader>
             <Typography variant={'subtitle2'} className={font.fontWeightMedium}>
-                AGS Inc.
+                AGS Submissions
             </Typography>
             <Typography variant={'subtitle2'} className={font.fontWeightMedium}>
                 727 Page Ave

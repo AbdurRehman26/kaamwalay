@@ -9,10 +9,10 @@ import { useAuth } from '@shared/hooks/useAuth';
  * @time: 06:35
  */
 export function AuthenticationCheck() {
-    const { authCheck } = useAuth();
+    const { checkAuth } = useAuth();
     useEffect(
         () => {
-            authCheck();
+            checkAuth();
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],

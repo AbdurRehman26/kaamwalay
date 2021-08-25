@@ -9,14 +9,16 @@ use Illuminate\Support\Str;
 class TestingStripeService implements PaymentProviderServiceInterface
 {
     // stripe charges 2.9% x (amount) + 30cents
-    const STRIPE_FEE_PERCENTAGE = 0.029;
-    const STRIPE_FEE_ADDITIONAL_AMOUNT = 30;
+    public const STRIPE_FEE_PERCENTAGE = 0.029;
+    public const STRIPE_FEE_ADDITIONAL_AMOUNT = 30;
+    protected const ERROR_PARAMETER_CUSTOMER = 'customer';
+    protected const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
     public function charge(Order $order): array
     {
         $paymentData = [
             'customer_id' => Str::random(25),
-            'amount' => (int) ($order->grand_total * 100),
+            'amount' => $order->grand_total_cents,
             'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->id}",
@@ -115,8 +117,8 @@ class TestingStripeService implements PaymentProviderServiceInterface
             "charges" => collect([
                 (object) [
                     "id" => "ch_3JPMybJCai8r8pbf0PSZNf2Y",
-                    "amount" => (int) ($order->grand_total * 100),
-                    "amount_captured" => (int) ($order->grand_total * 100),
+                    "amount" => $order->grand_total_cents,
+                    "amount_captured" => $order->grand_total_cents,
                     "outcome" => (object) [
                         "type" => "authorized",
                     ],
@@ -129,9 +131,8 @@ class TestingStripeService implements PaymentProviderServiceInterface
     protected function validateOrderIsPaid(Order $order, object $paymentIntent): bool
     {
         $charge = $paymentIntent->charges->first();
-
         if (
-            $charge->amount === (int) ($order->grand_total * 100)
+            $charge->amount === $order->grand_total_cents
             && $charge->outcome->type === 'authorized'
         ) {
             $order->orderPayment->update([
@@ -154,10 +155,57 @@ class TestingStripeService implements PaymentProviderServiceInterface
 
     public function calculateFee(Order $order): float
     {
-        $amountCharged = (int) ($order->grand_total * 100);
+        $amountCharged = $order->grand_total_cents;
 
-        return  (float) (
+        return  round((float) (
             (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
-        ) / 100;
+        ) / 100, 2);
+    }
+
+    protected function handleInvalidCustomer(User $user): void
+    {
+        $this->removeOldCustomerId($user);
+        $this->createCustomerIfNull($user);
+    }
+
+    protected function removeOldCustomerId(User $user): void
+    {
+        $user->stripe_id = null;
+    }
+
+    protected function isPaymentMethodInvalid(string $param): bool
+    {
+        return $param === self::ERROR_PARAMETER_PAYMENT_METHOD;
+    }
+
+    protected function isCustomerInvalid(string $param): bool
+    {
+        return $param === self::ERROR_PARAMETER_CUSTOMER;
+    }
+
+    public function createSetupIntent(User $user): array
+    {
+        return [
+            'client_secret' => Str::random(50),
+            'customer' => $user->stripe_id,
+            'object' => 'setup_intent',
+        ];
+    }
+
+    public function getUserPaymentMethods(User $user): array
+    {
+        return [
+            [
+                'id' => Str::random(35),
+                'customer' => $user->stripeId(),
+                'object' => 'payment_method',
+                'type' => 'card',
+                'card' => [
+                    'brand' => 'visa',
+                    'country' => 'US',
+                    'last4' => 4242,
+                ],
+            ],
+        ];
     }
 }

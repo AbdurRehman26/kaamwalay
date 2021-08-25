@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\View\Components\apps\SinglePageApplication;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class BladeServiceProvider extends ServiceProvider
@@ -25,6 +23,6 @@ class BladeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::component('sap', SinglePageApplication::class);
+        //
     }
 }

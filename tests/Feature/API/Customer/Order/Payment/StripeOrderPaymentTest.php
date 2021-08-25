@@ -49,7 +49,7 @@ class StripeOrderPaymentTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonStructure(['data' => ['id', 'charges']]);
-        $response->assertJsonPath('data.amount', (int) ($this->order->grand_total * 100));
+        $response->assertJsonPath('data.amount', $this->order->grand_total_cents);
     }
 
     /**
@@ -119,9 +119,9 @@ class StripeOrderPaymentTest extends TestCase
         $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments");
 
         $response->assertOk();
-        $response->assertJsonPath('data.amount', (int) ($this->order->grand_total * 100));
+        $response->assertJsonPath('data.amount', $this->order->grand_total_cents);
         $this->order->refresh();
-        $totalAmount = (int) ($this->order->grand_total * 100);
+        $totalAmount = $this->order->grand_total_cents;
         $actualFee = round((float) (
             (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100, 2);

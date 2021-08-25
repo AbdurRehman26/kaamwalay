@@ -4,22 +4,50 @@ namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\CardException;
+use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
+use Stripe\SetupIntent;
 
 class StripeService implements PaymentProviderServiceInterface
 {
     // stripe charges 2.9% x (amount) + 30cents
-    const STRIPE_FEE_PERCENTAGE = 0.029;
-    const STRIPE_FEE_ADDITIONAL_AMOUNT = 30;
+    public const STRIPE_FEE_PERCENTAGE = 0.029;
+    public const STRIPE_FEE_ADDITIONAL_AMOUNT = 30;
+    protected const ERROR_PARAMETER_CUSTOMER = 'customer';
+    protected const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
-    public function createSetupIntent(): \Stripe\SetupIntent
+    public function createSetupIntent(User $user): array | SetupIntent
     {
-        /** @var User $user */
-        $user = auth()->user();
+        try {
+            return $user->createSetupIntent(['customer' => $user->stripe_id]);
+        } catch (InvalidRequestException $e) {
+            if ($this->isCustomerInvalid($e->getStripeParam())) {
+                $this->handleInvalidCustomer($user);
 
-        return $user->createSetupIntent(['customer' => $user->stripe_id]);
+                return $this->createSetupIntent($user);
+            }
+        }
+
+        return [];
+    }
+
+    public function getUserPaymentMethods(User $user): array | Collection
+    {
+        try {
+            return $user->paymentMethods();
+        } catch (InvalidRequestException $e) {
+            if ($this->isCustomerInvalid($e->getStripeParam())) {
+                $this->handleInvalidCustomer($user);
+
+                return $this->getUserPaymentMethods($user);
+            }
+        }
+
+        return [];
     }
 
     public function charge(Order $order): array
@@ -28,7 +56,7 @@ class StripeService implements PaymentProviderServiceInterface
         $user = auth()->user();
 
         $paymentData = [
-            'amount' => $order->grand_total * 100,
+            'amount' => $order->grand_total_cents,
             'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->id}",
@@ -56,7 +84,15 @@ class StripeService implements PaymentProviderServiceInterface
             return [
                 'payment_intent' => $exception->payment,
             ];
+        } catch (InvalidRequestException $exception) {
+            if ($this->isPaymentMethodInvalid($exception->getStripeParam())) {
+                return ['message' => 'Invalid Payment Method, please select a valid Payment Method.'];
+            }
+        } catch (CardException $exception) {
+            return ['message' => $exception->getMessage()];
         }
+
+        return ['message' => 'Unable to handle your request at the moment.'];
     }
 
     public function verify(Order $order, string $paymentIntentId): bool
@@ -73,12 +109,12 @@ class StripeService implements PaymentProviderServiceInterface
         }
     }
 
-    public function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
+    protected function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
     {
         $charge = $paymentIntent->charges->first();
 
         if (
-            $charge->amount === (int) ($order->grand_total * 100)
+            $charge->amount === $order->grand_total_cents
             && $charge->outcome->type === 'authorized'
         ) {
             $order->orderPayment->update([
@@ -93,13 +129,22 @@ class StripeService implements PaymentProviderServiceInterface
 
     public function calculateFee(Order $order): float
     {
-        $amountCharged = (int) ($order->grand_total * 100);
+        $amountCharged = $order->grand_total_cents;
 
-        return (
+        return round((
             (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
-        ) / 100;
+        ) / 100, 2);
     }
 
+    protected function isCustomerInvalid(string $param): bool
+    {
+        return $param === self::ERROR_PARAMETER_CUSTOMER;
+    }
+
+    protected function isPaymentMethodInvalid(string $param): bool
+    {
+        return $param === self::ERROR_PARAMETER_PAYMENT_METHOD;
+    }
 
     public function createCustomerIfNull(User $user): void
     {
@@ -109,5 +154,16 @@ class StripeService implements PaymentProviderServiceInterface
                 'email' => $user->email,
             ]);
         }
+    }
+
+    protected function removeOldCustomerId(User $user): void
+    {
+        $user->stripe_id = null;
+    }
+
+    protected function handleInvalidCustomer(User $user): void
+    {
+        $this->removeOldCustomerId($user);
+        $this->createCustomerIfNull($user);
     }
 }

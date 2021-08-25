@@ -7,6 +7,7 @@ export const materialUiTheme = createTheme({
         primary: {
             main: '#20BFB8',
             contrastText: '#fff',
+            light: '#42E8E0',
         },
         secondary: {
             main: purple[500],

@@ -4,6 +4,7 @@ namespace Tests\Feature\Command;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
@@ -17,8 +18,12 @@ class ExportOrdersTest extends TestCase
     {
         Excel::fake();
         Storage::fake('s3');
+        Notification::fake();
 
         $this->artisan('orders:export ' . Carbon::now()->format('Y-m-d'))
             ->assertExitCode(0);
+
+        // Notification should not be sent because we are not running production
+        Notification::assertNothingSent();
     }
 }

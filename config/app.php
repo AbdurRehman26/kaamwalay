@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         \App\Providers\BladeServiceProvider::class,
+        \App\Providers\PaymentServiceProvider::class,
     ],
 
     /*

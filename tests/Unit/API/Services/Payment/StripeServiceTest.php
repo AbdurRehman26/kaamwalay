@@ -112,9 +112,9 @@ class StripeServiceTest extends TestCase
     {
         $order = Order::factory()->create();
         $totalAmount = (int) ($order->grand_total * 100);
-        $actualFee = (
+        $actualFee = round((
             (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
-        ) / 100;
+        ) / 100, 2);
         $calculatedFee = $this->stripe->calculateFee($order);
         $this->assertSame($calculatedFee, $actualFee);
     }

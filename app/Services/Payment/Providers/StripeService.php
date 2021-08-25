@@ -95,7 +95,7 @@ class StripeService implements PaymentProviderServiceInterface
     {
         $amountCharged = (int) ($order->grand_total * 100);
 
-        return  (float) (
+        return (
             (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100;
     }

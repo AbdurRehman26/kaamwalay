@@ -1,7 +1,13 @@
-import Box from '@material-ui/core/Box';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import React, { PropsWithChildren } from 'react';
+import Box, { BoxProps } from '@material-ui/core/Box';
+import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import React, { ElementType, PropsWithChildren, ReactElement } from 'react';
+import { renderElementType } from '@shared/lib/react/renderElementType';
 import { useSharedSelector } from '../hooks/useSharedDispatch';
+
+export interface SplashScreenProps extends BoxProps {
+    circularProgressProps?: CircularProgressProps;
+    customLoader?: ElementType | ReactElement | null;
+}
 
 /**
  *
@@ -10,13 +16,27 @@ import { useSharedSelector } from '../hooks/useSharedDispatch';
  * @date: 14.08.2021
  * @time: 02:49
  */
-export function SplashScreen({ children }: PropsWithChildren<any>) {
+export function SplashScreen({
+    children,
+    circularProgressProps,
+    customLoader,
+    ...rest
+}: PropsWithChildren<SplashScreenProps>) {
     const isConfigLoading = useSharedSelector((state) => state.configuration.isLoading);
 
     if (isConfigLoading) {
-        return (
-            <Box minHeight={'100vh'} width={'100%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                <CircularProgress />
+        return customLoader ? (
+            renderElementType(customLoader)
+        ) : (
+            <Box
+                minHeight={'100vh'}
+                width={'100%'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                {...rest}
+            >
+                <CircularProgress {...circularProgressProps} />
             </Box>
         );
     }

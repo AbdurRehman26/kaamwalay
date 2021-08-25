@@ -276,11 +276,11 @@ export function SubmissionStep04Content() {
                                     methodName={'Credit or Debit Card'}
                                     methodId={1}
                                 />
-                                {/* <PaymentMethodItem */}
-                                {/*    isSelected={paymentMethodId === 2}*/}
-                                {/*    methodName={'Paypal'}*/}
-                                {/*    methodId={2}*/}
-                                {/* /> */}
+                                <PaymentMethodItem
+                                    isSelected={paymentMethodId === 2}
+                                    methodName={'Paypal'}
+                                    methodId={2}
+                                />
                             </div>
                         </div>
                         <Divider light />

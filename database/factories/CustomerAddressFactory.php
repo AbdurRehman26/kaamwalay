@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Country;
 use App\Models\CustomerAddress;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerAddressFactory extends Factory
 {
@@ -30,7 +29,7 @@ class CustomerAddressFactory extends Factory
             'last_name' => $this->faker->lastName,
             'address' => $this->faker->address,
             'city' => $this->faker->city,
-            'state' => $this->faker->state,
+            'state' => $this->faker->stateAbbr(),
             'zip' => $this->faker->postcode,
             'phone' => $this->faker->phoneNumber,
             'flat' => $this->faker->numberBetween(1, 10),

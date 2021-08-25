@@ -72,8 +72,9 @@ class StripeService implements PaymentProviderServiceInterface
     public function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
     {
         $charge = $paymentIntent->charges->first();
+
         if (
-            $charge->amount === ($order->grand_total * 100)
+            $charge->amount === (int) ($order->grand_total * 100)
             && $charge->outcome->type === 'authorized'
         ) {
             $order->orderPayment->update([
@@ -84,5 +85,15 @@ class StripeService implements PaymentProviderServiceInterface
         }
 
         return false;
+    }
+
+    public function createCustomerIfNull(User $user): void
+    {
+        if (! $user->hasStripeId()) {
+            $user->createAsStripeCustomer([
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+        }
     }
 }

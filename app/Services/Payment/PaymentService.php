@@ -31,8 +31,8 @@ class PaymentService
         }
 
         if (! empty($data['success'])) {
-            $this->updateOrderStatus();
             $this->calculateAndSaveFee($order);
+            $this->updateOrderStatus();
         }
 
         return $this->updateOrderPayment($data);

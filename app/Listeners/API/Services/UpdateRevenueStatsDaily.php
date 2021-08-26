@@ -14,8 +14,12 @@ class UpdateRevenueStatsDaily implements ShouldQueue
 
     public $tries = 5;
 
-    public function handle(OrderPaid $event, RevenueStatsService $revenueStatsService)
+    public function __construct(protected RevenueStatsService $revenueStatsService)
     {
-        $revenueStatsService->updateStats(Carbon::now()->format('Y-m-d'), $event->order);
+    }
+
+    public function handle(OrderPaid $event)
+    {
+        $this->revenueStatsService->updateStats(Carbon::now()->format('Y-m-d'), $event->order);
     }
 }

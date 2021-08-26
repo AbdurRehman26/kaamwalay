@@ -35,13 +35,15 @@ class UpdateRevenueStatsDaily extends Command
         $currentDate = Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1);
         $formattedDate = $currentDate->format('Y-m-d');
 
-        Log::info("Revenue Stats Daily for Date : " . $formattedDate);
+        $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
+        Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
         $revenueStats = $revenueStatsService->addStats($formattedDate);
 
         if (app()->environment('production')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new RevenueStatsUpdated($revenueStats));
         }
+        $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
         Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
 
         return 0;

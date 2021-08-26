@@ -23,9 +23,13 @@ class UpdatePaymentProviderFee extends Command
 
     public function handle(PaymentService $paymentService): int
     {
+        $this->info("Updating payment provider fee for all missing orders");
+
         OrderPayment::whereNull('provider_fee')->get()->each(function (OrderPayment $orderPayment) use ($paymentService) {
             $paymentService->calculateAndSaveFee($orderPayment->order);
         });
+
+        $this->info("Updated.");
 
         return 0;
     }

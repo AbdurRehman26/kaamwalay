@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class RevenueStatsService
 {
-    public function addStats(string $currentDate) : RevenueStatsDaily
+    public function addStats(string $currentDate): RevenueStatsDaily
     {
         /*Using order payments instead of orders
         because we might take payments of some orders
@@ -44,7 +44,7 @@ class RevenueStatsService
         return $dailyRevenue;
     }
 
-    public function updateStats(string $currentDate, Order $order) : RevenueStatsDaily
+    public function updateStats(string $currentDate, Order $order): RevenueStatsDaily
     {
         $revenue = RevenueStatsDaily::updateOrCreate(['event_at' => $currentDate]);
 
@@ -54,12 +54,12 @@ class RevenueStatsService
         return $revenue;
     }
 
-    public function calculateRevenue(OrderPayment $orderPayment) : float
+    public function calculateRevenue(OrderPayment $orderPayment): float
     {
         return $orderPayment->order->grand_total;
     }
 
-    public function calculateProfit(OrderPayment $orderPayment) : float
+    public function calculateProfit(OrderPayment $orderPayment): float
     {
         return ($orderPayment->order->service_fee - $orderPayment->provider_fee);
     }

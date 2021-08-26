@@ -15,12 +15,12 @@ class UpdatePaymentProviderFee extends Command
      */
     protected $signature = 'payment-provider-fee:calculate-for-missing-orders';
 
-    /**
+    /**Services/Order/RevenueStatsService.php
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update All Provider Fees';
+    protected $description = 'Update Payment Provider Fee for missing orders';
 
     public function handle(PaymentService $paymentService): int
     {

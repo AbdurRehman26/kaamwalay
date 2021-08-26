@@ -5,23 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderPayment extends Model
+class RevenueStatsDaily extends Model
 {
     use HasFactory;
+
+    protected $table = "revenue_stats_daily";
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'order_id',
-        'payment_method_id',
-        'request',
-        'response',
-        'payment_provider_reference_id',
-    ];
+    protected $fillable = ['event_at', 'profit', 'revenue'];
 
     /**
      * The attributes that should be cast to native types.
@@ -30,11 +25,7 @@ class OrderPayment extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'provider_fee' => 'float',
+        'profit' => 'float',
+        'revenue' => 'float',
     ];
-
-    public function order(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Order::class);
-    }
 }

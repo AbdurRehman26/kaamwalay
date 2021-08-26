@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -28,6 +28,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
         $schedule->command("orders:export", [Carbon::now()->subDays(1)->format('Y-m-d')])
         ->dailyAt('00:10');
+        $schedule->command("revenue-stats:calculate-for-day", [Carbon::now()->subDays(1)->format('Y-m-d')])
+            ->dailyAt('00:20');
     }
 
     /**

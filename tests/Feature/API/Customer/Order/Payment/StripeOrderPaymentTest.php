@@ -6,6 +6,7 @@ use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
+use App\Services\Payment\Providers\TestingStripeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -102,5 +103,29 @@ class StripeOrderPaymentTest extends TestCase
         $response->assertJson([
             'error' => $exception->getMessage(),
         ]);
+    }
+
+    /**
+     * @test
+     * @group payment
+    */
+    public function provider_fee_is_set_after_a_successful_payment()
+    {
+        OrderPayment::factory()->create([
+            'order_id' => $this->order->id,
+            'payment_method_id' => 1,
+            'payment_provider_reference_id' => Str::random(25),
+        ]);
+        $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments");
+
+        $response->assertOk();
+        $response->assertJsonPath('data.amount', $this->order->grand_total_cents);
+        $this->order->refresh();
+        $totalAmount = $this->order->grand_total_cents;
+        $actualFee = round((float) (
+            (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
+        ) / 100, 2);
+
+        $this->assertSame($this->order->orderPayment->provider_fee, $actualFee);
     }
 }

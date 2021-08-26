@@ -30,7 +30,7 @@ class RevenueStatsService
 
         $dailyRevenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
 
-        if ($dailyRevenue['profit'] !== $revenueData['profit'] || $dailyRevenue['revenue'] !== $revenueData['revenue']) {
+        if ($dailyRevenue['profit'] !== $revenueData['profit'] || round($dailyRevenue['revenue'], 2) !== round($revenueData['revenue'], 2)) {
             Log::info("Discrepancy found in the revenue stats");
             Log::info("Revenue stats in database -> Profit: " . $dailyRevenue['profit'] . ", Revenue: " . $dailyRevenue['revenue']);
             Log::info("Revenue stats in calculated from Orders -> Profit: " . $revenueData['profit'] . ", Revenue: " . $revenueData['revenue']);

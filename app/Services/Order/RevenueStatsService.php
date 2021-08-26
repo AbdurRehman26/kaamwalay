@@ -54,12 +54,12 @@ class RevenueStatsService
         return $revenue;
     }
 
-    public function calculateRevenue(OrderPayment $orderPayment): float
+    protected function calculateRevenue(OrderPayment $orderPayment): float
     {
         return $orderPayment->order->grand_total;
     }
 
-    public function calculateProfit(OrderPayment $orderPayment): float
+    protected function calculateProfit(OrderPayment $orderPayment): float
     {
         return ($orderPayment->order->service_fee - $orderPayment->provider_fee);
     }

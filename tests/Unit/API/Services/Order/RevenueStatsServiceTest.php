@@ -37,24 +37,6 @@ class RevenueStatsServiceTest extends TestCase
      * @test
      * @group revenue stats
      */
-    public function it_calculates_revenue()
-    {
-        $this->assertSame($this->revenueStatsService->calculateRevenue($this->orderPayment), $this->order->grand_total);
-    }
-
-    /**
-     * @test
-     * @group revenue stats
-     */
-    public function it_calculates_profit()
-    {
-        $this->assertSame($this->revenueStatsService->calculateProfit($this->orderPayment), (($this->order->service_fee - $this->orderPayment->provider_fee)));
-    }
-
-    /**
-     * @test
-     * @group revenue stats
-     */
     public function it_adds_revenue_stats()
     {
         $profit = ($this->order->service_fee - $this->order->orderPayment->provider_fee);

@@ -392,7 +392,7 @@
                     @foreach ($orderItems as $item)
                         <tr class="item-row">
                             <td class="card-no">
-                                {{$item->id}}
+                                {{$item->card_product_id}}
                             </td>
                             <td class="description">
                                 <div class="item-name">

@@ -8,7 +8,7 @@ import {
     EventCategories,
     PaymentMethodEvents,
     ShippingAddressEvents,
-} from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
+} from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';

@@ -5,7 +5,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { EventCategories, ServiceLevelEvents } from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { EventCategories, ServiceLevelEvents } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
 

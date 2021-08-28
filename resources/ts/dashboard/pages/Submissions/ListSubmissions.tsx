@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import ReactGA from 'react-ga';
 import { useHistory } from 'react-router-dom';
-import { EventCategories, SubmissionEvents } from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { EventCategories, SubmissionEvents } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 

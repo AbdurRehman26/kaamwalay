@@ -3,11 +3,11 @@ import React, { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { EventCategories, SubmissionEvents } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
-import { EventCategories, SubmissionEvents } from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
 

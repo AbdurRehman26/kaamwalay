@@ -13,7 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import React from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { CardsSelectionEvents, EventCategories } from '@dashboard/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { CardsSelectionEvents, EventCategories } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     changeSelectedCardQty,

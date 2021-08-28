@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { GAWrapper } from '@dashboard/components/GoogleAnalyticsWrapper';
+import { GAWrapper } from '@dashboard/../shared/components/GoogleAnalyticsWrapper';
 import { LayoutOptions } from '@dashboard/components/Layout/LayoutOptions';
 import { Dashboard } from './Dashboard';
 import { Layout } from './components/Layout';
@@ -13,7 +13,7 @@ const RoutesOptions = {
 function App() {
     return (
         <BrowserRouter basename={'/dashboard'}>
-            <GAWrapper>
+            <GAWrapper basename={'/dashboard'}>
                 <Layout routeOptions={RoutesOptions}>
                     <Switch>
                         <Route path={'/'} component={Dashboard} />

@@ -88,7 +88,6 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
             ReactGA.event({
                 category: EventCategories.Cards,
                 action: CardsSelectionEvents.removed,
-                value: state.id,
             });
             dispatch(markCardAsUnselected(state));
             return;
@@ -97,7 +96,6 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
         ReactGA.event({
             category: EventCategories.Cards,
             action: CardsSelectionEvents.added,
-            value: state.id,
         });
         dispatch(markCardAsSelected(state));
     }

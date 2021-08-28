@@ -12,6 +12,7 @@ export function GAWrapper(props: GAWrapperProps) {
     const { basename } = props;
 
     ReactGA.initialize('UA-205552225-1');
+    ReactGA.plugin.require('ecommerce');
     // Sending page view events to GA whenever the user navigates to a new route
     // This is used to track what pages are our current users viewing
     useEffect(() => {

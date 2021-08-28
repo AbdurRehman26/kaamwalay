@@ -173,6 +173,36 @@ function SubmissionSummary() {
         dispatch(setCustomStep(0));
     }
 
+    const currentSelectedTurnaround = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
+    );
+    const currentSelectedMaxProtection = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.maxProtectionAmount,
+    );
+    const currentSelectedLevelPrice = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
+    );
+
+    const sendECommerceDataToGA = () => {
+        ReactGA.event({
+            category: EventCategories.Submissions,
+            action: SubmissionEvents.paid,
+        });
+        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
+            id: String(orderID), // Doing these type coercions because GA wants this data as string
+            revenue: String(grandTotal),
+        });
+
+        ReactGA.plugin.execute('ecommerce', 'addItem', {
+            id: String(orderID),
+            name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
+            price: String(currentSelectedLevelPrice),
+            quantity: String(numberOfSelectedCards),
+        });
+        ReactGA.plugin.execute('ecommerce', 'send', null);
+        ReactGA.plugin.execute('ecommerce', 'clear', null);
+    };
+
     let totalDeclaredValue = 0;
     selectedCards.forEach((selectedCard) => {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
@@ -199,6 +229,7 @@ function SubmissionSummary() {
                 category: EventCategories.Submissions,
                 action: SubmissionEvents.paid,
             });
+            sendECommerceDataToGA();
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err) {
             // Charge was failed by back-end so we try to charge him on the front-end
@@ -235,6 +266,7 @@ function SubmissionSummary() {
                             category: EventCategories.Submissions,
                             action: SubmissionEvents.paid,
                         });
+                        sendECommerceDataToGA();
                         history.push(`/submissions/${orderID}/confirmation`);
                     });
                 }

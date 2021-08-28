@@ -15,9 +15,47 @@ function PaypalBtn() {
     const contentRef = useRef<HTMLDivElement>(null);
     const apiService = useInjectable(APIService);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
+    const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
+    const currentSelectedTurnaround = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
+    );
+    const currentSelectedMaxProtection = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.maxProtectionAmount,
+    );
+    const currentSelectedLevelPrice = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
+    );
+    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const numberOfSelectedCards =
+        selectedCards.length !== 0
+            ? selectedCards.reduce(function (prev: number, cur: any) {
+                  // @ts-ignore
+                  return prev + cur?.qty;
+              }, 0)
+            : 0;
     const notifications = useNotifications();
     const history = useHistory();
     const dispatch = useDispatch();
+
+    const sendECommerceDataToGA = () => {
+        ReactGA.event({
+            category: EventCategories.Submissions,
+            action: SubmissionEvents.paid,
+        });
+        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
+            id: String(orderID), // Doing these type coercions because GA wants this data as string
+            revenue: String(grandTotal),
+        });
+
+        ReactGA.plugin.execute('ecommerce', 'addItem', {
+            id: String(orderID),
+            name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
+            price: String(currentSelectedLevelPrice),
+            quantity: String(numberOfSelectedCards),
+        });
+        ReactGA.plugin.execute('ecommerce', 'send', null);
+        ReactGA.plugin.execute('ecommerce', 'clear', null);
+    };
 
     useEffect(
         () => {
@@ -50,10 +88,7 @@ function PaypalBtn() {
                             notifications.success('Order paid!', 'Success!');
                             dispatch(clearSubmissionState());
                             dispatch(invalidateOrders());
-                            ReactGA.event({
-                                category: EventCategories.Submissions,
-                                action: SubmissionEvents.paid,
-                            });
+                            sendECommerceDataToGA();
                             history.push(`/submissions/${orderID}/confirmation`);
                         } catch (err) {
                             notifications.error('Payment could not be processed!', 'Error');

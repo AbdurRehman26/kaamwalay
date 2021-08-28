@@ -196,6 +196,7 @@ function SubmissionSummary() {
         ReactGA.plugin.execute('ecommerce', 'addItem', {
             id: String(orderID),
             name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
+            category: 'Cards',
             price: String(currentSelectedLevelPrice),
             quantity: String(numberOfSelectedCards),
         });

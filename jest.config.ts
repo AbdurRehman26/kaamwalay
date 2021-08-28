@@ -2,6 +2,7 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
  */
+import * as path from 'path';
 
 export default {
     preset: 'ts-jest',
@@ -32,4 +33,6 @@ export default {
 
     // The test environment that will be used for testing
     testEnvironment: 'jsdom',
+
+    setupFilesAfterEnv: [path.resolve(__dirname, './resources/ts/setupTests.ts')],
 };

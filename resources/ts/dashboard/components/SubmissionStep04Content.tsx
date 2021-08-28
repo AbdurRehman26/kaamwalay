@@ -222,7 +222,7 @@ export function SubmissionStep04Content() {
 
     const updateBillingState = useCallback(
         (stateId: any) => {
-            const stateLookup = availableStates.find((state) => state.id === parseInt(stateId));
+            const stateLookup = availableStates.find((state: any) => state.id === parseInt(stateId));
             if (stateLookup) {
                 dispatch(
                     updateBillingAddressField({
@@ -448,7 +448,7 @@ export function SubmissionStep04Content() {
                                                             style={{ height: '43px' }}
                                                         >
                                                             <option value="none">Select a state</option>
-                                                            {availableStates.map((item) => (
+                                                            {availableStates.map((item: any) => (
                                                                 <option key={item.id} value={item.id}>
                                                                     {item.code}
                                                                 </option>

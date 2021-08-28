@@ -1,9 +1,17 @@
 const path = require('path');
+const fs = require('fs');
 const mix = require('laravel-mix');
 const convertToFileHash = require('laravel-mix-make-file-hash');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const tailwindcss = require('tailwindcss');
+
+const baseDir = path.resolve(__dirname, '../..');
+
+function resolveEntry(entry) {
+    return fs.existsSync(path.resolve(baseDir, entry));
+}
 
 module.exports.createApp = function createApp(name) {
     const appUrl = `apps/${name}`;
@@ -30,9 +38,28 @@ module.exports.createApp = function createApp(name) {
         }
     }
 
+    const jsEntry = [
+        `resources/ts/${name}/index.tsx`,
+        `resources/ts/${name}/index.ts`,
+        `resources/ts/${name}/main.ts`,
+    ].find(resolveEntry);
+
+    const cssEntry = [`resources/style/${name}/app.scss`, `resources/style/${name}/app.css`].find(resolveEntry);
+
+    if (cssEntry) {
+        const isCss = /\.css$/.test(cssEntry);
+        const tailwindConfig = tailwindcss('./tailwind.config.js');
+
+        if (isCss) {
+            mix.postCss(cssEntry, '', [tailwindConfig]);
+        } else {
+            mix.sass(cssEntry, '', {}, [tailwindConfig]);
+        }
+    }
+
     // noinspection JSUnresolvedFunction
     mix.setPublicPath(appPath)
-        .ts(`resources/ts/${name}/index.tsx`, '')
+        .ts(jsEntry, '')
         .react()
         .extract()
         .browserSync(process.env.APP_URL || 'http://laravel.test')
@@ -42,7 +69,8 @@ module.exports.createApp = function createApp(name) {
             '@publicPath': path.join(__dirname, '../ts/shared/publicPath.ts'),
             [`@${name}`]: path.join(__dirname, `../ts/${name}`),
         })
-        .sourceMaps();
+        .sourceMaps()
+        .disableSuccessNotifications();
 
     if (mix.inProduction()) {
         mix.version();

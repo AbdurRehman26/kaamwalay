@@ -180,7 +180,7 @@ export function PaymentForm() {
             </Dialog>
             <Typography className={classes.cardsListTitle}>Your cards</Typography>
             <Paper variant="outlined" className={classes.cardsListContainer}>
-                {existingCustomerStripeCards?.map((item) => (
+                {existingCustomerStripeCards?.map((item: any) => (
                     <CustomerStripeCardItem key={item.id} {...item} />
                 ))}
                 <div className={classes.addNewCardItemContainer}>

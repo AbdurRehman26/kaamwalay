@@ -66,7 +66,7 @@ function PaypalBtn() {
                     createOrder: async function () {
                         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
                         const response = await endpoint.post('');
-                        return response.data.data.id;
+                        return response.data.id;
                     },
                     onApprove: async function (data: any, actions: any) {
                         try {

@@ -94,4 +94,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasRole(config('permission.roles.admin'));
     }
+
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }

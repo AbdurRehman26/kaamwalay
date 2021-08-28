@@ -16,14 +16,17 @@ class PaymentCardController extends Controller
         $user = auth()->user();
 
         return new JsonResponse([
-            'data' => $user->paymentMethods(),
+            'data' => resolve(StripeService::class)->getUserPaymentMethods($user),
         ], Response::HTTP_OK);
     }
 
-    public function createSetupIntent(StripeService $stripeService): JsonResponse
+    public function createSetupIntent(): JsonResponse
     {
+        /** @var User $user */
+        $user = auth()->user();
+
         return new JsonResponse([
-            'intent' => $stripeService->createSetupIntent(),
+            'intent' => resolve(StripeService::class)->createSetupIntent($user),
         ], Response::HTTP_OK);
     }
 }

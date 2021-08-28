@@ -205,7 +205,7 @@ function SubmissionSummary() {
     };
 
     let totalDeclaredValue = 0;
-    selectedCards.forEach((selectedCard) => {
+    selectedCards.forEach((selectedCard: any) => {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
@@ -233,15 +233,12 @@ function SubmissionSummary() {
             sendECommerceDataToGA();
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err) {
+            if ('message' in err?.response?.data) {
+                setIsStripePaymentLoading(false);
+                notifications.exception(err, 'Payment Failed');
+            }
             // Charge was failed by back-end so we try to charge him on the front-end
             // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
-            if (err.message === 'Amount must be no more than $999,999.99') {
-                setIsStripePaymentLoading(false);
-                notifications.error(
-                    'You can only pay up to $999,999.99 using this payment method - try using a different payment method',
-                    'Error',
-                );
-            }
             const intent = err.response.data.payment_intent;
             // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
             const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {

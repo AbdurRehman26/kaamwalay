@@ -4,6 +4,7 @@ namespace Tests\Feature\API\Customer\Order;
 
 use App\Models\CardProduct;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -33,10 +34,8 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_place_order()
+    public function a_customer_can_place_order()
     {
-        $this->markTestIncomplete('Stripe actual call needs to be mocked.');
-
         $this->actingAs($this->user);
 
         $response = $this->postJson('/api/customer/orders/', [
@@ -81,11 +80,25 @@ class OrderTest extends TestCase
                 'flat' => '43',
                 'same_as_shipping' => true,
             ],
+            'customer_address' => [
+                'first_name' => 'First',
+                'last_name' => 'Last',
+                'address' => 'Test address',
+                'city' => 'Test',
+                'state' => 'AB',
+                'zip' => '12345',
+                'phone' => '1234567890',
+                'flat' => '43',
+                'same_as_shipping' => true,
+            ],
             'shipping_method' => [
                 'id' => $this->shippingMethod->id,
             ],
             'payment_method' => [
                 'id' => $this->paymentMethod->id,
+            ],
+            'payment_provider_reference' => [
+                'id' => '12345678',
             ],
         ]);
 
@@ -147,6 +160,8 @@ class OrderTest extends TestCase
     {
         $this->actingAs($this->user);
         $order = Order::factory()->for($this->user)->create();
+        OrderItem::factory()->for($order)->create();
+
         $response = $this->getJson('/api/customer/orders/' . $order->id);
 
         $response->assertStatus(200);
@@ -193,6 +208,8 @@ class OrderTest extends TestCase
     {
         $this->actingAs($this->user);
         $order = Order::factory()->for($this->user)->create();
+        OrderItem::factory()->for($order)->create();
+
         $response = $this->getJson('/api/customer/orders/' . $order->id);
 
         $response->assertStatus(200);
@@ -206,7 +223,7 @@ class OrderTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        Order::factory()
+        $orders = Order::factory()
             ->count(2)
             ->for($this->user)
             ->state(new Sequence(
@@ -218,6 +235,17 @@ class OrderTest extends TestCase
                     'order_number' => 'RG000000002',
                     'order_status_id' => 2,
                 ],
+            ))
+            ->create();
+
+        OrderItem::factory()->count(2)
+            ->state(new Sequence(
+                [
+                    'order_id' => $orders[0]->id,
+                ],
+                [
+                    'order_id' => $orders[1]->id,
+                ]
             ))
             ->create();
 

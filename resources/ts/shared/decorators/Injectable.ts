@@ -40,8 +40,6 @@ export function Injectable(name: string | InjectableOptions, options: Injectable
         Reflect.defineMetadata(InjectableMetaOptions, options, target);
         injectable()(target);
 
-        DependencyContainer.bind(options.symbol)
-            .to(target as any)
-            .inSingletonScope();
+        DependencyContainer.bind(options.symbol).to(target as any);
     };
 }

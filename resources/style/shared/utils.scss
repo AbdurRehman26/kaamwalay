@@ -1,0 +1,15 @@
+@use "sass:list";
+@use "sass:meta";
+@use "./theme";
+
+@function transition($property: all, $delay: 0ms) {
+    @if (meta.type-of($property) == list) {
+        $value: ();
+        @each $prop in $property {
+            $value: list.append($value, transition($prop, $delay), $separator: comma);
+        }
+
+        @return $value;
+    }
+    @return #{$property theme.$transitionDuration theme.$transitionTiming $delay};
+}

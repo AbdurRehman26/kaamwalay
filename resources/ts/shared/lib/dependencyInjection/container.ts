@@ -1,3 +1,6 @@
 import { Container } from 'inversify';
 
-export const DependencyContainer = new Container({});
+export const DependencyContainer = new Container({
+    defaultScope: 'Singleton',
+    autoBindInjectable: true,
+});

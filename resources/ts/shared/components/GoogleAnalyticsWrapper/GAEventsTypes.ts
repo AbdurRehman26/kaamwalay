@@ -4,6 +4,7 @@ export enum EventCategories {
     Cards = 'Cards Selection',
     ShippingAddresses = 'Shipping Address',
     PaymentMethods = 'Payment Methods',
+    Auth = 'Authentication',
 }
 
 export enum ServiceLevelEvents {
@@ -29,4 +30,12 @@ export enum ShippingAddressEvents {
 export enum SubmissionEvents {
     initiated = 'New Submission Initiated',
     paid = 'Submission Paid',
+}
+
+export enum AuthenticationEvents {
+    loggedIn = 'Logged in successfully',
+    failedLogIn = 'Failed to log in',
+    loggedOut = 'Logged out',
+    registerSuccess = 'Registered & logged in successfully',
+    sentResetLink = 'Sent Password Reset link successfully',
 }

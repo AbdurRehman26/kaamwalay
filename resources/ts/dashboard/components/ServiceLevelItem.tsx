@@ -113,7 +113,12 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
 
     const handleSetServiceLevel = useCallback(() => {
         dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount }));
-        ReactGA.event({ category: EventCategories.ServiceLevels, action: `${ServiceLevelEvents.pressed} ${id}` });
+        ReactGA.event({
+            category: EventCategories.ServiceLevels,
+            action: ServiceLevelEvents.pressed,
+            dimension1: 'Level',
+            metric1: id,
+        });
     }, [dispatch, id, maxProtectionAmount, price, turnaround, type]);
 
     return (

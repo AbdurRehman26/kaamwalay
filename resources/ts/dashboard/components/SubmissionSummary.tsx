@@ -188,6 +188,8 @@ function SubmissionSummary() {
         ReactGA.event({
             category: EventCategories.Submissions,
             action: SubmissionEvents.paid,
+            dimension1: 'Payment Method',
+            metric1: paymentMethodID,
         });
 
         ReactGA.plugin.execute('ecommerce', 'addItem', {

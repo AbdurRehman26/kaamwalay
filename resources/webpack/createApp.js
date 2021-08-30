@@ -61,6 +61,7 @@ module.exports.createApp = function createApp(name) {
     mix.setPublicPath(appPath)
         .ts(jsEntry, '')
         .react()
+        .extract()
         .browserSync(process.env.APP_URL || 'http://robograding.test')
         .options({
             watchOptions: {
@@ -78,7 +79,6 @@ module.exports.createApp = function createApp(name) {
         .disableNotifications();
 
     if (mix.inProduction()) {
-        mix.extract();
         mix.version();
         mix.then(async () => {
             await convertToFileHash({

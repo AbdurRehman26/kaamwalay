@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
-import { EventCategories, SubmissionEvents } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
@@ -184,13 +184,10 @@ function SubmissionSummary() {
     );
 
     const sendECommerceDataToGA = () => {
+        ReactGA.plugin.require('ecommerce');
         ReactGA.event({
             category: EventCategories.Submissions,
             action: SubmissionEvents.paid,
-        });
-        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
-            id: String(orderID), // Doing these type coercions because GA wants this data as string
-            revenue: String(grandTotal),
         });
 
         ReactGA.plugin.execute('ecommerce', 'addItem', {
@@ -200,6 +197,12 @@ function SubmissionSummary() {
             price: String(currentSelectedLevelPrice),
             quantity: String(numberOfSelectedCards),
         });
+
+        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
+            id: String(orderID), // Doing these type coercions because GA wants this data as string
+            revenue: String(grandTotal),
+        });
+
         ReactGA.plugin.execute('ecommerce', 'send', null);
         ReactGA.plugin.execute('ecommerce', 'clear', null);
     };

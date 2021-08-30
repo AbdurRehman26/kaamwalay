@@ -7,7 +7,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import React from 'react';
 import ReactGA from 'react-ga';
-import { CardsSelectionEvents, EventCategories } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { markCardAsSelected, markCardAsUnselected } from '../redux/slices/newSubmissionSlice';
 

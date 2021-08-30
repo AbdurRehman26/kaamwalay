@@ -1,1 +1,1 @@
-export { GAWrapper } from './GAWrapper';
+export { ConfigureGA } from './ConfigureGA';

@@ -1,16 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { GAWrapper } from '@shared/components/GoogleAnalyticsWrapper';
+import { ConfigureGA } from '@shared/components/GoogleAnalyticsWrapper';
 import { Auth } from './Auth';
 
 function App() {
     return (
         <BrowserRouter basename={'/auth'}>
-            <GAWrapper basename={'/auth'}>
-                <Switch>
-                    <Route path={'/'} component={Auth} />
-                </Switch>
-            </GAWrapper>
+            <ConfigureGA />
+            <Switch>
+                <Route path={'/'} component={Auth} />
+            </Switch>
         </BrowserRouter>
     );
 }

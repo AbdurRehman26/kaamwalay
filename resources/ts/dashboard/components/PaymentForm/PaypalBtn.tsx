@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { EventCategories, SubmissionEvents } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
@@ -26,13 +26,7 @@ function PaypalBtn() {
         (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
     );
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-    const numberOfSelectedCards =
-        selectedCards.length !== 0
-            ? selectedCards.reduce(function (prev: number, cur: any) {
-                  // @ts-ignore
-                  return prev + cur?.qty;
-              }, 0)
-            : 0;
+    const numberOfSelectedCards = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
     const notifications = useNotifications();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -42,10 +36,6 @@ function PaypalBtn() {
             category: EventCategories.Submissions,
             action: SubmissionEvents.paid,
         });
-        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
-            id: String(orderID), // Doing these type coercions because GA wants this data as string
-            revenue: String(grandTotal),
-        });
 
         ReactGA.plugin.execute('ecommerce', 'addItem', {
             id: String(orderID),
@@ -54,6 +44,12 @@ function PaypalBtn() {
             price: String(currentSelectedLevelPrice),
             quantity: String(numberOfSelectedCards),
         });
+
+        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
+            id: String(orderID), // Doing these type coercions because GA wants this data as string
+            revenue: String(grandTotal),
+        });
+
         ReactGA.plugin.execute('ecommerce', 'send', null);
         ReactGA.plugin.execute('ecommerce', 'clear', null);
     };

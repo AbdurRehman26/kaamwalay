@@ -4,11 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
 import ReactGA from 'react-ga';
-import {
-    EventCategories,
-    PaymentMethodEvents,
-    ShippingAddressEvents,
-} from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';

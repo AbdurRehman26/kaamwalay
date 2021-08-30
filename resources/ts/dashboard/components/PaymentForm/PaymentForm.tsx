@@ -10,7 +10,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
-import { EventCategories, PaymentMethodEvents } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';

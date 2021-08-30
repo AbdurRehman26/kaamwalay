@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
 import ReactGA from 'react-ga';
-import { AuthenticationEvents, EventCategories } from '@shared/components/GoogleAnalyticsWrapper/GAEventsTypes';
+import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';

@@ -15,4 +15,7 @@ export class ConfigurationEntity {
 
     @Field('stripe_key')
     public stripeKey!: string;
+
+    @Field('google_analytics_tracking_code')
+    public googleAnalyticsTrackingCode!: string;
 }

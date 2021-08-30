@@ -1,0 +1,72 @@
+<?php
+
+namespace Tests\Feature\API\Customer\Order\Shipping;
+
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class OrderCustomerShipmentTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected string $shippingProvider;
+    protected string $trackingNumber;
+    protected OrderItem $orderItem;
+    protected Order $order;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->shippingProvider = 'fedex';
+        $this->trackingNumber = '020207021381215';
+
+        $this->orderItem = OrderItem::factory()->create();
+        $this->order = $this->orderItem->order;
+    }
+
+    /** @test */
+    public function a_customer_can_update_order_shipment_details()
+    {
+        $this->actingAs($this->order->user);
+
+        $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+            'shipping_provider' => $this->shippingProvider,
+            'tracking_number' => $this->trackingNumber,
+        ]);
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'data' => ['customer_shipment' => ['tracking_number', 'shipping_provider']],
+        ]);
+    }
+
+    /** @test */
+    public function a_guest_cannot_update_order_shipment_details()
+    {
+        $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+            'shipping_provider' => $this->shippingProvider,
+            'tracking_number' => $this->trackingNumber,
+        ]);
+
+        $response->assertUnauthorized();
+    }
+
+    /** @test */
+    public function a_customer_cannot_update_order_shipment_details_from_other_user()
+    {
+        /** @var User $otherCustomer */
+        $otherCustomer = User::factory()->create();
+
+        $this->actingAs($otherCustomer);
+
+        $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+            'shipping_provider' => $this->shippingProvider,
+            'tracking_number' => $this->trackingNumber,
+        ]);
+
+        $response->assertForbidden();
+    }
+}

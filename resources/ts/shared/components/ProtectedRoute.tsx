@@ -43,7 +43,7 @@ export function ProtectedRoute({ redirectRoute, roles, ...rest }: ProtectedRoute
         );
     }
 
-    if (!authenticated || !hasAtLeastOneRole) {
+    if (!authenticated || (roles && !hasAtLeastOneRole)) {
         return <NativeRedirect to={redirectRoute ?? AuthenticationEnum.SignInRoute} />;
     }
 

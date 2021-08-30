@@ -99,7 +99,8 @@ function SubmissionStep02Content() {
                                         You can easily upgrade your service level by&nbsp;
                                         <Link href={''} onClick={handleEditServiceLevelPress}>
                                             clicking here
-                                        </Link>.
+                                        </Link>
+                                        .
                                     </Alert>
                                 </>
                             ) : null}

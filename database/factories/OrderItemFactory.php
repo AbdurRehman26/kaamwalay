@@ -8,6 +8,7 @@ use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemShipment;
+use App\Models\OrderItemCustomerShipment;
 
 class OrderItemFactory extends Factory
 {
@@ -29,6 +30,7 @@ class OrderItemFactory extends Factory
             'order_id' => Order::factory(),
             'card_product_id' => CardProduct::factory(),
             'order_item_shipment_id' => OrderItemShipment::factory(),
+            'order_item_customer_shipment_id' => OrderItemCustomerShipment::factory(),
             'quantity' => $this->faker->numberBetween(1, 10000),
             'name' => $this->faker->name,
             'description' => $this->faker->text,

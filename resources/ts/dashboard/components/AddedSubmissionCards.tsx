@@ -11,7 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import React from 'react';
+import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
+import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     changeSelectedCardQty,
@@ -130,6 +132,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const { reviewMode } = props;
 
     function onDeselectCard(row: SearchResultItemCardProps) {
+        ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
         dispatch(markCardAsUnselected(row));
     }
 

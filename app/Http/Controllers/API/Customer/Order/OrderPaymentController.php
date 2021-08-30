@@ -43,8 +43,6 @@ class OrderPaymentController extends Controller
             PaymentNotVerified::class
         );
 
-        $this->paymentService->updateOrderStatus();
-
         return new JsonResponse([
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);

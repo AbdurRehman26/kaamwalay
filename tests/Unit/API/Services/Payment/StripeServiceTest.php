@@ -5,8 +5,7 @@ namespace Tests\Unit\API\Services\Payment;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
-use App\Services\Payment\Providers\PaymentProviderServiceInterface;
-use App\Services\Payment\Providers\StripeService;
+use App\Services\Payment\Providers\TestingStripeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -16,13 +15,13 @@ class StripeServiceTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
-    protected PaymentProviderServiceInterface $stripe;
+    protected TestingStripeService $stripe;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
-        $this->stripe = resolve(StripeService::class);
+        $this->stripe = new TestingStripeService;
     }
 
     /**
@@ -102,5 +101,46 @@ class StripeServiceTest extends TestCase
         $result = $this->stripe->charge($order);
 
         $this->assertArrayHasKey('payment_intent', $result);
+    }
+
+    /**
+    * @test
+    * @group payment
+    */
+    public function it_calculates_fee()
+    {
+        $order = Order::factory()->create();
+        $actualFee = round((
+            (TestingStripeService::STRIPE_FEE_PERCENTAGE * $order->grand_total_cents) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
+        ) / 100, 2);
+        $calculatedFee = $this->stripe->calculateFee($order);
+        $this->assertSame($calculatedFee, $actualFee);
+    }
+
+    /**
+     * @test
+     * @group payment
+    */
+    public function it_returns_payment_cards_for_user()
+    {
+        $user = User::factory()->create();
+        $result = $this->stripe->getUserPaymentMethods($user);
+
+        $this->assertArrayHasKey(0, $result);
+        $this->assertArrayHasKey('id', $result[0]);
+        $this->assertArrayHasKey('customer', $result[0]);
+    }
+
+    /**
+     * @test
+     * @group payment
+     */
+    public function it_returns_payment_setup_intent_for_user()
+    {
+        $user = User::factory()->create();
+        $result = $this->stripe->createSetupIntent($user);
+
+        $this->assertArrayHasKey('client_secret', $result);
+        $this->assertArrayHasKey('customer', $result);
     }
 }

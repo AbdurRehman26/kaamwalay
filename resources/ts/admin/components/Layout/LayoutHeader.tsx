@@ -23,8 +23,8 @@ function LayoutHeader() {
     const dispatch = useAppDispatch();
 
     const drawerState = useAppSelector((state) => state.page.drawerOpened);
-
     const handleDrawerState = useCallback(() => dispatch(drawerVisibility(!drawerState)), [drawerState, dispatch]);
+
     const handleUserMenuOpen = useCallback((e) => setUserMenuAnchor(e.target), [setUserMenuAnchor]);
     const handleUserMenuClose = useCallback(() => setUserMenuAnchor(null), [setUserMenuAnchor]);
     const handleLogout = useCallback(() => {

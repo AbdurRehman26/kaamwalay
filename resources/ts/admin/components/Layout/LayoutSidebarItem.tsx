@@ -43,7 +43,7 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, exact = true } = props;
+    const { icon: Icon, title, href, exact } = props;
 
     const location = useLocation();
     const classes = useStyles();

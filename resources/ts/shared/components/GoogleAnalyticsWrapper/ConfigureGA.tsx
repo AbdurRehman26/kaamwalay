@@ -12,6 +12,7 @@ export function ConfigureGA() {
     useEffect(() => {
         if (config.googleAnalyticsTrackingCode) {
             ReactGA.initialize(config.googleAnalyticsTrackingCode);
+            ReactGA.plugin.require('ecommerce');
             ReactGA.pageview(window.location.pathname + window.location.search);
             return history.listen(() => {
                 ReactGA.pageview(window.location.pathname + window.location.search);

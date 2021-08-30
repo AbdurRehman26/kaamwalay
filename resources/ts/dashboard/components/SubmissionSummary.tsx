@@ -203,6 +203,7 @@ function SubmissionSummary() {
         ReactGA.plugin.execute('ecommerce', 'addTransaction', {
             id: String(orderID), // Doing these type coercions because GA wants this data as string
             revenue: String(grandTotal),
+            shipping: String(shippingFee),
         });
 
         ReactGA.plugin.execute('ecommerce', 'send', null);

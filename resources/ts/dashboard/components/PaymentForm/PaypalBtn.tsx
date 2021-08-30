@@ -25,6 +25,7 @@ function PaypalBtn() {
     const currentSelectedLevelPrice = useAppSelector(
         (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
     );
+    const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const numberOfSelectedCards = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
     const notifications = useNotifications();
@@ -48,6 +49,7 @@ function PaypalBtn() {
         ReactGA.plugin.execute('ecommerce', 'addTransaction', {
             id: String(orderID), // Doing these type coercions because GA wants this data as string
             revenue: String(grandTotal),
+            shipping: String(shippingFee),
         });
 
         ReactGA.plugin.execute('ecommerce', 'send', null);

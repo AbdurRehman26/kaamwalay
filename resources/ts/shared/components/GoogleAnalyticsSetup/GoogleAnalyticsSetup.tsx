@@ -3,7 +3,7 @@ import ReactGA from 'react-ga';
 import { useHistory } from 'react-router-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 
-export function ConfigureGA() {
+export function GoogleAnalyticsSetup() {
     const history = useHistory();
     const config = useConfiguration();
 

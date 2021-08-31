@@ -25,11 +25,6 @@ test('user can login with valid credentials', function () {
     ]);
 })->group('auth');
 
-/**
- *
- *
- * @return void
- */
 test('user can not login with invalid email', function () {
     $response = $this->postJson('api/auth/login', [
         'email' => 'test@test.test',
@@ -41,11 +36,6 @@ test('user can not login with invalid email', function () {
     $response->assertJsonPath('error', 'The email or password is invalid.');
 })->group('auth');
 
-/**
- *
- *
- * @return void
- */
 test('user can not login with invalid password', function () {
     $user = User::factory()->create();
 
@@ -60,6 +50,7 @@ test('user can not login with invalid password', function () {
 })->group('auth');
 
 test('user receives his own information', function () {
+    /** @var User $user */
     $user = User::factory()->create();
     $this->actingAs($user);
     $response = $this->getJson('api/auth/me');
@@ -100,4 +91,4 @@ test('a logged in customer cannot login', function () {
 
     $response = $this->postJson('api/auth/login');
     $response->assertRedirect();
-});
+})->group('auth');

@@ -12,9 +12,6 @@ beforeEach(function () {
     $this->user = User::factory()->create();
 });
 
-/**
- * @return void
- */
 test('a user can see states', function () {
     $this->actingAs($this->user);
 
@@ -32,9 +29,6 @@ test('a user can see states', function () {
     ]);
 });
 
-/**
- * @return void
- */
 test('a user can see specific state', function () {
     $this->actingAs($this->user);
 

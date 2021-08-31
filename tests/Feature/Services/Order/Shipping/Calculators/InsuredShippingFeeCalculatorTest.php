@@ -6,7 +6,7 @@ use Tests\TestCase;
 uses(TestCase::class);
 
 test('insured shipping fee is calculated correctly', function (float $expectedShippingFee, float $calculatedShippingFee) {
-    expect($calculatedShippingFee)->toEqual($expectedShippingFee);
+    expect($calculatedShippingFee)->toBe($expectedShippingFee);
 })->with('insuredShippingFee');
 
 // Datasets

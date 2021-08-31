@@ -25,7 +25,7 @@ class RevenueStatsServiceTest extends TestCase
         $this->paymentService = new PaymentService();
 
         $this->order = Order::factory()->state(new Sequence(
-            ['payment_method_id' => 1]
+            ['payment_method_id' => 1, 'order_status_id' => 2]
         ))->create();
 
         $this->orderPayment = OrderPayment::factory()->for($this->order)->stripe()->create();

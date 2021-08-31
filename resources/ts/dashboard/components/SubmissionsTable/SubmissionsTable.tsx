@@ -52,6 +52,7 @@ export function SubmissionsTable() {
                                 dateArrived={data.arrivedAt}
                                 invoice={data.invoice?.path}
                                 invoiceNumber={data.invoice?.invoiceNumber}
+                                customerShipment={data.customerShipment}
                             />
                         ))}
                     </TableBody>

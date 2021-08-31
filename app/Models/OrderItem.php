@@ -64,4 +64,36 @@ class OrderItem extends Model
     {
         return $this->belongsTo(\App\Models\OrderItemCustomerShipment::class);
     }
+
+    // public function markAsMissing(): self
+    // {
+    //     $this->order_status_id = 1;
+    //     $this->save();
+
+    //     return $this;
+    // }
+
+    // public function markAsNotAccepted(): self
+    // {
+    //     $this->order_status_id = 2;
+    //     $this->save();
+
+    //     return $this;
+    // }
+
+    // public function markAsConfirmed(): self
+    // {
+    //     $this->order_status_id = 3;
+    //     $this->save();
+
+    //     return $this;
+    // }
+
+    // public function markAsGraded(): self
+    // {
+    //     $this->order_status_id = 4;
+    //     $this->save();
+
+    //     return $this;
+    // }
 }

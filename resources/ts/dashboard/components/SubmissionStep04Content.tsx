@@ -19,6 +19,7 @@ import {
     setIsNextDisabled,
     setUseShippingAddressAsBilling,
     updateBillingAddressField,
+    updatePaymentMethodId,
 } from '../redux/slices/newSubmissionSlice';
 import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
@@ -251,6 +252,7 @@ export function SubmissionStep04Content() {
         setArePaymentMethodsLoading(true);
         const endpoint = apiService.createEndpoint('customer/orders/payment-methods');
         const response = await endpoint.get('');
+        dispatch(updatePaymentMethodId(response.data[0].id));
         setAvailablePaymentMethods(response.data);
         setArePaymentMethodsLoading(false);
     }

@@ -14,8 +14,12 @@ class RevenueStatsService
         /*Using order payments instead of orders
         because we might take payments of some orders
         not on the same day*/
-
-        $orderPayments = OrderPayment::whereDate('created_at', $currentDate)->get();
+        $orderPayments = OrderPayment::join('orders', function ($join) {
+            $join->on('orders.id', '=', 'order_payments.order_id');
+        })->where('orders.order_status_id', Order::STATUSES['placed'])
+            ->whereDate('order_payments.created_at', $currentDate)
+            ->select('order_payments.*')
+            ->get();
 
         $revenueData = [
             'profit' => 0,

@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
@@ -9,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -120,6 +123,12 @@ const useStyles = makeStyles({
         letterSpacing: '0.1px',
         color: 'rgba(0, 0, 0, 0.54)',
     },
+    loaderContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'center',
+    },
 });
 
 const GreenCheckbox = withStyles({
@@ -149,7 +158,10 @@ const schema = yup.object().shape({
 export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
+    const apiService = useInjectable(APIService);
 
+    const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
+    const [arePaymentMethodsLoading, setArePaymentMethodsLoading] = useState(false);
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const currentSelectedStripeCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
 
@@ -235,6 +247,18 @@ export function SubmissionStep04Content() {
         [availableStates, dispatch],
     );
 
+    async function getPaymentMethods() {
+        setArePaymentMethodsLoading(true);
+        const endpoint = apiService.createEndpoint('customer/orders/payment-methods');
+        const response = await endpoint.get('');
+        setAvailablePaymentMethods(response.data);
+        setArePaymentMethodsLoading(false);
+    }
+
+    useEffect(() => {
+        getPaymentMethods();
+    }, []);
+
     useEffect(() => {
         dispatch(setIsNextDisabled(true));
         if (paymentMethodId === 1) {
@@ -271,16 +295,17 @@ export function SubmissionStep04Content() {
                         <div className={classes.shippingMethodContainer}>
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
                             <div className={classes.shippingMethodItemContainer}>
-                                <PaymentMethodItem
-                                    isSelected={paymentMethodId === 1}
-                                    methodName={'Credit or Debit Card'}
-                                    methodId={1}
-                                />
-                                <PaymentMethodItem
-                                    isSelected={paymentMethodId === 2}
-                                    methodName={'Paypal'}
-                                    methodId={2}
-                                />
+                                <div className={classes.loaderContainer}>
+                                    {arePaymentMethodsLoading ? <CircularProgress color={'secondary'} /> : null}
+                                </div>
+
+                                {availablePaymentMethods.map((item) => (
+                                    <PaymentMethodItem
+                                        isSelected={paymentMethodId === item['id']}
+                                        methodName={item['name']}
+                                        methodId={item['id']}
+                                    />
+                                ))}
                             </div>
                         </div>
                         <Divider light />

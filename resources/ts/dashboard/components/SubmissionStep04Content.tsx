@@ -294,11 +294,13 @@ export function SubmissionStep04Content() {
                     <div className={classes.leftSideContainer}>
                         <div className={classes.shippingMethodContainer}>
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
-                            <div className={classes.shippingMethodItemContainer}>
-                                <div className={classes.loaderContainer}>
-                                    {arePaymentMethodsLoading ? <CircularProgress color={'secondary'} /> : null}
-                                </div>
 
+                            <div className={classes.shippingMethodItemContainer}>
+                                {arePaymentMethodsLoading ? (
+                                    <div className={classes.loaderContainer}>
+                                        <CircularProgress color={'secondary'} />
+                                    </div>
+                                ) : null}
                                 {availablePaymentMethods.map((item) => (
                                     <PaymentMethodItem
                                         isSelected={paymentMethodId === item['id']}

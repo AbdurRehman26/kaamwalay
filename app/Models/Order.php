@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     const STATUSES = [
-        'placed' => 2
+        'placed' => 2,
     ];
     use HasFactory;
 

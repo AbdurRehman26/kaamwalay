@@ -123,6 +123,12 @@ const useStyles = makeStyles({
         letterSpacing: '0.1px',
         color: 'rgba(0, 0, 0, 0.54)',
     },
+    loaderContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'center',
+    },
 });
 
 const GreenCheckbox = withStyles({
@@ -289,7 +295,9 @@ export function SubmissionStep04Content() {
                         <div className={classes.shippingMethodContainer}>
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
                             <div className={classes.shippingMethodItemContainer}>
-                                {arePaymentMethodsLoading ? <CircularProgress /> : null}
+                                <div className={classes.loaderContainer}>
+                                    {arePaymentMethodsLoading ? <CircularProgress /> : null}
+                                </div>
 
                                 {availablePaymentMethods.map((item) => (
                                     <PaymentMethodItem

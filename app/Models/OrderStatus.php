@@ -10,11 +10,11 @@ class OrderStatus extends Model
     use HasFactory;
 
     public const STATUSES = [
-        'default' => 1,
+        'payment_pending' => 1,
         'placed' => 2,
     ];
 
-    public const DEFAULT_ORDER_STATUS = self::STATUSES['default'];
+    public const DEFAULT_ORDER_STATUS = self::STATUSES['payment_pending'];
 
 
     /**

@@ -19,7 +19,7 @@ it('can update order shipment details', function () {
     $order = (new CustomerShipmentService)->process($order, $shippingProvider, $trackingNumber);
     $firstItem = $order->orderItems[0];
 
-    $this->assertInstanceOf(OrderItemCustomerShipment::class, $firstItem->orderItemCustomerShipment);
-    $this->assertEquals($firstItem->orderItemCustomerShipment->shipping_provider, $shippingProvider);
-    $this->assertEquals($firstItem->orderItemCustomerShipment->tracking_number, $trackingNumber);
+    expect($firstItem->orderItemCustomerShipment)->toBeInstanceOf(OrderItemCustomerShipment::class);
+    expect($shippingProvider)->toEqual($firstItem->orderItemCustomerShipment->shipping_provider);
+    expect($trackingNumber)->toEqual($firstItem->orderItemCustomerShipment->tracking_number);
 });

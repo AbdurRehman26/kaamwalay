@@ -20,7 +20,7 @@ it('can generate stripe customer id', function () {
     $user = User::factory()->create();
     $this->stripe->createCustomerIfNull($user);
     $user->refresh();
-    $this->assertTrue($user->hasStripeId());
+    expect($user->hasStripeId())->toBeTrue();
 })->group('payment');
 
 test('is successfully validates a paid order', function () {
@@ -32,7 +32,7 @@ test('is successfully validates a paid order', function () {
     ]);
     $result = $this->stripe->verify($order, Str::random(25));
 
-    $this->assertTrue($result);
+    expect($result)->toBeTrue();
 })->group('payment');
 
 test('is successfully invalidates unpaid order', function () {
@@ -43,7 +43,7 @@ test('is successfully invalidates unpaid order', function () {
     ]);
     $result = $this->stripe->verify($order, 'incomplete');
 
-    $this->assertFalse($result);
+    expect($result)->toBeFalse();
 })->group('payment');
 
 it('charges user successfully', function () {
@@ -76,7 +76,7 @@ it('calculates fee', function () {
         (TestingStripeService::STRIPE_FEE_PERCENTAGE * $order->grand_total_cents) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
     ) / 100, 2);
     $calculatedFee = $this->stripe->calculateFee($order);
-    $this->assertSame($calculatedFee, $actualFee);
+    expect($actualFee)->toBe($calculatedFee);
 })->group('payment');
 
 it('returns payment cards for user', function () {

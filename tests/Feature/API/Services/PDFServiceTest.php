@@ -31,5 +31,5 @@ it('can generate pdf', function () {
 
     $pdf = PDFService::generate('pdf.invoice', $data);
 
-    $this->assertInstanceOf(\Barryvdh\DomPDF\PDF::class, $pdf);
+    expect($pdf)->toBeInstanceOf(\Barryvdh\DomPDF\PDF::class);
 });

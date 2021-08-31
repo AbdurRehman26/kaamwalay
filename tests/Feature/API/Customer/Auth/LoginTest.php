@@ -90,7 +90,7 @@ test('ags user can login', function () {
     $user = User::first();
     $response->assertStatus(200);
     $response->assertJsonStructure(['access_token', 'type', 'expiry']);
-    $this->assertSame($testEmail, $user->email);
+    expect($user->email)->toBe($testEmail);
 })->group('auth');
 
 test('a logged in customer cannot login', function () {

@@ -28,5 +28,5 @@ test('shipping fee is calculated correctly', function () {
             'quantity' => 2,
         ]);
 
-    $this->assertEquals(172, ShippingFeeService::calculateForOrder($order));
+    expect(ShippingFeeService::calculateForOrder($order))->toEqual(172);
 });

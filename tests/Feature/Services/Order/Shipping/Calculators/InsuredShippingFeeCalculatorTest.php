@@ -6,7 +6,7 @@ use Tests\TestCase;
 uses(TestCase::class);
 
 test('insured shipping fee is calculated correctly', function (float $expectedShippingFee, float $calculatedShippingFee) {
-    $this->assertEquals($expectedShippingFee, $calculatedShippingFee);
+    expect($calculatedShippingFee)->toEqual($expectedShippingFee);
 })->with('insuredShippingFee');
 
 // Datasets

@@ -10,16 +10,16 @@ it('should correctly parse value', function () {
         "key" => "APP_ENV",
         "value" => env("APP_ENV"),
     ]);
-    $this->assertEquals('app_env', $defaultConfigValue->getKey());
-    $this->assertEquals(env('APP_ENV'), $defaultConfigValue->getValue());
-    $this->assertEquals(true, $defaultConfigValue->canBeInclude());
+    expect($defaultConfigValue->getKey())->toEqual('app_env');
+    expect($defaultConfigValue->getValue())->toEqual(env('APP_ENV'));
+    expect($defaultConfigValue->canBeInclude())->toEqual(true);
 
     $authConfigValue = new ConfigurationValue([
         "key" => "APP_ENV",
         "value" => env("APP_ENV"),
         "auth" => true,
     ]);
-    $this->assertEquals('app_env', $authConfigValue->getKey());
-    $this->assertEquals(null, $authConfigValue->getValue());
-    $this->assertEquals(false, $authConfigValue->canBeInclude());
+    expect($authConfigValue->getKey())->toEqual('app_env');
+    expect($authConfigValue->getValue())->toEqual(null);
+    expect($authConfigValue->canBeInclude())->toEqual(false);
 });

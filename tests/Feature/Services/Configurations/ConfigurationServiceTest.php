@@ -10,7 +10,7 @@ beforeEach(function () {
 });
 
 it('should instantiate correctly', function () {
-    $this->assertInstanceOf(ConfigurationService::class, $this->configurationService);
+    expect($this->configurationService)->toBeInstanceOf(ConfigurationService::class);
 });
 
 it('should get guest keys', function () {

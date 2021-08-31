@@ -22,5 +22,5 @@ test('customer can be created with role', function () {
         'username' => $this->faker->userName,
         'password' => bcrypt('password'),
     ]);
-    $this->assertTrue($user->hasRole(config('permission.roles.customer')));
+    expect($user->hasRole(config('permission.roles.customer')))->toBeTrue();
 });

@@ -9,5 +9,5 @@ uses(TestCase::class);
 it('can generate barcode', function () {
     $barcode = BarcodeService::generate('RG000000001', BarcodeGenerator::Code39, '', 2);
 
-    $this->assertIsString($barcode);
+    expect($barcode)->toBeString();
 });

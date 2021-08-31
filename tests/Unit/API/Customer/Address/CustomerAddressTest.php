@@ -14,7 +14,7 @@ test('model scope returns only specific user data', function () {
 
     $addresses = CustomerAddress::forUser($customerAddressA->user)->get();
 
-    $this->assertTrue($addresses->contains($customerAddressA));
-    $this->assertFalse($addresses->contains($customerAddressB));
-    $this->assertFalse($addresses->contains($customerAddressC));
+    expect($addresses->contains($customerAddressA))->toBeTrue();
+    expect($addresses->contains($customerAddressB))->toBeFalse();
+    expect($addresses->contains($customerAddressC))->toBeFalse();
 });

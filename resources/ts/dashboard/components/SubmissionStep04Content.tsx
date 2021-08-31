@@ -291,22 +291,13 @@ export function SubmissionStep04Content() {
                             <div className={classes.shippingMethodItemContainer}>
                                 {arePaymentMethodsLoading ? <CircularProgress /> : null}
 
-                                {/* Using bracket notation for item['id'] because of a weird TS bug related to 'never' type */}
-                                {availablePaymentMethods.some((item) => item['code'] === 'stripe') ? (
+                                {availablePaymentMethods.map((item) => (
                                     <PaymentMethodItem
-                                        isSelected={paymentMethodId === 1}
-                                        methodName={'Credit or Debit Card'}
-                                        methodId={1}
+                                        isSelected={paymentMethodId === item['id']}
+                                        methodName={item['name']}
+                                        methodId={item['id']}
                                     />
-                                ) : null}
-
-                                {availablePaymentMethods.some((item) => item['code'] === 'paypal') ? (
-                                    <PaymentMethodItem
-                                        isSelected={paymentMethodId === 2}
-                                        methodName={'Paypal'}
-                                        methodId={2}
-                                    />
-                                ) : null}
+                                ))}
                             </div>
                         </div>
                         <Divider light />

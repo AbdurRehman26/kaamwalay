@@ -1,62 +1,44 @@
 <?php
 
-namespace Tests\Feature\API\Customer\PaymentCard;
-
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class PaymentCardTest extends TestCase
-{
-    use RefreshDatabase;
+uses(TestCase::class);
+uses(RefreshDatabase::class);
 
-    protected User $user;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->actingAs($this->user);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->user = User::factory()->create();
-        $this->actingAs($this->user);
-    }
+test('user can receive payment cards', function () {
+    $response = $this->get('api/customer/payment-cards');
 
-    /**
-     * @test
-     * @group payment
-     */
-    public function user_can_receive_payment_cards()
-    {
-        $response = $this->get('api/customer/payment-cards');
+    $response->assertOk();
 
-        $response->assertOk();
-
-        $response->assertJsonStructure([
-            'data' => [
-                [
-                    'id',
-                    'customer',
-                    'card',
-                    'type',
-                ],
-            ],
-        ]);
-    }
-
-    /**
-     * @test
-     * @group payment
-    */
-    public function user_can_create_card_setup_intent()
-    {
-        $response = $this->post('api/customer/payment-cards/setup');
-
-        $response->assertOk();
-
-        $response->assertJsonStructure([
-            'intent' => [
-                'client_secret',
+    $response->assertJsonStructure([
+        'data' => [
+            [
+                'id',
                 'customer',
-                'object',
+                'card',
+                'type',
             ],
-        ]);
-    }
-}
+        ],
+    ]);
+})->group('payment');
+
+test('user can create card setup intent', function () {
+    $response = $this->post('api/customer/payment-cards/setup');
+
+    $response->assertOk();
+
+    $response->assertJsonStructure([
+        'intent' => [
+            'client_secret',
+            'customer',
+            'object',
+        ],
+    ]);
+})->group('payment');

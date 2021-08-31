@@ -1,26 +1,20 @@
 <?php
 
-namespace Tests\Unit\API\Customer\Address;
-
 use App\Models\CustomerAddress;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CustomerAddressTest extends TestCase
-{
-    use RefreshDatabase;
+uses(TestCase::class);
+uses(RefreshDatabase::class);
 
-    /** @test */
-    public function model_scope_returns_only_specific_user_data()
-    {
-        $customerAddressA = CustomerAddress::factory()->create();
-        $customerAddressB = CustomerAddress::factory()->create();
-        $customerAddressC = CustomerAddress::factory()->create();
+test('model scope returns only specific user data', function () {
+    $customerAddressA = CustomerAddress::factory()->create();
+    $customerAddressB = CustomerAddress::factory()->create();
+    $customerAddressC = CustomerAddress::factory()->create();
 
-        $addresses = CustomerAddress::forUser($customerAddressA->user)->get();
+    $addresses = CustomerAddress::forUser($customerAddressA->user)->get();
 
-        $this->assertTrue($addresses->contains($customerAddressA));
-        $this->assertFalse($addresses->contains($customerAddressB));
-        $this->assertFalse($addresses->contains($customerAddressC));
-    }
-}
+    $this->assertTrue($addresses->contains($customerAddressA));
+    $this->assertFalse($addresses->contains($customerAddressB));
+    $this->assertFalse($addresses->contains($customerAddressC));
+});

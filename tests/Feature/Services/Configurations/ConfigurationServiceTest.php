@@ -1,45 +1,34 @@
 <?php
 
-namespace Tests\Feature\Services\Configurations;
-
 use App\Services\ConfigurationService\ConfigurationService;
 use Tests\TestCase;
 
-class ConfigurationServiceTest extends TestCase
-{
-    private ConfigurationService $configurationService;
+uses(TestCase::class);
 
-    /** @test */
-    public function it_should_instantiate_correctly()
-    {
-        $this->assertInstanceOf(ConfigurationService::class, $this->configurationService);
-    }
+beforeEach(function () {
+    $this->configurationService = $this->app->make(ConfigurationService::class);
+});
 
-    /** @test */
-    public function it_should_get_guest_keys()
-    {
-        config([
-            'configuration.keys' => [
-                'APP_ENV' => [
-                    'value' => env('APP_ENV'),
-                    'auth' => false,
-                ],
-                'APP_URL' => [
-                    'value' => env('APP_URL'),
-                    'auth' => true,
-                ],
+it('should instantiate correctly', function () {
+    $this->assertInstanceOf(ConfigurationService::class, $this->configurationService);
+});
+
+it('should get guest keys', function () {
+    config([
+        'configuration.keys' => [
+            'APP_ENV' => [
+                'value' => env('APP_ENV'),
+                'auth' => false,
             ],
-        ]);
+            'APP_URL' => [
+                'value' => env('APP_URL'),
+                'auth' => true,
+            ],
+        ],
+    ]);
 
-        $data = $this->configurationService->getAllConfigurations();
-        $this->assertEquals([
-            'app_env' => env('APP_ENV'),
-        ], $data);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->configurationService = $this->app->make(ConfigurationService::class);
-    }
-}
+    $data = $this->configurationService->getAllConfigurations();
+    $this->assertEquals([
+        'app_env' => env('APP_ENV'),
+    ], $data);
+});

@@ -292,7 +292,7 @@ export function SubmissionStep04Content() {
                                 {arePaymentMethodsLoading ? <CircularProgress /> : null}
 
                                 {/* Using bracket notation for item['id'] because of a weird TS bug related to 'never' type */}
-                                {availablePaymentMethods.some((item) => item['id'] === 1) ? (
+                                {availablePaymentMethods.some((item) => item['code'] === 'stripe') ? (
                                     <PaymentMethodItem
                                         isSelected={paymentMethodId === 1}
                                         methodName={'Credit or Debit Card'}
@@ -300,7 +300,7 @@ export function SubmissionStep04Content() {
                                     />
                                 ) : null}
 
-                                {availablePaymentMethods.some((item) => item['id'] === 2) ? (
+                                {availablePaymentMethods.some((item) => item['code'] === 'paypal') ? (
                                     <PaymentMethodItem
                                         isSelected={paymentMethodId === 2}
                                         methodName={'Paypal'}

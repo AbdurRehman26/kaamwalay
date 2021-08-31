@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
@@ -9,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -149,7 +152,10 @@ const schema = yup.object().shape({
 export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
+    const apiService = useInjectable(APIService);
 
+    const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
+    const [arePaymentMethodsLoading, setArePaymentMethodsLoading] = useState(false);
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const currentSelectedStripeCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
 
@@ -235,6 +241,18 @@ export function SubmissionStep04Content() {
         [availableStates, dispatch],
     );
 
+    async function getPaymentMethods() {
+        setArePaymentMethodsLoading(true);
+        const endpoint = apiService.createEndpoint('customer/orders/payment-methods');
+        const response = await endpoint.get('');
+        setAvailablePaymentMethods(response.data);
+        setArePaymentMethodsLoading(false);
+    }
+
+    useEffect(() => {
+        getPaymentMethods();
+    }, []);
+
     useEffect(() => {
         dispatch(setIsNextDisabled(true));
         if (paymentMethodId === 1) {
@@ -271,16 +289,24 @@ export function SubmissionStep04Content() {
                         <div className={classes.shippingMethodContainer}>
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
                             <div className={classes.shippingMethodItemContainer}>
-                                <PaymentMethodItem
-                                    isSelected={paymentMethodId === 1}
-                                    methodName={'Credit or Debit Card'}
-                                    methodId={1}
-                                />
-                                <PaymentMethodItem
-                                    isSelected={paymentMethodId === 2}
-                                    methodName={'Paypal'}
-                                    methodId={2}
-                                />
+                                {arePaymentMethodsLoading ? <CircularProgress /> : null}
+
+                                {/* Using bracket notation for item['id'] because of a weird TS bug related to 'never' type */}
+                                {availablePaymentMethods.some((item) => item['id'] === 1) ? (
+                                    <PaymentMethodItem
+                                        isSelected={paymentMethodId === 1}
+                                        methodName={'Credit or Debit Card'}
+                                        methodId={1}
+                                    />
+                                ) : null}
+
+                                {availablePaymentMethods.some((item) => item['id'] === 2) ? (
+                                    <PaymentMethodItem
+                                        isSelected={paymentMethodId === 2}
+                                        methodName={'Paypal'}
+                                        methodId={2}
+                                    />
+                                ) : null}
                             </div>
                         </div>
                         <Divider light />

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Payment\PaymentService;

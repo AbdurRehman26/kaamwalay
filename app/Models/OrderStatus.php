@@ -9,7 +9,13 @@ class OrderStatus extends Model
 {
     use HasFactory;
 
-    public const DEFAULT_ORDER_STATUS = 1;
+    public const STATUSES = [
+        'default' => 1,
+        'placed' => 2,
+    ];
+
+    public const DEFAULT_ORDER_STATUS = self::STATUSES['default'];
+
 
     /**
      * The attributes that are mass assignable.

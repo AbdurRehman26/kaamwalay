@@ -4,6 +4,7 @@ namespace App\Services\Order;
 
 use App\Models\Order;
 use App\Models\OrderPayment;
+use App\Models\OrderStatus;
 use App\Models\RevenueStatsDaily;
 use Illuminate\Support\Facades\Log;
 
@@ -16,7 +17,7 @@ class RevenueStatsService
         not on the same day*/
         $orderPayments = OrderPayment::join('orders', function ($join) {
             $join->on('orders.id', '=', 'order_payments.order_id');
-        })->where('orders.order_status_id', Order::STATUSES['placed'])
+        })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
             ->whereDate('order_payments.created_at', $currentDate)
             ->select('order_payments.*')
             ->get();

@@ -3,6 +3,7 @@
 namespace Tests\Feature\API\Customer\Auth;
 
 use App\Models\User;
+use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
@@ -95,6 +96,7 @@ class LoginTest extends TestCase
      */
     public function ags_user_can_login()
     {
+        $this->seed(RolesSeeder::class);
         Config::set('services.ags.is_platform_enabled', true);
         Config::set('services.ags.base_url', 'http://test.test');
 

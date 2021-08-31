@@ -9,6 +9,7 @@ use App\Services\AGS\AGS;
 use App\Services\Payment\Providers\StripeService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 trait AuthenticatableWithAGS
@@ -40,6 +41,8 @@ trait AuthenticatableWithAGS
                 ['password' => $request->get('password')]
             )
         );
+
+        $user->assignCustomerRole();
 
         resolve(StripeService::class)->createCustomerIfNull($user);
 

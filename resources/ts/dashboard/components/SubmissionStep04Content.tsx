@@ -296,7 +296,7 @@ export function SubmissionStep04Content() {
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
                             <div className={classes.shippingMethodItemContainer}>
                                 <div className={classes.loaderContainer}>
-                                    {arePaymentMethodsLoading ? <CircularProgress /> : null}
+                                    {arePaymentMethodsLoading ? <CircularProgress color={'secondary'} /> : null}
                                 </div>
 
                                 {availablePaymentMethods.map((item) => (

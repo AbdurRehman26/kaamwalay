@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\User;
+use Database\Seeders\RolesSeeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Database\Seeders\RolesSeeder;
 
 test('user can login with valid credentials', function () {
     $user = User::factory()->create();

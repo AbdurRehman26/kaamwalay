@@ -1,60 +1,40 @@
 <?php
 
-namespace Tests\Feature\API\Customer\Order;
-
 use App\Models\PaymentPlan;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class PaymentPlanTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    protected User $user;
+test('a user can see payment plans', function () {
+    $this->actingAs($this->user);
+    $response = $this->getJson('/api/customer/orders/payment-plans/');
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $response->assertJsonCount(7, 'data');
+    $response->assertJsonStructure([
+        'data' => [
+            '*' => ['id', 'price', 'max_protection_amount', 'turnaround'],
+        ],
+    ]);
+});
 
-        $this->user = User::factory()->create();
-    }
+test('a user can see specific payment plan', function () {
+    $this->actingAs($this->user);
 
-    /** @test */
-    public function a_user_can_see_payment_plans()
-    {
-        $this->actingAs($this->user);
-        $response = $this->getJson('/api/customer/orders/payment-plans/');
+    PaymentPlan::factory()
+        ->count(1)
+        ->create();
+    $response = $this->getJson('/api/customer/orders/payment-plans/1');
 
-        $response->assertJsonCount(7, 'data');
-        $response->assertJsonStructure([
-            'data' => [
-                '*' => ['id', 'price', 'max_protection_amount', 'turnaround'],
-            ],
-        ]);
-    }
+    $response->assertJsonCount(4, 'data');
+    $response->assertJsonStructure([
+        'data' => ['id', 'price', 'max_protection_amount', 'turnaround'],
+    ]);
+});
 
-    /** @test */
-    public function a_user_can_see_specific_payment_plan()
-    {
-        $this->actingAs($this->user);
+test('a guest cannot get payment plans', function () {
+    $response = $this->getJson('/api/customer/orders/payment-plans');
 
-        PaymentPlan::factory()
-            ->count(1)
-            ->create();
-        $response = $this->getJson('/api/customer/orders/payment-plans/1');
-
-        $response->assertJsonCount(4, 'data');
-        $response->assertJsonStructure([
-            'data' => ['id', 'price', 'max_protection_amount', 'turnaround'],
-        ]);
-    }
-
-    /** @test */
-    public function a_guest_cannot_get_payment_plans()
-    {
-        $response = $this->getJson('/api/customer/orders/payment-plans');
-
-        $response->assertUnauthorized();
-    }
-}
+    $response->assertUnauthorized();
+});

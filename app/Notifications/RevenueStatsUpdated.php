@@ -33,6 +33,6 @@ class RevenueStatsUpdated extends Notification
     {
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
-            ->content("Revenue Stats .\n Date: {$this->revenueStatsDaily->event_at}, Revenue: \${$this->revenueStatsDaily->revenue}, Profit: \${$this->revenueStatsDaily->profit}");
+            ->content("Revenue Stats .\n Date: {$this->revenueStatsDaily->event_at}, Revenue: \${$this->revenueStatsDaily->revenue}");
     }
 }

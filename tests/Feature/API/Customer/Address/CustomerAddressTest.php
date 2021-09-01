@@ -1,11 +1,6 @@
 <?php
 
 use App\Models\CustomerAddress;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $addresses = CustomerAddress::factory()->count(2)->create();

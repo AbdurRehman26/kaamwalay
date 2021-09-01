@@ -4,11 +4,6 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\PDFService;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 it('can generate pdf', function () {
     $order = Order::factory()->create();

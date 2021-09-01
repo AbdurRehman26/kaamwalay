@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -11,7 +14,7 @@
 |
 */
 
-/** @link https://pestphp.com/docs/underlying-test-case */
+uses(TestCase::class, RefreshDatabase::class)->in(__DIR__);
 
 /*
 |--------------------------------------------------------------------------

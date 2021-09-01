@@ -2,12 +2,8 @@
 
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 uses(WithFaker::class);
 
 beforeEach(function () {

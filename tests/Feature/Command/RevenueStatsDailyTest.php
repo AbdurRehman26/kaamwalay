@@ -1,12 +1,7 @@
 <?php
 
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 it('adds daily revenue stats', function () {
     Notification::fake();

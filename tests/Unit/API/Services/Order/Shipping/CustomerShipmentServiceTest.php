@@ -3,11 +3,6 @@
 use App\Models\OrderItem;
 use App\Models\OrderItemCustomerShipment;
 use App\Services\Order\Shipping\CustomerShipmentService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 it('can update order shipment details', function () {
     $shippingProvider = 'fedex';

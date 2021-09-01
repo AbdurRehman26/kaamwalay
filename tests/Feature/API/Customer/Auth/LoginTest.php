@@ -1,13 +1,8 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('user can login with valid credentials', function () {
     $user = User::factory()->create();

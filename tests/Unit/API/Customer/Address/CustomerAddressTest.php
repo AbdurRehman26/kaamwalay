@@ -1,11 +1,6 @@
 <?php
 
 use App\Models\CustomerAddress;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('model scope returns only specific user data', function () {
     $customerAddressA = CustomerAddress::factory()->create();

@@ -4,12 +4,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\Providers\TestingStripeService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create();

@@ -3,14 +3,10 @@
 use App\Events\API\Auth\CustomerRegistered;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Symfony\Component\HttpFoundation\Response;
-use Tests\TestCase;
 
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 uses(WithFaker::class);
 
 beforeEach(function () {

@@ -5,14 +5,9 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\Providers\TestingStripeService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $user = User::factory()->create([

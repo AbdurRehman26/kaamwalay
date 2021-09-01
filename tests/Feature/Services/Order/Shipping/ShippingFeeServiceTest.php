@@ -3,11 +3,6 @@
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\Order\Shipping\ShippingFeeService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('shipping fee is calculated correctly', function () {
     /** @var Order $order */

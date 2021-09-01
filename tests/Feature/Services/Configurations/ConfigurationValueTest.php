@@ -1,9 +1,6 @@
 <?php
 
 use App\Services\ConfigurationService\ConfigurationValue;
-use Tests\TestCase;
-
-uses(TestCase::class);
 
 it('should correctly parse value', function () {
     $defaultConfigValue = new ConfigurationValue([

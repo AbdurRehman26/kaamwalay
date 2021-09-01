@@ -1,9 +1,6 @@
 <?php
 
 use App\Services\ConfigurationService\ConfigurationService;
-use Tests\TestCase;
-
-uses(TestCase::class);
 
 beforeEach(function () {
     $this->configurationService = $this->app->make(ConfigurationService::class);

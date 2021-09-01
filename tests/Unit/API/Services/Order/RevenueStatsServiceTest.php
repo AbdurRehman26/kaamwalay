@@ -6,11 +6,6 @@ use App\Services\Order\RevenueStatsService;
 use App\Services\Payment\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->revenueStatsService = new RevenueStatsService();

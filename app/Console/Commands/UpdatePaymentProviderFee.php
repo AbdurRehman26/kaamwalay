@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\OrderPayment;
+use App\Models\OrderStatus;
 use App\Services\Payment\PaymentService;
 use Illuminate\Console\Command;
 
@@ -25,9 +26,14 @@ class UpdatePaymentProviderFee extends Command
     {
         $this->info("Updating payment provider fee for all missing orders");
 
-        OrderPayment::whereNull('provider_fee')->get()->each(function (OrderPayment $orderPayment) use ($paymentService) {
-            $paymentService->calculateAndSaveFee($orderPayment->order);
-        });
+        OrderPayment::join('orders', function ($join) {
+            $join->on('orders.id', '=', 'order_payments.order_id');
+        })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
+            ->whereNull('order_payments.provider_fee')
+            ->select('order_payments.*')
+            ->get()->each(function (OrderPayment $orderPayment) use ($paymentService) {
+                $paymentService->calculateAndSaveFee($orderPayment->order);
+            });
 
         $this->info("Updated.");
 

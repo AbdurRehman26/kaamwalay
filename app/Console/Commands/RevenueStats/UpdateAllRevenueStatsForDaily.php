@@ -32,12 +32,11 @@ class UpdateAllRevenueStatsForDaily extends Command
 
         $lastRevenueDate = Carbon::now()->toDateString();
 
-        $revenueDaily = RevenueStatsDaily::first();
+        $revenueDaily = RevenueStatsDaily::orderBy('event_at', 'asc')->first();
 
         if (! empty($revenueDaily)) {
             $lastRevenueDate = $revenueDaily->event_at;
         }
-
         OrderPayment::whereDate('created_at', '<', $lastRevenueDate)
             ->select('created_at')
             ->distinct()

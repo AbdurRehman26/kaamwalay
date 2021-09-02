@@ -218,6 +218,8 @@
     <footer>
         <img src="{{$agsLogo}}"/>
         <br/>
+        AGS Submissions
+        <br/>
         727 Page Ave
         <br/>
         Staten Island, NY 10307, US

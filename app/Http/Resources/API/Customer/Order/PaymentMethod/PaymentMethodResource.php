@@ -10,7 +10,7 @@ class PaymentMethodResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'code' => $this->name,
+            'code' => $this->code,
             'name' => $this->name,
         ];
     }

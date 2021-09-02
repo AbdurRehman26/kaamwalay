@@ -3,6 +3,7 @@ import List from '@material-ui/core/List';
 import { makeStyles } from '@material-ui/core/styles';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import StyleIcon from '@material-ui/icons/Style';
 import React from 'react';
 import { useAppSelector } from '@admin/redux/hooks';
@@ -32,7 +33,6 @@ function LayoutSidebar() {
     return (
         <Drawer
             open={drawerState}
-            keepMounted
             variant={'persistent'}
             className={classes.root}
             classes={{ paper: classes.drawerPaper }}
@@ -41,7 +41,7 @@ function LayoutSidebar() {
                 <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
                 <LayoutSidebarItem icon={StyleIcon} title={'Cards'} href={'/cards'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Customers'} href={'/customers'} />
-                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Ledger'} href={'/ledger'} />
+                <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} />
             </List>
         </Drawer>
     );

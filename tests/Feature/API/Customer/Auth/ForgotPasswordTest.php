@@ -1,27 +1,18 @@
 <?php
 
-namespace Tests\Feature\API\Customer\Auth;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Support\Facades\Notification;
 
-class ForgotPasswordTest extends TestCase
-{
-    use RefreshDatabase;
+test('user can request forgot password', function () {
+    $user = User::factory()->create();
+    Notification::fake();
 
-    /** @test @group auth */
-    public function user_can_request_forgot_password()
-    {
-        $user = User::factory()->create();
+    $response = $this->postJson('/api/auth/password/forgot', [
+        'email' => $user->email,
+    ]);
 
-        $response = $this->postJson('/api/auth/password/forgot', [
-            'email' => $user->email,
-        ]);
-
-        $response->assertStatus(200);
-        $this->assertDatabaseHas('password_resets', [
-            'email' => $user->email,
-        ]);
-    }
-}
+    $response->assertStatus(200);
+    $this->assertDatabaseHas('password_resets', [
+        'email' => $user->email,
+    ]);
+})->group('auth');

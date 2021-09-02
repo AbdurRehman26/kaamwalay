@@ -1,16 +1,15 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import ProtectedRoute from '@shared/components/ProtectedRoute';
+import { RolesEnum } from '@shared/constants/RolesEnum';
 import { Admin } from './Admin';
-import { Layout } from './components/Layout';
 
 function App() {
     return (
         <BrowserRouter basename={'/admin'}>
-            <Layout>
-                <Switch>
-                    <Route path={'/'} component={Admin} />
-                </Switch>
-            </Layout>
+            <Switch>
+                <ProtectedRoute roles={RolesEnum.Admin} path={'/'} component={Admin} />
+            </Switch>
         </BrowserRouter>
     );
 }

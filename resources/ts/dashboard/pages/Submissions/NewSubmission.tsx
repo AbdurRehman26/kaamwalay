@@ -3,6 +3,8 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
+import ReactGA from 'react-ga';
+import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
@@ -53,6 +55,11 @@ export function NewSubmission() {
     const classes = useStyles({ currentStep });
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const selectedExistingAddressId = useAppSelector(
+        (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
+    );
+    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+
     const getStepContent = useCallback(() => {
         switch (currentStep) {
             case 0:
@@ -79,7 +86,25 @@ export function NewSubmission() {
             dispatch(nextStep());
             return;
         }
+        if (currentStep === 2) {
+            ReactGA.event({
+                category: EventCategories.ShippingAddresses,
+                action:
+                    selectedExistingAddressId === -1
+                        ? ShippingAddressEvents.continuedWithNewAddress
+                        : ShippingAddressEvents.continuedWithExisting,
+            });
+            dispatch(nextStep());
+            return;
+        }
         if (currentStep === 3) {
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action:
+                    paymentMethodId === 1
+                        ? PaymentMethodEvents.continuedWithStripePayment
+                        : PaymentMethodEvents.continuedWithPaypalPayment,
+            });
             await dispatch(createOrder());
             dispatch(nextStep());
             return;

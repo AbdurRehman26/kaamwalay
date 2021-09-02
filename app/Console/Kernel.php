@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ExportOrders;
+use App\Console\Commands\RevenueStats\UpdateRevenueStatsDaily;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -20,14 +22,16 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
-        $schedule->command("orders:export", [Carbon::now()->subDays(1)->format('Y-m-d')])
+        $schedule->command(ExportOrders::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
         ->dailyAt('00:10');
+        $schedule->command(UpdateRevenueStatsDaily::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
+            ->dailyAt('00:20');
     }
 
     /**

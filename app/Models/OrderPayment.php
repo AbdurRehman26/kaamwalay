@@ -30,6 +30,7 @@ class OrderPayment extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'provider_fee' => 'float',
     ];
 
     public function order(): \Illuminate\Database\Eloquent\Relations\BelongsTo

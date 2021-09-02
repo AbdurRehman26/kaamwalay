@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { RolesEnum } from '@shared/constants/RolesEnum';
 import { Entity } from '@shared/entities/Entity';
 import { Field } from '../decorators/Field';
 import { RoleEntity } from './RoleEntity';
@@ -26,5 +27,19 @@ export class UserEntity extends Entity {
 
     public getFullName() {
         return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
+    }
+
+    public hasRole(role: RolesEnum): boolean {
+        return !!this.roles.find(({ id }) => id === role);
+    }
+
+    public getInitials() {
+        const name = this.getFullName();
+        let words = name.split(' ');
+        if (words.length > 1) {
+            words = words.map((word) => word.charAt(0));
+        }
+
+        return words.join('').substr(0, 2);
     }
 }

@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { CustomerShipmentEntity } from '@shared/entities/CustomerShipmentEntity';
 import { Entity } from '@shared/entities/Entity';
 import { DateField } from '../decorators/DateField';
 import { Field } from '../decorators/Field';
@@ -56,6 +57,9 @@ export class OrderEntity extends Entity {
 
     @Field('billing_address')
     public billingAddress!: AddressEntity;
+
+    @Field('customer_shipment')
+    public customerShipment!: CustomerShipmentEntity | null;
 
     @DateField('arrived_at')
     public arrivedAt!: Moment;

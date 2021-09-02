@@ -1,0 +1,1 @@
+export { GoogleAnalyticsSetup } from './GoogleAnalyticsSetup';

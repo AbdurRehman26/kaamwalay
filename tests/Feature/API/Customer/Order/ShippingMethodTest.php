@@ -1,53 +1,33 @@
 <?php
 
-namespace Tests\Feature\API\Customer\Order;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class ShippingMethodTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    protected User $user;
+test('a customer can get shipping methods', function () {
+    $this->actingAs($this->user);
+    $response = $this->getJson('/api/customer/orders/shipping-methods');
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $response->assertJsonStructure([
+        'data' => [
+            '*' => ['id', 'code', 'name'],
+        ],
+    ]);
+});
 
-        $this->user = User::factory()->create();
-    }
+test('a customer can get specific shipping method', function () {
+    $this->actingAs($this->user);
+    $response = $this->getJson('/api/customer/orders/shipping-methods/1');
 
-    /** @test */
-    public function a_customer_can_get_shipping_methods()
-    {
-        $this->actingAs($this->user);
-        $response = $this->getJson('/api/customer/orders/shipping-methods');
+    $response->assertJsonStructure([
+        'data' => ['id', 'code', 'name'],
+    ]);
+});
 
-        $response->assertJsonStructure([
-            'data' => [
-                '*' => ['id', 'code', 'name'],
-            ],
-        ]);
-    }
+test('a guest cannot get shipping methods', function () {
+    $response = $this->getJson('/api/customer/orders/shipping-methods');
 
-    /** @test */
-    public function a_customer_can_get_specific_shipping_method()
-    {
-        $this->actingAs($this->user);
-        $response = $this->getJson('/api/customer/orders/shipping-methods/1');
-
-        $response->assertJsonStructure([
-            'data' => ['id', 'code', 'name'],
-        ]);
-    }
-
-    /** @test */
-    public function a_guest_cannot_get_shipping_methods()
-    {
-        $response = $this->getJson('/api/customer/orders/shipping-methods');
-
-        $response->assertUnauthorized();
-    }
-}
+    $response->assertUnauthorized();
+});

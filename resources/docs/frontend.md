@@ -346,7 +346,7 @@ import { useAuth } from "@shared/hooks/useAuth";
 function Foo() {
     const {
         user,           // UserEntity object of logged user
-        authCheck,      // Send the auth check request and see if the user it's still logged in
+        checkAuth,      // Send the auth check request and see if the user it's still logged in
         login,          // Send the login request and obtain session for the user
         logout,         // revoke current auth session
         accessToken,    // access token used for authorization

@@ -84,9 +84,9 @@
  *                    }
  *                },
  *                "invoice": {
- *                    id: 28
- *                    invoice_number: "RG000000042"
- *                    path: "http://minio:9000/local/invoice/89a79cd1-48a6-4ee6-a606-c62d83f80f50.pdf"
+ *                    "id": 28
+ *                    "invoice_number": "RG000000042"
+ *                    "path": "http://minio:9000/local/invoice/89a79cd1-48a6-4ee6-a606-c62d83f80f50.pdf"
  *                },
  *                "order_payment": {
  *                    "card": {
@@ -127,7 +127,12 @@
  *                            "image_path": "https://den-cards.pokellector.com/305/Weepinbell.SWSH05.2.37529.png"
  *                        }
  *                    }
- *                ]
+ *                ],
+ *                "customer_shipment": {
+ *                     "id": 2,
+ *                     "shipping_provider": "fedex",
+ *                     "tracking_number": "020207021381215"
+ *                 }
  *            }
  *        }
  */

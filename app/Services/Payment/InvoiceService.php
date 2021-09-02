@@ -59,7 +59,7 @@ class InvoiceService
 
 
         $items = OrderItem::select('card_product_id', 'declared_value_total','declared_value_per_unit', DB::raw('sum(quantity) as quantity'))
-        ->where('order_id',11)
+        ->where('order_id',$order->id)
         ->groupBy(['card_product_id', 'declared_value_total','declared_value_per_unit'])
         ->get();
 

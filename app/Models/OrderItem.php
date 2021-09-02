@@ -65,35 +65,14 @@ class OrderItem extends Model
         return $this->belongsTo(\App\Models\OrderItemCustomerShipment::class);
     }
 
-    // public function markAsMissing(): self
-    // {
-    //     $this->order_status_id = 1;
-    //     $this->save();
+    public function itemStatuses()
+    {
+        return $this->hasMany(\App\Models\ItemStatus::class);
+    }
 
-    //     return $this;
-    // }
+    public function userCard()
+    {
+        return $this->hasOne(\App\Models\UserCard::class);
+    }
 
-    // public function markAsNotAccepted(): self
-    // {
-    //     $this->order_status_id = 2;
-    //     $this->save();
-
-    //     return $this;
-    // }
-
-    // public function markAsConfirmed(): self
-    // {
-    //     $this->order_status_id = 3;
-    //     $this->save();
-
-    //     return $this;
-    // }
-
-    // public function markAsGraded(): self
-    // {
-    //     $this->order_status_id = 4;
-    //     $this->save();
-
-    //     return $this;
-    // }
 }

@@ -9,7 +9,11 @@ class OrderItemStatus extends Model
 {
     use HasFactory;
 
-    public const DEFAULT_ORDER_ITEM_STATUS = 1;
+    public const PENDING_STATUS = 1;
+    public const MISSING_STATUS = 2;
+    public const NOT_ACCEPTED_STATUS = 3;
+    public const CONFIRMED_STATUS = 4;
+    public const GRADED_STATUS = 5;
 
     /**
      * The attributes that are mass assignable.

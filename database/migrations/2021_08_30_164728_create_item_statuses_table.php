@@ -15,8 +15,8 @@ class CreateItemStatusesTable extends Migration
     {
         Schema::create('item_statuses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_item_status_id');
-            $table->foreignId('order_item_id');
+            $table->foreignId('order_item_status_id')->constrained();
+            $table->foreignId('order_item_id')->constrained();
             $table->text('notes')->nullable();
             $table->timestamps();
         });

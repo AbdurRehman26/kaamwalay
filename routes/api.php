@@ -54,6 +54,12 @@ Route::prefix('customer')->group(function () {
             Route::apiResource('/', OrderController::class)
                 ->only(['index', 'store']);
             Route::post('{order}/customer-shipment',[OrderController::class, 'updateCustomerShipment']);
+            Route::post('{order}/confirm/{orderItem}',[OrderController::class, 'confirmItem']);
+            Route::post('{order}/missing/{orderItem}',[OrderController::class, 'markItemMissing']);
+            Route::post('{order}/mark-items-pending',[OrderController::class, 'markItemsPending']);
+            Route::post('{order}/complete-review',[OrderController::class, 'completeReview']);
+            Route::post('{order}/extra-card',[OrderController::class, 'addExtraCard']);
+            Route::post('{order}/edit-card/{orderItem}',[OrderController::class, 'editCard']);
         });
     });
 });

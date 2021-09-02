@@ -9,7 +9,10 @@ class OrderAdminStatus extends Model
 {
     use HasFactory;
 
-    public const DEFAULT_ORDER_STATUS = 1;
+    public const PENDING_STATUS = 1;
+    public const REVIEWED_STATUS = 2;
+    public const GRADED_STATUS = 3;
+    public const SHIPPED_STATUS = 4;
 
     /**
      * The attributes that are mass assignable.

@@ -16,7 +16,7 @@ class CreateUserCardsTable extends Migration
         Schema::create('user_cards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_item_id')->constrained();
-            $table->foreignId('users_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->json('front_values')->nullable();
             $table->json('back_values')->nullable();
             $table->json('overall_values')->nullable();

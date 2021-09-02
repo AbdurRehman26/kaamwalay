@@ -7,16 +7,24 @@ use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
+use App\Http\Requests\API\Customer\Order\AddExtraCardRequest;
+use App\Http\Requests\API\Customer\Order\MarkItemsPendingRequest;
 use App\Http\Resources\API\Customer\Order\OrderCollection;
 use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
+use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Services\Order\CreateOrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Order\ConfirmItemService;
+use App\Services\Order\OrderItemsService;
+use App\Services\Order\ManageOrderService;
+use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 
 class OrderController extends Controller
 {
@@ -74,5 +82,51 @@ class OrderController extends Controller
         }
 
         return new OrderResource($order);
+    }
+
+    public function confirmItem(Request $request, Order $order, OrderItem $orderItem, ConfirmItemService $confirmItemService): OrderItemResource
+    {
+        // $this->authorize('review');
+
+        //check if item belongs to order?
+
+        $result = $confirmItemService->process($orderItem);
+
+        return new OrderItemResource($result);
+    }
+
+    public function markItemMissing(Request $request, Order $order, OrderItem $orderItem, OrderItemsService $orderItemsService): OrderItemResource
+    {
+        // $this->authorize('review');
+
+        //check if item belongs to order?
+
+        $result = $orderItemsService->markAsMissing($orderItem);
+
+        return new OrderItemResource($result);
+    }
+
+    public function markItemsPending(MarkItemsPendingRequest $request, Order $order, OrderItemsService $orderItemsService): OrderItemCollection
+    {
+        $result = $orderItemsService->markItemsAsPending($order, $request->items);
+
+        return new OrderItemCollection($result);
+    }
+
+    public function completeReview(Request $request, Order $order, ManageOrderService $manageOrderService): OrderResource
+    {
+        return new OrderResource($manageOrderService->confirmReview($order));
+    }
+
+    public function addExtraCard(AddExtraCardRequest $request, Order $order, ManageOrderService $manageOrderService): OrderItemResource
+    {
+        $result = $manageOrderService->addExtraCard($order,$request->card_id);
+        return new OrderItemResource($result);
+    }
+
+    public function editCard(AddExtraCardRequest $request, Order $order, OrderItem $orderItem, ManageOrderService $manageOrderService): OrderItemResource
+    {
+        $result = $manageOrderService->editCard($order,$orderItem,$request->card_id);
+        return new OrderItemResource($result);
     }
 }

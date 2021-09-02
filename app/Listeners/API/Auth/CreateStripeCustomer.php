@@ -9,19 +9,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class CreateStripeCustomer implements ShouldQueue, ShouldBeEncrypted
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function __construct(protected StripeService $stripeService)
     {
-        //
     }
 
-    public function handle(CustomerRegistered $event, StripeService $stripeService): void
+    public function handle(CustomerRegistered $event): void
     {
         $user = $event->user;
-        $stripeService->createCustomerIfNull($user);
+        $this->stripeService->createCustomerIfNull($user);
     }
 }

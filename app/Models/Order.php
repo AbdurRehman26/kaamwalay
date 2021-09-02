@@ -58,7 +58,10 @@ class Order extends Model
         'arrived_at' => 'date',
         'reviewed_by_id' => 'date',
         'graded_by_id' => 'date',
+        'grand_total_cents' => 'integer',
     ];
+
+    protected $appends = ['grand_total_cents'];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -146,5 +149,10 @@ class Order extends Model
     public function scopePlaced(Builder $query): Builder
     {
         return $query->where('order_status_id', 2);
+    }
+
+    public function getGrandTotalCentsAttribute(): int
+    {
+        return $this->grand_total * 100;
     }
 }

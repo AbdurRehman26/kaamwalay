@@ -49,5 +49,8 @@ return [
             'auth' => true,
             'value' => env('ALGOLIA_PUBLIC_KEY'),
         ],
+        'google_analytics_tracking_code' => [
+            'value' => env('GOOGLE_ANALYTICS_TRACKING_CODE'),
+        ],
     ],
 ];

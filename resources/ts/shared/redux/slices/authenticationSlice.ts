@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
+import ReactGA from 'react-ga';
+import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
@@ -28,14 +30,17 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
     try {
         const authenticatedUser = await authenticationRepository.postLogin(input);
         NotificationsService.success('Login successfully!');
+        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
         // serialize class objects to plain objects according redux toolkit error
         return classToPlain(authenticatedUser);
     } catch (e) {
         if (isAxiosError(e) || isException(e)) {
+            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
             NotificationsService.exception(e);
         } else {
+            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
             NotificationsService.error('Unable to login.');
         }
 
@@ -50,6 +55,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
     try {
         const authenticatedUser = await authenticationRepository.postRegister(input);
         NotificationsService.success('Register successfully!');
+        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
         thunkAPI.dispatch(authenticateCheckAction());
@@ -82,7 +88,9 @@ export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {
 export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', async (email: string, thunkAPI) => {
     const authenticationRepository = app(AuthenticationRepository);
     try {
-        return await authenticationRepository.forgotPassword(email);
+        const forgotPasswordResponse = await authenticationRepository.forgotPassword(email);
+        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.sentResetLink });
+        return forgotPasswordResponse;
     } catch (e) {
         NotificationsService.exception(e);
         return thunkAPI.rejectWithValue(e);
@@ -94,7 +102,9 @@ export const resetPasswordAction = createAsyncThunk(
     async (input: ResetPasswordRequestDto, thunkAPI) => {
         const authenticationRepository = app(AuthenticationRepository);
         try {
-            return await authenticationRepository.resetPassword(input);
+            const resetPasswordResponse = await authenticationRepository.resetPassword(input);
+            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.sentResetLink });
+            return resetPasswordResponse;
         } catch (e) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);

@@ -3,7 +3,9 @@ import Radio, { RadioProps } from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
+import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
+import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
 
@@ -111,6 +113,12 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
 
     const handleSetServiceLevel = useCallback(() => {
         dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount }));
+        ReactGA.event({
+            category: EventCategories.ServiceLevels,
+            action: ServiceLevelEvents.pressed,
+            dimension1: 'Level',
+            metric1: id,
+        });
     }, [dispatch, id, maxProtectionAmount, price, turnaround, type]);
 
     return (

@@ -19,7 +19,7 @@ class OrderController extends Controller
             ->allowedFilters([
                 'order_number',
                 AllowedFilter::exact('id'),
-                AllowedFilter::exact('order_status_id'),
+                AllowedFilter::scope('status_code'),
             ])
             ->allowedSorts(['grand_total'])
             ->latest()

@@ -124,8 +124,8 @@ it('filters orders by id', function () {
     ]);
 })->group('admin', 'admin_orders');
 
-it('returns only pending(placed) orders', function () {
-    $response = $this->getJson('/api/admin/orders?filter[order_status_id]=2');
+it('returns only placed orders', function () {
+    $response = $this->getJson('/api/admin/orders?filter[status_code]=placed');
 
     $response->assertOk();
     $response->assertJsonFragment([
@@ -137,12 +137,32 @@ it('returns only pending(placed) orders', function () {
 })->group('admin', 'admin_orders');
 
 it('returns only reviewed orders', function () {
-    $response = $this->getJson('/api/admin/orders?filter[order_status_id]=7');
+    $response = $this->getJson('/api/admin/orders?filter[status_code]=reviewed');
 
     $response->assertOk();
     $response->assertJsonCount(1, ['data']);
     $response->assertJsonFragment([
         'status' => OrderStatus::find(7)->name,
+    ]);
+})->group('admin', 'admin_orders');
+
+it('returns only graded orders', function () {
+    $response = $this->getJson('/api/admin/orders?filter[status_code]=graded');
+
+    $response->assertOk();
+    $response->assertJsonCount(1, ['data']);
+    $response->assertJsonFragment([
+        'status' => OrderStatus::find(4)->name,
+    ]);
+})->group('admin', 'admin_orders');
+
+it('returns only shipped orders', function () {
+    $response = $this->getJson('/api/admin/orders?filter[status_code]=shipped');
+
+    $response->assertOk();
+    $response->assertJsonCount(1, ['data']);
+    $response->assertJsonFragment([
+        'status' => OrderStatus::find(5)->name,
     ]);
 })->group('admin', 'admin_orders');
 

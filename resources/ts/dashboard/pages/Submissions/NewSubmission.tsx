@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,6 +23,7 @@ import {
     getStatesList,
     nextStep,
     setIsNextDisabled,
+    setIsNextLoading,
 } from '../../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
@@ -55,6 +57,7 @@ export function NewSubmission() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const classes = useStyles({ currentStep });
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
+    const isNextLoading = useAppSelector((state) => state.newSubmission.isNextLoading);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
@@ -101,6 +104,7 @@ export function NewSubmission() {
         }
         if (currentStep === 3) {
             try {
+                dispatch(setIsNextLoading(true));
                 await dispatch(createOrder()).unwrap();
                 ReactGA.event({
                     category: EventCategories.Submissions,
@@ -109,9 +113,11 @@ export function NewSubmission() {
                             ? PaymentMethodEvents.continuedWithStripePayment
                             : PaymentMethodEvents.continuedWithPaypalPayment,
                 });
+                dispatch(setIsNextLoading(false));
                 dispatch(nextStep());
                 return;
             } catch (error) {
+                dispatch(setIsNextLoading(false));
                 notifications.exception(error);
                 return;
             }
@@ -167,6 +173,9 @@ export function NewSubmission() {
                                     color={'primary'}
                                     onClick={handleNext}
                                     className={classes.nextBtn}
+                                    startIcon={
+                                        isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null
+                                    }
                                 >
                                     Next
                                 </Button>

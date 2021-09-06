@@ -17,7 +17,15 @@ class UserCard extends Model
         'overall_values',
         'overall_grade',
         'certificate_number',
-        'ai_model_number',
+        'ai_model_numbers',
+        'front_centering_img_src',
+        'front_surface_img_src',
+        'front_edges_img_src',
+        'front_corners_img_src',
+        'back_centering_img_src',
+        'back_surface_img_src',
+        'back_edges_img_src',
+        'back_corners_img_src',
     ];
 
     protected $casts = [

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -75,4 +76,8 @@ class OrderItem extends Model
         return $this->hasOne(\App\Models\UserCard::class);
     }
 
+    public function scopeForOrder(Builder $query, Order $order): Builder
+    {
+        return $query->where('order_id', $order->id);
+    }
 }

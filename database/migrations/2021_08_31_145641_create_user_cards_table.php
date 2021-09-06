@@ -22,7 +22,15 @@ class CreateUserCardsTable extends Migration
             $table->json('overall_values')->nullable();
             $table->decimal('overall_grade',10,2)->nullable();
             $table->string('certificate_number')->nullable();
-            $table->string('ai_model_number')->nullable();
+            $table->json('ai_model_numbers')->nullable();
+            $table->string('front_centering_img_src')->nullable();
+            $table->string('front_surface_img_src')->nullable();
+            $table->string('front_edges_img_src')->nullable();
+            $table->string('front_corners_img_src')->nullable();
+            $table->string('back_centering_img_src')->nullable();
+            $table->string('back_surface_img_src')->nullable();
+            $table->string('back_edges_img_src')->nullable();
+            $table->string('back_corners_img_src')->nullable();
             $table->timestamps();
         });
     }

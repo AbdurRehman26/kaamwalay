@@ -33,6 +33,8 @@ class Order extends Model
         'notes',
         'reviewed_by_id',
         'graded_by_id',
+        'reviewed_at',
+        'graded_at',
     ];
 
     /**
@@ -56,9 +58,11 @@ class Order extends Model
         'shipping_method_id' => 'integer',
         'invoice_id' => 'integer',
         'arrived_at' => 'date',
-        'reviewed_by_id' => 'date',
-        'graded_by_id' => 'date',
+        'reviewed_by_id' => 'integer',
+        'graded_by_id' => 'integer',
         'grand_total_cents' => 'integer',
+        'reviewed_at' => 'date',
+        'graded_at' => 'date',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -120,12 +124,12 @@ class Order extends Model
 
     public function reviewedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(\App\Models\User::class,'reviewed_by_id');
     }
 
     public function gradedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(\App\Models\User::class,'graded_by_id');
     }
 
     public function scopeForUser(Builder $query, User $user): Builder

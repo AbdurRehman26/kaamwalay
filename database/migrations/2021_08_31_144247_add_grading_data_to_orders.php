@@ -18,6 +18,8 @@ class AddGradingDataToOrders extends Migration
             $table->foreignId('order_admin_status_id')->default(1)->constrained();
             $table->unsignedBigInteger('reviewed_by_id')->nullable();
             $table->unsignedBigInteger('graded_by_id')->nullable();
+            $table->timestamp('reviewed_at')->nullable();
+            $table->timestamp('graded_at')->nullable();
 
             $table->foreign('reviewed_by_id')->references('id')->on('users');
             $table->foreign('graded_by_id')->references('id')->on('users');
@@ -34,6 +36,8 @@ class AddGradingDataToOrders extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('notes');
+            $table->dropColumn('reviewed_at');
+            $table->dropColumn('graded_at');
 
             $table->dropForeign('orders_order_admin_status_id_foreign');
             $table->dropIndex('orders_order_admin_status_id_foreign');

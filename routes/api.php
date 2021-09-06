@@ -8,6 +8,7 @@ use App\Http\Controllers\API\ConfigurationsController;
 use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\Customer\Address\StateController;
 use App\Http\Controllers\API\Customer\Order\OrderController;
+use App\Http\Controllers\API\Customer\Order\OrderItemController;
 use App\Http\Controllers\API\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
@@ -54,12 +55,12 @@ Route::prefix('customer')->group(function () {
             Route::apiResource('/', OrderController::class)
                 ->only(['index', 'store']);
             Route::post('{order}/customer-shipment',[OrderController::class, 'updateCustomerShipment']);
-            Route::post('{order}/confirm/{orderItem}',[OrderController::class, 'confirmItem']);
-            Route::post('{order}/missing/{orderItem}',[OrderController::class, 'markItemMissing']);
-            Route::post('{order}/mark-items-pending',[OrderController::class, 'markItemsPending']);
+            Route::get('{order}/cards',[OrderItemController::class, 'getOrderCards']);
+            Route::post('{order}/cards/{orderItem}/change-status',[OrderItemController::class, 'changeStatus']);
+            Route::post('{order}/cards/bulk-pending',[OrderItemController::class, 'bulkMarkAsPending']);
             Route::post('{order}/complete-review',[OrderController::class, 'completeReview']);
-            Route::post('{order}/extra-card',[OrderController::class, 'addExtraCard']);
-            Route::post('{order}/edit-card/{orderItem}',[OrderController::class, 'editCard']);
+            Route::post('{order}/cards',[OrderItemController::class, 'store']);
+            Route::put('{order}/cards/{orderItem}',[OrderItemController::class, 'update']);
         });
     });
 });

@@ -84,49 +84,9 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function confirmItem(Request $request, Order $order, OrderItem $orderItem, ConfirmItemService $confirmItemService): OrderItemResource
-    {
-        // $this->authorize('review');
-
-        //check if item belongs to order?
-
-        $result = $confirmItemService->process($orderItem);
-
-        return new OrderItemResource($result);
-    }
-
-    public function markItemMissing(Request $request, Order $order, OrderItem $orderItem, OrderItemsService $orderItemsService): OrderItemResource
-    {
-        // $this->authorize('review');
-
-        //check if item belongs to order?
-
-        $result = $orderItemsService->markAsMissing($orderItem);
-
-        return new OrderItemResource($result);
-    }
-
-    public function markItemsPending(MarkItemsPendingRequest $request, Order $order, OrderItemsService $orderItemsService): OrderItemCollection
-    {
-        $result = $orderItemsService->markItemsAsPending($order, $request->items);
-
-        return new OrderItemCollection($result);
-    }
-
     public function completeReview(Request $request, Order $order, ManageOrderService $manageOrderService): OrderResource
     {
-        return new OrderResource($manageOrderService->confirmReview($order));
+        return new OrderResource($manageOrderService->confirmReview($order, $request->user()));
     }
 
-    public function addExtraCard(AddExtraCardRequest $request, Order $order, ManageOrderService $manageOrderService): OrderItemResource
-    {
-        $result = $manageOrderService->addExtraCard($order,$request->card_id);
-        return new OrderItemResource($result);
-    }
-
-    public function editCard(AddExtraCardRequest $request, Order $order, OrderItem $orderItem, ManageOrderService $manageOrderService): OrderItemResource
-    {
-        $result = $manageOrderService->editCard($order,$orderItem,$request->card_id);
-        return new OrderItemResource($result);
-    }
 }

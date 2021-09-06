@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -173,7 +174,7 @@ export function NewSubmission() {
                                     onClick={handleNext}
                                     className={classes.nextBtn}
                                 >
-                                    {isNextLoading ? 'Loading...' : 'Next'}
+                                    {isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : 'Next'}
                                 </Button>
                             ) : null}
                         </div>

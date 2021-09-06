@@ -12,6 +12,7 @@ use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Order\CreateOrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +40,7 @@ class OrderController extends Controller
     {
         try {
             $order = $createOrderService->create($request->validated());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

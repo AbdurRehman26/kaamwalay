@@ -45,20 +45,6 @@ class OrderResource extends BaseResource
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
             'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment),
-            'payment_method' => resolve(StripeService::class)->retrievePaymentMethod($this->ordedrPayment->payment_provider_reference_id),
-        ];
-    }
-
-    /**
-     * Get additional data that should be returned with the resource array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function with($request)
-    {
-        return [
-            'payment_method' => resolve(StripeService::class)->retrievePaymentMethod($this->ordedrPayment->payment_provider_reference_id),
         ];
     }
 }

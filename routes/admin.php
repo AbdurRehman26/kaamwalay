@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::group(function () {
-Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
-//});
+Route::middleware(['role:admin'])->group(function () {
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
+});

@@ -10,10 +10,6 @@ use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCustomerShipmentRes
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
-use App\Http\Resources\API\Customer\User\UserResource;
-use App\Models\Order;
-use App\Models\OrderStatus;
-use App\Services\Payment\Providers\StripeService;
 use Illuminate\Http\Request;
 
 class OrderResource extends BaseResource
@@ -36,7 +32,7 @@ class OrderResource extends BaseResource
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
             'created_at' => $this->formatDate($this->created_at),
-            'customer' => new UserResource($this->user),
+            'customer' => new OrderCustomerResource($this->user),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),

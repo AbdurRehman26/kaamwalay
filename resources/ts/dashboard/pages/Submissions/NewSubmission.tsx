@@ -173,8 +173,11 @@ export function NewSubmission() {
                                     color={'primary'}
                                     onClick={handleNext}
                                     className={classes.nextBtn}
+                                    startIcon={
+                                        isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null
+                                    }
                                 >
-                                    {isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : 'Next'}
+                                    Next
                                 </Button>
                             ) : null}
                         </div>

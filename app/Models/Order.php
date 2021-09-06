@@ -133,4 +133,9 @@ class Order extends Model
     {
         return $this->grand_total * 100;
     }
+
+    public function hasOrderArrived()
+    {
+        return ! in_array($this->status, [1, 2]);
+    }
 }

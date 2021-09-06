@@ -15,6 +15,11 @@ class OrderStatus extends Model
     ];
 
     public const DEFAULT_ORDER_STATUS = self::STATUSES['payment_pending'];
+    public const IS_ARRIVED_ORDER_STATUSES = [
+        'payment_pending' => 1,
+        'placed' => 2,
+        'cancelled' => 6,
+    ];
 
 
     /**

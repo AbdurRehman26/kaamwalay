@@ -27,11 +27,11 @@ class OrderItemFactory extends Factory
     public function definition()
     {
         return [
-            'order_id' => Order::factory(),
-            'card_product_id' => CardProduct::factory(),
+            'order_id' => Order::inRandomOrder()->first()->id,
+            'card_product_id' => CardProduct::inRandomOrder()->first()->id,
             'order_item_shipment_id' => OrderItemShipment::factory(),
             'order_item_customer_shipment_id' => OrderItemCustomerShipment::factory(),
-            'quantity' => $this->faker->numberBetween(1, 10000),
+            'quantity' => $this->faker->numberBetween(1, 50),
             'name' => $this->faker->name,
             'description' => $this->faker->text,
             'declared_value_per_unit' => $this->faker->randomFloat(2, 1, 99999999.99),

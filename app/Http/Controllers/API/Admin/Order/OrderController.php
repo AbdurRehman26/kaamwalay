@@ -8,6 +8,7 @@ use App\Http\Resources\API\Admin\Order\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderController extends Controller
@@ -15,8 +16,12 @@ class OrderController extends Controller
     public function index(): OrderListCollection
     {
         $orders = QueryBuilder::for(Order::class)
-            ->allowedFilters(['order_number', 'id', 'order_status_id'])
-            ->allowedSorts(['order_status_id', 'grand_total'])
+            ->allowedFilters([
+                'order_number',
+                'id',
+                AllowedFilter::exact('order_status_id'),
+            ])
+            ->allowedSorts(['order_status_id', 'grand_total', 'created_at'])
             ->placed()
             ->latest()
             ->paginate(request('per_page', 15));

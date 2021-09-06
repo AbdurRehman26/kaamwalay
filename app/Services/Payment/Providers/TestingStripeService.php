@@ -208,16 +208,4 @@ class TestingStripeService implements PaymentProviderServiceInterface
             ],
         ];
     }
-
-
-
-    public function retrievePaymentMethod(string $id, $failure = false): ?array
-    {
-        if (! $failure) {
-            return [
-
-            ];
-        }
-        return null;
-    }
 }

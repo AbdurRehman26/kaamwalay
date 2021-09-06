@@ -168,18 +168,4 @@ class StripeService implements PaymentProviderServiceInterface
         $this->removeOldCustomerId($user);
         $this->createCustomerIfNull($user);
     }
-
-    public function retrievePaymentMethod(string $id): ?PaymentMethod
-    {
-        $stripe = Cashier::stripe([]);
-
-        try {
-            return $stripe->paymentMethods->retrieve($id);
-        } catch (ApiErrorException $exception) {
-            logger()->error('Unable to fetch the payment method', ['pyament_method_id' => $id]);
-            logger()->error('Stripe throws error while fetching single payment method', ['message' => $exception->getMessage()]);
-
-            return null;
-        }
-    }
 }

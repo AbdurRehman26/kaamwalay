@@ -5,6 +5,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
@@ -59,6 +60,7 @@ export function NewSubmission() {
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const notifications = useNotifications();
 
     const getStepContent = useCallback(() => {
         switch (currentStep) {
@@ -98,16 +100,21 @@ export function NewSubmission() {
             return;
         }
         if (currentStep === 3) {
-            ReactGA.event({
-                category: EventCategories.Submissions,
-                action:
-                    paymentMethodId === 1
-                        ? PaymentMethodEvents.continuedWithStripePayment
-                        : PaymentMethodEvents.continuedWithPaypalPayment,
-            });
-            await dispatch(createOrder());
-            dispatch(nextStep());
-            return;
+            try {
+                await dispatch(createOrder()).unwrap();
+                ReactGA.event({
+                    category: EventCategories.Submissions,
+                    action:
+                        paymentMethodId === 1
+                            ? PaymentMethodEvents.continuedWithStripePayment
+                            : PaymentMethodEvents.continuedWithPaypalPayment,
+                });
+                dispatch(nextStep());
+                return;
+            } catch (error) {
+                notifications.exception(error);
+                return;
+            }
         }
         dispatch(nextStep());
     };

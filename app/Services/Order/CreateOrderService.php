@@ -12,6 +12,7 @@ use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -21,7 +22,7 @@ class CreateOrderService
     protected array $data;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(array $data): Order
     {
@@ -32,7 +33,7 @@ class CreateOrderService
             $this->process();
 
             return $this->order;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
 
@@ -41,7 +42,7 @@ class CreateOrderService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function validate()
     {

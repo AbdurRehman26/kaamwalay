@@ -4,9 +4,9 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useParams } from 'react-router-dom';
+import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
+import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { useOrderQuery } from '@shared/hooks/useOrderQuery';
-import { ViewSubmissionBilling } from './ViewSubmissionBilling';
-import { ViewSubmissionDetails } from './ViewSubmissionDetails';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
 import { ViewSubmissionInformation } from './ViewSubmissionInformation';
 import { ViewSubmissionStatus } from './ViewSubmissionStatus';
@@ -50,7 +50,7 @@ export function ViewSubmission() {
                 total={data.grandTotal}
             />
             <Divider />
-            <ViewSubmissionBilling
+            <SubmissionViewBilling
                 shippingAddress={data.shippingAddress}
                 billingAddress={data.billingAddress}
                 cardExpirationMonth={data.orderPayment?.card?.expMonth}
@@ -58,7 +58,7 @@ export function ViewSubmission() {
                 cardLast4={data.orderPayment?.card?.last4}
                 cardType={data.orderPayment?.card?.brand}
             />
-            <ViewSubmissionDetails />
+            <SubmissionViewCards />
         </Grid>
     );
 }

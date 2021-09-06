@@ -22,7 +22,7 @@ class OrderController extends Controller
                 AllowedFilter::scope('status_code'),
             ])
             ->allowedSorts(['grand_total'])
-            ->latest()
+            ->defaultSort('-created_at')
             ->paginate(request('per_page', 15));
 
         return new OrderListCollection($orders);

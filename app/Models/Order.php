@@ -134,11 +134,6 @@ class Order extends Model
         return $this->grand_total * 100;
     }
 
-    public function hasOrderArrived()
-    {
-        return ! in_array($this->status, [1, 2]);
-    }
-
     public function scopeStatusCode(Builder $query, string $statusCode): Builder
     {
         return $query->whereHas('orderStatus', fn ($query) => $query->where('code', $statusCode));

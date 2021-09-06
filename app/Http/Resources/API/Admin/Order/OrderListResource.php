@@ -25,7 +25,7 @@ class OrderListResource extends BaseResource
             'grand_total' => $this->grand_total,
             'created_at' => $this->formatDate($this->created_at),
             'customer' => $this->user->email,
-            'arrived' => ! in_array($this->order_status_id, array_values(OrderStatus::IS_ARRIVED_ORDER_STATUSES)),
+            'arrived' => ! is_null($this->arrived_at),
         ];
     }
 }

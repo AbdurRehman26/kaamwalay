@@ -18,11 +18,10 @@ class OrderController extends Controller
         $orders = QueryBuilder::for(Order::class)
             ->allowedFilters([
                 'order_number',
-                'id',
+                AllowedFilter::exact('id'),
                 AllowedFilter::exact('order_status_id'),
             ])
-            ->allowedSorts(['order_status_id', 'grand_total', 'created_at'])
-            ->placed()
+            ->allowedSorts(['grand_total'])
             ->latest()
             ->paginate(request('per_page', 15));
 

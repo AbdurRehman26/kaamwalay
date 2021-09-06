@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\Admin\Order;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class OrderListCollection extends ResourceCollection
 {

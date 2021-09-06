@@ -5,13 +5,11 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Collection;
-use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\CardException;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
-use Stripe\PaymentMethod;
 use Stripe\SetupIntent;
 
 class StripeService implements PaymentProviderServiceInterface

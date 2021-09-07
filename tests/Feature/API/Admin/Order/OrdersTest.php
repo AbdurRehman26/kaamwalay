@@ -95,17 +95,8 @@ test('order details throws error for roles other than admin', function () {
         ->assertForbidden();
 })->group('admin', 'admin_orders');
 
-it('filters orders by order number', function () {
-    $this->getJson('/api/admin/orders?filter[order_number]=' . $this->orders[0]->order_number)
-        ->assertOk()
-        ->assertJsonCount(1, ['data'])
-        ->assertJsonFragment([
-            'order_number' => $this->orders[0]->order_number,
-        ]);
-})->group('admin', 'admin_orders');
-
 it('filters orders by id', function () {
-    $this->getJson('/api/admin/orders?filter[id]=' . $this->orders[0]->id)
+    $this->getJson('/api/admin/orders?filter[order_id]=' . $this->orders[0]->id)
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -167,4 +158,24 @@ it('returns orders order by desc grand_total', function () {
         Order::orderBy('grand_total', 'DESC')->pluck('id')->toArray(),
         collect($response->getData()->data)->pluck('id')->toArray()
     );
+})->group('admin', 'admin_orders');
+
+test('orders are filterable by customer first name', function () {
+    $user = $this->orders[0]->user;
+    $this->getJson('/api/admin/orders?filter[customer_name]=' . $user->first_name)
+        ->assertOk()
+        ->assertJsonCount($user->orders->count(), ['data'])
+        ->assertJsonFragment([
+            'customer' => $user->email,
+        ]);
+})->group('admin', 'admin_orders');
+
+test('orders are filterable by customer ID', function () {
+    $user = $this->orders[0]->user;
+    $this->getJson('/api/admin/orders?filter[customer_id]=' . $user->id)
+        ->assertOk()
+        ->assertJsonCount($user->orders->count(), ['data'])
+        ->assertJsonFragment([
+            'customer' => $user->email,
+        ]);
 })->group('admin', 'admin_orders');

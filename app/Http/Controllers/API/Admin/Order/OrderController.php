@@ -16,9 +16,10 @@ class OrderController extends Controller
     {
         $orders = QueryBuilder::for(Order::class)
             ->allowedFilters([
-                'order_number',
-                AllowedFilter::exact('id'),
+                AllowedFilter::exact('order_id', 'id'),
                 AllowedFilter::scope('status_code'),
+                AllowedFilter::scope('customer_name'),
+                AllowedFilter::scope('customer_id'),
             ])
             ->allowedSorts(['grand_total'])
             ->defaultSort('-created_at')

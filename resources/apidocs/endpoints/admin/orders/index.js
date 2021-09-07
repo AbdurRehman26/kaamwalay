@@ -6,8 +6,9 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {Array} [filter[order_number]] For filtering records by order number. E.g. filter[order_number]=RG000000001
- * @apiParam {Array} [filter[id]] For filtering records by order number. E.g. filter[id]=1
+ * @apiParam {Array} [filter[order_id]] For filtering records by order number. E.g. filter[order_id]=1
+ * @apiParam {Array} [filter[customer_id]] For filtering records by order number. E.g. filter[customer_id]=1
+ * @apiParam {Array} [filter[customer_name]] For filtering records by order number. E.g. filter[customer_name]=Jhon
  * @apiParam {Array} [filter[status_code]] For filtering records by order number. E.g. filter[status_code]=arrived
  * @apiParam {string} sort For sorting records, supporting params are [grand_total, -grand_total]. E.g. sort=grand_total
  *

@@ -138,4 +138,17 @@ class Order extends Model
     {
         return $query->whereHas('orderStatus', fn ($query) => $query->where('code', $statusCode));
     }
+
+    public function scopeCustomerName(Builder $query, string $customerName): Builder
+    {
+        return $query->whereHas(
+            'user',
+            fn ($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere('last_name', 'like', "%$customerName%")
+        );
+    }
+
+    public function scopeCustomerId(Builder $query, string $customerId): Builder
+    {
+        return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
+    }
 }

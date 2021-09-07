@@ -16,7 +16,6 @@ class UserCard extends Model
         'back_values',
         'overall_values',
         'overall_grade',
-        'certificate_number',
         'ai_model_numbers',
         'front_centering_img_src',
         'front_surface_img_src',
@@ -42,5 +41,10 @@ class UserCard extends Model
     public function orderItem(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\OrderItem::class);
+    }
+
+    public function userCardCertificate(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\App\Models\UserCardCertificate::class);
     }
 }

@@ -8,12 +8,18 @@ use App\Models\OrderItemStatus;
 use App\Models\ItemStatus;
 use App\Models\UserCard;
 use Illuminate\Support\Collection;
+use App\Exceptions\API\Customer\Order\OrderItem\ItemDontBelongToOrder;
+use App\Services\Order\UserCardService;
 
 class OrderItemsService
 {
 
-    public function changeStatus(OrderItem $item, array $request): OrderItem
+    public function changeStatus(Order $order, OrderItem $item, array $request): OrderItem
     {
+        if($item->order_id !== $order->id){
+            throw new ItemDontBelongToOrder;
+        }
+
         $latestStatus = $item->itemStatuses()->latest()->first();
         $requestStatus = OrderItemStatus::whereCode($request['status'])->first();
 
@@ -27,35 +33,23 @@ class OrderItemsService
 
             if ($requestStatus->id === OrderItemStatus::CONFIRMED_STATUS && !$item->userCard)
             {
-                $this->createItemUserCard($item);
+                (new UserCardService)->createItemUserCard($item);
             }
         }
 
-
         return $item->fresh();
     }
-
-    public function createItemUserCard(OrderItem $item): UserCard
-    {
-        $userCard = new UserCard();
-        $userCard->order_item_id = $item->id;
-        $userCard->user_id = $item->order->user_id;
-        $userCard->certificate_number = 'CALL_CERTIFICATE_NUMBER_SERVICE';
-        $userCard->save();
-
-        return $userCard;
-    }
-
 
     public function markItemsAsPending(Order $order, array $items): Collection
     {
         $processedItems = [];
         foreach($items as $item){
             $orderItem = OrderItem::find($item);
-            $processedItems[] = $this->changeStatus($orderItem,["status" => "pending"]);
+            $processedItems[] = $this->changeStatus($order,$orderItem,["status" => "pending"]);
         }
 
         return collect($processedItems);
     }
+
 
 }

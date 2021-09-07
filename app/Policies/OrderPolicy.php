@@ -29,4 +29,10 @@ class OrderPolicy
     {
         //
     }
+
+    public function review(User $user)
+    {
+        return $user->isAdmin() ;
+    }
+
 }

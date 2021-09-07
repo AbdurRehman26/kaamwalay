@@ -60,6 +60,15 @@ class User extends Authenticatable implements JWTSubject
         return $user;
     }
 
+    public static function createAdmin(array $data): self
+    {
+        $user = self::create($data);
+
+        $user->assignRole(Role::findByName(config('permission.roles.admin')));
+
+        return $user;
+    }
+
     public function customer_addresses(): HasMany
     {
         return $this->hasMany(CustomerAddress::class, 'user_id');

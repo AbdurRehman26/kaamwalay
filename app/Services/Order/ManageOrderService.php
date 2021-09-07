@@ -7,7 +7,7 @@ use App\Models\OrderItem;
 use App\Models\OrderAdminStatus;
 use App\Models\User;
 use App\Services\Order\OrderItemsService;
-use App\Services\Order\ConfirmItemService;
+use App\Exceptions\API\Customer\Order\OrderItem\ItemDontBelongToOrder;
 
 class ManageOrderService
 {
@@ -23,25 +23,28 @@ class ManageOrderService
         return $order;
     }
 
-
-    public function addExtraCard(Order $order, int $card_id): OrderItem
+    public function addExtraCard(Order $order, int $card_id, float $value): OrderItem
     {
         $newItem =  OrderItem::create([
             'order_id' => $order->id,
             'card_product_id' => $card_id,
             'quantity' => 1,
-            'declared_value_per_unit' => 0,
-            'declared_value_total' => 0,
+            'declared_value_per_unit' => $value,
+            'declared_value_total' => $value,
         ]);
 
-        return (new OrderItemsService)->changeStatus($newItem,["status" => "confirmed"]);
+        return (new OrderItemsService)->changeStatus($order,$newItem,["status" => "confirmed"]);
     }
 
-
-
-    public function editCard(Order $order, OrderItem $orderItem, int $card_id): OrderItem
+    public function editCard(Order $order, OrderItem $orderItem, int $card_id, float $value): OrderItem
     {
+        if($orderItem->order_id !== $order->id){
+            throw new ItemDontBelongToOrder;
+        }
+
         $orderItem->card_product_id = $card_id;
+        $orderItem->declared_value_per_unit = $value;
+        $orderItem->declared_value_total = $value;
         $orderItem->save();
 
         return $orderItem;

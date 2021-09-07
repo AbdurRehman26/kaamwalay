@@ -8,6 +8,10 @@ use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Database\Seeders\RolesSeeder;
+use Illuminate\Foundation\Testing\WithFaker;
+
+uses(WithFaker::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -223,4 +227,41 @@ test('a customer can filter orders by order number', function () {
     $response->assertJsonMissing([
         'order_number' => 'RG000000002',
     ]);
+});
+
+test('an admin can complete review of an order', function () {
+    $this->seed(RolesSeeder::class);
+
+    $adminUser = User::createAdmin([
+        'first_name' => $this->faker->firstName,
+        'last_name' => $this->faker->lastName,
+        'email' => $this->faker->safeEmail,
+        'username' => $this->faker->userName,
+        'password' => bcrypt('password'),
+    ]);
+
+    $this->actingAs($adminUser);
+
+    $order = Order::factory()->for($this->user)->create();
+    OrderItem::factory()->for($order)->create();
+
+    $response = $this->postJson('/api/customer/orders/' . $order->id . '/complete-review');
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'data' => ['reviewed_by', 'reviewed_at'],
+    ]);
+});
+
+test('a customer can not complete review of an order', function () {
+    $this->seed(RolesSeeder::class);
+
+    $this->actingAs($this->user);
+
+    $order = Order::factory()->for($this->user)->create();
+    OrderItem::factory()->for($order)->create();
+
+    $response = $this->postJson('/api/customer/orders/' . $order->id . '/complete-review');
+
+    $response->assertStatus(403);
 });

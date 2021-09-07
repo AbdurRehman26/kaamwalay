@@ -25,6 +25,7 @@ class AddExtraCardRequest extends FormRequest
     {
         return [
             'card_id' => 'required|integer',
+            'value' => 'required|numeric|min:1',
         ];
     }
 }

@@ -21,7 +21,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\Order\ConfirmItemService;
 use App\Services\Order\OrderItemsService;
 use App\Services\Order\ManageOrderService;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
@@ -86,6 +85,8 @@ class OrderController extends Controller
 
     public function completeReview(Request $request, Order $order, ManageOrderService $manageOrderService): OrderResource
     {
+        $this->authorize('review', $order);
+
         return new OrderResource($manageOrderService->confirmReview($order, $request->user()));
     }
 

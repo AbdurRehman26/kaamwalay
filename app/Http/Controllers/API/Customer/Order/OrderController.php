@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\Customer\Order;
 
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
-use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
@@ -17,8 +16,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\Order\CreateOrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Order\OrderItemsService;
@@ -48,7 +47,7 @@ class OrderController extends Controller
     {
         try {
             $order = $createOrderService->create($request->validated());
-        } catch (OrderNotPlaced $e) {
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

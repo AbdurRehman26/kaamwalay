@@ -20,7 +20,7 @@ class CreateUserCardsTable extends Migration
             $table->json('front_values')->nullable();
             $table->json('back_values')->nullable();
             $table->json('overall_values')->nullable();
-            $table->decimal('overall_grade',10,2)->nullable();
+            $table->decimal('overall_grade', 10, 2)->nullable();
             $table->string('certificate_number')->nullable();
             $table->json('ai_model_numbers')->nullable();
             $table->string('front_centering_img_src')->nullable();

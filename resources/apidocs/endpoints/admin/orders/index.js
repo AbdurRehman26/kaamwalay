@@ -6,10 +6,10 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {Array} [filter[order_id]] For filtering records by order number. E.g. filter[order_id]=1
- * @apiParam {Array} [filter[customer_id]] For filtering records by order number. E.g. filter[customer_id]=1
- * @apiParam {Array} [filter[customer_name]] For filtering records by order number. E.g. filter[customer_name]=Jhon
- * @apiParam {Array} [filter[status_code]] For filtering records by order number. E.g. filter[status_code]=arrived
+ * @apiParam {Array} [filter[order_id]] For filtering records by order ID. E.g. filter[order_id]=1
+ * @apiParam {Array} [filter[customer_id]] For filtering records by customer ID. E.g. filter[customer_id]=1
+ * @apiParam {Array} [filter[customer_name]] For filtering records by customer name. E.g. filter[customer_name]=Jhon
+ * @apiParam {Array} [filter[status_code]] For filtering records by order's status code. E.g. filter[status_code]=arrived
  * @apiParam {string} sort For sorting records, supporting params are [grand_total, -grand_total]. E.g. sort=grand_total
  *
  * @apiSuccess {Object} data Orders data

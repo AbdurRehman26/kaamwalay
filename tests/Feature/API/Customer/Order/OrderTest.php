@@ -278,7 +278,7 @@ test('an admin can complete review of an order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->postJson('/api/customer/orders/' . $order->id . '/complete-review');
+    $response = $this->postJson('/api/admin/orders/' . $order->id . '/complete-review');
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -294,10 +294,11 @@ test('a customer can not complete review of an order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->postJson('/api/customer/orders/' . $order->id . '/complete-review');
+    $response = $this->postJson('/api/admin/orders/' . $order->id . '/complete-review');
 
     $response->assertStatus(403);
 });
+
 test('a customer cannot place order with item declared value greater than schema limit', function () {
     $this->actingAs($this->user);
 

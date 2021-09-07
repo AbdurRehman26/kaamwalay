@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\API\Customer\Order\OrderItem;
+namespace App\Http\Requests\API\Admin\Order\OrderItem;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

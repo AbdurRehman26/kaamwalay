@@ -6,12 +6,9 @@ use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
-use App\Http\Requests\API\Customer\Order\AddExtraCardRequest;
-use App\Http\Requests\API\Customer\Order\MarkItemsPendingRequest;
 use App\Http\Resources\API\Customer\Order\OrderCollection;
 use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
-use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\Order\CreateOrderService;
@@ -20,9 +17,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\Order\OrderItemsService;
-use App\Services\Order\ManageOrderService;
-use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 
 class OrderController extends Controller
 {
@@ -80,13 +74,6 @@ class OrderController extends Controller
         }
 
         return new OrderResource($order);
-    }
-
-    public function completeReview(Request $request, Order $order, ManageOrderService $manageOrderService): OrderResource
-    {
-        $this->authorize('review', $order);
-
-        return new OrderResource($manageOrderService->confirmReview($order, $request->user()));
     }
 
 }

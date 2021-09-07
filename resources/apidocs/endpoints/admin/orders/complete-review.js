@@ -1,7 +1,7 @@
 /**
- * @api {post} /customer/orders/15/complete-review Complete order review
+ * @api {post} /admin/orders/15/complete-review Complete order review
  * @apiName Complete Order Review
- * @apiGroup Customer-Orders
+ * @apiGroup Admin Orders
  *
  * @apiUse header_main
  * @apiUse Authorization
@@ -24,10 +24,10 @@
  *            "created_at": "2021-08-12T19:15:32.000000Z",
  *            "customer": {
  *                "id": 17,
- *                "first_name": "Luis",
- *                "last_name": "Molina",
- *                "email": "luis@wooter.com",
- *                "username": "luis",
+ *                "first_name": "John",
+ *                "last_name": "Doe",
+ *                "email": "John@wooter.com",
+ *                "username": "John",
  *                "phone": null,
  *                "stripe_id": "cus_K1lUIejV1VeEK8",
  *                "roles": [
@@ -50,8 +50,8 @@
  *            },
  *            "shipping_address": {
  *                "id": 25,
- *                "first_name": "Luis",
- *                "last_name": "Molina",
+ *                "first_name": "John",
+ *                "last_name": "Doe",
  *                "address": "Test",
  *                "city": "Test",
  *                "state": "DE",
@@ -66,8 +66,8 @@
  *            },
  *            "billing_address": {
  *                "id": 25,
- *                "first_name": "Luis",
- *                "last_name": "Molina",
+ *                "first_name": "John",
+ *                "last_name": "Doe",
  *                "address": "Test",
  *                "city": "Test",
  *                "state": "DE",
@@ -115,7 +115,7 @@
  *                        },
  *                        "notes": null
  *                    },
- *                    "certificate_number": 3
+ *                    "certificate_number": "00000003"
  *                }
  *            ],
  *            "invoice": null,

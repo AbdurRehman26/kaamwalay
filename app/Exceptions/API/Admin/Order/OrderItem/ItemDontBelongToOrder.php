@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions\API\Customer\Order\OrderItem;
+namespace App\Exceptions\API\Admin\Order\OrderItem;
 
 use Exception;
 

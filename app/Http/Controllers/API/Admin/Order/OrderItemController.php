@@ -1,23 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\API\Customer\Order;
+namespace App\Http\Controllers\API\Admin\Order;
 
-use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
-use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
-use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
-use App\Http\Requests\API\Customer\Order\AddExtraCardRequest;
-use App\Http\Requests\API\Customer\Order\MarkItemsPendingRequest;
-use App\Http\Requests\API\Customer\Order\OrderItem\ChangeStatusRequest;
-use App\Http\Resources\API\Customer\Order\OrderCollection;
-use App\Http\Resources\API\Customer\Order\OrderCreateResource;
-use App\Http\Resources\API\Customer\Order\OrderResource;
+use App\Http\Requests\API\Admin\Order\AddExtraCardRequest;
+use App\Http\Requests\API\Admin\Order\MarkItemsPendingRequest;
+use App\Http\Requests\API\Admin\Order\OrderItem\ChangeStatusRequest;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Services\Order\CreateOrderService;
-use App\Services\Order\Shipping\CustomerShipmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -25,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Services\Order\OrderItemsService;
 use App\Services\Order\ManageOrderService;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
-use App\Exceptions\API\Customer\Order\OrderItem\ItemDontBelongToOrder;
+use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
 
 class OrderItemController extends Controller
 {

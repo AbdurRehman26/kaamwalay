@@ -1,6 +1,6 @@
 /**
- * @api {post} /customer/orders/11/cards/8/change-status Change Order Item Status
- * @apiName Change Order Item Status
+ * @api {put} /api/admin/orders/13/cards/91 Update Order Card
+ * @apiName Update Order Card
  * @apiGroup Order Cards
  *
  * @apiUse header_main
@@ -8,8 +8,8 @@
  *
  *  @apiParamExample {json} Request-Example:
  *      {
- *          "status": "missing",
- *          "notes": "Lorem"
+ *          "card_id": 75,
+ *          "value": 1.5
  *      }
  *
  * @apiSuccess {Object} data Card object
@@ -18,30 +18,30 @@
  *     HTTP/1.1 200 OK
  *     {
  *         "data": {
- *             "id": 8,
+ *             "id": 91,
  *             "quantity": 1,
- *             "declared_value_per_unit": 20,
+ *             "declared_value_per_unit": 1.5,
  *             "card_product": {
- *                 "id": 3,
- *                 "name": "Victreebel",
+ *                 "id": 70,
+ *                 "name": "Marowak",
  *                 "card_category_name": "Pokemon",
  *                 "card_set_name": "Battle Styles",
  *                 "card_series_name": "Sword & Shield Series",
  *                 "release_year": 2021,
- *                 "card_number_order": "003",
- *                 "image_path": "https://den-cards.pokellector.com/305/Victreebel.SWSH05.3.37530.png"
+ *                 "card_number_order": "070",
+ *                 "image_path": "https://den-cards.pokellector.com/305/Marowak.SWSH05.70.37594.png"
  *             },
  *             "status": {
- *                 "id": 100,
+ *                 "id": 93,
  *                 "order_item_status": {
- *                     "id": 2,
- *                     "code": "missing",
- *                     "name": "Missing",
- *                     "description": "Item is not present in the shipped box",
+ *                     "id": 4,
+ *                     "code": "confirmed",
+ *                     "name": "Confirmed",
+ *                     "description": "Item is present in the shipped box and will be graded",
  *                     "created_at": "2021-09-04T21:12:34.000000Z",
  *                     "updated_at": "2021-09-04T21:12:34.000000Z"
  *                 },
- *                 "notes": "Lorem"
+ *                 "notes": null
  *             },
  *             "certificate_number": null
  *         }

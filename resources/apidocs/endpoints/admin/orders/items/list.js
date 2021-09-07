@@ -1,5 +1,5 @@
 /**
- * @api {get} /customer/orders/13/cards Get Order Cards
+ * @api {get} /admin/orders/13/cards Get Order Cards
  * @apiName Order Cards
  * @apiGroup Order Cards
  *

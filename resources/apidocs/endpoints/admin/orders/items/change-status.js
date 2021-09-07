@@ -1,6 +1,6 @@
 /**
- * @api {put} {{host}}/api/customer/orders/13/cards/91 Update Order Card
- * @apiName Update Order Card
+ * @api {post} /admin/orders/11/cards/8/change-status Change Order Item Status
+ * @apiName Change Order Item Status
  * @apiGroup Order Cards
  *
  * @apiUse header_main
@@ -8,8 +8,8 @@
  *
  *  @apiParamExample {json} Request-Example:
  *      {
- *          "card_id": 75,
- *          "value": 1.5
+ *          "status": "missing",
+ *          "notes": "Lorem"
  *      }
  *
  * @apiSuccess {Object} data Card object
@@ -18,30 +18,30 @@
  *     HTTP/1.1 200 OK
  *     {
  *         "data": {
- *             "id": 91,
+ *             "id": 8,
  *             "quantity": 1,
- *             "declared_value_per_unit": 1.5,
+ *             "declared_value_per_unit": 20,
  *             "card_product": {
- *                 "id": 70,
- *                 "name": "Marowak",
+ *                 "id": 3,
+ *                 "name": "Victreebel",
  *                 "card_category_name": "Pokemon",
  *                 "card_set_name": "Battle Styles",
  *                 "card_series_name": "Sword & Shield Series",
  *                 "release_year": 2021,
- *                 "card_number_order": "070",
- *                 "image_path": "https://den-cards.pokellector.com/305/Marowak.SWSH05.70.37594.png"
+ *                 "card_number_order": "003",
+ *                 "image_path": "https://den-cards.pokellector.com/305/Victreebel.SWSH05.3.37530.png"
  *             },
  *             "status": {
- *                 "id": 93,
+ *                 "id": 100,
  *                 "order_item_status": {
- *                     "id": 4,
- *                     "code": "confirmed",
- *                     "name": "Confirmed",
- *                     "description": "Item is present in the shipped box and will be graded",
+ *                     "id": 2,
+ *                     "code": "missing",
+ *                     "name": "Missing",
+ *                     "description": "Item is not present in the shipped box",
  *                     "created_at": "2021-09-04T21:12:34.000000Z",
  *                     "updated_at": "2021-09-04T21:12:34.000000Z"
  *                 },
- *                 "notes": null
+ *                 "notes": "Lorem"
  *             },
  *             "certificate_number": null
  *         }

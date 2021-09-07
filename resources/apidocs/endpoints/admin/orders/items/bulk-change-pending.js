@@ -1,5 +1,5 @@
 /**
- * @api {post} /customer/orders/11/cards/bulk-pending Bulk Change Order Items Status to Pending
+ * @api {post} /admin/orders/11/cards/bulk-pending Bulk Change Order Items Status to Pending
  * @apiName Bulk Change Order Items Status to Pending
  * @apiGroup Order Cards
  *

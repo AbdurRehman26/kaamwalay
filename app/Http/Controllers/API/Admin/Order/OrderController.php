@@ -9,6 +9,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Services\Order\ManageOrderService;
 
 class OrderController extends Controller
 {
@@ -32,4 +33,12 @@ class OrderController extends Controller
     {
         return new OrderResource($order);
     }
+
+    public function completeReview(Request $request, Order $order, ManageOrderService $manageOrderService): OrderResource
+    {
+        $this->authorize('review', $order);
+
+        return new OrderResource($manageOrderService->confirmReview($order, $request->user()));
+    }
+
 }

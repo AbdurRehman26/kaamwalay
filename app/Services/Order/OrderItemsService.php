@@ -8,7 +8,7 @@ use App\Models\OrderItemStatus;
 use App\Models\ItemStatus;
 use App\Models\UserCard;
 use Illuminate\Support\Collection;
-use App\Exceptions\API\Customer\Order\OrderItem\ItemDontBelongToOrder;
+use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
 use App\Services\Order\UserCardService;
 
 class OrderItemsService

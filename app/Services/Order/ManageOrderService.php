@@ -7,7 +7,7 @@ use App\Models\OrderItem;
 use App\Models\OrderAdminStatus;
 use App\Models\User;
 use App\Services\Order\OrderItemsService;
-use App\Exceptions\API\Customer\Order\OrderItem\ItemDontBelongToOrder;
+use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
 
 class ManageOrderService
 {

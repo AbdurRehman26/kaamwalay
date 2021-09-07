@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\Admin\LoginController;
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use Illuminate\Support\Facades\Route;

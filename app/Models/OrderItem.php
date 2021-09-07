@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -63,5 +64,20 @@ class OrderItem extends Model
     public function orderItemCustomerShipment()
     {
         return $this->belongsTo(\App\Models\OrderItemCustomerShipment::class);
+    }
+
+    public function itemStatuses()
+    {
+        return $this->hasMany(\App\Models\ItemStatus::class);
+    }
+
+    public function userCard()
+    {
+        return $this->hasOne(\App\Models\UserCard::class);
+    }
+
+    public function scopeForOrder(Builder $query, Order $order): Builder
+    {
+        return $query->where('order_id', $order->id);
     }
 }

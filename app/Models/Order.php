@@ -23,12 +23,18 @@ class Order extends Model
         'user_id',
         'payment_plan_id',
         'order_status_id',
+        'order_admin_status_id',
         'shipping_order_address_id',
         'billing_order_address_id',
         'payment_method_id',
         'shipping_method_id',
         'invoice_id',
         'arrived_at',
+        'notes',
+        'reviewed_by_id',
+        'graded_by_id',
+        'reviewed_at',
+        'graded_at',
     ];
 
     /**
@@ -44,6 +50,7 @@ class Order extends Model
         'user_id' => 'integer',
         'payment_plan_id' => 'integer',
         'order_status_id' => 'integer',
+        'order_admin_status_id' => 'integer',
         'order_address_id' => 'integer',
         'shipping_order_address_id' => 'integer',
         'billing_order_address_id' => 'integer',
@@ -51,7 +58,11 @@ class Order extends Model
         'shipping_method_id' => 'integer',
         'invoice_id' => 'integer',
         'arrived_at' => 'date',
+        'reviewed_by_id' => 'integer',
+        'graded_by_id' => 'integer',
         'grand_total_cents' => 'integer',
+        'reviewed_at' => 'date',
+        'graded_at' => 'date',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -69,6 +80,11 @@ class Order extends Model
     public function orderStatus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\OrderStatus::class);
+    }
+
+    public function orderAdminStatus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\OrderAdminStatus::class);
     }
 
     public function shippingAddress(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -104,6 +120,16 @@ class Order extends Model
     public function orderPayment(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(OrderPayment::class);
+    }
+
+    public function reviewedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class,'reviewed_by_id');
+    }
+
+    public function gradedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class,'graded_by_id');
     }
 
     public function scopeForUser(Builder $query, User $user): Builder

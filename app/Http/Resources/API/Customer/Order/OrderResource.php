@@ -20,6 +20,7 @@ class OrderResource extends BaseResource
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
             'status' => $this->orderStatus->name ?? null,
+            'admin_status' => $this->orderAdminStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
@@ -33,6 +34,10 @@ class OrderResource extends BaseResource
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
             'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment),
+            'reviewed_by' => $this->reviewedBy ? $this->reviewedBy->getFullName() : null,
+            'reviewed_at' => $this->formatDate($this->reviewed_at),
+            'graded_by' => $this->gradedBy ? $this->gradedBy->getFullName() : null,
+            'graded_at' => $this->formatDate($this->graded_at),
         ];
     }
 }

@@ -35,11 +35,11 @@ class OrderFactory extends Factory
             'grand_total' => $this->faker->randomFloat(2, 20, 10000),
             'user_id' => User::factory()->withRole(config('permission.roles.customer')),
             'payment_plan_id' => PaymentPlan::factory(),
-            'order_status_id' => OrderStatus::inRandomOrder()->first()->id,
+            'order_status_id' => OrderStatus::factory(),
             'shipping_order_address_id' => OrderAddress::factory(),
             'billing_order_address_id' => OrderAddress::factory(),
             'payment_method_id' => PaymentMethod::factory(),
-            'shipping_method_id' => ShippingMethod::inRandomOrder()->first()->id,
+            'shipping_method_id' => ShippingMethod::factory(),
             'invoice_id' => Invoice::factory(),
             'arrived_at' => $this->faker->dateTime(),
         ];

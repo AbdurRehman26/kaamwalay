@@ -3,6 +3,7 @@
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
-    $this->paymentPlan = PaymentPlan::factory()->create();
+    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000]);
     $this->cardProduct = CardProduct::factory()->create();
     $this->shippingMethod = ShippingMethod::factory()->create();
     $this->paymentMethod = PaymentMethod::factory()->create();
@@ -145,14 +146,46 @@ test('a customer can see his order', function () {
 });
 
 test('a customer only see own orders', function () {
-    $someOtherCustomer = User::factory()->create();
-    Order::factory()->for($someOtherCustomer)->create();
+    Order::factory()->for(User::factory())
+        ->has(OrderItem::factory())
+        ->count(2)
+        ->create([
+            'order_status_id' => OrderStatus::STATUSES['placed'],
+        ]);
+
+    Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->count(2)
+        ->create([
+            'order_status_id' => OrderStatus::STATUSES['placed'],
+        ]);
 
     $this->actingAs($this->user);
     $response = $this->getJson('/api/customer/orders/');
 
     $response->assertOk();
-    $response->assertJsonCount(0, ['data']);
+    $response->assertJsonCount(2, ['data']);
+});
+
+test('a customer does not see payment pending orders', function () {
+    Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->count(2)
+        ->state(new Sequence(
+            [
+                'order_status_id' => OrderStatus::STATUSES['placed'],
+            ],
+            [
+                'order_status_id' => OrderStatus::STATUSES['payment_pending'],
+            ],
+        ))
+        ->create();
+
+    $this->actingAs($this->user);
+    $response = $this->getJson('/api/customer/orders/');
+
+    $response->assertOk();
+    $response->assertJsonCount(1, ['data']);
 });
 
 test('a customer cannot see order by another customer', function () {
@@ -223,4 +256,68 @@ test('a customer can filter orders by order number', function () {
     $response->assertJsonMissing([
         'order_number' => 'RG000000002',
     ]);
+});
+
+test('a customer cannot place order with item declared value greater than schema limit', function () {
+    $this->actingAs($this->user);
+
+    $response = $this->postJson('/api/customer/orders/', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 100,
+                'declared_value_per_unit' => 1000000,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+    ]);
+
+    $response->assertStatus(400);
+    $response->assertJsonStructure(['data' => 'error']);
 });

@@ -104,4 +104,9 @@ class User extends Authenticatable implements JWTSubject
     {
         $this->assignRole(Role::findByName(config('permission.roles.customer')));
     }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
 }

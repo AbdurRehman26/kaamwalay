@@ -20,9 +20,10 @@ class OrderPaid extends Notification
     public function toSlack($notifiable)
     {
         $paymentCode = ucfirst($this->order->paymentMethod->code);
+        $totalCards = $this->order->orderItems->sum('quantity');
 
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
-            ->content("{$this->order->user->getFullName()}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}");
+            ->content("{$this->order->user->getFullName()}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}");
     }
 }

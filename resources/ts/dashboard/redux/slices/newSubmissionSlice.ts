@@ -82,6 +82,7 @@ export interface PaymentSubmissionState {
 
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
+    isNextLoading: boolean;
     currentStep: number;
     step01Status: any;
     orderID: number;
@@ -98,6 +99,7 @@ const initialState: NewSubmissionSliceState = {
     grandTotal: 0,
     orderNumber: '',
     isNextDisabled: false,
+    isNextLoading: false,
     currentStep: 0,
     step01Status: null,
     step01Data: {
@@ -384,6 +386,10 @@ export const newSubmissionSlice = createSlice({
         setIsNextDisabled: (state, action: PayloadAction<boolean>) => {
             state.isNextDisabled = action.payload;
         },
+        setIsNextLoading: (state, action: PayloadAction<boolean>) => {
+            state.isNextDisabled = action.payload;
+            state.isNextLoading = action.payload;
+        },
         setSaveShippingAddress: (state, action: PayloadAction<boolean>) => {
             state.step03Data.saveForLater = action.payload;
         },
@@ -531,5 +537,6 @@ export const {
     setUseCustomShippingAddress,
     resetSelectedExistingAddress,
     setBillingAddress,
+    setIsNextLoading,
     clearSubmissionState,
 } = newSubmissionSlice.actions;

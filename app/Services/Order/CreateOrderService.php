@@ -2,7 +2,6 @@
 
 namespace App\Services\Order;
 
-use App\Exceptions\API\Customer\Order\OrderNotPlaced;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -11,7 +10,9 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\CustomerAddressValidator;
+use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -21,7 +22,7 @@ class CreateOrderService
     protected array $data;
 
     /**
-     * @throws OrderNotPlaced
+     * @throws Exception
      */
     public function create(array $data): Order
     {
@@ -32,16 +33,16 @@ class CreateOrderService
             $this->process();
 
             return $this->order;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
 
-            throw new OrderNotPlaced;
+            throw new $e;
         }
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function validate()
     {
@@ -152,6 +153,9 @@ class CreateOrderService
     {
         $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
         $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee;
+
+        GrandTotalValidator::validate($this->order);
+
         $this->order->save();
     }
 

@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -5,6 +6,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
@@ -21,6 +23,7 @@ import {
     getStatesList,
     nextStep,
     setIsNextDisabled,
+    setIsNextLoading,
 } from '../../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
@@ -54,11 +57,13 @@ export function NewSubmission() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const classes = useStyles({ currentStep });
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
+    const isNextLoading = useAppSelector((state) => state.newSubmission.isNextLoading);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const notifications = useNotifications();
 
     const getStepContent = useCallback(() => {
         switch (currentStep) {
@@ -98,16 +103,24 @@ export function NewSubmission() {
             return;
         }
         if (currentStep === 3) {
-            ReactGA.event({
-                category: EventCategories.Submissions,
-                action:
-                    paymentMethodId === 1
-                        ? PaymentMethodEvents.continuedWithStripePayment
-                        : PaymentMethodEvents.continuedWithPaypalPayment,
-            });
-            await dispatch(createOrder());
-            dispatch(nextStep());
-            return;
+            try {
+                dispatch(setIsNextLoading(true));
+                await dispatch(createOrder()).unwrap();
+                ReactGA.event({
+                    category: EventCategories.Submissions,
+                    action:
+                        paymentMethodId === 1
+                            ? PaymentMethodEvents.continuedWithStripePayment
+                            : PaymentMethodEvents.continuedWithPaypalPayment,
+                });
+                dispatch(setIsNextLoading(false));
+                dispatch(nextStep());
+                return;
+            } catch (error) {
+                dispatch(setIsNextLoading(false));
+                notifications.exception(error);
+                return;
+            }
         }
         dispatch(nextStep());
     };
@@ -160,6 +173,9 @@ export function NewSubmission() {
                                     color={'primary'}
                                     onClick={handleNext}
                                     className={classes.nextBtn}
+                                    startIcon={
+                                        isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null
+                                    }
                                 >
                                     Next
                                 </Button>

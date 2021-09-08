@@ -26,11 +26,13 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             CustomerAddressSeeder::class,
             InvoiceSeeder::class,
+            OrderSeeder::class,
             OrderItemSeeder::class,
             OrderItemShipmentSeeder::class,
             OrderItemCustomerShipmentSeeder::class,
-            OrderSeeder::class,
             StateSeeder::class,
+            SetOrderAdminStatusesSeeder::class,
+            InitializeOrderItemsAsPendingSeeder::class,
         ]);
 
         CardProduct::enableSearchSyncing();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\API\Customer\Order;
+namespace App\Http\Requests\API\Admin\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,6 +25,7 @@ class AddExtraCardRequest extends FormRequest
     {
         return [
             'card_id' => 'required|integer',
+            'value' => 'required|numeric|min:1',
         ];
     }
 }

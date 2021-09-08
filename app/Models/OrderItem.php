@@ -20,6 +20,7 @@ class OrderItem extends Model
         'card_product_id',
         'order_item_shipment_id',
         'order_item_customer_shipment_id',
+        'grading_id',
         'quantity',
         'unit_price',
         'total_price',

@@ -19,7 +19,7 @@ class InitializeOrderItemsAsPendingSeeder extends Seeder
 
         $items = OrderItem::all();
         foreach($items as $item){
-            $orderItemsService->changeStatus($item,["status" => "pending"]);
+            $orderItemsService->changeStatus($item->order,$item,["status" => "pending"]);
         }
     }
 }

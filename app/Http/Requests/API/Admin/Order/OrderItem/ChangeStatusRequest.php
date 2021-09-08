@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests\API\Customer\Order\OrderItem;
+namespace App\Http\Requests\API\Admin\Order\OrderItem;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ChangeStatusRequest extends FormRequest
 {
@@ -23,9 +24,14 @@ class ChangeStatusRequest extends FormRequest
      */
     public function rules()
     {
+        $requestStatus = $this->request->get('status');
+
         return [
-            'status' => 'required|string',
-            'notes' => 'sometimes|string',
+            'status' => ['required','string', Rule::in(['pending', 'missing', 'not_accepted', 'confirmed', 'graded'])],
+            'notes' => [
+                'string',
+                Rule::requiredIf(in_array($requestStatus,['missing','not_accepted']))
+            ],
         ];
     }
 }

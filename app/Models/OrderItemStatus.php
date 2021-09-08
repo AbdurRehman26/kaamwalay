@@ -30,5 +30,4 @@ class OrderItemStatus extends Model
     protected $casts = [
         'id' => 'integer',
     ];
-
 }

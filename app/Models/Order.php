@@ -168,7 +168,7 @@ class Order extends Model
         return $this->grand_total * 100;
     }
 
-    public function scopeStatus(Builder $query, string|int $status): Builder
+    public function scopeStatus(Builder $query, string | int $status): Builder
     {
         if (! $status || $status === 'all') {
             return $query;

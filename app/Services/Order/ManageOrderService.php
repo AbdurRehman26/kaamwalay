@@ -11,7 +11,6 @@ use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
 
 class ManageOrderService
 {
-
     public function confirmReview(Order $order, User $user): Order
     {
         $order->order_admin_status_id = OrderAdminStatus::REVIEWED_STATUS;

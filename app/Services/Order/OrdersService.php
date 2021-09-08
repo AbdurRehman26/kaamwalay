@@ -41,7 +41,7 @@ class OrdersService
             ->paginate($itemsPerPage);
     }
 
-    public function getOrder(int $order): Model|QueryBuilder
+    public function getOrder(int $order): Model | QueryBuilder
     {
         return QueryBuilder::for(Order::class)
             ->where('id', $order)

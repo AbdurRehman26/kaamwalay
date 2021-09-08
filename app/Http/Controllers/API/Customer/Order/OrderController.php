@@ -74,5 +74,4 @@ class OrderController extends Controller
 
         return new OrderResource($order);
     }
-
 }

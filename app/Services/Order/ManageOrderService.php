@@ -2,12 +2,11 @@
 
 namespace App\Services\Order;
 
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\OrderAdminStatus;
-use App\Models\User;
-use App\Services\Order\OrderItemsService;
 use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
+use App\Models\Order;
+use App\Models\OrderAdminStatus;
+use App\Models\OrderItem;
+use App\Models\User;
 
 class ManageOrderService
 {
@@ -24,7 +23,7 @@ class ManageOrderService
 
     public function addExtraCard(Order $order, int $card_id, float $value): OrderItem
     {
-        $newItem =  OrderItem::create([
+        $newItem = OrderItem::create([
             'order_id' => $order->id,
             'card_product_id' => $card_id,
             'quantity' => 1,
@@ -32,12 +31,12 @@ class ManageOrderService
             'declared_value_total' => $value,
         ]);
 
-        return (new OrderItemsService)->changeStatus($order,$newItem,["status" => "confirmed"]);
+        return (new OrderItemsService)->changeStatus($order, $newItem, ["status" => "confirmed"]);
     }
 
     public function editCard(Order $order, OrderItem $orderItem, int $card_id, float $value): OrderItem
     {
-        if($orderItem->order_id !== $order->id){
+        if ($orderItem->order_id !== $order->id) {
             throw new ItemDontBelongToOrder;
         }
 

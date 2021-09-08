@@ -15,7 +15,6 @@ use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\Order\OrderItemsService;
 
 class CreateOrderService
 {
@@ -141,7 +140,7 @@ class CreateOrderService
                 'declared_value_total' => $item['quantity'] * $item['declared_value_per_unit'],
             ]);
 
-            $orderItemsService->changeStatus($this->order,$storedItem,['status' => 'pending']);
+            $orderItemsService->changeStatus($this->order, $storedItem, ['status' => 'pending']);
         }
     }
 

@@ -55,7 +55,7 @@ class User extends Authenticatable implements JWTSubject
     {
         $user = self::create($data);
 
-        $user->assignRole(Role::findByName(config('permission.roles.customer')));
+        $user->assignCustomerRole();
 
         return $user;
     }
@@ -98,6 +98,11 @@ class User extends Authenticatable implements JWTSubject
     public function getNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function assignCustomerRole(): void
+    {
+        $this->assignRole(Role::findByName(config('permission.roles.customer')));
     }
 
     public function orders(): HasMany

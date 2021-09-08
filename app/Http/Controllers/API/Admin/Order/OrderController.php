@@ -35,5 +35,4 @@ class OrderController extends Controller
 
         return new OrderResource($manageOrderService->confirmReview($order, $request->user()));
     }
-
 }

@@ -8,7 +8,6 @@ use App\Models\UserCardCertificate;
 
 class UserCardService
 {
-
     public function createItemUserCard(OrderItem $item): UserCard
     {
         $userCard = new UserCard();

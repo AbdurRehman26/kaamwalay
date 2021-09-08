@@ -39,6 +39,7 @@ class User extends Authenticatable implements JWTSubject
         'id' => 'integer',
         'email_verified_at' => 'datetime',
     ];
+
     /**
      * The relations that should be returned with model.
      *

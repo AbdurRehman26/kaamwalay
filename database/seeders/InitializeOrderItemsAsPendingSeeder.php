@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Services\Order\OrderItemsService;
+use App\Services\Admin\Order\OrderItemService;
 use App\Models\OrderItem;
 
 class InitializeOrderItemsAsPendingSeeder extends Seeder
@@ -15,11 +15,11 @@ class InitializeOrderItemsAsPendingSeeder extends Seeder
      */
     public function run()
     {
-        $orderItemsService = new OrderItemsService();
+        $orderItemService = new OrderItemService();
 
         $items = OrderItem::all();
         foreach($items as $item){
-            $orderItemsService->changeStatus($item->order,$item,["status" => "pending"]);
+            $orderItemService->changeStatus($item->order,$item,["status" => "pending"]);
         }
     }
 }

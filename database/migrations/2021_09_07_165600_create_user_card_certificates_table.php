@@ -16,6 +16,7 @@ class CreateUserCardCertificatesTable extends Migration
         Schema::create('user_card_certificates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_card_id')->constrained()->unique()->nullable();
+            $table->string('number')->nullable();
             $table->timestamps();
         });
     }

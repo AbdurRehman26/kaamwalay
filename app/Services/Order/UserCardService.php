@@ -5,6 +5,7 @@ namespace App\Services\Order;
 use App\Models\OrderItem;
 use App\Models\UserCard;
 use App\Models\UserCardCertificate;
+use Illuminate\Support\Str;
 
 class UserCardService
 {
@@ -25,6 +26,9 @@ class UserCardService
     {
         $certificate = new UserCardCertificate();
         $certificate->user_card_id = $userCard->id;
+        $certificate->save();
+
+        $certificate->number = Str::padLeft($certificate->id, 8, '0');
         $certificate->save();
 
         return $certificate;

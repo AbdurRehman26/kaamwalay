@@ -4,7 +4,6 @@ namespace App\Http\Resources\API\Customer\Order\OrderItem;
 
 use App\Http\Resources\API\CardProduct\CardProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 
 class OrderItemResource extends JsonResource
 {

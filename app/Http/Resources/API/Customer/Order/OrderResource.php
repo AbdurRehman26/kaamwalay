@@ -20,7 +20,6 @@ class OrderResource extends BaseResource
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
             'status' => $this->orderStatus->name ?? null,
-            'admin_status' => $this->orderAdminStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,

@@ -5,6 +5,7 @@ namespace App\Services\Order;
 use App\Models\OrderItem;
 use App\Models\UserCard;
 use App\Models\UserCardCertificate;
+use App\Services\Order\Grading\CardGradingService;
 use Illuminate\Support\Str;
 
 class UserCardService
@@ -12,9 +13,14 @@ class UserCardService
 
     public function createItemUserCard(OrderItem $item): UserCard
     {
+        $cardGradingService = new CardGradingService;
         $userCard = new UserCard();
         $userCard->order_item_id = $item->id;
         $userCard->user_id = $item->order->user_id;
+        $userCard->human_grade_values = $cardGradingService->defaultValues('human');
+        $userCard->robo_grade_values = $cardGradingService->defaultValues('robo');
+        $userCard->overall_values = $cardGradingService->defaultValues('overall');
+        $userCard->overall_grade = 0.0;
         $userCard->save();
 
         $this->createCertificate($userCard);

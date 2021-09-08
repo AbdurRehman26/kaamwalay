@@ -27,7 +27,7 @@ class CardGradingService
         ];
     }
 
-    #[Pure] #[ArrayShape(['overall' => "int[]"])]
+    #[Pure] #[ArrayShape(['overall' => "float[]"])]
     protected function defaultOverallValues(): array
     {
         return [
@@ -35,14 +35,14 @@ class CardGradingService
         ];
     }
 
-    #[ArrayShape(['front' => "int", 'center' => "int", 'surface' => "int", 'edge' => "int"])]
+    #[ArrayShape(['front' => "float", 'center' => "float", 'surface' => "float", 'edge' => "float"])]
     protected function getDefaultSet(): array
     {
         return [
-            'front' => 0,
-            'center' => 0,
-            'surface' => 0,
-            'edge' => 0,
+            'front' => 0.0,
+            'center' => 0.0,
+            'surface' => 0.0,
+            'edge' => 0.0,
         ];
     }
 
@@ -52,7 +52,7 @@ class CardGradingService
         if (is_string($frontValues)) {
             $frontValues = json_decode($frontValues, associative: true);
         }
-//        dd($frontValues);
+
         return [
             'center' => $this->getAverage(Arr::get($frontValues, 'front.center'), Arr::get($frontValues, 'back.center')),
             'surface' => $this->getAverage(Arr::get($frontValues, 'front.surface'), Arr::get($frontValues, 'back.surface')),
@@ -71,6 +71,6 @@ class CardGradingService
 
     protected function getAverage(...$values): float
     {
-        return number_format((float)(array_sum($values) / count($values)), 1);
+        return number_format((float) (array_sum($values) / count($values)), 1);
     }
 }

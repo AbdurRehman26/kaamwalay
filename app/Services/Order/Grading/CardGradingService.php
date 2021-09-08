@@ -71,6 +71,9 @@ class CardGradingService
 
     protected function getAverage(...$values): float
     {
+        if (count($values) === 0) {
+            return 0.0;
+        }
         return number_format((float) (array_sum($values) / count($values)), 1);
     }
 }

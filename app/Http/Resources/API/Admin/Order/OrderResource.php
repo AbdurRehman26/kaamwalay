@@ -45,6 +45,7 @@ class OrderResource extends BaseResource
             'reviewed_at' => $this->when(!is_null($this->reviewedBy), $this->reviewed_at),
             'graded_by' => $this->when(!is_null($this->gradedBy), !is_null($this->gradedBy) ? $this->gradedBy->getFullName() : null),
             'graded_at' => $this->when(!is_null($this->gradedBy), $this->graded_at),
+            'notes' => $this->notes,
         ];
     }
 }

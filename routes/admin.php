@@ -19,6 +19,7 @@ use App\Http\Controllers\API\Admin\Order\UserCardController;
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
     Route::prefix('orders/')->group(function () {
+        Route::put('{order}/notes',[OrderController::class, 'updateNotes']);
         Route::get('{order}/cards', [OrderItemController::class, 'getOrderCards']);
         Route::post('{order}/cards/{orderItem}/change-status', [OrderItemController::class, 'changeStatus']);
         Route::post('{order}/cards/bulk-pending', [OrderItemController::class, 'bulkMarkAsPending']);

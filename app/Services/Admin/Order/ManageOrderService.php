@@ -47,4 +47,12 @@ class ManageOrderService
 
         return $orderItem;
     }
+
+    public function updateNotes(Order $order, $notes): Order
+    {
+        $order->notes = $notes;
+        $order->save();
+
+        return $order;
+    }
 }

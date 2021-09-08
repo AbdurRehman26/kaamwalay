@@ -33,7 +33,7 @@ class SerialNumberService
      * @param string $pad
      * @return string
      */
-    public static function for(CanBeSerialNumbered|string $subject, $value, int $len = 8, string $pad = '0')
+    public static function for(CanBeSerialNumbered | string $subject, $value, int $len = 8, string $pad = '0')
     {
         if (class_exists($subject) && method_exists($subject, 'getPrefixSerialNumber')) {
             // If subject it's a class and implements CanBeSerialNumbered interface.
@@ -61,7 +61,7 @@ class SerialNumberService
         return self::for(self::PREFIX_MAP[$name], ...$arguments);
     }
 
-    public function get(CanBeSerialNumbered|string $subject, $value, int $len = 8, string $pad = '0'): string
+    public function get(CanBeSerialNumbered | string $subject, $value, int $len = 8, string $pad = '0'): string
     {
         return self::for($subject, $value, $len, $pad);
     }

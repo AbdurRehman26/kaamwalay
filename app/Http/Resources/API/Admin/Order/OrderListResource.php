@@ -4,7 +4,6 @@ namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class OrderListResource extends BaseResource
 {

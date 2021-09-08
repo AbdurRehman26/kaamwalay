@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\Customer\Order\OrderItem;
 
 use App\Http\Resources\API\CardProduct\CardProductResource;
-use App\Http\Resources\API\Customer\Order\OrderItem\ItemStatusResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderItemResource extends JsonResource

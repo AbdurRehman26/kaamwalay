@@ -3,15 +3,12 @@
 namespace App\Services\Order;
 
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\OrderAdminStatus;
+use App\Models\OrderItem;
 use App\Models\User;
-use App\Services\Order\OrderItemsService;
-use App\Services\Order\ConfirmItemService;
 
 class ManageOrderService
 {
-
     public function confirmReview(Order $order, User $user): Order
     {
         $order->order_admin_status_id = OrderAdminStatus::REVIEWED_STATUS;
@@ -26,7 +23,7 @@ class ManageOrderService
 
     public function addExtraCard(Order $order, int $card_id): OrderItem
     {
-        $newItem =  OrderItem::create([
+        $newItem = OrderItem::create([
             'order_id' => $order->id,
             'card_product_id' => $card_id,
             'quantity' => 1,
@@ -34,7 +31,7 @@ class ManageOrderService
             'declared_value_total' => 0,
         ]);
 
-        return (new OrderItemsService)->changeStatus($newItem,["status" => "confirmed"]);
+        return (new OrderItemsService)->changeStatus($newItem, ["status" => "confirmed"]);
     }
 
 

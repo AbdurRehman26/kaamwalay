@@ -2,19 +2,14 @@
 
 namespace App\Services\Order;
 
-use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\UserCard;
-use App\Services\Order\OrderItemsService;
 
 class ConfirmItemService
 {
-
     public function process(OrderItem $orderItem): OrderItem
     {
-
-        if(!$orderItem->userCard){
-
+        if (! $orderItem->userCard) {
             $userCard = new UserCard();
             $userCard->order_item_id = $orderItem->id;
             $userCard->user_id = $orderItem->order->user_id;
@@ -24,5 +19,4 @@ class ConfirmItemService
 
         return (new OrderItemsService)->markAsConfirmed($orderItem->fresh());
     }
-
 }

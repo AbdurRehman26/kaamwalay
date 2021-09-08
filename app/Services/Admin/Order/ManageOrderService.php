@@ -4,7 +4,6 @@ namespace App\Services\Admin\Order;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\OrderAdminStatus;
 use App\Models\User;
 use App\Services\Admin\Order\OrderItemService;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
@@ -14,7 +13,6 @@ class ManageOrderService
 
     public function confirmReview(Order $order, User $user): Order
     {
-        $order->order_admin_status_id = OrderAdminStatus::REVIEWED_STATUS;
         $order->order_status_id = 3;
         $order->reviewed_by_id = $user->id;
         $order->reviewed_at = new \Datetime();

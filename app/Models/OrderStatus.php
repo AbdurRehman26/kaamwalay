@@ -14,7 +14,7 @@ class OrderStatus extends Model
     use HasFactory;
 
     public const PAYMENT_PENDING = 1;
-    public const PLACED = 1;
+    public const PLACED = 2;
 
     public const DEFAULT_ORDER_STATUS = self::PAYMENT_PENDING;
 
@@ -22,7 +22,6 @@ class OrderStatus extends Model
         'payment_pending' => self::PAYMENT_PENDING,
         'placed' => self::PLACED,
     ];
-
 
     /**
      * The attributes that are mass assignable.

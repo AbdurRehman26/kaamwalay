@@ -19,6 +19,7 @@ class OrdersService
         return QueryBuilder::for(Order::class)
             ->placed()
             ->forUser($user)
+            ->allowedFilters(['order_number'])
             ->allowedSorts(['grand_total'])
             ->defaultSort('-created_at')
             ->paginate($itemsPerPage);

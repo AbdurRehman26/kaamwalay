@@ -11,7 +11,7 @@ class PaymentMethodController extends Controller
 {
     public function index()
     {
-        return new PaymentMethodCollection(PaymentMethod::all());
+        return new PaymentMethodCollection(PaymentMethod::enabled()->get());
     }
 
     public function show(PaymentMethod $paymentMethod)

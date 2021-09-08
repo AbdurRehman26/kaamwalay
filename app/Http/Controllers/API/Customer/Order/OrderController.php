@@ -12,12 +12,10 @@ use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Order\CreateOrderService;
-use App\Services\Order\ManageOrderService;
 use App\Services\Order\OrdersService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -77,8 +75,4 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function completeReview(Request $request, Order $order, ManageOrderService $manageOrderService): OrderResource
-    {
-        return new OrderResource($manageOrderService->confirmReview($order, $request->user()));
-    }
 }

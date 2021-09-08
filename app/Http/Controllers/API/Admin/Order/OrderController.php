@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\Admin\Order\OrderResource;
 use App\Services\Order\OrdersService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -27,4 +28,12 @@ class OrderController extends Controller
 
         return new OrderResource($order);
     }
+
+    public function completeReview(Request $request, Order $order, ManageOrderService $manageOrderService): OrderResource
+    {
+        $this->authorize('review', $order);
+
+        return new OrderResource($manageOrderService->confirmReview($order, $request->user()));
+    }
+
 }

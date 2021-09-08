@@ -19,4 +19,14 @@ class UserCardController extends Controller
 
         return new UserCardResource($userCard);
     }
+
+    public function updateImage(UserCardImageRequest $request, UserCard $userCard): UserCardResource
+    {
+        ['source' => $source, 'field' => $field] = $request->validated();
+
+        $userCard->fill([$field => $source]);
+        $userCard->save();
+
+        return new UserCardResource($userCard);
+    }
 }

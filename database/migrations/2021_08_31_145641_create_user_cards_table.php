@@ -17,10 +17,10 @@ class CreateUserCardsTable extends Migration
             $table->id();
             $table->foreignId('order_item_id')->constrained()->unique();
             $table->foreignId('user_id')->constrained();
-            $table->json('front_values')->nullable();
-            $table->json('back_values')->nullable();
+            $table->json('human_grade_values')->nullable();
+            $table->json('robo_grade_values')->nullable();
             $table->json('overall_values')->nullable();
-            $table->decimal('overall_grade',10,2)->nullable();
+            $table->decimal('overall_grade', 10, 2)->nullable();
             $table->string('grading_id')->nullable();
             $table->json('ai_model_numbers')->nullable();
             $table->string('front_centering_img_src')->nullable();

@@ -14,7 +14,6 @@ use App\Models\Order;
 use App\Services\Order\CreateOrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -11,6 +11,7 @@ class UserCardCertificate extends Model
 
     protected $fillable = [
         'user_card_id',
+        'number',
     ];
 
     protected $casts = [

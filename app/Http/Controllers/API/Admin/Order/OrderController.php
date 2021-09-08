@@ -9,7 +9,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Services\Order\ManageOrderService;
+use App\Services\Admin\Order\ManageOrderService;
 
 class OrderController extends Controller
 {

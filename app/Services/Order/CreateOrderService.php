@@ -15,7 +15,7 @@ use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\Order\OrderItemsService;
+use App\Services\Admin\Order\OrderItemService;
 
 class CreateOrderService
 {
@@ -131,7 +131,7 @@ class CreateOrderService
 
     protected function storeOrderItems(array $items)
     {
-        $orderItemsService = new OrderItemsService();
+        $orderItemService = new OrderItemService();
         foreach ($items as $item) {
             $storedItem = OrderItem::create([
                 'order_id' => $this->order->id,
@@ -141,7 +141,7 @@ class CreateOrderService
                 'declared_value_total' => $item['quantity'] * $item['declared_value_per_unit'],
             ]);
 
-            $orderItemsService->changeStatus($this->order,$storedItem,['status' => 'pending']);
+            $orderItemService->changeStatus($this->order,$storedItem,['status' => 'pending']);
         }
     }
 

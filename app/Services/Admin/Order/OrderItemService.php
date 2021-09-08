@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\Admin\Order;
 
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -8,16 +8,16 @@ use App\Models\OrderItemStatus;
 use App\Models\ItemStatus;
 use App\Models\UserCard;
 use Illuminate\Support\Collection;
-use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
+use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Services\Order\UserCardService;
 
-class OrderItemsService
+class OrderItemService
 {
 
     public function changeStatus(Order $order, OrderItem $item, array $request): OrderItem
     {
         if($item->order_id !== $order->id){
-            throw new ItemDontBelongToOrder;
+            throw new OrderItemDoesNotBelongToOrder;
         }
 
         $latestStatus = $item->itemStatuses()->latest()->first();

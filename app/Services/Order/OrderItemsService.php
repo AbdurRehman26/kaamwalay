@@ -2,21 +2,21 @@
 
 namespace App\Services\Order;
 
+use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
 use App\Models\ItemStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
-use App\Models\UserCard;
 use Illuminate\Support\Collection;
-use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
-use App\Services\Order\UserCardService;
 
 class OrderItemsService
 {
-
+    /**
+     * @throws ItemDontBelongToOrder
+     */
     public function changeStatus(Order $order, OrderItem $item, array $request): OrderItem
     {
-        if($item->order_id !== $order->id){
+        if ($item->order_id !== $order->id) {
             throw new ItemDontBelongToOrder;
         }
 
@@ -30,9 +30,8 @@ class OrderItemsService
             $status->notes = in_array($requestStatus->id, [OrderItemStatus::MISSING_STATUS,OrderItemStatus::NOT_ACCEPTED_STATUS]) ? ($request['notes'] ?? null) : null;
             $status->save();
 
-            if ($requestStatus->id === OrderItemStatus::CONFIRMED_STATUS && !$item->userCard)
-            {
-                $this->createItemUserCard($item);
+            if ($requestStatus->id === OrderItemStatus::CONFIRMED_STATUS && ! $item->userCard) {
+                (new UserCardService)->createItemUserCard($item);
             }
         }
 
@@ -44,7 +43,7 @@ class OrderItemsService
         $processedItems = [];
         foreach ($items as $item) {
             $orderItem = OrderItem::find($item);
-            $processedItems[] = $this->changeStatus($orderItem, ["status" => "pending"]);
+            $processedItems[] = $this->changeStatus($order, $orderItem, ["status" => "pending"]);
         }
 
         return collect($processedItems);

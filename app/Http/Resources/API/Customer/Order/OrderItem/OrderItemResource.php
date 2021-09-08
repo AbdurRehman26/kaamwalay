@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\Customer\Order\OrderItem;
 
 use App\Http\Resources\API\CardProduct\CardProductResource;
-use App\Http\Resources\API\Customer\Order\OrderItem\ItemStatusResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderItemResource extends JsonResource
@@ -16,7 +15,7 @@ class OrderItemResource extends JsonResource
             'declared_value_per_unit' => $this->declared_value_per_unit,
             'card_product' => new CardProductResource($this->cardProduct),
             'status' => new ItemStatusResource($this->itemStatuses()->latest()->first()),
-            'certificate_number' => !!$this->userCard ? $this->userCard->userCardCertificate->number : null,
+            'certificate_number' => ! ! $this->userCard ? Str::padLeft($this->userCard->userCardCertificate->id, 8, '0') : null,
         ];
     }
 }

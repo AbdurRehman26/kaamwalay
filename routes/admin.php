@@ -2,6 +2,7 @@
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\Admin\Order\UserCardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,14 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
-    Route::prefix('orders')->group(function () {
-        Route::get('{order}/cards',[OrderItemController::class, 'getOrderCards']);
-        Route::post('{order}/cards/{orderItem}/change-status',[OrderItemController::class, 'changeStatus']);
-        Route::post('{order}/cards/bulk-pending',[OrderItemController::class, 'bulkMarkAsPending']);
-        Route::post('{order}/complete-review',[OrderController::class, 'completeReview']);
-        Route::post('{order}/cards',[OrderItemController::class, 'store']);
-        Route::put('{order}/cards/{orderItem}',[OrderItemController::class, 'update']);
+    Route::prefix('orders/')->group(function () {
+        Route::get('{order}/cards', [OrderItemController::class, 'getOrderCards']);
+        Route::post('{order}/cards/{orderItem}/change-status', [OrderItemController::class, 'changeStatus']);
+        Route::post('{order}/cards/bulk-pending', [OrderItemController::class, 'bulkMarkAsPending']);
+        Route::post('{order}/complete-review', [OrderController::class, 'completeReview']);
+        Route::post('{order}/cards', [OrderItemController::class, 'store']);
+        Route::put('{order}/cards/{orderItem}', [OrderItemController::class, 'update']);
     });
+    Route::put('user-cards/{userCard}/grades', [UserCardController::class, 'updateGradingValues']);
+    Route::put('user-cards/{userCard}/images', [UserCardController::class, 'updateImage']);
+    Route::delete('user-cards/{userCard}/images', [UserCardController::class, 'deleteImage']);
 });

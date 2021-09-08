@@ -69,7 +69,7 @@ it('returns orders list for admin', function () {
 })->group('admin', 'admin_orders');
 
 it('returns order details', function () {
-    $this->getJson('api/admin/orders/1')
+    $this->getJson('api/admin/orders/1?include=customer')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -105,7 +105,7 @@ it('filters orders by id', function () {
 })->group('admin', 'admin_orders');
 
 it('returns only placed orders', function () {
-    $this->getJson('/api/admin/orders?filter[status_code]=placed')
+    $this->getJson('/api/admin/orders?filter[status]=placed')
         ->assertOk()
         ->assertJsonFragment([
             'status' => OrderStatus::find(2)->name,
@@ -116,7 +116,7 @@ it('returns only placed orders', function () {
 })->group('admin', 'admin_orders');
 
 it('returns only reviewed orders', function () {
-    $this->getJson('/api/admin/orders?filter[status_code]=reviewed')
+    $this->getJson('/api/admin/orders?filter[status]=reviewed')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -125,7 +125,7 @@ it('returns only reviewed orders', function () {
 })->group('admin', 'admin_orders');
 
 it('returns only graded orders', function () {
-    $this->getJson('/api/admin/orders?filter[status_code]=graded')
+    $this->getJson('/api/admin/orders?filter[status]=graded')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -134,7 +134,7 @@ it('returns only graded orders', function () {
 })->group('admin', 'admin_orders');
 
 it('returns only shipped orders', function () {
-    $this->getJson('/api/admin/orders?filter[status_code]=shipped')
+    $this->getJson('/api/admin/orders?filter[status]=shipped')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([

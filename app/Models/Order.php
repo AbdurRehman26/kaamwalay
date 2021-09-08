@@ -5,7 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property OrderStatus $orderStatus
+ * @property int $order_status_id
+ * @property float $grand_total
+ */
 class Order extends Model
 {
     use HasFactory;
@@ -67,69 +75,69 @@ class Order extends Model
 
     protected $appends = ['grand_total_cents'];
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function paymentPlan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function paymentPlan(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\PaymentPlan::class);
+        return $this->belongsTo(PaymentPlan::class);
     }
 
-    public function orderStatus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function orderStatus(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderStatus::class);
+        return $this->belongsTo(OrderStatus::class);
     }
 
-    public function orderAdminStatus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function orderAdminStatus(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderAdminStatus::class);
+        return $this->belongsTo(OrderAdminStatus::class);
     }
 
-    public function shippingAddress(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function shippingAddress(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderAddress::class, 'shipping_order_address_id');
+        return $this->belongsTo(OrderAddress::class, 'shipping_order_address_id');
     }
 
-    public function billingAddress(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function billingAddress(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderAddress::class, 'billing_order_address_id');
+        return $this->belongsTo(OrderAddress::class, 'billing_order_address_id');
     }
 
-    public function paymentMethod(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function paymentMethod(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\PaymentMethod::class);
+        return $this->belongsTo(PaymentMethod::class);
     }
 
-    public function shippingMethod(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function shippingMethod(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\ShippingMethod::class);
+        return $this->belongsTo(ShippingMethod::class);
     }
 
-    public function invoice(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function invoice(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Invoice::class);
+        return $this->belongsTo(Invoice::class);
     }
 
-    public function orderItems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    public function orderPayment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function orderPayment(): HasOne
     {
         return $this->hasOne(OrderPayment::class);
     }
 
-    public function reviewedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function reviewedBy(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class,'reviewed_by_id');
+        return $this->belongsTo(User::class, 'reviewed_by_id');
     }
 
-    public function gradedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function gradedBy(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class,'graded_by_id');
+        return $this->belongsTo(User::class, 'graded_by_id');
     }
 
     public function scopeForUser(Builder $query, User $user): Builder
@@ -160,9 +168,18 @@ class Order extends Model
         return $this->grand_total * 100;
     }
 
-    public function scopeStatusCode(Builder $query, string $statusCode): Builder
+    public function scopeStatus(Builder $query, string|int $status): Builder
     {
-        return $query->whereHas('orderStatus', fn ($query) => $query->where('code', $statusCode));
+        if (! $status || $status === 'all') {
+            return $query;
+        }
+
+        return $query->whereHas(
+            'orderStatus',
+            fn ($query) => $query
+                ->where('id', $status)
+                ->orWhere('code', $status)
+        );
     }
 
     public function scopeCustomerName(Builder $query, string $customerName): Builder

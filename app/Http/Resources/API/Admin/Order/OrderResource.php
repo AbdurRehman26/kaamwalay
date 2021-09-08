@@ -32,7 +32,7 @@ class OrderResource extends BaseResource
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
             'created_at' => $this->formatDate($this->created_at),
-            'customer' => new OrderCustomerResource($this->user),
+            'customer' => $this->whenLoaded('user', fn () => new OrderCustomerResource($this->user)),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),

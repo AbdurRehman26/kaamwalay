@@ -28,7 +28,7 @@ class UpdatePaymentProviderFee extends Command
 
         OrderPayment::join('orders', function ($join) {
             $join->on('orders.id', '=', 'order_payments.order_id');
-        })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
+        })->where('orders.order_status_id', OrderStatus::PLACED)
             ->whereNull('order_payments.provider_fee')
             ->select('order_payments.*')
             ->get()->each(function (OrderPayment $orderPayment) use ($paymentService) {

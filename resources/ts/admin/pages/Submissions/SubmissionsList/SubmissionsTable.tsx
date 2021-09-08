@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -15,8 +16,10 @@ import { upperFirst } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
+import { bracketParams } from '@shared/lib/api/bracketParams';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { font } from '@shared/styles/utils';
 
 interface SubmissionsTableProps {
@@ -24,12 +27,30 @@ interface SubmissionsTableProps {
 }
 
 export function SubmissionsTable({ tabFilter }: SubmissionsTableProps) {
-    const totals = 3;
     const heading = upperFirst(tabFilter);
+
+    const orders$ = useListAdminOrdersQuery({
+        params: {
+            filter: {
+                status: tabFilter,
+            },
+        },
+        ...bracketParams(),
+    });
+
+    const totals = orders$.pagination?.meta?.total ?? 0;
+
+    if (orders$.isLoading) {
+        return (
+            <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <Grid container direction={'column'}>
-            <Box padding={2.5}>
+            <Box pt={2.5} px={2} pb={2}>
                 <Typography variant={'h6'}>
                     {heading} {totals > 0 ? `(${totals})` : null}
                 </Typography>
@@ -51,46 +72,58 @@ export function SubmissionsTable({ tabFilter }: SubmissionsTableProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <TableCell>
-                                <MuiLink
-                                    component={Link}
-                                    color={'primary'}
-                                    to={'/submissions/RG808078787/view'}
-                                    className={font.fontWeightMedium}
-                                >
-                                    RG808078787
-                                </MuiLink>
-                            </TableCell>
-                            <TableCell>{formatDate(new Date(), 'MM/DD/YYYY')}</TableCell>
-                            <TableCell>{formatDate(new Date(), 'MM/DD/YYYY')}</TableCell>
-                            <TableCell>
-                                <MuiLink
-                                    component={Link}
-                                    color={'primary'}
-                                    to={'/customers/C89899190/view'}
-                                    className={font.fontWeightMedium}
-                                >
-                                    C89899190
-                                </MuiLink>
-                            </TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>
-                                <StatusChip label={'Reviewed'} />
-                            </TableCell>
-                            <TableCell>{formatCurrency(400)}</TableCell>
-                            <TableCell>{formatCurrency(60)}</TableCell>
-                            <TableCell align={'right'}>
-                                <Button variant={'contained'} color={'primary'}>
-                                    Review
-                                </Button>
-                            </TableCell>
-                            <TableCell align={'right'}>
-                                <IconButton size={'small'}>
-                                    <MoreVertIcon />
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
+                        {orders$.data?.length > 0 ? (
+                            orders$.data.map((item, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <MuiLink
+                                            component={Link}
+                                            color={'primary'}
+                                            to={`/submissions/${item.id}/view`}
+                                            className={font.fontWeightMedium}
+                                        >
+                                            {item.orderNumber}
+                                        </MuiLink>
+                                    </TableCell>
+                                    <TableCell>{formatDate(item.createdAt, 'MM/DD/YYYY')}</TableCell>
+                                    <TableCell>{formatDate(item.arrivedAt, 'MM/DD/YYYY')}</TableCell>
+                                    <TableCell>
+                                        <MuiLink
+                                            component={Link}
+                                            color={'primary'}
+                                            to={`/customers/${item.customerId}/view`}
+                                            className={font.fontWeightMedium}
+                                        >
+                                            {item.customerNumber}
+                                        </MuiLink>
+                                    </TableCell>
+                                    <TableCell>{item.numberOfCards}</TableCell>
+                                    <TableCell>
+                                        <StatusChip label={item.status as any} />
+                                    </TableCell>
+                                    <TableCell>{formatCurrency(item.totalDeclaredValue)}</TableCell>
+                                    <TableCell>{formatCurrency(item.grandTotal)}</TableCell>
+                                    <TableCell align={'right'}>
+                                        <Button variant={'contained'} color={'primary'}>
+                                            Review
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell align={'right'}>
+                                        <IconButton size={'small'}>
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell align={'center'} colSpan={9}>
+                                    <Box padding={2}>
+                                        <Typography variant={'subtitle2'}>We couldn't found any orders yet.</Typography>
+                                    </Box>
+                                </TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

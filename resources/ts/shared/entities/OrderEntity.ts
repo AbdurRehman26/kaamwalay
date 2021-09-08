@@ -66,4 +66,10 @@ export class OrderEntity extends Entity {
 
     @Type(() => InvoiceEntity)
     public invoice!: InvoiceEntity | null;
+
+    @Field('customer_id')
+    public customerId!: number;
+
+    @Field('customer_number')
+    public customerNumber!: string;
 }

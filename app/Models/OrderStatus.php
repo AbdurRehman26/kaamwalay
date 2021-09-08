@@ -4,17 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property string $code
+ */
 class OrderStatus extends Model
 {
     use HasFactory;
 
-    public const STATUSES = [
-        'payment_pending' => 1,
-        'placed' => 2,
-    ];
+    public const PAYMENT_PENDING = 1;
+    public const PLACED = 1;
 
-    public const DEFAULT_ORDER_STATUS = self::STATUSES['payment_pending'];
+    public const DEFAULT_ORDER_STATUS = self::PAYMENT_PENDING;
+
+    public const STATUSES = [
+        'payment_pending' => self::PAYMENT_PENDING,
+        'placed' => self::PLACED,
+    ];
 
 
     /**
@@ -34,8 +41,8 @@ class OrderStatus extends Model
         'order_state_id' => 'integer',
     ];
 
-    public function orderState()
+    public function orderState(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderState::class);
+        return $this->belongsTo(OrderState::class);
     }
 }

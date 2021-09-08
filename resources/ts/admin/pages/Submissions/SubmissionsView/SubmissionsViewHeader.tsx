@@ -13,6 +13,8 @@ import { useOrderStatus } from '../../../hooks/useOrderStatus';
 
 interface SubmissionViewHeaderProps {
     orderId: string | number;
+    orderNumber: string;
+    isLoading?: boolean;
     isReviewed?: boolean;
     isGraded?: boolean;
     isShipped?: boolean;
@@ -42,7 +44,13 @@ const useStyles = makeStyles(
     { name: 'SubmissionViewHeader' },
 );
 
-export function SubmissionsViewHeader({ orderId, isReviewed, isGraded, isShipped }: SubmissionViewHeaderProps) {
+export function SubmissionsViewHeader({
+    orderId,
+    orderNumber,
+    isReviewed,
+    isGraded,
+    isShipped,
+}: SubmissionViewHeaderProps) {
     const classes = useStyles();
 
     const [statusType, statusLabel] = useOrderStatus({ isGraded, isReviewed, isShipped });
@@ -87,7 +95,7 @@ export function SubmissionsViewHeader({ orderId, isReviewed, isGraded, isShipped
             <Grid container className={classes.header}>
                 <Grid container item xs alignItems={'center'}>
                     <Typography variant={'h6'} className={classes.heading}>
-                        Submission # <span className={font.fontWeightBold}>RG80808078787</span>
+                        Submission # <span className={font.fontWeightBold}>{orderNumber}</span>
                     </Typography>
                     <StatusChip color={statusType} label={statusLabel} />
                 </Grid>

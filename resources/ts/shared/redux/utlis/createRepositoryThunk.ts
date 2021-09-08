@@ -71,8 +71,8 @@ export function createRepositoryThunk<
             .addCase(listAction.fulfilled, (state, { payload }) => {
                 const { data, meta, links } = payload;
                 const { entities, ids } = serializeDataList(data);
-                state.ids = uniq([...state.ids, ...ids]);
-                state.entities = { ...state.entities, ...entities };
+                state.ids = uniq(ids);
+                state.entities = { ...entities } as any;
                 state.pagination.links = links;
                 state.pagination.meta = meta;
                 state.isLoading.list = false;

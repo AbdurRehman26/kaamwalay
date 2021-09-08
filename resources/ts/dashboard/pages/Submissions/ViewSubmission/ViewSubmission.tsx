@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { useParams } from 'react-router-dom';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
-import { useOrderQuery } from '@shared/hooks/useOrderQuery';
+import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
 import { ViewSubmissionInformation } from './ViewSubmissionInformation';
 import { ViewSubmissionStatus } from './ViewSubmissionStatus';

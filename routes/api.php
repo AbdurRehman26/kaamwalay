@@ -52,15 +52,14 @@ Route::prefix('customer')->group(function () {
             Route::get('{order}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
-            Route::apiResource('/', OrderController::class)
-                ->only(['index', 'store']);
-            Route::post('{order}/customer-shipment',[OrderController::class, 'updateCustomerShipment']);
-            Route::get('{order}/cards',[OrderItemController::class, 'getOrderCards']);
-            Route::post('{order}/cards/{orderItem}/change-status',[OrderItemController::class, 'changeStatus']);
-            Route::post('{order}/cards/bulk-pending',[OrderItemController::class, 'bulkMarkAsPending']);
-            Route::post('{order}/complete-review',[OrderController::class, 'completeReview']);
-            Route::post('{order}/cards',[OrderItemController::class, 'store']);
-            Route::put('{order}/cards/{orderItem}',[OrderItemController::class, 'update']);
+            Route::apiResource('/', OrderController::class)->only(['index', 'store']);
+            Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
+            Route::get('{order}/cards', [OrderItemController::class, 'getOrderCards']);
+            Route::post('{order}/cards/{orderItem}/change-status', [OrderItemController::class, 'changeStatus']);
+            Route::post('{order}/cards/bulk-pending', [OrderItemController::class, 'bulkMarkAsPending']);
+            Route::post('{order}/complete-review', [OrderController::class, 'completeReview']);
+            Route::post('{order}/cards', [OrderItemController::class, 'store']);
+            Route::put('{order}/cards/{orderItem}', [OrderItemController::class, 'update']);
         });
     });
 });

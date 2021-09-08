@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\SerialNumberService\SerialNumberService;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +13,9 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @property int $id
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword;
@@ -45,6 +49,11 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $with = ['roles:id,name'];
+    /**
+     * The attributes appended to the model.
+     * @var string[]
+     */
+    protected $appends = ['customer_number'];
 
     public function setPasswordAttribute($value)
     {
@@ -103,5 +112,10 @@ class User extends Authenticatable implements JWTSubject
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function getCustomerNumberAttribute(): string
+    {
+        return SerialNumberService::customer($this->id);
     }
 }

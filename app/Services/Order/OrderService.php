@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class OrdersService
+class OrderService
 {
     public function getPlacedOrders(User $user): LengthAwarePaginator
     {

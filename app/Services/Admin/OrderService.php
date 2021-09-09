@@ -10,21 +10,8 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class OrdersService
+class OrderService
 {
-    public function getCustomerPlacedOrders(User $user): LengthAwarePaginator
-    {
-        $itemsPerPage = request('per_page');
-
-        return QueryBuilder::for(Order::class)
-            ->placed()
-            ->forUser($user)
-            ->allowedFilters(['order_number'])
-            ->allowedSorts(['grand_total'])
-            ->defaultSort('-created_at')
-            ->paginate($itemsPerPage);
-    }
-
     public function getOrders(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');

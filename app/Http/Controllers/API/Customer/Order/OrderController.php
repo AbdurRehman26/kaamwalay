@@ -12,7 +12,7 @@ use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Order\CreateOrderService;
-use App\Services\Order\OrdersService;
+use App\Services\Order\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderController extends Controller
 {
     public function __construct(
-        public OrdersService $orderService,
+        public OrderService $orderService,
     ) {
         $this->authorizeResource(Order::class, 'order');
     }

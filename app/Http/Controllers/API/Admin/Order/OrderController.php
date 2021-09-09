@@ -8,13 +8,13 @@ use App\Http\Resources\API\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\Admin\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Admin\Order\ManageOrderService;
-use App\Services\Admin\OrdersService;
+use App\Services\Admin\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     public function __construct(
-        private OrdersService $ordersService
+        private OrderService $ordersService
     ) {
     }
 

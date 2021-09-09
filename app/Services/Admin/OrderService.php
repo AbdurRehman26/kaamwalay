@@ -3,7 +3,6 @@
 namespace App\Services\Admin;
 
 use App\Models\Order;
-use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\AllowedFilter;

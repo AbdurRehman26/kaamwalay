@@ -29,6 +29,43 @@ it('can return the default values for human_grade_values', function () {
         ]);
 })->group('admin', 'grading');
 
+it('can return the default values for robo_grade_values', function () {
+    $defaultSet = $this->service->defaultValues('robo');
+
+    expect($defaultSet)
+        ->toBeArray()
+        ->toHaveKeys(['front', 'back'])
+        ->front
+        ->toBeArray()
+        ->toMatchArray([
+            'center' => 0.0,
+            'surface' => 0.0,
+            'edge' => 0.0,
+            'corner' => 0.0,
+        ])
+        ->back
+        ->toBeArray()
+        ->toMatchArray([
+            'center' => 0.0,
+            'surface' => 0.0,
+            'edge' => 0.0,
+            'corner' => 0.0,
+        ]);
+})->group('admin', 'grading');
+
+it('can return the default values for overall_values', function () {
+    $defaultSet = $this->service->defaultValues('overall');
+
+    expect($defaultSet)
+        ->toBeArray()
+        ->toMatchArray([
+            'center' => 0.0,
+            'surface' => 0.0,
+            'edge' => 0.0,
+            'corner' => 0.0,
+        ]);
+})->group('admin', 'grading');
+
 it('calculates the overall grading values', function () {
     $humanGrades = [
         'front' => [

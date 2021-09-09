@@ -30,9 +30,7 @@ class CardGradingService
     #[Pure] #[ArrayShape(['overall' => "float[]"])]
     protected function defaultOverallValues(): array
     {
-        return [
-            'overall' => $this->getDefaultSet(),
-        ];
+        return $this->getDefaultSet();
     }
 
     #[ArrayShape(['center' => "float", 'surface' => "float", 'edge' => "float", 'corner' => "float"])]

@@ -25,6 +25,7 @@ class SerialNumber
     public function setValue(?int $value): self
     {
         $this->value = $value;
+
         return $this;
     }
 

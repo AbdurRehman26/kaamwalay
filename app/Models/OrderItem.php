@@ -21,6 +21,7 @@ class OrderItem extends Model
         'card_product_id',
         'order_item_shipment_id',
         'order_item_customer_shipment_id',
+        'order_item_status_id',
         'grading_id',
         'quantity',
         'unit_price',
@@ -42,6 +43,7 @@ class OrderItem extends Model
         'card_product_id' => 'integer',
         'order_item_shipment_id' => 'integer',
         'order_item_customer_shipment_id' => 'integer',
+        'order_item_status_id' => 'integer',
         'unit_price' => 'decimal:2',
         'total_price' => 'decimal:2',
         'declared_value_per_unit' => 'float',
@@ -68,9 +70,14 @@ class OrderItem extends Model
         return $this->belongsTo(OrderItemCustomerShipment::class);
     }
 
-    public function itemStatuses()
+    public function orderItemStatus()
     {
-        return $this->hasMany(ItemStatus::class);
+        return $this->belongsTo(OrderItemStatus::class);
+    }
+
+    public function orderItemStatusHistories()
+    {
+        return $this->hasMany(OrderItemStatusHistory::class);
     }
 
     public function userCard(): HasOne

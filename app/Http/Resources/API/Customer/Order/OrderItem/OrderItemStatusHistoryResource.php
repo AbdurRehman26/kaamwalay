@@ -4,7 +4,7 @@ namespace App\Http\Resources\API\Customer\Order\OrderItem;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ItemStatusResource extends JsonResource
+class OrderItemStatusHistoryResource extends JsonResource
 {
     public function toArray($request): array
     {

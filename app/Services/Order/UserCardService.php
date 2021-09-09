@@ -5,7 +5,7 @@ namespace App\Services\Order;
 use App\Models\OrderItem;
 use App\Models\UserCard;
 use App\Models\UserCardCertificate;
-use App\Services\Admin\Order\Grading\CardGradingService;
+use App\Services\Admin\CardGradingService;
 use Illuminate\Support\Str;
 
 class UserCardService

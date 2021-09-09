@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\Admin\Order\Grading\CardGradingService;
+use App\Services\Admin\CardGradingService;
 
 beforeEach(function () {
     $this->service = new CardGradingService;

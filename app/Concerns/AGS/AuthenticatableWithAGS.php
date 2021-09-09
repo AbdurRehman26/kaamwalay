@@ -41,6 +41,8 @@ trait AuthenticatableWithAGS
             )
         );
 
+        $user->assignCustomerRole();
+
         resolve(StripeService::class)->createCustomerIfNull($user);
 
         return $user;

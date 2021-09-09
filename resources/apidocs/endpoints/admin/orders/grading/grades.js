@@ -16,36 +16,11 @@
  * @apiParam {Float} human_grade_values.back.center back centering value for card. E.g. center=4.5
  * @apiParam {Float} human_grade_values.back.surface back surfacing value for card. E.g. surface=8.5
  * @apiParam {Float} human_grade_values.back.edge back edges value for card. E.g. edge=6.0
- * @apiParam {Float} human_grade_values.back.corner back corners value for card. E.g. corner=3.5* @apiParam {Array} human_grade_values For user card.
- * @apiParam {Array} robo_grade_values For user card retrieved from robogrades API.
- * @apiParam {Array} robo_grade_values.front card front values.
- * @apiParam {Float} robo_grade_values.front.center front centering value for card. E.g. center=4.5
- * @apiParam {Float} robo_grade_values.front.surface front surfacing value for card. E.g. surface=8.5
- * @apiParam {Float} robo_grade_values.front.edge front edges value for card. E.g. edge=6.0
- * @apiParam {Float} robo_grade_values.front.corner front corners value for card. E.g. corner=3.5
- * @apiParam {Array} robo_grade_values.back card back values.
- * @apiParam {Float} robo_grade_values.back.center back centering value for card. E.g. center=4.5
- * @apiParam {Float} robo_grade_values.back.surface back surfacing value for card. E.g. surface=8.5
- * @apiParam {Float} robo_grade_values.back.edge back edges value for card. E.g. edge=6.0
- * @apiParam {Float} robo_grade_values.back.corner back corners value for card. E.g. corner=3.5
+ * @apiParam {Float} human_grade_values.back.corner back corners value for card. E.g. corner=3.5
  *
  *  @apiParamExample {json} Request-Example:
  *      {
  *          "human_grade_values": {
- *              "front": {
- *                  "center": 4.0,
- *                  "surface": 5,
- *                  "edge": 4,
- *                  "corner": 8
- *              },
- *              "back": {
- *                  "center": 5.0,
- *                  "surface": 4,
- *                  "edge": 3,
- *                  "corner": 9
- *              }
- *          },
- *          "robo_grade_values": {
  *              "front": {
  *                  "center": 4.0,
  *                  "surface": 5,

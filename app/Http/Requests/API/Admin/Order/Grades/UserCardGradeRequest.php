@@ -36,17 +36,6 @@ class UserCardGradeRequest extends FormRequest
             'human_grade_values.back.surface' => ['required', 'numeric', 'max:10', 'min:0'],
             'human_grade_values.back.corner' => ['required', 'numeric', 'max:10', 'min:0'],
             'human_grade_values.back.edge' => ['required', 'numeric', 'max:10', 'min:0'],
-            'robo_grade_values' => ['required', 'array'],
-            'robo_grade_values.front' => ['required', 'array'],
-            'robo_grade_values.front.center' => ['required', 'numeric', 'max:10', 'min:0'],
-            'robo_grade_values.front.surface' => ['required', 'numeric', 'max:10', 'min:0'],
-            'robo_grade_values.front.corner' => ['required', 'numeric', 'max:10', 'min:0'],
-            'robo_grade_values.front.edge' => ['required', 'numeric', 'max:10', 'min:0'],
-            'robo_grade_values.back' => ['required', 'array'],
-            'robo_grade_values.back.center' => ['required', 'numeric', 'max:10', 'min:0'],
-            'robo_grade_values.back.surface' => ['required', 'numeric', 'max:10', 'min:0'],
-            'robo_grade_values.back.corner' => ['required', 'numeric', 'max:10', 'min:0'],
-            'robo_grade_values.back.edge' => ['required', 'numeric', 'max:10', 'min:0'],
         ];
     }
 

@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 
 class UserCardService
 {
-
     public function createItemUserCard(OrderItem $item): UserCard
     {
         $cardGradingService = new CardGradingService;

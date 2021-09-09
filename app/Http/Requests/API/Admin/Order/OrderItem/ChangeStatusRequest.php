@@ -30,7 +30,7 @@ class ChangeStatusRequest extends FormRequest
             'status' => ['required','string', Rule::in(['pending', 'missing', 'not_accepted', 'confirmed', 'graded'])],
             'notes' => [
                 'string',
-                Rule::requiredIf(in_array($requestStatus,['missing','not_accepted']))
+                Rule::requiredIf(in_array($requestStatus, ['missing','not_accepted'])),
             ],
         ];
     }

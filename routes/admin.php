@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\API\Auth\Admin\LoginController;
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
 use Illuminate\Support\Facades\Route;
@@ -16,9 +17,11 @@ use App\Http\Controllers\API\Admin\Order\UserCardController;
 |
 */
 
+Route::post('auth/login', LoginController::class)->middleware('guest');
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
     Route::prefix('orders/')->group(function () {
+        Route::put('{order}/notes',[OrderController::class, 'updateNotes']);
         Route::get('{order}/cards', [OrderItemController::class, 'getOrderCards']);
         Route::post('{order}/cards/{orderItem}/change-status', [OrderItemController::class, 'changeStatus']);
         Route::post('{order}/cards/bulk-pending', [OrderItemController::class, 'bulkMarkAsPending']);

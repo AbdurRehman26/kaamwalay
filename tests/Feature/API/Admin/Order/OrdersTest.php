@@ -179,3 +179,19 @@ test('orders are filterable by customer ID', function () {
             'customer' => $user->email,
         ]);
 })->group('admin', 'admin_orders');
+
+test('an admin can update order notes', function () {
+    $response = $this->putJson('/api/admin/orders/' . $this->orders[0]->id . '/notes', [
+        'notes' => 'Lorem Ipsum',
+    ])->assertOk();
+})->group('admin', 'admin_orders');
+
+test('a customer can not update order notes', function () {
+    $customerUser = User::factory()->withRole(config('permission.roles.customer'))->create();
+
+    $this->actingAs($customerUser);
+
+    $response = $this->putJson('/api/admin/orders/' . $this->orders[0]->id . '/notes', [
+        'notes' => 'Lorem Ipsum',
+    ])->assertForbidden();
+})->group('admin', 'admin_orders');

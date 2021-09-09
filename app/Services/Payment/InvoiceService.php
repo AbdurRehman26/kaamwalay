@@ -10,9 +10,9 @@ use App\Services\BarcodeService;
 use App\Services\PDFService;
 use Carbon\Carbon;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class InvoiceService
 {
@@ -58,8 +58,8 @@ class InvoiceService
         }
 
 
-        $items = OrderItem::select('card_product_id', 'declared_value_total','declared_value_per_unit', DB::raw('sum(quantity) as quantity'))
-        ->where('order_id',$order->id)
+        $items = OrderItem::select('card_product_id', 'declared_value_total', 'declared_value_per_unit', DB::raw('sum(quantity) as quantity'))
+        ->where('order_id', $order->id)
         ->groupBy(['card_product_id', 'declared_value_total','declared_value_per_unit'])
         ->get();
 

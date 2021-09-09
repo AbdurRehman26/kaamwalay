@@ -8,6 +8,7 @@ use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Services\Admin\Order\OrderItemService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
@@ -15,7 +16,6 @@ use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\Admin\Order\OrderItemService;
 
 class CreateOrderService
 {
@@ -141,7 +141,7 @@ class CreateOrderService
                 'declared_value_total' => $item['quantity'] * $item['declared_value_per_unit'],
             ]);
 
-            $orderItemService->changeStatus($this->order,$storedItem,['status' => 'pending']);
+            $orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending']);
         }
     }
 

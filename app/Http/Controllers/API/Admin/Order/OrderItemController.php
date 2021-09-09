@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\Admin\Order;
 
-use App\Exceptions\API\Admin\Order\OrderItem\ItemDontBelongToOrder;
+use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\AddExtraCardRequest;
 use App\Http\Requests\API\Admin\Order\MarkItemsPendingRequest;
@@ -11,12 +11,11 @@ use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Services\Admin\Order\ManageOrderService;
+use App\Services\Admin\Order\OrderItemService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\Admin\Order\OrderItemService;
-use App\Services\Admin\Order\ManageOrderService;
-use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 
 class OrderItemController extends Controller
 {
@@ -82,7 +81,7 @@ class OrderItemController extends Controller
         }
     }
 
-    public function bulkMarkAsPending(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection|JsonResponse
+    public function bulkMarkAsPending(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection | JsonResponse
     {
         $this->authorize('review', $order);
 

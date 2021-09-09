@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\API\Customer\Order\OrderItem;
 
-use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemStatusResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ItemStatusResource extends JsonResource

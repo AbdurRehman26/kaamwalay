@@ -13,5 +13,4 @@ class OrderItemPolicy
     {
         return $user->isAdmin() ;
     }
-
 }

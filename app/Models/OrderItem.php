@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderItem extends Model
 {
@@ -49,32 +50,32 @@ class OrderItem extends Model
 
     public function order()
     {
-        return $this->belongsTo(\App\Models\Order::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function cardProduct()
     {
-        return $this->belongsTo(\App\Models\CardProduct::class);
+        return $this->belongsTo(CardProduct::class);
     }
 
     public function orderItemShipment()
     {
-        return $this->belongsTo(\App\Models\OrderItemShipment::class);
+        return $this->belongsTo(OrderItemShipment::class);
     }
 
     public function orderItemCustomerShipment()
     {
-        return $this->belongsTo(\App\Models\OrderItemCustomerShipment::class);
+        return $this->belongsTo(OrderItemCustomerShipment::class);
     }
 
     public function itemStatuses()
     {
-        return $this->hasMany(\App\Models\ItemStatus::class);
+        return $this->hasMany(ItemStatus::class);
     }
 
-    public function userCard()
+    public function userCard(): HasOne
     {
-        return $this->hasOne(\App\Models\UserCard::class);
+        return $this->hasOne(UserCard::class);
     }
 
     public function scopeForOrder(Builder $query, Order $order): Builder

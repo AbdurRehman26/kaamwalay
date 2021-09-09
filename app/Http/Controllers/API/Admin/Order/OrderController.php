@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\Admin\Order\OrderResource;
 use App\Models\Order;
+use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
+use App\Services\Admin\Order\ManageOrderService;
+use App\Http\Requests\API\Admin\Order\UpdateNotesRequest;
 use App\Services\Order\ManageOrderService;
 use App\Services\Order\OrdersService;
 use Illuminate\Http\Request;
@@ -29,6 +34,11 @@ class OrderController extends Controller
         $order = $this->ordersService->getOrder($orderId);
 
         return new OrderResource($order);
+    }
+
+    public function updateNotes(UpdateNotesRequest $request, Order $order, ManageOrderService $manageOrderService): OrderResource
+    {
+        return new OrderResource($manageOrderService->updateNotes($order, $request->notes));
     }
 
     public function completeReview(Request $request, Order $order, ManageOrderService $manageOrderService): OrderResource

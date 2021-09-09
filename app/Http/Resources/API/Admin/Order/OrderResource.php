@@ -32,7 +32,7 @@ class OrderResource extends BaseResource
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
             'created_at' => $this->formatDate($this->created_at),
-            'customer' => $this->whenLoaded('user', fn () => new OrderCustomerResource($this->user)),
+            'customer' => new OrderCustomerResource($this->user),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),
@@ -41,10 +41,11 @@ class OrderResource extends BaseResource
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
             'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment),
-            'reviewed_by' => $this->when(! ! $this->reviewedBy, ! ! $this->reviewedBy ? $this->reviewedBy->getFullName() : null),
-            'reviewed_at' => $this->when(! ! $this->reviewedBy, $this->reviewed_at),
-            'graded_by' => $this->when(! ! $this->gradedBy, ! ! $this->gradedBy ? $this->gradedBy->getFullName() : null),
-            'graded_at' => $this->when(! ! $this->gradedBy, $this->graded_at),
+            'reviewed_by' => $this->when(!is_null($this->reviewedBy), !is_null($this->reviewedBy) ? $this->reviewedBy->getFullName() : null),
+            'reviewed_at' => $this->when(!is_null($this->reviewedBy), $this->reviewed_at),
+            'graded_by' => $this->when(!is_null($this->gradedBy), !is_null($this->gradedBy) ? $this->gradedBy->getFullName() : null),
+            'graded_at' => $this->when(!is_null($this->gradedBy), $this->graded_at),
+            'notes' => $this->notes,
         ];
     }
 }

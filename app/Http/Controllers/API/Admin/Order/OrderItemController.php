@@ -11,11 +11,12 @@ use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Services\Order\ManageOrderService;
-use App\Services\Order\OrderItemsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Admin\Order\OrderItemService;
+use App\Services\Admin\Order\ManageOrderService;
+use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 
 class OrderItemController extends Controller
 {
@@ -53,7 +54,7 @@ class OrderItemController extends Controller
             $result = $manageOrderService->editCard($order, $orderItem, $request->card_id, $request->value);
 
             return new OrderItemResource($result);
-        } catch (ItemDontBelongToOrder $e) {
+        } catch (OrderItemDoesNotBelongToOrder $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
@@ -63,15 +64,15 @@ class OrderItemController extends Controller
         }
     }
 
-    public function changeStatus(ChangeStatusRequest $request, Order $order, OrderItem $orderItem, OrderItemsService $orderItemsService): OrderItemResource | JsonResponse
+    public function changeStatus(ChangeStatusRequest $request, Order $order, OrderItem $orderItem, OrderItemService $orderItemService): OrderItemResource | JsonResponse
     {
         $this->authorize('review', $order);
 
         try {
-            $result = $orderItemsService->changeStatus($order, $orderItem, $request->all());
+            $result = $orderItemService->changeStatus($order, $orderItem, $request->all());
 
             return new OrderItemResource($result);
-        } catch (ItemDontBelongToOrder $e) {
+        } catch (OrderItemDoesNotBelongToOrder $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
@@ -81,15 +82,15 @@ class OrderItemController extends Controller
         }
     }
 
-    public function bulkMarkAsPending(MarkItemsPendingRequest $request, Order $order, OrderItemsService $orderItemsService): OrderItemCollection
+    public function bulkMarkAsPending(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection|JsonResponse
     {
         $this->authorize('review', $order);
 
         try {
-            $result = $orderItemsService->markItemsAsPending($order, $request->items);
+            $result = $orderItemService->markItemsAsPending($order, $request->items);
 
             return new OrderItemCollection($result);
-        } catch (ItemDontBelongToOrder $e) {
+        } catch (OrderItemDoesNotBelongToOrder $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

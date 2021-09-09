@@ -15,6 +15,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * @property int $id
+ * @property string $customer_number
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -25,7 +26,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -50,11 +51,6 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $with = ['roles:id,name'];
-    /**
-     * The attributes appended to the model.
-     * @var string[]
-     */
-    protected $appends = ['customer_number'];
 
     public function setPasswordAttribute($value)
     {
@@ -63,9 +59,11 @@ class User extends Authenticatable implements JWTSubject
 
     public static function createCustomer(array $data): self
     {
+        /* @var User $user */
         $user = self::create($data);
 
         $user->assignCustomerRole();
+        $user->assignCustomerNumber();
 
         return $user;
     }
@@ -114,9 +112,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasRole(config('permission.roles.admin'));
     }
 
-    public function getNameAttribute()
+    public function getNameAttribute(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        return $this->getFullName();
     }
 
     public function assignCustomerRole(): void
@@ -129,8 +127,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
-    public function getCustomerNumberAttribute(): string
+    private function assignCustomerNumber(): void
     {
-        return SerialNumberService::customer($this->id);
+        if (! $this->customer_number) {
+            $this->customer_number = SerialNumberService::customer($this->id)->toString();
+        }
     }
 }

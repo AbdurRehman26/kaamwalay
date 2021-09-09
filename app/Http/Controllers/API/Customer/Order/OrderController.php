@@ -32,7 +32,7 @@ class OrderController extends Controller
         $user = auth()->user();
 
         return new OrderCollection(
-            $this->orderService->getCustomerPlacedOrders($user)
+            $this->orderService->getPlacedOrders($user)
         );
     }
 

@@ -2,11 +2,10 @@
 
 namespace App\Services\SerialNumberService;
 
-use App\Interfaces\CanBeSerialNumbered;
 use Illuminate\Support\Str;
 
 /**
- * @method static customer(int $int, int $len = 8, string $pad = '0'): string
+ * @method static SerialNumber customer(?int $value = null, int $len = 8, string $pad = '0') Get a SerialNumber configured for customer
  */
 class SerialNumberService
 {
@@ -28,12 +27,12 @@ class SerialNumberService
      * with max. amount of 3 letter.
      *
      * @param CanBeSerialNumbered|string $subject
-     * @param $value
+     * @param ?int $value
      * @param int $len
      * @param string $pad
-     * @return string
+     * @return SerialNumber
      */
-    public static function for(CanBeSerialNumbered | string $subject, $value, int $len = 8, string $pad = '0')
+    public static function for(CanBeSerialNumbered | string $subject, ?int $value = null, int $len = 8, string $pad = '0'): SerialNumber
     {
         if (class_exists($subject) && method_exists($subject, 'getPrefixSerialNumber')) {
             // If subject it's a class and implements CanBeSerialNumbered interface.
@@ -53,7 +52,7 @@ class SerialNumberService
             $prefix = Str::substr(preg_replace('/[^A-Z]/', '', Str::studly($subject)), 0, 3);
         }
 
-        return (new SerialNumber($prefix, $len, $pad))->build($value);
+        return (new SerialNumber($prefix, $len, $pad))->setValue($value);
     }
 
     public static function __callStatic(string $name, array $arguments)

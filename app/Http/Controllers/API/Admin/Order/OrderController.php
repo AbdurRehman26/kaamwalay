@@ -8,7 +8,7 @@ use App\Http\Resources\API\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\Admin\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Admin\Order\ManageOrderService;
-use App\Services\Order\OrdersService;
+use App\Services\Admin\OrdersService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller

@@ -9,8 +9,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
-    public function getPlacedOrders(User $user): LengthAwarePaginator
+    public function getOrders(): LengthAwarePaginator
     {
+        /* @var User $user */
+        $user = auth()->user();
         $itemsPerPage = request('per_page');
 
         return QueryBuilder::for(Order::class)

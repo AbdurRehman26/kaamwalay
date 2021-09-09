@@ -28,11 +28,8 @@ class OrderController extends Controller
 
     public function index(): OrderCollection
     {
-        /* @var User $user */
-        $user = auth()->user();
-
         return new OrderCollection(
-            $this->orderService->getPlacedOrders($user)
+            $this->orderService->getOrders()
         );
     }
 

@@ -13,9 +13,13 @@ class AssignCustomerNumberToUsers extends Migration
      */
     public function up(): void
     {
-        User::query()->whereNull('customer_number')->update([
-            'customer_number' => SerialNumberService::customer()->toSql(),
-        ]);
+        // Skip running migration when db it's sqlite
+        // CONCAT function used as expression from
+        if (config('database.default') !== 'sqlite') {
+            User::query()->whereNull('customer_number')->update([
+                'customer_number' => SerialNumberService::customer()->toSql(),
+            ]);
+        }
     }
 
     /**

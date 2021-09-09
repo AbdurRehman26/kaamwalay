@@ -29,10 +29,10 @@ class OrderService
             ->paginate($itemsPerPage);
     }
 
-    public function getOrder(int $order): Model | QueryBuilder
+    public function getOrder(int $orderId): Model | QueryBuilder
     {
         return QueryBuilder::for(Order::class)
-            ->where('id', $order)
+            ->where('id', $orderId)
             ->allowedIncludes([
                 AllowedInclude::relationship('customer', 'user'),
             ])

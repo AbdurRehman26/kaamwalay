@@ -55,12 +55,12 @@ class SerialNumberService
         return (new SerialNumber($prefix, $len, $pad))->setValue($value);
     }
 
-    public static function __callStatic(string $name, array $arguments)
+    public static function __callStatic(string $name, array $arguments): SerialNumber
     {
         return self::for(self::PREFIX_MAP[$name], ...$arguments);
     }
 
-    public function get(CanBeSerialNumbered | string $subject, $value, int $len = 8, string $pad = '0'): string
+    public function get(CanBeSerialNumbered | string $subject, $value, int $len = 8, string $pad = '0'): SerialNumber
     {
         return self::for($subject, $value, $len, $pad);
     }

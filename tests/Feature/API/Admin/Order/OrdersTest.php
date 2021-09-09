@@ -181,8 +181,8 @@ test('orders are filterable by customer ID', function () {
 })->group('admin', 'admin_orders');
 
 test('an admin can update order notes', function () {
-    $response = $this->putJson('/api/admin/orders/' . $this->orders[0]->id . '/notes',[
-        'notes' => 'Lorem Ipsum'
+    $response = $this->putJson('/api/admin/orders/' . $this->orders[0]->id . '/notes', [
+        'notes' => 'Lorem Ipsum',
     ])->assertOk();
 })->group('admin', 'admin_orders');
 
@@ -191,7 +191,7 @@ test('a customer can not update order notes', function () {
 
     $this->actingAs($customerUser);
 
-    $response = $this->putJson('/api/admin/orders/' . $this->orders[0]->id . '/notes',[
-        'notes' => 'Lorem Ipsum'
+    $response = $this->putJson('/api/admin/orders/' . $this->orders[0]->id . '/notes', [
+        'notes' => 'Lorem Ipsum',
     ])->assertForbidden();
 })->group('admin', 'admin_orders');

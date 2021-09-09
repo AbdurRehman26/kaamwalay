@@ -117,12 +117,12 @@ class Order extends Model
 
     public function reviewedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class,'reviewed_by_id');
+        return $this->belongsTo(\App\Models\User::class, 'reviewed_by_id');
     }
 
     public function gradedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class,'graded_by_id');
+        return $this->belongsTo(\App\Models\User::class, 'graded_by_id');
     }
 
     public function scopeForUser(Builder $query, User $user): Builder

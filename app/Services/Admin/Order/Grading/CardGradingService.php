@@ -47,7 +47,7 @@ class CardGradingService
     }
 
     #[ArrayShape(['center' => "float", 'surface' => "float", 'edge' => "float", 'corner' => "float"])]
-    public function calculateOverallValues(array|string $frontValues): array
+    public function calculateOverallValues(array | string $frontValues): array
     {
         if (is_string($frontValues)) {
             $frontValues = json_decode($frontValues, associative: true);
@@ -61,11 +61,12 @@ class CardGradingService
         ];
     }
 
-    public function calculateOverallAverage(array|string $overAllValues): float
+    public function calculateOverallAverage(array | string $overAllValues): float
     {
         if (is_string($overAllValues)) {
             $overAllValues = json_decode($overAllValues, associative: true);
         }
+
         return $this->getAverage($overAllValues['center'], $overAllValues['surface'], $overAllValues['edge'], $overAllValues['corner']);
     }
 
@@ -74,6 +75,7 @@ class CardGradingService
         if (count($values) === 0) {
             return 0.0;
         }
+
         return number_format((float) (array_sum($values) / count($values)), 1);
     }
 }

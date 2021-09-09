@@ -4,7 +4,6 @@ namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
-use App\Models\OrderItem;
 
 class UserCardResource extends BaseResource
 {

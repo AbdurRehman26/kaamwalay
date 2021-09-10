@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\Admin\Order\Grades;
 
-use App\Services\Admin\CardGradingService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserCardGradeRequest extends FormRequest
@@ -37,15 +36,5 @@ class UserCardGradeRequest extends FormRequest
             'human_grade_values.back.corner' => ['required', 'numeric', 'max:10', 'min:0'],
             'human_grade_values.back.edge' => ['required', 'numeric', 'max:10', 'min:0'],
         ];
-    }
-
-    protected function passedValidation()
-    {
-        $cardGradingService = new CardGradingService;
-        $overallValues = $cardGradingService->calculateOverallValues($this->get('human_grade_values'));
-        $this->merge([
-            'overall_values' => $overallValues,
-            'overall_grade' => $cardGradingService->calculateOverallAverage($overallValues),
-        ]);
     }
 }

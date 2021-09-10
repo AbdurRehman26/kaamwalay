@@ -3,27 +3,27 @@
 namespace App\Listeners\API\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
-use App\Services\AGS\AGS;
+use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\Response;
 
 class RegisterWithAGS implements ShouldQueue, ShouldBeEncrypted
 {
+    public function __construct(protected AgsService $agsService)
+    {
+    }
+
     /**
      * Handle the event.
      *
      * @param CustomerRegistered $event
      * @return void
      */
-    public function handle(CustomerRegistered $event)
+    public function handle(CustomerRegistered $event): void
     {
-        $ags = new AGS();
-
-        if (! $ags->isEnabled()) {
-            logger('Skipping AGS as it is disabled.');
+        if (! $this->agsService->isEnabled()) {
+            logger('Skipping AgsService as it is disabled.');
 
             return;
         }
@@ -31,20 +31,14 @@ class RegisterWithAGS implements ShouldQueue, ShouldBeEncrypted
         $passwordKeysForAgs = ['password1', 'password2'];
         $user = $event->user;
 
-        $response = Http::post(
-            $ags->baseUrl() . '/registration/',
-            array_merge(
+        $this->agsService->register(
+            data: array_merge(
                 $user->only('username', 'email'),
                 array_fill_keys($passwordKeysForAgs, $password),
                 ['app_generated_id' => 'w' . Str::random(5) . time()]
             )
         );
 
-        if ($response->status() === Response::HTTP_CREATED) {
-            logger('User created on AGS successfully.', ['user_id' => $user->id]);
-
-            return;
-        }
-        logger()->error('Error occurred while creating user on AGS', ['user_id' => $user->id]);
+        logger('User created on AgsService successfully.', ['user_id' => $user->id]);
     }
 }

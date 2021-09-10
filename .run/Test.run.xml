@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test" type="PestRunConfigurationType" singleton="false">
     <option name="pestRunnerSettings">
-      <PestRunner method="" scope="ConfigurationFile" options="--parallel" />
+      <PestRunner method="" scope="ConfigurationFile" />
     </option>
     <option name="runnerSettings">
-      <PhpTestRunnerSettings method="" scope="ConfigurationFile" options="--parallel" />
+      <PhpTestRunnerSettings method="" scope="ConfigurationFile" />
     </option>
     <method v="2" />
   </configuration>

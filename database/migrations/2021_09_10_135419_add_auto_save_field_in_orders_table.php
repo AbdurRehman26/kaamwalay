@@ -26,7 +26,7 @@ class AddAutoSaveFieldInOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
+            $table->dropColumn('auto_saved_at');
         });
     }
 }

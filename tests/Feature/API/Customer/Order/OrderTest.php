@@ -191,7 +191,7 @@ test('a customer does not see payment pending orders', function () {
     });
 
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/customer/orders/');
+    $response = $this->getJson('/api/customer/orders');
 
     $response->assertOk();
     $response->assertJsonCount(1, ['data']);

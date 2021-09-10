@@ -155,7 +155,7 @@ class Order extends Model
     {
         return $query
             ->join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
-            ->where('order_status_id', OrderStatus::PLACED);
+            ->where('order_status_histories.order_status_id', OrderStatus::PLACED);
     }
 
     public function getGrandTotalCentsAttribute(): int

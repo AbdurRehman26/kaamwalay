@@ -60,6 +60,5 @@ trait AuthenticatableWithAGS
             && Arr::has($response->json(), 'access_token'),
             AuthenticationException::class
         );
-
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
 {
@@ -45,23 +46,23 @@ class OrderItem extends Model
         'declared_value_total' => 'float',
     ];
 
-    public function order()
+    public function order(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Order::class);
+        return $this->belongsTo(Order::class);
     }
 
-    public function cardProduct()
+    public function cardProduct(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\CardProduct::class);
+        return $this->belongsTo(CardProduct::class);
     }
 
-    public function orderItemShipment()
+    public function orderItemShipment(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderItemShipment::class);
+        return $this->belongsTo(OrderItemShipment::class);
     }
 
-    public function orderItemCustomerShipment()
+    public function orderItemCustomerShipment(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderItemCustomerShipment::class);
+        return $this->belongsTo(OrderItemCustomerShipment::class);
     }
 }

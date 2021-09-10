@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CardSet extends Model
 {
@@ -25,17 +27,17 @@ class CardSet extends Model
         'set_url',
     ];
 
-    public function cardSeries()
+    public function cardSeries(): BelongsTo
     {
         return $this->belongsTo(CardSeries::class);
     }
 
-    public function cardProducts()
+    public function cardProducts(): HasMany
     {
         return $this->hasMany(CardProduct::class);
     }
 
-    public function cardCategory()
+    public function cardCategory(): BelongsTo
     {
         return $this->belongsTo(CardCategory::class);
     }

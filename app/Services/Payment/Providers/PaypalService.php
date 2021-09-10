@@ -12,7 +12,7 @@ use PayPalHttp\HttpException;
 
 class PaypalService implements PaymentProviderServiceInterface
 {
-    protected $environment;
+    protected SandboxEnvironment|ProductionEnvironment $environment;
     protected PayPalHttpClient $client;
 
     public function __construct()
@@ -54,7 +54,7 @@ class PaypalService implements PaymentProviderServiceInterface
             return [
                 'request' => $requestData,
                 'response' => json_decode(json_encode($response->result), associative: true),
-                'payment_provider_reference_id' => $response->result->id, // @phpstan-ignore-line
+                'payment_provider_reference_id' => $response->result->id,
             ];
         } catch (HttpException $e) {
             return ['message' => $e->getMessage()];

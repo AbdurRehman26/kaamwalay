@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property OrderStatusHistory[] $orderStatusHistory
+ * @property OrderStatus $orderStatus
  * @property float $grand_total
  * @property PaymentMethod $paymentMethod
  * @property OrderPayment $orderPayment
@@ -30,6 +31,7 @@ class Order extends Model
         'service_fee',
         'grand_total',
         'user_id',
+        'order_status_id',
         'payment_plan_id',
         'shipping_order_address_id',
         'billing_order_address_id',
@@ -62,6 +64,7 @@ class Order extends Model
         'payment_method_id' => 'integer',
         'shipping_method_id' => 'integer',
         'invoice_id' => 'integer',
+        'order_status_id' => 'integer',
         'arrived_at' => 'date',
         'reviewed_by_id' => 'integer',
         'graded_by_id' => 'integer',
@@ -80,6 +83,11 @@ class Order extends Model
     public function paymentPlan(): BelongsTo
     {
         return $this->belongsTo(PaymentPlan::class);
+    }
+
+    public function orderStatus(): BelongsTo
+    {
+        return $this->belongsTo(OrderStatus::class);
     }
 
     public function orderStatusHistory(): HasMany

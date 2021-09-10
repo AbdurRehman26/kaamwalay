@@ -3,8 +3,8 @@
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
-use App\Models\OrderStatusHistory;
 use App\Models\User;
+use App\Services\Admin\OrderStatusHistoryService;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -23,35 +23,18 @@ beforeEach(function () {
 
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
-    $this->orders = Order::factory()->count(5)->create();
-
-    OrderStatusHistory::factory()->count(5)->state(new Sequence(
-        [
-            'order_id' => $this->orders[0]->id,
-            'order_status_id' => 2,
-            'user_id' => $user->id,
-        ],
-        [
-            'order_id' => $this->orders[1]->id,
-            'order_status_id' => 3,
-            'user_id' => $user->id,
-        ],
-        [
-            'order_id' => $this->orders[2]->id,
-            'order_status_id' => 4,
-            'user_id' => $user->id,
-        ],
-        [
-            'order_id' => $this->orders[3]->id,
-            'order_status_id' => 5,
-            'user_id' => $user->id,
-        ],
-        [
-            'order_id' => $this->orders[4]->id,
-            'order_status_id' => 7,
-            'user_id' => $user->id,
-        ]
+    $this->orders = Order::factory()->count(5)->state(new Sequence(
+        ['order_status_id' => OrderStatus::PLACED],
+        ['order_status_id' => OrderStatus::ARRIVED],
+        ['order_status_id' => OrderStatus::GRADED],
+        ['order_status_id' => OrderStatus::SHIPPED],
+        ['order_status_id' => OrderStatus::REVIEWED]
     ))->create();
+
+    $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+    $this->orders->each(function ($order) use ($orderStatusHistoryService) {
+        $orderStatusHistoryService->addStatusToOrder($order->order_status_id, $order->id, $order->user_id);
+    });
 
     OrderItem::factory()->count(2)
         ->state(new Sequence(

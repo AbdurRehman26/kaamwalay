@@ -28,10 +28,15 @@ class OrderStatusHistoryService
     /**
      * @throws OrderStatusHistoryWasAlreadyAssigned|Throwable
      */
-    public function addStatusToOrder(OrderStatus|int $orderStatus, Order|int $order, ?string $notes = null)
+    public function addStatusToOrder(OrderStatus|int $orderStatus, Order|int $order, User|int $user = null, ?string $notes = null)
     {
-        /* @var User $user */
-        $user = auth()->user();
+        if (! $user) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $user = auth()->user();
+        }
+
+        $orderId = getModelId($order);
+        $orderStatusId = getModelId($orderStatus);
 
         $exists = OrderStatusHistory::query()
             ->where('order_id', getModelId($order))
@@ -40,10 +45,16 @@ class OrderStatusHistoryService
 
         throw_if($exists, OrderStatusHistoryWasAlreadyAssigned::class);
 
+        Order::query()
+            ->where('id', $orderId)
+            ->update([
+                'order_status_id' => $orderStatusId,
+            ]);
+
         return OrderStatusHistory::create([
-            'order_id' => getModelId($order),
-            'order_status_id' => getModelId($orderStatus),
-            'user_id' => $user->id,
+            'order_id' => $orderId,
+            'order_status_id' => $orderStatusId,
+            'user_id' => getModelId($user),
             'notes' => $notes,
         ]);
     }

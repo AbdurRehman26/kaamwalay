@@ -4,7 +4,6 @@ use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
-use App\Models\OrderStatusHistory;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -22,6 +21,7 @@ beforeEach(function () {
     $this->cardProduct = CardProduct::factory()->create();
     $this->shippingMethod = ShippingMethod::factory()->create();
     $this->paymentMethod = PaymentMethod::factory()->create();
+    $this->orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
 });
 
 test('a customer can place order', function () {
@@ -152,30 +152,22 @@ test('a customer can see his order', function () {
 });
 
 test('a customer only see own orders', function () {
-    /**
-     * @var OrderStatusHistoryService $orderStatusHistoryService
-     */
-    $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
-
     $user = User::factory();
     $orders = Order::factory()->for($user)
         ->has(OrderItem::factory())
         ->count(2)
         ->create();
 
-    $this->actingAs($this->user);
-    $orders->each(function ($order) use ($orderStatusHistoryService) {
-        $orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id);
-    });
-
-    $orders = Order::factory()->for($this->user)
-        ->has(OrderItem::factory())
-        ->count(2)
-        ->create();
+    $orders = $orders->merge(
+        Order::factory()->for($this->user)
+            ->has(OrderItem::factory())
+            ->count(2)
+            ->create()
+    );
 
     $this->actingAs($this->user);
-    $orders->each(function ($order) use ($orderStatusHistoryService) {
-        $orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id);
+    $orders->each(function ($order) {
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id, $order->user_id);
     });
 
     $response = $this->getJson('/api/customer/orders');
@@ -188,20 +180,15 @@ test('a customer does not see payment pending orders', function () {
     $orders = Order::factory()->for($this->user)
         ->has(OrderItem::factory())
         ->count(2)
+        ->state(new Sequence(
+            ['order_status_id' => OrderStatus::STATUSES['placed']],
+            ['order_status_id' => OrderStatus::STATUSES['payment_pending']],
+        ))
         ->create();
 
-    OrderStatusHistory::factory()->count(2)->state(new Sequence(
-        [
-            'user_id' => $this->user->id,
-            'order_id' => $orders[0]->id,
-            'order_status_id' => OrderStatus::STATUSES['placed'],
-        ],
-        [
-            'user_id' => $this->user->id,
-            'order_id' => $orders[0]->id,
-            'order_status_id' => OrderStatus::STATUSES['payment_pending'],
-        ],
-    ))->create();
+    $orders->each(function ($order) {
+        $this->orderStatusHistoryService->addStatusToOrder($order->order_status_id, $order->id, $order->user_id);
+    });
 
     $this->actingAs($this->user);
     $response = $this->getJson('/api/customer/orders/');
@@ -256,11 +243,7 @@ test('a customer can filter orders by order number', function () {
         ->create();
 
     $orders->each(function ($order) {
-        OrderStatusHistory::factory()->create([
-            'user_id' => $this->user->id,
-            'order_id' => $order->id,
-            'order_status_id' => OrderStatus::PLACED,
-        ]);
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id, $this->user->id);
     });
 
     OrderItem::factory()->count(2)

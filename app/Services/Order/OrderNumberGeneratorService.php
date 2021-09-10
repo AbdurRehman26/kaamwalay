@@ -11,6 +11,6 @@ class OrderNumberGeneratorService
 
     public static function generate(Order $order): string
     {
-        return self::PREFIX . Str::padLeft($order->id, 9, '0');
+        return self::PREFIX . Str::padLeft((string)$order->id, 9, '0');
     }
 }

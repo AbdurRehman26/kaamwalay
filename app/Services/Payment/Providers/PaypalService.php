@@ -54,7 +54,7 @@ class PaypalService implements PaymentProviderServiceInterface
             return [
                 'request' => $requestData,
                 'response' => json_decode(json_encode($response->result), associative: true),
-                'payment_provider_reference_id' => $response->result->id,
+                'payment_provider_reference_id' => $response->result->id, // @phpstan-ignore-line
             ];
         } catch (HttpException $e) {
             return ['message' => $e->getMessage()];

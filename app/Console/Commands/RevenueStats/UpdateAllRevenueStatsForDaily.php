@@ -55,7 +55,6 @@ class UpdateAllRevenueStatsForDaily extends Command
         $this->info("Revenue Stats Daily For Previously Missed Dates Completed.");
         Log::info("Revenue Stats Daily For Previously Missed Dates Completed.");
 
-
         return 0;
     }
 }

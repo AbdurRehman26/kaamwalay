@@ -12,11 +12,13 @@ class PaymentService
 {
     /**
      * Payment Providers available for the application
-    **/
+     */
     protected array $providers = [
         'stripe' => StripeService::class,
         'paypal' => PaypalService::class,
     ];
+
+    protected Order $order;
 
     public function charge(Order $order): array
     {

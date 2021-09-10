@@ -5,7 +5,6 @@ namespace App\Services\Admin\Order;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\User;
 
 class ManageOrderService
 {

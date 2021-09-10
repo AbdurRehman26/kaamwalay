@@ -7,9 +7,7 @@ use App\Http\Requests\API\Admin\Order\AssignOrderStatusHistoryRequest;
 use App\Http\Resources\API\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\Admin\Order\OrderStatusHistoryResource;
 use App\Models\Order;
-use App\Models\OrderStatus;
 use App\Services\Admin\OrderStatusHistoryService;
-use Illuminate\Auth\Access\AuthorizationException;
 use Throwable;
 
 class OrderStatusHistoryController extends Controller

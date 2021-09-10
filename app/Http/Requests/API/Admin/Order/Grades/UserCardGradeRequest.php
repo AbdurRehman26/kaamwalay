@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\Admin\Order\Grades;
 
-use App\Services\Admin\CardGradingService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserCardGradeRequest extends FormRequest

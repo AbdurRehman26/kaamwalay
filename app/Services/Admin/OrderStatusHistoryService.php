@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Services\Admin;
+
+use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
+use App\Models\Order;
+use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
+use App\Models\User;
+use Spatie\QueryBuilder\AllowedInclude;
+use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
+
+class OrderStatusHistoryService
+{
+    public function getAllByOrderId(Order|int $orderId)
+    {
+        return QueryBuilder::for(OrderStatusHistory::class)
+            ->where('order_id', getModelId($orderId))
+            ->allowedIncludes([
+                AllowedInclude::relationship('user'),
+                AllowedInclude::relationship('order'),
+                AllowedInclude::relationship('order_status'),
+            ])
+            ->get();
+    }
+
+    /**
+     * @throws OrderStatusHistoryWasAlreadyAssigned|Throwable
+     */
+    public function addStatusToOrder(OrderStatus|int $orderStatus, Order|int $order, ?string $notes = null)
+    {
+        /* @var User $user */
+        $user = auth()->user();
+
+        $exists = OrderStatusHistory::query()
+            ->where('order_id', getModelId($order))
+            ->where('order_status_id', getModelId($orderStatus))
+            ->exists();
+
+        throw_if($exists, OrderStatusHistoryWasAlreadyAssigned::class);
+
+        return OrderStatusHistory::create([
+            'order_id' => getModelId($order),
+            'order_status_id' => getModelId($orderStatus),
+            'user_id' => $user->id,
+            'notes' => $notes,
+        ]);
+    }
+}

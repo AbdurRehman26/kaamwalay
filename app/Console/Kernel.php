@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('telescope:prune')->daily();
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
         $schedule->command(ExportOrders::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
         ->dailyAt('00:10');

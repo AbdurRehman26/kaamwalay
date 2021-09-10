@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Resources\API\Admin\Order\OrderStatusHistoryResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -83,12 +84,12 @@ class Order extends Model
         return $this->belongsTo(PaymentPlan::class);
     }
 
-    public function orderStatus(): BelongsTo
+    public function orderStatusHistory(): HasMany
     {
-        return $this->belongsTo(OrderStatus::class);
+        return $this->hasMany(OrderStatusHistory::class);
     }
 
-    public function shippingAddress(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function shippingAddress(): BelongsTo
     {
         return $this->belongsTo(OrderAddress::class, 'shipping_order_address_id');
     }

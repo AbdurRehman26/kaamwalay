@@ -9,16 +9,6 @@ use App\Models\User;
 
 class ManageOrderService
 {
-    public function confirmReview(Order $order, User $user): Order
-    {
-        $order->order_status_id = 3;
-        $order->reviewed_by_id = $user->id;
-        $order->reviewed_at = new \Datetime();
-        $order->save();
-
-        return $order;
-    }
-
     public function addExtraCard(Order $order, int $card_id, float $value): OrderItem
     {
         $newItem = OrderItem::create([

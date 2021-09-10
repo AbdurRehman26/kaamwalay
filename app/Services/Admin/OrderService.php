@@ -34,6 +34,8 @@ class OrderService
             ->where('id', $orderId)
             ->allowedIncludes([
                 AllowedInclude::relationship('customer', 'user'),
+                AllowedInclude::relationship('orderStatusHistory'),
+                AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             ])
             ->firstOrFail();
     }

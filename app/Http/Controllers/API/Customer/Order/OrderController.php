@@ -10,7 +10,6 @@ use App\Http\Resources\API\Customer\Order\OrderCollection;
 use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
-use App\Models\User;
 use App\Services\Order\CreateOrderService;
 use App\Services\Order\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;

@@ -20,7 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderController extends Controller
 {
     public function __construct(
-        public OrderService $orderService,
+        private OrderService $orderService,
+        private CreateOrderService $createOrderService
     ) {
         $this->authorizeResource(Order::class, 'order');
     }
@@ -32,10 +33,10 @@ class OrderController extends Controller
         );
     }
 
-    public function store(StoreOrderRequest $request, CreateOrderService $createOrderService): OrderCreateResource | JsonResponse
+    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
     {
         try {
-            $order = $createOrderService->create($request->validated());
+            $order = $this->createOrderService->create($request->validated());
         } catch (Exception $e) {
             return new JsonResponse(
                 [

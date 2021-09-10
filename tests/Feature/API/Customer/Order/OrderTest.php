@@ -4,10 +4,12 @@ use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Services\Admin\OrderStatusHistoryService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -25,7 +27,7 @@ beforeEach(function () {
 test('a customer can place order', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/customer/orders/', [
+    $response = $this->postJson('/api/customer/orders', [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
         ],
@@ -89,7 +91,7 @@ test('a customer can place order', function () {
         ],
     ]);
 
-    $response->assertStatus(201);
+    $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
             'id',
@@ -150,40 +152,56 @@ test('a customer can see his order', function () {
 });
 
 test('a customer only see own orders', function () {
-    Order::factory()->for(User::factory())
-        ->has(OrderItem::factory())
-        ->count(2)
-        ->create([
-            'order_status_id' => OrderStatus::STATUSES['placed'],
-        ]);
+    /**
+     * @var OrderStatusHistoryService $orderStatusHistoryService
+     */
+    $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
 
-    Order::factory()->for($this->user)
+    $user = User::factory();
+    $orders = Order::factory()->for($user)
         ->has(OrderItem::factory())
         ->count(2)
-        ->create([
-            'order_status_id' => OrderStatus::STATUSES['placed'],
-        ]);
+        ->create();
 
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/customer/orders/');
+    $orders->each(function ($order) use ($orderStatusHistoryService) {
+        $orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id);
+    });
+
+    $orders = Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->count(2)
+        ->create();
+
+    $this->actingAs($this->user);
+    $orders->each(function ($order) use ($orderStatusHistoryService) {
+        $orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id);
+    });
+
+    $response = $this->getJson('/api/customer/orders');
 
     $response->assertOk();
     $response->assertJsonCount(2, ['data']);
 });
 
 test('a customer does not see payment pending orders', function () {
-    Order::factory()->for($this->user)
+    $orders = Order::factory()->for($this->user)
         ->has(OrderItem::factory())
         ->count(2)
-        ->state(new Sequence(
-            [
-                'order_status_id' => OrderStatus::STATUSES['placed'],
-            ],
-            [
-                'order_status_id' => OrderStatus::STATUSES['payment_pending'],
-            ],
-        ))
         ->create();
+
+    OrderStatusHistory::factory()->count(2)->state(new Sequence(
+        [
+            'user_id' => $this->user->id,
+            'order_id' => $orders[0]->id,
+            'order_status_id' => OrderStatus::STATUSES['placed'],
+        ],
+        [
+            'user_id' => $this->user->id,
+            'order_id' => $orders[0]->id,
+            'order_status_id' => OrderStatus::STATUSES['payment_pending'],
+        ],
+    ))->create();
 
     $this->actingAs($this->user);
     $response = $this->getJson('/api/customer/orders/');
@@ -230,14 +248,20 @@ test('a customer can filter orders by order number', function () {
         ->state(new Sequence(
             [
                 'order_number' => 'RG000000001',
-                'order_status_id' => 2,
             ],
             [
                 'order_number' => 'RG000000002',
-                'order_status_id' => 2,
             ],
         ))
         ->create();
+
+    $orders->each(function ($order) {
+        OrderStatusHistory::factory()->create([
+            'user_id' => $this->user->id,
+            'order_id' => $order->id,
+            'order_status_id' => OrderStatus::PLACED,
+        ]);
+    });
 
     OrderItem::factory()->count(2)
         ->state(new Sequence(
@@ -278,11 +302,16 @@ test('an admin can complete review of an order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->postJson('/api/admin/orders/' . $order->id . '/complete-review');
+    $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ARRIVED,
+    ]);
 
-    $response->assertStatus(200);
-    $response->assertJsonStructure([
-        'data' => ['reviewed_by', 'reviewed_at'],
+    $response->assertSuccessful();
+    $response->assertJson([
+        'data' => [
+            'order_id' => $order->id,
+            'order_status_id' => OrderStatus::ARRIVED,
+        ],
     ]);
 });
 
@@ -294,7 +323,9 @@ test('a customer can not complete review of an order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->postJson('/api/admin/orders/' . $order->id . '/complete-review');
+    $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ARRIVED,
+    ]);
 
     $response->assertStatus(403);
 });

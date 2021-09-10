@@ -12,12 +12,13 @@ class RevenueStatsService
 {
     public function addStats(string $currentDate): RevenueStatsDaily
     {
-        /*Using order payments instead of orders
-        because we might take payments of some orders
-        not on the same day*/
+        // Using order payments instead of orders because we might take payments
+        // of some orders not on the same day.
         $orderPayments = OrderPayment::join('orders', function ($join) {
             $join->on('orders.id', '=', 'order_payments.order_id');
-        })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
+        })
+            ->join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
+            ->where('order_status_histories.order_status_id', OrderStatus::STATUSES['placed'])
             ->whereDate('order_payments.created_at', $currentDate)
             ->select('order_payments.*')
             ->get();

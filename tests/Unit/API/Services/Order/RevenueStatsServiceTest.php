@@ -2,18 +2,29 @@
 
 use App\Models\Order;
 use App\Models\OrderPayment;
+use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
+use App\Models\User;
 use App\Services\Order\RevenueStatsService;
 use App\Services\Payment\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 beforeEach(function () {
-    $this->revenueStatsService = new RevenueStatsService();
-    $this->paymentService = new PaymentService();
+    $this->revenueStatsService = resolve(RevenueStatsService::class);
+    $this->paymentService = resolve(PaymentService::class);
 
     $this->order = Order::factory()->state(new Sequence(
-        ['payment_method_id' => 1, 'order_status_id' => 2]
+        ['payment_method_id' => 1]
     ))->create();
+
+    $user = User::factory()->create();
+
+    OrderStatusHistory::factory()->create([
+        'order_id' => $this->order->id,
+        'order_status_id' => OrderStatus::PLACED,
+        'user_id' => $user->id,
+    ]);
 
     $this->orderPayment = OrderPayment::factory()->for($this->order)->stripe()->create();
 

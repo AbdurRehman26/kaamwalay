@@ -14,15 +14,20 @@ class OrderService
     public function getOrders(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');
-        $allowedFilters = [
-            AllowedFilter::exact('order_id', 'id'),
-            AllowedFilter::scope('status'),
-            AllowedFilter::scope('customer_name'),
-            AllowedFilter::scope('customer_id'),
-        ];
 
         return QueryBuilder::for(Order::class)
-            ->allowedFilters($allowedFilters)
+            ->allowedFilters([
+                AllowedFilter::exact('order_id', 'id'),
+                AllowedFilter::scope('status'),
+                AllowedFilter::scope('order_status', 'status'),
+                AllowedFilter::scope('customer_name'),
+                AllowedFilter::scope('customer_id'),
+            ])
+            ->allowedIncludes([
+                AllowedInclude::relationship('customer', 'user'),
+                AllowedInclude::relationship('orderStatusHistory'),
+                AllowedInclude::relationship('orderStatusHistory.orderStatus'),
+            ])
             ->allowedSorts(['grand_total'])
             ->defaultSort('-created_at')
             ->paginate($itemsPerPage);

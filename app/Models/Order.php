@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property OrderStatus $orderStatus
- * @property int $order_status_id
+ * @property OrderStatusHistory[] $orderStatusHistory
  * @property float $grand_total
+ * @property PaymentMethod $paymentMethod
+ * @property OrderPayment $orderPayment
  */
 class Order extends Model
 {
@@ -30,7 +31,6 @@ class Order extends Model
         'grand_total',
         'user_id',
         'payment_plan_id',
-        'order_status_id',
         'shipping_order_address_id',
         'billing_order_address_id',
         'payment_method_id',
@@ -56,7 +56,6 @@ class Order extends Model
         'grand_total' => 'float',
         'user_id' => 'integer',
         'payment_plan_id' => 'integer',
-        'order_status_id' => 'integer',
         'order_address_id' => 'integer',
         'shipping_order_address_id' => 'integer',
         'billing_order_address_id' => 'integer',
@@ -135,25 +134,19 @@ class Order extends Model
 
     public function scopeForUser(Builder $query, User $user): Builder
     {
-        return $query->where('user_id', $user->id);
+        return $query->where('orders.user_id', $user->id);
     }
 
     public function isPayable(): bool
     {
-        return $this->orderStatus->code === 'pending_payment';
-    }
-
-    public function markAsPlaced(): self
-    {
-        $this->order_status_id = 2;
-        $this->save();
-
-        return $this;
+        return $this->orderStatusHistory()->where('order_status_histories.order_status_id', OrderStatus::PAYMENT_PENDING)->exists();
     }
 
     public function scopePlaced(Builder $query): Builder
     {
-        return $query->where('order_status_id', 2);
+        return $query
+            ->join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
+            ->where('order_status_histories.order_status_id', OrderStatus::PLACED);
     }
 
     public function getGrandTotalCentsAttribute(): int
@@ -168,7 +161,7 @@ class Order extends Model
         }
 
         return $query->whereHas(
-            'orderStatus',
+            'orderStatusHistory.orderStatus',
             fn ($query) => $query
                 ->where('id', $status)
                 ->orWhere('code', $status)

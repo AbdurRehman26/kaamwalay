@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderAddress;
-use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -35,7 +34,6 @@ class OrderFactory extends Factory
             'grand_total' => $this->faker->randomFloat(2, 20, 10000),
             'user_id' => User::factory()->withRole(config('permission.roles.customer')),
             'payment_plan_id' => PaymentPlan::factory(),
-            'order_status_id' => OrderStatus::factory(),
             'shipping_order_address_id' => OrderAddress::factory(),
             'billing_order_address_id' => OrderAddress::factory(),
             'payment_method_id' => PaymentMethod::factory(),

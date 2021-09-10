@@ -19,9 +19,9 @@ class OrderStatus extends Model
     public const GRADED = 4;
     public const SHIPPED = 5;
     public const CANCELLED = 6;
+    public const REVIEWED = 7;
 
     public const DEFAULT_ORDER_STATUS = self::PAYMENT_PENDING;
-
     public const STATUSES = [
         'payment_pending' => self::PAYMENT_PENDING,
         'placed' => self::PLACED,

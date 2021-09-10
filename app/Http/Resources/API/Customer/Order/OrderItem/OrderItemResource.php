@@ -14,8 +14,8 @@ class OrderItemResource extends JsonResource
             'quantity' => $this->quantity,
             'declared_value_per_unit' => $this->declared_value_per_unit,
             'card_product' => new CardProductResource($this->cardProduct),
-            'status' => new ItemStatusResource($this->itemStatuses()->latest()->first()),
-            'certificate_number' => ! ! $this->userCard ? $this->userCard->userCardCertificate->number : null,
+            'status' => new OrderItemStatusResource($this->orderItemStatus),
+            'certificate_number' => $this->userCard?->userCardCertificate?->number,
         ];
     }
 }

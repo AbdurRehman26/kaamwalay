@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
 
 class UserCardResource extends BaseResource
 {
@@ -17,6 +18,7 @@ class UserCardResource extends BaseResource
         return [
             'id' => $this->id,
             'customer' => new OrderCustomerResource($this->user),
+            'order_item' => new OrderItemResource($this->orderItem),
             'human_grade_values' => $this->human_grade_values,
             'robo_grade_values' => $this->robo_grade_values,
             'overall_values' => $this->overall_values,

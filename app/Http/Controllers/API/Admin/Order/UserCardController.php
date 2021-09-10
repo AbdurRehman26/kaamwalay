@@ -14,9 +14,8 @@ class UserCardController extends Controller
     public function updateGradingValues(UserCardGradeRequest $request, UserCard $userCard): UserCardResource
     {
         $userCard->update(
-            $request->only('human_grade_values', 'robo_grade_values', 'overall_values', 'overall_grade')
+            $request->only('human_grade_values', 'overall_values', 'overall_grade')
         );
-        $userCard->save();
 
         return new UserCardResource($userCard);
     }

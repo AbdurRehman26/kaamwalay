@@ -22,13 +22,14 @@ class OrderService
             ->allowedIncludes([
                 AllowedInclude::relationship('invoice'),
                 AllowedInclude::relationship('paymentPlan'),
+                AllowedInclude::relationship('orderItems'),
                 AllowedInclude::relationship('orderStatus'),
                 AllowedInclude::relationship('orderStatusHistory'),
                 AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             ])
             ->allowedFilters(['order_number'])
             ->allowedSorts(['grand_total'])
-            ->defaultSort('-created_at')
+            ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
     }
 }

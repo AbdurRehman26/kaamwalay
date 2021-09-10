@@ -14,7 +14,11 @@ import { SubmissionTableRow } from './SubmissionTableRow';
 import { Table } from './styles';
 
 export function SubmissionsTable() {
-    const { isLoading, isError, data, paginationProps } = useListOrdersQuery();
+    const { isLoading, isError, data, paginationProps } = useListOrdersQuery({
+        params: {
+            include: ['paymentPlan', 'invoice'],
+        },
+    });
 
     if (isLoading || isError) {
         return (

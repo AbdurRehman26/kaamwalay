@@ -153,9 +153,9 @@ class Order extends Model
 
     public function scopePlaced(Builder $query): Builder
     {
-        return $query
-            ->join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
-            ->where('order_status_histories.order_status_id', OrderStatus::PLACED);
+        return $query->whereHas('orderStatusHistory', function ($query) {
+            return $query->where('order_status_id', OrderStatus::PLACED);
+        });
     }
 
     public function getGrandTotalCentsAttribute(): int

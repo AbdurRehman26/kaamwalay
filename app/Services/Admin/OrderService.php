@@ -30,7 +30,7 @@ class OrderService
                 AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             ])
             ->allowedSorts(['grand_total'])
-            ->defaultSort('-created_at')
+            ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
     }
 

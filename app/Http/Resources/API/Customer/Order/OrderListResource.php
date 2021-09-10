@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\Customer\Order;
 
 use App\Http\Resources\API\Admin\Order\OrderStatusHistoryCollection;
+use App\Http\Resources\API\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCustomerShipmentResource;
@@ -18,6 +19,7 @@ class OrderListResource extends BaseResource
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'customer_shipment' => count($this->orderItems) > 0 ? new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment) : null,
             'payment_plan' => $this->whenLoaded('paymentPlan', PaymentPlanResource::class),
+            'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'created_at' => $this->formatDate($this->created_at),

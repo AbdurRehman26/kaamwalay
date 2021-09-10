@@ -25,6 +25,7 @@ class OrderService
             ])
             ->allowedIncludes([
                 AllowedInclude::relationship('customer', 'user'),
+                AllowedInclude::relationship('orderStatus'),
                 AllowedInclude::relationship('orderStatusHistory'),
                 AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             ])
@@ -39,6 +40,7 @@ class OrderService
             ->where('id', $orderId)
             ->allowedIncludes([
                 AllowedInclude::relationship('customer', 'user'),
+                AllowedInclude::relationship('orderStatus'),
                 AllowedInclude::relationship('orderStatusHistory'),
                 AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             ])

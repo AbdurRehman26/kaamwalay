@@ -19,10 +19,8 @@ class OrderStatusResource extends BaseResource
             'code' => $this->code,
             'name' => $this->name,
             'description' => $this->description,
-            'order_state_id' => $this->order_state_id,
             'created_at' => $this->formatDate($this->created_at),
             'updated_at' => $this->formatDate($this->updated_at),
-            'order_state' => $this->whenLoaded('orderState'),
         ];
     }
 }

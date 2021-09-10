@@ -18,7 +18,7 @@ class RevenueStatsService
             $join->on('orders.id', '=', 'order_payments.order_id');
         })
             ->join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
-            ->where('order_status_histories.order_status_id', OrderStatus::STATUSES['placed'])
+            ->where('order_status_histories.order_status_id', OrderStatus::PLACED)
             ->whereDate('order_payments.created_at', $currentDate)
             ->select('order_payments.*')
             ->get();

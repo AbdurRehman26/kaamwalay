@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property float $grand_total
  * @property PaymentMethod $paymentMethod
  * @property OrderPayment $orderPayment
+ * @property int $order_status_id
  */
 class Order extends Model
 {
@@ -147,14 +148,14 @@ class Order extends Model
 
     public function isPayable(): bool
     {
-        return $this->orderStatusHistory()->where('order_status_histories.order_status_id', OrderStatus::PAYMENT_PENDING)->exists();
+        return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
     }
 
     public function scopePlaced(Builder $query): Builder
     {
         return $query
             ->join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
-            ->where('order_status_histories.order_status_id', OrderStatus::PLACED);
+            ->where('order_status_id', OrderStatus::PLACED);
     }
 
     public function getGrandTotalCentsAttribute(): int

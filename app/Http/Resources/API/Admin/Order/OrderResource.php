@@ -58,6 +58,7 @@ class OrderResource extends BaseResource
             'graded_at' => $this->when(! is_null($this->gradedBy), $this->graded_at),
             'notes' => $this->notes,
 
+            'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),

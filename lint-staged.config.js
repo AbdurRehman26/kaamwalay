@@ -5,5 +5,7 @@ module.exports = {
     ],
     '**/*.spec.ts?(x)': 'jest --bail --findRelatedTests',
     '**/*.{js,jsx,ts,tsx,json,scss}': ['prettier -w'],
-    '**/*.php': ['./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-risky=yes'],
+    '**/*.php': [
+        './vendor/bin/sail run -rm laravel.test ./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-risky=yes',
+    ],
 };

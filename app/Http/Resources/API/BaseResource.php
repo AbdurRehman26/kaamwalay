@@ -19,10 +19,6 @@ class BaseResource extends JsonResource
         return parent::toArray($request);
     }
 
-    /**
-     * @param string|null $date
-     * @return string|null
-     */
     public function formatDate(string $date = null): ?string
     {
         if ($date) {
@@ -32,14 +28,6 @@ class BaseResource extends JsonResource
         return null;
     }
 
-
-    /**
-     * @param string $relationship
-     * @param mixed $value
-     * @param mixed $default
-     * @return mixed
-     * @noinspection PhpMissingReturnTypeInspection
-     */
     protected function whenLoaded($relationship, $value = null, $default = null)
     {
         if (is_string($value) && class_exists($value)) {

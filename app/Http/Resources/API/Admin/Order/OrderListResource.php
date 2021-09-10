@@ -21,9 +21,10 @@ class OrderListResource extends BaseResource
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
             'grand_total' => $this->grand_total,
-            'arrived' => ! is_null($this->arrived_at),
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
+            'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
+            'arrived' => ! is_null($this->arrived_at),
             'arrived_at' => $this->formatDate($this->arrived_at),
             'created_at' => $this->formatDate($this->created_at),
         ];

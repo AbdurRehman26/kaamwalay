@@ -18,9 +18,9 @@ class CreateOrderStatusHistoriesTable extends Migration
     {
         Schema::create('order_status_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Order::class, 'order_id');
-            $table->foreignIdFor(OrderStatus::class, 'order_status_id');
-            $table->foreignIdFor(User::class, 'user_id');
+            $table->foreignId('order_id')->constrained();
+            $table->foreignId('order_status_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->text('notes')->nullable();
             $table->timestamps();
 

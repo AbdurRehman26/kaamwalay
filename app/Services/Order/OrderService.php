@@ -22,6 +22,7 @@ class OrderService
             ->allowedIncludes([
                 AllowedInclude::relationship('invoice'),
                 AllowedInclude::relationship('paymentPlan'),
+                AllowedInclude::relationship('orderStatus'),
                 AllowedInclude::relationship('orderStatusHistory'),
                 AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             ])

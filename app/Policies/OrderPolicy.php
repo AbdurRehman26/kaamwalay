@@ -34,9 +34,4 @@ class OrderPolicy
     {
         return $user->isAdmin();
     }
-
-    public function canAssignStatus(User $user): bool
-    {
-        return $user->isAdmin();
-    }
 }

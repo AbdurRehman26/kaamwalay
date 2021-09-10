@@ -2,69 +2,31 @@
 
 use App\Services\Admin\CardGradingService;
 
-beforeEach(function () {
-    $this->service = new CardGradingService;
-});
-it('can return the default values for human_grade_values', function () {
-    $defaultSet = $this->service->defaultValues('human');
+beforeEach(fn () => $this->service = new CardGradingService);
 
+uses()->group('admin', 'grading');
+
+it('can return the default values for human and robo grade values', function (array $defaultSet) {
     expect($defaultSet)
         ->toBeArray()
         ->toHaveKeys(['front', 'back'])
-        ->front
-        ->toBeArray()
-        ->toMatchArray([
-            'center' => 0.0,
-            'surface' => 0.0,
-            'edge' => 0.0,
-            'corner' => 0.0,
-        ])
-        ->back
-        ->toBeArray()
+        ->each
         ->toMatchArray([
             'center' => 0.0,
             'surface' => 0.0,
             'edge' => 0.0,
             'corner' => 0.0,
         ]);
-})->group('admin', 'grading');
+})->with([
+    fn () => $this->service->defaultValues('human'),
+    fn () => $this->service->defaultValues('robo'),
+]);
 
-it('can return the default values for robo_grade_values', function () {
-    $defaultSet = $this->service->defaultValues('robo');
-
-    expect($defaultSet)
-        ->toBeArray()
-        ->toHaveKeys(['front', 'back'])
-        ->front
-        ->toBeArray()
-        ->toMatchArray([
-            'center' => 0.0,
-            'surface' => 0.0,
-            'edge' => 0.0,
-            'corner' => 0.0,
-        ])
-        ->back
-        ->toBeArray()
-        ->toMatchArray([
-            'center' => 0.0,
-            'surface' => 0.0,
-            'edge' => 0.0,
-            'corner' => 0.0,
-        ]);
-})->group('admin', 'grading');
-
-it('can return the default values for overall_values', function () {
-    $defaultSet = $this->service->defaultValues('overall');
-
-    expect($defaultSet)
-        ->toBeArray()
-        ->toMatchArray([
-            'center' => 0.0,
-            'surface' => 0.0,
-            'edge' => 0.0,
-            'corner' => 0.0,
-        ]);
-})->group('admin', 'grading');
+it('can return the default values for overall_values', function (array $defaultSet) {
+    expect($defaultSet)->toBeArray()->toHaveKeys(['center', 'surface', 'edge', 'corner'])->each->toBe(0.0);
+})->with([
+    fn () => $this->service->defaultValues('overall'),
+]);
 
 it('calculates the overall grading values', function () {
     $humanGrades = [
@@ -89,7 +51,7 @@ it('calculates the overall grading values', function () {
         ->surface->toBe(4.4)
         ->edge->toBe(8.0)
         ->corner->toBe(7.0);
-})->group('admin', 'grading');
+});
 
 it('calculates overall grade average', function () {
     $overAllValues = [
@@ -100,4 +62,4 @@ it('calculates overall grade average', function () {
     ];
     $overAllGrade = $this->service->calculateOverallAverage($overAllValues);
     expect($overAllGrade)->toBe(7.0);
-})->group('admin', 'grading');
+});

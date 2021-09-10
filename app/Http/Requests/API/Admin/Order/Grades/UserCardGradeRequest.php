@@ -38,14 +38,4 @@ class UserCardGradeRequest extends FormRequest
             'human_grade_values.back.edge' => ['required', 'numeric', 'max:10', 'min:0'],
         ];
     }
-
-    protected function passedValidation()
-    {
-        $cardGradingService = new CardGradingService;
-        $overallValues = $cardGradingService->calculateOverallValues($this->get('human_grade_values'));
-        $this->merge([
-            'overall_values' => $overallValues,
-            'overall_grade' => $cardGradingService->calculateOverallAverage($overallValues),
-        ]);
-    }
 }

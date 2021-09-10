@@ -30,6 +30,4 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('{order}/cards/{orderItem}', [OrderItemController::class, 'update']);
     });
     Route::put('user-cards/{userCard}/grades', [UserCardController::class, 'updateGradingValues']);
-    Route::put('user-cards/{userCard}/images', [UserCardController::class, 'updateImage']);
-    Route::delete('user-cards/{userCard}/images', [UserCardController::class, 'deleteImage']);
 });

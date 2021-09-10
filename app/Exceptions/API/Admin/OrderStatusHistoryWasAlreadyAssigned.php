@@ -6,5 +6,5 @@ use Exception;
 
 class OrderStatusHistoryWasAlreadyAssigned extends Exception
 {
-    protected $message = 'The order status has been already assigned.';
+    protected $message = 'The order status has been assigned already.';
 }

@@ -18,6 +18,7 @@ class UserCard extends Model
         'robo_grade_values',
         'overall_values',
         'overall_grade',
+        'overall_grade_nickname',
         'ai_model_numbers',
         'front_centering_img_src',
         'front_surface_img_src',

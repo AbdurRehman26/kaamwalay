@@ -12,32 +12,44 @@ use Illuminate\Support\Collection;
 
 class OrderItemService
 {
+    public function __construct(
+        private  UserCardService $userCardService
+    ) {
+    }
+    
+    /**
+     * @throws OrderItemDoesNotBelongToOrder
+     */
     public function changeStatus(Order $order, OrderItem $item, array $request): OrderItem
     {
         if ($item->order_id !== $order->id) {
             throw new OrderItemDoesNotBelongToOrder;
         }
 
-        $requestStatus = OrderItemStatus::whereCode($request['status'])->first();
+        /** @var OrderItemStatus $requestStatus */
+        $requestStatus = OrderItemStatus::forStatus($request['status'])->first();
 
-        if (! ! $requestStatus && (! $item->orderItemStatus || $item->order_item_status_id !== $requestStatus->id)) {
+        if ($requestStatus && (! $item->orderItemStatus || $item->order_item_status_id !== $requestStatus->id)) {
             $status = new OrderItemStatusHistory();
             $status->order_item_id = $item->id;
             $status->order_item_status_id = $requestStatus->id;
-            $status->notes = in_array($requestStatus->id, [OrderItemStatus::MISSING_STATUS,OrderItemStatus::NOT_ACCEPTED_STATUS]) ? ($request['notes'] ?? null) : null;
+            $status->notes = $request['notes'] ?? '';
             $status->save();
 
             $item->order_item_status_id = $requestStatus->id;
             $item->save();
 
-            if ($requestStatus->id === OrderItemStatus::CONFIRMED_STATUS && ! $item->userCard) {
-                (new UserCardService)->createItemUserCard($item);
+            if ($requestStatus->id === OrderItemStatus::CONFIRMED && ! $item->userCard) {
+                $this->userCardService->createItemUserCard($item);
             }
         }
 
         return $item->fresh();
     }
 
+    /**
+     * @throws OrderItemDoesNotBelongToOrder
+     */
     public function markItemsAsPending(Order $order, array $items): Collection
     {
         $processedItems = [];

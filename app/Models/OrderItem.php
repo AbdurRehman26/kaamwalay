@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property OrderItemStatus $orderItemStatus
+ * @property int $order_item_status_id
+ * @property int $order_id
+ * @property int $id
+ * @property UserCard $userCard
+ */
 class OrderItem extends Model
 {
     use HasFactory;

@@ -1,6 +1,6 @@
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import { DialogProps } from '@material-ui/core/Dialog';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog, { DialogProps } from '@material-ui/core/Dialog';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -8,17 +8,25 @@ import { makeStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
-import { useCallback } from 'react';
-import dummyCharizard from '@shared/assets/dummyCharizard.png';
+import { plainToClass } from 'class-transformer';
+import { useCallback, useMemo, useState } from 'react';
+import { OrderEntity } from '@shared/entities/OrderEntity';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { cx } from '@shared/lib/utils/cx';
+import { useAppSelector } from '@admin/redux/hooks';
 
 interface ReviewCardDialogProps extends DialogProps {
-    index: number;
+    indexId: number;
+    orderId: number;
     disableNext?: boolean;
     disablePrevious?: boolean;
+
     onNext(): void;
+
     onPrevious(): void;
+
     onMissing(value: number): void;
+
     onConfirm(value: number): void;
 }
 
@@ -80,32 +88,60 @@ const useStyles = makeStyles(
     { name: 'ReviewCardDialog' },
 );
 
-export function ReviewCardDialog({
-    index,
-    onNext,
-    onPrevious,
-    onMissing,
-    onConfirm,
-    disableNext,
-    disablePrevious,
-    onClose,
-    ...rest
-}: ReviewCardDialogProps) {
-    const classes = useStyles();
+export function ReviewCardDialog(props: ReviewCardDialogProps) {
+    const {
+        indexId,
+        orderId,
+        onNext,
+        onPrevious,
+        onMissing,
+        onConfirm,
+        disableNext,
+        disablePrevious,
+        onClose,
+        ...rest
+    } = props;
 
-    const handleMissing = useCallback(() => onMissing(index), [onMissing, index]);
-    const handleConfirm = useCallback(() => onConfirm(index), [onConfirm, index]);
+    const classes = useStyles();
+    const [loading, setLoading] = useState('');
+
+    const notification = useNotifications();
+
+    const entities = useAppSelector((state) => state.adminOrders.entities);
+    const order = useMemo(() => plainToClass(OrderEntity, entities[orderId]), [entities, orderId]);
+    const activeItem = useMemo(() => (order?.orderItems ?? [])[indexId], [order?.orderItems, indexId]);
+
     const handleClose = useCallback(() => (onClose as any)(), [onClose]);
+
+    const handleConfirm = useCallback(async () => {
+        setLoading('confirm');
+        try {
+            await onConfirm(activeItem.id);
+        } catch (e) {
+            notification.exception(e);
+        }
+        setLoading('');
+    }, [onConfirm, activeItem?.id, notification]);
+
+    const handleMissing = useCallback(async () => {
+        setLoading('missing');
+        try {
+            await onMissing(activeItem.id);
+        } catch (e) {
+            notification.exception(e);
+        }
+        setLoading('');
+    }, [onMissing, activeItem?.id, notification]);
 
     return (
         <Dialog scroll={'body'} classes={{ root: classes.dialog, paper: classes.paper }} onClose={onClose} {...rest}>
             <Grid container direction={'column'} className={classes.root}>
                 <Grid container direction={'column'}>
                     <Typography variant={'h4'} className={classes.heading}>
-                        Charizard
+                        {activeItem?.cardProduct?.getName()}
                     </Typography>
                     <Typography variant={'body2'} className={classes.subheading}>
-                        2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard
+                        {activeItem?.cardProduct?.getDescription()}
                     </Typography>
 
                     <IconButton className={classes.closeButton} size={'small'} onClick={handleClose}>
@@ -113,21 +149,32 @@ export function ReviewCardDialog({
                     </IconButton>
                 </Grid>
                 <Grid container className={classes.imageHolder}>
-                    <img src={dummyCharizard} alt="Card preview" className={classes.image} />
+                    {activeItem?.cardProduct?.imagePath ? (
+                        <img src={activeItem?.cardProduct?.imagePath} alt="Card preview" className={classes.image} />
+                    ) : null}
                 </Grid>
                 <Grid container spacing={2}>
-                    <Grid item xs>
-                        <Button variant={'contained'} size={'large'} fullWidth onClick={handleMissing}>
-                            Missing
-                        </Button>
-                    </Grid>
                     <Grid item xs>
                         <Button
                             variant={'contained'}
                             size={'large'}
                             fullWidth
-                            onClick={handleConfirm}
+                            onClick={handleMissing}
+                            disabled={loading !== ''}
+                            startIcon={loading === 'missing' ? <CircularProgress size={24} color={'inherit'} /> : null}
+                        >
+                            Missing
+                        </Button>
+                    </Grid>
+                    <Grid item xs>
+                        <Button
                             color={'primary'}
+                            variant={'contained'}
+                            size={'large'}
+                            fullWidth
+                            onClick={handleConfirm}
+                            disabled={loading !== ''}
+                            startIcon={loading === 'confirm' ? <CircularProgress size={24} color={'inherit'} /> : null}
                         >
                             Confirm
                         </Button>

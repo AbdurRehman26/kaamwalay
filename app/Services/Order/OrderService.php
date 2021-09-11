@@ -5,7 +5,6 @@ namespace App\Services\Order;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
@@ -19,14 +18,7 @@ class OrderService
         return QueryBuilder::for(Order::class)
             ->placed()
             ->forUser($user)
-            ->allowedIncludes([
-                AllowedInclude::relationship('invoice'),
-                AllowedInclude::relationship('paymentPlan'),
-                AllowedInclude::relationship('orderItems'),
-                AllowedInclude::relationship('orderStatus'),
-                AllowedInclude::relationship('orderStatusHistory'),
-                AllowedInclude::relationship('orderStatusHistory.orderStatus'),
-            ])
+            ->allowedIncludes(Order::GetAllowedAdminIncludes())
             ->allowedFilters(['order_number'])
             ->allowedSorts(['grand_total'])
             ->defaultSort('-orders.created_at')

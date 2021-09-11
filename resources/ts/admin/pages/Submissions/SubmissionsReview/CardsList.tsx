@@ -2,16 +2,18 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useCallback, useState } from 'react';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { font } from '@shared/styles/utils';
 
 interface CardsListProps {
     heading: string;
     totals: number;
-    onClear?: () => void;
+    onClear?: (() => void) | null;
 }
 
 const useStyles = makeStyles(
@@ -41,6 +43,20 @@ const useStyles = makeStyles(
 
 export function CardsList({ children, heading, totals, onClear }: PropsWithChildren<CardsListProps>) {
     const classes = useStyles();
+    const notifications = useNotifications();
+    const [loading, setLoading] = useState(false);
+
+    const handleClear = useCallback(async () => {
+        if (onClear) {
+            setLoading(true);
+            try {
+                await onClear();
+            } catch (e) {
+                notifications.exception(e);
+            }
+            setLoading(false);
+        }
+    }, [notifications, onClear]);
 
     return (
         <Card variant={'outlined'} className={classes.root}>
@@ -53,9 +69,20 @@ export function CardsList({ children, heading, totals, onClear }: PropsWithChild
                     </Typography>
                 }
                 subheader={
-                    <Button onClick={onClear} startIcon={<ClearAllIcon color={'inherit'} />}>
-                        Clear
-                    </Button>
+                    onClear ? (
+                        <Button
+                            onClick={handleClear}
+                            startIcon={
+                                loading ? (
+                                    <CircularProgress size={18} color={'inherit'} />
+                                ) : (
+                                    <ClearAllIcon color={'inherit'} />
+                                )
+                            }
+                        >
+                            Clear
+                        </Button>
+                    ) : null
                 }
                 disableTypography
             />

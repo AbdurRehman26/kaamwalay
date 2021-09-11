@@ -1,17 +1,22 @@
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-import { useCallback } from 'react';
-import cardPreview from '@shared/assets/cardPreview.png';
+import { useCallback, useState } from 'react';
+import { CardProductEntity } from '@shared/entities/CardProductEntity';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { font } from '@shared/styles/utils';
 
 interface CardItemProps {
     label: string;
+    itemId: number;
+    card: CardProductEntity;
     labelIcon?: any;
-    onRemove(): void;
+
+    onRemove(orderItemId: number): void;
 }
 
 const useStyles = makeStyles(
@@ -38,22 +43,30 @@ const useStyles = makeStyles(
     { name: 'CardItem' },
 );
 
-export function CardItem({ label, labelIcon, onRemove }: CardItemProps) {
+export function CardItem({ label, itemId, card, labelIcon, onRemove }: CardItemProps) {
     const classes = useStyles();
+    const [loading, setLoading] = useState(false);
+    const notifications = useNotifications();
 
-    const handleRemove = useCallback(() => {
-        onRemove();
-    }, [onRemove]);
+    const handleRemove = useCallback(async () => {
+        setLoading(true);
+        try {
+            await onRemove(itemId);
+        } catch (e) {
+            notifications.exception(e);
+        }
+        setLoading(false);
+    }, [onRemove, itemId, notifications]);
 
     return (
         <Grid container alignItems={'center'} className={classes.root}>
             <Box display={'flex'} flexGrow={1}>
-                <img src={cardPreview} alt={'card'} className={classes.image} />
+                <img src={card.imagePath} alt={'card'} className={classes.image} />
                 <Box flexGrow={1}>
                     <Typography variant={'body2'} className={font.fontWeightMedium}>
-                        Charizard
+                        {card.getName()}
                     </Typography>
-                    <Typography variant={'caption'}>2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard</Typography>
+                    <Typography variant={'caption'}>{card.getDescription()}</Typography>
                 </Box>
             </Box>
 
@@ -70,8 +83,8 @@ export function CardItem({ label, labelIcon, onRemove }: CardItemProps) {
                 )}
             </Typography>
 
-            <IconButton size={'small'} onClick={handleRemove}>
-                <CloseIcon />
+            <IconButton size={'small'} onClick={handleRemove} disabled={loading}>
+                {loading ? <CircularProgress size={24} color={'inherit'} /> : <CloseIcon />}
             </IconButton>
         </Grid>
     );

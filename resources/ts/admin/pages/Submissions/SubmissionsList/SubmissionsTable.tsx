@@ -34,6 +34,7 @@ export function SubmissionsTable({ tabFilter }: SubmissionsTableProps) {
             filter: {
                 status: tabFilter,
             },
+            include: ['orderStatus', 'customer'],
         },
         ...bracketParams(),
     });
@@ -104,7 +105,12 @@ export function SubmissionsTable({ tabFilter }: SubmissionsTableProps) {
                                     <TableCell>{formatCurrency(item.totalDeclaredValue)}</TableCell>
                                     <TableCell>{formatCurrency(item.grandTotal)}</TableCell>
                                     <TableCell align={'right'}>
-                                        <Button variant={'contained'} color={'primary'}>
+                                        <Button
+                                            variant={'contained'}
+                                            component={Link}
+                                            color={'primary'}
+                                            to={`/submissions/${item.id}/review`}
+                                        >
                                             Review
                                         </Button>
                                     </TableCell>

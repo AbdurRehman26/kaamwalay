@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 
 /**
  * @property OrderStatusHistory[] $orderStatusHistory
@@ -16,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property PaymentMethod $paymentMethod
  * @property OrderPayment $orderPayment
  * @property int $order_status_id
+ * @property int $id
  */
 class Order extends Model
 {
@@ -75,6 +78,30 @@ class Order extends Model
     ];
 
     protected $appends = ['grand_total_cents'];
+
+    public static function GetAllowedAdminIncludes(): array
+    {
+        return [
+            AllowedInclude::relationship('invoice'),
+            AllowedInclude::relationship('paymentPlan'),
+            AllowedInclude::relationship('orderItems'),
+            AllowedInclude::relationship('orderStatus'),
+            AllowedInclude::relationship('orderStatusHistory'),
+            AllowedInclude::relationship('orderStatusHistory.orderStatus'),
+            AllowedInclude::relationship('customer', 'user'),
+        ];
+    }
+
+    public static function GetAllowedAdminFilters(): array
+    {
+        return [
+            AllowedFilter::exact('order_id', 'id'),
+            AllowedFilter::scope('status'),
+            AllowedFilter::scope('order_status', 'status'),
+            AllowedFilter::scope('customer_name'),
+            AllowedFilter::scope('customer_id'),
+        ];
+    }
 
     public function user(): BelongsTo
     {
@@ -163,7 +190,7 @@ class Order extends Model
         return $this->grand_total * 100;
     }
 
-    public function scopeStatus(Builder $query, string | int $status): Builder
+    public function scopeStatus(Builder $query, string|int $status): Builder
     {
         if (! $status || $status === 'all') {
             return $query;

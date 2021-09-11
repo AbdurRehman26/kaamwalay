@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
-use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
@@ -17,11 +16,7 @@ class OrderStatusHistoryService
     {
         return QueryBuilder::for(OrderStatusHistory::class)
             ->where('order_id', getModelId($orderId))
-            ->allowedIncludes([
-                AllowedInclude::relationship('user'),
-                AllowedInclude::relationship('order'),
-                AllowedInclude::relationship('order_status'),
-            ])
+            ->allowedIncludes(OrderStatusHistory::GetAllowedAdminIncludes())
             ->get();
     }
 

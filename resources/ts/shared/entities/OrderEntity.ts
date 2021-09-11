@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { CustomerShipmentEntity } from '@shared/entities/CustomerShipmentEntity';
 import { Entity } from '@shared/entities/Entity';
 import { DateField } from '../decorators/DateField';
@@ -8,13 +9,15 @@ import { AddressEntity } from './AddressEntity';
 import { InvoiceEntity } from './InvoiceEntity';
 import { OrderItemEntity } from './OrderItemEntity';
 import { OrderPaymentEntity } from './OrderPaymentEntity';
+import { OrderStatusEntity } from './OrderStatusEntity';
 import { PaymentMethodEntity } from './PaymentMethodEntity';
 import { PaymentPlanEntity } from './PaymentPlanEntity';
 import { ShippingMethodEntity } from './ShippingMethodEntity';
 import { UserEntity } from './UserEntity';
 
 export class OrderEntity extends Entity {
-    public status!: string;
+    @Field('order_status')
+    public orderStatus!: OrderStatusEntity;
 
     @Type()
     public customer!: UserEntity;
@@ -72,4 +75,12 @@ export class OrderEntity extends Entity {
 
     @Field('customer_number')
     public customerNumber!: string;
+
+    public get status() {
+        return this.orderStatus?.name;
+    }
+
+    public getItemsByStatus(status: OrderItemStatusEnum): OrderItemEntity[] {
+        return this.orderItems.filter((item) => item.status?.id === status);
+    }
 }

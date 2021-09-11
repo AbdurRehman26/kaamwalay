@@ -5,8 +5,6 @@ namespace App\Services\Admin;
 use App\Models\Order;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
@@ -16,19 +14,8 @@ class OrderService
         $itemsPerPage = request('per_page');
 
         return QueryBuilder::for(Order::class)
-            ->allowedFilters([
-                AllowedFilter::exact('order_id', 'id'),
-                AllowedFilter::scope('status'),
-                AllowedFilter::scope('order_status', 'status'),
-                AllowedFilter::scope('customer_name'),
-                AllowedFilter::scope('customer_id'),
-            ])
-            ->allowedIncludes([
-                AllowedInclude::relationship('customer', 'user'),
-                AllowedInclude::relationship('orderStatus'),
-                AllowedInclude::relationship('orderStatusHistory'),
-                AllowedInclude::relationship('orderStatusHistory.orderStatus'),
-            ])
+            ->allowedFilters(Order::GetAllowedAdminFilters())
+            ->allowedIncludes(Order::GetAllowedAdminIncludes())
             ->allowedSorts(['grand_total'])
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
@@ -38,12 +25,7 @@ class OrderService
     {
         return QueryBuilder::for(Order::class)
             ->where('id', $orderId)
-            ->allowedIncludes([
-                AllowedInclude::relationship('customer', 'user'),
-                AllowedInclude::relationship('orderStatus'),
-                AllowedInclude::relationship('orderStatusHistory'),
-                AllowedInclude::relationship('orderStatusHistory.orderStatus'),
-            ])
+            ->allowedIncludes(Order::GetAllowedAdminIncludes())
             ->firstOrFail();
     }
 }

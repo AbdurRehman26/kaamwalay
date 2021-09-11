@@ -31,16 +31,20 @@ export function NotesDialog({ heading, description, onSubmitNotes, extraData, on
 
     const handleChange = useCallback((e) => setValue(e.target.value), [setValue]);
 
-    const handleSubmit = useCallback(() => {
-        setLoading(true);
-        try {
-            onSubmitNotes(value, extraData ?? {});
-            setValue('');
-        } catch (e) {
-            notifications.exception(e);
-        }
-        setLoading(false);
-    }, [notifications, onSubmitNotes, value, extraData]);
+    const handleSubmit = useCallback(
+        (event) => {
+            setLoading(true);
+            try {
+                onSubmitNotes(value, extraData ?? {});
+                setValue('');
+            } catch (e) {
+                notifications.exception(e);
+            }
+            setLoading(false);
+            handleClose(event);
+        },
+        [handleClose, onSubmitNotes, value, extraData, notifications],
+    );
 
     return (
         <Dialog {...rest} onClose={onClose} maxWidth={'xs'}>

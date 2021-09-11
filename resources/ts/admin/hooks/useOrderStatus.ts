@@ -1,30 +1,15 @@
 import { useMemo } from 'react';
 import { StatusChipColor } from '@shared/components/StatusChip';
+import { OrderStatusMap } from '@shared/constants/OrderStatusEnum';
+import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 
-interface Options {
-    isShipped?: boolean;
-    isGraded?: boolean;
-    isReviewed?: boolean;
-}
-
-export function useOrderStatus({
-    isShipped,
-    isGraded,
-    isReviewed,
-}: Options): [statusType: StatusChipColor, label: string] {
+export function useOrderStatus(orderStatus: OrderStatusEntity): [statusType: StatusChipColor, label: string] {
     return useMemo(() => {
-        if (isShipped) {
-            return ['shipped', 'Shipped'];
-        }
-
-        if (isGraded) {
-            return ['graded', 'Graded'];
-        }
-
-        if (isReviewed) {
-            return ['reviewed', 'Reviewed'];
+        const meta = (OrderStatusMap as Record<number, any>)[orderStatus?.id];
+        if (meta) {
+            return [meta.value, meta.label];
         }
 
         return ['pending', 'Pending'];
-    }, [isGraded, isReviewed, isShipped]);
+    }, [orderStatus?.id]);
 }

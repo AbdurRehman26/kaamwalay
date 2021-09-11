@@ -29,7 +29,7 @@ class OrderStatusHistory extends Model
         return [
             AllowedInclude::relationship('user'),
             AllowedInclude::relationship('order'),
-            AllowedInclude::relationship('order_status'),
+            AllowedInclude::relationship('orderStatus'),
         ];
     }
 

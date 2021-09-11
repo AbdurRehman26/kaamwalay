@@ -6,7 +6,10 @@ import { app } from '@shared/lib/app';
 import { OrderItemsRepository } from '@shared/repositories/Admin/OrderItemsRepository';
 import { OrdersRepository } from '@shared/repositories/Admin/OrdersRepository';
 import { APIState } from '@shared/types/APIState';
+import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
 import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBatchDto';
+import { OrderItemStatusEntity } from '../../entities/OrderItemStatusEntity';
+import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntity';
 import { NotificationsService } from '../../services/NotificationsService';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
@@ -24,7 +27,7 @@ export const changeOrderItemStatus = createAsyncThunk(
             return {
                 orderId: input.orderId,
                 orderItemId: input.orderItemId,
-                status: item.status,
+                status: classToPlain(item.status),
             };
         } catch (e) {
             NotificationsService.exception(e);
@@ -43,8 +46,23 @@ export const changeOrderItemsStatus = createAsyncThunk(
             return processedItems.map((item) => ({
                 orderId: input.orderId,
                 orderItemId: item.id,
-                status: item.status,
+                status: classToPlain(item.status),
             }));
+        } catch (e) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
+        }
+    },
+);
+
+export const addOrderStatusHistory = createAsyncThunk(
+    'addOrderStatusHistory',
+    async (input: AddOrderStatusHistoryDto, thunkAPI) => {
+        const ordersRepository = app(OrdersRepository);
+
+        try {
+            const orderStatusHistory = await ordersRepository.addOrderStatusHistory(input);
+            return classToPlain(orderStatusHistory);
         } catch (e) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
@@ -69,7 +87,7 @@ export const adminOrdersSlice = createSlice({
 
             order.orderItems = (order.orderItems ?? []).map((item) => {
                 if (item.id === orderItemId) {
-                    item.status = status;
+                    item.status = plainToClass(OrderItemStatusEntity, status);
                 }
 
                 return item;
@@ -83,7 +101,7 @@ export const adminOrdersSlice = createSlice({
                 const order = plainToClass(OrderEntity, state.entities[orderId]);
                 order.orderItems = (order.orderItems ?? []).map((item) => {
                     if (item.id === orderItemId) {
-                        item.status = status;
+                        item.status = plainToClass(OrderItemStatusEntity, status);
                     }
 
                     return item;
@@ -91,6 +109,18 @@ export const adminOrdersSlice = createSlice({
 
                 state.entities[orderId] = classToPlain(order) as any;
             });
+        });
+
+        builder.addCase(addOrderStatusHistory.fulfilled, (state, { payload }) => {
+            const orderStatusHistory = plainToClass(OrderStatusHistoryEntity, payload);
+            const order = plainToClass(OrderEntity, state.entities[orderStatusHistory.orderId]);
+
+            if (order) {
+                order.orderStatusHistory = [...order.orderStatusHistory, orderStatusHistory];
+                order.orderStatus = orderStatusHistory.orderStatus;
+
+                state.entities[orderStatusHistory.orderId] = classToPlain(order) as any;
+            }
         });
     },
 });

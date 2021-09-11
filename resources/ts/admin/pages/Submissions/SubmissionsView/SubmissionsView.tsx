@@ -16,12 +16,20 @@ export function SubmissionsView() {
         resourceId: id,
         config: {
             params: {
-                include: 'customer',
+                include: [
+                    'customer',
+                    'billingAddress',
+                    'shippingAddress',
+                    'orderPayment',
+                    'orderStatus',
+                    'orderItems',
+                    'orderStatusHistory.orderStatus',
+                ],
             },
         },
     });
 
-    if (isLoading) {
+    if (isLoading || !data) {
         return (
             <Box p={4} display={'flex'} alignItems={'center'} justifyContent={'center'} width={'100%'}>
                 <CircularProgress />
@@ -31,7 +39,12 @@ export function SubmissionsView() {
 
     return (
         <Grid container direction={'column'}>
-            <SubmissionsViewHeader orderId={id} orderNumber={data?.orderNumber ?? ''} />
+            <SubmissionsViewHeader
+                orderId={id}
+                orderNumber={data?.orderNumber ?? ''}
+                orderStatus={data?.orderStatus}
+                orderStatusHistory={data?.orderStatusHistory}
+            />
             <Divider />
             <SubmissionsViewDetails
                 serviceLevelFee={data.serviceFee}
@@ -41,19 +54,19 @@ export function SubmissionsView() {
                 serviceFee={data.serviceFee * data.numberOfCards}
                 shippingFee={data.shippingFee}
                 grandTotal={data.grandTotal}
-                customerId={data.customer.id}
-                customerNumber={data.customer.customerNumber}
-                customerName={data.customer.getFullName()}
-                customerEmail={data.customer.email}
-                customerPhone={data.customer.phone}
+                customerId={data.customer?.id}
+                customerNumber={data.customer?.customerNumber}
+                customerName={data.customer?.getFullName()}
+                customerEmail={data.customer?.email}
+                customerPhone={data.customer?.phone}
                 billingAddress={data.billingAddress}
                 shippingAddress={data.shippingAddress}
-                cardLast4={data.orderPayment.card.last4}
-                cardType={data.orderPayment.card.brand}
-                cardExpirationMonth={data.orderPayment.card.expMonth}
-                cardExpirationYear={data.orderPayment.card.expYear}
+                cardLast4={data.orderPayment?.card?.last4}
+                cardType={data.orderPayment?.card?.brand}
+                cardExpirationMonth={data.orderPayment?.card?.expMonth}
+                cardExpirationYear={data.orderPayment?.card?.expYear}
             />
-            <SubmissionViewCards />
+            <SubmissionViewCards items={data.orderItems} serviceFee={data.serviceFee} />
         </Grid>
     );
 }

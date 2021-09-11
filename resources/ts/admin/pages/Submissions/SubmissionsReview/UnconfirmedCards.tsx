@@ -149,6 +149,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                 onClose={handleClosePreview}
                 indexId={activeIndex!}
                 orderId={orderId}
+                itemsLength={items.length}
                 onNext={handleNext}
                 onPrevious={handlePrevious}
                 onMissing={handleMissing}

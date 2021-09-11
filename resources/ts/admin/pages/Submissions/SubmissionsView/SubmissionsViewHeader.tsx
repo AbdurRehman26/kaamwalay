@@ -8,16 +8,17 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
+import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
+import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
+import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '../../../hooks/useOrderStatus';
 
 interface SubmissionViewHeaderProps {
     orderId: string | number;
     orderNumber: string;
-    isLoading?: boolean;
-    isReviewed?: boolean;
-    isGraded?: boolean;
-    isShipped?: boolean;
+    orderStatus: OrderStatusEntity;
+    orderStatusHistory: OrderStatusHistoryEntity[];
 }
 
 const useStyles = makeStyles(
@@ -47,13 +48,12 @@ const useStyles = makeStyles(
 export function SubmissionsViewHeader({
     orderId,
     orderNumber,
-    isReviewed,
-    isGraded,
-    isShipped,
+    orderStatus,
+    orderStatusHistory,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
 
-    const [statusType, statusLabel] = useOrderStatus({ isGraded, isReviewed, isShipped });
+    const [statusType, statusLabel] = useOrderStatus(orderStatus);
 
     const actionButton = useMemo(() => {
         const sharedProps: any = {
@@ -63,7 +63,11 @@ export function SubmissionsViewHeader({
             className: classes.button,
         };
 
-        if (!isReviewed) {
+        if (!orderStatus) {
+            return null;
+        }
+
+        if (!orderStatus.is(OrderStatusEnum.ARRIVED)) {
             return (
                 <Button component={Link} to={`/submissions/${orderId}/review`} {...sharedProps}>
                     Review
@@ -71,7 +75,7 @@ export function SubmissionsViewHeader({
             );
         }
 
-        if (!isGraded) {
+        if (!orderStatus.is(OrderStatusEnum.GRADED)) {
             return (
                 <Button component={Link} to={`/submissions/${orderId}/grade`} {...sharedProps}>
                     Grade
@@ -79,7 +83,7 @@ export function SubmissionsViewHeader({
             );
         }
 
-        if (!isShipped) {
+        if (!orderStatus.is(OrderStatusEnum.SHIPPED)) {
             return <Button {...sharedProps}>Mark Shipped</Button>;
         }
 
@@ -88,7 +92,30 @@ export function SubmissionsViewHeader({
                 Edit Tracking
             </Button>
         );
-    }, [classes.button, isGraded, isReviewed, isShipped, orderId]);
+    }, [classes.button, orderId, orderStatus]);
+
+    const history = useMemo(
+        () =>
+            [
+                OrderStatusEnum.PAYMENT_PENDING,
+                OrderStatusEnum.ARRIVED,
+                OrderStatusEnum.GRADED,
+                OrderStatusEnum.SHIPPED,
+            ].map((status) => {
+                const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
+                const { label, value } = OrderStatusMap[status];
+
+                return {
+                    label,
+                    value,
+                    isCompleted: !!item?.createdAt,
+                    completedAt: item?.createdAt,
+                };
+            }),
+        [orderStatusHistory],
+    );
+
+    console.log(statusType, statusLabel, orderStatus);
 
     return (
         <Grid container className={classes.root}>
@@ -106,14 +133,7 @@ export function SubmissionsViewHeader({
                     </IconButton>
                 </Grid>
             </Grid>
-            <StatusProgressBar
-                steps={[
-                    { label: 'Pending', value: 'pending', isCompleted: true, completedAt: new Date() },
-                    { label: 'Reviewed', value: 'reviewed' },
-                    { label: 'Graded', value: 'graded' },
-                    { label: 'Shipped', value: 'shipped' },
-                ]}
-            />
+            <StatusProgressBar steps={history} />
         </Grid>
     );
 }

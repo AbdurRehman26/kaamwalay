@@ -13,9 +13,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { upperFirst } from 'lodash';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
+import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -23,16 +24,18 @@ import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { font } from '@shared/styles/utils';
 
 interface SubmissionsTableProps {
-    tabFilter: string;
+    tabFilter?: OrderStatusEnum;
+    all?: boolean;
 }
 
-export function SubmissionsTable({ tabFilter }: SubmissionsTableProps) {
-    const heading = upperFirst(tabFilter);
+export function SubmissionsTable({ tabFilter, all }: SubmissionsTableProps) {
+    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PAYMENT_PENDING], [tabFilter]);
+    const heading = all ? 'All' : upperFirst(status?.label ?? '');
 
     const orders$ = useListAdminOrdersQuery({
         params: {
             filter: {
-                status: tabFilter,
+                status: all ? 'all' : tabFilter,
             },
             include: ['orderStatus', 'customer'],
         },
@@ -89,18 +92,25 @@ export function SubmissionsTable({ tabFilter }: SubmissionsTableProps) {
                                     <TableCell>{formatDate(item.createdAt, 'MM/DD/YYYY')}</TableCell>
                                     <TableCell>{formatDate(item.arrivedAt, 'MM/DD/YYYY')}</TableCell>
                                     <TableCell>
-                                        <MuiLink
-                                            component={Link}
-                                            color={'primary'}
-                                            to={`/customers/${item.customerId}/view`}
-                                            className={font.fontWeightMedium}
-                                        >
-                                            {item.customerNumber}
-                                        </MuiLink>
+                                        {item.customer ? (
+                                            <MuiLink
+                                                component={Link}
+                                                color={'primary'}
+                                                to={`/customers/${item.customer?.id}/view`}
+                                                className={font.fontWeightMedium}
+                                            >
+                                                {item.customer?.customerNumber}
+                                            </MuiLink>
+                                        ) : (
+                                            '-'
+                                        )}
                                     </TableCell>
                                     <TableCell>{item.numberOfCards}</TableCell>
                                     <TableCell>
-                                        <StatusChip label={item.status as any} />
+                                        <StatusChip
+                                            label={item.orderStatus?.name}
+                                            color={item.orderStatus?.code as any}
+                                        />
                                     </TableCell>
                                     <TableCell>{formatCurrency(item.totalDeclaredValue)}</TableCell>
                                     <TableCell>{formatCurrency(item.grandTotal)}</TableCell>

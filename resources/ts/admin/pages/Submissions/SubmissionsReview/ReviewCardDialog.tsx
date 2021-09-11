@@ -9,7 +9,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
 import { plainToClass } from 'class-transformer';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { cx } from '@shared/lib/utils/cx';
@@ -18,6 +18,7 @@ import { useAppSelector } from '@admin/redux/hooks';
 interface ReviewCardDialogProps extends DialogProps {
     indexId: number;
     orderId: number;
+    itemsLength: number;
     disableNext?: boolean;
     disablePrevious?: boolean;
 
@@ -99,6 +100,7 @@ export function ReviewCardDialog(props: ReviewCardDialogProps) {
         disableNext,
         disablePrevious,
         onClose,
+        itemsLength,
         ...rest
     } = props;
 
@@ -116,22 +118,34 @@ export function ReviewCardDialog(props: ReviewCardDialogProps) {
     const handleConfirm = useCallback(async () => {
         setLoading('confirm');
         try {
-            await onConfirm(activeItem.id);
+            await onConfirm(activeItem?.id);
         } catch (e) {
             notification.exception(e);
         }
         setLoading('');
-    }, [onConfirm, activeItem?.id, notification]);
+        onNext && onNext();
+    }, [onNext, onConfirm, activeItem?.id, notification]);
 
     const handleMissing = useCallback(async () => {
         setLoading('missing');
         try {
-            await onMissing(activeItem.id);
+            await onMissing(activeItem?.id);
         } catch (e) {
             notification.exception(e);
         }
         setLoading('');
-    }, [onMissing, activeItem?.id, notification]);
+        onNext && onNext();
+    }, [onNext, onMissing, activeItem?.id, notification]);
+
+    useEffect(
+        () => {
+            if (rest.open && itemsLength === 0) {
+                handleClose();
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [itemsLength, rest.open],
+    );
 
     return (
         <Dialog scroll={'body'} classes={{ root: classes.dialog, paper: classes.paper }} onClose={onClose} {...rest}>

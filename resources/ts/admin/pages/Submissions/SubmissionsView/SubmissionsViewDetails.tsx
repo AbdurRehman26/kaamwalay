@@ -78,20 +78,21 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
     );
 
     const customerInfo = useMemo(
-        () => [
-            ['Customer:', customerName],
-            ['', <MuiLink href={`mailto:${customerEmail}`}>{customerEmail}</MuiLink>],
-            ['', <MuiLink href={`tel:${customerPhone}`}>{customerPhone}</MuiLink>],
+        () =>
             [
-                '',
-                <>
-                    Customer ID:&nbsp;
-                    <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
-                        {customerNumber}
-                    </MuiLink>
-                </>,
-            ],
-        ],
+                ['Customer:', customerName],
+                customerEmail ? ['', <MuiLink href={`mailto:${customerEmail}`}>{customerEmail}</MuiLink>] : null,
+                customerPhone ? ['', <MuiLink href={`tel:${customerPhone}`}>{customerPhone}</MuiLink>] : null,
+                [
+                    '',
+                    <>
+                        Customer ID:&nbsp;
+                        <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
+                            {customerNumber}
+                        </MuiLink>
+                    </>,
+                ],
+            ].filter(Boolean),
         [customerEmail, customerId, customerName, customerNumber, customerPhone],
     );
 

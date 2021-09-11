@@ -6,26 +6,42 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
+import { addOrderStatusHistory } from '@shared/redux/slices/adminOrdersSlice';
 import { useSidebarHidden } from '@admin/hooks/useSidebarHidden';
+import { useAppDispatch } from '@admin/redux/hooks';
 import ConfirmedCards from './ConfirmedCards';
 import MissingCards from './MissingCards';
 import UnconfirmedCards from './UnconfirmedCards';
 
 export function SubmissionsReview() {
     const { id } = useParams<{ id: string }>();
+    const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState(false);
 
     const { data, isLoading } = useAdminOrderQuery({
         resourceId: id,
         config: {
             params: {
-                include: ['orderItems'],
+                include: ['orderItems', 'orderStatus', 'orderStatusHistory.orderStatus'],
             },
         },
     });
+
+    const handleCompleteOrderReview = useCallback(async () => {
+        setLoading(false);
+        await dispatch(
+            addOrderStatusHistory({
+                orderId: data?.id,
+                orderStatusId: OrderStatusEnum.ARRIVED,
+            }),
+        );
+        setLoading(true);
+    }, [dispatch, data?.id]);
 
     useSidebarHidden();
 
@@ -38,6 +54,15 @@ export function SubmissionsReview() {
     }
 
     const pendingItems = data.getItemsByStatus(OrderItemStatusEnum.PENDING);
+    if (pendingItems.length === 0) {
+        if (data.hasOrderStatus(OrderStatusEnum.ARRIVED)) {
+            if (!data.hasOrderStatus(OrderStatusEnum.GRADED)) {
+                return <Redirect to={`/submissions/${data.id}/grade`} />;
+            }
+
+            return <Redirect to={`/submissions/${data.id}/view`} />;
+        }
+    }
 
     return (
         <>
@@ -92,7 +117,13 @@ export function SubmissionsReview() {
                     alignItems={'center'}
                     justifyContent={'center'}
                 >
-                    <Button variant={'contained'} color={'primary'}>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        onClick={handleCompleteOrderReview}
+                        disabled={loading}
+                        startIcon={loading ? <CircularProgress size={18} color={'inherit'} /> : null}
+                    >
                         Complete Review
                     </Button>
                 </Box>

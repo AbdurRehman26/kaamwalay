@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
+use Carbon\Carbon;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
@@ -42,15 +43,23 @@ class OrderStatusHistoryService
 
         Order::query()
             ->where('id', $orderId)
-            ->update([
-                'order_status_id' => $orderStatusId,
-            ]);
+            ->update(array_merge(
+                [
+                    'order_status_id' => $orderStatusId,
+                ],
+                $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: []
+            ));
 
-        return OrderStatusHistory::create([
+        $orderStatusHistory = OrderStatusHistory::create([
             'order_id' => $orderId,
             'order_status_id' => $orderStatusId,
             'user_id' => getModelId($user),
             'notes' => $notes,
         ]);
+        
+        return QueryBuilder::for(OrderStatusHistory::class)
+            ->where('id', $orderStatusHistory->id)
+            ->allowedIncludes(OrderStatusHistory::GetAllowedAdminIncludes())
+            ->first();
     }
 }

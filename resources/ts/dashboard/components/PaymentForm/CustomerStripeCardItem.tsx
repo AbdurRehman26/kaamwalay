@@ -26,6 +26,9 @@ const useStyles = makeStyles(
             '&:hover': {
                 cursor: 'pointer',
             },
+            '@media (max-width:600px)': {
+                width: '100%',
+            },
         },
         leftSide: {
             display: 'flex',

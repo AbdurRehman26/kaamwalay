@@ -33,6 +33,9 @@ const useStyles = makeStyles({
             listStyle: 'none',
             padding: 0,
         },
+        '@media (max-width:600px)': {
+            maxHeight: '80vh',
+        },
     },
 });
 

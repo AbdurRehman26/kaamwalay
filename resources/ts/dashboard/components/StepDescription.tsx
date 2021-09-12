@@ -17,6 +17,9 @@ const useStyles = makeStyles({
         letterSpacing: '0px',
         textAlign: 'left',
         marginBottom: '6px',
+        '@media (max-width:600px)': {
+            fontSize: '20px',
+        },
     },
     description: {
         fontFamily: 'Roboto',

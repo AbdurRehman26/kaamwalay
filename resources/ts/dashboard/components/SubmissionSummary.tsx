@@ -21,6 +21,9 @@ const useStyles = makeStyles({
     container: {
         width: '345px',
         minHeight: '20px',
+        '@media (max-width:600px)': {
+            width: '100%',
+        },
     },
     titleContainer: {
         backgroundColor: '#F9F9F9',

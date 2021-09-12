@@ -1,3 +1,4 @@
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Paper from '@material-ui/core/Paper';
@@ -57,12 +58,18 @@ const useStyles = makeStyles({
     },
     qtyField: {
         width: '80px',
+        '@media (max-width:600px)': {
+            width: '100%',
+        },
     },
     valueField: {
         width: '150px',
+        '@media (max-width:600px)': {
+            width: '100%',
+        },
     },
     table: {
-        minWidth: 650,
+        minWidth: '100%',
     },
     editBtn: {
         fontFamily: 'Roboto',
@@ -91,6 +98,27 @@ const useStyles = makeStyles({
         textAlign: 'right',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.87)',
+    },
+    mobileViewContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: '12px',
+    },
+    mobileViewCardActionContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '45%',
+    },
+    mobileViewCardActions: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: '24px',
+        marginBottom: '12px',
+    },
+    actionLabel: {
+        fontWeight: 'bold',
+        marginBottom: '6px',
     },
 });
 
@@ -123,13 +151,14 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
 
 type AddedSubmissionCardsProps = {
     reviewMode?: boolean;
+    mobileMode?: boolean;
 };
 
 function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const classes = useStyles();
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
-    const { reviewMode } = props;
+    const { reviewMode, mobileMode } = props;
 
     function onDeselectCard(row: SearchResultItemCardProps) {
         ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
@@ -180,41 +209,11 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                 ) : null}
             </div>
 
-            <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Qty</TableCell>
-                        <TableCell align="left">Card(s)</TableCell>
-                        <TableCell align="left">Value (USD) </TableCell>
-                        <TableCell align="left"> </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
+            {mobileMode && !reviewMode ? (
+                <>
                     {selectedCards.map((row: SearchResultItemCardProps) => (
-                        <TableRow key={row.id}>
-                            <TableCell component="th" scope="row">
-                                {!reviewMode ? (
-                                    <TextField
-                                        onChange={(e) => onChangeCardQty(row, Number(e.target.value))}
-                                        type="number"
-                                        size={'small'}
-                                        value={row.qty}
-                                        InputProps={{
-                                            inputProps: { min: 1 },
-                                        }}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        className={classes.qtyField}
-                                        variant="outlined"
-                                    />
-                                ) : (
-                                    <Typography variant={'subtitle1'} className={classes.tableRowText}>
-                                        {row.qty}
-                                    </Typography>
-                                )}
-                            </TableCell>
-                            <TableCell align="left">
+                        <>
+                            <div className={classes.mobileViewContainer}>
                                 <SearchResultItemCard
                                     key={row.id}
                                     id={row.id}
@@ -222,45 +221,139 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                     subtitle={row.subtitle}
                                     title={row.title}
                                     addedMode
+                                    reviewMode
                                 />
-                            </TableCell>
-                            <TableCell align="left">
-                                {!reviewMode ? (
-                                    <TextField
-                                        value={row.value}
-                                        onChange={(e) => onChangeCardValue(row, Number(e.target.value))}
-                                        name="numberformat"
-                                        size="small"
-                                        id="formatted-numberformat-input"
-                                        variant="outlined"
-                                        InputProps={{
-                                            inputComponent: NumberFormatCustom as any,
-                                            inputProps: { min: 1 },
-                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                        }}
-                                    />
-                                ) : (
-                                    <NumberFormat
-                                        value={row.value}
-                                        displayType={'text'}
-                                        thousandSeparator
-                                        decimalSeparator={'.'}
-                                        prefix={'$'}
-                                        className={classes.tableRowText}
-                                    />
-                                )}
-                            </TableCell>
-                            {!reviewMode ? (
-                                <TableCell align="left">
-                                    <IconButton aria-label="delete" onClick={() => onDeselectCard(row)}>
-                                        <DeleteIcon fontSize="medium" />
-                                    </IconButton>
-                                </TableCell>
-                            ) : null}
-                        </TableRow>
+                                <div className={classes.mobileViewCardActions}>
+                                    <div className={classes.mobileViewCardActionContainer}>
+                                        <Typography variant={'caption'} className={classes.actionLabel}>
+                                            Qty
+                                        </Typography>
+                                        <TextField
+                                            onChange={(e) => onChangeCardQty(row, Number(e.target.value))}
+                                            type="number"
+                                            size={'small'}
+                                            value={row.qty}
+                                            InputProps={{
+                                                inputProps: { min: 1 },
+                                            }}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            className={classes.qtyField}
+                                            variant="outlined"
+                                        />
+                                    </div>
+
+                                    <div className={classes.mobileViewCardActionContainer}>
+                                        <Typography variant={'caption'} className={classes.actionLabel}>
+                                            Value (USD)
+                                        </Typography>
+                                        <TextField
+                                            value={row.value}
+                                            onChange={(e) => onChangeCardValue(row, Number(e.target.value))}
+                                            name="numberformat"
+                                            size="small"
+                                            id="formatted-numberformat-input"
+                                            variant="outlined"
+                                            InputProps={{
+                                                inputComponent: NumberFormatCustom as any,
+                                                inputProps: { min: 1 },
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                            }}
+                                            className={classes.valueField}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <Divider light />
+                        </>
                     ))}
-                </TableBody>
-            </Table>
+                </>
+            ) : (
+                <Table className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Qty</TableCell>
+                            <TableCell align="left">Card(s)</TableCell>
+                            <TableCell align="right">Value (USD) </TableCell>
+                            {!reviewMode ? <TableCell align="left"> </TableCell> : null}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {selectedCards.map((row: SearchResultItemCardProps) => (
+                            <>
+                                <TableRow key={row.id}>
+                                    <TableCell component="th" scope="row" align={'left'}>
+                                        {!reviewMode ? (
+                                            <TextField
+                                                onChange={(e) => onChangeCardQty(row, Number(e.target.value))}
+                                                type="number"
+                                                size={'small'}
+                                                value={row.qty}
+                                                InputProps={{
+                                                    inputProps: { min: 1 },
+                                                }}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                className={classes.qtyField}
+                                                variant="outlined"
+                                            />
+                                        ) : (
+                                            <Typography variant={'subtitle1'} className={classes.tableRowText}>
+                                                {row.qty}
+                                            </Typography>
+                                        )}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <SearchResultItemCard
+                                            key={row.id}
+                                            id={row.id}
+                                            image={row.image}
+                                            subtitle={row.subtitle}
+                                            title={row.title}
+                                            addedMode
+                                        />
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {!reviewMode ? (
+                                            <TextField
+                                                value={row.value}
+                                                onChange={(e) => onChangeCardValue(row, Number(e.target.value))}
+                                                name="numberformat"
+                                                size="small"
+                                                id="formatted-numberformat-input"
+                                                variant="outlined"
+                                                InputProps={{
+                                                    inputComponent: NumberFormatCustom as any,
+                                                    inputProps: { min: 1 },
+                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                }}
+                                            />
+                                        ) : (
+                                            <NumberFormat
+                                                value={row.value}
+                                                displayType={'text'}
+                                                thousandSeparator
+                                                decimalSeparator={'.'}
+                                                prefix={'$'}
+                                                className={classes.tableRowText}
+                                            />
+                                        )}
+                                    </TableCell>
+                                    {!reviewMode ? (
+                                        <TableCell align="left">
+                                            <IconButton aria-label="delete" onClick={() => onDeselectCard(row)}>
+                                                <DeleteIcon fontSize="medium" />
+                                            </IconButton>
+                                        </TableCell>
+                                    ) : null}
+                                </TableRow>
+                            </>
+                        ))}
+                    </TableBody>
+                </Table>
+            )}
         </Paper>
     );
 }

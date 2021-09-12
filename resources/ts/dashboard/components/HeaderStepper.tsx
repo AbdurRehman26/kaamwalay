@@ -92,6 +92,9 @@ const useStyles = makeStyles((theme: Theme) =>
             border: 'none',
             maxWidth: '552px',
             width: '100%',
+            '@media (max-width:600px)': {
+                width: 'auto',
+            },
         },
         stepperContainer: {
             display: 'flex',
@@ -99,6 +102,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             justifyContent: 'center',
             transform: 'translate(0, 88px)',
+            overflow: 'hidden',
         },
         instructions: {
             marginTop: theme.spacing(1),

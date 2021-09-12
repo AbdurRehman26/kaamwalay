@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
@@ -8,6 +9,7 @@ import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
+import CardsSearchMobileModal from '@dashboard/components/CardsSearchMobileModal';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { backStep, setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';
@@ -40,6 +42,7 @@ function SubmissionStep02Content() {
     );
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
+    const isMobile = useMediaQuery('(max-width:600px)');
     const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
 
     const searchClient = useMemo(
@@ -87,9 +90,10 @@ function SubmissionStep02Content() {
                     <Divider light />
                     <div className={classes.leftSideContainer}>
                         <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
+                            {isMobile ? <CardsSearchMobileModal /> : null}
                             <CardSubmissionSearchField />
-                            {searchValue !== '' ? <CardsSearchResults /> : null}
-                            <AddedSubmissionCards />
+                            {searchValue !== '' && !isMobile ? <CardsSearchResults /> : null}
+                            <AddedSubmissionCards mobileMode={isMobile} />
                             {!areSelectedCardsValuesValid() ? (
                                 <>
                                     <Alert severity="error" className={classes.valueAlert}>

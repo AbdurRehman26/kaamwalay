@@ -38,6 +38,9 @@ const useStyles = makeStyles(
             color: '#fff',
             fontWeight: 'bold',
             fontSize: '32px',
+            '@media (max-width:600px)': {
+                fontSize: '24px',
+            },
         },
     },
     {

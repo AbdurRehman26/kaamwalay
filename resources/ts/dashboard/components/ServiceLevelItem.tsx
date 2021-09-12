@@ -40,6 +40,9 @@ const useStyles = makeStyles(
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            '@media (max-width:600px)': {
+                minWidth: '106px',
+            },
         },
         radioBtnContainer: {},
         maxValueContainer: {
@@ -57,6 +60,9 @@ const useStyles = makeStyles(
             lineHeight: '24px',
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
+            '@media (max-width:600px)': {
+                fontSize: '14px',
+            },
         },
         protectionText: {
             fontFamily: 'Roboto',

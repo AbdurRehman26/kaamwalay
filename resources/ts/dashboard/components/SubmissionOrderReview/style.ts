@@ -7,6 +7,9 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        '@media (max-width:600px)': {
+            flexDirection: 'column',
+        },
     },
     orderDetailItemBody: {
         display: 'flex',
@@ -18,6 +21,7 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
+        marginTop: '24px',
     },
     orderDetailItemTitleContainer: {
         display: 'flex',

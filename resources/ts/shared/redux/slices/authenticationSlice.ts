@@ -35,7 +35,7 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
 
         // serialize class objects to plain objects according redux toolkit error
         return classToPlain(authenticatedUser);
-    } catch (e) {
+    } catch (e: any) {
         if (isAxiosError(e) || isException(e)) {
             ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
             NotificationsService.exception(e);
@@ -59,7 +59,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
         thunkAPI.dispatch(authenticateCheckAction());
-    } catch (e) {
+    } catch (e: any) {
         NotificationsService.exception(e);
         return thunkAPI.rejectWithValue(e);
     }
@@ -91,7 +91,7 @@ export const forgotPasswordAction = createAsyncThunk('auth/password/forgot', asy
         const forgotPasswordResponse = await authenticationRepository.forgotPassword(email);
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.sentResetLink });
         return forgotPasswordResponse;
-    } catch (e) {
+    } catch (e: any) {
         NotificationsService.exception(e);
         return thunkAPI.rejectWithValue(e);
     }
@@ -105,7 +105,7 @@ export const resetPasswordAction = createAsyncThunk(
             const resetPasswordResponse = await authenticationRepository.resetPassword(input);
             ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.sentResetLink });
             return resetPasswordResponse;
-        } catch (e) {
+        } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
         }

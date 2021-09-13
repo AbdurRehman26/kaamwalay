@@ -55,7 +55,7 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
             setDownloading(true);
             try {
                 await downloadFromUrl(invoice!, `robograding-${invoiceNumber}.pdf`);
-            } catch (e) {
+            } catch (e: any) {
                 notifications.exception(e);
             }
             setDownloading(false);

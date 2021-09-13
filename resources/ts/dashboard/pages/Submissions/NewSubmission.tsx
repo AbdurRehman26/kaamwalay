@@ -117,7 +117,7 @@ export function NewSubmission() {
                 dispatch(setIsNextLoading(false));
                 dispatch(nextStep());
                 return;
-            } catch (error) {
+            } catch (error: any) {
                 dispatch(setIsNextLoading(false));
                 notifications.exception(error);
                 return;

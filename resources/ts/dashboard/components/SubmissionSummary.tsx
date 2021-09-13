@@ -241,7 +241,7 @@ function SubmissionSummary() {
             });
             sendECommerceDataToGA();
             history.push(`/submissions/${orderID}/confirmation`);
-        } catch (err) {
+        } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
                 notifications.exception(err, 'Payment Failed');

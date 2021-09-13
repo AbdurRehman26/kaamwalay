@@ -16,13 +16,13 @@ class CardGradeResource extends BaseResource
     {
         return [
             'grading_id' => $this->resource['id'],
-            'overall_grade' => $this->resource['grade']['grade'],
-            'overall_grade_nickname' => $this->resource['grade']['nickname'],
+            'overall_grade' => $this->resource['grade']['grade'] ?? 0,
+            'overall_grade_nickname' => $this->resource['grade']['nickname'] ?? '',
             'overall_values' => [
-                'center' => $this->resource['total_centering_grade']['grade'],
-                'surface' => $this->resource['total_surface_grade']['grade'],
-                'edge' => $this->resource['total_edges_grade']['grade'],
-                'corner' => $this->resource['total_corners_grade']['grade'],
+                'center' => $this->resource['total_centering_grade']['grade'] ?? 0,
+                'surface' => $this->resource['total_surface_grade']['grade'] ?? 0,
+                'edge' => $this->resource['total_edges_grade']['grade'] ?? 0,
+                'corner' => $this->resource['total_corners_grade']['grade'] ?? 0,
             ],
             'robo_grade_values' => [
                 'front' => [

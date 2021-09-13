@@ -23,6 +23,7 @@ class UserCardResource extends BaseResource
             'robo_grade_values' => $this->robo_grade_values,
             'overall_values' => $this->overall_values,
             'overall_grade' => $this->overall_grade,
+            'overall_grade_nickname' => $this->overall_grade_nickname,
             'grading_id' => $this->grading_id,
             'ai_model_number' => $this->ai_model_number,
             'front_centering_img_src' => $this->front_centering_img_src,

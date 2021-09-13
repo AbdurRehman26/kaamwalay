@@ -9,27 +9,21 @@ use Illuminate\Support\Facades\Log;
 
 class AGSClient
 {
-    protected const API_VERSION_1 = '/v1';
     protected const API_VERSION_2 = '/v2';
 
-    protected function baseUrl(): string
+    protected function getBaseUrl(): string
     {
         return config('services.ags.base_url');
     }
 
-    protected function v1(): string
+    protected function getAuthToken(): string
     {
-        return $this->baseUrl() . self::API_VERSION_1;
-    }
-
-    protected function v2(): string
-    {
-        return $this->baseUrl() . self::API_VERSION_2;
+        return config('services.ags.authorization_token');
     }
 
     public function login(array $data): array
     {
-        $response = Http::post($this->baseUrl() . '/login/', $data);
+        $response = Http::post($this->getBaseUrl() . '/login/', $data);
         if ($response->successful()) {
             return $response->json();
         }
@@ -39,12 +33,23 @@ class AGSClient
 
     public function register(array $data): array
     {
-        $response = Http::post(url: $this->baseUrl() . '/registration/', data: $data);
+        $response = Http::post(url: $this->getBaseUrl() . '/registration/', data: $data);
         if ($response->successful()) {
             return $response->json();
         }
 
         return $this->responseHandler(response: $response, route: '/registration/', payload: $data);
+    }
+
+    public function getGrades(array $data): array
+    {
+        $response = Http::withToken($this->getAuthToken())->get(url: $this->getBaseUrl() . self::API_VERSION_2 . '/robograding/scan-results/', query: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/robograding/scan-results/', payload: $data);
     }
 
     protected function responseHandler(Response $response, string $route, array $payload = []): array
@@ -64,15 +69,10 @@ class AGSClient
         return [];
     }
 
-    protected function getAuthToken(): string
-    {
-        return config('services.ags.auth_token');
-    }
-
     public function updateHumanGrades(string $certificateId, array $payload)
     {
         $response = Http::withToken($this->getAuthToken())
-            ->patch($this->v2() . '/robograding/certificates/?certificate_id=' . $certificateId, $payload);
+            ->patch($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/?certificate_id=' . $certificateId, $payload);
         if ($response->successful()) {
             return $response->json();
         }
@@ -86,7 +86,7 @@ class AGSClient
 
     public function createCertificates(string $certificateIds)
     {
-        $response = Http::withToken($this->getAuthToken())->asForm()->post($this->v2() . '/robograding/certificates/', [
+        $response = Http::withToken($this->getAuthToken())->asForm()->post($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/', [
             "certificate_ids" => $certificateIds,
         ]);
 

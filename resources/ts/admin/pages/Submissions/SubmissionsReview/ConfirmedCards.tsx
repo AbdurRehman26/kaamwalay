@@ -1,9 +1,14 @@
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import CheckIcon from '@material-ui/icons/Check';
+import PrintIcon from '@material-ui/icons/PrintOutlined';
 import { useCallback } from 'react';
+import { AddCardDialogViewEnum } from '@shared/constants/AddCardDialogViewEnum';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
+import { setAddCardDialogState, setAddCardDialogView } from '@shared/redux/slices/addCardDialogSlice';
 import { changeOrderItemsStatus, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import CardItem from './CardItem';
@@ -41,27 +46,52 @@ export function ConfirmedCards({ items, orderId }: ConfirmedCardsProps) {
         );
     }, [dispatch, items, orderId]);
 
+    const handleAddExtraCard = useCallback(() => {
+        dispatch(setAddCardDialogState(true));
+        dispatch(setAddCardDialogView(AddCardDialogViewEnum.List));
+    }, [dispatch]);
+
     return (
-        <CardsList heading={'Confirmed cards'} totals={(items || []).length} onClear={!hasNoCards ? handleClear : null}>
-            {!hasNoCards ? (
-                items.map((item, index) => (
-                    <CardItem
-                        label={'Confirmed'}
-                        itemId={item.id}
-                        key={index}
-                        card={item.cardProduct}
-                        labelIcon={<CheckIcon color={'inherit'} fontSize={'small'} />}
-                        onRemove={handleRemove}
-                    />
-                ))
-            ) : (
-                <Box padding={7} display={'flex'} justifyContent={'center'}>
-                    <Typography variant={'body2'} color={'textSecondary'}>
-                        No cards confirmed.
-                    </Typography>
-                </Box>
-            )}
-        </CardsList>
+        <>
+            <CardsList
+                heading={'Confirmed cards'}
+                totals={(items || []).length}
+                onClear={!hasNoCards ? handleClear : null}
+                extraAction={
+                    <Box pl={1}>
+                        <Button onClick={handleAddExtraCard} variant={'outlined'} color={'primary'}>
+                            Add Extra Card
+                        </Button>
+                    </Box>
+                }
+            >
+                {!hasNoCards ? (
+                    items.map((item, index) => (
+                        <CardItem
+                            label={
+                                <Tooltip title={'Print Certificate number of the card. (Coming Soon)'}>
+                                    <IconButton size={'small'}>
+                                        <PrintIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            }
+                            itemId={item.id}
+                            key={index}
+                            card={item.cardProduct}
+                            certificateId={item.certificateNumber}
+                            declaredValue={item.declaredValuePerUnit}
+                            onRemove={handleRemove}
+                        />
+                    ))
+                ) : (
+                    <Box padding={7} display={'flex'} justifyContent={'center'}>
+                        <Typography variant={'body2'} color={'textSecondary'}>
+                            No cards confirmed.
+                        </Typography>
+                    </Box>
+                )}
+            </CardsList>
+        </>
     );
 }
 

@@ -13,6 +13,7 @@ import { font } from '@shared/styles/utils';
 interface CardsListProps {
     heading: string;
     totals: number;
+    extraAction?: any;
     onClear?: (() => void) | null;
 }
 
@@ -41,7 +42,7 @@ const useStyles = makeStyles(
     { name: 'CardsList' },
 );
 
-export function CardsList({ children, heading, totals, onClear }: PropsWithChildren<CardsListProps>) {
+export function CardsList({ children, heading, totals, extraAction, onClear }: PropsWithChildren<CardsListProps>) {
     const classes = useStyles();
     const notifications = useNotifications();
     const [loading, setLoading] = useState(false);
@@ -69,20 +70,23 @@ export function CardsList({ children, heading, totals, onClear }: PropsWithChild
                     </Typography>
                 }
                 subheader={
-                    onClear ? (
-                        <Button
-                            onClick={handleClear}
-                            startIcon={
-                                loading ? (
-                                    <CircularProgress size={18} color={'inherit'} />
-                                ) : (
-                                    <ClearAllIcon color={'inherit'} />
-                                )
-                            }
-                        >
-                            Clear
-                        </Button>
-                    ) : null
+                    <>
+                        {onClear ? (
+                            <Button
+                                onClick={handleClear}
+                                startIcon={
+                                    loading ? (
+                                        <CircularProgress size={18} color={'inherit'} />
+                                    ) : (
+                                        <ClearAllIcon color={'inherit'} />
+                                    )
+                                }
+                            >
+                                Clear
+                            </Button>
+                        ) : null}
+                        {extraAction}
+                    </>
                 }
                 disableTypography
             />

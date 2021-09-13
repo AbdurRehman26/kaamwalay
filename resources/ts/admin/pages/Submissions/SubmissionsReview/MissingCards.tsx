@@ -51,6 +51,8 @@ export function MissingCards({ items, orderId }: MissingCardsProps) {
                     itemId={item.id}
                     key={index}
                     card={item.cardProduct}
+                    certificateId={item.certificateNumber}
+                    declaredValue={item.declaredValuePerUnit}
                     onRemove={handleRemove}
                 />
             ))}

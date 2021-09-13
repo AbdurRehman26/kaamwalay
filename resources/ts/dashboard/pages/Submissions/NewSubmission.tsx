@@ -83,6 +83,7 @@ export function NewSubmission() {
     }, [currentStep]);
 
     const handleNext = async () => {
+        window.scroll(0, 0);
         // Executing different stuff before next step loads
         if (currentStep === 1) {
             await dispatch(getShippingFee(selectedCards));
@@ -126,6 +127,7 @@ export function NewSubmission() {
     };
 
     const handleBack = async () => {
+        window.scroll(0, 0);
         if (currentStep === 3) {
             await dispatch(getShippingFee(selectedCards));
             await dispatch(getStatesList());

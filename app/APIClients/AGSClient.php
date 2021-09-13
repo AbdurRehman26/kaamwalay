@@ -9,27 +9,20 @@ use Illuminate\Support\Facades\Log;
 
 class AGSClient
 {
-    protected const API_VERSION_1 = '/v1';
     protected const API_VERSION_2 = '/v2';
 
-    protected function baseUrl(): string
-    {
-        return config('services.ags.base_url');
-    }
+    protected string $baseUrl;
+    protected string $authToken;
 
-    protected function v1(): string
+    public function __construct()
     {
-        return $this->baseUrl() . self::API_VERSION_1;
-    }
-
-    protected function v2(): string
-    {
-        return $this->baseUrl() . self::API_VERSION_2;
+        $this->baseUrl = config('services.ags.base_url');
+        $this->authToken = config('services.ags.authorization_token');
     }
 
     public function login(array $data): array
     {
-        $response = Http::post($this->baseUrl() . '/login/', $data);
+        $response = Http::post($this->baseUrl . '/login/', $data);
         if ($response->successful()) {
             return $response->json();
         }
@@ -39,12 +32,23 @@ class AGSClient
 
     public function register(array $data): array
     {
-        $response = Http::post(url: $this->baseUrl() . '/registration/', data: $data);
+        $response = Http::post(url: $this->baseUrl . '/registration/', data: $data);
         if ($response->successful()) {
             return $response->json();
         }
 
         return $this->responseHandler(response: $response, route: '/registration/', payload: $data);
+    }
+
+    public function getGrades(array $data): array
+    {
+        $response = Http::withToken($this->authToken)->get(url: $this->baseUrl . self::API_VERSION_2 . '/robograding/scan-results/', query: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/robograding/scan-results/', payload: $data);
     }
 
     protected function responseHandler(Response $response, string $route, array $payload = []): array

@@ -37,18 +37,20 @@ class AgsService
     {
         return $this->client->getGrades([
             'certificate_ids' => $certificateId,
-        ])['results'][0];
+        ]);
     }
 
     public function getGradesForPublicPage(string $certificateId): array
     {
         $data = $this->getGradesByCertificateId($certificateId);
 
-        if (empty($data['grade'])) {
+        if (empty($data) || $data['count'] === 0 || empty($data['results'][0]['grade'])) {
             return [
                 'grades_available' => false,
             ];
         }
+
+        $data = $data['results'][0];
 
         return [
             'grades_available' => true,

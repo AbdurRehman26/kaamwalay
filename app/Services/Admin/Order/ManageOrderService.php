@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Order;
 
+use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -50,6 +51,8 @@ class ManageOrderService
     {
         $order->notes = $notes;
         $order->save();
+
+        OrderUpdated::dispatch($order);
 
         return $order;
     }

@@ -2,7 +2,7 @@
 
 namespace App\Listeners\API\Admin\Order;
 
-use App\Events\API\Admin\Order\OrderItemUpdated;
+use App\Events\API\Admin\Order\OrderUpdated;
 
 class UpdateAutoSaveAttribute
 {
@@ -16,10 +16,10 @@ class UpdateAutoSaveAttribute
         //
     }
 
-    public function handle(OrderItemUpdated $event)
+    public function handle(OrderUpdated $event)
     {
         $order = $event->order;
-        
+
         $order->fill([
             'auto_saved_at' => now(),
         ]);

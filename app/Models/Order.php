@@ -34,6 +34,7 @@ class Order extends Model
         'graded_by_id',
         'reviewed_at',
         'graded_at',
+        'auto_saved_at',
     ];
 
     /**

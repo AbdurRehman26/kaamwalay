@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Admin\Order;
 
+use App\Events\API\Admin\Order\OrderItemUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeRequest;
 use App\Http\Resources\API\Admin\Order\UserCardResource;
@@ -14,6 +15,8 @@ class UserCardController extends Controller
         $userCard->update(
             $request->only('human_grade_values')
         );
+
+        OrderItemUpdated::dispatch($userCard->orderItem->order);
 
         return new UserCardResource($userCard);
     }

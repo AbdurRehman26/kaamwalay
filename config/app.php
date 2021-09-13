@@ -179,7 +179,6 @@ return [
 
         \App\Providers\BladeServiceProvider::class,
         \App\Providers\PaymentServiceProvider::class,
-        \App\Providers\AgsServiceProvider::class,
     ],
 
     /*

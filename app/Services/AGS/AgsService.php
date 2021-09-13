@@ -46,4 +46,9 @@ class AgsService
             'back_corners_human_grade' => $data['human_grade_values']['back']['corner'],
         ];
     }
+
+    public function createCertificates(string $certificateIds)
+    {
+        return $this->client->createCertificates(certificateIds: $certificateIds);
+    }
 }

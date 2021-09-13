@@ -83,4 +83,17 @@ class AGSClient
             payload: ['data' => $payload, 'certificate_id' => $certificateId]
         );
     }
+
+    public function createCertificates(string $certificateIds)
+    {
+        $response = Http::withToken($this->getAuthToken())->asForm()->post($this->v2() . '/robograding/certificates/', [
+            "certificate_ids" => $certificateIds,
+        ]);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/robograding/certificates/', payload: [$certificateIds]);
+    }
 }

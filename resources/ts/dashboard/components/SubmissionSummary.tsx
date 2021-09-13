@@ -17,11 +17,11 @@ import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         width: '345px',
         minHeight: '20px',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
@@ -143,7 +143,7 @@ const useStyles = makeStyles({
         color: 'rgba(0, 0, 0, 0.87)',
         marginBottom: '12px',
     },
-});
+}));
 
 function SubmissionSummary() {
     const classes = useStyles();

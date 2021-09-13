@@ -7,7 +7,7 @@ type StepDescriptionProps = {
     description: any;
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     title: {
         fontFamily: 'Roboto',
         fontSize: '24px',
@@ -17,7 +17,7 @@ const useStyles = makeStyles({
         letterSpacing: '0px',
         textAlign: 'left',
         marginBottom: '6px',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             fontSize: '20px',
         },
     },
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
         textAlign: 'left',
         marginBottom: '32px',
     },
-});
+}));
 
 const StepDescription: FunctionComponent<StepDescriptionProps> = ({ title, description }) => {
     const classes = useStyles();

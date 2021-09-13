@@ -18,7 +18,7 @@ type ExistingAddressProps = {
 };
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
         container: {
             width: '200px',
             padding: '12px',
@@ -33,7 +33,7 @@ const useStyles = makeStyles(
             '&:hover': {
                 cursor: 'pointer',
             },
-            '@media (max-width:600px)': {
+            [theme.breakpoints.down('xs')]: {
                 width: '100%',
             },
         },
@@ -53,11 +53,11 @@ const useStyles = makeStyles(
             width: '110%',
             height: '25px',
             justifyContent: 'flex-end',
-            '@media (max-width:600px)': {
+            [theme.breakpoints.down('xs')]: {
                 width: '100%',
             },
         },
-    },
+    }),
     { name: 'ExistingAddressComponent' },
 );
 

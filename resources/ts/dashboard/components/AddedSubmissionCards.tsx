@@ -25,7 +25,7 @@ import {
 } from '../redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     addedCardsContainer: {
         marginTop: '32px',
         padding: '16px',
@@ -58,13 +58,13 @@ const useStyles = makeStyles({
     },
     qtyField: {
         width: '80px',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
     valueField: {
         width: '150px',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
@@ -120,7 +120,7 @@ const useStyles = makeStyles({
         fontWeight: 'bold',
         marginBottom: '6px',
     },
-});
+}));
 
 interface NumberFormatCustomProps {
     inputRef: (instance: NumberFormat | null) => void;

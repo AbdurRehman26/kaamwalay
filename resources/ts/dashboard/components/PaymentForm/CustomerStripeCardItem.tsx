@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { CreditCard, setSelectedStripeCard } from '@dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
         root: {
             display: 'flex',
             flexDirection: 'row',
@@ -26,7 +26,7 @@ const useStyles = makeStyles(
             '&:hover': {
                 cursor: 'pointer',
             },
-            '@media (max-width:600px)': {
+            [theme.breakpoints.down('xs')]: {
                 width: '100%',
             },
         },
@@ -101,7 +101,7 @@ const useStyles = makeStyles(
             fontWeight: 'normal',
             color: 'grey',
         },
-    },
+    }),
     { name: 'ServiceLevelItemStyle' },
 );
 

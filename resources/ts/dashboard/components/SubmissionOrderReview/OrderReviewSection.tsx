@@ -2,6 +2,7 @@ import { useMediaQuery } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { Theme } from '@material-ui/core/styles';
 import React from 'react';
 import NumberFormat from 'react-number-format';
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
@@ -12,7 +13,7 @@ import { useAppSelector } from '@dashboard/redux/hooks';
 
 function OrderReviewSection() {
     const classes = useStyles({});
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
     // Service level data
     const serviceLevelPricePerCard = useAppSelector(

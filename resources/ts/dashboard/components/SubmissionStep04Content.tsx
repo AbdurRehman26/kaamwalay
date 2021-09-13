@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -25,7 +25,7 @@ import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
         maxWidth: '425px',
     },
@@ -68,7 +68,7 @@ const useStyles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             flexDirection: 'column',
             justifyContent: 'flex-start',
         },
@@ -137,36 +137,36 @@ const useStyles = makeStyles({
     },
     addressFieldContainer: {
         width: '80%',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
     aptFieldContainer: {
         width: '18%',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
     cityFieldContainer: {
         width: '30%',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
     stateFieldContainer: {
         width: '32%',
         marginTop: '6px',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '47%',
         },
     },
     zipFieldContainer: {
         width: '32%',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '47%',
         },
     },
-});
+}));
 
 const GreenCheckbox = withStyles({
     root: {
@@ -196,7 +196,7 @@ export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const apiService = useInjectable(APIService);
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
     const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
     const [arePaymentMethodsLoading, setArePaymentMethodsLoading] = useState(false);

@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme: Theme) =>
             border: 'none',
             maxWidth: '552px',
             width: '100%',
-            '@media (max-width:600px)': {
+            [theme.breakpoints.down('xs')]: {
                 width: 'auto',
             },
         },

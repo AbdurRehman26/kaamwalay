@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
@@ -46,7 +46,7 @@ function AlogliaSearchWrapper(props: any) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     const isMobileSearchModalOpen = useAppSelector((state) => state.newSubmission.step02Data.isMobileSearchModalOpen);
 
     function handleClearSearch() {
@@ -102,7 +102,7 @@ const CustomSearchBox = connectSearchBox(AlogliaSearchWrapper);
 function CardSubmissionSearchField() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     const isMobileSearchModalOpen = useAppSelector((state) => state.newSubmission.step02Data.isMobileSearchModalOpen);
 
     function handleCloseIconPress() {

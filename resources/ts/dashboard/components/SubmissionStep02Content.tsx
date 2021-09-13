@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
@@ -42,7 +42,7 @@ function SubmissionStep02Content() {
     );
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
 
     const searchClient = useMemo(

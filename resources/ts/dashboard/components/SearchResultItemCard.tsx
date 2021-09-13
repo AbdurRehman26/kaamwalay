@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -14,7 +14,7 @@ import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEvent
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { markCardAsSelected, markCardAsUnselected } from '../redux/slices/newSubmissionSlice';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'row',
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
         alignItems: 'center',
         padding: '8px 12px',
         marginTop: '8px',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             padding: 0,
         },
     },
@@ -70,11 +70,11 @@ const useStyles = makeStyles({
         lineHeight: '20px',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.54)',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             fontSize: '12px',
         },
     },
-});
+}));
 
 type SearchResultItemCardProps = {
     image: string;
@@ -91,7 +91,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
     const { image, title, subtitle, id, addedMode, reviewMode } = props;
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const isCardSelected = selectedCards.find((card: Record<string, any>) => card.id === id);
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
     function handleSelectCard() {
         const state = { image, title, subtitle, id };

@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
@@ -27,7 +27,7 @@ import {
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
         maxWidth: '425px',
     },
@@ -114,36 +114,36 @@ const useStyles = makeStyles({
     },
     addressFieldContainer: {
         width: '80%',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
     cityFieldContainer: {
         width: '30%',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
     stateFieldContainer: {
         width: '32%',
         marginTop: '6px',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '47%',
         },
     },
     zipFieldContainer: {
         width: '32%',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '47%',
         },
     },
     aptFieldContainer: {
         width: '18%',
-        '@media (max-width:600px)': {
+        [theme.breakpoints.down('xs')]: {
             width: '100%',
         },
     },
-});
+}));
 
 // TODO: Fix duplication
 const schema = yup.object().shape({
@@ -180,7 +180,7 @@ export function SubmissionStep03Content() {
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
     useEffect(
         () => {

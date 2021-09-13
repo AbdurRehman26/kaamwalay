@@ -63,4 +63,24 @@ class AGSClient
 
         return [];
     }
+
+    protected function getAuthToken(): string
+    {
+        return config('services.ags.auth_token');
+    }
+
+    public function updateHumanGrades(string $certificateId, array $payload)
+    {
+        $response = Http::withToken($this->getAuthToken())
+            ->patch($this->v2() . '/robograding/certificates/?certificate_id=' . $certificateId, $payload);
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(
+            response: $response,
+            route: '/robograding/certificates/',
+            payload: ['data' => $payload, 'certificate_id' => $certificateId]
+        );
+    }
 }

@@ -32,6 +32,7 @@ return [
     'ags' => [
         'is_platform_enabled' => env('AGS_PLATFORM_ENABLED', false),
         'base_url' => env('AGS_BASE_URL'),
+        'auth_token' => env('AGS_AUTH_TOKEN'),
     ],
 
     'paypal' => [

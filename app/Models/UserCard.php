@@ -28,6 +28,7 @@ class UserCard extends Model
         'back_surface_img_src',
         'back_edges_img_src',
         'back_corners_img_src',
+        'grading_id',
     ];
 
     protected $casts = [

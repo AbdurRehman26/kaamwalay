@@ -3,18 +3,14 @@
 namespace App\Services\Admin;
 
 use Illuminate\Support\Arr;
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
 
 class CardGradingService
 {
-    #[Pure]
     public function defaultValues(string $node): array
     {
         return $this->getDefaultValues($node === 'overall');
     }
 
-    #[Pure]
     protected function getDefaultValues($isOverall): array
     {
         if ($isOverall) {
@@ -27,13 +23,11 @@ class CardGradingService
         ];
     }
 
-    #[Pure] #[ArrayShape(['overall' => "float[]"])]
     protected function defaultOverallValues(): array
     {
         return $this->getDefaultSet();
     }
 
-    #[ArrayShape(['center' => "float", 'surface' => "float", 'edge' => "float", 'corner' => "float"])]
     protected function getDefaultSet(): array
     {
         return [
@@ -44,7 +38,7 @@ class CardGradingService
         ];
     }
 
-    #[ArrayShape(['center' => "float", 'surface' => "float", 'edge' => "float", 'corner' => "float"])]
+
     public function calculateOverallValues(array | string $frontValues): array
     {
         if (is_string($frontValues)) {
@@ -75,5 +69,12 @@ class CardGradingService
         }
 
         return number_format((float) (array_sum($values) / count($values)), 1);
+    }
+
+    public function validateIfHumanGradesAreCompleted(array $humanGrades): bool
+    {
+        return collect($humanGrades)->filter(function ($side) {
+            return collect($side)->min() !== 0;
+        })->count() === 2;
     }
 }

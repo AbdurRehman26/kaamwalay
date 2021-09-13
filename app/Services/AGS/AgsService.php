@@ -3,10 +3,13 @@
 namespace App\Services\AGS;
 
 use App\APIClients\AGSClient;
-use JetBrains\PhpStorm\Pure;
 
 class AgsService
 {
+    public function __construct(protected AGSClient $client)
+    {
+    }
+
     public function isEnabled(): bool
     {
         return (bool) config('services.ags.is_platform_enabled');
@@ -14,17 +17,11 @@ class AgsService
 
     public function login(array $data): array
     {
-        return $this->client()->login(data: $data);
+        return $this->client->login(data: $data);
     }
 
     public function register(array $data): array
     {
-        return $this->client()->register(data: $data);
-    }
-
-    #[Pure]
-    public function client(): AGSClient
-    {
-        return new AGSClient();
+        return $this->client->register(data: $data);
     }
 }

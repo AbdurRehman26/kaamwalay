@@ -11,13 +11,15 @@ use Illuminate\Support\Arr;
 
 trait AuthenticatableWithAGS
 {
+    public function __construct(protected AgsService $agsService)
+    {
+    }
+
     public function loginAGS(LoginRequest $request): string
     {
-        $ags = new AgsService;
+        throw_unless($this->agsService->isEnabled(), AuthenticationException::class);
 
-        throw_unless($ags->isEnabled(), AuthenticationException::class);
-
-        $response = $ags->login(data: $request->validated());
+        $response = $this->agsService->login(data: $request->validated());
 
         $this->validateResponse($response);
 

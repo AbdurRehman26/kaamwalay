@@ -12,17 +12,17 @@ class AGSClient
     protected const API_VERSION_1 = '/v1';
     protected const API_VERSION_2 = '/v2';
 
-    public function baseUrl(): string
+    protected function baseUrl(): string
     {
         return config('services.ags.base_url');
     }
 
-    public function v1(): string
+    protected function v1(): string
     {
         return $this->baseUrl() . self::API_VERSION_1;
     }
 
-    public function v2(): string
+    protected function v2(): string
     {
         return $this->baseUrl() . self::API_VERSION_2;
     }

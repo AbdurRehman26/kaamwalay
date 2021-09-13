@@ -11,18 +11,19 @@ class AGSClient
 {
     protected const API_VERSION_2 = '/v2';
 
-    protected string $baseUrl;
-    protected string $authToken;
-
-    public function __construct()
+    protected function getBaseUrl(): string
     {
-        $this->baseUrl = config('services.ags.base_url');
-        $this->authToken = config('services.ags.authorization_token');
+        return config('services.ags.base_url');
+    }
+
+    protected function getAuthToken(): string
+    {
+        return config('services.ags.authorization_token');
     }
 
     public function login(array $data): array
     {
-        $response = Http::post($this->baseUrl . '/login/', $data);
+        $response = Http::post($this->getBaseUrl() . '/login/', $data);
         if ($response->successful()) {
             return $response->json();
         }
@@ -32,7 +33,7 @@ class AGSClient
 
     public function register(array $data): array
     {
-        $response = Http::post(url: $this->baseUrl . '/registration/', data: $data);
+        $response = Http::post(url: $this->getBaseUrl() . '/registration/', data: $data);
         if ($response->successful()) {
             return $response->json();
         }
@@ -42,7 +43,7 @@ class AGSClient
 
     public function getGrades(array $data): array
     {
-        $response = Http::withToken($this->authToken)->get(url: $this->baseUrl . self::API_VERSION_2 . '/robograding/scan-results/', query: $data);
+        $response = Http::withToken($this->getAuthToken())->get(url: $this->getBaseUrl() . self::API_VERSION_2 . '/robograding/scan-results/', query: $data);
 
         if ($response->successful()) {
             return $response->json();

@@ -8,7 +8,7 @@ import Logo from '@shared/assets/robogradingLogo.png';
 import CustomizedSteppers from './HeaderStepper';
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
         root: {
             width: '100%',
             minWidth: '100%',
@@ -38,8 +38,11 @@ const useStyles = makeStyles(
             color: '#fff',
             fontWeight: 'bold',
             fontSize: '32px',
+            [theme.breakpoints.down('xs')]: {
+                fontSize: '24px',
+            },
         },
-    },
+    }),
     {
         name: 'SubmissionHeaderStyle',
     },

@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
         root: {
             width: '100%',
             display: 'flex',
@@ -40,6 +40,9 @@ const useStyles = makeStyles(
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            [theme.breakpoints.down('xs')]: {
+                minWidth: '106px',
+            },
         },
         radioBtnContainer: {},
         maxValueContainer: {
@@ -57,6 +60,9 @@ const useStyles = makeStyles(
             lineHeight: '24px',
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
+            [theme.breakpoints.down('xs')]: {
+                fontSize: '14px',
+            },
         },
         protectionText: {
             fontFamily: 'Roboto',
@@ -92,7 +98,7 @@ const useStyles = makeStyles(
             flexDirection: 'row',
         },
         cardText: { fontWeight: 400 },
-    },
+    }),
     { name: 'ServiceLevelItemStyle' },
 );
 

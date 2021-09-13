@@ -18,7 +18,7 @@ type ExistingAddressProps = {
 };
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
         container: {
             width: '200px',
             padding: '12px',
@@ -28,11 +28,14 @@ const useStyles = makeStyles(
             borderStyle: 'solid',
             borderWidth: ({ isSelected }: any) => (isSelected ? '3px' : '1px'),
             borderColor: ({ isSelected }: any) => (isSelected ? '#20BFB8' : '#DDDDDD'),
+            marginRight: '12px',
+            marginBottom: '12px',
             '&:hover': {
                 cursor: 'pointer',
             },
-            marginRight: '12px',
-            marginBottom: '12px',
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+            },
         },
         addressLineText: {
             fontFamily: 'Roboto',
@@ -50,8 +53,11 @@ const useStyles = makeStyles(
             width: '110%',
             height: '25px',
             justifyContent: 'flex-end',
+            [theme.breakpoints.down('xs')]: {
+                width: '100%',
+            },
         },
-    },
+    }),
     { name: 'ExistingAddressComponent' },
 );
 

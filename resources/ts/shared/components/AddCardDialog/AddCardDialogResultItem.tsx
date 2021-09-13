@@ -53,9 +53,9 @@ export function AddCardDialogResultItem({ hit }: AddCardDialogResultItemProps) {
     const handleSelect = useCallback(() => {
         batch(() => {
             dispatch(setAddCardDialogView(AddCardDialogViewEnum.Card));
-            dispatch(selectAddCardDialog(hit));
+            dispatch(selectAddCardDialog(item));
         });
-    }, [dispatch, hit]);
+    }, [dispatch, item]);
 
     return (
         <ListItem

@@ -15,7 +15,7 @@ import { font } from '@shared/styles/utils';
  * @date: 13.09.2021
  * @time: 23:40
  */
-export const AddCardDialogSearch = connectSearchBox(({ refine }) => {
+export const AddCardDialogSearch = connectSearchBox(({ refine, isSearchStalled }) => {
     const isMounted = useIsMounted();
     const [search, setSearch] = useState('');
 
@@ -30,11 +30,15 @@ export const AddCardDialogSearch = connectSearchBox(({ refine }) => {
         setSearch('');
     }, [setSearch]);
 
-    useEffect(() => {
-        if (isMounted()) {
-            refine(search);
-        }
-    }, [isMounted, refine, search]);
+    useEffect(
+        () => {
+            if (isMounted()) {
+                refine(search);
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [search],
+    );
 
     return (
         <>

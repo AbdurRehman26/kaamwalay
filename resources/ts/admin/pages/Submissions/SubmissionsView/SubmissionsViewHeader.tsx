@@ -115,8 +115,6 @@ export function SubmissionsViewHeader({
         [orderStatusHistory],
     );
 
-    console.log(statusType, statusLabel, orderStatus);
-
     return (
         <Grid container className={classes.root}>
             <Grid container className={classes.header}>

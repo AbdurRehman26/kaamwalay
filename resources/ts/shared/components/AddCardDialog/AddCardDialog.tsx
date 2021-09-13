@@ -29,8 +29,6 @@ export function AddCardDialog({ ...rest }: AddCardDialogProps) {
     const classes = useStyles();
     const dialogState = useAddCardDialogState();
 
-    console.log(dialogState);
-
     return (
         <Dialog open={dialogState.open} classes={{ paper: classes.paper }} maxWidth={'sm'} {...rest}>
             <Slide in={dialogState.view === AddCardDialogViewEnum.List} direction={'left'} unmountOnExit exit={false}>

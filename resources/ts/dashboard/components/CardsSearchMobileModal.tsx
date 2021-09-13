@@ -72,7 +72,10 @@ function CardsSearchMobileModal() {
                 ) : (
                     <div className={classes.emptyStateContainer}>
                         <Typography variant={'subtitle1'} className={classes.emptyStateText}>
-                            Start searching by typing something in the field above.
+                            Start searching by typing in the field above{' '}
+                            <span role={'img'} aria-label={'Search emoji'}>
+                                🔍
+                            </span>
                         </Typography>
                     </div>
                 )}

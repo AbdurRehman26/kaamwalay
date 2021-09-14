@@ -79,7 +79,7 @@ class Order extends Model
 
     protected $appends = ['grand_total_cents'];
 
-    public static function GetAllowedAdminIncludes(): array
+    public static function getAllowedAdminIncludes(): array
     {
         return [
             AllowedInclude::relationship('invoice'),
@@ -95,7 +95,7 @@ class Order extends Model
         ];
     }
 
-    public static function GetAllowedAdminFilters(): array
+    public static function getAllowedAdminFilters(): array
     {
         return [
             AllowedFilter::exact('order_id', 'id'),
@@ -103,6 +103,22 @@ class Order extends Model
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+        ];
+    }
+
+    public static function getAllowedIncludes(): array
+    {
+        return [
+            AllowedInclude::relationship('invoice'),
+            AllowedInclude::relationship('paymentPlan'),
+            AllowedInclude::relationship('orderItems'),
+            AllowedInclude::relationship('orderStatus'),
+            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('billingAddress'),
+            AllowedInclude::relationship('shippingAddress'),
+            AllowedInclude::relationship('orderStatusHistory'),
+            AllowedInclude::relationship('orderStatusHistory.orderStatus'),
+            AllowedInclude::relationship('customer', 'user'),
         ];
     }
 

@@ -14,8 +14,8 @@ class OrderService
         $itemsPerPage = request('per_page');
 
         return QueryBuilder::for(Order::class)
-            ->allowedFilters(Order::GetAllowedAdminFilters())
-            ->allowedIncludes(Order::GetAllowedAdminIncludes())
+            ->allowedFilters(Order::getAllowedAdminFilters())
+            ->allowedIncludes(Order::getAllowedAdminIncludes())
             ->allowedSorts(['grand_total'])
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
@@ -25,7 +25,7 @@ class OrderService
     {
         return QueryBuilder::for(Order::class)
             ->where('id', $orderId)
-            ->allowedIncludes(Order::GetAllowedAdminIncludes())
+            ->allowedIncludes(Order::getAllowedAdminIncludes())
             ->firstOrFail();
     }
 }

@@ -24,7 +24,7 @@ class OrderStatusHistory extends Model
         'user_id' => 'integer',
     ];
 
-    public static function GetAllowedAdminIncludes(): array
+    public static function getAllowedAdminIncludes(): array
     {
         return [
             AllowedInclude::relationship('user'),

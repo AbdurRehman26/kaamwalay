@@ -17,7 +17,7 @@ class OrderStatusHistoryService
     {
         return QueryBuilder::for(OrderStatusHistory::class)
             ->where('order_id', getModelId($orderId))
-            ->allowedIncludes(OrderStatusHistory::GetAllowedAdminIncludes())
+            ->allowedIncludes(OrderStatusHistory::getAllowedAdminIncludes())
             ->get();
     }
 
@@ -59,7 +59,7 @@ class OrderStatusHistoryService
         
         return QueryBuilder::for(OrderStatusHistory::class)
             ->where('id', $orderStatusHistory->id)
-            ->allowedIncludes(OrderStatusHistory::GetAllowedAdminIncludes())
+            ->allowedIncludes(OrderStatusHistory::getAllowedAdminIncludes())
             ->first();
     }
 }

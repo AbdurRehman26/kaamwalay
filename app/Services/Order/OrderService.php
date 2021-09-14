@@ -18,7 +18,7 @@ class OrderService
         return QueryBuilder::for(Order::class)
             ->placed()
             ->forUser($user)
-            ->allowedIncludes(Order::GetAllowedAdminIncludes())
+            ->allowedIncludes(Order::getAllowedIncludes())
             ->allowedFilters(['order_number'])
             ->allowedSorts(['grand_total'])
             ->defaultSort('-orders.created_at')

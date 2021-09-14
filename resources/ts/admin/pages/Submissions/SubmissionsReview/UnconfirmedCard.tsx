@@ -63,7 +63,7 @@ export function UnconfirmedCard({
         setLoading(true);
         try {
             await onConfirm(itemId);
-        } catch (e) {
+        } catch (e: any) {
             notification.exception(e);
         }
         setLoading(false);
@@ -73,7 +73,7 @@ export function UnconfirmedCard({
         setLoading(true);
         try {
             await onMissing(itemId);
-        } catch (e) {
+        } catch (e: any) {
             notification.exception(e);
         }
         // TODO: fix memory leak error (dispatched action on unmounted component)
@@ -84,7 +84,7 @@ export function UnconfirmedCard({
         setLoading(true);
         try {
             await onEdit(itemId);
-        } catch (e) {
+        } catch (e: any) {
             notification.exception(e);
         }
         setLoading(false);

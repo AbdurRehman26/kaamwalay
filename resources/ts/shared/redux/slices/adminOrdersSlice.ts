@@ -29,7 +29,7 @@ export const changeOrderItemStatus = createAsyncThunk(
                 orderItemId: input.orderItemId,
                 status: classToPlain(item.status),
             };
-        } catch (e) {
+        } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
         }
@@ -48,7 +48,7 @@ export const changeOrderItemsStatus = createAsyncThunk(
                 orderItemId: item.id,
                 status: classToPlain(item.status),
             }));
-        } catch (e) {
+        } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
         }
@@ -63,7 +63,7 @@ export const addOrderStatusHistory = createAsyncThunk(
         try {
             const orderStatusHistory = await ordersRepository.addOrderStatusHistory(input);
             return classToPlain(orderStatusHistory);
-        } catch (e) {
+        } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
         }

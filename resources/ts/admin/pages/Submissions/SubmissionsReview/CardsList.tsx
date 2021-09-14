@@ -52,7 +52,7 @@ export function CardsList({ children, heading, totals, extraAction, onClear }: P
             setLoading(true);
             try {
                 await onClear();
-            } catch (e) {
+            } catch (e: any) {
                 notifications.exception(e);
             }
             setLoading(false);

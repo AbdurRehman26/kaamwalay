@@ -37,7 +37,7 @@ export function NotesDialog({ heading, description, onSubmitNotes, extraData, on
             try {
                 onSubmitNotes(value, extraData ?? {});
                 setValue('');
-            } catch (e) {
+            } catch (e: any) {
                 notifications.exception(e);
             }
             setLoading(false);

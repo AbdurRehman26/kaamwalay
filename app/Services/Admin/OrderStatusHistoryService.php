@@ -7,12 +7,20 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
+use App\Services\AGS\AgsService;
 use Carbon\Carbon;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
 class OrderStatusHistoryService
 {
+    public function __construct(
+        protected AgsService $agsService,
+        protected OrderService $orderService
+    )
+    {
+    }
+
     public function getAllByOrderId(Order|int $orderId)
     {
         return QueryBuilder::for(OrderStatusHistory::class)
@@ -50,13 +58,19 @@ class OrderStatusHistoryService
                 $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: []
             ));
 
+        if ($orderStatusId === OrderStatus::ARRIVED) {
+            $certificateIds = implode(',', $this->orderService->getOrderCertificates($order));
+
+            $this->agsService->createCertificates($certificateIds);
+        }
+
         $orderStatusHistory = OrderStatusHistory::create([
             'order_id' => $orderId,
             'order_status_id' => $orderStatusId,
             'user_id' => getModelId($user),
             'notes' => $notes,
         ]);
-        
+
         return QueryBuilder::for(OrderStatusHistory::class)
             ->where('id', $orderStatusHistory->id)
             ->allowedIncludes(OrderStatusHistory::getAllowedAdminIncludes())

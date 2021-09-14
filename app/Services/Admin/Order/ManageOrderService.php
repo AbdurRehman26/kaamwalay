@@ -75,7 +75,7 @@ class ManageOrderService
         return $order;
     }
 
-    protected function getOrderCertificates($order): array
+    public function getOrderCertificates(Order $order): array
     {
         $certificates = UserCardCertificate::select('number')
         ->join('user_cards', 'user_card_certificates.user_card_id', '=', 'user_cards.id')

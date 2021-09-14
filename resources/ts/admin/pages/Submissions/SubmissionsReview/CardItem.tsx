@@ -66,7 +66,7 @@ export function CardItem({ label, itemId, card, labelIcon, certificateId, declar
         setLoading(true);
         try {
             await onRemove(itemId);
-        } catch (e) {
+        } catch (e: any) {
             notifications.exception(e);
         }
         setLoading(false);

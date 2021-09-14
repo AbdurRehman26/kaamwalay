@@ -121,7 +121,7 @@ export function ReviewCardDialog(props: ReviewCardDialogProps) {
         setLoading('confirm');
         try {
             await onConfirm(activeItem?.id);
-        } catch (e) {
+        } catch (e: any) {
             notification.exception(e);
         }
         setLoading('');
@@ -132,7 +132,7 @@ export function ReviewCardDialog(props: ReviewCardDialogProps) {
         setLoading('missing');
         try {
             await onMissing(activeItem?.id);
-        } catch (e) {
+        } catch (e: any) {
             notification.exception(e);
         }
         setLoading('');
@@ -143,7 +143,7 @@ export function ReviewCardDialog(props: ReviewCardDialogProps) {
         setLoading('missing');
         try {
             await onEdit(activeItem?.id);
-        } catch (e) {
+        } catch (e: any) {
             notification.exception(e);
         }
         setLoading('');

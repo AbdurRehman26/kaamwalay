@@ -12,6 +12,7 @@ const useStyles = makeStyles(
     (theme) => ({
         root: {
             padding: theme.spacing(1.5, 2),
+            position: 'relative',
         },
 
         divider: {

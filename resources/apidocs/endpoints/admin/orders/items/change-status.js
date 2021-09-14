@@ -1,5 +1,5 @@
 /**
- * @api {post} /admin/orders/11/cards/8/change-status Change Order Item Status
+ * @api {post} /admin/orders/11/items/8/change-status Change Order Item Status
  * @apiName Change Order Item Status
  * @apiGroup Order Cards
  *

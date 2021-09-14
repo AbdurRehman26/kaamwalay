@@ -25,10 +25,12 @@ Route::get('/dashboard{path}', [DashboardController::class, 'getView'])->where([
 
 Route::prefix('auth')->group(function () {
     Route::get('/password/reset', [AuthController::class, 'getView'])->where(['path' => '.*'])->name('password.reset');
+    Route::get('sign-in', [AuthController::class, 'getView'])->name('login');
     Route::get('{path}', [AuthController::class, 'getView'])->where(['path' => '.*'])->name('auth.main');
 });
 
 Route::prefix('feed')->group(function () {
     Route::get('/', [FeedController::class, 'getList'])->name('feed.list');
+    Route::get('/{certificateId}/view', [FeedController::class, 'getView'])->name('feed.view');
 });
-Route::get('card/{certificateId}', [FeedController::class, 'getView'])->name('feed.view');
+Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');

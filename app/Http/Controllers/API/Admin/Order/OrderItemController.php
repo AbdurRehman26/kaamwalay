@@ -81,7 +81,7 @@ class OrderItemController extends Controller
         }
     }
 
-    public function bulkMarkAsPending(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection | JsonResponse
+    public function changeStatusBulk(MarkItemsPendingRequest $request, Order $order, OrderItemService $orderItemService): OrderItemCollection | JsonResponse
     {
         $this->authorize('review', $order);
 

@@ -4,8 +4,8 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import { plainToClass } from 'class-transformer';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { NotificationItem } from '@shared/classes/NotificationItem';
-import { NotificationType } from '@shared/constants/NotificationType';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { NotificationTypeEnum } from '../../constants/NotificationTypeEnum';
 
 export function NotificationsContainer() {
     const [active, setActive] = useState<null | NotificationItem>(null);
@@ -49,7 +49,7 @@ export function NotificationsContainer() {
                 onClose={handleClose}
                 elevation={6}
                 variant={'filled'}
-                severity={active?.type === NotificationType.Wait ? 'info' : active?.type}
+                severity={active?.type === NotificationTypeEnum.Wait ? 'info' : active?.type}
             >
                 {active?.title ? <AlertTitle>{active.title}</AlertTitle> : null}
                 {active?.message.split('\n').map((line, index) => (

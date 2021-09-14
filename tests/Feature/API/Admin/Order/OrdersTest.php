@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
+    Http::fake([
+        // Faking AGS Certificate API
+        'ags.api/*/certificates/*' => Http::response([]),
+    ]);
+
     $this->seed([
         RolesSeeder::class,
         CardCategoriesSeeder::class,

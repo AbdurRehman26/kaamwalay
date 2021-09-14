@@ -20,12 +20,11 @@ class UserCardController extends Controller
         AgsService $agsService,
         CardGradingService $cardGradingService
     ): UserCardResource {
-        // dd($card);
         $card->update(
             $request->only('human_grade_values')
         );
 
-        OrderUpdated::dispatch($card->orderItem->order);
+        OrderUpdated::dispatch($order);
         if ($cardGradingService->validateIfHumanGradesAreCompleted($card->human_grade_values)) {
             $response = $agsService->updateHumanGrades(
                 $card->userCardCertificate->number,

@@ -15,8 +15,7 @@ class ManageOrderService
     public function __construct(
         private  OrderItemService $orderItemService,
         private AgsService $agsService
-    )
-    {
+    ) {
     }
 
     public function confirmReview(Order $order, User $user): Order

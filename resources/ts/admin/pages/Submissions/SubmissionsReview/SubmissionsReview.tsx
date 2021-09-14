@@ -46,6 +46,8 @@ export function SubmissionsReview() {
 
     const handleAddCard = useCallback<AddCardDialogProps['onAdd']>(({ card, declaredValue }) => {
         console.log({ card, declaredValue });
+        // TODO: store the card to the order.
+        // TODO: set status of the card confirmed.
     }, []);
 
     useSidebarHidden();

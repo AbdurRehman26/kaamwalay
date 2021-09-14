@@ -59,6 +59,7 @@ export function UnconfirmedCard({ index, itemId, card, onConfirm, onMissing, onP
         } catch (e) {
             notification.exception(e);
         }
+        // TODO: fix memory leak error (dispatched action on unmounted component)
         setLoading(false);
     }, [onMissing, itemId, notification]);
 

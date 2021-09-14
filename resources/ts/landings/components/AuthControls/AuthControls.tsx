@@ -39,10 +39,11 @@ export function AuthControls() {
     if (!authenticated) {
         return (
             <>
-                <Button color={'primary'} className={cx(classes.button, classes.space)}>
+                <Button href={'/auth/sign-in'} color={'primary'} className={cx(classes.button, classes.space)}>
                     Log in
                 </Button>
                 <Button
+                    href={'/auth/sign-up'}
                     variant={'outlined'}
                     color={'primary'}
                     className={cx(classes.button, classes.buttonHighlighted)}

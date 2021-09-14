@@ -9,6 +9,7 @@
         </a>
     </div>
 
+    <!--
     <div class="page__header__nav-holder">
         <nav class="page__header__nav">
             <a href="{{ url('/feed') }}" class="page__header__nav-item page__header__nav-item--active">Feed</a>
@@ -17,7 +18,7 @@
             <a href="{{ url('/about-us') }}" class="page__header__nav-item">About Us</a>
             <a href="{{ url('/faq') }}" class="page__header__nav-item">FAQ</a>
         </nav>
-    </div>
+    </div> -->
 
     <div class="page__header__auth atoms--auth-controls">
         {{-- JS runtime actions --}}

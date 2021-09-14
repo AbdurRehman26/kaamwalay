@@ -1,6 +1,5 @@
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -63,40 +62,40 @@ export function DrawerNavigation() {
                 </Box>
 
                 <List>
-                    {authenticated && (
-                        <ListItem button href={'/dashboard'}>
-                            <ListItemText
-                                primary={'Dashboard'}
-                                primaryTypographyProps={{ className: classes.listItemText }}
-                            />
-                        </ListItem>
-                    )}
-                    <ListItem button href={'/feed'}>
-                        <ListItemText primary={'Feed'} primaryTypographyProps={{ className: classes.listItemText }} />
-                    </ListItem>
-                    <ListItem button href={'/how-it-works'}>
-                        <ListItemText
-                            primary={'How It Works'}
-                            primaryTypographyProps={{ className: classes.listItemText }}
-                        />
-                    </ListItem>
-                    <ListItem button href={'/pricing'}>
-                        <ListItemText
-                            primary={'Pricing'}
-                            primaryTypographyProps={{ className: classes.listItemText }}
-                        />
-                    </ListItem>
-                    <ListItem button href={'/about-us'}>
-                        <ListItemText
-                            primary={'About Us'}
-                            primaryTypographyProps={{ className: classes.listItemText }}
-                        />
-                    </ListItem>
-                    <ListItem button href={'/faq'}>
-                        <ListItemText primary={'FAQ'} primaryTypographyProps={{ className: classes.listItemText }} />
-                    </ListItem>
+                    {/* {authenticated && (*/}
+                    {/*    <ListItem button href={'/dashboard'}>*/}
+                    {/*        <ListItemText*/}
+                    {/*            primary={'Dashboard'}*/}
+                    {/*            primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*        />*/}
+                    {/*    </ListItem>*/}
+                    {/* )}*/}
+                    {/* <ListItem button href={'/feed'}>*/}
+                    {/*    <ListItemText primary={'Feed'} primaryTypographyProps={{ className: classes.listItemText }} />*/}
+                    {/* </ListItem>*/}
+                    {/* <ListItem button href={'/how-it-works'}>*/}
+                    {/*    <ListItemText*/}
+                    {/*        primary={'How It Works'}*/}
+                    {/*        primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*    />*/}
+                    {/* </ListItem>*/}
+                    {/* <ListItem button href={'/pricing'}>*/}
+                    {/*    <ListItemText*/}
+                    {/*        primary={'Pricing'}*/}
+                    {/*        primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*    />*/}
+                    {/* </ListItem>*/}
+                    {/* <ListItem button href={'/about-us'}>*/}
+                    {/*    <ListItemText*/}
+                    {/*        primary={'About Us'}*/}
+                    {/*        primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*    />*/}
+                    {/* </ListItem>*/}
+                    {/* <ListItem button href={'/faq'}>*/}
+                    {/*    <ListItemText primary={'FAQ'} primaryTypographyProps={{ className: classes.listItemText }} />*/}
+                    {/* </ListItem>*/}
 
-                    <Divider className={classes.divider} />
+                    {/* <Divider className={classes.divider} />*/}
 
                     {!authenticated ? (
                         <>

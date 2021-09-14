@@ -13,7 +13,7 @@ class FeedController extends Controller
     {
     }
 
-    public function getList():View
+    public function getList(): View
     {
         return view('landings.feed.list');
     }
@@ -27,6 +27,6 @@ class FeedController extends Controller
 
     public function cardRedirect(string $certificateId): RedirectResponse
     {
-        return redirect(route('feed.cardView', ['certificateId' => $certificateId]));
+        return redirect()->route('feed.view', ['certificateId' => $certificateId]);
     }
 }

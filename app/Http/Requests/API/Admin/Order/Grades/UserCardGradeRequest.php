@@ -25,16 +25,20 @@ class UserCardGradeRequest extends FormRequest
     {
         return [
             'human_grade_values' => ['required', 'array'],
-            'human_grade_values.front' => ['required', 'array'],
-            'human_grade_values.front.center' => ['required', 'numeric', 'max:10', 'min:0'],
-            'human_grade_values.front.surface' => ['required', 'numeric', 'max:10', 'min:0'],
-            'human_grade_values.front.corner' => ['required', 'numeric', 'max:10', 'min:0'],
-            'human_grade_values.front.edge' => ['required', 'numeric', 'max:10', 'min:0'],
-            'human_grade_values.back' => ['required', 'array'],
-            'human_grade_values.back.center' => ['required', 'numeric', 'max:10', 'min:0'],
-            'human_grade_values.back.surface' => ['required', 'numeric', 'max:10', 'min:0'],
-            'human_grade_values.back.corner' => ['required', 'numeric', 'max:10', 'min:0'],
-            'human_grade_values.back.edge' => ['required', 'numeric', 'max:10', 'min:0'],
+            'human_grade_values.front' => ['required_without_all:human_grade_values.back', 'array', 'min:1'],
+            'human_grade_values.front.center' => [
+                'numeric',
+                'max:10',
+                'min:0',
+            ],
+            'human_grade_values.front.surface' => ['numeric', 'max:10', 'min:0'],
+            'human_grade_values.front.corner' => ['numeric', 'max:10', 'min:0'],
+            'human_grade_values.front.edge' => ['numeric', 'max:10', 'min:0'],
+            'human_grade_values.back' => ['required_without_all:human_grade_values.front', 'array', 'min:1'],
+            'human_grade_values.back.center' => ['numeric', 'max:10', 'min:0'],
+            'human_grade_values.back.surface' => ['numeric', 'max:10', 'min:0'],
+            'human_grade_values.back.corner' => ['numeric', 'max:10', 'min:0'],
+            'human_grade_values.back.edge' => ['numeric', 'max:10', 'min:0'],
         ];
     }
 }

@@ -1,12 +1,15 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     orderReviewSection: {
         marginTop: '32px',
-        padding: '20px 22px 32px 16px',
+        padding: '20px 22px 0px 16px',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+        },
     },
     orderDetailItemBody: {
         display: 'flex',
@@ -18,6 +21,7 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
+        marginBottom: '24px',
     },
     orderDetailItemTitleContainer: {
         display: 'flex',
@@ -67,6 +71,9 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         maxWidth: '180px',
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: '100%',
+        },
     },
     cardDetailsContainer: {
         display: 'flex',
@@ -80,6 +87,6 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
     },
-});
+}));
 
 export default useStyles;

@@ -27,6 +27,7 @@ interface ReviewCardDialogProps extends DialogProps {
     onPrevious(): void;
 
     onMissing(value: number): void;
+    onEdit(value: number): void;
 
     onConfirm(value: number): void;
 }
@@ -97,6 +98,7 @@ export function ReviewCardDialog(props: ReviewCardDialogProps) {
         onPrevious,
         onMissing,
         onConfirm,
+        onEdit,
         disableNext,
         disablePrevious,
         onClose,
@@ -137,6 +139,17 @@ export function ReviewCardDialog(props: ReviewCardDialogProps) {
         onNext && onNext();
     }, [onNext, onMissing, activeItem?.id, notification]);
 
+    const handleEdit = useCallback(async () => {
+        setLoading('missing');
+        try {
+            await onEdit(activeItem?.id);
+        } catch (e) {
+            notification.exception(e);
+        }
+        setLoading('');
+        onNext && onNext();
+    }, [onNext, onEdit, activeItem?.id, notification]);
+
     useEffect(
         () => {
             if (rest.open && itemsLength === 0) {
@@ -168,17 +181,35 @@ export function ReviewCardDialog(props: ReviewCardDialogProps) {
                     ) : null}
                 </Grid>
                 <Grid container spacing={2}>
-                    <Grid item xs>
-                        <Button
-                            variant={'contained'}
-                            size={'large'}
-                            fullWidth
-                            onClick={handleMissing}
-                            disabled={loading !== ''}
-                            startIcon={loading === 'missing' ? <CircularProgress size={24} color={'inherit'} /> : null}
-                        >
-                            Missing
-                        </Button>
+                    <Grid item container spacing={2} xs>
+                        <Grid item xs>
+                            <Button
+                                variant={'contained'}
+                                size={'large'}
+                                fullWidth
+                                onClick={handleMissing}
+                                disabled={loading !== ''}
+                                startIcon={
+                                    loading === 'missing' ? <CircularProgress size={24} color={'inherit'} /> : null
+                                }
+                            >
+                                Missing
+                            </Button>
+                        </Grid>
+                        <Grid item xs>
+                            <Button
+                                variant={'contained'}
+                                size={'large'}
+                                fullWidth
+                                onClick={handleEdit}
+                                disabled={loading !== ''}
+                                startIcon={
+                                    loading === 'missing' ? <CircularProgress size={24} color={'inherit'} /> : null
+                                }
+                            >
+                                Edit
+                            </Button>
+                        </Grid>
                     </Grid>
                     <Grid item xs>
                         <Button

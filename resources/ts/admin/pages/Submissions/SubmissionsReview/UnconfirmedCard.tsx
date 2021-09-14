@@ -1,5 +1,5 @@
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useState } from 'react';
 import {
@@ -10,15 +10,18 @@ import {
 import AccordionCardItemLoader from '@shared/components/AccordionCardItem/AccordionCardItemLoader';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { cx } from '@shared/lib/utils/cx';
-import { font } from '@shared/styles/utils';
 
 interface UnconfirmedCardProps extends AccordionCardItemProps {
     index: number;
     itemId: number;
     card: CardProductEntity;
+
     onConfirm(index: number): void;
+
     onMissing(index: number): void;
+
+    onEdit(index: number): void;
+
     onPreview(index: number): void;
 }
 
@@ -30,11 +33,25 @@ const useStyles = makeStyles(
         button: {
             minWidth: 100,
         },
+        leftSpace: {
+            marginLeft: theme.spacing(1.25),
+        },
+        buttons: {
+            marginTop: theme.spacing(1.5),
+        },
     }),
     { name: 'UnconfirmedCard' },
 );
 
-export function UnconfirmedCard({ index, itemId, card, onConfirm, onMissing, onPreview }: UnconfirmedCardProps) {
+export function UnconfirmedCard({
+    index,
+    itemId,
+    card,
+    onConfirm,
+    onMissing,
+    onEdit,
+    onPreview,
+}: UnconfirmedCardProps) {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
@@ -63,6 +80,16 @@ export function UnconfirmedCard({ index, itemId, card, onConfirm, onMissing, onP
         setLoading(false);
     }, [onMissing, itemId, notification]);
 
+    const handleEdit = useCallback(async () => {
+        setLoading(true);
+        try {
+            await onEdit(itemId);
+        } catch (e) {
+            notification.exception(e);
+        }
+        setLoading(false);
+    }, [itemId, notification, onEdit]);
+
     return (
         <AccordionCardItem divider>
             <AccordionCardItemHeader
@@ -76,12 +103,14 @@ export function UnconfirmedCard({ index, itemId, card, onConfirm, onMissing, onP
                     </Button>
                 }
             >
-                <Typography variant={'body2'} className={cx(font.fontWeightMedium, classes.otherActionsText)}>
-                    Other Actions:
-                </Typography>
-                <Button variant={'contained'} onClick={handleMissing}>
-                    Missing
-                </Button>
+                <Grid container alignItems={'center'} className={classes.buttons}>
+                    <Button variant={'contained'} onClick={handleMissing}>
+                        Missing
+                    </Button>
+                    <Button variant={'contained'} onClick={handleEdit} className={classes.leftSpace}>
+                        Edit
+                    </Button>
+                </Grid>
             </AccordionCardItemHeader>
             <AccordionCardItemLoader show={loading} />
         </AccordionCardItem>

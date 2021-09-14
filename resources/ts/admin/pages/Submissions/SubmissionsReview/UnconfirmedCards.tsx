@@ -51,7 +51,20 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
     const dispatch = useAppDispatch();
 
     const handlePreview = useCallback((value) => setActiveIndex(value), [setActiveIndex]);
-    const handleNext = useCallback(() => setActiveIndex((value) => (value ?? 0) + 1), [setActiveIndex]);
+    const handleNext = useCallback(
+        () =>
+            setActiveIndex((value) => {
+                const nextValue = (value ?? 0) + 1;
+                const lastValue = items.length - 1;
+
+                if (nextValue > lastValue) {
+                    return 0;
+                }
+
+                return Math.max(Math.min(nextValue, lastValue), 0);
+            }),
+        [setActiveIndex, items],
+    );
     const handlePrevious = useCallback(
         () => setActiveIndex((value) => Math.max((value ?? 0) - 1, 0)),
         [setActiveIndex],
@@ -73,6 +86,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
     );
 
     const handleMissing = useCallback((orderItemId) => handleOpen({ orderItemId }), [handleOpen]);
+    const handleEdit = useCallback((orderItemId) => console.log('open edit dialog for item:', orderItemId), []);
 
     const handleSubmitNotes = useCallback(
         async (notes: string, { orderItemId }) => {
@@ -124,6 +138,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 onPreview={handlePreview}
                                 onConfirm={handleConfirm}
                                 onMissing={handleMissing}
+                                onEdit={handleEdit}
                             />
                         ))
                     ) : (
@@ -154,6 +169,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                 onPrevious={handlePrevious}
                 onMissing={handleMissing}
                 onConfirm={handleConfirm}
+                onEdit={handleEdit}
                 disablePrevious={activeIndex === 0}
                 disableNext={!!activeIndex && activeIndex >= items.length - 1}
             />

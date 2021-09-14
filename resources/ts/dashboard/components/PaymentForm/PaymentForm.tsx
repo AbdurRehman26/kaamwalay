@@ -74,7 +74,7 @@ export function PaymentForm() {
             }
             setIsCardsListLoading(false);
             setShowAddCardModal(false);
-        } catch (error) {
+        } catch (error: any) {
             setIsCardsListLoading(false);
             notifications.error("We weren't able to get your existing cards", 'Error');
         }

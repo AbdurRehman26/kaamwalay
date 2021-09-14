@@ -12,7 +12,7 @@ describe('lib/errors/normalizeError', function () {
         const endpoint = apiService.createEndpoint('/random/path/to/fail/404');
         try {
             await endpoint.get('/');
-        } catch (e) {
+        } catch (e: any) {
             error = e;
         }
 

@@ -42,7 +42,7 @@ export function createRepositoryThunk<
             try {
                 const data = await repo.list(config || {});
                 return classToPlain(data) as PaginatedData<E>;
-            } catch (e) {
+            } catch (e: any) {
                 return thunkAPI.rejectWithValue(e);
             }
         },
@@ -53,7 +53,7 @@ export function createRepositoryThunk<
         try {
             const data = await repo.show(args.resourceId, args.config);
             return classToPlain(data) as E;
-        } catch (e) {
+        } catch (e: any) {
             return thunkAPI.rejectWithValue(e);
         }
     });

@@ -2,6 +2,7 @@
 
 use App\Models\CardProduct;
 use App\Models\OrderItem;
+use App\Models\OrderStatus;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -254,8 +255,9 @@ test('an admin can mark multiple order items as pending', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk-pending', [
+    $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status', [
         "items" => [$orderItem->id],
+        "status" => OrderStatus::ARRIVED,
     ]);
 
     $response->assertStatus(200);
@@ -273,8 +275,9 @@ test('a customer can not mark multiple order items as pending', function () {
 
     $this->actingAs($customerUser);
 
-    $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk-pending', [
+    $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status', [
         "items" => [$orderItem->id],
+        "status" => OrderStatus::ARRIVED,
     ]);
 
     $response->assertStatus(403);
@@ -285,7 +288,7 @@ test('items are required for bulk set items as pending', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk-pending');
+    $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status');
 
     $response->assertJsonValidationErrors([
         'items' => 'The items field is required.',

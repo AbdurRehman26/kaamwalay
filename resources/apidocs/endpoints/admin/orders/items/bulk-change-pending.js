@@ -1,5 +1,5 @@
 /**
- * @api {post} /admin/orders/11/items/bulk-pending Bulk Change Order Items Status to Pending
+ * @api {post} /admin/orders/11/items/bulk/change-status Bulk Change Order Items Status to Pending
  * @apiName Bulk Change Order Items Status to Pending
  * @apiGroup Order Cards
  *
@@ -9,6 +9,7 @@
  *  @apiParamExample {json} Request-Example:
  *      {
  *          "items": [6,7]
+ *          "status": 3
  *      }
  *
  * @apiSuccess {Object} data Card object

@@ -8,6 +8,11 @@ use App\Models\OrderItem;
 
 class ManageOrderService
 {
+    public function __construct(
+        private  OrderItemService $orderItemService
+    ) {
+    }
+
     public function addExtraCard(Order $order, int $card_id, float $value): OrderItem
     {
         $newItem = OrderItem::create([
@@ -18,7 +23,7 @@ class ManageOrderService
             'declared_value_total' => $value,
         ]);
 
-        return (new OrderItemService)->changeStatus($order, $newItem, ["status" => "confirmed"]);
+        return $this->orderItemService->changeStatus($order, $newItem, ["status" => "confirmed"]);
     }
 
     public function editCard(Order $order, OrderItem $orderItem, int $card_id, float $value): OrderItem

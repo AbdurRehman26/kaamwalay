@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\CustomerAddress;
 use App\Models\Order;
@@ -26,7 +27,8 @@ class CreateOrderService
     protected array $data;
 
     public function __construct(
-        private OrderStatusHistoryService $orderStatusHistoryService
+        private OrderStatusHistoryService $orderStatusHistoryService,
+        private OrderItemService $orderItemService
     ) {
     }
 
@@ -142,9 +144,11 @@ class CreateOrderService
         $this->order->save();
     }
 
+    /**
+     * @throws OrderItemDoesNotBelongToOrder
+     */
     protected function storeOrderItems(array $items)
     {
-        $orderItemService = new OrderItemService();
         foreach ($items as $item) {
             $storedItem = OrderItem::create([
                 'order_id' => $this->order->id,
@@ -154,7 +158,7 @@ class CreateOrderService
                 'declared_value_total' => $item['quantity'] * $item['declared_value_per_unit'],
             ]);
 
-            $orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending']);
+            $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending']);
         }
     }
 

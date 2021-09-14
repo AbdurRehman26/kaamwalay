@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\UpdateNotesRequest;
 use App\Http\Resources\API\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\Admin\Order\OrderResource;
+use App\Http\Resources\API\Admin\Order\UserCardCollection;
 use App\Models\Order;
 use App\Services\Admin\Order\ManageOrderService;
 use Illuminate\Http\Request;
@@ -45,5 +46,12 @@ class OrderController extends Controller
         $this->authorize('review', $order);
 
         return new OrderResource($manageOrderService->confirmReview($order, $request->user()));
+    }
+
+    public function getGrades(Request $request, Order $order, ManageOrderService $manageOrderService): UserCardCollection
+    {
+        $this->authorize('review', $order);
+
+        return new UserCardCollection($manageOrderService->getGrades($order));
     }
 }

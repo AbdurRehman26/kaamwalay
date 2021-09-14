@@ -28,6 +28,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('{order}/complete-review', [OrderController::class, 'completeReview']);
         Route::post('{order}/cards', [OrderItemController::class, 'store']);
         Route::put('{order}/cards/{orderItem}', [OrderItemController::class, 'update']);
+        Route::put('{order}/cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
+        Route::get('{order}/grades', [OrderController::class, 'getGrades']);
     });
-    Route::put('user-cards/{userCard}/grades', [UserCardController::class, 'updateGradingValues']);
 });

@@ -20,15 +20,9 @@ class UserCard extends Model
         'overall_grade',
         'overall_grade_nickname',
         'ai_model_numbers',
-        'front_centering_img_src',
-        'front_surface_img_src',
-        'front_edges_img_src',
-        'front_corners_img_src',
-        'back_centering_img_src',
-        'back_surface_img_src',
-        'back_edges_img_src',
-        'back_corners_img_src',
+        'generated_images',
         'grading_id',
+        'certificate_number',
     ];
 
     protected $casts = [
@@ -38,17 +32,7 @@ class UserCard extends Model
         'human_grade_values' => 'array',
         'robo_grade_values' => 'array',
         'overall_values' => 'array',
-    ];
-
-    public const IMAGE_FIELDS = [
-        'front_centering_img_src',
-        'front_surface_img_src',
-        'front_edges_img_src',
-        'front_corners_img_src',
-        'back_centering_img_src',
-        'back_surface_img_src',
-        'back_edges_img_src',
-        'back_corners_img_src',
+        'generated_images' => 'array',
     ];
 
     public function user(): BelongsTo

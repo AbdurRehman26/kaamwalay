@@ -2,12 +2,16 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Services\Admin\Order\OrderItemService;
 use App\Models\OrderItem;
+use App\Services\Admin\Order\OrderItemService;
+use Illuminate\Database\Seeder;
 
 class InitializeOrderItemsAsPendingSeeder extends Seeder
 {
+    public function __construct(protected OrderItemService $orderItemService)
+    {
+    }
+
     /**
      * Run the database seeds.
      *
@@ -15,11 +19,10 @@ class InitializeOrderItemsAsPendingSeeder extends Seeder
      */
     public function run()
     {
-        $orderItemService = new OrderItemService();
 
         $items = OrderItem::all();
-        foreach($items as $item){
-            $orderItemService->changeStatus($item->order,$item,["status" => "pending"]);
+        foreach ($items as $item) {
+            $this->orderItemService->changeStatus($item->order, $item, ["status" => "pending"]);
         }
     }
 }

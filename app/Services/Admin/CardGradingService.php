@@ -6,13 +6,10 @@ class CardGradingService
 {
     public function defaultValues(string $node): array
     {
-        return $this->getDefaultValues($node === 'overall');
-    }
-
-    protected function getDefaultValues($isOverall): array
-    {
-        if ($isOverall) {
+        if ($node === 'overall') {
             return $this->defaultOverallValues();
+        } elseif ($node === 'images') {
+            return $this->defaultImagesValues();
         }
 
         return [
@@ -36,6 +33,43 @@ class CardGradingService
         ];
     }
 
+    protected function defaultImagesValues(): array
+    {
+        return [
+            [
+                'output_image' => null,
+                'name' => 'Front Centering',
+            ],
+            [
+                'output_image' => null,
+                'name' => 'Front Surface',
+            ],
+            [
+                'output_image' => null,
+                'name' => 'Front Edges',
+            ],
+            [
+                'output_image' => null,
+                'name' => 'Front Corners',
+            ],
+            [
+                'output_image' => null,
+                'name' => 'Back Centering',
+            ],
+            [
+                'output_image' => null,
+                'name' => 'Back Surface',
+            ],
+            [
+                'output_image' => null,
+                'name' => 'Back Edges',
+            ],
+            [
+                'output_image' => null,
+                'name' => 'Back Corners',
+            ],
+        ];
+    }
 
     public function validateIfHumanGradesAreCompleted(array $humanGrades): bool
     {

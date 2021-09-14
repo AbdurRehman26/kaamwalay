@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\UpdateNotesRequest;
 use App\Http\Resources\API\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\Admin\Order\OrderResource;
+use App\Http\Resources\API\Admin\Order\UserCardCollection;
 use App\Models\Order;
-use App\Services\Admin\Order\ManageOrderService;
 use App\Services\Admin\OrderService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -31,8 +32,22 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function updateNotes(UpdateNotesRequest $request, Order $order, ManageOrderService $manageOrderService): OrderResource
+    public function updateNotes(UpdateNotesRequest $request, Order $order, OrderService $orderService): OrderResource
     {
-        return new OrderResource($manageOrderService->updateNotes($order, $request->notes));
+        return new OrderResource($orderService->updateNotes($order, $request->notes));
+    }
+
+    public function completeReview(Request $request, Order $order, OrderService $orderService): OrderResource
+    {
+        $this->authorize('review', $order);
+
+        return new OrderResource($orderService->confirmReview($order, $request->user()));
+    }
+
+    public function getGrades(Request $request, Order $order, OrderService $orderService): UserCardCollection
+    {
+        $this->authorize('review', $order);
+
+        return new UserCardCollection($orderService->getGrades($order));
     }
 }

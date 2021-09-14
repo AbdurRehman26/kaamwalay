@@ -8,6 +8,7 @@ const colorsMap = {
     arrived: '#fff06c',
     graded: '#81d5f9',
     shipped: '#8feca9',
+    pending_payment: '#e1e1e1',
 };
 
 export type StatusChipColor = 'primary' | 'secondary' | keyof typeof colorsMap;

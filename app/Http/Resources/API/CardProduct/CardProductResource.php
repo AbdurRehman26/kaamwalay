@@ -10,6 +10,7 @@ class CardProductResource extends JsonResource
     {
         return [
             "id" => $this->id,
+            "full_name" => $this->getSearchableName(),
             "name" => $this->name,
             "card_category_name" => $this->cardCategory->name,
             "card_set_name" => $this->cardSet->name,

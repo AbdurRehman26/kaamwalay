@@ -11,8 +11,8 @@ use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Services\Admin\Order\ManageOrderService;
 use App\Services\Admin\Order\OrderItemService;
+use App\Services\Admin\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,21 +36,21 @@ class OrderItemController extends Controller
         );
     }
 
-    public function store(AddExtraCardRequest $request, Order $order, ManageOrderService $manageOrderService): OrderItemResource
+    public function store(AddExtraCardRequest $request, Order $order, OrderService $orderService): OrderItemResource
     {
         $this->authorize('review', $order);
 
-        $result = $manageOrderService->addExtraCard($order, $request->card_id, $request->value);
+        $result = $orderService->addExtraCard($order, $request->card_id, $request->value);
 
         return new OrderItemResource($result);
     }
 
-    public function update(AddExtraCardRequest $request, Order $order, OrderItem $orderItem, ManageOrderService $manageOrderService): OrderItemResource | JsonResponse
+    public function update(AddExtraCardRequest $request, Order $order, OrderItem $orderItem, OrderService $orderService): OrderItemResource | JsonResponse
     {
         $this->authorize('review', $order);
 
         try {
-            $result = $manageOrderService->editCard($order, $orderItem, $request->card_id, $request->value);
+            $result = $orderService->editCard($order, $orderItem, $request->card_id, $request->value);
 
             return new OrderItemResource($result);
         } catch (OrderItemDoesNotBelongToOrder $e) {

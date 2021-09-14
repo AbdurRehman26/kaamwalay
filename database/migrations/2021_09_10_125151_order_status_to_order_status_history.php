@@ -22,17 +22,18 @@ class OrderStatusToOrderStatusHistory extends Migration
             $table->foreignId('order_status_id')->nullable()->change();
         });
 
-        /**
-         * @var OrderStatusHistoryService $orderStatusHistoryService
-         */
-        $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
-        $orders = DB::select('SELECT id, user_id, order_status_id FROM orders');
+        // TODO: MOVE LOGIC TO A COMMAND
+        // /**
+        //  * @var OrderStatusHistoryService $orderStatusHistoryService
+        //  */
+        // $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+        // $orders = DB::select('SELECT id, user_id, order_status_id FROM orders');
 
-        foreach ($orders as $order) {
-            for ($orderStatusId = $order['order_status_id']; $orderStatusId >= 1; $orderStatusId++) {
-                $orderStatusHistoryService->addStatusToOrder($order['id'], $orderStatusId);
-            }
-        }
+        // foreach ($orders as $order) {
+        //     for ($orderStatusId = $order->order_status_id; $orderStatusId >= 1; $orderStatusId++) {
+        //         $orderStatusHistoryService->addStatusToOrder($order['id'], $orderStatusId);
+        //     }
+        // }
     }
 
     /**

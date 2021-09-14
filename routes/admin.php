@@ -32,7 +32,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('items/{orderItem}', [OrderItemController::class, 'update']);
         Route::get('items', [OrderItemController::class, 'getOrderCards']);
         Route::post('items', [OrderItemController::class, 'store']);
+        Route::get('grades', [OrderController::class, 'getGrades']);
+
+        Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
     });
 
-    Route::put('user-cards/{userCard}/grades', [UserCardController::class, 'updateGradingValues']);
 });

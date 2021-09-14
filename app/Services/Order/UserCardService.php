@@ -20,6 +20,7 @@ class UserCardService
         $userCard->robo_grade_values = $cardGradingService->defaultValues('robo');
         $userCard->overall_values = $cardGradingService->defaultValues('overall');
         $userCard->overall_grade = 0.0;
+        $userCard->generated_images = $cardGradingService->defaultValues('images');
         $userCard->save();
 
         $this->createCertificate($userCard);
@@ -33,8 +34,12 @@ class UserCardService
         $certificate->user_card_id = $userCard->id;
         $certificate->save();
 
-        $certificate->number = Str::padLeft($certificate->id, 8, '0');
+        $certificateNumber = Str::padLeft($certificate->id, 8, '0');
+        $certificate->number = $certificateNumber;
         $certificate->save();
+
+        $userCard->certificate_number = $certificateNumber;
+        $userCard->save();
 
         return $certificate;
     }

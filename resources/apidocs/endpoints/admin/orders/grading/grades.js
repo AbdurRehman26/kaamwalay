@@ -1,5 +1,5 @@
 /**
- * @api {put} /admin/user-cards/1/grades Update Card Grade Values
+ * @api {put} /admin/orders/1/cards/1/grades Update Card Grade Values
  * @apiName Update Grade Values
  * @apiGroup Order Cards
  *
@@ -86,15 +86,41 @@
  *              },
  *              "overall_grade": 5.3,
  *              "grading_id": null,
- *              "ai_model_number": null,
- *              "front_centering_img_src": null,
- *              "front_surface_img_src": null,
- *              "front_edges_img_src": null,
- *              "front_corners_img_src": null,
- *              "back_centering_img_src": null,
- *              "back_surface_img_src": null,
- *              "back_edges_img_src": null,
- *              "back_corners_img_src": null,
+ *              "ai_model_numbers": null,
+ *              "generated_images": [
+ *                   {
+ *                       "output_image": null,
+ *                       "name": "Front Centering",
+ *                   },
+ *                   {
+ *                       "output_image": null,
+ *                       "name": "Front Surface",
+ *                   },
+ *                   {
+ *                       "output_image": null,
+ *                       "name": "Front Edges",
+ *                   },
+ *                   {
+ *                       "output_image": null,
+ *                       "name": "Front Corners",
+ *                   },
+ *                   {
+ *                       "output_image": null,
+ *                       "name": "Back Centering",
+ *                   },
+ *                   {
+ *                       "output_image": null,
+ *                       "name": "Back Surface",
+ *                   },
+ *                   {
+ *                       "output_image": null,
+ *                       "name": "Back Edges",
+ *                   },
+ *                   {
+ *                       "output_image": null,
+ *                       "name": "Back Corners",
+ *                   },
+ *              ],
  *              "updated_at": "2021-09-09T07:24:43.000000Z"
  *           }
  *       }

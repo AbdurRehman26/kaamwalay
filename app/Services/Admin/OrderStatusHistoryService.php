@@ -17,8 +17,7 @@ class OrderStatusHistoryService
     public function __construct(
         protected AgsService $agsService,
         protected OrderService $orderService
-    )
-    {
+    ) {
     }
 
     public function getAllByOrderId(Order|int $orderId)

@@ -6,6 +6,15 @@ use App\Http\Resources\API\BaseResource;
 
 class CardGradeResource extends BaseResource
 {
+    protected array $ignoredParams = [];
+
+    public function ignoreParams(...$params): self
+    {
+        $this->ignoredParams = $params;
+
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -16,14 +25,16 @@ class CardGradeResource extends BaseResource
     {
         return [
             'grading_id' => $this->resource['id'],
-            'overall_grade' => $this->resource['grade']['grade'] ?? 0,
-            'overall_grade_nickname' => $this->resource['grade']['nickname'] ?? '',
-            'overall_values' => [
-                'center' => $this->resource['total_centering_grade']['grade'] ?? 0,
-                'surface' => $this->resource['total_surface_grade']['grade'] ?? 0,
-                'edge' => $this->resource['total_edges_grade']['grade'] ?? 0,
-                'corner' => $this->resource['total_corners_grade']['grade'] ?? 0,
-            ],
+            $this->mergeWhen(! in_array('overall', $this->ignoredParams), [
+                'overall_grade' => $this->resource['grade']['grade'] ?? 0,
+                'overall_grade_nickname' => $this->resource['grade']['nickname'] ?? '',
+                'overall_values' => [
+                    'center' => $this->resource['total_centering_grade']['grade'] ?? 0,
+                    'surface' => $this->resource['total_surface_grade']['grade'] ?? 0,
+                    'edge' => $this->resource['total_edges_grade']['grade'] ?? 0,
+                    'corner' => $this->resource['total_corners_grade']['grade'] ?? 0,
+                ],
+            ]),
             'robo_grade_values' => [
                 'front' => ! is_null($this->resource['front_scan']) ? [
                     'center' => $this->resource['front_scan']['centering_grade']['grade'],

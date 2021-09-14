@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
+use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
@@ -122,66 +123,11 @@ class OrderService
         $cards = [];
         foreach ($grades['results'] as $result) {
             $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
-            $card->update($this->getAgsGradesStructure($result));
+            $card->update(CardGradeResource::make($result)->ignoreParams('overall')->make());
 
             $cards[] = $card;
         }
 
         return $cards;
-    }
-
-    protected function getAgsGradesStructure(array $gradesResult): array
-    {
-        return [
-            'grading_id' => $gradesResult['id'],
-            'robo_grade_values' => [
-                'front' => ! is_null($gradesResult['front_scan']) ? [
-                    'center' => $gradesResult['front_scan']['centering_grade']['grade'],
-                    'surface' => $gradesResult['front_scan']['surface_grade']['grade'],
-                    'edge' => $gradesResult['front_scan']['edges_grade']['grade'],
-                    'corner' => $gradesResult['front_scan']['corners_grade']['grade'],
-                ] : null,
-                'back' => ! is_null($gradesResult['back_scan']) ? [
-                    'center' => $gradesResult['back_scan']['centering_grade']['grade'],
-                    'surface' => $gradesResult['back_scan']['surface_grade']['grade'],
-                    'edge' => $gradesResult['back_scan']['edges_grade']['grade'],
-                    'corner' => $gradesResult['back_scan']['corners_grade']['grade'],
-                ] : null,
-            ],
-            'generated_images' => [
-                [
-                    'output_image' => ! is_null($gradesResult['front_scan']) ? $gradesResult['front_scan']['centering_result']['output_image'] : null,
-                    'name' => 'Front Centering',
-                ],
-                [
-                    'output_image' => ! is_null($gradesResult['front_scan']) ? $gradesResult['front_scan']['surface_result']['output_image'] : null,
-                    'name' => 'Front Surface',
-                ],
-                [
-                    'output_image' => ! is_null($gradesResult['front_scan']) ? $gradesResult['front_scan']['edges_result']['output_image'] : null,
-                    'name' => 'Front Edges',
-                ],
-                [
-                    'output_image' => ! is_null($gradesResult['front_scan']) ? $gradesResult['front_scan']['corners_result']['output_image'] : null,
-                    'name' => 'Front Corners',
-                ],
-                [
-                    'output_image' => ! is_null($gradesResult['back_scan']) ? $gradesResult['back_scan']['centering_result']['output_image'] : null,
-                    'name' => 'Back Centering',
-                ],
-                [
-                    'output_image' => ! is_null($gradesResult['back_scan']) ? $gradesResult['back_scan']['surface_result']['output_image'] : null,
-                    'name' => 'Back Surface',
-                ],
-                [
-                    'output_image' => ! is_null($gradesResult['back_scan']) ? $gradesResult['back_scan']['edges_result']['output_image'] : null,
-                    'name' => 'Back Edges',
-                ],
-                [
-                    'output_image' => ! is_null($gradesResult['back_scan']) ? $gradesResult['back_scan']['corners_result']['output_image'] : null,
-                    'name' => 'Back Corners',
-                ],
-            ],
-        ];
     }
 }

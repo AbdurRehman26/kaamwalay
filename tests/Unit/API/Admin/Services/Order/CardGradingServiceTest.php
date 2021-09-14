@@ -28,38 +28,25 @@ it('can return the default values for overall_values', function (array $defaultS
     fn () => $this->service->defaultValues('overall'),
 ]);
 
-it('calculates the overall grading values', function () {
-    $humanGrades = [
-        'front' => [
-            'center' => 5.5,
-            'surface' => 6.2,
-            'edge' => 7.3,
-            'corner' => 9.0,
-        ],
-        'back' => [
-            'center' => 7.5,
-            'surface' => 2.5,
-            'edge' => 8.6,
-            'corner' => 5.0,
-        ],
-    ];
-    $overAllValues = $this->service->calculateOverallValues($humanGrades);
-    expect($overAllValues)
-        ->toBeArray()
-        ->toHaveKeys(['center', 'surface', 'edge', 'corner'])
-        ->center->toBe(6.5)
-        ->surface->toBe(4.4)
-        ->edge->toBe(8.0)
-        ->corner->toBe(7.0);
-});
+it('successfully verifies that human grades are completed', function (array $data) {
+    $this->assertTrue($this->service->validateIfHumanGradesAreCompleted($data));
+})->with([
+    fn () => ['front' => ['center' => 4.20, 'surface' => 4.20, 'edge' => 4.20, 'corner' => 4.20], 'back' => ['center' => 4.20, 'surface' => 4.20, 'edge' => 4.20, 'corner' => 4.20]],
+    fn () => ['front' => ['center' => 9.00, 'surface' => 5.40, 'edge' => 7.20, 'corner' => 3.80], 'back' => ['center' => 6.30, 'surface' => 6.20, 'edge' => 7.70, 'corner' => 7.40]],
+    fn () => ['front' => ['center' => 7.00, 'surface' => 9.40, 'edge' => 10.00, 'corner' => 5.60], 'back' => ['center' => 1.20, 'surface' => 1.60, 'edge' => 7.70, 'corner' => 7.40]],
+]);
 
-it('calculates overall grade average', function () {
-    $overAllValues = [
-        'center' => 5.5,
-        'surface' => 6.2,
-        'edge' => 7.3,
-        'corner' => 9.0,
-    ];
-    $overAllGrade = $this->service->calculateOverallAverage($overAllValues);
-    expect($overAllGrade)->toBe(7.0);
-});
+it('successfully verifies that human grades are not completed', function (array $data) {
+    $this->assertFalse($this->service->validateIfHumanGradesAreCompleted($data));
+})->with([
+    fn () => ['front' => ['center' => 0, 'surface' => 4.20, 'edge' => 4.20, 'corner' => 4.20], 'back' => ['center' => 4.20, 'surface' => 4.20, 'edge' => 4.20, 'corner' => 4.20]],
+    fn () => ['front' => ['center' => 9.00, 'surface' => 0, 'edge' => 7.20, 'corner' => 3.80], 'back' => ['center' => 6.30, 'surface' => 6.20, 'edge' => 7.70, 'corner' => 0]],
+    fn () => ['front' => ['center' => 7.00, 'surface' => 9.40, 'edge' => 10.00, 'corner' => 4.20], 'back' => ['center' => 4.20, 'surface' => 0, 'edge' => 4.20, 'corner' => 4.20]],
+    fn () => ['front' => ['center' => 0, 'surface' => 0, 'edge' => 7.20, 'corner' => 3.80], 'back' => ['center' => 6.30, 'surface' => 6.20, 'edge' => 0, 'corner' => 7.40]],
+    fn () => ['front' => ['center' => 7.00, 'surface' => 9.40, 'edge' => 10.00, 'corner' => 0], 'back' => ['center' => 1.20, 'surface' => 0, 'edge' => 7.70, 'corner' => 7.40]],
+    fn () => ['front' => ['center' => 0, 'surface' => 4.20, 'edge' => 4.20, 'corner' => 4.20], 'back' => ['center' => 4.20, 'surface' => 4.20, 'edge' => 4.20, 'corner' => 4.20]],
+    fn () => ['front' => ['center' => 9.00, 'surface' => 0, 'edge' => 7.20, 'corner' => 0], 'back' => ['center' => 6.30, 'surface' => 6.20, 'edge' => 7.70, 'corner' => 0]],
+    fn () => ['front' => ['center' => 7.00, 'surface' => 9.40, 'edge' => 10.00, 'corner' => 4.20], 'back' => ['center' => 4.20, 'surface' => 0, 'edge' => 4.20, 'corner' => 4.20]],
+    fn () => ['front' => ['center' => 9.00, 'surface' => 0, 'edge' => 7.20, 'corner' => 3.80], 'back' => ['center' => 6.30, 'surface' => 6.20, 'edge' => 0, 'corner' => 7.40]],
+    fn () => ['front' => ['center' => 0, 'surface' => 9.40, 'edge' => 10.00, 'corner' => 0], 'back' => ['center' => 1.20, 'surface' => 1.60, 'edge' => 7.70, 'corner' => 7.40]],
+]);

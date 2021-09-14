@@ -21,6 +21,7 @@ class CreateUserCardsTable extends Migration
             $table->json('robo_grade_values')->nullable();
             $table->json('overall_values')->nullable();
             $table->decimal('overall_grade', 10, 2)->nullable();
+            $table->string('overall_grade_nickname')->nullable();
             $table->string('grading_id')->nullable();
             $table->json('ai_model_numbers')->nullable();
             $table->string('front_centering_img_src')->nullable();

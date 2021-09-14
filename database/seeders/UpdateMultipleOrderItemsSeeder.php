@@ -14,19 +14,18 @@ class UpdateMultipleOrderItemsSeeder extends Seeder
      */
     public function run()
     {
-        $currentDateTime = new \Datetime();
-        $items = OrderItem::where('quantity', '>', 1)->get();
+        $items = OrderItem::where('quantity', '>', 1)->where('order_id', '>', 10)->get();
 
         foreach ($items as $item) {
-            $quantity = $item->quantity;
-            for ($i = 0; $i < $quantity - 1; $i++) {
+            for ($i = 0; $i < $item->quantity - 1; $i++) {
                 $newItem = $item->replicate();
                 $newItem->quantity = 1;
-                $newItem->created_at = $currentDateTime;
+                $newItem->declared_value_total = $item->declared_value_per_unit;
                 $newItem->save();
             }
 
             $item->quantity = 1;
+            $item->declared_value_total = $item->declared_value_per_unit;
             $item->save();
         }
     }

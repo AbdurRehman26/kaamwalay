@@ -6,7 +6,6 @@ use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Services\BarcodeService;
-use App\Services\Order\OrderService;
 use App\Services\PDFService;
 use Carbon\Carbon;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
@@ -56,15 +55,13 @@ class InvoiceService
             }
         }
 
-        $items = (new OrderService)->getGroupedOrderItems($order->id);
-
         return [
             'logoData' => $logoData,
             'agsLogo' => $agsLogo,
             'barcode' => $barcode,
             'order' => $order,
             'orderDate' => Carbon::parse($order->created_at)->format('m/d/Y'),
-            'orderItems' => $items,
+            'orderItems' => $order->getGroupedOrderItems(),
             'customer' => $order->user,
             'shippingAddress' => $order->shippingAddress,
             'orderPayment' => $orderPayment,

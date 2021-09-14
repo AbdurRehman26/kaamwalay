@@ -22,6 +22,9 @@ export class UserEntity extends Entity {
     @Field('stripe_id')
     public stripeId!: string;
 
+    @Field('customer_number')
+    public customerNumber!: string;
+
     @Type(() => RoleEntity)
     public roles!: RoleEntity[];
 

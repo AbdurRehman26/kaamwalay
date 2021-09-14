@@ -13,8 +13,10 @@ use App\Services\AGS\AgsService;
 
 class ManageOrderService
 {
-    public function __construct(protected AgsService $agsService)
-    {
+    public function __construct(
+        private  OrderItemService $orderItemService,
+        private AgsService $agsService
+    ) {
     }
 
     public function confirmReview(Order $order, User $user): Order
@@ -46,7 +48,7 @@ class ManageOrderService
             'declared_value_total' => $value,
         ]);
 
-        return (new OrderItemService)->changeStatus($order, $newItem, ["status" => "confirmed"]);
+        return $this->orderItemService->changeStatus($order, $newItem, ["status" => "confirmed"]);
     }
 
     public function editCard(Order $order, OrderItem $orderItem, int $card_id, float $value): OrderItem

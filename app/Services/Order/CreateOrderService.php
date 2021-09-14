@@ -2,6 +2,8 @@
 
 namespace App\Services\Order;
 
+use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
+use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -9,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Admin\Order\OrderItemService;
+use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
@@ -16,11 +19,18 @@ use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CreateOrderService
 {
     protected Order $order;
     protected array $data;
+
+    public function __construct(
+        private OrderStatusHistoryService $orderStatusHistoryService,
+        private OrderItemService $orderItemService
+    ) {
+    }
 
     /**
      * @throws Exception
@@ -38,7 +48,7 @@ class CreateOrderService
             DB::rollBack();
             Log::error($e->getMessage());
 
-            throw new $e;
+            throw $e;
         }
     }
 
@@ -51,6 +61,10 @@ class CreateOrderService
         CustomerAddressValidator::validate($this->data);
     }
 
+    /**
+     * @throws Throwable
+     * @throws OrderStatusHistoryWasAlreadyAssigned
+     */
     protected function process()
     {
         DB::beginTransaction();
@@ -66,6 +80,8 @@ class CreateOrderService
         $this->storeShippingFee();
         $this->storeShippingFeeAndGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
+
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
 
         DB::commit();
     }
@@ -123,15 +139,16 @@ class CreateOrderService
     protected function saveOrder()
     {
         $this->order->user()->associate(auth()->user());
-        $this->order->order_status_id = OrderStatus::DEFAULT_ORDER_STATUS;
         $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();
     }
 
+    /**
+     * @throws OrderItemDoesNotBelongToOrder
+     */
     protected function storeOrderItems(array $items)
     {
-        $orderItemService = new OrderItemService();
         foreach ($items as $item) {
             $storedItem = OrderItem::create([
                 'order_id' => $this->order->id,
@@ -141,7 +158,7 @@ class CreateOrderService
                 'declared_value_total' => $item['quantity'] * $item['declared_value_per_unit'],
             ]);
 
-            $orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending']);
+            $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending']);
         }
     }
 

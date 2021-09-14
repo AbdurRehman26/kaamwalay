@@ -21,4 +21,25 @@ export class CardProductEntity extends Entity {
 
     @Field('image_path')
     public imagePath!: string;
+
+    public getName() {
+        return this.name || 'Unknown';
+    }
+
+    public getDescription() {
+        const content = [
+            this.releaseYear,
+            this.cardCategoryName,
+            this.cardSeriesName,
+            this.cardSetName,
+            this.cardNumberOrder,
+            this.name,
+        ]
+            .map((item) => `${item ?? ''}`)
+            .filter(Boolean)
+            .join(' ')
+            .trim();
+
+        return content || 'No card description.';
+    }
 }

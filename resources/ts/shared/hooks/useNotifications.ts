@@ -1,14 +1,14 @@
 import { AxiosError } from 'axios';
 import { useCallback, useMemo } from 'react';
 import { NotificationItem } from '@shared/classes/NotificationItem';
-import { NotificationType } from '@shared/constants/NotificationType';
+import { NotificationTypeEnum } from '../constants/NotificationTypeEnum';
 import { NotificationsService } from '../services/NotificationsService';
 import { useSharedSelector } from './useSharedDispatch';
 
 export function useNotifications() {
     const notifications = useSharedSelector((state) => state.notifications.queue);
 
-    const notify = useCallback((type: NotificationType, message: string, title: string = '') => {
+    const notify = useCallback((type: NotificationTypeEnum, message: string, title: string = '') => {
         NotificationsService.notify(type, message, title);
     }, []);
 

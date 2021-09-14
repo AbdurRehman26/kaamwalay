@@ -17,7 +17,7 @@ class OrderPolicy
 
     public function view(User $user, Order $order)
     {
-        return $order->user()->is($user) ;
+        return $user->isAdmin() || $order->user()->is($user);
     }
 
     public function create(User $user)
@@ -32,6 +32,6 @@ class OrderPolicy
 
     public function review(User $user)
     {
-        return $user->isAdmin() ;
+        return $user->isAdmin();
     }
 }

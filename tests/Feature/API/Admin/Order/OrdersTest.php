@@ -4,6 +4,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Services\Admin\OrderStatusHistoryService;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -19,23 +20,22 @@ beforeEach(function () {
         CardSetsSeeder::class,
         CardProductSeeder::class,
     ]);
+
+    $user = User::factory()->withRole(config('permission.roles.admin'))->create();
+
     $this->orders = Order::factory()->count(5)->state(new Sequence(
-        [
-            'order_status_id' => 2,
-        ],
-        [
-            'order_status_id' => 3,
-        ],
-        [
-            'order_status_id' => 4,
-        ],
-        [
-            'order_status_id' => 5,
-        ],
-        [
-            'order_status_id' => 7,
-        ],
+        ['order_status_id' => OrderStatus::PLACED],
+        ['order_status_id' => OrderStatus::ARRIVED],
+        ['order_status_id' => OrderStatus::GRADED],
+        ['order_status_id' => OrderStatus::SHIPPED],
+        ['order_status_id' => OrderStatus::REVIEWED]
     ))->create();
+
+    $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+    $this->orders->each(function ($order) use ($orderStatusHistoryService) {
+        $orderStatusHistoryService->addStatusToOrder($order->order_status_id, $order->id, $order->user_id);
+    });
+
     OrderItem::factory()->count(2)
         ->state(new Sequence(
             [
@@ -48,7 +48,7 @@ beforeEach(function () {
         ->create([
             'order_id' => $this->orders[0],
         ]);
-    $user = User::factory()->withRole(config('permission.roles.admin'))->create();
+
     $this->actingAs($user);
 });
 
@@ -61,7 +61,6 @@ it('returns orders list for admin', function () {
                     'id',
                     'order_number',
                     'arrived',
-                    'status',
                     'created_at',
                 ],
             ],
@@ -69,13 +68,12 @@ it('returns orders list for admin', function () {
 })->group('admin', 'admin_orders');
 
 it('returns order details', function () {
-    $this->getJson('api/admin/orders/1')
+    $this->getJson('api/admin/orders/1?include=customer')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
                 'id',
                 'order_number',
-                'status',
                 'created_at',
                 'customer',
                 'order_items',
@@ -105,40 +103,37 @@ it('filters orders by id', function () {
 })->group('admin', 'admin_orders');
 
 it('returns only placed orders', function () {
-    $this->getJson('/api/admin/orders?filter[status_code]=placed')
+    $this->getJson('/api/admin/orders?include=order_status_history&filter[status]=placed')
         ->assertOk()
         ->assertJsonFragment([
-            'status' => OrderStatus::find(2)->name,
-        ])
-        ->assertJsonMissing([
-            'status' => OrderStatus::find(1)->name,
+            'order_status_id' => OrderStatus::PLACED,
         ]);
 })->group('admin', 'admin_orders');
 
 it('returns only reviewed orders', function () {
-    $this->getJson('/api/admin/orders?filter[status_code]=reviewed')
+    $this->getJson('/api/admin/orders?include=order_status_history&filter[status]=reviewed')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
-            'status' => OrderStatus::find(7)->name,
+            'order_status_id' => OrderStatus::REVIEWED,
         ]);
 })->group('admin', 'admin_orders');
 
 it('returns only graded orders', function () {
-    $this->getJson('/api/admin/orders?filter[status_code]=graded')
+    $this->getJson('/api/admin/orders?include=order_status_history&filter[status]=graded')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
-            'status' => OrderStatus::find(4)->name,
+            'order_status_id' => OrderStatus::GRADED,
         ]);
 })->group('admin', 'admin_orders');
 
 it('returns only shipped orders', function () {
-    $this->getJson('/api/admin/orders?filter[status_code]=shipped')
+    $this->getJson('/api/admin/orders?include=order_status_history&filter[status]=shipped')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
-            'status' => OrderStatus::find(5)->name,
+            'order_status_id' => OrderStatus::SHIPPED,
         ]);
 })->group('admin', 'admin_orders');
 
@@ -162,21 +157,21 @@ it('returns orders order by desc grand_total', function () {
 
 test('orders are filterable by customer first name', function () {
     $user = $this->orders[0]->user;
-    $this->getJson('/api/admin/orders?filter[customer_name]=' . $user->first_name)
+    $this->getJson('/api/admin/orders?include=customer&filter[customer_name]=' . $user->first_name)
         ->assertOk()
         ->assertJsonCount($user->orders->count(), ['data'])
         ->assertJsonFragment([
-            'customer' => $user->email,
+            'email' => $user->email,
         ]);
 })->group('admin', 'admin_orders');
 
 test('orders are filterable by customer ID', function () {
     $user = $this->orders[0]->user;
-    $this->getJson('/api/admin/orders?filter[customer_id]=' . $user->id)
+    $this->getJson('/api/admin/orders?include=customer&filter[customer_id]=' . $user->id)
         ->assertOk()
         ->assertJsonCount($user->orders->count(), ['data'])
         ->assertJsonFragment([
-            'customer' => $user->email,
+            'email' => $user->email,
         ]);
 })->group('admin', 'admin_orders');
 

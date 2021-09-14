@@ -1,8 +1,8 @@
 export enum LayoutFlags {
-    Header,
-    Sidebar,
-    Container,
-    Content,
+    Header = 'Header',
+    Sidebar = 'Sidebar',
+    Container = 'Container',
+    Content = 'Content',
 }
 
 type FlagMethods = {

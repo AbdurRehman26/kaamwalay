@@ -14,7 +14,8 @@ class ManageOrderService
 {
     public function __construct(
         private  OrderItemService $orderItemService,
-        private AgsService $agsService)
+        private AgsService $agsService
+    )
     {
     }
 

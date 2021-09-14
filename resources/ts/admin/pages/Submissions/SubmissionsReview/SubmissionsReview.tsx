@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
 import React, { useCallback, useState } from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';
-import AddCardDialog from '@shared/components/AddCardDialog/AddCardDialog';
+import AddCardDialog, { AddCardDialogProps } from '@shared/components/AddCardDialog/AddCardDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
@@ -43,6 +43,10 @@ export function SubmissionsReview() {
         );
         setLoading(true);
     }, [dispatch, data?.id]);
+
+    const handleAddCard = useCallback<AddCardDialogProps['onAdd']>(({ card, declaredValue }) => {
+        console.log({ card, declaredValue });
+    }, []);
 
     useSidebarHidden();
 
@@ -129,7 +133,7 @@ export function SubmissionsReview() {
                     </Button>
                 </Box>
             ) : null}
-            <AddCardDialog />
+            <AddCardDialog onAdd={handleAddCard} />
         </>
     );
 }

@@ -26,7 +26,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('items/bulk/change-status', [OrderItemController::class, 'changeStatusBulk']);
         Route::post('items/{orderItem}/change-status', [OrderItemController::class, 'changeStatus']);
         Route::apiResource('status-history', OrderStatusHistoryController::class)->only(['index', 'store']);
-        
+
         // TODO: move to resource controller
         Route::put('notes', [OrderController::class, 'updateNotes']);
         Route::put('items/{orderItem}', [OrderItemController::class, 'update']);

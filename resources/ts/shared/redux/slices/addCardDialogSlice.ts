@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { classToPlain } from 'class-transformer';
 import { AddCardDialogViewEnum } from '../../constants/AddCardDialogViewEnum';
 import { CardProductEntity } from '../../entities/CardProductEntity';
 
@@ -22,8 +23,8 @@ export const addCardDialogSlice = createSlice({
         setAddCardDialogView(state, { payload }: PayloadAction<AddCardDialogViewEnum>) {
             state.view = payload;
         },
-        selectAddCardDialog(state, { payload }: PayloadAction<CardProductEntity>) {
-            state.selectedCard = payload;
+        selectAddCardDialog(state, { payload }: PayloadAction<CardProductEntity | null>) {
+            state.selectedCard = classToPlain(payload) as any;
         },
     },
 });

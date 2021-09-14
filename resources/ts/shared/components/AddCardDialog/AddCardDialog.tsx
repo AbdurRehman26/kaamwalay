@@ -3,10 +3,12 @@ import Slide from '@material-ui/core/Slide';
 import { makeStyles } from '@material-ui/core/styles';
 import { AddCardDialogViewEnum } from '@shared/constants/AddCardDialogViewEnum';
 import { useAddCardDialogState } from '@shared/redux/hooks/useAddCardDialogState';
-import CardView from './CardView';
+import CardView, { CardViewProps } from './CardView';
 import ListCardsView from './ListCardsView';
 
-interface AddCardDialogProps extends Omit<DialogProps, 'open'> {}
+export interface AddCardDialogProps extends Omit<DialogProps, 'open'> {
+    onAdd: CardViewProps['onAdd'];
+}
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -25,7 +27,7 @@ const useStyles = makeStyles(
  * @date: 13.09.2021
  * @time: 19:24
  */
-export function AddCardDialog({ ...rest }: AddCardDialogProps) {
+export function AddCardDialog({ onAdd, ...rest }: AddCardDialogProps) {
     const classes = useStyles();
     const dialogState = useAddCardDialogState();
 
@@ -35,7 +37,7 @@ export function AddCardDialog({ ...rest }: AddCardDialogProps) {
                 <ListCardsView />
             </Slide>
             <Slide in={dialogState.view === AddCardDialogViewEnum.Card} direction={'right'} unmountOnExit exit={false}>
-                <CardView />
+                <CardView onAdd={onAdd} />
             </Slide>
         </Dialog>
     );

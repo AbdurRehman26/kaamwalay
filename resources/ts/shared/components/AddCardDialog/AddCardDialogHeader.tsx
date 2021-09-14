@@ -5,9 +5,14 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import CloseIcon from '@material-ui/icons/Close';
 import { useCallback } from 'react';
+import { batch } from 'react-redux';
 import { AddCardDialogViewEnum } from '@shared/constants/AddCardDialogViewEnum';
 import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
-import { setAddCardDialogState, setAddCardDialogView } from '@shared/redux/slices/addCardDialogSlice';
+import {
+    selectAddCardDialog,
+    setAddCardDialogState,
+    setAddCardDialogView,
+} from '@shared/redux/slices/addCardDialogSlice';
 import { font } from '@shared/styles/utils';
 
 interface AddCardDialogHeaderProps {
@@ -41,7 +46,10 @@ export function AddCardDialogHeader({ back }: AddCardDialogHeaderProps) {
     }, [dispatch]);
 
     const handleBack = useCallback(() => {
-        dispatch(setAddCardDialogView(AddCardDialogViewEnum.List));
+        batch(() => {
+            dispatch(setAddCardDialogView(AddCardDialogViewEnum.List));
+            dispatch(selectAddCardDialog(null));
+        });
     }, [dispatch]);
 
     return (

@@ -1,10 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Hits, Stats } from 'react-instantsearch-dom';
-import AddCardDialogResultItem from './AddCardDialogResultItem';
-import AddCardDialogResultsPagination from './AddCardDialogResultsPagination';
+import ManageCardDialogResultItem from './ManageCardDialogResultItem';
+import ManageCardDialogResultsPagination from './ManageCardDialogResultsPagination';
 
-interface AddCardDialogResultsProps {}
+interface ManageCardDialogResultsProps {}
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -31,25 +31,25 @@ const useStyles = makeStyles(
             },
         },
     }),
-    { name: 'AddCardDialogResults' },
+    { name: 'ManageCardDialogResults' },
 );
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: AddCardDialogResults
+ * @component: ManageCardDialogResults
  * @date: 13.09.2021
  * @time: 23:44
  */
-export function AddCardDialogResults(props: AddCardDialogResultsProps) {
+export function ManageCardDialogResults(props: ManageCardDialogResultsProps) {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             <Stats translations={{ stats: (nbHits) => `${nbHits} Results` }} />
-            <Hits hitComponent={AddCardDialogResultItem} />
-            <AddCardDialogResultsPagination />
+            <Hits hitComponent={ManageCardDialogResultItem} />
+            <ManageCardDialogResultsPagination />
         </div>
     );
 }
 
-export default AddCardDialogResults;
+export default ManageCardDialogResults;

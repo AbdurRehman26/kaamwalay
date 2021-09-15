@@ -9,12 +9,11 @@ import { plainToClass } from 'class-transformer';
 import { useCallback, useMemo } from 'react';
 import { Hit } from 'react-instantsearch-core';
 import { batch } from 'react-redux';
-import { AddCardDialogViewEnum } from '@shared/constants/AddCardDialogViewEnum';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
-import { selectAddCardDialog, setAddCardDialogView } from '@shared/redux/slices/addCardDialogSlice';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 
-interface AddCardDialogResultItemProps {
+interface ManageCardDialogResultItemProps {
     hit: Hit<CardProductEntity>;
 }
 
@@ -36,24 +35,24 @@ const useStyles = makeStyles(
             width: 28,
         },
     }),
-    { name: 'AddCardDialogResultItem' },
+    { name: 'ManageCardDialogResultItem' },
 );
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: AddCardDialogResultItem
+ * @component: ManageCardDialogResultItem
  * @date: 13.09.2021
  * @time: 23:53
  */
-export function AddCardDialogResultItem({ hit }: AddCardDialogResultItemProps) {
+export function ManageCardDialogResultItem({ hit }: ManageCardDialogResultItemProps) {
     const item = useMemo(() => plainToClass(CardProductEntity, hit), [hit]);
     const classes = useStyles();
     const dispatch = useSharedDispatch();
 
     const handleSelect = useCallback(() => {
         batch(() => {
-            dispatch(setAddCardDialogView(AddCardDialogViewEnum.Card));
-            dispatch(selectAddCardDialog(item));
+            dispatch(manageCardDialogActions.setSelectedCard(item));
+            dispatch(manageCardDialogActions.navigateToPreviousView());
         });
     }, [dispatch, item]);
 
@@ -84,4 +83,4 @@ export function AddCardDialogResultItem({ hit }: AddCardDialogResultItemProps) {
     );
 }
 
-export default AddCardDialogResultItem;
+export default ManageCardDialogResultItem;

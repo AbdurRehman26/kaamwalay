@@ -4,9 +4,9 @@ import algoliaSearch from 'algoliasearch';
 import React, { ForwardedRef, forwardRef, useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '../../hooks/useConfiguration';
-import AddCardDialogHeader from './AddCardDialogHeader';
-import AddCardDialogResults from './AddCardDialogResults';
-import AddCardDialogSearch from './AddCardDialogSearch';
+import ManageCardDialogHeader from './ManageCardDialogHeader';
+import ManageCardDialogResults from './ManageCardDialogResults';
+import ManageCardDialogSearch from './ManageCardDialogSearch';
 
 interface ListCardsViewProps {}
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles(
  * @date: 13.09.2021
  * @time: 19:31
  */
-export const ListCardsView = forwardRef((props: ListCardsViewProps, ref: ForwardedRef<HTMLDivElement>) => {
+export const ManageCardDialogList = forwardRef((props: ListCardsViewProps, ref: ForwardedRef<HTMLDivElement>) => {
     const classes = useStyles();
     const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
 
@@ -34,16 +34,16 @@ export const ListCardsView = forwardRef((props: ListCardsViewProps, ref: Forward
 
     return (
         <div className={classes.root} ref={ref}>
-            <AddCardDialogHeader />
+            <ManageCardDialogHeader />
             <Box p={3}>
                 <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
                     <Configure hitsPerPage={32} />
-                    <AddCardDialogSearch />
-                    <AddCardDialogResults />
+                    <ManageCardDialogSearch />
+                    <ManageCardDialogResults />
                 </InstantSearch>
             </Box>
         </div>
     );
 });
 
-export default ListCardsView;
+export default ManageCardDialogList;

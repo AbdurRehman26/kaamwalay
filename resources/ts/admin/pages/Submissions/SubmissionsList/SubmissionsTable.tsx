@@ -1,6 +1,5 @@
 import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MuiLink from '@material-ui/core/Link';
@@ -22,6 +21,7 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { font } from '@shared/styles/utils';
+import SubmissionActionButton from '@admin/components/SubmissionActionButton';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -115,14 +115,11 @@ export function SubmissionsTable({ tabFilter, all }: SubmissionsTableProps) {
                                     <TableCell>{formatCurrency(item.totalDeclaredValue)}</TableCell>
                                     <TableCell>{formatCurrency(item.grandTotal)}</TableCell>
                                     <TableCell align={'right'}>
-                                        <Button
-                                            variant={'contained'}
-                                            component={Link}
-                                            color={'primary'}
-                                            to={`/submissions/${item.id}/review`}
-                                        >
-                                            Review
-                                        </Button>
+                                        <SubmissionActionButton
+                                            orderId={item.id}
+                                            orderStatus={item.orderStatus}
+                                            size={'small'}
+                                        />
                                     </TableCell>
                                     <TableCell align={'right'}>
                                         <IconButton size={'small'}>

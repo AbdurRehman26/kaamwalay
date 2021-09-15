@@ -11,11 +11,11 @@ import { font } from '@shared/styles/utils';
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: AddCardDialogSearch
+ * @component: ManageCardDialogSearch
  * @date: 13.09.2021
  * @time: 23:40
  */
-export const AddCardDialogSearch = connectSearchBox(({ refine, isSearchStalled }) => {
+export const ManageCardDialogSearch = connectSearchBox(({ refine, isSearchStalled }) => {
     const isMounted = useIsMounted();
     const [search, setSearch] = useState('');
 
@@ -71,4 +71,4 @@ export const AddCardDialogSearch = connectSearchBox(({ refine, isSearchStalled }
     );
 });
 
-export default AddCardDialogSearch;
+export default ManageCardDialogSearch;

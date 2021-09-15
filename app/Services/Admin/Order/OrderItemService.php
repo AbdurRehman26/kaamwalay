@@ -16,7 +16,7 @@ class OrderItemService
         private  UserCardService $userCardService
     ) {
     }
-    
+
     /**
      * @throws OrderItemDoesNotBelongToOrder
      */
@@ -30,14 +30,23 @@ class OrderItemService
         $requestStatus = OrderItemStatus::forStatus($request['status'])->first();
 
         if ($requestStatus && (! $item->orderItemStatus || $item->order_item_status_id !== $requestStatus->id)) {
-            $status = new OrderItemStatusHistory();
-            $status->order_item_id = $item->id;
-            $status->order_item_status_id = $requestStatus->id;
-            $status->notes = $request['notes'] ?? '';
-            $status->save();
+            $hasStatus = $item->orderItemStatusHistories()->where('order_item_status_id', $requestStatus->id)->exists();
+            if (! $hasStatus) {
+                $status = new OrderItemStatusHistory();
+                $status->order_item_id = $item->id;
+                $status->order_item_status_id = $requestStatus->id;
+                $status->notes = $request['notes'] ?? '';
+                $status->save();
+            }
 
             $item->order_item_status_id = $requestStatus->id;
             $item->save();
+
+            if ($requestStatus->id === OrderItemStatus::PENDING) {
+                OrderItemStatusHistory::query()->where('order_item_id', $item->id)
+                ->where('order_item_status_id', '>', $requestStatus->id)
+                ->delete();
+            }
 
             if ($requestStatus->id === OrderItemStatus::CONFIRMED && ! $item->userCard) {
                 $this->userCardService->createItemUserCard($item);

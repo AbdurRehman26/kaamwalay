@@ -41,7 +41,7 @@ class UpdateRevenueStatsDaily extends Command
         $revenueStats = $revenueStatsService->addStats($formattedDate);
         $monthlyRevenueStats = $revenueStatsService->addMonthlyStats($month);
 
-        if (app()->environment('local')) {
+        if (app()->environment('production')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new RevenueStatsUpdated($revenueStats, $monthlyRevenueStats));
         }

@@ -21,6 +21,4 @@ export const materialUiTheme = createTheme({
     },
 });
 
-export type DashboardTheme = typeof materialUiTheme;
-
 export default materialUiTheme;

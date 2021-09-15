@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Database\Seeders\RolesSeeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
@@ -56,6 +57,7 @@ test('user receives his own information', function () {
 })->group('auth');
 
 test('ags user can login', function () {
+    $this->seed(RolesSeeder::class);
     Config::set('services.ags.is_platform_enabled', true);
     Config::set('services.ags.base_url', 'http://test.test');
 

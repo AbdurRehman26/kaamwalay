@@ -31,6 +31,7 @@ export interface AddCardsToSubmission {
     searchResults: SearchResultItemCardProps[];
     selectedCards: SearchResultItemCardProps[];
     shippingFee: number;
+    isMobileSearchModalOpen: boolean;
 }
 
 export interface Address {
@@ -82,6 +83,7 @@ export interface PaymentSubmissionState {
 
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
+    isNextLoading: boolean;
     currentStep: number;
     step01Status: any;
     orderID: number;
@@ -98,24 +100,76 @@ const initialState: NewSubmissionSliceState = {
     grandTotal: 0,
     orderNumber: '',
     isNextDisabled: false,
+    isNextLoading: false,
     currentStep: 0,
     step01Status: null,
     step01Data: {
-        availableServiceLevels: [],
+        availableServiceLevels: [
+            {
+                id: 1,
+                type: 'card',
+                maxProtectionAmount: 500,
+                turnaround: '28-30 Day',
+                price: 20,
+            },
+            {
+                id: 2,
+                type: 'card',
+                maxProtectionAmount: 1000,
+                turnaround: '12-14 Day',
+                price: 50,
+            },
+            {
+                id: 3,
+                type: 'card',
+                maxProtectionAmount: 2500,
+                turnaround: '5-7 Day',
+                price: 100,
+            },
+            {
+                id: 4,
+                type: 'card',
+                maxProtectionAmount: 10000,
+                turnaround: '2-3 Day',
+                price: 250,
+            },
+            {
+                id: 5,
+                type: 'card',
+                maxProtectionAmount: 50000,
+                turnaround: '1 Day',
+                price: 1000,
+            },
+            {
+                id: 6,
+                type: 'card',
+                maxProtectionAmount: 100000,
+                turnaround: '1 Day',
+                price: 2000,
+            },
+            {
+                id: 7,
+                type: 'card',
+                maxProtectionAmount: 1000000,
+                turnaround: 'Same Day',
+                price: 5000,
+            },
+        ],
         selectedServiceLevel: {
             id: 1,
             type: 'card',
             maxProtectionAmount: 500,
-            turnaround: '28-39 Day',
-            price: 1000,
+            turnaround: '28-30 Day',
+            price: 20,
         },
-        status: null,
+        status: 'success',
     },
     step02Data: {
         searchValue: '',
         searchResults: [],
         selectedCards: [],
         shippingFee: 0,
+        isMobileSearchModalOpen: false,
     },
     step03Data: {
         existingAddresses: [],
@@ -125,11 +179,18 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             flat: '',
             city: '',
-            state: { id: 0, code: '', name: '' },
+            state: {
+                id: 0,
+                code: '',
+                name: '',
+            },
             zipCode: '',
             phoneNumber: '',
-            country: { id: 0, code: '', name: '' },
-            // Setting it to -1 so we know for sure this isn't a real address id by default
+            country: {
+                id: 0,
+                code: '',
+                name: '',
+            },
             id: -1,
             userId: 0,
             isDefaultShipping: false,
@@ -141,16 +202,30 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             flat: '',
             city: '',
-            state: { id: 0, code: '', name: '' },
+            state: {
+                id: 0,
+                code: '',
+                name: '',
+            },
             zipCode: '',
             phoneNumber: '',
-            country: { id: 0, code: '', name: '' },
+            country: {
+                id: 0,
+                code: '',
+                name: '',
+            },
             id: -1,
             userId: 0,
             isDefaultShipping: false,
             isDefaultBilling: false,
         },
-        availableStatesList: [{ name: '', code: '', id: 0 }],
+        availableStatesList: [
+            {
+                name: '',
+                code: '',
+                id: 0,
+            },
+        ],
         fetchingStatus: null,
         saveForLater: true,
         disableAllShippingInputs: false,
@@ -175,10 +250,18 @@ const initialState: NewSubmissionSliceState = {
             address: '',
             flat: '',
             city: '',
-            state: { id: 0, code: '', name: '' },
+            state: {
+                id: 0,
+                code: '',
+                name: '',
+            },
             zipCode: '',
             phoneNumber: '',
-            country: { id: 0, code: '', name: '' },
+            country: {
+                id: 0,
+                code: '',
+                name: '',
+            },
             id: 0,
             userId: 0,
             isDefaultShipping: false,
@@ -384,6 +467,10 @@ export const newSubmissionSlice = createSlice({
         setIsNextDisabled: (state, action: PayloadAction<boolean>) => {
             state.isNextDisabled = action.payload;
         },
+        setIsNextLoading: (state, action: PayloadAction<boolean>) => {
+            state.isNextDisabled = action.payload;
+            state.isNextLoading = action.payload;
+        },
         setSaveShippingAddress: (state, action: PayloadAction<boolean>) => {
             state.step03Data.saveForLater = action.payload;
         },
@@ -441,6 +528,9 @@ export const newSubmissionSlice = createSlice({
         setUseCustomShippingAddress: (state, action: PayloadAction<boolean>) => {
             state.step03Data.useCustomShippingAddress = action.payload;
             state.step03Data.selectedAddress = initialState.step03Data.selectedAddress;
+        },
+        setIsMobileSearchModalOpen: (state, action: PayloadAction<boolean>) => {
+            state.step02Data.isMobileSearchModalOpen = action.payload;
         },
         clearSubmissionState: (state) => initialState,
     },
@@ -531,5 +621,7 @@ export const {
     setUseCustomShippingAddress,
     resetSelectedExistingAddress,
     setBillingAddress,
+    setIsNextLoading,
     clearSubmissionState,
+    setIsMobileSearchModalOpen,
 } = newSubmissionSlice.actions;

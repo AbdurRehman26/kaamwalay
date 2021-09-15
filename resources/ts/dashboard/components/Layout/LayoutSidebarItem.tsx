@@ -8,7 +8,7 @@ import { transparentize } from 'polished';
 import React, { ElementType, useMemo } from 'react';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import { cx } from '@shared/lib/utils/cx';
-import font from '@shared/styles/font.module.scss';
+import font from '@shared/styles/font.module.css';
 
 type SidebarMenuItemProps = {
     icon: ElementType;

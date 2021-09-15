@@ -1,12 +1,13 @@
+import { useMediaQuery } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { Hits, Stats } from 'react-instantsearch-dom';
 import CustomPagination from '@dashboard/components/CustomPagination';
 import SearchResultItemCard from './SearchResultItemCard';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     searchLabel: {
         fontFamily: 'Roboto',
         fontStyle: 'normal',
@@ -33,8 +34,13 @@ const useStyles = makeStyles({
             listStyle: 'none',
             padding: 0,
         },
+        [theme.breakpoints.down('xs')]: {
+            maxHeight: '80vh',
+            paddingLeft: 0,
+            paddingRight: 0,
+        },
     },
-});
+}));
 
 function ResultWrapper(props: any) {
     return (
@@ -54,6 +60,8 @@ function ResultWrapper(props: any) {
 
 function CardsSearchResults() {
     const classes = useStyles();
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+    const ResultsWrapper = isMobile ? 'div' : Paper;
     return (
         <div className={classes.container}>
             <Typography variant={'subtitle2'} className={classes.searchLabel}>
@@ -68,10 +76,10 @@ function CardsSearchResults() {
                     }}
                 />
             </Typography>
-            <Paper className={classes.resultsContainer} variant={'outlined'}>
+            <ResultsWrapper className={classes.resultsContainer} variant={'outlined'}>
                 <Hits hitComponent={ResultWrapper} />
                 <CustomPagination />
-            </Paper>
+            </ResultsWrapper>
         </div>
     );
 }

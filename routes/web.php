@@ -30,5 +30,6 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('feed')->group(function () {
     Route::get('/', [FeedController::class, 'getList'])->name('feed.list');
-    Route::get('/{id}/view', [FeedController::class, 'getView'])->name('feed.view');
+    Route::get('/{certificateId}/view', [FeedController::class, 'getView'])->name('feed.view');
 });
+Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');

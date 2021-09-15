@@ -1,5 +1,6 @@
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useState } from 'react';
 import {
@@ -10,10 +11,13 @@ import {
 import AccordionCardItemLoader from '@shared/components/AccordionCardItem/AccordionCardItemLoader';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { font } from '@shared/styles/utils';
 
 interface UnconfirmedCardProps extends AccordionCardItemProps {
     index: number;
     itemId: number;
+    declaredValue: number;
     card: CardProductEntity;
 
     onConfirm(index: number): void;
@@ -47,6 +51,7 @@ export function UnconfirmedCard({
     index,
     itemId,
     card,
+    declaredValue,
     onConfirm,
     onMissing,
     onEdit,
@@ -103,6 +108,12 @@ export function UnconfirmedCard({
                     </Button>
                 }
             >
+                <Typography variant={'caption'}>
+                    <span className={font.fontWeightMedium}>Value:</span>
+                    &nbsp;
+                    <span>{formatCurrency(declaredValue)}</span>
+                </Typography>
+
                 <Grid container alignItems={'center'} className={classes.buttons}>
                     <Button variant={'contained'} onClick={handleMissing}>
                         Missing

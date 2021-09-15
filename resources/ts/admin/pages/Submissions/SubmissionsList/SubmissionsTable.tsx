@@ -9,32 +9,50 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { upperFirst } from 'lodash';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { bracketParams } from '@shared/lib/api/bracketParams';
+import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import SubmissionsTableRow from '@admin/pages/Submissions/SubmissionsList/SubmissionsTableRow';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
     all?: boolean;
+    search?: string;
 }
 
-export function SubmissionsTable({ tabFilter, all }: SubmissionsTableProps) {
+export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PAYMENT_PENDING], [tabFilter]);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
 
     const orders$ = useListAdminOrdersQuery({
         params: {
+            search,
+            include: ['orderStatus', 'customer', 'invoice'],
             filter: {
                 status: all ? 'all' : tabFilter,
             },
-            include: ['orderStatus', 'customer', 'invoice'],
         },
         ...bracketParams(),
     });
 
     const totals = orders$.pagination?.meta?.total ?? 0;
+
+    useEffect(
+        () => {
+            if (!orders$.isLoading) {
+                // noinspection JSIgnoredPromiseFromCall
+                orders$.search(
+                    toApiPropertiesObject({
+                        orderNumber: search,
+                    }),
+                );
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [search],
+    );
 
     if (orders$.isLoading) {
         return (

@@ -149,6 +149,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 key={index}
                                 index={index}
                                 itemId={item.id}
+                                declaredValue={item.declaredValuePerUnit}
                                 card={item.cardProduct}
                                 onPreview={handlePreview}
                                 onConfirm={handleConfirm}

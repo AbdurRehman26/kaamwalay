@@ -22,6 +22,12 @@ class OrderPaid extends Notification
         $paymentCode = ucfirst($this->order->paymentMethod->code);
         $totalCards = $this->order->orderItems->sum('quantity');
 
+        if ($this->order->grand_total >= 5000) {
+            return (new SlackMessage)
+            ->from('Robograding', ':space_invader:')
+            ->content("{$this->order->user->getFullName()}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}");
+        }
+
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
             ->content("{$this->order->user->getFullName()}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}");

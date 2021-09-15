@@ -1,8 +1,6 @@
 import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import MuiLink from '@material-ui/core/Link';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,18 +8,12 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { upperFirst } from 'lodash';
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { StatusChip } from '@shared/components/StatusChip';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { formatDate } from '@shared/lib/datetime/formatDate';
-import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
-import { font } from '@shared/styles/utils';
-import SubmissionActionButton from '@admin/components/SubmissionActionButton';
+import SubmissionsTableRow from '@admin/pages/Submissions/SubmissionsList/SubmissionsTableRow';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -37,7 +29,7 @@ export function SubmissionsTable({ tabFilter, all }: SubmissionsTableProps) {
             filter: {
                 status: all ? 'all' : tabFilter,
             },
-            include: ['orderStatus', 'customer'],
+            include: ['orderStatus', 'customer', 'invoice'],
         },
         ...bracketParams(),
     });
@@ -77,57 +69,7 @@ export function SubmissionsTable({ tabFilter, all }: SubmissionsTableProps) {
                     </TableHead>
                     <TableBody>
                         {orders$.data?.length > 0 ? (
-                            orders$.data.map((item, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>
-                                        <MuiLink
-                                            component={Link}
-                                            color={'primary'}
-                                            to={`/submissions/${item.id}/view`}
-                                            className={font.fontWeightMedium}
-                                        >
-                                            {item.orderNumber}
-                                        </MuiLink>
-                                    </TableCell>
-                                    <TableCell>{formatDate(item.createdAt, 'MM/DD/YYYY')}</TableCell>
-                                    <TableCell>{formatDate(item.arrivedAt, 'MM/DD/YYYY')}</TableCell>
-                                    <TableCell>
-                                        {item.customer ? (
-                                            <MuiLink
-                                                component={Link}
-                                                color={'primary'}
-                                                to={`/customers/${item.customer?.id}/view`}
-                                                className={font.fontWeightMedium}
-                                            >
-                                                {item.customer?.customerNumber}
-                                            </MuiLink>
-                                        ) : (
-                                            '-'
-                                        )}
-                                    </TableCell>
-                                    <TableCell>{item.numberOfCards}</TableCell>
-                                    <TableCell>
-                                        <StatusChip
-                                            label={item.orderStatus?.name}
-                                            color={item.orderStatus?.code as any}
-                                        />
-                                    </TableCell>
-                                    <TableCell>{formatCurrency(item.totalDeclaredValue)}</TableCell>
-                                    <TableCell>{formatCurrency(item.grandTotal)}</TableCell>
-                                    <TableCell align={'right'}>
-                                        <SubmissionActionButton
-                                            orderId={item.id}
-                                            orderStatus={item.orderStatus}
-                                            size={'small'}
-                                        />
-                                    </TableCell>
-                                    <TableCell align={'right'}>
-                                        <IconButton size={'small'}>
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))
+                            orders$.data.map((order) => <SubmissionsTableRow order={order} key={order.id} />)
                         ) : (
                             <TableRow>
                                 <TableCell align={'center'} colSpan={9}>

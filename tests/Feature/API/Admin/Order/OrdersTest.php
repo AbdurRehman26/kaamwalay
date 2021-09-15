@@ -234,7 +234,7 @@ it('returns orders filtered after searching the order ID', function (string $val
             'id' => $this->orders[0]->id,
         ]);
 })->with([
-    fn () => $this->orders[0]->id,
+    fn () => $this->orders[0]->order_number,
     fn () => $this->orders[0]->user->id,
     fn () => $this->orders[0]->user->first_name,
 ]);

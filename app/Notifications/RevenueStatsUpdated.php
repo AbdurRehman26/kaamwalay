@@ -3,9 +3,9 @@
 namespace App\Notifications;
 
 use App\Models\RevenueStatsDaily;
+use Carbon\Carbon;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
-use Carbon\Carbon;
 
 class RevenueStatsUpdated extends Notification
 {
@@ -14,7 +14,7 @@ class RevenueStatsUpdated extends Notification
      *
      * @return void
      */
-    public function __construct(public RevenueStatsDaily $revenueStatsDaily , public RevenueStatsDaily $monthlyRevenueStats)
+    public function __construct(public RevenueStatsDaily $revenueStatsDaily, public RevenueStatsDaily $monthlyRevenueStats)
     {
         //
     }
@@ -33,7 +33,8 @@ class RevenueStatsUpdated extends Notification
     public function toSlack($notifiable)
     {
         $monthName = Carbon::now()->format('F');
-        $year= date('Y');
+        $year = date('Y');
+
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
             ->content("Revenue Stats .\n Date: {$this->revenueStatsDaily->event_at}, Revenue: \${$this->revenueStatsDaily->revenue} \n Month: {$monthName} {$year}, Revenue: \${$this->monthlyRevenueStats->revenue}");

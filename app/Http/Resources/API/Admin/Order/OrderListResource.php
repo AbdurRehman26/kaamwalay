@@ -4,7 +4,6 @@ namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
-use App\Models\Invoice;
 use Illuminate\Http\Request;
 
 class OrderListResource extends BaseResource

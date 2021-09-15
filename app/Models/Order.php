@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -104,6 +105,7 @@ class Order extends Model
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+            AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
     }
 

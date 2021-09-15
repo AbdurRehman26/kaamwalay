@@ -10,7 +10,7 @@ class AdminOrderSearchFilter implements Filter
     public function __invoke(Builder $query, $value, string $property)
     {
         $query->where(function (Builder $query) use ($value) {
-            $query->where('id', 'like', "%$value%")
+            $query->where('order_number', 'like', "%$value%")
                 ->orWhereHas(
                     'user',
                     function ($query) use ($value) {

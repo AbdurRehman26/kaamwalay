@@ -2,13 +2,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useMemo } from 'react';
 import { AddressEntity } from '@shared/entities/AddressEntity';
-import { getPaymentIcon } from '@shared/lib/payments';
-import font from '@shared/styles/font.module.scss';
-import { useViewSubmissionBillingStyles } from './styles';
+import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
+import font from '@shared/styles/font.module.css';
 
-interface ViewSubmissionBillingProps {
+interface SubmissionViewBillingProps {
     shippingAddress: AddressEntity;
     billingAddress: AddressEntity;
     cardLast4?: number | string;
@@ -17,26 +17,39 @@ interface ViewSubmissionBillingProps {
     cardType?: string;
 }
 
+export const useStyles = makeStyles(
+    {
+        paymentAvatar: {
+            width: 42,
+            height: 42,
+        },
+    },
+    {
+        name: 'SubmissionViewBilling',
+    },
+);
+
 /**
- * @parent ViewSubmissionBilling
+ * @parent SubmissionViewBilling
  * @private
  * @constructor
  */
-export function ViewSubmissionBilling({
+export function SubmissionViewBilling({
     shippingAddress,
     billingAddress,
     cardLast4,
     cardType,
     cardExpirationMonth,
     cardExpirationYear,
-}: ViewSubmissionBillingProps) {
-    const classes = useViewSubmissionBillingStyles();
+}: SubmissionViewBillingProps) {
+    const classes = useStyles();
     const cardIcon = useMemo(() => (cardType ? getPaymentIcon(cardType) : null), [cardType]);
+    const cardBrand = useMemo(() => (cardType ? getPaymentTitle(cardType) : null), [cardType]);
 
     const hasPayment = cardIcon && cardType && cardLast4 && cardExpirationMonth && cardExpirationYear;
 
     return (
-        <Grid container direction={'row'} className={classes.root} spacing={4}>
+        <Grid container direction={'row'} spacing={4}>
             <Grid item xs={4}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Shipping Address
@@ -52,12 +65,12 @@ export function ViewSubmissionBilling({
                         Payment Method
                     </Typography>
 
-                    <Box display={'flex'} alignItems={'center'} width={'100%'}>
+                    <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
                         {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
                         <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
-                            {cardType && cardLast4 ? (
+                            {(cardBrand || cardType) && cardLast4 ? (
                                 <Typography variant={'caption'}>
-                                    {cardType} ending in {cardLast4}
+                                    {cardBrand || cardType} ending in {cardLast4}
                                 </Typography>
                             ) : null}
                             {cardExpirationMonth && cardExpirationYear ? (

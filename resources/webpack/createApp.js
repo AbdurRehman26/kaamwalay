@@ -62,7 +62,13 @@ module.exports.createApp = function createApp(name) {
         .ts(jsEntry, '')
         .react()
         .extract()
-        .browserSync(process.env.APP_URL || 'http://laravel.test')
+        .browserSync(process.env.APP_URL || 'http://robograding.test')
+        .options({
+            watchOptions: {
+                ignored: /node_modules/,
+            },
+            processCssUrls: false,
+        })
         .override(extendWebpack)
         .alias({
             '@shared': path.join(__dirname, '../ts/shared'),
@@ -70,7 +76,7 @@ module.exports.createApp = function createApp(name) {
             [`@${name}`]: path.join(__dirname, `../ts/${name}`),
         })
         .sourceMaps()
-        .disableSuccessNotifications();
+        .disableNotifications();
 
     if (mix.inProduction()) {
         mix.version();

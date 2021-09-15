@@ -1,1 +1,1 @@
-export { default as font } from './font.module.scss';
+export { default as font } from './font.module.css';

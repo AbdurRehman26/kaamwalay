@@ -17,10 +17,13 @@ import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         width: '345px',
         minHeight: '20px',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        },
     },
     titleContainer: {
         backgroundColor: '#F9F9F9',
@@ -140,7 +143,7 @@ const useStyles = makeStyles({
         color: 'rgba(0, 0, 0, 0.87)',
         marginBottom: '12px',
     },
-});
+}));
 
 function SubmissionSummary() {
     const classes = useStyles();
@@ -238,7 +241,7 @@ function SubmissionSummary() {
             });
             sendECommerceDataToGA();
             history.push(`/submissions/${orderID}/confirmation`);
-        } catch (err) {
+        } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
                 notifications.exception(err, 'Payment Failed');

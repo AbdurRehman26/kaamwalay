@@ -31,7 +31,7 @@ class OrderItemFactory extends Factory
             'card_product_id' => CardProduct::factory(),
             'order_item_shipment_id' => OrderItemShipment::factory(),
             'order_item_customer_shipment_id' => OrderItemCustomerShipment::factory(),
-            'quantity' => $this->faker->numberBetween(1, 10000),
+            'quantity' => $this->faker->numberBetween(1, 50),
             'name' => $this->faker->name,
             'description' => $this->faker->text,
             'declared_value_per_unit' => $this->faker->randomFloat(2, 1, 99999999.99),

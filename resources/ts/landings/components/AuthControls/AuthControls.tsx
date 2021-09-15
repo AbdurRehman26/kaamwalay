@@ -18,6 +18,9 @@ const useStyles = makeStyles(
                 backgroundColor: alpha(theme.palette.primary.light, 0.1),
             },
         },
+        dashboardBtn: {
+            color: '#fff',
+        },
         space: {
             marginRight: theme.spacing(1),
         },
@@ -36,10 +39,11 @@ export function AuthControls() {
     if (!authenticated) {
         return (
             <>
-                <Button color={'primary'} className={cx(classes.button, classes.space)}>
+                <Button href={'/auth/sign-in'} color={'primary'} className={cx(classes.button, classes.space)}>
                     Log in
                 </Button>
                 <Button
+                    href={'/auth/sign-up'}
                     variant={'outlined'}
                     color={'primary'}
                     className={cx(classes.button, classes.buttonHighlighted)}
@@ -50,7 +54,11 @@ export function AuthControls() {
         );
     }
 
-    return <Button href={'/dashboard'}>Dashboard</Button>;
+    return (
+        <Button href={'/dashboard'} className={classes.dashboardBtn}>
+            Dashboard
+        </Button>
+    );
 }
 
 export default AuthControls;

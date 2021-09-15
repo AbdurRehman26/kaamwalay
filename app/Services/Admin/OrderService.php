@@ -3,10 +3,12 @@
 namespace App\Services\Admin;
 
 use App\Events\API\Admin\Order\OrderUpdated;
+use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Models\UserCardCertificate;
@@ -111,6 +113,9 @@ class OrderService
 
     public function getGrades(Order $order)
     {
+        if ($order->order_status_id !== OrderStatus::ARRIVED) {
+            throw new IncorrectOrderStatus;
+        }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
 
         $data = $this->updateLocalGrades($grades);
@@ -123,9 +128,11 @@ class OrderService
         $cards = [];
         foreach ($grades['results'] as $result) {
             $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
-            $card->update(CardGradeResource::make($result)->ignoreParams('overall')->make());
+            if (! is_null($card)) {
+                $card->update(CardGradeResource::make($result)->ignoreParams('overall')->make());
 
-            $cards[] = $card;
+                $cards[] = $card;
+            }
         }
 
         return $cards;

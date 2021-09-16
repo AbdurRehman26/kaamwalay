@@ -55,7 +55,7 @@ class RevenueStatsService
         $orderPayments = OrderPayment::join('orders', function ($join) {
             $join->on('orders.id', '=', 'order_payments.order_id');
         })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
-            ->whereDate('order_payments.created_at', '<=' , $currentDate)
+            ->whereDate('order_payments.created_at', '<=', $currentDate)
             ->whereMonth('order_payments.created_at', $currentMonth)
             ->whereYear('order_payments.created_at', date('Y'))
             ->select('order_payments.*')

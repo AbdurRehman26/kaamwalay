@@ -112,9 +112,7 @@ class OrderService
     public function getGrades(Order $order)
     {
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
-
         $data = $this->updateLocalGrades($grades);
-
         return $data;
     }
 
@@ -123,8 +121,7 @@ class OrderService
         $cards = [];
         foreach ($grades['results'] as $result) {
             $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
-            $card->update(CardGradeResource::make($result)->ignoreParams('overall')->make());
-
+            $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
             $cards[] = $card;
         }
 

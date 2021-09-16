@@ -3,9 +3,12 @@ import Grid from '@material-ui/core/Grid';
 import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { PaginatedData } from '@shared/classes/PaginatedData';
 import { font } from '@shared/styles/utils';
+import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
+import { getAllSubmissions } from '@admin/redux/slices/submissionGradeSlice';
 import SubmissionsGradeCard from './SubmissionsGradeCard';
 
 const useStyles = makeStyles(
@@ -20,23 +23,38 @@ const useStyles = makeStyles(
 
 export function SubmissionsGradeCards() {
     const classes = useStyles();
+    const allCards = useAppSelector((state) => state.submissionGradesSlice.allSubmissions);
+    const dispatch = useAppDispatch();
     const page = 0;
     const total = 3;
-
+    const { id } = useParams<{ id: string }>();
     const handleMissing = useCallback(() => {}, []);
     const handleNotAccepted = useCallback(() => {}, []);
     const handleChangePage = useCallback(() => {}, []);
     const handleChangeRowsPerPage = useCallback(() => {}, []);
 
+    useEffect(() => {
+        // @ts-ignore
+        dispatch(getAllSubmissions(id));
+    }, []);
+
     return (
         <Grid container direction={'column'} className={classes.root}>
             <Typography variant={'body1'}>
-                <span className={font.fontWeightMedium}>Cards</span>&nbsp;(3)
+                <span className={font.fontWeightMedium}>Cards</span>&nbsp;({allCards.length})
             </Typography>
             <Grid container direction={'column'} className={classes.cards}>
-                <SubmissionsGradeCard itemId={1} onMissing={handleMissing} onNotAccepted={handleNotAccepted} />
-                <SubmissionsGradeCard itemId={2} onMissing={handleMissing} onNotAccepted={handleNotAccepted} />
-                <SubmissionsGradeCard itemId={3} onMissing={handleMissing} onNotAccepted={handleNotAccepted} />
+                {allCards.map((item: any, index: number) => (
+                    <SubmissionsGradeCard
+                        key={item['order_item']['id']}
+                        orderID={Number(id)}
+                        cardData={item}
+                        itemIndex={index}
+                        itemId={item['order_item']['id']}
+                        onMissing={handleMissing}
+                        onNotAccepted={handleNotAccepted}
+                    />
+                ))}
             </Grid>
             <Divider />
             <TablePagination

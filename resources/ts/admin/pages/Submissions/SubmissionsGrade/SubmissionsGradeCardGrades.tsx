@@ -1,15 +1,20 @@
 import { makeStyles } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import Icon from '@material-ui/core/Icon';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import FaceIcon from '@material-ui/icons/Face';
 import { OutlinedCard } from '@shared/components/OutlinedCard';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
+import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
+import { updateExistingCardData, updateHumanGradeValue } from '@admin/redux/slices/submissionGradeSlice';
 
 interface SubmissionsGradeCardGradesProps {
     heading: string;
-    view: 'front' | 'back';
+    disabled?: boolean;
+    orderID: number;
+    itemIndex: number;
+    icon: any;
 }
 
 const useStyles = makeStyles(
@@ -23,9 +28,6 @@ const useStyles = makeStyles(
         headingHolder: {
             marginBottom: theme.spacing(2),
         },
-        headingIcon: {
-            opacity: 0.54,
-        },
         heading: {
             marginLeft: theme.spacing(1),
             fontWeight: 500,
@@ -33,47 +35,149 @@ const useStyles = makeStyles(
     }),
     { name: 'SubmissionsGradeCardGrades' },
 );
-
-export function SubmissionsGradeCardGrades({ heading, view }: SubmissionsGradeCardGradesProps) {
+export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }: SubmissionsGradeCardGradesProps) {
     const classes = useStyles();
+    const dispatch = useAppDispatch();
+    const apiService = useInjectable(APIService);
+
+    const frontCentering = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.center,
+    );
+    const frontEdge = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.edge,
+    );
+    const frontCorner = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.corner,
+    );
+    const frontSurface = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.surface,
+    );
+    const backSurface = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.surface,
+    );
+    const backEdge = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.edge,
+    );
+    const backCorner = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.corner,
+    );
+    const backCenter = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.center,
+    );
+    const itemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
+    const humanGrades = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values,
+    );
+    function updateHumanGrade(side: string, part: string, gradeValue: number) {
+        dispatch(
+            updateHumanGradeValue({
+                itemIndex,
+                side,
+                part,
+                gradeValue,
+            }),
+        );
+    }
+
+    async function sendHumanGradesToBackend() {
+        const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
+        const response = await endpoint.put('', {
+            human_grade_values: humanGrades,
+        });
+        dispatch(updateExistingCardData({ id: itemID, data: response.data }));
+    }
 
     return (
-        <OutlinedCard heading={heading} className={classes.root}>
+        <OutlinedCard heading={heading} icon={icon} className={classes.root}>
             <Grid container spacing={2}>
                 <Grid item xs={12} container alignItems={'center'} className={classes.headingHolder}>
-                    <Icon className={classes.headingIcon}>smart_toy</Icon>
-                    <Typography className={classes.heading}>Robogrades</Typography>
+                    <Typography className={classes.heading}>Front of Card</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField size={'medium'} variant={'outlined'} value={'0.00'} label={`Centering (${view})`} />
+                    <TextField
+                        size={'medium'}
+                        variant={'outlined'}
+                        value={frontCentering}
+                        onBlur={sendHumanGradesToBackend}
+                        onChange={(e) => updateHumanGrade('front', 'center', Number(e.target.value))}
+                        label={`Centering`}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField size={'medium'} variant={'outlined'} value={'0.00'} label={`Surface (${view})`} />
+                    <TextField
+                        size={'medium'}
+                        variant={'outlined'}
+                        value={frontSurface}
+                        onBlur={sendHumanGradesToBackend}
+                        onChange={(e) => updateHumanGrade('front', 'surface', Number(e.target.value))}
+                        label={`Surface`}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField size={'medium'} variant={'outlined'} value={'0.00'} label={`Edges (${view})`} />
+                    <TextField
+                        size={'medium'}
+                        variant={'outlined'}
+                        value={frontEdge}
+                        onBlur={sendHumanGradesToBackend}
+                        onChange={(e) => updateHumanGrade('front', 'edge', Number(e.target.value))}
+                        label={`Edges`}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField size={'medium'} variant={'outlined'} value={'0.00'} label={`Corners (${view})`} />
+                    <TextField
+                        size={'medium'}
+                        variant={'outlined'}
+                        value={frontCorner}
+                        onBlur={sendHumanGradesToBackend}
+                        onChange={(e) => updateHumanGrade('front', 'corner', Number(e.target.value))}
+                        label={`Corners`}
+                    />
                 </Grid>
             </Grid>
             <Divider className={classes.divider} />
             <Grid container spacing={2}>
                 <Grid item xs={12} container alignItems={'center'} className={classes.headingHolder}>
-                    <FaceIcon className={classes.headingIcon} />
-                    <Typography className={classes.heading}>Human Grades</Typography>
+                    <Typography className={classes.heading}>Back Of Card</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField size={'medium'} variant={'outlined'} value={'0.00'} label={`Centering (${view})`} />
+                    <TextField
+                        size={'medium'}
+                        variant={'outlined'}
+                        value={backCenter}
+                        onBlur={sendHumanGradesToBackend}
+                        onChange={(e) => updateHumanGrade('back', 'center', Number(e.target.value))}
+                        label={`Centering`}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField size={'medium'} variant={'outlined'} value={'0.00'} label={`Surface (${view})`} />
+                    <TextField
+                        size={'medium'}
+                        variant={'outlined'}
+                        value={backSurface}
+                        onBlur={sendHumanGradesToBackend}
+                        onChange={(e) => updateHumanGrade('back', 'surface', Number(e.target.value))}
+                        label={`Surface`}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField size={'medium'} variant={'outlined'} value={'0.00'} label={`Edges (${view})`} />
+                    <TextField
+                        size={'medium'}
+                        variant={'outlined'}
+                        value={backEdge}
+                        onBlur={sendHumanGradesToBackend}
+                        onChange={(e) => updateHumanGrade('back', 'edge', Number(e.target.value))}
+                        label={`Edges`}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField size={'medium'} variant={'outlined'} value={'0.00'} label={`Corners (${view})`} />
+                    <TextField
+                        size={'medium'}
+                        variant={'outlined'}
+                        value={backCorner}
+                        onBlur={sendHumanGradesToBackend}
+                        onChange={(e) => updateHumanGrade('back', 'corner', Number(e.target.value))}
+                        label={`Corners`}
+                    />
                 </Grid>
             </Grid>
         </OutlinedCard>

@@ -2,6 +2,8 @@
 
 namespace App\Services\Admin;
 
+use App\Models\UserCard;
+
 class CardGradingService
 {
     public function defaultValues(string $node): array
@@ -76,5 +78,12 @@ class CardGradingService
         return collect($humanGrades)->filter(function ($side) {
             return collect($side)->min() !== 0;
         })->count() === 2;
+    }
+
+    public function hasValidGradings(UserCard $card): bool
+    {
+        return $card->orderItem->isValidForGrading() && ! empty($card->overall_grade)
+            && ! empty($card->overall_grade_nickname) && ! empty($card->overall_values)
+            && $this->validateIfHumanGradesAreCompleted($card->human_grade_values);
     }
 }

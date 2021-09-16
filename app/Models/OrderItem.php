@@ -96,4 +96,9 @@ class OrderItem extends Model
     {
         return $query->where('order_id', $order->id);
     }
+
+    public function isValidForGrading(): bool
+    {
+        return $this->order_item_status_id === OrderItemStatus::CONFIRMED;
+    }
 }

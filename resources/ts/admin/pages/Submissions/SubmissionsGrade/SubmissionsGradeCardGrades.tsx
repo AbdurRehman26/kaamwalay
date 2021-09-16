@@ -3,6 +3,7 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
 import { OutlinedCard } from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
@@ -22,6 +23,9 @@ const useStyles = makeStyles(
         root: {
             marginTop: theme.spacing(3),
         },
+        alert: {
+            marginBottom: theme.spacing(2),
+        },
         divider: {
             margin: theme.spacing(3, 0),
         },
@@ -35,7 +39,13 @@ const useStyles = makeStyles(
     }),
     { name: 'SubmissionsGradeCardGrades' },
 );
-export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }: SubmissionsGradeCardGradesProps) {
+export function SubmissionsGradeCardGrades({
+    heading,
+    orderID,
+    disabled,
+    itemIndex,
+    icon,
+}: SubmissionsGradeCardGradesProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const apiService = useInjectable(APIService);
@@ -89,6 +99,9 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
 
     return (
         <OutlinedCard heading={heading} icon={icon} className={classes.root}>
+            <Alert severity="info" className={classes.alert}>
+                Human Grades are disabled until RoboGrades are available
+            </Alert>
             <Grid container spacing={2}>
                 <Grid item xs={12} container alignItems={'center'} className={classes.headingHolder}>
                     <Typography className={classes.heading}>Front of Card</Typography>
@@ -98,6 +111,7 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
                         size={'medium'}
                         variant={'outlined'}
                         value={frontCentering}
+                        disabled={disabled}
                         onBlur={sendHumanGradesToBackend}
                         onChange={(e) => updateHumanGrade('front', 'center', Number(e.target.value))}
                         label={`Centering`}
@@ -108,6 +122,7 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
                         size={'medium'}
                         variant={'outlined'}
                         value={frontSurface}
+                        disabled={disabled}
                         onBlur={sendHumanGradesToBackend}
                         onChange={(e) => updateHumanGrade('front', 'surface', Number(e.target.value))}
                         label={`Surface`}
@@ -118,6 +133,7 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
                         size={'medium'}
                         variant={'outlined'}
                         value={frontEdge}
+                        disabled={disabled}
                         onBlur={sendHumanGradesToBackend}
                         onChange={(e) => updateHumanGrade('front', 'edge', Number(e.target.value))}
                         label={`Edges`}
@@ -128,6 +144,7 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
                         size={'medium'}
                         variant={'outlined'}
                         value={frontCorner}
+                        disabled={disabled}
                         onBlur={sendHumanGradesToBackend}
                         onChange={(e) => updateHumanGrade('front', 'corner', Number(e.target.value))}
                         label={`Corners`}
@@ -144,6 +161,7 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
                         size={'medium'}
                         variant={'outlined'}
                         value={backCenter}
+                        disabled={disabled}
                         onBlur={sendHumanGradesToBackend}
                         onChange={(e) => updateHumanGrade('back', 'center', Number(e.target.value))}
                         label={`Centering`}
@@ -154,6 +172,7 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
                         size={'medium'}
                         variant={'outlined'}
                         value={backSurface}
+                        disabled={disabled}
                         onBlur={sendHumanGradesToBackend}
                         onChange={(e) => updateHumanGrade('back', 'surface', Number(e.target.value))}
                         label={`Surface`}
@@ -164,6 +183,7 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
                         size={'medium'}
                         variant={'outlined'}
                         value={backEdge}
+                        disabled={disabled}
                         onBlur={sendHumanGradesToBackend}
                         onChange={(e) => updateHumanGrade('back', 'edge', Number(e.target.value))}
                         label={`Edges`}
@@ -174,6 +194,7 @@ export function SubmissionsGradeCardGrades({ heading, orderID, itemIndex, icon }
                         size={'medium'}
                         variant={'outlined'}
                         value={backCorner}
+                        disabled={disabled}
                         onBlur={sendHumanGradesToBackend}
                         onChange={(e) => updateHumanGrade('back', 'corner', Number(e.target.value))}
                         label={`Corners`}

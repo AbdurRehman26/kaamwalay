@@ -1,11 +1,15 @@
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { PaginatedData } from '@shared/classes/PaginatedData';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { addOrderStatusHistory } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import { getAllSubmissions } from '@admin/redux/slices/submissionGradeSlice';
@@ -32,6 +36,20 @@ export function SubmissionsGradeCards() {
     const handleNotAccepted = useCallback(() => {}, []);
     const handleChangePage = useCallback(() => {}, []);
     const handleChangeRowsPerPage = useCallback(() => {}, []);
+
+    function isCompleteGradingBtnEnabled() {
+        const nonReviewedCards = allCards.filter((item: any) => item.order_item.status.name === 'Confirmed');
+        return nonReviewedCards.length === 0;
+    }
+
+    function handleCompleteGrading() {
+        dispatch(
+            addOrderStatusHistory({
+                orderId: Number(id),
+                orderStatusId: OrderStatusEnum.GRADED,
+            }),
+        );
+    }
 
     useEffect(() => {
         // @ts-ignore
@@ -66,6 +84,24 @@ export function SubmissionsGradeCards() {
                 rowsPerPageOptions={PaginatedData.LimitSet}
                 rowsPerPage={PaginatedData.LimitSet[0]}
             />
+            {isCompleteGradingBtnEnabled() ? (
+                <Box
+                    position={'fixed'}
+                    padding={2}
+                    left={0}
+                    bottom={0}
+                    width={'100%'}
+                    bgcolor={'#f9f9f9'}
+                    boxShadow={3}
+                    display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                >
+                    <Button variant={'contained'} color={'primary'} onClick={handleCompleteGrading}>
+                        Complete Grading
+                    </Button>
+                </Box>
+            ) : null}
         </Grid>
     );
 }

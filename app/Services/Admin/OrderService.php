@@ -126,18 +126,11 @@ class OrderService
         $cards = [];
         foreach ($grades['results'] as $result) {
             $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
-<<<<<<< HEAD
-            $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
-            $cards[] = $card;
-=======
             if (! is_null($card)) {
-                $card->update(CardGradeResource::make($result)->ignoreParams('overall')->make());
-
+                $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
                 $cards[] = $card;
             }
->>>>>>> e623b06ce94414a0a1c0f6b862611b17f7729173
         }
-
         return $cards;
     }
 }

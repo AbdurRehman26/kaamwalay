@@ -33,6 +33,10 @@ export const submissionGradesSlice = createSlice({
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
             state.allSubmissions[itemIndex] = action.payload.data;
         },
+        updateExistingCardStatus: (state, action: PayloadAction<{ id: number; status: string }>) => {
+            const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
+            state.allSubmissions[itemIndex].order_item.status.name = action.payload.status;
+        },
     },
     extraReducers: {
         [getAllSubmissions.fulfilled as any]: (state, action) => {
@@ -41,4 +45,5 @@ export const submissionGradesSlice = createSlice({
     },
 });
 
-export const { updateHumanGradeValue, updateExistingCardData } = submissionGradesSlice.actions;
+export const { updateHumanGradeValue, updateExistingCardData, updateExistingCardStatus } =
+    submissionGradesSlice.actions;

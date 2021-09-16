@@ -20,8 +20,7 @@ const useStyles = makeStyles(
             margin: '12px',
         },
         image: {
-            width: '191px',
-            height: '268px',
+            maxWidth: '160px',
         },
     }),
     { name: 'SubmissionsGradeCardGrades' },

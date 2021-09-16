@@ -16,7 +16,8 @@ import { cx } from '@shared/lib/utils/cx';
 import { APIService } from '@shared/services/APIService';
 import SubmissionGradeCardUpload from '@admin/pages/Submissions/SubmissionsGrade/SubmissionGradeCardUpload';
 import { SubmissionsGradeCardRoboGrades } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardRoboGrades';
-import { useAppSelector } from '@admin/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
+import { updateExistingCardStatus } from '@admin/redux/slices/submissionGradeSlice';
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 
 interface SubmissionsGradeCardProps {
@@ -72,9 +73,57 @@ const useStyles = makeStyles(
             width: '100%',
         },
         gradeItemLabel: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
             fontSize: '16px',
+            lineHeight: '24px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
         },
-        gradeItemValue: {},
+        gradeItemLabelSecondary: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: '12px',
+            lineHeight: '16px',
+            display: 'flex',
+            alignItems: 'flex-end',
+            textAlign: 'center',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        gradeItemValueSecondary: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'bold',
+            fontSize: '20px',
+            lineHeight: '30px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        overallGradeTextContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+        },
+        gradeItemValue: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'bold',
+            fontSize: '36px',
+            lineHeight: '48px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        gradeNickname: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            lineHeight: '48px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
         statusButton: {},
         disabledButton: {},
         submitButton: {
@@ -100,7 +149,7 @@ export function SubmissionsGradeCard({
 }: SubmissionsGradeCardProps) {
     const classes = useStyles();
     const apiService = useInjectable(APIService);
-
+    const dispatch = useAppDispatch();
     const handleNotAccepted = useCallback(
         (e) => {
             e.preventDefault();
@@ -126,11 +175,12 @@ export function SubmissionsGradeCard({
             };
             const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/items/${orderItemID}/change-status`);
             const response = await endpoint.post('', DTO);
-            console.log(response);
+            dispatch(updateExistingCardStatus({ status: response.data.status.name, id: topLevelID }));
         }
     }
 
     const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.id);
+    const topLevelID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
     const cardName = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.card_product.name,
     );
@@ -144,6 +194,9 @@ export function SubmissionsGradeCard({
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.certificate_number,
     );
     const overallGrade = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.grade);
+    const overallGradeNickname = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.nickname,
+    );
     const overallEdgeGrade = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.edge,
     );
@@ -208,56 +261,61 @@ export function SubmissionsGradeCard({
                         <Typography variant={'h5'} className={classes.gradeItemLabel}>
                             Overall Grade
                         </Typography>
-                        <Typography variant={'h5'} className={classes.gradeItemValue}>
-                            {overallGrade !== 0 ? overallGrade : '-'}
-                        </Typography>
+                        <div className={classes.overallGradeTextContainer}>
+                            <Typography variant={'h5'} className={classes.gradeItemValue}>
+                                {overallGrade !== 0 ? overallGrade : '-'}
+                            </Typography>
+                            <Typography variant={'h5'} className={classes.gradeNickname}>
+                                {overallGrade !== 0 ? overallGradeNickname : '-'}
+                            </Typography>
+                        </div>
                     </Paper>
 
                     <Paper variant={'outlined'} className={classes.gradeSectionLarge}>
                         <div className={classes.gradeItem}>
-                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                            <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
                                 Centering
                             </Typography>
-                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                            <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
                                 (Overall)
                             </Typography>
-                            <Typography variant={'h5'} className={classes.gradeItemValue}>
+                            <Typography variant={'h5'} className={classes.gradeItemValueSecondary}>
                                 {overallCenterGrade !== 0 ? overallCenterGrade : '-'}
                             </Typography>
                         </div>
 
                         <div className={classes.gradeItem}>
-                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                            <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
                                 Surface
                             </Typography>
-                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                            <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
                                 (Overall)
                             </Typography>
-                            <Typography variant={'h5'} className={classes.gradeItemValue}>
+                            <Typography variant={'h5'} className={classes.gradeItemValueSecondary}>
                                 {overallSurfaceGrade !== 0 ? overallSurfaceGrade : '-'}
                             </Typography>
                         </div>
 
                         <div className={classes.gradeItem}>
-                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                            <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
                                 Edges
                             </Typography>
-                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                            <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
                                 (Overall)
                             </Typography>
-                            <Typography variant={'h5'} className={classes.gradeItemValue}>
+                            <Typography variant={'h5'} className={classes.gradeItemValueSecondary}>
                                 {overallEdgeGrade ? overallEdgeGrade : '-'}
                             </Typography>
                         </div>
 
                         <div className={classes.gradeItem}>
-                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                            <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
                                 Corners
                             </Typography>
-                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                            <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
                                 (Overall)
                             </Typography>
-                            <Typography variant={'h5'} className={classes.gradeItemValue}>
+                            <Typography variant={'h5'} className={classes.gradeItemValueSecondary}>
                                 {overallCornerGrade !== 0 ? overallCornerGrade : '-'}
                             </Typography>
                         </div>
@@ -266,6 +324,7 @@ export function SubmissionsGradeCard({
 
                 <SubmissionsGradeCardGrades
                     icon={<FaceIcon className={classes.headingIcon} />}
+                    disabled={overallGrade === 0}
                     itemIndex={itemIndex}
                     orderID={orderID}
                     heading={`Human Grades`}

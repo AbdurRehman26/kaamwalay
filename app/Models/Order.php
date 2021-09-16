@@ -241,17 +241,17 @@ class Order extends Model
 
     public function missingItemsCount(): int
     {
-        $this->orderItems()->where('order_item_status_id', OrderItemStatus::MISSING)->count();
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::MISSING)->count();
     }
 
     public function notAcceptedItemsCount(): int
     {
-        $this->orderItems()->where('order_item_status_id', OrderItemStatus::NOT_ACCEPTED)->count();
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::NOT_ACCEPTED)->count();
     }
 
     public function gradedItemsCount(): int
     {
-        $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
     }
 
     public function isEligibleToMarkAsGraded(): bool

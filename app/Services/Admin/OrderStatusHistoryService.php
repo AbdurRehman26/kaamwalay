@@ -51,7 +51,7 @@ class OrderStatusHistoryService
         throw_if($exists, OrderStatusHistoryWasAlreadyAssigned::class);
 
         throw_if(
-            getModelId($orderStatus) === OrderItemStatus::GRADED && ! $order->isEligibleToMarkAsGraded(),
+            getModelId($orderStatus) === OrderItemStatus::GRADED && ! Order::first($orderId)->isEligibleToMarkAsGraded(),
             OrderCanNotBeMarkedAsGraded::class
         );
 
@@ -62,7 +62,6 @@ class OrderStatusHistoryService
                     'order_status_id' => $orderStatusId,
                 ],
                 $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: [],
-                $orderStatusId === OrderStatus::GRADED ? ['graded_at' => Carbon::now(), 'graded_by_id' => $user->id]: [],
             ));
 
         if ($orderStatusId === OrderStatus::ARRIVED) {

@@ -129,7 +129,7 @@ class OrderService
         foreach ($grades['results'] as $result) {
             $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
             if (! is_null($card)) {
-                $card->update(CardGradeResource::make($result)->ignoreParams('overall')->make());
+                $card->update(CardGradeResource::make($result)->ignoreParams('overall')->resolve());
 
                 $cards[] = $card;
             }

@@ -121,7 +121,11 @@
  *                       "name": "Back Corners",
  *                   },
  *              ],
- *              "updated_at": "2021-09-09T07:24:43.000000Z"
+ *              "updated_at": "2021-09-09T07:24:43.000000Z",
+ *              "order": {
+ *                  "auto_saved_at": "2021-09-16T21:48:44.000000Z",
+ *                  "total_graded_items": 0
+ *              }
  *           }
  *       }
  */

@@ -5,7 +5,7 @@ namespace App\Http\Resources\API\Admin\Order;
 use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemResource;
 use App\Http\Resources\API\BaseResource;
 
-class UserCardResource extends BaseResource
+class UserCardGradeUpdateResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -15,6 +15,8 @@ class UserCardResource extends BaseResource
      */
     public function toArray($request): array
     {
+        $order = $this?->orderItem?->order;
+
         return [
             'id' => $this->id,
             'customer' => new OrderCustomerResource($this->user),
@@ -30,6 +32,10 @@ class UserCardResource extends BaseResource
             'ai_model_numbers' => $this->ai_model_numbers,
             'generated_images' => $this->generated_images,
             'updated_at' => $this->formatDate($this->updated_at),
+            'order' => [
+                'auto_saved_at' => $this->formatDate($order?->auto_saved_at),
+                'total_graded_items' => $order?->getTotalGradedItems(),
+            ],
         ];
     }
 }

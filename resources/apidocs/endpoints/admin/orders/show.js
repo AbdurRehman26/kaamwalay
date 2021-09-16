@@ -25,6 +25,12 @@
  *                    "timezone_type": 3,
  *                    "timezone": "UTC"
  *                },
+ *                "reviewed_by": "John Doe",
+ *                "reviewed_at": "2021-09-16T21:45:02.000000Z",
+ *                "graded_by": null,
+ *                "graded_at": null,
+ *                "auto_saved_at": "2021-09-16T21:45:08.000000Z",
+ *                "total_graded_items": 0,
  *                "customer": {
  *                    "id": 16,
  *                    "first_name": "Gisselle",
@@ -110,7 +116,15 @@
  *                            "release_year": 2021,
  *                            "card_number_order": "001",
  *                            "image_path": "https://den-cards.pokellector.com/305/Bellsprout.SWSH05.1.37528.png"
- *                        }
+ *                        },
+ *                        "status": {
+ *                            "id": 5,
+ *                            "name": "Graded",
+ *                            "description": "Item has been graded by us"
+ *                        },
+ *                        "certificate_number": "00000502",
+ *                        "graded_by": "John Doe",
+ *                        "graded_at": "2021-09-16T21:58:02.000000Z"
  *                    },
  *                    {
  *                        "id": 43,
@@ -125,7 +139,13 @@
  *                            "release_year": 2021,
  *                            "card_number_order": "002",
  *                            "image_path": "https://den-cards.pokellector.com/305/Weepinbell.SWSH05.2.37529.png"
- *                        }
+ *                        },
+ *                        "status": {
+ *                            "id": 4,
+ *                            "name": "Confirmed",
+ *                            "description": "Item is present in the shipped box and will be graded"
+ *                        },
+ *                        "certificate_number": "00000504"
  *                    }
  *                ],
  *                "customer_shipment": {

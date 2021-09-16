@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\Admin\Order;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeRequest;
-use App\Http\Resources\API\Admin\Order\UserCardResource;
+use App\Http\Resources\API\Admin\Order\UserCardGradeUpdateResource;
 use App\Models\Order;
 use App\Models\UserCard;
 use App\Services\Admin\CardGradingService;
@@ -19,7 +19,7 @@ class UserCardController extends Controller
         UserCard $card,
         AgsService $agsService,
         CardGradingService $cardGradingService
-    ): UserCardResource {
+    ): UserCardGradeUpdateResource {
         $card->update(
             $request->only('human_grade_values')
         );
@@ -33,6 +33,6 @@ class UserCardController extends Controller
             $card->update($response);
         }
 
-        return new UserCardResource($card);
+        return new UserCardGradeUpdateResource($card);
     }
 }

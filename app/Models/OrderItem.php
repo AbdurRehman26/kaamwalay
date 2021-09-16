@@ -82,7 +82,7 @@ class OrderItem extends Model
         return $this->belongsTo(OrderItemStatus::class);
     }
 
-    public function orderItemStatusHistories()
+    public function orderItemStatusHistory()
     {
         return $this->hasMany(OrderItemStatusHistory::class);
     }

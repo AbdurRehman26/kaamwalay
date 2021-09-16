@@ -16,7 +16,7 @@ class OrderItemService
         private  UserCardService $userCardService
     ) {
     }
-    
+
     /**
      * @throws OrderItemDoesNotBelongToOrder
      */
@@ -33,6 +33,7 @@ class OrderItemService
             $status = new OrderItemStatusHistory();
             $status->order_item_id = $item->id;
             $status->order_item_status_id = $requestStatus->id;
+            $status->user_id = auth()->user()->id;
             $status->notes = $request['notes'] ?? '';
             $status->save();
 

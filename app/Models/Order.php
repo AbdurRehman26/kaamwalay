@@ -212,6 +212,11 @@ class Order extends Model
         return $this->grand_total * 100;
     }
 
+    public function getTotalGradedItems(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+    }
+
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
         if (! $status || $status === 'all') {

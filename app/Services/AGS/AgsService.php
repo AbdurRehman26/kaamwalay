@@ -38,7 +38,7 @@ class AgsService
     {
         return [
             'front_centering_human_grade' => $data['human_grade_values']['front']['center'],
-            'front_surface_human_grade' => $data['human_grade_values']['front']['corner'],
+            'front_surface_human_grade' => $data['human_grade_values']['front']['surface'],
             'front_edges_human_grade' => $data['human_grade_values']['front']['edge'],
             'front_corners_human_grade' => $data['human_grade_values']['front']['corner'],
             'back_centering_human_grade' => $data['human_grade_values']['back']['center'],

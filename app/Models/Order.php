@@ -243,4 +243,26 @@ class Order extends Model
     {
         return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
     }
+
+    public function missingItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::MISSING)->count();
+    }
+
+    public function notAcceptedItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::NOT_ACCEPTED)->count();
+    }
+
+    public function gradedItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+    }
+
+    public function isEligibleToMarkAsGraded(): bool
+    {
+        return $this->orderItems()->count() === (
+            $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
+        );
+    }
 }

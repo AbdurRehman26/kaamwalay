@@ -1,18 +1,17 @@
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
 import { font } from '@shared/styles/utils';
-import { useOrderStatus } from '../../../hooks/useOrderStatus';
+import SubmissionActionButton from '@admin/components/SubmissionActionButton';
+import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 
 interface SubmissionViewHeaderProps {
     orderId: string | number;
@@ -37,10 +36,6 @@ const useStyles = makeStyles(
         menuButton: {
             marginLeft: theme.spacing(2),
         },
-        button: {
-            borderRadius: 24,
-            padding: theme.spacing(1.375, 3.5),
-        },
     }),
     { name: 'SubmissionViewHeader' },
 );
@@ -54,45 +49,6 @@ export function SubmissionsViewHeader({
     const classes = useStyles();
 
     const [statusType, statusLabel] = useOrderStatus(orderStatus);
-
-    const actionButton = useMemo(() => {
-        const sharedProps: any = {
-            variant: 'contained',
-            color: 'primary',
-            size: 'large',
-            className: classes.button,
-        };
-
-        if (!orderStatus) {
-            return null;
-        }
-
-        if (!orderStatus.is(OrderStatusEnum.ARRIVED)) {
-            return (
-                <Button component={Link} to={`/submissions/${orderId}/review`} {...sharedProps}>
-                    Review
-                </Button>
-            );
-        }
-
-        if (!orderStatus.is(OrderStatusEnum.GRADED)) {
-            return (
-                <Button component={Link} to={`/submissions/${orderId}/grade`} {...sharedProps}>
-                    Grade
-                </Button>
-            );
-        }
-
-        if (!orderStatus.is(OrderStatusEnum.SHIPPED)) {
-            return <Button {...sharedProps}>Mark Shipped</Button>;
-        }
-
-        return (
-            <Button size={'large'} color={'primary'}>
-                Edit Tracking
-            </Button>
-        );
-    }, [classes.button, orderId, orderStatus]);
 
     const history = useMemo(
         () =>
@@ -125,7 +81,7 @@ export function SubmissionsViewHeader({
                     <StatusChip color={statusType} label={statusLabel} />
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
-                    {actionButton}
+                    <SubmissionActionButton orderId={orderId} orderStatus={orderStatus} />
                     <IconButton size={'medium'} className={classes.menuButton}>
                         <MoreVertIcon />
                     </IconButton>

@@ -20,6 +20,7 @@ export function SubmissionsView() {
                     'customer',
                     'billingAddress',
                     'shippingAddress',
+                    'paymentPlan',
                     'orderPayment',
                     'orderStatus',
                     'orderItems',
@@ -47,11 +48,11 @@ export function SubmissionsView() {
             />
             <Divider />
             <SubmissionsViewDetails
-                serviceLevelFee={data.serviceFee}
+                serviceLevelFee={data.paymentPlan?.price}
                 numberOfCards={data.numberOfCards}
                 placedAt={data.createdAt}
                 declaredValue={data.totalDeclaredValue}
-                serviceFee={data.serviceFee * data.numberOfCards}
+                serviceFee={data.serviceFee}
                 shippingFee={data.shippingFee}
                 grandTotal={data.grandTotal}
                 customerId={data.customer?.id}
@@ -66,7 +67,7 @@ export function SubmissionsView() {
                 cardExpirationMonth={data.orderPayment?.card?.expMonth}
                 cardExpirationYear={data.orderPayment?.card?.expYear}
             />
-            <SubmissionViewCards items={data.orderItems} serviceFee={data.serviceFee} />
+            <SubmissionViewCards items={data.orderItems} serviceFee={data.paymentPlan?.price} />
         </Grid>
     );
 }

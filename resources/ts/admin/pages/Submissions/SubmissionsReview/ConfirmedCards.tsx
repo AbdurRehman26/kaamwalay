@@ -5,11 +5,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import PrintIcon from '@material-ui/icons/PrintOutlined';
 import { useCallback } from 'react';
-import { AddCardDialogViewEnum } from '@shared/constants/AddCardDialogViewEnum';
+import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
-import { setAddCardDialogState, setAddCardDialogView } from '@shared/redux/slices/addCardDialogSlice';
 import { changeOrderItemsStatus, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import CardItem from './CardItem';
 import CardsList from './CardsList';
@@ -47,8 +47,8 @@ export function ConfirmedCards({ items, orderId }: ConfirmedCardsProps) {
     }, [dispatch, items, orderId]);
 
     const handleAddExtraCard = useCallback(() => {
-        dispatch(setAddCardDialogState(true));
-        dispatch(setAddCardDialogView(AddCardDialogViewEnum.List));
+        dispatch(manageCardDialogActions.setOpen(true));
+        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.List));
     }, [dispatch]);
 
     return (

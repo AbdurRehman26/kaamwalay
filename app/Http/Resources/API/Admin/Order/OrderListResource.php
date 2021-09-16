@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use Illuminate\Http\Request;
 
 class OrderListResource extends BaseResource
@@ -23,6 +24,7 @@ class OrderListResource extends BaseResource
             'grand_total' => $this->grand_total,
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
+            'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'arrived' => ! is_null($this->arrived_at),
             'arrived_at' => $this->formatDate($this->arrived_at),

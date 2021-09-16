@@ -69,12 +69,12 @@ export function SubmissionViewBilling({
                         {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
                         <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
                             {(cardBrand || cardType) && cardLast4 ? (
-                                <Typography variant={'caption'}>
+                                <Typography variant={'body2'} color={'textPrimary'}>
                                     {cardBrand || cardType} ending in {cardLast4}
                                 </Typography>
                             ) : null}
                             {cardExpirationMonth && cardExpirationYear ? (
-                                <Typography variant={'caption'}>
+                                <Typography variant={'caption'} color={'textSecondary'}>
                                     Expires {cardExpirationMonth}/{cardExpirationYear}
                                 </Typography>
                             ) : null}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Admin\Order;
 
+use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\UpdateNotesRequest;
 use App\Http\Resources\API\Admin\Order\OrderListCollection;
@@ -9,7 +10,9 @@ use App\Http\Resources\API\Admin\Order\OrderResource;
 use App\Http\Resources\API\Admin\Order\UserCardCollection;
 use App\Models\Order;
 use App\Services\Admin\OrderService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
@@ -44,10 +47,21 @@ class OrderController extends Controller
         return new OrderResource($orderService->confirmReview($order, $request->user()));
     }
 
-    public function getGrades(Request $request, Order $order, OrderService $orderService): UserCardCollection
+    public function getGrades(Request $request, Order $order, OrderService $orderService): UserCardCollection | JsonResponse
     {
         $this->authorize('review', $order);
 
-        return new UserCardCollection($orderService->getGrades($order));
+        try {
+            $userCards = $orderService->getGrades($order);
+        } catch (IncorrectOrderStatus $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return new UserCardCollection($userCards);
     }
 }

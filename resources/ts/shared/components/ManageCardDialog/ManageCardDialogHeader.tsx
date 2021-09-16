@@ -6,20 +6,17 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import CloseIcon from '@material-ui/icons/Close';
 import { useCallback } from 'react';
 import { batch } from 'react-redux';
-import { AddCardDialogViewEnum } from '@shared/constants/AddCardDialogViewEnum';
+import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
-import {
-    selectAddCardDialog,
-    setAddCardDialogState,
-    setAddCardDialogView,
-} from '@shared/redux/slices/addCardDialogSlice';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 
-interface AddCardDialogHeaderProps {
+interface ManageCardDialogHeaderProps {
     back?: boolean;
+    label?: string | null;
 }
 
-const useStyles = makeStyles<Theme, AddCardDialogHeaderProps>(
+const useStyles = makeStyles<Theme, ManageCardDialogHeaderProps>(
     (theme) => ({
         root: ({ back }) => ({
             padding: theme.spacing(2, 2, 0, back ? 1.5 : 3),
@@ -28,27 +25,27 @@ const useStyles = makeStyles<Theme, AddCardDialogHeaderProps>(
             marginRight: theme.spacing(1),
         },
     }),
-    { name: 'AddCardDialogHeader' },
+    { name: 'ManageCardDialogHeader' },
 );
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: AddCardDialogHeader
+ * @component: ManageCardDialogHeader
  * @date: 13.09.2021
  * @time: 22:33
  */
-export function AddCardDialogHeader({ back }: AddCardDialogHeaderProps) {
+export function ManageCardDialogHeader({ back, label }: ManageCardDialogHeaderProps) {
     const classes = useStyles({ back });
     const dispatch = useSharedDispatch();
 
     const handleClose = useCallback(() => {
-        dispatch(setAddCardDialogState(false));
+        dispatch(manageCardDialogActions.setOpen(false));
     }, [dispatch]);
 
     const handleBack = useCallback(() => {
         batch(() => {
-            dispatch(setAddCardDialogView(AddCardDialogViewEnum.List));
-            dispatch(selectAddCardDialog(null));
+            dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.List));
+            dispatch(manageCardDialogActions.setSelectedCard(null));
         });
     }, [dispatch]);
 
@@ -61,7 +58,7 @@ export function AddCardDialogHeader({ back }: AddCardDialogHeaderProps) {
                     </IconButton>
                 ) : null}
                 <Typography variant={'h6'} className={font.fontWeightMedium}>
-                    Add Extra Card
+                    {label ?? 'Add Extra Card'}
                 </Typography>
             </Grid>
             <Grid container item xs={3} alignItems={'center'} justifyContent={'flex-end'}>
@@ -73,4 +70,4 @@ export function AddCardDialogHeader({ back }: AddCardDialogHeaderProps) {
     );
 }
 
-export default AddCardDialogHeader;
+export default ManageCardDialogHeader;

@@ -49,6 +49,9 @@ const useStyles = makeStyles(
         },
         gutterLeft: {
             marginLeft: theme.spacing(2),
+            '&:first-child': {
+                marginLeft: 0,
+            },
         },
         closeButton: {
             marginLeft: theme.spacing(1),
@@ -74,13 +77,13 @@ export function CardItem({ label, itemId, card, labelIcon, certificateId, declar
 
     return (
         <Grid container alignItems={'center'} className={classes.root}>
-            <Box display={'flex'} flexGrow={1} alignItems={'flex-start'}>
+            <Box display={'flex'} flexGrow={1} alignItems={'flex-start'} maxWidth={'calc(100% - 68px)'}>
                 <img
                     src={card.imagePath}
                     alt={'card'}
                     className={cx(classes.image, { large: !!(certificateId || declaredValue) })}
                 />
-                <Box flexGrow={1}>
+                <Box flexGrow={1} pr={1}>
                     <Typography variant={'body2'} className={font.fontWeightMedium}>
                         {card.getName()}
                     </Typography>

@@ -20,7 +20,6 @@ import { UserEntity } from './UserEntity';
 export class OrderEntity extends Entity {
     @Field('order_status')
     public orderStatus!: OrderStatusEntity;
-
     @Field('order_status_history', () => OrderStatusHistoryEntity)
     public orderStatusHistory!: OrderStatusHistoryEntity[];
 
@@ -99,5 +98,24 @@ export class OrderEntity extends Entity {
         }
 
         return matchCurrentStatus;
+    }
+
+    public addItem(orderItem: OrderItemEntity) {
+        let added = false;
+
+        this.orderItems = this.orderItems.map((item) => {
+            if (item.id === orderItem.id) {
+                added = true;
+                return orderItem;
+            }
+
+            return item;
+        });
+
+        if (!added) {
+            this.orderItems.push(orderItem);
+        }
+
+        return this;
     }
 }

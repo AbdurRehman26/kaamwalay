@@ -39,7 +39,7 @@ class UpdateRevenueStatsDaily extends Command
         $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
         Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
         $revenueStats = $revenueStatsService->addStats($formattedDate);
-        $monthlyRevenueStats = $revenueStatsService->addMonthlyStats($month);
+        $monthlyRevenueStats = $revenueStatsService->addMonthlyStats($month, $formattedDate);
 
         if (app()->environment('production')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))

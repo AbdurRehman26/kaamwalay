@@ -17,7 +17,7 @@ class OrderItemResource extends BaseResource
             'quantity' => $this->quantity,
             'declared_value_per_unit' => $this->declared_value_per_unit,
             'card_product' => new CardProductResource($this->cardProduct),
-            'status' => new OrderItemStatusResource($this->orderItemStatus),
+            'status' => new OrderItemStatusHistoryResource($this->orderItemStatusHistory()->latest()->first()),
             'certificate_number' => $this->userCard?->userCardCertificate?->number,
 
             'graded_by' => $this->when($this->order_item_status_id === OrderItemStatus::GRADED, $gradedHistory?->user?->getFullName()),

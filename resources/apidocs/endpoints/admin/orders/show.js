@@ -118,9 +118,13 @@
  *                            "image_path": "https://den-cards.pokellector.com/305/Bellsprout.SWSH05.1.37528.png"
  *                        },
  *                        "status": {
- *                            "id": 5,
- *                            "name": "Graded",
- *                            "description": "Item has been graded by us"
+ *                             "id": 6,
+ *                             "order_item_status": {
+ *                                 "id": 5,
+ *                                 "name": "Graded",
+ *                                 "description": "Item has been graded by us"
+ *                             },
+ *                             "notes": ""
  *                        },
  *                        "certificate_number": "00000502",
  *                        "graded_by": "John Doe",
@@ -141,9 +145,13 @@
  *                            "image_path": "https://den-cards.pokellector.com/305/Weepinbell.SWSH05.2.37529.png"
  *                        },
  *                        "status": {
- *                            "id": 4,
- *                            "name": "Confirmed",
- *                            "description": "Item is present in the shipped box and will be graded"
+ *                             "id": 5,
+ *                             "order_item_status": {
+ *                                 "id": 4,
+ *                                 "name": "Confirmed",
+ *                                 "description": "Item is present in the shipped box and will be graded"
+ *                             },
+ *                             "notes": ""
  *                        },
  *                        "certificate_number": "00000504"
  *                    }

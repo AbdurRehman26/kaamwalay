@@ -105,9 +105,14 @@
  *                         "image_path": "https://den-cards.pokellector.com/305/Bellsprout.SWSH05.1.37528.png"
  *                     },
  *                     "status": {
- *                         "id": 1,
- *                         "name": "Pending",
- *                         "description": "Item is pending to be reviewed"
+ *                         "id": 92,
+ *                         "order_item_status": {
+ *                             "id": 1,
+ *                             "code": "pending",
+ *                             "name": "Pending",
+ *                             "description": "Item is pending to be reviewed",
+ *                         },
+ *                         "notes": null
  *                     },
  *                     "certificate_number": null
  *                 }

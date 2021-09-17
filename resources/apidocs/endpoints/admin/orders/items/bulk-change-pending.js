@@ -39,8 +39,6 @@
  *                         "code": "pending",
  *                         "name": "Pending",
  *                         "description": "Item is pending to be reviewed",
- *                         "created_at": "2021-09-04T21:12:34.000000Z",
- *                         "updated_at": "2021-09-04T21:12:34.000000Z"
  *                     },
  *                     "notes": null
  *                 },
@@ -67,8 +65,6 @@
  *                         "code": "pending",
  *                         "name": "Pending",
  *                         "description": "Item is pending to be reviewed",
- *                         "created_at": "2021-09-04T21:12:34.000000Z",
- *                         "updated_at": "2021-09-04T21:12:34.000000Z"
  *                     },
  *                     "notes": null
  *                 },

@@ -10,7 +10,7 @@ class OrderItemStatusHistoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'order_item_status' => $this->orderItemStatus,
+            'order_item_status' => new OrderItemStatusResource($this->orderItemStatus),
             'notes' => $this->notes,
         ];
     }

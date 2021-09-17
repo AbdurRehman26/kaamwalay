@@ -38,8 +38,6 @@
  *                     "code": "confirmed",
  *                     "name": "Confirmed",
  *                     "description": "Item is present in the shipped box and will be graded",
- *                     "created_at": "2021-09-04T21:12:34.000000Z",
- *                     "updated_at": "2021-09-04T21:12:34.000000Z"
  *                 },
  *                 "notes": null
  *             },

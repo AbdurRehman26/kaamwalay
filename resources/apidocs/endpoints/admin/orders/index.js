@@ -6,6 +6,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
+ * @apiParam {Array} [filter[search]] For for searching orders list based on these columns: order ID, customer Name and Customer ID. E.g. filter[search]=1
  * @apiParam {Array} [filter[order_id]] For filtering records by order ID. E.g. filter[order_id]=1
  * @apiParam {Array} [filter[customer_id]] For filtering records by customer ID. E.g. filter[customer_id]=1
  * @apiParam {Array} [filter[customer_name]] For filtering records by customer name. E.g. filter[customer_name]=Jhon

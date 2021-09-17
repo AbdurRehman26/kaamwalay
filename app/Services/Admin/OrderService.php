@@ -118,6 +118,7 @@ class OrderService
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
         $data = $this->updateLocalGrades($grades);
+
         return $data;
     }
 
@@ -131,6 +132,7 @@ class OrderService
                 $cards[] = $card;
             }
         }
+
         return $cards;
     }
 }

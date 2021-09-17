@@ -38,8 +38,6 @@
  *                     "code": "missing",
  *                     "name": "Missing",
  *                     "description": "Item is not present in the shipped box",
- *                     "created_at": "2021-09-04T21:12:34.000000Z",
- *                     "updated_at": "2021-09-04T21:12:34.000000Z"
  *                 },
  *                 "notes": "Lorem"
  *             },

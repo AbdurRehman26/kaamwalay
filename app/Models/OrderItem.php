@@ -82,7 +82,7 @@ class OrderItem extends Model
         return $this->belongsTo(OrderItemStatus::class);
     }
 
-    public function orderItemStatusHistories()
+    public function orderItemStatusHistory()
     {
         return $this->hasMany(OrderItemStatusHistory::class);
     }
@@ -95,5 +95,10 @@ class OrderItem extends Model
     public function scopeForOrder(Builder $query, Order $order): Builder
     {
         return $query->where('order_id', $order->id);
+    }
+
+    public function isValidForGrading(): bool
+    {
+        return $this->order_item_status_id === OrderItemStatus::CONFIRMED;
     }
 }

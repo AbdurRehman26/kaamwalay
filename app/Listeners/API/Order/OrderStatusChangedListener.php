@@ -32,12 +32,15 @@ class OrderStatusChangedListener implements ShouldQueue
         switch ($event->orderStatus->id) {
             case OrderStatus::ARRIVED:
                 $this->handleArrived($event);
+
                 break;
             case OrderStatus::GRADED:
                 $this->handleGraded($event);
+
                 break;
             case OrderStatus::SHIPPED:
                 $this->handleShipped($event);
+
                 break;
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderStatus;
@@ -56,6 +57,9 @@ class OrderStatusHistoryService
                 ],
                 $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: []
             ));
+
+        // TODO: replace find with the model.
+        OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
         if ($orderStatusId === OrderStatus::ARRIVED) {
             $certificateIds = implode(',', $this->orderService->getOrderCertificates($order));

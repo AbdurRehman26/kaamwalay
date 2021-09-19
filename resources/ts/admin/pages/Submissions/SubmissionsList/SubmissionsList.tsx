@@ -3,7 +3,9 @@ import Grid from '@material-ui/core/Grid';
 import { styled } from '@material-ui/core/styles';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { SubmissionsListHeader } from './SubmissionsListHeader';
 import { SubmissionsTable } from './SubmissionsTable';
 
@@ -16,26 +18,27 @@ const TabContent = styled(TabPanel)(
 
 export function SubmissionsList() {
     const { tab } = useParams<{ tab: string }>();
-
+    const [search, setSearch] = useState('');
     return (
         <TabContext value={tab}>
             <Grid container direction={'column'}>
-                <SubmissionsListHeader />
+                <SubmissionsListHeader onSearch={setSearch} />
+
                 <Divider />
                 <TabContent value={'all'}>
-                    <SubmissionsTable tabFilter={'all'} />
+                    <SubmissionsTable search={search} all />
                 </TabContent>
                 <TabContent value={'pending'}>
-                    <SubmissionsTable tabFilter={'pending'} />
+                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.PAYMENT_PENDING} />
                 </TabContent>
                 <TabContent value={'reviewed'}>
-                    <SubmissionsTable tabFilter={'reviewed'} />
+                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.ARRIVED} />
                 </TabContent>
                 <TabContent value={'graded'}>
-                    <SubmissionsTable tabFilter={'graded'} />
+                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.GRADED} />
                 </TabContent>
                 <TabContent value={'shipped'}>
-                    <SubmissionsTable tabFilter={'shipped'} />
+                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.SHIPPED} />
                 </TabContent>
             </Grid>
         </TabContext>

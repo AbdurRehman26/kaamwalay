@@ -5,10 +5,12 @@ namespace App\Services\Payment;
 use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Services\BarcodeService;
 use App\Services\PDFService;
 use Carbon\Carbon;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -55,13 +57,19 @@ class InvoiceService
             }
         }
 
+
+        $items = OrderItem::select('card_product_id', 'declared_value_total', 'declared_value_per_unit', DB::raw('sum(quantity) as quantity'))
+        ->where('order_id', $order->id)
+        ->groupBy(['card_product_id', 'declared_value_total','declared_value_per_unit'])
+        ->get();
+
         return [
             'logoData' => $logoData,
             'agsLogo' => $agsLogo,
             'barcode' => $barcode,
             'order' => $order,
             'orderDate' => Carbon::parse($order->created_at)->format('m/d/Y'),
-            'orderItems' => $order->orderItems,
+            'orderItems' => $items,
             'customer' => $order->user,
             'shippingAddress' => $order->shippingAddress,
             'orderPayment' => $orderPayment,

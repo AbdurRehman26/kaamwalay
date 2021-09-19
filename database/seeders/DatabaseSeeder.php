@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             OrderItemShipmentSeeder::class,
             OrderItemCustomerShipmentSeeder::class,
             StateSeeder::class,
+            InitializeOrderItemsAsPendingSeeder::class,
         ]);
 
         CardProduct::enableSearchSyncing();

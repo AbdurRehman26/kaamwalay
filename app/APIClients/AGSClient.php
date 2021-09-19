@@ -68,4 +68,32 @@ class AGSClient
 
         return [];
     }
+
+    public function updateHumanGrades(string $certificateId, array $payload)
+    {
+        $response = Http::withToken($this->getAuthToken())
+            ->patch($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/?certificate_id=' . $certificateId, $payload);
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(
+            response: $response,
+            route: '/robograding/certificates/',
+            payload: ['data' => $payload, 'certificate_id' => $certificateId]
+        );
+    }
+
+    public function createCertificates(string $certificateIds)
+    {
+        $response = Http::withToken($this->getAuthToken())->asForm()->post($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/', [
+            "certificate_ids" => $certificateIds,
+        ]);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/robograding/certificates/', payload: [$certificateIds]);
+    }
 }

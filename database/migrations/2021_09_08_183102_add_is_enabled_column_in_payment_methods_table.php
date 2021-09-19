@@ -28,7 +28,7 @@ class AddIsEnabledColumnInPaymentMethodsTable extends Migration
     public function down()
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            //
+            $table->dropColumn('is_enabled');
         });
     }
 }

@@ -1,6 +1,5 @@
 import { AxiosError } from 'axios';
 import { NotificationItem } from '@shared/classes/NotificationItem';
-import { NotificationType } from '@shared/constants/NotificationType';
 import { Injectable } from '@shared/decorators/Injectable';
 import { Log4ts } from '@shared/decorators/Log4ts';
 import { Exception } from '@shared/exceptions/Exception';
@@ -8,6 +7,7 @@ import { ValidationException } from '@shared/exceptions/ValidationException';
 import { LogChannel } from '@shared/lib/log';
 import { dequeueNotification, enqueueNotification } from '@shared/redux/slices/notificationsSlice';
 import { GlobalDispatch } from '@shared/redux/store';
+import { NotificationTypeEnum } from '../constants/NotificationTypeEnum';
 import { getErrorMessage } from '../lib/api/getErrorMessage';
 import { getErrorsBagArray } from '../lib/api/getErrorsBagArray';
 import { isAxiosError } from '../lib/api/isAxiosError';
@@ -18,24 +18,24 @@ export class NotificationsService {
     @Log4ts('NotificationsService')
     private static log: LogChannel;
 
-    public static notify(type: NotificationType, message: string, title: string = '') {
+    public static notify(type: NotificationTypeEnum, message: string, title: string = '') {
         GlobalDispatch(enqueueNotification(new NotificationItem(type, message, title)));
     }
 
     public static error(message: string, title: string = '') {
-        NotificationsService.notify(NotificationType.Error, message, title);
+        NotificationsService.notify(NotificationTypeEnum.Error, message, title);
     }
 
     public static info(message: string, title: string = '') {
-        NotificationsService.notify(NotificationType.Info, message, title);
+        NotificationsService.notify(NotificationTypeEnum.Info, message, title);
     }
 
     public static success(message: string, title: string = '') {
-        NotificationsService.notify(NotificationType.Success, message, title);
+        NotificationsService.notify(NotificationTypeEnum.Success, message, title);
     }
 
     public static warning(message: string, title: string = '') {
-        NotificationsService.notify(NotificationType.Warning, message, title);
+        NotificationsService.notify(NotificationTypeEnum.Warning, message, title);
     }
 
     public static exception(error: Error | Exception | AxiosError, title?: string) {

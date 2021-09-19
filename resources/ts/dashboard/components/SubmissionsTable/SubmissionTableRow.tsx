@@ -38,7 +38,7 @@ enum Options {
     Download,
     Delete,
     ViewInstructions,
-    toggleShipmentTrackingModal,
+    ToggleShipmentTrackingModal,
 }
 
 const useStyles = makeStyles(
@@ -115,8 +115,8 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const confirm = useConfirmation();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
 
@@ -134,7 +134,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 case Options.Edit:
                     history.push(`/submissions/${id}/edit`);
                     break;
-                case Options.toggleShipmentTrackingModal:
+                case Options.ToggleShipmentTrackingModal:
                     setShowShipmentTrackingModal(!showShipmentTrackingModal);
                     break;
                 case Options.Delete:
@@ -157,7 +157,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 id={id}
                 customerShipment={customerShipment as CustomerShipmentEntity}
                 showModal={showShipmentTrackingModal}
-                handleModalVisibility={handleOption(Options.toggleShipmentTrackingModal)}
+                handleModalVisibility={handleOption(Options.ToggleShipmentTrackingModal)}
             />
 
             {!isMobile ? (
@@ -178,7 +178,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
                             </MenuItem>
                             <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
-                            <MenuItem onClick={handleOption(Options.toggleShipmentTrackingModal)}>
+                            <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
                                 {customerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                             </MenuItem>
                         </Menu>
@@ -234,7 +234,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                     <MenuItem onClick={handleOption(Options.ViewInstructions)}>
                                         View Instructions
                                     </MenuItem>
-                                    <MenuItem onClick={handleOption(Options.toggleShipmentTrackingModal)}>
+                                    <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
                                         {customerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                                     </MenuItem>
                                 </Menu>

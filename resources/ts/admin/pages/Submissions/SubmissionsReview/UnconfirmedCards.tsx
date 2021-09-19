@@ -1,3 +1,4 @@
+import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -5,11 +6,24 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import CheckIcon from '@material-ui/icons/Check';
 import SearchIcon from '@material-ui/icons/Search';
 import { useCallback, useState } from 'react';
+import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
+import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
+import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
+import { useNotesDialog } from '@shared/hooks/useNotesDialog';
+import { changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
+import { useAppDispatch } from '@admin/redux/hooks';
 import ReviewCardDialog from './ReviewCardDialog';
 import UnconfirmedCard from './UnconfirmedCard';
+
+interface UnconfirmedCardsProps {
+    orderId: number;
+    items: OrderItemEntity[];
+}
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -29,26 +43,79 @@ const useStyles = makeStyles(
     { name: 'UnconfirmedCards' },
 );
 
-export function UnconfirmedCards() {
-    const classes = useStyles();
-    const [activePreview, setActivePreview] = useState<number | null>(null);
+export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-    const handlePreview = useCallback((value) => setActivePreview(value), [setActivePreview]);
-    const handleNext = useCallback(() => setActivePreview((value) => (value ?? 0) + 1), [setActivePreview]);
+    const { handleOpen, ...notesDialogProps } = useNotesDialog();
+
+    const classes = useStyles();
+    const dispatch = useAppDispatch();
+
+    const handlePreview = useCallback((value) => setActiveIndex(value), [setActiveIndex]);
+    const handleNext = useCallback(
+        () =>
+            setActiveIndex((value) => {
+                const nextValue = (value ?? 0) + 1;
+                const lastValue = items.length - 1;
+
+                if (nextValue > lastValue) {
+                    return 0;
+                }
+
+                return Math.max(Math.min(nextValue, lastValue), 0);
+            }),
+        [setActiveIndex, items],
+    );
     const handlePrevious = useCallback(
-        () => setActivePreview((value) => Math.max((value ?? 0) - 1, 0)),
-        [setActivePreview],
+        () => setActiveIndex((value) => Math.max((value ?? 0) - 1, 0)),
+        [setActiveIndex],
     );
 
-    const handleClosePreview = useCallback(() => setActivePreview(null), [setActivePreview]);
+    const handleClosePreview = useCallback(() => setActiveIndex(null), [setActiveIndex]);
 
-    const handleConfirm = useCallback((value) => {
-        console.log('handleConfirm', value);
-    }, []);
+    const handleConfirm = useCallback(
+        async (orderItemId) => {
+            await dispatch(
+                changeOrderItemStatus({
+                    orderItemId,
+                    orderId,
+                    orderItemStatus: OrderItemStatusEnum.CONFIRMED,
+                }),
+            );
+        },
+        [dispatch, orderId],
+    );
 
-    const handleMissing = useCallback((value) => {
-        console.log('handleMissing', value);
-    }, []);
+    const handleMissing = useCallback((orderItemId) => handleOpen({ orderItemId }), [handleOpen]);
+    const handleEdit = useCallback(
+        (orderItemId) => {
+            const activeItem = items.find((item) => item.id === orderItemId);
+            if (activeItem) {
+                dispatch(
+                    manageCardDialogActions.editCard({
+                        orderItemId,
+                        card: activeItem.cardProduct,
+                        declaredValue: activeItem.declaredValuePerUnit,
+                    }),
+                );
+            }
+        },
+        [dispatch, items],
+    );
+
+    const handleSubmitNotes = useCallback(
+        async (notes: string, { orderItemId }) => {
+            await dispatch(
+                changeOrderItemStatus({
+                    orderItemId,
+                    orderId,
+                    orderItemStatus: OrderItemStatusEnum.MISSING,
+                    notes,
+                }),
+            );
+        },
+        [dispatch, orderId],
+    );
 
     return (
         <>
@@ -70,41 +137,63 @@ export function UnconfirmedCards() {
                     className={classes.header}
                     title={
                         <Typography variant={'body1'}>
-                            <span className={font.fontWeightMedium}>Unconfirmed Cards</span> (3)
+                            <span className={font.fontWeightMedium}>Unconfirmed Cards</span> ({(items || []).length})
                         </Typography>
                     }
                     disableTypography
                 />
                 <CardContent className={classes.content}>
-                    <UnconfirmedCard
-                        itemId={1}
-                        onPreview={handlePreview}
-                        onConfirm={handleConfirm}
-                        onMissing={handleMissing}
-                    />
-                    <UnconfirmedCard
-                        itemId={2}
-                        onPreview={handlePreview}
-                        onConfirm={handleConfirm}
-                        onMissing={handleMissing}
-                    />
-                    <UnconfirmedCard
-                        itemId={3}
-                        onPreview={handlePreview}
-                        onConfirm={handleConfirm}
-                        onMissing={handleMissing}
-                    />
+                    {items.length > 0 ? (
+                        items.map((item, index) => (
+                            <UnconfirmedCard
+                                key={index}
+                                index={index}
+                                itemId={item.id}
+                                declaredValue={item.declaredValuePerUnit}
+                                card={item.cardProduct}
+                                onPreview={handlePreview}
+                                onConfirm={handleConfirm}
+                                onMissing={handleMissing}
+                                onEdit={handleEdit}
+                            />
+                        ))
+                    ) : (
+                        <Box
+                            padding={4}
+                            display={'flex'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            flexDirection={'column'}
+                        >
+                            <Box mb={1}>
+                                <CheckIcon color={'disabled'} />
+                            </Box>
+                            <Typography variant={'body2'} color={'textSecondary'}>
+                                All cards have been reviewed.
+                            </Typography>
+                        </Box>
+                    )}
                 </CardContent>
             </Card>
             <ReviewCardDialog
-                open={activePreview !== null}
+                open={activeIndex !== null}
                 onClose={handleClosePreview}
-                index={activePreview!}
+                indexId={activeIndex!}
+                orderId={orderId}
+                itemsLength={items.length}
                 onNext={handleNext}
                 onPrevious={handlePrevious}
                 onMissing={handleMissing}
                 onConfirm={handleConfirm}
-                disablePrevious={activePreview === 0}
+                onEdit={handleEdit}
+                disablePrevious={activeIndex === 0}
+                disableNext={!!activeIndex && activeIndex >= items.length - 1}
+            />
+            <NotesDialog
+                heading={'Add Notes'}
+                description={'Add notes for the missing status of the order item.'}
+                onSubmitNotes={handleSubmitNotes}
+                {...notesDialogProps}
             />
         </>
     );

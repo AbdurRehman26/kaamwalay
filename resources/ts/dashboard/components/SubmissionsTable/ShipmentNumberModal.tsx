@@ -107,7 +107,7 @@ function ShipmentNumberModal(props: ShipmentNumberModalProps) {
                 tracking_number: trackingNumber,
             });
             handleModalVisibility();
-        } catch (err) {}
+        } catch (err: any) {}
     }
 
     function handleCustomShipmentProviderChange(e: any) {

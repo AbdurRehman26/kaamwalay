@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Auth\RegisterController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\Customer\Order\ShippingMethodController;
 use App\Http\Controllers\API\Customer\PaymentCardController;
+use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,4 +64,10 @@ Route::prefix('customer')->group(function () {
 Route::prefix('configurations')->group(function () {
     Route::post('/', [ConfigurationsController::class, 'getConfigurations']);
     Route::delete('/', [ConfigurationsController::class, 'purgeConfigurations'])->middleware('auth');
+});
+
+
+// DUMMY
+Route::get("testevent", function () {
+    return OrderStatusChangedEvent::dispatch(Order::find(10), OrderStatus::find(3));
 });

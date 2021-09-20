@@ -59,7 +59,7 @@ export const stringify = (data: any, space?: string | number, { includeFunctions
                                 space,
                             ),
                         );
-                    } catch (error) {
+                    } catch (error: any) {
                         return '[JSON circular]';
                     }
                 }

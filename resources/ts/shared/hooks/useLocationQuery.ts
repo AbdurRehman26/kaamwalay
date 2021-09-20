@@ -1,4 +1,4 @@
-import * as queryString from 'query-string';
+import * as queryString from 'qs';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 

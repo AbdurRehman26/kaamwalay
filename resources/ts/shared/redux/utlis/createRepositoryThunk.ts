@@ -42,7 +42,7 @@ export function createRepositoryThunk<
             try {
                 const data = await repo.list(config || {});
                 return classToPlain(data) as PaginatedData<E>;
-            } catch (e) {
+            } catch (e: any) {
                 return thunkAPI.rejectWithValue(e);
             }
         },
@@ -53,7 +53,7 @@ export function createRepositoryThunk<
         try {
             const data = await repo.show(args.resourceId, args.config);
             return classToPlain(data) as E;
-        } catch (e) {
+        } catch (e: any) {
             return thunkAPI.rejectWithValue(e);
         }
     });
@@ -71,8 +71,8 @@ export function createRepositoryThunk<
             .addCase(listAction.fulfilled, (state, { payload }) => {
                 const { data, meta, links } = payload;
                 const { entities, ids } = serializeDataList(data);
-                state.ids = uniq([...state.ids, ...ids]);
-                state.entities = { ...state.entities, ...entities };
+                state.ids = uniq(ids);
+                state.entities = { ...entities } as any;
                 state.pagination.links = links;
                 state.pagination.meta = meta;
                 state.isLoading.list = false;

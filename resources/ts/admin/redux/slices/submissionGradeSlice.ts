@@ -36,7 +36,7 @@ export const submissionGradesSlice = createSlice({
     reducers: {
         updateHumanGradeValue: (
             state,
-            action: PayloadAction<{ itemIndex: number; side: string; part: string; gradeValue: number }>,
+            action: PayloadAction<{ itemIndex: number; side: string; part: string; gradeValue: string }>,
         ) => {
             state.allSubmissions[action.payload.itemIndex].human_grade_values[action.payload.side][
                 action.payload.part

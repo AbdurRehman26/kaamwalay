@@ -121,7 +121,7 @@ export function SubmissionsGradeCardGrades({
         return roboGradesFront !== null && roboGradesBack !== null;
     }
 
-    function updateHumanGrade(side: string, part: string, gradeValue: number) {
+    function updateHumanGrade(side: string, part: string, gradeValue: string) {
         dispatch(
             updateHumanGradeValue({
                 itemIndex,
@@ -161,7 +161,7 @@ export function SubmissionsGradeCardGrades({
                                 value={frontCentering}
                                 disabled={disabled}
                                 onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('front', 'center', Number(e.target.value))}
+                                onChange={(e) => updateHumanGrade('front', 'center', e.target.value)}
                                 label={`Centering`}
                             />
                         ) : (
@@ -179,7 +179,7 @@ export function SubmissionsGradeCardGrades({
                                 value={frontSurface}
                                 disabled={disabled}
                                 onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('front', 'surface', Number(e.target.value))}
+                                onChange={(e) => updateHumanGrade('front', 'surface', e.target.value)}
                                 label={`Surface`}
                             />
                         ) : (
@@ -197,7 +197,7 @@ export function SubmissionsGradeCardGrades({
                                 value={frontEdge}
                                 disabled={disabled}
                                 onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('front', 'edge', Number(e.target.value))}
+                                onChange={(e) => updateHumanGrade('front', 'edge', e.target.value)}
                                 label={`Edges`}
                             />
                         ) : (
@@ -215,7 +215,7 @@ export function SubmissionsGradeCardGrades({
                                 value={frontCorner}
                                 disabled={disabled}
                                 onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('front', 'corner', Number(e.target.value))}
+                                onChange={(e) => updateHumanGrade('front', 'corner', e.target.value)}
                                 label={`Corners`}
                             />
                         ) : (
@@ -239,7 +239,7 @@ export function SubmissionsGradeCardGrades({
                                 value={backCenter}
                                 disabled={disabled}
                                 onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('back', 'center', Number(e.target.value))}
+                                onChange={(e) => updateHumanGrade('back', 'center', e.target.value)}
                                 label={`Centering`}
                             />
                         ) : (
@@ -257,7 +257,7 @@ export function SubmissionsGradeCardGrades({
                                 value={backSurface}
                                 disabled={disabled}
                                 onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('back', 'surface', Number(e.target.value))}
+                                onChange={(e) => updateHumanGrade('back', 'surface', e.target.value)}
                                 label={`Surface`}
                             />
                         ) : (
@@ -275,7 +275,7 @@ export function SubmissionsGradeCardGrades({
                                 value={backEdge}
                                 disabled={disabled}
                                 onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('back', 'edge', Number(e.target.value))}
+                                onChange={(e) => updateHumanGrade('back', 'edge', e.target.value)}
                                 label={`Edges`}
                             />
                         ) : (
@@ -293,7 +293,7 @@ export function SubmissionsGradeCardGrades({
                                 value={backCorner}
                                 disabled={disabled}
                                 onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('back', 'corner', Number(e.target.value))}
+                                onChange={(e) => updateHumanGrade('back', 'corner', e.target.value)}
                                 label={`Corners`}
                             />
                         ) : (

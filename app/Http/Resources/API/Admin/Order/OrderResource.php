@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\Admin\Order;
 
+use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemShipmentResource;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderAddressResource;
@@ -41,6 +42,7 @@ class OrderResource extends BaseResource
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
             'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment),
+            'shipment' => new OrderItemShipmentResource($this?->orderItems[0]?->orderItemShipment),
         ];
     }
 }

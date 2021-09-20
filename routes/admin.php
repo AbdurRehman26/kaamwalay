@@ -18,4 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::post('auth/login', LoginController::class)->middleware('guest');
 Route::middleware(['role:admin'])->group(function () {
     Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
+    Route::post('orders/{order}/shipment',[OrderController::class, 'updateShipment']);
 });

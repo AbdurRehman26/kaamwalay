@@ -269,7 +269,8 @@ class Order extends Model
         );
     }
 
-    public function customerShipment () {
+    public function customerShipment()
+    {
         return optional($this->orderItems()->first())->orderItemCustomerShipment();
     }
 }

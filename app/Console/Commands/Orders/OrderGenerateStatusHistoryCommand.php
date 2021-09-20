@@ -6,7 +6,6 @@ use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Services\Admin\OrderService;
 use App\Services\Admin\OrderStatusHistoryService;
 use Illuminate\Console\Command;
-use PHPUnit\Exception;
 use Throwable;
 
 class OrderGenerateStatusHistoryCommand extends Command
@@ -33,8 +32,7 @@ class OrderGenerateStatusHistoryCommand extends Command
     public function __construct(
         public  OrderService $orderService,
         public  OrderStatusHistoryService $orderStatusHistoryService,
-    )
-    {
+    ) {
         parent::__construct();
     }
 

@@ -27,7 +27,6 @@ export function SubmissionsGradeNotes(props: SubmissionsGradeNotesProps) {
             notes: notesValue,
         });
     };
-
     return (
         <OutlinedCard heading={'Notes'}>
             <TextField

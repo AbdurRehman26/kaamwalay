@@ -23,6 +23,9 @@ const useStyles = makeStyles(
         root: {
             marginTop: theme.spacing(3),
         },
+        disabled: {
+            opacity: 0.2,
+        },
         alert: {
             marginBottom: theme.spacing(2),
         },
@@ -35,6 +38,29 @@ const useStyles = makeStyles(
         heading: {
             marginLeft: theme.spacing(1),
             fontWeight: 500,
+        },
+        gradeReadContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        gradeReadLabel: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: '12px',
+            lineHeight: '16px',
+            letterSpacing: '0.1px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        gradeReadValue: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: '14px',
+            lineHeight: '20px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+            marginTop: '12px',
         },
     }),
     { name: 'SubmissionsGradeCardGrades' },
@@ -78,6 +104,23 @@ export function SubmissionsGradeCardGrades({
     const humanGrades = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values,
     );
+
+    const roboGradesFront = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.front,
+    );
+    const roboGradesBack = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.back,
+    );
+
+    const cardStatus = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.status.order_item_status.name,
+    );
+    const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
+
+    function areRoboGradesAvailable() {
+        return roboGradesFront !== null && roboGradesBack !== null;
+    }
+
     function updateHumanGrade(side: string, part: string, gradeValue: number) {
         dispatch(
             updateHumanGradeValue({
@@ -99,108 +142,169 @@ export function SubmissionsGradeCardGrades({
 
     return (
         <OutlinedCard heading={heading} icon={icon} className={classes.root}>
-            <Alert severity="info" className={classes.alert}>
-                Human Grades are disabled until RoboGrades are available
-            </Alert>
-            <Grid container spacing={2}>
-                <Grid item xs={12} container alignItems={'center'} className={classes.headingHolder}>
-                    <Typography className={classes.heading}>Front of Card</Typography>
+            {!areRoboGradesAvailable() ? (
+                <Alert severity="info" className={classes.alert}>
+                    Human Grades are disabled until RoboGrades are available
+                </Alert>
+            ) : null}
+
+            <div className={disabled ? classes.disabled : ''}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} container alignItems={'center'} className={classes.headingHolder}>
+                        <Typography className={classes.heading}>Front of Card</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
+                            <TextField
+                                size={'medium'}
+                                variant={'outlined'}
+                                value={frontCentering}
+                                disabled={disabled}
+                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                                onChange={(e) => updateHumanGrade('front', 'center', Number(e.target.value))}
+                                label={`Centering`}
+                            />
+                        ) : (
+                            <div className={classes.gradeReadContainer}>
+                                <div className={classes.gradeReadLabel}>Centering</div>
+                                <div className={classes.gradeReadValue}>{frontCentering}</div>
+                            </div>
+                        )}
+                    </Grid>
+                    <Grid item xs={3}>
+                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
+                            <TextField
+                                size={'medium'}
+                                variant={'outlined'}
+                                value={frontSurface}
+                                disabled={disabled}
+                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                                onChange={(e) => updateHumanGrade('front', 'surface', Number(e.target.value))}
+                                label={`Surface`}
+                            />
+                        ) : (
+                            <div className={classes.gradeReadContainer}>
+                                <div className={classes.gradeReadLabel}>Surface</div>
+                                <div className={classes.gradeReadValue}>{frontSurface}</div>
+                            </div>
+                        )}
+                    </Grid>
+                    <Grid item xs={3}>
+                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
+                            <TextField
+                                size={'medium'}
+                                variant={'outlined'}
+                                value={frontEdge}
+                                disabled={disabled}
+                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                                onChange={(e) => updateHumanGrade('front', 'edge', Number(e.target.value))}
+                                label={`Edges`}
+                            />
+                        ) : (
+                            <div className={classes.gradeReadContainer}>
+                                <div className={classes.gradeReadLabel}>Edges</div>
+                                <div className={classes.gradeReadValue}>{frontEdge}</div>
+                            </div>
+                        )}
+                    </Grid>
+                    <Grid item xs={3}>
+                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
+                            <TextField
+                                size={'medium'}
+                                variant={'outlined'}
+                                value={frontCorner}
+                                disabled={disabled}
+                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                                onChange={(e) => updateHumanGrade('front', 'corner', Number(e.target.value))}
+                                label={`Corners`}
+                            />
+                        ) : (
+                            <div className={classes.gradeReadContainer}>
+                                <div className={classes.gradeReadLabel}>Corners</div>
+                                <div className={classes.gradeReadValue}>{frontCorner}</div>
+                            </div>
+                        )}
+                    </Grid>
                 </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        size={'medium'}
-                        variant={'outlined'}
-                        value={frontCentering}
-                        disabled={disabled}
-                        onBlur={sendHumanGradesToBackend}
-                        onChange={(e) => updateHumanGrade('front', 'center', Number(e.target.value))}
-                        label={`Centering`}
-                    />
+                <Divider className={classes.divider} />
+                <Grid container spacing={2}>
+                    <Grid item xs={12} container alignItems={'center'} className={classes.headingHolder}>
+                        <Typography className={classes.heading}>Back Of Card</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
+                            <TextField
+                                size={'medium'}
+                                variant={'outlined'}
+                                value={backCenter}
+                                disabled={disabled}
+                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                                onChange={(e) => updateHumanGrade('back', 'center', Number(e.target.value))}
+                                label={`Centering`}
+                            />
+                        ) : (
+                            <div className={classes.gradeReadContainer}>
+                                <div className={classes.gradeReadLabel}>Centering</div>
+                                <div className={classes.gradeReadValue}>{backCenter}</div>
+                            </div>
+                        )}
+                    </Grid>
+                    <Grid item xs={3}>
+                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
+                            <TextField
+                                size={'medium'}
+                                variant={'outlined'}
+                                value={backSurface}
+                                disabled={disabled}
+                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                                onChange={(e) => updateHumanGrade('back', 'surface', Number(e.target.value))}
+                                label={`Surface`}
+                            />
+                        ) : (
+                            <div className={classes.gradeReadContainer}>
+                                <div className={classes.gradeReadLabel}>Surface</div>
+                                <div className={classes.gradeReadValue}>{backSurface}</div>
+                            </div>
+                        )}
+                    </Grid>
+                    <Grid item xs={3}>
+                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
+                            <TextField
+                                size={'medium'}
+                                variant={'outlined'}
+                                value={backEdge}
+                                disabled={disabled}
+                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                                onChange={(e) => updateHumanGrade('back', 'edge', Number(e.target.value))}
+                                label={`Edges`}
+                            />
+                        ) : (
+                            <div className={classes.gradeReadContainer}>
+                                <div className={classes.gradeReadLabel}>Edges</div>
+                                <div className={classes.gradeReadValue}>{backEdge}</div>
+                            </div>
+                        )}
+                    </Grid>
+                    <Grid item xs={3}>
+                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
+                            <TextField
+                                size={'medium'}
+                                variant={'outlined'}
+                                value={backCorner}
+                                disabled={disabled}
+                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                                onChange={(e) => updateHumanGrade('back', 'corner', Number(e.target.value))}
+                                label={`Corners`}
+                            />
+                        ) : (
+                            <div className={classes.gradeReadContainer}>
+                                <div className={classes.gradeReadLabel}>Edges</div>
+                                <div className={classes.gradeReadValue}>{backCorner}</div>
+                            </div>
+                        )}
+                    </Grid>
                 </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        size={'medium'}
-                        variant={'outlined'}
-                        value={frontSurface}
-                        disabled={disabled}
-                        onBlur={sendHumanGradesToBackend}
-                        onChange={(e) => updateHumanGrade('front', 'surface', Number(e.target.value))}
-                        label={`Surface`}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        size={'medium'}
-                        variant={'outlined'}
-                        value={frontEdge}
-                        disabled={disabled}
-                        onBlur={sendHumanGradesToBackend}
-                        onChange={(e) => updateHumanGrade('front', 'edge', Number(e.target.value))}
-                        label={`Edges`}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        size={'medium'}
-                        variant={'outlined'}
-                        value={frontCorner}
-                        disabled={disabled}
-                        onBlur={sendHumanGradesToBackend}
-                        onChange={(e) => updateHumanGrade('front', 'corner', Number(e.target.value))}
-                        label={`Corners`}
-                    />
-                </Grid>
-            </Grid>
-            <Divider className={classes.divider} />
-            <Grid container spacing={2}>
-                <Grid item xs={12} container alignItems={'center'} className={classes.headingHolder}>
-                    <Typography className={classes.heading}>Back Of Card</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        size={'medium'}
-                        variant={'outlined'}
-                        value={backCenter}
-                        disabled={disabled}
-                        onBlur={sendHumanGradesToBackend}
-                        onChange={(e) => updateHumanGrade('back', 'center', Number(e.target.value))}
-                        label={`Centering`}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        size={'medium'}
-                        variant={'outlined'}
-                        value={backSurface}
-                        disabled={disabled}
-                        onBlur={sendHumanGradesToBackend}
-                        onChange={(e) => updateHumanGrade('back', 'surface', Number(e.target.value))}
-                        label={`Surface`}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        size={'medium'}
-                        variant={'outlined'}
-                        value={backEdge}
-                        disabled={disabled}
-                        onBlur={sendHumanGradesToBackend}
-                        onChange={(e) => updateHumanGrade('back', 'edge', Number(e.target.value))}
-                        label={`Edges`}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        size={'medium'}
-                        variant={'outlined'}
-                        value={backCorner}
-                        disabled={disabled}
-                        onBlur={sendHumanGradesToBackend}
-                        onChange={(e) => updateHumanGrade('back', 'corner', Number(e.target.value))}
-                        label={`Corners`}
-                    />
-                </Grid>
-            </Grid>
+            </div>
         </OutlinedCard>
     );
 }

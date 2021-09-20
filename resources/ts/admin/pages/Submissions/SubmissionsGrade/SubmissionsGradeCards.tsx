@@ -12,7 +12,7 @@ import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { addOrderStatusHistory } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import { getAllSubmissions } from '@admin/redux/slices/submissionGradeSlice';
+import { getAllSubmissions, matchExistingOrderItemsToViewModes } from '@admin/redux/slices/submissionGradeSlice';
 import SubmissionsGradeCard from './SubmissionsGradeCard';
 
 const useStyles = makeStyles(
@@ -38,7 +38,9 @@ export function SubmissionsGradeCards() {
     const handleChangeRowsPerPage = useCallback(() => {}, []);
 
     function isCompleteGradingBtnEnabled() {
-        const nonReviewedCards = allCards.filter((item: any) => item.order_item.status.name === 'Confirmed');
+        const nonReviewedCards = allCards.filter(
+            (item: any) => item.order_item.status.order_item_status.name === 'Confirmed',
+        );
         return nonReviewedCards.length === 0;
     }
 
@@ -53,7 +55,11 @@ export function SubmissionsGradeCards() {
 
     useEffect(() => {
         // @ts-ignore
-        dispatch(getAllSubmissions(id));
+        dispatch(getAllSubmissions(id))
+            .unwrap()
+            .then((r) => {
+                dispatch(matchExistingOrderItemsToViewModes());
+            });
     }, []);
 
     return (

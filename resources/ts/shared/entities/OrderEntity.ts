@@ -80,6 +80,12 @@ export class OrderEntity extends Entity {
     @Field('customer_number')
     public customerNumber!: string;
 
+    @Field('reviewed_at')
+    public reviewedAt!: string;
+
+    @Field('reviewed_by')
+    public reviewedBy!: string;
+
     public get status() {
         return this.orderStatus?.code;
     }

@@ -21,7 +21,7 @@ export function SubmissionsTable() {
             include: ['paymentPlan', 'invoice', 'orderStatus'],
         },
     });
-        
+
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
     if (isLoading || isError) {
@@ -31,7 +31,7 @@ export function SubmissionsTable() {
             </Box>
         );
     }
-    
+
     return (
         <>
             <TableContainer>
@@ -54,17 +54,17 @@ export function SubmissionsTable() {
                         {data.map((data: OrderEntity) => (
                             <SubmissionTableRow
                                 disabled
-                                key={data.id}
-                                id={data.id}
-                                orderNumber={data.orderNumber}
-                                serviceLevel={data.paymentPlan.price}
-                                cardsNumber={data.numberOfCards}
-                                status={data.status}
-                                datePlaced={data.createdAt}
-                                dateArrived={data.arrivedAt}
-                                invoice={data.invoice?.path}
-                                invoiceNumber={data.invoice?.invoiceNumber}
-                                customerShipment={data.customerShipment}
+                                key={data?.id}
+                                id={data?.id}
+                                orderNumber={data?.orderNumber}
+                                serviceLevel={data?.paymentPlan?.price}
+                                cardsNumber={data?.numberOfCards}
+                                status={data?.status}
+                                datePlaced={data?.createdAt}
+                                dateArrived={data?.arrivedAt}
+                                invoice={data?.invoice?.path}
+                                invoiceNumber={data?.invoice?.invoiceNumber}
+                                customerShipment={data?.customerShipment}
                             />
                         ))}
                     </TableBody>

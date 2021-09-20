@@ -62,7 +62,7 @@ export function SubmissionsGrade() {
                         <SubmissionsGradeCards />
                     </Grid>
                     <Grid item xs={4} className={classes.notes}>
-                        <SubmissionsGradeNotes />
+                        <SubmissionsGradeNotes notes={data?.notes} />
                     </Grid>
                 </Grid>
             </Container>

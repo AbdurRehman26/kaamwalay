@@ -96,7 +96,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
             </TableCell>
             <TableCell>{order.numberOfCards}</TableCell>
             <TableCell>
-                <StatusChip label={order.orderStatus?.name} color={order.orderStatus?.code as any} />
+                <StatusChip label={order.orderStatus?.name} color={'graded'} />
             </TableCell>
             <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
             <TableCell>{formatCurrency(order.grandTotal)}</TableCell>

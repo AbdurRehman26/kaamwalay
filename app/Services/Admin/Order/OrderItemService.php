@@ -38,7 +38,7 @@ class OrderItemService
         }
 
         if ($requestStatus && (! $item->orderItemStatus || $item->order_item_status_id !== $requestStatus->id)) {
-            $hasStatus = $item->orderItemStatusHistories()->where('order_item_status_id', $requestStatus->id)->exists();
+            $hasStatus = $item->orderItemStatusHistory()->where('order_item_status_id', $requestStatus->id)->exists();
             if (! $hasStatus) {
                 $status = new OrderItemStatusHistory();
                 $status->order_item_id = $item->id;

@@ -5,7 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import FaceIcon from '@material-ui/icons/Face';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { ReactComponent as OutlinedToyIcon } from '@shared/assets/icons/optimisedSmartToyIcon.svg';
 import {
     AccordionCardItem,
     AccordionCardItemHeader,
@@ -13,6 +14,7 @@ import {
 } from '@shared/components/AccordionCardItem';
 import OutlinedCard from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 import { cx } from '@shared/lib/utils/cx';
 import { APIService } from '@shared/services/APIService';
 import SubmissionGradeCardUpload from '@admin/pages/Submissions/SubmissionsGrade/SubmissionGradeCardUpload';
@@ -200,6 +202,44 @@ const useStyles = makeStyles(
             textAlign: 'center',
             marginTop: '12px',
             letterSpacing: '0.1px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        lastGradedText: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '12px',
+            lineHeight: '16px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+            marginTop: '8px',
+        },
+        lastGradedTime: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: '12px',
+            lineHeight: '16px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        certificateNumberText: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            lineHeight: '20px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+            marginTop: '6px',
+        },
+        certificateNumberItself: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: '14px',
+            lineHeight: '20px',
+            letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
         },
     }),
@@ -393,6 +433,13 @@ export function SubmissionsGradeCard({
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.back,
     );
 
+    const gradedAt = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.graded_at,
+    );
+    const gradedBy = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.graded_by,
+    );
+
     function areRoboGradesAvailable() {
         return roboGradesFront !== null && roboGradesBack !== null;
     }
@@ -420,6 +467,28 @@ export function SubmissionsGradeCard({
         }
     }
 
+    function getGradedAtText() {
+        if (gradedAt && gradedBy) {
+            return (
+                <Typography variant={'subtitle2'} className={classes.lastGradedText}>
+                    Last Graded:{' '}
+                    <span className={classes.lastGradedTime}>
+                        {formatDate(gradedAt, 'MM/DD/YYYY')} at {formatDate(gradedAt, 'M:H')}
+                    </span>{' '}
+                    ({gradedBy})
+                </Typography>
+            );
+        }
+    }
+
+    function getCertificateNumberText() {
+        return (
+            <Typography variant={'subtitle2'} className={classes.certificateNumberText}>
+                Certificate Number: <span className={classes.certificateNumberItself}>{certificateNumber}</span>
+            </Typography>
+        );
+    }
+
     return (
         <AccordionCardItem variant={'outlined'}>
             <AccordionCardItemHeader
@@ -429,7 +498,9 @@ export function SubmissionsGradeCard({
                     <>
                         {cardFullName}
                         <br />
-                        Certificate Number: {certificateNumber}
+                        {getCertificateNumberText()}
+                        <br />
+                        {getGradedAtText()}
                     </>
                 }
                 action={
@@ -619,16 +690,15 @@ export function SubmissionsGradeCard({
                             <>
                                 <SubmissionsGradeCardGrades
                                     icon={<FaceIcon className={classes.headingIcon} />}
-                                    disabled={overallGrade === 0}
+                                    disabled={!areRoboGradesAvailable()}
                                     itemIndex={itemIndex}
                                     orderID={orderID}
                                     heading={`Human Grades`}
                                 />
                                 <SubmissionsGradeCardRoboGrades
                                     heading={'Robogrades'}
-                                    disabled={!areRoboGradesAvailable()}
                                     itemIndex={itemIndex}
-                                    icon={<FaceIcon className={classes.headingIcon} />}
+                                    icon={<OutlinedToyIcon className={classes.headingIcon} />}
                                 />
                                 <SubmissionGradeCardUpload itemIndex={itemIndex} />
                                 <Grid container justifyContent={'flex-end'}>

@@ -1,11 +1,13 @@
 import TextField from '@material-ui/core/TextField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OutlinedCard from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 
-interface SubmissionsGradeNotesProps {}
+interface SubmissionsGradeNotesProps {
+    notes?: string;
+}
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -16,8 +18,7 @@ interface SubmissionsGradeNotesProps {}
 export function SubmissionsGradeNotes(props: SubmissionsGradeNotesProps) {
     const { id } = useParams<{ id: string }>();
     const apiService = useInjectable(APIService);
-
-    const [notesValue, setNotesValue] = useState('');
+    const [notesValue, setNotesValue] = useState(props.notes);
 
     const handleNotesChange = (e: any) => setNotesValue(e.target.value);
 
@@ -27,6 +28,10 @@ export function SubmissionsGradeNotes(props: SubmissionsGradeNotesProps) {
             notes: notesValue,
         });
     };
+
+    useEffect(() => {
+        setNotesValue(props.notes);
+    }, [props.notes]);
     return (
         <OutlinedCard heading={'Notes'}>
             <TextField

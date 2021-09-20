@@ -38,6 +38,9 @@ export function SubmissionsGradeCards() {
     const handleChangeRowsPerPage = useCallback(() => {}, []);
 
     function isCompleteGradingBtnEnabled() {
+        if (allCards.length === 0) {
+            return false;
+        }
         const nonReviewedCards = allCards.filter(
             (item: any) => item.order_item.status.order_item_status.name === 'Confirmed',
         );

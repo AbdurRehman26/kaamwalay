@@ -14,6 +14,7 @@ import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { useNotesDialog } from '@shared/hooks/useNotesDialog';
 import { changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
 import ReviewCardDialog from './ReviewCardDialog';
@@ -86,7 +87,21 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
     );
 
     const handleMissing = useCallback((orderItemId) => handleOpen({ orderItemId }), [handleOpen]);
-    const handleEdit = useCallback((orderItemId) => console.log('open edit dialog for item:', orderItemId), []);
+    const handleEdit = useCallback(
+        (orderItemId) => {
+            const activeItem = items.find((item) => item.id === orderItemId);
+            if (activeItem) {
+                dispatch(
+                    manageCardDialogActions.editCard({
+                        orderItemId,
+                        card: activeItem.cardProduct,
+                        declaredValue: activeItem.declaredValuePerUnit,
+                    }),
+                );
+            }
+        },
+        [dispatch, items],
+    );
 
     const handleSubmitNotes = useCallback(
         async (notes: string, { orderItemId }) => {
@@ -134,6 +149,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 key={index}
                                 index={index}
                                 itemId={item.id}
+                                declaredValue={item.declaredValuePerUnit}
                                 card={item.cardProduct}
                                 onPreview={handlePreview}
                                 onConfirm={handleConfirm}

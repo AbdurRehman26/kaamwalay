@@ -9,16 +9,16 @@ const useStyles = makeStyles(
             justifyContent: 'center',
         },
     }),
-    { name: 'AddCardDialogResultsPagination' },
+    { name: 'ManageCardDialogResultsPagination' },
 );
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
- * @component: AddCardDialogResultsPagination
+ * @component: ManageCardDialogResultsPagination
  * @date: 13.09.2021
  * @time: 23:56
  */
-export const AddCardDialogResultsPagination = connectPagination(({ nbPages, currentRefinement, refine }) => {
+export const ManageCardDialogResultsPagination = connectPagination(({ nbPages, currentRefinement, refine }) => {
     const classes = useStyles();
 
     const handleChange = useCallback((event: any, value: any) => refine(value), [refine]);
@@ -36,4 +36,4 @@ export const AddCardDialogResultsPagination = connectPagination(({ nbPages, curr
     );
 });
 
-export default AddCardDialogResultsPagination;
+export default ManageCardDialogResultsPagination;

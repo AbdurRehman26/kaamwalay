@@ -98,7 +98,7 @@ export class Log {
 
         try {
             return ['1', 'true'].includes(localStorage.getItem('__LOGS__') || '');
-        } catch (e) {
+        } catch (e: any) {
             // nothing
         }
 
@@ -114,7 +114,7 @@ export class Log {
                 if (localStorage) {
                     localStorage.setItem('debug', 'app:*');
                 }
-            } catch (e) {
+            } catch (e: any) {
                 // nothing
             }
         } else {

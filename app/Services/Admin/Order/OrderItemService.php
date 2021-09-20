@@ -39,7 +39,6 @@ class OrderItemService
             throw new OrderItemIsNotGraded;
         }
 
-//        dd($item->toArray(), $item->order_item_status_id, $requestStatus->id);
         if ($item->order_item_status_id === $requestStatus->id) {
             $orderItemStatusHistory = OrderItemStatusHistory::where('order_item_id', $item->id)
                 ->where('order_item_status_id', $item->order_item_status_id)
@@ -57,6 +56,12 @@ class OrderItemService
 
             $item->order_item_status_id = $requestStatus->id;
             $item->save();
+
+            if ($requestStatus->id === OrderItemStatus::PENDING) {
+                OrderItemStatusHistory::query()->where('order_item_id', $item->id)
+                ->where('order_item_status_id', '>', $requestStatus->id)
+                ->delete();
+            }
 
             if ($requestStatus->id === OrderItemStatus::CONFIRMED && ! $item->userCard) {
                 $this->userCardService->createItemUserCard($item);

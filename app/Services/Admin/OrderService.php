@@ -117,7 +117,6 @@ class OrderService
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
-
         $data = $this->updateLocalGrades($grades);
 
         return $data;
@@ -129,8 +128,7 @@ class OrderService
         foreach ($grades['results'] as $result) {
             $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
             if (! is_null($card)) {
-                $card->update(CardGradeResource::make($result)->ignoreParams('overall')->resolve());
-
+                $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
                 $cards[] = $card;
             }
         }

@@ -20,7 +20,6 @@ import { UserEntity } from './UserEntity';
 export class OrderEntity extends Entity {
     @Field('order_status')
     public orderStatus!: OrderStatusEntity;
-
     @Field('order_status_history', () => OrderStatusHistoryEntity)
     public orderStatusHistory!: OrderStatusHistoryEntity[];
 
@@ -81,12 +80,21 @@ export class OrderEntity extends Entity {
     @Field('customer_number')
     public customerNumber!: string;
 
+    @Field('reviewed_at')
+    public reviewedAt!: string;
+
+    @Field('reviewed_by')
+    public reviewedBy!: string;
+
+    @Field('notes')
+    public notes!: string;
+
     public get status() {
         return this.orderStatus?.code;
     }
 
     public getItemsByStatus(status: OrderItemStatusEnum): OrderItemEntity[] {
-        return (this.orderItems ?? []).filter((item) => item.status?.id === status);
+        return (this.orderItems ?? []).filter((item: any) => item.status?.order_item_status?.id === status);
     }
 
     public hasOrderStatus(status: OrderStatusEnum, checkInHistory: boolean = true) {
@@ -99,5 +107,24 @@ export class OrderEntity extends Entity {
         }
 
         return matchCurrentStatus;
+    }
+
+    public addItem(orderItem: OrderItemEntity) {
+        let added = false;
+
+        this.orderItems = this.orderItems.map((item) => {
+            if (item.id === orderItem.id) {
+                added = true;
+                return orderItem;
+            }
+
+            return item;
+        });
+
+        if (!added) {
+            this.orderItems.push(orderItem);
+        }
+
+        return this;
     }
 }

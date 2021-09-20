@@ -6,6 +6,8 @@ import { OrderItemStatusEntity } from './OrderItemStatusEntity';
 export class OrderItemEntity extends Entity {
     public quantity!: number;
 
+    public status!: OrderItemStatusEntity;
+
     @Field('declared_value_per_unit')
     public declaredValuePerUnit!: number;
 
@@ -15,5 +17,6 @@ export class OrderItemEntity extends Entity {
     @Field('certificate_number')
     public certificateNumber!: number;
 
-    public status!: OrderItemStatusEntity;
+    @Field('order_id')
+    public orderId!: number;
 }

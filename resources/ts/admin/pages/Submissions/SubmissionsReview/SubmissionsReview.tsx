@@ -8,11 +8,11 @@ import Typography from '@material-ui/core/Typography';
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
 import React, { useCallback, useState } from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';
-import AddCardDialog, { AddCardDialogProps } from '@shared/components/AddCardDialog/AddCardDialog';
+import ManageCardDialog, { ManageCardDialogProps } from '@shared/components/ManageCardDialog/ManageCardDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
-import { addOrderStatusHistory } from '@shared/redux/slices/adminOrdersSlice';
+import { addCardToOrder, addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { useSidebarHidden } from '@admin/hooks/useSidebarHidden';
 import { useAppDispatch } from '@admin/redux/hooks';
 import ConfirmedCards from './ConfirmedCards';
@@ -44,11 +44,33 @@ export function SubmissionsReview() {
         setLoading(true);
     }, [dispatch, data?.id]);
 
-    const handleAddCard = useCallback<AddCardDialogProps['onAdd']>(({ card, declaredValue }) => {
-        console.log({ card, declaredValue });
-        // TODO: store the card to the order.
-        // TODO: set status of the card confirmed.
-    }, []);
+    const handleAddCard = useCallback<ManageCardDialogProps['onAdd']>(
+        async ({ card, declaredValue, orderItemId }) => {
+            if (!data?.id) {
+                return;
+            }
+
+            if (orderItemId) {
+                await dispatch(
+                    editCardOfOrder({
+                        orderItemId,
+                        orderId: data?.id,
+                        cardProductId: card.id,
+                        value: declaredValue,
+                    }),
+                );
+            } else {
+                await dispatch(
+                    addCardToOrder({
+                        orderId: data?.id,
+                        cardProductId: card.id,
+                        value: declaredValue,
+                    }),
+                );
+            }
+        },
+        [data?.id, dispatch],
+    );
 
     useSidebarHidden();
 
@@ -135,7 +157,7 @@ export function SubmissionsReview() {
                     </Button>
                 </Box>
             ) : null}
-            <AddCardDialog onAdd={handleAddCard} />
+            <ManageCardDialog onAdd={handleAddCard} />
         </>
     );
 }

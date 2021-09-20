@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderAddressResource;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
@@ -74,8 +75,7 @@ class OrderResource extends BaseResource
             'order_payment' => $this->whenLoaded('orderPayment', OrderPaymentResource::class),
             'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
             'customer_shipment' => $this->whenLoaded('orderItems', fn () => $this->orderItems[0]->orderItemCustomerShipment),
-            'invoice' => $this->whenLoaded('invoice', OrderItemCollection::class),
-
+            'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
         ];
     }
 }

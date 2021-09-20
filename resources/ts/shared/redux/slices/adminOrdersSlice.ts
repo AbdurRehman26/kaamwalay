@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { classToPlain, plainToClass } from 'class-transformer';
+import { AddCardToOrderDto } from '@shared/dto/AddCardToOrderDto';
 import { ChangeOrderItemStatusDto } from '@shared/dto/ChangeOrderItemStatusDto';
+import { EditCardOfOrderDto } from '@shared/dto/EditCardOfOrderDto';
 import { OrderEntity } from '@shared/entities/OrderEntity';
+import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { app } from '@shared/lib/app';
 import { OrderItemsRepository } from '@shared/repositories/Admin/OrderItemsRepository';
 import { OrdersRepository } from '@shared/repositories/Admin/OrdersRepository';
@@ -46,7 +49,7 @@ export const changeOrderItemsStatus = createAsyncThunk(
             return processedItems.map((item) => ({
                 orderId: input.orderId,
                 orderItemId: item.id,
-                status: classToPlain(item.status),
+                item: classToPlain(item),
             }));
         } catch (e: any) {
             NotificationsService.exception(e);
@@ -70,6 +73,30 @@ export const addOrderStatusHistory = createAsyncThunk(
     },
 );
 
+export const addCardToOrder = createAsyncThunk('addCardToOrder', async (input: AddCardToOrderDto, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+
+    try {
+        const orderItem = await ordersRepository.addCard(input);
+        return classToPlain(orderItem);
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
+export const editCardOfOrder = createAsyncThunk('editCardOfOrder', async (input: EditCardOfOrderDto, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+
+    try {
+        const orderItem = await ordersRepository.editCard(input);
+        return classToPlain(orderItem);
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
 export const adminOrdersSlice = createSlice({
     name: adminOrdersThunk.name,
     initialState: {
@@ -80,6 +107,16 @@ export const adminOrdersSlice = createSlice({
     },
     extraReducers: (builder) => {
         adminOrdersThunk.buildReducers(builder);
+
+        function manageOrderAndItem(state: StateType, payload: any) {
+            const orderItem = plainToClass(OrderItemEntity, payload);
+            const order = plainToClass(OrderEntity, state.entities[orderItem.orderId]);
+            if (order) {
+                order.addItem(orderItem);
+            }
+
+            state.entities[orderItem.orderId] = classToPlain(order) as any;
+        }
 
         builder.addCase(changeOrderItemStatus.fulfilled, (state, { payload }) => {
             const { orderId, orderItemId, status } = payload;
@@ -97,11 +134,12 @@ export const adminOrdersSlice = createSlice({
         });
 
         builder.addCase(changeOrderItemsStatus.fulfilled, (state, { payload }) => {
-            payload.forEach(({ orderId, status, orderItemId }) => {
+            payload.forEach(({ orderId, item, orderItemId }) => {
+                const orderItem = plainToClass(OrderItemEntity, item);
                 const order = plainToClass(OrderEntity, state.entities[orderId]);
                 order.orderItems = (order.orderItems ?? []).map((item) => {
                     if (item.id === orderItemId) {
-                        item.status = plainToClass(OrderItemStatusEntity, status);
+                        return orderItem;
                     }
 
                     return item;
@@ -121,6 +159,14 @@ export const adminOrdersSlice = createSlice({
 
                 state.entities[orderStatusHistory.orderId] = classToPlain(order) as any;
             }
+        });
+
+        builder.addCase(addCardToOrder.fulfilled, (state, { payload }) => {
+            manageOrderAndItem(state, payload);
+        });
+
+        builder.addCase(editCardOfOrder.fulfilled, (state, { payload }) => {
+            manageOrderAndItem(state, payload);
         });
     },
 });

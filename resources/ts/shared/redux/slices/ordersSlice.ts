@@ -17,7 +17,7 @@ export const setOrderCustomerShipment = createAsyncThunk(
     async (input: ChangeOrderCustomerShipmentDto, thunkAPI) => {
         const ordersRepository = app(OrdersRepository);
         try {
-            const customerShipment = await ordersRepository.setShipment(input);
+            const customerShipment = await ordersRepository.setCustomerShipment(input);
 
             return {
                 customerShipment: classToPlain(customerShipment),

@@ -10,7 +10,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     readonly endpointPath: string = 'customer/orders';
     readonly model = OrderEntity;
 
-    public async setShipment(input: ChangeOrderCustomerShipmentDto) {
+    public async setCustomerShipment(input: ChangeOrderCustomerShipmentDto) {
         const { orderId, shippingProvider, trackingNumber } = input;
         const { data } = await this.endpoint.post(`${orderId}/customer-shipment`, {
             shipping_provider: shippingProvider,

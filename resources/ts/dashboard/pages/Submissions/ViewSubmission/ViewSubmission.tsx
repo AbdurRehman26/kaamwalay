@@ -19,7 +19,14 @@ import { ViewSubmissionStatus } from './ViewSubmissionStatus';
  */
 export function ViewSubmission() {
     const { id } = useParams<{ id: string }>();
-    const { isLoading, isError, data } = useOrderQuery({ resourceId: id });
+    const { isLoading, isError, data } = useOrderQuery({
+        resourceId: id,
+        config: {
+            params: {
+                include: ['paymentPlan', 'orderStatusHistory', 'orderStatusHistory.orderStatus', 'invoice'],
+            },
+        },
+    });
 
     if (isLoading || isError) {
         return (

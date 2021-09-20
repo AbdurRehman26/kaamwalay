@@ -158,7 +158,7 @@ class CreateOrderService
                 'declared_value_total' => $item['quantity'] * $item['declared_value_per_unit'],
             ]);
 
-            $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending']);
+            $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending'], auth()->user());
         }
     }
 

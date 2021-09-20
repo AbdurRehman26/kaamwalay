@@ -37,9 +37,13 @@
  *                         "image_path": "https://den-cards.pokellector.com/305/Bellsprout.SWSH05.1.37528.png"
  *                     },
  *                     "status": {
- *                         "id": 4,
- *                         "name": "Confirmed",
- *                         "description": "Item is present in the shipped box and will be graded"
+ *                         "id": 5,
+ *                         "order_item_status": {
+ *                             "id": 4,
+ *                             "name": "Confirmed",
+ *                             "description": "Item is present in the shipped box and will be graded"
+ *                         },
+ *                         "notes": ""
  *                     },
  *                     "certificate_number": "00000501"
  *                 },

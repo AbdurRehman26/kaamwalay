@@ -2,8 +2,10 @@
 
 namespace App\Services\Admin;
 
+use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
+use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
@@ -48,13 +50,18 @@ class OrderStatusHistoryService
 
         throw_if($exists, OrderStatusHistoryWasAlreadyAssigned::class);
 
+        throw_if(
+            getModelId($orderStatus) === OrderItemStatus::GRADED && ! Order::first($orderId)->isEligibleToMarkAsGraded(),
+            OrderCanNotBeMarkedAsGraded::class
+        );
+
         Order::query()
             ->where('id', $orderId)
             ->update(array_merge(
                 [
                     'order_status_id' => $orderStatusId,
                 ],
-                $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: []
+                $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: [],
             ));
 
         if ($orderStatusId === OrderStatus::ARRIVED) {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\Admin\Order\OrderItem;
 
-use App\Models\OrderItemStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,21 +24,13 @@ class ChangeStatusRequest extends FormRequest
      */
     public function rules()
     {
-        $requestStatus = $this->request->get('status');
-
         return [
             'status' => [
                 'required',
                 Rule::when(fn ($value) => is_numeric($value->status), 'exists:order_item_statuses,id'),
                 Rule::when(fn ($value) => ! is_numeric($value->status), 'exists:order_item_statuses,code'),
             ],
-            'notes' => [
-                'string',
-                Rule::requiredIf(in_array($requestStatus, [
-                    'missing', 'not_accepted',
-                    OrderItemStatus::MISSING, OrderItemStatus::NOT_ACCEPTED,
-                ], true)),
-            ],
+            'notes' => ['nullable', 'string'],
         ];
     }
 }

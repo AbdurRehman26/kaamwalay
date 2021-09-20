@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $order_item_id
@@ -22,6 +23,7 @@ class OrderItemStatusHistory extends Model
     protected $fillable = [
         'order_item_status_id',
         'order_item_id',
+        'user_id',
         'notes',
     ];
 
@@ -34,14 +36,20 @@ class OrderItemStatusHistory extends Model
         'id' => 'integer',
         'order_item_status_id' => 'integer',
         'order_item_id' => 'integer',
+        'user_id' => 'integer',
     ];
 
-    public function orderItem()
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function orderItem(): BelongsTo
     {
         return $this->belongsTo(\App\Models\OrderItem::class);
     }
 
-    public function orderItemStatus()
+    public function orderItemStatus(): BelongsTo
     {
         return $this->belongsTo(\App\Models\OrderItemStatus::class);
     }

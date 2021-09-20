@@ -80,12 +80,21 @@ export class OrderEntity extends Entity {
     @Field('customer_number')
     public customerNumber!: string;
 
+    @Field('reviewed_at')
+    public reviewedAt!: string;
+
+    @Field('reviewed_by')
+    public reviewedBy!: string;
+
+    @Field('notes')
+    public notes!: string;
+
     public get status() {
         return this.orderStatus?.code;
     }
 
     public getItemsByStatus(status: OrderItemStatusEnum): OrderItemEntity[] {
-        return (this.orderItems ?? []).filter((item) => item.status?.id === status);
+        return (this.orderItems ?? []).filter((item: any) => item.status?.order_item_status?.id === status);
     }
 
     public hasOrderStatus(status: OrderStatusEnum, checkInHistory: boolean = true) {

@@ -26,6 +26,10 @@
  *             "shipping_fee": 14,
  *             "grand_total": 34,
  *             "created_at": "2021-08-12T19:15:32.000000Z",
+ *             "reviewed_by": "John Doe",
+ *             "reviewed_at": "2021-09-16T21:45:02.000000Z",
+ *             "auto_saved_at": "2021-09-16T21:45:08.000000Z",
+ *             "total_graded_items": 0,
  *             "customer": {
  *                 "id": 17,
  *                 "first_name": "John",
@@ -101,9 +105,14 @@
  *                         "image_path": "https://den-cards.pokellector.com/305/Bellsprout.SWSH05.1.37528.png"
  *                     },
  *                     "status": {
- *                         "id": 1,
- *                         "name": "Pending",
- *                         "description": "Item is pending to be reviewed"
+ *                         "id": 92,
+ *                         "order_item_status": {
+ *                             "id": 1,
+ *                             "code": "pending",
+ *                             "name": "Pending",
+ *                             "description": "Item is pending to be reviewed",
+ *                         },
+ *                         "notes": null
  *                     },
  *                     "certificate_number": null
  *                 }

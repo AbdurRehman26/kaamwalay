@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -105,6 +106,7 @@ class Order extends Model
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+            AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
     }
 
@@ -211,6 +213,11 @@ class Order extends Model
         return $this->grand_total * 100;
     }
 
+    public function getTotalGradedItems(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+    }
+
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
         if (! $status || $status === 'all') {
@@ -236,5 +243,27 @@ class Order extends Model
     public function scopeCustomerId(Builder $query, string $customerId): Builder
     {
         return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
+    }
+
+    public function missingItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::MISSING)->count();
+    }
+
+    public function notAcceptedItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::NOT_ACCEPTED)->count();
+    }
+
+    public function gradedItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+    }
+
+    public function isEligibleToMarkAsGraded(): bool
+    {
+        return $this->orderItems()->count() === (
+            $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
+        );
     }
 }

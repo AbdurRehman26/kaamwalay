@@ -6,13 +6,13 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { PaginatedData } from '@shared/classes/PaginatedData';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { addOrderStatusHistory } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import { getAllSubmissions } from '@admin/redux/slices/submissionGradeSlice';
+import { getAllSubmissions, matchExistingOrderItemsToViewModes } from '@admin/redux/slices/submissionGradeSlice';
 import SubmissionsGradeCard from './SubmissionsGradeCard';
 
 const useStyles = makeStyles(
@@ -36,9 +36,15 @@ export function SubmissionsGradeCards() {
     const handleNotAccepted = useCallback(() => {}, []);
     const handleChangePage = useCallback(() => {}, []);
     const handleChangeRowsPerPage = useCallback(() => {}, []);
+    const history = useHistory();
 
     function isCompleteGradingBtnEnabled() {
-        const nonReviewedCards = allCards.filter((item: any) => item.order_item.status.name === 'Confirmed');
+        if (allCards.length === 0) {
+            return false;
+        }
+        const nonReviewedCards = allCards.filter(
+            (item: any) => item.order_item.status.order_item_status.name === 'Confirmed',
+        );
         return nonReviewedCards.length === 0;
     }
 
@@ -48,12 +54,20 @@ export function SubmissionsGradeCards() {
                 orderId: Number(id),
                 orderStatusId: OrderStatusEnum.GRADED,
             }),
-        );
+        )
+            .unwrap()
+            .then(() => {
+                history.push(`/submissions/${id}/view`);
+            });
     }
 
     useEffect(() => {
         // @ts-ignore
-        dispatch(getAllSubmissions(id));
+        dispatch(getAllSubmissions(id))
+            .unwrap()
+            .then((r) => {
+                dispatch(matchExistingOrderItemsToViewModes());
+            });
     }, []);
 
     return (

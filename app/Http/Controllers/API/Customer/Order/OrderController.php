@@ -61,6 +61,7 @@ class OrderController extends Controller
 
         try {
             $order = $customerShipmentService->process($order, $request->get('shipping_provider'), $request->get('tracking_number'));
+
             return new OrderItemCustomerShipmentResource($order->customerShipment);
         } catch (CustomerShipmentNotUpdated $e) {
             return new JsonResponse(

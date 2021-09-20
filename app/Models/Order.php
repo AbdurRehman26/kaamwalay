@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 
@@ -269,7 +270,16 @@ class Order extends Model
         );
     }
 
-    public function customerShipment () {
+    public function customerShipment()
+    {
         return optional($this->orderItems()->first())->orderItemCustomerShipment();
+    }
+    
+    public function getGroupedOrderItems()
+    {
+        return OrderItem::select('card_product_id', 'declared_value_total', 'declared_value_per_unit', DB::raw('sum(quantity) as quantity'))
+        ->where('order_id', $this->id)
+        ->groupBy(['card_product_id', 'declared_value_total','declared_value_per_unit'])
+        ->get();
     }
 }

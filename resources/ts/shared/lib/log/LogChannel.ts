@@ -85,7 +85,7 @@ export class LogChannel {
             if (typeof localStorage !== 'undefined' && localStorage.getItem('__LOGS__') !== null) {
                 return true;
             }
-        } catch (e) {
+        } catch (e: any) {
             // nothing
         }
 

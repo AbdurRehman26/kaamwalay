@@ -1,4 +1,4 @@
-export enum NotificationType {
+export enum NotificationTypeEnum {
     Info = 'info',
     Success = 'success',
     Warning = 'warning',

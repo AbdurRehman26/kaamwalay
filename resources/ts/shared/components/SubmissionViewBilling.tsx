@@ -9,8 +9,8 @@ import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
 import font from '@shared/styles/font.module.css';
 
 interface SubmissionViewBillingProps {
-    shippingAddress: AddressEntity;
-    billingAddress: AddressEntity;
+    shippingAddress?: AddressEntity;
+    billingAddress?: AddressEntity;
     cardLast4?: number | string;
     cardExpirationMonth?: number;
     cardExpirationYear?: number;
@@ -54,10 +54,10 @@ export function SubmissionViewBilling({
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Shipping Address
                 </Typography>
-                <Typography variant={'body2'}>{shippingAddress.getFullName()}</Typography>
-                <Typography variant={'body2'}>{shippingAddress.getAddress()}</Typography>
-                <Typography variant={'body2'}>{shippingAddress.getAddressLine2()}</Typography>
-                <Typography variant={'body2'}>{shippingAddress.phone}</Typography>
+                <Typography variant={'body2'}>{shippingAddress?.getFullName()}</Typography>
+                <Typography variant={'body2'}>{shippingAddress?.getAddress()}</Typography>
+                <Typography variant={'body2'}>{shippingAddress?.getAddressLine2()}</Typography>
+                <Typography variant={'body2'}>{shippingAddress?.phone}</Typography>
             </Grid>
             {hasPayment ? (
                 <Grid item xs={4}>
@@ -69,12 +69,12 @@ export function SubmissionViewBilling({
                         {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
                         <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
                             {(cardBrand || cardType) && cardLast4 ? (
-                                <Typography variant={'caption'}>
+                                <Typography variant={'body2'} color={'textPrimary'}>
                                     {cardBrand || cardType} ending in {cardLast4}
                                 </Typography>
                             ) : null}
                             {cardExpirationMonth && cardExpirationYear ? (
-                                <Typography variant={'caption'}>
+                                <Typography variant={'caption'} color={'textSecondary'}>
                                     Expires {cardExpirationMonth}/{cardExpirationYear}
                                 </Typography>
                             ) : null}
@@ -86,7 +86,7 @@ export function SubmissionViewBilling({
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Billing Address
                 </Typography>
-                {!billingAddress || billingAddress.id === shippingAddress.id ? (
+                {!billingAddress || billingAddress.id === shippingAddress?.id ? (
                     <Typography variant={'body2'}>Same as shipping</Typography>
                 ) : (
                     <>

@@ -3,9 +3,12 @@ import { styled, Theme } from '@material-ui/core/styles';
 
 const colorsMap = {
     pending: '#e1e1e1',
+    placed: '#e1e1e1',
     reviewed: '#fff06c',
+    arrived: '#fff06c',
     graded: '#81d5f9',
     shipped: '#8feca9',
+    pending_payment: '#e1e1e1',
 };
 
 export type StatusChipColor = 'primary' | 'secondary' | keyof typeof colorsMap;
@@ -19,6 +22,8 @@ export const StatusChip = styled(({ color, ...rest }: StatusChipProps) => <Chip 
             color$ = colorsMap[color$ as keyof typeof colorsMap];
         } else if (color$ && color$ in theme.palette) {
             color$ = (theme.palette[color$ as keyof typeof theme.palette] as any)?.main;
+        } else {
+            color$ = colorsMap.pending;
         }
 
         return {

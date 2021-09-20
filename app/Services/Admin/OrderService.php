@@ -74,7 +74,7 @@ class OrderService
         return $this->agsService->createCertificates($certificateIds);
     }
 
-    public function addExtraCard(Order $order, int $card_id, float $value): OrderItem
+    public function addExtraCard(Order $order, User $user, int $card_id, float $value): OrderItem
     {
         $newItem = OrderItem::create([
             'order_id' => $order->id,
@@ -84,7 +84,7 @@ class OrderService
             'declared_value_total' => $value,
         ]);
 
-        return $this->orderItemService->changeStatus($order, $newItem, ["status" => "confirmed"]);
+        return $this->orderItemService->changeStatus($order, $newItem, ["status" => "confirmed"], $user);
     }
 
     public function editCard(Order $order, OrderItem $orderItem, int $card_id, float $value): OrderItem

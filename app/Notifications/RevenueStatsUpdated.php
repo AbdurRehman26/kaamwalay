@@ -15,7 +15,7 @@ class RevenueStatsUpdated extends Notification
      *
      * @return void
      */
-    public function __construct(public RevenueStatsDaily $revenueStatsDaily, public RevenueStatsMonthly $monthlyRevenueStats)
+    public function __construct(public RevenueStatsDaily $revenueStatsDaily, public RevenueStatsMonthly $revenueStatsMonthly)
     {
         //
     }
@@ -33,11 +33,9 @@ class RevenueStatsUpdated extends Notification
 
     public function toSlack($notifiable)
     {
-        $monthName = Carbon::now()->format('F');
-        $year = date('Y');
-
+        $monthYear= Carbon::parse($this->revenueStatsMonthly->event_at)->format('F-Y');
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
-            ->content("Revenue Stats .\n Date: {$this->revenueStatsDaily->event_at}, Revenue: \${$this->revenueStatsDaily->revenue} \n Month: {$monthName} {$year}, Revenue: \${$this->monthlyRevenueStats->monthly_revenue}");
+            ->content("Revenue Stats .\n Date: {$this->revenueStatsDaily->event_at}, Revenue: \${$this->revenueStatsDaily->revenue} \n Month: {$monthYear}, Revenue: \${$this->revenueStatsMonthly->revenue}");
     }
 }

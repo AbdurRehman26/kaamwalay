@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
-class UpdateRevenueStatsDaily extends Command
+class UpdateRevenueStatsDailyAndMonthly extends Command
 {
     /**
      * The name and signature of the console command.
@@ -39,14 +39,18 @@ class UpdateRevenueStatsDaily extends Command
         $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
         Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
         $revenueStats = $revenueStatsService->addStats($formattedDate);
-        $monthlyRevenueStats = $revenueStatsService->addMonthlyStats($month, $formattedDate);
+        $this->info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Starting");
+        Log::info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Starting");
+        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($month, $formattedDate);
 
         if (app()->environment('production')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-                ->notify(new RevenueStatsUpdated($revenueStats, $monthlyRevenueStats));
+                ->notify(new RevenueStatsUpdated($revenueStats, $revenueStatsMonthly));
         }
         $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
         Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
+        $this->info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Completed");
+        Log::info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Completed");
 
         return 0;
     }

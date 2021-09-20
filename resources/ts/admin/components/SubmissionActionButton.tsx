@@ -45,6 +45,14 @@ export function SubmissionActionButton({ orderId, orderStatus, ...rest }: Submis
         return null;
     }
 
+    if (orderStatus.is(OrderStatusEnum.GRADED)) {
+        return (
+            <Button component={Link} to={`/submissions/${orderId}/view`} {...sharedProps}>
+                View
+            </Button>
+        );
+    }
+
     if (!orderStatus.is(OrderStatusEnum.ARRIVED)) {
         return (
             <Button component={Link} to={`/submissions/${orderId}/review`} {...sharedProps}>

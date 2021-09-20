@@ -21,15 +21,14 @@ class OrderPaid extends Notification
     {
         $paymentCode = ucfirst($this->order->paymentMethod->code);
         $totalCards = $this->order->orderItems->sum('quantity');
+        $emoji = ':robot_face:';
 
         if ($this->order->grand_total >= 5000) {
-            return (new SlackMessage)
-            ->from('Robograding', ':space_invader:')
-            ->content("{$this->order->user->getFullName()}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}");
+            $emoji = ':space_invader:';
         }
 
         return (new SlackMessage)
-            ->from('Robograding', ':robot_face:')
+            ->from('Robograding', $emoji)
             ->content("{$this->order->user->getFullName()}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}");
     }
 }

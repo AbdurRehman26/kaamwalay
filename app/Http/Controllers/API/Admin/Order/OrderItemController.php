@@ -21,8 +21,6 @@ class OrderItemController extends Controller
 {
     public function getOrderCards(Request $request, Order $order): JsonResponse
     {
-        $this->authorize('review', $order);
-
         return new JsonResponse(
             [
                 'data' => new OrderItemCollection(
@@ -40,7 +38,7 @@ class OrderItemController extends Controller
     {
         $this->authorize('review', $order);
 
-        $result = $orderService->addExtraCard($order, $request->card_id, $request->value);
+        $result = $orderService->addExtraCard($order, $request->user(), $request->card_id, $request->value);
 
         return new OrderItemResource($result);
     }
@@ -68,7 +66,7 @@ class OrderItemController extends Controller
         $this->authorize('review', $order);
 
         try {
-            $result = $orderItemService->changeStatus($order, $orderItem, $request->all());
+            $result = $orderItemService->changeStatus($order, $orderItem, $request->all(), $request->user());
 
             return new OrderItemResource($result);
         } catch (OrderItemDoesNotBelongToOrder $e) {
@@ -86,7 +84,7 @@ class OrderItemController extends Controller
         $this->authorize('review', $order);
 
         try {
-            $result = $orderItemService->markItemsAsPending($order, $request->items);
+            $result = $orderItemService->markItemsAsPending($order, $request->items, $request->user());
 
             return new OrderItemCollection($result);
         } catch (OrderItemDoesNotBelongToOrder $e) {

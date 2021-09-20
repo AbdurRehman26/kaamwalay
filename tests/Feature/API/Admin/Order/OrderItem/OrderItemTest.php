@@ -6,8 +6,10 @@ use App\Models\OrderStatus;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\OrderItemStatusHistory;
 
 uses(WithFaker::class);
+uses()->group('admin');
 
 beforeEach(function () {
     $this->seed(RolesSeeder::class);
@@ -170,12 +172,10 @@ test('an admin can update an order item status', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id. '/change-status', [
+    $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id. '/change-status', [
         'status' => 'missing',
         'notes' => 'Lorem',
-    ]);
-
-    $response->assertStatus(200);
+    ])->assertStatus(200);
 });
 
 test('a customer can not update an order item status', function () {
@@ -237,19 +237,6 @@ test('status update fails with wrong desired status', function () {
     ]);
 });
 
-test('notes are required for status update to missing or not accepted', function () {
-    $orderItem = OrderItem::factory()->create();
-
-    $this->actingAs($this->user);
-
-    $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id. '/change-status', [
-        'status' => 'missing',
-    ]);
-    $response->assertJsonValidationErrors([
-        'notes' => 'The notes field is required.',
-    ]);
-});
-
 test('an admin can mark multiple order items as pending', function () {
     $orderItem = OrderItem::factory()->create();
 
@@ -292,5 +279,41 @@ test('items are required for bulk set items as pending', function () {
 
     $response->assertJsonValidationErrors([
         'items' => 'The items field is required.',
+    ]);
+});
+
+test('an admin can update an existing order item status notes', function () {
+    $orderItem = OrderItem::factory()->create();
+    $orderItemStatusHistory = OrderItemStatusHistory::factory()->create([
+        'order_item_id' => $orderItem->id,
+        'order_item_status_id' => $orderItem->order_item_status_id,
+    ]);
+
+    $this->actingAs($this->user);
+    $notes = 'Updating Item Status Notes';
+
+    $this->postJson('/api/admin/orders/' . $orderItem->order->id . '/items/'. $orderItem->id. '/change-status', [
+        'status' => $orderItemStatusHistory->order_item_status_id,
+        'notes' => $notes,
+    ])->assertStatus(200);
+    $this->assertDatabaseHas('order_item_status_histories', [
+        'notes' => $notes,
+    ]);
+});
+
+test('an admin can update an existing order item status notes as empty', function () {
+    $orderItem = OrderItem::factory()->create();
+    $orderItemStatusHistory = OrderItemStatusHistory::factory()->create([
+        'order_item_id' => $orderItem->id,
+        'order_item_status_id' => $orderItem->order_item_status_id,
+    ]);
+
+    $this->actingAs($this->user);
+
+    $this->postJson('/api/admin/orders/' . $orderItem->order->id . '/items/'. $orderItem->id. '/change-status', [
+        'status' => $orderItemStatusHistory->order_item_status_id,
+    ])->assertStatus(200);
+    $this->assertDatabaseMissing('order_item_status_histories', [
+        'notes' => $orderItemStatusHistory->notes,
     ]);
 });

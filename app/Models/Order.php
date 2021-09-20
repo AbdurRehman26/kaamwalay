@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property OrderStatusHistory[] $orderStatusHistory
@@ -265,5 +266,13 @@ class Order extends Model
         return $this->orderItems()->count() === (
             $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
         );
+    }
+    
+    public function getGroupedOrderItems()
+    {
+        return OrderItem::select('card_product_id', 'declared_value_total', 'declared_value_per_unit', DB::raw('sum(quantity) as quantity'))
+        ->where('order_id', $this->id)
+        ->groupBy(['card_product_id', 'declared_value_total','declared_value_per_unit'])
+        ->get();
     }
 }

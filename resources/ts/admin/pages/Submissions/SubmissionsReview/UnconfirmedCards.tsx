@@ -2,12 +2,9 @@ import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
-import SearchIcon from '@material-ui/icons/Search';
 import { useCallback, useState } from 'react';
 import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
@@ -119,19 +116,6 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
 
     return (
         <>
-            <TextField
-                variant={'outlined'}
-                placeholder={'Search cards...'}
-                size={'small'}
-                fullWidth
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position={'start'}>
-                            <SearchIcon color={'disabled'} />
-                        </InputAdornment>
-                    ),
-                }}
-            />
             <Card variant={'outlined'} className={classes.root}>
                 <CardHeader
                     className={classes.header}

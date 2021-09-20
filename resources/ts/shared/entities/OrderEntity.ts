@@ -47,7 +47,7 @@ export class OrderEntity extends Entity {
     @Field('service_fee')
     public serviceFee!: number;
 
-    @Field('payment_plan', { type: () => PaymentPlanEntity })
+    @Field('payment_plan', () => PaymentPlanEntity)
     public paymentPlan!: PaymentPlanEntity;
 
     @Field('payment_method')
@@ -65,7 +65,7 @@ export class OrderEntity extends Entity {
     @Field('billing_address')
     public billingAddress!: AddressEntity;
 
-    @Field('customer_shipment')
+    @Field('customer_shipment', () => CustomerShipmentEntity)
     public customerShipment!: CustomerShipmentEntity | null;
 
     @DateField('arrived_at')

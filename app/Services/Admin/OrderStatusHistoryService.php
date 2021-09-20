@@ -51,7 +51,7 @@ class OrderStatusHistoryService
         throw_if($exists, OrderStatusHistoryWasAlreadyAssigned::class);
 
         throw_if(
-            getModelId($orderStatus) === OrderItemStatus::GRADED && ! Order::first($orderId)->isEligibleToMarkAsGraded(),
+            getModelId($orderStatus) === OrderItemStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
             OrderCanNotBeMarkedAsGraded::class
         );
 

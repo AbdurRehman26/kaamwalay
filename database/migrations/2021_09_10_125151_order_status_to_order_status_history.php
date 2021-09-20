@@ -21,19 +21,6 @@ class OrderStatusToOrderStatusHistory extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignId('order_status_id')->nullable()->change();
         });
-
-        // TODO: MOVE LOGIC TO A COMMAND
-        // /**
-        //  * @var OrderStatusHistoryService $orderStatusHistoryService
-        //  */
-        // $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
-        // $orders = DB::select('SELECT id, user_id, order_status_id FROM orders');
-
-        // foreach ($orders as $order) {
-        //     for ($orderStatusId = $order->order_status_id; $orderStatusId >= 1; $orderStatusId++) {
-        //         $orderStatusHistoryService->addStatusToOrder($order['id'], $orderStatusId);
-        //     }
-        // }
     }
 
     /**

@@ -20,6 +20,7 @@ use Spatie\QueryBuilder\AllowedInclude;
  * @property OrderPayment $orderPayment
  * @property int $order_status_id
  * @property int $id
+ * @property OrderItemCustomerShipment $customerShipment
  */
 class Order extends Model
 {
@@ -123,6 +124,7 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
+            'customerShipment',
         ];
     }
 
@@ -265,5 +267,9 @@ class Order extends Model
         return $this->orderItems()->count() === (
             $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
         );
+    }
+
+    public function customerShipment () {
+        return optional($this->orderItems()->first())->orderItemCustomerShipment();
     }
 }

@@ -6,7 +6,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { PaginatedData } from '@shared/classes/PaginatedData';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { addOrderStatusHistory } from '@shared/redux/slices/adminOrdersSlice';
@@ -36,6 +36,7 @@ export function SubmissionsGradeCards() {
     const handleNotAccepted = useCallback(() => {}, []);
     const handleChangePage = useCallback(() => {}, []);
     const handleChangeRowsPerPage = useCallback(() => {}, []);
+    const history = useHistory();
 
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
@@ -53,7 +54,11 @@ export function SubmissionsGradeCards() {
                 orderId: Number(id),
                 orderStatusId: OrderStatusEnum.GRADED,
             }),
-        );
+        )
+            .unwrap()
+            .then(() => {
+                history.push(`/submissions/${id}/view`);
+            });
     }
 
     useEffect(() => {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\Admin\Order\OrderItem;
 
-use App\Models\OrderItemStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

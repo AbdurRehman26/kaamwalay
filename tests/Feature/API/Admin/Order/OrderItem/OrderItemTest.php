@@ -2,11 +2,11 @@
 
 use App\Models\CardProduct;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\OrderItemStatusHistory;
 
 uses(WithFaker::class);
 uses()->group('admin');

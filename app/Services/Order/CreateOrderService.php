@@ -151,7 +151,7 @@ class CreateOrderService
     {
         foreach ($items as $item) {
             for ($i = 0; $i < $item['quantity']; $i++) {
-                $storedItem = OrderItem::create([ 
+                $storedItem = OrderItem::create([
                     'order_id' => $this->order->id,
                     'card_product_id' => $item['card_product']['id'],
                     'quantity' => 1,

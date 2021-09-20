@@ -36,7 +36,7 @@ export function SubmissionsGradeNotes(props: SubmissionsGradeNotesProps) {
         <OutlinedCard heading={'Notes'}>
             <TextField
                 variant={'outlined'}
-                value={notesValue}
+                value={notesValue ?? ''}
                 onBlur={handleSaveNotes}
                 onChange={handleNotesChange}
                 placeholder={'Enter notes...'}

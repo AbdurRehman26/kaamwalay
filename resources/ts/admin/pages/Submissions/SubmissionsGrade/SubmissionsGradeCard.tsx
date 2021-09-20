@@ -16,6 +16,7 @@ import OutlinedCard from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { cx } from '@shared/lib/utils/cx';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { APIService } from '@shared/services/APIService';
 import SubmissionGradeCardUpload from '@admin/pages/Submissions/SubmissionsGrade/SubmissionGradeCardUpload';
 import { SubmissionsGradeCardRoboGrades } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardRoboGrades';
@@ -30,12 +31,10 @@ import {
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 
 interface SubmissionsGradeCardProps {
-    cardData: any;
     itemId: any;
     itemIndex: number;
     orderID: number;
-    onNotAccepted(itemId: number): void;
-    onMissing(itemId: number): void;
+    gradeData: any;
 }
 
 const useStyles = makeStyles(
@@ -252,13 +251,7 @@ const useStyles = makeStyles(
  * @date: 28.08.2021
  * @time: 19:09
  */
-export function SubmissionsGradeCard({
-    itemId,
-    itemIndex,
-    orderID,
-    onNotAccepted,
-    onMissing,
-}: SubmissionsGradeCardProps) {
+export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: SubmissionsGradeCardProps) {
     const classes = useStyles();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
@@ -269,7 +262,7 @@ export function SubmissionsGradeCard({
             e.stopPropagation();
             dispatch(updateCardViewMode({ viewModeName: 'not_accepted_pending_notes', viewModeIndex: itemIndex }));
         },
-        [onNotAccepted, itemId],
+        [dispatch, itemIndex],
     );
 
     const handleRevisePress = () => {
@@ -292,8 +285,18 @@ export function SubmissionsGradeCard({
             e.stopPropagation();
             dispatch(updateCardViewMode({ viewModeName: 'missing_pending_notes', viewModeIndex: itemIndex }));
         },
-        [onMissing, itemId],
+        [dispatch, itemIndex],
     );
+
+    const handleEdit = useCallback(() => {
+        dispatch(
+            manageCardDialogActions.editCard({
+                card: gradeData?.order_item?.card_product,
+                declaredValue: gradeData?.order_item?.declared_value_per_unit,
+                orderItemId: itemId,
+            }),
+        );
+    }, [dispatch, gradeData, itemId]);
 
     const handleCancel = () => {
         dispatch(resetCardViewMode({ viewModeIndex: itemIndex, topLevelID: topLevelID }));
@@ -467,48 +470,32 @@ export function SubmissionsGradeCard({
         }
     }
 
-    function getGradedAtText() {
-        if (gradedAt && gradedBy) {
-            return (
-                <Typography variant={'subtitle2'} className={classes.lastGradedText}>
-                    Last Graded:{' '}
-                    <span className={classes.lastGradedTime}>
-                        {formatDate(gradedAt, 'MM/DD/YYYY')} at {formatDate(gradedAt, 'M:H')}
-                    </span>{' '}
-                    ({gradedBy})
-                </Typography>
-            );
-        }
-    }
-
-    function getCertificateNumberText() {
-        return (
-            <Typography variant={'subtitle2'} className={classes.certificateNumberText}>
-                Certificate Number: <span className={classes.certificateNumberItself}>{certificateNumber}</span>
-            </Typography>
-        );
-    }
-
     return (
         <AccordionCardItem variant={'outlined'}>
             <AccordionCardItemHeader
                 heading={cardName}
                 image={cardImage}
-                subheading={
-                    <>
-                        {cardFullName}
-                        <br />
-                        {getCertificateNumberText()}
-                        <br />
-                        {getGradedAtText()}
-                    </>
-                }
+                subheading={cardFullName}
                 action={
                     <Button disabled variant={'outlined'} className={cx(classes.statusButton, classes.disabledButton)}>
                         {cardStatus}
                     </Button>
                 }
             >
+                <Grid container direction={'column'}>
+                    <Typography variant={'subtitle2'} className={classes.certificateNumberText}>
+                        Certificate Number: <span className={classes.certificateNumberItself}>{certificateNumber}</span>
+                    </Typography>
+                    {gradedAt && gradedBy ? (
+                        <Typography variant={'subtitle2'} className={classes.lastGradedText}>
+                            Last Graded:{' '}
+                            <span className={classes.lastGradedTime}>
+                                {formatDate(gradedAt, 'MM/DD/YYYY')} at {formatDate(gradedAt, 'M:H')}
+                            </span>{' '}
+                            ({gradedBy})
+                        </Typography>
+                    ) : null}
+                </Grid>
                 <Grid container className={classes.actions}>
                     {cardStatus.toLowerCase() === 'confirmed' ? (
                         <>
@@ -519,7 +506,7 @@ export function SubmissionsGradeCard({
                                 <Button variant={'contained'} onClick={handleMissing} className={classes.button}>
                                     Missing
                                 </Button>
-                                <Button variant={'contained'} onClick={() => ''} className={classes.button}>
+                                <Button variant={'contained'} onClick={handleEdit} className={classes.button}>
                                     Edit Card
                                 </Button>
                             </Grid>
@@ -651,8 +638,7 @@ export function SubmissionsGradeCard({
                             </Typography>
                             <TextField
                                 variant={'outlined'}
-                                value={viewModes[itemIndex]?.notes}
-                                onBlur={() => ''}
+                                value={viewModes[itemIndex]?.notes ?? ''}
                                 onChange={handleActionNotesChange}
                                 placeholder={viewModes[itemIndex]?.notesPlaceholder}
                                 fullWidth

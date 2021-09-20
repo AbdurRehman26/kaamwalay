@@ -81,7 +81,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
             <TableCell>{formatDate(order.createdAt, 'MM/DD/YYYY')}</TableCell>
             <TableCell>{formatDate(order.arrivedAt, 'MM/DD/YYYY')}</TableCell>
             <TableCell>
-                {order.customer ? (
+                {order.customer?.id && order.customer?.customerNumber ? (
                     <MuiLink
                         component={Link}
                         color={'primary'}
@@ -96,7 +96,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
             </TableCell>
             <TableCell>{order.numberOfCards}</TableCell>
             <TableCell>
-                <StatusChip label={order.orderStatus?.name} color={'graded'} />
+                <StatusChip label={order.orderStatus?.name} color={order.orderStatus?.code as any} />
             </TableCell>
             <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
             <TableCell>{formatCurrency(order.grandTotal)}</TableCell>

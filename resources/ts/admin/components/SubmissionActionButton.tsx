@@ -41,19 +41,7 @@ export function SubmissionActionButton({ orderId, orderStatus, ...rest }: Submis
         [classes.button, rest],
     );
 
-    if (!orderStatus) {
-        return null;
-    }
-
-    if (orderStatus.is(OrderStatusEnum.GRADED)) {
-        return (
-            <Button component={Link} to={`/submissions/${orderId}/view`} {...sharedProps}>
-                View
-            </Button>
-        );
-    }
-
-    if (!orderStatus.is(OrderStatusEnum.ARRIVED)) {
+    if (!orderStatus || orderStatus.is(OrderStatusEnum.PLACED)) {
         return (
             <Button component={Link} to={`/submissions/${orderId}/review`} {...sharedProps}>
                 Review
@@ -61,7 +49,7 @@ export function SubmissionActionButton({ orderId, orderStatus, ...rest }: Submis
         );
     }
 
-    if (!orderStatus.is(OrderStatusEnum.GRADED)) {
+    if (orderStatus.is(OrderStatusEnum.ARRIVED)) {
         return (
             <Button component={Link} to={`/submissions/${orderId}/grade`} {...sharedProps}>
                 Grade
@@ -69,13 +57,21 @@ export function SubmissionActionButton({ orderId, orderStatus, ...rest }: Submis
         );
     }
 
-    if (!orderStatus.is(OrderStatusEnum.SHIPPED)) {
-        return <Button {...sharedProps}>Mark Shipped</Button>;
+    if (orderStatus.is(OrderStatusEnum.GRADED)) {
+        return <Button {...sharedProps}> Mark Shipped</Button>;
+    }
+
+    if (orderStatus.is(OrderStatusEnum.SHIPPED)) {
+        return (
+            <Button size={'large'} color={'primary'}>
+                Edit Tracking
+            </Button>
+        );
     }
 
     return (
-        <Button size={'large'} color={'primary'}>
-            Edit Tracking
+        <Button component={Link} to={`/submissions/${orderId}/view`} {...sharedProps}>
+            View
         </Button>
     );
 }

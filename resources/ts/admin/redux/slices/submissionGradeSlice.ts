@@ -2,12 +2,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
-export const getAllSubmissions = createAsyncThunk('submissionGrades/getSubmissionsAndGrades', async (id) => {
-    const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint(`admin/orders/${id}/grades`);
-    const cardsResponse = await endpoint.get('');
-    return cardsResponse.data;
-});
+export const getAllSubmissions = createAsyncThunk(
+    'submissionGrades/getSubmissionsAndGrades',
+    async (id: number | string) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/orders/${id}/grades`);
+        const cardsResponse = await endpoint.get('');
+        return cardsResponse.data;
+    },
+);
 
 export interface SubmissionsGrades {
     allSubmissions: any;
@@ -58,8 +61,7 @@ export const submissionGradesSlice = createSlice({
         },
         handleActionNotesInput: (state, action: PayloadAction<{ viewModeIndex: number; notes: string }>) => {
             const viewModeIndex = action.payload.viewModeIndex;
-            const notes = action.payload.notes;
-            state.viewModes[viewModeIndex].notes = notes;
+            state.viewModes[viewModeIndex].notes = action.payload.notes;
         },
         resetCardViewMode: (state, action: PayloadAction<{ viewModeIndex: number; topLevelID: number }>) => {
             const viewModeIndex = action.payload.viewModeIndex;
@@ -131,7 +133,7 @@ export const submissionGradesSlice = createSlice({
 
                 return { title: '', placeHolder: '' };
             }
-            const viewMode = state.allSubmissions.map((item: any, index: number) => {
+            state.viewModes = state.allSubmissions.map((item: any, index: number) => {
                 const status = statuses[item.order_item.status.order_item_status.id];
                 return {
                     name: status,
@@ -144,7 +146,6 @@ export const submissionGradesSlice = createSlice({
                     notesPlaceholder: getSectionData(status!)!.placeHolder,
                 };
             });
-            state.viewModes = viewMode;
         },
     },
     extraReducers: {

@@ -55,23 +55,16 @@ class OrderService
 
         return $certificates->pluck('number')->flatten()->all();
     }
-    public function confirmReview(Order $order, User $user): Order
+
+    public function getOrderCertificatesData(Order|int $order): array
     {
-        $order->order_status_id = 3;
-        $order->reviewed_by_id = $user->id;
-        $order->reviewed_at = new \Datetime();
-        $order->save();
-
-        $this->createCertificates($order);
-
-        return $order;
-    }
-
-    public function createCertificates(Order $order)
-    {
-        $certificateIds = implode(',', $this->getOrderCertificates($order));
-
-        return $this->agsService->createCertificates($certificateIds);
+        return UserCard::
+            select('certificate_number as certificate_id','card_sets.name as set_name','card_products.card_number')
+            ->join('order_items','user_cards.order_item_id','=','order_items.id')
+            ->join('card_products','order_items.card_product_id','=','card_products.id')
+            ->join('card_sets','card_products.card_set_id','=','card_sets.id')
+            ->where('order_items.order_id',getModelId($order))
+            ->get()->toArray();
     }
 
     public function addExtraCard(Order $order, User $user, int $card_id, float $value): OrderItem

@@ -60,13 +60,6 @@ class OrderController extends Controller
         return new OrderResource($orderService->updateNotes($order, $request->notes));
     }
 
-    public function completeReview(Request $request, Order $order, OrderService $orderService): OrderResource
-    {
-        $this->authorize('review', $order);
-
-        return new OrderResource($orderService->confirmReview($order, $request->user()));
-    }
-
     public function getGrades(Request $request, Order $order, OrderService $orderService): UserCardCollection | JsonResponse
     {
         $this->authorize('review', $order);

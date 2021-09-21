@@ -60,9 +60,9 @@ class OrderStatusHistoryService
             ));
 
         if ($orderStatusId === OrderStatus::ARRIVED) {
-            $certificateIds = implode(',', $this->orderService->getOrderCertificates($order));
+            $data = $this->orderService->getOrderCertificatesData($order);
 
-            $this->agsService->createCertificates($certificateIds);
+            $this->agsService->createCertificates($data);
         }
 
         if (! $orderStatusHistory) {

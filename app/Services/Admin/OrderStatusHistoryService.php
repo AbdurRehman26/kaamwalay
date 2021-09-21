@@ -5,7 +5,6 @@ namespace App\Services\Admin;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
-use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
@@ -70,16 +69,14 @@ class OrderStatusHistoryService
             $this->agsService->createCertificates($certificateIds);
         }
 
-        if(getModelId($orderStatus) === OrderStatus::SHIPPED && $exists)
-        {
+        if (getModelId($orderStatus) === OrderStatus::SHIPPED && $exists) {
             $orderStatusHistory = OrderStatusHistory::where('order_id', getModelId($order))
                 ->where('order_status_id', getModelId($orderStatus))
                 ->first();
 
             $orderStatusHistory->user_id = getModelId($user);
             $orderStatusHistory->save();
-        } else{
-
+        } else {
             $orderStatusHistory = OrderStatusHistory::create([
                 'order_id' => $orderId,
                 'order_status_id' => $orderStatusId,

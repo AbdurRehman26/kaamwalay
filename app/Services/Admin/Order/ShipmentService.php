@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class ShipmentService
 {
-    public function __construct (protected OrderStatusHistoryService $orderStatusHistoryService) {
+    public function __construct(protected OrderStatusHistoryService $orderStatusHistoryService)
+    {
     }
 
     public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderItemShipment
@@ -38,9 +39,8 @@ class ShipmentService
                 }
             }
             $shippedStatus = OrderStatus::whereCode('shipped')->first();
-            if($order->order_status_id !== $shippedStatus->id){
-
-                $this->orderStatusHistoryService->addStatusToOrder($shippedStatus,$order);
+            if ($order->order_status_id !== $shippedStatus->id) {
+                $this->orderStatusHistoryService->addStatusToOrder($shippedStatus, $order);
             }
 
             return $shipment;

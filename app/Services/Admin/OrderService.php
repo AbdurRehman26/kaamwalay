@@ -109,10 +109,10 @@ class OrderService
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
-        $cards = UserCard::join('order_items','user_cards.order_item_id','=','order_items.id')
-            ->where('order_items.order_id',$order->id)->select('user_cards.*')->get();
+        $cards = UserCard::join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->where('order_items.order_id', $order->id)->select('user_cards.*')->get();
 
-        $this->updateLocalGrades($grades,$cards);
+        $this->updateLocalGrades($grades, $cards);
 
         return $cards;
     }
@@ -122,7 +122,7 @@ class OrderService
         foreach ($grades['results'] as $result) {
             $certId = $result['certificate_id'];
 
-            $cardFilter = $cards->filter( function ($c, $key) use ($certId) {
+            $cardFilter = $cards->filter(function ($c, $key) use ($certId) {
                 return $c->certificate_number === $certId;
             });
 
@@ -131,6 +131,5 @@ class OrderService
                 $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
             }
         }
-
     }
 }

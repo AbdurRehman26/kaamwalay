@@ -36,3 +36,19 @@ export const ShipmentProvidersList = [
 export const isCustomShipmentProvider = (value?: ShipmentProviders | string) => {
     return value === ShipmentProviders.Other || !ShipmentProvidersList.find((item) => item.value === value);
 };
+
+/**
+ * Normalize any value to the right shipment provider
+ * @param value
+ */
+export const getNormalizedShipmentProvider = (value?: any) => {
+    if (!value) {
+        return ShipmentProvidersList[0].value;
+    }
+
+    if (isCustomShipmentProvider(value)) {
+        return ShipmentProviders.Other;
+    }
+
+    return value;
+};

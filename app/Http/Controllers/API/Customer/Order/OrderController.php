@@ -60,7 +60,12 @@ class OrderController extends Controller
         $this->authorize('view', $order);
 
         try {
-            $order = $customerShipmentService->process($order, $request->get('shipping_provider'), $request->get('tracking_number'));
+            $data = $request->safe()->only([
+                'shipping_provider',
+                'tracking_number',
+            ]);
+
+            $order = $customerShipmentService->process($order, $data['shipping_provider'], $data['tracking_number']);
 
             return new OrderItemCustomerShipmentResource($order->customerShipment);
         } catch (CustomerShipmentNotUpdated $e) {

@@ -13,6 +13,7 @@ import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import * as Yup from 'yup';
 import {
+    getNormalizedShipmentProvider,
     isCustomShipmentProvider,
     ShipmentProviders,
     ShipmentProvidersList,
@@ -109,8 +110,8 @@ function ShipmentDialog(props: ShipmentDialogProps) {
             <Formik
                 initialValues={{
                     customShippingProvider: isCustomShipmentProvider(shippingProvider) ? shippingProvider : '',
-                    shippingProvider: shippingProvider ?? ShipmentProvidersList[0].value,
-                    trackingNumber,
+                    shippingProvider: getNormalizedShipmentProvider(shippingProvider),
+                    trackingNumber: trackingNumber ?? '',
                 }}
                 onSubmit={handleSubmit}
                 validationSchema={validationSchema}

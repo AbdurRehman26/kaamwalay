@@ -272,9 +272,11 @@ class Order extends Model
 
     public function customerShipment()
     {
-        return optional($this->orderItems()->first())->orderItemCustomerShipment();
+        $orderItem = $this->orderItems()->first();
+
+        return $orderItem?->orderItemCustomerShipment();
     }
-    
+
     public function getGroupedOrderItems()
     {
         return OrderItem::select('card_product_id', 'declared_value_total', 'declared_value_per_unit', DB::raw('sum(quantity) as quantity'))

@@ -12,7 +12,7 @@ import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
-import { CustomerShipmentEntity } from '@shared/entities/CustomerShipmentEntity';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
@@ -29,7 +29,7 @@ interface SubmissionTableRowProps {
     invoice?: string;
     invoiceNumber?: string;
     disabled?: boolean;
-    customerShipment: null | CustomerShipmentEntity;
+    customerShipment: null | ShipmentEntity;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
 }

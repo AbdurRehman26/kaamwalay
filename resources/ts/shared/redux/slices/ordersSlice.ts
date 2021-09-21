@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
-import { ChangeOrderCustomerShipmentDto } from '../../dto/ChangeOrderCustomerShipmentDto';
+import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
 import { app } from '../../lib/app';
 import { NotificationsService } from '../../services/NotificationsService';
 import { APIState } from '../../types/APIState';
@@ -13,8 +13,8 @@ interface StateType extends APIState<OrderEntity> {}
 const ordersThunk = createRepositoryThunk('orders', OrdersRepository);
 
 export const setOrderCustomerShipment = createAsyncThunk(
-    'setCustomerShipment',
-    async (input: ChangeOrderCustomerShipmentDto, thunkAPI) => {
+    'setOrderCustomerShipment',
+    async (input: ChangeOrderShipmentDto, thunkAPI) => {
         const ordersRepository = app(OrdersRepository);
         try {
             const customerShipment = await ordersRepository.setCustomerShipment(input);

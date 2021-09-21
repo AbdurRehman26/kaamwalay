@@ -1,7 +1,7 @@
 import { Field } from '../decorators/Field';
 import { Entity } from './Entity';
 
-export class CustomerShipmentEntity extends Entity {
+export class ShipmentEntity extends Entity {
     public id!: number;
 
     @Field('shipment_date')

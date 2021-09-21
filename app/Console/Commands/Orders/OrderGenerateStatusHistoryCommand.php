@@ -53,7 +53,7 @@ class OrderGenerateStatusHistoryCommand extends Command
         }
 
         $user = auth()->user();
-        if (!$user || ! $user->isAdmin()) {
+        if (! $user || ! $user->isAdmin()) {
             $this->error("Unauthorized access!");
 
             return  1;

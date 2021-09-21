@@ -22,6 +22,7 @@ use Spatie\QueryBuilder\AllowedInclude;
  * @property int $order_status_id
  * @property int $id
  * @property OrderItemCustomerShipment $customerShipment
+ * @property int $shipping_method_id
  */
 class Order extends Model
 {

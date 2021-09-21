@@ -69,12 +69,12 @@ class OrderItem extends Model
 
     public function orderItemShipment()
     {
-        return $this->belongsTo(OrderItemShipment::class, 'order_item_shipment_id', 'id', 'orderItemShipment');
+        return $this->belongsTo(OrderItemShipment::class);
     }
 
     public function orderItemCustomerShipment()
     {
-        return $this->belongsTo(OrderItemCustomerShipment::class, 'order_item_customer_shipment_id', 'id', 'orderItemCustomerShipment');
+        return $this->belongsTo(OrderItemCustomerShipment::class);
     }
 
     public function orderItemStatus()

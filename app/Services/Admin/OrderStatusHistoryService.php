@@ -3,9 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
-use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
-use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
@@ -31,7 +29,7 @@ class OrderStatusHistoryService
     }
 
     /**
-     * @throws OrderStatusHistoryWasAlreadyAssigned|Throwable
+     * @throws OrderCanNotBeMarkedAsGraded|Throwable
      */
     public function addStatusToOrder(OrderStatus|int $orderStatus, Order|int $order, User|int $user = null, ?string $notes = null)
     {
@@ -43,15 +41,12 @@ class OrderStatusHistoryService
         $orderId = getModelId($order);
         $orderStatusId = getModelId($orderStatus);
 
-        $exists = OrderStatusHistory::query()
-            ->where('order_id', getModelId($order))
+        $orderStatusHistory = OrderStatusHistory::where('order_id', getModelId($order))
             ->where('order_status_id', getModelId($orderStatus))
-            ->exists();
-
-        throw_if($exists, OrderStatusHistoryWasAlreadyAssigned::class);
+            ->first();
 
         throw_if(
-            getModelId($orderStatus) === OrderItemStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
+            getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
             OrderCanNotBeMarkedAsGraded::class
         );
 
@@ -70,12 +65,20 @@ class OrderStatusHistoryService
             $this->agsService->createCertificates($certificateIds);
         }
 
-        $orderStatusHistory = OrderStatusHistory::create([
-            'order_id' => $orderId,
-            'order_status_id' => $orderStatusId,
-            'user_id' => getModelId($user),
-            'notes' => $notes,
-        ]);
+        if (! $orderStatusHistory) {
+            $orderStatusHistory = OrderStatusHistory::create([
+                'order_id' => $orderId,
+                'order_status_id' => $orderStatusId,
+                'user_id' => getModelId($user),
+                'notes' => $notes,
+            ]);
+        }
+
+        if (getModelId($orderStatus) === OrderStatus::SHIPPED) {
+            $orderStatusHistory->user_id = getModelId($user);
+            $orderStatusHistory->notes = $notes;
+            $orderStatusHistory->save();
+        }
 
         return QueryBuilder::for(OrderStatusHistory::class)
             ->where('id', $orderStatusHistory->id)

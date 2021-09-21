@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\Admin\Order\OrderItem;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\API\BaseResource;
 
-class OrderItemShipmentResource extends JsonResource
+class OrderItemShipmentResource extends BaseResource
 {
     public function toArray($request): array
     {

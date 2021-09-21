@@ -10,10 +10,7 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
     $this->order = Order::factory()->create();
-    OrderItem::factory()->count(2)
-        ->create([
-            'order_id' => $this->order,
-        ]);
+    OrderItem::factory()->for($this->order)->create();
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->actingAs($user);
 });
@@ -23,7 +20,11 @@ test('an admin can update order shipment', function () {
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])
-        ->assertOk()
+        ->assertSuccessful()
+        ->assertJsonFragment([
+            'shipping_provider' => 'usps',
+            'tracking_number' => '9400100000000000000000',
+        ])
         ->assertJsonStructure([
             'data' => [
                 'shipping_provider',

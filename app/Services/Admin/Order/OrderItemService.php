@@ -46,7 +46,7 @@ class OrderItemService
             $this->updateStatusNotes($orderItemStatusHistory, $request['notes'] ?? '', $user->id);
         }
 
-        if ($requestStatus && (! $item->orderItemStatus || $item->orderItemStatusHistory()->count() < 1 || $item->order_item_status_id !== $requestStatus->id)) {
+        if ($requestStatus && (! $item->orderItemStatus || $item->order_item_status_id !== $requestStatus->id)) {
             $status = new OrderItemStatusHistory();
             $status->order_item_id = $item->id;
             $status->order_item_status_id = $requestStatus->id;

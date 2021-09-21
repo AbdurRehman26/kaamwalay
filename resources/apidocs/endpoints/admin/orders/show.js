@@ -160,7 +160,14 @@
  *                     "id": 2,
  *                     "shipping_provider": "fedex",
  *                     "tracking_number": "020207021381215"
- *                 }
+ *                },
+ *                "shipment": {
+ *                    "id": 14,
+ *                    "shipment_date": "2021-09-20T20:12:48.000000Z",
+ *                    "shipping_provider": "usps",
+ *                    "tracking_number": "9400100000000000000000"
+ *                    "tracking_url": "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=9400100000000000000000",
+ *                }
  *            }
  *        }
  */

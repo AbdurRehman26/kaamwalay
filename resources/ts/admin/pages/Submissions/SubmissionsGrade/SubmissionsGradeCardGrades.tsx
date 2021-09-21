@@ -135,7 +135,7 @@ export function SubmissionsGradeCardGrades({
     async function sendHumanGradesToBackend() {
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
         const response = await endpoint.put('', {
-            human_grade_values: humanGrades,
+            humanGradeValues: humanGrades,
         });
         dispatch(updateExistingCardData({ id: itemID, data: response.data }));
     }

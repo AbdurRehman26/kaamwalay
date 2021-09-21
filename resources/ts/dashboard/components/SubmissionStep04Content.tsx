@@ -294,9 +294,13 @@ export function SubmissionStep04Content() {
         setArePaymentMethodsLoading(false);
     }
 
-    useEffect(() => {
-        getPaymentMethods();
-    }, []);
+    useEffect(
+        () => {
+            getPaymentMethods();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     useEffect(() => {
         dispatch(setIsNextDisabled(true));

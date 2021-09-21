@@ -101,6 +101,7 @@ export function PaymentForm() {
 
         // We're using the client secret now in order to save the card for the customer on stripe
         const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.client_secret, {
+            // eslint-disable-next-line camelcase
             payment_method: {
                 card: elements.getElement(CardElement) as any,
             },

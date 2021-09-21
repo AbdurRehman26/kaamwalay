@@ -84,8 +84,8 @@ export const submissionGradesSlice = createSlice({
 
             if (cardStatus.toLowerCase() === 'graded') {
                 state.viewModes[viewModeIndex].name = 'graded';
-                state.allSubmissions[viewModeIndex].human_grade_values =
-                    state.viewModes[viewModeIndex].prevViewModeGraded.human_grade_values;
+                state.allSubmissions[viewModeIndex].humanGradeValues =
+                    state.viewModes[viewModeIndex].prevViewModeGraded.humanGradeValues;
             }
         },
         updateCardViewMode: (state, action: PayloadAction<{ viewModeIndex: number; viewModeName: string }>) => {

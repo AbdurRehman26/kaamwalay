@@ -13,8 +13,8 @@ export class OrdersRepository extends Repository<OrderEntity> {
     public async setCustomerShipment(input: ChangeOrderShipmentDto) {
         const { orderId, shippingProvider, trackingNumber } = input;
         const { data } = await this.endpoint.post(`${orderId}/customer-shipment`, {
-            shipping_provider: shippingProvider,
-            tracking_number: trackingNumber,
+            shippingProvider,
+            trackingNumber,
         });
 
         return plainToClass(ShipmentEntity, data);

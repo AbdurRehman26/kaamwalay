@@ -43,7 +43,7 @@ export const ordersSlice = createSlice({
 
         builder.addCase(setOrderCustomerShipment.fulfilled, (state, { payload }) => {
             if (state.entities[payload.orderId]) {
-                (state.entities[payload.orderId] as any).customer_shipment = payload.customerShipment as any;
+                state.entities[payload.orderId].customerShipment = payload.customerShipment as any;
             }
         });
     },

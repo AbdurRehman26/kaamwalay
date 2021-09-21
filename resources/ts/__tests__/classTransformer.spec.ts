@@ -6,6 +6,7 @@ describe('Class Transformer', () => {
         const data = {
             foo: 'foo',
             bar: 'bar',
+            // eslint-disable-next-line camelcase
             foo_bar: 'foo & bar',
         };
 

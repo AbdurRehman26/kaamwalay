@@ -300,7 +300,7 @@ export const getShippingFee = createAsyncThunk(
         const DTO = {
             items: selectedCards.map((item) => ({
                 quantity: item.qty,
-                declared_value_per_unit: item.value,
+                declaredValuePerUnit: item.value,
             })),
         };
         const shippingFeeResponse = await endpoint.post('', DTO);
@@ -350,54 +350,54 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
 
     const orderDTO = {
-        payment_plan: {
+        paymentPlan: {
             id: currentSubmission.step01Data.selectedServiceLevel.id,
         },
         items: currentSubmission.step02Data.selectedCards.map((selectedCard: any) => ({
-            card_product: {
+            cardProduct: {
                 id: selectedCard.id,
             },
             quantity: selectedCard.qty,
-            declared_value_per_unit: selectedCard.value,
+            declaredValuePerUnit: selectedCard.value,
         })),
-        shipping_address: {
-            first_name: finalShippingAddress.firstName,
-            last_name: finalShippingAddress.lastName,
+        shippingAddress: {
+            firstName: finalShippingAddress.firstName,
+            lastName: finalShippingAddress.lastName,
             address: finalShippingAddress.address,
             city: finalShippingAddress.city,
             state: finalShippingAddress.state.code,
             zip: finalShippingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: finalShippingAddress.flat,
-            save_for_later:
+            saveForLater:
                 currentSubmission.step03Data.selectedExistingAddress.id !== -1
                     ? false
                     : currentSubmission.step03Data.saveForLater,
         },
-        billing_address: {
-            first_name: billingAddress.firstName,
-            last_name: billingAddress.lastName,
+        billingAddress: {
+            firstName: billingAddress.firstName,
+            lastName: billingAddress.lastName,
             address: billingAddress.address,
             city: billingAddress.city,
             state: billingAddress.state.code,
             zip: billingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: billingAddress.flat,
-            same_as_shipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
+            sameAsShipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
         },
-        customer_address: {
+        customerAddress: {
             id:
                 currentSubmission.step03Data.selectedExistingAddress.id !== -1
                     ? currentSubmission.step03Data.selectedExistingAddress.id
                     : null,
         },
-        shipping_method: {
+        shippingMethod: {
             id: 1,
         },
-        payment_method: {
+        paymentMethod: {
             id: currentSubmission.step04Data.paymentMethodId,
         },
-        payment_provider_reference: {
+        paymentProviderReference: {
             id:
                 currentSubmission.step04Data.paymentMethodId === 1
                     ? currentSubmission.step04Data.selectedCreditCard.id

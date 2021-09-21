@@ -229,7 +229,7 @@ function SubmissionSummary() {
 
             // Try to charge the customer
             await endpoint.post('', {
-                payment_method_id: stripePaymentMethod,
+                paymentMethodId: stripePaymentMethod,
             });
 
             setIsStripePaymentLoading(false);
@@ -251,6 +251,7 @@ function SubmissionSummary() {
             const intent = err.response.data.payment_intent;
             // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
             const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {
+                // eslint-disable-next-line camelcase
                 payment_method: intent.payment_method,
             });
 

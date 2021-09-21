@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { toApiPropertiesObject } from './toApiPropertiesObject';
 
 describe('Utilities::toApiPropertiesObject', () => {

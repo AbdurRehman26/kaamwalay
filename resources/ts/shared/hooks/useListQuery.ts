@@ -46,7 +46,7 @@ export function useListQuery<
             const baseConfig = {
                 params: {
                     page: currentPage,
-                    per_page: perPage,
+                    perPage: perPage,
                 },
             };
 
@@ -95,7 +95,7 @@ export function useListQuery<
         async function handleChangeRowsPerPage(e) {
             await fetch({
                 params: {
-                    per_page: e.target.value,
+                    perPage: e.target.value,
                 },
             });
         },

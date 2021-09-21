@@ -4,7 +4,9 @@ namespace App\Exceptions;
 
 use App\Exceptions\API\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Throwable;
+use Illuminate\Support\Arr;
 
 class Handler extends ExceptionHandler
 {
@@ -43,5 +45,19 @@ class Handler extends ExceptionHandler
         }
 
         parent::report($e);
+    }
+
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        $errors = [];
+
+        foreach ($exception->errors() as $key => $value) {
+            Arr::set($errors, $key, $value);
+        }
+
+        return response()->json([
+            'message' => $exception->getMessage(),
+            'errors' => $errors,
+        ], $exception->status);
     }
 }

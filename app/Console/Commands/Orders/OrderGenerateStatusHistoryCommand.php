@@ -5,8 +5,6 @@ namespace App\Console\Commands\Orders;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
-use App\Services\Admin\OrderService;
-use App\Services\Admin\OrderStatusHistoryService;
 use Illuminate\Console\Command;
 use Throwable;
 
@@ -31,10 +29,8 @@ class OrderGenerateStatusHistoryCommand extends Command
      *
      * @return void
      */
-    public function __construct(
-        public  OrderService $orderService,
-        public  OrderStatusHistoryService $orderStatusHistoryService,
-    ) {
+    public function __construct()
+    {
         parent::__construct();
     }
 

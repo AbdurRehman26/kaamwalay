@@ -56,7 +56,7 @@ class OrderGenerateStatusHistoryCommand extends Command
                     try {
                         OrderStatusHistory::create([
                            'order_id' => $order->id,
-                           'order_status_id' => $orders,
+                           'order_status_id' => $orderStatusId,
                            'user_id' => $user?->id,
                         ]);
                         $status = "OK";

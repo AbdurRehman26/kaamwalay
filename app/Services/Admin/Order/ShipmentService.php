@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class ShipmentService
 {
-    public function __construct (protected OrderStatusHistoryService $orderStatusHistoryService) {
+    public function __construct(protected OrderStatusHistoryService $orderStatusHistoryService)
+    {
     }
 
     public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderItemShipment

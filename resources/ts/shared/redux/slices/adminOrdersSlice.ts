@@ -11,6 +11,7 @@ import { OrdersRepository } from '@shared/repositories/Admin/OrdersRepository';
 import { APIState } from '@shared/types/APIState';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
 import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBatchDto';
+import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
 import { OrderItemStatusEntity } from '../../entities/OrderItemStatusEntity';
 import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntity';
 import { NotificationsService } from '../../services/NotificationsService';
@@ -97,6 +98,24 @@ export const editCardOfOrder = createAsyncThunk('editCardOfOrder', async (input:
     }
 });
 
+export const setOrderShipment = createAsyncThunk(
+    'setOrderShipment',
+    async (input: ChangeOrderShipmentDto, thunkAPI) => {
+        const ordersRepository = app(OrdersRepository);
+        try {
+            const customerShipment = await ordersRepository.setShipment(input);
+
+            return {
+                customerShipment: classToPlain(customerShipment),
+                orderId: input.orderId,
+            };
+        } catch (e: any) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
+        }
+    },
+);
+
 export const adminOrdersSlice = createSlice({
     name: adminOrdersThunk.name,
     initialState: {
@@ -167,6 +186,12 @@ export const adminOrdersSlice = createSlice({
 
         builder.addCase(editCardOfOrder.fulfilled, (state, { payload }) => {
             manageOrderAndItem(state, payload);
+        });
+
+        builder.addCase(setOrderShipment.fulfilled, (state, { payload }) => {
+            if (state.entities[payload.orderId]) {
+                (state.entities[payload.orderId] as any).customer_shipment = payload.customerShipment as any;
+            }
         });
     },
 });

@@ -18,7 +18,7 @@ import { Table } from './styles';
 export function SubmissionsTable() {
     const { isLoading, isError, data, paginationProps } = useListOrdersQuery({
         params: {
-            include: ['paymentPlan', 'invoice', 'orderStatus'],
+            include: ['paymentPlan', 'invoice', 'orderStatus', 'customerShipment'],
         },
     });
 

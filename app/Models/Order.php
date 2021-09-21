@@ -21,6 +21,7 @@ use Spatie\QueryBuilder\AllowedInclude;
  * @property OrderPayment $orderPayment
  * @property int $order_status_id
  * @property int $id
+ * @property OrderItemCustomerShipment $customerShipment
  */
 class Order extends Model
 {
@@ -124,6 +125,7 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
+            'customerShipment',
         ];
     }
 
@@ -267,7 +269,14 @@ class Order extends Model
             $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
         );
     }
-    
+
+    public function customerShipment()
+    {
+        $orderItem = $this->orderItems()->first();
+
+        return $orderItem?->orderItemCustomerShipment();
+    }
+
     public function getGroupedOrderItems()
     {
         return OrderItem::select('card_product_id', 'declared_value_total', 'declared_value_per_unit', DB::raw('sum(quantity) as quantity'))

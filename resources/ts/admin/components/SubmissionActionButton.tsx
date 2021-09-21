@@ -1,9 +1,13 @@
 import Button, { ButtonProps } from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
+import { setOrderShipment } from '@shared/redux/slices/adminOrdersSlice';
+import { useAppDispatch } from '@admin/redux/hooks';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -17,8 +21,9 @@ const useStyles = makeStyles(
 );
 
 interface SubmissionActionButtonProps extends ButtonProps {
-    orderId: number | string;
+    orderId: number;
     orderStatus: OrderStatusEntity;
+    shipment?: ShipmentEntity | null;
 }
 
 /**
@@ -27,8 +32,10 @@ interface SubmissionActionButtonProps extends ButtonProps {
  * @date: 14.09.2021
  * @time: 21:43
  */
-export function SubmissionActionButton({ orderId, orderStatus, ...rest }: SubmissionActionButtonProps) {
+export function SubmissionActionButton({ orderId, orderStatus, shipment, ...rest }: SubmissionActionButtonProps) {
     const classes = useStyles();
+    const dispatch = useAppDispatch();
+    const [isShipmentDialogOpen, setIsShipmentDialogOpen] = useState(false);
 
     const sharedProps: any = useMemo(
         () => ({
@@ -40,6 +47,20 @@ export function SubmissionActionButton({ orderId, orderStatus, ...rest }: Submis
         }),
         [classes.button, rest],
     );
+
+    const handleShipmentSubmit = useCallback(
+        async ({ trackingNumber, shippingProvider }: Record<any, string>) => {
+            await dispatch(setOrderShipment({ trackingNumber, shippingProvider, orderId }));
+        },
+        [dispatch, orderId],
+    );
+    const handleOpenShipmentDialog = useCallback(() => {
+        setIsShipmentDialogOpen(true);
+    }, []);
+
+    const handleCloseShipmentDialog = useCallback(() => {
+        setIsShipmentDialogOpen(false);
+    }, []);
 
     if (!orderStatus || orderStatus.is(OrderStatusEnum.PLACED)) {
         return (
@@ -58,7 +79,21 @@ export function SubmissionActionButton({ orderId, orderStatus, ...rest }: Submis
     }
 
     if (orderStatus.is(OrderStatusEnum.GRADED)) {
-        return <Button {...sharedProps}> Mark Shipped</Button>;
+        return (
+            <>
+                <ShipmentDialog
+                    open={isShipmentDialogOpen}
+                    onClose={handleCloseShipmentDialog}
+                    trackingNumber={shipment?.trackingNumber}
+                    shippingProvider={shipment?.shippingProvider}
+                    onSubmit={handleShipmentSubmit}
+                />
+
+                <Button {...sharedProps} onClick={handleOpenShipmentDialog}>
+                    Mark Shipped
+                </Button>
+            </>
+        );
     }
 
     if (orderStatus.is(OrderStatusEnum.SHIPPED)) {

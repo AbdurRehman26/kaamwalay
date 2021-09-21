@@ -21,7 +21,7 @@ test('a customer can update order shipment details', function () {
 
     $response->assertOk();
     $response->assertJsonStructure([
-        'data' => ['customer_shipment' => ['tracking_number', 'shipping_provider']],
+        'data' => ['tracking_number', 'shipping_provider'],
     ]);
 });
 

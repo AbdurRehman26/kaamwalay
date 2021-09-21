@@ -47,7 +47,7 @@ class OrderGenerateStatusHistoryCommand extends Command
         $email = $this->ask('Your account email');
         $user = User::whereEmail($email)->first();
         
-        if (!$user || ! $user->isAdmin()) {
+        if (! $user || ! $user->isAdmin()) {
             $this->error("Unauthorized access!");
 
             return  1;

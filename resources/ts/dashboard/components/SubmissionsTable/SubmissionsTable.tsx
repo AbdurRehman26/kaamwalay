@@ -59,7 +59,7 @@ export function SubmissionsTable() {
                                 orderNumber={data?.orderNumber}
                                 serviceLevel={data?.paymentPlan?.price}
                                 cardsNumber={data?.numberOfCards}
-                                status={data?.status}
+                                status={data?.orderStatus?.name}
                                 datePlaced={data?.createdAt}
                                 dateArrived={data?.arrivedAt}
                                 invoice={data?.invoice?.path}

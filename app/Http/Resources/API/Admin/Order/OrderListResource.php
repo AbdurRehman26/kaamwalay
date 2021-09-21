@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\API\Admin\Order;
 
+use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCustomerShipmentResource;
+use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemShipmentResource;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use Illuminate\Http\Request;
@@ -29,6 +31,11 @@ class OrderListResource extends BaseResource
             'arrived' => ! is_null($this->arrived_at),
             'arrived_at' => $this->formatDate($this->arrived_at),
             'created_at' => $this->formatDate($this->created_at),
+
+            // Hack for customer_shipment and shipment include
+            // TODO: replace with normal relationship
+            'customer_shipment' => $this->whenIncluded('customerShipment', OrderItemCustomerShipmentResource::class, null, fn () => $this->resource->customerShipment()?->first()),
+            'shipment' => $this->whenIncluded('shipment', OrderItemShipmentResource::class, null, fn () => $this->resource->shipment()?->first()),
         ];
     }
 }

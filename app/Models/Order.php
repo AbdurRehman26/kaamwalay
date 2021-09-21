@@ -96,6 +96,8 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
+            AllowedInclude::relationship('shipment'),
+            AllowedInclude::relationship('customerShipment'),
         ];
     }
 
@@ -125,7 +127,8 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
-            'customerShipment',
+            AllowedInclude::relationship('shipment'),
+            AllowedInclude::relationship('customerShipment'),
         ];
     }
 
@@ -272,9 +275,12 @@ class Order extends Model
 
     public function customerShipment()
     {
-        $orderItem = $this->orderItems()->first();
+        return $this->orderItems()->first()?->orderItemCustomerShipment();
+    }
 
-        return $orderItem?->orderItemCustomerShipment();
+    public function shipment()
+    {
+        return $this->orderItems()->first()?->orderItemShipment();
     }
 
     public function getGroupedOrderItems()

@@ -112,9 +112,16 @@ export const setOrderShipment = createAsyncThunk(
         const ordersRepository = app(OrdersRepository);
         try {
             const shipment = await ordersRepository.setShipment(input);
+            const order = await ordersRepository.show(input.orderId, {
+                params: {
+                    include: ['orderStatus', 'orderStatusHistory.orderStatus'],
+                },
+            });
 
             return {
                 shipment: classToPlain(shipment),
+                orderStatus: classToPlain(order.orderStatus),
+                orderStatusHistory: classToPlain(order.orderStatusHistory),
                 orderId: input.orderId,
             };
         } catch (e: any) {
@@ -198,6 +205,8 @@ export const adminOrdersSlice = createSlice({
         builder.addCase(setOrderShipment.fulfilled, (state, { payload }) => {
             if (state.entities[payload.orderId]) {
                 (state.entities[payload.orderId] as any).shipment = payload.shipment as any;
+                (state.entities[payload.orderId] as any).order_status = payload.orderStatus as any;
+                (state.entities[payload.orderId] as any).order_status_history = payload.orderStatusHistory as any;
             }
         });
     },

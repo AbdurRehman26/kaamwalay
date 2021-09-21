@@ -122,12 +122,11 @@ class OrderService
         foreach ($grades['results'] as $result) {
             $certId = $result['certificate_id'];
 
-            $cardFilter = $cards->filter(function ($c, $key) use ($certId) {
+            $card = $cards->first(function ($c, $key) use ($certId) {
                 return $c->certificate_number === $certId;
             });
 
-            if ($cardFilter->count() > 0) {
-                $card = $cardFilter->get(0);
+            if (! is_null($card)) {
                 $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
             }
         }

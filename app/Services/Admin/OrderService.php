@@ -59,11 +59,11 @@ class OrderService
     public function getOrderCertificatesData(Order|int $order): array
     {
         return UserCard::
-            select('certificate_number as certificate_id','card_sets.name as set_name','card_products.card_number')
-            ->join('order_items','user_cards.order_item_id','=','order_items.id')
-            ->join('card_products','order_items.card_product_id','=','card_products.id')
-            ->join('card_sets','card_products.card_set_id','=','card_sets.id')
-            ->where('order_items.order_id',getModelId($order))
+            select('certificate_number as certificate_id', 'card_sets.name as set_name', 'card_products.card_number')
+            ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
+            ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id')
+            ->where('order_items.order_id', getModelId($order))
             ->get()->toArray();
     }
 

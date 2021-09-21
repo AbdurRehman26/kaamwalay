@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Orders;
 
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
+use App\Models\Order;
 use App\Services\Admin\OrderService;
 use App\Services\Admin\OrderStatusHistoryService;
 use Illuminate\Console\Command;
@@ -43,7 +44,7 @@ class OrderGenerateStatusHistoryCommand extends Command
      */
     public function handle()
     {
-        $orders = $this->orderService->getOrders();
+        $orders = Order::all();
 
         $email = $this->ask('Your account email');
         $password = $this->secret("Password of '$email'");
@@ -53,7 +54,7 @@ class OrderGenerateStatusHistoryCommand extends Command
         foreach ($orders as $order) {
             if ($order->order_status_id) {
                 $this->info("- Found Order [$order->id] with status '$order->order_status_id'");
-                for ($orderStatusId = $order->order_status_id; $orderStatusId >= 1; $orderStatusId--) {
+                for ($orderStatusId = 1; $orderStatusId <= $order->order_status_id; $orderStatusId++) {
                     try {
                         $this->orderStatusHistoryService->addStatusToOrder($orderStatusId, $order);
                         $status = "OK";

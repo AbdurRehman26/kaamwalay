@@ -5,6 +5,7 @@ namespace App\Console\Commands\Orders;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Throwable;
 
@@ -44,15 +45,8 @@ class OrderGenerateStatusHistoryCommand extends Command
         $orders = Order::all();
 
         $email = $this->ask('Your account email');
-        $password = $this->secret("Password of '$email'");
-
-        if (! auth()->attempt(compact('email', 'password'))) {
-            $this->error("Invalid credentials!");
-
-            return  1;
-        }
-
-        $user = auth()->user();
+        $user = User::whereEmail($email)->first();
+        
         if (!$user || ! $user->isAdmin()) {
             $this->error("Unauthorized access!");
 

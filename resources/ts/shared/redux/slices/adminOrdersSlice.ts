@@ -79,6 +79,10 @@ export const addCardToOrder = createAsyncThunk('addCardToOrder', async (input: A
 
     try {
         const orderItem = await ordersRepository.addCard(input);
+        if (!orderItem.orderId) {
+            orderItem.orderId = input.orderId;
+        }
+
         return classToPlain(orderItem);
     } catch (e: any) {
         NotificationsService.exception(e);
@@ -91,6 +95,10 @@ export const editCardOfOrder = createAsyncThunk('editCardOfOrder', async (input:
 
     try {
         const orderItem = await ordersRepository.editCard(input);
+        if (!orderItem.orderId) {
+            orderItem.orderId = input.orderId;
+        }
+
         return classToPlain(orderItem);
     } catch (e: any) {
         NotificationsService.exception(e);
@@ -132,9 +140,8 @@ export const adminOrdersSlice = createSlice({
             const order = plainToClass(OrderEntity, state.entities[orderItem.orderId]);
             if (order) {
                 order.addItem(orderItem);
+                state.entities[orderItem.orderId] = classToPlain(order) as any;
             }
-
-            state.entities[orderItem.orderId] = classToPlain(order) as any;
         }
 
         builder.addCase(changeOrderItemStatus.fulfilled, (state, { payload }) => {

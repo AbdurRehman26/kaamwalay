@@ -324,7 +324,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
             };
             const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/items/${orderItemID}/change-status`);
             const response = await endpoint.post('', DTO);
-            dispatch(updateExistingCardStatus({ status: response.data.status.name, id: topLevelID }));
+            dispatch(updateExistingCardStatus({ status: response.data.status.order_item_status.name, id: topLevelID }));
         }
     }
 

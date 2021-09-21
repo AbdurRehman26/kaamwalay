@@ -12,18 +12,23 @@ module.exports.handler = (handler) => (object) => ({ ...object, handler });
 /**
  *
  * @param name
- * @param {yargs.PositionalOptions} options
+ * @param {import('yargs').PositionalOptions} options
  */
-module.exports.option = (name, options) => (object) => {
-    if (object.positional) {
-        return object.positional(name, options);
-    }
+module.exports.option =
+    (name, options) =>
+    /**
+     * @param {import('yargs').Argv} object
+     */
+    (object) => {
+        if (object.option) {
+            return object.option(name, options);
+        }
 
-    return {
-        ...object,
-        builder: (app) => (object.builder ? object.builder(app) : app).positional(name, options),
+        return {
+            ...object,
+            builder: (app) => (object.builder ? object.builder(app) : app).option(name, options),
+        };
     };
-};
 
 module.exports.registerCommand = (commandPath) => (app) => {
     return app.command(require(path.resolve(__dirname, '..', 'commands', commandPath)));

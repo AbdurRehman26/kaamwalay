@@ -7,7 +7,7 @@ compose(
     option('app', {
         alias: 'a',
         type: 'string',
-        default: 'all',
+        demandOption: true,
         choices: ['all', ...availableApps],
     }),
     registerCommand('build'),

@@ -12,10 +12,15 @@ module.exports = compose(
     }),
     option('hot', {
         type: 'boolean',
-        default: true,
+        default: false,
         describe: 'enable/disable hot reload',
     }),
-    handler(({ app, watch, hot }) => {
+    option('poll', {
+        type: 'boolean',
+        default: false,
+        describe: 'enable/disable watch-poll',
+    }),
+    handler(({ poll, app, watch, hot }) => {
         const args = ['mix'];
 
         if (watch) {
@@ -24,6 +29,10 @@ module.exports = compose(
 
         if (hot) {
             args.push('--hot');
+        }
+
+        if (poll) {
+            args.push('-- --watch-options-poll=1000');
         }
 
         compose(env('BUILD_PRESET', app), stringCommand(...args), executeCommand(), processPipes());

@@ -14,6 +14,7 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -108,22 +109,28 @@ class OrderService
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
-        $data = $this->updateLocalGrades($grades);
+        $cards = UserCard::join('order_items','user_cards.order_item_id','=','order_items.id')
+            ->where('order_items.order_id',$order->id)->select('user_cards.*')->get();
 
-        return $data;
+        $this->updateLocalGrades($grades,$cards);
+
+        return $cards;
     }
 
-    protected function updateLocalGrades(array $grades): array
+    protected function updateLocalGrades(array $grades, Collection $cards): void
     {
-        $cards = [];
         foreach ($grades['results'] as $result) {
-            $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
-            if (! is_null($card)) {
+            $certId = $result['certificate_id'];
+
+            $cardFilter = $cards->filter( function ($c, $key) use ($certId) {
+                return $c->certificate_number === $certId;
+            });
+
+            if ($cardFilter->count() > 0) {
+                $card = $cardFilter->get(0);
                 $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
-                $cards[] = $card;
             }
         }
 
-        return $cards;
     }
 }

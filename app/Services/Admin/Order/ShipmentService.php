@@ -22,7 +22,6 @@ class ShipmentService
 
             foreach ($items as $item) {
                 $shipment = OrderItemShipment::firstOrCreate([
-
                     'shipping_provider' => $shippingProvider,
                     'tracking_number' => $trackingNumber,
                     'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),

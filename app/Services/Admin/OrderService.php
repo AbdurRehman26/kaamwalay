@@ -48,12 +48,11 @@ class OrderService
 
     public function getOrderCertificates(Order|int $order): array
     {
-        $certificates = UserCardCertificate::select('number')
-        ->join('user_cards', 'user_card_certificates.user_card_id', '=', 'user_cards.id')
+        $certificates = UserCard::select('certificate_number')
         ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
         ->where('order_items.order_id', getModelId($order))->get();
 
-        return $certificates->pluck('number')->flatten()->all();
+        return $certificates->pluck('certificate_number')->flatten()->all();
     }
 
     public function getOrderCertificatesData(Order|int $order): array

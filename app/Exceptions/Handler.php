@@ -4,9 +4,9 @@ namespace App\Exceptions;
 
 use App\Exceptions\API\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use Illuminate\Support\Arr;
 
 class Handler extends ExceptionHandler
 {

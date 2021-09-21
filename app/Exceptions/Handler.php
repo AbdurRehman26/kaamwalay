@@ -7,7 +7,6 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Throwable;
-use Illuminate\Support\Arr;
 use Illuminate\Http\JsonResponse;
 
 class Handler extends ExceptionHandler

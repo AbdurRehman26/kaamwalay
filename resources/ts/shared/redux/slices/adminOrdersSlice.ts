@@ -114,7 +114,7 @@ export const setOrderShipment = createAsyncThunk(
             const customerShipment = await ordersRepository.setShipment(input);
 
             return {
-                customerShipment: classToPlain(customerShipment),
+                shipment: classToPlain(customerShipment),
                 orderId: input.orderId,
             };
         } catch (e: any) {
@@ -197,7 +197,7 @@ export const adminOrdersSlice = createSlice({
 
         builder.addCase(setOrderShipment.fulfilled, (state, { payload }) => {
             if (state.entities[payload.orderId]) {
-                (state.entities[payload.orderId] as any).shipment = payload.customerShipment as any;
+                (state.entities[payload.orderId] as any).shipment = payload.shipment as any;
             }
         });
     },

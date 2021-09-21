@@ -21,7 +21,6 @@ class ShipmentService
             $items = $order->orderItems;
 
             foreach ($items as $item) {
-
                 $shipment = OrderItemShipment::firstOrCreate([
 
                     'shipping_provider' => $shippingProvider,
@@ -37,7 +36,7 @@ class ShipmentService
                 }
             }
 
-            $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED,$order);
+            $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
 
             return $shipment;
         } catch (\Exception $e) {

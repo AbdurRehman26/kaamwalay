@@ -66,8 +66,7 @@ class OrderStatusHistoryService
             $this->agsService->createCertificates($certificateIds);
         }
 
-        if (!$orderStatusHistory)
-        {
+        if (! $orderStatusHistory) {
             $orderStatusHistory = OrderStatusHistory::create([
                 'order_id' => $orderId,
                 'order_status_id' => $orderStatusId,
@@ -76,7 +75,7 @@ class OrderStatusHistoryService
             ]);
         }
 
-        if( getModelId($orderStatus) === OrderStatus::SHIPPED) {
+        if (getModelId($orderStatus) === OrderStatus::SHIPPED) {
             $orderStatusHistory->user_id = getModelId($user);
             $orderStatusHistory->notes = $notes;
             $orderStatusHistory->save();

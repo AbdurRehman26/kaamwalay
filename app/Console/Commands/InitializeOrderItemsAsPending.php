@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderItemStatusHistory;
 use App\Models\User;
 use App\Services\Admin\Order\OrderItemService;
+use Illuminate\Console\Command;
 
 class InitializeOrderItemsAsPending extends Command
 {

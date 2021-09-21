@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $order_item_id
  * @property int $order_item_status_id
  * @property int $notes
+ * @property int $user_id
  */
 class OrderItemStatusHistory extends Model
 {

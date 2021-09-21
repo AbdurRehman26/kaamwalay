@@ -41,10 +41,11 @@ export function SubmissionsView() {
     return (
         <Grid container direction={'column'}>
             <SubmissionsViewHeader
-                orderId={id}
+                orderId={Number(id)}
                 orderNumber={data?.orderNumber ?? ''}
                 orderStatus={data?.orderStatus}
                 orderStatusHistory={data?.orderStatusHistory}
+                shipment={data?.shipment}
             />
             <Divider />
             <SubmissionsViewDetails

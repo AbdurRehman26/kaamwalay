@@ -5,11 +5,13 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
+import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { upperFirst } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
+import { TablePagination } from '@shared/components/TablePagination';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
@@ -43,11 +45,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         () => {
             if (!orders$.isLoading) {
                 // noinspection JSIgnoredPromiseFromCall
-                orders$.search(
-                    toApiPropertiesObject({
-                        orderNumber: search,
-                    }),
-                );
+                orders$.search(toApiPropertiesObject({ search }));
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,6 +96,11 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                             </TableRow>
                         )}
                     </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination {...orders$.paginationProps} />
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </TableContainer>
         </Grid>

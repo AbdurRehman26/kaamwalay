@@ -6,6 +6,7 @@ use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
+use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCustomerShipmentResource;
 use App\Http\Resources\API\Customer\Order\OrderCollection;
 use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
@@ -54,12 +55,19 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function updateCustomerShipment(UpdateCustomerShipmentRequest $request, Order $order, CustomerShipmentService $customerShipmentService): OrderResource | JsonResponse
+    public function updateCustomerShipment(UpdateCustomerShipmentRequest $request, Order $order, CustomerShipmentService $customerShipmentService): JsonResponse|OrderItemCustomerShipmentResource
     {
         $this->authorize('view', $order);
 
         try {
-            $order = $customerShipmentService->process($order, $request->shipping_provider, $request->tracking_number);
+            $data = $request->safe()->only([
+                'shipping_provider',
+                'tracking_number',
+            ]);
+
+            $order = $customerShipmentService->process($order, $data['shipping_provider'], $data['tracking_number']);
+
+            return new OrderItemCustomerShipmentResource($order->customerShipment);
         } catch (CustomerShipmentNotUpdated $e) {
             return new JsonResponse(
                 [
@@ -68,7 +76,5 @@ class OrderController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
-
-        return new OrderResource($order);
     }
 }

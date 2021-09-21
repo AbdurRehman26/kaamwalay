@@ -5,7 +5,9 @@ import { EditCardOfOrderDto } from '@shared/dto/EditCardOfOrderDto';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
+import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
 import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntity';
+import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { toApiPropertiesObject } from '../../lib/utils/toApiPropertiesObject';
 import { Repository } from '../Repository';
 
@@ -41,5 +43,23 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const { data } = await this.endpoint.put(`/items/:orderItemId`, body, { params: { orderItemId, orderId } });
 
         return plainToClass(OrderItemEntity, data);
+    }
+
+    public async setShipment(input: ChangeOrderShipmentDto) {
+        const { orderId, shippingProvider, trackingNumber } = input;
+        const { data } = await this.endpoint.post(
+            `shipment`,
+            {
+                shipping_provider: shippingProvider,
+                tracking_number: trackingNumber,
+            },
+            {
+                params: {
+                    orderId,
+                },
+            },
+        );
+
+        return plainToClass(ShipmentEntity, data);
     }
 }

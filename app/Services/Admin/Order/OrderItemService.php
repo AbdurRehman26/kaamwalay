@@ -53,7 +53,7 @@ class OrderItemService
             ->first();
 
         // In case it's not there create the history item.
-        if (!$orderItemStatusHistory) {
+        if (! $orderItemStatusHistory) {
             $orderItemStatusHistory = new OrderItemStatusHistory();
             $orderItemStatusHistory->order_item_id = $item->id;
             $orderItemStatusHistory->order_item_status_id = $requestStatus->id;

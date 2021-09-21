@@ -1,5 +1,7 @@
+import Chip from '@material-ui/core/Chip';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import { transparentize } from 'polished';
@@ -11,6 +13,7 @@ type SidebarMenuItemProps = {
     title: string;
     href: string;
     exact?: boolean;
+    comingSoon?: boolean;
 };
 
 const useStyles = makeStyles(
@@ -36,6 +39,14 @@ const useStyles = makeStyles(
         iconHolder: {
             minWidth: 42,
         },
+        chip: {
+            position: 'relative',
+            fontSize: 11,
+            height: 18,
+            top: -1,
+            transformOrigin: 'right center',
+            transform: 'scale(0.75)',
+        },
     }),
     {
         name: 'SidebarMenuItem',
@@ -43,7 +54,7 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, exact = true } = props;
+    const { icon: Icon, title, href, exact, comingSoon } = props;
 
     const location = useLocation();
     const classes = useStyles();
@@ -65,12 +76,25 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
         [location.pathname, href, exact],
     );
 
+    const rest = !comingSoon
+        ? {
+              button: true,
+              component: Link,
+              to: href,
+          }
+        : {};
+
     return (
-        <ListItem selected={isActive} button component={Link} to={href} classes={itemClasses}>
+        <ListItem selected={isActive} {...(rest as any)} classes={itemClasses}>
             <ListItemIcon className={classes.iconHolder}>
                 <Icon className={classes.icon} />
             </ListItemIcon>
             <ListItemText primary={title} className={classes.title} />
+            {comingSoon ? (
+                <ListItemSecondaryAction>
+                    <Chip className={classes.chip} color={'secondary'} label={'Coming Soon'} size={'small'} />
+                </ListItemSecondaryAction>
+            ) : null}
         </ListItem>
     );
 }

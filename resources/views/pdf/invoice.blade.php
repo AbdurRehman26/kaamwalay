@@ -218,11 +218,13 @@
     <footer>
         <img src="{{$agsLogo}}"/>
         <br/>
+        AGS Submissions
+        <br/>
         727 Page Ave
         <br/>
-        Staten Island, NY 10309, US
+        Staten Island, NY 10307, US
         <br/>
-        (718) 999-1910
+        (347) 850 2720
     </footer>
     <main>
         <div class="general-info-section">
@@ -297,7 +299,7 @@
                 <div class="info-box-content">
                     {{$shippingAddress->getFullName()}}
                     <br/>
-                    {{$shippingAddress->address}}
+                    {{$shippingAddress->address}}@if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
                     <br/>
                     {{$shippingAddress->city}}, {{$shippingAddress->state}} {{$shippingAddress->zip}}, {{$shippingAddress->country->code}}
                     <br/>
@@ -390,7 +392,7 @@
                     @foreach ($orderItems as $item)
                         <tr class="item-row">
                             <td class="card-no">
-                                {{$item->id}}
+                                {{$item->card_product_id}}
                             </td>
                             <td class="description">
                                 <div class="item-name">

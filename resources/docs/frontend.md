@@ -290,12 +290,12 @@ Usage:
 ```ts
 // Via hook inside components
 import { useNotifications } from "@shared/hooks/useNotifications";
-import { NotificationType } from "@shared/constants/NotificationType";
+import { NotificationTypeEnum } from "@shared/constants/NotificationTypeEnum";
 import { NotificationsService } from "@shared/services/NotificationsService";
 import { app } from "@shared/lib/app";
 
 const notifications = useNotifications();
-notifications.notify(NotificationType.Success, "This is a notification message", "This is an optional notification title")
+notifications.notify(NotificationTypeEnum.Success, "This is a notification message", "This is an optional notification title")
 
 // Aliases
 notifications.info('This is a info notification.', 'Optional title');
@@ -346,7 +346,7 @@ import { useAuth } from "@shared/hooks/useAuth";
 function Foo() {
     const {
         user,           // UserEntity object of logged user
-        authCheck,      // Send the auth check request and see if the user it's still logged in
+        checkAuth,      // Send the auth check request and see if the user it's still logged in
         login,          // Send the login request and obtain session for the user
         logout,         // revoke current auth session
         accessToken,    // access token used for authorization

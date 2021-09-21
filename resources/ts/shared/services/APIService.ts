@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 import { Inject } from '@shared/decorators/Inject';
 import { Injectable } from '@shared/decorators/Injectable';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { buildUrl } from '../lib/api/buildUrl';
 
 @Injectable('APIService')
 export class APIService {
@@ -67,6 +68,9 @@ export class APIService {
         if (this.isNotExternal(config) && accessToken && !config.headers.Authorization) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
+
+        config.url = buildUrl(config.url ?? '', config?.params ?? {});
+        config.baseURL = buildUrl(config.baseURL ?? '', config?.params ?? {});
 
         return config;
     }

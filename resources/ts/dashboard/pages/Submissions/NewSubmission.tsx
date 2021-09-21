@@ -1,8 +1,12 @@
+import { CircularProgress } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React, { useCallback, useEffect } from 'react';
+import ReactGA from 'react-ga';
+import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
@@ -19,6 +23,7 @@ import {
     getStatesList,
     nextStep,
     setIsNextDisabled,
+    setIsNextLoading,
 } from '../../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles({
@@ -52,7 +57,14 @@ export function NewSubmission() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const classes = useStyles({ currentStep });
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
+    const isNextLoading = useAppSelector((state) => state.newSubmission.isNextLoading);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const selectedExistingAddressId = useAppSelector(
+        (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
+    );
+    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const notifications = useNotifications();
+
     const getStepContent = useCallback(() => {
         switch (currentStep) {
             case 0:
@@ -71,6 +83,7 @@ export function NewSubmission() {
     }, [currentStep]);
 
     const handleNext = async () => {
+        window.scroll(0, 0);
         // Executing different stuff before next step loads
         if (currentStep === 1) {
             await dispatch(getShippingFee(selectedCards));
@@ -79,15 +92,42 @@ export function NewSubmission() {
             dispatch(nextStep());
             return;
         }
-        if (currentStep === 3) {
-            await dispatch(createOrder());
+        if (currentStep === 2) {
+            ReactGA.event({
+                category: EventCategories.ShippingAddresses,
+                action:
+                    selectedExistingAddressId === -1
+                        ? ShippingAddressEvents.continuedWithNewAddress
+                        : ShippingAddressEvents.continuedWithExisting,
+            });
             dispatch(nextStep());
             return;
+        }
+        if (currentStep === 3) {
+            try {
+                dispatch(setIsNextLoading(true));
+                await dispatch(createOrder()).unwrap();
+                ReactGA.event({
+                    category: EventCategories.Submissions,
+                    action:
+                        paymentMethodId === 1
+                            ? PaymentMethodEvents.continuedWithStripePayment
+                            : PaymentMethodEvents.continuedWithPaypalPayment,
+                });
+                dispatch(setIsNextLoading(false));
+                dispatch(nextStep());
+                return;
+            } catch (error: any) {
+                dispatch(setIsNextLoading(false));
+                notifications.exception(error);
+                return;
+            }
         }
         dispatch(nextStep());
     };
 
     const handleBack = async () => {
+        window.scroll(0, 0);
         if (currentStep === 3) {
             await dispatch(getShippingFee(selectedCards));
             await dispatch(getStatesList());
@@ -135,6 +175,9 @@ export function NewSubmission() {
                                     color={'primary'}
                                     onClick={handleNext}
                                     className={classes.nextBtn}
+                                    startIcon={
+                                        isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null
+                                    }
                                 >
                                     Next
                                 </Button>

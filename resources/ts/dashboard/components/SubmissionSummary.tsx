@@ -5,8 +5,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
+import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
+import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
@@ -15,10 +17,13 @@ import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         width: '345px',
         minHeight: '20px',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+        },
     },
     titleContainer: {
         backgroundColor: '#F9F9F9',
@@ -138,7 +143,7 @@ const useStyles = makeStyles({
         color: 'rgba(0, 0, 0, 0.87)',
         marginBottom: '12px',
     },
-});
+}));
 
 function SubmissionSummary() {
     const classes = useStyles();
@@ -171,8 +176,45 @@ function SubmissionSummary() {
         dispatch(setCustomStep(0));
     }
 
+    const currentSelectedTurnaround = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
+    );
+    const currentSelectedMaxProtection = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.maxProtectionAmount,
+    );
+    const currentSelectedLevelPrice = useAppSelector(
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
+    );
+
+    const sendECommerceDataToGA = () => {
+        ReactGA.plugin.require('ecommerce');
+        ReactGA.event({
+            category: EventCategories.Submissions,
+            action: SubmissionEvents.paid,
+            dimension1: 'Payment Method',
+            metric1: paymentMethodID,
+        });
+
+        ReactGA.plugin.execute('ecommerce', 'addItem', {
+            id: String(orderID),
+            name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
+            category: 'Cards',
+            price: String(currentSelectedLevelPrice),
+            quantity: String(numberOfSelectedCards),
+        });
+
+        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
+            id: String(orderID), // Doing these type coercions because GA wants this data as string
+            revenue: String(grandTotal),
+            shipping: String(shippingFee),
+        });
+
+        ReactGA.plugin.execute('ecommerce', 'send', null);
+        ReactGA.plugin.execute('ecommerce', 'clear', null);
+    };
+
     let totalDeclaredValue = 0;
-    selectedCards.forEach((selectedCard) => {
+    selectedCards.forEach((selectedCard: any) => {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
@@ -193,17 +235,19 @@ function SubmissionSummary() {
             setIsStripePaymentLoading(false);
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action: SubmissionEvents.paid,
+            });
+            sendECommerceDataToGA();
             history.push(`/submissions/${orderID}/confirmation`);
-        } catch (err) {
+        } catch (err: any) {
+            if ('message' in err?.response?.data) {
+                setIsStripePaymentLoading(false);
+                notifications.exception(err, 'Payment Failed');
+            }
             // Charge was failed by back-end so we try to charge him on the front-end
             // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
-            if (err.message === 'Amount must be no more than $999,999.99') {
-                setIsStripePaymentLoading(false);
-                notifications.error(
-                    'You can only pay up to $999,999.99 using this payment method - try using a different payment method',
-                    'Error',
-                );
-            }
             const intent = err.response.data.payment_intent;
             // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
             const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {
@@ -221,10 +265,15 @@ function SubmissionSummary() {
                     const verifyOrderEndpoint = apiService.createEndpoint(
                         `customer/orders/${orderID}/payments/${chargeResult.paymentIntent.id}`,
                     );
-                    verifyOrderEndpoint.post('').then((r) => {
+                    verifyOrderEndpoint.post('').then(() => {
                         setIsStripePaymentLoading(false);
                         dispatch(clearSubmissionState());
                         dispatch(invalidateOrders());
+                        ReactGA.event({
+                            category: EventCategories.Submissions,
+                            action: SubmissionEvents.paid,
+                        });
+                        sendECommerceDataToGA();
                         history.push(`/submissions/${orderID}/confirmation`);
                     });
                 }

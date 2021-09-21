@@ -6,5 +6,5 @@ use Exception;
 
 class ErrorInDeclaredValue extends Exception
 {
-    protected $message = 'Error in declared value';
+    protected $message = 'Declared value of any card must not be greater than service level maximum protection. Please go back and update.';
 }

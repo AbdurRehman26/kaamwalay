@@ -26,9 +26,10 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             CustomerAddressSeeder::class,
             InvoiceSeeder::class,
+            OrderSeeder::class,
             OrderItemSeeder::class,
             OrderItemShipmentSeeder::class,
-            OrderSeeder::class,
+            OrderItemCustomerShipmentSeeder::class,
             StateSeeder::class,
         ]);
 

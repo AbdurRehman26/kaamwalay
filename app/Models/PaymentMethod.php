@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $code
+ */
 class PaymentMethod extends Model
 {
     use HasFactory;
@@ -14,7 +18,7 @@ class PaymentMethod extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'is_enabled'];
 
     /**
      * The attributes that should be cast to native types.
@@ -24,4 +28,9 @@ class PaymentMethod extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function scopeEnabled(Builder $query): Builder
+    {
+        return $query->where('is_enabled', 1);
+    }
 }

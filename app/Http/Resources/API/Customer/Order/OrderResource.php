@@ -2,9 +2,12 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
+use App\Http\Resources\API\Admin\Order\OrderStatusHistoryCollection;
+use App\Http\Resources\API\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
+use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCustomerShipmentResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\Customer\User\UserResource;
@@ -31,6 +34,9 @@ class OrderResource extends BaseResource
             'order_payment' => new OrderPaymentResource($this->orderPayment),
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
+            'customer_shipment' => $this->whenLoaded('customerShipment', OrderItemCustomerShipmentResource::class),
+            'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
+            'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
         ];
     }
 }

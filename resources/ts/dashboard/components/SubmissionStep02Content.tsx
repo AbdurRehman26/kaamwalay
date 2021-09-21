@@ -1,14 +1,17 @@
+import { useMediaQuery } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
+import Link from '@material-ui/core/Link';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
+import CardsSearchMobileModal from '@dashboard/components/CardsSearchMobileModal';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
+import { backStep, setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';
 import CardSubmissionSearchField from './CardSubmissionSearchField';
 import CardsSearchResults from './CardsSearchResults';
@@ -39,6 +42,7 @@ function SubmissionStep02Content() {
     );
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
 
     const searchClient = useMemo(
@@ -62,6 +66,14 @@ function SubmissionStep02Content() {
         return true;
     }
 
+    function handleEditServiceLevelPress(
+        e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    ) {
+        // Preventing page refresh
+        e.preventDefault();
+        dispatch(backStep());
+    }
+
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -78,14 +90,23 @@ function SubmissionStep02Content() {
                     <Divider light />
                     <div className={classes.leftSideContainer}>
                         <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
+                            {isMobile ? <CardsSearchMobileModal /> : null}
                             <CardSubmissionSearchField />
-                            {searchValue !== '' ? <CardsSearchResults /> : null}
-                            <AddedSubmissionCards />
-
+                            {searchValue !== '' && !isMobile ? <CardsSearchResults /> : null}
+                            <AddedSubmissionCards mobileMode={isMobile} />
                             {!areSelectedCardsValuesValid() ? (
-                                <Alert severity="error" className={classes.valueAlert}>
-                                    Card's value can't be higher than the protection level.
-                                </Alert>
+                                <>
+                                    <Alert severity="error" className={classes.valueAlert}>
+                                        Card's value can't be higher than the protection level.
+                                    </Alert>
+                                    <Alert severity={'info'} className={classes.valueAlert}>
+                                        You can easily upgrade your service level by&nbsp;
+                                        <Link href={''} onClick={handleEditServiceLevelPress}>
+                                            clicking here
+                                        </Link>
+                                        .
+                                    </Alert>
+                                </>
                             ) : null}
                             <Configure hitsPerPage={20} />
                         </InstantSearch>

@@ -1,1 +1,1 @@
-<x-sap app="admin" title="Admin | Robograding"/>
+<x-layout appName="admin" :isSinglePageApp="true"/>

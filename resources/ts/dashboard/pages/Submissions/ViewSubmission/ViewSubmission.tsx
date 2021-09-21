@@ -4,9 +4,9 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useParams } from 'react-router-dom';
-import { useOrderQuery } from '@shared/hooks/useOrderQuery';
-import { ViewSubmissionBilling } from './ViewSubmissionBilling';
-import { ViewSubmissionDetails } from './ViewSubmissionDetails';
+import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
+import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
+import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
 import { ViewSubmissionInformation } from './ViewSubmissionInformation';
 import { ViewSubmissionStatus } from './ViewSubmissionStatus';
@@ -19,7 +19,14 @@ import { ViewSubmissionStatus } from './ViewSubmissionStatus';
  */
 export function ViewSubmission() {
     const { id } = useParams<{ id: string }>();
-    const { isLoading, isError, data } = useOrderQuery({ resourceId: id });
+    const { isLoading, isError, data } = useOrderQuery({
+        resourceId: id,
+        config: {
+            params: {
+                include: ['paymentPlan', 'orderStatusHistory', 'orderStatusHistory.orderStatus', 'invoice'],
+            },
+        },
+    });
 
     if (isLoading || isError) {
         return (
@@ -41,16 +48,16 @@ export function ViewSubmission() {
                 shippingMethod={data.shippingMethod.name}
                 createdAt={data.createdAt}
                 declaredValue={data.totalDeclaredValue}
-                customerName={data.customer.getFullName()}
-                customerEmail={data.customer.email}
-                customerPhone={data.customer.phone}
-                customerId={data.customer.id}
+                customerName={data.customer?.getFullName()}
+                customerEmail={data.customer?.email}
+                customerPhone={data.customer?.phone}
+                customerId={data.customer?.id}
                 serviceFee={0}
                 shippingFee={data.shippingFee}
                 total={data.grandTotal}
             />
             <Divider />
-            <ViewSubmissionBilling
+            <SubmissionViewBilling
                 shippingAddress={data.shippingAddress}
                 billingAddress={data.billingAddress}
                 cardExpirationMonth={data.orderPayment?.card?.expMonth}
@@ -58,7 +65,7 @@ export function ViewSubmission() {
                 cardLast4={data.orderPayment?.card?.last4}
                 cardType={data.orderPayment?.card?.brand}
             />
-            <ViewSubmissionDetails />
+            <SubmissionViewCards serviceFee={data.serviceFee} items={data.orderItems} />
         </Grid>
     );
 }

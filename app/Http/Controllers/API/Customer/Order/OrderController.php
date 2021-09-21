@@ -2,43 +2,43 @@
 
 namespace App\Http\Controllers\API\Customer\Order;
 
-use App\Exceptions\API\Customer\Order\OrderNotPlaced;
+use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
+use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
+use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCustomerShipmentResource;
 use App\Http\Resources\API\Customer\Order\OrderCollection;
 use App\Http\Resources\API\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Order\CreateOrderService;
+use App\Services\Order\OrderService;
+use App\Services\Order\Shipping\CustomerShipmentService;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        private OrderService $orderService,
+        private CreateOrderService $createOrderService
+    ) {
         $this->authorizeResource(Order::class, 'order');
     }
 
     public function index(): OrderCollection
     {
         return new OrderCollection(
-            QueryBuilder::for(Order::class)
-                ->forUser(auth()->user())
-                ->placed()
-                ->latest()
-                ->allowedFilters('order_number')
-                ->paginate(request('per_page'))
+            $this->orderService->getOrders()
         );
     }
 
-    public function store(StoreOrderRequest $request, CreateOrderService $createOrderService): OrderCreateResource | JsonResponse
+    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
     {
         try {
-            $order = $createOrderService->create($request->validated());
-        } catch (OrderNotPlaced $e) {
+            $order = $this->createOrderService->create($request->validated());
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
@@ -55,15 +55,26 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Order $order)
+    public function updateCustomerShipment(UpdateCustomerShipmentRequest $request, Order $order, CustomerShipmentService $customerShipmentService): JsonResponse|OrderItemCustomerShipmentResource
     {
-        //
+        $this->authorize('view', $order);
+
+        try {
+            $data = $request->safe()->only([
+                'shipping_provider',
+                'tracking_number',
+            ]);
+
+            $order = $customerShipmentService->process($order, $data['shipping_provider'], $data['tracking_number']);
+
+            return new OrderItemCustomerShipmentResource($order->customerShipment);
+        } catch (CustomerShipmentNotUpdated $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 }

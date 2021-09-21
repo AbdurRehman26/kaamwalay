@@ -1,11 +1,15 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { Main } from './pages/Main';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { Layout } from './components/Layout';
+import { Submissions } from './pages/Submissions';
 
 export function Admin() {
     return (
-        <Switch>
-            <Route exact path={'/'} component={Main} />
-        </Switch>
+        <Layout>
+            <Switch>
+                <Redirect exact from={'/'} to={'/submissions'} />
+                <Route path={'/submissions'} component={Submissions} />
+            </Switch>
+        </Layout>
     );
 }

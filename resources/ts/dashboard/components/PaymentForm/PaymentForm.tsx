@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
+import ReactGA from 'react-ga';
+import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
@@ -72,7 +74,7 @@ export function PaymentForm() {
             }
             setIsCardsListLoading(false);
             setShowAddCardModal(false);
-        } catch (error) {
+        } catch (error: any) {
             setIsCardsListLoading(false);
             notifications.error("We weren't able to get your existing cards", 'Error');
         }
@@ -114,6 +116,10 @@ export function PaymentForm() {
             await saveExistingStripeCards();
             notifications.success('Your card was successfully saved', 'Card saved');
             setSaveBtnLoading(false);
+            ReactGA.event({
+                category: EventCategories.PaymentMethods,
+                action: PaymentMethodEvents.addedNewStripeCard,
+            });
         }
     };
 
@@ -174,7 +180,7 @@ export function PaymentForm() {
             </Dialog>
             <Typography className={classes.cardsListTitle}>Your cards</Typography>
             <Paper variant="outlined" className={classes.cardsListContainer}>
-                {existingCustomerStripeCards?.map((item) => (
+                {existingCustomerStripeCards?.map((item: any) => (
                     <CustomerStripeCardItem key={item.id} {...item} />
                 ))}
                 <div className={classes.addNewCardItemContainer}>

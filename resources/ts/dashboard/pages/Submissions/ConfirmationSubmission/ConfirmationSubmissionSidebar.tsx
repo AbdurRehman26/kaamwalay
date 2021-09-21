@@ -11,9 +11,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/Check';
 import React from 'react';
-import { useOrderQuery } from '@shared/hooks/useOrderQuery';
+import { Redirect } from 'react-router-dom';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { font } from '@shared/styles/utils';
 import { useConfirmationSubmissionSidebarStyles } from './style';
 
@@ -30,7 +31,12 @@ interface ConfirmationSubmissionsSidebarProps {
  */
 export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissionsSidebarProps) {
     const classes = useConfirmationSubmissionSidebarStyles();
-    const { isLoading, isError, data } = useOrderQuery({ resourceId: orderId });
+    const { isLoading, isError, data, error } = useOrderQuery({ resourceId: orderId });
+    const message = (error as Error)?.message || error;
+
+    if (message === 'This action is unauthorized.') {
+        return <Redirect to={'/submissions'} />;
+    }
 
     if (isLoading || isError) {
         return (
@@ -39,6 +45,15 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
             </Box>
         );
     }
+
+    if (!data) {
+        return (
+            <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
+                <Typography color={'error'}>Submission not found.</Typography>
+            </Box>
+        );
+    }
+
     return (
         <Paper variant={'outlined'} className={classes.root}>
             <Box paddingY={3} display={'flex'} flexDirection={'column'} alignItems={'center'}>
@@ -93,7 +108,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                        {data.shippingMethod.name}
+                                        {data.shippingMethod?.name}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -135,7 +150,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                 </TableCell>
                                 <TableCell align={'right'}>
                                     <Typography variant={'caption'} align={'right'} color={'textSecondary'}>
-                                        ({formatCurrency(data.paymentPlan.price)}&nbsp;×&nbsp;{data.numberOfCards}) =
+                                        ({formatCurrency(data.paymentPlan?.price)}&nbsp;×&nbsp;{data.numberOfCards}) =
                                         &nbsp;
                                         <Typography
                                             component={'span'}
@@ -144,7 +159,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                             color={'textPrimary'}
                                             className={font.fontWeightMedium}
                                         >
-                                            {formatCurrency(data.paymentPlan.price * data.numberOfCards)}
+                                            {formatCurrency(data.paymentPlan?.price * data.numberOfCards)}
                                         </Typography>
                                     </Typography>
                                 </TableCell>

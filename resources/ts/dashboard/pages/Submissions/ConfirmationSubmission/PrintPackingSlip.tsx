@@ -33,8 +33,10 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
     const notifications = useNotifications();
     const classes = usePrintPackingSlipStyles();
     const dispatch = useAppDispatch();
-    const isLoading = useAppSelector((state) => state.orders.isLoading[orderId]);
     const order = useAppSelector((state) => plainToClass(OrderEntity, state.orders.entities[orderId]));
+    const isLoading = useAppSelector((state) => state.orders.isLoading[orderId]);
+    const error = useAppSelector((state) => state.orders.errors[`show_${orderId}`]);
+    const isError = !!error;
 
     const invoiceNumber = order?.invoice?.invoiceNumber;
     const invoice = order?.invoice?.path;
@@ -53,7 +55,7 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
             setDownloading(true);
             try {
                 await downloadFromUrl(invoice!, `robograding-${invoiceNumber}.pdf`);
-            } catch (e) {
+            } catch (e: any) {
                 notifications.exception(e);
             }
             setDownloading(false);
@@ -63,9 +65,9 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
 
     useRetry(
         async () => {
-            await dispatch(showOrderAction({ resourceId: orderId }));
+            await dispatch(showOrderAction({ resourceId: orderId, skipLoading: true }));
         },
-        () => !invoice,
+        () => !isError && !invoice,
     );
 
     return (
@@ -86,7 +88,9 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
 
                 <footer className={classes.footer}>
                     {isLoading ? (
-                        <CircularProgress size={24} color={'inherit'} />
+                        <Box p={1}>
+                            <CircularProgress size={24} color={'inherit'} />
+                        </Box>
                     ) : invoice ? (
                         <>
                             <Button onClick={handleDownload} color={'inherit'} classes={buttonClasses}>

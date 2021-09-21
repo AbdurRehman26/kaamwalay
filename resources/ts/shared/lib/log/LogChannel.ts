@@ -77,15 +77,19 @@ export class LogChannel {
      * @private
      */
     private canLog() {
+        if (process.env.NODE_ENV !== 'production') {
+            return true;
+        }
+
         try {
             if (typeof localStorage !== 'undefined' && localStorage.getItem('__LOGS__') !== null) {
                 return true;
             }
-        } catch (e) {
+        } catch (e: any) {
             // nothing
         }
 
-        return process.env.NODE_ENV !== 'production';
+        return false;
     }
 
     public setActive(state: boolean) {

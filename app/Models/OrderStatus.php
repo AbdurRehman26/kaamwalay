@@ -4,12 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property string $code
+ */
 class OrderStatus extends Model
 {
     use HasFactory;
 
-    public const DEFAULT_ORDER_STATUS = 1;
+    public const PAYMENT_PENDING = 1;
+    public const PLACED = 2;
+    public const ARRIVED = 3;
+    public const GRADED = 4;
+    public const SHIPPED = 5;
+    public const CANCELLED = 6;
+    public const REVIEWED = 7;
+
+    public const DEFAULT_ORDER_STATUS = self::PAYMENT_PENDING;
+    public const STATUSES = [
+        'payment_pending' => self::PAYMENT_PENDING,
+        'placed' => self::PLACED,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -28,8 +44,8 @@ class OrderStatus extends Model
         'order_state_id' => 'integer',
     ];
 
-    public function orderState()
+    public function orderState(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderState::class);
+        return $this->belongsTo(OrderState::class);
     }
 }

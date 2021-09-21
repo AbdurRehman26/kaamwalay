@@ -2,26 +2,38 @@
 
 namespace App\Services\Order;
 
-use App\Exceptions\API\Customer\Order\OrderNotPlaced;
+use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
+use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Services\Admin\Order\OrderItemService;
+use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\CustomerAddressValidator;
+use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CreateOrderService
 {
     protected Order $order;
     protected array $data;
 
+    public function __construct(
+        private OrderStatusHistoryService $orderStatusHistoryService,
+        private OrderItemService $orderItemService
+    ) {
+    }
+
     /**
-     * @throws OrderNotPlaced
+     * @throws Exception
      */
     public function create(array $data): Order
     {
@@ -32,16 +44,16 @@ class CreateOrderService
             $this->process();
 
             return $this->order;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
 
-            throw new OrderNotPlaced;
+            throw $e;
         }
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function validate()
     {
@@ -49,6 +61,10 @@ class CreateOrderService
         CustomerAddressValidator::validate($this->data);
     }
 
+    /**
+     * @throws Throwable
+     * @throws OrderStatusHistoryWasAlreadyAssigned
+     */
     protected function process()
     {
         DB::beginTransaction();
@@ -64,6 +80,8 @@ class CreateOrderService
         $this->storeShippingFee();
         $this->storeShippingFeeAndGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
+
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
 
         DB::commit();
     }
@@ -121,22 +139,28 @@ class CreateOrderService
     protected function saveOrder()
     {
         $this->order->user()->associate(auth()->user());
-        $this->order->order_status_id = OrderStatus::DEFAULT_ORDER_STATUS;
         $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();
     }
 
+    /**
+     * @throws OrderItemDoesNotBelongToOrder
+     */
     protected function storeOrderItems(array $items)
     {
         foreach ($items as $item) {
-            OrderItem::create([
-                'order_id' => $this->order->id,
-                'card_product_id' => $item['card_product']['id'],
-                'quantity' => $item['quantity'],
-                'declared_value_per_unit' => $item['declared_value_per_unit'],
-                'declared_value_total' => $item['quantity'] * $item['declared_value_per_unit'],
-            ]);
+            for ($i = 0; $i < $item['quantity']; $i++) {
+                $storedItem = OrderItem::create([
+                    'order_id' => $this->order->id,
+                    'card_product_id' => $item['card_product']['id'],
+                    'quantity' => 1,
+                    'declared_value_per_unit' => $item['declared_value_per_unit'],
+                    'declared_value_total' => $item['declared_value_per_unit'],
+                ]);
+              
+                $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending'], auth()->user());
+            }
         }
     }
 
@@ -152,6 +176,9 @@ class CreateOrderService
     {
         $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
         $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee;
+
+        GrandTotalValidator::validate($this->order);
+
         $this->order->save();
     }
 

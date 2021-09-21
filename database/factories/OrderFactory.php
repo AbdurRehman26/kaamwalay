@@ -31,10 +31,11 @@ class OrderFactory extends Factory
         return [
             'order_number' => $this->faker->uuid(),
             'shipping_fee' => $this->faker->randomFloat(2, 50, 500),
+            'service_fee' => $this->faker->randomFloat(2, 50, 500),
             'grand_total' => $this->faker->randomFloat(2, 20, 10000),
             'user_id' => User::factory()->withRole(config('permission.roles.customer')),
-            'payment_plan_id' => PaymentPlan::factory(),
             'order_status_id' => OrderStatus::factory(),
+            'payment_plan_id' => PaymentPlan::factory(),
             'shipping_order_address_id' => OrderAddress::factory(),
             'billing_order_address_id' => OrderAddress::factory(),
             'payment_method_id' => PaymentMethod::factory(),

@@ -26,23 +26,31 @@ return [
     |--------------------------------------------------------------------------
     | Guest environment keys
     |--------------------------------------------------------------------------
-    | This option will provide an array of environment keys that will be used
+    | This option will provide an array of key configurations that will be used
     | to fill the configuration object.
     |
-    | Template: '$key[:$option,$arg1,$arg2]'
-    | Examples:
-    | [
-    |    'APP_ENV:env'      // Get the APP_ENV from environment.
-    |    'APP_ENV:auth'     // Include the key only if user it's authenticated.
-    |    'APP_ENV:env:auth' // Include the key on auth from env.
-    |    'APP_ENV'          // Similar to 'APP_ENV' one.
-    | ]
     */
     'keys' => [
-        'APP_ENV',
-        'APP_URL',
-        'STRIPE_KEY:auth',
-        'ALGOLIA_APP_ID:auth',
-        'ALGOLIA_PUBLIC_KEY:auth',
+        'app_env' => [
+            'value' => env('APP_ENV'),
+        ],
+        'app_url' => [
+            'value' => env('APP_URL'),
+        ],
+        'stripe_key' => [
+            'auth' => true,
+            'value' => env('STRIPE_KEY'),
+        ],
+        'algolia_app_id' => [
+            'auth' => true,
+            'value' => env('ALGOLIA_APP_ID'),
+        ],
+        'algolia_public_key' => [
+            'auth' => true,
+            'value' => env('ALGOLIA_PUBLIC_KEY'),
+        ],
+        'google_analytics_tracking_code' => [
+            'value' => env('GOOGLE_ANALYTICS_TRACKING_CODE'),
+        ],
     ],
 ];

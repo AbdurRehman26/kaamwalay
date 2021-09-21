@@ -1,32 +1,37 @@
 <?php
 
-namespace Tests\Unit\API\Customer\User;
-
 use App\Models\User;
+use App\Services\SerialNumberService\SerialNumberService;
 use Database\Seeders\RolesSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-class UserTest extends TestCase
-{
-    use RefreshDatabase, WithFaker;
+uses(WithFaker::class);
 
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->seed(RolesSeeder::class);
-    }
-    /** @test */
-    public function customer_can_be_created_with_role()
-    {
-        $user = User::createCustomer([
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->safeEmail,
-            'username' => $this->faker->userName,
-            'password' => bcrypt('password'),
-        ]);
-        $this->assertTrue($user->hasRole(config('permission.roles.customer')));
-    }
-}
+beforeEach(function () {
+    $this->seed(RolesSeeder::class);
+});
+
+test('customer can be created with role', function () {
+    $user = User::createCustomer([
+        'first_name' => $this->faker->firstName,
+        'last_name' => $this->faker->lastName,
+        'email' => $this->faker->safeEmail,
+        'username' => $this->faker->userName,
+        'password' => bcrypt('password'),
+    ]);
+    expect($user->hasRole(config('permission.roles.customer')))->toBeTrue();
+});
+
+test('customer should have customer_number on create', function () {
+    $user = User::createCustomer([
+        'first_name' => $this->faker->firstName,
+        'last_name' => $this->faker->lastName,
+        'email' => $this->faker->safeEmail,
+        'username' => $this->faker->userName,
+        'password' => bcrypt('password'),
+    ]);
+
+    expect($user->customer_number)->not->toBeEmpty();
+    expect($user->customer_number)->toEndWith($user->id);
+    expect($user->customer_number)->toEqual(SerialNumberService::customer($user->id));
+});

@@ -7,6 +7,7 @@ export const materialUiTheme = createTheme({
         primary: {
             main: '#20BFB8',
             contrastText: '#fff',
+            light: '#42E8E0',
         },
         secondary: {
             main: purple[500],
@@ -19,7 +20,5 @@ export const materialUiTheme = createTheme({
         },
     },
 });
-
-export type DashboardTheme = typeof materialUiTheme;
 
 export default materialUiTheme;

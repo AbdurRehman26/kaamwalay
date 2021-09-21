@@ -48,10 +48,10 @@ class OrderStatusHistoryService
             ->where('order_status_id', getModelId($orderStatus))
             ->exists();
 
-        throw_if($exists, OrderStatusHistoryWasAlreadyAssigned::class);
+        throw_if(getModelId($orderStatus) !== OrderStatus::SHIPPED && $exists, OrderStatusHistoryWasAlreadyAssigned::class);
 
         throw_if(
-            getModelId($orderStatus) === OrderItemStatus::GRADED && ! Order::first($orderId)->isEligibleToMarkAsGraded(),
+            getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
             OrderCanNotBeMarkedAsGraded::class
         );
 
@@ -70,12 +70,23 @@ class OrderStatusHistoryService
             $this->agsService->createCertificates($certificateIds);
         }
 
-        $orderStatusHistory = OrderStatusHistory::create([
-            'order_id' => $orderId,
-            'order_status_id' => $orderStatusId,
-            'user_id' => getModelId($user),
-            'notes' => $notes,
-        ]);
+        if(getModelId($orderStatus) === OrderStatus::SHIPPED && $exists)
+        {
+            $orderStatusHistory = OrderStatusHistory::where('order_id', getModelId($order))
+                ->where('order_status_id', getModelId($orderStatus))
+                ->first();
+
+            $orderStatusHistory->user_id = getModelId($user);
+            $orderStatusHistory->save();
+        } else{
+
+            $orderStatusHistory = OrderStatusHistory::create([
+                'order_id' => $orderId,
+                'order_status_id' => $orderStatusId,
+                'user_id' => getModelId($user),
+                'notes' => $notes,
+            ]);
+        }
 
         return QueryBuilder::for(OrderStatusHistory::class)
             ->where('id', $orderStatusHistory->id)

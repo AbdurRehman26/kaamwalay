@@ -26,10 +26,8 @@ test('an admin can update order shipment', function () {
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
-                'shipment' => [
-                    'shipping_provider',
-                    'tracking_number',
-                ],
+                'shipping_provider',
+                'tracking_number',
             ],
         ]);
 });

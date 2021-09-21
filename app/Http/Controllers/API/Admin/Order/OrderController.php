@@ -7,6 +7,7 @@ use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\UpdateShipmentRequest;
 use App\Http\Requests\API\Admin\Order\UpdateNotesRequest;
+use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemShipmentResource;
 use App\Http\Resources\API\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\Admin\Order\OrderResource;
 use App\Http\Resources\API\Admin\Order\UserCardCollection;
@@ -38,10 +39,10 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function updateShipment(UpdateShipmentRequest $request, Order $order, ShipmentService $shipmentService): OrderResource | JsonResponse
+    public function updateShipment(UpdateShipmentRequest $request, Order $order, ShipmentService $shipmentService): OrderItemShipmentResource | JsonResponse
     {
         try {
-            $order = $shipmentService->process($order, $request->shipping_provider, $request->tracking_number);
+            $result = $shipmentService->updateShipment($order, $request->shipping_provider, $request->tracking_number);
         } catch (ShipmentNotUpdated $e) {
             return new JsonResponse(
                 [
@@ -50,8 +51,9 @@ class OrderController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
-        return new OrderResource($order);
+        return new OrderItemShipmentResource($result);
     }
+
     public function updateNotes(UpdateNotesRequest $request, Order $order, OrderService $orderService): OrderResource
     {
         return new OrderResource($orderService->updateNotes($order, $request->notes));

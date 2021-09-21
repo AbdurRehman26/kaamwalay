@@ -3,8 +3,8 @@
 namespace App\Console\Commands\Orders;
 
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
-use App\Services\Admin\OrderService;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Models\Order;
+use App\Models\OrderStatusHistory;
 use Illuminate\Console\Command;
 use Throwable;
 
@@ -29,10 +29,8 @@ class OrderGenerateStatusHistoryCommand extends Command
      *
      * @return void
      */
-    public function __construct(
-        public  OrderService $orderService,
-        public  OrderStatusHistoryService $orderStatusHistoryService,
-    ) {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -43,19 +41,24 @@ class OrderGenerateStatusHistoryCommand extends Command
      */
     public function handle()
     {
-        $orders = $this->orderService->getOrders();
+        $orders = Order::all();
 
         $email = $this->ask('Your account email');
         $password = $this->secret("Password of '$email'");
 
         auth()->attempt(compact('email', 'password'));
+        $user = auth() -> user();
 
         foreach ($orders as $order) {
             if ($order->order_status_id) {
                 $this->info("- Found Order [$order->id] with status '$order->order_status_id'");
-                for ($orderStatusId = $order->order_status_id; $orderStatusId >= 1; $orderStatusId--) {
+                for ($orderStatusId = 1; $orderStatusId <= $order->order_status_id; $orderStatusId++) {
                     try {
-                        $this->orderStatusHistoryService->addStatusToOrder($orderStatusId, $order);
+                        OrderStatusHistory::create([
+                           'order_id' => $order->id,
+                           'order_status_id' => $orders,
+                           'user_id' => $user?->id,
+                        ]);
                         $status = "OK";
                     } catch (\Exception $e) {
                         $message = $e->getMessage();

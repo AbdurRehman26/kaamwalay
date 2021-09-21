@@ -46,8 +46,18 @@ class OrderGenerateStatusHistoryCommand extends Command
         $email = $this->ask('Your account email');
         $password = $this->secret("Password of '$email'");
 
-        auth()->attempt(compact('email', 'password'));
-        $user = auth() -> user();
+        if (! auth()->attempt(compact('email', 'password'))) {
+            $this->error("Invalid credentials!");
+
+            return  1;
+        }
+
+        $user = auth()->user();
+        if (!$user || ! $user->isAdmin()) {
+            $this->error("Unauthorized access!");
+
+            return  1;
+        }
 
         foreach ($orders as $order) {
             if ($order->order_status_id) {

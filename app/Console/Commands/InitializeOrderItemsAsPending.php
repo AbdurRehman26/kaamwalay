@@ -51,7 +51,6 @@ class InitializeOrderItemsAsPending extends Command
             $status->order_item_id = $item->id;
             $status->order_item_status_id = OrderItemStatus::PENDING;
             $status->user_id = User::find(1);
-            $status->notes = '';
             $status->save();
 
             $this->info('Created status: ' . $status->id);

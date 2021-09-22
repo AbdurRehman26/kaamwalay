@@ -35,7 +35,7 @@ class ShipmentService
             ];
 
             if (! $shipment) {
-                $shipment = OrderItemShipment::create();
+                $shipment = OrderItemShipment::create($data);
             } else {
                 $shipment->update($data);
             }

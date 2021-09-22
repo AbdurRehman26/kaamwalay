@@ -47,18 +47,4 @@ class Handler extends ExceptionHandler
 
         parent::report($e);
     }
-
-    protected function invalidJson($request, ValidationException $exception): JsonResponse
-    {
-        $errors = [];
-
-        foreach ($exception->errors() as $key => $value) {
-            Arr::set($errors, $key, $value);
-        }
-
-        return response()->json([
-            'message' => $exception->getMessage(),
-            'errors' => $errors,
-        ], $exception->status);
-    }
 }

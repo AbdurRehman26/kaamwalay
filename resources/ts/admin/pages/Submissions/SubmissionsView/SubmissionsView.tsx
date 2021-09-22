@@ -63,10 +63,7 @@ export function SubmissionsView() {
                 customerPhone={data.customer?.phone}
                 billingAddress={data.billingAddress}
                 shippingAddress={data.shippingAddress}
-                cardLast4={data.orderPayment?.card?.last4}
-                cardType={data.orderPayment?.card?.brand}
-                cardExpirationMonth={data.orderPayment?.card?.expMonth}
-                cardExpirationYear={data.orderPayment?.card?.expYear}
+                payment={data.orderPayment}
             />
             <SubmissionViewCards items={data.orderItems} serviceFee={data.paymentPlan?.price} />
         </Grid>

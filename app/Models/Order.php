@@ -227,15 +227,19 @@ class Order extends Model
 
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
-        if (! $status || $status === 'all') {
-            return $query;
-        }
 
         return $query->whereHas(
-            'orderStatusHistory.orderStatus',
-            fn ($query) => $query
-                ->where('id', $status)
-                ->orWhere('code', $status)
+            'orderStatus',
+            function (Builder $query) use ($status) {
+                $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
+                if (! $status || $status === 'all') {
+                    return $query;
+                }
+
+                return $query
+                    ->where('id', $status)
+                    ->orWhere('code', $status);
+            }
         );
     }
 

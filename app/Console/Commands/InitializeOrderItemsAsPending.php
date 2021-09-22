@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderItemStatusHistory;
-use App\Models\User;
 use App\Services\Admin\Order\OrderItemService;
 use Illuminate\Console\Command;
 
@@ -50,7 +49,6 @@ class InitializeOrderItemsAsPending extends Command
             $status = new OrderItemStatusHistory();
             $status->order_item_id = $item->id;
             $status->order_item_status_id = OrderItemStatus::PENDING;
-            $status->user_id = User::find(1);
             $status->save();
 
             $this->info('Created status: ' . $status->id);

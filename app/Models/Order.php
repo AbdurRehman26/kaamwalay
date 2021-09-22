@@ -279,9 +279,9 @@ class Order extends Model
 
     public function getGroupedOrderItems()
     {
-        return OrderItem::select('card_product_id', 'declared_value_total', 'declared_value_per_unit', DB::raw('sum(quantity) as quantity'))
+        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('min(declared_value_total) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
         ->where('order_id', $this->id)
-        ->groupBy(['card_product_id', 'declared_value_total','declared_value_per_unit'])
+        ->groupBy(['card_product_id'])
         ->get();
     }
 }

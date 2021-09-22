@@ -19,6 +19,8 @@ use Spatie\QueryBuilder\AllowedInclude;
  * @property OrderPayment $orderPayment
  * @property int $order_status_id
  * @property int $id
+ * @property string $order_number
+ * @property User $user
  */
 class Order extends Model
 {

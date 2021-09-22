@@ -16,6 +16,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 /**
  * @property int $id
  * @property string $customer_number
+ * @property string $first_name
  */
 class User extends Authenticatable implements JWTSubject
 {

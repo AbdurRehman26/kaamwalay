@@ -48,6 +48,10 @@ class OrderStatusChangedListener implements ShouldQueue
     private function handleArrived(OrderStatusChangedEvent $event)
     {
         // Order Arrived logics
+        $this->sendEmail('arrived-robograding', [
+            'ORDER_NUMBER' => $event->order->order_number,
+            'FIRST_NAME' => $event->order->user->first_name,
+        ]);
     }
 
     private function handleGraded(OrderStatusChangedEvent $event)
@@ -58,5 +62,10 @@ class OrderStatusChangedListener implements ShouldQueue
     private function handleShipped(OrderStatusChangedEvent $event)
     {
         // Order Shipped logics
+    }
+
+    private function sendEmail(string $template, array $vars)
+    {
+        // Add email logics
     }
 }

@@ -275,7 +275,7 @@
                                             {{$customer->phone}}
                                             @endif
                                             <br/>
-                                            Customer ID: {{$customer->id}}
+                                            Customer ID: {{$customer->customer_number}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -284,7 +284,7 @@
                         <td class="customer-id-holder">
                             Customer ID:
                             <p class="customer-id">
-                                {{$customer->id}}
+                                {{$customer->customer_number}}
                             </p>
                         </td>
                     </tr>

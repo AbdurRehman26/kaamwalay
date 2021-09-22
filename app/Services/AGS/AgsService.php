@@ -50,9 +50,9 @@ class AgsService
         ];
     }
 
-    public function createCertificates(string $certificateIds): array
+    public function createCertificates(array $data): array
     {
-        return $this->client->createCertificates(certificateIds: $certificateIds);
+        return $this->client->createCertificates(data: $data);
     }
 
     public function getGrades(array $certificateIds): array

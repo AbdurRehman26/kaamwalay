@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Events\API\Admin\Order\OrderUpdated;
+use App\Exceptions\API\Admin\GradesAreNotAvailable;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
@@ -111,21 +112,28 @@ class OrderService
         return $order;
     }
 
-    public function getGrades(Order $order)
+    /**
+     * @throws GradesAreNotAvailable
+     * @throws IncorrectOrderStatus
+     */
+    public function getGrades(Order $order): array
     {
         if ($order->order_status_id !== OrderStatus::ARRIVED) {
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
-        $data = $this->updateLocalGrades($grades);
 
-        return $data;
+        if (empty($grades)) {
+            throw new GradesAreNotAvailable;
+        }
+
+        return $this->updateLocalGrades($grades);
     }
 
     protected function updateLocalGrades(array $grades): array
     {
         $cards = [];
-        foreach ($grades['results'] as $result) {
+        foreach ($grades['results'] ?? [] as $result) {
             $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
             if (! is_null($card)) {
                 $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Admin\Order;
 
+use App\Exceptions\API\Admin\GradesAreNotAvailable;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\ShipmentNotUpdated;
 use App\Http\Controllers\Controller;
@@ -80,6 +81,13 @@ class OrderController extends Controller
                 ],
                 Response::HTTP_BAD_REQUEST
             );
+        } catch (GradesAreNotAvailable $e) {
+            return new JsonResponse([
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_NOT_FOUND,
+            ]);
         }
 
         return new UserCardCollection($userCards);

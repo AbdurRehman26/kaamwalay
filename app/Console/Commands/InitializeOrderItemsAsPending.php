@@ -15,7 +15,7 @@ class InitializeOrderItemsAsPending extends Command
      *
      * @var string
      */
-    protected $signature = 'order:initialize-items-pending';
+    protected $signature = 'orders:initialize-items-pending';
 
     /**
      * The console command description.

@@ -74,20 +74,13 @@ class OrderController extends Controller
 
         try {
             $userCards = $orderService->getGrades($order);
-        } catch (IncorrectOrderStatus $e) {
+        } catch (IncorrectOrderStatus | GradesAreNotAvailable $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
                 ],
-                Response::HTTP_BAD_REQUEST
+                $e->getCode()
             );
-        } catch (GradesAreNotAvailable $e) {
-            return new JsonResponse([
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_NOT_FOUND,
-            ]);
         }
 
         return new UserCardCollection($userCards);

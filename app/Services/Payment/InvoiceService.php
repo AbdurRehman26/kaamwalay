@@ -5,12 +5,10 @@ namespace App\Services\Payment;
 use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Models\Invoice;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Services\BarcodeService;
 use App\Services\PDFService;
 use Carbon\Carbon;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 

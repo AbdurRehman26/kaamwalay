@@ -127,6 +127,10 @@
  *                             "notes": ""
  *                        },
  *                        "certificate_number": "00000502",
+ *                        "grade": {
+ *                            "grade": 7,
+ *                            "nickname": "NM"
+ *                        },
  *                        "graded_by": "John Doe",
  *                        "graded_at": "2021-09-16T21:58:02.000000Z"
  *                    },
@@ -153,7 +157,11 @@
  *                             },
  *                             "notes": ""
  *                        },
- *                        "certificate_number": "00000504"
+ *                        "certificate_number": "00000504",
+ *                        "grade": {
+ *                            "grade": null,
+ *                            "nickname": null
+ *                        },
  *                    }
  *                ],
  *                "customer_shipment": {

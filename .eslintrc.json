@@ -24,7 +24,7 @@
         "valid-jsdoc": "off",
         "new-cap": "off",
         "no-unused-vars": "off",
-        "camelcase": ["error", {}],
+        "camelcase": ["error", { "properties": "always" }],
         "@typescript-eslint/no-unused-vars": "error"
     }
 }

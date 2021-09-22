@@ -279,7 +279,7 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
     return serviceLevels.data.map((serviceLevel: any) => ({
         id: serviceLevel.id,
         type: 'card',
-        maxProtectionAmount: serviceLevel.max_protection_amount,
+        maxProtectionAmount: serviceLevel.maxProtectionAmount,
         turnaround: serviceLevel.turnaround,
         price: serviceLevel.price,
     }));
@@ -304,7 +304,7 @@ export const getShippingFee = createAsyncThunk(
             })),
         };
         const shippingFeeResponse = await endpoint.post('', DTO);
-        return shippingFeeResponse.data.shipping_fee;
+        return shippingFeeResponse.data.shippingFee;
     },
 );
 
@@ -316,16 +316,16 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
     const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
         return {
             id: address.id,
-            userId: address.user_id,
-            firstName: address.first_name,
-            lastName: address.last_name,
+            userId: address.userId,
+            firstName: address.firstName,
+            lastName: address.lastName,
             address: address.address,
             zipCode: address.zip,
             phoneNumber: address.phone,
             flat: address.flat ?? '',
             city: address.city,
-            isDefaultShipping: address.is_default_shipping,
-            isDefaultBilling: address.is_default_billing,
+            isDefaultShipping: address.isDefaultShipping,
+            isDefaultBilling: address.isDefaultSilling,
             // Doing this because the back-end can't give me this full object for the state
             // so I'll just search for the complete object inside the existing states
             state: availableStatesList.find((item: any) => item.code === address.state),
@@ -563,33 +563,33 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.existingAddresses = action.payload;
         },
         [createOrder.fulfilled as any]: (state, action) => {
-            state.grandTotal = action.payload.grand_total;
-            state.orderNumber = action.payload.order_number;
+            state.grandTotal = action.payload.grandTotal;
+            state.orderNumber = action.payload.orderNumber;
             state.orderID = action.payload.id;
-            state.step04Data.selectedBillingAddress.address = action.payload.billing_address.address;
-            state.step04Data.selectedBillingAddress.country = action.payload.billing_address.country;
-            state.step04Data.selectedBillingAddress.firstName = action.payload.billing_address.first_name;
-            state.step04Data.selectedBillingAddress.lastName = action.payload.billing_address.last_name;
-            state.step04Data.selectedBillingAddress.flat = action.payload.billing_address.flat;
-            state.step04Data.selectedBillingAddress.id = action.payload.billing_address.id;
+            state.step04Data.selectedBillingAddress.address = action.payload.billingAddress.address;
+            state.step04Data.selectedBillingAddress.country = action.payload.billingAddress.country;
+            state.step04Data.selectedBillingAddress.firstName = action.payload.billingAddress.firstName;
+            state.step04Data.selectedBillingAddress.lastName = action.payload.billingAddress.lastName;
+            state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress.flat;
+            state.step04Data.selectedBillingAddress.id = action.payload.billingAddress.id;
             state.step04Data.selectedCreditCard.expMonth =
-                state.step04Data.paymentMethodId === 1 ? action.payload.order_payment.card.exp_month : '';
-            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billing_address.phone;
+                state.step04Data.paymentMethodId === 1 ? action.payload.orderPayment.card.expMonth : '';
+            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress.phone;
             state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
-                (currentState: any) => currentState.code === action.payload.billing_address.state,
+                (currentState: any) => currentState.code === action.payload.billingAddress.state,
             ) as any;
-            state.step04Data.selectedBillingAddress.zipCode = action.payload.billing_address.zip;
-            state.step04Data.selectedBillingAddress.city = action.payload.billing_address.city;
-            state.step02Data.selectedCards = action.payload.order_items.map((orderItem: any) => ({
-                image: orderItem.card_product.image_path,
-                title: orderItem.card_product.name,
-                subtitle: `${orderItem.card_product.release_year} ${orderItem.card_product.card_category_name} ${orderItem.card_product.card_series_name} ${orderItem.card_product.card_series_name} ${orderItem.card_product.card_number_order} ${orderItem.card_product.name}`,
-                id: orderItem.card_product.id,
+            state.step04Data.selectedBillingAddress.zipCode = action.payload.billingAddress.zip;
+            state.step04Data.selectedBillingAddress.city = action.payload.billingAddress.city;
+            state.step02Data.selectedCards = action.payload.orderItems.map((orderItem: any) => ({
+                image: orderItem.cardProduct.imagePath,
+                title: orderItem.cardProduct.name,
+                subtitle: `${orderItem.cardProduct.releaseYear} ${orderItem.cardProduct.cardCategoryName} ${orderItem.cardProduct.cardSeriesName} ${orderItem.cardProduct.cardSeriesName} ${orderItem.cardProduct.cardNumberOrder} ${orderItem.cardProduct.name}`,
+                id: orderItem.cardProduct.id,
                 qty: orderItem.quantity,
-                value: orderItem.declared_value_per_unit,
+                value: orderItem.declaredValuePerUnit,
             }));
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
-                (plan) => plan.id === action.payload.payment_plan.id,
+                (plan) => plan.id === action.payload.paymentPlan.id,
             ) as any;
         },
     },

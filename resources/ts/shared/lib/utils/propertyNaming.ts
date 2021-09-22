@@ -8,6 +8,10 @@ export function propertyNaming(object: Record<string, any>, options?: PropertyNa
         return object;
     }
 
+    if (Array.isArray(object)) {
+        return object.map((value) => propertyNaming(value, options));
+    }
+
     return Object.entries(object).reduce(
         (prev, [key, value]) => ({
             ...prev,

@@ -23,7 +23,7 @@ import pickNPay from '../../assets/icons/payments/pick-n-pay.svg';
 import postepay from '../../assets/icons/payments/postepay.svg';
 import sage from '../../assets/icons/payments/sage.svg';
 import solo from '../../assets/icons/payments/solo.svg';
-import _switch from '../../assets/icons/payments/switch.svg';
+import switchIcon from '../../assets/icons/payments/switch.svg';
 import symbols from '../../assets/icons/payments/symbols.svg';
 import unionPay from '../../assets/icons/payments/union-pay.svg';
 import visa from '../../assets/icons/payments/visa.svg';
@@ -69,7 +69,7 @@ export const getPaymentTitle = (icon: string): string | null => _getter(icon, 't
  * @param aliases
  * @private
  */
-const _register = (icon: string, title: string, ...aliases: string[]): void => {
+const registerIcon = (icon: string, title: string, ...aliases: string[]): void => {
     aliases.forEach((alias) => {
         alias = alias.toLowerCase();
 
@@ -84,37 +84,37 @@ const _register = (icon: string, title: string, ...aliases: string[]): void => {
     });
 };
 
-_register(amex, 'American Express', 'amex', 'american express');
-_register(twoCo, '2 Checkout', '2co', '2 checkout', 'two co');
-_register(amazon, 'Amazon', 'amazon');
-_register(bbu, 'Better Business Bureau', 'better business bureau', 'bbu');
-_register(bluePay, 'Blue Pay', 'blue pay');
-_register(cirrus, 'Cirrus', 'cirrus');
-_register(citi, 'Citi bank', 'citi', 'citi bank');
-_register(clickbank, 'Click Bank', 'click bank');
-_register(dinnersClub, 'Dinners Club', 'dinners club');
-_register(directDebit, 'Direct Debit', 'direct debit');
-_register(discover, 'Discover', 'discover');
-_register(ebay, 'Ebay', 'ebay');
-_register(eway, 'Eway', 'eway');
-_register(hsbc, 'HSBC', 'hsbc');
-_register(ideal, 'Ideal', 'ideal');
-_register(jcb, 'JCB', 'jcb');
-_register(maestro, 'Maestro', 'maestro');
-_register(mastercard, 'Master Card', 'master card');
-_register(paypal, 'Paypal', 'pay pal');
-_register(paypoint, 'Paypoint', 'paypoint');
-_register(pickNPay, 'Pick n Pay', 'pick n pay');
-_register(postepay, 'Poste Pay', 'poste pay');
-_register(sage, 'Sage', 'sage');
-_register(solo, 'Solo', 'solo');
-_register(_switch, 'Switch', 'switch');
-_register(symbols, 'Symbols', 'symbols');
-_register(unionPay, 'Union Pay', 'union pay');
-_register(visa, 'Visa', 'visa');
-_register(wepay, 'We Pay', 'we pay');
-_register(westernUnion, 'Western Union', 'western union');
-_register(wirecard, 'Wire Card', 'wire card');
-_register(worldpay, 'World Pay', 'world pay');
+registerIcon(amex, 'American Express', 'amex', 'american express');
+registerIcon(twoCo, '2 Checkout', '2co', '2 checkout', 'two co');
+registerIcon(amazon, 'Amazon', 'amazon');
+registerIcon(bbu, 'Better Business Bureau', 'better business bureau', 'bbu');
+registerIcon(bluePay, 'Blue Pay', 'blue pay');
+registerIcon(cirrus, 'Cirrus', 'cirrus');
+registerIcon(citi, 'Citi bank', 'citi', 'citi bank');
+registerIcon(clickbank, 'Click Bank', 'click bank');
+registerIcon(dinnersClub, 'Dinners Club', 'dinners club');
+registerIcon(directDebit, 'Direct Debit', 'direct debit');
+registerIcon(discover, 'Discover', 'discover');
+registerIcon(ebay, 'Ebay', 'ebay');
+registerIcon(eway, 'Eway', 'eway');
+registerIcon(hsbc, 'HSBC', 'hsbc');
+registerIcon(ideal, 'Ideal', 'ideal');
+registerIcon(jcb, 'JCB', 'jcb');
+registerIcon(maestro, 'Maestro', 'maestro');
+registerIcon(mastercard, 'Master Card', 'master card');
+registerIcon(paypal, 'Paypal', 'pay pal');
+registerIcon(paypoint, 'Paypoint', 'paypoint');
+registerIcon(pickNPay, 'Pick n Pay', 'pick n pay');
+registerIcon(postepay, 'Poste Pay', 'poste pay');
+registerIcon(sage, 'Sage', 'sage');
+registerIcon(solo, 'Solo', 'solo');
+registerIcon(switchIcon, 'Switch', 'switch');
+registerIcon(symbols, 'Symbols', 'symbols');
+registerIcon(unionPay, 'Union Pay', 'union pay');
+registerIcon(visa, 'Visa', 'visa');
+registerIcon(wepay, 'We Pay', 'we pay');
+registerIcon(westernUnion, 'Western Union', 'western union');
+registerIcon(wirecard, 'Wire Card', 'wire card');
+registerIcon(worldpay, 'World Pay', 'world pay');
 
 export default ICONS;

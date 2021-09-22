@@ -39,6 +39,8 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
         ...bracketParams(),
     });
 
+    console.log(orders$.data);
+
     const totals = orders$.pagination?.meta?.total ?? 0;
 
     useEffect(

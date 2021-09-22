@@ -227,7 +227,6 @@ class Order extends Model
 
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
-
         return $query->whereHas(
             'orderStatus',
             function (Builder $query) use ($status) {

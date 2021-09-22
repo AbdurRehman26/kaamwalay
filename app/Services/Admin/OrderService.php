@@ -127,13 +127,13 @@ class OrderService
             throw new GradesAreNotAvailable;
         }
 
-        return $this->updateLocalGrades($grades);
+        return $this->updateLocalGrades($grades['results']);
     }
 
     protected function updateLocalGrades(array $grades): array
     {
         $cards = [];
-        foreach ($grades['results'] ?? [] as $result) {
+        foreach ($grades as $result) {
             $card = UserCard::whereCertificateNumber($result['certificate_id'])->first();
             if (! is_null($card)) {
                 $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));

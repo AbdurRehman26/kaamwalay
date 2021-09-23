@@ -95,4 +95,11 @@ class OrderService
 
         return '';
     }
+
+    public function getOrder(int $orderId): Order | QueryBuilder
+    {
+        return QueryBuilder::for(Order::class)
+            ->allowedIncludes(Order::getAllowedIncludes())
+            ->findOrFail($orderId);
+    }
 }

@@ -1,10 +1,7 @@
 <?php
 
-use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
-use App\Services\Admin\OrderStatusHistoryService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class OrderStatusToOrderStatusHistory extends Migration
@@ -14,7 +11,6 @@ class OrderStatusToOrderStatusHistory extends Migration
      *
      * @return void
      * @throws Throwable
-     * @throws OrderStatusHistoryWasAlreadyAssigned
      */
     public function up(): void
     {

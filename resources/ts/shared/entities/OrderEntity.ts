@@ -65,11 +65,11 @@ export class OrderEntity extends Entity {
     @Field('billing_address')
     public billingAddress!: AddressEntity;
 
-    @Field('customer_shipment', () => ShipmentEntity)
-    public customerShipment!: ShipmentEntity | null;
+    @Field('order_customer_shipment', () => ShipmentEntity)
+    public orderCustomerShipment!: ShipmentEntity | null;
 
-    @Type(() => ShipmentEntity)
-    public shipment!: ShipmentEntity | null;
+    @Field('order_shipment', () => ShipmentEntity)
+    public orderShipment!: ShipmentEntity | null;
 
     @DateField('arrived_at')
     public arrivedAt!: Moment;

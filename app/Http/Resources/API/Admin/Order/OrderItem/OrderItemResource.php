@@ -14,6 +14,7 @@ class OrderItemResource extends BaseResource
 
         return [
             'id' => $this->id,
+            'order_id' => $this->order_id,
             'quantity' => $this->quantity,
             'declared_value_per_unit' => $this->declared_value_per_unit,
             'card_product' => new CardProductResource($this->cardProduct),

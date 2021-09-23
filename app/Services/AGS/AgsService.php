@@ -48,9 +48,9 @@ class AgsService
         ];
     }
 
-    public function createCertificates(string $certificateIds): array
+    public function createCertificates(array $data): array
     {
-        return $this->client->createCertificates(certificateIds: $certificateIds);
+        return $this->client->createCertificates(data: $data);
     }
 
     public function getGrades(array $certificateIds): array
@@ -88,12 +88,14 @@ class AgsService
             ],
             'card' => [
                 'name' => $data['card']['name'] ?? null,
-                'full_name' => $this->getCardFullName($data['card']) ?? null,
+                'full_name' => ! empty($data['card']) ? $this->getCardFullName($data['card']) : '',
                 'image_path' => $data['card']['image_path'] ?? null,
                 'type' => 'Pokemon',
                 'series' => $data['card']['pokemon_serie']['name'] ?? null,
                 'set' => $data['card']['pokemon_set']['name'] ?? null,
-                'release_date' => Carbon::parse($data['card']['pokemon_set']['release_date'])->format('F d, Y') ?? null,
+                'release_date' => ! empty($data['card']['pokemon_set']['release_date']) ?
+                    Carbon::parse($data['card']['pokemon_set']['release_date'])->format('F d, Y') :
+                    null,
                 'number' => $data['card']['pokemon_set']['cards_number'] ?? null,
             ],
             'overall' => [

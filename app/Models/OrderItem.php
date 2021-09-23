@@ -51,6 +51,7 @@ class OrderItem extends Model
         'order_item_shipment_id' => 'integer',
         'order_item_customer_shipment_id' => 'integer',
         'order_item_status_id' => 'integer',
+        'quantity' => 'integer',
         'unit_price' => 'decimal:2',
         'total_price' => 'decimal:2',
         'declared_value_per_unit' => 'float',

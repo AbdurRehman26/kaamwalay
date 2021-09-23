@@ -12,7 +12,4 @@ it('generates export', function () {
 
     $this->artisan('orders:export ' . Carbon::now()->format('Y-m-d'))
         ->assertExitCode(0);
-
-    // Notification should not be sent because we are not running production
-    Notification::assertNothingSent();
 });

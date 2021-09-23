@@ -87,16 +87,16 @@ class AGSClient
         );
     }
 
-    public function createCertificates(string $certificateIds)
+    public function createCertificates(array $data)
     {
-        $response = Http::withToken($this->getAuthToken())->asForm()->post($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/', [
-            "certificate_ids" => $certificateIds,
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/', [
+            "data" => $data,
         ]);
 
         if ($response->successful()) {
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/robograding/certificates/', payload: [$certificateIds]);
+        return $this->responseHandler(response: $response, route: '/robograding/certificates/', payload: [$data]);
     }
 }

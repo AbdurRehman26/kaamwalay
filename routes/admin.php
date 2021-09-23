@@ -33,9 +33,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('items', [OrderItemController::class, 'getOrderCards']);
         Route::post('items', [OrderItemController::class, 'store']);
         Route::get('grades', [OrderController::class, 'getGrades']);
-        Route::post('shipment',[OrderController::class, 'updateShipment']);
+        Route::post('shipment', [OrderController::class, 'updateShipment']);
 
         Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
     });
-
 });

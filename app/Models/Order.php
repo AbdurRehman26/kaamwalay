@@ -22,6 +22,7 @@ use Spatie\QueryBuilder\AllowedInclude;
  * @property int $order_status_id
  * @property int $id
  * @property OrderItemCustomerShipment $customerShipment
+ * @property int $shipping_method_id
  */
 class Order extends Model
 {
@@ -45,6 +46,8 @@ class Order extends Model
         'payment_method_id',
         'shipping_method_id',
         'invoice_id',
+        'order_shipment_id',
+        'order_customer_shipment_id',
         'arrived_at',
         'notes',
         'reviewed_by_id',
@@ -96,6 +99,8 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
+            AllowedInclude::relationship('orderShipment'),
+            AllowedInclude::relationship('orderCustomerShipment'),
         ];
     }
 
@@ -125,7 +130,8 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
-            'customerShipment',
+            AllowedInclude::relationship('shipment'),
+            AllowedInclude::relationship('orderCustomerShipment'),
         ];
     }
 
@@ -223,15 +229,18 @@ class Order extends Model
 
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
-        if (! $status || $status === 'all') {
-            return $query;
-        }
-
         return $query->whereHas(
-            'orderStatusHistory.orderStatus',
-            fn ($query) => $query
-                ->where('id', $status)
-                ->orWhere('code', $status)
+            'orderStatus',
+            function (Builder $query) use ($status) {
+                $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
+                if (! $status || $status === 'all') {
+                    return $query;
+                }
+
+                return $query
+                    ->where('id', $status)
+                    ->orWhere('code', $status);
+            }
         );
     }
 
@@ -270,18 +279,22 @@ class Order extends Model
         );
     }
 
-    public function customerShipment()
+    public function orderShipment(): BelongsTo
     {
-        $orderItem = $this->orderItems()->first();
-
-        return $orderItem?->orderItemCustomerShipment();
+        return $this->belongsTo(OrderShipment::class);
     }
+
+    public function orderCustomerShipment(): BelongsTo
+    {
+        return $this->belongsTo(OrderCustomerShipment::class);
+    }
+
 
     public function getGroupedOrderItems()
     {
-        return OrderItem::select('card_product_id', 'declared_value_total', 'declared_value_per_unit', DB::raw('sum(quantity) as quantity'))
+        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('min(declared_value_total) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
         ->where('order_id', $this->id)
-        ->groupBy(['card_product_id', 'declared_value_total','declared_value_per_unit'])
+        ->groupBy(['card_product_id'])
         ->get();
     }
 }

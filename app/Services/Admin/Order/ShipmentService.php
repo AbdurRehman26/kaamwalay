@@ -2,12 +2,12 @@
 
 namespace App\Services\Admin\Order;
 
-use App\Exceptions\API\Admin\Order\ShipmentNotUpdated;
+use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Models\Order;
-use App\Models\OrderItemShipment;
+use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Services\Admin\OrderStatusHistoryService;
-use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ShipmentService
 {
@@ -15,49 +15,45 @@ class ShipmentService
     {
     }
 
-    public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderItemShipment
+    /**
+     * @throws OrderCanNotBeMarkedAsGraded
+     * @throws Throwable
+     */
+    public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderShipment
     {
-        try {
-            $items = $order->orderItems;
+        /** @var OrderShipment $orderShipment */
+        $orderShipment = $order->orderShipment;
 
-            foreach ($items as $item) {
-                $shipment = OrderItemShipment::firstOrCreate([
-                    'shipping_provider' => $shippingProvider,
-                    'tracking_number' => $trackingNumber,
-                    'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
-                    'shipment_date' => new \Datetime(),
-                    'shipping_method_id' => $order->shipping_method_id,
-                ]);
+        if ($orderShipment) {
+            $orderShipment->update([
+                'shipping_provider' => $shippingProvider,
+                'tracking_number' => $trackingNumber,
+                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
+            ]);
+        } else {
+            $orderShipment = OrderShipment::create([
+                'shipping_provider' => $shippingProvider,
+                'tracking_number' => $trackingNumber,
+                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
+                'shipping_method_id' => $order->shipping_method_id,
+            ]);
 
-                if (! $item->order_item_shipment_id) {
-                    $item->order_item_shipment_id = $shipment->id;
-                    $item->save();
-                }
-            }
-
-            $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
-
-            return $shipment;
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
-            throw new ShipmentNotUpdated();
+            $order->orderShipment()->associate($orderShipment)->save();
         }
+
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
+
+        return $orderShipment;
     }
 
-    protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): string
+    protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): ?string
     {
-        switch (strtolower($shippingProvider)) {
-            case 'usps':
-                return 'https://tools.usps.com/go/TrackConfirmAction.action?tLabels=' . $trackingNumber;
-            case 'ups':
-                return 'https://wwwapps.ups.com/WebTracking/processRequest?HTMLVersion=5.0&Requester=NES&AgreeToTermsAndConditions=yes&loc=en_US&tracknum=' . $trackingNumber . '/trackdetails';
-            case 'fedex':
-                return 'https://www.fedex.com/fedextrack/?trknbr=' . $trackingNumber . '&trkqual=2459465000~' . $trackingNumber . '~FX';
-            case 'dhlexpress':
-                return 'https://www.dhl.com/us-en/home/tracking/tracking-express.html?submit=1&tracking-id=' . $trackingNumber;
-            default:
-                return null;
-        }
+        return match (strtolower($shippingProvider)) {
+            'usps' => 'https://tools.usps.com/go/TrackConfirmAction.action?tLabels=' . $trackingNumber,
+            'ups' => 'https://wwwapps.ups.com/WebTracking/processRequest?HTMLVersion=5.0&Requester=NES&AgreeToTermsAndConditions=yes&loc=en_US&tracknum=' . $trackingNumber . '/trackdetails',
+            'fedex' => 'https://www.fedex.com/fedextrack/?trknbr=' . $trackingNumber . '&trkqual=2459465000~' . $trackingNumber . '~FX',
+            'dhlexpress' => 'https://www.dhl.com/us-en/home/tracking/tracking-express.html?submit=1&tracking-id=' . $trackingNumber,
+            default => null,
+        };
     }
 }

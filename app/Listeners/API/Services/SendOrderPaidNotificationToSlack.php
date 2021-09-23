@@ -15,7 +15,7 @@ class SendOrderPaidNotificationToSlack implements ShouldQueue
 
     public function handle(OrderPaid $event): void
     {
-        if (! app()->environment('production')) {
+        if (app()->environment('local')) {
             return;
         }
 

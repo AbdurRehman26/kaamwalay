@@ -39,9 +39,14 @@ function LayoutSidebar() {
         >
             <List>
                 <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
-                <LayoutSidebarItem icon={StyleIcon} title={'Cards'} href={'/cards'} />
-                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Customers'} href={'/customers'} />
-                <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} />
+                <LayoutSidebarItem icon={StyleIcon} title={'Cards'} href={'/cards'} comingSoon />
+                <LayoutSidebarItem
+                    icon={AccountCircleOutlinedIcon}
+                    title={'Customers'}
+                    href={'/customers'}
+                    comingSoon
+                />
+                <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />
             </List>
         </Drawer>
     );

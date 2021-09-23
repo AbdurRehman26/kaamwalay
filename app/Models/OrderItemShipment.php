@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static OrderItemShipment create(?array $data = [])
+ */
 class OrderItemShipment extends Model
 {
     use HasFactory;
@@ -14,7 +17,7 @@ class OrderItemShipment extends Model
      *
      * @var array
      */
-    protected $fillable = ['shipment_date', 'tracking_number', 'tracking_url', 'shipping_method_id'];
+    protected $fillable = ['shipment_date', 'tracking_number', 'tracking_url', 'shipping_method_id', 'shipping_provider'];
 
     /**
      * The attributes that should be cast to native types.
@@ -23,7 +26,7 @@ class OrderItemShipment extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'shipment_date' => 'timestamp',
+        'shipment_date' => 'datetime',
         'shipping_method_id' => 'integer',
     ];
 

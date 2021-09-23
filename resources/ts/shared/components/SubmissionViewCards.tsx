@@ -3,16 +3,20 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useCallback, useState } from 'react';
-import DummyCharizard from '@shared/assets/dummyCharizard.png';
-import { TablePagination } from '@shared/components/TablePagination';
+import React from 'react';
 import font from '@shared/styles/font.module.css';
+import { OrderItemEntity } from '../entities/OrderItemEntity';
 import { cx } from '../lib/utils/cx';
+import { formatCurrency } from '../lib/utils/formatCurrency';
+
+interface SubmissionViewCardsProps {
+    items: OrderItemEntity[];
+    serviceFee: number;
+}
 
 export const useStyles = makeStyles(
     (theme) => ({
@@ -49,15 +53,8 @@ export const useStyles = makeStyles(
     { name: 'SubmissionViewCards' },
 );
 
-export function SubmissionViewCards() {
+export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsProps) {
     const classes = useStyles();
-
-    const totals = 0;
-    const [page, setPage] = useState(0);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-
-    const handleChangePage = useCallback((e, page) => setPage(page), [setPage]);
-    const handleChangeRowsPerPage = useCallback((e) => setItemsPerPage(e.target.value), [setItemsPerPage]);
 
     return (
         <Box px={3}>
@@ -74,94 +71,64 @@ export function SubmissionViewCards() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <TableCell>
-                                <Box display={'flex'} alignItems={'center'}>
-                                    <img src={DummyCharizard} className={classes.cardImage} alt={'Charizard'} />
-                                    <Box display={'flex'} flexDirection={'column'} paddingLeft={1}>
-                                        <Typography variant={'body2'}>Charizard</Typography>
-                                        <Typography variant={'body2'}>
-                                            2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard
-                                        </Typography>
-                                        <Box>
-                                            <Typography
-                                                variant={'caption'}
-                                                color={'textSecondary'}
-                                                className={classes.gutterRight}
-                                            >
-                                                Card #: 898982
+                        {items?.map((item, index) => (
+                            <TableRow key={index}>
+                                <TableCell>
+                                    <Box display={'flex'} alignItems={'center'}>
+                                        <img
+                                            src={item.cardProduct.imagePath}
+                                            className={classes.cardImage}
+                                            alt={item.cardProduct.imagePath}
+                                        />
+                                        <Box display={'flex'} flexDirection={'column'} paddingLeft={1}>
+                                            <Typography variant={'body2'}>{item.cardProduct.getName()}</Typography>
+                                            <Typography variant={'body2'}>
+                                                {item.cardProduct.getDescription()}
                                             </Typography>
-                                            <Typography
-                                                variant={'caption'}
-                                                color={'textSecondary'}
-                                                className={classes.gutterRight}
-                                            >
-                                                ID: 898982
-                                            </Typography>
+                                            <Box>
+                                                <Typography
+                                                    variant={'caption'}
+                                                    color={'textSecondary'}
+                                                    className={classes.gutterRight}
+                                                >
+                                                    Card #: {item.cardProduct.cardNumberOrder}
+                                                </Typography>
+                                                <Typography
+                                                    variant={'caption'}
+                                                    color={'textSecondary'}
+                                                    className={classes.gutterRight}
+                                                >
+                                                    ID: {item.id}
+                                                </Typography>
+                                            </Box>
                                         </Box>
                                     </Box>
-                                </Box>
-                            </TableCell>
-                            <TableCell>-</TableCell>
-                            <TableCell>
-                                <Typography variant={'body2'}>$ 400.00</Typography>
-                            </TableCell>
-                            <TableCell align={'right'}>
-                                <Typography variant={'body2'}>$ 20.00</Typography>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <Box display={'flex'} alignItems={'center'}>
-                                    <img src={DummyCharizard} className={classes.cardImage} alt={'Charizard'} />
-                                    <Box display={'flex'} flexDirection={'column'} paddingLeft={1}>
-                                        <Typography variant={'body2'}>Charizard</Typography>
-                                        <Typography variant={'body2'}>
-                                            2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard
+                                </TableCell>
+                                <TableCell>
+                                    {!item ? (
+                                        <Typography
+                                            variant={'body2'}
+                                            className={cx(font.fontWeightBold, classes.gradeBadge)}
+                                        >
+                                            8.7
                                         </Typography>
-                                        <Box>
-                                            <Typography
-                                                variant={'caption'}
-                                                color={'textSecondary'}
-                                                className={classes.gutterRight}
-                                            >
-                                                Card #: 898982
-                                            </Typography>
-                                            <Typography
-                                                variant={'caption'}
-                                                color={'textSecondary'}
-                                                className={classes.gutterRight}
-                                            >
-                                                ID: 898982
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            </TableCell>
-                            <TableCell>
-                                <Typography variant={'body2'} className={cx(font.fontWeightBold, classes.gradeBadge)}>
-                                    8.7
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography variant={'body2'}>$ 400.00</Typography>
-                            </TableCell>
-                            <TableCell align={'right'}>
-                                <Typography variant={'body2'}>$ 20.00</Typography>
-                            </TableCell>
-                        </TableRow>
+                                    ) : (
+                                        '-'
+                                    )}
+                                </TableCell>
+                                <TableCell>
+                                    <Typography variant={'body2'}>
+                                        {formatCurrency(item.declaredValuePerUnit)}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align={'right'}>
+                                    <Typography variant={'body2'}>
+                                        {formatCurrency(item.quantity * serviceFee)}
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
-                    <TableFooter className={classes.footer}>
-                        <TableRow>
-                            <TablePagination
-                                count={totals || 0}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                rowsPerPage={itemsPerPage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
-                        </TableRow>
-                    </TableFooter>
                 </Table>
             </TableContainer>
         </Box>

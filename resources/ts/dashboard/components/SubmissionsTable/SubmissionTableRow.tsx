@@ -11,12 +11,14 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CustomerShipmentEntity } from '@shared/entities/CustomerShipmentEntity';
+import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import ShipmentNumberModal from '@dashboard/components/SubmissionsTable/ShipmentNumberModal';
+import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
+import { useAppDispatch } from '@dashboard/redux/hooks';
 
 interface SubmissionTableRowProps {
     id: number;
@@ -27,7 +29,7 @@ interface SubmissionTableRowProps {
     invoice?: string;
     invoiceNumber?: string;
     disabled?: boolean;
-    customerShipment: null | CustomerShipmentEntity;
+    orderCustomerShipment: null | ShipmentEntity;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
 }
@@ -38,7 +40,7 @@ enum Options {
     Download,
     Delete,
     ViewInstructions,
-    toggleShipmentTrackingModal,
+    ToggleShipmentTrackingModal,
 }
 
 const useStyles = makeStyles(
@@ -108,17 +110,18 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         invoice,
         invoiceNumber,
         status,
-        customerShipment,
+        orderCustomerShipment,
     } = props;
 
     const history = useHistory();
     const confirm = useConfirmation();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
+    const dispatch = useAppDispatch();
 
     const handleOption = useCallback(
         (option: Options) => async () => {
@@ -134,7 +137,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 case Options.Edit:
                     history.push(`/submissions/${id}/edit`);
                     break;
-                case Options.toggleShipmentTrackingModal:
+                case Options.ToggleShipmentTrackingModal:
                     setShowShipmentTrackingModal(!showShipmentTrackingModal);
                     break;
                 case Options.Delete:
@@ -151,13 +154,21 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [handleCloseOptions, history, id, confirm, invoice, invoiceNumber, showShipmentTrackingModal],
     );
 
+    const handleShipmentSubmit = useCallback(
+        async ({ trackingNumber, shippingProvider }: Record<any, string>) => {
+            await dispatch(setOrderCustomerShipment({ trackingNumber, shippingProvider, orderId: id }));
+        },
+        [dispatch, id],
+    );
+
     return (
         <>
-            <ShipmentNumberModal
-                id={id}
-                customerShipment={customerShipment as CustomerShipmentEntity}
-                showModal={showShipmentTrackingModal}
-                handleModalVisibility={handleOption(Options.toggleShipmentTrackingModal)}
+            <ShipmentDialog
+                open={showShipmentTrackingModal}
+                onClose={handleOption(Options.ToggleShipmentTrackingModal)}
+                trackingNumber={orderCustomerShipment?.trackingNumber}
+                shippingProvider={orderCustomerShipment?.shippingProvider}
+                onSubmit={handleShipmentSubmit}
             />
 
             {!isMobile ? (
@@ -178,8 +189,8 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
                             </MenuItem>
                             <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
-                            <MenuItem onClick={handleOption(Options.toggleShipmentTrackingModal)}>
-                                {customerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                            <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                             </MenuItem>
                         </Menu>
                     </TableCell>
@@ -234,8 +245,8 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                     <MenuItem onClick={handleOption(Options.ViewInstructions)}>
                                         View Instructions
                                     </MenuItem>
-                                    <MenuItem onClick={handleOption(Options.toggleShipmentTrackingModal)}>
-                                        {customerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                    <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                        {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                                     </MenuItem>
                                 </Menu>
                             </div>

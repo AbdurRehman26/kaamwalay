@@ -12,9 +12,9 @@ import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/Check';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { useOrderQuery } from '@shared/hooks/useOrderQuery';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { font } from '@shared/styles/utils';
 import { useConfirmationSubmissionSidebarStyles } from './style';
 

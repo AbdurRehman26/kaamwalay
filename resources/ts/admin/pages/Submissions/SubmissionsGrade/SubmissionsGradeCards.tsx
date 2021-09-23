@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
-import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
@@ -32,10 +31,12 @@ export function SubmissionsGradeCards() {
     const history = useHistory();
 
     function isCompleteGradingBtnEnabled() {
+        if (allCards.length === 0) {
+            return false;
+        }
         const nonReviewedCards = allCards.filter(
-            (item: any) => item?.order_item?.status?.order_item_status?.id === OrderItemStatusEnum.CONFIRMED,
+            (item: any) => item.order_item.status.order_item_status.name === 'Confirmed',
         );
-
         return nonReviewedCards.length === 0;
     }
 

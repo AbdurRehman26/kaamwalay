@@ -61,7 +61,7 @@ class InvoiceService
             'barcode' => $barcode,
             'order' => $order,
             'orderDate' => Carbon::parse($order->created_at)->format('m/d/Y'),
-            'orderItems' => $order->orderItems,
+            'orderItems' => $order->getGroupedOrderItems(),
             'customer' => $order->user,
             'shippingAddress' => $order->shippingAddress,
             'orderPayment' => $orderPayment,

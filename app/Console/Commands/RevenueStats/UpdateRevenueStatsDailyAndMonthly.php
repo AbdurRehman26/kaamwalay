@@ -43,10 +43,11 @@ class UpdateRevenueStatsDailyAndMonthly extends Command
         Log::info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Starting");
         $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($month, $formattedDate);
 
-        if (app()->environment('production')) {
+        if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new RevenueStatsUpdated($revenueStats, $revenueStatsMonthly));
         }
+
         $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
         Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
         $this->info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Completed");

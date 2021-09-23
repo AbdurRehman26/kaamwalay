@@ -29,5 +29,7 @@
         <server name="TELESCOPE_ENABLED" value="false"/>
         <server name="JWT_SECRET" value="test_jwt_secret"/>
         <server name="SCOUT_DRIVER" value="null"/>
+        <server name="AGS_BASE_URL" value="https://ags.api"/>
+        <server name="AGS_AUTHORIZATION_TOKEN" value="12345"/>
     </php>
 </phpunit>

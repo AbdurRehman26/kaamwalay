@@ -48,12 +48,11 @@ Route::prefix('customer')->group(function () {
             Route::post('shipping-fee', ShippingFeeController::class);
             Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
             Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
-            Route::get('{order}', [OrderController::class, 'show']);
+            Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
-            Route::apiResource('/', OrderController::class)
-                ->only(['index', 'store']);
-            Route::post('{order}/customer-shipment',[OrderController::class, 'updateCustomerShipment']);
+            Route::apiResource('/', OrderController::class)->only(['index', 'store']);
+            Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
         });
     });
 });

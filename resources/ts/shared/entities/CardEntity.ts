@@ -1,4 +1,4 @@
-import { Field } from '@shared/decorators/Field';
+import { Field } from '../decorators/Field';
 
 export class CardEntity {
     public brand!: string;

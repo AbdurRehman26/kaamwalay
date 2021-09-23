@@ -12,7 +12,7 @@ import { useAccordionCardItemContext } from './AccordionCardItemContext';
 interface AccordionCardItemHeaderProps {
     image: string;
     heading: string;
-    subheading: string;
+    subheading: any;
     action?: ReactNode;
     onPreview?: () => void;
 }

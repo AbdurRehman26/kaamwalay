@@ -20,7 +20,7 @@ describe('dto/SignupRequestDto', function () {
 
         try {
             foo.attempt({ email: 'test' } as any);
-        } catch (e) {
+        } catch (e: any) {
             expect(e).toBeInstanceOf(ValidationException);
             expect((e as ValidationException).errors[0].constraints).toMatchObject({
                 isEmail: createErrorMessage(ErrorMessages.ShouldBeValidEmailAddress, 'Email'),

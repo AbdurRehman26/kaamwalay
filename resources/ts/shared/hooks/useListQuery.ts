@@ -28,7 +28,7 @@ export function useListQuery<
     const isError = !!error;
 
     const currentPage = pagination.meta?.currentPage ?? 1;
-    const perPage = pagination.meta?.perPage ?? PaginatedData.LimitSet[0];
+    const perPage = Number(pagination.meta?.perPage ?? PaginatedData.LimitSet[0]);
     const lastPage = pagination.meta?.lastPage ?? 1;
 
     const data = useMemo(() => {
@@ -124,7 +124,7 @@ export function useListQuery<
             paginationProps: {
                 count: pagination.meta?.total || 0,
                 page: currentPage - 1,
-                rowsPerPage: perPage,
+                rowsPerPage: Number(perPage),
                 onPageChange: handleChangePage,
                 onRowsPerPageChange: handleChangeRowsPerPage,
                 rowsPerPageOptions: PaginatedData.LimitSet,

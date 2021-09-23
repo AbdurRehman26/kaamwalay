@@ -147,20 +147,12 @@ export class APIService {
         URL.revokeObjectURL(downloadHref);
     }
 
-    private objectToSnakeCase(params: any) {
-        if (params && typeof params === 'object' && !(params instanceof FormData)) {
-            return toApiPropertiesObject({ ...params }, { deep: true });
-        }
-
-        return params;
+    private objectToSnakeCase(data: any) {
+        return toApiPropertiesObject(data, { deep: true });
     }
 
-    private objectToCamelCase(params: any) {
-        if (params && typeof params === 'object' && !(params instanceof FormData)) {
-            return fromApiPropertiesObject({ ...params }, { deep: true });
-        }
-
-        return params;
+    private objectToCamelCase(data: any) {
+        return fromApiPropertiesObject(data, { deep: true });
     }
 
     private logResponse(response: AxiosResponse) {
@@ -172,5 +164,9 @@ export class APIService {
         } catch (e) {
             // pass
         }
+    }
+
+    private canBeConverted(data: any) {
+        return data && typeof data === 'object';
     }
 }

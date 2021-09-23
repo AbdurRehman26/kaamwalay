@@ -76,7 +76,7 @@ export class OrderEntity extends Entity {
     }
 
     public getItemsByStatus(status: OrderItemStatusEnum): OrderItemEntity[] {
-        return (this.orderItems ?? []).filter((item: any) => item.status?.order_item_status?.id === status);
+        return (this.orderItems ?? []).filter((item: any) => item.status?.orderItemStatus?.id === status);
     }
 
     public hasOrderStatus(status: OrderStatusEnum, checkInHistory: boolean = true) {

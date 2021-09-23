@@ -30,7 +30,7 @@ export function SubmissionsGrade() {
 
     function getGradedCards() {
         const gradedCards = allSubmissions.filter(
-            (item: any) => item.order_item.status.order_item_status.name !== 'Confirmed',
+            (item: any) => item.orderItem.status.orderItemStatus.name !== 'Confirmed',
         );
         return gradedCards.length;
     }

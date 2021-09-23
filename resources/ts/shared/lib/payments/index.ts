@@ -43,7 +43,7 @@ const DEFAULT_ICON = null;
  * @returns {null}
  * @private
  */
-const _getter = (icon: string, prop: 'icon' | 'title'): string | null => {
+const getter = (icon: string, prop: 'icon' | 'title'): string | null => {
     icon = icon?.toLowerCase() ?? DEFAULT_ICON;
     return icon && ICONS.hasOwnProperty(icon) ? ICONS[icon][prop] : DEFAULT_ICON;
 };
@@ -53,14 +53,14 @@ const _getter = (icon: string, prop: 'icon' | 'title'): string | null => {
  * @param icon
  * @returns {string}
  */
-export const getPaymentIcon = (icon: string): string | null => _getter(icon, 'icon');
+export const getPaymentIcon = (icon: string): string | null => getter(icon, 'icon');
 
 /**
  * Title getter
  * @param icon
  * @returns {string}
  */
-export const getPaymentTitle = (icon: string): string | null => _getter(icon, 'title');
+export const getPaymentTitle = (icon: string): string | null => getter(icon, 'title');
 
 /**
  * Icon register

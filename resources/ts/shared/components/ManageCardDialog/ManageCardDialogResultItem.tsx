@@ -12,6 +12,7 @@ import { batch } from 'react-redux';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
+import { fromApiPropertiesObject } from '../../lib/utils/fromApiPropertiesObject';
 
 interface ManageCardDialogResultItemProps {
     hit: Hit<CardProductEntity>;
@@ -45,7 +46,7 @@ const useStyles = makeStyles(
  * @time: 23:53
  */
 export function ManageCardDialogResultItem({ hit }: ManageCardDialogResultItemProps) {
-    const item = useMemo(() => plainToClass(CardProductEntity, hit), [hit]);
+    const item = useMemo(() => plainToClass(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
     const classes = useStyles();
     const dispatch = useSharedDispatch();
 

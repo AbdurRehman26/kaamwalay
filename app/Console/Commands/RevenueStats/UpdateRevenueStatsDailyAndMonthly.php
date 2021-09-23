@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
-class UpdateRevenueStatsDaily extends Command
+class UpdateRevenueStatsDailyAndMonthly extends Command
 {
     /**
      * The name and signature of the console command.

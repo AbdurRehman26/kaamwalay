@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UpdateRevenueStatsDailyAndMonthly implements ShouldQueue
+class UpdateRevenueStatsDaily implements ShouldQueue
 {
     use InteractsWithQueue;
 

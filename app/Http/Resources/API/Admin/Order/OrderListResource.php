@@ -31,11 +31,8 @@ class OrderListResource extends BaseResource
             'arrived' => ! is_null($this->arrived_at),
             'arrived_at' => $this->formatDate($this->arrived_at),
             'created_at' => $this->formatDate($this->created_at),
-
-            // Hack for customer_shipment and shipment include
-            // TODO: replace with normal relationship
-            'customer_shipment' => $this->whenIncluded('customerShipment', OrderItemCustomerShipmentResource::class, null, fn () => $this->resource->customerShipment()?->first()),
-            'shipment' => $this->whenIncluded('shipment', OrderItemShipmentResource::class, null, fn () => $this->resource->shipment()?->first()),
+            'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
+            'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
         ];
     }
 }

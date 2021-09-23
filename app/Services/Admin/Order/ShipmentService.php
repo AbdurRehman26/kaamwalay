@@ -4,7 +4,7 @@ namespace App\Services\Admin\Order;
 
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Models\Order;
-use App\Models\OrderItemShipment;
+use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Services\Admin\OrderStatusHistoryService;
 use Throwable;
@@ -19,36 +19,31 @@ class ShipmentService
      * @throws OrderCanNotBeMarkedAsGraded
      * @throws Throwable
      */
-    public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderItemShipment
+    public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderShipment
     {
-        $items = $order->orderItems()->with('orderItemShipment')->get();
-        $shipment = null;
+        /** @var OrderShipment $orderShipment */
+        $orderShipment = $order->orderShipment;
 
-        foreach ($items as $item) {
-            $shipment = $item->orderItemShipment;
-            $data = [
-                'shipment_date' => now(),
-                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
-                'shipping_method_id' => $order->shipping_method_id,
+        if ($orderShipment) {
+            $orderShipment->update([
                 'shipping_provider' => $shippingProvider,
                 'tracking_number' => $trackingNumber,
-            ];
+                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
+            ]);
+        } else {
+            $orderShipment = OrderShipment::create([
+                'shipping_provider' => $shippingProvider,
+                'tracking_number' => $trackingNumber,
+                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
+                'shipping_method_id' => $order->shipping_method_id
+            ]);
 
-            if (! $shipment) {
-                $shipment = OrderItemShipment::create($data);
-            } else {
-                $shipment->update($data);
-            }
-
-            if ($item->order_item_shipment_id !== $shipment->id) {
-                $item->order_item_shipment_id = $shipment->id;
-                $item->save();
-            }
+            $order->orderShipment()->associate($orderShipment)->save();
         }
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
 
-        return $shipment;
+        return $orderShipment;
     }
 
     protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): ?string

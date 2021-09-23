@@ -19,7 +19,7 @@ interface SubmissionViewHeaderProps {
     orderNumber: string;
     orderStatus: OrderStatusEntity;
     orderStatusHistory: OrderStatusHistoryEntity[];
-    shipment?: ShipmentEntity | null;
+    orderShipment?: ShipmentEntity | null;
 }
 
 const useStyles = makeStyles(
@@ -47,7 +47,7 @@ export function SubmissionsViewHeader({
     orderNumber,
     orderStatus,
     orderStatusHistory,
-    shipment,
+    orderShipment,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
 
@@ -87,8 +87,8 @@ export function SubmissionsViewHeader({
                     <SubmissionActionButton
                         orderId={orderId}
                         orderStatus={orderStatus}
-                        trackingNumber={shipment?.trackingNumber}
-                        shippingProvider={shipment?.shippingProvider}
+                        trackingNumber={orderShipment?.trackingNumber}
+                        shippingProvider={orderShipment?.shippingProvider}
                     />
                     <IconButton size={'medium'} className={classes.menuButton}>
                         <MoreVertIcon />

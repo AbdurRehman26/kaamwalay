@@ -17,10 +17,10 @@ export const setOrderCustomerShipment = createAsyncThunk(
     async (input: ChangeOrderShipmentDto, thunkAPI) => {
         const ordersRepository = app(OrdersRepository);
         try {
-            const customerShipment = await ordersRepository.setCustomerShipment(input);
+            const orderCustomerShipment = await ordersRepository.setCustomerShipment(input);
 
             return {
-                customerShipment: classToPlain(customerShipment),
+                orderCustomerShipment: classToPlain(orderCustomerShipment),
                 orderId: input.orderId,
             };
         } catch (e: any) {
@@ -43,7 +43,7 @@ export const ordersSlice = createSlice({
 
         builder.addCase(setOrderCustomerShipment.fulfilled, (state, { payload }) => {
             if (state.entities[payload.orderId]) {
-                (state.entities[payload.orderId] as any).customer_shipment = payload.customerShipment as any;
+                (state.entities[payload.orderId] as any).order_customer_shipment = payload.orderCustomerShipment as any;
             }
         });
     },

@@ -74,11 +74,8 @@ class OrderResource extends BaseResource
             'order_payment' => $this->whenLoaded('orderPayment', OrderPaymentResource::class),
             'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
-
-            // Hack for customer_shipment and shipment include
-            // TODO: replace with normal relationship
-            'customer_shipment' => $this->whenIncluded('customerShipment', OrderItemCustomerShipmentResource::class, null, fn () => $this->resource->customerShipment()?->first()),
-            'shipment' => $this->whenIncluded('shipment', OrderItemShipmentResource::class, null, fn () => $this->resource->shipment()?->first()),
+            'customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
+            'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
         ];
     }
 

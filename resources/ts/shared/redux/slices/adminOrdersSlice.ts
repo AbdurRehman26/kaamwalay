@@ -111,7 +111,7 @@ export const setOrderShipment = createAsyncThunk(
     async (input: ChangeOrderShipmentDto, thunkAPI) => {
         const ordersRepository = app(OrdersRepository);
         try {
-            const shipment = await ordersRepository.setShipment(input);
+            const orderShipment = await ordersRepository.setShipment(input);
             const order = await ordersRepository.show(input.orderId, {
                 params: {
                     include: ['orderStatus', 'orderStatusHistory.orderStatus'],
@@ -119,7 +119,7 @@ export const setOrderShipment = createAsyncThunk(
             });
 
             return {
-                shipment: classToPlain(shipment),
+                orderShipment: classToPlain(orderShipment),
                 orderStatus: classToPlain(order.orderStatus),
                 orderStatusHistory: classToPlain(order.orderStatusHistory),
                 orderId: input.orderId,
@@ -204,7 +204,7 @@ export const adminOrdersSlice = createSlice({
 
         builder.addCase(setOrderShipment.fulfilled, (state, { payload }) => {
             if (state.entities[payload.orderId]) {
-                (state.entities[payload.orderId] as any).shipment = payload.shipment as any;
+                (state.entities[payload.orderId] as any).order_shipment = payload.orderShipment as any;
                 (state.entities[payload.orderId] as any).order_status = payload.orderStatus as any;
                 (state.entities[payload.orderId] as any).order_status_history = payload.orderStatusHistory as any;
             }

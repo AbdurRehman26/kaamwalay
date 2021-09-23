@@ -46,6 +46,8 @@ class Order extends Model
         'payment_method_id',
         'shipping_method_id',
         'invoice_id',
+        'order_shipment_id',
+        'order_customer_shipment_id',
         'arrived_at',
         'notes',
         'reviewed_by_id',
@@ -97,8 +99,8 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
-            AllowedInclude::relationship('shipment'),
-            AllowedInclude::relationship('customerShipment'),
+            AllowedInclude::relationship('orderShipment'),
+            AllowedInclude::relationship('orderCustomerShipment'),
         ];
     }
 
@@ -129,7 +131,7 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('shipment'),
-            AllowedInclude::relationship('customerShipment'),
+            AllowedInclude::relationship('orderCustomerShipment'),
         ];
     }
 
@@ -277,15 +279,16 @@ class Order extends Model
         );
     }
 
-    public function customerShipment()
+    public function orderShipment(): BelongsTo
     {
-        return $this->orderItems()->first()?->orderItemCustomerShipment();
+        return $this->belongsTo(OrderShipment::class);
     }
 
-    public function shipment()
+    public function orderCustomerShipment(): BelongsTo
     {
-        return $this->orderItems()->first()?->orderItemShipment();
+        return $this->belongsTo(OrderCustomerShipment::class);
     }
+
 
     public function getGroupedOrderItems()
     {

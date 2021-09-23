@@ -24,6 +24,7 @@ export function SubmissionsView() {
                     'orderPayment',
                     'orderStatus',
                     'orderItems',
+                    'orderShipment',
                     'orderStatusHistory.orderStatus',
                 ],
             },
@@ -45,7 +46,7 @@ export function SubmissionsView() {
                 orderNumber={data?.orderNumber ?? ''}
                 orderStatus={data?.orderStatus}
                 orderStatusHistory={data?.orderStatusHistory}
-                shipment={data?.shipment}
+                orderShipment={data?.orderShipment}
             />
             <Divider />
             <SubmissionsViewDetails

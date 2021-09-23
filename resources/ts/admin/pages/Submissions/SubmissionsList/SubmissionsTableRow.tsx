@@ -106,8 +106,8 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     orderStatus={order.orderStatus}
                     size={'small'}
                     buttonOnly
-                    trackingNumber={order.shipment?.trackingNumber}
-                    shippingProvider={order.shipment?.shippingProvider}
+                    trackingNumber={order.orderShipment?.trackingNumber}
+                    shippingProvider={order.orderShipment?.shippingProvider}
                 />
             </TableCell>
             <TableCell align={'right'} className={classes.optionsCell}>

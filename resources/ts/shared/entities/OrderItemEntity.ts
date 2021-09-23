@@ -15,7 +15,7 @@ export class OrderItemEntity extends Entity {
     public cardProduct!: CardProductEntity;
 
     @Field('certificate_number')
-    public certificateNumber!: number;
+    public certificateNumber!: string;
 
     @Field('order_id')
     public orderId!: number;

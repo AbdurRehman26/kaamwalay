@@ -3,6 +3,7 @@
 namespace App\Services\AGS;
 
 use App\APIClients\AGSClient;
+use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use Carbon\Carbon;
 
 class AgsService
@@ -24,6 +25,32 @@ class AgsService
     public function register(array $data): array
     {
         return $this->client->register(data: $data);
+    }
+
+    public function updateHumanGrades(string $certificateId, array $data): array
+    {
+        $response = $this->client->updateHumanGrades($certificateId, $this->prepareHumanGradeData($data));
+
+        return CardGradeResource::make($response)->resolve();
+    }
+
+    protected function prepareHumanGradeData(array $data): array
+    {
+        return [
+            'front_centering_human_grade' => $data['human_grade_values']['front']['center'],
+            'front_surface_human_grade' => $data['human_grade_values']['front']['surface'],
+            'front_edges_human_grade' => $data['human_grade_values']['front']['edge'],
+            'front_corners_human_grade' => $data['human_grade_values']['front']['corner'],
+            'back_centering_human_grade' => $data['human_grade_values']['back']['center'],
+            'back_surface_human_grade' => $data['human_grade_values']['back']['corner'],
+            'back_edges_human_grade' => $data['human_grade_values']['back']['edge'],
+            'back_corners_human_grade' => $data['human_grade_values']['back']['corner'],
+        ];
+    }
+
+    public function createCertificates(array $data): array
+    {
+        return $this->client->createCertificates(data: $data);
     }
 
     public function getGrades(array $certificateIds): array
@@ -61,12 +88,14 @@ class AgsService
             ],
             'card' => [
                 'name' => $data['card']['name'] ?? null,
-                'full_name' => $this->getCardFullName($data['card']) ?? null,
+                'full_name' => ! empty($data['card']) ? $this->getCardFullName($data['card']) : '',
                 'image_path' => $data['card']['image_path'] ?? null,
                 'type' => 'Pokemon',
                 'series' => $data['card']['pokemon_serie']['name'] ?? null,
                 'set' => $data['card']['pokemon_set']['name'] ?? null,
-                'release_date' => Carbon::parse($data['card']['pokemon_set']['release_date'])->format('F d, Y') ?? null,
+                'release_date' => ! empty($data['card']['pokemon_set']['release_date']) ?
+                    Carbon::parse($data['card']['pokemon_set']['release_date'])->format('F d, Y') :
+                    null,
                 'number' => $data['card']['pokemon_set']['cards_number'] ?? null,
             ],
             'overall' => [

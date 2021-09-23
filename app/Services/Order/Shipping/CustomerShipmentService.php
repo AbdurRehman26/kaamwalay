@@ -4,7 +4,7 @@ namespace App\Services\Order\Shipping;
 
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Models\Order;
-use App\Models\OrderItemCustomerShipment;
+use App\Models\OrderCustomerShipment;
 use Illuminate\Support\Facades\Log;
 
 class CustomerShipmentService
@@ -12,25 +12,23 @@ class CustomerShipmentService
     public function process(Order $order, string $shippingProvider, string $trackingNumber): Order
     {
         try {
-            $items = $order->orderItems;
+            $orderCustomerShipment = $order->orderCustomerShipment;
 
-            foreach ($items as $item) {
-                $shipment = $item->orderItemCustomerShipment;
+            if ($orderCustomerShipment) {
+                $orderCustomerShipment->update([
+                    'shipping_provider' => $shippingProvider,
+                    'tracking_number' => $trackingNumber,
+                ]);
+            } else {
+                $orderCustomerShipment = OrderCustomerShipment::create([
+                    'shipping_provider' => $shippingProvider,
+                    'tracking_number' => $trackingNumber,
+                ]);
 
-                if (! $shipment) {
-                    $shipment = new OrderItemCustomerShipment();
-                }
-                $shipment->shipping_provider = $shippingProvider;
-                $shipment->tracking_number = $trackingNumber;
-                $shipment->save();
-
-                if (! $item->order_item_customer_shipment_id) {
-                    $item->order_item_customer_shipment_id = $shipment->id;
-                    $item->save();
-                }
+                $order->orderCustomerShipment()->associate($orderCustomerShipment)->save();
             }
 
-            return $order->fresh();
+            return $order->refresh();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 

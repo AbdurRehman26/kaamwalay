@@ -22,6 +22,9 @@ test('user can login with valid credentials', function () {
 })->group('auth');
 
 test('user can not login with invalid email', function () {
+    Http::fake([
+        'https://ags.api/login/' => Http::response([]),
+    ]);
     $response = $this->postJson('api/auth/login', [
         'email' => 'test@test.test',
         'password' => 'password',
@@ -34,6 +37,9 @@ test('user can not login with invalid email', function () {
 
 test('user can not login with invalid password', function () {
     $user = User::factory()->create();
+    Http::fake([
+        'https://ags.api/login/' => Http::response([]),
+    ]);
 
     $response = $this->postJson('api/auth/login', [
         'email' => $user->email,

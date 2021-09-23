@@ -13,10 +13,10 @@ export function DateField(name?: string): PropertyDecorator {
                 try {
                     if (value instanceof Date) {
                         return value.toISOString();
-                    } else if (isMoment(value)) {
+                    } else if (value && isMoment(value)) {
                         return (value as Moment).toISOString();
                     }
-                } catch (error) {
+                } catch (error: any) {
                     return null;
                 }
             } else if (type === TransformationType.PLAIN_TO_CLASS) {

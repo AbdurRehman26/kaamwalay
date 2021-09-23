@@ -8,9 +8,29 @@ import { Link } from 'react-router-dom';
 import KeyValueTable from '@shared/components/KeyValueTable';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { AddressEntity } from '@shared/entities/AddressEntity';
-import { CountryEntity } from '@shared/entities/CountryEntity';
+import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
+import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+
+interface SubmissionsViewDetailsProps {
+    serviceLevelFee: number;
+    numberOfCards: number;
+    placedAt: DateLike;
+    declaredValue: number;
+    serviceFee: number;
+    shippingFee: number;
+    grandTotal: number;
+    customerId: number;
+    customerNumber: string;
+    customerName: string;
+    customerEmail: string;
+    customerPhone: string;
+    billingAddress: AddressEntity;
+    shippingAddress: AddressEntity;
+
+    payment: OrderPaymentEntity;
+}
 
 const useStyles = makeStyles(
     {
@@ -21,62 +41,65 @@ const useStyles = makeStyles(
     { name: 'SubmissionViewDetails' },
 );
 
-export function SubmissionsViewDetails() {
-    const classes = useStyles();
+export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
+    const {
+        numberOfCards,
+        serviceLevelFee,
+        placedAt,
+        declaredValue,
+        customerName,
+        customerEmail,
+        customerPhone,
+        customerId,
+        customerNumber,
+        serviceFee,
+        shippingFee,
+        grandTotal,
+        billingAddress,
+        shippingAddress,
+        payment,
+    } = props;
 
+    const classes = useStyles();
     const orderInfo = useMemo(
         () => ({
-            'Service level:': `${formatCurrency(20)} / Card`,
-            'No. of Cards:': 1,
+            'Service level:': `${formatCurrency(serviceLevelFee)} / Card`,
+            'No. of Cards:': numberOfCards,
             'Shipping Method': 'Insured',
-            'Placed:': formatDate(new Date(), 'MM/DD/YYYY [at] hh:mm A'),
-            'Declared Value:': formatCurrency(400),
+            'Placed:': formatDate(placedAt, 'MM/DD/YYYY [at] hh:mm A'),
+            'Declared Value:': formatCurrency(declaredValue),
         }),
-        [],
+        [declaredValue, numberOfCards, placedAt, serviceLevelFee],
     );
 
     const customerInfo = useMemo(
-        () => [
-            ['Customer:', 'James Smith'],
-            ['', 'jsmith@email.com'],
-            ['', '(718) 999-1910'],
+        () =>
             [
-                '',
-                <>
-                    Customer ID:&nbsp;
-                    <MuiLink component={Link} to={'/customers/C9090090/view'} color={'primary'}>
-                        C9090090
-                    </MuiLink>
-                </>,
-            ],
-        ],
-        [],
+                ['Customer:', customerName],
+                customerEmail ? ['', <MuiLink href={`mailto:${customerEmail}`}>{customerEmail}</MuiLink>] : null,
+                customerPhone ? ['', <MuiLink href={`tel:${customerPhone}`}>{customerPhone}</MuiLink>] : null,
+                [
+                    '',
+                    <>
+                        Customer ID:&nbsp;
+                        <MuiLink component={Link} to={`/customers/${customerId}/view`} color={'primary'}>
+                            {customerNumber}
+                        </MuiLink>
+                    </>,
+                ],
+            ].filter(Boolean),
+        [customerEmail, customerId, customerName, customerNumber, customerPhone],
     );
 
     const paymentInfo = useMemo(
         () => ({
-            'Total Declared Value:': formatCurrency(400),
-            'Service Fee:': formatCurrency(20),
-            'Insured Shipping:': formatCurrency(14),
-            'Total:': formatCurrency(34),
+            'Total Declared Value:': formatCurrency(declaredValue),
+            'Service Fee:': formatCurrency(serviceFee),
+            'Insured Shipping:': formatCurrency(shippingFee),
+            'Total:': formatCurrency(grandTotal),
         }),
-        [],
+        [declaredValue, grandTotal, serviceFee, shippingFee],
     );
-
-    // TODO: Remove
-    const _address = new AddressEntity();
-    _address.id = 1;
-    _address.address = '727 Amsterdam Blvd.';
-    _address.city = 'New York';
-    _address.state = 'NY';
-    _address.zip = '10301';
-    _address.phone = '(718) 999-1910';
-    _address.flat = '11';
-    _address.firstName = 'James';
-    _address.lastName = 'Smith';
-    _address.country = new CountryEntity();
-    _address.country.name = 'United States';
-    _address.country.code = 'US';
 
     return (
         <Grid container direction={'column'} className={classes.root}>
@@ -95,12 +118,9 @@ export function SubmissionsViewDetails() {
                 <Divider />
             </Box>
             <SubmissionViewBilling
-                billingAddress={_address}
-                shippingAddress={_address}
-                cardLast4={7972}
-                cardType={'visa'}
-                cardExpirationMonth={8}
-                cardExpirationYear={25}
+                billingAddress={billingAddress}
+                shippingAddress={shippingAddress}
+                payment={payment}
             />
         </Grid>
     );

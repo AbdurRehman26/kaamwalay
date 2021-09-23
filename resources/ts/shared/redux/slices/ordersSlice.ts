@@ -1,12 +1,34 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { classToPlain } from 'class-transformer';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
+import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
+import { app } from '../../lib/app';
+import { NotificationsService } from '../../services/NotificationsService';
 import { APIState } from '../../types/APIState';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
 interface StateType extends APIState<OrderEntity> {}
 
 const ordersThunk = createRepositoryThunk('orders', OrdersRepository);
+
+export const setOrderCustomerShipment = createAsyncThunk(
+    'setOrderCustomerShipment',
+    async (input: ChangeOrderShipmentDto, thunkAPI) => {
+        const ordersRepository = app(OrdersRepository);
+        try {
+            const orderCustomerShipment = await ordersRepository.setCustomerShipment(input);
+
+            return {
+                orderCustomerShipment: classToPlain(orderCustomerShipment),
+                orderId: input.orderId,
+            };
+        } catch (e: any) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
+        }
+    },
+);
 
 export const ordersSlice = createSlice({
     name: ordersThunk.name,
@@ -16,7 +38,15 @@ export const ordersSlice = createSlice({
     reducers: {
         invalidateOrders: ordersThunk.invalidateEntities,
     },
-    extraReducers: ordersThunk.buildReducers,
+    extraReducers(builder) {
+        ordersThunk.buildReducers(builder);
+
+        builder.addCase(setOrderCustomerShipment.fulfilled, (state, { payload }) => {
+            if (state.entities[payload.orderId]) {
+                (state.entities[payload.orderId] as any).order_customer_shipment = payload.orderCustomerShipment as any;
+            }
+        });
+    },
 });
 export const { invalidateOrders } = ordersSlice.actions;
 export const { listAction: listOrdersAction, showAction: showOrderAction } = ordersThunk;

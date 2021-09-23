@@ -25,6 +25,12 @@
  *                    "timezone_type": 3,
  *                    "timezone": "UTC"
  *                },
+ *                "reviewed_by": "John Doe",
+ *                "reviewed_at": "2021-09-16T21:45:02.000000Z",
+ *                "graded_by": null,
+ *                "graded_at": null,
+ *                "auto_saved_at": "2021-09-16T21:45:08.000000Z",
+ *                "total_graded_items": 0,
  *                "customer": {
  *                    "id": 16,
  *                    "first_name": "Gisselle",
@@ -110,7 +116,23 @@
  *                            "release_year": 2021,
  *                            "card_number_order": "001",
  *                            "image_path": "https://den-cards.pokellector.com/305/Bellsprout.SWSH05.1.37528.png"
- *                        }
+ *                        },
+ *                        "status": {
+ *                             "id": 6,
+ *                             "order_item_status": {
+ *                                 "id": 5,
+ *                                 "name": "Graded",
+ *                                 "description": "Item has been graded by us"
+ *                             },
+ *                             "notes": ""
+ *                        },
+ *                        "certificate_number": "00000502",
+ *                        "grade": {
+ *                            "grade": 7,
+ *                            "nickname": "NM"
+ *                        },
+ *                        "graded_by": "John Doe",
+ *                        "graded_at": "2021-09-16T21:58:02.000000Z"
  *                    },
  *                    {
  *                        "id": 43,
@@ -125,14 +147,35 @@
  *                            "release_year": 2021,
  *                            "card_number_order": "002",
  *                            "image_path": "https://den-cards.pokellector.com/305/Weepinbell.SWSH05.2.37529.png"
- *                        }
+ *                        },
+ *                        "status": {
+ *                             "id": 5,
+ *                             "order_item_status": {
+ *                                 "id": 4,
+ *                                 "name": "Confirmed",
+ *                                 "description": "Item is present in the shipped box and will be graded"
+ *                             },
+ *                             "notes": ""
+ *                        },
+ *                        "certificate_number": "00000504",
+ *                        "grade": {
+ *                            "grade": null,
+ *                            "nickname": null
+ *                        },
  *                    }
  *                ],
  *                "customer_shipment": {
  *                     "id": 2,
  *                     "shipping_provider": "fedex",
  *                     "tracking_number": "020207021381215"
- *                 }
+ *                },
+ *                "shipment": {
+ *                    "id": 14,
+ *                    "shipment_date": "2021-09-20T20:12:48.000000Z",
+ *                    "shipping_provider": "usps",
+ *                    "tracking_number": "9400100000000000000000"
+ *                    "tracking_url": "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=9400100000000000000000",
+ *                }
  *            }
  *        }
  */

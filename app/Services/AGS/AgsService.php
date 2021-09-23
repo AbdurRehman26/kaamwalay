@@ -88,12 +88,12 @@ class AgsService
             ],
             'card' => [
                 'name' => $data['card']['name'] ?? null,
-                'full_name' => !empty($data['card']) ? $this->getCardFullName($data['card']) : '',
+                'full_name' => ! empty($data['card']) ? $this->getCardFullName($data['card']) : '',
                 'image_path' => $data['card']['image_path'] ?? null,
                 'type' => 'Pokemon',
                 'series' => $data['card']['pokemon_serie']['name'] ?? null,
                 'set' => $data['card']['pokemon_set']['name'] ?? null,
-                'release_date' => !empty($data['card']['pokemon_set']['release_date']) ?
+                'release_date' => ! empty($data['card']['pokemon_set']['release_date']) ?
                     Carbon::parse($data['card']['pokemon_set']['release_date'])->format('F d, Y') :
                     null,
                 'number' => $data['card']['pokemon_set']['cards_number'] ?? null,

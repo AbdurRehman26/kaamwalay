@@ -3,8 +3,6 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCollection;
-use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCustomerShipmentResource;
-use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemShipmentResource;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderAddressResource;

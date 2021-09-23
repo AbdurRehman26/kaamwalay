@@ -35,7 +35,7 @@ class ShipmentService
                 'shipping_provider' => $shippingProvider,
                 'tracking_number' => $trackingNumber,
                 'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
-                'shipping_method_id' => $order->shipping_method_id
+                'shipping_method_id' => $order->shipping_method_id,
             ]);
 
             $order->orderShipment()->associate($orderShipment)->save();

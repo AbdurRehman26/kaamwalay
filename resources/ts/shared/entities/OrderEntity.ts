@@ -60,10 +60,10 @@ export class OrderEntity extends Entity {
     public orderItems!: OrderItemEntity[];
 
     @Type(() => ShipmentEntity)
-    public customerShipment!: ShipmentEntity | null;
+    public orderCustomerShipment!: ShipmentEntity | null;
 
     @Type(() => ShipmentEntity)
-    public shipment!: ShipmentEntity | null;
+    public orderShipment!: ShipmentEntity | null;
 
     @DateField()
     public arrivedAt!: Moment;

@@ -29,7 +29,7 @@ interface SubmissionTableRowProps {
     invoice?: string;
     invoiceNumber?: string;
     disabled?: boolean;
-    customerShipment: null | ShipmentEntity;
+    orderCustomerShipment: null | ShipmentEntity;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
 }
@@ -110,7 +110,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         invoice,
         invoiceNumber,
         status,
-        customerShipment,
+        orderCustomerShipment,
     } = props;
 
     const history = useHistory();
@@ -166,8 +166,8 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             <ShipmentDialog
                 open={showShipmentTrackingModal}
                 onClose={handleOption(Options.ToggleShipmentTrackingModal)}
-                trackingNumber={customerShipment?.trackingNumber}
-                shippingProvider={customerShipment?.shippingProvider}
+                trackingNumber={orderCustomerShipment?.trackingNumber}
+                shippingProvider={orderCustomerShipment?.shippingProvider}
                 onSubmit={handleShipmentSubmit}
             />
 
@@ -190,7 +190,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </MenuItem>
                             <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
                             <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                {customerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                             </MenuItem>
                         </Menu>
                     </TableCell>
@@ -246,7 +246,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                         View Instructions
                                     </MenuItem>
                                     <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                        {customerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                        {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                                     </MenuItem>
                                 </Menu>
                             </div>

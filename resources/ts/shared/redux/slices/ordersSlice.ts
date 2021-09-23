@@ -3,6 +3,7 @@ import { classToPlain } from 'class-transformer';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
+import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { app } from '../../lib/app';
 import { NotificationsService } from '../../services/NotificationsService';
 import { APIState } from '../../types/APIState';
@@ -17,10 +18,10 @@ export const setOrderCustomerShipment = createAsyncThunk(
     async (input: ChangeOrderShipmentDto, thunkAPI) => {
         const ordersRepository = app(OrdersRepository);
         try {
-            const customerShipment = await ordersRepository.setCustomerShipment(input);
+            const orderCustomerShipment = await ordersRepository.setCustomerShipment(input);
 
             return {
-                customerShipment: classToPlain(customerShipment),
+                orderCustomerShipment: classToPlain(orderCustomerShipment) as ShipmentEntity,
                 orderId: input.orderId,
             };
         } catch (e: any) {
@@ -43,7 +44,7 @@ export const ordersSlice = createSlice({
 
         builder.addCase(setOrderCustomerShipment.fulfilled, (state, { payload }) => {
             if (state.entities[payload.orderId]) {
-                state.entities[payload.orderId].customerShipment = payload.customerShipment as any;
+                state.entities[payload.orderId].orderCustomerShipment = payload.orderCustomerShipment;
             }
         });
     },

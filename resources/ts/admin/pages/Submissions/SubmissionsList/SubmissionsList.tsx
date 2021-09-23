@@ -29,7 +29,7 @@ export function SubmissionsList() {
                     <SubmissionsTable search={search} all />
                 </TabContent>
                 <TabContent value={'pending'}>
-                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.PAYMENT_PENDING} />
+                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.PLACED} />
                 </TabContent>
                 <TabContent value={'reviewed'}>
                     <SubmissionsTable search={search} tabFilter={OrderStatusEnum.ARRIVED} />

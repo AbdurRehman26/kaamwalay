@@ -7,14 +7,12 @@ import React, { useMemo } from 'react';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
 import font from '@shared/styles/font.module.css';
+import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
 
 interface SubmissionViewBillingProps {
     shippingAddress?: AddressEntity;
     billingAddress?: AddressEntity;
-    cardLast4?: number | string;
-    cardExpirationMonth?: number;
-    cardExpirationYear?: number;
-    cardType?: string;
+    payment?: OrderPaymentEntity;
 }
 
 export const useStyles = makeStyles(
@@ -34,19 +32,48 @@ export const useStyles = makeStyles(
  * @private
  * @constructor
  */
-export function SubmissionViewBilling({
-    shippingAddress,
-    billingAddress,
-    cardLast4,
-    cardType,
-    cardExpirationMonth,
-    cardExpirationYear,
-}: SubmissionViewBillingProps) {
+export function SubmissionViewBilling({ shippingAddress, billingAddress, payment }: SubmissionViewBillingProps) {
     const classes = useStyles();
-    const cardIcon = useMemo(() => (cardType ? getPaymentIcon(cardType) : null), [cardType]);
-    const cardBrand = useMemo(() => (cardType ? getPaymentTitle(cardType) : null), [cardType]);
+    const { card, payer } = payment ?? {};
+    const hasPayment = !!card || !!payer;
+    const isPaypal = !card && !!payer;
 
-    const hasPayment = cardIcon && cardType && cardLast4 && cardExpirationMonth && cardExpirationYear;
+    const { cardIcon, cardBrand } = useMemo(() => {
+        if (isPaypal) {
+            return {
+                cardIcon: getPaymentIcon('paypal'),
+                cardBrand: getPaymentTitle('paypal'),
+            };
+        }
+
+        return {
+            cardIcon: card?.brand ? getPaymentIcon(card.brand) : null,
+            cardBrand: (card?.brand ? getPaymentTitle(card.brand) : null) ?? card?.brand,
+        };
+    }, [card?.brand, isPaypal]);
+
+    const paymentHeading = useMemo(() => {
+        if (isPaypal) {
+            return payer?.name;
+        }
+
+        if (cardBrand && card?.last4) {
+            return `${cardBrand} ending in ${card?.last4}`;
+        }
+        return 'Unknown card';
+    }, [card?.last4, cardBrand, isPaypal, payer?.name]);
+
+    const paymentSubheading = useMemo(() => {
+        if (isPaypal) {
+            return payer?.email;
+        }
+
+        if (cardBrand && card?.last4) {
+            return `Expires ${card?.expMonth}/${card?.expYear}`;
+        }
+
+        return null;
+    }, [card?.expMonth, card?.expYear, card?.last4, cardBrand, isPaypal, payer?.email]);
 
     return (
         <Grid container direction={'row'} spacing={4}>
@@ -68,14 +95,12 @@ export function SubmissionViewBilling({
                     <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
                         {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
                         <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
-                            {(cardBrand || cardType) && cardLast4 ? (
-                                <Typography variant={'body2'} color={'textPrimary'}>
-                                    {cardBrand || cardType} ending in {cardLast4}
-                                </Typography>
-                            ) : null}
-                            {cardExpirationMonth && cardExpirationYear ? (
+                            <Typography variant={'body2'} color={'textPrimary'}>
+                                {paymentHeading}
+                            </Typography>
+                            {paymentSubheading ? (
                                 <Typography variant={'caption'} color={'textSecondary'}>
-                                    Expires {cardExpirationMonth}/{cardExpirationYear}
+                                    {paymentSubheading}
                                 </Typography>
                             ) : null}
                         </Box>

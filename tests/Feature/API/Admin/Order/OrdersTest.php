@@ -80,7 +80,7 @@ it('returns orders list for admin', function () {
 });
 
 it('returns order details', function () {
-    $this->getJson('api/admin/orders/1?include=customer')
+    $this->getJson('api/admin/orders/1?include=customer,orderItems')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [

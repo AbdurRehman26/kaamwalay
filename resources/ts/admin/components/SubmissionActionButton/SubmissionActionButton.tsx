@@ -7,7 +7,8 @@ import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { setOrderShipment } from '@shared/redux/slices/adminOrdersSlice';
-import { useAppDispatch } from '@admin/redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
+import EditTrackingInformation from './EditTrackingInformation';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -23,7 +24,9 @@ const useStyles = makeStyles(
 interface SubmissionActionButtonProps extends ButtonProps {
     orderId: number;
     orderStatus: OrderStatusEntity;
-    shipment?: ShipmentEntity | null;
+    shippingProvider?: ShipmentEntity['shippingProvider'];
+    trackingNumber?: ShipmentEntity['trackingNumber'];
+    buttonOnly?: boolean;
 }
 
 /**
@@ -32,7 +35,14 @@ interface SubmissionActionButtonProps extends ButtonProps {
  * @date: 14.09.2021
  * @time: 21:43
  */
-export function SubmissionActionButton({ orderId, orderStatus, shipment, ...rest }: SubmissionActionButtonProps) {
+export function SubmissionActionButton({
+    orderId,
+    orderStatus,
+    trackingNumber,
+    shippingProvider,
+    buttonOnly,
+    ...rest
+}: SubmissionActionButtonProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const [isShipmentDialogOpen, setIsShipmentDialogOpen] = useState(false);
@@ -78,29 +88,35 @@ export function SubmissionActionButton({ orderId, orderStatus, shipment, ...rest
         );
     }
 
-    if (orderStatus.is(OrderStatusEnum.GRADED)) {
+    if (orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED)) {
         return (
             <>
                 <ShipmentDialog
                     open={isShipmentDialogOpen}
                     onClose={handleCloseShipmentDialog}
-                    trackingNumber={shipment?.trackingNumber}
-                    shippingProvider={shipment?.shippingProvider}
+                    trackingNumber={trackingNumber}
+                    shippingProvider={shippingProvider}
                     onSubmit={handleShipmentSubmit}
                 />
 
-                <Button {...sharedProps} onClick={handleOpenShipmentDialog}>
-                    Mark Shipped
-                </Button>
+                {orderStatus.is(OrderStatusEnum.GRADED) ? (
+                    <Button {...sharedProps} onClick={handleOpenShipmentDialog}>
+                        Mark Shipped
+                    </Button>
+                ) : (
+                    <>
+                        {!buttonOnly ? (
+                            <EditTrackingInformation
+                                trackingNumber={trackingNumber}
+                                shippingProvider={shippingProvider}
+                            />
+                        ) : null}
+                        <Button color={'primary'} onClick={handleOpenShipmentDialog}>
+                            Edit Tracking
+                        </Button>
+                    </>
+                )}
             </>
-        );
-    }
-
-    if (orderStatus.is(OrderStatusEnum.SHIPPED)) {
-        return (
-            <Button size={'large'} color={'primary'}>
-                Edit Tracking
-            </Button>
         );
     }
 

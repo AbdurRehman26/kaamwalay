@@ -13,7 +13,9 @@ import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
 import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBatchDto';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
 import { OrderItemStatusEntity } from '../../entities/OrderItemStatusEntity';
+import { OrderStatusEntity } from '../../entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntity';
+import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { NotificationsService } from '../../services/NotificationsService';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
@@ -111,10 +113,17 @@ export const setOrderShipment = createAsyncThunk(
     async (input: ChangeOrderShipmentDto, thunkAPI) => {
         const ordersRepository = app(OrdersRepository);
         try {
-            const customerShipment = await ordersRepository.setShipment(input);
+            const orderShipment = await ordersRepository.setShipment(input);
+            const order = await ordersRepository.show(input.orderId, {
+                params: {
+                    include: ['orderStatus', 'orderStatusHistory.orderStatus'],
+                },
+            });
 
             return {
-                customerShipment: classToPlain(customerShipment),
+                orderShipment: classToPlain(orderShipment) as ShipmentEntity,
+                orderStatus: classToPlain(order.orderStatus) as OrderStatusEntity,
+                orderStatusHistory: classToPlain(order.orderStatusHistory) as OrderStatusHistoryEntity[],
                 orderId: input.orderId,
             };
         } catch (e: any) {
@@ -197,7 +206,9 @@ export const adminOrdersSlice = createSlice({
 
         builder.addCase(setOrderShipment.fulfilled, (state, { payload }) => {
             if (state.entities[payload.orderId]) {
-                state.entities[payload.orderId].customerShipment = payload.customerShipment as any;
+                state.entities[payload.orderId].orderShipment = payload.orderShipment;
+                state.entities[payload.orderId].orderStatus = payload.orderStatus;
+                state.entities[payload.orderId].orderStatusHistory = payload.orderStatusHistory;
             }
         });
     },

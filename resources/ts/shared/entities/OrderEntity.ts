@@ -68,7 +68,7 @@ export class OrderEntity extends Entity {
     @Field('order_customer_shipment', () => ShipmentEntity)
     public orderCustomerShipment!: ShipmentEntity | null;
 
-    @Type(() => ShipmentEntity)
+    @Field('order_shipment', () => ShipmentEntity)
     public orderShipment!: ShipmentEntity | null;
 
     @DateField('arrived_at')

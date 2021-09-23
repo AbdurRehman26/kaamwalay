@@ -11,6 +11,7 @@ use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
+use Closure;
 use Illuminate\Http\Request;
 
 /**
@@ -34,6 +35,11 @@ use Illuminate\Http\Request;
  * @property mixed $service_fee
  * @property mixed $order_number
  * @property mixed $id
+ * @property mixed $auto_saved_at
+ * @property mixed $order_status_id
+ * @method orderItems()
+ * @method orderStatusHistory()
+ * @method getTotalGradedItems()
  */
 class OrderResource extends BaseResource
 {
@@ -54,10 +60,10 @@ class OrderResource extends BaseResource
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
             'created_at' => $this->formatDate($this->created_at),
-            'reviewed_by' => $this->reviewedBy(fn (OrderStatusHistory $history) => $history->user?->getFullName()),
-            'reviewed_at' => $this->reviewedBy(fn (OrderStatusHistory $history) => $this->formatDate($history->updated_at)),
-            'graded_by' => $this->gradedBy(fn (OrderStatusHistory $history) => $history->user?->getFullName()),
-            'graded_at' => $this->gradedBy(fn (OrderStatusHistory $history) => $this->formatDate($history->updated_at)),
+            'reviewed_by' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
+            'reviewed_at' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
+            'graded_by' => $this->gradedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
+            'graded_at' => $this->gradedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
             'auto_saved_at' => $this->formatDate($this->auto_saved_at),
             'total_graded_items' => $this->when($this->order_status_id === OrderStatus::ARRIVED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
@@ -77,14 +83,14 @@ class OrderResource extends BaseResource
         ];
     }
 
-    private function reviewedBy(\Closure $selector)
+    private function reviewedBy(Closure $selector)
     {
         return $this->when($this->order_status_id >= OrderStatus::ARRIVED, function () use ($selector) {
             return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::ARRIVED)->latest()->first());
         });
     }
 
-    private function gradedBy(\Closure $selector)
+    private function gradedBy(Closure $selector)
     {
         return $this->when($this->order_status_id >= OrderStatus::GRADED, function () use ($selector) {
             return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::GRADED)->latest()->first());

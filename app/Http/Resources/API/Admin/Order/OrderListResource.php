@@ -29,6 +29,8 @@ class OrderListResource extends BaseResource
             'arrived' => ! is_null($this->arrived_at),
             'arrived_at' => $this->formatDate($this->arrived_at),
             'created_at' => $this->formatDate($this->created_at),
+            'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
+            'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
         ];
     }
 }

@@ -21,6 +21,7 @@
         "lint": "eslint --cache --ext \".ts,.tsx\" ./resources/ts",
         "lint:fix": "yarn lint --fix",
         "prepare": "husky install && cd ./resources/apidocs && yarn install"
+        "test:e2e": "cypress run"
     },
     "dependencies": {
         "@material-ui/core": "^4.12.2",
@@ -93,6 +94,7 @@
         "browser-sync": "^2.27.5",
         "browser-sync-webpack-plugin": "^2.3.0",
         "cross-env": "^7.0.3",
+        "cypress": "^8.4.1",
         "eslint": "^7.32.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^8.3.0",

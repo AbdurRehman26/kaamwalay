@@ -28,8 +28,17 @@ jobs:
       - name: Dependency install
         run: yarn install --ignore-scripts --pure-lockfile --non-interactive
 
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+
       - name: Pretty code
-        run: yarn format
+        run: |
+          files=();
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            if [[ "${changed_file}" == *.{js,jsx,ts,tsx,css,scss} ]]; then
+            files+="${changed_file}";
+          done
+          yarn prettier -w ${files}
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4

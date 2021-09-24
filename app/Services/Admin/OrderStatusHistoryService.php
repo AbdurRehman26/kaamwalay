@@ -3,7 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
-use App\Exceptions\API\Admin\OrderCannotBeMarkedAsReviewed;
+use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
@@ -64,7 +64,7 @@ class OrderStatusHistoryService
             $data = $this->orderService->getOrderCertificatesData($order);
 
             $response = $this->agsService->createCertificates($data);
-            throw_if(empty($response), OrderCannotBeMarkedAsReviewed::class);
+            throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
         }
 
         if (! $orderStatusHistory) {

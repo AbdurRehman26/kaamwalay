@@ -33,10 +33,12 @@ jobs:
 
       - name: Pretty code
         run: |
-          files=();
+          files="";
           for changed_file in ${{ steps.files.outputs.all }}; do
             if echo "$changed_file" | grep -Eq '(json|jsx\?|tsx\?|css|scss)$'; then
-             files+=$changed_file;
+              if [[ -f "$changed_file" ]]; then
+                files="$files $changed_file";
+              fi
            fi
           done;
           yarn prettier -w ${files}

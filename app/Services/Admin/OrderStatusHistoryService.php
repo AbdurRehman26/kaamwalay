@@ -51,6 +51,12 @@ class OrderStatusHistoryService
             OrderCanNotBeMarkedAsGraded::class
         );
 
+        if ($orderStatusId === OrderStatus::ARRIVED) {
+            $data = $this->orderService->getOrderCertificatesData($order);
+
+            $response = $this->agsService->createCertificates($data);
+            throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
+        }
         Order::query()
             ->where('id', $orderId)
             ->update(array_merge(
@@ -59,13 +65,6 @@ class OrderStatusHistoryService
                 ],
                 $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: [],
             ));
-
-        if ($orderStatusId === OrderStatus::ARRIVED) {
-            $data = $this->orderService->getOrderCertificatesData($order);
-
-            $response = $this->agsService->createCertificates($data);
-            throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
-        }
 
         if (! $orderStatusHistory) {
             $orderStatusHistory = OrderStatusHistory::create([

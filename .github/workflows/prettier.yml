@@ -35,9 +35,9 @@ jobs:
         run: |
           files=();
           for changed_file in ${{ steps.files.outputs.all }}; do
-            if [[ "${changed_file}" == *.{js,jsx,ts,tsx,css,scss} ]]; then
-              files+=("${changed_file}");
-            fi
+            if echo "$changed_file" | grep -Eq '(json|jsx\?|tsx\?|css|scss)$'; then
+             files+=$changed_file;
+           fi
           done;
           yarn prettier -w ${files}
 

@@ -41,11 +41,6 @@ beforeEach(function () {
         ['order_status_id' => $this->orders[4]->order_status_id, 'order_id' => $this->orders[4]->id, 'user_id' => $this->orders[4]->user_id]
     )->create();
 
-//    $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
-//    $this->orders->each(function ($order) use ($orderStatusHistoryService) {
-//        $orderStatusHistoryService->addStatusToOrder($order->order_status_id, $order->id, $order->user_id);
-//    });
-
     OrderItem::factory()->count(2)
         ->state(new Sequence(
             [

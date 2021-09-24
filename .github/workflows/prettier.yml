@@ -15,14 +15,21 @@ jobs:
           # This is important to fetch the changes to the previous commit
           fetch-depth: 0
 
-      - name: Prettify code
-        uses: alindesign/prettier-action@v4.1
+      - name: Restore cache
+        uses: actions/cache@v2
         with:
-          # This part is also where you can pass other options, for example:
-          prettier_version: 2.4.1
-          prettier_options: --write **/*.{js,jsx,ts,tsx,scss}
-          prettier_plugins: '@trivago/prettier-plugin-sort-imports'
-          only_changed: True
+          path: |
+            yarn.lock
+            node_modules
+          key: ${{ runner.os }}-yarn-v1-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-v1
+
+      - name: Dependency install
+        run: yarn install --ignore-scripts --pure-lockfile --non-interactive
+
+      - name: Pretty code
+        run: yarn prettier --write **/*.{js,jsx,ts,tsx,scss}
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4

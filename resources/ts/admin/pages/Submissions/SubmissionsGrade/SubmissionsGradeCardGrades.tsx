@@ -105,21 +105,10 @@ export function SubmissionsGradeCardGrades({
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values,
     );
 
-    const roboGradesFront = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.front,
-    );
-    const roboGradesBack = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.back,
-    );
-
     const cardStatus = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.status.order_item_status.name,
     );
     const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
-
-    function areRoboGradesAvailable() {
-        return roboGradesFront !== null && roboGradesBack !== null;
-    }
 
     function updateHumanGrade(side: string, part: string, gradeValue: string) {
         dispatch(
@@ -142,7 +131,7 @@ export function SubmissionsGradeCardGrades({
 
     return (
         <OutlinedCard heading={heading} icon={icon} className={classes.root}>
-            {!areRoboGradesAvailable() ? (
+            {disabled ? (
                 <Alert severity="info" className={classes.alert}>
                     Human Grades are disabled until RoboGrades are available
                 </Alert>

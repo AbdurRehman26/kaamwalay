@@ -29,7 +29,7 @@ jobs:
         run: yarn install --ignore-scripts --pure-lockfile --non-interactive
 
       - name: Pretty code
-        run: yarn prettier --write **/*.{js,jsx,ts,tsx,scss}
+        run: yarn format
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4

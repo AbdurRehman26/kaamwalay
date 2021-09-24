@@ -42,9 +42,8 @@ class OrderService
     public function getOrder(int $orderId): Model | QueryBuilder
     {
         return QueryBuilder::for(Order::class)
-            ->where('id', $orderId)
             ->allowedIncludes(Order::getAllowedAdminIncludes())
-            ->firstOrFail();
+            ->findOrFail($orderId);
     }
 
     public function getOrderCertificates(Order|int $order): array

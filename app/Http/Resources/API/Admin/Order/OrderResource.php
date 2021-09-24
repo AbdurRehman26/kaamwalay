@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCollection;
-use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemShipmentResource;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderAddressResource;
@@ -12,6 +11,7 @@ use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
+use Closure;
 use Illuminate\Http\Request;
 
 /**
@@ -35,6 +35,11 @@ use Illuminate\Http\Request;
  * @property mixed $service_fee
  * @property mixed $order_number
  * @property mixed $id
+ * @property mixed $auto_saved_at
+ * @property mixed $order_status_id
+ * @method orderItems()
+ * @method orderStatusHistory()
+ * @method getTotalGradedItems()
  */
 class OrderResource extends BaseResource
 {
@@ -46,24 +51,21 @@ class OrderResource extends BaseResource
      */
     public function toArray($request): array
     {
-        $reviewedHistory = $this->orderStatusHistory()->where('order_status_id', OrderStatus::ARRIVED)->latest()->first();
-        $gradedHistory = $this->orderStatusHistory()->where('order_status_id', OrderStatus::GRADED)->latest()->first();
-
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
-            'number_of_cards' => $this->orderItems->sum('quantity'),
-            'total_declared_value' => $this->orderItems->sum('declared_value_total'),
+            'number_of_cards' => (int)$this->orderItems()->sum('quantity'),
+            'total_declared_value' => (float)$this->orderItems()->sum('declared_value_total'),
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
             'created_at' => $this->formatDate($this->created_at),
-            'reviewed_by' => $this->when(in_array($this->order_status_id, [OrderStatus::ARRIVED, OrderStatus::GRADED, OrderStatus::SHIPPED]), $reviewedHistory?->user?->getFullName()),
-            'reviewed_at' => $this->when(in_array($this->order_status_id, [OrderStatus::ARRIVED, OrderStatus::GRADED, OrderStatus::SHIPPED]), $this->formatDate($reviewedHistory?->updated_at)),
-            'graded_by' => $this->when(in_array($this->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED]), $gradedHistory?->user?->getFullName()),
-            'graded_at' => $this->when(in_array($this->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED]), $this->formatDate($gradedHistory?->updated_at)),
-            'auto_saved_at' => $this->when($this->order_status_id === OrderStatus::ARRIVED, $this->formatDate($this->auto_saved_at)),
-            'total_graded_items' => $this->when($this->order_status_id === OrderStatus::ARRIVED, $this->getTotalGradedItems()),
+            'reviewed_by' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
+            'reviewed_at' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
+            'graded_by' => $this->gradedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
+            'graded_at' => $this->gradedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
+            'auto_saved_at' => $this->formatDate($this->auto_saved_at),
+            'total_graded_items' => $this->when($this->order_status_id === OrderStatus::ARRIVED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
 
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
@@ -75,9 +77,23 @@ class OrderResource extends BaseResource
             'billing_address' => $this->whenLoaded('billingAddress', OrderAddressResource::class),
             'order_payment' => $this->whenLoaded('orderPayment', OrderPaymentResource::class),
             'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
-            'customer_shipment' => $this->whenLoaded('orderItems', fn () => $this->orderItems[0]->orderItemCustomerShipment),
-            'shipment' => $this->whenLoaded('orderItems', new OrderItemShipmentResource($this?->orderItems[0]?->orderItemShipment)),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
+            'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
+            'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
         ];
+    }
+
+    private function reviewedBy(Closure $selector)
+    {
+        return $this->when($this->order_status_id >= OrderStatus::ARRIVED, function () use ($selector) {
+            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::ARRIVED)->latest()->first());
+        });
+    }
+
+    private function gradedBy(Closure $selector)
+    {
+        return $this->when($this->order_status_id >= OrderStatus::GRADED, function () use ($selector) {
+            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::GRADED)->latest()->first());
+        });
     }
 }

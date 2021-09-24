@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Orders;
 
 use App\Models\OrderItem;
 use Illuminate\Console\Command;
@@ -36,7 +36,7 @@ class UpdateMultipleOrderItems extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $items = OrderItem::where('quantity', '>', 1)->get();
         $this->info('Found ' . count($items). ' items.');
@@ -59,5 +59,7 @@ class UpdateMultipleOrderItems extends Command
         }
 
         $this->info('Process completed.');
+
+        return 0;
     }
 }

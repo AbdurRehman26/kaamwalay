@@ -3,7 +3,6 @@
 namespace App\Services\Admin;
 
 use App\Events\API\Order\OrderStatusChangedEvent;
-use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Models\Order;
 use App\Models\OrderStatus;

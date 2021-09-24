@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import { BindParams } from '@shared/decorators/BindParams';
+import { BindParams } from './BindParams';
 
-describe('Decorators', () => {
+describe('decorators', () => {
     it('should bind params correctly', () => {
         class MyClass {
             a!: number;

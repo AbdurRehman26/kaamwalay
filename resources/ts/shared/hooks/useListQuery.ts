@@ -32,14 +32,14 @@ export function useListQuery<
     const lastPage = pagination.meta?.lastPage ?? 1;
 
     const data = useMemo(() => {
-        let list = ids.map((id) => entities[id]);
-        if (perPage) {
-            const offset = (currentPage - 1) * perPage;
-            list = list.slice(offset, offset + perPage);
-        }
+        const list = ids.map((id) => entities[id]);
+        // if (perPage) {
+        //     const offset = (currentPage - 1) * perPage;
+        //     list = list.slice(offset, offset + perPage);
+        // }
 
         return plainToClass(entity, list);
-    }, [ids, perPage, entity, entities, currentPage]);
+    }, [ids, entity, entities]);
 
     const fetch = useCallback(
         async function fetch(config?: AxiosRequestConfig) {

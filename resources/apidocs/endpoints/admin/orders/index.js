@@ -6,6 +6,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
+ * @apiParam {Array} [filter[search]] For for searching orders list based on these columns: order ID, customer Name and Customer ID. E.g. filter[search]=1
  * @apiParam {Array} [filter[order_id]] For filtering records by order ID. E.g. filter[order_id]=1
  * @apiParam {Array} [filter[customer_id]] For filtering records by customer ID. E.g. filter[customer_id]=1
  * @apiParam {Array} [filter[customer_name]] For filtering records by customer name. E.g. filter[customer_name]=Jhon
@@ -43,6 +44,17 @@
  *                        "id": 1,
  *                        "shipping_provider": "usps",
  *                        "tracking_number": "9400100000000000000000"
+ *                    },
+ *                    "grade": {
+ *                        "grade": null,
+ *                        "nickname": null
+ *                    },
+ *                    "shipment": {
+ *                        "id": 14,
+ *                        "shipment_date": "2021-09-20T20:12:48.000000Z",
+ *                        "shipping_provider": "usps",
+ *                        "tracking_number": "9400100000000000000000"
+ *                        "tracking_url": "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=9400100000000000000000",
  *                    }
  *                },
  *                {
@@ -70,6 +82,17 @@
  *                        "id": 2,
  *                        "shipping_provider": "fedex",
  *                        "tracking_number": "020207021381215"
+ *                    },
+ *                    "grade": {
+ *                        "grade": 7,
+ *                        "nickname": "NM"
+ *                    },
+ *                    "shipment": {
+ *                        "id": 14,
+ *                        "shipment_date": "2021-09-20T20:12:48.000000Z",
+ *                        "shipping_provider": "usps",
+ *                        "tracking_number": "9400100000000000000000"
+ *                        "tracking_url": "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=9400100000000000000000",
  *                    }
  *                },
  *            ],

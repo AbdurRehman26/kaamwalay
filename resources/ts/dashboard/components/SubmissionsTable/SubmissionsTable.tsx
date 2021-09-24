@@ -18,10 +18,10 @@ import { Table } from './styles';
 export function SubmissionsTable() {
     const { isLoading, isError, data, paginationProps } = useListOrdersQuery({
         params: {
-            include: ['paymentPlan', 'invoice', 'orderStatus'],
+            include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
         },
     });
-        
+
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
     if (isLoading || isError) {
@@ -31,7 +31,7 @@ export function SubmissionsTable() {
             </Box>
         );
     }
-    
+
     return (
         <>
             <TableContainer>
@@ -54,17 +54,17 @@ export function SubmissionsTable() {
                         {data.map((data: OrderEntity) => (
                             <SubmissionTableRow
                                 disabled
-                                key={data.id}
-                                id={data.id}
-                                orderNumber={data.orderNumber}
-                                serviceLevel={data.paymentPlan.price}
-                                cardsNumber={data.numberOfCards}
-                                status={data.status}
-                                datePlaced={data.createdAt}
-                                dateArrived={data.arrivedAt}
-                                invoice={data.invoice?.path}
-                                invoiceNumber={data.invoice?.invoiceNumber}
-                                customerShipment={data.customerShipment}
+                                key={data?.id}
+                                id={data?.id}
+                                orderNumber={data?.orderNumber}
+                                serviceLevel={data?.paymentPlan?.price}
+                                cardsNumber={data?.numberOfCards}
+                                status={data?.orderStatus?.name}
+                                datePlaced={data?.createdAt}
+                                dateArrived={data?.arrivedAt}
+                                invoice={data?.invoice?.path}
+                                invoiceNumber={data?.invoice?.invoiceNumber}
+                                orderCustomerShipment={data?.orderCustomerShipment}
                             />
                         ))}
                     </TableBody>

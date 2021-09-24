@@ -95,15 +95,17 @@ export function SubmissionsListHeader({ onSearch }: SubmissionsListHeaderProps) 
                 </Grid>
                 <Grid container item xs justifyContent={'flex-end'}>
                     <Tooltip title={'Coming Soon'}>
-                        <Button
-                            variant={'contained'}
-                            color={'primary'}
-                            startIcon={<Icon>qr_code_scanner</Icon>}
-                            className={classes.scanButton}
-                            disabled
-                        >
-                            Scan Barcode
-                        </Button>
+                        <span>
+                            <Button
+                                variant={'contained'}
+                                color={'primary'}
+                                startIcon={<Icon>qr_code_scanner</Icon>}
+                                className={classes.scanButton}
+                                disabled
+                            >
+                                Scan Barcode
+                            </Button>
+                        </span>
                     </Tooltip>
                 </Grid>
             </Grid>

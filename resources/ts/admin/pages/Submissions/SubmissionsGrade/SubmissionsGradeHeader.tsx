@@ -16,6 +16,7 @@ interface SubmissionsGradeHeaderProps {
     reviewedAt: DateLike;
     reviewer: string;
     cardsGraded: number;
+    cardsInOrder: number;
 }
 
 const useStyles = makeStyles(
@@ -47,6 +48,7 @@ export function SubmissionsGradeHeader({
     reviewer,
     cardsGraded,
     reviewedAt,
+    cardsInOrder,
 }: SubmissionsGradeHeaderProps) {
     const classes = useStyles();
 
@@ -72,14 +74,17 @@ export function SubmissionsGradeHeader({
                             variant={'outlined'}
                             disableFocusRipple
                         >
-                            Grading Incomplete
+                            {cardsGraded !== cardsInOrder ? 'Grading Incomplete' : 'Grading Complete'}
                         </Button>
                         <Button
                             className={cx(classes.buttonDisabled, classes.button)}
                             variant={'outlined'}
                             disableFocusRipple
                         >
-                            <b>{cardsGraded}/3</b>&nbsp;Cards Graded
+                            <b>
+                                {cardsGraded}/{cardsInOrder}
+                            </b>
+                            &nbsp;Cards Graded
                         </Button>
                         <Button
                             component={Link}

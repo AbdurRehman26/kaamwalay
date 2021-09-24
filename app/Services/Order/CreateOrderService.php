@@ -150,15 +150,17 @@ class CreateOrderService
     protected function storeOrderItems(array $items)
     {
         foreach ($items as $item) {
-            $storedItem = OrderItem::create([
-                'order_id' => $this->order->id,
-                'card_product_id' => $item['card_product']['id'],
-                'quantity' => $item['quantity'],
-                'declared_value_per_unit' => $item['declared_value_per_unit'],
-                'declared_value_total' => $item['quantity'] * $item['declared_value_per_unit'],
-            ]);
-
-            $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending']);
+            for ($i = 0; $i < $item['quantity']; $i++) {
+                $storedItem = OrderItem::create([
+                    'order_id' => $this->order->id,
+                    'card_product_id' => $item['card_product']['id'],
+                    'quantity' => 1,
+                    'declared_value_per_unit' => $item['declared_value_per_unit'],
+                    'declared_value_total' => $item['declared_value_per_unit'],
+                ]);
+              
+                $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending'], auth()->user());
+            }
         }
     }
 

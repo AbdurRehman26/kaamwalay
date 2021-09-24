@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import KeyValueTable from '@shared/components/KeyValueTable';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { AddressEntity } from '@shared/entities/AddressEntity';
+import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
@@ -28,10 +29,7 @@ interface SubmissionsViewDetailsProps {
     billingAddress: AddressEntity;
     shippingAddress: AddressEntity;
 
-    cardLast4?: string;
-    cardType?: string;
-    cardExpirationMonth?: number;
-    cardExpirationYear?: number;
+    payment: OrderPaymentEntity;
 }
 
 const useStyles = makeStyles(
@@ -59,10 +57,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         grandTotal,
         billingAddress,
         shippingAddress,
-        cardLast4,
-        cardType,
-        cardExpirationMonth,
-        cardExpirationYear,
+        payment,
     } = props;
 
     const classes = useStyles();
@@ -125,10 +120,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             <SubmissionViewBilling
                 billingAddress={billingAddress}
                 shippingAddress={shippingAddress}
-                cardLast4={cardLast4}
-                cardType={cardType}
-                cardExpirationMonth={cardExpirationMonth}
-                cardExpirationYear={cardExpirationYear}
+                payment={payment}
             />
         </Grid>
     );

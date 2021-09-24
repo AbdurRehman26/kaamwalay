@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 
@@ -21,6 +23,8 @@ use Spatie\QueryBuilder\AllowedInclude;
  * @property int $id
  * @property string $order_number
  * @property User $user
+ * @property OrderItemCustomerShipment $customerShipment
+ * @property int $shipping_method_id
  */
 class Order extends Model
 {
@@ -44,6 +48,8 @@ class Order extends Model
         'payment_method_id',
         'shipping_method_id',
         'invoice_id',
+        'order_shipment_id',
+        'order_customer_shipment_id',
         'arrived_at',
         'notes',
         'reviewed_by_id',
@@ -95,6 +101,8 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
+            AllowedInclude::relationship('orderShipment'),
+            AllowedInclude::relationship('orderCustomerShipment'),
         ];
     }
 
@@ -107,6 +115,7 @@ class Order extends Model
             AllowedFilter::scope('order_status', 'status'),
             AllowedFilter::scope('customer_name'),
             AllowedFilter::scope('customer_id'),
+            AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
     }
 
@@ -123,6 +132,8 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
+            AllowedInclude::relationship('shipment'),
+            AllowedInclude::relationship('orderCustomerShipment'),
         ];
     }
 
@@ -213,17 +224,25 @@ class Order extends Model
         return $this->grand_total * 100;
     }
 
+    public function getTotalGradedItems(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+    }
+
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
-        if (! $status || $status === 'all') {
-            return $query;
-        }
-
         return $query->whereHas(
-            'orderStatusHistory.orderStatus',
-            fn ($query) => $query
-                ->where('id', $status)
-                ->orWhere('code', $status)
+            'orderStatus',
+            function (Builder $query) use ($status) {
+                $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
+                if (! $status || $status === 'all') {
+                    return $query;
+                }
+
+                return $query
+                    ->where('id', $status)
+                    ->orWhere('code', $status);
+            }
         );
     }
 
@@ -238,5 +257,46 @@ class Order extends Model
     public function scopeCustomerId(Builder $query, string $customerId): Builder
     {
         return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
+    }
+
+    public function missingItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::MISSING)->count();
+    }
+
+    public function notAcceptedItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::NOT_ACCEPTED)->count();
+    }
+
+    public function gradedItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+    }
+
+    public function isEligibleToMarkAsGraded(): bool
+    {
+        return $this->orderItems()->count() === (
+            $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
+        );
+    }
+
+    public function orderShipment(): BelongsTo
+    {
+        return $this->belongsTo(OrderShipment::class);
+    }
+
+    public function orderCustomerShipment(): BelongsTo
+    {
+        return $this->belongsTo(OrderCustomerShipment::class);
+    }
+
+
+    public function getGroupedOrderItems()
+    {
+        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('min(declared_value_total) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
+        ->where('order_id', $this->id)
+        ->groupBy(['card_product_id'])
+        ->get();
     }
 }

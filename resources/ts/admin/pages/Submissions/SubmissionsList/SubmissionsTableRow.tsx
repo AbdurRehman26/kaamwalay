@@ -15,7 +15,7 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
-import SubmissionActionButton from '@admin/components/SubmissionActionButton';
+import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -81,7 +81,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
             <TableCell>{formatDate(order.createdAt, 'MM/DD/YYYY')}</TableCell>
             <TableCell>{formatDate(order.arrivedAt, 'MM/DD/YYYY')}</TableCell>
             <TableCell>
-                {order.customer ? (
+                {order.customer?.id && order.customer?.customerNumber ? (
                     <MuiLink
                         component={Link}
                         color={'primary'}
@@ -101,7 +101,14 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
             <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
             <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
             <TableCell align={'right'}>
-                <SubmissionActionButton orderId={order.id} orderStatus={order.orderStatus} size={'small'} />
+                <SubmissionActionButton
+                    orderId={order.id}
+                    orderStatus={order.orderStatus}
+                    size={'small'}
+                    buttonOnly
+                    trackingNumber={order.orderShipment?.trackingNumber}
+                    shippingProvider={order.orderShipment?.shippingProvider}
+                />
             </TableCell>
             <TableCell align={'right'} className={classes.optionsCell}>
                 <IconButton onClick={handleClickOptions}>

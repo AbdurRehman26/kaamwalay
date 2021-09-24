@@ -24,6 +24,7 @@ export function SubmissionsView() {
                     'orderPayment',
                     'orderStatus',
                     'orderItems',
+                    'orderShipment',
                     'orderStatusHistory.orderStatus',
                 ],
             },
@@ -41,10 +42,11 @@ export function SubmissionsView() {
     return (
         <Grid container direction={'column'}>
             <SubmissionsViewHeader
-                orderId={id}
+                orderId={Number(id)}
                 orderNumber={data?.orderNumber ?? ''}
                 orderStatus={data?.orderStatus}
                 orderStatusHistory={data?.orderStatusHistory}
+                orderShipment={data?.orderShipment}
             />
             <Divider />
             <SubmissionsViewDetails
@@ -62,10 +64,7 @@ export function SubmissionsView() {
                 customerPhone={data.customer?.phone}
                 billingAddress={data.billingAddress}
                 shippingAddress={data.shippingAddress}
-                cardLast4={data.orderPayment?.card?.last4}
-                cardType={data.orderPayment?.card?.brand}
-                cardExpirationMonth={data.orderPayment?.card?.expMonth}
-                cardExpirationYear={data.orderPayment?.card?.expYear}
+                payment={data.orderPayment}
             />
             <SubmissionViewCards items={data.orderItems} serviceFee={data.paymentPlan?.price} />
         </Grid>

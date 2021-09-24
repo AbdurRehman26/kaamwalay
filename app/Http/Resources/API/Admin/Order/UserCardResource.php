@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\Admin\Order;
 
+use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemResource;
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemResource;
 
 class UserCardResource extends BaseResource
 {

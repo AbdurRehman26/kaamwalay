@@ -22,6 +22,8 @@ export const StatusChip = styled(({ color, ...rest }: StatusChipProps) => <Chip 
             color$ = colorsMap[color$ as keyof typeof colorsMap];
         } else if (color$ && color$ in theme.palette) {
             color$ = (theme.palette[color$ as keyof typeof theme.palette] as any)?.main;
+        } else {
+            color$ = colorsMap.pending;
         }
 
         return {

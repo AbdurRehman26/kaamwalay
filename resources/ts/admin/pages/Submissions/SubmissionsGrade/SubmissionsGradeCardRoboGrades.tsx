@@ -24,6 +24,29 @@ const useStyles = makeStyles(
         headingHolder: {
             marginBottom: theme.spacing(2),
         },
+        gradeReadContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        gradeReadLabel: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: '12px',
+            lineHeight: '16px',
+            letterSpacing: '0.1px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        gradeReadValue: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: '14px',
+            lineHeight: '20px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+            marginTop: '12px',
+        },
         heading: {
             marginLeft: theme.spacing(1),
             fontWeight: 500,
@@ -51,7 +74,7 @@ export function SubmissionsGradeCardRoboGrades({ heading, itemIndex, icon }: Sub
                     <TextField
                         size={'medium'}
                         variant={'outlined'}
-                        value={roboGradesFront !== null ? roboGradesFront.center : '-'}
+                        value={roboGradesFront !== null ? roboGradesFront?.center : '-'}
                         label={`Centering`}
                     />
                 </Grid>

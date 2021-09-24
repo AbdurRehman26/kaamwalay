@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Orders;
 
 use App\Exports\Order\OrdersExport;
 use App\Notifications\OrdersExported;
@@ -49,7 +49,7 @@ class ExportOrders extends Command
 
         Log::info("Orders Export Completed for date: ". $date);
 
-        if (app()->environment('production')) {
+        if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new OrdersExported($filePathUrl, Carbon::parse($date)->format('m/d/Y')));
         }

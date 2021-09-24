@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
+use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
@@ -30,7 +31,7 @@ class OrderStatusHistoryService
     }
 
     /**
-     * @throws OrderStatusHistoryWasAlreadyAssigned|Throwable
+     * @throws OrderCanNotBeMarkedAsGraded|Throwable
      */
     public function addStatusToOrder(OrderStatus|int $orderStatus, Order|int $order, User|int $user = null, ?string $notes = null)
     {
@@ -42,12 +43,14 @@ class OrderStatusHistoryService
         $orderId = getModelId($order);
         $orderStatusId = getModelId($orderStatus);
 
-        $exists = OrderStatusHistory::query()
-            ->where('order_id', getModelId($order))
+        $orderStatusHistory = OrderStatusHistory::where('order_id', getModelId($order))
             ->where('order_status_id', getModelId($orderStatus))
-            ->exists();
+            ->first();
 
-        throw_if($exists, OrderStatusHistoryWasAlreadyAssigned::class);
+        throw_if(
+            getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
+            OrderCanNotBeMarkedAsGraded::class
+        );
 
         Order::query()
             ->where('id', $orderId)
@@ -55,24 +58,32 @@ class OrderStatusHistoryService
                 [
                     'order_status_id' => $orderStatusId,
                 ],
-                $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: []
+                $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: [],
             ));
 
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 
         if ($orderStatusId === OrderStatus::ARRIVED) {
-            $certificateIds = implode(',', $this->orderService->getOrderCertificates($order));
+            $data = $this->orderService->getOrderCertificatesData($order);
 
-            $this->agsService->createCertificates($certificateIds);
+            $this->agsService->createCertificates($data);
         }
 
-        $orderStatusHistory = OrderStatusHistory::create([
-            'order_id' => $orderId,
-            'order_status_id' => $orderStatusId,
-            'user_id' => getModelId($user),
-            'notes' => $notes,
-        ]);
+        if (! $orderStatusHistory) {
+            $orderStatusHistory = OrderStatusHistory::create([
+                'order_id' => $orderId,
+                'order_status_id' => $orderStatusId,
+                'user_id' => getModelId($user),
+                'notes' => $notes,
+            ]);
+        }
+
+        if (getModelId($orderStatus) === OrderStatus::SHIPPED) {
+            $orderStatusHistory->user_id = getModelId($user);
+            $orderStatusHistory->notes = $notes;
+            $orderStatusHistory->save();
+        }
 
         return QueryBuilder::for(OrderStatusHistory::class)
             ->where('id', $orderStatusHistory->id)

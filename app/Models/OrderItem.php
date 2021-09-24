@@ -51,6 +51,7 @@ class OrderItem extends Model
         'order_item_shipment_id' => 'integer',
         'order_item_customer_shipment_id' => 'integer',
         'order_item_status_id' => 'integer',
+        'quantity' => 'integer',
         'unit_price' => 'decimal:2',
         'total_price' => 'decimal:2',
         'declared_value_per_unit' => 'float',
@@ -82,7 +83,7 @@ class OrderItem extends Model
         return $this->belongsTo(OrderItemStatus::class);
     }
 
-    public function orderItemStatusHistories()
+    public function orderItemStatusHistory()
     {
         return $this->hasMany(OrderItemStatusHistory::class);
     }
@@ -95,5 +96,10 @@ class OrderItem extends Model
     public function scopeForOrder(Builder $query, Order $order): Builder
     {
         return $query->where('order_id', $order->id);
+    }
+
+    public function isValidForGrading(): bool
+    {
+        return $this->order_item_status_id === OrderItemStatus::CONFIRMED;
     }
 }

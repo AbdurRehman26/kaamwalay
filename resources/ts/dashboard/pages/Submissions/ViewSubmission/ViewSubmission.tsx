@@ -19,7 +19,14 @@ import { ViewSubmissionStatus } from './ViewSubmissionStatus';
  */
 export function ViewSubmission() {
     const { id } = useParams<{ id: string }>();
-    const { isLoading, isError, data } = useOrderQuery({ resourceId: id });
+    const { isLoading, isError, data } = useOrderQuery({
+        resourceId: id,
+        config: {
+            params: {
+                include: ['paymentPlan', 'orderStatusHistory', 'orderStatusHistory.orderStatus', 'invoice'],
+            },
+        },
+    });
 
     if (isLoading || isError) {
         return (
@@ -53,10 +60,7 @@ export function ViewSubmission() {
             <SubmissionViewBilling
                 shippingAddress={data.shippingAddress}
                 billingAddress={data.billingAddress}
-                cardExpirationMonth={data.orderPayment?.card?.expMonth}
-                cardExpirationYear={data.orderPayment?.card?.expYear}
-                cardLast4={data.orderPayment?.card?.last4}
-                cardType={data.orderPayment?.card?.brand}
+                payment={data.orderPayment}
             />
             <SubmissionViewCards serviceFee={data.serviceFee} items={data.orderItems} />
         </Grid>

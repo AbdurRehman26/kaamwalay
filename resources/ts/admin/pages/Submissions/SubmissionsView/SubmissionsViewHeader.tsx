@@ -9,15 +9,17 @@ import { StatusProgressBar } from '@shared/components/StatusProgressBar';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { font } from '@shared/styles/utils';
-import SubmissionActionButton from '@admin/components/SubmissionActionButton';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
+import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 
 interface SubmissionViewHeaderProps {
-    orderId: string | number;
+    orderId: number;
     orderNumber: string;
     orderStatus: OrderStatusEntity;
     orderStatusHistory: OrderStatusHistoryEntity[];
+    orderShipment?: ShipmentEntity | null;
 }
 
 const useStyles = makeStyles(
@@ -45,6 +47,7 @@ export function SubmissionsViewHeader({
     orderNumber,
     orderStatus,
     orderStatusHistory,
+    orderShipment,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
 
@@ -81,7 +84,12 @@ export function SubmissionsViewHeader({
                     <StatusChip color={statusType} label={statusLabel} />
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
-                    <SubmissionActionButton orderId={orderId} orderStatus={orderStatus} />
+                    <SubmissionActionButton
+                        orderId={orderId}
+                        orderStatus={orderStatus}
+                        trackingNumber={orderShipment?.trackingNumber}
+                        shippingProvider={orderShipment?.shippingProvider}
+                    />
                     <IconButton size={'medium'} className={classes.menuButton}>
                         <MoreVertIcon />
                     </IconButton>

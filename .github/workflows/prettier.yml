@@ -22,7 +22,7 @@ jobs:
       uses: creyD/prettier_action@v4.0
       with:
         # This part is also where you can pass other options, for example:
-        prettier_options: --plugin "@trivago/prettier-plugin-sort-imports" --write **/*.{js,jsx,ts,tsx,scss}
+        prettier_options: --plugin @trivago/prettier-plugin-sort-imports --write **/*.{js,jsx,ts,tsx,scss}
         only_changed: True
 
     - name: Commit changes

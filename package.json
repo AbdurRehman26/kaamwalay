@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "format": "prettier -w .",
+        "format": "prettier -w ./resources",
         "dev": "mix",
         "watch": "mix watch",
         "hot": "mix watch --hot",

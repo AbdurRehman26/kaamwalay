@@ -7,25 +7,37 @@ jobs:
   prettier:
     runs-on: ubuntu-latest
     steps:
-    - name: "Install @trivago/prettier-plugin-sort-imports"
-      run: "npm install -g @trivago/prettier-plugin-sort-imports"
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Make sure the actual branch is checked out when running on pull requests
+          ref: ${{ github.head_ref }}
+          # This is important to fetch the changes to the previous commit
+          fetch-depth: 0
 
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        # Make sure the actual branch is checked out when running on pull requests
-        ref: ${{ github.head_ref }}
-        # This is important to fetch the changes to the previous commit
-        fetch-depth: 0
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    - name: Prettify code
-      uses: creyD/prettier_action@v4.0
-      with:
-        # This part is also where you can pass other options, for example:
-        prettier_options: --plugin @trivago/prettier-plugin-sort-imports --write **/*.{js,jsx,ts,tsx,scss}
-        only_changed: True
+      - uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-v1-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-v1
 
-    - name: Commit changes
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: Prettier changes
+      - name: Dependency install
+        run: yarn install --ignore-scripts --pure-lockfile --non-interactive
+
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.0
+        with:
+          # This part is also where you can pass other options, for example:
+          prettier_options: --write **/*.{js,jsx,ts,tsx,scss}
+          only_changed: True
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Prettier changes

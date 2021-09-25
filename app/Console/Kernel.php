@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\ExportOrders;
+use App\Console\Commands\Orders\ExportOrders;
 use App\Console\Commands\RevenueStats\UpdateRevenueStatsDaily;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;

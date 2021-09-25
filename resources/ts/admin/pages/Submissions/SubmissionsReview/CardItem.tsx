@@ -77,7 +77,13 @@ export function CardItem({ label, itemId, card, labelIcon, certificateId, declar
 
     return (
         <Grid container alignItems={'center'} className={classes.root}>
-            <Box display={'flex'} flexGrow={1} alignItems={'flex-start'} maxWidth={'calc(100% - 68px)'}>
+            <Box
+                display={'flex'}
+                flexGrow={1}
+                flexWrap={'nowrap'}
+                alignItems={'flex-start'}
+                maxWidth={'calc(100% - 68px)'}
+            >
                 <img
                     src={card.imagePath}
                     alt={'card'}

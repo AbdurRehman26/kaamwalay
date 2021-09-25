@@ -174,7 +174,7 @@ class AgsService
     {
         $gradeValue = (float) $value;
 
-        if(floor($gradeValue) === $gradeValue) {
+        if (floor($gradeValue) === $gradeValue) {
             return floor($gradeValue);
         } else {
             return round($gradeValue, 1);

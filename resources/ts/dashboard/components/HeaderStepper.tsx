@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'row',
             width: '100%',
             justifyContent: 'center',
-            transform: 'translate(0, 88px)',
+            transform: 'translate(0, 64px)',
             overflow: 'hidden',
         },
         instructions: {

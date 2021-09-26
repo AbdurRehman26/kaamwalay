@@ -36,14 +36,12 @@ const useStyles = makeStyles(
             },
             dialogActions: {
                 marginBottom: '12px',
-                marginRight: '24px',
+                marginRight: '18px',
             },
             contentContainer: {
                 width: '457px',
             },
             saveBtn: {
-                width: '140px',
-                height: '48px',
                 marginLeft: '12px',
             },
             fieldContainer: {
@@ -197,6 +195,7 @@ function ShipmentDialog(props: ShipmentDialogProps) {
                                 type={'submit'}
                                 color={'primary'}
                                 variant={'contained'}
+                                size={'medium'}
                                 className={classes.saveBtn}
                                 startIcon={isSubmitting ? <CircularProgress size={20} color={'inherit'} /> : null}
                             >

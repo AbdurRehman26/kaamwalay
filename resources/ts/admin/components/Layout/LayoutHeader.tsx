@@ -42,9 +42,9 @@ function LayoutHeader() {
                     <img src={Logo} alt={'Robograding'} className={classes.brandImage} />
                 </Link>
                 <Box flexGrow={1} />
-                <ButtonBase component={Avatar} onClick={handleUserMenuOpen}>
+                <Avatar component={ButtonBase} onClick={handleUserMenuOpen}>
                     {user.getInitials()}
-                </ButtonBase>
+                </Avatar>
                 <Menu open={!!userMenuAnchor} anchorEl={userMenuAnchor} onClose={handleUserMenuClose}>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>

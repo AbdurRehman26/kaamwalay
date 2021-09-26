@@ -104,7 +104,6 @@ class OrderService
     }
 
     /**
-     * @throws GradesAreNotAvailable
      * @throws IncorrectOrderStatus
      */
     public function getGrades(Order $order): Collection
@@ -114,14 +113,10 @@ class OrderService
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
 
-        if (empty($grades)) {
-            throw new GradesAreNotAvailable;
-        }
-
         $cards = UserCard::join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
             ->where('order_items.order_id', $order->id)->select('user_cards.*')->get();
 
-        $this->updateLocalGrades($grades['results'], $cards);
+        $this->updateLocalGrades($grades['results'] ?? [], $cards);
 
         return $cards;
     }

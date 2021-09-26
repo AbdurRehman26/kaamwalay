@@ -36,7 +36,7 @@ class SendScheduledEmails extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         (new EmailService)->processScheduledEmails();
 

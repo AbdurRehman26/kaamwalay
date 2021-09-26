@@ -1,4 +1,4 @@
-import { TablePaginationProps } from '@material-ui/core/TablePagination';
+import { TablePaginationProps } from '@mui/material/TablePagination';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
 import { ClassConstructor, plainToClass } from 'class-transformer';

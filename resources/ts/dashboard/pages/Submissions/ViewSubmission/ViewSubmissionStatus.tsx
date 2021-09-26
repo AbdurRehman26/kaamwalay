@@ -1,6 +1,6 @@
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import React, { useMemo } from 'react';
 import { cx } from '@shared/lib/utils/cx';
 import { ViewSubmissionStatusBar } from './ViewSubmissionStatusBar';

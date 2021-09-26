@@ -1,6 +1,6 @@
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Snackbar from '@mui/material/Snackbar';
 import { plainToClass } from 'class-transformer';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { NotificationItem } from '@shared/classes/NotificationItem';

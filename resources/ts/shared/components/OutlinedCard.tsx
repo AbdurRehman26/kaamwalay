@@ -1,8 +1,8 @@
-import Card, { CardProps } from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import { TypographyProps } from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Card, { CardProps } from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import { TypographyProps } from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { PropsWithChildren, useMemo } from 'react';
 import { cx } from '@shared/lib/utils/cx';
 import { font } from '../styles/utils';

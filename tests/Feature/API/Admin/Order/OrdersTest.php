@@ -222,13 +222,16 @@ it('can not get order grades if order is not reviewed', function () {
     $response->assertJsonPath('error', (new IncorrectOrderStatus)->getMessage());
 });
 
-it('returns orders filtered after searching the order with order number, userID and user Name', function (string $value) {
-    $this->getJson('/api/admin/orders?include=order_status_history&filter[search]=' . $value)
-        ->assertOk()
-        ->assertJsonFragment([
-            'id' => $this->orders[0]->id,
-        ]);
-})->with([
+it(
+    'returns orders filtered after searching the order with order number, customer number and user Name',
+    function (string $value) {
+        $this->getJson('/api/admin/orders?include=order_status_history&filter[search]=' . $value)
+            ->assertOk()
+            ->assertJsonFragment([
+                'id' => $this->orders[0]->id,
+            ]);
+    }
+)->with([
     fn () => $this->orders[0]->order_number,
     fn () => $this->orders[0]->user->customer_number,
     fn () => $this->orders[0]->user->first_name,

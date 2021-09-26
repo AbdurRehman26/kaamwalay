@@ -3,7 +3,6 @@
 namespace App\Services\Admin;
 
 use App\Events\API\Admin\Order\OrderUpdated;
-use App\Exceptions\API\Admin\GradesAreNotAvailable;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
@@ -17,7 +16,6 @@ use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService

@@ -92,6 +92,7 @@ export function ResetPassword() {
                             to={'/sign-in'}
                             align={'center'}
                             color={'primary'}
+                            underline={'hover'}
                             className={font.fontWeightMedium}
                             paragraph
                         >
@@ -102,6 +103,7 @@ export function ResetPassword() {
                             to={'/sign-up'}
                             align={'center'}
                             color={'textSecondary'}
+                            underline={'hover'}
                             className={font.fontWeightMedium}
                         >
                             Sign up

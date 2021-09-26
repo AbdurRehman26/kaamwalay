@@ -75,6 +75,7 @@ export function SignUp() {
                             to={'/sign-in'}
                             align={'center'}
                             color={'primary'}
+                            underline={'hover'}
                             className={font.fontWeightMedium}
                         >
                             Sign in

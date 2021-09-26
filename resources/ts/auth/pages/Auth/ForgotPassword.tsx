@@ -96,6 +96,7 @@ export function ForgotPassword() {
                             to={'/sign-in'}
                             align={'center'}
                             color={'primary'}
+                            underline={'hover'}
                             className={font.fontWeightMedium}
                             paragraph
                         >
@@ -106,6 +107,7 @@ export function ForgotPassword() {
                             to={'/sign-up'}
                             align={'center'}
                             color={'textSecondary'}
+                            underline={'hover'}
                             className={font.fontWeightMedium}
                         >
                             Sign up

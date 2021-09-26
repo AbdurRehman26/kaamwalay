@@ -63,6 +63,7 @@ export function SignIn() {
                         variant={'subtitle1'}
                         color={'textPrimary'}
                         align={'center'}
+                        underline={'hover'}
                         className={classes.forgotLink}
                     >
                         Forgot Password?
@@ -79,6 +80,7 @@ export function SignIn() {
                             to={'/sign-up'}
                             align={'center'}
                             color={'primary'}
+                            underline={'hover'}
                             className={font.fontWeightMedium}
                         >
                             Sign Up

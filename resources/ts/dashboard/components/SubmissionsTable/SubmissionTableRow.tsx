@@ -11,6 +11,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
@@ -93,6 +94,16 @@ const useStyles = makeStyles(
             flexDirection: 'column',
             justifyContent: 'flex-start',
         },
+        orderLink: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '14px',
+            lineHeight: '20px',
+            letterSpacing: '0.2px',
+            textDecorationLine: 'underline',
+            color: '#20BFB8',
+        },
         closeIconBtn: {
             paddingTop: 0,
         },
@@ -173,7 +184,13 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
 
             {!isMobile ? (
                 <TableRow>
-                    <TableCell>{orderNumber}</TableCell>
+                    <TableCell>
+                        <Link to={`submissions/${id}/view`}>
+                            <Typography variant={'subtitle2'} className={classes.orderLink}>
+                                {orderNumber}
+                            </Typography>
+                        </Link>
+                    </TableCell>
                     <TableCell>{datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}</TableCell>
                     <TableCell>{dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}</TableCell>
                     <TableCell>{`${formatCurrency(serviceLevel)} / Card`}</TableCell>

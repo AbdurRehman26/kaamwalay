@@ -25,6 +25,19 @@ export const useViewSubmissionStatusStyles = makeStyles(
         textGutter: {
             marginBottom: 2,
         },
+        descriptionFont: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: '12px',
+            lineHeight: '16px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+            maxWidth: '420px',
+        },
+        '&:first-letter': {
+            textTransform: 'capitalize',
+        },
     }),
     {
         name: 'ViewSubmissionStatus',

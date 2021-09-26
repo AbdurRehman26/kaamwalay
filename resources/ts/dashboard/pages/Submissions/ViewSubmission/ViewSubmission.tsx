@@ -38,31 +38,32 @@ export function ViewSubmission() {
 
     return (
         <Grid container direction={'column'}>
-            <ViewSubmissionHeader orderNumber={data.orderNumber} />
+            <ViewSubmissionHeader orderNumber={data?.orderNumber} />
             <Divider />
-            <ViewSubmissionStatus orderStatus={data.status} />
+            <ViewSubmissionStatus orderStatus={data?.status[0].toUpperCase() + data?.status.slice(1)} />
             <Divider />
             <ViewSubmissionInformation
                 serviceLevel={'Basic'}
-                numberOfCards={data.numberOfCards}
-                shippingMethod={data.shippingMethod.name}
-                createdAt={data.createdAt}
-                declaredValue={data.totalDeclaredValue}
-                customerName={data.customer?.getFullName()}
-                customerEmail={data.customer?.email}
-                customerPhone={data.customer?.phone}
-                customerId={data.customer?.id}
+                numberOfCards={data?.numberOfCards}
+                shippingMethod={data?.shippingMethod?.name}
+                createdAt={data?.createdAt}
+                declaredValue={data?.totalDeclaredValue}
+                customerName={data?.customer?.getFullName()}
+                customerEmail={data?.customer?.email}
+                customerPhone={data?.customer?.phone}
+                customerId={data?.customer?.id}
                 serviceFee={0}
-                shippingFee={data.shippingFee}
-                total={data.grandTotal}
+                shippingFee={data?.shippingFee}
+                total={data?.grandTotal}
             />
             <Divider />
+            <Box marginTop={'24px'} />
             <SubmissionViewBilling
-                shippingAddress={data.shippingAddress}
-                billingAddress={data.billingAddress}
-                payment={data.orderPayment}
+                shippingAddress={data?.shippingAddress}
+                billingAddress={data?.billingAddress}
+                payment={data?.orderPayment}
             />
-            <SubmissionViewCards serviceFee={data.serviceFee} items={data.orderItems} />
+            <SubmissionViewCards serviceFee={data?.serviceFee} items={data?.orderItems} />
         </Grid>
     );
 }

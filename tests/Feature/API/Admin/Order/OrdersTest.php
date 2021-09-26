@@ -49,9 +49,7 @@ beforeEach(function () {
                 'order_id' => $this->orders[1]->id,
             ]
         ))
-        ->create([
-            'order_id' => $this->orders[0],
-        ]);
+        ->create();
 
     $this->sampleAgsResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
@@ -224,7 +222,7 @@ it('can not get order grades if order is not reviewed', function () {
     $response->assertJsonPath('error', (new IncorrectOrderStatus)->getMessage());
 });
 
-it('returns orders filtered after searching the order ID', function (string $value) {
+it('returns orders filtered after searching the order with order number, userID and user Name', function (string $value) {
     $this->getJson('/api/admin/orders?include=order_status_history&filter[search]=' . $value)
         ->assertOk()
         ->assertJsonFragment([
@@ -232,7 +230,7 @@ it('returns orders filtered after searching the order ID', function (string $val
         ]);
 })->with([
     fn () => $this->orders[0]->order_number,
-    fn () => $this->orders[0]->user->id,
+    fn () => $this->orders[0]->user->customer_number,
     fn () => $this->orders[0]->user->first_name,
 ]);
 
@@ -261,4 +259,34 @@ test('an admin can not complete review of an order if error occurred with AGS cl
     $this->postJson('/api/admin/orders/' . $this->orders[1]->id . '/status-history', [
         'order_status_id' => OrderStatus::ARRIVED,
     ])->assertStatus(422);
+});
+
+test('an admin can get order cards if AGS API fails to return grades', function () {
+    Http::fake(['*' => Http::response([])]);
+    \App\Models\UserCard::factory()->create([
+        'order_item_id' => $this->orders[1]->orderItems->first()->id,
+    ]);
+    $this->getJson('/api/admin/orders/' . $this->orders[1]->id . '/grades')
+        ->assertOk()
+        ->assertJsonFragment([
+            'robo_grade_values' => null,
+        ]);
+});
+
+
+
+test('an admin can get order cards if AGS API returns grades', function () {
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    $orderItemId = $this->orders[1]->orderItems->first()->id;
+    \App\Models\UserCard::factory()->create([
+        'order_item_id' => $orderItemId,
+        'certificate_number' => '09000000',
+    ]);
+    $this->getJson('/api/admin/orders/' . $this->orders[1]->id . '/grades')
+        ->assertJsonFragment([
+                'center' => '2.00',
+        ])
+        ->assertJsonFragment([
+            'id' => $orderItemId,
+        ]);
 });

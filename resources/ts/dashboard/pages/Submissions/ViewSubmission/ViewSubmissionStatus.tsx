@@ -2,12 +2,15 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import React, { useMemo } from 'react';
 import { cx } from '@shared/lib/utils/cx';
+import SubmissionTrackingStatus from '@dashboard/pages/Submissions/ViewSubmission/SubmissionTrackingStatus';
 import { ViewSubmissionStatusBar } from './ViewSubmissionStatusBar';
 import { SubmissionSteps } from './data';
 import { useViewSubmissionStatusStyles } from './styles';
 
 interface ViewSubmissionStatusProps {
     orderStatus: string | SubmissionSteps;
+    trackingNumber?: string;
+    shipmentProvider?: string;
 }
 
 /**
@@ -15,7 +18,7 @@ interface ViewSubmissionStatusProps {
  * @private
  * @constructor
  */
-export function ViewSubmissionStatus({ orderStatus }: ViewSubmissionStatusProps) {
+export function ViewSubmissionStatus({ orderStatus, shipmentProvider, trackingNumber }: ViewSubmissionStatusProps) {
     const classes = useViewSubmissionStatusStyles();
     const steps = useMemo(() => Object.values(SubmissionSteps), []);
 
@@ -42,6 +45,12 @@ export function ViewSubmissionStatus({ orderStatus }: ViewSubmissionStatusProps)
             </Typography>
 
             <ViewSubmissionStatusBar steps={steps} currentStep={orderStatus[0].toUpperCase() + orderStatus.slice(1)} />
+
+            <SubmissionTrackingStatus
+                trackingNumber={trackingNumber!}
+                orderStatus={orderStatus.toLowerCase()}
+                shippingProvider={shipmentProvider!}
+            />
         </Grid>
     );
 }

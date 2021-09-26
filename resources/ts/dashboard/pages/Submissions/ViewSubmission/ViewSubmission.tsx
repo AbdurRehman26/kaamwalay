@@ -23,7 +23,13 @@ export function ViewSubmission() {
         resourceId: id,
         config: {
             params: {
-                include: ['paymentPlan', 'orderStatusHistory', 'orderStatusHistory.orderStatus', 'invoice'],
+                include: [
+                    'paymentPlan',
+                    'orderStatusHistory',
+                    'orderCustomerShipment',
+                    'orderStatusHistory.orderStatus',
+                    'invoice',
+                ],
             },
         },
     });
@@ -40,7 +46,11 @@ export function ViewSubmission() {
         <Grid container direction={'column'}>
             <ViewSubmissionHeader orderNumber={data?.orderNumber} />
             <Divider />
-            <ViewSubmissionStatus orderStatus={data?.status[0].toUpperCase() + data?.status.slice(1)} />
+            <ViewSubmissionStatus
+                trackingNumber={data?.orderCustomerShipment?.trackingNumber}
+                shipmentProvider={data?.orderCustomerShipment?.shippingProvider}
+                orderStatus={data?.status[0].toUpperCase() + data?.status.slice(1)}
+            />
             <Divider />
             <ViewSubmissionInformation
                 serviceLevel={'Basic'}

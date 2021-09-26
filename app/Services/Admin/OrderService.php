@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Events\API\Admin\Order\OrderUpdated;
+use App\Exceptions\API\Admin\GradesAreNotAvailable;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
@@ -102,23 +103,32 @@ class OrderService
         return $order;
     }
 
-    public function getGrades(Order $order)
+    /**
+     * @throws GradesAreNotAvailable
+     * @throws IncorrectOrderStatus
+     */
+    public function getGrades(Order $order): Collection
     {
         if ($order->order_status_id !== OrderStatus::ARRIVED) {
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
+
+        if (empty($grades)) {
+            throw new GradesAreNotAvailable;
+        }
+
         $cards = UserCard::join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
             ->where('order_items.order_id', $order->id)->select('user_cards.*')->get();
 
-        $this->updateLocalGrades($grades, $cards);
+        $this->updateLocalGrades($grades['results'], $cards);
 
         return $cards;
     }
 
     protected function updateLocalGrades(array $grades, Collection $cards): void
     {
-        foreach ($grades['results'] as $result) {
+        foreach ($grades as $result) {
             $certId = $result['certificate_id'];
 
             $card = $cards->first(function ($c, $key) use ($certId) {

@@ -49,4 +49,11 @@ class UserCard extends Model
     {
         return $this->hasOne(UserCardCertificate::class);
     }
+
+    public function updateFromAgsResponse(array $response): void
+    {
+        if (! empty($response)) {
+            $this->update($response);
+        }
+    }
 }

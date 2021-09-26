@@ -31,7 +31,9 @@ class AgsService
     {
         $response = $this->client->updateHumanGrades($certificateId, $this->prepareHumanGradeData($data));
 
-        return CardGradeResource::make($response)->resolve();
+        return ! empty($response)
+            ? CardGradeResource::make($response)->resolve()
+            : [];
     }
 
     protected function prepareHumanGradeData(array $data): array
@@ -42,7 +44,7 @@ class AgsService
             'front_edges_human_grade' => $data['human_grade_values']['front']['edge'],
             'front_corners_human_grade' => $data['human_grade_values']['front']['corner'],
             'back_centering_human_grade' => $data['human_grade_values']['back']['center'],
-            'back_surface_human_grade' => $data['human_grade_values']['back']['corner'],
+            'back_surface_human_grade' => $data['human_grade_values']['back']['surface'],
             'back_edges_human_grade' => $data['human_grade_values']['back']['edge'],
             'back_corners_human_grade' => $data['human_grade_values']['back']['corner'],
         ];
@@ -82,10 +84,7 @@ class AgsService
         return [
             'grades_available' => true,
             'certificate_id' => $data['certificate_id'] ?? null,
-            'grade' => [
-                'grade' => $data['grade']['grade'] ?? null,
-                'nickname' => $data['grade']['nickname'] ?? null,
-            ],
+            'grade' => $this->prepareGradeForPublicPage($data['grade']),
             'card' => [
                 'name' => $data['card']['name'] ?? null,
                 'full_name' => ! empty($data['card']) ? $this->getCardFullName($data['card']) : '',
@@ -98,24 +97,9 @@ class AgsService
                     null,
                 'number' => $data['card']['pokemon_set']['cards_number'] ?? null,
             ],
-            'overall' => [
-                'centering' => $data['total_centering_grade']['grade'] ?? null,
-                'surface' => $data['total_surface_grade']['grade'] ?? null,
-                'edges' => $data['total_edges_grade']['grade'] ?? null,
-                'corners' => $data['total_corners_grade']['grade'] ?? null,
-            ],
-            'front_scan' => [
-                'centering' => $data['front_scan']['centering_grade']['grade'] ?? null,
-                'surface' => $data['front_scan']['surface_grade']['grade'] ?? null,
-                'edges' => $data['front_scan']['edges_grade']['grade'] ?? null,
-                'corners' => $data['front_scan']['corners_grade']['grade'] ?? null,
-            ],
-            'back_scan' => [
-                'centering' => $data['back_scan']['centering_grade']['grade'] ?? null,
-                'surface' => $data['back_scan']['surface_grade']['grade'] ?? null,
-                'edges' => $data['back_scan']['edges_grade']['grade'] ?? null,
-                'corners' => $data['back_scan']['corners_grade']['grade'] ?? null,
-            ],
+            'overall' => $this->prepareOverallGradesForPublicPage($data),
+            'front_scan' => $this->prepareFrontScanGradesForPublicPage($data),
+            'back_scan' => $this->prepareBackScanGradesForPublicPage($data),
             'generated_images' => [
                 [
                     'output_image' => $data['front_scan']['centering_result']['output_image'] ?? null,
@@ -161,5 +145,61 @@ class AgsService
             $card['pokemon_set']['name'] . ' ' .
             $card['pokemon_set']['cards_number'] . ' ' .
             $card['name'];
+    }
+
+    protected function prepareGradeForPublicPage(array $grade): array
+    {
+        return [
+            'grade' => $this->preparePreciseValue($grade['grade']),
+            'nickname' => $grade['nickname'] ?? null,
+        ];
+    }
+
+    protected function prepareOverallGradesForPublicPage(array $data): array
+    {
+        return [
+            'centering' => $this->preparePreciseValue($data['total_centering_grade']['grade']) ?? null,
+            'surface' => $this->preparePreciseValue($data['total_surface_grade']['grade']) ?? null,
+            'edges' => $this->preparePreciseValue($data['total_edges_grade']['grade']) ?? null,
+            'corners' => $this->preparePreciseValue($data['total_corners_grade']['grade']) ?? null,
+        ];
+    }
+
+    /**
+     * It returns precise value for display.
+     * e.g. 8.00 will be converted to 8, 8.50 will be converted to 8.5, 8.125 will be converted to 8.1
+     *
+     * @param  string  $value
+     * @return float
+     */
+    protected function preparePreciseValue(string $value): float
+    {
+        $gradeValue = (float) $value;
+
+        if (floor($gradeValue) === $gradeValue) {
+            return floor($gradeValue);
+        } else {
+            return round($gradeValue, 1);
+        }
+    }
+
+    protected function prepareFrontScanGradesForPublicPage(array $data): array
+    {
+        return [
+            'centering' => $data['front_centering_human_grade'] ?? $data['front_scan']['centering_grade']['grade'] ?? null,
+            'surface' => $data['front_surface_human_grade'] ?? $data['front_scan']['surface_grade']['grade'] ?? null,
+            'edges' => $data['front_edges_human_grade'] ?? $data['front_scan']['edges_grade']['grade'] ?? null,
+            'corners' => $data['front_corners_human_grade'] ?? $data['front_scan']['corners_grade']['grade'] ?? null,
+        ];
+    }
+
+    protected function prepareBackScanGradesForPublicPage(array $data): array
+    {
+        return [
+            'centering' => $data['back_centering_human_grade'] ?? $data['back_scan']['centering_grade']['grade'] ?? null,
+            'surface' => $data['back_surface_human_grade'] ?? $data['back_scan']['surface_grade']['grade'] ?? null,
+            'edges' => $data['back_edges_human_grade'] ?? $data['back_scan']['edges_grade']['grade'] ?? null,
+            'corners' => $data['back_corners_human_grade'] ?? $data['back_scan']['corners_grade']['grade'] ?? null,
+        ];
     }
 }

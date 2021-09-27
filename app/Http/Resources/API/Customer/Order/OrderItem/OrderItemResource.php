@@ -16,6 +16,10 @@ class OrderItemResource extends JsonResource
             'declared_value_per_unit' => $this->declared_value_per_unit,
             'card_product' => new CardProductResource($this->cardProduct),
             'status' => new OrderItemStatusResource($this->orderItemStatus),
+            'grade' => [
+                'grade' => $this?->userCard?->overall_grade,
+                'nickname' => $this?->userCard?->overall_grade_nickname,
+            ],
             'certificate_number' => $this->userCard?->userCardCertificate?->number,
         ];
     }

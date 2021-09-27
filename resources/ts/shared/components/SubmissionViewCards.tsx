@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,7 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import font from '@shared/styles/font.module.css';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
@@ -20,6 +21,12 @@ interface SubmissionViewCardsProps {
 
 export const useStyles = makeStyles(
     (theme) => ({
+        containerBox: {
+            [theme.breakpoints.down('xs')]: {
+                maxWidth: '98%',
+                padding: 0,
+            },
+        },
         root: {
             marginTop: theme.spacing(4),
             borderRadius: 3,
@@ -49,25 +56,60 @@ export const useStyles = makeStyles(
             alignItems: 'center',
             justifyContent: 'center',
         },
+        viewGradeText: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '14px',
+            lineHeight: '20px',
+            textAlign: 'center',
+            letterSpacing: '0.35px',
+            color: '#20BFB8',
+            textDecoration: 'none',
+        },
+        cardDataKeyText: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 'bold',
+            fontSize: '12px',
+            lineHeight: '16px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
+        cardDataKeyValue: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '12px',
+            lineHeight: '16px',
+            letterSpacing: '0.2px',
+            color: 'rgba(0, 0, 0, 0.87)',
+        },
     }),
     { name: 'SubmissionViewCards' },
 );
 
 export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsProps) {
     const classes = useStyles();
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
+    const GradeRoot = isMobile ? 'a' : Box;
     return (
-        <Box px={3}>
+        <Box px={3} className={classes.containerBox}>
             <TableContainer className={classes.root}>
                 <Table>
                     <TableHead className={classes.header}>
                         <TableRow>
                             <TableCell variant={'head'}>Card</TableCell>
                             <TableCell variant={'head'}>Grade</TableCell>
-                            <TableCell variant={'head'}>Value (USD)</TableCell>
-                            <TableCell variant={'head'} align={'right'}>
-                                Paid
-                            </TableCell>
+                            {isMobile ? null : (
+                                <>
+                                    <TableCell variant={'head'}>Value (USD)</TableCell>
+                                    <TableCell variant={'head'} align={'right'}>
+                                        Paid
+                                    </TableCell>
+                                </>
+                            )}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -85,47 +127,147 @@ export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsPr
                                             <Typography variant={'body2'}>
                                                 {item.cardProduct.getDescription()}
                                             </Typography>
-                                            <Box>
-                                                <Typography
-                                                    variant={'caption'}
-                                                    color={'textSecondary'}
-                                                    className={classes.gutterRight}
-                                                >
-                                                    Card #: {item.cardProduct.cardNumberOrder}
-                                                </Typography>
-                                                <Typography
-                                                    variant={'caption'}
-                                                    color={'textSecondary'}
-                                                    className={classes.gutterRight}
-                                                >
-                                                    ID: {item.id}
-                                                </Typography>
-                                            </Box>
+
+                                            {!isMobile ? (
+                                                <Box>
+                                                    <Typography
+                                                        variant={'caption'}
+                                                        color={'textSecondary'}
+                                                        className={classes.gutterRight}
+                                                    >
+                                                        Card #: {item.cardProduct.cardNumberOrder}
+                                                    </Typography>
+                                                    <Typography
+                                                        variant={'caption'}
+                                                        color={'textSecondary'}
+                                                        className={classes.gutterRight}
+                                                    >
+                                                        ID: {item.id}
+                                                    </Typography>
+                                                </Box>
+                                            ) : null}
+
+                                            {!isMobile ? null : (
+                                                <>
+                                                    <Box>
+                                                        <Typography
+                                                            variant={'caption'}
+                                                            color={'textSecondary'}
+                                                            className={classes.cardDataKeyText}
+                                                        >
+                                                            Card ID:
+                                                        </Typography>
+                                                        <Typography
+                                                            variant={'caption'}
+                                                            color={'textSecondary'}
+                                                            className={classes.cardDataKeyValue}
+                                                        >
+                                                            &nbsp;{item.id}
+                                                        </Typography>
+                                                    </Box>
+
+                                                    {item.certificateNumber ? (
+                                                        <Box>
+                                                            <Typography
+                                                                variant={'caption'}
+                                                                color={'textSecondary'}
+                                                                className={classes.cardDataKeyText}
+                                                            >
+                                                                Certificate ID:
+                                                            </Typography>
+                                                            <Typography
+                                                                variant={'caption'}
+                                                                color={'textSecondary'}
+                                                                className={classes.cardDataKeyValue}
+                                                            >
+                                                                &nbsp;{item.certificateNumber}
+                                                            </Typography>
+                                                        </Box>
+                                                    ) : null}
+
+                                                    <Box>
+                                                        <Typography
+                                                            variant={'caption'}
+                                                            color={'textSecondary'}
+                                                            className={classes.cardDataKeyText}
+                                                        >
+                                                            Value (USD):
+                                                        </Typography>
+                                                        <Typography
+                                                            variant={'caption'}
+                                                            color={'textSecondary'}
+                                                            className={classes.cardDataKeyValue}
+                                                        >
+                                                            &nbsp;{formatCurrency(item.declaredValuePerUnit)}
+                                                        </Typography>
+                                                    </Box>
+
+                                                    <Box>
+                                                        <Typography
+                                                            variant={'caption'}
+                                                            color={'textSecondary'}
+                                                            className={classes.cardDataKeyText}
+                                                        >
+                                                            Paid:
+                                                        </Typography>
+                                                        <Typography
+                                                            variant={'caption'}
+                                                            color={'textSecondary'}
+                                                            className={classes.cardDataKeyValue}
+                                                        >
+                                                            &nbsp;{formatCurrency(serviceFee)}
+                                                        </Typography>
+                                                    </Box>
+                                                </>
+                                            )}
                                         </Box>
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    {!item ? (
-                                        <Typography
-                                            variant={'body2'}
-                                            className={cx(font.fontWeightBold, classes.gradeBadge)}
+                                    {item?.grade?.grade ? (
+                                        <GradeRoot
+                                            target={'_blank'}
+                                            href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
+                                            flexDirection={'column'}
+                                            style={{ textDecoration: 'none' }}
                                         >
-                                            8.7
-                                        </Typography>
+                                            <Typography
+                                                variant={'body2'}
+                                                className={cx(
+                                                    font.fontWeightBold,
+                                                    isMobile ? classes.gradeBadge : null,
+                                                )}
+                                            >
+                                                {item?.grade?.grade}
+                                            </Typography>
+                                            {isMobile ? null : (
+                                                <a
+                                                    target={'_blank'}
+                                                    href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
+                                                    style={{ textDecoration: 'none' }} rel="noreferrer"
+                                                >
+                                                    <Typography variant={'body2'} className={classes.viewGradeText}>
+                                                        View Grade
+                                                    </Typography>
+                                                </a>
+                                            )}
+                                        </GradeRoot>
                                     ) : (
                                         '-'
                                     )}
                                 </TableCell>
-                                <TableCell>
-                                    <Typography variant={'body2'}>
-                                        {formatCurrency(item.declaredValuePerUnit)}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align={'right'}>
-                                    <Typography variant={'body2'}>
-                                        {formatCurrency(item.quantity * serviceFee)}
-                                    </Typography>
-                                </TableCell>
+                                {isMobile ? null : (
+                                    <>
+                                        <TableCell>
+                                            <Typography variant={'body2'}>
+                                                {formatCurrency(item.declaredValuePerUnit)}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align={'right'}>
+                                            <Typography variant={'body2'}>{formatCurrency(serviceFee)}</Typography>
+                                        </TableCell>
+                                    </>
+                                )}
                             </TableRow>
                         ))}
                     </TableBody>

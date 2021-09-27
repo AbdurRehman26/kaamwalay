@@ -19,4 +19,10 @@ export class OrderItemEntity extends Entity {
 
     @Field('order_id')
     public orderId!: number;
+
+    @Field('grade')
+    public grade!: {
+        grade: number;
+        nickname: string;
+    };
 }

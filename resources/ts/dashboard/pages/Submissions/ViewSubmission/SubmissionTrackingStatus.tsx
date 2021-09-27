@@ -12,6 +12,9 @@ type SubmissionTrackingStatusProps = {
     trackingNumber?: string;
     shippingProvider?: string;
     orderStatus: string;
+    invoicePath?: string;
+    shipmentNumber?: string;
+    shipmentLink?: string;
 };
 
 const useStyles = makeStyles({
@@ -63,7 +66,13 @@ const useStyles = makeStyles({
     },
 });
 
-function SubmissionTrackingStatus({ trackingNumber, shippingProvider, orderStatus }: SubmissionTrackingStatusProps) {
+function SubmissionTrackingStatus({
+    trackingNumber,
+    shippingProvider,
+    orderStatus,
+    shipmentNumber,
+    shipmentLink,
+}: SubmissionTrackingStatusProps) {
     const classes = useStyles();
     const { id }: any = useParams();
     const [isShipmentDialogOpen, setIsShipmentDialogOpen] = useState(false);
@@ -90,8 +99,8 @@ function SubmissionTrackingStatus({ trackingNumber, shippingProvider, orderStatu
                 <Typography variant={'subtitle2'} className={classes.textDescription}>
                     Return Shipment Tracking Number
                 </Typography>
-                <Link to={'/test'} className={classes.shippingTrackingText}>
-                    <Typography variant={'subtitle2'}>asd123</Typography>
+                <Link to={shipmentLink!} className={classes.shippingTrackingText}>
+                    <Typography variant={'subtitle2'}>{shipmentNumber}</Typography>
                 </Link>
             </div>
         );

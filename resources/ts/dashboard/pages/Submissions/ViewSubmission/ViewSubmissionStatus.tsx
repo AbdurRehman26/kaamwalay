@@ -1,6 +1,7 @@
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import React, { useMemo } from 'react';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { cx } from '@shared/lib/utils/cx';
 import SubmissionTrackingStatus from '@dashboard/pages/Submissions/ViewSubmission/SubmissionTrackingStatus';
 import { ViewSubmissionStatusBar } from './ViewSubmissionStatusBar';
@@ -11,6 +12,7 @@ interface ViewSubmissionStatusProps {
     orderStatus: string | SubmissionSteps;
     trackingNumber?: string;
     shipmentProvider?: string;
+    orderShipment: ShipmentEntity | null;
 }
 
 /**
@@ -18,7 +20,12 @@ interface ViewSubmissionStatusProps {
  * @private
  * @constructor
  */
-export function ViewSubmissionStatus({ orderStatus, shipmentProvider, trackingNumber }: ViewSubmissionStatusProps) {
+export function ViewSubmissionStatus({
+    orderStatus,
+    shipmentProvider,
+    trackingNumber,
+    orderShipment,
+}: ViewSubmissionStatusProps) {
     const classes = useViewSubmissionStatusStyles();
     const steps = useMemo(() => Object.values(SubmissionSteps), []);
 
@@ -50,6 +57,8 @@ export function ViewSubmissionStatus({ orderStatus, shipmentProvider, trackingNu
                 trackingNumber={trackingNumber!}
                 orderStatus={orderStatus.toLowerCase()}
                 shippingProvider={shipmentProvider!}
+                shipmentLink={orderShipment?.trackingUrl!}
+                shipmentNumber={orderShipment?.trackingNumber}
             />
         </Grid>
     );

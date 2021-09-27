@@ -107,6 +107,10 @@ const useStyles = makeStyles(
         closeIconBtn: {
             paddingTop: 0,
         },
+        linkText: {
+            textDecoration: 'none',
+            color: '#000',
+        },
     },
     { name: 'OrderMobileRow' },
 );
@@ -172,6 +176,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [dispatch, id],
     );
 
+    const submissionViewUrl = `submissions/${id}/view`;
     return (
         <>
             <ShipmentDialog
@@ -185,17 +190,37 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             {!isMobile ? (
                 <TableRow>
                     <TableCell>
-                        <Link to={`submissions/${id}/view`}>
+                        <Link to={submissionViewUrl}>
                             <Typography variant={'subtitle2'} className={classes.orderLink}>
                                 {orderNumber}
                             </Typography>
                         </Link>
                     </TableCell>
-                    <TableCell>{datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}</TableCell>
-                    <TableCell>{dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}</TableCell>
-                    <TableCell>{`${formatCurrency(serviceLevel)} / Card`}</TableCell>
-                    <TableCell>{cardsNumber}</TableCell>
-                    <TableCell>{status}</TableCell>
+                    <TableCell>
+                        <Link to={submissionViewUrl} className={classes.linkText}>
+                            {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
+                        </Link>
+                    </TableCell>
+                    <TableCell>
+                        <Link to={submissionViewUrl} className={classes.linkText}>
+                            {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
+                        </Link>
+                    </TableCell>
+                    <TableCell>
+                        <Link to={submissionViewUrl} className={classes.linkText}>
+                            {`${formatCurrency(serviceLevel)} / Card`}
+                        </Link>
+                    </TableCell>
+                    <TableCell>
+                        <Link to={submissionViewUrl} className={classes.linkText}>
+                            {cardsNumber}
+                        </Link>
+                    </TableCell>
+                    <TableCell>
+                        <Link to={submissionViewUrl} className={classes.linkText}>
+                            {status}
+                        </Link>
+                    </TableCell>
                     <TableCell align={'right'}>
                         <IconButton onClick={handleClickOptions}>
                             <MoreIcon />
@@ -216,9 +241,11 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 <>
                     <div className={classes.submissionHolder}>
                         <div className={classes.submissionLeftSide}>
-                            <Typography variant={'subtitle1'} className={classes.orderNumber}>
-                                {orderNumber}
-                            </Typography>
+                            <Link to={`submissions/${id}/view`} style={{ textDecoration: 'none' }}>
+                                <Typography variant={'subtitle1'} className={classes.orderNumber}>
+                                    {orderNumber}
+                                </Typography>
+                            </Link>
 
                             <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
                                 Date Placed:{' '}

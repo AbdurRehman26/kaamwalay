@@ -30,6 +30,10 @@ class EmailService
         string $templateName,
         array $templateContent = []
     ): void {
+        if (app()->environment('local')) {
+            return;
+        }
+
         SendEmail::dispatch($recipientEmail, $recipientName, $subject, $templateName, $templateContent);
     }
 
@@ -52,6 +56,10 @@ class EmailService
         string $templateName,
         array $templateContent = []
     ): bool {
+        if (app()->environment('local')) {
+            return true;
+        }
+
         ScheduledEmail::create([
             'send_at' => $sendAt,
             'payload' => serialize([
@@ -68,6 +76,10 @@ class EmailService
 
     public function processScheduledEmails(): void
     {
+        if (app()->environment('local')) {
+            return;
+        }
+
         ScheduledEmail::where('send_at', '<=', now())->where('is_sent', 0)->each(function (ScheduledEmail $scheduledEmail) {
             SendScheduledEmail::dispatch($scheduledEmail);
         });

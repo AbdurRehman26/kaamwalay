@@ -50,10 +50,11 @@ class RevenueStatsService
         Log::info("Calculation For Monthly Stats Started");
         $this->addStats($currentDate, $orderPayments, $Revenue);
         Log::info("Calculation For Monthly Stats Completed");
+
         return $Revenue;
     }
 
-    public function addStats($currentDate, $orderPayments, $Revenue) 
+    public function addStats($currentDate, $orderPayments, $Revenue)
     {
         $revenueData = [
             'profit' => 0,
@@ -67,7 +68,6 @@ class RevenueStatsService
         }
 
         if ($Revenue['profit'] !== $revenueData['profit'] || round($Revenue['revenue'], 2) !== round($revenueData['revenue'], 2)) {
-
             Log::info("Discrepancy found in the revenue stats");
             Log::info("Revenue stats in database ->  Profit: " . $Revenue['profit'] . ",  Revenue: " . $Revenue['revenue']);
             Log::info("Revenue stats in calculated from Orders ->  Profit: " . $revenueData['profit'] . ",  Revenue: " . $revenueData['revenue']);
@@ -77,6 +77,7 @@ class RevenueStatsService
             $Revenue->revenue = $revenueData['revenue'];
         }
         $Revenue->save();
+
         return $Revenue;
     }
 
@@ -84,6 +85,7 @@ class RevenueStatsService
     {
         $revenue = RevenueStatsDaily::updateOrCreate(['event_at' => $currentDate]);
         $this->calculateStats($revenue);
+
         return $revenue;
     }
 
@@ -91,6 +93,7 @@ class RevenueStatsService
     {
         $revenue = RevenueStatsMonthly::updateOrCreate(['event_at' => $currentDate]);
         $this->calculateStats($revenue);
+
         return $revenue;
     }
 

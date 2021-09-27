@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-
 use App\Console\Commands\ExportOrders;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
 

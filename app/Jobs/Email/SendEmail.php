@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Email;
 
 use App\Http\APIClients\MandrillClient;
 use Illuminate\Bus\Queueable;

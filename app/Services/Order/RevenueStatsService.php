@@ -8,6 +8,7 @@ use App\Models\OrderStatus;
 use App\Models\RevenueStatsDaily;
 use App\Models\RevenueStatsMonthly;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class RevenueStatsService
 {
@@ -36,15 +37,16 @@ class RevenueStatsService
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
     {
+        $startOFMonth = Carbon::parse($currentDate)->firstOfMonth();
+        $endOFMonth = Carbon::parse($currentDate)->endOfMonth();
+        $year = Carbon::parse($currentDate)->format('Y');
         $orderPayments = OrderPayment::join('orders', function ($join) {
             $join->on('orders.id', '=', 'order_payments.order_id');
         })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
-            ->whereDate('order_payments.created_at', '<=', $currentDate)
-            ->whereMonth('order_payments.created_at', date('m', strtotime($currentDate)))
-            ->whereYear('order_payments.created_at', date('Y', strtotime($currentDate)))
+            ->whereBetween('order_payments.created_at', [$startOFMonth, $endOFMonth])
             ->select('order_payments.*')
             ->get();
-
+            
         $Revenue = RevenueStatsMonthly::firstOrCreate(['event_at' => $currentDate]);
         
         Log::info("Calculation For Monthly Stats Started");

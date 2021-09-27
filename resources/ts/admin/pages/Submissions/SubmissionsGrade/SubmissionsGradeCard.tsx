@@ -429,13 +429,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
         }
     }, [overallGrade]);
 
-    const roboGradesFront = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.front,
-    );
-    const roboGradesBack = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.back,
-    );
-
     const gradedAt = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.graded_at,
     );
@@ -444,7 +437,12 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     );
 
     function areRoboGradesAvailable() {
-        return roboGradesFront !== null && roboGradesBack !== null;
+        // return roboGradesFront !== null && roboGradesBack !== null;
+
+        // Commented out the above condition for a hotfix in order to display
+        // human grades all the time. In the future, if we'll need to conditionally enable them
+        // we'll only bring back the values from the slice & uncomment the line above ;)
+        return true;
     }
 
     function isOverallDoneDisabled() {

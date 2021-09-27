@@ -14,7 +14,7 @@ class AdminOrderSearchFilter implements Filter
                 ->orWhereHas(
                     'user',
                     function ($query) use ($value) {
-                        $query->where('users.id', $value)
+                        $query->where('customer_number', 'like', "%$value%")
                             ->orWhere('first_name', 'like', "%$value%")
                             ->orWhere('last_name', 'like', "%$value%");
                     }

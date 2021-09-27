@@ -2,7 +2,7 @@
 
 namespace App\Services\AGS;
 
-use App\APIClients\AGSClient;
+use App\Http\APIClients\AGSClient;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use Carbon\Carbon;
 
@@ -31,7 +31,9 @@ class AgsService
     {
         $response = $this->client->updateHumanGrades($certificateId, $this->prepareHumanGradeData($data));
 
-        return CardGradeResource::make($response)->resolve();
+        return ! empty($response)
+            ? CardGradeResource::make($response)->resolve()
+            : [];
     }
 
     protected function prepareHumanGradeData(array $data): array
@@ -42,7 +44,7 @@ class AgsService
             'front_edges_human_grade' => $data['human_grade_values']['front']['edge'],
             'front_corners_human_grade' => $data['human_grade_values']['front']['corner'],
             'back_centering_human_grade' => $data['human_grade_values']['back']['center'],
-            'back_surface_human_grade' => $data['human_grade_values']['back']['corner'],
+            'back_surface_human_grade' => $data['human_grade_values']['back']['surface'],
             'back_edges_human_grade' => $data['human_grade_values']['back']['edge'],
             'back_corners_human_grade' => $data['human_grade_values']['back']['corner'],
         ];

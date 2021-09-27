@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
-class UpdateRevenueStatsDailyAndMonthly extends Command
+class UpdateRevenueStats extends Command
 {
     /**
      * The name and signature of the console command.
@@ -34,14 +34,13 @@ class UpdateRevenueStatsDailyAndMonthly extends Command
     {
         $currentDate = Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1);
         $formattedDate = $currentDate->format('Y-m-d');
-        $month = date('m');
 
         $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
         Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
-        $revenueStats = $revenueStatsService->addStats($formattedDate);
-        $this->info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Starting");
-        Log::info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Starting");
-        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($month, $formattedDate);
+        $revenueStats = $revenueStatsService->addDailyStats($formattedDate);
+        $this->info("Revenue Stats Daily for Month : " . date('F-Y', strtotime($formattedDate)) . " Starting");
+        Log::info("Revenue Stats Daily for Month : " . date('F-Y', strtotime($formattedDate)) . " Starting");
+        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($formattedDate);
 
         if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
@@ -50,8 +49,8 @@ class UpdateRevenueStatsDailyAndMonthly extends Command
 
         $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
         Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
-        $this->info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Completed");
-        Log::info("Revenue Stats Daily for Month : " . Carbon::parse(Carbon::now())->format('F-Y') . " Completed");
+        $this->info("Revenue Stats Daily for Month : " . date('F-Y', strtotime($formattedDate)) . " Completed");
+        Log::info("Revenue Stats Daily for Month : " . date('F-Y', strtotime($formattedDate)) . " Completed");
 
         return 0;
     }

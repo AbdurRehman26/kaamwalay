@@ -31,7 +31,7 @@ beforeEach(function () {
 it('adds revenue stats', function () {
     $profit = ($this->order->service_fee - $this->order->orderPayment->provider_fee);
     $revenue = $this->order->grand_total;
-    $revenueStats = $this->revenueStatsService->addStats(Carbon::now()->toDateString());
+    $revenueStats = $this->revenueStatsService->addDailyStats(Carbon::now()->toDateString());
     expect($revenue)->toBe($revenueStats['revenue']);
     expect($profit)->toBe($revenueStats['profit']);
 })->group('revenue-stats');

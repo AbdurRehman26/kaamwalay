@@ -58,6 +58,7 @@ class OrderStatusHistoryService
             $response = $this->agsService->createCertificates($data);
             throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
         }
+
         Order::query()
             ->where('id', $orderId)
             ->update(array_merge(
@@ -69,12 +70,6 @@ class OrderStatusHistoryService
 
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
-
-        if ($orderStatusId === OrderStatus::ARRIVED) {
-            $data = $this->orderService->getOrderCertificatesData($order);
-
-            $this->agsService->createCertificates($data);
-        }
 
         if (! $orderStatusHistory) {
             $orderStatusHistory = OrderStatusHistory::create([

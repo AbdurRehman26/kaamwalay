@@ -86,7 +86,7 @@ class RevenueStatsService
     public function updateStats(string $currentDate, Order $order): RevenueStatsDaily
     {
         $revenue = RevenueStatsDaily::updateOrCreate(['event_at' => $currentDate]);
-        $this->calculateStats($revenue);
+        $this->calculateStats($order, $revenue);
 
         return $revenue;
     }
@@ -94,7 +94,7 @@ class RevenueStatsService
     public function updateMonthlyStats(string $currentDate, Order $order): RevenueStatsMonthly
     {
         $revenue = RevenueStatsMonthly::updateOrCreate(['event_at' => $currentDate]);
-        $this->calculateStats($revenue);
+        $this->calculateStats($order, $revenue);
 
         return $revenue;
     }

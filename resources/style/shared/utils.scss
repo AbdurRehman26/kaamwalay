@@ -1,6 +1,6 @@
-@use "sass:list";
-@use "sass:meta";
-@use "./theme";
+@use 'sass:list';
+@use 'sass:meta';
+@use './theme';
 
 @function transition($property: all, $delay: 0ms) {
     @if (meta.type-of($property) == list) {

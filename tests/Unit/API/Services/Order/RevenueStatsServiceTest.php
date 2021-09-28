@@ -52,13 +52,13 @@ it('adds monthly revenue stats', function () {
             ],
         ))
         ->create();
-            $orders->each(function ($order) {
-            $orderPayment = OrderPayment::factory()->state(new Sequence (['created_at' => $order->created_at]))->for($order)->stripe()->create();    
-            $this->paymentService->calculateAndSaveFee($orderPayment->order);     
-            $profit = ($order->service_fee - $order->orderPayment->provider_fee);
-            $revenue = $order->grand_total;
-            $revenueStats = $this->revenueStatsService->addMonthlyStats($order->created_at);
-            expect($revenue)->toBe($revenueStats['revenue']);
-            expect($profit)->toBe($revenueStats['profit']);
-        });
+    $orders->each(function ($order) {
+        $orderPayment = OrderPayment::factory()->state(new Sequence(['created_at' => $order->created_at]))->for($order)->stripe()->create();
+        $this->paymentService->calculateAndSaveFee($orderPayment->order);
+        $profit = ($order->service_fee - $order->orderPayment->provider_fee);
+        $revenue = $order->grand_total;
+        $revenueStats = $this->revenueStatsService->addMonthlyStats($order->created_at);
+        expect($revenue)->toBe($revenueStats['revenue']);
+        expect($profit)->toBe($revenueStats['profit']);
+    });
 })->group('revenue-stats');

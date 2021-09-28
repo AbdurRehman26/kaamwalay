@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property mixed $id
+ * @property int $id
  * @property string $code
  */
 class OrderStatus extends Model

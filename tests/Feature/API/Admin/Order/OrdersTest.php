@@ -296,7 +296,7 @@ test('an admin can get order cards if AGS API returns grades', function () {
         ]);
 });
 
-it('should send event right when order status gets changed', function () {
+it('should send an event when order status gets changed', function () {
     Event::fake();
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
 

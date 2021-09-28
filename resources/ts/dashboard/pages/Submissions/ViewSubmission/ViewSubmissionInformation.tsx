@@ -17,7 +17,7 @@ interface ViewSubmissionInformationProps {
     customerName: string;
     customerEmail: string;
     customerPhone: string;
-    customerId: number;
+    customerNumber: string;
     serviceFee: number;
     shippingFee: number;
     total: number;
@@ -37,7 +37,7 @@ export function ViewSubmissionInformation({
     customerName,
     customerEmail,
     customerPhone,
-    customerId,
+    customerNumber,
     serviceFee,
     shippingFee,
     total,
@@ -46,7 +46,7 @@ export function ViewSubmissionInformation({
 
     return (
         <Grid container direction={'row'} className={classes.root}>
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={4}>
                 <TableInfo>
                     <TableRow>
                         <TableCell variant={'head'} component={'th'}>
@@ -80,7 +80,7 @@ export function ViewSubmissionInformation({
                     </TableRow>
                 </TableInfo>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={4}>
                 <TableInfo>
                     <TableRow>
                         <TableCell variant={'head'} component={'th'}>
@@ -106,11 +106,11 @@ export function ViewSubmissionInformation({
                         <TableCell variant={'head'} component={'th'}>
                             &nbsp;
                         </TableCell>
-                        <TableCell>Customer ID: {customerId}</TableCell>
+                        <TableCell>Customer ID: {customerNumber}</TableCell>
                     </TableRow>
                 </TableInfo>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={4}>
                 <TableInfo>
                     <TableRow>
                         <TableCell variant={'head'} component={'th'}>

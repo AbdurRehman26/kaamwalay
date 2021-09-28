@@ -46,4 +46,8 @@ return [
         ],
     ],
 
+    'mandrill' => [
+        'key' => env('MANDRILL_KEY'),
+    ],
+
 ];

@@ -224,7 +224,7 @@ export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsPr
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    {item?.grade?.grade ? (
+                                    {item?.userCard?.overallGrade ? (
                                         <GradeRoot
                                             target={'_blank'}
                                             href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
@@ -238,13 +238,14 @@ export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsPr
                                                     isMobile ? classes.gradeBadge : null,
                                                 )}
                                             >
-                                                {item?.grade?.grade}
+                                                {item?.userCard?.overallGrade}
                                             </Typography>
                                             {isMobile ? null : (
                                                 <a
                                                     target={'_blank'}
                                                     href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
-                                                    style={{ textDecoration: 'none' }} rel="noreferrer"
+                                                    style={{ textDecoration: 'none' }}
+                                                    rel="noreferrer"
                                                 >
                                                     <Typography variant={'body2'} className={classes.viewGradeText}>
                                                         View Grade

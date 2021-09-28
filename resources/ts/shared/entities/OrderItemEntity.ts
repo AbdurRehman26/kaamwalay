@@ -2,6 +2,7 @@ import { Field } from '../decorators/Field';
 import { CardProductEntity } from './CardProductEntity';
 import { Entity } from './Entity';
 import { OrderItemStatusEntity } from './OrderItemStatusEntity';
+import { UserCardEntity } from './UserCardEntity';
 
 export class OrderItemEntity extends Entity {
     public quantity!: number;
@@ -20,9 +21,6 @@ export class OrderItemEntity extends Entity {
     @Field('order_id')
     public orderId!: number;
 
-    @Field('grade')
-    public grade!: {
-        grade: number;
-        nickname: string;
-    };
+    @Field('userCard')
+    public userCard!: UserCardEntity;
 }

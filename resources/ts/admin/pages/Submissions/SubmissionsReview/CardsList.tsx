@@ -14,7 +14,7 @@ interface CardsListProps {
     heading: string;
     totals: number;
     extraAction?: any;
-    onClear?: (() => void) | null;
+    onClear?: any;
 }
 
 const useStyles = makeStyles(

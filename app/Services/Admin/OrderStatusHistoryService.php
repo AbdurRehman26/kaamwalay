@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
+use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
@@ -51,6 +52,12 @@ class OrderStatusHistoryService
             OrderCanNotBeMarkedAsGraded::class
         );
 
+        if ($orderStatusId === OrderStatus::ARRIVED) {
+            $data = $this->orderService->getOrderCertificatesData($order);
+
+            $response = $this->agsService->createCertificates($data);
+            throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
+        }
         Order::query()
             ->where('id', $orderId)
             ->update(array_merge(

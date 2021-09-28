@@ -11,10 +11,12 @@ class EmailService
 {
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_ARRIVED = 'arrived-robograding';
+    public const TEMPLATE_SLUG_TRACKING_REMINDER = 'enter-tracking-robograding';
 
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
         self::TEMPLATE_SLUG_SUBMISSION_ARRIVED => 'Your submission has arrived!',
+        self::TEMPLATE_SLUG_TRACKING_REMINDER => 'Enter a tracking number!',
     ];
 
     /**
@@ -60,9 +62,9 @@ class EmailService
         string $templateName,
         array $templateContent = []
     ): bool {
-        if (app()->environment('local')) {
-            return true;
-        }
+        // if (app()->environment('local')) {
+        //     return true;
+        // }
 
         ScheduledEmail::create([
             'send_at' => $sendAt,
@@ -80,9 +82,9 @@ class EmailService
 
     public function processScheduledEmails(): void
     {
-        if (app()->environment('local')) {
-            return;
-        }
+        // if (app()->environment('local')) {
+        //     return;
+        // }
 
         ScheduledEmail::where('send_at', '<=', now())->where('is_sent', 0)->each(function (
             ScheduledEmail $scheduledEmail

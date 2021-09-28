@@ -21,6 +21,6 @@ export class OrderItemEntity extends Entity {
     @Field('order_id')
     public orderId!: number;
 
-    @Field('userCard')
+    @Field('user_card')
     public userCard!: UserCardEntity;
 }

@@ -2,6 +2,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import PrintIcon from '@material-ui/icons/Print';
+import { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { useViewSubmissionHeaderStyles } from './styles';
@@ -21,13 +22,14 @@ export function ViewSubmissionHeader({ orderNumber, invoicePath, invoiceNumber }
     const classes = useViewSubmissionHeaderStyles();
     const { id }: any = useParams();
     const history = useHistory();
-    function handlePrintPackingSlipPress() {
-        downloadFromUrl(invoicePath!, `robograding-${invoiceNumber}.pdf`);
-    }
 
-    function shippingInstructionsPress() {
+    const handlePrintPackingSlipPress = useCallback(() => {
+        downloadFromUrl(invoicePath!, `robograding-${invoiceNumber}.pdf`);
+    }, [id, invoicePath, invoiceNumber]);
+
+    const shippingInstructionsPress = useCallback(() => {
         history.push(`/submissions/${id}/confirmation`);
-    }
+    }, [id]);
 
     return (
         <Grid container alignItems={'center'} className={classes.root}>

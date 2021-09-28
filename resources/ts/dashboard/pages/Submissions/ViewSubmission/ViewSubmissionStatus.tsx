@@ -15,6 +15,14 @@ interface ViewSubmissionStatusProps {
     orderShipment: ShipmentEntity | null;
 }
 
+const STATUS_DESCRIPTION_MAP = {
+    placed: 'Your submission has been placed. The next step is to ship the cards to us. Once we receive the shipment arrives we will begin grading your cards.',
+    arrived:
+        'We have received your cards and will start grading them soon. You will receive an email as soon as grading is complete.',
+    graded: 'Your cards have been graded! You can see all grades in the “Your Cards” tab. We are now preparing your cards for return shipment.',
+    shipped: 'Your cards have been shipped back to you! They should arrive at your doorstep in the next few days.',
+} as any;
+
 /**
  * @parent ViewSubmissionStatus
  * @private
@@ -29,16 +37,7 @@ export function ViewSubmissionStatus({
     const classes = useViewSubmissionStatusStyles();
     const steps = useMemo(() => Object.values(SubmissionSteps), []);
 
-    function getStatusDescription(status: string) {
-        return {
-            placed: 'Your submission has been placed. The next step is to ship the cards to us. Once we receive the shipment arrives we will begin grading your cards.',
-            arrived:
-                'We have received your cards and will start grading them soon. You will receive an email as soon as grading is complete.',
-            graded: 'Your cards have been graded! You can see all grades in the “Your Cards” tab. We are now preparing your cards for return shipment.',
-            shipped:
-                'Your cards have been shipped back to you! They should arrive at your doorstep in the next few days.',
-        }[status.toLowerCase()];
-    }
+    const statusDescription = useMemo(() => STATUS_DESCRIPTION_MAP[orderStatus.toLowerCase()], [orderStatus]);
     return (
         <Grid container direction={'column'} className={classes.root}>
             <Typography variant={'body2'} className={cx(classes.fontMedium, classes.textGutter)}>
@@ -47,11 +46,11 @@ export function ViewSubmissionStatus({
             <Typography variant={'h6'} color={'primary'} className={cx(classes.fontMedium, classes.textGutter)}>
                 {orderStatus}
             </Typography>
-            <Typography variant={'h6'} color={'primary'} className={cx(classes.descriptionFont, classes.textGutter)}>
-                {getStatusDescription(orderStatus)}
+            <Typography variant={'caption'} color={'primary'} className={cx(classes.textGutter, classes.darkText)}>
+                {statusDescription}
             </Typography>
 
-            <ViewSubmissionStatusBar steps={steps} currentStep={orderStatus[0].toUpperCase() + orderStatus.slice(1)} />
+            <ViewSubmissionStatusBar steps={steps} currentStep={orderStatus} />
 
             <SubmissionTrackingStatus
                 trackingNumber={trackingNumber!}

@@ -62,8 +62,6 @@ const useStyles = makeStyles(
             flexDirection: 'row',
         },
         submissionPropertyLabel: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
             fontWeight: 'bold',
             fontSize: '14px',
             lineHeight: '20px',
@@ -71,8 +69,6 @@ const useStyles = makeStyles(
             color: 'rgba(0, 0, 0, 0.87)',
         },
         submissionPropertyValue: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
             fontWeight: 'normal',
             fontSize: '14px',
             lineHeight: '20px',
@@ -80,8 +76,6 @@ const useStyles = makeStyles(
             color: 'rgba(0, 0, 0, 0.87)',
         },
         orderNumber: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
             fontWeight: 500,
             fontSize: '16px',
             lineHeight: '24px',
@@ -95,8 +89,6 @@ const useStyles = makeStyles(
             justifyContent: 'flex-start',
         },
         orderLink: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
             fontWeight: 500,
             fontSize: '14px',
             lineHeight: '20px',

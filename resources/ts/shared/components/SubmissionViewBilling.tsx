@@ -15,7 +15,7 @@ interface SubmissionViewBillingProps {
     payment?: OrderPaymentEntity;
 }
 
-export const useStyle = makeStyles(
+export const useStyles = makeStyles(
     (theme) => ({
         paymentAvatar: {
             width: 42,
@@ -38,7 +38,7 @@ export const useStyle = makeStyles(
  * @constructor
  */
 export function SubmissionViewBilling({ shippingAddress, billingAddress, payment }: SubmissionViewBillingProps) {
-    const classes = useStyle();
+    const classes = useStyles();
     const { card, payer } = payment ?? {};
     const hasPayment = !!card || !!payer;
     const isPaypal = !card && !!payer;

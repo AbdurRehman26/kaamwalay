@@ -26,14 +26,10 @@ export const useViewSubmissionStatusStyles = makeStyles(
             marginBottom: 2,
         },
         descriptionFont: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
-            fontWeight: 'normal',
-            fontSize: '12px',
-            lineHeight: '16px',
-            letterSpacing: '0.2px',
-            color: 'rgba(0, 0, 0, 0.87)',
             maxWidth: '420px',
+        },
+        darkText: {
+            color: '#000',
         },
         '&:first-letter': {
             textTransform: 'capitalize',

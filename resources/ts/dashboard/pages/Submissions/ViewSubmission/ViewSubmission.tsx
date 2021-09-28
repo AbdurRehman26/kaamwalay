@@ -3,6 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { upperFirst } from 'lodash';
 import { useParams } from 'react-router-dom';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
@@ -31,6 +32,7 @@ export function ViewSubmission() {
                     'invoice',
                     'orderShipment',
                     'orderItems',
+                    'orderStatus',
                 ],
             },
         },
@@ -51,7 +53,7 @@ export function ViewSubmission() {
             <ViewSubmissionStatus
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}
                 shipmentProvider={data?.orderCustomerShipment?.shippingProvider}
-                orderStatus={data?.status[0].toUpperCase() + data?.status.slice(1)}
+                orderStatus={upperFirst(data?.orderStatus.name)}
                 orderShipment={data?.orderShipment}
             />
             <Divider />
@@ -65,7 +67,7 @@ export function ViewSubmission() {
                 customerEmail={data?.customer?.email}
                 customerPhone={data?.customer?.phone}
                 customerNumber={data?.customer?.customerNumber}
-                serviceFee={0}
+                serviceFee={data?.serviceFee}
                 shippingFee={data?.shippingFee}
                 total={data?.grandTotal}
             />
@@ -76,7 +78,7 @@ export function ViewSubmission() {
                 billingAddress={data?.billingAddress}
                 payment={data?.orderPayment}
             />
-            <SubmissionViewCards serviceFee={data?.serviceFee} items={data?.orderItems} />
+            <SubmissionViewCards serviceLevelPrice={data?.paymentPlan.price} items={data?.orderItems} />
         </Grid>
     );
 }

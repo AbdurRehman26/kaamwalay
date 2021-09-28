@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch } from '@dashboard/redux/hooks';
@@ -78,10 +78,6 @@ function SubmissionTrackingStatus({
     const [isShipmentDialogOpen, setIsShipmentDialogOpen] = useState(false);
     const dispatch = useAppDispatch();
 
-    function handleCloseShipmentDialog() {
-        setIsShipmentDialogOpen(false);
-    }
-
     const handleShipmentSubmit = useCallback(
         async ({ trackingNumber, shippingProvider }: Record<any, string>) => {
             await dispatch(setOrderCustomerShipment({ trackingNumber, shippingProvider, orderId: id }));
@@ -89,9 +85,13 @@ function SubmissionTrackingStatus({
         [dispatch, id],
     );
 
-    function handleAddTrackingNumber() {
+    const handleCloseShipmentDialog = useCallback(() => {
+        setIsShipmentDialogOpen(false);
+    }, [isShipmentDialogOpen, dispatch, id]);
+
+    const handleAddTrackingNumber = useCallback(() => {
         setIsShipmentDialogOpen(true);
-    }
+    }, [isShipmentDialogOpen, dispatch, id]);
 
     if (orderStatus === 'shipped') {
         return (
@@ -99,9 +99,9 @@ function SubmissionTrackingStatus({
                 <Typography variant={'subtitle2'} className={classes.textDescription}>
                     Return Shipment Tracking Number
                 </Typography>
-                <Link to={shipmentLink!} className={classes.shippingTrackingText}>
+                <a target="_blank" href={shipmentLink!} className={classes.shippingTrackingText} rel="noreferrer">
                     <Typography variant={'subtitle2'}>{shipmentNumber}</Typography>
-                </Link>
+                </a>
             </div>
         );
     }

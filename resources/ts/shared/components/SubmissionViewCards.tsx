@@ -16,7 +16,7 @@ import { formatCurrency } from '../lib/utils/formatCurrency';
 
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
-    serviceFee: number;
+    serviceLevelPrice: number;
 }
 
 export const useStyles = makeStyles(
@@ -57,8 +57,6 @@ export const useStyles = makeStyles(
             justifyContent: 'center',
         },
         viewGradeText: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
             fontWeight: 500,
             fontSize: '14px',
             lineHeight: '20px',
@@ -68,8 +66,6 @@ export const useStyles = makeStyles(
             textDecoration: 'none',
         },
         cardDataKeyText: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
             fontWeight: 'bold',
             fontSize: '12px',
             lineHeight: '16px',
@@ -77,8 +73,6 @@ export const useStyles = makeStyles(
             color: 'rgba(0, 0, 0, 0.87)',
         },
         cardDataKeyValue: {
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
             fontWeight: 500,
             fontSize: '12px',
             lineHeight: '16px',
@@ -89,7 +83,7 @@ export const useStyles = makeStyles(
     { name: 'SubmissionViewCards' },
 );
 
-export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsProps) {
+export function SubmissionViewCards({ items, serviceLevelPrice }: SubmissionViewCardsProps) {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
@@ -215,7 +209,7 @@ export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsPr
                                                             color={'textSecondary'}
                                                             className={classes.cardDataKeyValue}
                                                         >
-                                                            &nbsp;{formatCurrency(serviceFee)}
+                                                            &nbsp;{formatCurrency(serviceLevelPrice)}
                                                         </Typography>
                                                     </Box>
                                                 </>
@@ -224,7 +218,7 @@ export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsPr
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    {item?.userCard?.overallGrade ? (
+                                    {item?.userCard?.overallGrade !== '0' ? (
                                         <GradeRoot
                                             target={'_blank'}
                                             href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
@@ -265,7 +259,9 @@ export function SubmissionViewCards({ items, serviceFee }: SubmissionViewCardsPr
                                             </Typography>
                                         </TableCell>
                                         <TableCell align={'right'}>
-                                            <Typography variant={'body2'}>{formatCurrency(serviceFee)}</Typography>
+                                            <Typography variant={'body2'}>
+                                                {formatCurrency(serviceLevelPrice)}
+                                            </Typography>
                                         </TableCell>
                                     </>
                                 )}

@@ -24,14 +24,14 @@ class EmailService
      * @param string $recipientName
      * @param string $subject
      * @param string $templateName
-     * @param array $templateContent
+     * @param array  $templateContent
      */
     public function sendEmail(
         string $recipientEmail,
         string $recipientName,
         string $subject,
         string $templateName,
-        array  $templateContent = []
+        array $templateContent = []
     ): void {
         if (app()->environment('local')) {
             return;
@@ -44,20 +44,21 @@ class EmailService
      * Schedule email for sending later. Email will be sent later at specified time.
      *
      * @param DateTime $sendAt
-     * @param string $recipientEmail
-     * @param string $recipientName
-     * @param string $subject
-     * @param string $templateName
-     * @param array $templateContent
+     * @param string   $recipientEmail
+     * @param string   $recipientName
+     * @param string   $subject
+     * @param string   $templateName
+     * @param array    $templateContent
+     *
      * @return bool
      */
     public function scheduleEmail(
         DateTime $sendAt,
-        string   $recipientEmail,
-        string   $recipientName,
-        string   $subject,
-        string   $templateName,
-        array    $templateContent = []
+        string $recipientEmail,
+        string $recipientName,
+        string $subject,
+        string $templateName,
+        array $templateContent = []
     ): bool {
         if (app()->environment('local')) {
             return true;
@@ -89,13 +90,14 @@ class EmailService
     }
 
     /**
-     * Get predefined subject based on template, allowing as an alternative a fallback.
+     * Get predefined subject based on template.
+     *
      * @param string $template
-     * @param string|null $fallback
+     *
      * @return string
      */
-    public function getSubjectByTemplate(string $template, string $fallback = null): string
+    public function getSubjectByTemplate(string $template): string
     {
-        return self::SUBJECT[$template] ?? $fallback ?? '';
+        return self::SUBJECT[$template];
     }
 }

@@ -42,12 +42,12 @@ it('adds monthly revenue stats', function () {
         ->state(new Sequence(
             [
                 'created_at' => '2020-09-01',
-                'payment_method_id' => 1, 
+                'payment_method_id' => 1,
                 'order_status_id' => OrderStatus::PLACED,
             ],
             [
                 'created_at' => '2020-08-01',
-                'payment_method_id' => 1, 
+                'payment_method_id' => 1,
                 'order_status_id' => OrderStatus::PLACED,
             ],
         ))

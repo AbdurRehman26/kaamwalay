@@ -2,9 +2,9 @@
 
 namespace App\Console;
 
-use App\Console\Commands\ExportOrders;
+use App\Console\Commands\Orders\ExportOrders;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
-
+use App\Console\Commands\SendScheduledEmails;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;

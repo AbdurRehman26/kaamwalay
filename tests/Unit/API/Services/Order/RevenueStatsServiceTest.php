@@ -62,3 +62,19 @@ it('adds monthly revenue stats', function () {
         expect($profit)->toBe($revenueStats['profit']);
     });
 })->group('revenue-stats');
+
+it('updates daily revenue stats', function () {
+    $profit = ($this->order->service_fee - $this->order->orderPayment->provider_fee);
+    $revenue = $this->order->grand_total;
+    $revenueStats = $this->revenueStatsService->updateStats(Carbon::now()->toDateString(), $this->order);
+    expect($revenue)->toBe($revenueStats['revenue']);
+    expect($profit)->toBe($revenueStats['profit']);
+})->group('revenue-stats');
+
+it('updates monthly revenue stats', function () {
+    $profit = ($this->order->service_fee - $this->order->orderPayment->provider_fee);
+    $revenue = $this->order->grand_total;
+    $revenueStats = $this->revenueStatsService->updateMonthlyStats(Carbon::now()->toDateString(), $this->order);
+    expect($revenue)->toBe($revenueStats['revenue']);
+    expect($profit)->toBe($revenueStats['profit']);
+})->group('revenue-stats');

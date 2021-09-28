@@ -25,38 +25,38 @@ class RevenueStatsService
             ->select('order_payments.*')
             ->get();
 
-        $Revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
+        $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
 
         
         Log::info("Calculation For Daily Stats Started");
-        $this->addStats($currentDate, $orderPayments, $Revenue);
+        $this->addStats($currentDate, $orderPayments, $revenue);
         Log::info("Calculation For Daily Stats Completed");
 
-        return $Revenue;
+        return $revenue;
     }
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
     {
         $startOFMonth = Carbon::parse($currentDate)->firstOfMonth();
         $endOFMonth = Carbon::parse($currentDate)->endOfMonth();
-        $year = Carbon::parse($currentDate)->format('Y');
+        
         $orderPayments = OrderPayment::join('orders', function ($join) {
             $join->on('orders.id', '=', 'order_payments.order_id');
         })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
             ->whereBetween('order_payments.created_at', [$startOFMonth, $endOFMonth])
             ->select('order_payments.*')
             ->get();
-            
-        $Revenue = RevenueStatsMonthly::firstOrCreate(['event_at' => $currentDate]);
+        
+        $revenue = RevenueStatsMonthly::firstOrCreate(['event_at' => $currentDate]);
         
         Log::info("Calculation For Monthly Stats Started");
-        $this->addStats($currentDate, $orderPayments, $Revenue);
+        $this->addStats($currentDate, $orderPayments, $revenue);
         Log::info("Calculation For Monthly Stats Completed");
 
-        return $Revenue;
+        return $revenue;
     }
 
-    public function addStats($currentDate, $orderPayments, $Revenue)
+    protected function addStats($currentDate, $orderPayments, $revenue)
     {
         $revenueData = [
             'profit' => 0,
@@ -69,18 +69,18 @@ class RevenueStatsService
             $revenueData['revenue'] += $this->calculateRevenue($orderPayment);
         }
 
-        if ($Revenue['profit'] !== $revenueData['profit'] || round($Revenue['revenue'], 2) !== round($revenueData['revenue'], 2)) {
+        if ($revenue['profit'] !== $revenueData['profit'] || round($revenue['revenue'], 2) !== round($revenueData['revenue'], 2)) {
             Log::info("Discrepancy found in the revenue stats");
-            Log::info("Revenue stats in database ->  Profit: " . $Revenue['profit'] . ",  Revenue: " . $Revenue['revenue']);
+            Log::info("Revenue stats in database ->  Profit: " . $revenue['profit'] . ",  Revenue: " . $revenue['revenue']);
             Log::info("Revenue stats in calculated from Orders ->  Profit: " . $revenueData['profit'] . ",  Revenue: " . $revenueData['revenue']);
             Log::info("Updating Revenue Stats");
            
-            $Revenue->profit = $revenueData['profit'];
-            $Revenue->revenue = $revenueData['revenue'];
+            $revenue->profit = $revenueData['profit'];
+            $revenue->revenue = $revenueData['revenue'];
         }
-        $Revenue->save();
+        $revenue->save();
 
-        return $Revenue;
+        return $revenue;
     }
 
     public function updateStats(string $currentDate, Order $order): RevenueStatsDaily
@@ -99,7 +99,7 @@ class RevenueStatsService
         return $revenue;
     }
 
-    public function calculateStats(Order $order, $revenue)
+    protected function calculateStats(Order $order, $revenue)
     {
         $revenue->increment('profit', $this->calculateProfit($order->orderPayment));
         $revenue->increment('revenue', $this->calculateRevenue($order->orderPayment));

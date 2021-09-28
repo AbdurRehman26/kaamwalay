@@ -49,7 +49,7 @@ class OrderStatusChangedListener implements ShouldQueue
     private function handleArrived(OrderStatusChangedEvent $event)
     {
         // Order Arrived logics
-        $this->sendEmail($event, 'arrived-robograding', [
+        $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_ARRIVED, [
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
         ]);

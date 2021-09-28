@@ -10,8 +10,11 @@ use DateTime;
 class EmailService
 {
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
+    public const TEMPLATE_SLUG_CUSTOMER_CONFIRMATION = 'customer-confirmation-robograding';
+
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
+        self::TEMPLATE_SLUG_CUSTOMER_CONFIRMATION => 'Submission Placed!',
     ];
 
     /**

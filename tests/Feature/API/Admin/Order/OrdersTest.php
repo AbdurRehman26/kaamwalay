@@ -300,11 +300,14 @@ it('should send an event when order status gets changed', function () {
     Event::fake();
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
 
+    /** @var Order $order */
     $order = Order::factory()->create();
     $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::ARRIVED,
     ]);
 
     $response->assertSuccessful();
-    Event::assertDispatched(OrderStatusChangedEvent::class, 1);
+    Event::assertDispatched(function (OrderStatusChangedEvent $event) use ($order) {
+        return $event->order->id === $order->id && $event->orderStatus->id === OrderStatus::ARRIVED;
+    });
 });

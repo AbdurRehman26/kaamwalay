@@ -10,8 +10,10 @@ use DateTime;
 class EmailService
 {
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
+    public const TEMPLATE_SLUG_FORGOT_PASSWORD = 'reset-password-robograding';
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
+        self::TEMPLATE_SLUG_FORGOT_PASSWORD => 'Reset your password!',
     ];
 
     /**

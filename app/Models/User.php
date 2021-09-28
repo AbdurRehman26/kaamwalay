@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -135,5 +136,16 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $this;
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        /* @var EmailService $emailService */
+        $emailService = resolve(EmailService::class);
+        $emailService->sendEmail(
+            $this->getEmailForPasswordReset(),
+            $this->name,
+
+        );
     }
 }

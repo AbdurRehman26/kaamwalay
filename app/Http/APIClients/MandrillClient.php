@@ -23,10 +23,22 @@ class MandrillClient
         string $templateName,
         array $templateContent = []
     ): Response {
+        $templateContent = collect($templateContent)->flatMap(function (
+            string $placeholderValue,
+            string $placeholderKey
+        ) {
+            return [
+                [
+                    'name' => $placeholderKey,
+                    'content' => $placeholderValue,
+                ],
+            ];
+        })->toArray();
+
         return Http::post($this->baseUrl . '/send-template', [
             'key' => $this->apiKey,
             'template_name' => $templateName,
-            'template_content' => $templateContent,
+            'template_content' => [],
             'message' => [
                 'subject' => $subject,
                 'from_email' => config('mail.from.address'),
@@ -35,6 +47,8 @@ class MandrillClient
                     'email' => $recipientEmail,
                     'name' => $recipientName,
                 ]],
+                'global_merge_vars' => $templateContent,
+                'merge_language' => 'handlebars',
             ],
         ]);
     }

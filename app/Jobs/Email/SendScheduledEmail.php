@@ -48,7 +48,9 @@ class SendScheduledEmail implements ShouldQueue
             $payload['templateContent']
         );
 
-        $status = $response->json()[0]['status'];
+        if (! empty($response->json()[0]['status'])) {
+            $status = $response->json()[0]['status'];
+        }
 
         if (empty($status) || $status !== 'sent') {
             throw new Exception('Email could not be sent. Response: ' . $response->body());

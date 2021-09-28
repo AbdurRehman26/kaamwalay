@@ -20,11 +20,11 @@ class EmailService
     /**
      * Send email using a template. It automatically sends email to queue for background processing.
      *
-     * @param string $recipientEmail
-     * @param string $recipientName
-     * @param string $subject
-     * @param string $templateName
-     * @param array  $templateContent
+     * @param  string  $recipientEmail
+     * @param  string  $recipientName
+     * @param  string  $subject
+     * @param  string  $templateName
+     * @param  array  $templateContent
      */
     public function sendEmail(
         string $recipientEmail,
@@ -43,12 +43,12 @@ class EmailService
     /**
      * Schedule email for sending later. Email will be sent later at specified time.
      *
-     * @param DateTime $sendAt
-     * @param string   $recipientEmail
-     * @param string   $recipientName
-     * @param string   $subject
-     * @param string   $templateName
-     * @param array    $templateContent
+     * @param  DateTime  $sendAt
+     * @param  string  $recipientEmail
+     * @param  string  $recipientName
+     * @param  string  $subject
+     * @param  string  $templateName
+     * @param  array  $templateContent
      *
      * @return bool
      */
@@ -84,7 +84,9 @@ class EmailService
             return;
         }
 
-        ScheduledEmail::where('send_at', '<=', now())->where('is_sent', 0)->each(function (ScheduledEmail $scheduledEmail) {
+        ScheduledEmail::where('send_at', '<=', now())->where('is_sent', 0)->each(function (
+            ScheduledEmail $scheduledEmail
+        ) {
             SendScheduledEmail::dispatch($scheduledEmail);
         });
     }
@@ -92,7 +94,7 @@ class EmailService
     /**
      * Get predefined subject based on template.
      *
-     * @param string $template
+     * @param  string  $template
      *
      * @return string
      */

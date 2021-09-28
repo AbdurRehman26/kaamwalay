@@ -22,7 +22,7 @@ class SendCustomerConfirmationEmail implements ShouldBeEncrypted
             $order->user->first_name ?? '',
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_CUSTOMER_CONFIRMATION],
             EmailService::TEMPLATE_SLUG_CUSTOMER_CONFIRMATION,
-            [$this->orderService->getSubmissionConfirmationData($order)]
+            $this->orderService->getSubmissionConfirmationData($order)
         );
     }
 }

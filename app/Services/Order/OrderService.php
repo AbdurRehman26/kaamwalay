@@ -3,7 +3,6 @@
 namespace App\Services\Order;
 
 use App\Models\Order;
-use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
@@ -41,29 +40,29 @@ class OrderService
         foreach($orderItems as $orderItem){
             $card = $orderItem->cardProduct;
             $items[] = [
-                "CARD_IMAGE_URL" => $card->image_bucket_path,
+                "CARD_IMAGE_URL" => $card->image_path,
                 "CARD_NAME" => $card->name,
                 "CARD_FULL_NAME" => $card->getSearchableName(),
-                "CARD_VALUE" => $orderItem->declared_value_per_unit,
+                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit,2),
                 "CARD_QUANTITY" => $orderItem->quantity,
-                "CARD_COST" => $orderItem->quantity * $paymentPlan->price,
+                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price,2),
             ];
         }
 
         $data["ORDER_ITEMS"] = $items;
-        $data["SUBTOTAL"] = $order->service_fee;
-        $data["SHIPPING_FEE"] = $order->shipping_fee;
-        $data["TOTAL"] = $order->grand_total;
+        $data["SUBTOTAL"] = number_format($order->service_fee,2);
+        $data["SHIPPING_FEE"] = number_format($order->shipping_fee,2);
+        $data["TOTAL"] = number_format($order->grand_total,2);
 
         $data["SERVICE_LEVEL"] = $paymentPlan->price;
         $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
         $data["DATE"] = $order->created_at->format('m/d/Y');
-        $data["TOTAL_DECLARED_VALUE"] = $order->orderItems->sum('declared_value_per_unit');
+        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'),2);
 
         $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
         $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
 
-        $data["ORDER_PAYMENT"] = $this->getOrderPaymentText($orderPayment);
+        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
     }

@@ -78,7 +78,11 @@ export function ViewSubmission() {
                 billingAddress={data?.billingAddress}
                 payment={data?.orderPayment}
             />
-            <SubmissionViewCards serviceLevelPrice={data?.paymentPlan.price} items={data?.orderItems} />
+            <SubmissionViewCards
+                serviceLevelPrice={data?.paymentPlan.price}
+                orderStatus={data?.orderStatus?.name?.toLowerCase()}
+                items={data?.orderItems}
+            />
         </Grid>
     );
 }

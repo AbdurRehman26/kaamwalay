@@ -17,14 +17,15 @@ import { formatCurrency } from '../lib/utils/formatCurrency';
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
     serviceLevelPrice: number;
+    orderStatus?: string;
 }
 
 export const useStyles = makeStyles(
     (theme) => ({
         containerBox: {
+            padding: 0,
             [theme.breakpoints.down('xs')]: {
                 maxWidth: '98%',
-                padding: 0,
             },
         },
         root: {
@@ -83,7 +84,7 @@ export const useStyles = makeStyles(
     { name: 'SubmissionViewCards' },
 );
 
-export function SubmissionViewCards({ items, serviceLevelPrice }: SubmissionViewCardsProps) {
+export function SubmissionViewCards({ items, serviceLevelPrice, orderStatus }: SubmissionViewCardsProps) {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
@@ -218,7 +219,8 @@ export function SubmissionViewCards({ items, serviceLevelPrice }: SubmissionView
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    {item?.userCard?.overallGrade !== '0' ? (
+                                    {(orderStatus === 'graded' || orderStatus === 'shipped') &&
+                                    item?.userCard?.overallGrade !== '0' ? (
                                         <GradeRoot
                                             target={'_blank'}
                                             href={`https://robograding.com/feed/${item.certificateNumber}/view/`}

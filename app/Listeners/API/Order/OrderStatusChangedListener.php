@@ -46,7 +46,7 @@ class OrderStatusChangedListener implements ShouldQueue
         }
     }
 
-    private function handleArrived(OrderStatusChangedEvent $event)
+    protected function handleArrived(OrderStatusChangedEvent $event)
     {
         // Order Arrived logics
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_ARRIVED, [
@@ -55,17 +55,17 @@ class OrderStatusChangedListener implements ShouldQueue
         ]);
     }
 
-    private function handleGraded(OrderStatusChangedEvent $event)
+    protected function handleGraded(OrderStatusChangedEvent $event)
     {
         // Order Graded logics
     }
 
-    private function handleShipped(OrderStatusChangedEvent $event)
+    protected function handleShipped(OrderStatusChangedEvent $event)
     {
         // Order Shipped logics
     }
 
-    private function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars)
+    protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars)
     {
         $this->emailService->sendEmail(
             $event->order->user->email,

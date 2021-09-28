@@ -37,13 +37,13 @@ class RevenueStatsService
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
     {
-        $startOFMonth = Carbon::parse($currentDate)->firstOfMonth();
-        $endOFMonth = Carbon::parse($currentDate)->endOfMonth();
+        $monthStart = Carbon::parse($currentDate)->firstOfMonth();
+        $monthEnd = Carbon::parse($currentDate)->endOfMonth();
         
         $orderPayments = OrderPayment::join('orders', function ($join) {
             $join->on('orders.id', '=', 'order_payments.order_id');
         })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
-            ->whereBetween('order_payments.created_at', [$startOFMonth, $endOFMonth])
+            ->whereBetween('order_payments.created_at', [$monthStart, $monthEnd])
             ->select('order_payments.*')
             ->get();
         

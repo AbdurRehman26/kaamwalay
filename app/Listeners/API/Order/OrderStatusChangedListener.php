@@ -57,7 +57,13 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleGraded(OrderStatusChangedEvent $event)
     {
-        // Order Graded logics
+        $this->emailService->sendEmail(
+            $event->order->user->email,
+            $event->order->user->first_name ?? '',
+            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_CARDS_GRADED],
+            EmailService::TEMPLATE_SLUG_CARDS_GRADED,
+            [$event->order->order_number]
+        );
     }
 
     protected function handleShipped(OrderStatusChangedEvent $event)

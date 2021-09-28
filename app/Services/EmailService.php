@@ -11,10 +11,12 @@ class EmailService
 {
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_ARRIVED = 'arrived-robograding';
+    public const TEMPLATE_SLUG_CARDS_GRADED = 'graded-robograding-1';
 
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
         self::TEMPLATE_SLUG_SUBMISSION_ARRIVED => 'Your submission has arrived!',
+        self::TEMPLATE_SLUG_CARDS_GRADED => 'Your cards have been graded',
     ];
 
     /**
@@ -33,9 +35,9 @@ class EmailService
         string $templateName,
         array $templateContent = []
     ): void {
-        if (app()->environment('local')) {
+       /* if (app()->environment('local')) {
             return;
-        }
+        }*/
 
         SendEmail::dispatch($recipientEmail, $recipientName, $subject, $templateName, $templateContent);
     }

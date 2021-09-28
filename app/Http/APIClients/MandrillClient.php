@@ -26,7 +26,7 @@ class MandrillClient
         return Http::post($this->baseUrl . '/send-template', [
             'key' => $this->apiKey,
             'template_name' => $templateName,
-            'template_content' => $templateContent,
+            'template_content' => [$templateContent],
             'message' => [
                 'subject' => $subject,
                 'from_email' => config('mail.from.address'),

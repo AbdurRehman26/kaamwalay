@@ -4,6 +4,7 @@ namespace App\Listeners\API\Order;
 
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
+use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -16,7 +17,7 @@ class OrderStatusChangedListener implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(private EmailService $emailService)
     {
         //
     }
@@ -48,7 +49,7 @@ class OrderStatusChangedListener implements ShouldQueue
     private function handleArrived(OrderStatusChangedEvent $event)
     {
         // Order Arrived logics
-        $this->sendEmail('arrived-robograding', [
+        $this->sendEmail($event, 'arrived-robograding', [
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
         ]);
@@ -64,8 +65,14 @@ class OrderStatusChangedListener implements ShouldQueue
         // Order Shipped logics
     }
 
-    private function sendEmail(string $template, array $vars)
+    private function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars)
     {
-        // Add email logics
+        $this->emailService->sendEmail(
+            $event->order->user->email,
+            $event->order->user->getFullName(),
+            $this->emailService->getSubjectByTemplate($template),
+            $template,
+            $vars
+        );
     }
 }

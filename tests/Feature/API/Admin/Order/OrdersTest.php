@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -11,6 +12,7 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -292,4 +294,17 @@ test('an admin can get order cards if AGS API returns grades', function () {
         ->assertJsonFragment([
             'id' => $orderItemId,
         ]);
+});
+
+it('should send event right when order status gets changed', function () {
+    Event::fake();
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+
+    $order = Order::factory()->create();
+    $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ARRIVED,
+    ]);
+
+    $response->assertSuccessful();
+    Event::assertDispatched(OrderStatusChangedEvent::class, 1);
 });

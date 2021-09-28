@@ -23,14 +23,17 @@ class MandrillClient
         string $templateName,
         array $templateContent = []
     ): Response {
-        $templateContent = collect($templateContent)->mapWithKeys(function (string $placeholderValue, string $placeholderKey) {
+        $templateContent = collect($templateContent)->flatMap(function (
+            string $placeholderValue,
+            string $placeholderKey
+        ) {
             return [
-                $placeholderKey => [
+                [
                     'name' => $placeholderKey,
                     'content' => $placeholderValue,
                 ],
             ];
-        })->values()->toArray();
+        })->toArray();
 
         return Http::post($this->baseUrl . '/send-template', [
             'key' => $this->apiKey,

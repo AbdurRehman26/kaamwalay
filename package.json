@@ -41,7 +41,8 @@
         "apidoc:start": "cd ./resources/apidocs && yarn start",
         "backup": "aws s3 mv s3://apparel-cdn/apps/robograding/latest s3://apparel-cdn/apps/robograding/v$(node -e \"process.stdout.write(require('./package.json').version)\") --recursive",
         "deploy": "aws s3 cp ./public/apps s3://apparel-cdn/apps/robograding/latest/apps --recursive",
-        "dep:upgrade": "npx npm-check-updates -i"
+        "dep:upgrade": "npx npm-check-updates -i",
+        "test:e2e": "cypress run"
     },
     "dependencies": {
         "@material-ui/core": "^4.12.3",
@@ -111,6 +112,7 @@
         "browser-sync": "^2.27.5",
         "browser-sync-webpack-plugin": "^2.3.0",
         "cross-env": "^7.0.3",
+        "cypress": "^8.4.1",
         "eslint": "^7.32.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^8.3.0",

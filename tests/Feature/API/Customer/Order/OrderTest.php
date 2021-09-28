@@ -274,35 +274,6 @@ test('a customer can filter orders by order number', function () {
     ]);
 });
 
-test('an admin can complete review of an order', function () {
-    $this->seed(RolesSeeder::class);
-
-    $adminUser = User::createAdmin([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
-        'password' => bcrypt('password'),
-    ]);
-
-    $this->actingAs($adminUser);
-
-    $order = Order::factory()->for($this->user)->create();
-    OrderItem::factory()->for($order)->create();
-
-    $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
-        'order_status_id' => OrderStatus::ARRIVED,
-    ]);
-
-    $response->assertSuccessful();
-    $response->assertJson([
-        'data' => [
-            'order_id' => $order->id,
-            'order_status_id' => OrderStatus::ARRIVED,
-        ],
-    ]);
-});
-
 test('a customer can not complete review of an order', function () {
     $this->seed(RolesSeeder::class);
 

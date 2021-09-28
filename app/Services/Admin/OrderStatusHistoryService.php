@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
+use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
@@ -50,6 +51,12 @@ class OrderStatusHistoryService
             OrderCanNotBeMarkedAsGraded::class
         );
 
+        if ($orderStatusId === OrderStatus::ARRIVED) {
+            $data = $this->orderService->getOrderCertificatesData($order);
+
+            $response = $this->agsService->createCertificates($data);
+            throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
+        }
         Order::query()
             ->where('id', $orderId)
             ->update(array_merge(
@@ -58,12 +65,6 @@ class OrderStatusHistoryService
                 ],
                 $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: [],
             ));
-
-        if ($orderStatusId === OrderStatus::ARRIVED) {
-            $data = $this->orderService->getOrderCertificatesData($order);
-
-            $this->agsService->createCertificates($data);
-        }
 
         if (! $orderStatusHistory) {
             $orderStatusHistory = OrderStatusHistory::create([

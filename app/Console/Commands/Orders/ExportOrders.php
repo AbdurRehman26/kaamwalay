@@ -26,14 +26,14 @@ class ExportOrders extends Command
      *
      * @var string
      */
-    protected $description = 'Export orders and upload csv to AWS S3';
+    protected $description = 'Export orders, upload csv to AWS S3 and send notification';
 
     /**
      * Execute the console command.
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $this->info('Exporting...');
 

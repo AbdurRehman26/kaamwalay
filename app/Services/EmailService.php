@@ -12,7 +12,7 @@ class EmailService
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_ARRIVED = 'arrived-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_SHIPPED = 'shipped-robograding';
-    public const TEMPLATE_SLUG_SUBMISSION_GRADED  = 'graded-robograding-1';
+    public const TEMPLATE_SLUG_SUBMISSION_GRADED = 'graded-robograding-1';
     public const TEMPLATE_SLUG_FORGOT_PASSWORD = 'reset-password-robograding';
     public const TEMPLATE_PASSWORD_CHANGED = 'new-password-confirmation-robograding';
     
@@ -20,7 +20,7 @@ class EmailService
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
         self::TEMPLATE_SLUG_SUBMISSION_ARRIVED => 'Your submission has arrived!',
         self::TEMPLATE_SLUG_SUBMISSION_SHIPPED => 'Your cards have shipped!',
-        self::TEMPLATE_SLUG_SUBMISSION_GRADED  => 'Your cards have been graded',
+        self::TEMPLATE_SLUG_SUBMISSION_GRADED => 'Your cards have been graded',
         self::TEMPLATE_SLUG_FORGOT_PASSWORD => 'Reset your password!',
         self::TEMPLATE_PASSWORD_CHANGED => 'Your password has been changed!',
     ];

@@ -61,7 +61,7 @@ class OrderStatusChangedListener implements ShouldQueue
             $event->order->user->email,
             $event->order->user->first_name ?? '',
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED ],
-            EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED ,
+            EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
             ['ORDER_NUMBER' => $event->order->order_number]
         );
     }

@@ -27,7 +27,7 @@ class GenerateOrderInvoice implements ShouldQueue
 
         $template = EmailService::TEMPLATE_SLUG_TRACKING_REMINDER;
 
-        (new EmailService)->scheduleEmail((Carbon::now()->addMinutes(2)), $event->order->user->email, $event->order->user->getFullName(), $this->emailService->getSubjectByTemplate($template) , $template , ['FIRST_NAME' => $event->order->user->first_name]);
+        (new EmailService)->scheduleEmail((now()->addMinutes(2)), $event->order->user->email, $event->order->user->getFullName(), $this->emailService->getSubjectByTemplate($template) , $template , ['FIRST_NAME' => $event->order->user->first_name]);
 
     }
 

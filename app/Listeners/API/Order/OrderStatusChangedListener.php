@@ -38,7 +38,7 @@ class OrderStatusChangedListener implements ShouldQueue
                 break;
             case OrderStatus::ARRIVED:
                 $this->handleArrived($event);
-    
+
                 break;
             case OrderStatus::GRADED:
                 $this->handleGraded($event);

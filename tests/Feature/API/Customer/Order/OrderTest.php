@@ -12,6 +12,8 @@ use App\Services\Admin\OrderStatusHistoryService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
+use App\Events\API\Order\OrderStatusChangedEvent;
 
 uses(WithFaker::class);
 
@@ -157,6 +159,9 @@ test('a customer can see his order', function () {
 });
 
 test('a customer only see own orders', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class
+    ]);
     $user = User::factory();
     $orders = Order::factory()->for($user)
         ->has(OrderItem::factory())
@@ -182,6 +187,9 @@ test('a customer only see own orders', function () {
 });
 
 test('a customer does not see payment pending orders', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class
+    ]);
     $orders = Order::factory()->for($this->user)
         ->has(OrderItem::factory())
         ->count(2)
@@ -232,6 +240,9 @@ test('a customer can see invoice in order', function () {
 });
 
 test('a customer can filter orders by order number', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class
+    ]);
     $this->actingAs($this->user);
 
     $orders = Order::factory()

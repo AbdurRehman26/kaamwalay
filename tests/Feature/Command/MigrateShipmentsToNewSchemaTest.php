@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemCustomerShipment;
@@ -7,11 +8,15 @@ use App\Models\OrderItemShipment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
+use Illuminate\Support\Facades\Event;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
 beforeEach(function () {
+    Event::fake([
+        OrderStatusChangedEvent::class
+    ]);
     $this->user = User::factory()->create();
 
     $this->order = Order::factory()->create([

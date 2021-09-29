@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -9,8 +10,12 @@ use App\Services\Order\RevenueStatsService;
 use App\Services\Payment\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Facades\Event;
 
 beforeEach(function () {
+    Event::fake([
+        OrderStatusChangedEvent::class
+    ]);
     $this->revenueStatsService = resolve(RevenueStatsService::class);
     $this->paymentService = resolve(PaymentService::class);
 

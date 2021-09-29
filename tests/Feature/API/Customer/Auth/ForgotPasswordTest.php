@@ -1,11 +1,10 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Notification;
 
 test('user can request forgot password', function () {
     $user = User::factory()->create();
-    Notification::fake();
+    \Illuminate\Support\Facades\Bus::fake();
 
     $response = $this->postJson('/api/auth/password/forgot', [
         'email' => $user->email,

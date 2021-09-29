@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -13,7 +14,6 @@ use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
-use App\Events\API\Order\OrderStatusChangedEvent;
 
 uses(WithFaker::class);
 
@@ -160,7 +160,7 @@ test('a customer can see his order', function () {
 
 test('a customer only see own orders', function () {
     Event::fake([
-        OrderStatusChangedEvent::class
+        OrderStatusChangedEvent::class,
     ]);
     $user = User::factory();
     $orders = Order::factory()->for($user)
@@ -188,7 +188,7 @@ test('a customer only see own orders', function () {
 
 test('a customer does not see payment pending orders', function () {
     Event::fake([
-        OrderStatusChangedEvent::class
+        OrderStatusChangedEvent::class,
     ]);
     $orders = Order::factory()->for($this->user)
         ->has(OrderItem::factory())
@@ -241,7 +241,7 @@ test('a customer can see invoice in order', function () {
 
 test('a customer can filter orders by order number', function () {
     Event::fake([
-        OrderStatusChangedEvent::class
+        OrderStatusChangedEvent::class,
     ]);
     $this->actingAs($this->user);
 

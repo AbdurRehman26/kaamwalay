@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Event;
 
 beforeEach(function () {
     Event::fake([
-        OrderStatusChangedEvent::class
+        OrderStatusChangedEvent::class,
     ]);
     $this->revenueStatsService = resolve(RevenueStatsService::class);
     $this->paymentService = resolve(PaymentService::class);

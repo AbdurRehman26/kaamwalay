@@ -70,9 +70,8 @@ class OrderStatusChangedListener implements ShouldQueue
     protected function handleGradedLinks(OrderStatusChangedEvent $event)
     {
         $orders = $event->order->orderItems;
-        $cardsNumber = array();
-        foreach ($orders as $order)
-        {
+        $cardsNumber = [];
+        foreach ($orders as $order) {
             $cardsNumber[] = $order->userCard->certificate_number;
         }
         $this->emailService->sendEmail(

@@ -37,7 +37,7 @@ class OrderStatusChangedListener implements ShouldQueue
                 break;
             case OrderStatus::GRADED:
                 $this->handleGraded($event);
-                $this->handlePublicPages($event);
+                $this->handleGradedLinks($event);
 
                 break;
             case OrderStatus::SHIPPED:
@@ -67,7 +67,7 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function handlePublicPages(OrderStatusChangedEvent $event)
+    protected function handleGradedLinks(OrderStatusChangedEvent $event)
     {
         $orders = $event->order->orderItems;
         $cardsNumber = array();

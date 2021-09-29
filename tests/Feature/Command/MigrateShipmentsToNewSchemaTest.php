@@ -15,7 +15,7 @@ use function Pest\Laravel\assertDatabaseHas;
 
 beforeEach(function () {
     Event::fake([
-        OrderStatusChangedEvent::class
+        OrderStatusChangedEvent::class,
     ]);
     $this->user = User::factory()->create();
 

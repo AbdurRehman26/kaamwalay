@@ -8,6 +8,7 @@ use App\Services\EmailService;
 use App\Services\Order\OrderService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use DateTime;
 
 class OrderStatusChangedListener implements ShouldQueue
 {
@@ -58,6 +59,10 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
         );
+
+        $this->scheduleEmail(now()->addDay(), $event, EmailService::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER, [
+            'FIRST_NAME' => $event->order->user->first_name,
+        ]);    
     }
 
     protected function handleArrived(OrderStatusChangedEvent $event)
@@ -93,6 +98,18 @@ class OrderStatusChangedListener implements ShouldQueue
     protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars)
     {
         $this->emailService->sendEmail(
+            $event->order->user->email,
+            $event->order->user->getFullName(),
+            $this->emailService->getSubjectByTemplate($template),
+            $template,
+            $vars
+        );
+    }
+
+    protected function scheduleEmail(DateTime $sendAt, OrderStatusChangedEvent $event, string $template, array $vars)
+    {
+        $this->emailService->scheduleEmail(
+            $sendAt,
             $event->order->user->email,
             $event->order->user->getFullName(),
             $this->emailService->getSubjectByTemplate($template),

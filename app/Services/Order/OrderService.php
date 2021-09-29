@@ -2,10 +2,10 @@
 
 namespace App\Services\Order;
 
+use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 
 class OrderService
 {
@@ -44,27 +44,27 @@ class OrderService
         $data["SHIPPING_INSTRUCTIONS_URL"] = config('app.url') . '/dashboard/submissions/' . $order->id . '/confirmation';
 
         $items = [];
-        foreach($orderItems as $orderItem){
+        foreach ($orderItems as $orderItem) {
             $card = $orderItem->cardProduct;
             $items[] = [
                 "CARD_IMAGE_URL" => $card->image_path,
                 "CARD_NAME" => $card->name,
                 "CARD_FULL_NAME" => $card->getSearchableName(),
-                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit,2),
+                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
                 "CARD_QUANTITY" => $orderItem->quantity,
-                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price,2),
+                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
             ];
         }
 
         $data["ORDER_ITEMS"] = $items;
-        $data["SUBTOTAL"] = number_format($order->service_fee,2);
-        $data["SHIPPING_FEE"] = number_format($order->shipping_fee,2);
-        $data["TOTAL"] = number_format($order->grand_total,2);
+        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
+        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
+        $data["TOTAL"] = number_format($order->grand_total, 2);
 
         $data["SERVICE_LEVEL"] = $paymentPlan->price;
         $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
         $data["DATE"] = $order->created_at->format('m/d/Y');
-        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'),2);
+        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
         $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
         $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
@@ -90,12 +90,9 @@ class OrderService
 
     protected function getOrderPaymentText(array $orderPayment): string
     {
-        if(array_key_exists('card',$orderPayment))
-        {
+        if (array_key_exists('card', $orderPayment)) {
             return ucfirst($orderPayment["card"]["brand"]) . ' ending in ' . $orderPayment["card"]["last4"];
-        }
-        else if(array_key_exists('payer',$orderPayment))
-        {
+        } elseif (array_key_exists('payer', $orderPayment)) {
             return $orderPayment["payer"]["email"] . "\n" . $orderPayment["payer"]["name"];
         }
 

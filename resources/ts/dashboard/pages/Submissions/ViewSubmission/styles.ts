@@ -135,8 +135,11 @@ export const useViewSubmissionInformationStyles = makeStyles(
                 paddingLeft: 0,
                 border: 'none',
             },
+
             [theme.breakpoints.down('xs')]: {
-                flexDirection: 'column',
+                '& .table-info td, & .table-info td': {
+                    width: '60%',
+                },
             },
         },
     }),

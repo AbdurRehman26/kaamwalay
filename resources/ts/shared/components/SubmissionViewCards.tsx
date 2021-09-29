@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import font from '@shared/styles/font.module.css';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
 import { cx } from '../lib/utils/cx';
@@ -17,14 +18,15 @@ import { formatCurrency } from '../lib/utils/formatCurrency';
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
     serviceLevelPrice: number;
+    orderStatusID?: number;
 }
 
 export const useStyles = makeStyles(
     (theme) => ({
         containerBox: {
+            padding: 0,
             [theme.breakpoints.down('xs')]: {
                 maxWidth: '98%',
-                padding: 0,
             },
         },
         root: {
@@ -83,7 +85,7 @@ export const useStyles = makeStyles(
     { name: 'SubmissionViewCards' },
 );
 
-export function SubmissionViewCards({ items, serviceLevelPrice }: SubmissionViewCardsProps) {
+export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }: SubmissionViewCardsProps) {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
@@ -218,7 +220,10 @@ export function SubmissionViewCards({ items, serviceLevelPrice }: SubmissionView
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    {item?.userCard?.overallGrade !== '0' ? (
+                                    {(orderStatusID === OrderStatusEnum.GRADED ||
+                                        orderStatusID === OrderStatusEnum.SHIPPED) &&
+                                    item?.userCard?.overallGrade !== '0' &&
+                                    item?.userCard?.overallGradeNickname ? (
                                         <GradeRoot
                                             target={'_blank'}
                                             href={`https://robograding.com/feed/${item.certificateNumber}/view/`}

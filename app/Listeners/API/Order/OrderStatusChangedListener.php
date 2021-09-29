@@ -6,9 +6,9 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
+use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use DateTime;
 
 class OrderStatusChangedListener implements ShouldQueue
 {
@@ -62,7 +62,7 @@ class OrderStatusChangedListener implements ShouldQueue
 
         $this->scheduleEmail(now()->addDay(), $event, EmailService::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER, [
             'FIRST_NAME' => $event->order->user->first_name,
-        ]);    
+        ]);
     }
 
     protected function handleArrived(OrderStatusChangedEvent $event)

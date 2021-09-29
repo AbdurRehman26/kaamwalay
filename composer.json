@@ -26,6 +26,7 @@
         "paypal/paypal-checkout-sdk": "^1.0",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^2.8",
+        "spatie/dropbox-api": "^1.19",
         "spatie/laravel-permission": "^4.2",
         "spatie/laravel-query-builder": "^3.5",
         "tymon/jwt-auth": "^1.0"

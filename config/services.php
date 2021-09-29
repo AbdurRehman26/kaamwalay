@@ -50,4 +50,8 @@ return [
         'key' => env('MANDRILL_KEY'),
     ],
 
+    'dropbox' => [
+        'token' => env('AGS_DROPBOX_TOKEN'),
+    ]
+
 ];

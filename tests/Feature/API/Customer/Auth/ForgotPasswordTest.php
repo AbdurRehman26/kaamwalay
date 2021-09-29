@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Notification;
 
 test('user can request forgot password', function () {
     $user = User::factory()->create();

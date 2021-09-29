@@ -5,6 +5,7 @@ namespace App\Listeners\API\Order;
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Services\EmailService;
+use App\Services\Order\OrderService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -17,7 +18,7 @@ class OrderStatusChangedListener implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(private EmailService $emailService)
+    public function __construct(private EmailService $emailService, private OrderService $orderService)
     {
         //
     }
@@ -31,9 +32,13 @@ class OrderStatusChangedListener implements ShouldQueue
     public function handle(OrderStatusChangedEvent $event)
     {
         switch ($event->orderStatus->id) {
+            case OrderStatus::PLACED:
+                $this->handlePlaced($event);
+
+                break;
             case OrderStatus::ARRIVED:
                 $this->handleArrived($event);
-    
+
                 break;
             case OrderStatus::GRADED:
                 $this->handleGraded($event);
@@ -44,6 +49,15 @@ class OrderStatusChangedListener implements ShouldQueue
 
                 break;
         }
+    }
+
+    protected function handlePlaced(OrderStatusChangedEvent $event)
+    {
+        $this->sendEmail(
+            $event,
+            EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
+            $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
+        );
     }
 
     protected function handleArrived(OrderStatusChangedEvent $event)

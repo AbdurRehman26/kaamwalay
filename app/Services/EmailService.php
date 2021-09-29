@@ -10,14 +10,16 @@ use DateTime;
 class EmailService
 {
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
+    public const TEMPLATE_SLUG_SUBMISSION_PLACED = 'customer-confirmation-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_ARRIVED = 'arrived-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_SHIPPED = 'shipped-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_GRADED = 'graded-robograding-1';
     public const TEMPLATE_SLUG_FORGOT_PASSWORD = 'reset-password-robograding';
     public const TEMPLATE_PASSWORD_CHANGED = 'new-password-confirmation-robograding';
-    
+
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
+        self::TEMPLATE_SLUG_SUBMISSION_PLACED => 'Submission Placed!',
         self::TEMPLATE_SLUG_SUBMISSION_ARRIVED => 'Your submission has arrived!',
         self::TEMPLATE_SLUG_SUBMISSION_SHIPPED => 'Your cards have shipped!',
         self::TEMPLATE_SLUG_SUBMISSION_GRADED => 'Your cards have been graded',

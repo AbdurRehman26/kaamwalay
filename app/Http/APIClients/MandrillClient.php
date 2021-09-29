@@ -24,8 +24,8 @@ class MandrillClient
         array $templateContent = []
     ): Response {
         $templateContent = collect($templateContent)->flatMap(function (
-            string $placeholderValue,
-            string $placeholderKey
+            $placeholderValue,
+            $placeholderKey
         ) {
             return [
                 [

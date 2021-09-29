@@ -11,9 +11,11 @@ class EmailService
 {
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
     public const TEMPLATE_SLUG_FORGOT_PASSWORD = 'reset-password-robograding';
+    public const TEMPLATE_SLUG_SUBMISSION_ARRIVED = 'arrived-robograding';
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
         self::TEMPLATE_SLUG_FORGOT_PASSWORD => 'Reset your password!',
+        self::TEMPLATE_SLUG_SUBMISSION_ARRIVED => 'Your submission has arrived!',
     ];
 
     /**
@@ -48,6 +50,7 @@ class EmailService
      * @param  string  $subject
      * @param  string  $templateName
      * @param  array  $templateContent
+     *
      * @return bool
      */
     public function scheduleEmail(
@@ -82,8 +85,22 @@ class EmailService
             return;
         }
 
-        ScheduledEmail::where('send_at', '<=', now())->where('is_sent', 0)->each(function (ScheduledEmail $scheduledEmail) {
+        ScheduledEmail::where('send_at', '<=', now())->where('is_sent', 0)->each(function (
+            ScheduledEmail $scheduledEmail
+        ) {
             SendScheduledEmail::dispatch($scheduledEmail);
         });
+    }
+
+    /**
+     * Get predefined subject based on template.
+     *
+     * @param  string  $template
+     *
+     * @return string
+     */
+    public function getSubjectByTemplate(string $template): string
+    {
+        return self::SUBJECT[$template];
     }
 }

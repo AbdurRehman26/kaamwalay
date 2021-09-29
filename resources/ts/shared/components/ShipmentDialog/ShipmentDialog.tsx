@@ -38,6 +38,9 @@ const useStyles = makeStyles(
             },
             contentContainer: {
                 width: '457px',
+                [theme.breakpoints.down('xs')]: {
+                    width: '100%',
+                },
             },
             saveBtn: {
                 width: '140px',
@@ -212,9 +215,9 @@ export default ShipmentDialog;
 
 const validationSchema = Yup.object().shape({
     shippingProvider: Yup.string().oneOf(Object.values(ShipmentProviders)),
-    trackingNumber: Yup.string().required('Tracking number is required.'),
+    trackingNumber: Yup.string().required("Tracking number can't be empty."),
     customShippingProvider: Yup.string().when('shippingProvider', {
         is: (value: any) => value === ShipmentProviders.Other,
-        then: Yup.string().required("Shipping carrier name it's required."),
+        then: Yup.string().required("Shipping carrier name can't be empty"),
     }),
 });

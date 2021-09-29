@@ -58,7 +58,7 @@ export function ViewSubmission() {
             />
             <Divider />
             <ViewSubmissionInformation
-                serviceLevel={`$${data?.paymentPlan.price} / Card`}
+                serviceLevel={`$${data?.paymentPlan?.price} / Card`}
                 numberOfCards={data?.numberOfCards}
                 shippingMethod={data?.shippingMethod?.name}
                 createdAt={data?.createdAt}
@@ -79,8 +79,8 @@ export function ViewSubmission() {
                 payment={data?.orderPayment}
             />
             <SubmissionViewCards
-                serviceLevelPrice={data?.paymentPlan.price}
-                orderStatus={data?.orderStatus?.name?.toLowerCase()}
+                serviceLevelPrice={data?.paymentPlan?.price}
+                orderStatusID={data?.orderStatus?.id}
                 items={data?.orderItems}
             />
         </Grid>

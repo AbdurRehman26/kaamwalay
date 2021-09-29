@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import font from '@shared/styles/font.module.css';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
 import { cx } from '../lib/utils/cx';
@@ -17,7 +18,7 @@ import { formatCurrency } from '../lib/utils/formatCurrency';
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
     serviceLevelPrice: number;
-    orderStatus?: string;
+    orderStatusID?: number;
 }
 
 export const useStyles = makeStyles(
@@ -84,7 +85,7 @@ export const useStyles = makeStyles(
     { name: 'SubmissionViewCards' },
 );
 
-export function SubmissionViewCards({ items, serviceLevelPrice, orderStatus }: SubmissionViewCardsProps) {
+export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }: SubmissionViewCardsProps) {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
@@ -219,7 +220,8 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatus }: S
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    {(orderStatus === 'graded' || orderStatus === 'shipped') &&
+                                    {(orderStatusID === OrderStatusEnum.GRADED ||
+                                        orderStatusID === OrderStatusEnum.SHIPPED) &&
                                     item?.userCard?.overallGrade !== '0' ? (
                                         <GradeRoot
                                             target={'_blank'}

@@ -33,10 +33,11 @@ class OrderStatusChangedListener implements ShouldQueue
         switch ($event->orderStatus->id) {
             case OrderStatus::ARRIVED:
                 $this->handleArrived($event);
-
+    
                 break;
             case OrderStatus::GRADED:
                 $this->handleGraded($event);
+                $this->handlePublicPages($event);
 
                 break;
             case OrderStatus::SHIPPED:
@@ -62,7 +63,27 @@ class OrderStatusChangedListener implements ShouldQueue
             $event->order->user->first_name ?? '',
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_CARDS_GRADED],
             EmailService::TEMPLATE_SLUG_CARDS_GRADED,
-            [$event->order->order_number]
+            ['ORDER_NUMBER' => $event->order->order_number]
+        );
+    }
+
+    protected function handlePublicPages(OrderStatusChangedEvent $event)
+    {
+        $orders = $event->order->orderItems;
+        $cardsNumber = array();
+        foreach ($orders as $order)
+        {
+            $cardsNumber[] = $order->userCard->certificate_number;
+        }
+        $this->emailService->sendEmail(
+            $event->order->user->email,
+            $event->order->user->first_name ?? '',
+            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_CARDS],
+            EmailService::TEMPLATE_SLUG_CARDS,
+            [
+                'ORDER_NUMBER' => $event->order->order_number,
+                'CARD_NUMBERS' => $cardsNumber,
+            ]
         );
     }
 

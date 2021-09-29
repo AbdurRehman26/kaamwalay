@@ -150,7 +150,7 @@ class User extends Authenticatable implements JWTSubject
             $emailService::SUBJECT[$emailService::TEMPLATE_SLUG_FORGOT_PASSWORD],
             $emailService::TEMPLATE_SLUG_FORGOT_PASSWORD,
             [
-                'FORGOT_PASSWORD_LINK' => route('password.reset', ['token' => $token], false),
+                'PASSWORD_RESET_LINK' => route('password.reset', ['token' => $token]),
             ],
         );
     }

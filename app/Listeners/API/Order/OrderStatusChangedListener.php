@@ -55,7 +55,7 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         $this->sendEmail(
             $event,
-            EmailService::TEMPLATE_SLUG_CUSTOMER_CONFIRMATION,
+            EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
         );
     }

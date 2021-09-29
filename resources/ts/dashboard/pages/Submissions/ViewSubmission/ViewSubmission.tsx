@@ -48,7 +48,11 @@ export function ViewSubmission() {
 
     return (
         <Grid container direction={'column'}>
-            <ViewSubmissionHeader orderNumber={data?.orderNumber} invoicePath={data?.invoice?.path} />
+            <ViewSubmissionHeader
+                orderNumber={data?.orderNumber}
+                invoicePath={data?.invoice?.path}
+                invoiceNumber={data?.invoice?.invoiceNumber}
+            />
             <Divider />
             <ViewSubmissionStatus
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}

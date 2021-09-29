@@ -20,6 +20,9 @@ class PasswordResetListener implements ShouldBeEncrypted
             $user->name,
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_PASSWORD_CHANGED],
             $this->emailService::TEMPLATE_PASSWORD_CHANGED,
+            [
+                'FIRST_NAME' => $user->first_name,
+            ],
         );
     }
 }

@@ -16,6 +16,8 @@ beforeEach(function () {
 });
 
 test('an admin can update order shipment', function () {
+    Event::fake();
+
     $this->postJson('/api/admin/orders/' . $this->order->id . '/shipment', [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',

@@ -11,10 +11,12 @@ class EmailService
 {
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_ARRIVED = 'arrived-robograding';
+    public const TEMPLATE_SLUG_SUBMISSION_SHIPPED = 'shipped-robograding';
 
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
         self::TEMPLATE_SLUG_SUBMISSION_ARRIVED => 'Your submission has arrived!',
+        self::TEMPLATE_SLUG_SUBMISSION_SHIPPED => 'Your cards have shipped!',
     ];
 
     /**

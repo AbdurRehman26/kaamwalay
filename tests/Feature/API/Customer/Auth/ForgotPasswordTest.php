@@ -4,15 +4,7 @@ use App\Models\User;
 
 test('user can request forgot password', function () {
     $user = User::factory()->create();
-    $mandrillResponse = [[
-        'email' => 'test@test.com',
-        'status' => 'sent',
-        '_id' => '7f1f03dfcf5243d5a213873d738a0bd7',
-        'reject_reason' => null,
-    ]];
-    Http::fake([
-        'https://mandrillapp.com/api/*' => Http::response($mandrillResponse),
-    ]);
+    \Illuminate\Support\Facades\Bus::fake();
 
     $response = $this->postJson('/api/auth/password/forgot', [
         'email' => $user->email,

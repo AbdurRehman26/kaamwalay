@@ -9,7 +9,6 @@ use DateTime;
 
 class EmailService
 {
-
     public const TEMPLATE_SLUG_CUSTOMER_WELCOME = 'customer-welcome-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_PLACED = 'customer-confirmation-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_ARRIVED = 'arrived-robograding';

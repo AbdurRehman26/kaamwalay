@@ -9,7 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PasswordResetListener implements ShouldQueue, ShouldBeEncrypted
 {
-
     public function __construct(protected EmailService $emailService)
     {
     }

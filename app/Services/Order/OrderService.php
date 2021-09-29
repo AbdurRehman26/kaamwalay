@@ -25,7 +25,14 @@ class OrderService
             ->paginate($itemsPerPage);
     }
 
-    public function getSubmissionConfirmationData(Order $order)
+    public function getOrder(int $orderId): Order | QueryBuilder
+    {
+        return QueryBuilder::for(Order::class)
+            ->allowedIncludes(Order::getAllowedIncludes())
+            ->findOrFail($orderId);
+    }
+
+    public function getDataForCustomerSubmissionConfirmationEmail(Order $order)
     {
         $data = [];
 
@@ -90,12 +97,5 @@ class OrderService
         }
 
         return '';
-    }
-
-    public function getOrder(int $orderId): Order | QueryBuilder
-    {
-        return QueryBuilder::for(Order::class)
-            ->allowedIncludes(Order::getAllowedIncludes())
-            ->findOrFail($orderId);
     }
 }

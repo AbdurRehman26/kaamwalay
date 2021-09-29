@@ -222,7 +222,8 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                 <TableCell>
                                     {(orderStatusID === OrderStatusEnum.GRADED ||
                                         orderStatusID === OrderStatusEnum.SHIPPED) &&
-                                    item?.userCard?.overallGrade !== '0' ? (
+                                    item?.userCard?.overallGrade !== '0' &&
+                                    item?.userCard?.overallGradeNickname !== null ? (
                                         <GradeRoot
                                             target={'_blank'}
                                             href={`https://robograding.com/feed/${item.certificateNumber}/view/`}

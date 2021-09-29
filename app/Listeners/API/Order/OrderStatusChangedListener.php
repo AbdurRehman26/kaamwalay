@@ -37,7 +37,6 @@ class OrderStatusChangedListener implements ShouldQueue
                 break;
             case OrderStatus::GRADED:
                 $this->handleGraded($event);
-                $this->handleGradedLinks($event);
 
                 break;
             case OrderStatus::SHIPPED:
@@ -61,28 +60,9 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->emailService->sendEmail(
             $event->order->user->email,
             $event->order->user->first_name ?? '',
-            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_CARDS_GRADED],
-            EmailService::TEMPLATE_SLUG_CARDS_GRADED,
+            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED ],
+            EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED ,
             ['ORDER_NUMBER' => $event->order->order_number]
-        );
-    }
-
-    protected function handleGradedLinks(OrderStatusChangedEvent $event)
-    {
-        $orders = $event->order->orderItems;
-        $cardsNumber = [];
-        foreach ($orders as $order) {
-            $cardsNumber[] = $order->userCard->certificate_number;
-        }
-        $this->emailService->sendEmail(
-            $event->order->user->email,
-            $event->order->user->first_name ?? '',
-            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_CARDS],
-            EmailService::TEMPLATE_SLUG_CARDS,
-            [
-                'ORDER_NUMBER' => $event->order->order_number,
-                'CARD_NUMBERS' => $cardsNumber,
-            ]
         );
     }
 

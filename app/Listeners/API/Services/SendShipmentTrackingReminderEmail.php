@@ -21,7 +21,6 @@ class SendShipmentTrackingReminderEmail implements ShouldQueue
     public function handle(OrderPaid $event)
     {
         $template = EmailService::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER;
-        $this->emailService->scheduleEmail((now()->addDay()), $event->order->user->email, $event->order->user->getFullName(), $this->emailService->getSubjectByTemplate($template) , $template , ['FIRST_NAME' => $event->order->user->first_name]);
-
+        $this->emailService->scheduleEmail((now()->addDay()), $event->order->user->email, $event->order->user->getFullName(), $this->emailService->getSubjectByTemplate($template), $template, ['FIRST_NAME' => $event->order->user->first_name]);
     }
 }

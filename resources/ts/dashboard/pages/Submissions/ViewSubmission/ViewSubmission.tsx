@@ -48,7 +48,11 @@ export function ViewSubmission() {
 
     return (
         <Grid container direction={'column'}>
-            <ViewSubmissionHeader orderNumber={data?.orderNumber} invoicePath={data?.invoice?.path} />
+            <ViewSubmissionHeader
+                orderNumber={data?.orderNumber}
+                invoicePath={data?.invoice?.path}
+                invoiceNumber={data?.invoice?.invoiceNumber}
+            />
             <Divider />
             <ViewSubmissionStatus
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}
@@ -58,7 +62,7 @@ export function ViewSubmission() {
             />
             <Divider />
             <ViewSubmissionInformation
-                serviceLevel={`$${data?.paymentPlan.price} / Card`}
+                serviceLevel={`$${data?.paymentPlan?.price} / Card`}
                 numberOfCards={data?.numberOfCards}
                 shippingMethod={data?.shippingMethod?.name}
                 createdAt={data?.createdAt}
@@ -78,7 +82,11 @@ export function ViewSubmission() {
                 billingAddress={data?.billingAddress}
                 payment={data?.orderPayment}
             />
-            <SubmissionViewCards serviceLevelPrice={data?.paymentPlan.price} items={data?.orderItems} />
+            <SubmissionViewCards
+                serviceLevelPrice={data?.paymentPlan?.price}
+                orderStatusID={data?.orderStatus?.id}
+                items={data?.orderItems}
+            />
         </Grid>
     );
 }

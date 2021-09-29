@@ -35,9 +35,9 @@ class EmailService
         string $templateName,
         array $templateContent = []
     ): void {
-        // if (app()->environment('local')) {
-        //     return;
-        // }
+        if (app()->environment('local')) {
+            return;
+        }
 
         SendEmail::dispatch($recipientEmail, $recipientName, $subject, $templateName, $templateContent);
     }
@@ -62,9 +62,9 @@ class EmailService
         string $templateName,
         array $templateContent = []
     ): bool {
-        // if (app()->environment('local')) {
-        //     return true;
-        // }
+        if (app()->environment('local')) {
+            return true;
+        }
         
         ScheduledEmail::create([
             'send_at' => $sendAt,

@@ -100,7 +100,7 @@ class AgsService
             'overall' => $this->prepareOverallGradesForPublicPage($data),
             'front_scan' => $this->prepareFrontScanGradesForPublicPage($data),
             'back_scan' => $this->prepareBackScanGradesForPublicPage($data),
-            'generated_images' => $this->prepareGeneratedImagesForPublicPage($data)
+            'generated_images' => $this->prepareGeneratedImagesForPublicPage($data),
         ];
     }
 

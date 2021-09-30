@@ -6,6 +6,7 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
+use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -58,11 +59,19 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
         );
+
+        $this->scheduleEmail(
+            $event,
+            now()->addDay(),
+            EmailService::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER,
+            [
+                'FIRST_NAME' => $event->order->user->first_name,
+            ]
+        );
     }
 
     protected function handleArrived(OrderStatusChangedEvent $event)
     {
-        // Order Arrived logics
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_ARRIVED, [
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
@@ -71,10 +80,8 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleGraded(OrderStatusChangedEvent $event)
     {
-        $this->emailService->sendEmail(
-            $event->order->user->email,
-            $event->order->user->first_name ?? '',
-            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED ],
+        $this->sendEmail(
+            $event,
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
             ['ORDER_NUMBER' => $event->order->order_number]
         );
@@ -82,7 +89,6 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleShipped(OrderStatusChangedEvent $event)
     {
-        // Order Shipped logics
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED, [
             'FIRST_NAME' => $event->order->user->first_name,
             'TRACKING_NUMBER' => $event->order->orderShipment->tracking_number,
@@ -93,6 +99,18 @@ class OrderStatusChangedListener implements ShouldQueue
     protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars)
     {
         $this->emailService->sendEmail(
+            $event->order->user->email,
+            $event->order->user->getFullName(),
+            $this->emailService->getSubjectByTemplate($template),
+            $template,
+            $vars
+        );
+    }
+
+    protected function scheduleEmail(OrderStatusChangedEvent $event, DateTime $sendAt, string $template, array $vars)
+    {
+        $this->emailService->scheduleEmail(
+            $sendAt,
             $event->order->user->email,
             $event->order->user->getFullName(),
             $this->emailService->getSubjectByTemplate($template),

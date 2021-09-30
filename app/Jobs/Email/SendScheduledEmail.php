@@ -39,7 +39,7 @@ class SendScheduledEmail implements ShouldQueue
     public function handle(MandrillClient $mandrillClient)
     {
         $payload = unserialize($this->scheduledEmail->payload);
-
+    
         $response = $mandrillClient->sendEmailWithTemplate(
             $payload['recipientEmail'],
             $payload['recipientName'],

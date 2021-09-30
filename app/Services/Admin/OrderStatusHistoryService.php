@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
@@ -57,6 +58,8 @@ class OrderStatusHistoryService
 
             $response = $this->agsService->createCertificates($data);
             throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
+
+            CreateOrderFoldersOnDropbox::dispatch($order);
         }
 
         Order::query()

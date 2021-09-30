@@ -2,6 +2,7 @@
 
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
@@ -299,6 +300,7 @@ test('an admin can get order cards if AGS API returns grades', function () {
 it('should send an event when order status gets changed', function () {
     Event::fake();
     Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    Bus::fake();
 
     /** @var Order $order */
     $order = Order::factory()->create();
@@ -310,4 +312,18 @@ it('should send an event when order status gets changed', function () {
     Event::assertDispatched(function (OrderStatusChangedEvent $event) use ($order) {
         return $event->order->id === $order->id && $event->orderStatus->id === OrderStatus::ARRIVED;
     });
+});
+
+it('dispatches job for creating folders on dropbox when an order is reviewed', function () {
+    Event::fake();
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    Bus::fake();
+
+    /** @var Order $order */
+    $order = Order::factory()->create();
+    $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ARRIVED,
+    ]);
+
+    Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
 });

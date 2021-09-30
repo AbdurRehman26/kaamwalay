@@ -25,6 +25,15 @@ export const useViewSubmissionStatusStyles = makeStyles(
         textGutter: {
             marginBottom: 2,
         },
+        descriptionFont: {
+            maxWidth: '420px',
+        },
+        darkText: {
+            color: '#000',
+        },
+        '&:first-letter': {
+            textTransform: 'capitalize',
+        },
     }),
     {
         name: 'ViewSubmissionStatus',
@@ -85,6 +94,9 @@ export const useViewSubmissionStatusBarStyles = makeStyles(
         },
         label: {
             fontWeight: 500,
+            '&&': {
+                zIndex: 10,
+            },
         },
         itemActive: {
             backgroundColor: theme.palette.primary.main,
@@ -97,6 +109,9 @@ export const useViewSubmissionStatusBarStyles = makeStyles(
             },
             '& $label': {
                 color: theme.palette.primary.contrastText,
+                '&&': {
+                    zIndex: 10,
+                },
             },
         },
 
@@ -119,6 +134,12 @@ export const useViewSubmissionInformationStyles = makeStyles(
                 paddingBottom: 2,
                 paddingLeft: 0,
                 border: 'none',
+            },
+
+            [theme.breakpoints.down('xs')]: {
+                '& .table-info td, & .table-info td': {
+                    width: '60%',
+                },
             },
         },
     }),

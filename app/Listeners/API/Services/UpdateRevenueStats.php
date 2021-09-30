@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UpdateRevenueStatsDaily implements ShouldQueue
+class UpdateRevenueStats implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -21,5 +21,6 @@ class UpdateRevenueStatsDaily implements ShouldQueue
     public function handle(OrderPaid $event)
     {
         $this->revenueStatsService->updateStats(Carbon::now()->format('Y-m-d'), $event->order);
+        $this->revenueStatsService->updateMonthlyStats(Carbon::now()->format('Y-m-d'), $event->order);
     }
 }

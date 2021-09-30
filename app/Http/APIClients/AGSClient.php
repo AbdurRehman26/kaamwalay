@@ -1,6 +1,6 @@
 <?php
 
-namespace App\APIClients;
+namespace App\Http\APIClients;
 
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;

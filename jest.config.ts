@@ -25,6 +25,7 @@ export default {
         '@auth/(.*)$': '<rootDir>/resources/ts/auth/$1',
         '@admin/(.*)$': '<rootDir>/resources/ts/admin/$1',
         '@dashboard/(.*)$': '<rootDir>/resources/ts/dashboard/$1',
+        '@landings/(.*)$': '<rootDir>/resources/ts/landings/$1',
         '@shared/(.*)$': '<rootDir>/resources/ts/shared/$1',
     },
 
@@ -33,6 +34,7 @@ export default {
 
     // The test environment that will be used for testing
     testEnvironment: 'jsdom',
+    testPathIgnorePatterns: ['resources/ts/__tests__/integration'],
 
     setupFilesAfterEnv: [path.resolve(__dirname, './resources/ts/setupTests.ts')],
 };

@@ -2,7 +2,7 @@
 
 namespace App\Services\AGS;
 
-use App\APIClients\AGSClient;
+use App\Http\APIClients\AGSClient;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use Carbon\Carbon;
 
@@ -31,7 +31,9 @@ class AgsService
     {
         $response = $this->client->updateHumanGrades($certificateId, $this->prepareHumanGradeData($data));
 
-        return CardGradeResource::make($response)->resolve();
+        return ! empty($response)
+            ? CardGradeResource::make($response)->resolve()
+            : [];
     }
 
     protected function prepareHumanGradeData(array $data): array
@@ -42,7 +44,7 @@ class AgsService
             'front_edges_human_grade' => $data['human_grade_values']['front']['edge'],
             'front_corners_human_grade' => $data['human_grade_values']['front']['corner'],
             'back_centering_human_grade' => $data['human_grade_values']['back']['center'],
-            'back_surface_human_grade' => $data['human_grade_values']['back']['corner'],
+            'back_surface_human_grade' => $data['human_grade_values']['back']['surface'],
             'back_edges_human_grade' => $data['human_grade_values']['back']['edge'],
             'back_corners_human_grade' => $data['human_grade_values']['back']['corner'],
         ];
@@ -98,40 +100,7 @@ class AgsService
             'overall' => $this->prepareOverallGradesForPublicPage($data),
             'front_scan' => $this->prepareFrontScanGradesForPublicPage($data),
             'back_scan' => $this->prepareBackScanGradesForPublicPage($data),
-            'generated_images' => [
-                [
-                    'output_image' => $data['front_scan']['centering_result']['output_image'] ?? null,
-                    'name' => 'Front Centering',
-                ],
-                [
-                    'output_image' => $data['front_scan']['surface_result']['output_image'] ?? null,
-                    'name' => 'Front Surface',
-                ],
-                [
-                    'output_image' => $data['front_scan']['edges_result']['output_image'] ?? null,
-                    'name' => 'Front Edges',
-                ],
-                [
-                    'output_image' => $data['front_scan']['corners_result']['output_image'] ?? null,
-                    'name' => 'Front Corners',
-                ],
-                [
-                    'output_image' => $data['back_scan']['centering_result']['output_image'] ?? null,
-                    'name' => 'Back Centering',
-                ],
-                [
-                    'output_image' => $data['back_scan']['surface_result']['output_image'] ?? null,
-                    'name' => 'Back Surface',
-                ],
-                [
-                    'output_image' => $data['back_scan']['edges_result']['output_image'] ?? null,
-                    'name' => 'Back Edges',
-                ],
-                [
-                    'output_image' => $data['back_scan']['corners_result']['output_image'] ?? null,
-                    'name' => 'Back Corners',
-                ],
-            ],
+            'generated_images' => $this->prepareGeneratedImagesForPublicPage($data),
         ];
     }
 
@@ -198,6 +167,76 @@ class AgsService
             'surface' => $data['back_surface_human_grade'] ?? $data['back_scan']['surface_grade']['grade'] ?? null,
             'edges' => $data['back_edges_human_grade'] ?? $data['back_scan']['edges_grade']['grade'] ?? null,
             'corners' => $data['back_corners_human_grade'] ?? $data['back_scan']['corners_grade']['grade'] ?? null,
+        ];
+    }
+
+    protected function prepareGeneratedImagesForPublicPage(array $data): array
+    {
+        return [
+            [
+                'output_image' => $data['front_scan']['centering_result']['output_image'] ?? null,
+                'name' => 'Front Centering',
+            ],
+            [
+                'output_image' => $data['front_scan']['surface_result']['output_image'] ?? null,
+                'name' => 'Front Surface',
+            ],
+            [
+                'output_image' => $data['front_scan']['edges_result']['output_image'] ?? null,
+                'name' => 'Front Edges',
+            ],
+            [
+                'output_image' => $data['front_scan']['corners_result']['output_image'] ?? null,
+                'name' => 'Front Corners',
+            ],
+            [
+                'output_image' => $data['back_scan']['centering_result']['output_image'] ?? null,
+                'name' => 'Back Centering',
+            ],
+            [
+                'output_image' => $data['back_scan']['surface_result']['output_image'] ?? null,
+                'name' => 'Back Surface',
+            ],
+            [
+                'output_image' => $data['back_scan']['edges_result']['output_image'] ?? null,
+                'name' => 'Back Edges',
+            ],
+            [
+                'output_image' => $data['back_scan']['corners_result']['output_image'] ?? null,
+                'name' => 'Back Corners',
+            ],
+            [
+                'output_image' => $data['laser_front_scan']['centering_result']['output_image'] ?? null,
+                'name' => 'Laser Front Centering',
+            ],
+            [
+                'output_image' => $data['laser_front_scan']['surface_result']['output_image'] ?? null,
+                'name' => 'Laser Front Surface',
+            ],
+            [
+                'output_image' => $data['laser_front_scan']['edges_result']['output_image'] ?? null,
+                'name' => 'Laser Front Edges',
+            ],
+            [
+                'output_image' => $data['laser_front_scan']['corners_result']['output_image'] ?? null,
+                'name' => 'Laser Front Corners',
+            ],
+            [
+                'output_image' => $data['laser_back_scan']['centering_result']['output_image'] ?? null,
+                'name' => 'Laser Back Centering',
+            ],
+            [
+                'output_image' => $data['laser_back_scan']['surface_result']['output_image'] ?? null,
+                'name' => 'Laser Back Surface',
+            ],
+            [
+                'output_image' => $data['laser_back_scan']['edges_result']['output_image'] ?? null,
+                'name' => 'Laser Back Edges',
+            ],
+            [
+                'output_image' => $data['laser_back_scan']['corners_result']['output_image'] ?? null,
+                'name' => 'Laser Back Corners',
+            ],
         ];
     }
 }

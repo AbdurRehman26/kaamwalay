@@ -12,4 +12,7 @@ export class ShipmentEntity extends Entity {
 
     @Field('shipping_provider')
     public shippingProvider!: string;
+
+    @Field('tracking_url')
+    public trackingUrl!: string | null;
 }

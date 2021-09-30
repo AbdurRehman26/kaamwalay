@@ -30,7 +30,7 @@ class UserCardController extends Controller
                 $card->userCardCertificate->number,
                 $request->only('human_grade_values')
             );
-            $card->update($response);
+            $card->updateFromAgsResponse($response);
         }
 
         return new UserCardGradeUpdateResource($card);

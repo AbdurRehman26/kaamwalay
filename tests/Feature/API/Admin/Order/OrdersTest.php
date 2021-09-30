@@ -1,25 +1,22 @@
 <?php
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
+use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
-use App\Services\Admin\OrderStatusHistoryService;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
-    Http::fake([
-        // Faking AGS Certificate API
-        'ags.api/*/certificates/*' => Http::response([]),
-    ]);
-
     $this->seed([
         RolesSeeder::class,
         CardCategoriesSeeder::class,
@@ -38,10 +35,13 @@ beforeEach(function () {
         ['order_status_id' => OrderStatus::REVIEWED]
     ))->create();
 
-    $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
-    $this->orders->each(function ($order) use ($orderStatusHistoryService) {
-        $orderStatusHistoryService->addStatusToOrder($order->order_status_id, $order->id, $order->user_id);
-    });
+    \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
+        ['order_status_id' => $this->orders[0]->order_status_id, 'order_id' => $this->orders[0]->id, 'user_id' => $this->orders[0]->user_id],
+        ['order_status_id' => $this->orders[1]->order_status_id, 'order_id' => $this->orders[1]->id, 'user_id' => $this->orders[1]->user_id],
+        ['order_status_id' => $this->orders[2]->order_status_id, 'order_id' => $this->orders[2]->id, 'user_id' => $this->orders[2]->user_id],
+        ['order_status_id' => $this->orders[3]->order_status_id, 'order_id' => $this->orders[3]->id, 'user_id' => $this->orders[3]->user_id],
+        ['order_status_id' => $this->orders[4]->order_status_id, 'order_id' => $this->orders[4]->id, 'user_id' => $this->orders[4]->user_id]
+    )->create();
 
     OrderItem::factory()->count(2)
         ->state(new Sequence(
@@ -52,9 +52,7 @@ beforeEach(function () {
                 'order_id' => $this->orders[1]->id,
             ]
         ))
-        ->create([
-            'order_id' => $this->orders[0],
-        ]);
+        ->create();
 
     $this->sampleAgsResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
@@ -227,14 +225,105 @@ it('can not get order grades if order is not reviewed', function () {
     $response->assertJsonPath('error', (new IncorrectOrderStatus)->getMessage());
 });
 
-it('returns orders filtered after searching the order ID', function (string $value) {
-    $this->getJson('/api/admin/orders?include=order_status_history&filter[search]=' . $value)
-        ->assertOk()
-        ->assertJsonFragment([
-            'id' => $this->orders[0]->id,
-        ]);
-})->with([
+it(
+    'returns orders filtered after searching the order with order number, customer number and user Name',
+    function (string $value) {
+        $this->getJson('/api/admin/orders?include=order_status_history&filter[search]=' . $value)
+            ->assertOk()
+            ->assertJsonFragment([
+                'id' => $this->orders[0]->id,
+            ]);
+    }
+)->with([
     fn () => $this->orders[0]->order_number,
-    fn () => $this->orders[0]->user->id,
+    fn () => $this->orders[0]->user->customer_number,
     fn () => $this->orders[0]->user->first_name,
 ]);
+
+test('an admin can complete review of an order', function () {
+    Http::fake([
+        'ags.api/*/certificates/*' => Http::response(['data']),
+    ]);
+    $response = $this->postJson('/api/admin/orders/' . $this->orders[0]->id . '/status-history', [
+        'order_status_id' => OrderStatus::REVIEWED,
+    ]);
+
+    $response->assertSuccessful();
+    $response->assertJson([
+        'data' => [
+            'order_id' => $this->orders[0]->id,
+            'order_status_id' => OrderStatus::REVIEWED,
+        ],
+    ]);
+});
+
+test('an admin can not complete review of an order if error occurred with AGS client', function () {
+    Http::fake([
+        'ags.api/*/certificates/*' => Http::response([]),
+    ]);
+
+    $this->postJson('/api/admin/orders/' . $this->orders[1]->id . '/status-history', [
+        'order_status_id' => OrderStatus::ARRIVED,
+    ])->assertStatus(422);
+});
+
+test('an admin can get order cards if AGS API fails to return grades', function () {
+    Http::fake(['*' => Http::response([])]);
+    \App\Models\UserCard::factory()->create([
+        'order_item_id' => $this->orders[1]->orderItems->first()->id,
+    ]);
+    $this->getJson('/api/admin/orders/' . $this->orders[1]->id . '/grades')
+        ->assertOk()
+        ->assertJsonFragment([
+            'robo_grade_values' => null,
+        ]);
+});
+
+
+
+test('an admin can get order cards if AGS API returns grades', function () {
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    $orderItemId = $this->orders[1]->orderItems->first()->id;
+    \App\Models\UserCard::factory()->create([
+        'order_item_id' => $orderItemId,
+        'certificate_number' => '09000000',
+    ]);
+    $this->getJson('/api/admin/orders/' . $this->orders[1]->id . '/grades')
+        ->assertJsonFragment([
+                'center' => '2.00',
+        ])
+        ->assertJsonFragment([
+            'id' => $orderItemId,
+        ]);
+});
+
+it('should send an event when order status gets changed', function () {
+    Event::fake();
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    Bus::fake();
+
+    /** @var Order $order */
+    $order = Order::factory()->create();
+    $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ARRIVED,
+    ]);
+
+    $response->assertSuccessful();
+    Event::assertDispatched(function (OrderStatusChangedEvent $event) use ($order) {
+        return $event->order->id === $order->id && $event->orderStatus->id === OrderStatus::ARRIVED;
+    });
+});
+
+it('dispatches job for creating folders on dropbox when an order is reviewed', function () {
+    Event::fake();
+    Http::fake(['*' => Http::response($this->sampleAgsResponse)]);
+    Bus::fake();
+
+    /** @var Order $order */
+    $order = Order::factory()->create();
+    $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::ARRIVED,
+    ]);
+
+    Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);
+});

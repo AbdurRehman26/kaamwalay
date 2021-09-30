@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -12,6 +13,7 @@ use App\Services\Admin\OrderStatusHistoryService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 
 uses(WithFaker::class);
 
@@ -157,6 +159,9 @@ test('a customer can see his order', function () {
 });
 
 test('a customer only see own orders', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class,
+    ]);
     $user = User::factory();
     $orders = Order::factory()->for($user)
         ->has(OrderItem::factory())
@@ -182,6 +187,9 @@ test('a customer only see own orders', function () {
 });
 
 test('a customer does not see payment pending orders', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class,
+    ]);
     $orders = Order::factory()->for($this->user)
         ->has(OrderItem::factory())
         ->count(2)
@@ -232,6 +240,9 @@ test('a customer can see invoice in order', function () {
 });
 
 test('a customer can filter orders by order number', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class,
+    ]);
     $this->actingAs($this->user);
 
     $orders = Order::factory()
@@ -271,35 +282,6 @@ test('a customer can filter orders by order number', function () {
     ]);
     $response->assertJsonMissing([
         'order_number' => 'RG000000002',
-    ]);
-});
-
-test('an admin can complete review of an order', function () {
-    $this->seed(RolesSeeder::class);
-
-    $adminUser = User::createAdmin([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
-        'password' => bcrypt('password'),
-    ]);
-
-    $this->actingAs($adminUser);
-
-    $order = Order::factory()->for($this->user)->create();
-    OrderItem::factory()->for($order)->create();
-
-    $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
-        'order_status_id' => OrderStatus::ARRIVED,
-    ]);
-
-    $response->assertSuccessful();
-    $response->assertJson([
-        'data' => [
-            'order_id' => $order->id,
-            'order_status_id' => OrderStatus::ARRIVED,
-        ],
     ]);
 });
 

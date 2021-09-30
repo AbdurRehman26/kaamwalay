@@ -60,14 +60,18 @@ class OrderStatusChangedListener implements ShouldQueue
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
         );
 
-        $this->scheduleEmail(now()->addDay(), $event, EmailService::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER, [
-            'FIRST_NAME' => $event->order->user->first_name,
-        ]);
+        $this->scheduleEmail(
+            $event,
+            now()->addDay(),
+            EmailService::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER,
+            [
+                'FIRST_NAME' => $event->order->user->first_name,
+            ]
+        );
     }
 
     protected function handleArrived(OrderStatusChangedEvent $event)
     {
-        // Order Arrived logics
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_ARRIVED, [
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
@@ -76,10 +80,8 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleGraded(OrderStatusChangedEvent $event)
     {
-        $this->emailService->sendEmail(
-            $event->order->user->email,
-            $event->order->user->first_name ?? '',
-            EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED ],
+        $this->sendEmail(
+            $event,
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
             ['ORDER_NUMBER' => $event->order->order_number]
         );
@@ -87,7 +89,6 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleShipped(OrderStatusChangedEvent $event)
     {
-        // Order Shipped logics
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED, [
             'FIRST_NAME' => $event->order->user->first_name,
             'TRACKING_NUMBER' => $event->order->orderShipment->tracking_number,
@@ -106,7 +107,7 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function scheduleEmail(DateTime $sendAt, OrderStatusChangedEvent $event, string $template, array $vars)
+    protected function scheduleEmail(OrderStatusChangedEvent $event, DateTime $sendAt, string $template, array $vars)
     {
         $this->emailService->scheduleEmail(
             $sendAt,

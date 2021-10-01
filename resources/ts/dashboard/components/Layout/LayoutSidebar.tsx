@@ -11,7 +11,7 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PaymentOutlinedIcon from '@material-ui/icons/PaymentOutlined';
 import StyleIcon from '@material-ui/icons/Style';
 import React from 'react';
-import UserAvatar from '@shared/assets/dummyLargeAvatar.png';
+import UserAvatar from '@shared/assets/dummyLargeAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import LayoutSidebarItem from './LayoutSidebarItem';
 

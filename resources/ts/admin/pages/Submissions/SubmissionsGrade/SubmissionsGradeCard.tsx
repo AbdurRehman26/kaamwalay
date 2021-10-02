@@ -14,6 +14,7 @@ import {
 } from '@shared/components/AccordionCardItem';
 import OutlinedCard from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { cx } from '@shared/lib/utils/cx';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
@@ -255,7 +256,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     const classes = useStyles();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
-
+    const notifications = useNotifications();
     const handleNotAccepted = useCallback(
         (e) => {
             e.preventDefault();
@@ -314,6 +315,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
             await endpoint.post('', DTO);
             const newCardStatus = viewModes[itemIndex]?.name === 'missing_pending_notes' ? 'Missing' : 'Not Accepted';
             dispatch(updateExistingCardStatus({ status: newCardStatus, id: topLevelID }));
+            notifications.info(`Card was marked as ${newCardStatus}`, 'Warning');
         } catch (err) {}
     };
 
@@ -326,6 +328,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
             const response = await endpoint.post('', DTO);
             dispatch(updateExistingCardStatus({ status: response.data.status.orderItemStatus.name, id: topLevelID }));
         }
+        notifications.success('Card graded successfully!.', 'Success');
     }
 
     async function handleActionNotesChange(e: any) {

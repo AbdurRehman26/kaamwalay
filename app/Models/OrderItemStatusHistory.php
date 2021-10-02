@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $order_item_status_id
  * @property int $notes
  * @property int $user_id
+ * @property Carbon $updated_at
+ * @property User $user
  */
 class OrderItemStatusHistory extends Model
 {

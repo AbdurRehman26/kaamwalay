@@ -16,12 +16,17 @@ interface SubmissionViewBillingProps {
 }
 
 export const useStyles = makeStyles(
-    {
+    (theme) => ({
         paymentAvatar: {
             width: 42,
             height: 42,
         },
-    },
+        root: {
+            [theme.breakpoints.down('xs')]: {
+                display: 'column',
+            },
+        },
+    }),
     {
         name: 'SubmissionViewBilling',
     },
@@ -76,8 +81,8 @@ export function SubmissionViewBilling({ shippingAddress, billingAddress, payment
     }, [card?.expMonth, card?.expYear, card?.last4, cardBrand, isPaypal, payer?.email]);
 
     return (
-        <Grid container direction={'row'} spacing={4}>
-            <Grid item xs={4}>
+        <Grid container direction={'row'} spacing={4} className={classes.root}>
+            <Grid item xs={12} sm={4}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Shipping Address
                 </Typography>
@@ -87,7 +92,7 @@ export function SubmissionViewBilling({ shippingAddress, billingAddress, payment
                 <Typography variant={'body2'}>{shippingAddress?.phone}</Typography>
             </Grid>
             {hasPayment ? (
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={4}>
                     <Typography variant={'body1'} className={font.fontWeightMedium}>
                         Payment Method
                     </Typography>
@@ -107,7 +112,7 @@ export function SubmissionViewBilling({ shippingAddress, billingAddress, payment
                     </Box>
                 </Grid>
             ) : null}
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={4}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Billing Address
                 </Typography>

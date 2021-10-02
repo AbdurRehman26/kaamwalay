@@ -3,6 +3,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { upperFirst } from 'lodash';
 import { useParams } from 'react-router-dom';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
@@ -23,7 +24,16 @@ export function ViewSubmission() {
         resourceId: id,
         config: {
             params: {
-                include: ['paymentPlan', 'orderStatusHistory', 'orderStatusHistory.orderStatus', 'invoice'],
+                include: [
+                    'paymentPlan',
+                    'orderStatusHistory',
+                    'orderCustomerShipment',
+                    'orderStatusHistory.orderStatus',
+                    'invoice',
+                    'orderShipment',
+                    'orderItems',
+                    'orderStatus',
+                ],
             },
         },
     });
@@ -38,31 +48,45 @@ export function ViewSubmission() {
 
     return (
         <Grid container direction={'column'}>
-            <ViewSubmissionHeader orderNumber={data.orderNumber} />
+            <ViewSubmissionHeader
+                orderNumber={data?.orderNumber}
+                invoicePath={data?.invoice?.path}
+                invoiceNumber={data?.invoice?.invoiceNumber}
+            />
             <Divider />
-            <ViewSubmissionStatus orderStatus={data.status} />
+            <ViewSubmissionStatus
+                trackingNumber={data?.orderCustomerShipment?.trackingNumber}
+                shipmentProvider={data?.orderCustomerShipment?.shippingProvider}
+                orderStatus={upperFirst(data?.orderStatus.name)}
+                orderShipment={data?.orderShipment}
+            />
             <Divider />
             <ViewSubmissionInformation
-                serviceLevel={'Basic'}
-                numberOfCards={data.numberOfCards}
-                shippingMethod={data.shippingMethod.name}
-                createdAt={data.createdAt}
-                declaredValue={data.totalDeclaredValue}
-                customerName={data.customer?.getFullName()}
-                customerEmail={data.customer?.email}
-                customerPhone={data.customer?.phone}
-                customerId={data.customer?.id}
-                serviceFee={0}
-                shippingFee={data.shippingFee}
-                total={data.grandTotal}
+                serviceLevel={`$${data?.paymentPlan?.price} / Card`}
+                numberOfCards={data?.numberOfCards}
+                shippingMethod={data?.shippingMethod?.name}
+                createdAt={data?.createdAt}
+                declaredValue={data?.totalDeclaredValue}
+                customerName={data?.customer?.getFullName()}
+                customerEmail={data?.customer?.email}
+                customerPhone={data?.customer?.phone}
+                customerNumber={data?.customer?.customerNumber}
+                serviceFee={data?.serviceFee}
+                shippingFee={data?.shippingFee}
+                total={data?.grandTotal}
             />
             <Divider />
+            <Box marginTop={'24px'} />
             <SubmissionViewBilling
-                shippingAddress={data.shippingAddress}
-                billingAddress={data.billingAddress}
-                payment={data.orderPayment}
+                shippingAddress={data?.shippingAddress}
+                billingAddress={data?.billingAddress}
+                payment={data?.orderPayment}
             />
-            <SubmissionViewCards serviceFee={data.serviceFee} items={data.orderItems} />
+            <SubmissionViewCards
+                serviceLevelPrice={data?.paymentPlan?.price}
+                orderStatusID={data?.orderStatus?.id}
+                items={data?.orderItems}
+            />
         </Grid>
     );
 }

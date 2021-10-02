@@ -5,11 +5,13 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         <link rel="stylesheet" type="text/css"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" integrity="sha512-Velp0ebMKjcd9RiCoaHhLXkR1sFoCCWXNp6w4zj1hfMifYB5441C+sKeBl/T/Ka6NjBiRfBBQRaQq65ekYz3UQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </x-slot>
     <x-slot name="body">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript"
                 src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js" integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script defer>
             $(function () {
                 $('.feed-view__slider--js').slick({
@@ -253,7 +255,7 @@
                 <div class="feed-view__slider feed-view__slider--js">
                     @foreach($generated_images as $generated_image)
                         <div class="feed-view__slider__item">
-                            <a href="#" class="feed-view__slider__link">
+                            <a href="{{ $generated_image['output_image'] }}" class="feed-view__slider__link" data-toggle="lightbox" data-gallery="cards-gallery">
                                 <img class="feed-view__slider__image"
                                      src="{{ $generated_image['output_image'] }}" alt="{{ $generated_image['name'] }}">
                                 <p class="feed-view__slider__caption">{{ $generated_image['name'] }}</p>

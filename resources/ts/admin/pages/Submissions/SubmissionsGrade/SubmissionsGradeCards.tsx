@@ -35,7 +35,7 @@ export function SubmissionsGradeCards() {
             return false;
         }
         const nonReviewedCards = allCards.filter(
-            (item: any) => item.order_item.status.order_item_status.name === 'Confirmed',
+            (item: any) => item.orderItem.status.orderItemStatus.name === 'Confirmed',
         );
         return nonReviewedCards.length === 0;
     }
@@ -91,10 +91,10 @@ export function SubmissionsGradeCards() {
             <Grid container direction={'column'} className={classes.cards}>
                 {allCards.map((item: any, index: number) => (
                     <SubmissionsGradeCard
-                        key={item.order_item.id}
+                        key={item.orderItem.id}
                         orderID={Number(id)}
                         itemIndex={index}
-                        itemId={item.order_item.id}
+                        itemId={item.orderItem.id}
                         gradeData={item}
                     />
                 ))}

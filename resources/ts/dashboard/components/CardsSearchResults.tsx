@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ResultWrapper(props: any) {
+    // TODO: Transform hit to the right type.
     return (
         <SearchResultItemCard
             image={props.hit.image_path}

@@ -292,8 +292,8 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     const handleEdit = useCallback(() => {
         dispatch(
             manageCardDialogActions.editCard({
-                card: gradeData?.order_item?.card_product,
-                declaredValue: gradeData?.order_item?.declared_value_per_unit,
+                card: gradeData?.orderItem?.cardProduct,
+                declaredValue: gradeData?.orderItem?.declaredValuePerUnit,
                 orderItemId: itemId,
             }),
         );
@@ -326,7 +326,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
             };
             const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/items/${orderItemID}/change-status`);
             const response = await endpoint.post('', DTO);
-            dispatch(updateExistingCardStatus({ status: response.data.status.order_item_status.name, id: topLevelID }));
+            dispatch(updateExistingCardStatus({ status: response.data.status.orderItemStatus.name, id: topLevelID }));
         }
         notifications.success('Card graded successfully!.', 'Success');
     }
@@ -346,7 +346,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     async function sendHumanGradesToBackend() {
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${topLevelID}/grades`);
         const response = await endpoint.put('', {
-            human_grade_values: humanGrades,
+            humanGradeValues: humanGrades,
         });
         dispatch(updateExistingCardData({ id: topLevelID, data: response.data }));
     }
@@ -357,66 +357,66 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     }
 
     const humanGrades = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex]?.human_grade_values,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex]?.humanGradeValues,
     );
 
-    const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.id);
+    const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.id);
     const topLevelID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
     const cardName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.card_product.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.name,
     );
     const cardImage = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.card_product.image_path,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.imagePath,
     );
     const cardFullName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.card_product.full_name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.fullName,
     );
     const certificateNumber = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.certificate_number,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.certificateNumber,
     );
     const overallGrade = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.grade);
     const overallGradeNickname = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.nickname,
     );
     const overallEdgeGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.edge,
     );
     const overallCenterGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.center,
     );
     const overallCornerGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.corner,
     );
     const overallSurfaceGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.surface,
     );
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.status.order_item_status.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name,
     );
 
     const frontCentering = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.center,
     );
     const frontEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.edge,
     );
     const frontCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.corner,
     );
     const frontSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.surface,
     );
     const backSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.surface,
     );
     const backEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.edge,
     );
     const backCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.corner,
     );
     const backCenter = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.center,
     );
 
     const [isDoneDisabled, setIsDoneDisabled] = useState(true);
@@ -433,10 +433,10 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     }, [overallGrade]);
 
     const gradedAt = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.graded_at,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.gradedAt,
     );
     const gradedBy = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.graded_by,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.gradedBy,
     );
 
     function areRoboGradesAvailable() {
@@ -463,7 +463,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     }
 
     function isReviseGradedSaveBtnDisabled() {
-        const prevHumanGrades = viewModes[itemIndex].prevViewModeGraded.human_grade_values;
+        const prevHumanGrades = viewModes[itemIndex].prevViewModeGraded.humanGradeValues;
         if (!isOverallDoneDisabled()) {
             return JSON.stringify(prevHumanGrades) === JSON.stringify(humanGrades);
         } else {

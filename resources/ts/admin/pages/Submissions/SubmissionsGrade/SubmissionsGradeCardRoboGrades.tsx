@@ -58,10 +58,10 @@ export function SubmissionsGradeCardRoboGrades({ heading, itemIndex, icon }: Sub
     const classes = useStyles();
 
     const roboGradesFront = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.front,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].roboGradeValues.front,
     );
     const roboGradesBack = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].robo_grade_values.back,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].roboGradeValues.back,
     );
 
     return (

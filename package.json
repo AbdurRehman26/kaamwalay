@@ -6,6 +6,7 @@
         "dashboard": "yarn -s cli -a dashboard",
         "auth": "yarn -s cli -a auth",
         "admin": "yarn -s cli -a admin",
+        "landings": "yarn -s cli -a landings",
         "build": "rm -rf public/apps && yarn -s all build -m production",
         "coverage:build": "yarn test --collect-coverage --coverage",
         "coverage:serve": "serve ./public/coverage/lcov-report",

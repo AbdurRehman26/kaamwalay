@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Services\Admin\Order\ShipmentService;
 
 it('can update order shipment details', function () {
+    Event::fake();
+
     /** @var User $user */
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->actingAs($user);

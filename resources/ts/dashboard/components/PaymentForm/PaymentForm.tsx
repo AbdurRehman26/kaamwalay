@@ -60,8 +60,8 @@ export function PaymentForm() {
             const existingStripeCardsForCustomer = await endpoint.get('');
             const formattedStripeCards = existingStripeCardsForCustomer.data?.map((item: any) => {
                 return {
-                    expMonth: item.card.exp_month,
-                    expYear: item.card.exp_year,
+                    expMonth: item.card.expMonth,
+                    expYear: item.card.expYear,
                     last4: item.card.last4,
                     brand: item.card.brand,
                     id: item.id,
@@ -100,7 +100,8 @@ export function PaymentForm() {
         const requestClientSecret = await endpoint.post('');
 
         // We're using the client secret now in order to save the card for the customer on stripe
-        const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.client_secret, {
+        const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.clientSecret, {
+            // eslint-disable-next-line camelcase
             payment_method: {
                 card: elements.getElement(CardElement) as any,
             },

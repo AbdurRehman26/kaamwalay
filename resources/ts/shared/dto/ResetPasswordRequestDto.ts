@@ -16,6 +16,6 @@ export class ResetPasswordRequestDto {
 
     @IsNotEmpty(createErrorMessageOption(ErrorMessages.ShouldNotBeEmpty, 'Password confirmation'))
     @MinLength(8, createErrorMessageOption(ErrorMessages.ShouldHaveAtLeastNCharacters, 'Password confirmation', '8'))
-    @Field('password_confirmation', { toPlainOnly: true })
+    @Field('passwordConfirmation', { toPlainOnly: true })
     public passwordConfirmation!: string;
 }

@@ -229,7 +229,7 @@ function SubmissionSummary() {
 
             // Try to charge the customer
             await endpoint.post('', {
-                payment_method_id: stripePaymentMethod,
+                paymentMethodId: stripePaymentMethod,
             });
 
             setIsStripePaymentLoading(false);
@@ -248,10 +248,11 @@ function SubmissionSummary() {
             }
             // Charge was failed by back-end so we try to charge him on the front-end
             // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
-            const intent = err.response.data.payment_intent;
+            const intent = err.response.data.paymentIntent;
             // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
-            const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {
-                payment_method: intent.payment_method,
+            const chargeResult = await stripe.confirmCardPayment(intent.clientSecret, {
+                // eslint-disable-next-line camelcase
+                payment_method: intent.paymentMethod,
             });
 
             // Checking if something else failed.

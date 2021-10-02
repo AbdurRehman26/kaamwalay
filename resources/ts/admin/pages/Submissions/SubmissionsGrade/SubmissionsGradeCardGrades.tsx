@@ -77,36 +77,36 @@ export function SubmissionsGradeCardGrades({
     const apiService = useInjectable(APIService);
 
     const frontCentering = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.center,
     );
     const frontEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.edge,
     );
     const frontCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.corner,
     );
     const frontSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.surface,
     );
     const backSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.surface,
     );
     const backEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.edge,
     );
     const backCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.corner,
     );
     const backCenter = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.center,
     );
     const itemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
     const humanGrades = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues,
     );
 
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.status.order_item_status.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name,
     );
     const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
 
@@ -124,7 +124,7 @@ export function SubmissionsGradeCardGrades({
     async function sendHumanGradesToBackend() {
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
         const response = await endpoint.put('', {
-            human_grade_values: humanGrades,
+            humanGradeValues: humanGrades,
         });
         dispatch(updateExistingCardData({ id: itemID, data: response.data }));
     }

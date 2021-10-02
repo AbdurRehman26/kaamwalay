@@ -136,7 +136,7 @@ export const useViewSubmissionInformationStyles = makeStyles(
                 border: 'none',
             },
 
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 '& .table-info td, & .table-info td': {
                     width: '60%',
                 },

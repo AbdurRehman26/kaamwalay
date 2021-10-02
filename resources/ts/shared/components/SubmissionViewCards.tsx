@@ -26,7 +26,7 @@ export const useStyles = makeStyles(
     (theme) => ({
         containerBox: {
             padding: 0,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 maxWidth: '98%',
             },
         },
@@ -88,7 +88,7 @@ export const useStyles = makeStyles(
 
 export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }: SubmissionViewCardsProps) {
     const classes = useStyles();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'));
 
     const GradeRoot = isMobile ? 'a' : Box;
     return (

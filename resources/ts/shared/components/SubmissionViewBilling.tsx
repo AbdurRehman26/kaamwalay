@@ -22,7 +22,7 @@ export const useStyles = makeStyles(
             height: 42,
         },
         root: {
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 display: 'column',
             },
         },

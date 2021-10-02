@@ -40,7 +40,7 @@ const useStyles = makeStyles(
             },
             contentContainer: {
                 width: '457px',
-                [theme.breakpoints.down('xs')]: {
+                [theme.breakpoints.down('sm')]: {
                     width: '100%',
                 },
             },

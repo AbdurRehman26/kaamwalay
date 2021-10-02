@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import RobogradingAvatar from '@shared/assets/dummyAvatar.png';
+import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import Logo from '@shared/assets/robogradingLogo.svg';
 import CustomizedSteppers from './HeaderStepper';
 

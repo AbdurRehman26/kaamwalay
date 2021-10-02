@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import UserAvatar from '@shared/assets/dummyLargeAvatar.svg';
+import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setNavigationDrawerOpen } from '@dashboard/redux/slices/dashboardSlice';

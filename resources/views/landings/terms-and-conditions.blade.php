@@ -155,7 +155,12 @@
                     AGS Inc. is permitted to revise these Terms at any time as it sees fit, and by using
                     this Website you are expected to review such Terms on a regular basis to ensure
                     you understand all terms and conditions governing use of this Website.
-                    10. ASSIGNMENT
+                </p>
+            </section>
+            <br>
+            <section class="terms-conditions__content-section">
+                <h3 class="terms-conditions__content-heading">10. ASSIGNMENT</h3>
+                <p class="terms-conditions__content-text">
                     AGS Inc. shall be permitted to assign, transfer, and subcontract its rights and/or
                     obligations under these Terms without any notification or consent required.
                     However, .you shall not be permitted to assign, transfer, or subcontract any of

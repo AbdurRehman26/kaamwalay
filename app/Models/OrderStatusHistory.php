@@ -2,16 +2,11 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\QueryBuilder\AllowedInclude;
 
-/**
- * @property User $user
- * @property Carbon $updated_at
- */
 class OrderStatusHistory extends Model
 {
     use HasFactory;

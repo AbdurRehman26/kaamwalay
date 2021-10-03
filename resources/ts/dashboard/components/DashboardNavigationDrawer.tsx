@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import UserAvatar from '@shared/assets/dummyLargeAvatar.png';
+import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setNavigationDrawerOpen } from '@dashboard/redux/slices/dashboardSlice';

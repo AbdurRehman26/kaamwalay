@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
-import UserAvatar from '@shared/assets/dummyLargeAvatar.png';
+import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import LayoutSidebarItem from './LayoutSidebarItem';
 

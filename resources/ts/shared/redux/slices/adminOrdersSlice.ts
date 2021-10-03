@@ -33,6 +33,7 @@ export const changeOrderItemStatus = createAsyncThunk(
             return {
                 orderId: input.orderId,
                 orderItemId: input.orderItemId,
+                certificateNumber: item.certificateNumber,
                 status: classToPlain(item.status),
             };
         } catch (e: any) {
@@ -154,11 +155,12 @@ export const adminOrdersSlice = createSlice({
         }
 
         builder.addCase(changeOrderItemStatus.fulfilled, (state, { payload }) => {
-            const { orderId, orderItemId, status } = payload;
+            const { orderId, orderItemId, certificateNumber, status } = payload;
             const order = plainToClass(OrderEntity, state.entities[orderId]);
 
             order.orderItems = (order.orderItems ?? []).map((item) => {
                 if (item.id === orderItemId) {
+                    item.certificateNumber = certificateNumber;
                     item.status = plainToClass(OrderItemStatusEntity, status);
                 }
 

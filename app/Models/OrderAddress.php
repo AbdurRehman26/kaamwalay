@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class OrderAddress extends Address
 {
     /**
@@ -31,9 +33,9 @@ class OrderAddress extends Address
         'country_id' => 'integer',
     ];
 
-    public function country(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function country(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Country::class);
+        return $this->belongsTo(Country::class);
     }
 
     public function getFullName(): string

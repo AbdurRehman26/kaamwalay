@@ -2,19 +2,10 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * @property int $order_item_id
- * @property int $order_item_status_id
- * @property int $notes
- * @property int $user_id
- * @property Carbon $updated_at
- * @property User $user
- */
 class OrderItemStatusHistory extends Model
 {
     use HasFactory;
@@ -50,11 +41,11 @@ class OrderItemStatusHistory extends Model
 
     public function orderItem(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderItem::class);
+        return $this->belongsTo(OrderItem::class);
     }
 
     public function orderItemStatus(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderItemStatus::class);
+        return $this->belongsTo(OrderItemStatus::class);
     }
 }

@@ -3,10 +3,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { castArray } from 'lodash';
 import React, { useMemo } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
-import { NativeRedirect } from '@shared/components/NativeRedirect';
-import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
-import { RolesEnum } from '@shared/constants/RolesEnum';
-import { useAuth } from '@shared/hooks/useAuth';
+import { AuthenticationEnum } from '../constants/AuthenticationEnum';
+import { RolesEnum } from '../constants/RolesEnum';
+import { useAuth } from '../hooks/useAuth';
+import { NativeRedirect } from './NativeRedirect';
 
 interface ProtectedRouteProps extends RouteProps {
     redirectRoute?: string;

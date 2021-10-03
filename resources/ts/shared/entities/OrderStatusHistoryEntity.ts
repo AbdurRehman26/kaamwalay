@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { Entity } from '@shared/entities/Entity';
+import { Entity } from './Entity';
 import { OrderStatusEntity } from './OrderStatusEntity';
 
 export class OrderStatusHistoryEntity extends Entity {

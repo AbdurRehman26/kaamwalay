@@ -3,8 +3,8 @@ import { ClassConstructor } from 'class-transformer';
 import objectHash from 'object-hash';
 import { useCallback, useMemo } from 'react';
 import useSWR, { SWRResponse } from 'swr';
-import { useRepository } from '@shared/hooks/useRepository';
-import { Repository } from '@shared/repositories/Repository';
+import { Repository } from '../repositories/Repository';
+import { useRepository } from './useRepository';
 
 export type RepositoryKeys<T extends Repository<any>> = keyof Omit<
     T,

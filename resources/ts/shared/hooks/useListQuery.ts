@@ -8,8 +8,8 @@ import { GlobalStateType } from '../redux/store';
 import { APIService } from '../services/APIService';
 import { APIState } from '../types/APIState';
 import { useInjectable } from './useInjectable';
-import { useSharedSelector } from './useSharedDispatch';
-import { useSharedDispatch } from './useSharedSelector';
+import { useSharedDispatch } from './useSharedDispatch';
+import { useSharedSelector } from './useSharedSelector';
 
 export function useListQuery<
     E,
@@ -32,7 +32,7 @@ export function useListQuery<
     const lastPage = pagination.meta?.lastPage ?? 1;
 
     const data = useMemo(() => {
-        const list = ids.map((id) => entities[id]);
+        const list = ids.map((id: number) => entities[id]);
         // if (perPage) {
         //     const offset = (currentPage - 1) * perPage;
         //     list = list.slice(offset, offset + perPage);

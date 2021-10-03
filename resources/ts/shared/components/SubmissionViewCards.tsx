@@ -10,11 +10,11 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
-import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import font from '@shared/styles/font.module.css';
+import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
 import { cx } from '../lib/utils/cx';
 import { formatCurrency } from '../lib/utils/formatCurrency';
+import font from '../styles/font.module.css';
 
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];

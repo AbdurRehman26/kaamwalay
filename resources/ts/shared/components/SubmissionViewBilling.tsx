@@ -4,10 +4,10 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useMemo } from 'react';
-import { AddressEntity } from '@shared/entities/AddressEntity';
-import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
-import font from '@shared/styles/font.module.css';
+import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
+import { getPaymentIcon, getPaymentTitle } from '../lib/payments';
+import font from '../styles/font.module.css';
 
 interface SubmissionViewBillingProps {
     shippingAddress?: AddressEntity;

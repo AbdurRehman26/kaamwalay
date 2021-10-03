@@ -2,8 +2,8 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
-import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
-import { useAuth } from '@shared/hooks/useAuth';
+import { AuthenticationEnum } from '../constants/AuthenticationEnum';
+import { useAuth } from '../hooks/useAuth';
 
 interface GuestOnlyRouteProps extends RouteProps {
     redirectRoute?: string;

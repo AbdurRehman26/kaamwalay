@@ -10,7 +10,7 @@ import { useCallback, useMemo } from 'react';
 import { Hit } from 'react-instantsearch-core';
 import { batch } from 'react-redux';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
-import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { fromApiPropertiesObject } from '../../lib/utils/fromApiPropertiesObject';
 

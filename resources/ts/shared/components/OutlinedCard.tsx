@@ -4,7 +4,7 @@ import CardHeader from '@mui/material/CardHeader';
 import { TypographyProps } from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { PropsWithChildren, useMemo } from 'react';
-import { cx } from '@shared/lib/utils/cx';
+import { cx } from '../lib/utils/cx';
 import { font } from '../styles/utils';
 
 interface OutlinedCardProps extends CardProps {

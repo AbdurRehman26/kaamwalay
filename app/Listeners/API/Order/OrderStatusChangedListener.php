@@ -4,6 +4,7 @@ namespace App\Listeners\API\Order;
 
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
+use App\Models\User;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
 use DateTime;
@@ -57,7 +58,15 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->sendEmail(
             $event,
             EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
-            $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
+            $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order, false)
+        );
+
+        $users = User::whereHas("roles", function($query){ $query->where("name", "customer"); })->pluck('email', 'first_name');
+
+        $this->sendEmail(
+            $event,
+            EmailService::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED,
+            $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order, true)
         );
 
         $this->scheduleEmail(

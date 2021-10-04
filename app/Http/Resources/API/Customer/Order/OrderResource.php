@@ -31,7 +31,7 @@ class OrderResource extends BaseResource
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),
             'billing_address' => new OrderAddressResource($this->billingAddress),
-            'order_payment' => new OrderPaymentResource($this->orderPayment),
+            'order_payment' => new OrderPaymentResource($this->lastOrderPayment),
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),

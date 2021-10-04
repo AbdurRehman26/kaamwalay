@@ -69,7 +69,7 @@ class PaymentService
     public function updateOrderPayment(array $data): array
     {
         /** @noinspection JsonEncodingApiUsageInspection */
-        $this->order->orderPayment->update([
+        $this->order->lastOrderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
@@ -105,7 +105,7 @@ class PaymentService
             $this->order->paymentMethod->code
         ])->calculateFee($this->order);
 
-        $orderPayment = $this->order->orderPayment;
+        $orderPayment = $this->order->lastOrderPayment;
         $orderPayment->provider_fee = $fee;
         $orderPayment->save();
     }

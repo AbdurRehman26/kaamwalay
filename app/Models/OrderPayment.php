@@ -37,6 +37,7 @@ class OrderPayment extends Model
         'provider_fee' => 'float',
         'type' => 'integer',
         'amount' => 'float',
+        'order_id' => 'integer',
     ];
 
     public const PAYMENT_TYPES = [

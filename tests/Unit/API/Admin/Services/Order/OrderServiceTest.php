@@ -26,7 +26,7 @@ test('it can create extra charge for order', function () {
 
     $orderPayment = $order->lastOrderPayment;
 
-    $this->assertEquals($orderPayment->type, OrderPayment::PAYMENT_TYPES['extra_charge']);
-    $this->assertEquals($orderPayment->order_id, $order->id);
-    $this->assertEquals($orderPayment->amount, $amount);
+    expect($orderPayment->type)->toBe(OrderPayment::PAYMENT_TYPES['extra_charge']);
+    expect($orderPayment->order_id)->toBe($order->id);
+    expect($orderPayment->amount)->toEqual($amount);
 });

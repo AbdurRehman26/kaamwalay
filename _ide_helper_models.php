@@ -273,13 +273,18 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $reviewed_at
  * @property \Illuminate\Support\Carbon|null $graded_at
  * @property-read \App\Models\OrderAddress $billingAddress
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $extraCharges
+ * @property-read int|null $extra_charges_count
+ * @property-read \App\Models\OrderPayment|null $firstOrderPayment
  * @property-read int $grand_total_cents
  * @property-read \App\Models\User|null $gradedBy
  * @property-read \App\Models\Invoice|null $invoice
+ * @property-read \App\Models\OrderPayment|null $lastOrderPayment
  * @property-read \App\Models\OrderCustomerShipment|null $orderCustomerShipment
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems
  * @property-read int|null $order_items_count
- * @property-read \App\Models\OrderPayment|null $orderPayment
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $orderPayments
+ * @property-read int|null $order_payments_count
  * @property-read \App\Models\OrderShipment|null $orderShipment
  * @property-read \App\Models\OrderStatus|null $orderStatus
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderStatusHistory[] $orderStatusHistory
@@ -393,11 +398,8 @@ namespace App\Models{
 /**
  * App\Models\OrderItem
  *
- * @property OrderItemStatus $orderItemStatus
- * @property int $order_item_status_id
- * @property int $order_id
  * @property int $id
- * @property UserCard $userCard
+ * @property int $order_id
  * @property int $card_product_id
  * @property int|null $order_item_shipment_id
  * @property int $quantity
@@ -408,12 +410,15 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $order_item_customer_shipment_id
+ * @property int $order_item_status_id
  * @property-read \App\Models\CardProduct $cardProduct
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\OrderItemCustomerShipment|null $orderItemCustomerShipment
  * @property-read \App\Models\OrderItemShipment|null $orderItemShipment
+ * @property-read \App\Models\OrderItemStatus $orderItemStatus
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItemStatusHistory[] $orderItemStatusHistory
  * @property-read int|null $order_item_status_history_count
+ * @property-read \App\Models\UserCard|null $userCard
  * @method static \Database\Factories\OrderItemFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem forOrder(\App\Models\Order $order)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
@@ -464,7 +469,6 @@ namespace App\Models{
 /**
  * App\Models\OrderItemShipment
  *
- * @method static OrderItemShipment create(?array $data = [])
  * @property int $id
  * @property \Illuminate\Support\Carbon $shipment_date
  * @property string $tracking_number
@@ -495,13 +499,13 @@ namespace App\Models{
  * App\Models\OrderItemStatus
  *
  * @property int $id
- * @method static Builder forStatus(mixed $status)
  * @property string $code
  * @property string $name
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\OrderItemStatusFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatus forStatus($status)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatus query()
@@ -519,16 +523,16 @@ namespace App\Models{
 /**
  * App\Models\OrderItemStatusHistory
  *
- * @property int $order_item_id
- * @property int $order_item_status_id
- * @property int $notes
- * @property int $user_id
- * @property Carbon $updated_at
- * @property User $user
  * @property int $id
+ * @property int $order_item_status_id
+ * @property int $order_item_id
+ * @property int|null $user_id
+ * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\OrderItem $orderItem
  * @property-read \App\Models\OrderItemStatus $orderItemStatus
+ * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\OrderItemStatusHistoryFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatusHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItemStatusHistory newQuery()
@@ -554,6 +558,9 @@ namespace App\Models{
  * @property string|null $request
  * @property string|null $response
  * @property string|null $payment_provider_reference_id
+ * @property string|null $notes
+ * @property float|null $amount
+ * @property int $type 1 => order payment, 2 => extra charge, 3 => refund
  * @property float|null $provider_fee
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -562,14 +569,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment wherePaymentMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment wherePaymentProviderReferenceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereProviderFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereRequest($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereResponse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereUpdatedAt($value)
  */
 	class OrderPayment extends \Eloquent {}
@@ -657,16 +667,16 @@ namespace App\Models{
 /**
  * App\Models\OrderStatusHistory
  *
- * @property User $user
- * @property Carbon $updated_at
  * @property int $id
  * @property int $order_id
  * @property int $order_status_id
  * @property int $user_id
  * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\OrderStatus $orderStatus
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\OrderStatusHistoryFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatusHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatusHistory newQuery()
@@ -686,9 +696,9 @@ namespace App\Models{
 /**
  * App\Models\PaymentMethod
  *
- * @property string $code
  * @property int $id
  * @property string $name
+ * @property string $code
  * @property int $is_enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -760,9 +770,21 @@ namespace App\Models{
 /**
  * App\Models\RevenueStatsMonthly
  *
+ * @property int $id
+ * @property string $event_at
+ * @property float $revenue
+ * @property float $profit
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly whereEventAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly whereProfit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly whereRevenue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RevenueStatsMonthly whereUpdatedAt($value)
  */
 	class RevenueStatsMonthly extends \Eloquent {}
 }
@@ -840,10 +862,9 @@ namespace App\Models{
  * App\Models\User
  *
  * @property int $id
- * @property string $customer_number
- * @property string $first_name
- * @property string $email
+ * @property string|null $first_name
  * @property string|null $last_name
+ * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $username
  * @property string $password
@@ -855,7 +876,8 @@ namespace App\Models{
  * @property string|null $stripe_id
  * @property string|null $pm_type
  * @property string|null $pm_last_four
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CustomerAddress[] $customer_addresses
+ * @property string|null $customer_number
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CustomerAddress[] $customerAddresses
  * @property-read int|null $customer_addresses_count
  * @property-read string $name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications

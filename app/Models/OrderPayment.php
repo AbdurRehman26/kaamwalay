@@ -22,6 +22,9 @@ class OrderPayment extends Model
         'request',
         'response',
         'payment_provider_reference_id',
+        'notes',
+        'amount',
+        'type',
     ];
 
     /**
@@ -32,6 +35,14 @@ class OrderPayment extends Model
     protected $casts = [
         'id' => 'integer',
         'provider_fee' => 'float',
+        'type' => 'integer',
+        'amount' => 'float',
+    ];
+
+    public const PAYMENT_TYPES = [
+        'order_payment' => 1,
+        'extra_charge' => 2,
+        'refund' => 3,
     ];
 
     public function order(): BelongsTo

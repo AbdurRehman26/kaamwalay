@@ -3,8 +3,8 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import RobogradingAvatar from '@shared/assets/dummyAvatar.png';
-import Logo from '@shared/assets/robogradingLogo.png';
+import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
+import Logo from '@shared/assets/robogradingLogo.svg';
 import CustomizedSteppers from './HeaderStepper';
 
 const useStyles = makeStyles(

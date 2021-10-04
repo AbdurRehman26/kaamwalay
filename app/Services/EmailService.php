@@ -32,15 +32,13 @@ class EmailService
     /**
      * Send email using a template. It automatically sends email to queue for background processing.
      *
-     * @param  string  $recipientEmail
-     * @param  string  $recipientName
+     * @param  array  $recipients
      * @param  string  $subject
      * @param  string  $templateName
      * @param  array  $templateContent
      */
     public function sendEmail(
-        string $recipientEmail,
-        string $recipientName,
+        array $recipients,
         string $subject,
         string $templateName,
         array $templateContent = []
@@ -48,15 +46,15 @@ class EmailService
         if (app()->environment('local')) {
             return;
         }
-        SendEmail::dispatch($recipientEmail, $recipientName, $subject, $templateName, $templateContent);
+
+        SendEmail::dispatch($recipients, $subject, $templateName, $templateContent);
     }
 
     /**
      * Schedule email for sending later. Email will be sent later at specified time.
      *
      * @param  DateTime  $sendAt
-     * @param  string  $recipientEmail
-     * @param  string  $recipientName
+     * @param  array  $recipients
      * @param  string  $subject
      * @param  string  $templateName
      * @param  array  $templateContent
@@ -65,8 +63,7 @@ class EmailService
      */
     public function scheduleEmail(
         DateTime $sendAt,
-        string $recipientEmail,
-        string $recipientName,
+        array $recipients,
         string $subject,
         string $templateName,
         array $templateContent = []
@@ -74,12 +71,11 @@ class EmailService
         if (app()->environment('local')) {
             return true;
         }
-        
+
         ScheduledEmail::create([
             'send_at' => $sendAt,
             'payload' => serialize([
-                'recipientEmail' => $recipientEmail,
-                'recipientName' => $recipientName,
+                'recipients' => $recipients,
                 'subject' => $subject,
                 'templateName' => $templateName,
                 'templateContent' => $templateContent,
@@ -91,10 +87,6 @@ class EmailService
 
     public function processScheduledEmails(): void
     {
-        if (app()->environment('local')) {
-            return;
-        }
-
         ScheduledEmail::where('send_at', '<=', now())->where('is_sent', 0)->each(function (
             ScheduledEmail $scheduledEmail
         ) {

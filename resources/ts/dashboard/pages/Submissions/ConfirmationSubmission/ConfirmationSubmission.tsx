@@ -65,7 +65,12 @@ export function ConfirmationSubmission() {
                             our turnaround times are not guaranteed. For more on this, please read the Robograding
                         </span>
                         &nbsp;
-                        <MuiLink color={'inherit'} className={font.fontWeightMedium} underline={'always'}>
+                        <MuiLink
+                            href={'/terms-and-conditions'}
+                            color={'inherit'}
+                            className={font.fontWeightMedium}
+                            underline={'always'}
+                        >
                             Terms and Conditions
                         </MuiLink>
                         .

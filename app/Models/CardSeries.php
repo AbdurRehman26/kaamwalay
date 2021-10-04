@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CardSeries extends Model
 {
@@ -16,12 +18,12 @@ class CardSeries extends Model
         'image_bucket_path',
     ];
 
-    public function cardSets()
+    public function cardSets(): HasMany
     {
         return $this->hasMany(CardSet::class);
     }
 
-    public function cardCategory()
+    public function cardCategory(): BelongsTo
     {
         return $this->belongsTo(CardCategory::class);
     }

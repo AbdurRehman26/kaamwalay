@@ -308,7 +308,9 @@ function SubmissionSummary() {
 
                         <Typography className={classes.greyDescriptionText}>
                             By clicking the above button, you are agreeing to the Robograding{' '}
-                            <span className={classes.darkDescriptionText}>Terms and Conditions.</span>
+                            <a href={'/terms-and-conditions'} className={classes.darkDescriptionText}>
+                                Terms and Conditions.
+                            </a>
                         </Typography>
                     </div>
                 ) : null}

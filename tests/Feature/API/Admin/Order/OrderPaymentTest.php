@@ -3,6 +3,7 @@
 namespace Tests\Feature\API\Admin\Order;
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
@@ -38,9 +39,22 @@ beforeEach(function () {
     $this->actingAs($user);
 });
 
-test('it can create extra charge for order', function () {
+test('admin can create extra charge for order', function () {
     $this->postJson('/api/admin/orders/' . $this->order->id . '/extra/charge', [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
     ])->assertStatus(201);
+});
+
+test('admin can update order payment notes', function () {
+    $orderPayment = OrderPayment::factory()->create([
+        'order_id' => $this->order->id,
+    ]);
+    $notes = $this->faker->sentence();
+    $this->putJson('/api/admin/orders/' . $this->order->id . '/order-payments/' . $orderPayment->id, [
+        'notes' => $notes,
+    ])
+        ->assertStatus(200);
+    $orderPayment->refresh();
+    expect($orderPayment->notes)->toEqual($notes);
 });

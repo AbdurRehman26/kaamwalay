@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
+use App\Models\OrderPayment;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderPaymentResource extends JsonResource
@@ -31,12 +32,16 @@ class OrderPaymentResource extends JsonResource
         }
 
         return [
+            'id' => $this->id,
             'card' => [
                 'brand' => $card->brand,
                 'exp_month' => $card->exp_month,
                 'exp_year' => $card->exp_year,
                 'last4' => $card->last4,
             ],
+            'amount' => $this->amount,
+            'notes' => $this->notes,
+            'type' => array_search($this->type, OrderPayment::PAYMENT_TYPES),
         ];
     }
 

@@ -57,7 +57,7 @@ class StripeService implements PaymentProviderServiceInterface
 
         $paymentData = [
             'amount' => $order->grand_total_cents,
-            'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->id}",
                 'metadata' => [
@@ -78,7 +78,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'success' => true,
                 'request' => $paymentData,
                 'response' => $response->toArray(),
-                'payment_provider_reference_id' => $order->orderPayment->payment_provider_reference_id,
+                'payment_provider_reference_id' => $order->lastOrderPayment->payment_provider_reference_id,
             ];
         } catch (IncompletePayment $exception) {
             return [

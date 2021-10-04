@@ -33,7 +33,7 @@ class InvoiceService
         $agsLogo = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/agsLogo.png')));
         $barcode = 'data:image/png;base64,' . BarcodeService::generate($order->order_number, BarcodeGenerator::Code39, '', 2);
 
-        $orderPayment = $order->orderPayment;
+        $orderPayment = $order->lastOrderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
         if ($paymentResponse) {
             if ($order->paymentMethod->code === 'paypal') {

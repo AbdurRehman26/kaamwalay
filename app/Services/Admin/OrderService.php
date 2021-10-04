@@ -2,12 +2,14 @@
 
 namespace App\Services\Admin;
 
+use App\Events\API\Admin\Order\ExtraChargeApplied;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
@@ -133,5 +135,14 @@ class OrderService
                 $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
             }
         }
+    }
+
+    public function addExtraCharge(Order $order, array $data): void
+    {
+        $orderPayment = new OrderPayment(attributes: $data);
+
+        $order->orderPayments()->save($orderPayment);
+
+        ExtraChargeApplied::dispatch($order);
     }
 }

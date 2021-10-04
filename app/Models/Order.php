@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 class Order extends Model
 {
     use HasFactory;
+    use HasOrderPayments;
 
     /**
      * The attributes that are mass assignable.
@@ -83,7 +85,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -114,7 +116,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -173,11 +175,6 @@ class Order extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
-    }
-
-    public function orderPayment(): HasOne
-    {
-        return $this->hasOne(OrderPayment::class);
     }
 
     public function reviewedBy(): BelongsTo

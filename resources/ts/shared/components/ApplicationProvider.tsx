@@ -3,11 +3,11 @@ import { ThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles
 import { EnhancedStore } from '@reduxjs/toolkit';
 import React, { PropsWithChildren, useMemo } from 'react';
 import { Provider } from 'react-redux';
-import AuthenticationCheck from '@shared/components/AuthenticationCheck';
-import { NotificationsContainer } from '@shared/components/NotificationsContainer';
-import { ConfirmationDialogProvider } from '@shared/contexts/ConfirmationDialogContext';
-import { materialUiTheme } from '@shared/styles/theme';
+import { ConfirmationDialogProvider } from '../contexts/ConfirmationDialogContext';
+import { materialUiTheme } from '../styles/theme';
+import AuthenticationCheck from './AuthenticationCheck';
 import { ConfigurationLoad } from './ConfigurationLoad';
+import { NotificationsContainer } from './NotificationsContainer';
 import { SplashScreen, SplashScreenProps } from './SplashScreen';
 
 declare module '@mui/styles/defaultTheme' {

@@ -8,7 +8,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useCallback } from 'react';
 import { batch } from 'react-redux';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
-import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 

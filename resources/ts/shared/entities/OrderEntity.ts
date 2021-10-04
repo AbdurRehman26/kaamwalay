@@ -1,10 +1,10 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
-import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
-import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import { Entity } from '@shared/entities/Entity';
+import { OrderItemStatusEnum } from '../constants/OrderItemStatusEnum';
+import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { DateField } from '../decorators/DateField';
 import { AddressEntity } from './AddressEntity';
+import { Entity } from './Entity';
 import { InvoiceEntity } from './InvoiceEntity';
 import { OrderItemEntity } from './OrderItemEntity';
 import { OrderPaymentEntity } from './OrderPaymentEntity';

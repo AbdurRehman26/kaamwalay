@@ -18,7 +18,7 @@ import { ForwardedRef, forwardRef, useCallback, useMemo, useRef } from 'react';
 import { batch } from 'react-redux';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
-import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';

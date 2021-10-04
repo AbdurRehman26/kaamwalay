@@ -108,8 +108,7 @@ class OrderStatusChangedListener implements ShouldQueue
     protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars)
     {
         $this->emailService->sendEmail(
-            $event->order->user->email,
-            $event->order->user->getFullName(),
+            [[$event->order->user->email => $event->order->user->getFullName()]],
             $this->emailService->getSubjectByTemplate($template),
             $template,
             $vars
@@ -120,8 +119,7 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         $this->emailService->scheduleEmail(
             $sendAt,
-            $event->order->user->email,
-            $event->order->user->getFullName(),
+            [[$event->order->user->email => $event->order->user->getFullName()]],
             $this->emailService->getSubjectByTemplate($template),
             $template,
             $vars

@@ -17,6 +17,7 @@ class AddExtraChargeRequest extends FormRequest
     {
         /* @var User $user */
         $user = $this->user();
+
         return $user->isAdmin();
     }
 

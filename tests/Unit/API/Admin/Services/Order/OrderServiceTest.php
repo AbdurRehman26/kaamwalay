@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Admin\OrderService;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\OrderPayment;
 
 uses(WithFaker::class);
 

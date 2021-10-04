@@ -4,8 +4,6 @@ namespace App\Listeners\API\Order;
 
 use App\Events\API\Customer\Order\ExtraAmountCharged;
 use App\Services\EmailService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class SendExtraChargedEmail
 {
@@ -36,6 +34,10 @@ class SendExtraChargedEmail
             $this->emailService::TEMPLATE_SLUG_SUBMISSION_EXTRA_CHARGED,
             [
                 'TOTAL_AMOUNT' => 100,
+                'SUB_TOTAL' => 2,
+                'SHIPPING_FEE' => 1,
+                'EXTRA_CHARGE' => 2,
+                'CARD' => 'Amex ending with 2020',
             ],
         );
     }

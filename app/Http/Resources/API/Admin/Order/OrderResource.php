@@ -6,7 +6,7 @@ use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderAddressResource;
-use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
+use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\OrderStatus;
@@ -80,6 +80,7 @@ class OrderResource extends BaseResource
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
+            'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),
         ];
     }
 

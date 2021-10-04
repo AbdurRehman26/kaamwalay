@@ -6,7 +6,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiSuccess {Object} data OrderPayment object
+ * @apiSuccess {Object} data OrderPaymentResource object
  *
  * @apiParam {String} notes notes for the extra charge.
  *

@@ -32,7 +32,7 @@ class AgsService
         $response = $this->client->updateHumanGrades($certificateId, $this->prepareHumanGradeData($data));
 
         return ! empty($response)
-            ? CardGradeResource::make($response)->resolve()
+            ? CardGradeResource::make($response)->ignoreParams('overall')->resolve()
             : [];
     }
 

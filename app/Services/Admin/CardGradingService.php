@@ -137,8 +137,19 @@ class CardGradingService
     protected function getGradeNickname(float $overallValue): string
     {
         [$greaterGradeValues] = collect(self::GRADE_CRITERIA)
-            ->partition(fn ($value) => $value >= round($overallValue));
+            ->partition(fn ($value) => $value > $this->getRoundedValue($overallValue));
 
         return array_key_last($greaterGradeValues->all());
+    }
+
+    public function getRoundedValue(float $value): float
+    {
+        $integerValue = (int) $value;
+        $decimalValue = round(($value - $integerValue), 2);
+        return match (true) {
+            ($decimalValue <= 0.25) => number_format($integerValue, 2),
+            ($decimalValue <= 0.50), ($decimalValue <= 0.75) => number_format($integerValue + 0.5, 2),
+            default => number_format($integerValue + 1, 2),
+        };
     }
 }

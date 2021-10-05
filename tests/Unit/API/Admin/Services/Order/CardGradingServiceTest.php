@@ -50,3 +50,10 @@ it('successfully verifies that human grades are not completed', function (array 
     fn () => ['front' => ['center' => 9.00, 'surface' => 0, 'edge' => 7.20, 'corner' => 3.80], 'back' => ['center' => 6.30, 'surface' => 6.20, 'edge' => 0, 'corner' => 7.40]],
     fn () => ['front' => ['center' => 0, 'surface' => 9.40, 'edge' => 10.00, 'corner' => 0], 'back' => ['center' => 1.20, 'surface' => 1.60, 'edge' => 7.70, 'corner' => 7.40]],
 ]);
+
+test('it returns right rounded values', function () {
+    expect($this->service->getRoundedValue(8.2))->toBe(8.0);
+    expect($this->service->getRoundedValue(8.26))->toBe(8.5);
+    expect($this->service->getRoundedValue(8.55))->toBe(8.5);
+    expect($this->service->getRoundedValue(8.85))->toBe(9.0);
+});

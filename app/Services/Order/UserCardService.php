@@ -63,9 +63,9 @@ class UserCardService
         ->join('card_products','card_products.id','=','order_items.card_product_id')
         ->join('order_item_status_histories','order_item_status_histories.order_item_id','=','order_items.id')
         ->where('user_cards.user_id',$user->id)
-        ->where('order_item_status_histories.order_item_status_id',OrderItemStatus::CONFIRMED)
-        // ->whereIn('orders.order_status_id', [OrderStatus::ARRIVED, OrderStatus::GRADED,OrderStatus::SHIPPED])
-        ->whereIn('order_items.order_item_status_id',[OrderItemStatus::CONFIRMED, OrderItemStatus::GRADED])
+        ->where('order_item_status_histories.order_item_status_id',OrderItemStatus::GRADED)
+        ->whereIn('orders.order_status_id', [OrderStatus::GRADED,OrderStatus::SHIPPED])
+        ->whereIn('order_items.order_item_status_id',[OrderItemStatus::GRADED])
         ->select(['user_cards.*','card_products.name as card_name','order_item_status_histories.created_at as reviewed_at']);
 
         return QueryBuilder::for($query)

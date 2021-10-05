@@ -137,7 +137,7 @@ class CardGradingService
     protected function getGradeNickname(float $overallValue): string
     {
         [$greaterGradeValues] = collect(self::GRADE_CRITERIA)
-            ->partition(fn ($value) => $value > $this->getRoundedValue($overallValue));
+            ->partition(fn ($value) => $value >= $this->getRoundedValue($overallValue));
 
         return array_key_last($greaterGradeValues->all());
     }

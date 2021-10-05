@@ -21,9 +21,9 @@ class UserCardResource extends BaseResource
             'order_item' => new OrderItemResource($this->orderItem),
             'human_grade_values' => $this->human_grade_values,
             'robo_grade_values' => $this->robo_grade_values,
-            'overall_values' => $this->overall_values,
+            'overall_values' => $this->getRoundedOverallValues(),
             'grade' => [
-                'grade' => $this->overall_grade,
+                'grade' => $this->getRoundedOverall(),
                 'nickname' => $this->overall_grade_nickname,
             ],
             'grading_id' => $this->grading_id,

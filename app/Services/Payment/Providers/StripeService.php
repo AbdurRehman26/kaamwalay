@@ -218,6 +218,7 @@ class StripeService implements PaymentProviderServiceInterface
             ];
         } catch (IncompletePayment|InvalidRequestException|CardException $exception) {
             dd($exception->getMessage());
+
             return [];
         }
     }

@@ -51,7 +51,7 @@ class SendEmail implements ShouldQueue
             $status = $response->json()[0]['status'];
         }
 
-        if (empty($status) || $status !== 'sent') {
+        if (empty($status) || $status !== 'sent' && $status !== 'queued') {
             throw new Exception('Email could not be sent. Response: ' . $response->body());
         }
     }

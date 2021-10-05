@@ -41,7 +41,7 @@ class OrderService
             $data['CUSTOMER_NAME'] = $order->user->getFullName();
             $data['CUSTOMER_EMAIL'] = $order->user->email;
             $data['CUSTOMER_NUMBER'] = $order->user->customer_number;
-            $data["TIME"] = $order->created_at->format('h:m A"');
+            $data["TIME"] = $order->created_at->format('h:m A');
         }
 
         $paymentPlan = $order->paymentPlan;

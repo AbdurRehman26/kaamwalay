@@ -61,10 +61,15 @@ class OrderStatusChangedListener implements ShouldQueue
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order, false)
         );
 
-        $users = User::whereHas("roles", function($query){ $query->where("name", "customer"); })->pluck('email', 'first_name');
+        $users = User::whereHas("roles", function($query){ $query->where("name", config('permission.roles.admin')); })->get();
 
-        $this->sendEmail(
-            $event,
+        $data = array();
+        foreach($users as $user) {
+            array_push($data, array($user->email => $user->first_name . " " . $user->last_name));
+        }
+        
+        $this->sendAdminEmail(
+            $data,
             EmailService::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED,
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order, true)
         );
@@ -109,6 +114,16 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         $this->emailService->sendEmail(
             [[$event->order->user->email => $event->order->user->getFullName()]],
+            $this->emailService->getSubjectByTemplate($template),
+            $template,
+            $vars
+        );
+    }
+
+    protected function sendAdminEmail(array $data, string $template, array $vars)
+    {
+        $this->emailService->sendEmail(
+            $data,
             $this->emailService->getSubjectByTemplate($template),
             $template,
             $vars

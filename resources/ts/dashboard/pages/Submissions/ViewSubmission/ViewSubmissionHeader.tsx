@@ -50,7 +50,7 @@ export function ViewSubmissionHeader({ orderNumber, invoicePath, invoiceNumber }
                 >
                     Print Packing Slip
                 </Button>
-                <Button className={classes.button} onClick={shippingInstructionsPress}>
+                <Button className={classes.button} color={'inherit'} onClick={shippingInstructionsPress}>
                     Shipping Instructions
                 </Button>
             </Grid>

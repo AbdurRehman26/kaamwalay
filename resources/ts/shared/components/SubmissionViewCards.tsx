@@ -227,7 +227,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     item?.userCard?.overallGradeNickname ? (
                                         <GradeRoot
                                             target={'_blank'}
-                                            href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
+                                            href={`/feed/${item.certificateNumber}/view`}
                                             flexDirection={'column'}
                                             style={{ textDecoration: 'none' }}
                                         >
@@ -243,7 +243,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                             {isMobile ? null : (
                                                 <a
                                                     target={'_blank'}
-                                                    href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
+                                                    href={`/feed/${item.certificateNumber}/view`}
                                                     style={{ textDecoration: 'none' }}
                                                     rel="noreferrer"
                                                 >

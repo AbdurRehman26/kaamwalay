@@ -2,6 +2,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { useMediaQuery } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
@@ -89,14 +90,6 @@ const useStyles = makeStyles(
             flexDirection: 'column',
             justifyContent: 'flex-start',
         },
-        orderLink: {
-            fontWeight: 500,
-            fontSize: '14px',
-            lineHeight: '20px',
-            letterSpacing: '0.2px',
-            textDecorationLine: 'underline',
-            color: '#20BFB8',
-        },
         closeIconBtn: {
             paddingTop: 0,
         },
@@ -183,11 +176,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             {!isMobile ? (
                 <TableRow>
                     <TableCell>
-                        <Link to={submissionViewUrl}>
-                            <Typography variant={'subtitle2'} className={classes.orderLink}>
-                                {orderNumber}
-                            </Typography>
-                        </Link>
+                        <MuiLink component={Link} to={submissionViewUrl}>
+                            {orderNumber}
+                        </MuiLink>
                     </TableCell>
                     <TableCell>
                         <Link to={submissionViewUrl} className={classes.linkText}>

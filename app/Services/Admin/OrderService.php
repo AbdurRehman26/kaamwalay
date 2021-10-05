@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin;
 
-use App\Events\API\Admin\Order\ExtraChargeApplied;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;

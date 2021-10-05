@@ -21,7 +21,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class OrderService
 {
     public function __construct(
-        private  OrderItemService $orderItemService,
+        private OrderItemService $orderItemService,
         private AgsService $agsService
     ) {
     }

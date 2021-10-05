@@ -28,7 +28,7 @@ class UserCardController extends Controller
         if ($cardGradingService->validateIfHumanGradesAreCompleted($card->human_grade_values)) {
             $response = $agsService->updateHumanGrades(
                 $card->userCardCertificate->number,
-                $request->only('human_grade_values')
+                $request->only('human_grade_values', 'overall_values', 'overall_grade', 'overall_grade_nickname')
             );
             $card->updateFromAgsResponse($response);
         }

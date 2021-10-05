@@ -47,6 +47,14 @@ class AgsService
             'back_surface_human_grade' => $data['human_grade_values']['back']['surface'],
             'back_edges_human_grade' => $data['human_grade_values']['back']['edge'],
             'back_corners_human_grade' => $data['human_grade_values']['back']['corner'],
+            'overall_centering_grade' => $data['overall_values']['center'],
+            'overall_corners_grade' => $data['overall_values']['corner'],
+            'overall_edges_grade' => $data['overall_values']['edge'],
+            'overall_surface_grade' => $data['overall_values']['surface'],
+            'overall_grade' => [
+                'grade' => $data['overall_grade'],
+                'nickname' => $data['overall_grade_nickname'],
+            ],
         ];
     }
 

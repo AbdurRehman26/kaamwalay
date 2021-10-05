@@ -62,17 +62,9 @@ it('stores the human grades and update data on AGS', function () {
         ],
     ])
     ->assertOk()
-    ->assertJsonFragment([
-        'grade' => 7,
-    ])
     ->assertJsonCount(8, 'data.generated_images')
     ->assertJsonCount(4, 'data.overall_values')
-    ->assertJsonFragment([
-        "grade" => [
-            "grade" => 7,
-            "nickname" => "NM",
-        ],
-    ]);
+    ->assertJsonCount(2, 'data.grade');
 
     Http::assertSent(function ($request) {
         return $request->url() == 'https://ags.api/v2/robograding/certificates/?certificate_id=' . $this->userCardCertificate->number;

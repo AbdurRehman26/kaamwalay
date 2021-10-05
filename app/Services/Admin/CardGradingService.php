@@ -3,9 +3,27 @@
 namespace App\Services\Admin;
 
 use App\Models\UserCard;
+use Illuminate\Support\Arr;
 
 class CardGradingService
 {
+    protected const FRONT_AVERAGING_RATIO = 0.6;
+    protected const BACK_AVERAGING_RATIO = 0.4;
+
+    protected const GRADE_CRITERIA = [
+        'GEM-MT' => 10.00,
+        'MINT' => 9.00,
+        'NM-MT' => 8.00,
+        'NM' => 7.00,
+        'EX-MT' => 6.00,
+        'EX' => 5.00,
+        'VG-EX' => 4.00,
+        'VG' => 3.00,
+        'GOOD' => 2.00,
+        'FR' => 1.50,
+        'PR' => 1.00,
+    ];
+
     public function defaultValues(string $node): array
     {
         if ($node === 'overall') {
@@ -85,5 +103,42 @@ class CardGradingService
         return $card->orderItem->isValidForGrading() && ! empty($card->overall_grade)
             && ! empty($card->overall_grade_nickname) && ! empty($card->overall_values)
             && $this->validateIfHumanGradesAreCompleted($card->human_grade_values);
+    }
+
+    public function calculateOverallValues(array|string $frontValues): array
+    {
+        return [
+            'center' => (Arr::get($frontValues, 'front.center') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.center') * self::BACK_AVERAGING_RATIO),
+            'surface' => (Arr::get($frontValues, 'front.edge') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.edge') * self::BACK_AVERAGING_RATIO),
+            'edge' => (Arr::get($frontValues, 'front.edge') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.edge') * self::BACK_AVERAGING_RATIO),
+            'corner' => (Arr::get($frontValues, 'front.corner') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.corner') * self::BACK_AVERAGING_RATIO),
+        ];
+    }
+
+    public function calculateOverallAverage(array|string $overAllValues): array
+    {
+        if (is_string($overAllValues)) {
+            $overAllValues = json_decode($overAllValues, associative: true);
+        }
+
+        $overallGrade = $this->getAverage($overAllValues['center'], $overAllValues['surface'], $overAllValues['edge'], $overAllValues['corner']);
+
+        return [
+            'grade' => $overallGrade,
+            'nickname' => $this->getGradeNickname($overallGrade),
+        ];
+    }
+
+    protected function getAverage(...$values): float
+    {
+        return number_format((float)(array_sum($values) / count($values)), 2);
+    }
+
+    protected function getGradeNickname(float $overallValue): string
+    {
+        [$greaterGradeValues] = collect(self::GRADE_CRITERIA)
+            ->partition(fn ($value) => $value >= round($overallValue));
+
+        return array_key_last($greaterGradeValues->all());
     }
 }

@@ -21,7 +21,7 @@ class UserCardController extends Controller
         CardGradingService $cardGradingService
     ): UserCardGradeUpdateResource {
         $card->update(
-            $request->only('human_grade_values')
+            $request->only('human_grade_values', 'overall_values', 'overall_grade', 'overall_grade_nickname')
         );
 
         OrderUpdated::dispatch($order);

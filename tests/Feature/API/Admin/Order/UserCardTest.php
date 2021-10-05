@@ -15,7 +15,7 @@ beforeEach(function () {
 
 uses()->group('admin', 'grading');
 
-it('stores the human grades and does not update data on AGS', function () {
+it('stores the human grades with calculations of overall and does not update data on AGS', function () {
     Http::fake();
     $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
         'human_grade_values' => [

@@ -3,9 +3,11 @@
 namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
+use App\Exceptions\API\Admin\Order\ExtraChargeFailed;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\PaypalService;
@@ -73,6 +75,9 @@ class PaymentService
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
+            'amount' => $data['amount'] ?? $this->order->grand_total,
+            'type' => $data['type'],
+            'notes' => $data['notes'] ?? '',
         ]);
 
         return [
@@ -119,5 +124,31 @@ class PaymentService
         $this->order = $order;
 
         return $this;
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function additionalCharge(Order $order, array $request): array
+    {
+        $this->hasProvider($order);
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->additionalCharge($this->order, $request);
+
+        throw_if(condition: empty($data['success']), exception: ExtraChargeFailed::class);
+
+        $this->calculateAdditionalFee(order: $order, data: $data);
+
+        return $data;
+    }
+
+    protected function calculateAdditionalFee(Order $order, array &$data): void
+    {
+        $this->hasProvider($order);
+
+        $data['provider_fee'] = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->calculateFeeWithAmount($data['amount']);
     }
 }

@@ -17,7 +17,7 @@ class ExtraChargeApplied implements ShouldQueue, ShouldBeEncrypted
      *
      * @return void
      */
-    public function __construct(public Order $order)
+    public function __construct(public Order $order, public array $requestData)
     {
     }
 }

@@ -18,6 +18,7 @@ use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
@@ -137,12 +138,31 @@ class OrderService
         }
     }
 
-    public function addExtraCharge(Order $order, array $data): void
+    public function addExtraCharge(Order $order, array $data, array $paymentResponse): void
     {
-        $orderPayment = new OrderPayment(attributes: $data);
+        DB::beginTransaction();
 
-        $order->orderPayments()->save($orderPayment);
+        $order->fill([
+            'extra_charge' => $order->extra_charge + $data['amount'],
+            'grand_total' => $order->grand_total + $data['amount'],
+        ]);
+        $order->save();
+//        dd($data + $paymentResponse);
 
-        ExtraChargeApplied::dispatch($order);
+        OrderPayment::create([
+            'request' => json_encode($paymentResponse['request']),
+            'response' => json_encode($paymentResponse['response']),
+            'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
+            'amount' => $paymentResponse['amount'],
+            'type' => $paymentResponse['type'],
+            'notes' => $paymentResponse['notes'],
+            'order_id' => $order->id,
+            'payment_method_id' => $order->payment_method_id,
+            'provider_fee' => $paymentResponse['provider_fee'],
+        ]);
+
+//        $order->orderPayments()->save($orderPayment);
+
+        DB::commit();
     }
 }

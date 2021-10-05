@@ -13,6 +13,7 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 
 uses(WithFaker::class);
 
@@ -29,6 +30,14 @@ beforeEach(function () {
 
     $this->order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,
+        'payment_method_id' => 1,
+    ]);
+
+    OrderPayment::factory()->create([
+        'order_id' => $this->order->id,
+        'payment_method_id' => 1,
+        'payment_provider_reference_id' => Str::random(25),
+
     ]);
 
     OrderStatusHistory::factory()->create([

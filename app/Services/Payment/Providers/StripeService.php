@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Laravel\Cashier\Exceptions\IncompletePayment;
@@ -63,6 +64,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'metadata' => [
                     'Order ID' => $order->id,
                     'User Email' => $order->user->email,
+                    'Type' => 'Order Payment',
                 ],
             ],
         ];
@@ -79,6 +81,9 @@ class StripeService implements PaymentProviderServiceInterface
                 'request' => $paymentData,
                 'response' => $response->toArray(),
                 'payment_provider_reference_id' => $order->lastOrderPayment->payment_provider_reference_id,
+                'amount' => $order->grand_total,
+                'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+                'notes' => $paymentData['additional_data']['description'],
             ];
         } catch (IncompletePayment $exception) {
             return [
@@ -127,13 +132,11 @@ class StripeService implements PaymentProviderServiceInterface
         return false;
     }
 
-    public function calculateFee(Order $order): float
+    public function calculateFeeWithOrder(Order $order): float
     {
         $amountCharged = $order->grand_total_cents;
 
-        return round((
-            (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
-        ) / 100, 2);
+        return $this->calculateFee($amountCharged);
     }
 
     protected function isCustomerInvalid(string $param): bool
@@ -165,5 +168,57 @@ class StripeService implements PaymentProviderServiceInterface
     {
         $this->removeOldCustomerId($user);
         $this->createCustomerIfNull($user);
+    }
+
+    public function calculateFeeWithAmount(float $amount): float
+    {
+        $amountCharged = round($amount * 100);
+
+        return $this->calculateFee($amountCharged);
+    }
+
+    public function calculateFee(int $amount): float
+    {
+//        dd((self::STRIPE_FEE_PERCENTAGE * $amount) + self::STRIPE_FEE_ADDITIONAL_AMOUNT, $amount);
+        return round((
+            (self::STRIPE_FEE_PERCENTAGE * $amount) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
+        ) / 100, 2);
+    }
+
+    public function additionalCharge(Order $order, $request): array
+    {
+        $paymentData = [
+            'amount' => (int) $request['amount'] * 100,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
+            'additional_data' => [
+                'description' => $request['notes'],
+                'metadata' => [
+                    'Order ID' => $order->id,
+                    'User Email' => $order->user->email,
+                    'Type' => 'Extra Charge',
+                ],
+            ],
+        ];
+
+        try {
+            $response = $order->user->charge(
+                $paymentData['amount'],
+                $paymentData['payment_intent_id'],
+                $paymentData['additional_data']
+            );
+
+            return [
+                'success' => true,
+                'request' => $paymentData,
+                'response' => $response->toArray(),
+                'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
+                'amount' => $request['amount'],
+                'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+                'notes' => $paymentData['additional_data']['description'],
+            ];
+        } catch (IncompletePayment|InvalidRequestException|CardException $exception) {
+            dd($exception->getMessage());
+            return [];
+        }
     }
 }

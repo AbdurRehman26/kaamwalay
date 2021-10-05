@@ -61,11 +61,13 @@ class OrderStatusChangedListener implements ShouldQueue
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order, false)
         );
 
-        $users = User::whereHas("roles", function($query){ $query->where("name", config('permission.roles.admin')); })->get();
+        $users = User::whereHas("roles", function ($query) {
+            $query->where("name", config('permission.roles.admin'));
+        })->get();
 
-        $data = array();
-        foreach($users as $user) {
-            array_push($data, array($user->email => $user->first_name . " " . $user->last_name));
+        $data = [];
+        foreach ($users as $user) {
+            array_push($data, [$user->email => $user->first_name . " " . $user->last_name]);
         }
         
         $this->sendAdminEmail(

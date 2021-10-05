@@ -37,7 +37,7 @@ class OrderService
     {
         $data = [];
 
-        if($isAdminMail) {
+        if ($isAdminMail) {
             $data['CUSTOMER_NAME'] = $order->user->getFullName();
             $data['CUSTOMER_EMAIL'] = $order->user->email;
             $data['CUSTOMER_NUMBER'] = $order->user->customer_number;

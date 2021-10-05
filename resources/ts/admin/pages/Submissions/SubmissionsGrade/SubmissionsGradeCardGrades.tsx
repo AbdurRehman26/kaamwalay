@@ -106,7 +106,7 @@ export function SubmissionsGradeCardGrades({
     );
 
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name,
     );
     const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
 

@@ -35,7 +35,7 @@ export function SubmissionsGradeCards() {
             return false;
         }
         const nonReviewedCards = allCards.filter(
-            (item: any) => item.orderItem.status.orderItemStatus.name === 'Confirmed',
+            (item: any) => item.orderItem?.status?.orderItemStatus?.name === 'Confirmed',
         );
         return nonReviewedCards.length === 0;
     }

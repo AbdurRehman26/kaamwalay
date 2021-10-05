@@ -115,10 +115,10 @@ export function UnconfirmedCard({
                 </Typography>
 
                 <Grid container alignItems={'center'} className={classes.buttons}>
-                    <Button variant={'contained'} onClick={handleMissing}>
+                    <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
                         Missing
                     </Button>
-                    <Button variant={'contained'} onClick={handleEdit} className={classes.leftSpace}>
+                    <Button variant={'contained'} color={'inherit'} onClick={handleEdit} className={classes.leftSpace}>
                         Edit
                     </Button>
                 </Grid>

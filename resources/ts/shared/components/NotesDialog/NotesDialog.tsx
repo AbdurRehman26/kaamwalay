@@ -63,7 +63,7 @@ export function NotesDialog({ heading, description, onSubmitNotes, extraData, on
                 />
             </DialogContent>
             <DialogActions>
-                <Button disabled={loading} onClick={handleClose}>
+                <Button color={'inherit'} disabled={loading} onClick={handleClose}>
                     Cancel
                 </Button>
                 <Button disabled={loading && value === ''} onClick={handleSubmit}>

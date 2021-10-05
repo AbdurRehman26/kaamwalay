@@ -199,6 +199,7 @@ export const ManageCardDialogView = forwardRef(
                                                             fullWidth
                                                             size={'small'}
                                                             variant={'contained'}
+                                                            color={'inherit'}
                                                             className={classes.swapButton}
                                                             onClick={handleSwapCard}
                                                         >
@@ -230,13 +231,12 @@ export const ManageCardDialogView = forwardRef(
                             </DialogContent>
                             <Divider />
                             <DialogActions className={classes.actions}>
-                                <Button disabled={isSubmitting} onClick={handleClose}>
+                                <Button color={'inherit'} disabled={isSubmitting} onClick={handleClose}>
                                     Cancel
                                 </Button>
                                 <Button
                                     type={'submit'}
                                     variant={'contained'}
-                                    color={'primary'}
                                     disabled={isSubmitting}
                                     startIcon={isSubmitting ? <CircularProgress size={18} color={'inherit'} /> : null}
                                 >

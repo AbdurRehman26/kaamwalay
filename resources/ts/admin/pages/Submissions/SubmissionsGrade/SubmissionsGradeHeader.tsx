@@ -91,6 +91,7 @@ export function SubmissionsGradeHeader({
                             to={`/submissions/${orderId}/view`}
                             className={classes.button}
                             variant={'contained'}
+                            color={'inherit'}
                             startIcon={<VisibilityIcon color={'inherit'} />}
                         >
                             View Submission

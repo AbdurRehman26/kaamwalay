@@ -391,7 +391,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.surface,
     );
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name ?? '',
     );
 
     const frontCentering = useAppSelector(
@@ -501,13 +501,28 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                     {cardStatus.toLowerCase() === 'confirmed' ? (
                         <>
                             <Grid item xs>
-                                <Button variant={'contained'} onClick={handleNotAccepted} className={classes.button}>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={handleNotAccepted}
+                                    className={classes.button}
+                                >
                                     Not Accepted
                                 </Button>
-                                <Button variant={'contained'} onClick={handleMissing} className={classes.button}>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={handleMissing}
+                                    className={classes.button}
+                                >
                                     Missing
                                 </Button>
-                                <Button variant={'contained'} onClick={handleEdit} className={classes.button}>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={handleEdit}
+                                    className={classes.button}
+                                >
                                     Edit Card
                                 </Button>
                             </Grid>
@@ -516,7 +531,12 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
 
                     {cardStatus.toLowerCase() !== 'confirmed' ? (
                         <Grid item xs>
-                            <Button variant={'contained'} onClick={handleRevisePress} className={classes.button}>
+                            <Button
+                                variant={'contained'}
+                                color={'inherit'}
+                                onClick={handleRevisePress}
+                                className={classes.button}
+                            >
                                 Revise
                             </Button>
                         </Grid>

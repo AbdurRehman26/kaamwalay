@@ -70,7 +70,7 @@ it('calculates fee', function () {
     $actualFee = round((
         (TestingStripeService::STRIPE_FEE_PERCENTAGE * $order->grand_total_cents) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
     ) / 100, 2);
-    $calculatedFee = $this->stripe->calculateFee($order);
+    $calculatedFee = $this->stripe->calculateFeeWithOrder($order);
     expect($actualFee)->toBe($calculatedFee);
 })->group('payment');
 

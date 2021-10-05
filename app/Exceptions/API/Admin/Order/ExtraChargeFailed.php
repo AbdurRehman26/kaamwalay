@@ -7,6 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExtraChargeFailed extends Exception
 {
-    protected $message = 'Extra Charge failed';
+    protected $message = 'We are unable to charge the customer with his last used payment method.';
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 }

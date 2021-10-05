@@ -179,7 +179,6 @@ class StripeService implements PaymentProviderServiceInterface
 
     public function calculateFee(int $amount): float
     {
-//        dd((self::STRIPE_FEE_PERCENTAGE * $amount) + self::STRIPE_FEE_ADDITIONAL_AMOUNT, $amount);
         return round((
             (self::STRIPE_FEE_PERCENTAGE * $amount) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100, 2);
@@ -211,13 +210,12 @@ class StripeService implements PaymentProviderServiceInterface
                 'success' => true,
                 'request' => $paymentData,
                 'response' => $response->toArray(),
-                'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
+                'payment_provider_reference_id' => $paymentData['payment_intent_id'],
                 'amount' => $request['amount'],
                 'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
                 'notes' => $paymentData['additional_data']['description'],
             ];
         } catch (IncompletePayment|InvalidRequestException|CardException $exception) {
-            dd($exception->getMessage());
             return [];
         }
     }

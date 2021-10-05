@@ -70,6 +70,7 @@ class UserCardGradeRequest extends FormRequest
     public function messages()
     {
         $message = 'can only have maximum of 2 decimal places.';
+
         return[
             'human_grade_values.front.center.regex' => 'Human Grades front centering ' . $message,
             'human_grade_values.front.surface.regex' => 'Human Grades front surface ' . $message,

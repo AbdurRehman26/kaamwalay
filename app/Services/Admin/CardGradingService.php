@@ -154,6 +154,7 @@ class CardGradingService
     {
         $integerValue = (int) $value;
         $decimalValue = round(($value - $integerValue), 2);
+
         return match (true) {
             ($decimalValue <= 0.25) => number_format($integerValue, 2),
             ($decimalValue <= 0.50), ($decimalValue <= 0.75) => number_format($integerValue + 0.5, 2),

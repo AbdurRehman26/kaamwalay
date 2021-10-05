@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Services\Admin\CardGradingService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use App\Services\Admin\CardGradingService;
 
 class UserCard extends Model
 {
@@ -58,7 +58,9 @@ class UserCard extends Model
 
     public function getRoundedOverallValues()
     {
-        return ! is_null($this->overall_values) ? array_map(function($v) { return round($v, 1); } , $this->overall_values) : $this->overall_values;
+        return ! is_null($this->overall_values) ? array_map(function ($v) {
+            return round($v, 1);
+        }, $this->overall_values) : $this->overall_values;
     }
 
     public function updateFromAgsResponse(array $response): void

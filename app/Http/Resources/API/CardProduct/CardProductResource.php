@@ -17,7 +17,7 @@ class CardProductResource extends BaseResource
             "card_series_name" => $this->cardSet->cardSeries->name,
             "release_date" => $this->formatDate($this->cardSet->release_year),
             "release_year" => $this->cardSet->release_year,
-            "card_number_order" => is_numeric($this->card_number_order) ? \Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order,
+            "card_number_order" => $this->getFormattedCardNumber(),
             "image_path" => $this->image_path,
         ];
     }

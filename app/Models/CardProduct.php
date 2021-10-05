@@ -72,8 +72,13 @@ class CardProduct extends Model
         return $this->belongsTo(CardCategory::class);
     }
 
+    public function getFormattedCardNumber(): string
+    {
+        return is_numeric($this->card_number_order) ? Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order;
+    }
+
     public function getSearchableName(): string
     {
-        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->card_number_order . ' ' . $this->name;
+        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->getFormattedCardNumber() . ' ' . $this->name;
     }
 }

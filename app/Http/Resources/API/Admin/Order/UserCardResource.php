@@ -27,7 +27,7 @@ class UserCardResource extends BaseResource
             'robo_grade_values' => $this->robo_grade_values,
             'overall_values' => $this->getRoundedOverallValues(),
             'grade' => [
-                'grade' => $this->getRoundedOverall(),
+                'grade' => $this->getRoundedOverallGrade(),
                 'nickname' => $this->overall_grade_nickname,
             ],
             'grading_id' => $this->grading_id,

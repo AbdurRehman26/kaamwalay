@@ -51,7 +51,7 @@ class UserCard extends Model
         return $this->hasOne(UserCardCertificate::class);
     }
 
-    public function getRoundedOverall()
+    public function getRoundedOverallGrade()
     {
         return ! is_null($this->overall_grade) ? (new CardGradingService)->getRoundedValue($this->overall_grade) : $this->overall_grade;
     }

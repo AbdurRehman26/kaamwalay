@@ -36,7 +36,7 @@ class OrderService
     public function getDataForCustomerSubmissionConfirmationEmail(Order $order): array
     {
         $data = [];
-
+        
         $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
         $orderPayment = OrderPaymentResource::make($order->orderPayment)->resolve();

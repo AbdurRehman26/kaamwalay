@@ -14,7 +14,7 @@ import { changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
-import ReviewCardDialog from './ReviewCardDialog';
+import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 import UnconfirmedCard from './UnconfirmedCard';
 
 interface UnconfirmedCardsProps {
@@ -159,7 +159,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                     )}
                 </CardContent>
             </Card>
-            <ReviewCardDialog
+            <SubmissionReviewCardDialog
                 open={activeIndex !== null}
                 onClose={handleClosePreview}
                 indexId={activeIndex!}

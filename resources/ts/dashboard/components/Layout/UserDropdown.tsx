@@ -2,7 +2,6 @@ import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import StyleIcon from '@mui/icons-material/Style';
 import Avatar from '@mui/material/Avatar';
-import ButtonBase from '@mui/material/ButtonBase';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -10,7 +9,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { MouseEvent, useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
+import { useAuth } from '@shared/hooks/useAuth';
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -19,6 +20,8 @@ import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
  * @time: 17:08
  */
 export function UserDropdown() {
+    const { logout } = useAuth();
+    const history = useHistory();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
 
@@ -26,12 +29,26 @@ export function UserDropdown() {
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
         [],
     );
+
     const handleUserProfileClose = useCallback(() => setAnchorEl(null), []);
+
+    const handleUserProfileClick = useCallback(
+        (href: string) => () => {
+            switch (href) {
+                case '/logout':
+                    logout();
+                    break;
+                default:
+                    history.push(href);
+            }
+        },
+        [history, logout],
+    );
 
     return (
         <>
             <IconButton onClick={handleUserProfileOpen}>
-                <Avatar component={ButtonBase} src={RobogradingAvatar} alt={'Robograding Avatar'} />
+                <Avatar src={RobogradingAvatar} alt={'Robograding Avatar'} />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}
@@ -45,20 +62,20 @@ export function UserDropdown() {
                     sx: MenuStyle,
                 }}
             >
-                <StyledMenuItem>
+                <StyledMenuItem onClick={handleUserProfileClick('/submissions')}>
                     <ListItemIcon>
                         <Inventory2Icon />
                     </ListItemIcon>
                     Submissions
                 </StyledMenuItem>
-                <StyledMenuItem>
+                <StyledMenuItem onClick={handleUserProfileClick('/cards')}>
                     <ListItemIcon>
                         <StyleIcon />
                     </ListItemIcon>
                     Your Cards
                 </StyledMenuItem>
                 <Divider />
-                <StyledMenuItem>
+                <StyledMenuItem onClick={handleUserProfileClick('/logout')}>
                     <ListItemIcon>
                         <LogoutIcon />
                     </ListItemIcon>

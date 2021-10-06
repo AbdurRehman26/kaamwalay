@@ -117,7 +117,7 @@ class CardGradingService
     {
         return [
             'center' => (Arr::get($frontValues, 'front.center') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.center') * self::BACK_AVERAGING_RATIO),
-            'surface' => (Arr::get($frontValues, 'front.edge') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.edge') * self::BACK_AVERAGING_RATIO),
+            'surface' => (Arr::get($frontValues, 'front.surface') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.surface') * self::BACK_AVERAGING_RATIO),
             'edge' => (Arr::get($frontValues, 'front.edge') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.edge') * self::BACK_AVERAGING_RATIO),
             'corner' => (Arr::get($frontValues, 'front.corner') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.corner') * self::BACK_AVERAGING_RATIO),
         ];

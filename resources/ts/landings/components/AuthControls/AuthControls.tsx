@@ -1,5 +1,6 @@
-import Button from '@material-ui/core/Button';
-import { alpha, makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import { alpha } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
 

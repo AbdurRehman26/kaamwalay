@@ -1,9 +1,9 @@
-import Container from '@material-ui/core/Container';
-import Dialog from '@material-ui/core/Dialog';
-import Slide from '@material-ui/core/Slide';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { TransitionProps } from '@material-ui/core/transitions';
+import Container from '@mui/material/Container';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
+import Typography from '@mui/material/Typography';
+import { TransitionProps } from '@mui/material/transitions';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import CardSubmissionSearchField from '@dashboard/components/CardSubmissionSearchField';
 import CardsSearchResults from '@dashboard/components/CardsSearchResults';

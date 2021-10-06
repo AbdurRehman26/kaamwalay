@@ -1,12 +1,12 @@
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Map } from 'immutable';
-import { Inject } from '@shared/decorators/Inject';
-import { Injectable } from '@shared/decorators/Injectable';
-import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { Inject } from '../decorators/Inject';
+import { Injectable } from '../decorators/Injectable';
 import { buildUrl } from '../lib/api/buildUrl';
 import { cleanPath } from '../lib/strings/cleanPath';
 import { fromApiPropertiesObject } from '../lib/utils/fromApiPropertiesObject';
 import { toApiPropertiesObject } from '../lib/utils/toApiPropertiesObject';
+import { AuthenticationService } from './AuthenticationService';
 
 @Injectable('APIService')
 export class APIService {

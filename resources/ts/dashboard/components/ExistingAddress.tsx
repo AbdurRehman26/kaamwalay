@@ -1,7 +1,7 @@
-import { Paper } from '@material-ui/core';
-import Radio from '@material-ui/core/Radio';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { Paper } from '@mui/material';
+import Radio from '@mui/material/Radio';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setSelectedExistingAddress, setUseCustomShippingAddress } from '@dashboard/redux/slices/newSubmissionSlice';
@@ -33,7 +33,7 @@ const useStyles = makeStyles(
             '&:hover': {
                 cursor: 'pointer',
             },
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: '100%',
             },
         },
@@ -53,7 +53,7 @@ const useStyles = makeStyles(
             width: '110%',
             height: '25px',
             justifyContent: 'flex-end',
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: '100%',
             },
         },

@@ -1,4 +1,4 @@
-import { Exception } from '@shared/exceptions/Exception';
+import { Exception } from './Exception';
 
 describe('exceptions/Exception', function () {
     it('should create correct error', function () {

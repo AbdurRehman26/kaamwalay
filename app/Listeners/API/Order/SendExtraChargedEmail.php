@@ -2,7 +2,7 @@
 
 namespace App\Listeners\API\Order;
 
-use App\Events\API\Customer\Order\ExtraAmountCharged;
+use App\Events\API\Admin\Order\ExtraChargeApplied;
 use App\Services\EmailService;
 
 class SendExtraChargedEmail
@@ -21,24 +21,26 @@ class SendExtraChargedEmail
     /**
      * Handle the event.
      *
-     * @param  ExtraAmountCharged  $event
+     * @param  ExtraChargeApplied  $event
      * @return void
      */
-    public function handle(ExtraAmountCharged $event)
+    public function handle(ExtraChargeApplied $event)
     {
-        $user = $event->order->user;
+        $order = $event->orderPayment->order;
+        $user = $order->user;
         $this->emailService->sendEmail(
             $user->email,
             $user->name,
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_SUBMISSION_EXTRA_CHARGED],
             $this->emailService::TEMPLATE_SLUG_SUBMISSION_EXTRA_CHARGED,
             [
-                'TOTAL_AMOUNT' => 100,
+                'TOTAL_AMOUNT' => $order->grand_total,
                 'SUB_TOTAL' => 2,
-                'SHIPPING_FEE' => 1,
-                'EXTRA_CHARGE' => 2,
+                'SHIPPING_FEE' => $order->shipping_fee,
+                'EXTRA_CHARGE' => $event->orderPayment->amount,
                 'CARD' => 'Amex ending with 2020',
             ],
         );
+        dd(1);
     }
 }

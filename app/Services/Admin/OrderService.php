@@ -143,6 +143,6 @@ class OrderService
 
         $order->orderPayments()->save($orderPayment);
 
-        ExtraChargeApplied::dispatch($order);
+        ExtraChargeApplied::dispatch($orderPayment);
     }
 }

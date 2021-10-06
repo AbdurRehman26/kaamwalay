@@ -2,7 +2,7 @@
 
 namespace App\Events\API\Admin\Order;
 
-use App\Models\Order;
+use App\Models\OrderPayment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -22,7 +22,7 @@ class ExtraChargeApplied implements ShouldQueue, ShouldBeEncrypted
      *
      * @return void
      */
-    public function __construct(public Order $order)
+    public function __construct(public OrderPayment $orderPayment)
     {
     }
 }

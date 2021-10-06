@@ -182,5 +182,3 @@ export function DashboardNavigationDrawer() {
         </Drawer>
     );
 }
-
-export default DashboardNavigationDrawer;

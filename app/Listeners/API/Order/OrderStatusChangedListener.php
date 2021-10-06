@@ -7,6 +7,7 @@ use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
+use App\Services\Admin\OrderService as AdminOrderService;
 use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -20,7 +21,7 @@ class OrderStatusChangedListener implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(private EmailService $emailService, private OrderService $orderService)
+    public function __construct(private EmailService $emailService, private OrderService $orderService, private AdminOrderService $adminOrderService)
     {
         //
     }
@@ -58,20 +59,12 @@ class OrderStatusChangedListener implements ShouldQueue
         $this->sendEmail(
             $event,
             EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
-            $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order, false)
+            $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
         );
-
-        $users = User::whereHas("roles", function($query){ $query->where("name", config('permission.roles.admin')); })->get();
-
-        $data = array();
-        foreach($users as $user) {
-            array_push($data, array($user->email => $user->first_name . " " . $user->last_name));
-        }
-        
+    
         $this->sendAdminEmail(
-            $data,
             EmailService::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED,
-            $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order, true)
+            $this->adminOrderService->getDataForAdminSubmissionConfirmationEmail($event->order)
         );
 
         $this->scheduleEmail(
@@ -120,8 +113,9 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function sendAdminEmail(array $data, string $template, array $vars)
+    protected function sendAdminEmail(string $template, array $vars)
     {
+        $data = User::get()->filter->isAdmin()->map(function($value){return [$value->email => $value->name]; })->toArray();
         $this->emailService->sendEmail(
             $data,
             $this->emailService->getSubjectByTemplate($template),

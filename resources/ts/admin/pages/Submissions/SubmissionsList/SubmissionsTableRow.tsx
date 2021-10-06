@@ -1,11 +1,11 @@
-import IconButton from '@material-ui/core/IconButton';
-import MuiLink from '@material-ui/core/Link';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import { makeStyles } from '@material-ui/core/styles';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
+import MuiLink from '@mui/material/Link';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
@@ -111,7 +111,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                 />
             </TableCell>
             <TableCell align={'right'} className={classes.optionsCell}>
-                <IconButton onClick={handleClickOptions}>
+                <IconButton onClick={handleClickOptions} size="large">
                     <MoreIcon />
                 </IconButton>
 

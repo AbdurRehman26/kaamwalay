@@ -1,4 +1,4 @@
-import { TablePaginationProps } from '@material-ui/core/TablePagination';
+import { TablePaginationProps } from '@mui/material/TablePagination';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
 import { ClassConstructor, plainToClass } from 'class-transformer';
@@ -8,8 +8,8 @@ import { GlobalStateType } from '../redux/store';
 import { APIService } from '../services/APIService';
 import { APIState } from '../types/APIState';
 import { useInjectable } from './useInjectable';
-import { useSharedSelector } from './useSharedDispatch';
-import { useSharedDispatch } from './useSharedSelector';
+import { useSharedDispatch } from './useSharedDispatch';
+import { useSharedSelector } from './useSharedSelector';
 
 export function useListQuery<
     E,
@@ -28,11 +28,11 @@ export function useListQuery<
     const isError = !!error;
 
     const currentPage = pagination.meta?.currentPage ?? 1;
-    const perPage = pagination.meta?.perPage ?? PaginatedData.LimitSet[0];
+    const perPage = Number(pagination.meta?.perPage ?? PaginatedData.LimitSet[0]);
     const lastPage = pagination.meta?.lastPage ?? 1;
 
     const data = useMemo(() => {
-        const list = ids.map((id) => entities[id]);
+        const list = ids.map((id: number) => entities[id]);
         // if (perPage) {
         //     const offset = (currentPage - 1) * perPage;
         //     list = list.slice(offset, offset + perPage);
@@ -46,7 +46,7 @@ export function useListQuery<
             const baseConfig = {
                 params: {
                     page: currentPage,
-                    per_page: perPage,
+                    perPage: perPage,
                 },
             };
 
@@ -95,7 +95,7 @@ export function useListQuery<
         async function handleChangeRowsPerPage(e) {
             await fetch({
                 params: {
-                    per_page: e.target.value,
+                    perPage: e.target.value,
                 },
             });
         },
@@ -124,7 +124,7 @@ export function useListQuery<
             paginationProps: {
                 count: pagination.meta?.total || 0,
                 page: currentPage - 1,
-                rowsPerPage: perPage,
+                rowsPerPage: Number(perPage),
                 onPageChange: handleChangePage,
                 onRowsPerPageChange: handleChangeRowsPerPage,
                 rowsPerPageOptions: PaginatedData.LimitSet,

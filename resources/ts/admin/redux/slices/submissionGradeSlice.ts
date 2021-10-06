@@ -64,7 +64,7 @@ export const submissionGradesSlice = createSlice({
         },
         updateExistingCardStatus: (state, action: PayloadAction<{ id: number; status: string }>) => {
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
-            state.allSubmissions[itemIndex].order_item.status.order_item_status.name = action.payload.status;
+            state.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name = action.payload.status;
 
             if (action.payload.status.toLowerCase() === 'not accepted') {
                 state.viewModes[itemIndex].name = 'not_accepted';
@@ -79,7 +79,7 @@ export const submissionGradesSlice = createSlice({
         resetCardViewMode: (state, action: PayloadAction<{ viewModeIndex: number; topLevelID: number }>) => {
             const viewModeIndex = action.payload.viewModeIndex;
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.topLevelID);
-            const cardStatus = state.allSubmissions[itemIndex].order_item.status.order_item_status.name;
+            const cardStatus = state.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name;
 
             if (cardStatus.toLowerCase() === 'not accepted') {
                 state.viewModes[viewModeIndex] = state.viewModes[viewModeIndex].prevViewMode;
@@ -97,8 +97,8 @@ export const submissionGradesSlice = createSlice({
 
             if (cardStatus.toLowerCase() === 'graded') {
                 state.viewModes[viewModeIndex].name = 'graded';
-                state.allSubmissions[viewModeIndex].human_grade_values =
-                    state.viewModes[viewModeIndex].prevViewModeGraded.human_grade_values;
+                state.allSubmissions[viewModeIndex].humanGradeValues =
+                    state.viewModes[viewModeIndex].prevViewModeGraded.humanGradeValues;
             }
         },
         updateCardViewMode: (state, action: PayloadAction<{ viewModeIndex: number; viewModeName: string }>) => {
@@ -147,7 +147,7 @@ export const submissionGradesSlice = createSlice({
                 return { title: '', placeHolder: '' };
             }
             state.viewModes = state.allSubmissions.map((item: any, index: number) => {
-                const status = statuses[item.order_item.status.order_item_status.id];
+                const status = statuses[item.orderItem.status?.orderItemStatus?.id];
                 return {
                     name: status,
                     areNotesRequired: status === 'not_accepted',
@@ -155,7 +155,7 @@ export const submissionGradesSlice = createSlice({
                     itemIndex: index,
                     pressedDone: status !== 'confirmed',
                     isDoneDisabled: true,
-                    notes: item.order_item.status.notes,
+                    notes: item.orderItem.status?.notes,
                     notesPlaceholder: getSectionData(status!)!.placeHolder,
                 };
             });

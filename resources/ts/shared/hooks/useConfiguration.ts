@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { useMemo } from 'react';
 import { ConfigurationEntity } from '../entities/ConfigurationEntity';
-import { useSharedSelector } from './useSharedDispatch';
+import { useSharedSelector } from './useSharedSelector';
 
 export function useConfiguration(): ConfigurationEntity {
     const config = useSharedSelector((state) => state.configuration.data);

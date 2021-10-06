@@ -9,23 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 
-/**
- * @property OrderStatusHistory[] $orderStatusHistory
- * @property OrderStatus $orderStatus
- * @property float $grand_total
- * @property PaymentMethod $paymentMethod
- * @property OrderPayment $orderPayment
- * @property int $order_status_id
- * @property int $id
- * @property string $order_number
- * @property User $user
- * @property OrderItemCustomerShipment $customerShipment
- * @property int $shipping_method_id
- */
 class Order extends Model
 {
     use HasFactory;
@@ -291,8 +279,7 @@ class Order extends Model
         return $this->belongsTo(OrderCustomerShipment::class);
     }
 
-
-    public function getGroupedOrderItems()
+    public function getGroupedOrderItems(): Collection
     {
         return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('min(declared_value_total) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
         ->where('order_id', $this->id)

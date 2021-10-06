@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
-import { InjectableMetaOptions } from '@shared/constants/ReflectMetadata';
-import { GetInjectableName } from '@shared/interfaces/GetInjectableName';
-import { DependencyContainer } from '@shared/lib/dependencyInjection/container';
+import { InjectableMetaOptions } from '../constants/ReflectMetadata';
+import { GetInjectableName } from '../interfaces/GetInjectableName';
+import { DependencyContainer } from '../lib/dependencyInjection/container';
 
 interface InjectableOptions {
     symbol?: symbol;

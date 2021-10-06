@@ -1,9 +1,12 @@
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Map } from 'immutable';
-import { Inject } from '@shared/decorators/Inject';
-import { Injectable } from '@shared/decorators/Injectable';
-import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { Inject } from '../decorators/Inject';
+import { Injectable } from '../decorators/Injectable';
 import { buildUrl } from '../lib/api/buildUrl';
+import { cleanPath } from '../lib/strings/cleanPath';
+import { fromApiPropertiesObject } from '../lib/utils/fromApiPropertiesObject';
+import { toApiPropertiesObject } from '../lib/utils/toApiPropertiesObject';
+import { AuthenticationService } from './AuthenticationService';
 
 @Injectable('APIService')
 export class APIService {
@@ -72,6 +75,9 @@ export class APIService {
         config.url = buildUrl(config.url ?? '', config?.params ?? {});
         config.baseURL = buildUrl(config.baseURL ?? '', config?.params ?? {});
 
+        config.params = this.objectToSnakeCase(config.params);
+        config.data = this.objectToSnakeCase(config.data);
+
         return config;
     }
 
@@ -83,6 +89,12 @@ export class APIService {
     private responseInterceptor(response: AxiosResponse) {
         if (response?.data?.data && Object.keys(response?.data).length === 1) {
             response.data = response.data.data;
+        }
+
+        response.data = this.objectToCamelCase(response.data);
+
+        if (process.env.NODE_ENV === 'development') {
+            this.logResponse(response);
         }
 
         return response;
@@ -133,5 +145,28 @@ export class APIService {
         link.remove();
 
         URL.revokeObjectURL(downloadHref);
+    }
+
+    private objectToSnakeCase(data: any) {
+        return toApiPropertiesObject(data, { deep: true });
+    }
+
+    private objectToCamelCase(data: any) {
+        return fromApiPropertiesObject(data, { deep: true });
+    }
+
+    private logResponse(response: AxiosResponse) {
+        try {
+            const url = cleanPath(`${response.config.baseURL}/${response.config.url}`);
+            console.groupCollapsed(`HTTP Request: ${response.config.method?.toUpperCase()} ${url}`);
+            console.log(response);
+            console.groupEnd();
+        } catch (e) {
+            // pass
+        }
+    }
+
+    private canBeConverted(data: any) {
+        return data && typeof data === 'object';
     }
 }

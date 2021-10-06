@@ -1,13 +1,14 @@
-import { useMediaQuery } from '@material-ui/core';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { useMediaQuery } from '@mui/material';
+import ButtonBase from '@mui/material/ButtonBase';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import ReactGA from 'react-ga';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         padding: '8px 12px',
         marginTop: '8px',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             padding: 0,
         },
     },
@@ -70,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: '20px',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.54)',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             fontSize: '12px',
         },
     },
@@ -91,7 +92,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
     const { image, title, subtitle, id, addedMode, reviewMode } = props;
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const isCardSelected = selectedCards.find((card: Record<string, any>) => card.id === id);
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     function handleSelectCard() {
         const state = { image, title, subtitle, id };
@@ -141,9 +142,9 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                         </Typography>
 
                         {/* Using dangerouslySetInnerHTML is completely safe here, because this data is coming from algolia
-                            the client has no control over this data, therefore it won't result in an XSS.
-                            We're using this because algolia is giving us the highlighted elements wrapper in <ais-highlight-0000000000 />
-                            which we can then style to display the searched term bolded in the results*/}
+                        the client has no control over this data, therefore it won't result in an XSS.
+                        We're using this because algolia is giving us the highlighted elements wrapper in <ais-highlight-0000000000 />
+                        which we can then style to display the searched term bolded in the results*/}
                         <Typography
                             variant={'subtitle2'}
                             className={classes.subtitle}
@@ -154,7 +155,13 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                 </div>
                 {addedMode && isMobile && reviewMode ? (
                     <div className={classes.rightSideMobile}>
-                        <IconButton edge="start" color="inherit" onClick={handleMobileDeselect} aria-label="close">
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={handleMobileDeselect}
+                            aria-label="close"
+                            size="large"
+                        >
                             <DeleteOutlineOutlinedIcon fontSize="medium" />
                         </IconButton>
                     </div>

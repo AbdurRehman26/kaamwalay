@@ -1,5 +1,5 @@
-import MuiTablePagination from '@material-ui/core/TablePagination';
-import { styled } from '@material-ui/core/styles';
+import MuiTablePagination from '@mui/material/TablePagination';
+import { styled } from '@mui/material/styles';
 
 export const TablePagination = styled(MuiTablePagination)(
     {

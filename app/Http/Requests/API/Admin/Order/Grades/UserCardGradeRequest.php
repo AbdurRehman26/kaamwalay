@@ -55,18 +55,6 @@ class UserCardGradeRequest extends FormRequest
         ];
     }
 
-    protected function passedValidation()
-    {
-        $cardGradingService = new CardGradingService;
-        $overallValues = $cardGradingService->calculateOverallValues($this->get('human_grade_values'));
-        ['grade' => $grade, 'nickname' => $nickname] = $cardGradingService->calculateOverallAverage($overallValues);
-        $this->merge([
-            'overall_values' => $overallValues,
-            'overall_grade' => $grade,
-            'overall_grade_nickname' => $nickname,
-        ]);
-    }
-
     public function messages()
     {
         $message = 'can only have maximum of 2 decimal places.';

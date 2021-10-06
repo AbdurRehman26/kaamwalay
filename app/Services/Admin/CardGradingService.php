@@ -116,20 +116,23 @@ class CardGradingService
     public function calculateOverallValues(array|string $frontValues): array
     {
         return [
-            'center' => (Arr::get($frontValues, 'front.center') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.center') * self::BACK_AVERAGING_RATIO),
-            'surface' => (Arr::get($frontValues, 'front.surface') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.surface') * self::BACK_AVERAGING_RATIO),
-            'edge' => (Arr::get($frontValues, 'front.edge') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.edge') * self::BACK_AVERAGING_RATIO),
-            'corner' => (Arr::get($frontValues, 'front.corner') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.corner') * self::BACK_AVERAGING_RATIO),
+            'center' => round((Arr::get($frontValues, 'front.center') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.center') * self::BACK_AVERAGING_RATIO), 2),
+            'surface' => round((Arr::get($frontValues, 'front.surface') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.surface') * self::BACK_AVERAGING_RATIO), 2),
+            'edge' => round((Arr::get($frontValues, 'front.edge') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.edge') * self::BACK_AVERAGING_RATIO), 2),
+            'corner' => round((Arr::get($frontValues, 'front.corner') * self::FRONT_AVERAGING_RATIO) + (Arr::get($frontValues, 'back.corner') * self::BACK_AVERAGING_RATIO), 2),
         ];
     }
 
-    public function calculateOverallAverage(array|string $overAllValues): array
+    public function calculateOverallAverage(array $overAllValues): array
     {
-        if (is_string($overAllValues)) {
-            $overAllValues = json_decode($overAllValues, associative: true);
-        }
-
-        $overallGrade = $this->getAverage($overAllValues['center'], $overAllValues['surface'], $overAllValues['edge'], $overAllValues['corner']);
+        $overallGrade = $this->getRoundedValue(
+            $this->getAverage(
+                $overAllValues['center'],
+                $overAllValues['surface'],
+                $overAllValues['edge'],
+                $overAllValues['corner'],
+            )
+        );
 
         return [
             'grade' => $overallGrade,
@@ -144,10 +147,7 @@ class CardGradingService
 
     protected function getGradeNickname(float $overallValue): string
     {
-        [$greaterGradeValues] = collect(self::GRADE_CRITERIA)
-            ->partition(fn ($value) => $value >= $this->getRoundedValue($overallValue));
-
-        return array_key_last($greaterGradeValues->all());
+        return array_search($overallValue, self::GRADE_CRITERIA);
     }
 
     public function getRoundedValue(float $value): float

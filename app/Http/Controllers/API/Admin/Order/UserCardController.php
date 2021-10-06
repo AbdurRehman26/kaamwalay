@@ -18,17 +18,26 @@ class UserCardController extends Controller
         Order $order,
         UserCard $card,
         AgsService $agsService,
-        CardGradingService $cardGradingService
+        CardGradingService $cardGradingService,
     ): UserCardGradeUpdateResource {
+        $overallValues = $cardGradingService->calculateOverallValues($request->get('human_grade_values'));
+
+        ['grade' => $grade, 'nickname' => $nickname] = $cardGradingService
+            ->calculateOverallAverage($overallValues);
+
         $card->update(
-            $request->only('human_grade_values', 'overall_values', 'overall_grade', 'overall_grade_nickname')
+            $request->only('human_grade_values') + [
+                'overall_values' => $overallValues,
+                'overall_grade' => $grade,
+                'overall_grade_nickname' => $nickname,
+            ]
         );
 
         OrderUpdated::dispatch($order);
         if ($cardGradingService->validateIfHumanGradesAreCompleted($card->human_grade_values)) {
             $response = $agsService->updateHumanGrades(
                 $card->userCardCertificate->number,
-                $request->only('human_grade_values', 'overall_values', 'overall_grade', 'overall_grade_nickname')
+                $card->only('human_grade_values', 'overall_values', 'overall_grade', 'overall_grade_nickname')
             );
             $card->updateFromAgsResponse($response);
         }

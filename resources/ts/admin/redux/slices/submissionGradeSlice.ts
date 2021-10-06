@@ -133,7 +133,7 @@ export const submissionGradesSlice = createSlice({
                 return { title: '', placeHolder: '' };
             }
             state.viewModes = state.allSubmissions.map((item: any, index: number) => {
-                const status = statuses[item.orderItem.status.orderItemStatus.id];
+                const status = statuses[item.orderItem.status?.orderItemStatus?.id];
                 return {
                     name: status,
                     areNotesRequired: status === 'not_accepted',
@@ -141,7 +141,7 @@ export const submissionGradesSlice = createSlice({
                     itemIndex: index,
                     pressedDone: status !== 'confirmed',
                     isDoneDisabled: true,
-                    notes: item.orderItem.status.notes,
+                    notes: item.orderItem.status?.notes,
                     notesPlaceholder: getSectionData(status!)!.placeHolder,
                 };
             });

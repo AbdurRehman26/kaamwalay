@@ -1,9 +1,9 @@
-import { makeStyles } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { OutlinedCard } from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
@@ -106,7 +106,7 @@ export function SubmissionsGradeCardGrades({
     );
 
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name,
     );
     const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
 

@@ -1,10 +1,10 @@
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import CheckIcon from '@material-ui/icons/Check';
+import CheckIcon from '@mui/icons-material/Check';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';

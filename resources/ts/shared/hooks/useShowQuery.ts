@@ -7,8 +7,8 @@ import { APIService } from '../services/APIService';
 import { APIState } from '../types/APIState';
 import { ThunkShowActionArg } from '../types/ThunkShowActionArg';
 import { useInjectable } from './useInjectable';
-import { useSharedSelector } from './useSharedDispatch';
-import { useSharedDispatch } from './useSharedSelector';
+import { useSharedDispatch } from './useSharedDispatch';
+import { useSharedSelector } from './useSharedSelector';
 
 export function useShowQuery<
     E,

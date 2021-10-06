@@ -1,10 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { Hits, Stats } from 'react-instantsearch-dom';
 import ManageCardDialogResultItem from './ManageCardDialogResultItem';
 import ManageCardDialogResultsPagination from './ManageCardDialogResultsPagination';
-
-interface ManageCardDialogResultsProps {}
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -40,7 +38,7 @@ const useStyles = makeStyles(
  * @date: 13.09.2021
  * @time: 23:44
  */
-export function ManageCardDialogResults(props: ManageCardDialogResultsProps) {
+export function ManageCardDialogResults() {
     const classes = useStyles();
 
     return (

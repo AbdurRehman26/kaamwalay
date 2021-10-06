@@ -1,13 +1,15 @@
-import { useMediaQuery } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import { useMediaQuery } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MuiLink from '@mui/material/Link';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -88,14 +90,6 @@ const useStyles = makeStyles(
             flexDirection: 'column',
             justifyContent: 'flex-start',
         },
-        orderLink: {
-            fontWeight: 500,
-            fontSize: '14px',
-            lineHeight: '20px',
-            letterSpacing: '0.2px',
-            textDecorationLine: 'underline',
-            color: '#20BFB8',
-        },
         closeIconBtn: {
             paddingTop: 0,
         },
@@ -122,7 +116,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
 
     const history = useHistory();
     const confirm = useConfirmation();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const classes = useStyles();
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -182,11 +176,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             {!isMobile ? (
                 <TableRow>
                     <TableCell>
-                        <Link to={submissionViewUrl}>
-                            <Typography variant={'subtitle2'} className={classes.orderLink}>
-                                {orderNumber}
-                            </Typography>
-                        </Link>
+                        <MuiLink component={Link} to={submissionViewUrl}>
+                            {orderNumber}
+                        </MuiLink>
                     </TableCell>
                     <TableCell>
                         <Link to={submissionViewUrl} className={classes.linkText}>
@@ -214,7 +206,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                         </Link>
                     </TableCell>
                     <TableCell align={'right'}>
-                        <IconButton onClick={handleClickOptions}>
+                        <IconButton onClick={handleClickOptions} size="large">
                             <MoreIcon />
                         </IconButton>
 
@@ -270,7 +262,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 Status: <span className={classes.submissionPropertyValue}>{status}</span>
                             </Typography>
                             <div className={classes.closeIconContainer}>
-                                <IconButton onClick={handleClickOptions} className={classes.closeIconBtn}>
+                                <IconButton onClick={handleClickOptions} className={classes.closeIconBtn} size="large">
                                     <MoreIcon />
                                 </IconButton>
 

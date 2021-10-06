@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { PaginationLink } from '@shared/classes/PaginationLink';
+import { PaginationLink } from './PaginationLink';
 
 export class PaginationMeta {
     @Type(() => PaginationLink)

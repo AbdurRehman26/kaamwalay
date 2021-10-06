@@ -1,13 +1,13 @@
-import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useMemo } from 'react';
-import { AddressEntity } from '@shared/entities/AddressEntity';
-import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
-import font from '@shared/styles/font.module.css';
+import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
+import { getPaymentIcon, getPaymentTitle } from '../lib/payments';
+import font from '../styles/font.module.css';
 
 interface SubmissionViewBillingProps {
     shippingAddress?: AddressEntity;
@@ -22,7 +22,7 @@ export const useStyles = makeStyles(
             height: 42,
         },
         root: {
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 display: 'column',
             },
         },

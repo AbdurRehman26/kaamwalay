@@ -81,7 +81,7 @@ class AgsService
     {
         $data = $this->getGradesByCertificateId($certificateId);
 
-        if (empty($data) || $data['count'] === 0 || empty($data['results'][0]['grade'])) {
+        if (empty($data) || $data['count'] === 0 || (empty($data['results'][0]['grade']) && empty($data['results'][0]['overall_grade']))) {
             return [
                 'grades_available' => false,
             ];
@@ -92,7 +92,7 @@ class AgsService
         return [
             'grades_available' => true,
             'certificate_id' => $data['certificate_id'] ?? null,
-            'grade' => $this->prepareGradeForPublicPage($data['grade']),
+            'grade' => $this->prepareGradeForPublicPage($data['grade'] ?? $data['overall_grade']),
             'card' => [
                 'name' => $data['card']['name'] ?? null,
                 'full_name' => ! empty($data['card']) ? $this->getCardFullName($data['card']) : '',
@@ -133,10 +133,10 @@ class AgsService
     protected function prepareOverallGradesForPublicPage(array $data): array
     {
         return [
-            'centering' => $this->preparePreciseValue($data['total_centering_grade']['grade']) ?? null,
-            'surface' => $this->preparePreciseValue($data['total_surface_grade']['grade']) ?? null,
-            'edges' => $this->preparePreciseValue($data['total_edges_grade']['grade']) ?? null,
-            'corners' => $this->preparePreciseValue($data['total_corners_grade']['grade']) ?? null,
+            'centering' => $this->preparePreciseValue($data['total_centering_grade']['grade'] ?? $data['overall_centering_grade']) ?? null,
+            'surface' => $this->preparePreciseValue($data['total_surface_grade']['grade'] ?? $data['overall_surface_grade']) ?? null,
+            'edges' => $this->preparePreciseValue($data['total_edges_grade']['grade'] ?? $data['overall_edges_grade']) ?? null,
+            'corners' => $this->preparePreciseValue($data['total_corners_grade']['grade'] ?? $data['overall_corners_grade']) ?? null,
         ];
     }
 

@@ -150,7 +150,7 @@ class CardGradingService
         return array_search($overallValue, self::GRADE_CRITERIA);
     }
 
-    public function getRoundedValue(float $value): float
+    protected function getRoundedValue(float $value): float
     {
         $integerValue = (int) $value;
         $decimalValue = round(($value - $integerValue), 2);

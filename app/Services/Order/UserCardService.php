@@ -12,7 +12,6 @@ use App\Models\UserCard;
 use App\Models\UserCardCertificate;
 use App\Services\Admin\CardGradingService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
@@ -58,31 +57,30 @@ class UserCardService
     {
         $itemsPerPage = request('per_page');
 
-        $query = UserCard::join('order_items','order_items.id','=','user_cards.order_item_id')
-        ->join('orders','orders.id','=','order_items.order_id')
-        ->join('card_products','card_products.id','=','order_items.card_product_id')
-        ->join('order_item_status_histories','order_item_status_histories.order_item_id','=','order_items.id')
-        ->where('user_cards.user_id',$user->id)
-        ->where('order_item_status_histories.order_item_status_id',OrderItemStatus::GRADED)
+        $query = UserCard::join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->join('card_products', 'card_products.id', '=', 'order_items.card_product_id')
+        ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
+        ->where('user_cards.user_id', $user->id)
+        ->where('order_item_status_histories.order_item_status_id', OrderItemStatus::GRADED)
         ->whereIn('orders.order_status_id', [OrderStatus::GRADED,OrderStatus::SHIPPED])
-        ->whereIn('order_items.order_item_status_id',[OrderItemStatus::GRADED])
+        ->whereIn('order_items.order_item_status_id', [OrderItemStatus::GRADED])
         ->select(['user_cards.*','card_products.name as card_name','order_item_status_histories.created_at as reviewed_at']);
 
         return QueryBuilder::for($query)
         ->allowedFilters([
-            AllowedFilter::custom('search',new UserCardSearchFilter)
+            AllowedFilter::custom('search', new UserCardSearchFilter),
         ])
         ->allowedSorts([
-            AllowedSort::field('name','card_products.name'),
-            AllowedSort::field('date','order_item_status_histories.created_at')
+            AllowedSort::field('name', 'card_products.name'),
+            AllowedSort::field('date', 'order_item_status_histories.created_at'),
             ])
         ->paginate($itemsPerPage);
-
     }
 
     public function getCustomerCard(User $user, UserCard $userCard): UserCard
     {
-        if($userCard->user_id !== $user->id){
+        if ($userCard->user_id !== $user->id) {
             throw new CardDoesNotBelongToUser;
         }
 

@@ -34,7 +34,8 @@ class UserCardSearchFilter implements Filter
                                 function ($query) use ($value) {
                                     $query->where('name', 'like', "%$value%");
                                 }
-                            );;
+                            );
+                        ;
                     }
                 )
                 ->orWhereHas(

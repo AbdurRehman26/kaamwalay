@@ -50,6 +50,13 @@ class UserCard extends Model
         return $this->hasOne(UserCardCertificate::class);
     }
 
+    public function getRoundedOverallValues()
+    {
+        return ! is_null($this->overall_values) ? array_map(function ($v) {
+            return round($v, 1);
+        }, $this->overall_values) : $this->overall_values;
+    }
+
     public function updateFromAgsResponse(array $response): void
     {
         if (! empty($response)) {

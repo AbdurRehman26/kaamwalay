@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\Admin\Order;
 
-use App\Exceptions\API\Admin\GradesAreNotAvailable;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\ShipmentNotUpdated;
 use App\Http\Controllers\Controller;
@@ -67,7 +66,7 @@ class OrderController extends Controller
 
         try {
             $userCards = $orderService->getGrades($order);
-        } catch (IncorrectOrderStatus | GradesAreNotAvailable $e) {
+        } catch (IncorrectOrderStatus $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

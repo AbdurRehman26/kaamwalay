@@ -51,7 +51,7 @@ it('successfully verifies that human grades are not completed', function (array 
     fn () => ['front' => ['center' => 0, 'surface' => 9.40, 'edge' => 10.00, 'corner' => 0], 'back' => ['center' => 1.20, 'surface' => 1.60, 'edge' => 7.70, 'corner' => 7.40]],
 ]);
 
-test('it returns overall rounded values', function() {
+test('it returns overall rounded values', function () {
     $overallValues = $this->service->calculateOverallValues([
         'front' => [
             'center' => 6.50,

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\Admin\Order;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeRequest;
-use App\Http\Resources\API\Admin\Order\UserCardGradeUpdateResource;
+use App\Http\Resources\API\Admin\Order\UserCardResource;
 use App\Models\Order;
 use App\Models\UserCard;
 use App\Services\Admin\CardGradingService;
@@ -18,21 +18,30 @@ class UserCardController extends Controller
         Order $order,
         UserCard $card,
         AgsService $agsService,
-        CardGradingService $cardGradingService
-    ): UserCardGradeUpdateResource {
+        CardGradingService $cardGradingService,
+    ): UserCardResource {
+        $overallValues = $cardGradingService->calculateOverallValues($request->get('human_grade_values'));
+
+        ['grade' => $grade, 'nickname' => $nickname] = $cardGradingService
+            ->calculateOverallAverage($overallValues);
+
         $card->update(
-            $request->only('human_grade_values')
+            $request->only('human_grade_values') + [
+                'overall_values' => $overallValues,
+                'overall_grade' => $grade,
+                'overall_grade_nickname' => $nickname,
+            ]
         );
 
         OrderUpdated::dispatch($order);
         if ($cardGradingService->validateIfHumanGradesAreCompleted($card->human_grade_values)) {
             $response = $agsService->updateHumanGrades(
                 $card->userCardCertificate->number,
-                $request->only('human_grade_values')
+                $card->only('human_grade_values', 'overall_values', 'overall_grade', 'overall_grade_nickname')
             );
             $card->updateFromAgsResponse($response);
         }
 
-        return new UserCardGradeUpdateResource($card);
+        return new UserCardResource($card);
     }
 }

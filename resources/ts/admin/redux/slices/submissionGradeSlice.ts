@@ -53,7 +53,7 @@ export const submissionGradesSlice = createSlice({
                 if (Number(incomingGrade) > 10) {
                     incomingGrade = '10';
                 }
-                state.allSubmissions[action.payload.itemIndex].human_grade_values[action.payload.side][
+                state.allSubmissions[action.payload.itemIndex].humanGradeValues[action.payload.side][
                     action.payload.part
                 ] = incomingGrade.replace(/,/g, '.');
             }

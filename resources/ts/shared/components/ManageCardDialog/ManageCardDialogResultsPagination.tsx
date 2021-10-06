@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { Pagination } from '@material-ui/lab';
+import { Pagination } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useCallback } from 'react';
 import { connectPagination } from 'react-instantsearch-dom';
 

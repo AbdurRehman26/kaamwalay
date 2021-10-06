@@ -1,14 +1,16 @@
-import { TextField } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Dialog, { DialogProps } from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import * as Yup from 'yup';
@@ -34,17 +36,15 @@ const useStyles = makeStyles(
             },
             dialogActions: {
                 marginBottom: '12px',
-                marginRight: '24px',
+                marginRight: '18px',
             },
             contentContainer: {
                 width: '457px',
-                [theme.breakpoints.down('xs')]: {
+                [theme.breakpoints.down('sm')]: {
                     width: '100%',
                 },
             },
             saveBtn: {
-                width: '140px',
-                height: '48px',
                 marginLeft: '12px',
             },
             fieldContainer: {
@@ -198,6 +198,7 @@ function ShipmentDialog(props: ShipmentDialogProps) {
                                 type={'submit'}
                                 color={'primary'}
                                 variant={'contained'}
+                                size={'medium'}
                                 className={classes.saveBtn}
                                 startIcon={isSubmitting ? <CircularProgress size={20} color={'inherit'} /> : null}
                             >

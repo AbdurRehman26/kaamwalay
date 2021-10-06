@@ -16,8 +16,7 @@ class SendWelcomeEmail implements ShouldBeEncrypted
     {
         $user = $event->user;
         $this->emailService->sendEmail(
-            $user->email,
-            $user->first_name ?? '',
+            [[$user->email => $user->first_name ?? '']],
             EmailService::SUBJECT[EmailService::TEMPLATE_SLUG_CUSTOMER_WELCOME],
             EmailService::TEMPLATE_SLUG_CUSTOMER_WELCOME
         );

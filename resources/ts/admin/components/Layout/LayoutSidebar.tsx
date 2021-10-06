@@ -1,10 +1,10 @@
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import { makeStyles } from '@material-ui/core/styles';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import AllInboxIcon from '@material-ui/icons/AllInbox';
-import ReceiptIcon from '@material-ui/icons/Receipt';
-import StyleIcon from '@material-ui/icons/Style';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import AllInboxIcon from '@mui/icons-material/AllInbox';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import StyleIcon from '@mui/icons-material/Style';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { useAppSelector } from '@admin/redux/hooks';
 import LayoutSidebarItem from './LayoutSidebarItem';

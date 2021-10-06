@@ -1,17 +1,17 @@
 import { AxiosError } from 'axios';
-import { NotificationItem } from '@shared/classes/NotificationItem';
-import { Injectable } from '@shared/decorators/Injectable';
-import { Log4ts } from '@shared/decorators/Log4ts';
-import { Exception } from '@shared/exceptions/Exception';
-import { ValidationException } from '@shared/exceptions/ValidationException';
-import { LogChannel } from '@shared/lib/log';
-import { dequeueNotification, enqueueNotification } from '@shared/redux/slices/notificationsSlice';
-import { GlobalDispatch } from '@shared/redux/store';
+import { NotificationItem } from '../classes/NotificationItem';
 import { NotificationTypeEnum } from '../constants/NotificationTypeEnum';
+import { Injectable } from '../decorators/Injectable';
+import { Log4ts } from '../decorators/Log4ts';
+import { Exception } from '../exceptions/Exception';
+import { ValidationException } from '../exceptions/ValidationException';
 import { getErrorMessage } from '../lib/api/getErrorMessage';
 import { getErrorsBagArray } from '../lib/api/getErrorsBagArray';
 import { isAxiosError } from '../lib/api/isAxiosError';
 import { isErrorBagResponse } from '../lib/api/isErrorBagResponse';
+import { LogChannel } from '../lib/log';
+import { dequeueNotification, enqueueNotification } from '../redux/slices/notificationsSlice';
+import { GlobalDispatch } from '../redux/store';
 
 @Injectable('NotificationsService')
 export class NotificationsService {

@@ -1,6 +1,6 @@
-import { StorageBucket } from '@shared/classes/StorageBucket';
-import { Injectable } from '@shared/decorators/Injectable';
-import { StorageBucketInterface } from '@shared/interfaces/StorageBucketInterface';
+import { StorageBucket } from '../classes/StorageBucket';
+import { Injectable } from '../decorators/Injectable';
+import { StorageBucketInterface } from '../interfaces/StorageBucketInterface';
 
 @Injectable('StorageService')
 export class StorageService implements StorageBucketInterface {

@@ -1,8 +1,8 @@
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOffOutlined';
-import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { useFormikContext } from 'formik';
 import { kebabCase } from 'lodash';
 import { transparentize } from 'polished';
@@ -34,19 +34,19 @@ const useStyles = makeStyles(
                 backgroundColor: transparentize(0.95, theme.palette.primary.main),
             },
             '&:focus ~ $label, & ~ $labelFilled': {
-                transform: `scale(0.75) translate(0, ${theme.spacing(1.5)}px)`,
+                transform: `scale(0.75) translate(0, ${theme.spacing(1.5)})`,
                 fontWeight: 500,
             },
         },
         labelFilled: {},
         label: {
-            lineHeight: `${theme.spacing(2)}px`,
+            lineHeight: theme.spacing(2),
             position: 'absolute',
             top: 0,
             left: theme.spacing(2.5),
             fontWeight: 400,
             pointerEvents: 'none',
-            transform: `scale(1) translate(0, ${theme.spacing(2.5)}px)`,
+            transform: `scale(1) translate(0, ${theme.spacing(2.5)})`,
             transformOrigin: 'left top',
             transition: theme.transitions.create(['transform', 'font-weight']),
         },
@@ -113,7 +113,7 @@ export function FormInput({ label, id, name, type, ...rest }: FormInputProps) {
                 {label}
             </Typography>
             {isSensitiveField && (
-                <IconButton onClick={handleSensitiveToggle} className={classes.sensitiveToggle}>
+                <IconButton onClick={handleSensitiveToggle} className={classes.sensitiveToggle} size="large">
                     {showSensitive ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
             )}

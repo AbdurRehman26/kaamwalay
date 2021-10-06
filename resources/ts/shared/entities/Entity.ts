@@ -4,9 +4,9 @@ import { DateField } from '../decorators/DateField';
 export abstract class Entity<T extends string | number = number> {
     public id!: T;
 
-    @DateField('created_at')
+    @DateField()
     public createdAt!: Moment;
 
-    @DateField('updated_at')
+    @DateField()
     public updatedAt!: Moment;
 }

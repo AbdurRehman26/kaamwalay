@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\Admin\CardGradingService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,11 +48,6 @@ class UserCard extends Model
     public function userCardCertificate(): HasOne
     {
         return $this->hasOne(UserCardCertificate::class);
-    }
-
-    public function getRoundedOverallGrade()
-    {
-        return ! is_null($this->overall_grade) ? (new CardGradingService)->getRoundedValue($this->overall_grade) : $this->overall_grade;
     }
 
     public function getRoundedOverallValues()

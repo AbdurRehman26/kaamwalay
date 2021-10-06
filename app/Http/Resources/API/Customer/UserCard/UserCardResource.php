@@ -16,7 +16,7 @@ class UserCardResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'overall_grade' => $this->resource->getRoundedOverallGrade(),
+            'overall_grade' => $this->resource->overall_grade,
             'overall_grade_nickname' => $this->resource->overall_grade_nickname,
         ];
     }

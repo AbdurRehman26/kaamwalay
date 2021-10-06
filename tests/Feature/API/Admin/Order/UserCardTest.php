@@ -15,7 +15,7 @@ beforeEach(function () {
 
 uses()->group('admin', 'grading');
 
-it('stores the human grades and does not update data on AGS', function () {
+it('stores the human grades with calculations of overall and does not update data on AGS', function () {
     Http::fake();
     $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
         'human_grade_values' => [
@@ -26,14 +26,15 @@ it('stores the human grades and does not update data on AGS', function () {
                 'corner' => 0,
             ],
             'back' => [
-                'center' => 0,
+                'center' => 4.80,
                 'surface' => 0,
                 'edge' => 0,
                 'corner' => 0,
             ],
         ],
     ])
-    ->assertOk();
+    ->assertOk()
+    ->assertJsonFragment(['center' => 3.4]);
 
     Http::assertNothingSent();
 });
@@ -62,17 +63,9 @@ it('stores the human grades and update data on AGS', function () {
         ],
     ])
     ->assertOk()
-    ->assertJsonFragment([
-        'grade' => 7,
-    ])
     ->assertJsonCount(16, 'data.generated_images')
     ->assertJsonCount(4, 'data.overall_values')
-    ->assertJsonFragment([
-        "grade" => [
-            "grade" => 7,
-            "nickname" => "NM",
-        ],
-    ]);
+    ->assertJsonCount(2, 'data.grade');
 
     Http::assertSent(function ($request) {
         return $request->url() == 'https://ags.api/v2/robograding/certificates/?certificate_id=' . $this->userCardCertificate->number;

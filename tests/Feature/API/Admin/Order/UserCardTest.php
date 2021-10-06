@@ -26,14 +26,15 @@ it('stores the human grades with calculations of overall and does not update dat
                 'corner' => 0,
             ],
             'back' => [
-                'center' => 0,
+                'center' => 4.80,
                 'surface' => 0,
                 'edge' => 0,
                 'corner' => 0,
             ],
         ],
     ])
-    ->assertOk();
+    ->assertOk()
+    ->assertJsonFragment(['center' => 3.4]);
 
     Http::assertNothingSent();
 });

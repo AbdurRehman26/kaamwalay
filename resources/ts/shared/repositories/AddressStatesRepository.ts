@@ -1,4 +1,4 @@
-import { Injectable } from '../decorators/Injectable';
+import { Injectable } from '@shared/decorators/Injectable';
 import { AddressStateEntity } from '../entities/AddressStateEntity';
 import { Repository } from './Repository';
 

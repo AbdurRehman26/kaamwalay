@@ -1,5 +1,5 @@
-import Box from '@mui/material/Box';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
 import algoliaSearch from 'algoliasearch';
 import React, { ForwardedRef, forwardRef, useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
@@ -11,7 +11,7 @@ import ManageCardDialogSearch from './ManageCardDialogSearch';
 interface ListCardsViewProps {}
 
 const useStyles = makeStyles(
-    () => ({
+    (theme) => ({
         root: {},
     }),
     { name: 'ListCardsView' },

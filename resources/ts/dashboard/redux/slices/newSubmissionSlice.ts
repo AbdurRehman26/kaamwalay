@@ -279,7 +279,7 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
     return serviceLevels.data.map((serviceLevel: any) => ({
         id: serviceLevel.id,
         type: 'card',
-        maxProtectionAmount: serviceLevel.maxProtectionAmount,
+        maxProtectionAmount: serviceLevel.max_protection_amount,
         turnaround: serviceLevel.turnaround,
         price: serviceLevel.price,
     }));
@@ -300,11 +300,11 @@ export const getShippingFee = createAsyncThunk(
         const DTO = {
             items: selectedCards.map((item) => ({
                 quantity: item.qty,
-                declaredValuePerUnit: item.value,
+                declared_value_per_unit: item.value,
             })),
         };
         const shippingFeeResponse = await endpoint.post('', DTO);
-        return shippingFeeResponse.data.shippingFee;
+        return shippingFeeResponse.data.shipping_fee;
     },
 );
 
@@ -316,16 +316,16 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
     const formattedAddresses: Address[] = customerAddresses.data.map((address: any) => {
         return {
             id: address.id,
-            userId: address.userId,
-            firstName: address.firstName,
-            lastName: address.lastName,
+            userId: address.user_id,
+            firstName: address.first_name,
+            lastName: address.last_name,
             address: address.address,
             zipCode: address.zip,
             phoneNumber: address.phone,
             flat: address.flat ?? '',
             city: address.city,
-            isDefaultShipping: address.isDefaultShipping,
-            isDefaultBilling: address.isDefaultSilling,
+            isDefaultShipping: address.is_default_shipping,
+            isDefaultBilling: address.is_default_billing,
             // Doing this because the back-end can't give me this full object for the state
             // so I'll just search for the complete object inside the existing states
             state: availableStatesList.find((item: any) => item.code === address.state),
@@ -350,54 +350,54 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
 
     const orderDTO = {
-        paymentPlan: {
+        payment_plan: {
             id: currentSubmission.step01Data.selectedServiceLevel.id,
         },
         items: currentSubmission.step02Data.selectedCards.map((selectedCard: any) => ({
-            cardProduct: {
+            card_product: {
                 id: selectedCard.id,
             },
             quantity: selectedCard.qty,
-            declaredValuePerUnit: selectedCard.value,
+            declared_value_per_unit: selectedCard.value,
         })),
-        shippingAddress: {
-            firstName: finalShippingAddress.firstName,
-            lastName: finalShippingAddress.lastName,
+        shipping_address: {
+            first_name: finalShippingAddress.firstName,
+            last_name: finalShippingAddress.lastName,
             address: finalShippingAddress.address,
             city: finalShippingAddress.city,
             state: finalShippingAddress.state.code,
             zip: finalShippingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: finalShippingAddress.flat,
-            saveForLater:
+            save_for_later:
                 currentSubmission.step03Data.selectedExistingAddress.id !== -1
                     ? false
                     : currentSubmission.step03Data.saveForLater,
         },
-        billingAddress: {
-            firstName: billingAddress.firstName,
-            lastName: billingAddress.lastName,
+        billing_address: {
+            first_name: billingAddress.firstName,
+            last_name: billingAddress.lastName,
             address: billingAddress.address,
             city: billingAddress.city,
             state: billingAddress.state.code,
             zip: billingAddress.zipCode,
             phone: finalShippingAddress.phoneNumber,
             flat: billingAddress.flat,
-            sameAsShipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
+            same_as_shipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
         },
-        customerAddress: {
+        customer_address: {
             id:
                 currentSubmission.step03Data.selectedExistingAddress.id !== -1
                     ? currentSubmission.step03Data.selectedExistingAddress.id
                     : null,
         },
-        shippingMethod: {
+        shipping_method: {
             id: 1,
         },
-        paymentMethod: {
+        payment_method: {
             id: currentSubmission.step04Data.paymentMethodId,
         },
-        paymentProviderReference: {
+        payment_provider_reference: {
             id:
                 currentSubmission.step04Data.paymentMethodId === 1
                     ? currentSubmission.step04Data.selectedCreditCard.id
@@ -563,33 +563,33 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.existingAddresses = action.payload;
         },
         [createOrder.fulfilled as any]: (state, action) => {
-            state.grandTotal = action.payload.grandTotal;
-            state.orderNumber = action.payload.orderNumber;
+            state.grandTotal = action.payload.grand_total;
+            state.orderNumber = action.payload.order_number;
             state.orderID = action.payload.id;
-            state.step04Data.selectedBillingAddress.address = action.payload.billingAddress.address;
-            state.step04Data.selectedBillingAddress.country = action.payload.billingAddress.country;
-            state.step04Data.selectedBillingAddress.firstName = action.payload.billingAddress.firstName;
-            state.step04Data.selectedBillingAddress.lastName = action.payload.billingAddress.lastName;
-            state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress.flat;
-            state.step04Data.selectedBillingAddress.id = action.payload.billingAddress.id;
+            state.step04Data.selectedBillingAddress.address = action.payload.billing_address.address;
+            state.step04Data.selectedBillingAddress.country = action.payload.billing_address.country;
+            state.step04Data.selectedBillingAddress.firstName = action.payload.billing_address.first_name;
+            state.step04Data.selectedBillingAddress.lastName = action.payload.billing_address.last_name;
+            state.step04Data.selectedBillingAddress.flat = action.payload.billing_address.flat;
+            state.step04Data.selectedBillingAddress.id = action.payload.billing_address.id;
             state.step04Data.selectedCreditCard.expMonth =
-                state.step04Data.paymentMethodId === 1 ? action.payload.orderPayment.card.expMonth : '';
-            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress.phone;
+                state.step04Data.paymentMethodId === 1 ? action.payload.order_payment.card.exp_month : '';
+            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billing_address.phone;
             state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
-                (currentState: any) => currentState.code === action.payload.billingAddress.state,
+                (currentState: any) => currentState.code === action.payload.billing_address.state,
             ) as any;
-            state.step04Data.selectedBillingAddress.zipCode = action.payload.billingAddress.zip;
-            state.step04Data.selectedBillingAddress.city = action.payload.billingAddress.city;
-            state.step02Data.selectedCards = action.payload.orderItems.map((orderItem: any) => ({
-                image: orderItem.cardProduct.imagePath,
-                title: orderItem.cardProduct.name,
-                subtitle: `${orderItem.cardProduct.releaseYear} ${orderItem.cardProduct.cardCategoryName} ${orderItem.cardProduct.cardSeriesName} ${orderItem.cardProduct.cardSeriesName} ${orderItem.cardProduct.cardNumberOrder} ${orderItem.cardProduct.name}`,
-                id: orderItem.cardProduct.id,
+            state.step04Data.selectedBillingAddress.zipCode = action.payload.billing_address.zip;
+            state.step04Data.selectedBillingAddress.city = action.payload.billing_address.city;
+            state.step02Data.selectedCards = action.payload.order_items.map((orderItem: any) => ({
+                image: orderItem.card_product.image_path,
+                title: orderItem.card_product.name,
+                subtitle: `${orderItem.card_product.release_year} ${orderItem.card_product.card_category_name} ${orderItem.card_product.card_series_name} ${orderItem.card_product.card_series_name} ${orderItem.card_product.card_number_order} ${orderItem.card_product.name}`,
+                id: orderItem.card_product.id,
                 qty: orderItem.quantity,
-                value: orderItem.declaredValuePerUnit,
+                value: orderItem.declared_value_per_unit,
             }));
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
-                (plan) => plan.id === action.payload.paymentPlan.id,
+                (plan) => plan.id === action.payload.payment_plan.id,
             ) as any;
         },
     },

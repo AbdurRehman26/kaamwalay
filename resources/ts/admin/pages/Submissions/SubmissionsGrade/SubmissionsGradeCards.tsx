@@ -1,8 +1,8 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
@@ -35,7 +35,7 @@ export function SubmissionsGradeCards() {
             return false;
         }
         const nonReviewedCards = allCards.filter(
-            (item: any) => item.orderItem?.status?.orderItemStatus?.name === 'Confirmed',
+            (item: any) => item.order_item.status.order_item_status.name === 'Confirmed',
         );
         return nonReviewedCards.length === 0;
     }
@@ -91,10 +91,10 @@ export function SubmissionsGradeCards() {
             <Grid container direction={'column'} className={classes.cards}>
                 {allCards.map((item: any, index: number) => (
                     <SubmissionsGradeCard
-                        key={item.orderItem.id}
+                        key={item.order_item.id}
                         orderID={Number(id)}
                         itemIndex={index}
-                        itemId={item.orderItem.id}
+                        itemId={item.order_item.id}
                         gradeData={item}
                     />
                 ))}

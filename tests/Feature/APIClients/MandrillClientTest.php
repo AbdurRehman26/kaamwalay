@@ -15,7 +15,8 @@ it('sends email with template', function () {
     ]);
 
     $response = resolve(MandrillClient::class)->sendEmailWithTemplate(
-        [['test@test.com' => 'Test Name']],
+        'test@test.com',
+        'Test Name',
         'Test Subject',
         'test_template',
         []

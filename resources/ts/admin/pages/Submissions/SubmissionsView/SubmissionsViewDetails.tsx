@@ -1,8 +1,8 @@
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import MuiLink from '@mui/material/Link';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import MuiLink from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import KeyValueTable from '@shared/components/KeyValueTable';

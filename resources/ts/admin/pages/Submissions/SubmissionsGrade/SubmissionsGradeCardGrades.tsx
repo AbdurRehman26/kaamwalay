@@ -1,9 +1,9 @@
-import Alert from '@mui/material/Alert';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
 import { OutlinedCard } from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
@@ -77,36 +77,36 @@ export function SubmissionsGradeCardGrades({
     const apiService = useInjectable(APIService);
 
     const frontCentering = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.center,
     );
     const frontEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.edge,
     );
     const frontCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.corner,
     );
     const frontSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.surface,
     );
     const backSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.surface,
     );
     const backEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.edge,
     );
     const backCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.corner,
     );
     const backCenter = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.center,
     );
     const itemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
     const humanGrades = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values,
     );
 
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.status.order_item_status.name,
     );
     const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
 
@@ -124,7 +124,7 @@ export function SubmissionsGradeCardGrades({
     async function sendHumanGradesToBackend() {
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
         const response = await endpoint.put('', {
-            humanGradeValues: humanGrades,
+            human_grade_values: humanGrades,
         });
         dispatch(updateExistingCardData({ id: itemID, data: response.data }));
     }

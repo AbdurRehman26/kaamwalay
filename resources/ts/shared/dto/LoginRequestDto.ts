@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
-import { ErrorMessages } from '../lib/errors/ErrorMessage';
-import { createErrorMessageOption } from '../lib/errors/createErrorMessage';
+import { ErrorMessages } from '@shared/lib/errors/ErrorMessage';
+import { createErrorMessageOption } from '@shared/lib/errors/createErrorMessage';
 
 export class LoginRequestDto {
     @IsEmail({}, createErrorMessageOption(ErrorMessages.ShouldBeValidEmailAddress, 'Email'))

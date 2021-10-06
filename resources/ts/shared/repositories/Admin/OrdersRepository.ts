@@ -50,8 +50,8 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const { data } = await this.endpoint.post(
             `shipment`,
             {
-                shippingProvider,
-                trackingNumber,
+                shipping_provider: shippingProvider,
+                tracking_number: trackingNumber,
             },
             {
                 params: {

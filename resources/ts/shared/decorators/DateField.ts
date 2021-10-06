@@ -1,8 +1,9 @@
-import { Transform, TransformationType } from 'class-transformer';
+import { Expose, Transform, TransformationType } from 'class-transformer';
 import moment, { isMoment, Moment } from 'moment';
 
-export function DateField(): PropertyDecorator {
+export function DateField(name?: string): PropertyDecorator {
     return (target, propertyName) => {
+        Expose({ name })(target, propertyName);
         Transform(({ value, type }) => {
             if (!value) {
                 return null;

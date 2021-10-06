@@ -1,9 +1,9 @@
 import 'reflect-metadata';
-import { ValidateMethodParams } from '../decorators/ValidateMethodParams';
-import { ValidationException } from '../exceptions/ValidationException';
-import { ErrorMessages } from '../lib/errors/ErrorMessage';
-import { createErrorMessage } from '../lib/errors/createErrorMessage';
-import { SignUpRequestDto } from './SignUpRequestDto';
+import { ValidateMethodParams } from '@shared/decorators/ValidateMethodParams';
+import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
+import { ValidationException } from '@shared/exceptions/ValidationException';
+import { ErrorMessages } from '@shared/lib/errors/ErrorMessage';
+import { createErrorMessage } from '@shared/lib/errors/createErrorMessage';
 
 describe('dto/SignupRequestDto', function () {
     it('should correctly parse errors', function () {

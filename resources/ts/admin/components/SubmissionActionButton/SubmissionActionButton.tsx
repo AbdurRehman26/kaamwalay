@@ -1,5 +1,5 @@
-import Button, { ButtonProps } from '@mui/material/Button';
-import makeStyles from '@mui/styles/makeStyles';
+import Button, { ButtonProps } from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';

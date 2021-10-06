@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CardCategory extends Model
 {
@@ -14,17 +13,17 @@ class CardCategory extends Model
         'name',
     ];
 
-    public function cardSeries(): HasMany
+    public function cardSeries()
     {
         return $this->hasMany(CardSeries::class);
     }
 
-    public function cardSets(): HasMany
+    public function cardSets()
     {
         return $this->hasMany(CardSet::class);
     }
 
-    public function cardProducts(): HasMany
+    public function cardProducts()
     {
         return $this->hasMany(CardProduct::class);
     }

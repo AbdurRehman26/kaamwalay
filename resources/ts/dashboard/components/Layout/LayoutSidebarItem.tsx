@@ -1,9 +1,9 @@
-import { ListItemSecondaryAction } from '@mui/material';
-import Chip from '@mui/material/Chip';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import makeStyles from '@mui/styles/makeStyles';
+import { ListItemSecondaryAction } from '@material-ui/core';
+import Chip from '@material-ui/core/Chip';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import { makeStyles } from '@material-ui/core/styles';
 import { transparentize } from 'polished';
 import React, { ElementType, useMemo } from 'react';
 import { Link, matchPath, useLocation } from 'react-router-dom';

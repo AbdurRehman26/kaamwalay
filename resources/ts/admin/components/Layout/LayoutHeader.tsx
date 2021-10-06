@@ -1,12 +1,12 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import ButtonBase from '@mui/material/ButtonBase';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Toolbar from '@mui/material/Toolbar';
+import AppBar from '@material-ui/core/AppBar';
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Toolbar from '@material-ui/core/Toolbar';
+import MenuIcon from '@material-ui/icons/Menu';
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@shared/assets/logo.svg';
@@ -35,16 +35,16 @@ function LayoutHeader() {
     return (
         <AppBar position="static" className={classes.root}>
             <Toolbar className={classes.toolbar}>
-                <IconButton onClick={handleDrawerState} size="large">
+                <IconButton onClick={handleDrawerState}>
                     <MenuIcon />
                 </IconButton>
                 <Link to={'/'} className={classes.brand}>
                     <img src={Logo} alt={'Robograding'} className={classes.brandImage} />
                 </Link>
                 <Box flexGrow={1} />
-                <Avatar component={ButtonBase} onClick={handleUserMenuOpen}>
+                <ButtonBase component={Avatar} onClick={handleUserMenuOpen}>
                     {user.getInitials()}
-                </Avatar>
+                </ButtonBase>
                 <Menu open={!!userMenuAnchor} anchorEl={userMenuAnchor} onClose={handleUserMenuClose}>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>

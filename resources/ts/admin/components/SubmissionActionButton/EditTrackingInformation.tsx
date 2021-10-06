@@ -1,5 +1,5 @@
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import { useMemo } from 'react';
 import { ShipmentProvidersList } from '@shared/constants/ShipmentProviders';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';

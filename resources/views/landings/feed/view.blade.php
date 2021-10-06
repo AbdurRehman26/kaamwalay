@@ -1,20 +1,17 @@
 <x-layout>
     <x-slot name="head">
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
         <link rel="stylesheet" type="text/css"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         <link rel="stylesheet" type="text/css"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" integrity="sha512-Velp0ebMKjcd9RiCoaHhLXkR1sFoCCWXNp6w4zj1hfMifYB5441C+sKeBl/T/Ka6NjBiRfBBQRaQq65ekYz3UQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </x-slot>
     <x-slot name="body">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/fslightbox@3.3.0-2/index.js" integrity="sha256-XDXybe19IazSiJEOLnRr+TK7f+lLK5gV1VJpC1Nfdk0=" crossorigin="anonymous"></script>
-
+        <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
         <script defer>
-            $(function() {
+            $(function () {
                 $('.feed-view__slider--js').slick({
                     infinite: true,
                     arrows: true,
@@ -28,25 +25,25 @@
                             settings: {
                                 slidesToShow: 3,
                                 slidesToScroll: 3,
-                            },
+                            }
                         },
                         {
                             breakpoint: 600,
                             settings: {
                                 slidesToShow: 2,
-                                slidesToScroll: 2,
-                            },
+                                slidesToScroll: 2
+                            }
                         },
                         {
                             breakpoint: 480,
                             settings: {
                                 slidesToShow: 1,
-                                slidesToScroll: 1,
-                            },
+                                slidesToScroll: 1
+                            }
                         },
                     ],
                 });
-            })
+            });
         </script>
     </x-slot>
     @if($grades_available)
@@ -256,7 +253,7 @@
                 <div class="feed-view__slider feed-view__slider--js">
                     @foreach($generated_images as $generated_image)
                         <div class="feed-view__slider__item">
-                            <a href="{{ $generated_image['output_image'] }}" class="feed-view__slider__link" data-fslightbox="cards-gallery" data-type="image">
+                            <a href="#" class="feed-view__slider__link">
                                 <img class="feed-view__slider__image"
                                      src="{{ $generated_image['output_image'] }}" alt="{{ $generated_image['name'] }}">
                                 <p class="feed-view__slider__caption">{{ $generated_image['name'] }}</p>

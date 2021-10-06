@@ -1,7 +1,7 @@
-import Divider from '@mui/material/Divider';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import Divider from '@material-ui/core/Divider';
+import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { PropsWithChildren } from 'react';
 import LogoPoweredByAgs from '@shared/assets/logoPoweredByAgs.svg';
 import robogradingBanner from '@shared/assets/robogradingBanner.png';
@@ -18,13 +18,13 @@ const useStyles = makeStyles(
             flexDirection: 'column',
             maxWidth: 520,
             padding: '64px 24px',
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 padding: 0,
             },
         },
         content: {
             paddingBottom: 32,
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 padding: 0,
             },
         },
@@ -52,17 +52,17 @@ const useStyles = makeStyles(
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
         },
         hideOnMobile: {
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 display: 'none',
             },
         },
         brandContainer: {
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 padding: '12px 12px',
             },
         },
         brand: {
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 width: '249px',
                 height: '59px',
                 marginLeft: '12px',

@@ -1,5 +1,5 @@
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { FunctionComponent } from 'react';
 
 type StepDescriptionProps = {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         letterSpacing: '0px',
         textAlign: 'left',
         marginBottom: '6px',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('xs')]: {
             fontSize: '20px',
         },
     },

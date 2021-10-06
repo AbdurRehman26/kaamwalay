@@ -24,7 +24,8 @@ class SendEmail implements ShouldQueue
      * @return void
      */
     public function __construct(
-        protected array $recipients,
+        protected string $recipientEmail,
+        protected string $recipientName,
         protected string $subject,
         protected string $templateName,
         protected array $templateContent = []
@@ -41,7 +42,8 @@ class SendEmail implements ShouldQueue
     public function handle(MandrillClient $mandrillClient)
     {
         $response = $mandrillClient->sendEmailWithTemplate(
-            $this->recipients,
+            $this->recipientEmail,
+            $this->recipientName,
             $this->subject,
             $this->templateName,
             $this->templateContent

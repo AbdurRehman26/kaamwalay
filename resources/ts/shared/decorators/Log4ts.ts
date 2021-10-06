@@ -1,5 +1,5 @@
-import { Log } from '../lib/log';
-import { LogAdapterClass } from '../lib/log/adapters/LogAdapter';
+import { Log } from '@shared/lib/log';
+import { LogAdapterClass } from '@shared/lib/log/adapters/LogAdapter';
 
 /**
  * @example

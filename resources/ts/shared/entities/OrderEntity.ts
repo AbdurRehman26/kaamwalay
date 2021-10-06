@@ -1,10 +1,11 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
-import { OrderItemStatusEnum } from '../constants/OrderItemStatusEnum';
-import { OrderStatusEnum } from '../constants/OrderStatusEnum';
+import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { Entity } from '@shared/entities/Entity';
 import { DateField } from '../decorators/DateField';
+import { Field } from '../decorators/Field';
 import { AddressEntity } from './AddressEntity';
-import { Entity } from './Entity';
 import { InvoiceEntity } from './InvoiceEntity';
 import { OrderItemEntity } from './OrderItemEntity';
 import { OrderPaymentEntity } from './OrderPaymentEntity';
@@ -17,66 +18,86 @@ import { ShippingMethodEntity } from './ShippingMethodEntity';
 import { UserEntity } from './UserEntity';
 
 export class OrderEntity extends Entity {
-    public orderNumber!: string;
-    public numberOfCards!: number;
-    public totalDeclaredValue!: number;
-    public grandTotal!: number;
-    public shippingFee!: number;
-    public serviceFee!: number;
-    public customerId!: number;
-    public customerNumber!: string;
-    public reviewedAt!: string;
-    public reviewedBy!: string;
-    public notes!: string;
-
-    @Type(() => OrderStatusEntity)
+    @Field('order_status')
     public orderStatus!: OrderStatusEntity;
-
-    @Type(() => UserEntity)
-    public customer!: UserEntity;
-
-    @Type(() => PaymentPlanEntity)
-    public paymentPlan!: PaymentPlanEntity;
-
-    @Type(() => PaymentMethodEntity)
-    public paymentMethod!: PaymentMethodEntity;
-
-    @Type(() => ShippingMethodEntity)
-    public shippingMethod!: ShippingMethodEntity;
-
-    @Type(() => OrderPaymentEntity)
-    public orderPayment!: OrderPaymentEntity;
-
-    @Type(() => AddressEntity)
-    public shippingAddress!: AddressEntity;
-
-    @Type(() => AddressEntity)
-    public billingAddress!: AddressEntity;
-
-    @Type(() => OrderStatusHistoryEntity)
+    @Field('order_status_history', () => OrderStatusHistoryEntity)
     public orderStatusHistory!: OrderStatusHistoryEntity[];
 
-    @Type(() => OrderItemEntity)
+    @Type()
+    public customer!: UserEntity;
+
+    @Field('order_items', () => OrderItemEntity)
     public orderItems!: OrderItemEntity[];
 
-    @Type(() => ShipmentEntity)
+    @Field('order_number')
+    public orderNumber!: string;
+
+    @Field('number_of_cards')
+    public numberOfCards!: number;
+
+    @Field('total_declared_value')
+    public totalDeclaredValue!: number;
+
+    @Field('grand_total')
+    public grandTotal!: number;
+
+    @Field('shipping_fee')
+    public shippingFee!: number;
+
+    @Field('service_fee')
+    public serviceFee!: number;
+
+    @Field('payment_plan', () => PaymentPlanEntity)
+    public paymentPlan!: PaymentPlanEntity;
+
+    @Field('payment_method')
+    public paymentMethod!: PaymentMethodEntity;
+
+    @Field('shipping_method')
+    public shippingMethod!: ShippingMethodEntity;
+
+    @Field('order_payment')
+    public orderPayment!: OrderPaymentEntity;
+
+    @Field('shipping_address')
+    public shippingAddress!: AddressEntity;
+
+    @Field('billing_address')
+    public billingAddress!: AddressEntity;
+
+    @Field('order_customer_shipment', () => ShipmentEntity)
     public orderCustomerShipment!: ShipmentEntity | null;
 
-    @Type(() => ShipmentEntity)
+    @Field('order_shipment', () => ShipmentEntity)
     public orderShipment!: ShipmentEntity | null;
 
-    @DateField()
+    @DateField('arrived_at')
     public arrivedAt!: Moment;
 
     @Type(() => InvoiceEntity)
     public invoice!: InvoiceEntity | null;
+
+    @Field('customer_id')
+    public customerId!: number;
+
+    @Field('customer_number')
+    public customerNumber!: string;
+
+    @Field('reviewed_at')
+    public reviewedAt!: string;
+
+    @Field('reviewed_by')
+    public reviewedBy!: string;
+
+    @Field('notes')
+    public notes!: string;
 
     public get status() {
         return this.orderStatus?.code;
     }
 
     public getItemsByStatus(status: OrderItemStatusEnum): OrderItemEntity[] {
-        return (this.orderItems ?? []).filter((item: any) => item.status?.orderItemStatus?.id === status);
+        return (this.orderItems ?? []).filter((item: any) => item.status?.order_item_status?.id === status);
     }
 
     public hasOrderStatus(status: OrderStatusEnum, checkInHistory: boolean = true) {

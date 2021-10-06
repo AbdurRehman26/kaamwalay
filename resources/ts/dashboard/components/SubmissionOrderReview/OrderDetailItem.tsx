@@ -1,4 +1,4 @@
-import Typography from '@mui/material/Typography';
+import Typography from '@material-ui/core/Typography';
 import React, { useCallback } from 'react';
 import useStyles from '@dashboard/components/SubmissionOrderReview/style';
 import { useAppDispatch } from '@dashboard/redux/hooks';

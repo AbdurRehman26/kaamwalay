@@ -1,6 +1,6 @@
 import { validate, validateSync, ValidatorOptions } from 'class-validator';
-import { ReflectReturnType } from '../constants/ReflectMetadata';
-import { ValidationException } from '../exceptions/ValidationException';
+import { ReflectReturnType } from '@shared/constants/ReflectMetadata';
+import { ValidationException } from '@shared/exceptions/ValidationException';
 import { bindParams } from './BindParams';
 
 export function ValidateMethodParams(options?: ValidatorOptions): MethodDecorator {

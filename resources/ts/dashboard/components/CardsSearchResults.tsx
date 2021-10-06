@@ -1,8 +1,7 @@
-import { useMediaQuery } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import { useMediaQuery } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { Hits, Stats } from 'react-instantsearch-dom';
 import CustomPagination from '@dashboard/components/CustomPagination';
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
             listStyle: 'none',
             padding: 0,
         },
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('xs')]: {
             maxHeight: '80vh',
             paddingLeft: 0,
             paddingRight: 0,
@@ -44,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ResultWrapper(props: any) {
-    // TODO: Transform hit to the right type.
     return (
         <SearchResultItemCard
             image={props.hit.image_path}
@@ -62,7 +60,7 @@ function ResultWrapper(props: any) {
 
 function CardsSearchResults() {
     const classes = useStyles();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     const ResultsWrapper = isMobile ? 'div' : Paper;
     return (
         <div className={classes.container}>

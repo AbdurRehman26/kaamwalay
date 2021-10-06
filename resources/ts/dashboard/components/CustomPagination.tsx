@@ -1,5 +1,5 @@
-import Pagination from '@mui/material/Pagination';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 import { connectPagination } from 'react-instantsearch-dom';
 
 const useStyles = makeStyles({

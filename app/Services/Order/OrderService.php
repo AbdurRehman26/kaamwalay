@@ -4,7 +4,6 @@ namespace App\Services\Order;
 
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
-use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -33,7 +32,7 @@ class OrderService
             ->findOrFail($orderId);
     }
 
-    public function getDataForCustomerSubmissionConfirmationEmail(Order $order): array
+    public function getDataForCustomerSubmissionConfirmationEmail(Order $order)
     {
         $data = [];
 

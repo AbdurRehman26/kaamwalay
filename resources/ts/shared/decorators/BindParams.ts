@@ -1,5 +1,5 @@
 import { plainToClass } from 'class-transformer';
-import { BindParamsDecoratorOptions, ReflectParamsType } from '../constants/ReflectMetadata';
+import { BindParamsDecoratorOptions, ReflectParamsType } from '@shared/constants/ReflectMetadata';
 
 export function bindParams(args: any[], { target, propertyKey }: Record<string, any>) {
     const paramTypes = Reflect.getMetadata(ReflectParamsType, target, propertyKey);

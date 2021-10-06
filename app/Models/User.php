@@ -14,6 +14,12 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @property int $id
+ * @property string $customer_number
+ * @property string $first_name
+ * @property string $email
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword;
@@ -74,7 +80,7 @@ class User extends Authenticatable implements JWTSubject
         return $user;
     }
 
-    public function customerAddresses(): HasMany
+    public function customer_addresses(): HasMany
     {
         return $this->hasMany(CustomerAddress::class, 'user_id');
     }
@@ -139,7 +145,8 @@ class User extends Authenticatable implements JWTSubject
         /* @var EmailService $emailService */
         $emailService = resolve(EmailService::class);
         $emailService->sendEmail(
-            [[$this->getEmailForPasswordReset() => $this->name]],
+            $this->getEmailForPasswordReset(),
+            $this->name,
             $emailService::SUBJECT[$emailService::TEMPLATE_SLUG_FORGOT_PASSWORD],
             $emailService::TEMPLATE_SLUG_FORGOT_PASSWORD,
             [

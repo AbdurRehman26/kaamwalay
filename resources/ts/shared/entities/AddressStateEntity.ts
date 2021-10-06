@@ -1,4 +1,4 @@
-import { Entity } from './Entity';
+import { Entity } from '@shared/entities/Entity';
 
 export class AddressStateEntity extends Entity {
     public code!: string;

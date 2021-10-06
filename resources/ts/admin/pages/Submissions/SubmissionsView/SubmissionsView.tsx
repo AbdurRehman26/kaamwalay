@@ -1,7 +1,7 @@
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';

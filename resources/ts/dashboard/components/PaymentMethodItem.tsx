@@ -1,8 +1,7 @@
-import ButtonBase from '@mui/material/ButtonBase';
-import Radio, { RadioProps } from '@mui/material/Radio';
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Radio, { RadioProps } from '@material-ui/core/Radio';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';

@@ -1,5 +1,5 @@
-import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
+import Typography from '@material-ui/core/Typography';
+import { styled } from '@material-ui/core/styles';
 import React from 'react';
 import { font } from '@shared/styles/utils';
 

@@ -1,9 +1,10 @@
-import { Type } from 'class-transformer';
+import { Field } from '../decorators/Field';
 import { UserEntity } from './UserEntity';
 
 export class AuthenticatedUserEntity {
-    public accessToken!: string;
-
-    @Type(() => UserEntity)
+    @Field()
     public user!: UserEntity;
+
+    @Field('access_token')
+    public accessToken!: string;
 }

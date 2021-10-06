@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Field } from '../decorators/Field';
 import { CardProductEntity } from './CardProductEntity';
 import { Entity } from './Entity';
 import { OrderItemStatusEntity } from './OrderItemStatusEntity';
@@ -6,16 +6,21 @@ import { UserCardEntity } from './UserCardEntity';
 
 export class OrderItemEntity extends Entity {
     public quantity!: number;
-    public declaredValuePerUnit!: number;
-    public certificateNumber!: string;
-    public orderId!: number;
 
-    @Type(() => OrderItemStatusEntity)
     public status!: OrderItemStatusEntity;
 
-    @Type(() => CardProductEntity)
+    @Field('declared_value_per_unit')
+    public declaredValuePerUnit!: number;
+
+    @Field('card_product')
     public cardProduct!: CardProductEntity;
 
-    @Type(() => UserCardEntity)
+    @Field('certificate_number')
+    public certificateNumber!: string;
+
+    @Field('order_id')
+    public orderId!: number;
+
+    @Field('user_card')
     public userCard!: UserCardEntity;
 }

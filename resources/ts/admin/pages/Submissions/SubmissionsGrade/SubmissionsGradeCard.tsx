@@ -1,10 +1,10 @@
-import FaceIcon from '@mui/icons-material/Face';
-import { Paper } from '@mui/material';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { Paper } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import FaceIcon from '@material-ui/icons/Face';
 import { useCallback, useEffect, useState } from 'react';
 import { ReactComponent as OutlinedToyIcon } from '@shared/assets/icons/optimisedSmartToyIcon.svg';
 import {
@@ -292,8 +292,8 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     const handleEdit = useCallback(() => {
         dispatch(
             manageCardDialogActions.editCard({
-                card: gradeData?.orderItem?.cardProduct,
-                declaredValue: gradeData?.orderItem?.declaredValuePerUnit,
+                card: gradeData?.order_item?.card_product,
+                declaredValue: gradeData?.order_item?.declared_value_per_unit,
                 orderItemId: itemId,
             }),
         );
@@ -326,7 +326,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
             };
             const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/items/${orderItemID}/change-status`);
             const response = await endpoint.post('', DTO);
-            dispatch(updateExistingCardStatus({ status: response.data.status.orderItemStatus.name, id: topLevelID }));
+            dispatch(updateExistingCardStatus({ status: response.data.status.order_item_status.name, id: topLevelID }));
         }
         notifications.success('Card graded successfully!.', 'Success');
     }
@@ -346,7 +346,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     async function sendHumanGradesToBackend() {
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${topLevelID}/grades`);
         const response = await endpoint.put('', {
-            humanGradeValues: humanGrades,
+            human_grade_values: humanGrades,
         });
         dispatch(updateExistingCardData({ id: topLevelID, data: response.data }));
     }
@@ -357,66 +357,66 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     }
 
     const humanGrades = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex]?.humanGradeValues,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex]?.human_grade_values,
     );
 
-    const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.id);
+    const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.id);
     const topLevelID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
     const cardName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.card_product.name,
     );
     const cardImage = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.imagePath,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.card_product.image_path,
     );
     const cardFullName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.fullName,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.card_product.full_name,
     );
     const certificateNumber = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.certificateNumber,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.certificate_number,
     );
     const overallGrade = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.grade);
     const overallGradeNickname = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.nickname,
     );
     const overallEdgeGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.edge,
     );
     const overallCenterGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.center,
     );
     const overallCornerGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.corner,
     );
     const overallSurfaceGrade = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overall_values.surface,
     );
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name ?? '',
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.status.order_item_status.name,
     );
 
     const frontCentering = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.center,
     );
     const frontEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.edge,
     );
     const frontCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.corner,
     );
     const frontSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.front.surface,
     );
     const backSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.surface,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.surface,
     );
     const backEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.edge,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.edge,
     );
     const backCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.corner,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.corner,
     );
     const backCenter = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.center,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].human_grade_values.back.center,
     );
 
     const [isDoneDisabled, setIsDoneDisabled] = useState(true);
@@ -433,10 +433,10 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     }, [overallGrade]);
 
     const gradedAt = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.gradedAt,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.graded_at,
     );
     const gradedBy = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.gradedBy,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].order_item.graded_by,
     );
 
     function areRoboGradesAvailable() {
@@ -463,7 +463,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     }
 
     function isReviseGradedSaveBtnDisabled() {
-        const prevHumanGrades = viewModes[itemIndex].prevViewModeGraded.humanGradeValues;
+        const prevHumanGrades = viewModes[itemIndex].prevViewModeGraded.human_grade_values;
         if (!isOverallDoneDisabled()) {
             return JSON.stringify(prevHumanGrades) === JSON.stringify(humanGrades);
         } else {
@@ -501,28 +501,13 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                     {cardStatus.toLowerCase() === 'confirmed' ? (
                         <>
                             <Grid item xs>
-                                <Button
-                                    variant={'contained'}
-                                    color={'inherit'}
-                                    onClick={handleNotAccepted}
-                                    className={classes.button}
-                                >
+                                <Button variant={'contained'} onClick={handleNotAccepted} className={classes.button}>
                                     Not Accepted
                                 </Button>
-                                <Button
-                                    variant={'contained'}
-                                    color={'inherit'}
-                                    onClick={handleMissing}
-                                    className={classes.button}
-                                >
+                                <Button variant={'contained'} onClick={handleMissing} className={classes.button}>
                                     Missing
                                 </Button>
-                                <Button
-                                    variant={'contained'}
-                                    color={'inherit'}
-                                    onClick={handleEdit}
-                                    className={classes.button}
-                                >
+                                <Button variant={'contained'} onClick={handleEdit} className={classes.button}>
                                     Edit Card
                                 </Button>
                             </Grid>
@@ -531,12 +516,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
 
                     {cardStatus.toLowerCase() !== 'confirmed' ? (
                         <Grid item xs>
-                            <Button
-                                variant={'contained'}
-                                color={'inherit'}
-                                onClick={handleRevisePress}
-                                className={classes.button}
-                            >
+                            <Button variant={'contained'} onClick={handleRevisePress} className={classes.button}>
                                 Revise
                             </Button>
                         </Grid>

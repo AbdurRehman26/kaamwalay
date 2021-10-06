@@ -1,6 +1,6 @@
-import { useMediaQuery } from '@mui/material';
-import Container from '@mui/material/Container';
-import { Theme } from '@mui/material/styles';
+import { useMediaQuery } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import { Theme } from '@material-ui/core/styles';
 import React, { Fragment, PropsWithChildren, useMemo } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 import { ConfirmationDialog } from '@shared/components/ConfirmationDialog';
@@ -27,7 +27,7 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
 
     const ContainerComponent = options.has(LayoutFlags.Container) ? (Container as any) : Fragment;
     const ContentComponent = options.has(LayoutFlags.Content) ? Content : Fragment;
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     if (!authenticated || options.isEmpty()) {
         return children as any;
     }

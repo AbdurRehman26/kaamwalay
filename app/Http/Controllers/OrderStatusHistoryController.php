@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API\Admin;
+namespace App\Http\Controllers;
 
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\AssignOrderStatusHistoryRequest;
 use App\Http\Resources\API\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\Admin\Order\OrderStatusHistoryResource;

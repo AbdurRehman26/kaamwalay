@@ -5,10 +5,4 @@ import { stringify, StringifyOptions } from './stringify';
  * @param data
  * @param options
  */
-export const toJS = (data: any, options?: StringifyOptions) => {
-    try {
-        return JSON.parse(stringify(data, void 0, options));
-    } catch (e) {
-        return data;
-    }
-};
+export const toJS = (data: any, options?: StringifyOptions) => JSON.parse(stringify(data, void 0, options));

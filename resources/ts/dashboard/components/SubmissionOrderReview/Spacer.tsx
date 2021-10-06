@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import { styled } from '@material-ui/core/styles';
 
 type SpacerProps = {
     top: string;

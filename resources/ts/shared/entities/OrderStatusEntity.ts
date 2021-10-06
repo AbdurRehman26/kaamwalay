@@ -1,5 +1,5 @@
+import { Entity } from '@shared/entities/Entity';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
-import { Entity } from './Entity';
 
 export class OrderStatusEntity extends Entity {
     public name!: string;

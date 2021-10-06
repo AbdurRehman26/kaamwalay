@@ -1,10 +1,9 @@
-import PrintIcon from '@mui/icons-material/Print';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import PrintIcon from '@material-ui/icons/Print';
 import { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { useViewSubmissionHeaderStyles } from './styles';
 
@@ -25,13 +24,12 @@ export function ViewSubmissionHeader({ orderNumber, invoicePath, invoiceNumber }
     const history = useHistory();
 
     const handlePrintPackingSlipPress = useCallback(() => {
-        // noinspection JSIgnoredPromiseFromCall
         downloadFromUrl(invoicePath!, `robograding-${invoiceNumber}.pdf`);
-    }, [invoicePath, invoiceNumber]);
+    }, [id, invoicePath, invoiceNumber]);
 
     const shippingInstructionsPress = useCallback(() => {
         history.push(`/submissions/${id}/confirmation`);
-    }, [history, id]);
+    }, [id]);
 
     return (
         <Grid container alignItems={'center'} className={classes.root}>
@@ -50,7 +48,7 @@ export function ViewSubmissionHeader({ orderNumber, invoicePath, invoiceNumber }
                 >
                     Print Packing Slip
                 </Button>
-                <Button className={classes.button} color={'inherit'} onClick={shippingInstructionsPress}>
+                <Button className={classes.button} onClick={shippingInstructionsPress}>
                     Shipping Instructions
                 </Button>
             </Grid>

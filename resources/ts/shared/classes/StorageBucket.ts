@@ -1,5 +1,5 @@
 import { default as localforage } from 'localforage';
-import { StorageBucketInterface } from '../interfaces/StorageBucketInterface';
+import { StorageBucketInterface } from '@shared/interfaces/StorageBucketInterface';
 
 export class StorageBucket implements StorageBucketInterface {
     private store: LocalForage;

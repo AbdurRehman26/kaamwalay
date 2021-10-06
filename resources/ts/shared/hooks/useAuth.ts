@@ -1,8 +1,8 @@
 import { plainToClass } from 'class-transformer';
 import { useCallback, useMemo } from 'react';
-import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
-import { SignUpRequestDto } from '../dto/SignUpRequestDto';
-import { UserEntity } from '../entities/UserEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
+import { useSharedSelector } from '@shared/hooks/useSharedDispatch';
+import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
 import {
     authenticateAction,
     authenticateCheckAction,
@@ -10,9 +10,9 @@ import {
     registerAction,
     resetPasswordAction,
     revokeAuthAction,
-} from '../redux/slices/authenticationSlice';
-import { useSharedDispatch } from './useSharedDispatch';
-import { useSharedSelector } from './useSharedSelector';
+} from '@shared/redux/slices/authenticationSlice';
+import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
+import { SignUpRequestDto } from '../dto/SignUpRequestDto';
 
 export function useAuth() {
     const dispatch = useSharedDispatch();

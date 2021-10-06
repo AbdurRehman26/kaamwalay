@@ -1,11 +1,14 @@
-import { Type } from 'class-transformer';
-import { Entity } from './Entity';
+import { Entity } from '@shared/entities/Entity';
+import { Field } from '../decorators/Field';
 import { OrderStatusEntity } from './OrderStatusEntity';
 
 export class OrderStatusHistoryEntity extends Entity {
+    @Field('order_id')
     public orderId!: number;
+
+    @Field('order_status_id')
     public orderStatusId!: number;
 
-    @Type(() => OrderStatusEntity)
+    @Field('order_status')
     public orderStatus!: OrderStatusEntity;
 }

@@ -1,8 +1,8 @@
-import { StorageBucket } from '../classes/StorageBucket';
-import { AuthenticationEnum } from '../constants/AuthenticationEnum';
-import { Inject } from '../decorators/Inject';
-import { Injectable } from '../decorators/Injectable';
-import { StorageService } from './StorageService';
+import { StorageBucket } from '@shared/classes/StorageBucket';
+import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
+import { Inject } from '@shared/decorators/Inject';
+import { Injectable } from '@shared/decorators/Injectable';
+import { StorageService } from '@shared/services/StorageService';
 
 @Injectable('AuthenticationService')
 export class AuthenticationService {

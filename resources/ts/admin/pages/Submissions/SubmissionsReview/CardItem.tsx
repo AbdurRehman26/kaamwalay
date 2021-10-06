@@ -1,10 +1,10 @@
-import CloseIcon from '@mui/icons-material/Close';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import { useCallback, useState } from 'react';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';

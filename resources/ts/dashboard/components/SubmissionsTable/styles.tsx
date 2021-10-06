@@ -1,5 +1,5 @@
-import MuiTable from '@mui/material/Table';
-import { styled } from '@mui/material/styles';
+import MuiTable from '@material-ui/core/Table';
+import { styled } from '@material-ui/core/styles';
 
 export const Table = styled(MuiTable)(
     {},

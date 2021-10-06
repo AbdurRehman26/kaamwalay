@@ -1,4 +1,4 @@
-import TextField from '@mui/material/TextField';
+import TextField from '@material-ui/core/TextField';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OutlinedCard from '@shared/components/OutlinedCard';

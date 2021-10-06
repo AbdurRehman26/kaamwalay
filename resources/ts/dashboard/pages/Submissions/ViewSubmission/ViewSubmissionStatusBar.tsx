@@ -1,4 +1,4 @@
-import Typography from '@mui/material/Typography';
+import Typography from '@material-ui/core/Typography';
 import { useMemo } from 'react';
 import { cx } from '@shared/lib/utils/cx';
 import { useViewSubmissionStatusBarStyles } from './styles';

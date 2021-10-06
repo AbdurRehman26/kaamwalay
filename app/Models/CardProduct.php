@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
@@ -62,12 +61,12 @@ class CardProduct extends Model
         return $array;
     }
 
-    public function cardSet(): BelongsTo
+    public function cardSet(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(CardSet::class);
     }
 
-    public function cardCategory(): BelongsTo
+    public function cardCategory(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(CardCategory::class);
     }

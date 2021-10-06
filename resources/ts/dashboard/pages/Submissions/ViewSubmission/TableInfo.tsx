@@ -1,6 +1,6 @@
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableContainer from '@material-ui/core/TableContainer';
 import { PropsWithChildren } from 'react';
 
 export function TableInfo({ children }: PropsWithChildren<{}>) {

@@ -1,4 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from '@material-ui/core/styles';
 
 export const useViewSubmissionHeaderStyles = makeStyles(
     (theme) => ({
@@ -136,7 +136,7 @@ export const useViewSubmissionInformationStyles = makeStyles(
                 border: 'none',
             },
 
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 '& .table-info td, & .table-info td': {
                     width: '60%',
                 },

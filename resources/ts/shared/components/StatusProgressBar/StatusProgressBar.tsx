@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Grid';
+import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import StatusProgressItem from './StatusProgressItem';
 import { StatusProgressStep } from './StatusProgressStep';

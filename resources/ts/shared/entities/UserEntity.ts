@@ -1,21 +1,29 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
-import { RolesEnum } from '../constants/RolesEnum';
-import { DateField } from '../decorators/DateField';
-import { Entity } from './Entity';
+import { RolesEnum } from '@shared/constants/RolesEnum';
+import { Entity } from '@shared/entities/Entity';
+import { Field } from '../decorators/Field';
 import { RoleEntity } from './RoleEntity';
 
 export class UserEntity extends Entity {
     public username!: string;
     public email!: string;
     public phone!: string;
-    public firstName!: string;
-    public lastName!: string;
-    public stripeId!: string;
-    public customerNumber!: string;
 
-    @DateField()
+    @Field('first_name')
+    public firstName!: string;
+
+    @Field('last_name')
+    public lastName!: string;
+
+    @Field('email_verified_at')
     public emailVerifiedAt!: Moment;
+
+    @Field('stripe_id')
+    public stripeId!: string;
+
+    @Field('customer_number')
+    public customerNumber!: string;
 
     @Type(() => RoleEntity)
     public roles!: RoleEntity[];

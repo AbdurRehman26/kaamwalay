@@ -1,6 +1,6 @@
-import Dialog, { DialogProps } from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
-import makeStyles from '@mui/styles/makeStyles';
+import Dialog, { DialogProps } from '@material-ui/core/Dialog';
+import Slide from '@material-ui/core/Slide';
+import { makeStyles } from '@material-ui/core/styles';
 import ManageCardDialogEdit from '@shared/components/ManageCardDialog/ManageCardDialogEdit';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
@@ -12,7 +12,7 @@ export interface ManageCardDialogProps extends Omit<DialogProps, 'open'> {
 }
 
 const useStyles = makeStyles(
-    () => ({
+    (theme) => ({
         root: {},
         paper: {
             width: '100%',

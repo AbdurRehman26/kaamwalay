@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @method static OrderItemShipment create(?array $data = [])
+ */
 class OrderItemShipment extends Model
 {
     use HasFactory;
@@ -28,8 +30,8 @@ class OrderItemShipment extends Model
         'shipping_method_id' => 'integer',
     ];
 
-    public function shippingMethod(): BelongsTo
+    public function shippingMethod()
     {
-        return $this->belongsTo(ShippingMethod::class);
+        return $this->belongsTo(\App\Models\ShippingMethod::class);
     }
 }

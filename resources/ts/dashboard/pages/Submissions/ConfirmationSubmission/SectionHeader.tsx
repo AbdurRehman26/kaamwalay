@@ -1,6 +1,6 @@
-import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import React, { PropsWithChildren } from 'react';
 import { font } from '@shared/styles/utils';
 import { useSectionHeaderStyles } from './style';

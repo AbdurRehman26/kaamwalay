@@ -1,6 +1,5 @@
-import Typography from '@mui/material/Typography';
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useMemo } from 'react';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { cx } from '../../lib/utils/cx';

@@ -1,9 +1,9 @@
-import PrintIcon from '@mui/icons-material/PrintOutlined';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import PrintIcon from '@material-ui/icons/PrintOutlined';
 import { useCallback } from 'react';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';

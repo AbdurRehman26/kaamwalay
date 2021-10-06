@@ -39,16 +39,10 @@ class SendScheduledEmail implements ShouldQueue
     public function handle(MandrillClient $mandrillClient)
     {
         $payload = unserialize($this->scheduledEmail->payload);
-
-        // TODO It is to support any existing scheduled emails. From next release, it would only support `recipients`.
-        if (! empty($payload['recipientEmail'])) {
-            $recipients = [[$payload['recipientEmail'] => $payload['recipientName']]];
-        } else {
-            $recipients = $payload['recipients'];
-        }
-
+    
         $response = $mandrillClient->sendEmailWithTemplate(
-            $recipients,
+            $payload['recipientEmail'],
+            $payload['recipientName'],
             $payload['subject'],
             $payload['templateName'],
             $payload['templateContent']

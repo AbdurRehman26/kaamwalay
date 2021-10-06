@@ -1,5 +1,5 @@
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
 import GuestOnlyRoute from '@shared/components/GuestOnlyRoute';

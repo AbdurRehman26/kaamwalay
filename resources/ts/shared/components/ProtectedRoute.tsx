@@ -1,12 +1,12 @@
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { castArray } from 'lodash';
 import React, { useMemo } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
-import { AuthenticationEnum } from '../constants/AuthenticationEnum';
-import { RolesEnum } from '../constants/RolesEnum';
-import { useAuth } from '../hooks/useAuth';
-import { NativeRedirect } from './NativeRedirect';
+import { NativeRedirect } from '@shared/components/NativeRedirect';
+import { AuthenticationEnum } from '@shared/constants/AuthenticationEnum';
+import { RolesEnum } from '@shared/constants/RolesEnum';
+import { useAuth } from '@shared/hooks/useAuth';
 
 interface ProtectedRouteProps extends RouteProps {
     redirectRoute?: string;

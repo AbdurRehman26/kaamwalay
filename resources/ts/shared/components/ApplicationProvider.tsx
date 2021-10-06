@@ -1,19 +1,14 @@
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import React, { PropsWithChildren, useMemo } from 'react';
 import { Provider } from 'react-redux';
-import { ConfirmationDialogProvider } from '../contexts/ConfirmationDialogContext';
-import { materialUiTheme } from '../styles/theme';
-import AuthenticationCheck from './AuthenticationCheck';
+import AuthenticationCheck from '@shared/components/AuthenticationCheck';
+import { NotificationsContainer } from '@shared/components/NotificationsContainer';
+import { ConfirmationDialogProvider } from '@shared/contexts/ConfirmationDialogContext';
+import { materialUiTheme } from '@shared/styles/theme';
 import { ConfigurationLoad } from './ConfigurationLoad';
-import { NotificationsContainer } from './NotificationsContainer';
 import { SplashScreen, SplashScreenProps } from './SplashScreen';
-
-declare module '@mui/styles/defaultTheme' {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface DefaultTheme extends Theme {}
-}
 
 interface ApplicationProviderProps {
     store: EnhancedStore;
@@ -49,17 +44,15 @@ export function ApplicationProvider({
 
     return (
         <Provider store={store}>
-            <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={materialUiTheme}>
-                    <>
-                        {!noConfigurationLoad && <ConfigurationLoad />}
-                        {!noAuthenticationCheck && <AuthenticationCheck />}
-                        {!noNotificationsContainer && <NotificationsContainer />}
-                        {!noCssBaseline && <CssBaseline />}
-                        <ConfirmationDialogProvider>{content}</ConfirmationDialogProvider>
-                    </>
-                </ThemeProvider>
-            </StyledEngineProvider>
+            <ThemeProvider theme={materialUiTheme}>
+                <>
+                    {!noConfigurationLoad && <ConfigurationLoad />}
+                    {!noAuthenticationCheck && <AuthenticationCheck />}
+                    {!noNotificationsContainer && <NotificationsContainer />}
+                    {!noCssBaseline && <CssBaseline />}
+                    <ConfirmationDialogProvider>{content}</ConfirmationDialogProvider>
+                </>
+            </ThemeProvider>
         </Provider>
     );
 }

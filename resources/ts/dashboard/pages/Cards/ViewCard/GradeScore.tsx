@@ -1,7 +1,6 @@
-import Grid, { GridProps } from '@mui/material/Grid';
-import Typography, { TypographyProps } from '@mui/material/Typography';
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import Grid, { GridProps } from '@material-ui/core/Grid';
+import Typography, { TypographyProps } from '@material-ui/core/Typography';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useMemo } from 'react';
 import { font } from '@shared/styles/utils';
 

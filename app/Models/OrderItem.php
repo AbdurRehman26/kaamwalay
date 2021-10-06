@@ -5,10 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property OrderItemStatus $orderItemStatus
+ * @property int $order_item_status_id
+ * @property int $order_id
+ * @property int $id
+ * @property UserCard $userCard
+ */
 class OrderItem extends Model
 {
     use HasFactory;
@@ -53,32 +58,32 @@ class OrderItem extends Model
         'declared_value_total' => 'float',
     ];
 
-    public function order(): BelongsTo
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
-    public function cardProduct(): BelongsTo
+    public function cardProduct()
     {
         return $this->belongsTo(CardProduct::class);
     }
 
-    public function orderItemShipment(): BelongsTo
+    public function orderItemShipment()
     {
         return $this->belongsTo(OrderItemShipment::class);
     }
 
-    public function orderItemCustomerShipment(): BelongsTo
+    public function orderItemCustomerShipment()
     {
         return $this->belongsTo(OrderItemCustomerShipment::class);
     }
 
-    public function orderItemStatus(): BelongsTo
+    public function orderItemStatus()
     {
         return $this->belongsTo(OrderItemStatus::class);
     }
 
-    public function orderItemStatusHistory(): HasMany
+    public function orderItemStatusHistory()
     {
         return $this->hasMany(OrderItemStatusHistory::class);
     }

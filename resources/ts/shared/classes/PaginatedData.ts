@@ -1,6 +1,6 @@
 import { plainToClass, Type } from 'class-transformer';
-import { PaginationLinks } from './PaginationLinks';
-import { PaginationMeta } from './PaginationMeta';
+import { PaginationLinks } from '@shared/classes/PaginationLinks';
+import { PaginationMeta } from '@shared/classes/PaginationMeta';
 
 export class PaginatedData<T> {
     static LimitSet = [24, 48, 72, 96, 120];

@@ -1,6 +1,6 @@
-import Grid from '@mui/material/Grid';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
+import Grid from '@material-ui/core/Grid';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 import { Moment } from 'moment';
 import React from 'react';
 import { formatDate } from '@shared/lib/datetime/formatDate';

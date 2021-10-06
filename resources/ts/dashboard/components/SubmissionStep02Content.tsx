@@ -1,11 +1,10 @@
-import { useMediaQuery } from '@mui/material';
-import Alert from '@mui/material/Alert';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import { useMediaQuery } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
 import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
@@ -43,7 +42,7 @@ function SubmissionStep02Content() {
     );
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
     const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
 
     const searchClient = useMemo(

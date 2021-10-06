@@ -1,5 +1,5 @@
 import { ValidationError } from 'class-validator';
-import { Exception } from './Exception';
+import { Exception } from '@shared/exceptions/Exception';
 
 export class ValidationException extends Exception {
     public errors!: ValidationError[];

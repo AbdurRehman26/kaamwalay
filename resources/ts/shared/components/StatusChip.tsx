@@ -1,5 +1,5 @@
-import Chip, { ChipProps } from '@mui/material/Chip';
-import { styled } from '@mui/material/styles';
+import Chip, { ChipProps } from '@material-ui/core/Chip';
+import { styled, Theme } from '@material-ui/core/styles';
 
 const colorsMap = {
     pending: '#e1e1e1',
@@ -8,7 +8,6 @@ const colorsMap = {
     arrived: '#fff06c',
     graded: '#81d5f9',
     shipped: '#8feca9',
-    // eslint-disable-next-line camelcase
     pending_payment: '#e1e1e1',
 };
 
@@ -17,7 +16,7 @@ export type StatusChipColor = 'primary' | 'secondary' | keyof typeof colorsMap;
 type StatusChipProps = Omit<ChipProps, 'color'> & { color?: StatusChipColor };
 
 export const StatusChip = styled(({ color, ...rest }: StatusChipProps) => <Chip {...rest} />)(
-    ({ theme, color = 'pending' }) => {
+    ({ theme, color = 'pending' }: StatusChipProps & { theme: Theme }) => {
         let color$: string = color;
         if (color$ && color$ in colorsMap) {
             color$ = colorsMap[color$ as keyof typeof colorsMap];

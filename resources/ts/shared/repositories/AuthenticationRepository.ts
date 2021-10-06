@@ -1,14 +1,14 @@
 import { classToPlain, plainToClass } from 'class-transformer';
-import { Inject } from '../decorators/Inject';
-import { Injectable } from '../decorators/Injectable';
-import { ValidateMethodParamsAsync } from '../decorators/ValidateMethodParams';
-import { LoginRequestDto } from '../dto/LoginRequestDto';
+import { Inject } from '@shared/decorators/Inject';
+import { Injectable } from '@shared/decorators/Injectable';
+import { ValidateMethodParamsAsync } from '@shared/decorators/ValidateMethodParams';
+import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
+import { AuthenticatedUserEntity } from '@shared/entities/AuthenticatedUserEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
+import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
+import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
 import { SignUpRequestDto } from '../dto/SignUpRequestDto';
-import { AuthenticatedUserEntity } from '../entities/AuthenticatedUserEntity';
-import { UserEntity } from '../entities/UserEntity';
-import { toApiPropertiesObject } from '../lib/utils/toApiPropertiesObject';
-import { AuthenticationService } from '../services/AuthenticationService';
 import { Repository } from './Repository';
 
 @Injectable('AuthenticationRepository')

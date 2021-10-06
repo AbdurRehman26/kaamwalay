@@ -13,7 +13,8 @@ it('sends email', function () {
     Bus::fake();
 
     resolve(EmailService::class)->sendEmail(
-        [['test@test.test' => 'Test Name']],
+        'test@test.test',
+        'Test Name',
         'Test Subject',
         'test_template',
         []
@@ -25,7 +26,8 @@ it('sends email', function () {
 it('schedules email', function () {
     $sendAt = now()->addDay();
     $data = [
-        'recipients' => [['test@test.test' => 'Test Name']],
+        'recipientEmail' => 'test@test.test',
+        'recipientName' => 'Test Name',
         'subject' => 'Test Subject',
         'templateName' => 'test_template',
         'templateContent' => [],
@@ -33,7 +35,8 @@ it('schedules email', function () {
 
     resolve(EmailService::class)->scheduleEmail(
         $sendAt,
-        $data['recipients'],
+        $data['recipientEmail'],
+        $data['recipientName'],
         $data['subject'],
         $data['templateName'],
         $data['templateContent']

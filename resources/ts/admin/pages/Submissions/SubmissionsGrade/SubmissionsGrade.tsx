@@ -1,7 +1,7 @@
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import makeStyles from '@mui/styles/makeStyles';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
 import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { useSidebarHidden } from '@admin/hooks/useSidebarHidden';
@@ -30,7 +30,7 @@ export function SubmissionsGrade() {
 
     function getGradedCards() {
         const gradedCards = allSubmissions.filter(
-            (item: any) => item.orderItem?.status?.orderItemStatus?.name !== 'Confirmed',
+            (item: any) => item.order_item.status.order_item_status.name !== 'Confirmed',
         );
         return gradedCards.length;
     }

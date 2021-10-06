@@ -1,6 +1,6 @@
-import ButtonBase, { ButtonBaseProps } from '@mui/material/ButtonBase';
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import ButtonBase, { ButtonBaseProps } from '@material-ui/core/ButtonBase';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
 import { cx } from '@shared/lib/utils/cx';
 import { CardPreview } from '@dashboard/components/CardPreview';

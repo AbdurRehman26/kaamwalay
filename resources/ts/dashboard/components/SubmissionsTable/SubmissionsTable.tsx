@@ -1,14 +1,14 @@
-import { useMediaQuery } from '@mui/material';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import { Theme } from '@mui/material/styles';
+import { useMediaQuery } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableFooter from '@material-ui/core/TableFooter';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import { Theme } from '@material-ui/core/styles';
 import { TablePagination } from '@shared/components/TablePagination';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
@@ -22,7 +22,7 @@ export function SubmissionsTable() {
         },
     });
 
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
 
     if (isLoading || isError) {
         return (

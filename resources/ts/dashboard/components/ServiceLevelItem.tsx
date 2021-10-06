@@ -1,8 +1,7 @@
-import ButtonBase from '@mui/material/ButtonBase';
-import Radio, { RadioProps } from '@mui/material/Radio';
-import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Radio, { RadioProps } from '@material-ui/core/Radio';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
@@ -41,7 +40,7 @@ const useStyles = makeStyles(
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 minWidth: '106px',
             },
         },
@@ -61,7 +60,7 @@ const useStyles = makeStyles(
             lineHeight: '24px',
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('xs')]: {
                 fontSize: '14px',
             },
         },

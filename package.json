@@ -27,7 +27,7 @@
         "landings:prod": "cross-env BUILD_PRESET=landings yarn prod",
         "landings:start": "cross-env BUILD_PRESET=landings yarn start",
         "landings:watch-poll": "cross-env BUILD_PRESET=landings yarn watch-poll",
-        "build": "rm -rf public/apps && yarn prod & yarn admin:prod",
+        "build": "rm -rf public/apps && yarn prod & yarn admin:prod & yarn auth:prod & yarn landings:prod",
         "prepare": "husky install && cd ./resources/apidocs && yarn install",
         "test": "jest",
         "lint": "eslint --cache --ext \".ts,.tsx\" ./resources/ts",

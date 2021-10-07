@@ -22,7 +22,7 @@ interface SubmissionsTableProps {
 }
 
 export function SubmissionsTable({ search }: SubmissionsTableProps) {
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const orders$ = useListOrdersQuery({
         params: {
@@ -55,11 +55,44 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
         );
     }
 
+    const footer$ = (
+        <TableFooter>
+            <TableRow>
+                <TablePagination {...orders$.paginationProps} />
+            </TableRow>
+        </TableFooter>
+    );
+
+    const items$ = orders$.data?.map((data: OrderEntity) => (
+        <SubmissionTableRow
+            disabled
+            key={data?.id}
+            id={data?.id}
+            isSm={isSm}
+            orderNumber={data?.orderNumber}
+            serviceLevel={data?.paymentPlan?.price}
+            cardsNumber={data?.numberOfCards}
+            status={data?.orderStatus?.name}
+            datePlaced={data?.createdAt}
+            dateArrived={data?.arrivedAt}
+            invoice={data?.invoice?.path}
+            invoiceNumber={data?.invoice?.invoiceNumber}
+            orderCustomerShipment={data?.orderCustomerShipment}
+        />
+    ));
+
     return (
         <>
-            <TableContainer>
-                <Table>
-                    {!isMobile ? (
+            {isSm ? (
+                <>
+                    {items$}
+                    <TableContainer>
+                        <Table>{footer$}</Table>
+                    </TableContainer>
+                </>
+            ) : (
+                <TableContainer>
+                    <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell variant={'head'}>Submission #</TableCell>
@@ -71,34 +104,13 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
                                 <TableCell variant={'head'} />
                             </TableRow>
                         </TableHead>
-                    ) : null}
 
-                    <TableBody>
-                        {orders$.data?.map((data: OrderEntity) => (
-                            <SubmissionTableRow
-                                disabled
-                                key={data?.id}
-                                id={data?.id}
-                                orderNumber={data?.orderNumber}
-                                serviceLevel={data?.paymentPlan?.price}
-                                cardsNumber={data?.numberOfCards}
-                                status={data?.orderStatus?.name}
-                                datePlaced={data?.createdAt}
-                                dateArrived={data?.arrivedAt}
-                                invoice={data?.invoice?.path}
-                                invoiceNumber={data?.invoice?.invoiceNumber}
-                                orderCustomerShipment={data?.orderCustomerShipment}
-                            />
-                        ))}
-                    </TableBody>
+                        <TableBody>{items$}</TableBody>
 
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination {...orders$.paginationProps} />
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
+                        {footer$}
+                    </Table>
+                </TableContainer>
+            )}
         </>
     );
 }

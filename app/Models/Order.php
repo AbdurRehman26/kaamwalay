@@ -127,11 +127,7 @@ class Order extends Model
     public static function getAllowedFilters(): array
     {
         return [
-            AllowedFilter::exact('order_id', 'id'),
             AllowedFilter::partial('order_number'),
-            AllowedFilter::scope('status'),
-            AllowedFilter::scope('order_status', 'status'),
-            AllowedFilter::custom('search', new AdminOrderSearchFilter),
         ];
     }
 

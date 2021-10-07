@@ -26,7 +26,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
 
     const orders$ = useListOrdersQuery({
         params: {
-            filter: { search },
+            filter: { orderNumber: search },
             include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
         },
         ...bracketParams(),
@@ -36,7 +36,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
         () => {
             if (!orders$.isLoading) {
                 // noinspection JSIgnoredPromiseFromCall
-                orders$.search({ search });
+                orders$.search({ orderNumber: search });
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

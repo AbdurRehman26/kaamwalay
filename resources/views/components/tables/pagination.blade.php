@@ -15,17 +15,16 @@
 
 @if($totals > 0)
     <div class="pagination pagination--table">
-        @if($totals > $itemsPerPage)
-            <div class="pagination__limit">
-                <label for="{{ $id }}" class="pagination__limit__label">Items per page:</label>
-                <select id="{{ $id }}" class="pagination__limit__select">
-                    @foreach($itemsPerPageOptions as $value)
-                        <option
-                            {{ $value === $itemsPerPage ? 'selected' : '' }} value="{{ $value }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div>
-        @endif
+        <div class="pagination__limit">
+            <label for="{{ $id }}" class="pagination__limit__label">Items per page:</label>
+            <select id="{{ $id }}" class="pagination__limit__select">
+                @foreach($itemsPerPageOptions as $value)
+                    <option
+                        {{ $value === $itemsPerPage ? 'selected' : '' }} value="{{ $value }}">{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="pagination__navigation">
             <p class="pagination__navigation__pages">{{ $offset + 1 }} - {{ $endIndex > $totals ? $totals : $endIndex }} of {{ $totals }}</p>
 

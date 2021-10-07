@@ -5,11 +5,9 @@ namespace App\Http\Controllers\API\Customer\Cards;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Customer\UserCard\UserCardListCollection;
 use App\Http\Resources\API\Customer\UserCard\UserCardResource;
-use App\Models\User;
 use App\Models\UserCard;
 use App\Services\Order\UserCardService;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class UserCardController extends Controller
 {
@@ -30,6 +28,5 @@ class UserCardController extends Controller
         $this->authorize('view', $userCard);
 
         return new UserCardResource($userCard);
-
     }
 }

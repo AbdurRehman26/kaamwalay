@@ -77,5 +77,4 @@ class UserCardService
         ->defaultSort('-order_item_status_histories.created_at')
         ->paginate($itemsPerPage);
     }
-
 }

@@ -5,9 +5,9 @@ namespace App\Listeners\API\Order;
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Services\Admin\OrderService as AdminOrderService;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
-use App\Services\Admin\OrderService as AdminOrderService;
 use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -115,7 +115,9 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function sendAdminEmail(string $template, array $vars)
     {
-        $data = User::get()->filter->isAdmin()->map(function($value){return [$value->email => $value->name]; })->toArray();
+        $data = User::get()->filter->isAdmin()->map(function ($value) {
+            return [$value->email => $value->name];
+        })->toArray();
         $this->emailService->sendEmail(
             $data,
             $this->emailService->getSubjectByTemplate($template),

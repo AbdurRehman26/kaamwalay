@@ -41,34 +41,14 @@ const useStyles = makeStyles(
 );
 
 export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [activeItemId, setActiveItemId] = useState<number | null>(null);
 
     const { handleOpen, ...notesDialogProps } = useNotesDialog();
 
     const classes = useStyles();
     const dispatch = useAppDispatch();
-
-    const handlePreview = useCallback((value) => setActiveIndex(value), [setActiveIndex]);
-    const handleNext = useCallback(
-        () =>
-            setActiveIndex((value) => {
-                const nextValue = (value ?? 0) + 1;
-                const lastValue = items.length - 1;
-
-                if (nextValue > lastValue) {
-                    return 0;
-                }
-
-                return Math.max(Math.min(nextValue, lastValue), 0);
-            }),
-        [setActiveIndex, items],
-    );
-    const handlePrevious = useCallback(
-        () => setActiveIndex((value) => Math.max((value ?? 0) - 1, 0)),
-        [setActiveIndex],
-    );
-
-    const handleClosePreview = useCallback(() => setActiveIndex(null), [setActiveIndex]);
+    const handlePreview = useCallback((value) => setActiveItemId(value), [setActiveItemId]);
+    const handleClosePreview = useCallback(() => setActiveItemId(null), [setActiveItemId]);
 
     const handleConfirm = useCallback(
         async (orderItemId) => {
@@ -131,7 +111,6 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                         items.map((item, index) => (
                             <UnconfirmedCard
                                 key={index}
-                                index={index}
                                 itemId={item.id}
                                 declaredValue={item.declaredValuePerUnit}
                                 card={item.cardProduct}
@@ -160,18 +139,14 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                 </CardContent>
             </Card>
             <SubmissionReviewCardDialog
-                open={activeIndex !== null}
+                open={activeItemId !== null}
                 onClose={handleClosePreview}
-                indexId={activeIndex!}
+                itemId={activeItemId!}
                 orderId={orderId}
-                itemsLength={items.length}
-                onNext={handleNext}
-                onPrevious={handlePrevious}
                 onMissing={handleMissing}
                 onConfirm={handleConfirm}
                 onEdit={handleEdit}
-                disablePrevious={activeIndex === 0}
-                disableNext={!!activeIndex && activeIndex >= items.length - 1}
+                onChangeItemId={handlePreview}
             />
             <NotesDialog
                 heading={'Add Notes'}

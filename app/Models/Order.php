@@ -124,6 +124,7 @@ class Order extends Model
             AllowedInclude::relationship('orderCustomerShipment'),
         ];
     }
+
     public static function getAllowedFilters(): array
     {
         return [

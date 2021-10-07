@@ -2,7 +2,6 @@
 
 namespace App\Services\Order;
 
-use App\Exceptions\API\Customer\Cards\CardDoesNotBelongToUser;
 use App\Http\Filters\UserCardSearchFilter;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
@@ -65,7 +64,7 @@ class UserCardService
         ->where('order_item_status_histories.order_item_status_id', OrderItemStatus::GRADED)
         ->whereIn('orders.order_status_id', [OrderStatus::GRADED,OrderStatus::SHIPPED])
         ->whereIn('order_items.order_item_status_id', [OrderItemStatus::GRADED])
-        ->select(['user_cards.*','card_products.name as card_name','order_item_status_histories.created_at as reviewed_at']);
+        ->select(['user_cards.*','card_products.name as card_name','order_item_status_histories.created_at as graded_at']);
 
         return QueryBuilder::for($query)
         ->allowedFilters([
@@ -74,16 +73,9 @@ class UserCardService
         ->allowedSorts([
             AllowedSort::field('name', 'card_products.name'),
             AllowedSort::field('date', 'order_item_status_histories.created_at'),
-            ])
+        ])
+        ->defaultSort('-order_item_status_histories.created_at')
         ->paginate($itemsPerPage);
     }
 
-    public function getCustomerCard(User $user, UserCard $userCard): UserCard
-    {
-        if ($userCard->user_id !== $user->id) {
-            throw new CardDoesNotBelongToUser;
-        }
-
-        return $userCard;
-    }
 }

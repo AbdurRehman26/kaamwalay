@@ -1,5 +1,5 @@
 /**
- * @api {get} /customer/17/cards List cards
+ * @api {get} /customer/cards List cards
  * @apiName List Cards
  * @apiGroup User Cards
  *
@@ -8,7 +8,7 @@
  *
  * @apiParam {Integer} id Unique customer id
  * @apiParam {Array} [filter[search]] For filtering cards by name, certificate # or submision # . E.g. filter[search]=charizard
- * @apiParam {String} [sort] For sorting cards by either card name or graded date # . E.g. sort=date
+ * @apiParam {String} [sort] For sorting cards by either card name or graded date # . E.g. sort=name, sort=date, sort=-date
  *
  * @apiSuccess {Object} data User Cards data
  *

@@ -56,7 +56,7 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
         });
 
-        Route::prefix('{user}/cards')->group(function () {
+        Route::prefix('/cards')->group(function () {
             Route::apiResource('/', UserCardController::class)->only(['index']);
             Route::get('/{userCard}', [UserCardController::class, 'show']);
         });

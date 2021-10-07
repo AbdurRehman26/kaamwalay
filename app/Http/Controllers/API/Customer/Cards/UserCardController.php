@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\Customer\Cards;
 
-use App\Exceptions\API\Customer\Cards\CardDoesNotBelongToUser;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Customer\UserCard\UserCardListCollection;
 use App\Http\Resources\API\Customer\UserCard\UserCardResource;
@@ -19,30 +18,18 @@ class UserCardController extends Controller
     ) {
     }
 
-    public function index(User $user): UserCardListCollection
+    public function index(): UserCardListCollection
     {
-        $this->authorize('viewCards', $user);
-
         return new UserCardListCollection(
-            $this->userCardService->getCustomerCards($user)
+            $this->userCardService->getCustomerCards(auth()->user())
         );
     }
 
-    public function show(User $user, UserCard $userCard): UserCardResource | JsonResponse
+    public function show(UserCard $userCard): UserCardResource | JsonResponse
     {
         $this->authorize('view', $userCard);
 
-        try {
-            $card = $this->userCardService->getCustomerCard($user, $userCard);
+        return new UserCardResource($userCard);
 
-            return new UserCardResource($card);
-        } catch (CardDoesNotBelongToUser $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
     }
 }

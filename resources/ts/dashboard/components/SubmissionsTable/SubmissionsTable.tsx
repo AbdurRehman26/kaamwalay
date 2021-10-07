@@ -9,25 +9,48 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import { useEffect } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { OrderEntity } from '@shared/entities/OrderEntity';
+import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionTableRow } from './SubmissionTableRow';
 import { Table } from './styles';
 
-export function SubmissionsTable() {
-    const { isLoading, isError, data, paginationProps } = useListOrdersQuery({
-        params: {
-            include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
-        },
-    });
+interface SubmissionsTableProps {
+    search?: string;
+}
 
+export function SubmissionsTable({ search }: SubmissionsTableProps) {
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-    if (isLoading || isError) {
+    const orders$ = useListOrdersQuery({
+        params: {
+            filter: { search },
+            include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
+        },
+        ...bracketParams(),
+    });
+
+    useEffect(
+        () => {
+            if (!orders$.isLoading) {
+                // noinspection JSIgnoredPromiseFromCall
+                orders$.search({ search });
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [search],
+    );
+
+    if (orders$.isLoading || orders$.isError) {
         return (
             <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
-                {isLoading ? <CircularProgress /> : <Typography color={'error'}>Error loading submissions</Typography>}
+                {orders$.isLoading ? (
+                    <CircularProgress />
+                ) : (
+                    <Typography color={'error'}>Error loading submissions</Typography>
+                )}
             </Box>
         );
     }
@@ -51,7 +74,7 @@ export function SubmissionsTable() {
                     ) : null}
 
                     <TableBody>
-                        {data.map((data: OrderEntity) => (
+                        {orders$.data?.map((data: OrderEntity) => (
                             <SubmissionTableRow
                                 disabled
                                 key={data?.id}
@@ -71,7 +94,7 @@ export function SubmissionsTable() {
 
                     <TableFooter>
                         <TableRow>
-                            <TablePagination {...paginationProps} />
+                            <TablePagination {...orders$.paginationProps} />
                         </TableRow>
                     </TableFooter>
                 </Table>

@@ -21,6 +21,13 @@ const useStyles = makeStyles(
         root: {},
         searchBarHolder: {
             padding: '0 20px',
+            [theme.breakpoints.down(1016)]: {
+                paddingRight: 0,
+            },
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
+                padding: '14px 0 0 0',
+            },
         },
         searchBar: {
             width: '100%',
@@ -29,6 +36,9 @@ const useStyles = makeStyles(
             backgroundColor: '#fff',
             borderRadius: 24,
             maxWidth: 400,
+            [theme.breakpoints.down(1016)]: {
+                maxWidth: '100%',
+            },
         },
         searchBarIcon: {
             margin: '0 14px',
@@ -37,6 +47,12 @@ const useStyles = makeStyles(
             width: '100%',
             margin: theme.spacing(2.5, 0, noMargin ? 0 : 2.5),
         }),
+        rightContentHolder: {
+            [theme.breakpoints.down(1016)]: {
+                paddingTop: 14,
+                width: '100%',
+            },
+        },
     }),
     {
         name: 'ListHeader',
@@ -83,11 +99,17 @@ export function ListHeader({ children, headline, noSearch, noMargin, onSearch }:
                         />
                     )}
                 </Box>
-                {children}
+
+                <Box
+                    display={'flex'}
+                    flex={'1 1 auto'}
+                    justifyContent={'flex-end'}
+                    className={classes.rightContentHolder}
+                >
+                    {children}
+                </Box>
             </Grid>
             <Divider className={classes.divider} />
         </>
     );
 }
-
-export default ListHeader;

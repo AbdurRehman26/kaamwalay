@@ -33,6 +33,7 @@ class UserCard extends Model
         'robo_grade_values' => 'array',
         'overall_values' => 'array',
         'generated_images' => 'array',
+        'graded_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

@@ -3,10 +3,14 @@
 namespace App\Services\Order;
 
 use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
+use App\Models\OrderStatus;
 use App\Models\UserCard;
 use App\Models\UserCardCertificate;
 use App\Services\Admin\CardGradingService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserCardService
 {
@@ -42,5 +46,21 @@ class UserCardService
         $userCard->save();
 
         return $certificate;
+    }
+
+    public function getFeedCards(): LengthAwarePaginator
+    {
+        $itemsPerPage = request('per_page');
+
+        return UserCard::join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
+        ->whereIn('order_item_status_histories.order_item_status_id', [OrderItemStatus::CONFIRMED, OrderItemStatus::GRADED])
+        ->whereIn('orders.order_status_id', [OrderStatus::ARRIVED,OrderStatus::GRADED,OrderStatus::SHIPPED])
+        ->whereIn('order_items.order_item_status_id', [OrderItemStatus::CONFIRMED,OrderItemStatus::GRADED])
+        ->select(['user_cards.*','order_item_status_histories.created_at as graded_at'])
+        ->orderBy('reviewed_at','desc')
+        ->paginate($itemsPerPage);
+
     }
 }

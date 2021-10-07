@@ -10,7 +10,7 @@
     $startIndex = $offset;
     $endIndex = $offset + $itemsPerPage;
     $isFirstPage = $offset === 0;
-    $isLastPage = $endIndex > $totals;
+    $isLastPage = $endIndex >= $totals;
 @endphp
 
 @if($totals > 0)
@@ -27,15 +27,15 @@
             </div>
         @endif
         <div class="pagination__navigation">
-            <p class="pagination__navigation__pages">{{ $offset + 1 }} - {{ $endIndex }} of {{ $totals }}</p>
+            <p class="pagination__navigation__pages">{{ $offset + 1 }} - {{ $endIndex > $totals ? $totals : $endIndex }} of {{ $totals }}</p>
 
-            <a {{ $isFirstPage ? 'disabled' : '' }} href="#"
-               class="pagination__navigation__button pagination__navigation__button--prev">
+            <a href="{{route('feed.list',['page' => $currentPage - 1, 'per_page' => $itemsPerPage])}}"
+               class="pagination__navigation__button {{ $isFirstPage ? 'pagination__navigation__button__disabled' : '' }} pagination__navigation__button--prev">
                 <span class="material-icons">chevron_left</span>
             </a>
 
-            <a {{ $isLastPage ? 'disabled' : '' }} href="#"
-               class="pagination__navigation__button pagination__navigation__button--next">
+            <a href="{{route('feed.list',['page' => $currentPage + 1, 'per_page' => $itemsPerPage])}}"
+               class="pagination__navigation__button {{ $isLastPage ? 'pagination__navigation__button__disabled' : '' }} pagination__navigation__button--next">
                 <span class="material-icons">chevron_right</span>
             </a>
         </div>

@@ -26,41 +26,41 @@
                     </thead>
 
                     <tbody class="feed-list__table-body">
-                        @for($i = 0; $i < 10; $i++)
+                        @foreach($data->items() as $item)
                             <tr class="feed-list__table-row">
                                 <td class="feed-list__table-cell feed-list__table-cell--card">
-                                    <a href="{{ route('feed.view', ['certificateId' => $i]) }}" class="feed-list__table__info">
-                                        <img class="feed-list__table__info-image" src="{{ asset('assets/images/card-preview.png') }}" alt="Card" width="52" />
+                                    <a href="{{ route('feed.view', ['certificateId' => $item->certificate_number]) }}" class="feed-list__table__info">
+                                        <img class="feed-list__table__info-image" src="{{ $item->orderItem->cardProduct->image_path }}" alt="Card" width="52" />
                                         <div class="feed-list__table__info-text">
-                                            <p class="feed-list__table__info-heading">Charizard</p>
-                                            <p class="feed-list__table__info-subheading">2020 Pokemon Sword & Shield Vivid Voltage 025 Charizard</p>
+                                            <p class="feed-list__table__info-heading">{{$item->orderItem->cardProduct->name}}</p>
+                                            <p class="feed-list__table__info-subheading">{{$item->orderItem->cardProduct->getSearchableName()}}</p>
                                         </div>
                                     </a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--date">
-                                    <a href="{{ route('feed.view', ['certificateId' => $i]) }}">
-                                    {{ \Carbon\Carbon::now()->format("m/d/Y") }}
+                                    <a href="{{ route('feed.view', ['certificateId' => $item->certificate_number]) }}">
+                                    {{ $item->graded_at->format("m/d/Y") }}
                                     <br/>
-                                    {{ \Carbon\Carbon::now()->format("h:i A") }}
+                                    {{ $item->graded_at->format("h:i A") }}
                                     </a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--certificate">
-                                    <a href="{{ route('feed.view', ['certificateId' => $i]) }}">AG676739</a>
+                                    <a href="{{ route('feed.view', ['certificateId' => $item->certificate_number]) }}">{{$item->certificate_number}}</a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--owner">
-                                    <a href="{{ route('feed.view', ['certificateId' => $i]) }}">JonDoe24</a>
+                                    <a href="{{ route('feed.view', ['certificateId' => $item->certificate_number]) }}">{{$item->user->username}}</a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--grade">
-                                    <a href="{{ route('feed.view', ['certificateId' => $i]) }}" class="feed-list__grade">
-                                        <p class="feed-list__grade__label">MINT</p>
-                                        <p class="feed-list__grade__value">9.5</p>
+                                    <a href="{{ route('feed.view', ['certificateId' => $item->certificate_number]) }}" class="feed-list__grade">
+                                        <p class="feed-list__grade__label">{{$item->overall_grade_nickname}}</p>
+                                        <p class="feed-list__grade__value">{{$item->overall_grade}}</p>
                                     </a>
                                 </td>
                             </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
-                <x-tables.pagination />
+                <x-tables.pagination :totals="$data->total()" :itemsPerPage="$data->perPage()" :currentPage="$data->currentPage()" :offset="($data->currentPage() - 1) * $data->perPage()" />
             </div>
         </div>
     </section>

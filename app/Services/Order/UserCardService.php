@@ -10,7 +10,6 @@ use App\Models\UserCardCertificate;
 use App\Services\Admin\CardGradingService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class UserCardService
 {
@@ -59,8 +58,7 @@ class UserCardService
         ->whereIn('orders.order_status_id', [OrderStatus::GRADED,OrderStatus::SHIPPED])
         ->whereIn('order_items.order_item_status_id', [OrderItemStatus::GRADED])
         ->select(['user_cards.*','order_item_status_histories.created_at as graded_at'])
-        ->orderBy('reviewed_at','desc')
+        ->orderBy('reviewed_at', 'desc')
         ->paginate($itemsPerPage);
-
     }
 }

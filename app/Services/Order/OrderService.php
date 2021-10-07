@@ -20,7 +20,7 @@ class OrderService
             ->placed()
             ->forUser($user)
             ->allowedIncludes(Order::getAllowedIncludes())
-            ->allowedFilters(['order_number'])
+            ->allowedFilters(Order::getAllowedFilters())
             ->allowedSorts(['grand_total'])
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);

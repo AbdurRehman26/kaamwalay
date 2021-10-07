@@ -125,6 +125,13 @@ class Order extends Model
         ];
     }
 
+    public static function getAllowedFilters(): array
+    {
+        return [
+            AllowedFilter::partial('order_number'),
+        ];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -5,13 +5,15 @@ import Grid from '@mui/material/Grid';
 import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { PropsWithChildren, useMemo } from 'react';
+import { debounce } from 'lodash';
+import React, { ChangeEvent, PropsWithChildren, useCallback, useMemo } from 'react';
 import { font } from '@shared/styles/utils';
 
 interface ListHeaderProps {
     headline: string;
     noSearch?: boolean;
     noMargin?: boolean;
+    onSearch?: (value: string) => void;
 }
 
 const useStyles = makeStyles(
@@ -41,6 +43,8 @@ const useStyles = makeStyles(
     },
 );
 
+const debouncedFunc = debounce((func: () => void) => func(), 300);
+
 /**
  *
  * @author: Dumitrana Alinus <alinus@wooter.co>
@@ -48,15 +52,20 @@ const useStyles = makeStyles(
  * @date: 10.08.2021
  * @time: 01:43
  */
-export function ListHeader({ children, headline, noSearch, noMargin }: PropsWithChildren<ListHeaderProps>) {
-    const styleProps = useMemo(
-        () => ({
-            noMargin,
-        }),
-        [noMargin],
-    );
-
+export function ListHeader({ children, headline, noSearch, noMargin, onSearch }: PropsWithChildren<ListHeaderProps>) {
+    const styleProps = useMemo(() => ({ noMargin }), [noMargin]);
     const classes = useStyles(styleProps);
+
+    const handleSearch = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            debouncedFunc(() => {
+                if (onSearch) {
+                    onSearch(event.target.value);
+                }
+            });
+        },
+        [onSearch],
+    );
 
     return (
         <>
@@ -70,6 +79,7 @@ export function ListHeader({ children, headline, noSearch, noMargin }: PropsWith
                             placeholder="Search…"
                             className={classes.searchBar}
                             startAdornment={<SearchIcon className={classes.searchBarIcon} />}
+                            onChange={handleSearch}
                         />
                     )}
                 </Box>

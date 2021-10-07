@@ -444,7 +444,7 @@ export const newSubmissionSlice = createSlice({
                 { ...action.payload, qty: 1, value: 1 },
             ];
         },
-        markCardAsUnselected: (state, action: PayloadAction<SearchResultItemCardProps>) => {
+        markCardAsUnselected: (state, action: PayloadAction<Pick<SearchResultItemCardProps, 'id'>>) => {
             state.step02Data.selectedCards = state.step02Data.selectedCards.filter(
                 (cardItem) => cardItem.id !== action.payload.id,
             );

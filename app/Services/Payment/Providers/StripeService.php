@@ -188,7 +188,7 @@ class StripeService implements PaymentProviderServiceInterface
     {
         $paymentData = [
             'amount' => (int) $request['amount'] * 100,
-            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => $request['notes'],
                 'metadata' => [

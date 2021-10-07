@@ -17,12 +17,33 @@ test('it can create extra charge for order', function () {
     $orderService = resolve(OrderService::class);
 
     $amount = number_format($this->faker->randomFloat(2, 10, 30), 2);
+    $paymentResponse = [
+        'success' => true,
+        'request' => [
+            'amount' => (int) $amount * 100,
+            'payment_intent_id' => \Illuminate\Support\Str::random(25),
+            'additional_data' => [
+                'description' => $this->faker->sentence(),
+                'metadata' => [
+                    'Order ID' => $order->id,
+                    'User Email' => $order->user->email,
+                    'Type' => 'Extra Charge',
+                ],
+            ],
+        ],
+        'response' => [],
+        'payment_provider_reference_id' => \Illuminate\Support\Str::random(25),
+        'amount' => $amount,
+        'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+        'notes' => $this->faker->sentence(),
+        'provider_fee' => 2.5,
+    ];
     $orderService->addExtraCharge($order, [
         'notes' => $this->faker->sentence(),
         'amount' => $amount,
         'payment_method_id' => $order->payment_method_id,
         'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
-    ]);
+    ], $paymentResponse);
 
     $orderPayment = $order->lastOrderPayment;
 

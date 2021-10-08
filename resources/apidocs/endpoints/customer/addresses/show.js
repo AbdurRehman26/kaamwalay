@@ -1,5 +1,5 @@
 /**
- * @api {get} /customer/orders/payment-plans/:id Show saved address
+ * @api {get} /customer/addresses/8 Show saved address
  * @apiName Show Saved Address
  * @apiGroup Customer-Addresses
  *
@@ -18,8 +18,6 @@
  * @apiSuccess {String} data.zip Zip
  * @apiSuccess {String} data.phone Phone
  * @apiSuccess {String} data.flat Apartment (optional)
- * @apiSuccess {Boolean} data.is_default_shipping Default shipping address
- * @apiSuccess {Boolean} data.is_default_billing Default billing address
  * @apiSuccess {Object} data.country Country data
  * @apiSuccess {Integer} data.country.id Country unique ID
  * @apiSuccess {String} data.country.code Country code
@@ -38,8 +36,6 @@
  *              "zip": "70691",
  *              "phone": "+1-351-520-6142",
  *              "flat": "3",
- *              "is_default_shipping": true,
- *              "is_default_billing": false,
  *              "country": {
  *                  "id": 6,
  *                  "code": "BS",

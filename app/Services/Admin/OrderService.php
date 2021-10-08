@@ -218,6 +218,7 @@ class OrderService
     {
         if (empty($paymentResponse)) {
             FailedExtraCharge::dispatch($order, $data);
+
             throw new FailedExtraCharge;
         }
         DB::beginTransaction();

@@ -3,7 +3,6 @@
 namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;

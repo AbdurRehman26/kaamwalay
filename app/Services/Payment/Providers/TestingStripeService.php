@@ -157,10 +157,11 @@ class TestingStripeService implements PaymentProviderServiceInterface
         }
     }
 
-    public function calculateFee(int $amount): float
+    public function calculateFee(Order $order): float
     {
+        $amountCharged = $order->grand_total_cents;
         return round((
-            (self::STRIPE_FEE_PERCENTAGE * $amount) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
+            (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100, 2);
     }
 
@@ -214,13 +215,6 @@ class TestingStripeService implements PaymentProviderServiceInterface
     public function calculateFeeWithAmount(float $amount): float
     {
         $amountCharged = round($amount * 100);
-
-        return $this->calculateFee($amountCharged);
-    }
-
-    public function calculateFeeWithOrder(Order $order): float
-    {
-        $amountCharged = $order->grand_total_cents;
 
         return $this->calculateFee($amountCharged);
     }

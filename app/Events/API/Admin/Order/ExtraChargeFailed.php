@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ExtraChargeApplied implements ShouldQueue, ShouldBeEncrypted
+class ExtraChargeFailed implements ShouldQueue, ShouldBeEncrypted
 {
     use Dispatchable, SerializesModels;
 
@@ -17,7 +17,8 @@ class ExtraChargeApplied implements ShouldQueue, ShouldBeEncrypted
      *
      * @return void
      */
-    public function __construct(public Order $order, public array $requestData)
+    public function __construct(protected Order $order, protected array $chargeData)
     {
+        //
     }
 }

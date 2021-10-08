@@ -2,10 +2,10 @@
 
 namespace App\Listeners\API\Admin\Order;
 
-use App\Events\API\Admin\Order\ExtraChargeApplied;
+use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Services\Payment\PaymentService;
 
-class ExtraChargeAppliedListener
+class ExtraChargeSuccessfulListener
 {
     /**
      * Create the event listener.
@@ -16,11 +16,8 @@ class ExtraChargeAppliedListener
     {
     }
 
-    public function handle(ExtraChargeApplied $event): void
+    public function handle(ExtraChargeSuccessful $event): void
     {
-        $order = $event->order;
-        $requestData = $event->requestData;
 
-//        $paymentService->add
     }
 }

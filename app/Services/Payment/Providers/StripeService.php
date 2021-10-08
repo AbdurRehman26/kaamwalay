@@ -132,13 +132,6 @@ class StripeService implements PaymentProviderServiceInterface
         return false;
     }
 
-    public function calculateFeeWithOrder(Order $order): float
-    {
-        $amountCharged = $order->grand_total_cents;
-
-        return $this->calculateFee($amountCharged);
-    }
-
     protected function isCustomerInvalid(string $param): bool
     {
         return $param === self::ERROR_PARAMETER_CUSTOMER;
@@ -177,10 +170,11 @@ class StripeService implements PaymentProviderServiceInterface
         return $this->calculateFee($amountCharged);
     }
 
-    public function calculateFee(int $amount): float
+    public function calculateFee(Order $order): float
     {
+        $amountCharged = $order->grand_total_cents;
         return round((
-            (self::STRIPE_FEE_PERCENTAGE * $amount) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
+            (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100, 2);
     }
 

@@ -10,9 +10,5 @@ interface PaymentProviderServiceInterface
 
     public function verify(Order $order, string $paymentIntentId): bool;
 
-    public function calculateFeeWithOrder(Order $order): float;
-
-    public function calculateFeeWithAmount(float $amount): float;
-
-    public function calculateFee(int $amount): float;
+    public function calculateFee(Order $amount): float;
 }

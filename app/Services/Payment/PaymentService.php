@@ -3,7 +3,7 @@
 namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Exceptions\API\Admin\Order\ExtraChargeFailed;
+use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
@@ -107,7 +107,7 @@ class PaymentService
 
         $fee = resolve($this->providers[
             $this->order->paymentMethod->code
-        ])->calculateFeeWithOrder($this->order);
+        ])->calculateFee($this->order);
 
         $orderPayment = $this->order->lastOrderPayment;
         $orderPayment->provider_fee = $fee;
@@ -131,23 +131,9 @@ class PaymentService
     public function additionalCharge(Order $order, array $request): array
     {
         $this->hasProvider($order);
-        $data = resolve($this->providers[
+
+        return resolve($this->providers[
             $this->order->paymentMethod->code
         ])->additionalCharge($this->order, $request);
-
-        throw_if(condition: empty($data['success']), exception: ExtraChargeFailed::class);
-
-        $this->calculateAdditionalFee(order: $order, data: $data);
-
-        return $data;
-    }
-
-    protected function calculateAdditionalFee(Order $order, array &$data): void
-    {
-        $this->hasProvider($order);
-
-        $data['provider_fee'] = resolve($this->providers[
-            $this->order->paymentMethod->code
-        ])->calculateFeeWithAmount($data['amount']);
     }
 }

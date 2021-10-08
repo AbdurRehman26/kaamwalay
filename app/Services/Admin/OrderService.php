@@ -2,8 +2,10 @@
 
 namespace App\Services\Admin;
 
+use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
+use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
@@ -19,6 +21,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 class OrderService
 {
@@ -137,8 +140,15 @@ class OrderService
         }
     }
 
+    /**
+     * @throws FailedExtraCharge|Throwable
+     */
     public function addExtraCharge(Order $order, array $data, array $paymentResponse): void
     {
+        if (empty($paymentResponse)) {
+            FailedExtraCharge::dispatch($order, $data);
+            throw new FailedExtraCharge;
+        }
         DB::beginTransaction();
 
         $order->fill([
@@ -146,7 +156,6 @@ class OrderService
             'grand_total' => $order->grand_total + $data['amount'],
         ]);
         $order->save();
-//        dd($data + $paymentResponse);
 
         OrderPayment::create([
             'request' => json_encode($paymentResponse['request']),
@@ -157,11 +166,10 @@ class OrderService
             'notes' => $paymentResponse['notes'],
             'order_id' => $order->id,
             'payment_method_id' => $order->payment_method_id,
-            'provider_fee' => $paymentResponse['provider_fee'],
         ]);
 
-//        $order->orderPayments()->save($orderPayment);
-
         DB::commit();
+
+        ExtraChargeSuccessful::dispatch($order);
     }
 }

@@ -37,7 +37,6 @@ beforeEach(function () {
         'order_id' => $this->order->id,
         'payment_method_id' => 1,
         'payment_provider_reference_id' => Str::random(25),
-
     ]);
 
     OrderStatusHistory::factory()->create([
@@ -53,6 +52,8 @@ test('admin can create extra charge for order', function () {
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
     ])->assertStatus(201);
+    expect($this->order->extraCharges()->count())->toEqual(1);
+    expect($this->order->orderPayments()->count())->toEqual(2);
 });
 
 test('admin can update order payment notes', function () {

@@ -4,6 +4,7 @@ namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
+use App\Exceptions\API\FeatureNotAvailable;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
 use App\Models\OrderStatus;
@@ -129,10 +130,22 @@ class PaymentService
      */
     public function additionalCharge(Order $order, array $request): array
     {
+        $this->canProcessExtraCharge();
+
         $this->hasProvider($order);
 
         return resolve($this->providers[
             $this->order->paymentMethod->code
         ])->additionalCharge($this->order, $request);
+    }
+
+    /**
+     * @throws Throwable
+    */
+    protected function canProcessExtraCharge()
+    {
+        if (config('robograding.extra_charge_enabled') !== true) {
+            throw new FeatureNotAvailable('Extra Charge service is not available at the moment.');
+        }
     }
 }

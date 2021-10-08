@@ -14,8 +14,10 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 uses(WithFaker::class);
 
@@ -50,11 +52,12 @@ beforeEach(function () {
 });
 
 test('admin can create extra charge for order', function () {
+    Config::set('robograding.extra_charge_enabled', true);
     Event::fake();
     $this->postJson('/api/admin/orders/' . $this->order->id . '/extra/charge', [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
-    ])->assertStatus(201);
+    ])->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(ExtraChargeSuccessful::class);
     expect($this->order->extraCharges()->count())->toEqual(1);
@@ -69,7 +72,15 @@ test('admin can update order payment notes', function () {
     $this->putJson('/api/admin/orders/' . $this->order->id . '/order-payments/' . $orderPayment->id, [
         'notes' => $notes,
     ])
-        ->assertStatus(200);
+        ->assertStatus(Response::HTTP_OK);
     $orderPayment->refresh();
     expect($orderPayment->notes)->toEqual($notes);
+});
+
+it('does not perform extra charge when service is disabled', function () {
+    Config::set('robograding.extra_charge_enabled', false);
+    $this->postJson('/api/admin/orders/' . $this->order->id . '/extra/charge', [
+        'notes' => $this->faker->sentence(),
+        'amount' => '20.00',
+    ])->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE);
 });

@@ -160,6 +160,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     public function calculateFee(Order $order): float
     {
         $amountCharged = $order->grand_total_cents;
+
         return round((
             (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100, 2);

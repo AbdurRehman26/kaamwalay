@@ -18,6 +18,5 @@ class ExtraChargeSuccessfulListener
 
     public function handle(ExtraChargeSuccessful $event): void
     {
-
     }
 }

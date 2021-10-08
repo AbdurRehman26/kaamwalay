@@ -63,7 +63,7 @@ class UserCardService
         ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
         ->where('user_cards.user_id', $user->id)
         ->where('order_item_status_histories.order_item_status_id', OrderItemStatus::GRADED)
-        ->where('orders.order_status_id', OrderStatus::SHIPPED)
+        ->whereIn('orders.order_status_id', [OrderStatus::GRADED,OrderStatus::SHIPPED])
         ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
         ->select(['user_cards.*']);
 

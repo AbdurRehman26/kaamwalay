@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
+use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -133,5 +134,75 @@ class OrderService
                 $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
             }
         }
+    }
+
+    public function getDataForAdminSubmissionConfirmationEmail(Order $order): array
+    {
+        $data = [];
+
+        $paymentPlan = $order->paymentPlan;
+        $orderItems = $order->getGroupedOrderItems();
+        $orderPayment = OrderPaymentResource::make($order->orderPayment)->resolve();
+
+        $data["SUBMISSION_NUMBER"] = $order->order_number;
+        $data['CUSTOMER_NAME'] = $order->user->getFullName();
+        $data['CUSTOMER_EMAIL'] = $order->user->email;
+        $data['CUSTOMER_NUMBER'] = $order->user->customer_number;
+        $data["TIME"] = $order->created_at->format('h:m A');
+
+        $items = [];
+        foreach ($orderItems as $orderItem) {
+            $card = $orderItem->cardProduct;
+            $items[] = [
+                "CARD_IMAGE_URL" => $card->image_path,
+                "CARD_NAME" => $card->name,
+                "CARD_FULL_NAME" => $card->getSearchableName(),
+                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
+                "CARD_QUANTITY" => $orderItem->quantity,
+                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
+            ];
+        }
+
+        $data["ORDER_ITEMS"] = $items;
+        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
+        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
+        $data["TOTAL"] = number_format($order->grand_total, 2);
+
+        $data["SERVICE_LEVEL"] = $paymentPlan->price;
+        $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
+        $data["DATE"] = $order->created_at->format('m/d/Y');
+        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
+
+        $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
+        $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
+
+        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+
+        return $data;
+    }
+
+    protected function getAddressData($address): array
+    {
+        return [
+            "ID" => $address->id,
+            "FULL_NAME" => $address->first_name . " " . $address->last_name,
+            "ADDRESS" => $address->address,
+            "CITY" => $address->city,
+            "STATE" => $address->state,
+            "ZIP" => $address->zip,
+            "COUNTRY" => $address->country->code,
+            "PHONE" => $address->phone,
+        ];
+    }
+
+    protected function getOrderPaymentText(array $orderPayment): string
+    {
+        if (array_key_exists('card', $orderPayment)) {
+            return ucfirst($orderPayment["card"]["brand"]) . ' ending in ' . $orderPayment["card"]["last4"];
+        } elseif (array_key_exists('payer', $orderPayment)) {
+            return $orderPayment["payer"]["email"] . "\n" . $orderPayment["payer"]["name"];
+        }
+
+        return '';
     }
 }

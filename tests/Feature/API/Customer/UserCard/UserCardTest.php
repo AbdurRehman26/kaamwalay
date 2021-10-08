@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\User;
-use App\Models\UserCard;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
+use App\Models\User;
+use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -29,7 +29,7 @@ beforeEach(function () {
     $this->orders = Order::factory()->count(1)->state(new Sequence(
         [
             'user_id' => $this->user->id,
-            'order_status_id' => OrderStatus::SHIPPED
+            'order_status_id' => OrderStatus::SHIPPED,
         ],
     ))->create();
 
@@ -68,7 +68,6 @@ beforeEach(function () {
     )->create();
 
     $this->actingAs($this->user);
-
 });
 
 test('customers can see their cards', function () {
@@ -102,7 +101,7 @@ it('sorts cards by date asc', function () {
     );
 
     $this->assertEquals(
-        OrderItemStatusHistory::orderBy('created_at','desc')->first()->orderItem->card_product_id,
+        OrderItemStatusHistory::orderBy('created_at', 'desc')->first()->orderItem->card_product_id,
         $response->getData()->data[2]->card_product->id
     );
 });
@@ -112,7 +111,7 @@ it('sorts cards by date desc', function () {
         ->assertOk();
 
     $this->assertEquals(
-        OrderItemStatusHistory::orderBy('created_at','desc')->first()->orderItem->card_product_id,
+        OrderItemStatusHistory::orderBy('created_at', 'desc')->first()->orderItem->card_product_id,
         $response->getData()->data[0]->card_product->id
     );
 
@@ -127,12 +126,12 @@ it('sorts cards alphabetically', function () {
         ->assertOk();
 
     $this->assertEquals(
-        OrderItem::join('card_products','card_products.id','=','order_items.card_product_id')->orderBy('card_products.name')->first()->name,
+        OrderItem::join('card_products', 'card_products.id', '=', 'order_items.card_product_id')->orderBy('card_products.name')->first()->name,
         $response->getData()->data[0]->card_product->name
     );
 
     $this->assertEquals(
-        OrderItem::join('card_products','card_products.id','=','order_items.card_product_id')->orderBy('card_products.name','desc')->first()->name,
+        OrderItem::join('card_products', 'card_products.id', '=', 'order_items.card_product_id')->orderBy('card_products.name', 'desc')->first()->name,
         $response->getData()->data[2]->card_product->name
     );
 });
@@ -143,6 +142,6 @@ it('filters cards by name', function () {
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
-            'name' => $searchName
+            'name' => $searchName,
         ]);
 });

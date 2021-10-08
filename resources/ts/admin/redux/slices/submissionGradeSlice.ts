@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
+import { countDecimals } from '@shared/lib/utils/countDecimals';
 import { APIService } from '@shared/services/APIService';
 
 export const getAllSubmissions = createAsyncThunk(
@@ -41,8 +42,21 @@ export const submissionGradesSlice = createSlice({
             state,
             action: PayloadAction<{ itemIndex: number; side: string; part: string; gradeValue: string }>,
         ) => {
-            state.allSubmissions[action.payload.itemIndex].humanGradeValues[action.payload.side][action.payload.part] =
-                action.payload.gradeValue;
+            // Regex Expression to detect if the incoming string contains any letters
+            const lettersReg = /[a-zA-Z]/g;
+            let incomingGrade = action.payload.gradeValue;
+
+            if (
+                !lettersReg.test(String(incomingGrade)) &&
+                countDecimals(Number(incomingGrade.replace(/,/g, '.'))) <= 2
+            ) {
+                if (Number(incomingGrade) > 10) {
+                    incomingGrade = '10';
+                }
+                state.allSubmissions[action.payload.itemIndex].humanGradeValues[action.payload.side][
+                    action.payload.part
+                ] = incomingGrade.replace(/,/g, '.');
+            }
         },
         updateExistingCardData: (state, action: PayloadAction<{ id: number; data: any }>) => {
             const itemIndex = state.allSubmissions.findIndex((p: any) => p.id === action.payload.id);
@@ -133,7 +147,7 @@ export const submissionGradesSlice = createSlice({
                 return { title: '', placeHolder: '' };
             }
             state.viewModes = state.allSubmissions.map((item: any, index: number) => {
-                const status = statuses[item.orderItem.status.orderItemStatus.id];
+                const status = statuses[item.orderItem.status?.orderItemStatus?.id];
                 return {
                     name: status,
                     areNotesRequired: status === 'not_accepted',
@@ -141,7 +155,7 @@ export const submissionGradesSlice = createSlice({
                     itemIndex: index,
                     pressedDone: status !== 'confirmed',
                     isDoneDisabled: true,
-                    notes: item.orderItem.status.notes,
+                    notes: item.orderItem.status?.notes,
                     notesPlaceholder: getSectionData(status!)!.placeHolder,
                 };
             });

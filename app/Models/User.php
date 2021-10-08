@@ -139,8 +139,7 @@ class User extends Authenticatable implements JWTSubject
         /* @var EmailService $emailService */
         $emailService = resolve(EmailService::class);
         $emailService->sendEmail(
-            $this->getEmailForPasswordReset(),
-            $this->name,
+            [[$this->getEmailForPasswordReset() => $this->name]],
             $emailService::SUBJECT[$emailService::TEMPLATE_SLUG_FORGOT_PASSWORD],
             $emailService::TEMPLATE_SLUG_FORGOT_PASSWORD,
             [

@@ -24,8 +24,7 @@ class SendEmail implements ShouldQueue
      * @return void
      */
     public function __construct(
-        protected string $recipientEmail,
-        protected string $recipientName,
+        protected array $recipients,
         protected string $subject,
         protected string $templateName,
         protected array $templateContent = []
@@ -42,8 +41,7 @@ class SendEmail implements ShouldQueue
     public function handle(MandrillClient $mandrillClient)
     {
         $response = $mandrillClient->sendEmailWithTemplate(
-            $this->recipientEmail,
-            $this->recipientName,
+            $this->recipients,
             $this->subject,
             $this->templateName,
             $this->templateContent
@@ -53,7 +51,7 @@ class SendEmail implements ShouldQueue
             $status = $response->json()[0]['status'];
         }
 
-        if (empty($status) || $status !== 'sent') {
+        if (empty($status) || ($status !== 'sent' && $status !== 'queued')) {
             throw new Exception('Email could not be sent. Response: ' . $response->body());
         }
     }

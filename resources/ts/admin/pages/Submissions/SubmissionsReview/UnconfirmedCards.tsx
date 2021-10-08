@@ -1,10 +1,10 @@
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import CheckIcon from '@material-ui/icons/Check';
+import CheckIcon from '@mui/icons-material/Check';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
@@ -14,7 +14,7 @@ import { changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
-import ReviewCardDialog from './ReviewCardDialog';
+import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 import UnconfirmedCard from './UnconfirmedCard';
 
 interface UnconfirmedCardsProps {
@@ -41,34 +41,14 @@ const useStyles = makeStyles(
 );
 
 export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [activeItemId, setActiveItemId] = useState<number | null>(null);
 
     const { handleOpen, ...notesDialogProps } = useNotesDialog();
 
     const classes = useStyles();
     const dispatch = useAppDispatch();
-
-    const handlePreview = useCallback((value) => setActiveIndex(value), [setActiveIndex]);
-    const handleNext = useCallback(
-        () =>
-            setActiveIndex((value) => {
-                const nextValue = (value ?? 0) + 1;
-                const lastValue = items.length - 1;
-
-                if (nextValue > lastValue) {
-                    return 0;
-                }
-
-                return Math.max(Math.min(nextValue, lastValue), 0);
-            }),
-        [setActiveIndex, items],
-    );
-    const handlePrevious = useCallback(
-        () => setActiveIndex((value) => Math.max((value ?? 0) - 1, 0)),
-        [setActiveIndex],
-    );
-
-    const handleClosePreview = useCallback(() => setActiveIndex(null), [setActiveIndex]);
+    const handlePreview = useCallback((value) => setActiveItemId(value), [setActiveItemId]);
+    const handleClosePreview = useCallback(() => setActiveItemId(null), [setActiveItemId]);
 
     const handleConfirm = useCallback(
         async (orderItemId) => {
@@ -131,7 +111,6 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                         items.map((item, index) => (
                             <UnconfirmedCard
                                 key={index}
-                                index={index}
                                 itemId={item.id}
                                 declaredValue={item.declaredValuePerUnit}
                                 card={item.cardProduct}
@@ -159,19 +138,15 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                     )}
                 </CardContent>
             </Card>
-            <ReviewCardDialog
-                open={activeIndex !== null}
+            <SubmissionReviewCardDialog
+                open={activeItemId !== null}
                 onClose={handleClosePreview}
-                indexId={activeIndex!}
+                itemId={activeItemId!}
                 orderId={orderId}
-                itemsLength={items.length}
-                onNext={handleNext}
-                onPrevious={handlePrevious}
                 onMissing={handleMissing}
                 onConfirm={handleConfirm}
                 onEdit={handleEdit}
-                disablePrevious={activeIndex === 0}
-                disableNext={!!activeIndex && activeIndex >= items.length - 1}
+                onChangeItemId={handlePreview}
             />
             <NotesDialog
                 heading={'Add Notes'}

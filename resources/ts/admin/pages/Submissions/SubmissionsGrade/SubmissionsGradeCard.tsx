@@ -1,10 +1,10 @@
-import { Paper } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import FaceIcon from '@material-ui/icons/Face';
+import FaceIcon from '@mui/icons-material/Face';
+import { Paper } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useEffect, useState } from 'react';
 import { ReactComponent as OutlinedToyIcon } from '@shared/assets/icons/optimisedSmartToyIcon.svg';
 import {
@@ -391,7 +391,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].overallValues.surface,
     );
     const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status.orderItemStatus.name,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name ?? '',
     );
 
     const frontCentering = useAppSelector(
@@ -501,13 +501,28 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                     {cardStatus.toLowerCase() === 'confirmed' ? (
                         <>
                             <Grid item xs>
-                                <Button variant={'contained'} onClick={handleNotAccepted} className={classes.button}>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={handleNotAccepted}
+                                    className={classes.button}
+                                >
                                     Not Accepted
                                 </Button>
-                                <Button variant={'contained'} onClick={handleMissing} className={classes.button}>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={handleMissing}
+                                    className={classes.button}
+                                >
                                     Missing
                                 </Button>
-                                <Button variant={'contained'} onClick={handleEdit} className={classes.button}>
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={handleEdit}
+                                    className={classes.button}
+                                >
                                     Edit Card
                                 </Button>
                             </Grid>
@@ -516,7 +531,12 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
 
                     {cardStatus.toLowerCase() !== 'confirmed' ? (
                         <Grid item xs>
-                            <Button variant={'contained'} onClick={handleRevisePress} className={classes.button}>
+                            <Button
+                                variant={'contained'}
+                                color={'inherit'}
+                                onClick={handleRevisePress}
+                                className={classes.button}
+                            >
                                 Revise
                             </Button>
                         </Grid>

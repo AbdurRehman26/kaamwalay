@@ -29,6 +29,7 @@ export const manageCardDialogSlice = createSlice({
             state.open = payload;
             if (!payload) {
                 state.backup = null;
+                state.view = 1;
                 state.lastView = null;
                 state.selectedCard = null;
                 state.declaredValue = 0;

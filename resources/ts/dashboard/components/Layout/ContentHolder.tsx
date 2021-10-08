@@ -1,4 +1,4 @@
-import { styled, Theme } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 import { HTMLAttributes } from 'react';
 
 interface ContentHolderProps extends HTMLAttributes<HTMLElement> {
@@ -15,7 +15,7 @@ function ContentHolderComponent({ hasSidebar, hasContent, ...rest }: ContentHold
 }
 
 export const ContentHolder = styled(ContentHolderComponent)(
-    ({ hasSidebar, theme }: { hasSidebar: boolean; theme: Theme }) => ({
+    ({ hasSidebar, theme }) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
@@ -23,7 +23,7 @@ export const ContentHolder = styled(ContentHolderComponent)(
         maxWidth: !hasSidebar ? '100%' : 'calc(100% - 364px)',
         marginLeft: !hasSidebar ? 0 : 24,
         width: '100%',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('md')]: {
             maxWidth: '100%',
             marginLeft: 0,
         },

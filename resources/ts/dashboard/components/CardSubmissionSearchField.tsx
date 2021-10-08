@@ -1,11 +1,12 @@
-import { useMediaQuery } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
-import SearchIcon from '@material-ui/icons/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
+import { useMediaQuery } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { connectSearchBox } from 'react-instantsearch-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -46,7 +47,7 @@ function AlogliaSearchWrapper(props: any) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const searchValue = useAppSelector((state) => state.newSubmission.step02Data.searchValue);
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const isMobileSearchModalOpen = useAppSelector((state) => state.newSubmission.step02Data.isMobileSearchModalOpen);
 
     function handleClearSearch() {
@@ -87,7 +88,7 @@ function AlogliaSearchWrapper(props: any) {
                     endAdornment:
                         props.currentRefinement !== '' ? (
                             <InputAdornment position="end">
-                                <IconButton aria-label="clear" onClick={handleClearSearch}>
+                                <IconButton aria-label="clear" onClick={handleClearSearch} size="large">
                                     <CloseIcon />
                                 </IconButton>
                             </InputAdornment>
@@ -102,7 +103,7 @@ const CustomSearchBox = connectSearchBox(AlogliaSearchWrapper);
 function CardSubmissionSearchField() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const isMobileSearchModalOpen = useAppSelector((state) => state.newSubmission.step02Data.isMobileSearchModalOpen);
 
     function handleCloseIconPress() {
@@ -117,7 +118,13 @@ function CardSubmissionSearchField() {
                     Search
                 </Typography>
                 {isMobile && isMobileSearchModalOpen ? (
-                    <IconButton edge="start" color="inherit" onClick={handleCloseIconPress} aria-label="close">
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        onClick={handleCloseIconPress}
+                        aria-label="close"
+                        size="large"
+                    >
                         <CloseIcon />
                     </IconButton>
                 ) : null}

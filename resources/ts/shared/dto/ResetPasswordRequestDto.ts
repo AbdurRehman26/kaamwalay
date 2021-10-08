@@ -1,7 +1,7 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
-import { ErrorMessages } from '@shared/lib/errors/ErrorMessage';
-import { createErrorMessageOption } from '@shared/lib/errors/createErrorMessage';
 import { Field } from '../decorators/Field';
+import { ErrorMessages } from '../lib/errors/ErrorMessage';
+import { createErrorMessageOption } from '../lib/errors/createErrorMessage';
 
 export class ResetPasswordRequestDto {
     @IsNotEmpty({ message: 'Missing reset password token!' })

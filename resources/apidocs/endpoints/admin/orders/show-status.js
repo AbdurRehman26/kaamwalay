@@ -1,6 +1,6 @@
 /**
- * @api {post} /admin/orders/15/status-history Change order status
- * @apiName Change order status
+ * @api {get} /admin/orders/15/status-history Show order status
+ * @apiName Show order status
  * @apiGroup Admin Orders
  *
  * @apiUse header_main
@@ -8,7 +8,6 @@
  *
  * @apiSuccess {Object} data Order object
  * @apiParam {Array} [include] For including relationships [order, orderStatus, user]
- * @apiParam {Integer} order_status_id Set the order status [order_status_id = 4]
  * @apiSuccessExample Success-Response:
  *      HTTP/1.1 200 OK
  *      {

@@ -43,7 +43,6 @@ class SyncCertificatesForOldOrders extends Command
     public function handle(): int
     {
         $fileName = $this->ask('Filename (storage/app/)');
-//        $fileName = 'order_cert_card_local.json';
 
         $data = collect(json_decode(Storage::get($fileName)))->map(function ($cardData) {
             return [

@@ -7,6 +7,7 @@ use App\Http\Controllers\API\Auth\ResetPasswordController;
 use App\Http\Controllers\API\ConfigurationsController;
 use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\Customer\Address\StateController;
+use App\Http\Controllers\API\Customer\Cards\UserCardController;
 use App\Http\Controllers\API\Customer\Order\OrderController;
 use App\Http\Controllers\API\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\Customer\Order\PaymentMethodController;
@@ -53,6 +54,11 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::apiResource('/', OrderController::class)->only(['index', 'store']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
+        });
+
+        Route::prefix('/cards')->group(function () {
+            Route::apiResource('/', UserCardController::class)->only(['index']);
+            Route::get('/{userCard}', [UserCardController::class, 'show']);
         });
     });
 });

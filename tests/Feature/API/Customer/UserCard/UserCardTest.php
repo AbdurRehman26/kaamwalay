@@ -29,7 +29,7 @@ beforeEach(function () {
     $this->orders = Order::factory()->count(1)->state(new Sequence(
         [
             'user_id' => $this->user->id,
-            'order_status_id' => OrderStatus::GRADED
+            'order_status_id' => OrderStatus::SHIPPED
         ],
     ))->create();
 

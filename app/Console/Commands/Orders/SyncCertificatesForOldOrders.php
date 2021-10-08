@@ -23,7 +23,7 @@ class SyncCertificatesForOldOrders extends Command
      *
      * @var string
      */
-    protected $description = 'It sync certificates for old orders which were created prior to Admin panel launch, but AGS graded those cards directly.';
+    protected $description = 'It syncs certificates for old orders which were created prior to Admin panel launch, but AGS graded those cards directly.';
 
     /**
      * Create a new command instance.

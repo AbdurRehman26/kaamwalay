@@ -126,6 +126,7 @@ class Order extends Model
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
+            AllowedInclude::relationship('extraCharges'),
         ];
     }
 

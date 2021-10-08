@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\API\Admin\Order;
 
+use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -13,6 +14,7 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
 uses(WithFaker::class);
@@ -48,10 +50,13 @@ beforeEach(function () {
 });
 
 test('admin can create extra charge for order', function () {
+    Event::fake();
     $this->postJson('/api/admin/orders/' . $this->order->id . '/extra/charge', [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
     ])->assertStatus(201);
+
+    Event::assertDispatched(ExtraChargeSuccessful::class);
     expect($this->order->extraCharges()->count())->toEqual(1);
     expect($this->order->orderPayments()->count())->toEqual(2);
 });

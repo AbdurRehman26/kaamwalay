@@ -14,5 +14,4 @@ class FeatureNotAvailable extends Exception
     {
         return new JsonResponse([ 'error' => $this->message ], $this->code);
     }
-
 }

@@ -100,7 +100,10 @@
  *                        "exp_month": 4,
  *                        "exp_year": 2024,
  *                        "last4": "4242"
- *                    }
+ *                    },
+ *                    "notes": "Lorem ispum",
+ *                    "amount": "12.22",
+ *                    "type": "order_payment",
  *                },
  *                "order_items": [
  *                    {
@@ -175,7 +178,20 @@
  *                    "shipping_provider": "usps",
  *                    "tracking_number": "9400100000000000000000"
  *                    "tracking_url": "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=9400100000000000000000",
- *                }
+ *                },
+ *                 "extra_charges": [
+ *                     {
+ *                          "card": {
+ *                              "brand": "visa",
+ *                              "exp_month": 4,
+ *                              "exp_year": 2024,
+ *                              "last4": "4242"
+ *                          },
+ *                          "notes": "Lorem ispum",
+ *                          "amount": "12.22",
+ *                          "type": "extra_charge",
+ *                     }
+ *                 ]
  *            }
  *        }
  */

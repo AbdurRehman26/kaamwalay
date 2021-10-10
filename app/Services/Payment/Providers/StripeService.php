@@ -13,7 +13,7 @@ use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
 use Stripe\SetupIntent;
 
-class StripeService implements PaymentProviderServiceInterface
+class   StripeService implements PaymentProviderServiceInterface
 {
     // stripe charges 2.9% x (amount) + 30cents
     public const STRIPE_FEE_PERCENTAGE = 0.029;
@@ -213,5 +213,32 @@ class StripeService implements PaymentProviderServiceInterface
         } catch (IncompletePayment|InvalidRequestException|CardException $exception) {
             return [];
         }
+    }
+
+    public function refund(Order $order, array $data)
+    {
+        $orderPayment = $order->firstOrderPayment;
+        $paymentData = json_decode($orderPayment->response, associative: true);
+
+        $refundData = [
+            'amount' => (int) $data['amount'] * 100,
+            'metadata' => [
+                'Order ID' => $order->id,
+                'Order #' => $order->order_number,
+                'Notes' => $data['notes'],
+            ],
+        ];
+
+        $response = $order->user->refund($paymentData['id'], $refundData);
+
+        return [
+            'success' => true,
+            'request' => $refundData,
+            'response' => $response->toArray(),
+            'payment_provider_reference_id' => $response->id,
+            'amount' => $data['amount'],
+            'type' => OrderPayment::PAYMENT_TYPES['refund'],
+            'notes' => $refundData['metadata']['Notes'],
+        ];
     }
 }

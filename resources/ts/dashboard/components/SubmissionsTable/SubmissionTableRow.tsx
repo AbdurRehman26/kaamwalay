@@ -1,6 +1,4 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { useMediaQuery } from '@mui/material';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
@@ -8,12 +6,10 @@ import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
@@ -32,6 +28,7 @@ interface SubmissionTableRowProps {
     invoice?: string;
     invoiceNumber?: string;
     disabled?: boolean;
+    isSm?: boolean;
     orderCustomerShipment: null | ShipmentEntity;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
@@ -49,11 +46,13 @@ enum Options {
 const useStyles = makeStyles(
     {
         submissionHolder: {
+            width: '100%',
+            borderBottom: '1px solid #ccc',
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginTop: '12px',
-            marginBottom: '12px',
+            paddingBottom: '12px',
         },
         submissionLeftSide: {
             display: 'flex',
@@ -98,7 +97,7 @@ const useStyles = makeStyles(
             color: '#000',
         },
     },
-    { name: 'OrderMobileRow' },
+    { name: 'SubmissionTableRow' },
 );
 export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const {
@@ -112,11 +111,13 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         invoiceNumber,
         status,
         orderCustomerShipment,
+        isSm,
     } = props;
+
+    const submissionViewUrl = `submissions/${id}/view`;
 
     const history = useHistory();
     const confirm = useConfirmation();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const classes = useStyles();
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -162,7 +163,6 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [dispatch, id],
     );
 
-    const submissionViewUrl = `submissions/${id}/view`;
     return (
         <>
             <ShipmentDialog
@@ -173,7 +173,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 onSubmit={handleShipmentSubmit}
             />
 
-            {!isMobile ? (
+            {!isSm ? (
                 <TableRow>
                     <TableCell>
                         <MuiLink component={Link} to={submissionViewUrl}>
@@ -222,66 +222,61 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     </TableCell>
                 </TableRow>
             ) : (
-                <>
-                    <div className={classes.submissionHolder}>
-                        <div className={classes.submissionLeftSide}>
-                            <Link to={`submissions/${id}/view`} style={{ textDecoration: 'none' }}>
-                                <Typography variant={'subtitle1'} className={classes.orderNumber}>
-                                    {orderNumber}
-                                </Typography>
-                            </Link>
-
-                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                                Date Placed:{' '}
-                                <span className={classes.submissionPropertyValue}>
-                                    {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
-                                </span>
+                <div className={classes.submissionHolder}>
+                    <div className={classes.submissionLeftSide}>
+                        <Link to={`submissions/${id}/view`} style={{ textDecoration: 'none' }}>
+                            <Typography variant={'subtitle1'} className={classes.orderNumber}>
+                                {orderNumber}
                             </Typography>
+                        </Link>
 
-                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                                Date Arrived:{' '}
-                                <span className={classes.submissionPropertyValue}>
-                                    {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
-                                </span>
-                            </Typography>
+                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                            Date Placed:{' '}
+                            <span className={classes.submissionPropertyValue}>
+                                {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
+                            </span>
+                        </Typography>
 
-                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                                Service Level:{' '}
-                                <span className={classes.submissionPropertyValue}>
-                                    {`${formatCurrency(serviceLevel)} / Card`}
-                                </span>
-                            </Typography>
+                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                            Date Arrived:{' '}
+                            <span className={classes.submissionPropertyValue}>
+                                {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
+                            </span>
+                        </Typography>
 
-                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                                # Cards: <span className={classes.submissionPropertyValue}>{cardsNumber}</span>
-                            </Typography>
-                        </div>
+                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                            Service Level:{' '}
+                            <span className={classes.submissionPropertyValue}>
+                                {`${formatCurrency(serviceLevel)} / Card`}
+                            </span>
+                        </Typography>
 
-                        <div className={classes.submissionRightSide}>
-                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                                Status: <span className={classes.submissionPropertyValue}>{status}</span>
-                            </Typography>
-                            <div className={classes.closeIconContainer}>
-                                <IconButton onClick={handleClickOptions} className={classes.closeIconBtn} size="large">
-                                    <MoreIcon />
-                                </IconButton>
+                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                            # Cards: <span className={classes.submissionPropertyValue}>{cardsNumber}</span>
+                        </Typography>
+                    </div>
 
-                                <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                                    <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
-                                        {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                                    </MenuItem>
-                                    <MenuItem onClick={handleOption(Options.ViewInstructions)}>
-                                        View Instructions
-                                    </MenuItem>
-                                    <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                        {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
-                                    </MenuItem>
-                                </Menu>
-                            </div>
+                    <div className={classes.submissionRightSide}>
+                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                            Status: <span className={classes.submissionPropertyValue}>{status}</span>
+                        </Typography>
+                        <div className={classes.closeIconContainer}>
+                            <IconButton onClick={handleClickOptions} className={classes.closeIconBtn} size="large">
+                                <MoreIcon />
+                            </IconButton>
+
+                            <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                                <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
+                                    {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                </MenuItem>
+                                <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
+                                <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                    {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                </MenuItem>
+                            </Menu>
                         </div>
                     </div>
-                    <Divider />
-                </>
+                </div>
             )}
         </>
     );

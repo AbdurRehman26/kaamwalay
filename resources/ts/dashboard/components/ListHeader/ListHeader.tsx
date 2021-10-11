@@ -5,13 +5,15 @@ import Grid from '@mui/material/Grid';
 import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { PropsWithChildren, useMemo } from 'react';
+import { debounce } from 'lodash';
+import React, { ChangeEvent, PropsWithChildren, useCallback, useMemo } from 'react';
 import { font } from '@shared/styles/utils';
 
 interface ListHeaderProps {
     headline: string;
     noSearch?: boolean;
     noMargin?: boolean;
+    onSearch?: (value: string) => void;
 }
 
 const useStyles = makeStyles(
@@ -19,6 +21,13 @@ const useStyles = makeStyles(
         root: {},
         searchBarHolder: {
             padding: '0 20px',
+            [theme.breakpoints.down(1016)]: {
+                paddingRight: 0,
+            },
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
+                padding: '14px 0 0 0',
+            },
         },
         searchBar: {
             width: '100%',
@@ -27,6 +36,9 @@ const useStyles = makeStyles(
             backgroundColor: '#fff',
             borderRadius: 24,
             maxWidth: 400,
+            [theme.breakpoints.down(1016)]: {
+                maxWidth: '100%',
+            },
         },
         searchBarIcon: {
             margin: '0 14px',
@@ -35,11 +47,19 @@ const useStyles = makeStyles(
             width: '100%',
             margin: theme.spacing(2.5, 0, noMargin ? 0 : 2.5),
         }),
+        rightContentHolder: {
+            [theme.breakpoints.down(1016)]: {
+                paddingTop: 14,
+                width: '100%',
+            },
+        },
     }),
     {
         name: 'ListHeader',
     },
 );
+
+const debouncedFunc = debounce((func: () => void) => func(), 300);
 
 /**
  *
@@ -48,15 +68,20 @@ const useStyles = makeStyles(
  * @date: 10.08.2021
  * @time: 01:43
  */
-export function ListHeader({ children, headline, noSearch, noMargin }: PropsWithChildren<ListHeaderProps>) {
-    const styleProps = useMemo(
-        () => ({
-            noMargin,
-        }),
-        [noMargin],
-    );
-
+export function ListHeader({ children, headline, noSearch, noMargin, onSearch }: PropsWithChildren<ListHeaderProps>) {
+    const styleProps = useMemo(() => ({ noMargin }), [noMargin]);
     const classes = useStyles(styleProps);
+
+    const handleSearch = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            debouncedFunc(() => {
+                if (onSearch) {
+                    onSearch(event.target.value);
+                }
+            });
+        },
+        [onSearch],
+    );
 
     return (
         <>
@@ -70,14 +95,21 @@ export function ListHeader({ children, headline, noSearch, noMargin }: PropsWith
                             placeholder="Search…"
                             className={classes.searchBar}
                             startAdornment={<SearchIcon className={classes.searchBarIcon} />}
+                            onChange={handleSearch}
                         />
                     )}
                 </Box>
-                {children}
+
+                <Box
+                    display={'flex'}
+                    flex={'1 1 auto'}
+                    justifyContent={'flex-end'}
+                    className={classes.rightContentHolder}
+                >
+                    {children}
+                </Box>
             </Grid>
             <Divider className={classes.divider} />
         </>
     );
 }
-
-export default ListHeader;

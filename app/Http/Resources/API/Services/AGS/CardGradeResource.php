@@ -82,6 +82,38 @@ class CardGradeResource extends BaseResource
                     'output_image' => $this->resource['back_scan']['corners_result']['output_image'] ?? null,
                     'name' => 'Back Corners',
                 ],
+                [
+                    'output_image' => $this->resource['laser_front_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Laser Front Centering',
+                ],
+                [
+                    'output_image' => $this->resource['laser_front_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Laser Front Surface',
+                ],
+                [
+                    'output_image' => $this->resource['laser_front_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Laser Front Edges',
+                ],
+                [
+                    'output_image' => $this->resource['laser_front_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Laser Front Corners',
+                ],
+                [
+                    'output_image' => $this->resource['laser_back_scan']['centering_result']['output_image'] ?? null,
+                    'name' => 'Laser Back Centering',
+                ],
+                [
+                    'output_image' => $this->resource['laser_back_scan']['surface_result']['output_image'] ?? null,
+                    'name' => 'Laser Back Surface',
+                ],
+                [
+                    'output_image' => $this->resource['laser_back_scan']['edges_result']['output_image'] ?? null,
+                    'name' => 'Laser Back Edges',
+                ],
+                [
+                    'output_image' => $this->resource['laser_back_scan']['corners_result']['output_image'] ?? null,
+                    'name' => 'Laser Back Corners',
+                ],
             ],
         ];
     }

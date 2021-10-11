@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import { useHistory } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
@@ -22,6 +22,7 @@ const useStyles = makeStyles(
 export function ListSubmissions() {
     const classes = useStyles();
     const history = useHistory();
+    const [search, setSearch] = useState('');
 
     function handleOnClick() {
         ReactGA.event({
@@ -33,7 +34,7 @@ export function ListSubmissions() {
 
     return (
         <>
-            <ListHeader headline={'Submissions'} noMargin noSearch>
+            <ListHeader headline={'Submissions'} noMargin onSearch={setSearch}>
                 <Button
                     onClick={handleOnClick}
                     variant={'contained'}
@@ -43,7 +44,7 @@ export function ListSubmissions() {
                     New Submission
                 </Button>
             </ListHeader>
-            <SubmissionsTable />
+            <SubmissionsTable search={search} />
         </>
     );
 }

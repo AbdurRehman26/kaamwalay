@@ -15,6 +15,7 @@
  *     HTTP/1.1 200 OK
  *     {
  *         "data": {
+ *             "id": 4,
  *             "card_product": {
  *                 "id": 4,
  *                 "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 4 Cacnea",

@@ -17,6 +17,7 @@
  *     {
  *         "data": [
  *             {
+ *                 "id": 7,
  *                 "card_product": {
  *                     "id": 7,
  *                     "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 7 Cherubi",
@@ -33,6 +34,7 @@
  *                 "overall_grade": 0
  *             },
  *             {
+ *                 "id": 8,
  *                 "card_product": {
  *                     "id": 8,
  *                     "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 8 Cherrim",
@@ -49,6 +51,7 @@
  *                 "overall_grade": 0
  *             },
  *             {
+ *                 "id": 8,
  *                 "card_product": {
  *                     "id": 8,
  *                     "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 8 Cherrim",

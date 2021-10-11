@@ -6,6 +6,7 @@ use App\Events\API\Admin\Order\ExtraChargeApplied;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
+use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -143,6 +144,8 @@ class OrderService
 
         $order->orderPayments()->save($orderPayment);
 
-        ExtraChargeApplied::dispatch($orderPayment);
+        $orderPaymentResource = new OrderPaymentResource($orderPayment);
+
+        ExtraChargeApplied::dispatch($orderPaymentResource);
     }
 }

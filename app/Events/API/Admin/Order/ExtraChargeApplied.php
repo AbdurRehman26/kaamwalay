@@ -2,12 +2,7 @@
 
 namespace App\Events\API\Admin\Order;
 
-use App\Models\OrderPayment;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -22,7 +17,7 @@ class ExtraChargeApplied implements ShouldQueue, ShouldBeEncrypted
      *
      * @return void
      */
-    public function __construct(public OrderPayment $orderPayment)
+    public function __construct(public OrderPaymentResource $orderPayment)
     {
     }
 }

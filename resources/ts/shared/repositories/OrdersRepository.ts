@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
-import { Injectable } from '@shared/decorators/Injectable';
-import { OrderEntity } from '@shared/entities/OrderEntity';
+import { Injectable } from '../decorators/Injectable';
 import { ChangeOrderShipmentDto } from '../dto/ChangeOrderShipmentDto';
+import { OrderEntity } from '../entities/OrderEntity';
 import { ShipmentEntity } from '../entities/ShipmentEntity';
 import { Repository } from './Repository';
 

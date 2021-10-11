@@ -52,6 +52,6 @@ return [
 
     'dropbox' => [
         'token' => env('AGS_DROPBOX_TOKEN'),
-    ]
+    ],
 
 ];

@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { PropsWithChildren } from 'react';
 import { cx } from '@shared/lib/utils/cx';
 import { AccordionCardItemProvider } from './AccordionCardItemContext';

@@ -107,6 +107,7 @@ class RevenueStatsService
         $order->orderPayments->map(function ($payment) use (&$calculatedProfit, &$calculatedRevenue) {
             $calculatedProfit += $this->calculateProfit($payment);
             $calculatedRevenue += $this->calculateRevenue($payment);
+
             return $payment;
         });
 

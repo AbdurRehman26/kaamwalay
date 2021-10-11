@@ -16,6 +16,7 @@ class UpdateOrderPaymentRequest extends FormRequest
     {
         /* @var User $user */
         $user = $this->user();
+
         return $user->isAdmin();
     }
 

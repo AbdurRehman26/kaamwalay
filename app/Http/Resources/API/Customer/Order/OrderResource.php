@@ -31,13 +31,14 @@ class OrderResource extends BaseResource
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),
             'billing_address' => new OrderAddressResource($this->billingAddress),
-            'order_payment' => new OrderPaymentResource($this->lastOrderPayment),
+            'order_payment' => new OrderPaymentResource($this->firstOrderPayment),
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
+            'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),
         ];
     }
 }

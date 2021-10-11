@@ -253,6 +253,7 @@ namespace App\Models{
  * @property float|null $service_fee
  * @property float|null $shipping_fee
  * @property float|null $grand_total
+ * @property float $extra_charge This will hold the cumulative value of all the extra charges per order
  * @property int $user_id
  * @property int $payment_plan_id
  * @property int|null $order_status_id
@@ -308,6 +309,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAutoSavedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereBillingOrderAddressId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereExtraCharge($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereGradedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereGradedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereGrandTotal($value)

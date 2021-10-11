@@ -1,12 +1,15 @@
-import Step from '@material-ui/core/Step';
-import StepConnector from '@material-ui/core/StepConnector';
-import { StepIconProps } from '@material-ui/core/StepIcon';
-import StepLabel from '@material-ui/core/StepLabel';
-import Stepper from '@material-ui/core/Stepper';
-import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
-import LocalShippingOutlinedIcon from '@material-ui/icons/LocalShippingOutlined';
-import PaymentOutlinedIcon from '@material-ui/icons/PaymentOutlined';
-import ReceiptOutlinedIcon from '@material-ui/icons/ReceiptOutlined';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import Step from '@mui/material/Step';
+import StepConnector from '@mui/material/StepConnector';
+import { StepIconProps } from '@mui/material/StepIcon';
+import StepLabel from '@mui/material/StepLabel';
+import Stepper from '@mui/material/Stepper';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
 import clsx from 'clsx';
 import React from 'react';
 import { ReactComponent as Step01Icon } from '@shared/assets/step01Icon.svg';
@@ -92,7 +95,7 @@ const useStyles = makeStyles((theme: Theme) =>
             border: 'none',
             maxWidth: '552px',
             width: '100%',
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: 'auto',
             },
         },
@@ -101,7 +104,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'row',
             width: '100%',
             justifyContent: 'center',
-            transform: 'translate(0, 88px)',
+            transform: 'translate(0, 64px)',
             overflow: 'hidden',
         },
         instructions: {

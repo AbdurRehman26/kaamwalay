@@ -18,7 +18,7 @@ class AddExtraChargeFieldsInOrderPaymentsTable extends Migration
                 ->default(1)
                 ->comment('1 => order payment, 2 => extra charge, 3 => refund')
                 ->after('payment_provider_reference_id');
-            $table->float('amount', 10, 2)
+            $table->decimal('amount', 10, 2)
                 ->nullable()
                 ->after('payment_provider_reference_id');
             $table->text('notes')

@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -47,6 +46,7 @@ class Order extends Model
         'reviewed_at',
         'graded_at',
         'auto_saved_at',
+        'extra_charge',
     ];
 
     /**
@@ -74,6 +74,7 @@ class Order extends Model
         'grand_total_cents' => 'integer',
         'reviewed_at' => 'date',
         'graded_at' => 'date',
+        'extra_charge' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -93,6 +94,7 @@ class Order extends Model
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
+            AllowedInclude::relationship('extraCharges'),
         ];
     }
 
@@ -124,6 +126,14 @@ class Order extends Model
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
+            AllowedInclude::relationship('extraCharges'),
+        ];
+    }
+
+    public static function getAllowedFilters(): array
+    {
+        return [
+            AllowedFilter::partial('order_number'),
         ];
     }
 

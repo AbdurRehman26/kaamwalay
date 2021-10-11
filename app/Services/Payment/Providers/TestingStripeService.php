@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Str;
 
@@ -41,6 +42,9 @@ class TestingStripeService implements PaymentProviderServiceInterface
             'request' => $paymentData,
             'response' => $response,
             'payment_provider_reference_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'amount' => $order->grand_total,
+            'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+            'notes' => $paymentData['additional_data']['description'],
         ];
     }
 
@@ -157,7 +161,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     {
         $amountCharged = $order->grand_total_cents;
 
-        return  round((float) (
+        return round((
             (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100, 2);
     }
@@ -206,6 +210,44 @@ class TestingStripeService implements PaymentProviderServiceInterface
                     'last4' => 4242,
                 ],
             ],
+        ];
+    }
+
+    public function calculateFeeWithAmount(float $amount): float
+    {
+        $amountCharged = round($amount * 100);
+
+        return $this->calculateFee($amountCharged);
+    }
+
+    public function additionalCharge(Order $order, $request): array
+    {
+        if (! empty($request['fail'])) {
+            return [];
+        }
+        $paymentData = [
+            'customer_id' => Str::random(25),
+            'amount' => (int) $request['amount'] * 100,
+            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'additional_data' => [
+                'description' => $request['notes'],
+                'metadata' => [
+                    'Order ID' => $order->id,
+                    'User Email' => $order->user->email,
+                    'Type' => 'Extra Charge',
+                ],
+            ],
+        ];
+        $response = $this->successfulPaymentResponse($paymentData);
+
+        return [
+            'success' => true,
+            'request' => $paymentData,
+            'response' => $response,
+            'payment_provider_reference_id' => $paymentData['payment_intent_id'],
+            'amount' => $request['amount'],
+            'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+            'notes' => $paymentData['additional_data']['description'],
         ];
     }
 }

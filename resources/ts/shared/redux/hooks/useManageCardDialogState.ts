@@ -1,4 +1,4 @@
-import { useSharedSelector } from '@shared/hooks/useSharedDispatch';
+import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 
 export function useManageCardDialogState() {
     return useSharedSelector((state) => state.manageCardDialog);

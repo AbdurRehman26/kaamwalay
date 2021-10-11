@@ -2,9 +2,10 @@
 
 namespace App\Services\Admin;
 
-use App\Events\API\Admin\Order\ExtraChargeApplied;
+use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
+use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
@@ -19,7 +20,9 @@ use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 class OrderService
 {
@@ -138,14 +141,109 @@ class OrderService
         }
     }
 
-    public function addExtraCharge(Order $order, array $data): void
+    public function getDataForAdminSubmissionConfirmationEmail(Order $order): array
     {
-        $orderPayment = new OrderPayment(attributes: $data);
+        $data = [];
 
-        $order->orderPayments()->save($orderPayment);
+        $paymentPlan = $order->paymentPlan;
+        $orderItems = $order->getGroupedOrderItems();
+        $orderPayment = OrderPaymentResource::make($order->orderPayment)->resolve();
+
+        $data["SUBMISSION_NUMBER"] = $order->order_number;
+        $data['CUSTOMER_NAME'] = $order->user->getFullName();
+        $data['CUSTOMER_EMAIL'] = $order->user->email;
+        $data['CUSTOMER_NUMBER'] = $order->user->customer_number;
+        $data["TIME"] = $order->created_at->format('h:m A');
+
+        $items = [];
+        foreach ($orderItems as $orderItem) {
+            $card = $orderItem->cardProduct;
+            $items[] = [
+                "CARD_IMAGE_URL" => $card->image_path,
+                "CARD_NAME" => $card->name,
+                "CARD_FULL_NAME" => $card->getSearchableName(),
+                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
+                "CARD_QUANTITY" => $orderItem->quantity,
+                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
+            ];
+        }
+
+        $data["ORDER_ITEMS"] = $items;
+        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
+        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
+        $data["TOTAL"] = number_format($order->grand_total, 2);
+
+        $data["SERVICE_LEVEL"] = $paymentPlan->price;
+        $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
+        $data["DATE"] = $order->created_at->format('m/d/Y');
+        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
+
+        $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
+        $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
+
+        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+
+        return $data;
+    }
+
+    protected function getAddressData($address): array
+    {
+        return [
+            "ID" => $address->id,
+            "FULL_NAME" => $address->first_name . " " . $address->last_name,
+            "ADDRESS" => $address->address,
+            "CITY" => $address->city,
+            "STATE" => $address->state,
+            "ZIP" => $address->zip,
+            "COUNTRY" => $address->country->code,
+            "PHONE" => $address->phone,
+        ];
+    }
+
+    protected function getOrderPaymentText(array $orderPayment): string
+    {
+        if (array_key_exists('card', $orderPayment)) {
+            return ucfirst($orderPayment["card"]["brand"]) . ' ending in ' . $orderPayment["card"]["last4"];
+        } elseif (array_key_exists('payer', $orderPayment)) {
+            return $orderPayment["payer"]["email"] . "\n" . $orderPayment["payer"]["name"];
+        }
+
+        return '';
+    }
+
+    /**
+     * @throws FailedExtraCharge|Throwable
+     */
+    public function addExtraCharge(Order $order, array $data, array $paymentResponse): void
+    {
+        if (empty($paymentResponse)) {
+            FailedExtraCharge::dispatch($order, $data);
+
+            throw new FailedExtraCharge;
+        }
+        DB::beginTransaction();
+
+        $order->fill([
+            'extra_charge' => $order->extra_charge + $data['amount'],
+            'grand_total' => $order->grand_total + $data['amount'],
+        ]);
+        $order->save();
+
+        $orderPayment = OrderPayment::create([
+            'request' => json_encode($paymentResponse['request']),
+            'response' => json_encode($paymentResponse['response']),
+            'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
+            'amount' => $paymentResponse['amount'],
+            'type' => $paymentResponse['type'],
+            'notes' => $paymentResponse['notes'],
+            'order_id' => $order->id,
+            'payment_method_id' => $order->payment_method_id,
+        ]);
+
+        DB::commit();
 
         $orderPaymentResource = new OrderPaymentResource($orderPayment);
 
-        ExtraChargeApplied::dispatch($orderPaymentResource);
+        ExtraChargeSuccessful::dispatch($orderPaymentResource);
     }
 }

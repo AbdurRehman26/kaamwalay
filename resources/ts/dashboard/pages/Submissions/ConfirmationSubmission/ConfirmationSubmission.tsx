@@ -1,9 +1,9 @@
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import MuiLink from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import MuiLink from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { font } from '@shared/styles/utils';

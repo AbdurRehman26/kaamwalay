@@ -1,6 +1,6 @@
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Grow from '@material-ui/core/Grow';
-import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+import Grow from '@mui/material/Grow';
+import makeStyles from '@mui/styles/makeStyles';
 
 interface AccordionCardItemLoaderProps {
     show: boolean;

@@ -1,16 +1,16 @@
-import { ListItemSecondaryAction } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
-import Drawer from '@material-ui/core/Drawer';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
+import { ListItemSecondaryAction } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
+import Drawer from '@mui/material/Drawer';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import UserAvatar from '@shared/assets/dummyAvatar.svg';
@@ -182,5 +182,3 @@ export function DashboardNavigationDrawer() {
         </Drawer>
     );
 }
-
-export default DashboardNavigationDrawer;

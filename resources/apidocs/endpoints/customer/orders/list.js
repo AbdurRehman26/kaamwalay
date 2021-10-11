@@ -67,7 +67,7 @@
  *                        "shipping_provider": "fedex",
  *                        "tracking_number": "020207021381215"
  *                    }
- *                },
+ *                }
  *            ],
  *            "links": {
  *                "first": "http://robograding.test/api/customer/orders?page=1",

@@ -9,7 +9,7 @@
  *  @apiParamExample {json} Request-Example:
  *      {
  *          "payment_plan": {
- *              id: 1
+ *              "id": 1
  *          },
  *          "items": [
  *              {

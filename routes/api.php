@@ -36,7 +36,7 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('customer')->group(function () {
     Route::middleware('auth')->group(function () {
-        Route::apiResource('addresses/states', StateController::class);
+        Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);

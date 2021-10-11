@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Admin\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\AddExtraChargeRequest;
+use App\Http\Requests\API\Admin\Order\RefundOrderRequest;
 use App\Http\Requests\API\Admin\Order\UpdateOrderPaymentRequest;
 use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
@@ -41,5 +42,19 @@ class OrderPaymentController extends Controller
         $orderPayment->update($request->all());
 
         return new OrderPaymentResource($order->lastOrderPayment);
+    }
+
+    public function refund(
+        RefundOrderRequest $request,
+        Order $order,
+        PaymentService $paymentService,
+        OrderService $orderService,
+    ): JsonResponse {
+        $response = $paymentService->refund(order: $order, request: $request->all());
+        $orderService->processRefund($order, $request->all(), $response);
+
+        return (new OrderPaymentResource($order->lastOrderPayment))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 }

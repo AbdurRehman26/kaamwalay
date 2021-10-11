@@ -47,6 +47,7 @@ class Order extends Model
         'graded_at',
         'auto_saved_at',
         'extra_charge',
+        'refund_amount',
     ];
 
     /**
@@ -75,6 +76,7 @@ class Order extends Model
         'reviewed_at' => 'date',
         'graded_at' => 'date',
         'extra_charge' => 'float',
+        'refund_amount' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];

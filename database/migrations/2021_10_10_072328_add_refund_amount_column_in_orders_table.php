@@ -14,7 +14,7 @@ class AddRefundAmountColumnInOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('refunds')
+            $table->decimal('refund_amount')
                 ->default(0.0)
                 ->after('extra_charge');
         });

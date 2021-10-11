@@ -148,4 +148,13 @@ class PaymentService
             throw new FeatureNotAvailable('Extra Charge service is not available at the moment.');
         }
     }
+
+    public function refund(Order $order, array $request): array
+    {
+        $this->hasProvider($order);
+
+        return resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->refund($this->order, $request);
+    }
 }

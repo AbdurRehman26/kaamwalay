@@ -2,10 +2,13 @@
 
 namespace App\Services\Admin;
 
+use App\Events\API\Admin\Order\ExtraChargeFailed;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
+use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
+use App\Exceptions\API\Admin\Order\FailedRedund;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
@@ -217,31 +220,36 @@ class OrderService
     public function addExtraCharge(Order $order, array $data, array $paymentResponse): void
     {
         if (empty($paymentResponse)) {
-            FailedExtraCharge::dispatch($order, $data);
+            ExtraChargeFailed::dispatch($order, $data);
 
             throw new FailedExtraCharge;
         }
         DB::beginTransaction();
 
-        $order->fill([
-            'extra_charge' => $order->extra_charge + $data['amount'],
-            'grand_total' => $order->grand_total + $data['amount'],
-        ]);
-        $order->save();
+        $order->updateAfterExtraCharge($data['amount']);
 
-        OrderPayment::create([
-            'request' => json_encode($paymentResponse['request']),
-            'response' => json_encode($paymentResponse['response']),
-            'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
-            'amount' => $paymentResponse['amount'],
-            'type' => $paymentResponse['type'],
-            'notes' => $paymentResponse['notes'],
-            'order_id' => $order->id,
-            'payment_method_id' => $order->payment_method_id,
-        ]);
+        $order->createOrderPayment($paymentResponse);
 
         DB::commit();
 
         ExtraChargeSuccessful::dispatch($order);
+    }
+
+    public function processRefund(Order $order, array $data, array $refundResponse)
+    {
+        if (empty($refundResponse)) {
+            ExtraChargeFailed::dispatch($order, $data);
+
+            throw new FailedRedund;
+        }
+        DB::beginTransaction();
+
+        $order->updateAfterExtraCharge($data['amount']);
+
+        $order->createOrderPayment($refundResponse);
+
+        DB::commit();
+
+        RefundSuccessful::dispatch($order);
     }
 }

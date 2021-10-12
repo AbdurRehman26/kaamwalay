@@ -19,7 +19,7 @@
  *             {
  *                 "id": 7,
  *                 "card_product": {
- *                     "id": 7,
+ *                     "id": 11,
  *                     "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 7 Cherubi",
  *                     "name": "Cherubi",
  *                     "card_category_name": "Pokemon",

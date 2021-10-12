@@ -17,7 +17,7 @@
  *         "data": {
  *             "id": 4,
  *             "card_product": {
- *                 "id": 4,
+ *                 "id": 10,
  *                 "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 4 Cacnea",
  *                 "name": "Cacnea",
  *                 "card_category_name": "Pokemon",
@@ -29,7 +29,8 @@
  *                 "image_path": "https://den-cards.pokellector.com/305/Cacnea.SWSH05.4.37531.png"
  *             },
  *             "certificate_number": "00000501",
- *             "submission_number": "RG000000094",
+ *             "order_number": "RG000000094",
+ *             "order_id": 5,
  *             "overall_values": {
  *                 "edge": 0,
  *                 "center": 0,

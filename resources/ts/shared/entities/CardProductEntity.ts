@@ -6,8 +6,10 @@ export class CardProductEntity extends Entity {
     public cardSetName!: string;
     public cardSeriesName!: string;
     public releaseYear!: number;
+    public releaseDate!: string;
     public cardNumberOrder!: string;
     public imagePath!: string;
+    public fullName!: string;
 
     public getName() {
         return this.name || 'Unknown';

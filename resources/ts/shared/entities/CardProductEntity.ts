@@ -10,25 +10,21 @@ export class CardProductEntity extends Entity {
     public cardNumberOrder!: string;
     public imagePath!: string;
     public fullName!: string;
+    public shortName!: string;
 
     public getName() {
-        return this.name || 'Unknown';
+        return this.getShortName() || 'Unknown';
     }
 
     public getDescription() {
-        const content = [
-            this.releaseYear,
-            this.cardCategoryName,
-            this.cardSeriesName,
-            this.cardSetName,
-            this.cardNumberOrder,
-            this.name,
-        ]
-            .map((item) => `${item ?? ''}`)
-            .filter(Boolean)
-            .join(' ')
-            .trim();
+        return this.getFullName() || 'No card description.';
+    }
 
-        return content || 'No card description.';
+    public getFullName() {
+        return this.fullName;
+    }
+
+    public getShortName() {
+        return this.shortName;
     }
 }

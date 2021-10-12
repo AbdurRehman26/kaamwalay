@@ -25,6 +25,9 @@ class CardProductFactory extends Factory
     {
         return [
             'name' => $this->faker->firstName(),
+            "variant_name" => '1st Edition',
+            "variant_category" => 'Surface',
+            "holo_type" => 'REV.HOLO',
             'card_set_id' => CardSet::factory(),
             'card_category_id' => CardCategory::factory(),
             'rarity' => 'Common',

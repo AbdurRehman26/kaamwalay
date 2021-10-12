@@ -24,7 +24,6 @@ const useStyles = makeStyles(
         caption: {
             padding: '10px 12px',
             backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            backdropFilter: 'blur(4px)',
             position: 'absolute',
             bottom: 0,
             left: 0,

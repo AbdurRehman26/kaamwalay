@@ -244,7 +244,7 @@ class OrderService
         }
         DB::beginTransaction();
 
-        $order->updateAfterExtraCharge($data['amount']);
+        $order->updateAfterRefund($data['amount']);
 
         $order->createOrderPayment($refundResponse);
 

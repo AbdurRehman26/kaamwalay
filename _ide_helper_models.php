@@ -129,7 +129,7 @@ namespace App\Models{
  * @property string $image_path
  * @property string $image_bucket_path
  * @property string|null $set_url
- * @property string|null $release_date
+ * @property \Illuminate\Support\Carbon|null $release_date
  * @property int|null $release_year
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -254,6 +254,7 @@ namespace App\Models{
  * @property float|null $shipping_fee
  * @property float|null $grand_total
  * @property float $extra_charge This will hold the cumulative value of all the extra charges per order
+ * @property float $refund_amount
  * @property int $user_id
  * @property int $payment_plan_id
  * @property int|null $order_status_id
@@ -292,6 +293,8 @@ namespace App\Models{
  * @property-read int|null $order_status_history_count
  * @property-read \App\Models\PaymentMethod $paymentMethod
  * @property-read \App\Models\PaymentPlan $paymentPlan
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $refunds
+ * @property-read int|null $refunds_count
  * @property-read \App\Models\User|null $reviewedBy
  * @property-read \App\Models\OrderAddress $shippingAddress
  * @property-read \App\Models\ShippingMethod $shippingMethod
@@ -322,6 +325,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentPlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereServiceFee($value)

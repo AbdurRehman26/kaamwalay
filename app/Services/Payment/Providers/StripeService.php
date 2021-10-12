@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\CardException;
@@ -13,7 +14,7 @@ use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
 use Stripe\SetupIntent;
 
-class   StripeService implements PaymentProviderServiceInterface
+class StripeService implements PaymentProviderServiceInterface
 {
     // stripe charges 2.9% x (amount) + 30cents
     public const STRIPE_FEE_PERCENTAGE = 0.029;
@@ -215,7 +216,7 @@ class   StripeService implements PaymentProviderServiceInterface
         }
     }
 
-    public function refund(Order $order, array $data)
+    public function refund(Order $order, array $data): array
     {
         $orderPayment = $order->firstOrderPayment;
         $paymentData = json_decode($orderPayment->response, associative: true);
@@ -229,7 +230,15 @@ class   StripeService implements PaymentProviderServiceInterface
             ],
         ];
 
-        $response = $order->user->refund($paymentData['id'], $refundData);
+        try {
+            $response = $order->user->refund($paymentData['id'], $refundData);
+        } catch (\Exception $exception) {
+            Log::error('Encountered error while refunding a charge', [
+                'message' => $exception->getMessage(),
+                'data' => $refundData,
+            ]);
+            return [];
+        }
 
         return [
             'success' => true,

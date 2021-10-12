@@ -9,7 +9,7 @@ import Slider from 'react-slick';
 import { CardGradeImage } from './CardGradeImage';
 
 interface CardGradeImagesProps {
-    images: undefined | { url: string; title: string }[];
+    images?: { url: string; title: string }[];
 }
 /**
  *
@@ -57,17 +57,9 @@ export function CardGradeImages({ images }: CardGradeImagesProps) {
                     ]}
                     arrows
                 >
-                    {!images
-                        ? []
-                        : images.map(({ url, title }, index) => (
-                              <CardGradeImage
-                                  key={index}
-                                  image={url}
-                                  title={title}
-                                  index={index}
-                                  onClick={handleSlide}
-                              />
-                          ))}
+                    {images?.map(({ url, title }, index) => (
+                        <CardGradeImage key={index} image={url} title={title} index={index} onClick={handleSlide} />
+                    ))}
                 </Slider>
             </Box>
             {open ? <Lightbox onClose={handleClose} startIndex={currentSlide} images={images} /> : null}

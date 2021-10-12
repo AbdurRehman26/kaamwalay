@@ -81,7 +81,7 @@ const useStyles = makeStyles(
 );
 
 interface CardGradeScoreProps {
-    cardData: UserCardEntity | undefined;
+    cardData?: UserCardEntity;
 }
 
 /**
@@ -163,7 +163,7 @@ export function CardGradeScore({ cardData }: CardGradeScoreProps) {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid container className={cx(classes.spacing)} alignItems={'center'} justifyContent={'center'}>
+            <Grid container className={classes.spacing} alignItems={'center'} justifyContent={'center'}>
                 <Grid item xs={12} className={classes.titleHolder}>
                     <Typography variant={'h6'} className={font.fontWeightMedium}>
                         Front of Card Breakdown

@@ -179,7 +179,9 @@ export function ViewCard() {
                                 <TableRow>
                                     <Cell variant={'head'}>Release Date:</Cell>
                                     <Cell>
-                                        {formatDate(cardData?.cardProduct?.releaseDate ?? '-', 'MM/DD/YYYY') ?? '-'}
+                                        {cardData?.cardProduct?.releaseDate
+                                            ? formatDate(cardData?.cardProduct?.releaseDate, 'MM/DD/YYYY')
+                                            : '-'}
                                     </Cell>
                                 </TableRow>
                                 <TableRow>

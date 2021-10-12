@@ -144,7 +144,17 @@ export function ViewCard() {
                             <TableBody>
                                 <TableRow>
                                     <Cell variant={'head'}>Certificate #:</Cell>
-                                    <Cell>{cardData?.certificateNumber}</Cell>
+                                    <Cell>
+                                        <MuiLink
+                                            target={'_blank'}
+                                            href={`${window.location.origin}/feed/${cardData?.certificateNumber}/view`}
+                                            color={'primary'}
+                                            variant={'body1'}
+                                            className={font.fontWeightMedium}
+                                        >
+                                            {cardData?.certificateNumber}
+                                        </MuiLink>
+                                    </Cell>
                                 </TableRow>
                                 <TableRow>
                                     <Cell variant={'head'}>Submission #:</Cell>

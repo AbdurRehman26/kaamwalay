@@ -2,11 +2,13 @@ import SortIcon from '@mui/icons-material/Sort';
 import { useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { styled, Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -26,12 +28,24 @@ const StyledSelect = styled(Select)(
     { name: 'StyledSelect' },
 );
 
+const useStyles = makeStyles(
+    {
+        divider: {
+            marginTop: '16px',
+            width: '100%',
+        },
+    },
+    {
+        name: 'ListCardsItemsStyles',
+    },
+);
 interface ListCardsItemsProps {
     search?: string;
 }
 
 export function ListCardItems({ search }: ListCardsItemsProps) {
     const [sortFilter, setSortFilter] = useState('date');
+    const classes = useStyles();
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const userCards$ = useListUserCardsQuery({
         params: {
@@ -128,6 +142,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
             </Box>
             <Grid container spacing={1}>
                 {items$}
+                <Divider className={classes.divider} />
                 <TablePagination {...userCards$.paginationProps} />
             </Grid>
         </>

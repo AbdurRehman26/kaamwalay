@@ -6,6 +6,7 @@ import React, { useCallback, useState } from 'react';
 import Lightbox from 'react-awesome-lightbox';
 import 'react-awesome-lightbox/build/style.css';
 import Slider from 'react-slick';
+import { font } from '@shared/styles/utils';
 import { CardGradeImage } from './CardGradeImage';
 
 interface CardGradeImagesProps {
@@ -34,7 +35,9 @@ export function CardGradeImages({ images }: CardGradeImagesProps) {
     return (
         <Grid container>
             <Box>
-                <Typography>Generated Images</Typography>
+                <Typography variant={'h6'} className={font.fontWeightMedium}>
+                    Generated Images
+                </Typography>
             </Box>
             <Box display={'block'} width={'100%'} paddingX={'12px'}>
                 <Slider

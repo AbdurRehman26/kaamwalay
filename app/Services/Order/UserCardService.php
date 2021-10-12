@@ -56,7 +56,8 @@ class UserCardService
     {
         $itemsPerPage = request('per_page');
 
-        return UserCard::join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
+        return UserCard::with(['orderItem.cardProduct.cardSet.cardSeries', 'orderItem.cardProduct.cardCategory', 'user'])
+        ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
         ->join('orders', 'orders.id', '=', 'order_items.order_id')
         ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
         ->whereIn('order_item_status_histories.order_item_status_id', [OrderItemStatus::GRADED])

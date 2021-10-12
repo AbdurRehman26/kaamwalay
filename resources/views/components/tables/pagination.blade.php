@@ -28,12 +28,12 @@
         <div class="pagination__navigation">
             <p class="pagination__navigation__pages">{{ $offset + 1 }} - {{ $endIndex > $totals ? $totals : $endIndex }} of {{ $totals }}</p>
 
-            <a href="{{route('feed.list',['page' => $currentPage - 1, 'per_page' => $itemsPerPage])}}"
+            <a href="{{$basePath . '?page=' . ($currentPage - 1) . '&per_page=' . $itemsPerPage}}"
                class="pagination__navigation__button {{ $isFirstPage ? 'pagination__navigation__button__disabled' : '' }} pagination__navigation__button--prev">
                 <span class="material-icons">chevron_left</span>
             </a>
 
-            <a href="{{route('feed.list',['page' => $currentPage + 1, 'per_page' => $itemsPerPage])}}"
+            <a href="{{$basePath . '?page=' . ($currentPage + 1) . '&per_page=' . $itemsPerPage}}"
                class="pagination__navigation__button {{ $isLastPage ? 'pagination__navigation__button__disabled' : '' }} pagination__navigation__button--next">
                 <span class="material-icons">chevron_right</span>
             </a>

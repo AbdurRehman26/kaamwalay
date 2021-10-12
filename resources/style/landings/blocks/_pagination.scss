@@ -11,7 +11,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
-        padding: 0 75px;
+        @apply pr-10;
+
         @include breakpoints.down(sm) {
             padding: 0;
         }
@@ -22,7 +23,7 @@
             color: inherit;
 
             option {
-                color: #000;
+                @apply text-color-black;
             }
         }
         &__select {

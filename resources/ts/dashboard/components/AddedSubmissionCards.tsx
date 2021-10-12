@@ -172,6 +172,8 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                     name: item.title,
                     cardCategoryName: item.subtitle,
                     imagePath: item.image,
+                    shortName: item.title,
+                    fullName: item.subtitle,
                 }),
             ),
         [selectedCards],

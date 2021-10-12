@@ -12,7 +12,7 @@
         align-items: center;
         justify-content: flex-end;
         padding: 0 75px;
-        @include breakpoints.down(md) {
+        @include breakpoints.down(sm) {
             padding: 0;
         }
         &__label,

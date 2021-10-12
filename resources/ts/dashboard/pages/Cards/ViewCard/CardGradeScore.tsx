@@ -73,6 +73,12 @@ const useStyles = makeStyles(
                 marginLeft: 14,
             },
         },
+        rowMargin: {
+            marginLeft: '-100px',
+            [theme.breakpoints.down('sm')]: {
+                marginLeft: '-50px',
+            },
+        },
     }),
 
     {
@@ -169,7 +175,7 @@ export function CardGradeScore({ cardData }: CardGradeScoreProps) {
                         Front of Card Breakdown
                     </Typography>
                 </Grid>
-                <div className={classes.largeOverallGradesContainer}>
+                <div className={cx(classes.largeOverallGradesContainer, classes.rowMargin)}>
                     <Grid container className={classes.overallGradesRow}>
                         <Grid item xs={3}>
                             <GradeScore
@@ -213,7 +219,7 @@ export function CardGradeScore({ cardData }: CardGradeScoreProps) {
                         Back of Card Breakdown
                     </Typography>
                 </Grid>
-                <div className={classes.largeOverallGradesContainer}>
+                <div className={cx(classes.largeOverallGradesContainer, classes.rowMargin)}>
                     <Grid container className={classes.overallGradesRow}>
                         <GradeScore
                             xs={3}
@@ -245,6 +251,7 @@ export function CardGradeScore({ cardData }: CardGradeScoreProps) {
                     </Grid>
                 </div>
             </Grid>
+            <Divider className={classes.spacing} />
         </Grid>
     );
 }

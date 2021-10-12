@@ -1,4 +1,6 @@
 @use '../../shared/utils';
+@use '../../shared/breakpoints';
+
 .pagination {
     display: flex;
     flex-direction: row;
@@ -9,6 +11,10 @@
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
+        padding: 0 75px;
+        @include breakpoints.down(md) {
+            padding: 0;
+        }
         &__label,
         &__select {
             font-size: 14px;

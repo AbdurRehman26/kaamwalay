@@ -87,7 +87,7 @@ function LayoutSidebar() {
 
             <List>
                 <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
-                <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} disabled href={'/cards'} />
+                <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} href={'/cards'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} disabled title={'Profile'} href={'/profile'} />
                 <LayoutSidebarItem
                     exact

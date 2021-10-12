@@ -5,9 +5,11 @@ import React, { useCallback, useState } from 'react';
 import Lightbox from 'react-awesome-lightbox';
 import 'react-awesome-lightbox/build/style.css';
 import Slider from 'react-slick';
-import cardPreview from '@shared/assets/cardPreview.png';
 import { CardGradeImage } from './CardGradeImage';
 
+interface CardGradeImagesProps {
+    images: undefined | { url: string; title: string }[];
+}
 /**
  *
  * @author: Dumitrana Alinus <alinus@wooter.co>
@@ -15,18 +17,9 @@ import { CardGradeImage } from './CardGradeImage';
  * @date: 11.08.2021
  * @time: 19:52
  */
-export function CardGradeImages() {
+export function CardGradeImages({ images }: CardGradeImagesProps) {
     const [open, setOpen] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
-
-    const images = [
-        { url: cardPreview + '?id=1', title: 'Front Centering' },
-        { url: cardPreview + '?id=2', title: 'Front Surface' },
-        { url: cardPreview + '?id=3', title: 'Front Edges' },
-        { url: cardPreview + '?id=4', title: 'Back Centering' },
-        { url: cardPreview + '?id=5', title: 'Back Surface' },
-        { url: cardPreview + '?id=6', title: 'Back Edges' },
-    ];
 
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
     const handleSlide = useCallback(
@@ -42,11 +35,19 @@ export function CardGradeImages() {
             <Box>
                 <Typography>Generated Images</Typography>
             </Box>
-            <Box display={'block'} width={'100%'}>
+            <Box display={'block'} width={'100%'} paddingX={'12px'}>
                 <Slider slidesToShow={5} arrows>
-                    {images.map(({ url, title }, index) => (
-                        <CardGradeImage key={index} image={url} title={title} index={index} onClick={handleSlide} />
-                    ))}
+                    {!images
+                        ? []
+                        : images.map(({ url, title }, index) => (
+                              <CardGradeImage
+                                  key={index}
+                                  image={url}
+                                  title={title}
+                                  index={index}
+                                  onClick={handleSlide}
+                              />
+                          ))}
                 </Slider>
             </Box>
             {open ? <Lightbox onClose={handleClose} startIndex={currentSlide} images={images} /> : null}

@@ -27,8 +27,8 @@ const useStyles = makeStyles(
 );
 
 interface GradeStatusProps {
-    value: number | string;
-    label: string;
+    value: number | string | null;
+    label: string | null;
 }
 
 /**

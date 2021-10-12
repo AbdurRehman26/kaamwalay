@@ -17,6 +17,7 @@ class UserCardResource extends BaseResource
     public function toArray($request)
     {
         return [
+            'id' => $this->orderItem->card_product_id,
             'card_product' => new CardProductResource($this->orderItem->cardProduct),
             'certificate_number' => $this->certificate_number,
             'submission_number' => $this->orderItem->order->order_number,

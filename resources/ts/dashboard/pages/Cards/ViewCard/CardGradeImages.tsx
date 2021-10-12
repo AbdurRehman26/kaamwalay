@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -20,7 +21,7 @@ interface CardGradeImagesProps {
 export function CardGradeImages({ images }: CardGradeImagesProps) {
     const [open, setOpen] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
-
+    const theme = useTheme();
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
     const handleSlide = useCallback(
         (event, index: number) => {
@@ -36,7 +37,26 @@ export function CardGradeImages({ images }: CardGradeImagesProps) {
                 <Typography>Generated Images</Typography>
             </Box>
             <Box display={'block'} width={'100%'} paddingX={'12px'}>
-                <Slider slidesToShow={5} arrows>
+                <Slider
+                    slidesToShow={5}
+                    responsive={[
+                        {
+                            breakpoint: theme.breakpoints.values['md'],
+                            settings: {
+                                slidesToShow: 3,
+                                slidesToScroll: 3,
+                            },
+                        },
+                        {
+                            breakpoint: theme.breakpoints.values['sm'],
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1,
+                            },
+                        },
+                    ]}
+                    arrows
+                >
                     {!images
                         ? []
                         : images.map(({ url, title }, index) => (

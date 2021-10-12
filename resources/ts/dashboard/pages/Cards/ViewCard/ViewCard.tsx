@@ -76,7 +76,7 @@ export function ViewCard() {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const handleViewPublicPage = useCallback(() => {
-        window.location.href = `https://robograding.com/feed/${cardData?.certificateNumber}/view`;
+        window.location.href = `${window.location.origin}/feed/${cardData?.certificateNumber}/view`;
     }, [cardData?.certificateNumber]);
 
     useEffect(() => {
@@ -151,12 +151,12 @@ export function ViewCard() {
                                     <Cell>
                                         <MuiLink
                                             component={Link}
-                                            to={`/submissions/${cardData?.submissionNumber}/view`}
+                                            to={`/submissions/${cardData?.orderId}/view`}
                                             color={'primary'}
                                             variant={'body1'}
                                             className={font.fontWeightMedium}
                                         >
-                                            {cardData?.submissionNumber}
+                                            {cardData?.orderNumber}
                                         </MuiLink>
                                     </Cell>
                                 </TableRow>

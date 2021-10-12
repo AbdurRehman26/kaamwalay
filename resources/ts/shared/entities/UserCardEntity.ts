@@ -9,7 +9,8 @@ export class UserCardEntity extends Entity {
     public overallGrade!: string;
     public overallGradeNickname!: string;
     public certificateNumber!: string;
-    public submissionNumber!: string;
+    public orderNumber!: number | string;
+    public orderId!: number | string;
 
     @Type(() => CardProductEntity)
     public cardProduct!: CardProductEntity;

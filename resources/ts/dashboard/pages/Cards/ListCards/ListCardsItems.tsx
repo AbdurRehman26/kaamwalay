@@ -83,7 +83,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
     const items$ = userCards$?.data?.map((userCard: any, index) => (
         <Grid item xs={6} sm={3} key={index}>
             <CardPreview
-                id={userCard?.cardProduct?.id}
+                id={userCard?.id}
                 image={userCard?.cardProduct?.imagePath}
                 name={userCard?.cardProduct?.name}
                 description={userCard?.cardProduct?.fullName ?? '-'}

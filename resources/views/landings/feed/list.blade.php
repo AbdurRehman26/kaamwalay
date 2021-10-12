@@ -34,6 +34,7 @@
                                         <div class="feed-list__table__info-text">
                                             <p class="feed-list__table__info-heading">{{$item->orderItem->cardProduct->name}}</p>
                                             <p class="feed-list__table__info-subheading">{{$item->orderItem->cardProduct->getSearchableName()}}</p>
+                                            <p class="feed-list__table__info-date">{{ $item->graded_at->format("m/d/Y h:i A") }}</p>
                                         </div>
                                     </a>
                                 </td>

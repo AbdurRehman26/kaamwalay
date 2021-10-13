@@ -5,7 +5,9 @@
                 <ol class="pop-hero__breadcrumbs__list">
                     <li><a href="{{route('pop.report')}}" class="pop-hero__breadcrumbs__list__link">Population Report</a></li>
                     <li><span class="mx-2">/</span></li>
-                    <li>Sword and Shield Series</li>
+                    <li><a href="{{route('pop.series', ['cardSeries' => 1])}}" class="pop-hero__breadcrumbs__list__link">Sword and Shield Series</a></li>
+                    <li><span class="mx-2">/</span></li>
+                    <li>Chilling Reign</li>
                 </ol>
             </nav>
         </div>
@@ -15,7 +17,7 @@
                      alt="Cards">
             </aside>
             <aside class="pop-hero__text">
-                <h1 class="pop-hero__text-series-heading">Sword & Shield Series</h1>
+                <h1 class="pop-hero__text-series-heading">Chilling Reign</h1>
                 <h2 class="pop-hero__text-series-subheading"><b>Released:</b> 11/15/2019</h2>
             </aside>
         </div>
@@ -26,7 +28,7 @@
                 <table class="pop-list__table">
                     <thead class="pop-list__table-head">
                         <tr class="pop-list__table-row">
-                            <th class="pop-list__table-cell pop-list__table-cell--series">Set / Release Date</th>
+                            <th class="pop-list__table-cell pop-list__table-cell--card">Card / Release Date</th>
                             <th class="pop-list__table-cell pop-list__table-cell--grade-title"></th>
                             <th class="pop-list__table-cell pop-list__table-cell--value">
                                 PR<br/>1
@@ -140,104 +142,78 @@
                         </tr>
                         @for($i = 0; $i < 10; $i++)
                             <tr class="pop-list__table-row">
-                                <td class="pop-list__table-cell pop-list__table-cell--series">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}" class="pop-list__table__info">
-                                        <div class="pop-list__table__info-text">
-                                            <p class="pop-list__table__info-heading">{{$i}}</p>
-                                            <p class="pop-list__table__info-subheading">{{$i}}</p>
-                                        </div>
-                                    </a>
+                                <td class="pop-list__table-cell pop-list__table-cell--card">
+                                    <img class="pop-list__table__info-image" src="{{ asset('assets/images/card-preview.png') }}" alt="Card" width="52" />
+                                    <div class="pop-list__table__info-text">
+                                        <p class="pop-list__table__info-heading">{{ 'Charizard' }}</p>
+                                        <p class="pop-list__table__info-subheading display-desktop">{{'2020 Pokemon Sword & Shield Chilling Reign 025 Charizard'}}</p>
+                                        <p class="pop-list__table__info-subheading display-mobile">{{'025'}}</p>
+                                    </div>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--grade-title">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
                                     Grade
                                     <br/>
                                     +
-                                    </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        -
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    -
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        -
-                                        <br/>
-                                        +
-                                    </a>
+                                    -
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--total">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $i, 'cardSet' => $i]) }}">
-                                        Grade
-                                        <br/>
-                                        +
-                                    </a>
+                                    Grade
+                                    <br/>
+                                    +
                                 </td>
                             </tr>
                         @endfor

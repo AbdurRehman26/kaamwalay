@@ -16,6 +16,9 @@
         @apply w-full relative;
         min-width: 900px;
         box-sizing: border-box;
+        // @include breakpoints.down(sm) {
+        //     min-width: 1200px;
+        // }
 
         &__container {
             @include breakpoints.down(md) {
@@ -40,12 +43,14 @@
         &-body {
             @apply divide-x;
             .pop-list__table-row {
-                .pop-list__table-cell--series {
+                .pop-list__table-cell--series,
+                .pop-list__table-cell--card {
                     @apply bg-white;
                 }
                 &:nth-child(odd) {
                     @apply bg-gray-100;
-                    .pop-list__table-cell--series {
+                    .pop-list__table-cell--series,
+                    .pop-list__table-cell--card {
                         @apply bg-gray-100;
                     }
                 }
@@ -56,7 +61,8 @@
             @apply text-white;
             background-color: #20bfb8;
 
-            .pop-list__table-cell--series {
+            .pop-list__table-cell--series,
+            .pop-list__table-cell--card {
                 background-color: #20bfb8;
             }
         }
@@ -65,16 +71,16 @@
             padding: 16px 8px;
             text-align: left;
 
-            &--series {
-                @apply w-40 sticky left-0;
-            }
-
+            &--series,
             &--card {
+                @apply w-64 sticky left-0 flex;
                 @include breakpoints.down(sm) {
-                    border-right: 1px solid transparentize(#fff, 0.7);
+                    @apply w-40 sticky left-0 flex;
                 }
             }
 
+            &--grade-title,
+            &--value,
             &--total {
                 text-align: right;
             }
@@ -83,7 +89,8 @@
         &-head &-cell {
             padding-top: 20px;
             padding-bottom: 20px;
-            &--series {
+            &--series,
+            &--card {
                 @apply bg-white;
             }
         }
@@ -101,6 +108,7 @@
             }
 
             &-text {
+                @apply ml-2;
                 max-width: 240px;
             }
 
@@ -112,6 +120,19 @@
 
             &-subheading {
                 font-size: 12px;
+
+                &.display-desktop {
+                    @include breakpoints.down(sm) {
+                        @apply hidden;
+                    }
+                }
+
+                &.display-mobile {
+                    @apply hidden;
+                    @include breakpoints.down(sm) {
+                        @apply block;
+                    }
+                }
             }
 
             &-date {

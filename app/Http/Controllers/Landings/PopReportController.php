@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Landings;
 
 use App\Http\Controllers\Controller;
 use App\Models\CardSeries;
+use App\Models\CardSet;
 use App\Services\AGS\AgsService;
 use App\Services\Order\UserCardService;
 use Illuminate\Http\RedirectResponse;
@@ -31,4 +32,11 @@ class PopReportController extends Controller
         return view('landings.pop.series',compact('data'));
     }
 
+    public function getSetReport(CardSeries $cardSeries, CardSet $cardSet): View
+    {
+        // $data = $this->userCardService->getFeedCards();
+
+        $data = [];
+        return view('landings.pop.set',compact('data'));
+    }
 }

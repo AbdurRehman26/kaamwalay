@@ -18,10 +18,6 @@
     &__text {
         @apply w-11/12 flex justify-center items-start flex-col;
         padding: 24px 0;
-        // @include breakpoints.down(xs) {
-        //     @apply w-9/12;
-        //     padding-top: 12px;
-        // }
 
         &-heading,
         &-subheading,

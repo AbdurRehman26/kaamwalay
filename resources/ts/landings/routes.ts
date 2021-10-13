@@ -17,5 +17,6 @@ export default () => {
         .group((route) => {
             route('/', [PopController, 'popReport']).name('report');
             route('/series/:id', [PopController, 'seriesReport']).name('series');
+            route('/series/:id/sets/:id', [PopController, 'setReport']).name('set');
         });
 };

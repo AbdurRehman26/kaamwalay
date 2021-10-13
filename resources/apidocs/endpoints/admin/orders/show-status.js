@@ -11,13 +11,31 @@
  * @apiSuccessExample Success-Response:
  *      HTTP/1.1 200 OK
  *      {
- *          "data": {
- *              "id": 1,
- *              "notes": null,
- *              "order_id": 2,
- *              "order_status_id": 3,
- *              "created_at": "2021-09-14T23:49:45.000000Z",
- *              "updated_at": "2021-09-14T23:49:45.000000Z"
- *          }
+ *          "data": [
+ *               {
+ *                   "id": 1,
+ *                   "notes": null,
+ *                   "order_id": 15,
+ *                   "order_status_id": 1,
+ *                   "created_at": "2021-09-27T13:35:50.000000Z",
+ *                   "updated_at": "2021-09-27T13:35:50.000000Z"
+ *               },
+ *               {
+ *                   "id": 2,
+ *                   "notes": null,
+ *                   "order_id": 15,
+ *                   "order_status_id": 2,
+ *                   "created_at": "2021-09-27T13:35:59.000000Z",
+ *                   "updated_at": "2021-09-27T13:35:59.000000Z"
+ *               },
+ *               {
+ *                   "id": 14,
+ *                   "notes": null,
+ *                   "order_id": 15,
+ *                   "order_status_id": 4,
+ *                   "created_at": "2021-09-28T18:53:24.000000Z",
+ *                   "updated_at": "2021-09-28T18:53:24.000000Z"
+ *               }
+ *           ]
  *      }
  */

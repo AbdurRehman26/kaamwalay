@@ -14,6 +14,9 @@
  *      }
  *
  * @apiSuccess {Object} data Order object
+ * @apiSuccess {Integer} data.id Customer Shipment ID
+ * @apiSuccess {string} data.shipping_provider Shipping Provider
+ * @apiSuccess {string} data.tracking_number Tracking number
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK

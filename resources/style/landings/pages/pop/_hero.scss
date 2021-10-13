@@ -95,7 +95,9 @@
 
     &__breadcrumbs {
         @apply rounded font-sans w-full pt-7 pb-1;
-
+        @include breakpoints.down(xs) {
+            @apply text-xs;
+        }
         &__list {
             @apply flex list-none;
 

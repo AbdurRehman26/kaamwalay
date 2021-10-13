@@ -1,8 +1,8 @@
-import { useMediaQuery } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { Theme } from '@material-ui/core/styles';
+import { useMediaQuery } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
 import React from 'react';
 import NumberFormat from 'react-number-format';
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
@@ -13,7 +13,7 @@ import { useAppSelector } from '@dashboard/redux/hooks';
 
 function OrderReviewSection() {
     const classes = useStyles({});
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     // Service level data
     const serviceLevelPricePerCard = useAppSelector(

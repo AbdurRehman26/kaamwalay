@@ -1,24 +1,24 @@
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import MuiLink from '@material-ui/core/Link';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import UndoIcon from '@material-ui/icons/Undo';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import UndoIcon from '@mui/icons-material/Undo';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import MuiLink from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { plainToClass } from 'class-transformer';
 import { Form, Formik, FormikProps } from 'formik';
 import { ForwardedRef, forwardRef, useCallback, useMemo, useRef } from 'react';
 import { batch } from 'react-redux';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
-import { useSharedDispatch } from '@shared/hooks/useSharedSelector';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
@@ -129,7 +129,7 @@ export const ManageCardDialogView = forwardRef(
                                         mt={2}
                                         py={1.25}
                                         display={'flex'}
-                                        borderRadius={3}
+                                        borderRadius="3px"
                                         bgcolor={'#f5f5f5'}
                                         alignItems={'center'}
                                         border={'1px solid #ccc'}
@@ -199,6 +199,7 @@ export const ManageCardDialogView = forwardRef(
                                                             fullWidth
                                                             size={'small'}
                                                             variant={'contained'}
+                                                            color={'inherit'}
                                                             className={classes.swapButton}
                                                             onClick={handleSwapCard}
                                                         >
@@ -230,13 +231,12 @@ export const ManageCardDialogView = forwardRef(
                             </DialogContent>
                             <Divider />
                             <DialogActions className={classes.actions}>
-                                <Button disabled={isSubmitting} onClick={handleClose}>
+                                <Button color={'inherit'} disabled={isSubmitting} onClick={handleClose}>
                                     Cancel
                                 </Button>
                                 <Button
                                     type={'submit'}
                                     variant={'contained'}
-                                    color={'primary'}
                                     disabled={isSubmitting}
                                     startIcon={isSubmitting ? <CircularProgress size={18} color={'inherit'} /> : null}
                                 >

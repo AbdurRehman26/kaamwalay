@@ -1,6 +1,7 @@
-import Radio, { RadioProps } from '@material-ui/core/Radio';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Radio, { RadioProps } from '@mui/material/Radio';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
 import React from 'react';
 
 const useStyles = makeStyles(

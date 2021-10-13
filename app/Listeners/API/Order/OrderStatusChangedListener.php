@@ -4,6 +4,8 @@ namespace App\Listeners\API\Order;
 
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
+use App\Models\User;
+use App\Services\Admin\OrderService as AdminOrderService;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
 use DateTime;
@@ -19,7 +21,7 @@ class OrderStatusChangedListener implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(private EmailService $emailService, private OrderService $orderService)
+    public function __construct(private EmailService $emailService, private OrderService $orderService, private AdminOrderService $adminOrderService)
     {
         //
     }
@@ -58,6 +60,11 @@ class OrderStatusChangedListener implements ShouldQueue
             $event,
             EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
+        );
+        
+        $this->sendAdminEmail(
+            EmailService::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED,
+            $this->adminOrderService->getDataForAdminSubmissionConfirmationEmail($event->order)
         );
 
         $this->scheduleEmail(
@@ -99,8 +106,20 @@ class OrderStatusChangedListener implements ShouldQueue
     protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars)
     {
         $this->emailService->sendEmail(
-            $event->order->user->email,
-            $event->order->user->getFullName(),
+            [[$event->order->user->email => $event->order->user->getFullName()]],
+            $this->emailService->getSubjectByTemplate($template),
+            $template,
+            $vars
+        );
+    }
+
+    protected function sendAdminEmail(string $template, array $vars)
+    {
+        $data = User::get()->filter->isAdmin()->map(function ($value) {
+            return [$value->email => $value->name];
+        })->toArray();
+        $this->emailService->sendEmail(
+            $data,
             $this->emailService->getSubjectByTemplate($template),
             $template,
             $vars
@@ -111,8 +130,7 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         $this->emailService->scheduleEmail(
             $sendAt,
-            $event->order->user->email,
-            $event->order->user->getFullName(),
+            [[$event->order->user->email => $event->order->user->getFullName()]],
             $this->emailService->getSubjectByTemplate($template),
             $template,
             $vars

@@ -1,8 +1,8 @@
-import Box, { BoxProps } from '@material-ui/core/Box';
-import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import Box, { BoxProps } from '@mui/material/Box';
+import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
 import React, { ElementType, PropsWithChildren, ReactElement } from 'react';
-import { renderElementType } from '@shared/lib/react/renderElementType';
-import { useSharedSelector } from '../hooks/useSharedDispatch';
+import { useSharedSelector } from '../hooks/useSharedSelector';
+import { renderElementType } from '../lib/react/renderElementType';
 
 export interface SplashScreenProps extends BoxProps {
     circularProgressProps?: CircularProgressProps;

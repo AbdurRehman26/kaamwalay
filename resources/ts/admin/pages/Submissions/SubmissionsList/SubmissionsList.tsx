@@ -1,8 +1,8 @@
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import { styled } from '@material-ui/core/styles';
-import TabContext from '@material-ui/lab/TabContext';
-import TabPanel from '@material-ui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+import TabPanel from '@mui/lab/TabPanel';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';

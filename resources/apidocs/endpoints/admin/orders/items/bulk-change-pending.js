@@ -6,10 +6,12 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- *  @apiParamExample {json} Request-Example:
+ * @apiParam {Array} items[] ID of the items
+ * @apiParam {String} status Change the status of items
+ * @apiParamExample {json} Request-Example:
  *      {
  *          "items": [6,7]
- *          "status": 3
+ *          "status": pending
  *      }
  *
  * @apiSuccess {Object} data Card object
@@ -20,10 +22,12 @@
  *         "data": [
  *             {
  *                 "id": 6,
+ *                 "order_id": 17,
  *                 "quantity": 1,
  *                 "declared_value_per_unit": 10,
  *                 "card_product": {
  *                     "id": 1,
+ *                     "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 001 Bellsprout",
  *                     "name": "Bellsprout",
  *                     "card_category_name": "Pokemon",
  *                     "card_set_name": "Battle Styles",
@@ -36,13 +40,16 @@
  *                     "id": 2,
  *                     "order_item_status": {
  *                         "id": 1,
- *                         "code": "pending",
  *                         "name": "Pending",
  *                         "description": "Item is pending to be reviewed",
  *                     },
- *                     "notes": null
+ *                     "notes": ""
  *                 },
- *                 "certificate_number": null
+ *                 "certificate_number": null,
+ *                   "user_card": {
+ *                       "overall_grade": 0,
+ *                       "overall_grade_nickname": null
+ *                    }
  *             },
  *             {
  *                 "id": 7,
@@ -50,6 +57,7 @@
  *                 "declared_value_per_unit": 15,
  *                 "card_product": {
  *                     "id": 2,
+ *                     "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 002 Weepinbell",
  *                     "name": "Weepinbell",
  *                     "card_category_name": "Pokemon",
  *                     "card_set_name": "Battle Styles",
@@ -62,13 +70,16 @@
  *                     "id": 3,
  *                     "order_item_status": {
  *                         "id": 1,
- *                         "code": "pending",
  *                         "name": "Pending",
  *                         "description": "Item is pending to be reviewed",
  *                     },
- *                     "notes": null
+ *                     "notes": ""
  *                 },
- *                 "certificate_number": null
+ *                 "certificate_number": null,
+ *                 "user_card": {
+ *                       "overall_grade": 0,
+ *                       "overall_grade_nickname": null
+ *                   }
  *             }
  *         ]
  *     }

@@ -1,13 +1,15 @@
-import { CircularProgress, useMediaQuery } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
+import { CircularProgress, useMediaQuery } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -68,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
             justifyContent: 'flex-start',
         },
@@ -137,32 +139,32 @@ const useStyles = makeStyles((theme) => ({
     },
     addressFieldContainer: {
         width: '80%',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
     },
     aptFieldContainer: {
         width: '18%',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
     },
     cityFieldContainer: {
         width: '30%',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
     },
     stateFieldContainer: {
         width: '32%',
         marginTop: '6px',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             width: '47%',
         },
     },
     zipFieldContainer: {
         width: '32%',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             width: '47%',
         },
     },
@@ -196,7 +198,7 @@ export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const apiService = useInjectable(APIService);
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
     const [arePaymentMethodsLoading, setArePaymentMethodsLoading] = useState(false);
@@ -294,9 +296,13 @@ export function SubmissionStep04Content() {
         setArePaymentMethodsLoading(false);
     }
 
-    useEffect(() => {
-        getPaymentMethods();
-    }, []);
+    useEffect(
+        () => {
+            getPaymentMethods();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     useEffect(() => {
         dispatch(setIsNextDisabled(true));

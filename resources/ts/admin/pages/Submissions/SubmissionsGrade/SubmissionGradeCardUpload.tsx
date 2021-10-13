@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import NoImagePlaceholder from '@shared/assets/no-image.png';
 import OutlinedCard from '@shared/components/OutlinedCard';
 import { useAppSelector } from '@admin/redux/hooks';
@@ -29,7 +29,7 @@ const useStyles = makeStyles(
 function SubmissionGradeCardUpload({ itemIndex }: { itemIndex: number }) {
     const classes = useStyles();
     const generatedImages = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].generated_images,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].generatedImages,
     );
 
     return (
@@ -39,7 +39,7 @@ function SubmissionGradeCardUpload({ itemIndex }: { itemIndex: number }) {
                     <div key={index} className={classes.imageContainer}>
                         <Typography variant={'subtitle2'}>{item.name}</Typography>
                         <img
-                            src={item.output_image !== null ? item.output_image : NoImagePlaceholder}
+                            src={item.outputImage !== null ? item.outputImage : NoImagePlaceholder}
                             alt={'Generated'}
                             className={classes.image}
                         />

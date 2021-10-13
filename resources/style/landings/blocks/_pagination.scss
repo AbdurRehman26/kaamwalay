@@ -1,4 +1,6 @@
 @use '../../shared/utils';
+@use '../../shared/breakpoints';
+
 .pagination {
     display: flex;
     flex-direction: row;
@@ -9,11 +11,20 @@
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
+        @apply pr-10;
+
+        @include breakpoints.down(sm) {
+            padding: 0;
+        }
         &__label,
         &__select {
             font-size: 14px;
             line-height: 14px;
             color: inherit;
+
+            option {
+                @apply text-black;
+            }
         }
         &__select {
             margin-left: 8px;
@@ -36,6 +47,10 @@
             color: inherit;
             position: relative;
             margin: 3px;
+
+            &__disabled {
+                pointer-events: none;
+            }
 
             &:after {
                 content: '';

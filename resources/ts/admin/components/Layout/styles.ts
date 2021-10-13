@@ -1,4 +1,5 @@
-import { makeStyles, styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 export const Content = styled('div')({
     display: 'flex',

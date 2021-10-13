@@ -1,19 +1,20 @@
-import { useMediaQuery } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
-import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import font from '@shared/styles/font.module.css';
+import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
 import { cx } from '../lib/utils/cx';
 import { formatCurrency } from '../lib/utils/formatCurrency';
+import font from '../styles/font.module.css';
 
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
@@ -25,7 +26,7 @@ export const useStyles = makeStyles(
     (theme) => ({
         containerBox: {
             padding: 0,
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 maxWidth: '98%',
             },
         },
@@ -87,7 +88,7 @@ export const useStyles = makeStyles(
 
 export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }: SubmissionViewCardsProps) {
     const classes = useStyles();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'));
 
     const GradeRoot = isMobile ? 'a' : Box;
     return (
@@ -226,7 +227,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                     item?.userCard?.overallGradeNickname ? (
                                         <GradeRoot
                                             target={'_blank'}
-                                            href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
+                                            href={`/feed/${item.certificateNumber}/view`}
                                             flexDirection={'column'}
                                             style={{ textDecoration: 'none' }}
                                         >
@@ -242,7 +243,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                             {isMobile ? null : (
                                                 <a
                                                     target={'_blank'}
-                                                    href={`https://robograding.com/feed/${item.certificateNumber}/view/`}
+                                                    href={`/feed/${item.certificateNumber}/view`}
                                                     style={{ textDecoration: 'none' }}
                                                     rel="noreferrer"
                                                 >

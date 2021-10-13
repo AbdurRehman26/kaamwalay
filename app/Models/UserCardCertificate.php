@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserCardCertificate extends Model
 {
@@ -19,8 +20,8 @@ class UserCardCertificate extends Model
         'user_card_id' => 'integer',
     ];
 
-    public function userCard(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function userCard(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\UserCard::class);
+        return $this->belongsTo(UserCard::class);
     }
 }

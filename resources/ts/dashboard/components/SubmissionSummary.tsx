@@ -1,8 +1,8 @@
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         width: '345px',
         minHeight: '20px',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
     },
@@ -229,7 +229,7 @@ function SubmissionSummary() {
 
             // Try to charge the customer
             await endpoint.post('', {
-                payment_method_id: stripePaymentMethod,
+                paymentMethodId: stripePaymentMethod,
             });
 
             setIsStripePaymentLoading(false);
@@ -248,10 +248,11 @@ function SubmissionSummary() {
             }
             // Charge was failed by back-end so we try to charge him on the front-end
             // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
-            const intent = err.response.data.payment_intent;
+            const intent = err.response.data.paymentIntent;
             // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
-            const chargeResult = await stripe.confirmCardPayment(intent.client_secret, {
-                payment_method: intent.payment_method,
+            const chargeResult = await stripe.confirmCardPayment(intent.clientSecret, {
+                // eslint-disable-next-line camelcase
+                payment_method: intent.paymentMethod,
             });
 
             // Checking if something else failed.
@@ -307,7 +308,9 @@ function SubmissionSummary() {
 
                         <Typography className={classes.greyDescriptionText}>
                             By clicking the above button, you are agreeing to the Robograding{' '}
-                            <span className={classes.darkDescriptionText}>Terms and Conditions.</span>
+                            <a href={'/terms-and-conditions'} className={classes.darkDescriptionText}>
+                                Terms and Conditions.
+                            </a>
                         </Typography>
                     </div>
                 ) : null}

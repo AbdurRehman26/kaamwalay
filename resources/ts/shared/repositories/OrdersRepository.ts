@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
-import { Injectable } from '@shared/decorators/Injectable';
-import { OrderEntity } from '@shared/entities/OrderEntity';
+import { Injectable } from '../decorators/Injectable';
 import { ChangeOrderShipmentDto } from '../dto/ChangeOrderShipmentDto';
+import { OrderEntity } from '../entities/OrderEntity';
 import { ShipmentEntity } from '../entities/ShipmentEntity';
 import { Repository } from './Repository';
 
@@ -13,8 +13,8 @@ export class OrdersRepository extends Repository<OrderEntity> {
     public async setCustomerShipment(input: ChangeOrderShipmentDto) {
         const { orderId, shippingProvider, trackingNumber } = input;
         const { data } = await this.endpoint.post(`${orderId}/customer-shipment`, {
-            shipping_provider: shippingProvider,
-            tracking_number: trackingNumber,
+            shippingProvider,
+            trackingNumber,
         });
 
         return plainToClass(ShipmentEntity, data);

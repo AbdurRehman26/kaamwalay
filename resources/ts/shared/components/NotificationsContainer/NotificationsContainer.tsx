@@ -1,14 +1,14 @@
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Snackbar from '@mui/material/Snackbar';
 import { plainToClass } from 'class-transformer';
 import { Fragment, useCallback, useEffect, useState } from 'react';
-import { NotificationItem } from '@shared/classes/NotificationItem';
-import { useNotifications } from '@shared/hooks/useNotifications';
+import { NotificationItem } from '../../classes/NotificationItem';
 import { NotificationTypeEnum } from '../../constants/NotificationTypeEnum';
+import { useNotifications } from '../../hooks/useNotifications';
 
 export function NotificationsContainer() {
-    const [active, setActive] = useState<null | NotificationItem>(null);
+    const [active, setActive] = useState<NotificationItem | null>(null);
     const { notifications, close } = useNotifications();
 
     const handleClose = useCallback(() => {
@@ -24,7 +24,7 @@ export function NotificationsContainer() {
     useEffect(() => {
         setActive((previous) => {
             if (!previous && notifications && notifications.length > 0) {
-                return plainToClass(NotificationItem, notifications[0]);
+                return plainToClass(NotificationItem, notifications[0] as NotificationItem);
             }
 
             return previous;

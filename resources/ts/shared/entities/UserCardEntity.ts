@@ -1,10 +1,26 @@
-import { Field } from '../decorators/Field';
+import { Type } from 'class-transformer';
+import { CardProductEntity } from '@shared/entities/CardProductEntity';
+import { UserCardGeneratedImagesEntity } from '@shared/entities/UserCardGeneratedImagesEntity';
+import { UserCardGradesEntity } from '@shared/entities/UserCardGradesEntity';
+import { UserCardHumanGradesEntity } from '@shared/entities/UserCardHumanGradesEntity';
 import { Entity } from './Entity';
 
 export class UserCardEntity extends Entity {
-    @Field('overall_grade')
     public overallGrade!: string;
-
-    @Field('overall_grade_nickname')
     public overallGradeNickname!: string;
+    public certificateNumber!: string;
+    public orderNumber!: number | string;
+    public orderId!: number | string;
+
+    @Type(() => CardProductEntity)
+    public cardProduct!: CardProductEntity;
+
+    @Type(() => UserCardGradesEntity)
+    public overallValues!: UserCardGradesEntity;
+
+    @Type(() => UserCardHumanGradesEntity)
+    public humanGradeValues!: UserCardHumanGradesEntity;
+
+    @Type(() => UserCardGeneratedImagesEntity)
+    public generatedImages!: UserCardGeneratedImagesEntity[];
 }

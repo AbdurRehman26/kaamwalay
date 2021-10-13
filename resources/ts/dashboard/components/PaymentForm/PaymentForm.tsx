@@ -1,12 +1,12 @@
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
@@ -60,8 +60,8 @@ export function PaymentForm() {
             const existingStripeCardsForCustomer = await endpoint.get('');
             const formattedStripeCards = existingStripeCardsForCustomer.data?.map((item: any) => {
                 return {
-                    expMonth: item.card.exp_month,
-                    expYear: item.card.exp_year,
+                    expMonth: item.card.expMonth,
+                    expYear: item.card.expYear,
                     last4: item.card.last4,
                     brand: item.card.brand,
                     id: item.id,
@@ -100,7 +100,8 @@ export function PaymentForm() {
         const requestClientSecret = await endpoint.post('');
 
         // We're using the client secret now in order to save the card for the customer on stripe
-        const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.client_secret, {
+        const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.clientSecret, {
+            // eslint-disable-next-line camelcase
             payment_method: {
                 card: elements.getElement(CardElement) as any,
             },

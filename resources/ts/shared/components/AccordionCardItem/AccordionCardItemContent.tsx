@@ -1,5 +1,5 @@
-import Collapse from '@material-ui/core/Collapse';
-import { makeStyles } from '@material-ui/core/styles';
+import Collapse from '@mui/material/Collapse';
+import makeStyles from '@mui/styles/makeStyles';
 import { PropsWithChildren } from 'react';
 import { useAccordionCardItemContext } from './AccordionCardItemContext';
 

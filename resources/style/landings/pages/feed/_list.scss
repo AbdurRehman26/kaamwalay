@@ -13,8 +13,7 @@
     }
 
     &__table {
-        @apply w-full table-fixed;
-        min-width: 900px;
+        @apply w-full table-auto;
         box-sizing: border-box;
 
         &__container {
@@ -44,6 +43,9 @@
             &--certificate,
             &--owner {
                 width: 140px;
+                @include breakpoints.down(sm) {
+                    @apply hidden;
+                }
             }
 
             &--grade {
@@ -55,6 +57,10 @@
         &-head &-cell {
             padding-top: 20px;
             padding-bottom: 20px;
+
+            @include breakpoints.down(sm) {
+                @apply hidden;
+            }
         }
 
         &__info {
@@ -77,6 +83,14 @@
 
             &-subheading {
                 font-size: 12px;
+            }
+
+            &-date {
+                @apply hidden;
+
+                @include breakpoints.down(sm) {
+                    @apply block pt-2 text-xs text-white text-opacity-70;
+                }
             }
         }
     }

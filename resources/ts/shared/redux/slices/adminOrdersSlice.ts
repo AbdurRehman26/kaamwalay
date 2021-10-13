@@ -12,8 +12,10 @@ import { APIState } from '@shared/types/APIState';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
 import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBatchDto';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
-import { OrderItemStatusEntity } from '../../entities/OrderItemStatusEntity';
+import { OrderItemStatusHistoryEntity } from '../../entities/OrderItemStatusHistoryEntity';
+import { OrderStatusEntity } from '../../entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntity';
+import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { NotificationsService } from '../../services/NotificationsService';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
@@ -31,6 +33,7 @@ export const changeOrderItemStatus = createAsyncThunk(
             return {
                 orderId: input.orderId,
                 orderItemId: input.orderItemId,
+                certificateNumber: item.certificateNumber,
                 status: classToPlain(item.status),
             };
         } catch (e: any) {
@@ -119,9 +122,9 @@ export const setOrderShipment = createAsyncThunk(
             });
 
             return {
-                orderShipment: classToPlain(orderShipment),
-                orderStatus: classToPlain(order.orderStatus),
-                orderStatusHistory: classToPlain(order.orderStatusHistory),
+                orderShipment: classToPlain(orderShipment) as ShipmentEntity,
+                orderStatus: classToPlain(order.orderStatus) as OrderStatusEntity,
+                orderStatusHistory: classToPlain(order.orderStatusHistory) as OrderStatusHistoryEntity[],
                 orderId: input.orderId,
             };
         } catch (e: any) {
@@ -152,12 +155,13 @@ export const adminOrdersSlice = createSlice({
         }
 
         builder.addCase(changeOrderItemStatus.fulfilled, (state, { payload }) => {
-            const { orderId, orderItemId, status } = payload;
+            const { orderId, orderItemId, certificateNumber, status } = payload;
             const order = plainToClass(OrderEntity, state.entities[orderId]);
 
             order.orderItems = (order.orderItems ?? []).map((item) => {
                 if (item.id === orderItemId) {
-                    item.status = plainToClass(OrderItemStatusEntity, status);
+                    item.certificateNumber = certificateNumber;
+                    item.status = plainToClass(OrderItemStatusHistoryEntity, status);
                 }
 
                 return item;
@@ -204,9 +208,9 @@ export const adminOrdersSlice = createSlice({
 
         builder.addCase(setOrderShipment.fulfilled, (state, { payload }) => {
             if (state.entities[payload.orderId]) {
-                (state.entities[payload.orderId] as any).order_shipment = payload.orderShipment as any;
-                (state.entities[payload.orderId] as any).order_status = payload.orderStatus as any;
-                (state.entities[payload.orderId] as any).order_status_history = payload.orderStatusHistory as any;
+                state.entities[payload.orderId].orderShipment = payload.orderShipment;
+                state.entities[payload.orderId].orderStatus = payload.orderStatus;
+                state.entities[payload.orderId].orderStatusHistory = payload.orderStatusHistory;
             }
         });
     },

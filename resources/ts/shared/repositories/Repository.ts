@@ -1,9 +1,9 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { ClassConstructor, ClassTransformOptions, plainToClass } from 'class-transformer';
-import { PaginatedData } from '@shared/classes/PaginatedData';
-import { Injectable } from '@shared/decorators/Injectable';
-import { app } from '@shared/lib/app';
-import { APIService } from '@shared/services/APIService';
+import { PaginatedData } from '../classes/PaginatedData';
+import { Injectable } from '../decorators/Injectable';
+import { app } from '../lib/app';
+import { APIService } from '../services/APIService';
 
 @Injectable('Repository')
 export abstract class Repository<T> {

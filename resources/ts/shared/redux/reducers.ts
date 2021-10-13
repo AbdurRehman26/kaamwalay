@@ -1,4 +1,4 @@
-import { notificationsSlice } from '@shared/redux/slices/notificationsSlice';
+import { notificationsSlice } from './slices/notificationsSlice';
 
 export const sharedReducers = {
     notifications: notificationsSlice.reducer,

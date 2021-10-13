@@ -1,4 +1,4 @@
-import { DialogProps } from '@material-ui/core/Dialog';
+import { DialogProps } from '@mui/material/Dialog';
 import { useCallback, useState } from 'react';
 
 export function useNotesDialog(): DialogProps & {

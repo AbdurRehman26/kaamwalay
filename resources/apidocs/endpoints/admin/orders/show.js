@@ -7,7 +7,8 @@
  * @apiUse Authorization
  *
  * @apiParam {Integer} id Order unique ID
- *
+ * @apiParam {Array} [include] For including relationships [invoice, paymentPlan, orderItems, orderStatus, orderPayment, billingAddress,
+ *  shippingAddress, orderStatusHistory, orderStatus, user, orderShipment, orderCustomerShipment]
  * @apiSuccess {Object} data Order object
  *
  * @apiSuccessExample Success-Response:
@@ -18,8 +19,9 @@
  *                "order_number": "RG000000029",
  *                "number_of_cards": 11,
  *                "total_declared_value": 5500,
- *                "grand_total": 263,
+ *                "service_fee": 20,
  *                "shipping_fee": 43,
+ *                "grand_total": 263,
  *                "created_at": {
  *                    "date": "2021-08-12 02:22:46.000000",
  *                    "timezone_type": 3,

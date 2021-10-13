@@ -122,7 +122,7 @@ class StripeService implements PaymentProviderServiceInterface
             $charge->amount === $order->grand_total_cents
             && $charge->outcome->type === 'authorized'
         ) {
-            $order->orderPayment->update([
+            $order->lastOrderPayment->update([
                 'response' => json_encode($paymentIntent->toArray()),
             ]);
 

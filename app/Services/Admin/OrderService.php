@@ -154,7 +154,7 @@ class OrderService
 
         $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
-        $orderPayment = OrderPaymentResource::make($order->orderPayment)->resolve();
+        $orderPayment = OrderPaymentResource::make($order->lastOrderPayment)->resolve();
 
         $data["SUBMISSION_NUMBER"] = $order->order_number;
         $data['CUSTOMER_NAME'] = $order->user->getFullName();

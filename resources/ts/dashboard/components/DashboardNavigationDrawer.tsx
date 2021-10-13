@@ -148,11 +148,8 @@ export function DashboardNavigationDrawer() {
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
                 </ListItem>
-                <ListItem selected={isItemActive('/cards')} button>
+                <ListItem selected={isItemActive('/cards')} onClick={() => handleItemPress('/cards')} button>
                     <ListItemText primary={'Your Cards'} primaryTypographyProps={{ className: classes.listItemText }} />
-                    <ListItemSecondaryAction>
-                        <Chip size="small" label="Soon" color={'secondary'} />
-                    </ListItemSecondaryAction>
                 </ListItem>
                 <ListItem selected={isItemActive('/profile')} button>
                     <ListItemText primary={'Profile'} primaryTypographyProps={{ className: classes.listItemText }} />

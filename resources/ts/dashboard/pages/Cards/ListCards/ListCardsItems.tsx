@@ -135,8 +135,8 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                         Sort By:
                     </Typography>
                     <StyledSelect value={sortFilter} variant="standard" onChange={handleSortChange}>
-                        <MenuItem value={'date'}>Date (newest)</MenuItem>
-                        <MenuItem value={'-date'}>Date (oldest)</MenuItem>
+                        <MenuItem value={'date'}>Date (Newest)</MenuItem>
+                        <MenuItem value={'-date'}>Date (Oldest)</MenuItem>
                     </StyledSelect>
                 </Grid>
             </Box>

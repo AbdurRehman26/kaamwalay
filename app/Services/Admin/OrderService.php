@@ -15,14 +15,14 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
     public function __construct(
-        private  OrderItemService $orderItemService,
+        private OrderItemService $orderItemService,
         private AgsService $agsService
     ) {
     }
@@ -57,7 +57,14 @@ class OrderService
 
     public function getOrderCertificatesData(Order|int $order): array
     {
-        return UserCard::select('certificate_number as certificate_id', 'card_sets.name as set_name', 'card_products.card_number')
+        return UserCard::select([
+                'certificate_number as certificate_id',
+                'card_sets.name as set_name',
+                'card_products.card_number',
+                'card_products.variant_name',
+                'card_products.variant_category',
+                'card_products.holo_type',
+            ])
             ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id')

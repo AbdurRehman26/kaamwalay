@@ -3,21 +3,22 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import { plainToClass } from 'class-transformer';
+import React, { useCallback, useMemo, useState } from 'react';
+import ReactGA from 'react-ga';
+import { Hit } from 'react-instantsearch-core';
 import { Hits, Stats } from 'react-instantsearch-dom';
+import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
+import { CardProductEntity } from '@shared/entities/CardProductEntity';
+import { fromApiPropertiesObject } from '@shared/lib/utils/fromApiPropertiesObject';
+import { font } from '@shared/styles/utils';
 import CustomPagination from '@dashboard/components/CustomPagination';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { markCardAsSelected, markCardAsUnselected } from '@dashboard/redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
+import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 
 const useStyles = makeStyles((theme) => ({
-    searchLabel: {
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 500,
-        fontSize: '12px',
-        lineHeight: '16px',
-        letterSpacing: '0.1px',
-        color: 'rgba(0, 0, 0, 0.87)',
-    },
     container: {
         marginTop: '24px',
         '& ais-highlight-0000000000': {
@@ -43,20 +44,99 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ResultWrapper(props: any) {
-    // TODO: Transform hit to the right type.
+interface ResultsWrapperProps {
+    hit: Hit<CardProductEntity>;
+}
+
+function ResultWrapper({ hit }: ResultsWrapperProps) {
+    const dispatch = useAppDispatch();
+    const [activeItem, setActiveItem] = useState<CardProductEntity | null>(null);
+    const item = useMemo(() => plainToClass(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
+    const result = useMemo(() => fromApiPropertiesObject(hit._highlightResult), [hit]);
+    const items = useMemo(() => (activeItem ? [activeItem] : []), [activeItem]);
+    const subtitle = result.fullName.value;
+
+    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const isCardSelected = useMemo(
+        () => !!selectedCards.find((card: Record<string, any>) => card.id === item.id),
+        [item.id, selectedCards],
+    );
+
+    function generateMarkCardDto(item: CardProductEntity) {
+        return { image: item.imagePath, title: item.getShortName(), id: item.id, subtitle: item.getFullName() };
+    }
+
+    const selectCard = useCallback(
+        (item: CardProductEntity) => {
+            ReactGA.event({
+                category: EventCategories.Cards,
+                action: CardsSelectionEvents.added,
+            });
+            dispatch(markCardAsSelected(generateMarkCardDto(item)));
+        },
+        [dispatch],
+    );
+
+    const deselectCard = useCallback(
+        (item: CardProductEntity) => {
+            ReactGA.event({
+                category: EventCategories.Cards,
+                action: CardsSelectionEvents.removed,
+            });
+            dispatch(markCardAsUnselected(generateMarkCardDto(item)));
+        },
+        [dispatch],
+    );
+
+    const handlePreview = useCallback(() => setActiveItem(item), [item]);
+    const handleClose = useCallback(() => setActiveItem(null), []);
+
+    const handleSelectCard = useCallback(() => {
+        const isSelected = !!selectedCards.find((card: Record<string, any>) => card.id === item.id);
+        if (!isSelected) {
+            selectCard(item);
+        } else {
+            deselectCard(item);
+        }
+    }, [selectedCards, item, selectCard, deselectCard]);
+
+    const handleRemove = useCallback(
+        (cardProductEntity: CardProductEntity) => {
+            deselectCard(cardProductEntity);
+            handleClose();
+        },
+        [deselectCard, handleClose],
+    );
+
+    const handleAdd = useCallback(
+        (cardProductEntity: CardProductEntity) => {
+            selectCard(cardProductEntity);
+            handleClose();
+        },
+        [handleClose, selectCard],
+    );
+
     return (
-        <SearchResultItemCard
-            image={props.hit.image_path}
-            title={props.hit.name}
-            subtitle={`${props.hit._highlightResult.release_year.value}
-                                             ${props.hit._highlightResult.card_category_name.value}
-                                             ${props.hit._highlightResult.card_series_name.value}
-                                             ${props.hit._highlightResult.card_set_name.value}
-                                             ${props.hit._highlightResult.card_number_order.value}
-                                             ${props.hit._highlightResult.name.value}`}
-            id={props.hit.id}
-        />
+        <>
+            <SubmissionReviewCardDialog
+                items={items}
+                itemsLength={items.length}
+                activeId={activeItem?.id}
+                exists={isCardSelected}
+                open={!!activeItem}
+                onAdd={handleAdd}
+                onRemove={handleRemove}
+                onClose={handleClose}
+            />
+            <SearchResultItemCard
+                image={item.imagePath}
+                title={item.getName()}
+                subtitle={subtitle}
+                id={item.id}
+                onPreview={handlePreview}
+                onSelectCard={handleSelectCard}
+            />
+        </>
     );
 }
 
@@ -64,9 +144,10 @@ function CardsSearchResults() {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const ResultsWrapper = isMobile ? 'div' : Paper;
+
     return (
         <div className={classes.container}>
-            <Typography variant={'subtitle2'} className={classes.searchLabel}>
+            <Typography variant={'caption'} className={font.fontWeightMedium}>
                 <Stats
                     translations={{
                         stats(nbHits, processingTimeMS, nbSortedHits, areHitsSorted) {

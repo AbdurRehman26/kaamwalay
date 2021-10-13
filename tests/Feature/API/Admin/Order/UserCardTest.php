@@ -63,7 +63,7 @@ it('stores the human grades and update data on AGS', function () {
         ],
     ])
     ->assertOk()
-    ->assertJsonCount(8, 'data.generated_images')
+    ->assertJsonCount(16, 'data.generated_images')
     ->assertJsonCount(4, 'data.overall_values')
     ->assertJsonCount(2, 'data.grade');
 

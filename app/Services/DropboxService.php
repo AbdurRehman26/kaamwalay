@@ -10,16 +10,18 @@ use Spatie\Dropbox\Exceptions\BadRequest;
 class DropboxService
 {
     protected Client $client;
+    protected string $rootPath;
 
     public function __construct()
     {
         $this->client = new Client(config('services.dropbox.token'));
+        $this->rootPath = config('services.dropbox.root_path');
     }
 
     public function createFolderBatch(array $paths): bool
     {
         $paths = collect($paths)->map(function (string $path) {
-            return $this->normalizePath($path);
+            return $this->rootPath . $this->normalizePath($path);
         })->toArray();
 
         try {

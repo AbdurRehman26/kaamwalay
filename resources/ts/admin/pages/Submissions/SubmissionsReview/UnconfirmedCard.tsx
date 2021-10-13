@@ -15,7 +15,6 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 
 interface UnconfirmedCardProps extends AccordionCardItemProps {
-    index: number;
     itemId: number;
     declaredValue: number;
     card: CardProductEntity;
@@ -48,7 +47,6 @@ const useStyles = makeStyles(
 );
 
 export function UnconfirmedCard({
-    index,
     itemId,
     card,
     declaredValue,
@@ -62,7 +60,7 @@ export function UnconfirmedCard({
     const [loading, setLoading] = useState(false);
     const notification = useNotifications();
 
-    const handlePreview = useCallback(() => onPreview(index), [onPreview, index]);
+    const handlePreview = useCallback(() => onPreview(itemId), [onPreview, itemId]);
 
     const handleConfirm = useCallback(async () => {
         setLoading(true);

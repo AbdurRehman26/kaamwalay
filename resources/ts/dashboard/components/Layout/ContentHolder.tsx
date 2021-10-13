@@ -23,7 +23,7 @@ export const ContentHolder = styled(ContentHolderComponent)(
         maxWidth: !hasSidebar ? '100%' : 'calc(100% - 364px)',
         marginLeft: !hasSidebar ? 0 : 24,
         width: '100%',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             maxWidth: '100%',
             marginLeft: 0,
         },

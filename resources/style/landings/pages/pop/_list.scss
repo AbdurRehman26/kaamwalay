@@ -3,9 +3,9 @@
 
 .pop-list {
     padding: 48px 0;
-    background: linear-gradient(103.29deg, #140078 -18.4%, #6c31bc 112.42%);
+    background: #fff;
     flex: 1 1 auto;
-    color: #fff;
+    color: #000;
 
     @include breakpoints.down(sm) {
         padding-top: 24px;
@@ -31,13 +31,18 @@
 
         &-row {
             border-bottom: 1px solid transparentize(#fff, 0.7);
+        }
 
-            &:nth-child(even) {
-                @apply bg-black bg-opacity-10;
+        &-body {
+            .pop-list__table-row {
+                &:nth-child(odd) {
+                    @apply bg-gray-100;
+                }
             }
         }
 
         &-total-row {
+            @apply text-white;
             background-color: #20bfb8;
         }
 

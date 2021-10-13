@@ -1,13 +1,22 @@
 <x-layout pageClass="page--pop-list">
     <section class="pop-hero">
         <div class="container pop-hero__container">
-            <aside class="pop-hero__text">
-                <h1 class="pop-hero__text-heading">Population Report</h1>
-                <h2 class="pop-hero__text-subheading">A record of all cards RoboGraded by AGS.</h2>
-            </aside>
-            <aside class="pop-hero__splash">
-                <img class="pop-hero__splash-image" src="{{ asset('assets/images/pop-hero-splash.png') }}"
+            <nav class="pop-hero__breadcrumbs">
+                <ol class="pop-hero__breadcrumbs__list">
+                    <li><a href="{{route('pop.report')}}" class="pop-hero__breadcrumbs__list__link">Population Report</a></li>
+                    <li><span class="mx-2">/</span></li>
+                    <li>Series</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="container pop-hero__container">
+            <aside class="pop-hero__logo">
+                <img class="pop-hero__logo-image" src="{{ asset('assets/images/pop-hero-splash.png') }}"
                      alt="Cards">
+            </aside>
+            <aside class="pop-hero__text">
+                <h1 class="pop-hero__text-series-heading">Sword & Shield Series</h1>
+                <h2 class="pop-hero__text-series-subheading"><b>Released:</b> 11/15/2019</h2>
             </aside>
         </div>
     </section>
@@ -17,7 +26,7 @@
                 <table class="pop-list__table">
                     <thead class="pop-list__table-head">
                         <tr class="pop-list__table-row">
-                            <th class="pop-list__table-cell pop-list__table-cell--series">Series / Release Date</th>
+                            <th class="pop-list__table-cell pop-list__table-cell--series">Set / Release Date</th>
                             <th class="pop-list__table-cell pop-list__table-cell--grade-title"></th>
                             <th class="pop-list__table-cell pop-list__table-cell--value">
                                 PR<br/>1

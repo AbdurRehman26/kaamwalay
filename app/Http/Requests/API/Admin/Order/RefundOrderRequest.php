@@ -35,10 +35,8 @@ class RefundOrderRequest extends FormRequest
                     $orderPayment = OrderPayment::find($this->route('orderPayment'));
                     if (
                         $value > $orderPayment->amount
-                        && ! in_array(
-                            $orderPayment->type,
-                            array_values(Arr::except(OrderPayment::PAYMENT_TYPES, ['refund'])),
-                        )) {
+                        || $orderPayment->type === OrderPayment::PAYMENT_TYPES['refund']
+                    ) {
                         $fail('The '.$attribute.' is invalid.');
                     }
                 },

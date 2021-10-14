@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Landings\FeedController;
+use App\Http\Controllers\Landings\PopReportController;
 use App\Http\Controllers\Landings\TermsAndConditionsController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,12 @@ Route::prefix('auth')->group(function () {
 Route::prefix('feed')->group(function () {
     Route::get('/', [FeedController::class, 'getList'])->name('feed.list');
     Route::get('/{certificateId}/view', [FeedController::class, 'getView'])->name('feed.view');
+});
+
+Route::prefix('pop')->group(function () {
+    Route::get('/', [PopReportController::class, 'getPopReport'])->name('report.series');
+    Route::get('/card-series/{seriesId}', [PopReportController::class, 'getSetsReport'])->name('report.sets');
+    Route::get('/card-series/{seriesId}/card-set/{setId}', [PopReportController::class, 'getCardsReport'])->name('report.cards');
 });
 
 Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');

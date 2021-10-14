@@ -14,9 +14,14 @@
 
     &__table {
         @apply w-full relative;
+        border-collapse: separate;
+        border-spacing: 0;
         min-width: 900px;
         box-sizing: border-box;
 
+        @include breakpoints.down(sm) {
+            min-width: 1000px;
+        }
         &__container {
             @include breakpoints.down(md) {
                 padding-left: 0;
@@ -33,12 +38,7 @@
             }
         }
 
-        &-row {
-            border-bottom: 1px solid transparentize(#fff, 0.7);
-        }
-
         &-body {
-            @apply divide-x;
             .pop-list__table-row {
                 .pop-list__table-cell--series,
                 .pop-list__table-cell--card {
@@ -65,22 +65,26 @@
         }
 
         &-cell {
-            padding: 16px 5px;
+            padding: 16px 8px;
             text-align: left;
+            @apply text-xs;
 
             &--series,
             &--card {
-                @apply w-64 sticky left-0 flex;
+                @apply w-64 sticky left-0;
                 @include breakpoints.down(sm) {
-                    @apply w-40 sticky left-0 flex;
+                    @apply w-52 border-r-2 border-solid border-gray-300;
                 }
             }
-            @include breakpoints.down(sm) {
-                @apply text-sm;
+
+            &--card-content {
+                @apply flex;
             }
+
             &--grade-title,
             &--value,
             &--total {
+                @apply w-16;
                 text-align: right;
             }
         }
@@ -97,6 +101,7 @@
         &-total-row &-cell {
             padding-top: 32px;
             padding-bottom: 32px;
+            @apply text-sm;
         }
 
         &__info {
@@ -112,8 +117,8 @@
             }
 
             &-heading {
+                @apply text-sm;
                 font-weight: 500;
-                font-size: 16px;
                 line-height: 24px;
             }
 

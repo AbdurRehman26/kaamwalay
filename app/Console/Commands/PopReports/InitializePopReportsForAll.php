@@ -36,7 +36,6 @@ class InitializePopReportsForAll extends Command
 
         /* For Series */
         if ($selectOption == 1 || $selectOption == 2) {
-
             $this->info("Initializing Values for Series");
 
             $cardSeriesIds = CardSeries::all()->pluck('id');
@@ -46,13 +45,11 @@ class InitializePopReportsForAll extends Command
             }
 
             $this->info("Initializing Values for Series Completed");
-
         }
 
         /* For Sets */
 
         if ($selectOption == 1 || $selectOption == 3) {
-
             $this->info("Initializing Values for Sets");
 
             $cardSets = CardSet::all();
@@ -64,14 +61,12 @@ class InitializePopReportsForAll extends Command
             }
 
             $this->info("Initializing Values for Sets Completed");
-
         }
 
 
         /* For Cards */
 
         if ($selectOption == 1 || $selectOption == 4) {
-
             $this->info("Initializing Values for Cards");
 
             $cardProducts = CardProduct::all();
@@ -83,7 +78,6 @@ class InitializePopReportsForAll extends Command
             }
 
             $this->info("Initializing Values for Cards Completed");
-
         }
 
         return 0;

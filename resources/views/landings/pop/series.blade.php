@@ -144,7 +144,7 @@
                                     <a href="{{ route('pop.set', ['seriesId' => $cardSetsReport->card_series_id, 'setId' => $cardSetsReport->card_set_id]) }}" class="pop-list__table__info">
                                         <div class="pop-list__table__info-text">
                                             <p class="pop-list__table__info-heading">{{$cardSetsReport->name}}</p>
-                                            <p class="pop-list__table__info-subheading">{{$cardSetsReport->release_date}}</p>
+                                            <p class="pop-list__table__info-subheading">{{$cardSetsReport->release_date->format('m/d/Y')}}</p>
                                         </div>
                                     </a>
                                 </td>

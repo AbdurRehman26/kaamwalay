@@ -102,6 +102,10 @@
             padding-top: 32px;
             padding-bottom: 32px;
             @apply text-sm;
+
+            .pop-list__table__info-text {
+                @apply m-0;
+            }
         }
 
         &__info {
@@ -112,6 +116,7 @@
             }
 
             &-text {
+                @apply ml-2;
                 max-width: 240px;
             }
 

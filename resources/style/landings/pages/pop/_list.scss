@@ -16,9 +16,6 @@
         @apply w-full relative;
         min-width: 900px;
         box-sizing: border-box;
-        // @include breakpoints.down(sm) {
-        //     min-width: 1200px;
-        // }
 
         &__container {
             @include breakpoints.down(md) {
@@ -68,7 +65,7 @@
         }
 
         &-cell {
-            padding: 16px 8px;
+            padding: 16px 5px;
             text-align: left;
 
             &--series,

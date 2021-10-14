@@ -10,7 +10,7 @@ class CardGradingService
     protected const FRONT_AVERAGING_RATIO = 0.6;
     protected const BACK_AVERAGING_RATIO = 0.4;
 
-    protected const GRADE_CRITERIA = [
+    public const GRADE_CRITERIA = [
         'GEM-MT' => 10.00,
         'MINT+' => 9.50,
         'MINT' => 9.00,

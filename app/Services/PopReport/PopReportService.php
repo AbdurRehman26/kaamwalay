@@ -28,6 +28,13 @@ class PopReportService
             try {
                 $popSeriesReportModel = PopSeriesReport::firstOrCreate([ 'card_series_id' => $cardSeriesId ]);
                 $popSeriesReportModel->increment($columnName, 1);
+
+                if (str_contains($columnName, "plus")) {
+                    $popSeriesReportModel->increment("total_plus", 1);
+                } else {
+                    $popSeriesReportModel->increment("total", 1);
+                }
+
             } catch (\Exception $e) {
                 \Log::info("Card Series Report not added for id " . $cardSeriesId);
                 \Log::info($e->getMessage());
@@ -51,6 +58,13 @@ class PopReportService
             try {
                 $popSetReportModel = PopSetsReport::firstOrCreate([ 'card_set_id' => $cardSetId , 'card_series_id' => $userCard->card_series_id ]);
                 $popSetReportModel->increment($columnName, 1);
+
+                if (str_contains($columnName, "plus")) {
+                    $popSetReportModel->increment("total_plus", 1);
+                } else {
+                    $popSetReportModel->increment("total", 1);
+                }
+
             } catch (\Exception $e) {
                 \Log::info("Card Set Report not added for id " . $cardSetId);
                 \Log::info($e->getMessage());
@@ -68,12 +82,19 @@ class PopReportService
             ->get();
 
         foreach ($userCards as $userCard) {
-            $popCardReportModel = PopCardsReport::firstOrCreate([ 'card_product_id' => $cardProductId , 'card_set_id' => $userCard->card_set_id ]);
 
             $columnName = $this->cleanColumnName($userCard->overall_grade);
 
             try {
+                $popCardReportModel = PopCardsReport::firstOrCreate([ 'card_product_id' => $cardProductId , 'card_set_id' => $userCard->card_set_id ]);
                 $popCardReportModel->increment($columnName, 1);
+
+                if (str_contains($columnName, "plus")) {
+                    $popCardReportModel->increment("total_plus", 1);
+                } else {
+                    $popCardReportModel->increment("total", 1);
+                }
+
             } catch (\Exception $e) {
                 \Log::info("Card Set Report not added for id " . $cardProductId);
                 \Log::info($e->getMessage());
@@ -97,7 +118,7 @@ class PopReportService
         $itemsPerPage = request('per_page') ?: 100;
 
         $query = PopSetsReport::join('card_sets', 'pop_sets_reports.card_set_id', 'card_sets.id')
-        ->where('pop_sets_reports.card_series_id',$seriesId);
+        ->where('pop_sets_reports.card_series_id', $seriesId);
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_sets_id'])
@@ -109,7 +130,7 @@ class PopReportService
         $itemsPerPage = request('per_page') ?: 100;
 
         $query = PopCardsReport::join('card_products', 'pop_cards_reports.card_product_id', 'card_products.id')
-        ->where('pop_cards_reports.card_set_id',$setId);
+        ->where('pop_cards_reports.card_set_id', $setId);
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_sets_id'])

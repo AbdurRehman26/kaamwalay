@@ -10,20 +10,37 @@ class PopController extends Controller implements CanSetup<PopController> {
 
     public popReport() {
         this.scrollToTotal();
+        this.enablePaginationLimit();
     }
 
     public seriesReport() {
         this.scrollToTotal();
+        this.enablePaginationLimit();
     }
 
     public setReport() {
         this.scrollToTotal();
+        this.enablePaginationLimit();
     }
 
     private scrollToTotal() {
         document
             .querySelector('.pop-list__table .pop-list__table-cell.pop-list__table-cell--total')
             ?.scrollIntoView(false);
+    }
+
+    private enablePaginationLimit() {
+        const paginationSelect = document.querySelector('.pagination__limit__select');
+
+        paginationSelect?.addEventListener('change', (e) => {
+            const select = e.target as HTMLSelectElement;
+            const selectedOption = select.options[select.selectedIndex];
+
+            const href = new URL(window.location.href);
+            href.searchParams.set('per_page', selectedOption.value);
+            href.searchParams.set('page', '1');
+            window.location.replace(href.toString());
+        });
     }
 }
 

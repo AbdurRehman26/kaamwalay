@@ -140,14 +140,14 @@
                                 +
                             </td>
                         </tr>
-                        @for($i = 0; $i < 10; $i++)
+                        @foreach($data as $i => $cardsReport)
                             <tr class="pop-list__table-row">
                                 <td class="pop-list__table-cell pop-list__table-cell--card">
-                                    <img class="pop-list__table__info-image" src="{{ asset('assets/images/card-preview.png') }}" alt="Card" width="52" />
+                                    <img class="pop-list__table__info-image" src="{{ $cardsReport->image_path }}" alt="Card" width="52" />
                                     <div class="pop-list__table__info-text">
-                                        <p class="pop-list__table__info-heading">{{ 'Charizard' }}</p>
-                                        <p class="pop-list__table__info-subheading display-desktop">{{'2020 Pokemon Sword & Shield Chilling Reign 025 Charizard'}}</p>
-                                        <p class="pop-list__table__info-subheading display-mobile">{{'025'}}</p>
+                                        <p class="pop-list__table__info-heading">{{ $cardsReport->name }}</p>
+                                        <p class="pop-list__table__info-subheading display-desktop">{{ $cardsReport->cardProduct->getSearchableName() }}</p>
+                                        <p class="pop-list__table__info-subheading display-mobile">{{$cardsReport->card_number_order}}</p>
                                     </div>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--grade-title">
@@ -156,59 +156,59 @@
                                     +
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->pr}}
                                     <br/>
                                     -
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
                                     -
                                     <br/>
-                                    +
+                                    {{$cardsReport->fr}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->good}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->good_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->vg}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->vg_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->vg_ex}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->vg_ex_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->ex}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->ex_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->ex_mt}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->ex_mt_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->nm}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->nm_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->nm_mt}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->nm_mt_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->mint}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->mint_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    Grade
+                                    {{$cardsReport->gem_mt}}
                                     <br/>
-                                    +
+                                    -
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--total">
                                     Grade
@@ -216,10 +216,10 @@
                                     +
                                 </td>
                             </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
-                <x-tables.pagination/>
+                <x-tables.pagination :totals="$data->total()" :itemsPerPage="$data->perPage()" :currentPage="$data->currentPage()" :offset="($data->currentPage() - 1) * $data->perPage()" :basePath="route('pop.report')" />
             </div>
         </div>
     </section>

@@ -80,64 +80,64 @@
                                 +
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->pr}}
                                 <br/>
                                 -
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
                                 -
                                 <br/>
-                                +
+                                {{$totalPopulation->fr_plus}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->good}}
                                 <br/>
-                                +
+                                {{$totalPopulation->good_plus}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->vg}}
                                 <br/>
-                                +
+                                {{$totalPopulation->vg_plus}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->vg_ex}}
                                 <br/>
-                                +
+                                {{$totalPopulation->vg_ex_plus}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->ex}}
                                 <br/>
-                                +
+                                {{$totalPopulation->ex_plus}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->ex_mt}}
                                 <br/>
-                                +
+                                {{$totalPopulation->ex_mt_plus}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->nm}}
                                 <br/>
-                                +
+                                {{$totalPopulation->nm_plus}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->nm_mt}}
                                 <br/>
-                                +
+                                {{$totalPopulation->nm_mt_plus}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->mint}}
                                 <br/>
-                                +
+                                -
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
-                                Grade
+                                {{$totalPopulation->gem_mt}}
                                 <br/>
-                                +
+                                -
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--total">
-                                Grade
+                                {{$totalPopulation->total}}
                                 <br/>
-                                +
+                                {{$totalPopulation->total_plus}}
                             </td>
                         </tr>
                         @foreach($data as $i => $cardsReport)
@@ -163,7 +163,7 @@
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
                                     -
                                     <br/>
-                                    {{$cardsReport->fr}}
+                                    {{$cardsReport->fr_plus}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
                                     {{$cardsReport->good}}

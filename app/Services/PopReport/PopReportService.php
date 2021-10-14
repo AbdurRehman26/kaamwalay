@@ -92,14 +92,28 @@ class PopReportService
             ->paginate($itemsPerPage);
     }
 
-    public function getSetsReport(): array
+    public function getSetsReport(int $seriesId): LengthAwarePaginator
     {
-        return [];
+        $itemsPerPage = request('per_page') ?: 100;
+
+        $query = PopSetsReport::join('card_sets', 'pop_sets_reports.card_set_id', 'card_sets.id')
+        ->where('pop_sets_reports.card_series_id',$seriesId);
+
+        return QueryBuilder::for($query)
+            ->allowedSorts(['card_sets_id'])
+            ->paginate($itemsPerPage);
     }
 
-    public function getCardsReport(): array
+    public function getCardsReport(int $setId): LengthAwarePaginator
     {
-        return [];
+        $itemsPerPage = request('per_page') ?: 100;
+
+        $query = PopCardsReport::join('card_products', 'pop_cards_reports.card_product_id', 'card_products.id')
+        ->where('pop_cards_reports.card_set_id',$setId);
+
+        return QueryBuilder::for($query)
+            ->allowedSorts(['card_sets_id'])
+            ->paginate($itemsPerPage);
     }
 
     public function cleanColumnName($overallGrade)

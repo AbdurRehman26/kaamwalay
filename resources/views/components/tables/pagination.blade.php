@@ -2,7 +2,7 @@
     use Illuminate\Support\Str;
 
     $id = Str::replace(".", "_", uniqid('select-items_', true));
-    $itemsPerPageOptions = [24, 48, 72, 96, 120];
+    $itemsPerPageOptions = [24, 48, 72, 96, 100, 120];
     $itemsPerPage = (int)($itemsPerPage ?? 0);
     $totals = (int)($totals ?? 0);
     $offset = (int)($offset ?? 0);

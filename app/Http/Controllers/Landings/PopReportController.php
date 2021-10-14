@@ -19,16 +19,16 @@ class PopReportController extends Controller
         return view('landings.pop.report', compact('data'));
     }
 
-    public function getSetsReport(): View
+    public function getSetsReport(int $seriesId): View
     {
-        $data = $this->popReportService->getSetsReport();
+        $data = $this->popReportService->getSetsReport($seriesId);
 
         return view('landings.pop.series', compact('data'));
     }
 
-    public function getCardsReport(): View
+    public function getCardsReport(int $seriesId, int $setId): View
     {
-        $data = $this->popReportService->getCardsReport();
+        $data = $this->popReportService->getCardsReport($setId);
 
         return view('landings.pop.set', compact('data'));
     }

@@ -16,4 +16,8 @@ class PopCardsReport extends Model
      */
     protected $fillable = ['card_product_id', 'card_set_id'];
 
+    public function cardProduct(){
+        return $this->belongsTo(CardProduct::class);
+    }
+
 }

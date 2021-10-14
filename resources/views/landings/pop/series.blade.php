@@ -234,9 +234,9 @@
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--total">
                                     <a href="{{ route('pop.set', ['seriesId' => $cardSetsReport->card_series_id, 'setId' => $cardSetsReport->card_set_id]) }}">
-                                        Grade
+                                        {{$cardSetsReport->total}}
                                         <br/>
-                                        +
+                                        {{$cardSetsReport->total_plus}}
                                     </a>
                                 </td>
                             </tr>

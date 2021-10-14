@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\API\Admin\Order;
 
+use App\Models\OrderPayment;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class RefundOrderRequest extends FormRequest
@@ -25,18 +27,22 @@ class RefundOrderRequest extends FormRequest
     public function rules()
     {
         return [
+            'notes' => ['required'],
             'amount' => [
                 'required',
                 'numeric',
-                Rule::exists(
-                    'order_payments',
-                    function ($query) {
-                        $query->where('id', $this->route('orderPayment')->id)
-                            ->where('amount', '<=', $this->get('amount'));
+                function ($attribute, $value, $fail) {
+                    $orderPayment = OrderPayment::find($this->route('orderPayment'));
+                    if (
+                        $value > $orderPayment->amount
+                        && ! in_array(
+                            $orderPayment->type,
+                            array_values(Arr::except(OrderPayment::PAYMENT_TYPES, ['refund'])),
+                        )) {
+                        $fail('The '.$attribute.' is invalid.');
                     }
-                ),
+                },
             ],
-            'notes' => ['required'],
         ];
     }
 }

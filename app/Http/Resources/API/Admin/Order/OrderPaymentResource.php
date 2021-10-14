@@ -22,23 +22,30 @@ class OrderPaymentResource extends BaseResource
         if ($this->order->paymentMethod->code === 'paypal') {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
         }
+        $hasCard = ! ($this->type === OrderPayment::PAYMENT_TYPES['refund']);
 
-        $providerResponse = json_decode($this->response);
+        $card = null;
 
-        if (! empty($providerResponse->card)) {
-            $card = $providerResponse->card;
-        } else {
-            $card = $providerResponse->charges->data[0]->payment_method_details->card;
+        if ($hasCard) {
+            $providerResponse = json_decode($this->response);
+
+            if (! empty($providerResponse->card)) {
+                $card = $providerResponse->card;
+            } else {
+                $card = $providerResponse->charges->data[0]->payment_method_details->card;
+            }
         }
 
         return [
             'id' => $this->id,
-            'card' => [
-                'brand' => $card->brand,
-                'exp_month' => $card->exp_month,
-                'exp_year' => $card->exp_year,
-                'last4' => $card->last4,
-            ],
+            $this->when($hasCard === true, [
+                'card' => [
+                    'brand' => $card?->brand,
+                    'exp_month' => $card?->exp_month,
+                    'exp_year' => $card?->exp_year,
+                    'last4' => $card?->last4,
+                ],
+            ]),
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => array_search($this->type, OrderPayment::PAYMENT_TYPES),

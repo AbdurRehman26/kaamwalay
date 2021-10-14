@@ -237,6 +237,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'message' => $exception->getMessage(),
                 'data' => $refundData,
             ]);
+
             return [];
         }
 

@@ -60,7 +60,7 @@ class StripeService implements PaymentProviderServiceInterface
             'amount' => $order->grand_total_cents,
             'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
             'additional_data' => [
-                'description' => "Payment for Order # {$order->id}",
+                'description' => "Payment for Order # {$order->order_number}",
                 'metadata' => [
                     'Order ID' => $order->id,
                     'User Email' => $order->user->email,
@@ -123,6 +123,9 @@ class StripeService implements PaymentProviderServiceInterface
             && $charge->outcome->type === 'authorized'
         ) {
             $order->lastOrderPayment->update([
+                'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+                'amount' => $order->grand_total,
+                'notes' => "Payment for Order # {$order->order_number}",
                 'response' => json_encode($paymentIntent->toArray()),
             ]);
 

@@ -17,23 +17,6 @@ use Throwable;
 
 class OrderPaymentController extends Controller
 {
-    /**
-     * @throws Throwable
-    */
-    public function addExtraCharge(
-        AddExtraChargeRequest $request,
-        Order $order,
-        OrderService $orderService,
-        PaymentService $paymentService,
-    ): JsonResponse {
-        $response = $paymentService->additionalCharge(order: $order, request: $request->all());
-        $orderService->addExtraCharge(order: $order, data: $request->all(), paymentResponse: $response);
-
-        return (new OrderPaymentResource($order->lastOrderPayment))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
-    }
-
     public function update(
         UpdateOrderPaymentRequest $request,
         Order $order,
@@ -42,19 +25,5 @@ class OrderPaymentController extends Controller
         $orderPayment->update($request->all());
 
         return new OrderPaymentResource($order->lastOrderPayment);
-    }
-
-    public function refund(
-        RefundOrderRequest $request,
-        Order $order,
-        PaymentService $paymentService,
-        OrderService $orderService,
-    ): JsonResponse {
-        $response = $paymentService->refund(order: $order, request: $request->all());
-        $orderService->processRefund($order, $request->all(), $response);
-
-        return (new OrderPaymentResource($order->lastOrderPayment))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
     }
 }

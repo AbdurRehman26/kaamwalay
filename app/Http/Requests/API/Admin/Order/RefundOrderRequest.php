@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\Admin\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RefundOrderRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class RefundOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->isAdmin();
     }
 
     /**
@@ -24,7 +25,18 @@ class RefundOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'amount' => [
+                'required',
+                'numeric',
+                Rule::exists(
+                    'order_payments',
+                    function ($query) {
+                        $query->where('id', $this->route('orderPayment')->id)
+                            ->where('amount', '<=', $this->get('amount'));
+                    }
+                ),
+            ],
+            'notes' => ['required'],
         ];
     }
 }

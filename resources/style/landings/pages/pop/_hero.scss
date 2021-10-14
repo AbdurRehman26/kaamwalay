@@ -79,22 +79,24 @@
     }
 
     &__logo {
-        @apply w-1/12 mr-1 flex justify-end items-center;
+        @apply w-1/12 mr-1 flex justify-start items-center;
 
         @include breakpoints.down(xs) {
             @apply w-2/12;
         }
 
         &-image {
-            // @include breakpoints.down(xs) {
-            //     max-width: 190px;
-            //     margin-right: -15px;
-            // }
+            &--holder {
+                @apply bg-white w-20 h-20 rounded flex items-center;
+                @include breakpoints.down(xs) {
+                    @apply w-16 h-16;
+                }
+            }
         }
     }
 
     &__breadcrumbs {
-        @apply rounded font-sans w-full pt-7 pb-1;
+        @apply rounded text-sm font-sans w-full pt-7 pb-1;
         @include breakpoints.down(xs) {
             @apply text-xs;
         }

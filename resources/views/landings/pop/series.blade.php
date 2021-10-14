@@ -5,18 +5,20 @@
                 <ol class="pop-hero__breadcrumbs__list">
                     <li><a href="{{route('pop.report')}}" class="pop-hero__breadcrumbs__list__link">Population Report</a></li>
                     <li><span class="mx-2">/</span></li>
-                    <li>Sword and Shield Series</li>
+                    <li>{{$cardSeries->name}}</li>
                 </ol>
             </nav>
         </div>
         <div class="container pop-hero__container">
             <aside class="pop-hero__logo">
-                <img class="pop-hero__logo-image" src="{{ asset('assets/images/pop-hero-splash.png') }}"
-                     alt="Cards">
+                <div class="pop-hero__logo-image--holder">
+                    <img class="pop-hero__logo-image" src="{{$cardSeries->image_path}}"
+                         alt="Cards">
+                </div>
             </aside>
             <aside class="pop-hero__text">
-                <h1 class="pop-hero__text-series-heading">Sword & Shield Series</h1>
-                <h2 class="pop-hero__text-series-subheading"><b>Released:</b> 11/15/2019</h2>
+                <h1 class="pop-hero__text-series-heading">{{$cardSeries->name}}</h1>
+                <h2 class="pop-hero__text-series-subheading"><b>Released:</b> {{$cardSeries->oldestReleaseDate->release_date->format('m/d/Y')}}</h2>
             </aside>
         </div>
     </section>

@@ -5,20 +5,22 @@
                 <ol class="pop-hero__breadcrumbs__list">
                     <li><a href="{{route('pop.report')}}" class="pop-hero__breadcrumbs__list__link">Population Report</a></li>
                     <li><span class="mx-2">/</span></li>
-                    <li><a href="{{route('pop.series', ['seriesId' => 1])}}" class="pop-hero__breadcrumbs__list__link">Sword and Shield Series</a></li>
+                    <li><a href="{{route('pop.series', ['cardSeries' => $cardSet->card_series_id])}}" class="pop-hero__breadcrumbs__list__link">{{$cardSet->cardSeries->name}}</a></li>
                     <li><span class="mx-2">/</span></li>
-                    <li>Chilling Reign</li>
+                    <li>{{$cardSet->name}}</li>
                 </ol>
             </nav>
         </div>
         <div class="container pop-hero__container">
             <aside class="pop-hero__logo">
-                <img class="pop-hero__logo-image" src="{{ asset('assets/images/pop-hero-splash.png') }}"
-                     alt="Cards">
+                <div class="pop-hero__logo-image--holder">
+                    <img class="pop-hero__logo-image" src="{{$cardSet->image_path}}"
+                        alt="Cards">
+                </div>
             </aside>
             <aside class="pop-hero__text">
-                <h1 class="pop-hero__text-series-heading">Chilling Reign</h1>
-                <h2 class="pop-hero__text-series-subheading"><b>Released:</b> 11/15/2019</h2>
+                <h1 class="pop-hero__text-series-heading">{{$cardSet->name}}</h1>
+                <h2 class="pop-hero__text-series-subheading"><b>Released:</b> {{$cardSet->release_date->format('m/d/Y')}}</h2>
             </aside>
         </div>
     </section>

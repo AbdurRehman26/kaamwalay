@@ -18,6 +18,7 @@ class PopReportService
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
             ->where('card_sets.card_series_id', $cardSeriesId)
+            ->where('user_cards.overall_grade','>',0)
             ->select('user_cards.overall_grade')
             ->get();
 
@@ -40,6 +41,7 @@ class PopReportService
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
             ->where('card_products.card_set_id', $cardSetId)
+            ->where('user_cards.overall_grade','>',0)
             ->select('user_cards.overall_grade', 'card_sets.card_series_id as card_series_id')
             ->get();
 
@@ -61,6 +63,7 @@ class PopReportService
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->where('card_products.id', $cardProductId)
+            ->where('user_cards.overall_grade','>',0)
             ->select('user_cards.overall_grade', 'card_products.card_set_id as card_set_id')
             ->get();
 

@@ -5,7 +5,7 @@
                 <ol class="pop-hero__breadcrumbs__list">
                     <li><a href="{{route('pop.report')}}" class="pop-hero__breadcrumbs__list__link">Population Report</a></li>
                     <li><span class="mx-2">/</span></li>
-                    <li><a href="{{route('pop.series', ['cardSeries' => 1])}}" class="pop-hero__breadcrumbs__list__link">Sword and Shield Series</a></li>
+                    <li><a href="{{route('pop.series', ['seriesId' => 1])}}" class="pop-hero__breadcrumbs__list__link">Sword and Shield Series</a></li>
                     <li><span class="mx-2">/</span></li>
                     <li>Chilling Reign</li>
                 </ol>

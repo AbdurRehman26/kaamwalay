@@ -10,7 +10,7 @@
         +
     </td>
     @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $totalPopulation->pr, 'plusValue' => '-'])
-    @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => '-', 'plusValue' => $totalPopulation->fr_plus])
+    @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => '-', 'plusValue' => $totalPopulation->fr])
     @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $totalPopulation->good, 'plusValue' => $totalPopulation->good_plus])
     @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $totalPopulation->vg, 'plusValue' => $totalPopulation->vg_plus])
     @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $totalPopulation->vg_ex, 'plusValue' => $totalPopulation->vg_ex_plus])

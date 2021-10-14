@@ -36,9 +36,9 @@ Route::prefix('feed')->group(function () {
 });
 
 Route::prefix('pop')->group(function () {
-    Route::get('/', [PopReportController::class, 'getSeriesReport'])->name('report.series');
-    Route::get('/card-series/{seriesId}', [PopReportController::class, 'getSetsReport'])->name('report.sets');
-    Route::get('/card-series/{seriesId}/card-set/{setId}', [PopReportController::class, 'getCardsReport'])->name('report.cards');
+    Route::get('/', [PopReportController::class, 'getSeriesReport'])->name('pop.report');
+    Route::get('/card-series/{seriesId}', [PopReportController::class, 'getSetsReport'])->name('pop.series');
+    Route::get('/card-series/{seriesId}/card-set/{setId}', [PopReportController::class, 'getCardsReport'])->name('pop.cards');
 });
 
 Route::get('card/{certificateId}', [FeedController::class, 'cardRedirect'])->name('feed.cardView');

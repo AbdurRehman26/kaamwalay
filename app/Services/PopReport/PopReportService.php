@@ -7,6 +7,8 @@ use App\Models\PopSeriesReport;
 use App\Models\PopSetsReport;
 use App\Models\UserCard;
 use App\Services\Admin\CardGradingService;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PopReportService
 {
@@ -76,9 +78,15 @@ class PopReportService
         }
     }
 
-    public function getSeriesReport(): array
+    public function getSeriesReport(): LengthAwarePaginator
     {
-        return [];
+        $itemsPerPage = request('per_page') ?: 150;
+
+        $query = PopSeriesReport::join('card_series', 'pop_series_reports.card_series_id', 'card_series.id');
+
+        return QueryBuilder::for($query)
+            ->allowedSorts(['card_series_id'])
+            ->paginate($itemsPerPage);
     }
 
     public function getSetsReport(): array

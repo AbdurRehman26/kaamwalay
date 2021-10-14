@@ -53,7 +53,7 @@
                                     </a>
                                 </td>
                                 @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->pr, 'plusValue' => '-'])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => '-', 'plusValue' => $cardSetsReport->fr_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => '-', 'plusValue' => $cardSetsReport->fr])
                                 @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->good, 'plusValue' => $cardSetsReport->good_plus])
                                 @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->vg, 'plusValue' => $cardSetsReport->vg_plus])
                                 @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->vg_ex, 'plusValue' => $cardSetsReport->vg_ex_plus])

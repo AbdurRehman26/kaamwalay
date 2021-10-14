@@ -2,105 +2,109 @@
 
 namespace App\Services\PopReport;
 
+use App\Models\CardProduct;
+use App\Models\CardSeries;
+use App\Models\CardSet;
 use App\Models\PopCardsReport;
 use App\Models\PopSeriesReport;
 use App\Models\PopSetsReport;
 use App\Models\UserCard;
 use App\Services\Admin\CardGradingService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PopReportService
 {
-    public function updateSeriesReport(int $cardSeriesId)
+    protected array $reportsTableArray = ['total' => 0, 'total_plus' => 0];
+
+    protected const PER_PAGE = 100;
+
+    public function __construct()
     {
-        $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
-            ->join('card_products', 'order_items.card_product_id', 'card_products.id')
-            ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
-            ->where('card_sets.card_series_id', $cardSeriesId)
-            ->where('user_cards.overall_grade', '>', 0)
-            ->select('user_cards.overall_grade')
-            ->get();
-
-        foreach ($userCards as $userCard) {
-            $columnName = $this->cleanColumnName($userCard->overall_grade);
-
-            try {
-                $popSeriesReportModel = PopSeriesReport::firstOrCreate([ 'card_series_id' => $cardSeriesId ]);
-                $popSeriesReportModel->increment($columnName, 1);
-
-                if (str_contains($columnName, "plus")) {
-                    $popSeriesReportModel->increment("total_plus", 1);
-                } else {
-                    $popSeriesReportModel->increment("total", 1);
-                }
-            } catch (\Exception $e) {
-                \Log::info("Card Series Report not added for id " . $cardSeriesId);
-                \Log::info($e->getMessage());
-            }
-        }
+        $this->generateReportEmptyArray();
     }
-
-    public function updateSetsReport(int $cardSetId)
+    public function updateSeriesReport(CardSeries $cardSeries)
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
-            ->where('card_products.card_set_id', $cardSetId)
+            ->where('card_sets.card_series_id', $cardSeries->id)
             ->where('user_cards.overall_grade', '>', 0)
             ->select('user_cards.overall_grade', 'card_sets.card_series_id as card_series_id')
             ->get();
 
-        foreach ($userCards as $userCard) {
-            $columnName = $this->cleanColumnName($userCard->overall_grade);
+        $whereCondition = [ 'card_series_id' => $cardSeries->id ];
+        $popSeriesReportModel = PopSeriesReport::firstOrCreate($whereCondition);
 
-            try {
-                $popSetReportModel = PopSetsReport::firstOrCreate([ 'card_set_id' => $cardSetId , 'card_series_id' => $userCard->card_series_id ]);
-                $popSetReportModel->increment($columnName, 1);
+        $reportsTableArray = $this->accumulateReportRow($userCards);
 
-                if (str_contains($columnName, "plus")) {
-                    $popSetReportModel->increment("total_plus", 1);
-                } else {
-                    $popSetReportModel->increment("total", 1);
-                }
-            } catch (\Exception $e) {
-                \Log::info("Card Set Report not added for id " . $cardSetId);
-                \Log::info($e->getMessage());
-            }
-        }
+        $popSeriesReportModel->where($whereCondition)->update($reportsTableArray);
     }
 
-    public function updateCardProductsReport(int $cardProductId)
+    public function updateSetsReport(CardSet $cardSet)
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
-            ->where('card_products.id', $cardProductId)
+            ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
+            ->where('card_products.card_set_id', $cardSet->id)
+            ->where('user_cards.overall_grade', '>', 0)
+            ->select('user_cards.overall_grade', 'card_sets.card_series_id as card_series_id')
+            ->get();
+
+        $whereCondition = [  'card_set_id' => $cardSet->id , 'card_series_id' => $cardSet->card_series_id ];
+
+        $popSetReportModel = PopSetsReport::firstOrCreate($whereCondition);
+
+        $reportsTableArray = $this->accumulateReportRow($userCards);
+
+        $popSetReportModel->where($whereCondition)->update($reportsTableArray);
+    }
+
+    public function updateCardProductsReport(CardProduct $cardProduct)
+    {
+        $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
+            ->join('card_products', 'order_items.card_product_id', 'card_products.id')
+            ->where('card_products.id', $cardProduct->id)
             ->where('user_cards.overall_grade', '>', 0)
             ->select('user_cards.overall_grade', 'card_products.card_set_id as card_set_id')
             ->get();
 
+        $whereCondition = [ 'card_product_id' => $cardProduct->id , 'card_set_id' => $cardProduct->card_set_id ];
+        $popCardReportModel = PopCardsReport::firstOrCreate($whereCondition);
+
+        $reportsTableArray = $this->accumulateReportRow($userCards);
+
+        $popCardReportModel->where($whereCondition)->update($reportsTableArray);
+    }
+
+    protected function accumulateReportRow(Collection $userCards)
+    {
+        $reportsTableArray = $this->reportsTableArray;
+
         foreach ($userCards as $userCard) {
             $columnName = $this->cleanColumnName($userCard->overall_grade);
 
             try {
-                $popCardReportModel = PopCardsReport::firstOrCreate([ 'card_product_id' => $cardProductId , 'card_set_id' => $userCard->card_set_id ]);
-                $popCardReportModel->increment($columnName, 1);
+                $reportsTableArray[$columnName] += 1;
 
                 if (str_contains($columnName, "plus")) {
-                    $popCardReportModel->increment("total_plus", 1);
+                    $reportsTableArray['total_plus'] += 1;
                 } else {
-                    $popCardReportModel->increment("total", 1);
+                    $reportsTableArray['total'] += 1;
                 }
             } catch (\Exception $e) {
-                \Log::info("Card Set Report not added for id " . $cardProductId);
+                \Log::info("User Card not added for id " . $userCard->id);
                 \Log::info($e->getMessage());
             }
         }
+
+        return $reportsTableArray;
     }
 
     public function getSeriesReport(): LengthAwarePaginator
     {
-        $itemsPerPage = request('per_page') ?: 100;
+        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopSeriesReport::join('card_series', 'pop_series_reports.card_series_id', 'card_series.id');
 
@@ -109,28 +113,35 @@ class PopReportService
             ->paginate($itemsPerPage);
     }
 
-    public function getSetsReport(int $seriesId): LengthAwarePaginator
+    public function getSetsReport(CardSeries $cardSeries): LengthAwarePaginator
     {
-        $itemsPerPage = request('per_page') ?: 100;
+        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopSetsReport::join('card_sets', 'pop_sets_reports.card_set_id', 'card_sets.id')
-        ->where('pop_sets_reports.card_series_id', $seriesId);
+        ->where('pop_sets_reports.card_series_id', $cardSeries->id);
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_sets_id'])
             ->paginate($itemsPerPage);
     }
 
-    public function getCardsReport(int $setId): LengthAwarePaginator
+    public function getCardsReport(CardSet $cardSet): LengthAwarePaginator
     {
-        $itemsPerPage = request('per_page') ?: 100;
+        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopCardsReport::join('card_products', 'pop_cards_reports.card_product_id', 'card_products.id')
-        ->where('pop_cards_reports.card_set_id', $setId);
+        ->where('pop_cards_reports.card_set_id', $cardSet->id);
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_sets_id'])
             ->paginate($itemsPerPage);
+    }
+
+    protected function generateReportEmptyArray()
+    {
+        foreach (CardGradingService::GRADE_CRITERIA as $key) {
+            $this->reportsTableArray[$this->cleanColumnName($key)] = 0;
+        }
     }
 
     public function getSeriesTotalPopulation()
@@ -138,20 +149,20 @@ class PopReportService
         return $this->getTotalPopulation(new PopSeriesReport());
     }
 
-    public function getSetsTotalPopulation($seriesId)
+    public function getSetsTotalPopulation(CardSeries $cardSeries)
     {
-        return $this->getTotalPopulation(PopSetsReport::where('card_series_id', $seriesId));
+        return $this->getTotalPopulation(PopSetsReport::where('card_series_id', $cardSeries->id));
     }
 
-    public function getCardProductsTotalPopulation($setId)
+    public function getCardProductsTotalPopulation(CardSet $cardSet)
     {
-        return $this->getTotalPopulation(PopCardsReport::where('card_set_id', $setId));
+        return $this->getTotalPopulation(PopCardsReport::where('card_set_id', $cardSet->id));
     }
 
     protected function getTotalPopulation($model)
     {
         return $model->selectRaw(
-            'sum(pr) as pr, sum(fr_plus) as fr_plus, sum(good) as good, sum(good_plus) as good_plus,
+            'sum(pr) as pr, sum(fr) as fr, sum(good) as good, sum(good_plus) as good_plus,
             sum(vg) as vg, sum(vg_plus) as vg_plus, sum(vg_ex) as vg_ex, sum(vg_ex_plus) as vg_ex_plus, sum(ex) as ex,
             sum(ex_plus) as ex_plus, sum(ex_mt) as ex_mt, sum(ex_mt_plus) as ex_mt_plus, sum(nm) as nm, sum(nm_plus) as nm_plus,
             sum(nm_mt) as nm_mt, sum(nm_mt_plus) as nm_mt_plus, sum(mint) as mint, sum(mint_plus) as mint_plus, sum(gem_mt) as gem_mt,
@@ -159,8 +170,8 @@ class PopReportService
         )->get()->first();
     }
 
-    protected function cleanColumnName($overallGrade): string
+    protected function cleanColumnName($grade): string
     {
-        return str_replace('+', 'good', str_replace('-', '_', strtolower(array_search($overallGrade, CardGradingService::GRADE_CRITERIA))));
+        return str_replace('+', '_plus', str_replace('-', '_', strtolower(array_search($grade, CardGradingService::GRADE_CRITERIA))));
     }
 }

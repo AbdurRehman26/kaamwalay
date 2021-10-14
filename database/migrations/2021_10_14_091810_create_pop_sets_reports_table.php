@@ -18,7 +18,7 @@ class CreatePopSetsReportsTable extends Migration
             $table->foreignId('card_series_id')->constrained();
             $table->foreignId('card_set_id')->unique()->constrained();
             $table->integer('pr')->default(0);
-            $table->integer('fr_plus')->default(0);
+            $table->integer('fr')->default(0);
             $table->integer('good')->default(0);
             $table->integer('good_plus')->default(0);
             $table->integer('vg')->default(0);

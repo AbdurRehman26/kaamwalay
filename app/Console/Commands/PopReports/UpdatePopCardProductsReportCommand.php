@@ -29,9 +29,9 @@ class UpdatePopCardProductsReportCommand extends Command
      */
     public function handle(PopReportService $popReportService)
     {
-        $cardProductIds = CardProduct::all()->pluck('id');
-        foreach ($cardProductIds as $cardProductId) {
-            $popReportService->updateCardProductsReport($cardProductId);
+        $cardProducts = CardProduct::all();
+        foreach ($cardProducts as $cardProduct) {
+            $popReportService->updateCardProductsReport($cardProduct);
         }
 
         return 0;

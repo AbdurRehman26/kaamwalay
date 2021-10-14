@@ -76,7 +76,7 @@ class PopReportService
         }
     }
 
-    public function getOverAllPopReport(): array
+    public function getSeriesReport(): array
     {
         return [];
     }

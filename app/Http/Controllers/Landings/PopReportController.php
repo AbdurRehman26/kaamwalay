@@ -12,11 +12,9 @@ class PopReportController extends Controller
     {
     }
 
-    public function getPopReport(): View
+    public function getSeriesReport(): View
     {
-        dd(1);
-
-        $data = $this->popReportService->getOverAllPopReport();
+        $data = $this->popReportService->getSeriesReport();
 
         return view('landings.feed.list', compact('data'));
     }

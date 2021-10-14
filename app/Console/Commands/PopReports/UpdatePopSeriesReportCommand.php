@@ -31,7 +31,11 @@ class UpdatePopSeriesReportCommand extends Command
         $allCardSeries = CardSeries::all();
 
         foreach ($allCardSeries as $cardSeries) {
+            $this->info('Updating reports for card series' . $cardSeries->id);
+
             $popReportService->updateSeriesReport($cardSeries);
+
+            $this->info('Updating reports for card series' . $cardSeries->id . ' completed');
         }
         
         return 0;

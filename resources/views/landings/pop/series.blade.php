@@ -29,117 +29,12 @@
                     <thead class="pop-list__table-head">
                         <tr class="pop-list__table-row">
                             <th class="pop-list__table-cell pop-list__table-cell--series">Set / Release Date</th>
-                            <th class="pop-list__table-cell pop-list__table-cell--grade-title"></th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                PR<br/>1
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                FR<br/>1.5
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                GOOD<br/>2
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                VG<br/>3
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                VG-EX<br/>4
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                EX<br/>5
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                EX-MT<br/>6
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                NM<br/>7
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                NM-MT<br/>8
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                MINT<br/>9
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                GEM-MT<br/>10
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--total">Total</th>
+                            @include('landings.pop.partials.common-table-headings')
                         </tr>
                     </thead>
 
                     <tbody class="pop-list__table-body">
-                        <tr class="pop-list__table-total-row">
-                            <td class="pop-list__table-cell pop-list__table-cell--series">
-                                <div class="pop-list__table__info-text">
-                                    <p class="pop-list__table__info-heading">Total Population</p>
-                                </div>
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--grade-title">
-                                Grade
-                                <br/>
-                                +
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->pr}}
-                                <br/>
-                                -
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                -
-                                <br/>
-                                {{$totalPopulation->fr_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->good}}
-                                <br/>
-                                {{$totalPopulation->good_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->vg}}
-                                <br/>
-                                {{$totalPopulation->vg_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->vg_ex}}
-                                <br/>
-                                {{$totalPopulation->vg_ex_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->ex}}
-                                <br/>
-                                {{$totalPopulation->ex_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->ex_mt}}
-                                <br/>
-                                {{$totalPopulation->ex_mt_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->nm}}
-                                <br/>
-                                {{$totalPopulation->nm_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->nm_mt}}
-                                <br/>
-                                {{$totalPopulation->nm_mt_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->mint}}
-                                <br/>
-                                -
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->gem_mt}}
-                                <br/>
-                                -
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--total">
-                                {{$totalPopulation->total}}
-                                <br/>
-                                {{$totalPopulation->total_plus}}
-                            </td>
-                        </tr>
+                        @include('landings.pop.partials.total-population-row', $totalPopulation)
                         @foreach($data as $i => $cardSetsReport)
                             <tr class="pop-list__table-row">
                                 <td class="pop-list__table-cell pop-list__table-cell--series">
@@ -157,83 +52,17 @@
                                     +
                                     </a>
                                 </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->pr}}
-                                        <br/>
-                                        -
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        -
-                                        <br/>
-                                        {{$cardSetsReport->fr_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->good}}
-                                        <br/>
-                                        {{$cardSetsReport->good_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->vg}}
-                                        <br/>
-                                        {{$cardSetsReport->vg_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->vg_ex}}
-                                        <br/>
-                                        {{$cardSetsReport->vg_ex_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->ex}}
-                                        <br/>
-                                        {{$cardSetsReport->ex_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->ex_mt}}
-                                        <br/>
-                                        {{$cardSetsReport->ex_mt_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->nm}}
-                                        <br/>
-                                        {{$cardSetsReport->nm_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->nm_mt}}
-                                        <br/>
-                                        {{$cardSetsReport->nm_mt_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->mint}}
-                                        <br/>
-                                        {{$cardSetsReport->mint_plus}}
-                                    </a>
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
-                                        {{$cardSetsReport->gem_mt}}
-                                        <br/>
-                                        -
-                                    </a>
-                                </td>
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->pr, 'plusValue' => '-'])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => '-', 'plusValue' => $cardSetsReport->fr_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->good, 'plusValue' => $cardSetsReport->good_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->vg, 'plusValue' => $cardSetsReport->vg_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->vg_ex, 'plusValue' => $cardSetsReport->vg_ex_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->ex, 'plusValue' => $cardSetsReport->ex_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->ex_mt, 'plusValue' => $cardSetsReport->ex_mt_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->nm, 'plusValue' => $cardSetsReport->nm_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->nm_mt, 'plusValue' => $cardSetsReport->nm_mt_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->mint, 'plusValue' => $cardSetsReport->mint_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->gem_mt, 'plusValue' => '-'])
                                 <td class="pop-list__table-cell pop-list__table-cell--total">
                                     <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
                                         {{$cardSetsReport->total}}

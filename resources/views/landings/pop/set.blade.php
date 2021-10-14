@@ -31,125 +31,22 @@
                     <thead class="pop-list__table-head">
                         <tr class="pop-list__table-row">
                             <th class="pop-list__table-cell pop-list__table-cell--card">Card / Release Date</th>
-                            <th class="pop-list__table-cell pop-list__table-cell--grade-title"></th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                PR<br/>1
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                FR<br/>1.5
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                GOOD<br/>2
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                VG<br/>3
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                VG-EX<br/>4
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                EX<br/>5
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                EX-MT<br/>6
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                NM<br/>7
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                NM-MT<br/>8
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                MINT<br/>9
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--value">
-                                GEM-MT<br/>10
-                            </th>
-                            <th class="pop-list__table-cell pop-list__table-cell--total">Total</th>
+                            @include('landings.pop.partials.common-table-headings')
                         </tr>
                     </thead>
 
                     <tbody class="pop-list__table-body">
-                        <tr class="pop-list__table-total-row">
-                            <td class="pop-list__table-cell pop-list__table-cell--series">
-                                <div class="pop-list__table__info-text">
-                                    <p class="pop-list__table__info-heading">Total Population</p>
-                                </div>
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--grade-title">
-                                Grade
-                                <br/>
-                                +
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->pr}}
-                                <br/>
-                                -
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                -
-                                <br/>
-                                {{$totalPopulation->fr_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->good}}
-                                <br/>
-                                {{$totalPopulation->good_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->vg}}
-                                <br/>
-                                {{$totalPopulation->vg_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->vg_ex}}
-                                <br/>
-                                {{$totalPopulation->vg_ex_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->ex}}
-                                <br/>
-                                {{$totalPopulation->ex_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->ex_mt}}
-                                <br/>
-                                {{$totalPopulation->ex_mt_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->nm}}
-                                <br/>
-                                {{$totalPopulation->nm_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->nm_mt}}
-                                <br/>
-                                {{$totalPopulation->nm_mt_plus}}
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->mint}}
-                                <br/>
-                                -
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--value">
-                                {{$totalPopulation->gem_mt}}
-                                <br/>
-                                -
-                            </td>
-                            <td class="pop-list__table-cell pop-list__table-cell--total">
-                                {{$totalPopulation->total}}
-                                <br/>
-                                {{$totalPopulation->total_plus}}
-                            </td>
-                        </tr>
+                        @include('landings.pop.partials.total-population-row', $totalPopulation)
                         @foreach($data as $i => $cardsReport)
                             <tr class="pop-list__table-row">
                                 <td class="pop-list__table-cell pop-list__table-cell--card">
-                                    <img class="pop-list__table__info-image" src="{{ $cardsReport->image_path }}" alt="Card" width="52" />
-                                    <div class="pop-list__table__info-text">
-                                        <p class="pop-list__table__info-heading">{{ $cardsReport->name }}</p>
-                                        <p class="pop-list__table__info-subheading display-desktop">{{ $cardsReport->cardProduct->getSearchableName() }}</p>
-                                        <p class="pop-list__table__info-subheading display-mobile">{{$cardsReport->card_number_order}}</p>
+                                    <div class="pop-list__table-cell--card-content">
+                                        <img class="pop-list__table__info-image" src="{{ $cardsReport->image_path }}" alt="Card" width="52" />
+                                        <div class="pop-list__table__info-text">
+                                            <p class="pop-list__table__info-heading">{{ $cardsReport->cardProduct->getShortName() }}</p>
+                                            <p class="pop-list__table__info-subheading display-desktop">{{ $cardsReport->cardProduct->getSearchableName() }}</p>
+                                            <p class="pop-list__table__info-subheading display-mobile">{{$cardsReport->card_number_order}}</p>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--grade-title">
@@ -157,61 +54,17 @@
                                     <br/>
                                     +
                                 </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->pr}}
-                                    <br/>
-                                    -
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    -
-                                    <br/>
-                                    {{$cardsReport->fr_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->good}}
-                                    <br/>
-                                    {{$cardsReport->good_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->vg}}
-                                    <br/>
-                                    {{$cardsReport->vg_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->vg_ex}}
-                                    <br/>
-                                    {{$cardsReport->vg_ex_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->ex}}
-                                    <br/>
-                                    {{$cardsReport->ex_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->ex_mt}}
-                                    <br/>
-                                    {{$cardsReport->ex_mt_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->nm}}
-                                    <br/>
-                                    {{$cardsReport->nm_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->nm_mt}}
-                                    <br/>
-                                    {{$cardsReport->nm_mt_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->mint}}
-                                    <br/>
-                                    {{$cardsReport->mint_plus}}
-                                </td>
-                                <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    {{$cardsReport->gem_mt}}
-                                    <br/>
-                                    -
-                                </td>
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->pr, 'plusValue' => '-'])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => '-', 'plusValue' => $cardsReport->fr_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->good, 'plusValue' => $cardsReport->good_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->vg, 'plusValue' => $cardsReport->vg_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->vg_ex, 'plusValue' => $cardsReport->vg_ex_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->ex, 'plusValue' => $cardsReport->ex_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->ex_mt, 'plusValue' => $cardsReport->ex_mt_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->nm, 'plusValue' => $cardsReport->nm_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->nm_mt, 'plusValue' => $cardsReport->nm_mt_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->mint, 'plusValue' => $cardsReport->mint_plus])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->gem_mt, 'plusValue' => '-'])
                                 <td class="pop-list__table-cell pop-list__table-cell--total">
                                     {{$cardsReport->total}}
                                     <br/>

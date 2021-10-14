@@ -7,7 +7,7 @@ import { font } from '@shared/styles/utils';
 
 interface GradeScoreProps extends GridProps {
     label: string;
-    value: number;
+    value: number | string;
     maxWidth?: number | string;
     padding?: number | string;
     align?: TypographyProps['align'];

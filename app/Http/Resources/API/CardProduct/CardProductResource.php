@@ -11,6 +11,7 @@ class CardProductResource extends BaseResource
         return [
             "id" => $this->id,
             "full_name" => $this->getSearchableName(),
+            "short_name" => $this->getShortName(),
             "name" => $this->name,
             "card_category_name" => $this->cardCategory->name,
             "card_set_name" => $this->cardSet->name,
@@ -19,6 +20,9 @@ class CardProductResource extends BaseResource
             "release_year" => $this->cardSet->release_year,
             "card_number_order" => $this->getFormattedCardNumber(),
             "image_path" => $this->image_path,
+            "variant_name" => $this->variant_name,
+            "variant_category" => $this->variant_category,
+            "holo_type" => $this->holo_type,
         ];
     }
 }

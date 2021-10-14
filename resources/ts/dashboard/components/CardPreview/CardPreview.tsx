@@ -16,7 +16,7 @@ type CardPreviewProps = {
     name: string;
     description: string;
     certification: string;
-    grade?: number;
+    grade?: string;
 };
 
 const useStyles = makeStyles(

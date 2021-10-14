@@ -396,7 +396,7 @@
                             </td>
                             <td class="description">
                                 <div class="item-name">
-                                    {{$item->cardProduct->name}}
+                                    {{$item->cardProduct->getShortName()}}
                                 </div>
                                 <div class="item-desc">
                                     {{$item->cardProduct->getSearchableName()}}

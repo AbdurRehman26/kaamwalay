@@ -7,6 +7,8 @@
  * @apiUse Authorization
  *
  * @apiParam {Array} [filter[order_number]] For filtering records by order number. E.g. filter[order_number]=RG000000001
+ * @apiParam {string} sort For sorting records, supporting params are [grand_total]. E.g. sort=grand_total. Default sort is created_at descending
+ * @apiParam {Array} [include] For including relationships [invoice, paymentPlan, orderItems, orderStatus, orderPayment, shippingAddress, orderStatusHistory, orderStatusHistory.orderStatus, customer, user, orderShipment, orderCustomerShipment]
  *
  * @apiSuccess {Object} data Orders data
  *
@@ -67,7 +69,7 @@
  *                        "shipping_provider": "fedex",
  *                        "tracking_number": "020207021381215"
  *                    }
- *                },
+ *                }
  *            ],
  *            "links": {
  *                "first": "http://robograding.test/api/customer/orders?page=1",

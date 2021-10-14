@@ -37,7 +37,7 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('customer')->group(function () {
     Route::middleware('auth')->group(function () {
-        Route::apiResource('addresses/states', StateController::class);
+        Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
@@ -56,8 +56,8 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
         });
 
-        Route::prefix('/cards')->group(function () {
-            Route::apiResource('/', UserCardController::class)->only(['index']);
+        Route::prefix('cards')->group(function () {
+            Route::get('/', [UserCardController::class, 'index']);
             Route::get('/{userCard}', [UserCardController::class, 'show']);
         });
     });

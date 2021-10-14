@@ -129,102 +129,102 @@
                                 +
                             </td>
                         </tr>
-                        @foreach($data as $i => $cardSeries)
+                        @foreach($data as $i => $cardSeriesReport)
                             <tr class="pop-list__table-row">
                                 <td class="pop-list__table-cell pop-list__table-cell--series">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}" class="pop-list__table__info">
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}" class="pop-list__table__info">
                                         <div class="pop-list__table__info-text">
-                                            <p class="pop-list__table__info-heading">{{$i}}</p>
-                                            <p class="pop-list__table__info-subheading">{{$i}}</p>
+                                            <p class="pop-list__table__info-heading">{{$cardSeriesReport->name}}</p>
+                                            <p class="pop-list__table__info-subheading">{{$cardSeriesReport->created_at}}</p>
                                         </div>
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--grade-title">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
                                     Grade
                                     <br/>
                                     +
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->pr}}
                                         <br/>
                                         -
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
                                         -
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->fr}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->good}}
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->good_plus}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->vg}}
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->vg_plus}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->vg_ex}}
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->vg_ex_plus}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->ex}}
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->ex_plus}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->ex_mt}}
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->ex_mt_plus}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->nm}}
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->nm_plus}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->nm_mt}}
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->nm_mt_plus}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->mint}}
                                         <br/>
-                                        +
+                                        {{$cardSeriesReport->mint_plus}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
-                                        Grade
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
+                                        {{$cardSeriesReport->gem_mt}}
                                         <br/>
-                                        +
+                                        -
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--total">
-                                    <a href="{{ route('pop.series', ['seriesId' => $i]) }}">
+                                    <a href="{{ route('pop.series', ['seriesId' => $cardSeriesReport->card_series_id]) }}">
                                         Grade
                                         <br/>
                                         +

@@ -15,6 +15,7 @@ class PopReportController extends Controller
     public function getSeriesReport(): View
     {
         $data = $this->popReportService->getSeriesReport();
+
         return view('landings.pop.report', compact('data'));
     }
 

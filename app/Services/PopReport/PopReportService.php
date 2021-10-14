@@ -80,7 +80,7 @@ class PopReportService
 
     public function getSeriesReport(): LengthAwarePaginator
     {
-        $itemsPerPage = request('per_page') ?: 150;
+        $itemsPerPage = request('per_page') ?: 100;
 
         $query = PopSeriesReport::join('card_series', 'pop_series_reports.card_series_id', 'card_series.id');
 

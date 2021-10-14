@@ -211,9 +211,9 @@
                                     -
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--total">
-                                    Grade
+                                    {{$cardsReport->total}}
                                     <br/>
-                                    +
+                                    {{$cardsReport->total_plus}}
                                 </td>
                             </tr>
                         @endforeach

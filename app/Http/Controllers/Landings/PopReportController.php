@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Landings;
 
 use App\Http\Controllers\Controller;
+use App\Models\CardSeries;
+use App\Models\CardSet;
 use App\Models\PopSeriesReport;
 use App\Services\PopReport\PopReportService;
 use Illuminate\View\View;
@@ -22,21 +24,21 @@ class PopReportController extends Controller
         return view('landings.pop.report', compact('data', 'totalPopulation'));
     }
 
-    public function getSetsReport(int $seriesId): View
+    public function getSetsReport(CardSeries $cardSeries): View
     {
-        $data = $this->popReportService->getSetsReport($seriesId);
+        $data = $this->popReportService->getSetsReport($cardSeries->id);
 
-        $totalPopulation = $this->popReportService->getSetsTotalPopulation($seriesId);
+        $totalPopulation = $this->popReportService->getSetsTotalPopulation($cardSeries->id);
 
-        return view('landings.pop.series', compact('data', 'totalPopulation'));
+        return view('landings.pop.series', compact('data', 'totalPopulation', 'cardSeries'));
     }
 
-    public function getCardsReport(int $seriesId, int $setId): View
+    public function getCardsReport(CardSeries $cardSeries, CardSet $cardSet): View
     {
-        $data = $this->popReportService->getCardsReport($setId);
+        $data = $this->popReportService->getCardsReport($cardSet->id);
 
-        $totalPopulation = $this->popReportService->getCardProductsTotalPopulation($setId);
+        $totalPopulation = $this->popReportService->getCardProductsTotalPopulation($cardSet->id);
 
-        return view('landings.pop.set', compact('data', 'totalPopulation'));
+        return view('landings.pop.set', compact('data', 'totalPopulation', 'cardSet'));
     }
 }

@@ -21,5 +21,4 @@ class PopSeriesReport extends Model
     {
         return $this->hasOne(CardSeries::class, 'id', 'card_series_id');
     }
-
 }

@@ -89,7 +89,7 @@
                             <td class="pop-list__table-cell pop-list__table-cell--value">
                                 -
                                 <br/>
-                                {{$totalPopulation->fr_plus}}
+                                {{$totalPopulation->fr}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
                                 {{$totalPopulation->good}}
@@ -165,7 +165,7 @@
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
                                     -
                                     <br/>
-                                    {{$cardsReport->fr_plus}}
+                                    {{$cardsReport->fr}}
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">
                                     {{$cardsReport->good}}

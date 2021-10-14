@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Landings;
 use App\Http\Controllers\Controller;
 use App\Models\CardSeries;
 use App\Models\CardSet;
-use App\Models\PopSeriesReport;
 use App\Services\PopReport\PopReportService;
 use Illuminate\View\View;
 
@@ -26,18 +25,18 @@ class PopReportController extends Controller
 
     public function getSetsReport(CardSeries $cardSeries): View
     {
-        $data = $this->popReportService->getSetsReport($cardSeries->id);
+        $data = $this->popReportService->getSetsReport($cardSeries);
 
-        $totalPopulation = $this->popReportService->getSetsTotalPopulation($cardSeries->id);
+        $totalPopulation = $this->popReportService->getSetsTotalPopulation($cardSeries);
 
         return view('landings.pop.series', compact('data', 'totalPopulation', 'cardSeries'));
     }
 
     public function getCardsReport(CardSeries $cardSeries, CardSet $cardSet): View
     {
-        $data = $this->popReportService->getCardsReport($cardSet->id);
+        $data = $this->popReportService->getCardsReport($cardSet);
 
-        $totalPopulation = $this->popReportService->getCardProductsTotalPopulation($cardSet->id);
+        $totalPopulation = $this->popReportService->getCardProductsTotalPopulation($cardSet);
 
         return view('landings.pop.set', compact('data', 'totalPopulation', 'cardSet'));
     }

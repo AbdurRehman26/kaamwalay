@@ -28,10 +28,10 @@ class UpdatePopSeriesReportCommand extends Command
      */
     public function handle(PopReportService $popReportService)
     {
-        $cardSeriesIds = CardSeries::all()->pluck('id');
+        $allCardSeries = CardSeries::all();
 
-        foreach ($cardSeriesIds as $cardSeriesId) {
-            $popReportService->updateSeriesReport($cardSeriesId);
+        foreach ($allCardSeries as $cardSeries) {
+            $popReportService->updateSeriesReport($cardSeries);
         }
         
         return 0;

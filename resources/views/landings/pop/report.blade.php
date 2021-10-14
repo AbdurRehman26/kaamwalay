@@ -76,7 +76,7 @@
                             <td class="pop-list__table-cell pop-list__table-cell--value">
                                 -
                                 <br/>
-                                {{$totalPopulation->fr_plus}}
+                                {{$totalPopulation->fr}}
                             </td>
                             <td class="pop-list__table-cell pop-list__table-cell--value">
                                 {{$totalPopulation->good}}
@@ -157,7 +157,7 @@
                                     <a href="{{ route('pop.series', ['cardSeries' => $cardSeriesReport->card_series_id]) }}">
                                         -
                                         <br/>
-                                        {{$cardSeriesReport->fr_plus}}
+                                        {{$cardSeriesReport->fr}}
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--value">

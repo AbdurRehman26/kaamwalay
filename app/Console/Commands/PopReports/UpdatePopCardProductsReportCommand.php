@@ -31,11 +31,11 @@ class UpdatePopCardProductsReportCommand extends Command
     {
         $cardProducts = CardProduct::all();
         foreach ($cardProducts as $cardProduct) {
-            $this->info('Updating reports for card product' . $cardProduct->id);
+            $this->info('Updating reports for card product ' . $cardProduct->id);
 
             $popReportService->updateCardProductsReport($cardProduct);
 
-            $this->info('Updating reports for card product' . $cardProduct->id . ' completed');
+            $this->info('Updating reports for card product ' . $cardProduct->id . ' completed');
         }
 
         return 0;

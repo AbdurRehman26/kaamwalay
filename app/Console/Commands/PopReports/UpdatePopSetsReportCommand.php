@@ -31,11 +31,11 @@ class UpdatePopSetsReportCommand extends Command
     {
         $cardSets = CardSet::all();
         foreach ($cardSets as $cardSet) {
-            $this->info('Updating reports for card sets' . $cardSet->id);
+            $this->info('Updating reports for card sets ' . $cardSet->id);
 
             $popReportService->updateSetsReport($cardSet);
 
-            $this->info('Updating reports for card sets' . $cardSet->id . ' completed');
+            $this->info('Updating reports for card sets ' . $cardSet->id . ' completed');
         }
 
         return 0;

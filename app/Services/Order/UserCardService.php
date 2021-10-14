@@ -52,6 +52,21 @@ class UserCardService
         return $certificate;
     }
 
+    public function getFeedCards(): LengthAwarePaginator
+    {
+        $itemsPerPage = request('per_page');
+
+        return UserCard::with(['orderItem.cardProduct.cardSet.cardSeries', 'orderItem.cardProduct.cardCategory', 'user'])
+        ->join('order_items', 'order_items.id', '=', 'user_cards.order_item_id')
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
+        ->whereIn('order_item_status_histories.order_item_status_id', [OrderItemStatus::GRADED])
+        ->whereIn('orders.order_status_id', [OrderStatus::GRADED,OrderStatus::SHIPPED])
+        ->whereIn('order_items.order_item_status_id', [OrderItemStatus::GRADED])
+        ->select(['user_cards.*','order_item_status_histories.created_at as graded_at'])
+        ->orderBy('reviewed_at', 'desc')
+        ->paginate($itemsPerPage);
+    }
     public function getCustomerCards(User $user): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');

@@ -8,11 +8,14 @@
  *
  * @apiParam {Array} [filter[search]] For for searching orders list based on these columns: order ID, customer Name and Customer ID. E.g. filter[search]=1
  * @apiParam {Array} [filter[order_id]] For filtering records by order ID. E.g. filter[order_id]=1
+ * @apiParam {Array} [filter[order_number]] For filtering records by order number. E.g. filter[order_number]=RG000000029
+ * @apiParam {Array} [filter[order_status]] For filtering records by order number. E.g. filter[order_status]=3
  * @apiParam {Array} [filter[customer_id]] For filtering records by customer ID. E.g. filter[customer_id]=1
  * @apiParam {Array} [filter[customer_name]] For filtering records by customer name. E.g. filter[customer_name]=Jhon
  * @apiParam {Array} [filter[status]] For filtering records by order's status code. E.g. filter[status]=arrived, filter[status]=1
  * @apiParam {string} sort For sorting records, supporting params are [grand_total, -grand_total]. E.g. sort=grand_total
- *
+ * @apiParam {Array} [include] For including relationships [invoice, paymentPlan, orderItems, orderStatus, orderPayment, billingAddress,
+ *  shippingAddress, orderStatusHistory, orderStatus, user, orderShipment, orderCustomerShipment]
  * @apiSuccess {Object} data Orders data
  *
  * @apiSuccessExample Success-Response:

@@ -5,6 +5,9 @@
  *
  * @apiUse header_main
  * @apiUse Authorization
+ * 
+ * @apiParam {Integer} id Order unique ID
+ * @apiParam {string} string Payment Intent unique ID
  *
  * @apiSuccess {string} message response message
  *

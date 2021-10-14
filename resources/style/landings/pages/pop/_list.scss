@@ -75,7 +75,9 @@
                     @apply w-40 sticky left-0 flex;
                 }
             }
-
+            @include breakpoints.down(sm) {
+                @apply text-sm;
+            }
             &--grade-title,
             &--value,
             &--total {

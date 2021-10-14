@@ -9,6 +9,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
+// import { useHistory } from 'react-router-dom';
 import { useAuth } from '@shared/hooks/useAuth';
 
 const useStyles = makeStyles(
@@ -41,6 +42,7 @@ export function DrawerNavigation() {
     const classes = useStyles();
     const { authenticated, logout } = useAuth();
     const [isOpen, setOpen] = useState(false);
+    // const history = useHistory();
 
     const handleOpen = useCallback(() => setOpen(true), [setOpen]);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
@@ -48,6 +50,11 @@ export function DrawerNavigation() {
         await logout();
         handleClose();
     }, [handleClose, logout]);
+
+    function handleItemPress(path: string) {
+        window.location.replace(path);
+        // dispatch(setNavigationDrawerOpen(false));
+    }
 
     return (
         <>
@@ -70,9 +77,18 @@ export function DrawerNavigation() {
                     {/*        />*/}
                     {/*    </ListItem>*/}
                     {/* )}*/}
-                    {/* <ListItem button href={'/feed'}>*/}
-                    {/*    <ListItemText primary={'Feed'} primaryTypographyProps={{ className: classes.listItemText }} />*/}
-                    {/* </ListItem>*/}
+                    <ListItem button onClick={() => handleItemPress('/feed')}>
+                        <ListItemText
+                            primary={'Live Feed'}
+                            primaryTypographyProps={{ className: classes.listItemText }}
+                        />
+                    </ListItem>
+                    <ListItem button onClick={() => handleItemPress('/pop')}>
+                        <ListItemText
+                            primary={'POP Report'}
+                            primaryTypographyProps={{ className: classes.listItemText }}
+                        />
+                    </ListItem>
                     {/* <ListItem button href={'/how-it-works'}>*/}
                     {/*    <ListItemText*/}
                     {/*        primary={'How It Works'}*/}

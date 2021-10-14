@@ -35,6 +35,8 @@ class CreatePopSeriesReportsTable extends Migration
             $table->integer('mint')->default(0);
             $table->integer('mint_plus')->default(0);
             $table->integer('gem_mt')->default(0);
+            $table->integer('total')->default(0);
+            $table->integer('total_plus')->default(0);
             $table->timestamps();
         });
     }

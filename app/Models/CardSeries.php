@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class CardSeries extends Model
 {
@@ -26,5 +27,10 @@ class CardSeries extends Model
     public function cardCategory(): BelongsTo
     {
         return $this->belongsTo(CardCategory::class);
+    }
+
+    public function oldestReleaseDate(): HasOne
+    {
+        return $this->hasOne(CardSet::class)->oldest('release_year');
     }
 }

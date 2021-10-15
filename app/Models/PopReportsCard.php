@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PopCardsReport extends Model
+class PopReportsCard extends Model
 {
     use HasFactory;
 
@@ -16,7 +17,7 @@ class PopCardsReport extends Model
      */
     protected $fillable = ['card_product_id', 'card_set_id'];
 
-    public function cardProduct()
+    public function cardProduct(): BelongsTo
     {
         return $this->belongsTo(CardProduct::class);
     }

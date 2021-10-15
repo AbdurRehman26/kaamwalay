@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Order;
 
-use App\Events\API\Admin\UserCard\UserCardGraded;
+use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
 use App\Models\Order;
@@ -75,10 +75,7 @@ class OrderItemService
             $this->userCardService->createItemUserCard($item);
         }
 
-        // When item is marked as graded.
-        if ($requestStatus->id === OrderItemStatus::GRADED) {
-            UserCardGraded::dispatch($item->cardProduct());
-        }
+        OrderItemStatusChangedEvent::dispatch($item);
 
         return $item->fresh();
     }

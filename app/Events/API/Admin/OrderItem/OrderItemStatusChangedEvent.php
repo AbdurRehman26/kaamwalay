@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Events\API\Admin\UserCard;
+namespace App\Events\API\Admin\OrderItem;
 
-use App\Models\CardProduct;
+use App\Models\OrderItem;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserCardGraded
+class OrderItemStatusChangedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -16,7 +16,7 @@ class UserCardGraded
      *
      * @return void
      */
-    public function __construct(public CardProduct $cardProduct)
+    public function __construct(public OrderItem $orderItem)
     {
         //
     }

@@ -18,7 +18,7 @@
             </aside>
             <aside class="pop-hero__text">
                 <h1 class="pop-hero__text-series-heading">{{$cardSeries->name}}</h1>
-                <h2 class="pop-hero__text-series-subheading"><b>Released:</b> {{$cardSeries->oldestReleaseDate->release_date->format('m/d/Y')}}</h2>
+                <h2 class="pop-hero__text-series-subheading"><b>Released:</b> {{Carbon\Carbon::parse($cardSeries->release_date)->format('m/d/Y')}}</h2>
             </aside>
         </div>
     </section>

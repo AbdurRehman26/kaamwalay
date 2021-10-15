@@ -30,7 +30,7 @@
                                     <a href="{{ route('pop.series', ['cardSeries' => $cardSeriesReport->card_series_id]) }}" class="pop-list__table__info">
                                         <div class="pop-list__table__info-text">
                                             <p class="pop-list__table__info-heading">{{$cardSeriesReport->name}}</p>
-                                            <p class="pop-list__table__info-subheading">{{$cardSeriesReport->cardSeries->oldestReleaseDate->release_date->format('m/d/Y')}}</p>
+                                            <p class="pop-list__table__info-subheading">{{\Carbon\Carbon::parse($cardSeriesReport->cardSeries->release_date)->format('m/d/Y')}}</p>
                                         </div>
                                     </a>
                                 </td>

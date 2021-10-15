@@ -6,14 +6,14 @@ use App\Models\CardProduct;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 
-class UpdatePopCardProductsReportCommand extends Command
+class UpdateCardReportCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'reports-update:card-products';
+    protected $signature = 'pop-reports:update-cards-report';
 
     /**
      * The console command description.
@@ -27,7 +27,7 @@ class UpdatePopCardProductsReportCommand extends Command
      *
      * @return int
      */
-    public function handle(PopReportService $popReportService)
+    public function handle(PopReportService $popReportService): int
     {
         $cardProducts = CardProduct::all();
         foreach ($cardProducts as $cardProduct) {

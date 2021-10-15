@@ -6,14 +6,14 @@ use App\Models\CardSeries;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 
-class UpdatePopSeriesReportCommand extends Command
+class UpdateSeriesReportCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'reports-update:series';
+    protected $signature = 'pop-reports:update-series-report';
 
     /**
      * The console command description.

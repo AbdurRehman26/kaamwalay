@@ -13,7 +13,7 @@ class CreatePopSeriesReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pop_series_reports', function (Blueprint $table) {
+        Schema::create('pop_reports_series', function (Blueprint $table) {
             $table->id();
             $table->foreignId('card_series_id')->unique()->constrained();
             $table->integer('pr')->default(0);
@@ -48,6 +48,6 @@ class CreatePopSeriesReportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pop_series_reports');
+        Schema::dropIfExists('pop_reports_series');
     }
 }

@@ -13,7 +13,7 @@ class CreatePopCardsReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pop_cards_reports', function (Blueprint $table) {
+        Schema::create('pop_reports_cards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('card_set_id')->constrained();
             $table->foreignId('card_product_id')->unique()->constrained();
@@ -49,6 +49,6 @@ class CreatePopCardsReportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pop_cards_reports');
+        Schema::dropIfExists('pop_reports_cards');
     }
 }

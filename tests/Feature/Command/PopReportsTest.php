@@ -18,7 +18,6 @@ beforeEach(function () {
 });
 
 it('initializes POP Reports For Series, Sets and Cards.', function () {
-
     $this->artisan('pop-reports:initialize')
         ->expectsQuestion('Initialize Report Values for :', "All")
         ->expectsOutput('Initializing Values for Series')
@@ -32,5 +31,4 @@ it('initializes POP Reports For Series, Sets and Cards.', function () {
     $this->assertDatabaseCount('pop_reports_series', CardSeries::count());
     $this->assertDatabaseCount('pop_reports_sets', CardSet::count());
     $this->assertDatabaseCount('pop_reports_cards', CardProduct::count());
-
 });

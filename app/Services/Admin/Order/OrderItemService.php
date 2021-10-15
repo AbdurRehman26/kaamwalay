@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Order;
 
+use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
 use App\Models\Order;
@@ -73,6 +74,8 @@ class OrderItemService
         if ($requestStatus->id === OrderItemStatus::CONFIRMED && ! $item->userCard) {
             $this->userCardService->createItemUserCard($item);
         }
+
+        OrderItemStatusChangedEvent::dispatch($item);
 
         return $item->fresh();
     }

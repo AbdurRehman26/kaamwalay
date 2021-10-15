@@ -189,11 +189,21 @@
  *                              "exp_year": 2024,
  *                              "last4": "4242"
  *                          },
+ *                          "order_id": 1,
  *                          "notes": "Lorem ispum",
  *                          "amount": "12.22",
  *                          "type": "extra_charge",
  *                     }
- *                 ]
+ *                 ],
+ *                 "refunds": [
+ *                     {
+ *                         "id": 1,
+ *                         "order_id": 1,
+ *                         "notes": "Lorem Ispum",
+ *                         "amount": "10.00",
+ *                         "type": "refund"
+ *                     }
+ *                 ],
  *            }
  *        }
  */

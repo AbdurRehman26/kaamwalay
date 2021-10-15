@@ -46,6 +46,7 @@ class OrderPaymentResource extends BaseResource
                     'last4' => $card?->last4,
                 ],
             ]),
+            'order_id' => $this->order_id,
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => array_search($this->type, OrderPayment::PAYMENT_TYPES),

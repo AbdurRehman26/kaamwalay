@@ -9,7 +9,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
-// import { useHistory } from 'react-router-dom';
 import { useAuth } from '@shared/hooks/useAuth';
 
 const useStyles = makeStyles(
@@ -42,7 +41,6 @@ export function DrawerNavigation() {
     const classes = useStyles();
     const { authenticated, logout } = useAuth();
     const [isOpen, setOpen] = useState(false);
-    // const history = useHistory();
 
     const handleOpen = useCallback(() => setOpen(true), [setOpen]);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
@@ -53,7 +51,6 @@ export function DrawerNavigation() {
 
     function handleItemPress(path: string) {
         window.location.replace(path);
-        // dispatch(setNavigationDrawerOpen(false));
     }
 
     return (

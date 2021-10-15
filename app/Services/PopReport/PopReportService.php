@@ -77,7 +77,7 @@ class PopReportService
         $popCardReportModel->where($whereCondition)->update($reportsTableArray);
     }
 
-    protected function accumulateReportRow(Collection $userCards)
+    protected function accumulateReportRow(Collection $userCards): array
     {
         $reportsTableArray = $this->reportsTableArray;
 
@@ -158,7 +158,11 @@ class PopReportService
         return $this->getTotalPopulation(PopCardsReport::where('card_set_id', $cardSet->id));
     }
 
-    protected function getTotalPopulation($model)
+    /**
+     * @param $model | CardSet | CardSeries | CardProduct
+     * @return mixed
+     */
+    protected function getTotalPopulation($model): mixed
     {
         return $model->selectRaw(
             'sum(pr) as pr, sum(fr) as fr, sum(good) as good, sum(good_plus) as good_plus,

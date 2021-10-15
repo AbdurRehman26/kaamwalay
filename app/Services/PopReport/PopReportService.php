@@ -46,10 +46,9 @@ class PopReportService
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
-            ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
             ->where('card_products.card_set_id', $cardSet->id)
             ->where('user_cards.overall_grade', '>', 0)
-            ->select('user_cards.overall_grade', 'card_sets.card_series_id as card_series_id')
+            ->select('user_cards.overall_grade')
             ->get();
 
         $whereCondition = [  'card_set_id' => $cardSet->id , 'card_series_id' => $cardSet->card_series_id ];
@@ -78,7 +77,7 @@ class PopReportService
         $popCardReportModel->where($whereCondition)->update($reportsTableArray);
     }
 
-    protected function accumulateReportRow(Collection $userCards)
+    protected function accumulateReportRow(Collection $userCards): array
     {
         $reportsTableArray = $this->reportsTableArray;
 
@@ -159,7 +158,11 @@ class PopReportService
         return $this->getTotalPopulation(PopCardsReport::where('card_set_id', $cardSet->id));
     }
 
-    protected function getTotalPopulation($model)
+    /**
+     * @param $model | CardSet | CardSeries | CardProduct
+     * @return mixed
+     */
+    protected function getTotalPopulation($model): mixed
     {
         return $model->selectRaw(
             'sum(pr) as pr, sum(fr) as fr, sum(good) as good, sum(good_plus) as good_plus,

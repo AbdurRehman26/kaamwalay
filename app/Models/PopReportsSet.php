@@ -15,8 +15,4 @@ class PopReportsSet extends Model
      * @var array
      */
     protected $fillable = ['card_set_id', 'card_series_id'];
-
-    protected $casts = [
-        'release_date' => 'date',
-    ];
 }

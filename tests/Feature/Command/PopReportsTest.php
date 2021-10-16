@@ -39,6 +39,7 @@ it('initializes POP Reports For Series, Sets and Cards.', function () {
     $this->assertDatabaseCount('pop_reports_series', CardSeries::count());
     $this->assertDatabaseCount('pop_reports_sets', CardSet::count());
     $this->assertDatabaseCount('pop_reports_cards', CardProduct::count());
+<<<<<<< HEAD
 });
 
 it('Updates series reports values', function () {
@@ -71,4 +72,6 @@ it('Updates cards reports values', function () {
         'card_product_id' => $this->cardProduct->id,
         'card_set_id' => $this->cardProduct->cardSet->id,
     ]);
+=======
+>>>>>>> 013486fd1a75f91b21a7cea44bdb783a8a49036e
 });

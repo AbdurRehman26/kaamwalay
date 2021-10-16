@@ -25,6 +25,7 @@ class PopReportService
     {
         $this->generateReportEmptyArray();
     }
+
     public function updateSeriesReport(CardSeries $cardSeries)
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
@@ -78,6 +79,56 @@ class PopReportService
         $popCardReportModel->where($whereCondition)->update($reportsTableArray);
     }
 
+    public function getSeriesReport(): LengthAwarePaginator
+    {
+        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
+
+        $query = PopReportsSeries::join('card_series', 'pop_reports_series.card_series_id', 'card_series.id');
+
+        return QueryBuilder::for($query)
+            ->allowedSorts(['card_series_id'])
+            ->paginate($itemsPerPage);
+    }
+
+    public function getSetsReport(CardSeries $cardSeries): LengthAwarePaginator
+    {
+        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
+
+        $query = PopReportsSet::join('card_sets', 'pop_reports_sets.card_set_id', 'card_sets.id')
+            ->where('pop_reports_sets.card_series_id', $cardSeries->id);
+
+        return QueryBuilder::for($query)
+            ->allowedSorts(['card_sets_id'])
+            ->paginate($itemsPerPage);
+    }
+
+    public function getCardsReport(CardSet $cardSet): LengthAwarePaginator
+    {
+        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
+
+        $query = PopReportsCard::join('card_products', 'pop_reports_cards.card_product_id', 'card_products.id')
+            ->where('pop_reports_cards.card_set_id', $cardSet->id);
+
+        return QueryBuilder::for($query)
+            ->allowedSorts(['card_sets_id'])
+            ->paginate($itemsPerPage);
+    }
+
+    public function getSeriesTotalPopulation(): mixed
+    {
+        return $this->getTotalPopulation(PopReportsSeries::query());
+    }
+
+    public function getSetsTotalPopulation(CardSeries $cardSeries): mixed
+    {
+        return $this->getTotalPopulation(PopReportsSet::where('card_series_id', $cardSeries->id));
+    }
+
+    public function getCardProductsTotalPopulation(CardSet $cardSet): mixed
+    {
+        return $this->getTotalPopulation(PopReportsCard::where('card_set_id', $cardSet->id));
+    }
+
     protected function accumulateReportRow(Collection $userCards): array
     {
         $reportsTableArray = $this->reportsTableArray;
@@ -102,61 +153,11 @@ class PopReportService
         return $reportsTableArray;
     }
 
-    public function getSeriesReport(): LengthAwarePaginator
-    {
-        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
-
-        $query = PopReportsSeries::join('card_series', 'pop_reports_series.card_series_id', 'card_series.id');
-
-        return QueryBuilder::for($query)
-            ->allowedSorts(['card_series_id'])
-            ->paginate($itemsPerPage);
-    }
-
-    public function getSetsReport(CardSeries $cardSeries): LengthAwarePaginator
-    {
-        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
-
-        $query = PopReportsSet::join('card_sets', 'pop_reports_sets.card_set_id', 'card_sets.id')
-        ->where('pop_reports_sets.card_series_id', $cardSeries->id);
-
-        return QueryBuilder::for($query)
-            ->allowedSorts(['card_sets_id'])
-            ->paginate($itemsPerPage);
-    }
-
-    public function getCardsReport(CardSet $cardSet): LengthAwarePaginator
-    {
-        $itemsPerPage = request('per_page') ?: self::PER_PAGE;
-
-        $query = PopReportsCard::join('card_products', 'pop_reports_cards.card_product_id', 'card_products.id')
-        ->where('pop_reports_cards.card_set_id', $cardSet->id);
-
-        return QueryBuilder::for($query)
-            ->allowedSorts(['card_sets_id'])
-            ->paginate($itemsPerPage);
-    }
-
     protected function generateReportEmptyArray()
     {
         foreach (CardGradingService::GRADE_CRITERIA as $key) {
             $this->reportsTableArray[$this->cleanColumnName($key)] = 0;
         }
-    }
-
-    public function getSeriesTotalPopulation(): mixed
-    {
-        return $this->getTotalPopulation(PopReportsSeries::query());
-    }
-
-    public function getSetsTotalPopulation(CardSeries $cardSeries): mixed
-    {
-        return $this->getTotalPopulation(PopReportsSet::where('card_series_id', $cardSeries->id));
-    }
-
-    public function getCardProductsTotalPopulation(CardSet $cardSet): mixed
-    {
-        return $this->getTotalPopulation(PopReportsCard::where('card_set_id', $cardSet->id));
     }
 
     protected function getTotalPopulation(Builder $model): mixed

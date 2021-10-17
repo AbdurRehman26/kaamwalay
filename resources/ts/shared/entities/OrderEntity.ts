@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
+import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
 import { OrderItemStatusEnum } from '../constants/OrderItemStatusEnum';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { DateField } from '../decorators/DateField';
@@ -41,6 +43,12 @@ export class OrderEntity extends Entity {
     @Type(() => PaymentMethodEntity)
     public paymentMethod!: PaymentMethodEntity;
 
+    @Type(() => OrderExtraChargeEntity)
+    public extraCharges!: OrderExtraChargeEntity[];
+
+    @Type(() => OrderRefundEntity)
+    public refunds!: OrderRefundEntity[];
+
     @Type(() => ShippingMethodEntity)
     public shippingMethod!: ShippingMethodEntity;
 
@@ -73,6 +81,16 @@ export class OrderEntity extends Entity {
 
     public get status() {
         return this.orderStatus?.code;
+    }
+
+    public getRefundsTotal() {
+        const refunds = this.refunds === undefined ? [] : this.refunds;
+        return refunds.reduce((n, { amount }) => n + Number(amount), 0);
+    }
+
+    public getExtraChargesTotal() {
+        const extraCharges = this.extraCharges === undefined ? [] : this.extraCharges;
+        return extraCharges.reduce((n, { amount }) => n + Number(amount), 0);
     }
 
     public getItemsByStatus(status: OrderItemStatusEnum): OrderItemEntity[] {

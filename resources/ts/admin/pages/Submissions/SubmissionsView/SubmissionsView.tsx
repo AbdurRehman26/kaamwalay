@@ -2,15 +2,18 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharges';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
+import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { SubmissionsViewDetails } from './SubmissionsViewDetails';
 import { SubmissionsViewHeader } from './SubmissionsViewHeader';
 
 export function SubmissionsView() {
     const { id } = useParams<{ id: string }>();
+    const [showPaymentActionsModal, setShowPaymentActionsModal] = useState(false);
 
     const { data, isLoading } = useAdminOrderQuery({
         resourceId: id,
@@ -25,6 +28,8 @@ export function SubmissionsView() {
                     'orderStatus',
                     'orderItems',
                     'orderShipment',
+                    'extraCharges',
+                    'refunds',
                     'orderStatusHistory.orderStatus',
                 ],
             },
@@ -41,12 +46,18 @@ export function SubmissionsView() {
 
     return (
         <Grid container direction={'column'}>
+            <SubmissionPaymentActionsModal
+                openState={showPaymentActionsModal}
+                orderId={id}
+                setShowPaymentActionsModal={setShowPaymentActionsModal}
+            />
             <SubmissionsViewHeader
                 orderId={Number(id)}
                 orderNumber={data?.orderNumber ?? ''}
                 orderStatus={data?.orderStatus}
                 orderStatusHistory={data?.orderStatusHistory}
                 orderShipment={data?.orderShipment}
+                setShowPaymentActionsModal={setShowPaymentActionsModal}
             />
             <Divider />
             <SubmissionsViewDetails
@@ -65,6 +76,15 @@ export function SubmissionsView() {
                 billingAddress={data.billingAddress}
                 shippingAddress={data.shippingAddress}
                 payment={data.orderPayment}
+                refundsTotal={String(data?.getRefundsTotal())}
+                extraChargesTotal={String(data?.getExtraChargesTotal())}
+            />
+            <Divider />
+            <RefundsAndExtraCharges
+                mode={'admin'}
+                orderId={id}
+                extraCharges={data?.extraCharges}
+                refunds={data?.refunds}
             />
             <SubmissionViewCards items={data.orderItems} serviceLevelPrice={data.paymentPlan?.price} />
         </Grid>

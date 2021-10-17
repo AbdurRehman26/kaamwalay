@@ -1,6 +1,4 @@
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { useMemo } from 'react';
@@ -12,6 +10,7 @@ import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEnt
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
+import SubmissionHeaderMoreButton from '@admin/pages/Submissions/SubmissionsView/SubmissionHeaderMoreButton';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 
 interface SubmissionViewHeaderProps {
@@ -20,6 +19,8 @@ interface SubmissionViewHeaderProps {
     orderStatus: OrderStatusEntity;
     orderStatusHistory: OrderStatusHistoryEntity[];
     orderShipment?: ShipmentEntity | null;
+    // TODO: Figure TS Type for functions passed as props
+    setShowPaymentActionsModal?: any;
 }
 
 const useStyles = makeStyles(
@@ -48,6 +49,7 @@ export function SubmissionsViewHeader({
     orderStatus,
     orderStatusHistory,
     orderShipment,
+    setShowPaymentActionsModal,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
 
@@ -90,9 +92,7 @@ export function SubmissionsViewHeader({
                         trackingNumber={orderShipment?.trackingNumber}
                         shippingProvider={orderShipment?.shippingProvider}
                     />
-                    <IconButton size={'medium'} className={classes.menuButton}>
-                        <MoreVertIcon />
-                    </IconButton>
+                    <SubmissionHeaderMoreButton setShowPaymentActionsModal={setShowPaymentActionsModal} />
                 </Grid>
             </Grid>
             <StatusProgressBar steps={history} />

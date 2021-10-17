@@ -28,7 +28,8 @@ interface SubmissionsViewDetailsProps {
     customerPhone: string;
     billingAddress: AddressEntity;
     shippingAddress: AddressEntity;
-
+    extraChargesTotal: string;
+    refundsTotal: string;
     payment: OrderPaymentEntity;
 }
 
@@ -58,6 +59,8 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         billingAddress,
         shippingAddress,
         payment,
+        extraChargesTotal,
+        refundsTotal,
     } = props;
 
     const classes = useStyles();
@@ -96,9 +99,11 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             'Total Declared Value:': formatCurrency(declaredValue),
             'Service Fee:': formatCurrency(serviceFee),
             'Insured Shipping:': formatCurrency(shippingFee),
+            ...(Number(extraChargesTotal) > 0 && { 'Extra Charge:': formatCurrency(extraChargesTotal) }),
+            ...(Number(refundsTotal) > 0 && { 'Refund:': formatCurrency(refundsTotal) }),
             'Total:': formatCurrency(grandTotal),
         }),
-        [declaredValue, grandTotal, serviceFee, shippingFee],
+        [declaredValue, grandTotal, serviceFee, shippingFee, extraChargesTotal, refundsTotal],
     );
 
     return (

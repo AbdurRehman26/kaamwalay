@@ -1,7 +1,10 @@
 import { plainToClass } from 'class-transformer';
 import { Injectable } from '@shared/decorators/Injectable';
 import { AddCardToOrderDto } from '@shared/dto/AddCardToOrderDto';
+import { AddExtraChargeToOrderDTO } from '@shared/dto/AddExtraChargeToOrderDTO';
 import { EditCardOfOrderDto } from '@shared/dto/EditCardOfOrderDto';
+import { EditTransactionNotesDTO } from '@shared/dto/EditTransactionNotesDTO';
+import { RefundOrderTransactionDTO } from '@shared/dto/RefundOrderTransactionDTO';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
@@ -41,6 +44,30 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const { orderId, cardProductId: cardId, orderItemId, value } = input;
         const body = toApiPropertiesObject({ cardId, value });
         const { data } = await this.endpoint.put(`/items/:orderItemId`, body, { params: { orderItemId, orderId } });
+
+        return plainToClass(OrderItemEntity, data);
+    }
+
+    async addExtraChargeToOrder(input: AddExtraChargeToOrderDTO) {
+        const { notes, amount, orderId } = input;
+        const body = toApiPropertiesObject({ notes, amount });
+        const { data } = await this.endpoint.post(`${orderId}/extra/charge`, body);
+
+        return plainToClass(OrderItemEntity, data);
+    }
+
+    async refundOrderTransaction(input: RefundOrderTransactionDTO) {
+        const { notes, amount, orderId } = input;
+        const body = toApiPropertiesObject({ notes, amount });
+        const { data } = await this.endpoint.post(`${orderId}/refund`, body);
+
+        return plainToClass(OrderItemEntity, data);
+    }
+
+    async editTransactionNotes(input: EditTransactionNotesDTO) {
+        const { orderId, transactionId, notes } = input;
+        const body = toApiPropertiesObject({ notes });
+        const { data } = await this.endpoint.put(`${orderId}/order-payments/${transactionId}`, body);
 
         return plainToClass(OrderItemEntity, data);
     }

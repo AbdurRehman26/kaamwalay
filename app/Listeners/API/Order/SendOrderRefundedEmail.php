@@ -3,6 +3,7 @@
 namespace App\Listeners\API\Order;
 
 use App\Events\API\Customer\Order\OrderRefunded;
+use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,6 +30,7 @@ class SendOrderRefundedEmail implements ShouldBeEncrypted
     public function handle(OrderRefunded $event)
     {
         $user = $event->order->user;
+        $orderPayment = new OrderPaymentResource($event->order->firstOrderPayment);
         $this->emailService->sendEmail(
             $user->email,
             $user->name,

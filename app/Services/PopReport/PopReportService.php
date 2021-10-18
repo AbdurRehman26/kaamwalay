@@ -13,6 +13,7 @@ use App\Services\Admin\CardGradingService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PopReportService
@@ -145,8 +146,8 @@ class PopReportService
                     $reportsTableArray['total'] += 1;
                 }
             } catch (\Exception $e) {
-                \Log::info("User Card not added for id " . $userCard->id);
-                \Log::info($e->getMessage());
+                Log::info("User Card not added for id " . $userCard->id);
+                Log::info($e->getMessage());
             }
         }
 

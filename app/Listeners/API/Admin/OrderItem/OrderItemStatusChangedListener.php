@@ -37,13 +37,10 @@ class OrderItemStatusChangedListener implements ShouldQueue
 
     protected function handleGraded($event)
     {
-        $this->handleUpdateReports($event);
+        $this->updatePopReports($event);
     }
 
-    /**
-     * @param $event
-     */
-    protected function handleUpdateReports($event): void
+    protected function updatePopReports($event): void
     {
         $this->popReportService->updateCardProductsReport($event->orderItem->cardProduct);
         $this->popReportService->updateSetsReport($event->orderItem->cardProduct->cardSet);

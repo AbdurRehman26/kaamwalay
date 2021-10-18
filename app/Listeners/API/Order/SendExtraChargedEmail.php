@@ -2,7 +2,7 @@
 
 namespace App\Listeners\API\Order;
 
-use App\Events\API\Admin\Order\ExtraChargeApplied;
+use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Services\EmailService;
 
 class SendExtraChargedEmail
@@ -21,18 +21,17 @@ class SendExtraChargedEmail
     /**
      * Handle the event.
      *
-     * @param  ExtraChargeApplied  $event
+     * @param  ExtraChargeSuccessful  $event
      * @return void
      */
-    public function handle(ExtraChargeApplied $event)
+    public function handle(ExtraChargeSuccessful $event)
     {
         $order = $event->orderPayment->order;
         $user = $order->user;
         $card = $event->orderPayment->card;
 
         $this->emailService->sendEmail(
-            $user->email,
-            $user->name,
+            [ 'email' => $user->email, 'name' => $user->name ],
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_SUBMISSION_EXTRA_CHARGED],
             $this->emailService::TEMPLATE_SLUG_SUBMISSION_EXTRA_CHARGED,
             [

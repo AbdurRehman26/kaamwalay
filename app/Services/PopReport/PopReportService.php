@@ -13,6 +13,7 @@ use App\Services\Admin\CardGradingService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PopReportService
@@ -25,6 +26,7 @@ class PopReportService
     {
         $this->generateReportEmptyArray();
     }
+
     public function updateSeriesReport(CardSeries $cardSeries)
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
@@ -78,30 +80,6 @@ class PopReportService
         $popCardReportModel->where($whereCondition)->update($reportsTableArray);
     }
 
-    protected function accumulateReportRow(Collection $userCards): array
-    {
-        $reportsTableArray = $this->reportsTableArray;
-
-        foreach ($userCards as $userCard) {
-            $columnName = $this->cleanColumnName($userCard->overall_grade);
-
-            try {
-                $reportsTableArray[$columnName] += 1;
-
-                if (str_contains($columnName, "plus")) {
-                    $reportsTableArray['total_plus'] += 1;
-                } else {
-                    $reportsTableArray['total'] += 1;
-                }
-            } catch (\Exception $e) {
-                \Log::info("User Card not added for id " . $userCard->id);
-                \Log::info($e->getMessage());
-            }
-        }
-
-        return $reportsTableArray;
-    }
-
     public function getSeriesReport(): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
@@ -118,7 +96,7 @@ class PopReportService
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopReportsSet::join('card_sets', 'pop_reports_sets.card_set_id', 'card_sets.id')
-        ->where('pop_reports_sets.card_series_id', $cardSeries->id);
+            ->where('pop_reports_sets.card_series_id', $cardSeries->id);
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_sets_id'])
@@ -130,18 +108,11 @@ class PopReportService
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
         $query = PopReportsCard::join('card_products', 'pop_reports_cards.card_product_id', 'card_products.id')
-        ->where('pop_reports_cards.card_set_id', $cardSet->id);
+            ->where('pop_reports_cards.card_set_id', $cardSet->id);
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_sets_id'])
             ->paginate($itemsPerPage);
-    }
-
-    protected function generateReportEmptyArray()
-    {
-        foreach (CardGradingService::GRADE_CRITERIA as $key) {
-            $this->reportsTableArray[$this->cleanColumnName($key)] = 0;
-        }
     }
 
     public function getSeriesTotalPopulation(): mixed
@@ -157,6 +128,37 @@ class PopReportService
     public function getCardProductsTotalPopulation(CardSet $cardSet): mixed
     {
         return $this->getTotalPopulation(PopReportsCard::where('card_set_id', $cardSet->id));
+    }
+
+    protected function accumulateReportRow(Collection $userCards): array
+    {
+        $reportsTableArray = $this->reportsTableArray;
+
+        foreach ($userCards as $userCard) {
+            $columnName = $this->cleanColumnName($userCard->overall_grade);
+
+            try {
+                $reportsTableArray[$columnName] += 1;
+
+                if (str_contains($columnName, "plus")) {
+                    $reportsTableArray['total_plus'] += 1;
+                } else {
+                    $reportsTableArray['total'] += 1;
+                }
+            } catch (\Exception $e) {
+                Log::info("User Card not added for id " . $userCard->id);
+                Log::info($e->getMessage());
+            }
+        }
+
+        return $reportsTableArray;
+    }
+
+    protected function generateReportEmptyArray()
+    {
+        foreach (CardGradingService::GRADE_CRITERIA as $key) {
+            $this->reportsTableArray[$this->cleanColumnName($key)] = 0;
+        }
     }
 
     protected function getTotalPopulation(Builder $model): mixed

@@ -3,6 +3,10 @@
 use App\Models\CardProduct;
 use App\Models\CardSeries;
 use App\Models\CardSet;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
+use App\Models\OrderStatus;
 use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
@@ -18,11 +22,24 @@ beforeEach(function () {
         CardProductSeeder::class,
     ]);
 
+    $order = Order::factory()->create([
+        'order_status_id' => OrderStatus::GRADED
+    ]);
+
+    $orderItem = OrderItem::factory()->create([
+        'order_id' => $order->id,
+        'order_item_status_id' => OrderItemStatus::GRADED
+    ]);
+
     $this->userCard = UserCard::factory()->state(new Sequence(
-        ['overall_grade' => 10.0]
+        [
+            'overall_grade' => 10.0,
+            'order_item_id' => $orderItem->id
+        ]
     ))->create();
 
     $this->cardProduct = $this->userCard->orderItem->cardProduct;
+
 });
 
 it('initializes POP Reports For Series, Sets and Cards.', function () {

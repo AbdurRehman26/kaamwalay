@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Str;
 
@@ -19,7 +20,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         $paymentData = [
             'customer_id' => Str::random(25),
             'amount' => $order->grand_total_cents,
-            'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->id}",
                 'metadata' => [
@@ -40,7 +41,10 @@ class TestingStripeService implements PaymentProviderServiceInterface
             'success' => true,
             'request' => $paymentData,
             'response' => $response,
-            'payment_provider_reference_id' => $order->orderPayment->payment_provider_reference_id,
+            'payment_provider_reference_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'amount' => $order->grand_total,
+            'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+            'notes' => $paymentData['additional_data']['description'],
         ];
     }
 
@@ -135,7 +139,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
             $charge->amount === $order->grand_total_cents
             && $charge->outcome->type === 'authorized'
         ) {
-            $order->orderPayment->update([
+            $order->lastOrderPayment->update([
                 'response' => json_encode($paymentIntent),
             ]);
 
@@ -157,7 +161,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     {
         $amountCharged = $order->grand_total_cents;
 
-        return  round((float) (
+        return round((
             (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100, 2);
     }
@@ -206,6 +210,90 @@ class TestingStripeService implements PaymentProviderServiceInterface
                     'last4' => 4242,
                 ],
             ],
+        ];
+    }
+
+    public function calculateFeeWithAmount(float $amount): float
+    {
+        $amountCharged = round($amount * 100);
+
+        return $this->calculateFee($amountCharged);
+    }
+
+    public function additionalCharge(Order $order, $request): array
+    {
+        if (! empty($request['fail'])) {
+            return [];
+        }
+        $paymentData = [
+            'customer_id' => Str::random(25),
+            'amount' => (int) $request['amount'] * 100,
+            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'additional_data' => [
+                'description' => $request['notes'],
+                'metadata' => [
+                    'Order ID' => $order->id,
+                    'User Email' => $order->user->email,
+                    'Type' => 'Extra Charge',
+                ],
+            ],
+        ];
+        $response = $this->successfulPaymentResponse($paymentData);
+
+        return [
+            'success' => true,
+            'request' => $paymentData,
+            'response' => $response,
+            'payment_provider_reference_id' => $paymentData['payment_intent_id'],
+            'amount' => $request['amount'],
+            'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+            'notes' => $paymentData['additional_data']['description'],
+        ];
+    }
+
+    public function refund(Order $order, array $data): array
+    {
+        $orderPayment = $order->firstOrderPayment;
+        $paymentData = json_decode($orderPayment->response, associative: true);
+
+        $refundData = [
+            'amount' => (int) $data['amount'] * 100,
+            'metadata' => [
+                'Order ID' => $order->id,
+                'Order #' => $order->order_number,
+                'Notes' => $data['notes'],
+            ],
+        ];
+
+        $response = [
+            "id" => "re_3JkPiHJCai8r8pbf0rt1gnjI",
+            "object" => "refund",
+            "amount" => 100,
+            "balance_transaction" => "txn_3JkPiHJCai8r8pbf0W60PefH",
+            "charge" => "ch_3JkPiHJCai8r8pbf0zKiypJJ",
+            "created" => 1634225868,
+            "currency" => "usd",
+            "metadata" => [
+                "Order ID" => "33",
+                "Order #" => "RG000000033",
+                "Notes" => "Test",
+            ],
+            "payment_intent" => "pi_3JkPiHJCai8r8pbf0jHacjUB",
+            "reason" => null,
+            "receipt_number" => null,
+            "source_transfer_reversal" => null,
+            "status" => "succeeded",
+            "transfer_reversal" => null,
+        ];
+
+        return [
+            'success' => true,
+            'request' => $refundData,
+            'response' => $response,
+            'payment_provider_reference_id' => $response['id'],
+            'amount' => $data['amount'],
+            'type' => OrderPayment::PAYMENT_TYPES['refund'],
+            'notes' => $refundData['metadata']['Notes'],
         ];
     }
 }

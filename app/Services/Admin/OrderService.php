@@ -2,26 +2,35 @@
 
 namespace App\Services\Admin;
 
+use App\Events\API\Admin\Order\ExtraChargeFailed;
+use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
+use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
+use App\Exceptions\API\Admin\Order\FailedExtraCharge;
+use App\Exceptions\API\Admin\Order\FailedRedund;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
+use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 class OrderService
 {
     public function __construct(
-        private  OrderItemService $orderItemService,
+        private OrderItemService $orderItemService,
         private AgsService $agsService
     ) {
     }
@@ -56,8 +65,14 @@ class OrderService
 
     public function getOrderCertificatesData(Order|int $order): array
     {
-        return UserCard::
-            select('certificate_number as certificate_id', 'card_sets.name as set_name', 'card_products.card_number')
+        return UserCard::select([
+                'certificate_number as certificate_id',
+                'card_sets.name as set_name',
+                'card_products.card_number',
+                'card_products.variant_name',
+                'card_products.variant_category',
+                'card_products.holo_type',
+            ])
             ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id')
@@ -133,5 +148,114 @@ class OrderService
                 $card->update(CardGradeResource::make($result)->ignoreParams('overall')->toArray(request()));
             }
         }
+    }
+
+    public function getDataForAdminSubmissionConfirmationEmail(Order $order): array
+    {
+        $data = [];
+
+        $paymentPlan = $order->paymentPlan;
+        $orderItems = $order->getGroupedOrderItems();
+        $orderPayment = OrderPaymentResource::make($order->lastOrderPayment)->resolve();
+
+        $data["SUBMISSION_NUMBER"] = $order->order_number;
+        $data['CUSTOMER_NAME'] = $order->user->getFullName();
+        $data['CUSTOMER_EMAIL'] = $order->user->email;
+        $data['CUSTOMER_NUMBER'] = $order->user->customer_number;
+        $data["TIME"] = $order->created_at->format('h:m A');
+
+        $items = [];
+        foreach ($orderItems as $orderItem) {
+            $card = $orderItem->cardProduct;
+            $items[] = [
+                "CARD_IMAGE_URL" => $card->image_path,
+                "CARD_NAME" => $card->name,
+                "CARD_FULL_NAME" => $card->getSearchableName(),
+                "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
+                "CARD_QUANTITY" => $orderItem->quantity,
+                "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
+            ];
+        }
+
+        $data["ORDER_ITEMS"] = $items;
+        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
+        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
+        $data["TOTAL"] = number_format($order->grand_total, 2);
+
+        $data["SERVICE_LEVEL"] = $paymentPlan->price;
+        $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
+        $data["DATE"] = $order->created_at->format('m/d/Y');
+        $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
+
+        $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
+        $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
+
+        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+
+        return $data;
+    }
+
+    protected function getAddressData($address): array
+    {
+        return [
+            "ID" => $address->id,
+            "FULL_NAME" => $address->first_name . " " . $address->last_name,
+            "ADDRESS" => $address->address,
+            "CITY" => $address->city,
+            "STATE" => $address->state,
+            "ZIP" => $address->zip,
+            "COUNTRY" => $address->country->code,
+            "PHONE" => $address->phone,
+        ];
+    }
+
+    protected function getOrderPaymentText(array $orderPayment): string
+    {
+        if (array_key_exists('card', $orderPayment)) {
+            return ucfirst($orderPayment["card"]["brand"]) . ' ending in ' . $orderPayment["card"]["last4"];
+        } elseif (array_key_exists('payer', $orderPayment)) {
+            return $orderPayment["payer"]["email"] . "\n" . $orderPayment["payer"]["name"];
+        }
+
+        return '';
+    }
+
+    /**
+     * @throws FailedExtraCharge|Throwable
+     */
+    public function addExtraCharge(Order $order, array $data, array $paymentResponse): void
+    {
+        if (empty($paymentResponse)) {
+            ExtraChargeFailed::dispatch($order, $data);
+
+            throw new FailedExtraCharge;
+        }
+        DB::beginTransaction();
+
+        $order->updateAfterExtraCharge($data['amount']);
+
+        $order->createOrderPayment($paymentResponse);
+
+        DB::commit();
+
+        ExtraChargeSuccessful::dispatch($order);
+    }
+
+    public function processRefund(Order $order, array $data, array $refundResponse)
+    {
+        if (empty($refundResponse)) {
+            ExtraChargeFailed::dispatch($order, $data);
+
+            throw new FailedRedund;
+        }
+        DB::beginTransaction();
+
+        $order->updateAfterRefund($data['amount']);
+
+        $order->createOrderPayment($refundResponse);
+
+        DB::commit();
+
+        RefundSuccessful::dispatch($order);
     }
 }

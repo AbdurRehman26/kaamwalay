@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import NoImagePlaceholder from '@shared/assets/no-image.png';
 import OutlinedCard from '@shared/components/OutlinedCard';
 import { useAppSelector } from '@admin/redux/hooks';

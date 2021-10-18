@@ -1,4 +1,4 @@
-import { TablePaginationProps } from '@material-ui/core/TablePagination';
+import { TablePaginationProps } from '@mui/material/TablePagination';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
 import { ClassConstructor, plainToClass } from 'class-transformer';
@@ -8,8 +8,8 @@ import { GlobalStateType } from '../redux/store';
 import { APIService } from '../services/APIService';
 import { APIState } from '../types/APIState';
 import { useInjectable } from './useInjectable';
-import { useSharedSelector } from './useSharedDispatch';
-import { useSharedDispatch } from './useSharedSelector';
+import { useSharedDispatch } from './useSharedDispatch';
+import { useSharedSelector } from './useSharedSelector';
 
 export function useListQuery<
     E,
@@ -32,7 +32,7 @@ export function useListQuery<
     const lastPage = pagination.meta?.lastPage ?? 1;
 
     const data = useMemo(() => {
-        const list = ids.map((id) => entities[id]);
+        const list = ids.map((id: number) => entities[id]);
         // if (perPage) {
         //     const offset = (currentPage - 1) * perPage;
         //     list = list.slice(offset, offset + perPage);
@@ -84,6 +84,14 @@ export function useListQuery<
 
     const search = useCallback((filter: Record<string, any>) => fetch({ params: { filter } }), [fetch]);
 
+    const sort = useCallback((sortFilter: Record<string, any>) => fetch({ params: { sort: sortFilter } }), [fetch]);
+
+    const searchSorted = useCallback(
+        (sortFilter: Record<string, any>, searchFilter: Record<string, any>) =>
+            fetch({ params: { sort: sortFilter, filter: searchFilter } }),
+        [fetch],
+    );
+
     const handleChangePage = useCallback(
         async function handleChangePage(e, page: number) {
             await getPage(page + 1);
@@ -121,6 +129,8 @@ export function useListQuery<
             nextPage,
             previousPage,
             search,
+            sort,
+            searchSorted,
             paginationProps: {
                 count: pagination.meta?.total || 0,
                 page: currentPage - 1,
@@ -138,6 +148,8 @@ export function useListQuery<
             getPage,
             nextPage,
             previousPage,
+            sort,
+            searchSorted,
             search,
             currentPage,
             perPage,

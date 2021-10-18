@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
-import { GlobalStoreType } from '@shared/redux/store';
+import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import { GlobalStateType } from '../redux/store';
 
-export const useSharedDispatch = () => useDispatch<GlobalStoreType['dispatch']>();
+export const useSharedSelector: TypedUseSelectorHook<GlobalStateType> = useSelector;

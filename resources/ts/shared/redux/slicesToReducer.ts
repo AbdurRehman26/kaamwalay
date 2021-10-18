@@ -1,5 +1,5 @@
 import { Slice } from '@reduxjs/toolkit';
-import { ReducersType } from '@shared/redux/types';
+import { ReducersType } from './types';
 
 export function slicesToReducer<S extends Record<string, Slice>>(slices: S) {
     return Object.values(slices).reduce(

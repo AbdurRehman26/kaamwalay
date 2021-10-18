@@ -84,18 +84,21 @@
  *                    }
  *                },
  *                "invoice": {
- *                    "id": 28
- *                    "invoice_number": "RG000000042"
+ *                    "id": 28,
+ *                    "invoice_number": "RG000000042",
  *                    "path": "http://minio:9000/local/invoice/89a79cd1-48a6-4ee6-a606-c62d83f80f50.pdf"
  *                },
  *                "order_payment": {
- *                    "card": {
- *                        "brand": "visa",
- *                        "exp_month": 4,
- *                        "exp_year": 2024,
- *                        "last4": "4242"
- *                    }
- *                },
+ *                      "card": {
+ *                          "brand": "visa",
+ *                          "exp_month": 4,
+ *                          "exp_year": 2024,
+ *                          "last4": "4242"
+ *                      },
+ *                      "notes": "Lorem ispum",
+ *                      "amount": "12.22",
+ *                      "type": "order_payment",
+ *                 },
  *                "order_items": [
  *                    {
  *                        "id": 42,
@@ -132,7 +135,20 @@
  *                     "id": 2,
  *                     "shipping_provider": "fedex",
  *                     "tracking_number": "020207021381215"
- *                 }
- *            }
+ *                 },
+ *                 "extra_charges": [
+ *                     {
+ *                          "card": {
+ *                              "brand": "visa",
+ *                              "exp_month": 4,
+ *                              "exp_year": 2024,
+ *                              "last4": "4242"
+ *                          },
+ *                          "notes": "Lorem ispum",
+ *                          "amount": "12.22",
+ *                          "type": "extra_charge",
+ *                     }
+ *                 ]
+ *          }
  *        }
  */

@@ -12,7 +12,7 @@ import { APIState } from '@shared/types/APIState';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
 import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBatchDto';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
-import { OrderItemStatusEntity } from '../../entities/OrderItemStatusEntity';
+import { OrderItemStatusHistoryEntity } from '../../entities/OrderItemStatusHistoryEntity';
 import { OrderStatusEntity } from '../../entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntity';
 import { ShipmentEntity } from '../../entities/ShipmentEntity';
@@ -33,6 +33,7 @@ export const changeOrderItemStatus = createAsyncThunk(
             return {
                 orderId: input.orderId,
                 orderItemId: input.orderItemId,
+                certificateNumber: item.certificateNumber,
                 status: classToPlain(item.status),
             };
         } catch (e: any) {
@@ -154,12 +155,13 @@ export const adminOrdersSlice = createSlice({
         }
 
         builder.addCase(changeOrderItemStatus.fulfilled, (state, { payload }) => {
-            const { orderId, orderItemId, status } = payload;
+            const { orderId, orderItemId, certificateNumber, status } = payload;
             const order = plainToClass(OrderEntity, state.entities[orderId]);
 
             order.orderItems = (order.orderItems ?? []).map((item) => {
                 if (item.id === orderItemId) {
-                    item.status = plainToClass(OrderItemStatusEntity, status);
+                    item.certificateNumber = certificateNumber;
+                    item.status = plainToClass(OrderItemStatusHistoryEntity, status);
                 }
 
                 return item;

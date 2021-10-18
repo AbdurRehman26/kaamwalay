@@ -1,8 +1,8 @@
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         width: '345px',
         minHeight: '20px',
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
     },
@@ -308,7 +308,9 @@ function SubmissionSummary() {
 
                         <Typography className={classes.greyDescriptionText}>
                             By clicking the above button, you are agreeing to the Robograding{' '}
-                            <span className={classes.darkDescriptionText}>Terms and Conditions.</span>
+                            <a href={'/terms-and-conditions'} className={classes.darkDescriptionText}>
+                                Terms and Conditions.
+                            </a>
                         </Typography>
                     </div>
                 ) : null}

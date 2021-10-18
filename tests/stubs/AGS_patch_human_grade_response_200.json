@@ -3,10 +3,6 @@
     "certificate_id": "09000000",
     "scan_version": "/api/v2",
     "filename": "pidgey2",
-    "grade": {
-        "grade": "7.00",
-        "nickname": "NM"
-    },
     "final_value_to_compare": "6.62",
     "front_scan": {
         "centering_grade": {

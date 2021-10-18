@@ -90,3 +90,21 @@ it('returns payment setup intent for user', function () {
     $this->assertArrayHasKey('client_secret', $result);
     $this->assertArrayHasKey('customer', $result);
 })->group('payment');
+
+it('can charge extra for particular order', function () {
+    $order = Order::factory()->create([
+        'payment_method_id' => 1,
+    ]);
+    OrderPayment::factory()->create([
+        'order_id' => $order->id,
+        'payment_method_id' => 1,
+        'payment_provider_reference_id' => Str::random(25),
+    ]);
+    $result = $this->stripe->additionalCharge($order, [
+        'amount' => 20.00,
+        'notes' => 'Extra Charge',
+        'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+        'payment_method_id' => $order->payment_method_id,
+    ]);
+    $this->assertArrayHasKey('success', $result);
+});

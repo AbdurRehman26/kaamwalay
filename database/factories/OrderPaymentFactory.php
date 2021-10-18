@@ -26,6 +26,7 @@ class OrderPaymentFactory extends Factory
         return [
             'order_id' => Order::factory(),
             'payment_method_id' => PaymentMethod::factory(),
+            'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
         ];
     }
 

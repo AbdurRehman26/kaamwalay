@@ -1,6 +1,6 @@
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import { makeStyles } from '@material-ui/core/styles';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getServiceLevels } from '../redux/slices/newSubmissionSlice';

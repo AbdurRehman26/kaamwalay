@@ -33,6 +33,7 @@ class UserCard extends Model
         'robo_grade_values' => 'array',
         'overall_values' => 'array',
         'generated_images' => 'array',
+        'graded_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -48,6 +49,13 @@ class UserCard extends Model
     public function userCardCertificate(): HasOne
     {
         return $this->hasOne(UserCardCertificate::class);
+    }
+
+    public function getRoundedOverallValues()
+    {
+        return ! is_null($this->overall_values) ? array_map(function ($v) {
+            return round($v, 1);
+        }, $this->overall_values) : $this->overall_values;
     }
 
     public function updateFromAgsResponse(array $response): void

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -17,6 +17,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 class Order extends Model
 {
     use HasFactory;
+    use HasOrderPayments;
 
     /**
      * The attributes that are mass assignable.
@@ -45,6 +46,8 @@ class Order extends Model
         'reviewed_at',
         'graded_at',
         'auto_saved_at',
+        'extra_charge',
+        'refund_amount',
     ];
 
     /**
@@ -72,6 +75,8 @@ class Order extends Model
         'grand_total_cents' => 'integer',
         'reviewed_at' => 'date',
         'graded_at' => 'date',
+        'extra_charge' => 'float',
+        'refund_amount' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -83,7 +88,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -91,6 +96,8 @@ class Order extends Model
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
+            AllowedInclude::relationship('extraCharges'),
+            AllowedInclude::relationship('refunds'),
         ];
     }
 
@@ -114,7 +121,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -122,6 +129,15 @@ class Order extends Model
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
+            AllowedInclude::relationship('extraCharges'),
+            AllowedInclude::relationship('refunds'),
+        ];
+    }
+
+    public static function getAllowedFilters(): array
+    {
+        return [
+            AllowedFilter::partial('order_number'),
         ];
     }
 
@@ -173,11 +189,6 @@ class Order extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
-    }
-
-    public function orderPayment(): HasOne
-    {
-        return $this->hasOne(OrderPayment::class);
     }
 
     public function reviewedBy(): BelongsTo
@@ -281,7 +292,7 @@ class Order extends Model
 
     public function getGroupedOrderItems(): Collection
     {
-        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('min(declared_value_total) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
+        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('sum(declared_value_per_unit) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
         ->where('order_id', $this->id)
         ->groupBy(['card_product_id'])
         ->get();

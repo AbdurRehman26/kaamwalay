@@ -1,7 +1,7 @@
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import {
     AccordionCardItem,
@@ -15,7 +15,6 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 
 interface UnconfirmedCardProps extends AccordionCardItemProps {
-    index: number;
     itemId: number;
     declaredValue: number;
     card: CardProductEntity;
@@ -48,7 +47,6 @@ const useStyles = makeStyles(
 );
 
 export function UnconfirmedCard({
-    index,
     itemId,
     card,
     declaredValue,
@@ -62,7 +60,7 @@ export function UnconfirmedCard({
     const [loading, setLoading] = useState(false);
     const notification = useNotifications();
 
-    const handlePreview = useCallback(() => onPreview(index), [onPreview, index]);
+    const handlePreview = useCallback(() => onPreview(itemId), [onPreview, itemId]);
 
     const handleConfirm = useCallback(async () => {
         setLoading(true);
@@ -115,10 +113,10 @@ export function UnconfirmedCard({
                 </Typography>
 
                 <Grid container alignItems={'center'} className={classes.buttons}>
-                    <Button variant={'contained'} onClick={handleMissing}>
+                    <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
                         Missing
                     </Button>
-                    <Button variant={'contained'} onClick={handleEdit} className={classes.leftSpace}>
+                    <Button variant={'contained'} color={'inherit'} onClick={handleEdit} className={classes.leftSpace}>
                         Edit
                     </Button>
                 </Grid>

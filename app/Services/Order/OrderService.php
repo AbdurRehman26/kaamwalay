@@ -20,7 +20,7 @@ class OrderService
             ->placed()
             ->forUser($user)
             ->allowedIncludes(Order::getAllowedIncludes())
-            ->allowedFilters(['order_number'])
+            ->allowedFilters(Order::getAllowedFilters())
             ->allowedSorts(['grand_total'])
             ->defaultSort('-orders.created_at')
             ->paginate($itemsPerPage);
@@ -39,7 +39,7 @@ class OrderService
 
         $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
-        $orderPayment = OrderPaymentResource::make($order->orderPayment)->resolve();
+        $orderPayment = OrderPaymentResource::make($order->lastOrderPayment)->resolve();
 
         $data["SUBMISSION_NUMBER"] = $order->order_number;
         $data["SHIPPING_INSTRUCTIONS_URL"] = config('app.url') . '/dashboard/submissions/' . $order->id . '/confirmation';

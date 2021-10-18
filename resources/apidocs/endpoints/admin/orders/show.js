@@ -7,7 +7,8 @@
  * @apiUse Authorization
  *
  * @apiParam {Integer} id Order unique ID
- *
+ * @apiParam {Array} [include] For including relationships [invoice, paymentPlan, orderItems, orderStatus, orderPayment, billingAddress,
+ *  shippingAddress, orderStatusHistory, orderStatus, user, orderShipment, orderCustomerShipment]
  * @apiSuccess {Object} data Order object
  *
  * @apiSuccessExample Success-Response:
@@ -18,8 +19,9 @@
  *                "order_number": "RG000000029",
  *                "number_of_cards": 11,
  *                "total_declared_value": 5500,
- *                "grand_total": 263,
+ *                "service_fee": 20,
  *                "shipping_fee": 43,
+ *                "grand_total": 263,
  *                "created_at": {
  *                    "date": "2021-08-12 02:22:46.000000",
  *                    "timezone_type": 3,
@@ -100,7 +102,10 @@
  *                        "exp_month": 4,
  *                        "exp_year": 2024,
  *                        "last4": "4242"
- *                    }
+ *                    },
+ *                    "notes": "Lorem ispum",
+ *                    "amount": "12.22",
+ *                    "type": "order_payment",
  *                },
  *                "order_items": [
  *                    {
@@ -175,7 +180,30 @@
  *                    "shipping_provider": "usps",
  *                    "tracking_number": "9400100000000000000000"
  *                    "tracking_url": "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=9400100000000000000000",
- *                }
+ *                },
+ *                 "extra_charges": [
+ *                     {
+ *                          "card": {
+ *                              "brand": "visa",
+ *                              "exp_month": 4,
+ *                              "exp_year": 2024,
+ *                              "last4": "4242"
+ *                          },
+ *                          "order_id": 1,
+ *                          "notes": "Lorem ispum",
+ *                          "amount": "12.22",
+ *                          "type": "extra_charge",
+ *                     }
+ *                 ],
+ *                 "refunds": [
+ *                     {
+ *                         "id": 1,
+ *                         "order_id": 1,
+ *                         "notes": "Lorem Ispum",
+ *                         "amount": "10.00",
+ *                         "type": "refund"
+ *                     }
+ *                 ],
  *            }
  *        }
  */

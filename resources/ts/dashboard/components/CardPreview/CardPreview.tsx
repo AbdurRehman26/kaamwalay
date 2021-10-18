@@ -1,5 +1,5 @@
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { cx } from '@shared/lib/utils/cx';
@@ -16,7 +16,7 @@ type CardPreviewProps = {
     name: string;
     description: string;
     certification: string;
-    grade?: number;
+    grade?: string;
 };
 
 const useStyles = makeStyles(

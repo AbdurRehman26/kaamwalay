@@ -17,13 +17,39 @@ class MandrillClient
     }
 
     public function sendEmailWithTemplate(
-        string $recipientEmail,
-        string $recipientName,
+        array $recipients,
         string $subject,
         string $templateName,
         array $templateContent = []
     ): Response {
-        $templateContent = collect($templateContent)->flatMap(function (
+        return $this->sendRequest(
+            $recipients,
+            $subject,
+            $templateName,
+            $templateContent
+        );
+    }
+
+    protected function sendRequest(array $recipients, string $subject, string $templateName, array $templateContent): Response
+    {
+        return Http::post($this->baseUrl . '/send-template', [
+            'key' => $this->apiKey,
+            'template_name' => $templateName,
+            'template_content' => [],
+            'message' => [
+                'subject' => $subject,
+                'from_email' => config('mail.from.address'),
+                'from_name' => config('mail.from.name'),
+                'to' => $this->prepareRecipients($recipients),
+                'global_merge_vars' => $this->prepareTemplateContent($templateContent),
+                'merge_language' => 'handlebars',
+            ],
+        ]);
+    }
+
+    protected function prepareTemplateContent(array $templateContent): array
+    {
+        return collect($templateContent)->flatMap(function (
             $placeholderValue,
             $placeholderKey
         ) {
@@ -34,22 +60,19 @@ class MandrillClient
                 ],
             ];
         })->toArray();
+    }
 
-        return Http::post($this->baseUrl . '/send-template', [
-            'key' => $this->apiKey,
-            'template_name' => $templateName,
-            'template_content' => [],
-            'message' => [
-                'subject' => $subject,
-                'from_email' => config('mail.from.address'),
-                'from_name' => config('mail.from.name'),
-                'to' => [[
-                    'email' => $recipientEmail,
-                    'name' => $recipientName,
-                ]],
-                'global_merge_vars' => $templateContent,
-                'merge_language' => 'handlebars',
-            ],
-        ]);
+    protected function prepareRecipients(array $recipients): array
+    {
+        return collect($recipients)->map(function (array $recipient) {
+            foreach ($recipient as $email => $name) {
+                return [
+                    'email' => $email,
+                    'name' => $name,
+                ];
+            }
+
+            return [];
+        })->toArray();
     }
 }

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import * as React from 'react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import PaymentEditNotesModal from '@shared/components/RefundsAndExtraCharges/PaymentEditNotesModal';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 
@@ -88,7 +88,7 @@ export default function PaymentAccordionItem({
         setExpanded(!expanded);
     };
 
-    const getSignBeforeCurrency = () => {
+    const signBeforeCurrency = useMemo(() => {
         if (mode === 'admin') {
             if (type === 'refund') {
                 return '-';
@@ -107,7 +107,7 @@ export default function PaymentAccordionItem({
                 return '-';
             }
         }
-    };
+    }, [mode, type]);
 
     const handleEditNotes = () => {
         setShowEditNotes(true);
@@ -130,7 +130,7 @@ export default function PaymentAccordionItem({
                 <AccordionSummary>
                     <Box flexDirection={'column'}>
                         <Typography variant={'subtitle2'} className={classes.amountText}>
-                            {getSignBeforeCurrency()}${amount}
+                            {signBeforeCurrency}${amount}
                         </Typography>
                         <Box flexDirection={'row'}>
                             <Typography variant={'subtitle2'} className={classes.dateText}>

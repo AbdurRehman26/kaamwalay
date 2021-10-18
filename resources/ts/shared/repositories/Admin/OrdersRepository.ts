@@ -6,7 +6,9 @@ import { EditCardOfOrderDto } from '@shared/dto/EditCardOfOrderDto';
 import { EditTransactionNotesDTO } from '@shared/dto/EditTransactionNotesDTO';
 import { RefundOrderTransactionDTO } from '@shared/dto/RefundOrderTransactionDTO';
 import { OrderEntity } from '@shared/entities/OrderEntity';
+import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
+import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
 import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntity';
@@ -53,7 +55,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const body = toApiPropertiesObject({ notes, amount });
         const { data } = await this.endpoint.post(`${orderId}/extra/charge`, body);
 
-        return plainToClass(OrderItemEntity, data);
+        return plainToClass(OrderExtraChargeEntity, data);
     }
 
     async refundOrderTransaction(input: RefundOrderTransactionDTO) {
@@ -61,7 +63,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const body = toApiPropertiesObject({ notes, amount });
         const { data } = await this.endpoint.post(`${orderId}/refund`, body);
 
-        return plainToClass(OrderItemEntity, data);
+        return plainToClass(OrderRefundEntity, data);
     }
 
     async editTransactionNotes(input: EditTransactionNotesDTO) {

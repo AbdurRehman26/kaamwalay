@@ -3,8 +3,9 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import makeStyles from '@mui/styles/makeStyles';
-import * as React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
+import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -21,20 +22,25 @@ enum Options {
 }
 
 interface SubmissionHeaderMoreButtonProps {
-    // TODO: Figure TS Type for functions passed as props
-    setShowPaymentActionsModal?: any;
+    orderId: number;
 }
 
-export default function SubmissionHeaderMoreButton(props: SubmissionHeaderMoreButtonProps) {
+export default function SubmissionHeaderMoreButton({ orderId }: SubmissionHeaderMoreButtonProps) {
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [showPaymentActionsModal, setShowPaymentActionsModal] = useState<DialogStateEnum | null>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
+
+    const handleClick = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>) => {
+            setAnchorEl(event.currentTarget);
+        },
+        [anchorEl],
+    );
+
+    const handleClose = useCallback(() => {
         setAnchorEl(null);
-    };
+    }, [setAnchorEl]);
 
     const handleOption = useCallback(
         (option: Options) => async () => {
@@ -42,10 +48,10 @@ export default function SubmissionHeaderMoreButton(props: SubmissionHeaderMoreBu
 
             switch (option) {
                 case Options.AddExtraCharge:
-                    props.setShowPaymentActionsModal('show-add-extra-charge');
+                    setShowPaymentActionsModal(DialogStateEnum.ShowAddExtraCharge);
                     break;
                 case Options.IssueRefund:
-                    props.setShowPaymentActionsModal('show-issue-refund');
+                    setShowPaymentActionsModal(DialogStateEnum.ShowIssueRefund);
                     break;
             }
         },
@@ -53,7 +59,7 @@ export default function SubmissionHeaderMoreButton(props: SubmissionHeaderMoreBu
     );
 
     return (
-        <div>
+        <>
             <IconButton size={'medium'} onClick={handleClick} className={classes.menuButton}>
                 <MoreVertIcon />
             </IconButton>
@@ -61,6 +67,11 @@ export default function SubmissionHeaderMoreButton(props: SubmissionHeaderMoreBu
                 <MenuItem onClick={handleOption(Options.AddExtraCharge)}>Add Extra Charge</MenuItem>
                 <MenuItem onClick={handleOption(Options.IssueRefund)}>Issue Refund</MenuItem>
             </Menu>
-        </div>
+            <SubmissionPaymentActionsModal
+                openState={showPaymentActionsModal}
+                orderId={orderId}
+                setShowPaymentActionsModal={setShowPaymentActionsModal}
+            />
+        </>
     );
 }

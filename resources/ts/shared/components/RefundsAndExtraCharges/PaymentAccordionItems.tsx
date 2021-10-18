@@ -5,8 +5,8 @@ import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity'
 import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
 
 interface PaymentAccordionItemsProps {
-    refunds: OrderRefundEntity[];
-    extraCharges: OrderExtraChargeEntity[];
+    refunds: OrderRefundEntity[] | null;
+    extraCharges: OrderExtraChargeEntity[] | null;
     mode: 'customer' | 'admin';
     orderId: string | number;
 }
@@ -14,55 +14,51 @@ export function PaymentAccordionItems({ refunds, extraCharges, mode, orderId }: 
     return (
         <Grid
             container
-            flexDirection={extraCharges.length === 0 ? 'row-reverse' : 'row'}
+            flexDirection={extraCharges?.length === 0 ? 'row-reverse' : 'row'}
             padding={'12px'}
             spacing={2}
             justifyContent={'space-between'}
             maxWidth={'100%'}
         >
             <Grid item sm={6} flexDirection={'column'}>
-                {extraCharges.length === 0 ? null : (
+                {extraCharges?.length !== 0 ? (
                     <Typography variant={'subtitle2'} marginBottom={'12px'}>
                         Extra Charges
                     </Typography>
-                )}
-                {extraCharges.map((item, index) => {
-                    return (
-                        <PaymentAccordionItem
-                            key={index}
-                            mode={mode}
-                            transactionId={item?.id}
-                            orderId={orderId}
-                            type={'extra_charge'}
-                            amount={item.amount}
-                            notes={item.notes}
-                            author={item.author}
-                            updatedAt={item.updatedAt}
-                        />
-                    );
-                })}
+                ) : null}
+                {extraCharges?.map((item, index) => (
+                    <PaymentAccordionItem
+                        key={index}
+                        mode={mode}
+                        transactionId={item?.id}
+                        orderId={orderId}
+                        type={'extra_charge'}
+                        amount={item.amount}
+                        notes={item.notes}
+                        author={item.author}
+                        updatedAt={item.updatedAt}
+                    />
+                ))}
             </Grid>
             <Grid item sm={6} flexDirection={'column'}>
-                {refunds.length === 0 ? null : (
+                {refunds?.length !== 0 ? (
                     <Typography variant={'subtitle2'} marginBottom={'12px'}>
                         Refunds
                     </Typography>
-                )}
-                {refunds.map((item, index) => {
-                    return (
-                        <PaymentAccordionItem
-                            key={index}
-                            mode={mode}
-                            transactionId={item?.id}
-                            orderId={orderId}
-                            type={'refund'}
-                            amount={item.amount}
-                            notes={item.notes}
-                            author={item.author}
-                            updatedAt={item.updatedAt}
-                        />
-                    );
-                })}
+                ) : null}
+                {refunds?.map((item, index) => (
+                    <PaymentAccordionItem
+                        key={index}
+                        mode={mode}
+                        transactionId={item?.id}
+                        orderId={orderId}
+                        type={'refund'}
+                        amount={item.amount}
+                        notes={item.notes}
+                        author={item.author}
+                        updatedAt={item.updatedAt}
+                    />
+                ))}
             </Grid>
         </Grid>
     );

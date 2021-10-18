@@ -146,7 +146,10 @@ export const addExtraChargeToOrder = createAsyncThunk(
 
         try {
             const extraCharge = await ordersRepository.addExtraChargeToOrder(input);
-            return classToPlain({ ...extraCharge, orderId: input.orderId });
+            return {
+                extraCharge: classToPlain(extraCharge) as OrderExtraChargeEntity,
+                orderId: input.orderId,
+            };
         } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
@@ -160,8 +163,11 @@ export const refundOrderTransaction = createAsyncThunk(
         const ordersRepository = app(OrdersRepository);
 
         try {
-            const extraCharge = await ordersRepository.refundOrderTransaction(input);
-            return classToPlain({ ...extraCharge, orderId: input.orderId });
+            const refundTransaction = await ordersRepository.refundOrderTransaction(input);
+            return {
+                extraCharge: classToPlain(refundTransaction) as OrderRefundEntity,
+                orderId: input.orderId,
+            };
         } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
@@ -265,20 +271,20 @@ export const adminOrdersSlice = createSlice({
         });
 
         builder.addCase(addExtraChargeToOrder.fulfilled, (state, { payload }) => {
-            const order = plainToClass(OrderEntity, state.entities[payload.orderId]);
-            const extraCharge = plainToClass(OrderExtraChargeEntity, payload);
-            if (order) {
-                order.extraCharges = [...order.extraCharges, extraCharge];
-                state.entities[payload.orderId] = classToPlain(order) as any;
+            const orderId = payload.orderId;
+            const orderEntity = state.entities[orderId];
+            if (orderEntity) {
+                orderEntity.extraCharges = [...orderEntity.extraCharges, payload.extraCharge];
+                state.entities[orderId] = orderEntity;
             }
         });
 
         builder.addCase(refundOrderTransaction.fulfilled, (state, { payload }) => {
-            const order = plainToClass(OrderEntity, state.entities[payload.orderId]);
-            const refund = plainToClass(OrderRefundEntity, payload);
-            if (order) {
-                order.refunds = [...order.refunds, refund];
-                state.entities[payload.orderId] = classToPlain(order) as any;
+            const orderId = payload.orderId;
+            const orderEntity = state.entities[orderId];
+            if (orderEntity) {
+                orderEntity.refunds = [...orderEntity.refunds, payload.extraCharge];
+                state.entities[payload.orderId] = orderEntity;
             }
         });
 
@@ -294,7 +300,6 @@ export const adminOrdersSlice = createSlice({
                 const existingTransactionIndex = order[transactionOrderProperty].findIndex(
                     (item) => item.id === transaction.id,
                 );
-                console.log({ transactionOrderProperty, transactionType, existingTransactionIndex, transaction });
                 order[transactionOrderProperty][existingTransactionIndex].notes = transaction.notes as any;
                 state.entities[payload.orderId] = classToPlain(order) as any;
             }

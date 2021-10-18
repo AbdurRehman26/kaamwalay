@@ -23,23 +23,22 @@ beforeEach(function () {
     ]);
 
     $order = Order::factory()->create([
-        'order_status_id' => OrderStatus::GRADED
+        'order_status_id' => OrderStatus::GRADED,
     ]);
 
     $orderItem = OrderItem::factory()->create([
         'order_id' => $order->id,
-        'order_item_status_id' => OrderItemStatus::GRADED
+        'order_item_status_id' => OrderItemStatus::GRADED,
     ]);
 
     $this->userCard = UserCard::factory()->state(new Sequence(
         [
             'overall_grade' => 10.0,
-            'order_item_id' => $orderItem->id
+            'order_item_id' => $orderItem->id,
         ]
     ))->create();
 
     $this->cardProduct = $this->userCard->orderItem->cardProduct;
-
 });
 
 it('initializes POP Reports For Series, Sets and Cards.', function () {

@@ -5,6 +5,8 @@ namespace App\Services\PopReport;
 use App\Models\CardProduct;
 use App\Models\CardSeries;
 use App\Models\CardSet;
+use App\Models\OrderItemStatus;
+use App\Models\OrderStatus;
 use App\Models\PopReportsCard;
 use App\Models\PopReportsSeries;
 use App\Models\PopReportsSet;
@@ -32,8 +34,11 @@ class PopReportService
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
+            ->join('orders', 'order_items.order_id', 'orders.id')
             ->where('card_sets.card_series_id', $cardSeries->id)
             ->where('user_cards.overall_grade', '>', 0)
+            ->where('order_items.order_item_status_id',[OrderItemStatus::GRADED])
+            ->whereIn('orders.order_status_id',[OrderStatus::GRADED, OrderStatus::SHIPPED])
             ->select('user_cards.overall_grade', 'card_sets.card_series_id as card_series_id')
             ->get();
 
@@ -49,8 +54,11 @@ class PopReportService
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
+            ->join('orders', 'order_items.order_id', 'orders.id')
             ->where('card_products.card_set_id', $cardSet->id)
             ->where('user_cards.overall_grade', '>', 0)
+            ->where('order_items.order_item_status_id',[OrderItemStatus::GRADED])
+            ->whereIn('orders.order_status_id',[OrderStatus::GRADED, OrderStatus::SHIPPED])
             ->select('user_cards.overall_grade')
             ->get();
 
@@ -67,8 +75,11 @@ class PopReportService
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
+            ->join('orders', 'order_items.order_id', 'orders.id')
             ->where('card_products.id', $cardProduct->id)
             ->where('user_cards.overall_grade', '>', 0)
+            ->where('order_items.order_item_status_id',[OrderItemStatus::GRADED])
+            ->whereIn('orders.order_status_id',[OrderStatus::GRADED, OrderStatus::SHIPPED])
             ->select('user_cards.overall_grade', 'card_products.card_set_id as card_set_id')
             ->get();
 

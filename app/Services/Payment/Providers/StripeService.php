@@ -7,6 +7,7 @@ use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Laravel\Cashier\Exceptions\IncompletePayment;
+use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\CardException;
 use Stripe\Exception\InvalidRequestException;
@@ -116,6 +117,7 @@ class StripeService implements PaymentProviderServiceInterface
 
     protected function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
     {
+        /** @var Charge $charge */
         $charge = $paymentIntent->charges->first();
 
         if (

@@ -49,6 +49,10 @@ export function DrawerNavigation() {
         handleClose();
     }, [handleClose, logout]);
 
+    function handleItemPress(path: string) {
+        window.location.replace(path);
+    }
+
     return (
         <>
             <IconButton color={'inherit'} size={'medium'} className={classes.toggleButton} onClick={handleOpen}>
@@ -70,9 +74,18 @@ export function DrawerNavigation() {
                     {/*        />*/}
                     {/*    </ListItem>*/}
                     {/* )}*/}
-                    {/* <ListItem button href={'/feed'}>*/}
-                    {/*    <ListItemText primary={'Feed'} primaryTypographyProps={{ className: classes.listItemText }} />*/}
-                    {/* </ListItem>*/}
+                    <ListItem button onClick={() => handleItemPress('/feed')}>
+                        <ListItemText
+                            primary={'Live Feed'}
+                            primaryTypographyProps={{ className: classes.listItemText }}
+                        />
+                    </ListItem>
+                    <ListItem button onClick={() => handleItemPress('/pop')}>
+                        <ListItemText
+                            primary={'POP Report'}
+                            primaryTypographyProps={{ className: classes.listItemText }}
+                        />
+                    </ListItem>
                     {/* <ListItem button href={'/how-it-works'}>*/}
                     {/*    <ListItemText*/}
                     {/*        primary={'How It Works'}*/}

@@ -34,7 +34,7 @@ trait AuthenticatableWithAGS
                 'email' => $request->get('email'),
             ],
             array_merge(
-                Arr::except($userData, 'pk', 'email'),
+                Arr::except($userData, ['pk', 'email']),
                 ['password' => $request->get('password')]
             )
         );

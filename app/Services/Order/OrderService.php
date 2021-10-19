@@ -6,6 +6,7 @@ use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
@@ -26,7 +27,7 @@ class OrderService
             ->paginate($itemsPerPage);
     }
 
-    public function getOrder(int $orderId): Order | QueryBuilder
+    public function getOrder(int $orderId): Model
     {
         return QueryBuilder::for(Order::class)
             ->allowedIncludes(Order::getAllowedIncludes())

@@ -12,7 +12,6 @@ use App\Models\OrderItemStatusHistory;
 use App\Models\User;
 use App\Services\Admin\CardGradingService;
 use App\Services\Order\UserCardService;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Collection;
 
 class OrderItemService

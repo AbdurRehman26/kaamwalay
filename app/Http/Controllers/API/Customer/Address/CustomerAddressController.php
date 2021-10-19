@@ -22,7 +22,7 @@ class CustomerAddressController extends Controller
         return new CustomerAddressCollection($addresses);
     }
 
-    public function show($address): CustomerAddressResource
+    public function show(CustomerAddress $address): CustomerAddressResource
     {
         return new CustomerAddressResource($address);
     }

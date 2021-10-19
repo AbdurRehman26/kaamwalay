@@ -24,7 +24,7 @@ class ShipmentService
         /** @var OrderShipment $orderShipment */
         $orderShipment = $order->orderShipment;
 
-        if (!empty($orderShipment)) {
+        if (! empty($orderShipment)) {
             $orderShipment->update([
                 'shipping_provider' => $shippingProvider,
                 'tracking_number' => $trackingNumber,

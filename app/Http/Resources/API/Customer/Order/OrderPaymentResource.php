@@ -20,10 +20,10 @@ class OrderPaymentResource extends JsonResource
         }
 
         if ($this->order->paymentMethod->code === 'paypal') {
-            return $this->paypalData(json_decode($this->response, associative: true) ?? []);
+            return $this->paypalData($this->response ?? []);
         }
 
-        $providerResponse = json_decode($this->response);
+        $providerResponse = $this->response;
 
         if (! empty($providerResponse->card)) {
             $card = $providerResponse->card;

@@ -71,8 +71,8 @@ class PaymentService
     {
         /** @noinspection JsonEncodingApiUsageInspection */
         $this->order->lastOrderPayment->update([
-            'request' => json_encode($data['request']),
-            'response' => json_encode($data['response']),
+            'request' => $data['request'],
+            'response' => $data['response'],
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
             'amount' => $data['amount'] ?? $this->order->grand_total,
             'type' => $data['type'],

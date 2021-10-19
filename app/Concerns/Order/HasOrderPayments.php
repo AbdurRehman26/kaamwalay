@@ -47,8 +47,8 @@ trait HasOrderPayments
     public function createOrderPayment(array $data)
     {
         $this->orderPayments()->create([
-            'request' => json_encode($data['request']),
-            'response' => json_encode($data['response']),
+            'request' => $data['request'],
+            'response' => $data['response'],
         ] + $data + ['payment_method_id' => $this->payment_method_id]);
     }
 

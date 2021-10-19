@@ -86,7 +86,7 @@ class PaypalService implements PaymentProviderServiceInterface
                 && $captureStatus === 'COMPLETED'
             ) {
                 $order->lastOrderPayment->update([
-                    'response' => json_encode($data),
+                    'response' => $data,
                 ]);
 
                 return true;

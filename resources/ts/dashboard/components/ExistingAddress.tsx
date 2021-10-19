@@ -1,7 +1,7 @@
-import { Paper } from '@material-ui/core';
-import Radio from '@material-ui/core/Radio';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { Paper } from '@mui/material';
+import Radio from '@mui/material/Radio';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setSelectedExistingAddress, setUseCustomShippingAddress } from '@dashboard/redux/slices/newSubmissionSlice';
@@ -18,7 +18,7 @@ type ExistingAddressProps = {
 };
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
         container: {
             width: '200px',
             padding: '12px',
@@ -28,11 +28,14 @@ const useStyles = makeStyles(
             borderStyle: 'solid',
             borderWidth: ({ isSelected }: any) => (isSelected ? '3px' : '1px'),
             borderColor: ({ isSelected }: any) => (isSelected ? '#20BFB8' : '#DDDDDD'),
+            marginRight: '12px',
+            marginBottom: '12px',
             '&:hover': {
                 cursor: 'pointer',
             },
-            marginRight: '12px',
-            marginBottom: '12px',
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
+            },
         },
         addressLineText: {
             fontFamily: 'Roboto',
@@ -50,8 +53,11 @@ const useStyles = makeStyles(
             width: '110%',
             height: '25px',
             justifyContent: 'flex-end',
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
+            },
         },
-    },
+    }),
     { name: 'ExistingAddressComponent' },
 );
 

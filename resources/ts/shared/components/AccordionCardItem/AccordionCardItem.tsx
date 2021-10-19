@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { PropsWithChildren } from 'react';
 import { cx } from '@shared/lib/utils/cx';
 import { AccordionCardItemProvider } from './AccordionCardItemContext';
@@ -12,6 +12,7 @@ const useStyles = makeStyles(
     (theme) => ({
         root: {
             padding: theme.spacing(1.5, 2),
+            position: 'relative',
         },
 
         divider: {

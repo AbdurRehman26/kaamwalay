@@ -1,8 +1,8 @@
-import { CircularProgress } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { CircularProgress } from '@mui/material';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
@@ -83,6 +83,7 @@ export function NewSubmission() {
     }, [currentStep]);
 
     const handleNext = async () => {
+        window.scroll(0, 0);
         // Executing different stuff before next step loads
         if (currentStep === 1) {
             await dispatch(getShippingFee(selectedCards));
@@ -116,7 +117,7 @@ export function NewSubmission() {
                 dispatch(setIsNextLoading(false));
                 dispatch(nextStep());
                 return;
-            } catch (error) {
+            } catch (error: any) {
                 dispatch(setIsNextLoading(false));
                 notifications.exception(error);
                 return;
@@ -126,6 +127,7 @@ export function NewSubmission() {
     };
 
     const handleBack = async () => {
+        window.scroll(0, 0);
         if (currentStep === 3) {
             await dispatch(getShippingFee(selectedCards));
             await dispatch(getStatesList());

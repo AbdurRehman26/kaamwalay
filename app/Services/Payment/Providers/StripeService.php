@@ -60,7 +60,7 @@ class StripeService implements PaymentProviderServiceInterface
             'amount' => $order->grand_total_cents,
             'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
             'additional_data' => [
-                'description' => "Payment for Order # {$order->id}",
+                'description' => "Payment for Order # {$order->order_number}",
                 'metadata' => [
                     'Order ID' => $order->id,
                     'User Email' => $order->user->email,

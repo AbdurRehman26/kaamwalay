@@ -1,5 +1,5 @@
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { FunctionComponent } from 'react';
 
 type StepDescriptionProps = {
@@ -7,7 +7,7 @@ type StepDescriptionProps = {
     description: any;
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     title: {
         fontFamily: 'Roboto',
         fontSize: '24px',
@@ -17,6 +17,9 @@ const useStyles = makeStyles({
         letterSpacing: '0px',
         textAlign: 'left',
         marginBottom: '6px',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '20px',
+        },
     },
     description: {
         fontFamily: 'Roboto',
@@ -29,7 +32,7 @@ const useStyles = makeStyles({
         textAlign: 'left',
         marginBottom: '32px',
     },
-});
+}));
 
 const StepDescription: FunctionComponent<StepDescriptionProps> = ({ title, description }) => {
     const classes = useStyles();

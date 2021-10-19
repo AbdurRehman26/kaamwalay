@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItemShipment extends Model
 {
@@ -14,7 +15,7 @@ class OrderItemShipment extends Model
      *
      * @var array
      */
-    protected $fillable = ['shipment_date', 'tracking_number', 'tracking_url', 'shipping_method_id'];
+    protected $fillable = ['shipment_date', 'tracking_number', 'tracking_url', 'shipping_method_id', 'shipping_provider'];
 
     /**
      * The attributes that should be cast to native types.
@@ -23,12 +24,12 @@ class OrderItemShipment extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'shipment_date' => 'timestamp',
+        'shipment_date' => 'datetime',
         'shipping_method_id' => 'integer',
     ];
 
-    public function shippingMethod()
+    public function shippingMethod(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\ShippingMethod::class);
+        return $this->belongsTo(ShippingMethod::class);
     }
 }

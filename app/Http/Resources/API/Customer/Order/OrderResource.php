@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
+use App\Http\Resources\API\Admin\Order\OrderShipmentResource;
+use App\Http\Resources\API\Admin\Order\OrderStatusHistoryCollection;
+use App\Http\Resources\API\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
-use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCustomerShipmentResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\Customer\User\UserResource;
@@ -17,8 +19,8 @@ class OrderResource extends BaseResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
-            'number_of_cards' => $this->orderItems->sum('quantity'),
-            'total_declared_value' => $this->orderItems->sum('declared_value_total'),
+            'number_of_cards' => (int) $this->orderItems()->sum('quantity'),
+            'total_declared_value' => (float) $this->orderItems()->sum('declared_value_total'),
             'status' => $this->orderStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
@@ -32,7 +34,10 @@ class OrderResource extends BaseResource
             'order_payment' => new OrderPaymentResource($this->orderPayment),
             'order_items' => new OrderItemCollection($this->orderItems),
             'invoice' => new InvoiceResource($this->invoice),
-            'customer_shipment' => new OrderItemCustomerShipmentResource($this->orderItems[0]->orderItemCustomerShipment),
+            'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
+            'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
+            'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
+            'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
         ];
     }
 }

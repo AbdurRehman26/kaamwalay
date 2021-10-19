@@ -1,53 +1,164 @@
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
-import { Link, useParams } from 'react-router-dom';
+import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import React, { useCallback, useState } from 'react';
+import { Link, Redirect, useParams } from 'react-router-dom';
+import ManageCardDialog, { ManageCardDialogProps } from '@shared/components/ManageCardDialog/ManageCardDialog';
+import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
+import { addCardToOrder, addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { useSidebarHidden } from '@admin/hooks/useSidebarHidden';
+import { useAppDispatch } from '@admin/redux/hooks';
 import ConfirmedCards from './ConfirmedCards';
 import MissingCards from './MissingCards';
 import UnconfirmedCards from './UnconfirmedCards';
 
 export function SubmissionsReview() {
     const { id } = useParams<{ id: string }>();
+    const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState(false);
+
+    const { data, isLoading } = useAdminOrderQuery({
+        resourceId: id,
+        config: {
+            params: {
+                include: ['orderItems', 'orderStatus', 'orderStatusHistory.orderStatus'],
+            },
+        },
+    });
+
+    const handleCompleteOrderReview = useCallback(async () => {
+        setLoading(false);
+        await dispatch(
+            addOrderStatusHistory({
+                orderId: data?.id,
+                orderStatusId: OrderStatusEnum.ARRIVED,
+            }),
+        );
+        setLoading(true);
+    }, [dispatch, data?.id]);
+
+    const handleAddCard = useCallback<ManageCardDialogProps['onAdd']>(
+        async ({ card, declaredValue, orderItemId }) => {
+            if (!data?.id) {
+                return;
+            }
+
+            if (orderItemId) {
+                await dispatch(
+                    editCardOfOrder({
+                        orderItemId,
+                        orderId: data?.id,
+                        cardProductId: card.id,
+                        value: declaredValue,
+                    }),
+                );
+            } else {
+                await dispatch(
+                    addCardToOrder({
+                        orderId: data?.id,
+                        cardProductId: card.id,
+                        value: declaredValue,
+                    }),
+                );
+            }
+        },
+        [data?.id, dispatch],
+    );
 
     useSidebarHidden();
 
+    if (isLoading) {
+        return (
+            <Box p={4} display={'flex'} alignItems={'center'} justifyContent={'center'} width={'100%'}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    const pendingItems = data.getItemsByStatus(OrderItemStatusEnum.PENDING);
+    if (pendingItems.length === 0) {
+        if (data.hasOrderStatus(OrderStatusEnum.ARRIVED)) {
+            if (!data.hasOrderStatus(OrderStatusEnum.GRADED)) {
+                return <Redirect to={`/submissions/${data.id}/grade`} />;
+            }
+
+            return <Redirect to={`/submissions/${data.id}/view`} />;
+        }
+    }
+
     return (
-        <Container>
-            <Box pt={7} pb={3} display={'flex'} alignItems={'center'}>
-                <Grid item xs>
-                    <Typography variant={'h5'}>
-                        Review Submission <b># RG909098678</b>
-                    </Typography>
-                </Grid>
-                <Grid container item xs justifyContent={'flex-end'}>
+        <>
+            <Container>
+                <Box pt={7} pb={3} display={'flex'} alignItems={'center'}>
+                    <Grid item xs>
+                        <Typography variant={'h5'}>
+                            Review Submission <b># {data.orderNumber}</b>
+                        </Typography>
+                    </Grid>
+                    <Grid container item xs justifyContent={'flex-end'}>
+                        <Button
+                            component={Link}
+                            to={`/submissions/${id}/view`}
+                            startIcon={<VisibilityIcon color={'inherit'} />}
+                            color={'primary'}
+                        >
+                            View Submission
+                        </Button>
+                    </Grid>
+                </Box>
+                <Divider />
+                <Box pt={3} pb={3}>
+                    <Grid container spacing={3}>
+                        <Grid item xs>
+                            <UnconfirmedCards items={pendingItems} orderId={data.id} />
+                        </Grid>
+                        <Grid item xs>
+                            <ConfirmedCards
+                                items={data.getItemsByStatus(OrderItemStatusEnum.CONFIRMED)}
+                                orderId={data.id}
+                            />
+                            <MissingCards
+                                items={data.getItemsByStatus(OrderItemStatusEnum.MISSING)}
+                                orderId={data.id}
+                            />
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Container>
+            <Box height={4} width={'100%'} />
+            {pendingItems.length === 0 && data.orderItems?.length > 0 ? (
+                <Box
+                    position={'fixed'}
+                    padding={2}
+                    left={0}
+                    bottom={0}
+                    width={'100%'}
+                    bgcolor={'#f9f9f9'}
+                    boxShadow={3}
+                    display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                >
                     <Button
-                        component={Link}
-                        to={`/submissions/${id}/view`}
-                        startIcon={<VisibilityIcon color={'inherit'} />}
+                        variant={'contained'}
                         color={'primary'}
+                        onClick={handleCompleteOrderReview}
+                        disabled={loading}
+                        startIcon={loading ? <CircularProgress size={18} color={'inherit'} /> : null}
                     >
-                        View Submission
+                        Complete Review
                     </Button>
-                </Grid>
-            </Box>
-            <Divider />
-            <Box pt={3} pb={3}>
-                <Grid container spacing={3}>
-                    <Grid item xs>
-                        <UnconfirmedCards />
-                    </Grid>
-                    <Grid item xs>
-                        <ConfirmedCards />
-                        <MissingCards />
-                    </Grid>
-                </Grid>
-            </Box>
-        </Container>
+                </Box>
+            ) : null}
+            <ManageCardDialog onAdd={handleAddCard} />
+        </>
     );
 }
 

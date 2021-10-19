@@ -89,7 +89,7 @@ function PaypalBtn() {
                             dispatch(invalidateOrders());
                             sendECommerceDataToGA();
                             history.push(`/submissions/${orderID}/confirmation`);
-                        } catch (err) {
+                        } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');
                         }
                     },

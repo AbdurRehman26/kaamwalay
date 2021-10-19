@@ -1,5 +1,5 @@
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 
 const useStyles = makeStyles(
@@ -27,8 +27,8 @@ const useStyles = makeStyles(
 );
 
 interface GradeStatusProps {
-    value: number | string;
-    label: string;
+    value: number | string | null;
+    label: string | null;
 }
 
 /**

@@ -1,21 +1,25 @@
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
+import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
+import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
+import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { font } from '@shared/styles/utils';
-import { useOrderStatus } from '../../../hooks/useOrderStatus';
+import { useOrderStatus } from '@admin/hooks/useOrderStatus';
+import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 
 interface SubmissionViewHeaderProps {
-    orderId: string | number;
-    isReviewed?: boolean;
-    isGraded?: boolean;
-    isShipped?: boolean;
+    orderId: number;
+    orderNumber: string;
+    orderStatus: OrderStatusEntity;
+    orderStatusHistory: OrderStatusHistoryEntity[];
+    orderShipment?: ShipmentEntity | null;
 }
 
 const useStyles = makeStyles(
@@ -34,78 +38,64 @@ const useStyles = makeStyles(
         menuButton: {
             marginLeft: theme.spacing(2),
         },
-        button: {
-            borderRadius: 24,
-            padding: theme.spacing(1.375, 3.5),
-        },
     }),
     { name: 'SubmissionViewHeader' },
 );
 
-export function SubmissionsViewHeader({ orderId, isReviewed, isGraded, isShipped }: SubmissionViewHeaderProps) {
+export function SubmissionsViewHeader({
+    orderId,
+    orderNumber,
+    orderStatus,
+    orderStatusHistory,
+    orderShipment,
+}: SubmissionViewHeaderProps) {
     const classes = useStyles();
 
-    const [statusType, statusLabel] = useOrderStatus({ isGraded, isReviewed, isShipped });
+    const [statusType, statusLabel] = useOrderStatus(orderStatus);
 
-    const actionButton = useMemo(() => {
-        const sharedProps: any = {
-            variant: 'contained',
-            color: 'primary',
-            size: 'large',
-            className: classes.button,
-        };
+    const history = useMemo(
+        () =>
+            [
+                OrderStatusEnum.PAYMENT_PENDING,
+                OrderStatusEnum.ARRIVED,
+                OrderStatusEnum.GRADED,
+                OrderStatusEnum.SHIPPED,
+            ].map((status) => {
+                const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
+                const { label, value } = OrderStatusMap[status];
 
-        if (!isReviewed) {
-            return (
-                <Button component={Link} to={`/submissions/${orderId}/review`} {...sharedProps}>
-                    Review
-                </Button>
-            );
-        }
-
-        if (!isGraded) {
-            return (
-                <Button component={Link} to={`/submissions/${orderId}/grade`} {...sharedProps}>
-                    Grade
-                </Button>
-            );
-        }
-
-        if (!isShipped) {
-            return <Button {...sharedProps}>Mark Shipped</Button>;
-        }
-
-        return (
-            <Button size={'large'} color={'primary'}>
-                Edit Tracking
-            </Button>
-        );
-    }, [classes.button, isGraded, isReviewed, isShipped, orderId]);
+                return {
+                    label,
+                    value,
+                    isCompleted: !!item?.createdAt,
+                    completedAt: item?.createdAt,
+                };
+            }),
+        [orderStatusHistory],
+    );
 
     return (
         <Grid container className={classes.root}>
             <Grid container className={classes.header}>
                 <Grid container item xs alignItems={'center'}>
                     <Typography variant={'h6'} className={classes.heading}>
-                        Submission # <span className={font.fontWeightBold}>RG80808078787</span>
+                        Submission # <span className={font.fontWeightBold}>{orderNumber}</span>
                     </Typography>
                     <StatusChip color={statusType} label={statusLabel} />
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
-                    {actionButton}
+                    <SubmissionActionButton
+                        orderId={orderId}
+                        orderStatus={orderStatus}
+                        trackingNumber={orderShipment?.trackingNumber}
+                        shippingProvider={orderShipment?.shippingProvider}
+                    />
                     <IconButton size={'medium'} className={classes.menuButton}>
                         <MoreVertIcon />
                     </IconButton>
                 </Grid>
             </Grid>
-            <StatusProgressBar
-                steps={[
-                    { label: 'Pending', value: 'pending', isCompleted: true, completedAt: new Date() },
-                    { label: 'Reviewed', value: 'reviewed' },
-                    { label: 'Graded', value: 'graded' },
-                    { label: 'Shipped', value: 'shipped' },
-                ]}
-            />
+            <StatusProgressBar steps={history} />
         </Grid>
     );
 }

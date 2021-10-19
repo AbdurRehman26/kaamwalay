@@ -290,12 +290,12 @@ Usage:
 ```ts
 // Via hook inside components
 import { useNotifications } from "@shared/hooks/useNotifications";
-import { NotificationType } from "@shared/constants/NotificationType";
+import { NotificationTypeEnum } from "@shared/constants/NotificationTypeEnum";
 import { NotificationsService } from "@shared/services/NotificationsService";
 import { app } from "@shared/lib/app";
 
 const notifications = useNotifications();
-notifications.notify(NotificationType.Success, "This is a notification message", "This is an optional notification title")
+notifications.notify(NotificationTypeEnum.Success, "This is a notification message", "This is an optional notification title")
 
 // Aliases
 notifications.info('This is a info notification.', 'Optional title');

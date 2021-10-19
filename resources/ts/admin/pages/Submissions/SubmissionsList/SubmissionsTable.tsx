@@ -1,35 +1,68 @@
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import MuiLink from '@material-ui/core/Link';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableFooter from '@mui/material/TableFooter';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
 import { upperFirst } from 'lodash';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { StatusChip } from '@shared/components/StatusChip';
-import { formatDate } from '@shared/lib/datetime/formatDate';
-import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { font } from '@shared/styles/utils';
+import React, { useEffect, useMemo } from 'react';
+import { TablePagination } from '@shared/components/TablePagination';
+import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
+import { bracketParams } from '@shared/lib/api/bracketParams';
+import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
+import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import SubmissionsTableRow from '@admin/pages/Submissions/SubmissionsList/SubmissionsTableRow';
 
 interface SubmissionsTableProps {
-    tabFilter: string;
+    tabFilter?: OrderStatusEnum;
+    all?: boolean;
+    search?: string;
 }
 
-export function SubmissionsTable({ tabFilter }: SubmissionsTableProps) {
-    const totals = 3;
-    const heading = upperFirst(tabFilter);
+export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
+    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PAYMENT_PENDING], [tabFilter]);
+    const heading = all ? 'All' : upperFirst(status?.label ?? '');
+
+    const orders$ = useListAdminOrdersQuery({
+        params: {
+            include: ['orderStatus', 'customer', 'invoice', 'orderShipment'],
+            filter: {
+                search,
+                status: all ? 'all' : tabFilter,
+            },
+        },
+        ...bracketParams(),
+    });
+
+    const totals = orders$.pagination?.meta?.total ?? 0;
+
+    useEffect(
+        () => {
+            if (!orders$.isLoading) {
+                // noinspection JSIgnoredPromiseFromCall
+                orders$.search(toApiPropertiesObject({ search }));
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [search],
+    );
+
+    if (orders$.isLoading) {
+        return (
+            <Box padding={4} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <Grid container direction={'column'}>
-            <Box padding={2.5}>
+            <Box pt={2.5} px={2} pb={2}>
                 <Typography variant={'h6'}>
                     {heading} {totals > 0 ? `(${totals})` : null}
                 </Typography>
@@ -51,47 +84,23 @@ export function SubmissionsTable({ tabFilter }: SubmissionsTableProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <TableCell>
-                                <MuiLink
-                                    component={Link}
-                                    color={'primary'}
-                                    to={'/submissions/RG808078787/view'}
-                                    className={font.fontWeightMedium}
-                                >
-                                    RG808078787
-                                </MuiLink>
-                            </TableCell>
-                            <TableCell>{formatDate(new Date(), 'MM/DD/YYYY')}</TableCell>
-                            <TableCell>{formatDate(new Date(), 'MM/DD/YYYY')}</TableCell>
-                            <TableCell>
-                                <MuiLink
-                                    component={Link}
-                                    color={'primary'}
-                                    to={'/customers/C89899190/view'}
-                                    className={font.fontWeightMedium}
-                                >
-                                    C89899190
-                                </MuiLink>
-                            </TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>
-                                <StatusChip label={'Reviewed'} />
-                            </TableCell>
-                            <TableCell>{formatCurrency(400)}</TableCell>
-                            <TableCell>{formatCurrency(60)}</TableCell>
-                            <TableCell align={'right'}>
-                                <Button variant={'contained'} color={'primary'}>
-                                    Review
-                                </Button>
-                            </TableCell>
-                            <TableCell align={'right'}>
-                                <IconButton size={'small'}>
-                                    <MoreVertIcon />
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
+                        {orders$.data?.length > 0 ? (
+                            orders$.data.map((order) => <SubmissionsTableRow order={order} key={order.id} />)
+                        ) : (
+                            <TableRow>
+                                <TableCell align={'center'} colSpan={9}>
+                                    <Box padding={2}>
+                                        <Typography variant={'subtitle2'}>We couldn't found any orders yet.</Typography>
+                                    </Box>
+                                </TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination {...orders$.paginationProps} />
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </TableContainer>
         </Grid>

@@ -1,9 +1,9 @@
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
+import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { Link } from 'react-router-dom';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
@@ -16,6 +16,7 @@ interface SubmissionsGradeHeaderProps {
     reviewedAt: DateLike;
     reviewer: string;
     cardsGraded: number;
+    cardsInOrder: number;
 }
 
 const useStyles = makeStyles(
@@ -47,6 +48,7 @@ export function SubmissionsGradeHeader({
     reviewer,
     cardsGraded,
     reviewedAt,
+    cardsInOrder,
 }: SubmissionsGradeHeaderProps) {
     const classes = useStyles();
 
@@ -72,20 +74,24 @@ export function SubmissionsGradeHeader({
                             variant={'outlined'}
                             disableFocusRipple
                         >
-                            Grading Incomplete
+                            {cardsGraded !== cardsInOrder ? 'Grading Incomplete' : 'Grading Complete'}
                         </Button>
                         <Button
                             className={cx(classes.buttonDisabled, classes.button)}
                             variant={'outlined'}
                             disableFocusRipple
                         >
-                            <b>{cardsGraded}/3</b>&nbsp;Cards Graded
+                            <b>
+                                {cardsGraded}/{cardsInOrder}
+                            </b>
+                            &nbsp;Cards Graded
                         </Button>
                         <Button
                             component={Link}
                             to={`/submissions/${orderId}/view`}
                             className={classes.button}
                             variant={'contained'}
+                            color={'inherit'}
                             startIcon={<VisibilityIcon color={'inherit'} />}
                         >
                             View Submission

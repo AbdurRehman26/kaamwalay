@@ -1,11 +1,11 @@
-import { NotificationType } from '@shared/constants/NotificationType';
-import { sha256 } from '@shared/lib/hash';
+import { NotificationTypeEnum } from '../constants/NotificationTypeEnum';
+import { sha256 } from '../lib/hash';
 
 export class NotificationItem {
     public wait!: boolean;
 
     constructor(
-        public type: NotificationType,
+        public type: NotificationTypeEnum,
         public message: string,
         public title: string = '',
         public key: string = '',

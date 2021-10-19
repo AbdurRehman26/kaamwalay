@@ -19,6 +19,7 @@
     </coverage>
     <php>
         <server name="APP_ENV" value="testing"/>
+        <server name="APP_KEY" value="base64:b5Aphwl3JpIuetTrM8dGLOe5yv7LGb2dXZeTmHzCfC5="/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="CACHE_DRIVER" value="array"/>
         <server name="DB_CONNECTION" value="sqlite"/>
@@ -29,5 +30,8 @@
         <server name="TELESCOPE_ENABLED" value="false"/>
         <server name="JWT_SECRET" value="test_jwt_secret"/>
         <server name="SCOUT_DRIVER" value="null"/>
+        <server name="AGS_BASE_URL" value="https://ags.api"/>
+        <server name="AGS_AUTHORIZATION_TOKEN" value="12345"/>
+        <server name="MANDRILL_KEY" value="12345"/>
     </php>
 </phpunit>

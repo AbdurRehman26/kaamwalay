@@ -2,9 +2,17 @@
 
 namespace App\Models;
 
+use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 
 class Order extends Model
 {
@@ -21,14 +29,22 @@ class Order extends Model
         'service_fee',
         'grand_total',
         'user_id',
-        'payment_plan_id',
         'order_status_id',
+        'payment_plan_id',
         'shipping_order_address_id',
         'billing_order_address_id',
         'payment_method_id',
         'shipping_method_id',
         'invoice_id',
+        'order_shipment_id',
+        'order_customer_shipment_id',
         'arrived_at',
+        'notes',
+        'reviewed_by_id',
+        'graded_by_id',
+        'reviewed_at',
+        'graded_at',
+        'auto_saved_at',
     ];
 
     /**
@@ -43,90 +59,159 @@ class Order extends Model
         'grand_total' => 'float',
         'user_id' => 'integer',
         'payment_plan_id' => 'integer',
-        'order_status_id' => 'integer',
         'order_address_id' => 'integer',
         'shipping_order_address_id' => 'integer',
         'billing_order_address_id' => 'integer',
         'payment_method_id' => 'integer',
         'shipping_method_id' => 'integer',
         'invoice_id' => 'integer',
+        'order_status_id' => 'integer',
         'arrived_at' => 'date',
+        'reviewed_by_id' => 'integer',
+        'graded_by_id' => 'integer',
         'grand_total_cents' => 'integer',
+        'reviewed_at' => 'date',
+        'graded_at' => 'date',
     ];
 
     protected $appends = ['grand_total_cents'];
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public static function getAllowedAdminIncludes(): array
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return [
+            AllowedInclude::relationship('invoice'),
+            AllowedInclude::relationship('paymentPlan'),
+            AllowedInclude::relationship('orderItems'),
+            AllowedInclude::relationship('orderStatus'),
+            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('billingAddress'),
+            AllowedInclude::relationship('shippingAddress'),
+            AllowedInclude::relationship('orderStatusHistory'),
+            AllowedInclude::relationship('orderStatusHistory.orderStatus'),
+            AllowedInclude::relationship('customer', 'user'),
+            AllowedInclude::relationship('orderShipment'),
+            AllowedInclude::relationship('orderCustomerShipment'),
+        ];
     }
 
-    public function paymentPlan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public static function getAllowedAdminFilters(): array
     {
-        return $this->belongsTo(\App\Models\PaymentPlan::class);
+        return [
+            AllowedFilter::exact('order_id', 'id'),
+            AllowedFilter::partial('order_number'),
+            AllowedFilter::scope('status'),
+            AllowedFilter::scope('order_status', 'status'),
+            AllowedFilter::scope('customer_name'),
+            AllowedFilter::scope('customer_id'),
+            AllowedFilter::custom('search', new AdminOrderSearchFilter),
+        ];
     }
 
-    public function orderStatus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public static function getAllowedIncludes(): array
     {
-        return $this->belongsTo(\App\Models\OrderStatus::class);
+        return [
+            AllowedInclude::relationship('invoice'),
+            AllowedInclude::relationship('paymentPlan'),
+            AllowedInclude::relationship('orderItems'),
+            AllowedInclude::relationship('orderStatus'),
+            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('billingAddress'),
+            AllowedInclude::relationship('shippingAddress'),
+            AllowedInclude::relationship('orderStatusHistory'),
+            AllowedInclude::relationship('orderStatusHistory.orderStatus'),
+            AllowedInclude::relationship('customer', 'user'),
+            AllowedInclude::relationship('orderShipment'),
+            AllowedInclude::relationship('orderCustomerShipment'),
+        ];
     }
 
-    public function shippingAddress(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public static function getAllowedFilters(): array
     {
-        return $this->belongsTo(\App\Models\OrderAddress::class, 'shipping_order_address_id');
+        return [
+            AllowedFilter::partial('order_number'),
+        ];
     }
 
-    public function billingAddress(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\OrderAddress::class, 'billing_order_address_id');
+        return $this->belongsTo(User::class);
     }
 
-    public function paymentMethod(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function paymentPlan(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\PaymentMethod::class);
+        return $this->belongsTo(PaymentPlan::class);
     }
 
-    public function shippingMethod(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function orderStatus(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\ShippingMethod::class);
+        return $this->belongsTo(OrderStatus::class);
     }
 
-    public function invoice(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function orderStatusHistory(): HasMany
     {
-        return $this->belongsTo(\App\Models\Invoice::class);
+        return $this->hasMany(OrderStatusHistory::class);
     }
 
-    public function orderItems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function shippingAddress(): BelongsTo
+    {
+        return $this->belongsTo(OrderAddress::class, 'shipping_order_address_id');
+    }
+
+    public function billingAddress(): BelongsTo
+    {
+        return $this->belongsTo(OrderAddress::class, 'billing_order_address_id');
+    }
+
+    public function paymentMethod(): BelongsTo
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+
+    public function shippingMethod(): BelongsTo
+    {
+        return $this->belongsTo(ShippingMethod::class);
+    }
+
+    public function invoice(): BelongsTo
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    public function orderPayment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function orderPayment(): HasOne
     {
         return $this->hasOne(OrderPayment::class);
     }
 
+    public function reviewedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewed_by_id');
+    }
+
+    public function gradedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'graded_by_id');
+    }
+
     public function scopeForUser(Builder $query, User $user): Builder
     {
-        return $query->where('user_id', $user->id);
+        return $query->where('orders.user_id', $user->id);
     }
 
     public function isPayable(): bool
     {
-        return $this->orderStatus->code === 'pending_payment';
-    }
-
-    public function markAsPlaced(): self
-    {
-        $this->order_status_id = 2;
-        $this->save();
-
-        return $this;
+        return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
     }
 
     public function scopePlaced(Builder $query): Builder
     {
-        return $query->where('order_status_id', 2);
+        return $query->whereHas('orderStatusHistory', function ($query) {
+            return $query->where('order_status_id', OrderStatus::PLACED);
+        });
     }
 
     public function getGrandTotalCentsAttribute(): int
@@ -134,9 +219,26 @@ class Order extends Model
         return $this->grand_total * 100;
     }
 
-    public function scopeStatusCode(Builder $query, string $statusCode): Builder
+    public function getTotalGradedItems(): int
     {
-        return $query->whereHas('orderStatus', fn ($query) => $query->where('code', $statusCode));
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+    }
+
+    public function scopeStatus(Builder $query, string|int $status): Builder
+    {
+        return $query->whereHas(
+            'orderStatus',
+            function (Builder $query) use ($status) {
+                $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
+                if (! $status || $status === 'all') {
+                    return $query;
+                }
+
+                return $query
+                    ->where('id', $status)
+                    ->orWhere('code', $status);
+            }
+        );
     }
 
     public function scopeCustomerName(Builder $query, string $customerName): Builder
@@ -150,5 +252,45 @@ class Order extends Model
     public function scopeCustomerId(Builder $query, string $customerId): Builder
     {
         return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
+    }
+
+    public function missingItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::MISSING)->count();
+    }
+
+    public function notAcceptedItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::NOT_ACCEPTED)->count();
+    }
+
+    public function gradedItemsCount(): int
+    {
+        return $this->orderItems()->where('order_item_status_id', OrderItemStatus::GRADED)->count();
+    }
+
+    public function isEligibleToMarkAsGraded(): bool
+    {
+        return $this->orderItems()->count() === (
+            $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
+        );
+    }
+
+    public function orderShipment(): BelongsTo
+    {
+        return $this->belongsTo(OrderShipment::class);
+    }
+
+    public function orderCustomerShipment(): BelongsTo
+    {
+        return $this->belongsTo(OrderCustomerShipment::class);
+    }
+
+    public function getGroupedOrderItems(): Collection
+    {
+        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('sum(declared_value_per_unit) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
+        ->where('order_id', $this->id)
+        ->groupBy(['card_product_id'])
+        ->get();
     }
 }

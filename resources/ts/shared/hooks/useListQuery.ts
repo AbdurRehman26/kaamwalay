@@ -1,4 +1,4 @@
-import { TablePaginationProps } from '@material-ui/core/TablePagination';
+import { TablePaginationProps } from '@mui/material/TablePagination';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
 import { ClassConstructor, plainToClass } from 'class-transformer';
@@ -8,8 +8,8 @@ import { GlobalStateType } from '../redux/store';
 import { APIService } from '../services/APIService';
 import { APIState } from '../types/APIState';
 import { useInjectable } from './useInjectable';
-import { useSharedSelector } from './useSharedDispatch';
-import { useSharedDispatch } from './useSharedSelector';
+import { useSharedDispatch } from './useSharedDispatch';
+import { useSharedSelector } from './useSharedSelector';
 
 export function useListQuery<
     E,
@@ -28,71 +28,82 @@ export function useListQuery<
     const isError = !!error;
 
     const currentPage = pagination.meta?.currentPage ?? 1;
-    const perPage = pagination.meta?.perPage ?? PaginatedData.LimitSet[0];
+    const perPage = Number(pagination.meta?.perPage ?? PaginatedData.LimitSet[0]);
     const lastPage = pagination.meta?.lastPage ?? 1;
 
     const data = useMemo(() => {
-        let list = ids.map((id) => entities[id]);
-        if (perPage) {
-            const offset = (currentPage - 1) * perPage;
-            list = list.slice(offset, offset + perPage);
-        }
+        const list = ids.map((id: number) => entities[id]);
+        // if (perPage) {
+        //     const offset = (currentPage - 1) * perPage;
+        //     list = list.slice(offset, offset + perPage);
+        // }
 
         return plainToClass(entity, list);
-    }, [ids, perPage, entity, entities, currentPage]);
+    }, [ids, entity, entities]);
 
     const fetch = useCallback(
-        function fetch(config?: AxiosRequestConfig) {
+        async function fetch(config?: AxiosRequestConfig) {
             const baseConfig = {
                 params: {
                     page: currentPage,
-                    per_page: perPage,
+                    perPage: perPage,
                 },
             };
 
-            dispatch(action(apiService.mergeConfig(baseConfig, config, actionArg)));
+            return dispatch(action(apiService.mergeConfig(baseConfig, config, actionArg)));
         },
         [currentPage, perPage, dispatch, action, apiService, actionArg],
     );
 
     const getPage = useCallback(
-        function getPage(pageNumber?: number) {
+        async function getPage(pageNumber?: number) {
             const params: Record<string, any> = {};
             if (pageNumber) {
                 // Ensure that the requested page will be never bigger than the last page, or lower than 1.
                 params.page = Math.min(lastPage, Math.max(1, pageNumber));
             }
-            fetch({ params });
+
+            await fetch({ params });
         },
         [fetch, lastPage],
     );
 
     const nextPage = useCallback(
-        function nextPage() {
-            getPage(currentPage + 1);
+        async function nextPage() {
+            await getPage(currentPage + 1);
         },
         [getPage, currentPage],
     );
 
     const previousPage = useCallback(
-        function previousPage() {
-            getPage(currentPage - 1);
+        async function previousPage() {
+            await getPage(currentPage - 1);
         },
         [getPage, currentPage],
     );
 
+    const search = useCallback((filter: Record<string, any>) => fetch({ params: { filter } }), [fetch]);
+
+    const sort = useCallback((sortFilter: Record<string, any>) => fetch({ params: { sort: sortFilter } }), [fetch]);
+
+    const searchSorted = useCallback(
+        (sortFilter: Record<string, any>, searchFilter: Record<string, any>) =>
+            fetch({ params: { sort: sortFilter, filter: searchFilter } }),
+        [fetch],
+    );
+
     const handleChangePage = useCallback(
-        function handleChangePage(e, page: number) {
-            getPage(page + 1);
+        async function handleChangePage(e, page: number) {
+            await getPage(page + 1);
         },
         [getPage],
     );
 
     const handleChangeRowsPerPage = useCallback(
-        function handleChangeRowsPerPage(e) {
-            fetch({
+        async function handleChangeRowsPerPage(e) {
+            await fetch({
                 params: {
-                    per_page: e.target.value,
+                    perPage: e.target.value,
                 },
             });
         },
@@ -101,6 +112,7 @@ export function useListQuery<
 
     useEffect(
         () => {
+            // noinspection JSIgnoredPromiseFromCall
             getPage();
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,10 +128,13 @@ export function useListQuery<
             getPage,
             nextPage,
             previousPage,
+            search,
+            sort,
+            searchSorted,
             paginationProps: {
                 count: pagination.meta?.total || 0,
                 page: currentPage - 1,
-                rowsPerPage: perPage,
+                rowsPerPage: Number(perPage),
                 onPageChange: handleChangePage,
                 onRowsPerPageChange: handleChangeRowsPerPage,
                 rowsPerPageOptions: PaginatedData.LimitSet,
@@ -133,6 +148,9 @@ export function useListQuery<
             getPage,
             nextPage,
             previousPage,
+            sort,
+            searchSorted,
+            search,
             currentPage,
             perPage,
             handleChangePage,

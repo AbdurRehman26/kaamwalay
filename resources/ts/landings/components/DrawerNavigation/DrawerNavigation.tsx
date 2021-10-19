@@ -1,14 +1,13 @@
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
-import MenuIcon from '@material-ui/icons/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import { useAuth } from '@shared/hooks/useAuth';
 
@@ -50,6 +49,10 @@ export function DrawerNavigation() {
         handleClose();
     }, [handleClose, logout]);
 
+    function handleItemPress(path: string) {
+        window.location.replace(path);
+    }
+
     return (
         <>
             <IconButton color={'inherit'} size={'medium'} className={classes.toggleButton} onClick={handleOpen}>
@@ -63,40 +66,49 @@ export function DrawerNavigation() {
                 </Box>
 
                 <List>
-                    {authenticated && (
-                        <ListItem button href={'/dashboard'}>
-                            <ListItemText
-                                primary={'Dashboard'}
-                                primaryTypographyProps={{ className: classes.listItemText }}
-                            />
-                        </ListItem>
-                    )}
-                    <ListItem button href={'/feed'}>
-                        <ListItemText primary={'Feed'} primaryTypographyProps={{ className: classes.listItemText }} />
-                    </ListItem>
-                    <ListItem button href={'/how-it-works'}>
+                    {/* {authenticated && (*/}
+                    {/*    <ListItem button href={'/dashboard'}>*/}
+                    {/*        <ListItemText*/}
+                    {/*            primary={'Dashboard'}*/}
+                    {/*            primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*        />*/}
+                    {/*    </ListItem>*/}
+                    {/* )}*/}
+                    <ListItem button onClick={() => handleItemPress('/feed')}>
                         <ListItemText
-                            primary={'How It Works'}
+                            primary={'Live Feed'}
                             primaryTypographyProps={{ className: classes.listItemText }}
                         />
                     </ListItem>
-                    <ListItem button href={'/pricing'}>
+                    <ListItem button onClick={() => handleItemPress('/pop')}>
                         <ListItemText
-                            primary={'Pricing'}
+                            primary={'POP Report'}
                             primaryTypographyProps={{ className: classes.listItemText }}
                         />
                     </ListItem>
-                    <ListItem button href={'/about-us'}>
-                        <ListItemText
-                            primary={'About Us'}
-                            primaryTypographyProps={{ className: classes.listItemText }}
-                        />
-                    </ListItem>
-                    <ListItem button href={'/faq'}>
-                        <ListItemText primary={'FAQ'} primaryTypographyProps={{ className: classes.listItemText }} />
-                    </ListItem>
+                    {/* <ListItem button href={'/how-it-works'}>*/}
+                    {/*    <ListItemText*/}
+                    {/*        primary={'How It Works'}*/}
+                    {/*        primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*    />*/}
+                    {/* </ListItem>*/}
+                    {/* <ListItem button href={'/pricing'}>*/}
+                    {/*    <ListItemText*/}
+                    {/*        primary={'Pricing'}*/}
+                    {/*        primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*    />*/}
+                    {/* </ListItem>*/}
+                    {/* <ListItem button href={'/about-us'}>*/}
+                    {/*    <ListItemText*/}
+                    {/*        primary={'About Us'}*/}
+                    {/*        primaryTypographyProps={{ className: classes.listItemText }}*/}
+                    {/*    />*/}
+                    {/* </ListItem>*/}
+                    {/* <ListItem button href={'/faq'}>*/}
+                    {/*    <ListItemText primary={'FAQ'} primaryTypographyProps={{ className: classes.listItemText }} />*/}
+                    {/* </ListItem>*/}
 
-                    <Divider className={classes.divider} />
+                    {/* <Divider className={classes.divider} />*/}
 
                     {!authenticated ? (
                         <>

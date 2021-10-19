@@ -1,6 +1,8 @@
-import Avatar from '@material-ui/core/Avatar';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import { useMediaQuery } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
 import React from 'react';
 import NumberFormat from 'react-number-format';
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
@@ -11,6 +13,7 @@ import { useAppSelector } from '@dashboard/redux/hooks';
 
 function OrderReviewSection() {
     const classes = useStyles({});
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     // Service level data
     const serviceLevelPricePerCard = useAppSelector(
@@ -64,7 +67,7 @@ function OrderReviewSection() {
                     </Typography>
                     <Typography className={classes.greyBodyText}>{`${turnaround} turnaround`}</Typography>
                 </OrderDetailItem>
-                <Spacer top={'32px'} />
+                {!isMobile ? <Spacer top={'32px'} /> : null}
                 <OrderDetailItem title={'Shipping Address'} editStep={2}>
                     <Typography
                         className={classes.darkBodyText}
@@ -100,7 +103,7 @@ function OrderReviewSection() {
                         <Typography className={classes.darkBodyText}>PayPal</Typography>
                     )}
                 </OrderDetailItem>
-                <Spacer top={'48px'} />
+                {!isMobile ? <Spacer top={'48px'} /> : null}
                 <OrderDetailItem title={'Return Shipping Method'} editStep={2} spaced>
                     <Typography className={classes.darkBodyText}>{'Insured Shipping'}</Typography>
                 </OrderDetailItem>

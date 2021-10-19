@@ -26,3 +26,6 @@ draft.yaml
 /public/coverage
 .eslintcache
 resources/terraform/.terraform/providers
+.DS_Store
+/cypress/screenshots
+/cypress/videos

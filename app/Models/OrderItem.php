@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderItem extends Model
 {
@@ -20,6 +23,8 @@ class OrderItem extends Model
         'card_product_id',
         'order_item_shipment_id',
         'order_item_customer_shipment_id',
+        'order_item_status_id',
+        'grading_id',
         'quantity',
         'unit_price',
         'total_price',
@@ -40,6 +45,8 @@ class OrderItem extends Model
         'card_product_id' => 'integer',
         'order_item_shipment_id' => 'integer',
         'order_item_customer_shipment_id' => 'integer',
+        'order_item_status_id' => 'integer',
+        'quantity' => 'integer',
         'unit_price' => 'decimal:2',
         'total_price' => 'decimal:2',
         'declared_value_per_unit' => 'float',
@@ -64,5 +71,30 @@ class OrderItem extends Model
     public function orderItemCustomerShipment(): BelongsTo
     {
         return $this->belongsTo(OrderItemCustomerShipment::class);
+    }
+
+    public function orderItemStatus(): BelongsTo
+    {
+        return $this->belongsTo(OrderItemStatus::class);
+    }
+
+    public function orderItemStatusHistory(): HasMany
+    {
+        return $this->hasMany(OrderItemStatusHistory::class);
+    }
+
+    public function userCard(): HasOne
+    {
+        return $this->hasOne(UserCard::class);
+    }
+
+    public function scopeForOrder(Builder $query, Order $order): Builder
+    {
+        return $query->where('order_id', $order->id);
+    }
+
+    public function isValidForGrading(): bool
+    {
+        return $this->order_item_status_id === OrderItemStatus::CONFIRMED;
     }
 }

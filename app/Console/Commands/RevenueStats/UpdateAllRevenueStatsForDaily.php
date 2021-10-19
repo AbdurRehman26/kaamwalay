@@ -46,7 +46,7 @@ class UpdateAllRevenueStatsForDaily extends Command
                 $formattedDate = $date->toDateString();
                 Log::info("Revenue Stats for Date : " . $formattedDate . " Adding.");
 
-                $revenueStatsService->addStats($formattedDate);
+//                $revenueStatsService->addStats($formattedDate);
 
                 Log::info("Revenue Stats for Date : " . $formattedDate . " Added.");
                 $this->info("Revenue Stats for Date : " . $formattedDate . " Added.");

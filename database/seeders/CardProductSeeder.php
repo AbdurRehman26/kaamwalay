@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\CardProduct;
 use Illuminate\Database\Seeder;
 
 class CardProductSeeder extends Seeder
@@ -31,7 +30,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '2/163',
                 'card_number_order' => 2,
@@ -45,7 +44,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '3/163',
                 'card_number_order' => 3,
@@ -59,7 +58,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '4/163',
                 'card_number_order' => 4,
@@ -73,7 +72,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '5/163',
                 'card_number_order' => 5,
@@ -87,7 +86,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '6/163',
                 'card_number_order' => 6,
@@ -101,7 +100,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '7/163',
                 'card_number_order' => 7,
@@ -115,7 +114,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '8/163',
                 'card_number_order' => 8,
@@ -129,7 +128,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '9/163',
                 'card_number_order' => 9,
@@ -143,7 +142,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '10/163',
                 'card_number_order' => 10,
@@ -157,7 +156,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '11/163',
                 'card_number_order' => 11,
@@ -171,7 +170,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '12/163',
                 'card_number_order' => 12,
@@ -185,7 +184,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '13/163',
                 'card_number_order' => 13,
@@ -199,7 +198,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '14/163',
                 'card_number_order' => 14,
@@ -213,7 +212,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '15/163',
                 'card_number_order' => 15,
@@ -227,7 +226,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '16/163',
                 'card_number_order' => 16,
@@ -241,7 +240,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '17/163',
                 'card_number_order' => 17,
@@ -255,7 +254,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '18/163',
                 'card_number_order' => 18,
@@ -269,7 +268,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '19/163',
                 'card_number_order' => 19,
@@ -283,7 +282,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '20/163',
                 'card_number_order' => 20,
@@ -297,7 +296,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '21/163',
                 'card_number_order' => 21,
@@ -311,7 +310,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '22/163',
                 'card_number_order' => 22,
@@ -325,7 +324,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '23/163',
                 'card_number_order' => 23,
@@ -339,7 +338,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '24/163',
                 'card_number_order' => 24,
@@ -353,7 +352,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:49',
-            ],             
+            ],
             [
                 'card_number' => '25/163',
                 'card_number_order' => 25,
@@ -367,7 +366,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '26/163',
                 'card_number_order' => 26,
@@ -381,7 +380,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '27/163',
                 'card_number_order' => 27,
@@ -395,7 +394,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '28/163',
                 'card_number_order' => 28,
@@ -409,7 +408,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '29/163',
                 'card_number_order' => 29,
@@ -423,7 +422,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '30/163',
                 'card_number_order' => 30,
@@ -437,7 +436,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '31/163',
                 'card_number_order' => 31,
@@ -451,7 +450,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '32/163',
                 'card_number_order' => 32,
@@ -465,7 +464,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '33/163',
                 'card_number_order' => 33,
@@ -479,7 +478,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '34/163',
                 'card_number_order' => 34,
@@ -493,7 +492,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '35/163',
                 'card_number_order' => 35,
@@ -507,7 +506,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '36/163',
                 'card_number_order' => 36,
@@ -521,7 +520,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '37/163',
                 'card_number_order' => 37,
@@ -535,7 +534,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '38/163',
                 'card_number_order' => 38,
@@ -549,7 +548,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '39/163',
                 'card_number_order' => 39,
@@ -563,7 +562,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '40/163',
                 'card_number_order' => 40,
@@ -577,7 +576,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '41/163',
                 'card_number_order' => 41,
@@ -591,7 +590,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '42/163',
                 'card_number_order' => 42,
@@ -605,7 +604,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '43/163',
                 'card_number_order' => 43,
@@ -619,7 +618,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '44/163',
                 'card_number_order' => 44,
@@ -633,7 +632,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '45/163',
                 'card_number_order' => 45,
@@ -647,7 +646,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '46/163',
                 'card_number_order' => 46,
@@ -661,7 +660,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '47/163',
                 'card_number_order' => 47,
@@ -675,7 +674,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '48/163',
                 'card_number_order' => 48,
@@ -689,7 +688,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '49/163',
                 'card_number_order' => 49,
@@ -703,7 +702,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '50/163',
                 'card_number_order' => 50,
@@ -717,7 +716,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '51/163',
                 'card_number_order' => 51,
@@ -731,7 +730,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '52/163',
                 'card_number_order' => 52,
@@ -745,7 +744,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '53/163',
                 'card_number_order' => 53,
@@ -759,7 +758,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '54/163',
                 'card_number_order' => 54,
@@ -773,7 +772,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '55/163',
                 'card_number_order' => 55,
@@ -787,7 +786,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '56/163',
                 'card_number_order' => 56,
@@ -801,7 +800,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '57/163',
                 'card_number_order' => 57,
@@ -815,7 +814,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '58/163',
                 'card_number_order' => 58,
@@ -829,7 +828,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '59/163',
                 'card_number_order' => 59,
@@ -843,7 +842,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '60/163',
                 'card_number_order' => 60,
@@ -857,7 +856,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '61/163',
                 'card_number_order' => 61,
@@ -871,7 +870,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '62/163',
                 'card_number_order' => 62,
@@ -885,7 +884,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '63/163',
                 'card_number_order' => 63,
@@ -899,7 +898,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '64/163',
                 'card_number_order' => 64,
@@ -913,7 +912,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '65/163',
                 'card_number_order' => 65,
@@ -927,7 +926,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:50',
-            ],             
+            ],
             [
                 'card_number' => '66/163',
                 'card_number_order' => 66,
@@ -941,7 +940,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '67/163',
                 'card_number_order' => 67,
@@ -955,7 +954,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '68/163',
                 'card_number_order' => 68,
@@ -969,7 +968,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '69/163',
                 'card_number_order' => 69,
@@ -983,7 +982,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '70/163',
                 'card_number_order' => 70,
@@ -997,7 +996,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '71/163',
                 'card_number_order' => 71,
@@ -1011,7 +1010,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '72/163',
                 'card_number_order' => 72,
@@ -1025,7 +1024,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '73/163',
                 'card_number_order' => 73,
@@ -1039,7 +1038,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '74/163',
                 'card_number_order' => 74,
@@ -1053,7 +1052,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '75/163',
                 'card_number_order' => 75,
@@ -1067,7 +1066,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '76/163',
                 'card_number_order' => 76,
@@ -1081,7 +1080,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '77/163',
                 'card_number_order' => 77,
@@ -1095,7 +1094,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '78/163',
                 'card_number_order' => 78,
@@ -1109,7 +1108,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '79/163',
                 'card_number_order' => 79,
@@ -1123,7 +1122,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '80/163',
                 'card_number_order' => 80,
@@ -1137,7 +1136,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '81/163',
                 'card_number_order' => 81,
@@ -1151,7 +1150,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '82/163',
                 'card_number_order' => 82,
@@ -1165,7 +1164,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '83/163',
                 'card_number_order' => 83,
@@ -1179,7 +1178,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '84/163',
                 'card_number_order' => 84,
@@ -1193,7 +1192,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '85/163',
                 'card_number_order' => 85,
@@ -1207,7 +1206,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '86/163',
                 'card_number_order' => 86,
@@ -1221,7 +1220,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '87/163',
                 'card_number_order' => 87,
@@ -1235,7 +1234,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '88/163',
                 'card_number_order' => 88,
@@ -1249,7 +1248,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '89/163',
                 'card_number_order' => 89,
@@ -1263,7 +1262,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '90/163',
                 'card_number_order' => 90,
@@ -1277,7 +1276,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '91/163',
                 'card_number_order' => 91,
@@ -1291,7 +1290,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '92/163',
                 'card_number_order' => 92,
@@ -1305,7 +1304,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '93/163',
                 'card_number_order' => 93,
@@ -1319,7 +1318,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '94/163',
                 'card_number_order' => 94,
@@ -1333,7 +1332,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '95/163',
                 'card_number_order' => 95,
@@ -1347,7 +1346,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '96/163',
                 'card_number_order' => 96,
@@ -1361,7 +1360,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '97/163',
                 'card_number_order' => 97,
@@ -1375,7 +1374,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '98/163',
                 'card_number_order' => 98,
@@ -1389,7 +1388,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Uncommon',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '99/163',
                 'card_number_order' => 99,
@@ -1403,7 +1402,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Rare',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ],             
+            ],
             [
                 'card_number' => '100/163',
                 'card_number_order' => 100,
@@ -1417,8 +1416,7 @@ class CardProductSeeder extends Seeder
                 'rarity' => 'Common',
                 'card_set_id' => 1,
                 'updated_at' => '2021-08-07 20:27:51',
-            ]
+            ],
         ]);
-        
     }
 }

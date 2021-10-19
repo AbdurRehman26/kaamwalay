@@ -1,11 +1,11 @@
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import FileDownloadIcon from '@material-ui/icons/GetApp';
-import PrintIcon from '@material-ui/icons/Print';
+import FileDownloadIcon from '@mui/icons-material/GetApp';
+import PrintIcon from '@mui/icons-material/Print';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { plainToClass } from 'class-transformer';
 import React, { useCallback, useMemo, useState } from 'react';
 import packingSlip from '@shared/assets/packingSlip.jpg';
@@ -55,7 +55,7 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
             setDownloading(true);
             try {
                 await downloadFromUrl(invoice!, `robograding-${invoiceNumber}.pdf`);
-            } catch (e) {
+            } catch (e: any) {
                 notifications.exception(e);
             }
             setDownloading(false);

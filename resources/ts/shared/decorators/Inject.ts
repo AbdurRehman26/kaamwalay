@@ -1,5 +1,5 @@
 import { inject } from 'inversify';
-import { InjectableMetaOptions, ReflectParamsType } from '@shared/constants/ReflectMetadata';
+import { InjectableMetaOptions, ReflectParamsType } from '../constants/ReflectMetadata';
 
 /**
  * Inject it's a decorator that can be used to inject an already defined Injectable,

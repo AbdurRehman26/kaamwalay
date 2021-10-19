@@ -32,6 +32,7 @@ return [
     'ags' => [
         'is_platform_enabled' => env('AGS_PLATFORM_ENABLED', false),
         'base_url' => env('AGS_BASE_URL'),
+        'authorization_token' => env('AGS_AUTHORIZATION_TOKEN'),
     ],
 
     'paypal' => [
@@ -41,8 +42,17 @@ return [
 
     'slack' => [
         'channel_webhooks' => [
-            'closes_ags' => env('SLACK_CHANNEL_WEBHOOK_CLOSES_AGS', 'https://hooks.slack.com/services/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'),
+            'closes_ags' => env('SLACK_CHANNEL_WEBHOOK_CLOSES_AGS'),
         ],
     ],
+
+    'mandrill' => [
+        'key' => env('MANDRILL_KEY'),
+    ],
+
+    'dropbox' => [
+        'token' => env('AGS_DROPBOX_TOKEN'),
+        'root_path' => env('AGS_DROPBOX_ROOT_PATH'),
+    ]
 
 ];

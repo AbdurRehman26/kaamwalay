@@ -1,13 +1,16 @@
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
+import { useMediaQuery } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
+import CardsSearchMobileModal from '@dashboard/components/CardsSearchMobileModal';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { backStep, setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';
@@ -40,6 +43,7 @@ function SubmissionStep02Content() {
     );
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
 
     const searchClient = useMemo(
@@ -87,9 +91,10 @@ function SubmissionStep02Content() {
                     <Divider light />
                     <div className={classes.leftSideContainer}>
                         <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
+                            {isMobile ? <CardsSearchMobileModal /> : null}
                             <CardSubmissionSearchField />
-                            {searchValue !== '' ? <CardsSearchResults /> : null}
-                            <AddedSubmissionCards />
+                            {searchValue !== '' && !isMobile ? <CardsSearchResults /> : null}
+                            <AddedSubmissionCards mobileMode={isMobile} />
                             {!areSelectedCardsValuesValid() ? (
                                 <>
                                     <Alert severity="error" className={classes.valueAlert}>

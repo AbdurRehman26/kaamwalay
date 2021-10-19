@@ -3,7 +3,9 @@
 use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Models\Order;
 use App\Models\OrderPayment;
+use App\Models\OrderStatus;
 use App\Models\User;
+use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\TestingStripeService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -13,12 +15,18 @@ beforeEach(function () {
     $user = User::factory()->create([
         'stripe_id' => Str::random(25),
     ]);
+
     $this->order = Order::factory()->create([
         'user_id' => $user->id,
         'payment_method_id' => 1,
-        'order_status_id' => 1,
+        'order_status_id' => OrderStatus::PAYMENT_PENDING,
     ]);
+
     $this->actingAs($user);
+    
+    $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+    $orderStatusHistoryService->addStatusToOrder($this->order->order_status_id, $this->order->id);
+    
     Event::fake();
 });
 

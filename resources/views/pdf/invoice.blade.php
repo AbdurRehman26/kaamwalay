@@ -275,7 +275,7 @@
                                             {{$customer->phone}}
                                             @endif
                                             <br/>
-                                            Customer ID: {{$customer->id}}
+                                            Customer ID: {{$customer->customer_number}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -284,7 +284,7 @@
                         <td class="customer-id-holder">
                             Customer ID:
                             <p class="customer-id">
-                                {{$customer->id}}
+                                {{$customer->customer_number}}
                             </p>
                         </td>
                     </tr>
@@ -392,11 +392,11 @@
                     @foreach ($orderItems as $item)
                         <tr class="item-row">
                             <td class="card-no">
-                                {{$item->id}}
+                                {{$item->card_product_id}}
                             </td>
                             <td class="description">
                                 <div class="item-name">
-                                    {{$item->cardProduct->name}}
+                                    {{$item->cardProduct->getShortName()}}
                                 </div>
                                 <div class="item-desc">
                                     {{$item->cardProduct->getSearchableName()}}

@@ -1,15 +1,15 @@
-import Avatar from '@material-ui/core/Avatar';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Radio from '@material-ui/core/Radio';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import ButtonBase from '@mui/material/ButtonBase';
+import Radio from '@mui/material/Radio';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useMemo } from 'react';
 import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { CreditCard, setSelectedStripeCard } from '@dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
         root: {
             display: 'flex',
             flexDirection: 'row',
@@ -25,6 +25,9 @@ const useStyles = makeStyles(
             borderWidth: ({ isSelected }: any) => (isSelected ? '2px' : '1px'),
             '&:hover': {
                 cursor: 'pointer',
+            },
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
             },
         },
         leftSide: {
@@ -98,7 +101,7 @@ const useStyles = makeStyles(
             fontWeight: 'normal',
             color: 'grey',
         },
-    },
+    }),
     { name: 'ServiceLevelItemStyle' },
 );
 

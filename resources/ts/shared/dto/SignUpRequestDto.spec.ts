@@ -1,9 +1,9 @@
 import 'reflect-metadata';
-import { ValidateMethodParams } from '@shared/decorators/ValidateMethodParams';
-import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
-import { ValidationException } from '@shared/exceptions/ValidationException';
-import { ErrorMessages } from '@shared/lib/errors/ErrorMessage';
-import { createErrorMessage } from '@shared/lib/errors/createErrorMessage';
+import { ValidateMethodParams } from '../decorators/ValidateMethodParams';
+import { ValidationException } from '../exceptions/ValidationException';
+import { ErrorMessages } from '../lib/errors/ErrorMessage';
+import { createErrorMessage } from '../lib/errors/createErrorMessage';
+import { SignUpRequestDto } from './SignUpRequestDto';
 
 describe('dto/SignupRequestDto', function () {
     it('should correctly parse errors', function () {
@@ -20,7 +20,7 @@ describe('dto/SignupRequestDto', function () {
 
         try {
             foo.attempt({ email: 'test' } as any);
-        } catch (e) {
+        } catch (e: any) {
             expect(e).toBeInstanceOf(ValidationException);
             expect((e as ValidationException).errors[0].constraints).toMatchObject({
                 isEmail: createErrorMessage(ErrorMessages.ShouldBeValidEmailAddress, 'Email'),

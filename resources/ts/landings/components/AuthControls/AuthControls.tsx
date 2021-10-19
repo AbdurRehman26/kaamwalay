@@ -1,5 +1,6 @@
-import Button from '@material-ui/core/Button';
-import { alpha, makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import { alpha } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
 
@@ -17,6 +18,9 @@ const useStyles = makeStyles(
             '&:hover': {
                 backgroundColor: alpha(theme.palette.primary.light, 0.1),
             },
+        },
+        dashboardBtn: {
+            color: '#fff',
         },
         space: {
             marginRight: theme.spacing(1),
@@ -36,10 +40,11 @@ export function AuthControls() {
     if (!authenticated) {
         return (
             <>
-                <Button color={'primary'} className={cx(classes.button, classes.space)}>
+                <Button href={'/auth/sign-in'} color={'primary'} className={cx(classes.button, classes.space)}>
                     Log in
                 </Button>
                 <Button
+                    href={'/auth/sign-up'}
                     variant={'outlined'}
                     color={'primary'}
                     className={cx(classes.button, classes.buttonHighlighted)}
@@ -50,7 +55,11 @@ export function AuthControls() {
         );
     }
 
-    return <Button href={'/dashboard'}>Dashboard</Button>;
+    return (
+        <Button href={'/dashboard'} className={classes.dashboardBtn}>
+            Dashboard
+        </Button>
+    );
 }
 
 export default AuthControls;

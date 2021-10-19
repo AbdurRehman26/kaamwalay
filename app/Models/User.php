@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\EmailService;
+use App\Services\SerialNumberService\SerialNumberService;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,7 +23,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -39,6 +41,7 @@ class User extends Authenticatable implements JWTSubject
         'id' => 'integer',
         'email_verified_at' => 'datetime',
     ];
+
     /**
      * The relations that should be returned with model.
      *
@@ -53,14 +56,25 @@ class User extends Authenticatable implements JWTSubject
 
     public static function createCustomer(array $data): self
     {
+        /* @var User $user */
         $user = self::create($data);
 
         $user->assignCustomerRole();
+        $user->assignCustomerNumber();
 
         return $user;
     }
 
-    public function customer_addresses(): HasMany
+    public static function createAdmin(array $data): self
+    {
+        $user = self::create($data);
+
+        $user->assignRole(Role::findByName(config('permission.roles.admin')));
+
+        return $user;
+    }
+
+    public function customerAddresses(): HasMany
     {
         return $this->hasMany(CustomerAddress::class, 'user_id');
     }
@@ -95,9 +109,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasRole(config('permission.roles.admin'));
     }
 
-    public function getNameAttribute()
+    public function getNameAttribute(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        return $this->getFullName();
     }
 
     public function assignCustomerRole(): void
@@ -108,5 +122,37 @@ class User extends Authenticatable implements JWTSubject
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    private function assignCustomerNumber(): self
+    {
+        if (! $this->customer_number) {
+            $this->customer_number = SerialNumberService::customer($this->id)->toString();
+            $this->save();
+        }
+
+        return $this;
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        /* @var EmailService $emailService */
+        $emailService = resolve(EmailService::class);
+        $emailService->sendEmail(
+            [[$this->getEmailForPasswordReset() => $this->name]],
+            $emailService::SUBJECT[$emailService::TEMPLATE_SLUG_FORGOT_PASSWORD],
+            $emailService::TEMPLATE_SLUG_FORGOT_PASSWORD,
+            [
+                'PASSWORD_RESET_LINK' => $this->getPasswordResetRoute($token),
+            ],
+        );
+    }
+
+    protected function getPasswordResetRoute(string $token): string
+    {
+        return route('password.reset', [
+            'token' => $token,
+            'email' => $this->getEmailForPasswordReset(),
+        ]);
     }
 }

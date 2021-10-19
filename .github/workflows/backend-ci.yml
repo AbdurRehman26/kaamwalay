@@ -27,7 +27,7 @@ jobs:
           commit_message: Fix styling
 
   static-analysis-and-tests:
-    name: Run Static Analysis
+    name: Run Static Analysis & Tests
     needs: style
     runs-on: ubuntu-latest
 
@@ -47,29 +47,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs
 
-      - name: Analyze
+      - name: Run Static Analysis
         run: vendor/bin/phpstan analyze
 
       - name: Execute tests
         run: vendor/bin/pest
-#
-#  test:
-#    name: Run Tests
-#    needs: static-analysis
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Setup PHP
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: 8.0
-#          extensions:
-#            dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif,
-#            iconv, imagick
-#          coverage: none
-#
-#      - name: Install dependencies
-#        run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs

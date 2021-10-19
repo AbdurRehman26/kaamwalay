@@ -36,14 +36,14 @@ class InitializePopReports extends Command
         $selectedOption = $this->choice(
             'Initialize Report Values for :',
             ['All', 'Series', 'Sets', 'Cards'],
-            0
+            '0'
         );
 
         /* For Series */
         if ($selectedOption == "All" || $selectedOption == "Series") {
             $this->info("Initializing Values for Series");
 
-            $cardSeriesIds = CardSeries::all()->pluck('id');
+            $cardSeriesIds = CardSeries::pluck('id');
 
             foreach ($cardSeriesIds as $cardSeriesId) {
                 PopReportsSeries::firstOrCreate([ 'card_series_id' => $cardSeriesId ]);

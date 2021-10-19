@@ -32,7 +32,6 @@ class CardSet extends Model
      *
      * @var array
      */
-
     protected $casts = [
         'release_date' => 'date',
     ];

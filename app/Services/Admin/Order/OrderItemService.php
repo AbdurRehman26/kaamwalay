@@ -26,7 +26,7 @@ class OrderItemService
     /**
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
-    public function changeStatus(Order $order, OrderItem $item, array $request, Authenticatable $user): OrderItem
+    public function changeStatus(Order $order, OrderItem $item, array $request, User $user): OrderItem
     {
         if ($item->order_id !== $order->id) {
             throw new OrderItemDoesNotBelongToOrder;

@@ -12,8 +12,8 @@ use App\Models\PopReportsSeries;
 use App\Models\PopReportsSet;
 use App\Models\UserCard;
 use App\Services\Admin\CardGradingService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -180,7 +180,7 @@ class PopReportService
             sum(ex_plus) as ex_plus, sum(ex_mt) as ex_mt, sum(ex_mt_plus) as ex_mt_plus, sum(nm) as nm, sum(nm_plus) as nm_plus,
             sum(nm_mt) as nm_mt, sum(nm_mt_plus) as nm_mt_plus, sum(mint) as mint, sum(mint_plus) as mint_plus, sum(gem_mt) as gem_mt,
             sum(total) as total, sum(total_plus) as total_plus'
-        )->get()->first();
+        )->first();
     }
 
     protected function cleanColumnName($grade): string

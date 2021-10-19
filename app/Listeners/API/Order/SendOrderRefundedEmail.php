@@ -6,8 +6,6 @@ use App\Events\API\Customer\Order\OrderRefunded;
 use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class SendOrderRefundedEmail implements ShouldBeEncrypted
 {
@@ -30,14 +28,24 @@ class SendOrderRefundedEmail implements ShouldBeEncrypted
     public function handle(OrderRefunded $event)
     {
         $user = $event->order->user;
+        $order = $event->order;
         $orderPayment = new OrderPaymentResource($event->order->firstOrderPayment);
+        $card = $orderPayment->card;
+
         $this->emailService->sendEmail(
-            $user->email,
-            $user->name,
+            [[ $user->email => $user->name ]],
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_ORDER_REFUNDED],
             $this->emailService::TEMPLATE_SLUG_ORDER_REFUNDED,
             [
-                'TOTAL_AMOUNT' => 100,
+                'ORDER_NUMBER' => $order->order_number,
+                'REFUNDED_AMOUNT' => $event->data['amount'],
+                'TOTAL_AMOUNT' => number_format($order->grand_total, 2),
+                'SUB_TOTAL' => number_format($order->service_fee, 2),
+                'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
+                'EXTRA_CHARGE' => number_format($orderPayment->amount, 2),
+                'CARD' => $card ? ($card['brand'] . ' ending in ' . $card['last4']) : 'N/A',
+                'NOTES' => $order->notes,
+                'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',
             ],
         );
     }

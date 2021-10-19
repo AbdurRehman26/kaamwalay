@@ -6,6 +6,7 @@ use App\Events\API\Admin\Order\ExtraChargeFailed;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Events\API\Admin\Order\RefundSuccessful;
+use App\Events\API\Customer\Order\OrderRefunded;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\FailedRedund;
@@ -256,6 +257,6 @@ class OrderService
 
         DB::commit();
 
-        RefundSuccessful::dispatch($order);
+        OrderRefunded::dispatch($order, $data);
     }
 }

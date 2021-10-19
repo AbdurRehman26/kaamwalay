@@ -12,6 +12,12 @@
         padding-bottom: 0;
     }
 
+    &__container {
+        @include breakpoints.down(sm) {
+            padding: 0;
+        }
+    }
+
     &__table {
         @apply w-full relative;
         border-collapse: separate;
@@ -20,7 +26,7 @@
         box-sizing: border-box;
 
         @include breakpoints.down(sm) {
-            min-width: 1000px;
+            min-width: 1200px;
         }
         &__container {
             @include breakpoints.down(md) {
@@ -32,10 +38,6 @@
         &-holder {
             max-width: 100%;
             overflow-x: auto;
-            @include breakpoints.down(sm) {
-                @apply absolute;
-                left: -1px;
-            }
         }
 
         &-body {

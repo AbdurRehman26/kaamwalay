@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
-use App\Models\OrderPayment;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderPaymentResource extends JsonResource

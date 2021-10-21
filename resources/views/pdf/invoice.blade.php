@@ -81,7 +81,7 @@
         .info-list-table, .info-list-table .dt, .info-list-table .dd{
             width: 50%;
             margin: 2px 0;
-            line-height: 18px;
+            line-height: 16.5px;
         }
         .info-list-table td, .customer-info-list-table td{
             vertical-align: top;
@@ -92,7 +92,7 @@
         .customer-info-list-table{
             width: 100%;
             margin: 2px 0;
-            line-height: 18px;
+            line-height: 16.5px;
         }
 
         .info-list-table .dt, .customer-info-list-table .dt{
@@ -116,7 +116,7 @@
         }
 
         .order-details-section{
-            margin-top: 38px;
+            margin-top: 34px;
             width: 100%;
         }
         .order-details-section .info-box{
@@ -134,7 +134,7 @@
 
         .info-box-content{
             padding: 8px;
-            line-height: 18px;
+            line-height: 16.5px;
         }
 
         .info-box-content.payment-method {

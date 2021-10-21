@@ -24,8 +24,7 @@ class ScheduledEmailFactory extends Factory
         return [
             'send_at' => $this->faker->dateTime(),
             'payload' => serialize([
-                'recipientEmail' => $this->faker->email(),
-                'recipientName' => $this->faker->firstName(),
+                'recipients' => [$this->faker->email() => $this->faker->firstName()],
                 'subject' => $this->faker->sentence(5),
                 'templateName' => $this->faker->slug(3),
                 'templateContent' => [],

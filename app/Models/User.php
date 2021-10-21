@@ -124,7 +124,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
-    private function assignCustomerNumber(): self
+    public function assignCustomerNumber(): self
     {
         if (! $this->customer_number) {
             $this->customer_number = SerialNumberService::customer($this->id)->toString();

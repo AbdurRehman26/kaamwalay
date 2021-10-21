@@ -294,5 +294,4 @@ class Order extends Model
         ->groupBy(['card_product_id'])
         ->get();
     }
-
 }

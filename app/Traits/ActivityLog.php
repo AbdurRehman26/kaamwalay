@@ -17,6 +17,6 @@ trait ActivityLog
 
     protected function shouldLogEvent(string $eventName): bool
     {
-        return Auth::user()->isAdmin();
+        return Auth::user() && Auth::user()->isAdmin();
     }
 }

@@ -137,6 +137,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeAdmin(Builder $query): Builder
     {
+        // @phpstan-ignore-next-line
         return $query->role(Role::findByName(config('permission.roles.admin')));
     }
 

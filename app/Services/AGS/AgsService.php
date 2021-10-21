@@ -180,7 +180,7 @@ class AgsService
 
     protected function prepareGeneratedImagesForPublicPage(array $data): array
     {
-        return [
+        $imagesData = [
             [
                 'output_image' => $data['front_scan']['centering_result']['output_image'] ?? null,
                 'name' => 'Front Centering',
@@ -246,5 +246,11 @@ class AgsService
                 'name' => 'Laser Back Corners',
             ],
         ];
+
+        $filterData = array_filter($imagesData, function($imageData) {
+            return ($imageData['output_image'] != null );
+        });
+
+        return $filterData;
     }
 }

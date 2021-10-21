@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Traits\ActivityLog;
 
 class OrderShipment extends Model
 {
-    use HasFactory;
+    use HasFactory, ActivityLog;
 
     /**
      * The attributes that are mass assignable.

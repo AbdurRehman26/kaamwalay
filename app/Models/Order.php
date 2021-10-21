@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Filters\AdminOrderSearchFilter;
+use App\Traits\ActivityLog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 class Order extends Model
 {
     use HasFactory;
+    use ActivityLog;
 
     /**
      * The attributes that are mass assignable.
@@ -293,4 +295,5 @@ class Order extends Model
         ->groupBy(['card_product_id'])
         ->get();
     }
+
 }

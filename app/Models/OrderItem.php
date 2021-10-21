@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Traits\ActivityLog;
 
 class OrderItem extends Model
 {
-    use HasFactory;
+    use HasFactory, ActivityLog;
 
     /**
      * The attributes that are mass assignable.

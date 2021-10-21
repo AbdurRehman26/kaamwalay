@@ -12,7 +12,7 @@ trait ActivityLog
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->logAll();
+        return LogOptions::defaults()->logAll()->logOnlyDirty()->dontLogIfAttributesChangedOnly(['updated_at']);
     }
 
     protected function shouldLogEvent(string $eventName): bool

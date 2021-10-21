@@ -17,8 +17,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 
 class Order extends Model
 {
-    use HasFactory;
-    use ActivityLog;
+    use HasFactory, ActivityLog;
 
     /**
      * The attributes that are mass assignable.

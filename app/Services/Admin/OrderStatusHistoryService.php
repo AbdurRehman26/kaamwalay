@@ -63,13 +63,15 @@ class OrderStatusHistoryService
             CreateOrderFoldersOnDropbox::dispatch($order);
         }
 
-        $order = Order::find($orderId);
-        $order->update(array_merge(
-            [
+        Order::query()
+            ->where('id', $orderId)
+            ->first()
+            ->update(array_merge(
+                [
                     'order_status_id' => $orderStatusId,
                 ],
-            $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: [],
-        ));
+                $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: [],
+            ));
 
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));

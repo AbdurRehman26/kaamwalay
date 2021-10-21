@@ -115,7 +115,7 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function sendAdminEmail(string $template, array $vars)
     {
-        $data = User::get()->filter->isAdmin()->map(function ($value) {
+        $data = User::admin()->get()->map(function ($value) {
             return [$value->email => $value->name];
         })->toArray();
         $this->emailService->sendEmail(

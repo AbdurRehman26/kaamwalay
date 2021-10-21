@@ -142,7 +142,7 @@ class CardGradingService
 
     protected function getAverage(...$values): float
     {
-        return number_format((float)(array_sum($values) / count($values)), 2);
+        return (float) number_format((float) (array_sum($values) / count($values)), 2);
     }
 
     protected function getGradeNickname(float $overallValue): string
@@ -155,10 +155,12 @@ class CardGradingService
         $integerValue = (int) $value;
         $decimalValue = round(($value - $integerValue), 2);
 
-        return match (true) {
+        $roundedValue = match (true) {
             ($decimalValue <= 0.25) => number_format($integerValue, 2),
             ($decimalValue <= 0.50), ($decimalValue <= 0.75) => number_format($integerValue + 0.5, 2),
             default => number_format($integerValue + 1, 2),
         };
+
+        return (float) $roundedValue;
     }
 }

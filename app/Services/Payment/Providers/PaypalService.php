@@ -12,7 +12,7 @@ use PayPalHttp\HttpException;
 
 class PaypalService implements PaymentProviderServiceInterface
 {
-    protected $environment;
+    protected SandboxEnvironment|ProductionEnvironment $environment;
     protected PayPalHttpClient $client;
 
     public function __construct()

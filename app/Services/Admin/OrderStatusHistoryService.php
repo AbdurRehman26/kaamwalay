@@ -12,6 +12,7 @@ use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
@@ -23,7 +24,7 @@ class OrderStatusHistoryService
     ) {
     }
 
-    public function getAllByOrderId(Order|int $orderId)
+    public function getAllByOrderId(Order|int $orderId): Collection
     {
         return QueryBuilder::for(OrderStatusHistory::class)
             ->where('order_id', getModelId($orderId))

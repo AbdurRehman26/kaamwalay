@@ -12,7 +12,6 @@ use App\Models\OrderItemStatusHistory;
 use App\Models\User;
 use App\Services\Admin\CardGradingService;
 use App\Services\Order\UserCardService;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Collection;
 
 class OrderItemService
@@ -26,7 +25,7 @@ class OrderItemService
     /**
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
-    public function changeStatus(Order $order, OrderItem $item, array $request, Authenticatable $user): OrderItem
+    public function changeStatus(Order $order, OrderItem $item, array $request, User $user): OrderItem
     {
         if ($item->order_id !== $order->id) {
             throw new OrderItemDoesNotBelongToOrder;

@@ -1,0 +1,54 @@
+name: 'Backend: Continuous Integration'
+
+on:
+  pull_request:
+    paths:
+      - '**.php'
+
+jobs:
+  style:
+    name: Check & Fix Styling
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Fix style
+        uses: docker://oskarstark/php-cs-fixer-ga
+        with:
+          args: --config=.php-cs-fixer.php --allow-risky=yes
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Fix styling
+
+  static-analysis-and-tests:
+    name: Run Static Analysis & Tests
+    needs: style
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions:
+            dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif,
+            iconv, imagick
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs
+
+      - name: Run Static Analysis
+        run: vendor/bin/phpstan analyze
+
+      - name: Execute tests
+        run: vendor/bin/pest

@@ -1,9 +1,12 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { useMemo } from 'react';
+import { MouseEventHandler, useCallback, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
@@ -52,6 +55,10 @@ export function SubmissionsViewHeader({
     const classes = useStyles();
 
     const [statusType, statusLabel] = useOrderStatus(orderStatus);
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+    const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
+    const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
+    const routeHistory = useHistory();
 
     const history = useMemo(
         () =>
@@ -74,6 +81,12 @@ export function SubmissionsViewHeader({
         [orderStatusHistory],
     );
 
+    const handleViewGrades = useCallback(() => {
+        handleCloseOptions();
+
+        routeHistory.push(`/submissions/${orderId}/grade`);
+    }, [handleCloseOptions, orderId]);
+
     return (
         <Grid container className={classes.root}>
             <Grid container className={classes.header}>
@@ -91,7 +104,17 @@ export function SubmissionsViewHeader({
                         shippingProvider={orderShipment?.shippingProvider}
                     />
                     <IconButton size={'medium'} className={classes.menuButton}>
-                        <MoreVertIcon />
+                        <IconButton onClick={handleClickOptions} size="large">
+                            <MoreVertIcon />
+                        </IconButton>
+
+                        <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                            {orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED) ? (
+                                <>
+                                    <MenuItem onClick={handleViewGrades}>View Grades</MenuItem>
+                                </>
+                            ) : null}
+                        </Menu>
                     </IconButton>
                 </Grid>
             </Grid>

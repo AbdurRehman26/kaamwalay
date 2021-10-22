@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Events\API\Admin\Order\OrderUpdated;
+use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
@@ -72,6 +73,23 @@ class OrderService
             ->get()->toArray();
     }
 
+    public function getOrderItemCertificateData(OrderItem|int $orderItem): array
+    {
+        return UserCard::select([
+                'certificate_number as certificate_id',
+                'card_sets.name as set_name',
+                'card_products.card_number',
+                'card_products.variant_name',
+                'card_products.variant_category',
+                'card_products.holo_type',
+            ])
+            ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
+            ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id')
+            ->where('user_cards.order_item_id', getModelId($orderItem))
+            ->get()->toArray();
+    }
+
     public function addExtraCard(Order $order, User $user, int $card_id, float $value): OrderItem
     {
         $newItem = OrderItem::create([
@@ -96,6 +114,8 @@ class OrderService
         $orderItem->declared_value_total = $value;
         $orderItem->save();
 
+        OrderItemCardChangedEvent::dispatch($orderItem);
+
         return $orderItem;
     }
 
@@ -114,7 +134,7 @@ class OrderService
      */
     public function getGrades(Order $order): Collection
     {
-        if ($order->order_status_id !== OrderStatus::ARRIVED) {
+        if ( !in_array($order->order_status_id, [OrderStatus::ARRIVED, OrderStatus::GRADED, OrderStatus::SHIPPED]) ) {
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));

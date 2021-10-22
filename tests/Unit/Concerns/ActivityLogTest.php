@@ -55,8 +55,9 @@ it('does not log activity when model is created by customer', function (Model $m
         'causer_id' => $this->customer->id,
     ]);
 })->with([
-    function() {
+    function () {
         $this->actingAs($this->customer);
+
         return Order::factory()->create();
     },
 ]);
@@ -64,30 +65,37 @@ it('does not log activity when model is created by customer', function (Model $m
 dataset('modelsByAdmin', function () {
     yield function () {
         $this->actingAs($this->admin);
+
         return Order::factory()->create();
     };
     yield function () {
         $this->actingAs($this->admin);
+
         return OrderItem::factory()->create();
     };
     yield function () {
         $this->actingAs($this->admin);
+
         return OrderItemStatusHistory::factory()->create();
     };
     yield function () {
         $this->actingAs($this->admin);
+
         return OrderPayment::factory()->create();
     };
     yield function () {
         $this->actingAs($this->admin);
+
         return OrderShipment::factory()->create();
     };
     yield function () {
         $this->actingAs($this->admin);
+
         return OrderStatusHistory::factory()->create();
     };
     yield function () {
         $this->actingAs($this->admin);
+
         return UserCard::factory()->create();
     };
 });

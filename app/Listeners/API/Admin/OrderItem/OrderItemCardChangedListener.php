@@ -36,12 +36,12 @@ class OrderItemCardChangedListener implements ShouldQueue
         }
     }
 
-    protected function handleGraded($event)
+    protected function handleGraded(OrderItemCardChangedEvent $event): void
     {
         $this->updateAgsCertificateCard($event);
     }
 
-    protected function updateAgsCertificateCard($event): void
+    protected function updateAgsCertificateCard(OrderItemCardChangedEvent $event): void
     {
         $data = $this->orderService->getOrderItemCertificateData($event->orderItem);
 

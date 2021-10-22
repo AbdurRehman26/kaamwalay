@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Http\Filters\AdminOrderSearchFilter;
 use App\Concerns\ActivityLog;
+use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

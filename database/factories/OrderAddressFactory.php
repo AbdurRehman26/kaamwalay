@@ -24,13 +24,13 @@ class OrderAddressFactory extends Factory
     public function definition()
     {
         return [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'address' => $this->faker->address,
-            'city' => $this->faker->city,
-            'state' => $this->faker->word,
-            'zip' => $this->faker->postcode,
-            'phone' => $this->faker->phoneNumber,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'address' => $this->faker->address(),
+            'city' => $this->faker->city(),
+            'state' => $this->faker->word(),
+            'zip' => $this->faker->postcode(),
+            'phone' => $this->faker->phoneNumber(),
             'flat' => $this->faker->numberBetween(1, 10),
             'country_id' => Country::factory(),
         ];

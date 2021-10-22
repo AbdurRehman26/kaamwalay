@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Concerns\ActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderPayment extends Model
 {
-    use HasFactory;
+    use HasFactory, ActivityLog;
 
     /**
      * The attributes that are mass assignable.

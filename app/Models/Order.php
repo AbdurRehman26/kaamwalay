@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\ActivityLog;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +17,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, ActivityLog;
 
     /**
      * The attributes that are mass assignable.

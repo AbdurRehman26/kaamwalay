@@ -7,7 +7,6 @@ use App\Models\OrderItemStatus;
 use App\Services\Admin\OrderService;
 use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Log;
 
 class OrderItemCardChangedListener implements ShouldQueue
 {

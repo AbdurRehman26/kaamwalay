@@ -134,7 +134,7 @@ class OrderService
      */
     public function getGrades(Order $order): Collection
     {
-        if ( !in_array($order->order_status_id, [OrderStatus::ARRIVED, OrderStatus::GRADED, OrderStatus::SHIPPED]) ) {
+        if (! in_array($order->order_status_id, [OrderStatus::ARRIVED, OrderStatus::GRADED, OrderStatus::SHIPPED])) {
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));

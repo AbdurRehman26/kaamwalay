@@ -249,7 +249,7 @@
         <div class="container">
             <hr class="divider"/>
         </div>
-
+        @if($generated_images)
         <section class="feed-view__images">
             <div class="container">
                 <h4 class="feed-view__images__heading">Generated Images</h4>
@@ -266,6 +266,7 @@
                 </div>
             </div>
         </section>
+        @endif
     @else
         Grades are not available yet.
     @endif

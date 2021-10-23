@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Models\Order;
 use App\Models\OrderPayment;
 
 class OrderPaymentResource extends BaseResource
@@ -57,7 +56,7 @@ class OrderPaymentResource extends BaseResource
     }
 
     /**
-     * @param int OrderPayment::TYPE_* $type
+     * @param int<1, 3> $type
      */
     public function getPaymentType(int $type): string
     {

@@ -54,7 +54,7 @@ beforeEach(function () {
 test('admin can create extra charge for order', function () {
     Config::set('robograding.extra_charge_enabled', true);
     Event::fake();
-    $this->postJson('/api/admin/orders/' . $this->order->id . '/extra/charge', [
+    $this->postJson('/api/admin/orders/' . $this->order->id . '/payments/extra-charge', [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
     ])->assertStatus(Response::HTTP_CREATED);
@@ -79,7 +79,7 @@ test('admin can update order payment notes', function () {
 
 it('does not perform extra charge when service is disabled', function () {
     Config::set('robograding.extra_charge_enabled', false);
-    $this->postJson('/api/admin/orders/' . $this->order->id . '/extra/charge', [
+    $this->postJson('/api/admin/orders/' . $this->order->id . '/payments/extra-charge', [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
     ])->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE);

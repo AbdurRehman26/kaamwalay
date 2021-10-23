@@ -38,7 +38,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
 
-        Route::post('extra/charge', [OrderPaymentController::class, 'addExtraCharge']);
+        Route::post('payments/extra-charge', [OrderPaymentController::class, 'addExtraCharge']);
         Route::put('order-payments/{orderPayment}', [OrderPaymentController::class, 'update']);
     });
 });

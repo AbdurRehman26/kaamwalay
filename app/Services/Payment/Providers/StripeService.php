@@ -59,7 +59,7 @@ class StripeService implements PaymentProviderServiceInterface
 
         $paymentData = [
             'amount' => $order->grand_total_cents,
-            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->order_number}",
                 'metadata' => [
@@ -81,7 +81,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'success' => true,
                 'request' => $paymentData,
                 'response' => $response->toArray(),
-                'payment_provider_reference_id' => $order->lastOrderPayment->payment_provider_reference_id,
+                'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
                 'amount' => $order->grand_total,
                 'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
                 'notes' => $paymentData['additional_data']['description'],
@@ -188,7 +188,7 @@ class StripeService implements PaymentProviderServiceInterface
     {
         $paymentData = [
             'amount' => (int) $request['amount'] * 100,
-            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => $request['notes'],
                 'metadata' => [

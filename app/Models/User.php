@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -124,7 +125,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
-    private function assignCustomerNumber(): self
+    public function assignCustomerNumber(): self
     {
         if (! $this->customer_number) {
             $this->customer_number = SerialNumberService::customer($this->id)->toString();
@@ -132,6 +133,12 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $this;
+    }
+
+    public function scopeAdmin(Builder $query): Builder
+    {
+        // @phpstan-ignore-next-line
+        return $query->role(Role::findByName(config('permission.roles.admin')));
     }
 
     public function sendPasswordResetNotification($token)

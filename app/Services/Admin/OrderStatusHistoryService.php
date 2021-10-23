@@ -65,6 +65,7 @@ class OrderStatusHistoryService
 
         Order::query()
             ->where('id', $orderId)
+            ->first()
             ->update(array_merge(
                 [
                     'order_status_id' => $orderStatusId,

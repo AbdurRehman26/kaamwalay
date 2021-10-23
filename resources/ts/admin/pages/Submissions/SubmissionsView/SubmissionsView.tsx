@@ -66,7 +66,11 @@ export function SubmissionsView() {
                 shippingAddress={data.shippingAddress}
                 payment={data.orderPayment}
             />
-            <SubmissionViewCards items={data.orderItems} serviceLevelPrice={data.paymentPlan?.price} />
+            <SubmissionViewCards
+                items={data?.orderItems}
+                serviceLevelPrice={data?.paymentPlan?.price}
+                orderStatusID={data?.orderStatus?.id}
+            />
         </Grid>
     );
 }

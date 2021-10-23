@@ -55,6 +55,9 @@ class OrderPaymentResource extends BaseResource
         ];
     }
 
+    /**
+     * @param int<1, 3> $type
+     */
     public function getPaymentType(int $type): string
     {
         return match ($type) {

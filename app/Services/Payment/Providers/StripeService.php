@@ -177,7 +177,7 @@ class StripeService implements PaymentProviderServiceInterface
         ) / 100, 2);
     }
 
-    public function additionalCharge(Order $order, $request): array
+    public function additionalCharge(Order $order, array $request): array
     {
         $paymentData = [
             'amount' => (int) $request['amount'] * 100,

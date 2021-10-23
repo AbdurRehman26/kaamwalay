@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FeatureNotAvailable extends Exception
 {
-    /* @var int $code */
+    /**
+     * @var int
+     */
     protected $code = Response::HTTP_SERVICE_UNAVAILABLE;
 
     /**

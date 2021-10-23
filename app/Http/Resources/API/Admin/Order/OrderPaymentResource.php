@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Models\Order;
 use App\Models\OrderPayment;
 
 class OrderPaymentResource extends BaseResource

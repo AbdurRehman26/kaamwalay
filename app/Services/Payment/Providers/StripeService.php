@@ -168,13 +168,6 @@ class StripeService implements PaymentProviderServiceInterface
         $this->createCustomerIfNull($user);
     }
 
-    public function calculateFeeWithAmount(float $amount): float
-    {
-        $amountCharged = round($amount * 100);
-
-        return $this->calculateFee($amountCharged);
-    }
-
     public function calculateFee(Order $order): float
     {
         $amountCharged = $order->grand_total_cents;

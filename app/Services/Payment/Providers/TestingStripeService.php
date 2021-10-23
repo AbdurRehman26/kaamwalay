@@ -221,14 +221,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         ];
     }
 
-    public function calculateFeeWithAmount(float $amount): float
-    {
-        $amountCharged = round($amount * 100);
-
-        return $this->calculateFee($amountCharged);
-    }
-
-    public function additionalCharge(Order $order, $request): array
+    public function additionalCharge(Order $order, array $request): array
     {
         if (! empty($request['fail'])) {
             return [];

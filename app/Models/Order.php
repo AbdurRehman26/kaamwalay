@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,8 +17,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 
 class Order extends Model
 {
-    use HasFactory;
-    use HasOrderPayments;
+    use HasFactory, ActivityLog, HasOrderPayments;
 
     /**
      * The attributes that are mass assignable.

@@ -41,7 +41,7 @@ class OrderPaymentResource extends BaseResource
             ],
             'amount' => $this->amount,
             'notes' => $this->notes,
-            'type' => array_search($this->type, OrderPayment::PAYMENT_TYPES),
+            'type' => $this->getPaymentType($this->type),
         ];
     }
 
@@ -53,5 +53,14 @@ class OrderPaymentResource extends BaseResource
                 "name" => $response['payer']['name']['given_name'] ?? "N/A",
             ],
         ];
+    }
+
+    public function getPaymentType(int $type): string
+    {
+        return match ($type) {
+            OrderPayment::TYPE_ORDER_PAYMENT => 'order_payment',
+            OrderPayment::TYPE_EXTRA_CHARGE => 'extra_charge',
+            OrderPayment::TYPE_REFUND => 'refund',
+        };
     }
 }

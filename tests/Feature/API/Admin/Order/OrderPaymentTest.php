@@ -57,7 +57,7 @@ test('admin can create extra charge for order', function () {
     $this->postJson('/api/admin/orders/' . $this->order->id . '/payments/extra-charge', [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
-    ])->assertStatus(Response::HTTP_CREATED);
+    ])->dump()->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(ExtraChargeSuccessful::class);
     expect($this->order->extraCharges()->count())->toEqual(1);

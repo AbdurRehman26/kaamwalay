@@ -83,7 +83,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'response' => $response->toArray(),
                 'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
                 'amount' => $order->grand_total,
-                'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+                'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => $paymentData['additional_data']['description'],
             ];
         } catch (IncompletePayment $exception) {
@@ -125,7 +125,7 @@ class StripeService implements PaymentProviderServiceInterface
             && $charge->outcome->type === 'authorized'
         ) {
             $order->lastOrderPayment->update([
-                'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+                'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'amount' => $order->grand_total,
                 'notes' => "Payment for Order # {$order->order_number}",
                 'response' => json_encode($paymentIntent->toArray()),
@@ -205,7 +205,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'response' => $response->toArray(),
                 'payment_provider_reference_id' => $paymentData['payment_intent_id'],
                 'amount' => $request['amount'],
-                'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+                'type' => OrderPayment::TYPE_EXTRA_CHARGE,
                 'notes' => $paymentData['additional_data']['description'],
             ];
         } catch (IncompletePayment|InvalidRequestException|CardException $exception) {

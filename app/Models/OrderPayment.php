@@ -40,11 +40,9 @@ class OrderPayment extends Model
         'order_id' => 'integer',
     ];
 
-    public const PAYMENT_TYPES = [
-        'order_payment' => 1,
-        'extra_charge' => 2,
-        'refund' => 3,
-    ];
+    public const TYPE_ORDER_PAYMENT = 1;
+    public const TYPE_EXTRA_CHARGE = 2;
+    public const TYPE_REFUND = 3;
 
     public function order(): BelongsTo
     {

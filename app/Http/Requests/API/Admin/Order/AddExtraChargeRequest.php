@@ -37,7 +37,7 @@ class AddExtraChargeRequest extends FormRequest
     protected function passedValidation()
     {
         $this->merge([
-            'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+            'type' => OrderPayment::TYPE_EXTRA_CHARGE,
             'payment_method_id' => $this->route('order')->payment_method_id,
         ]);
     }

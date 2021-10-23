@@ -43,7 +43,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
             'response' => $response,
             'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'amount' => $order->grand_total,
-            'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+            'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             'notes' => $paymentData['additional_data']['description'],
         ];
     }
@@ -247,7 +247,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
             'response' => $response,
             'payment_provider_reference_id' => $paymentData['payment_intent_id'],
             'amount' => $request['amount'],
-            'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+            'type' => OrderPayment::TYPE_EXTRA_CHARGE,
             'notes' => $paymentData['additional_data']['description'],
         ];
     }

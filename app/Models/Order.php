@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Concerns\Order\HasOrderPayments;
 use App\Concerns\ActivityLog;
+use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

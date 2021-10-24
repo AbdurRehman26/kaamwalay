@@ -66,14 +66,14 @@ export function DrawerNavigation() {
                 </Box>
 
                 <List>
-                    {/* {authenticated && (*/}
-                    {/*    <ListItem button href={'/dashboard'}>*/}
-                    {/*        <ListItemText*/}
-                    {/*            primary={'Dashboard'}*/}
-                    {/*            primaryTypographyProps={{ className: classes.listItemText }}*/}
-                    {/*        />*/}
-                    {/*    </ListItem>*/}
-                    {/* )}*/}
+                    {authenticated && (
+                        <ListItem button onClick={() => handleItemPress('/dashboard')}>
+                            <ListItemText
+                                primary={'Dashboard'}
+                                primaryTypographyProps={{ className: classes.listItemText }}
+                            />
+                        </ListItem>
+                    )}
                     <ListItem button onClick={() => handleItemPress('/feed')}>
                         <ListItemText
                             primary={'Live Feed'}

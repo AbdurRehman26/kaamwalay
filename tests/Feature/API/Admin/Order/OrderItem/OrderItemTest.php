@@ -1,12 +1,17 @@
 <?php
 
+use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
+use App\Listeners\API\Admin\OrderItem\OrderItemCardChangedListener;
 use App\Models\CardProduct;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Models\UserCard;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Services\Admin\OrderService;
+use App\Services\AGS\AgsService;
 
 uses(WithFaker::class);
 uses()->group('admin');
@@ -107,6 +112,7 @@ test('a new order item needs data', function () {
 });
 
 test('an admin can update order item', function () {
+    Event::fake();
     $orderItem = OrderItem::factory()->create();
 
     $this->actingAs($this->user);
@@ -126,6 +132,8 @@ test('an admin can update order item', function () {
         ],
     ]);
     $this->assertEquals($response['data']['card_product']['id'], $newCard->id);
+
+    Event::assertDispatched(OrderItemCardChangedEvent::class);
 });
 
 test('a customer can not update order item', function () {
@@ -316,4 +324,28 @@ test('an admin can update an existing order item status notes as empty', functio
     $this->assertDatabaseMissing('order_item_status_histories', [
         'notes' => $orderItemStatusHistory->notes,
     ]);
+});
+
+test('can swap card in AGS certificate', function () {
+
+    Event::fake();
+    Http::fake(['*' => Http::response(json_decode(file_get_contents(
+        base_path() . '/tests/stubs/AGS_create_certificates_response_200.json'
+    ), associative: true))]);
+
+    $userCard = UserCard::factory()->create([
+        'certificate_number' => '09000000',
+    ]);
+
+    $agsService = resolve(AgsService::class);
+    $orderService = resolve(OrderService::class);
+
+    $data = $orderService->getOrderItemCertificateData($userCard->orderItem);
+
+    $response = $agsService->createCertificates($data);
+
+    $this->assertEquals(count($response), 1);
+    $this->assertArrayHasKey('certificate_id',$response[0]);
+    $this->assertEquals($response[0]['certificate_id'], '09000000');
+
 });

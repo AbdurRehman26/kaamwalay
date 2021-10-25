@@ -24,6 +24,10 @@ class AddExtraChargeFieldsInOrderPaymentsTable extends Migration
             $table->text('notes')
                 ->nullable()
                 ->after('payment_provider_reference_id');
+            $table->foreignId('user_id')
+                ->comment('Person who made the transaction, can be a user himself or an admin')
+                ->nullable()
+                ->constrained();
         });
     }
 

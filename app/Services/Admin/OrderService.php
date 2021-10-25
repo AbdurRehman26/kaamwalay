@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\AGS\AgsService;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -221,7 +222,7 @@ class OrderService
     /**
      * @throws FailedExtraCharge|Throwable
      */
-    public function addExtraCharge(Order $order, array $data, array $paymentResponse): void
+    public function addExtraCharge(Order $order, User $user, array $data, array $paymentResponse): void
     {
         if (empty($paymentResponse)) {
             ExtraChargeFailed::dispatch($order, $data);
@@ -245,6 +246,7 @@ class OrderService
             'notes' => $paymentResponse['notes'],
             'order_id' => $order->id,
             'payment_method_id' => $order->payment_method_id,
+            'user_id' => $user->id,
         ]);
 
         DB::commit();

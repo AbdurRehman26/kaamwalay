@@ -129,6 +129,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'amount' => $order->grand_total,
                 'notes' => "Payment for Order # {$order->order_number}",
                 'response' => json_encode($paymentIntent->toArray()),
+                'user_id' => auth()->user()->id,
             ]);
 
             return true;

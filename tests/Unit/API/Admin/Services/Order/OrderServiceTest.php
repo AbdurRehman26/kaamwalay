@@ -13,6 +13,7 @@ test('it can create extra charge for order', function () {
     $order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,
     ]);
+    $user = \App\Models\User::factory()->create();
     /* @var OrderService $orderService */
     $orderService = resolve(OrderService::class);
 
@@ -38,7 +39,7 @@ test('it can create extra charge for order', function () {
         'notes' => $this->faker->sentence(),
         'provider_fee' => 2.5,
     ];
-    $orderService->addExtraCharge($order, [
+    $orderService->addExtraCharge($order, $user, [
         'notes' => $this->faker->sentence(),
         'amount' => $amount,
         'payment_method_id' => $order->payment_method_id,

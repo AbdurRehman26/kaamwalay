@@ -26,6 +26,7 @@ class OrderPayment extends Model
         'notes',
         'amount',
         'type',
+        'user_id',
     ];
 
     /**
@@ -39,6 +40,7 @@ class OrderPayment extends Model
         'type' => 'integer',
         'amount' => 'float',
         'order_id' => 'integer',
+        'user_id' => 'integer',
     ];
 
     public const TYPE_ORDER_PAYMENT = 1;
@@ -48,5 +50,10 @@ class OrderPayment extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

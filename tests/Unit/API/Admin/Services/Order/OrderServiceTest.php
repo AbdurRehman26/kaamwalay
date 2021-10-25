@@ -51,4 +51,5 @@ test('it can create extra charge for order', function () {
     expect($orderPayment->type)->toBe(OrderPayment::TYPE_EXTRA_CHARGE);
     expect($orderPayment->order_id)->toBe($order->id);
     expect($orderPayment->amount)->toEqual($amount);
+    expect($orderPayment->user_id)->toEqual($user->id);
 });

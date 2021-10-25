@@ -25,6 +25,11 @@
  *              "notes": "Lorem ispum",
  *              "amount": "12.22",
  *              "type": "order_payment",
+ *              "user": {
+ *                  "id": 1,
+ *                  "name": "Jane Doe",
+ *                  "email": "test@test.test"
+ *              }
  *        }
  *    }
  */

@@ -1,17 +1,16 @@
 <?php
 
 use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
-use App\Listeners\API\Admin\OrderItem\OrderItemCardChangedListener;
 use App\Models\CardProduct;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
-use Database\Seeders\RolesSeeder;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Services\Admin\OrderService;
 use App\Services\AGS\AgsService;
+use Database\Seeders\RolesSeeder;
+use Illuminate\Foundation\Testing\WithFaker;
 
 uses(WithFaker::class);
 uses()->group('admin');
@@ -327,7 +326,6 @@ test('an admin can update an existing order item status notes as empty', functio
 });
 
 test('can swap card in AGS certificate', function () {
-
     Event::fake();
     Http::fake(['*' => Http::response(json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_create_certificates_response_200.json'
@@ -345,7 +343,6 @@ test('can swap card in AGS certificate', function () {
     $response = $agsService->createCertificates($data);
 
     $this->assertEquals(count($response), 1);
-    $this->assertArrayHasKey('certificate_id',$response[0]);
+    $this->assertArrayHasKey('certificate_id', $response[0]);
     $this->assertEquals($response[0]['certificate_id'], '09000000');
-
 });

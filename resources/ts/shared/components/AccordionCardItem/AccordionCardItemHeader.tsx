@@ -14,6 +14,7 @@ interface AccordionCardItemHeaderProps {
     image: string;
     heading: string;
     subheading: any;
+    shortName?: string;
     action?: ReactNode;
     onPreview?: () => void;
 }
@@ -60,6 +61,13 @@ const useStyles = makeStyles<Theme, { isExpanded: boolean }>(
             transition: theme.transitions.create('transform', { duration: 100 }),
             transformOrigin: '0 0',
             transform: `translate3d(0, 0, 0) scale(${isExpanded ? 1 : 0.7})`,
+        }),
+        shortName: ({ isExpanded }) => ({
+            fontWeight: 500,
+            transition: theme.transitions.create('transform', { duration: 100 }),
+            transformOrigin: '0 0',
+            transform: `translate3d(0, 0, 0) scale(${isExpanded ? 1 : 0.7})`,
+            bottom: '24px',
         }),
         subheading: ({ isExpanded }) => ({
             display: 'block',
@@ -123,6 +131,7 @@ export function AccordionCardItemHeader({
     image,
     action,
     children,
+    shortName,
     onPreview,
 }: PropsWithChildren<AccordionCardItemHeaderProps>) {
     const { isExpanded, setIsExpanded } = useAccordionCardItemContext();
@@ -152,6 +161,9 @@ export function AccordionCardItemHeader({
                             </Typography>
                             <Typography variant={'caption'} className={classes.subheading}>
                                 {subheading}
+                            </Typography>
+                            <Typography variant={'subtitle2'} className={classes.shortName}>
+                                {shortName}
                             </Typography>
                         </div>
                         {action ? <div className={classes.actions}>{action}</div> : null}

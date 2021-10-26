@@ -55,7 +55,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     const result = useMemo(() => fromApiPropertiesObject(hit._highlightResult), [hit]);
     const items = useMemo(() => (activeItem ? [activeItem] : []), [activeItem]);
     const subtitle = result.fullName.value;
-
+    const shortname = result.shortName.value;
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const isCardSelected = useMemo(
         () => !!selectedCards.find((card: Record<string, any>) => card.id === item.id),
@@ -63,7 +63,13 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     );
 
     function generateMarkCardDto(item: CardProductEntity) {
-        return { image: item.imagePath, title: item.getShortName(), id: item.id, subtitle: item.getFullName() };
+        return {
+            image: item.imagePath,
+            title: item.getName(),
+            shortname: item.getShortName(),
+            id: item.id,
+            subtitle: item.getFullName(),
+        };
     }
 
     const selectCard = useCallback(
@@ -132,6 +138,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
                 image={item.imagePath}
                 title={item.getName()}
                 subtitle={subtitle}
+                shortname={shortname}
                 id={item.id}
                 onPreview={handlePreview}
                 onSelectCard={handleSelectCard}

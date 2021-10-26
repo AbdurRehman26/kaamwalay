@@ -94,6 +94,8 @@ export function CardItem({ label, itemId, card, labelIcon, certificateId, declar
                         {card.getName()}
                     </Typography>
                     <Typography variant={'caption'}>{card.getDescription()}</Typography>
+                    <br />
+                    <Typography variant={'caption'}>{card.getShortName()}</Typography>
                     {certificateId || declaredValue ? (
                         <Box>
                             {certificateId && (

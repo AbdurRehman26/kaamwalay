@@ -77,7 +77,6 @@ class PaymentService
             'amount' => $data['amount'] ?? $this->order->grand_total,
             'type' => $data['type'],
             'notes' => $data['notes'] ?? '',
-            'user_id' => auth()->user()->id,
         ]);
 
         return [

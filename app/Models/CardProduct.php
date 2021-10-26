@@ -109,5 +109,4 @@ class CardProduct extends Model
     {
         return  $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
     }
-
 }

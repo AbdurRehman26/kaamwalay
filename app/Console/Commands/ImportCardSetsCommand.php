@@ -2,25 +2,25 @@
 
 namespace App\Console\Commands;
 
-use App\Imports\CardsImport;
+use App\Imports\CardSetsImport;
 use Illuminate\Console\Command;
 use Maatwebsite\Excel\Facades\Excel;
 
-class ImportCardsCommand extends Command
+class ImportCardSetsCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'cards:import';
+    protected $signature = 'card-sets:import';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Import new cards to the database.';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -39,7 +39,7 @@ class ImportCardsCommand extends Command
      */
     public function handle()
     {
-        Excel::import(new CardsImport, storage_path('app/public/New_Sets_Final_Format.csv'));
+        Excel::import(new CardSetsImport, storage_path('app/public/New_Pokemon_Sets.csv'));
 
         return 0;
     }

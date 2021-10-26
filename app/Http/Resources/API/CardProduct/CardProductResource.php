@@ -10,7 +10,7 @@ class CardProductResource extends BaseResource
     {
         return [
             "id" => $this->id,
-            "full_name" => $this->getSearchableName(),
+            "long_name" => $this->getLongName(),
             "short_name" => $this->getShortName(),
             "name" => $this->name,
             "card_category_name" => $this->cardCategory->name,

@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\CardProduct;
+use App\Models\CardSeries;
 use App\Models\CardSet;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -15,25 +16,27 @@ class CardsImport implements ToCollection, WithBatchInserts, WithChunkReading, W
 {
     public function collection(Collection $rows)
     {
-        foreach ($rows as $row) {
-            $setNameArray = explode('Set: ', $row['set_name']);
-            $cardNumberOrder = explode('/', $row['card_number']);
+        CardProduct::disableSearchSyncing();
 
-            if (empty($setNameArray[1])) {
-                $setNameArray[1] = $setNameArray[0];
-            }
+        foreach ($rows as $row) {
+            $cardSeries = CardSeries::firstOrCreate(['name' => $row['series'] . ' Series', 'card_category_id' => 1]);
+
+            $cardSet = CardSet::firstOrCreate(['name' => $row['set'], 'card_series_id' => $cardSeries->id, 'card_category_id' => 1]);
+
             CardProduct::create([
-                'name' => $row['name'],
-                'card_set_id' => CardSet::whereName($setNameArray[1])->first()->id,
+                'card_id' => $row['card_id'],
+                'name' => $row['card_name'],
+                'card_set_id' => $cardSet->id,
                 'card_category_id' => 1,
                 'rarity' => $row['rarity'],
                 'card_number' => str_replace(' ', '', $row['card_number']),
-                'image_path' => $row['image_path'],
+                'card_number_order' => str_replace(' ', '', $row['card_number_order']),
+                'image_path' => $row['image'],
                 'card_url' => $row['card_url'],
-                'card_number_order' => str_replace(' ', '', $cardNumberOrder[0]),
-                'variant_category' => $row['variant_category'],
-                'variant_name' => $row['variant_name'],
-                'holo_type' => ! empty($row['holo_type']) ? $row['holo_type'] : "",
+                'language' => $row['language'],
+                'edition' => ! empty($row['edition']) ? $row['edition'] : '',
+                'surface' => ! empty($row['surface']) ? $row['surface'] : '',
+                'variant' => ! empty($row['variant']) ? $row['variant'] : '',
                 'created_at' => Carbon::now()->toDateString(),
                 'updated_at' => Carbon::now()->toDateString(),
             ]);

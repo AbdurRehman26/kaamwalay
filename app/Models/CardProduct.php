@@ -29,9 +29,11 @@ class CardProduct extends Model
         'card_url',
         'image_bucket_path',
         'card_number_order',
-        'holo_type',
-        'variant_category',
-        'variant_name',
+        'edition',
+        'surface',
+        'variant',
+        'card_id',
+        'language',
     ];
 
     /**
@@ -54,8 +56,10 @@ class CardProduct extends Model
         $array = [
             "id" => $this->id,
             "name" => $this->name,
-            "full_name" => $this->getSearchableName(),
+            "search_name" => $this->getSearchableName(),
+            'log_name' => $this->getLongName(),
             "short_name" => $this->getShortName(),
+            'full_name' => $this->getSearchableName(),
             "card_category_name" => $this->cardCategory->name,
             "card_set_name" => $this->cardSet->name,
             "card_series_name" => $this->cardSet->cardSeries->name,
@@ -87,13 +91,24 @@ class CardProduct extends Model
 
     public function getShortName(): string
     {
-        $variantName = $this->variant_name !== 'Unlimited' ? ' ' . $this->variant_name . ' ' : '';
+        $language = $this->language == 'English' ? $this->language . ' ' : '';
+        $edition = $this->edition ? $this->edition . ' ' : '';
+        $surface = $this->surface ? $this->surface . ' ' : '';
+        $variant = $this->variant ? $this->variant . ' ' : '';
 
-        return $this->name . $variantName . (! empty($this->holo_type == "HOLO") ? ' ' . ucwords(strtolower(str_replace('.', ' ', $this->holo_type))) : '');
+        return $language . $edition . $surface . $variant;
+    }
+
+    public function getLongName(): string
+    {
+        $series = $this->cardSet->cardSeries->name == $this->cardSet->name ? '' :  $this->cardSet->cardSeries->name . ' ';
+
+        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $series . $this->cardSet->name . ' ' . $this->card_number_order;
     }
 
     public function getSearchableName(): string
     {
-        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->getFormattedCardNumber() . ' ' . $this->getShortName();
+        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->getFormattedCardNumber() . ' ' . $this->getShortName() . ' ' . $this->name;
     }
+
 }

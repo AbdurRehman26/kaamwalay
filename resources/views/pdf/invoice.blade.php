@@ -396,10 +396,13 @@
                             </td>
                             <td class="description">
                                 <div class="item-name">
+                                    {{$item->cardProduct->name}}
+                                </div>
+                                <div class="item-name">
                                     {{$item->cardProduct->getShortName()}}
                                 </div>
                                 <div class="item-desc">
-                                    {{$item->cardProduct->getSearchableName()}}
+                                    {{$item->cardProduct->getLongName()}}
                                 </div>
                             </td>
                             <td class="qty">

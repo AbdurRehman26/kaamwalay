@@ -49,9 +49,12 @@ export function DrawerNavigation() {
         handleClose();
     }, [handleClose, logout]);
 
-    function handleItemPress(path: string) {
-        window.location.replace(path);
-    }
+    const handleItemPress = useCallback(
+        (path: string) => () => {
+            window.location.replace(path);
+        },
+        [window.location.pathname],
+    );
 
     return (
         <>
@@ -66,21 +69,21 @@ export function DrawerNavigation() {
                 </Box>
 
                 <List>
-                    {/* {authenticated && (*/}
-                    {/*    <ListItem button href={'/dashboard'}>*/}
-                    {/*        <ListItemText*/}
-                    {/*            primary={'Dashboard'}*/}
-                    {/*            primaryTypographyProps={{ className: classes.listItemText }}*/}
-                    {/*        />*/}
-                    {/*    </ListItem>*/}
-                    {/* )}*/}
-                    <ListItem button onClick={() => handleItemPress('/feed')}>
+                    {authenticated && (
+                        <ListItem button onClick={handleItemPress('/dashboard')}>
+                            <ListItemText
+                                primary={'Dashboard'}
+                                primaryTypographyProps={{ className: classes.listItemText }}
+                            />
+                        </ListItem>
+                    )}
+                    <ListItem button onClick={handleItemPress('/feed')}>
                         <ListItemText
                             primary={'Live Feed'}
                             primaryTypographyProps={{ className: classes.listItemText }}
                         />
                     </ListItem>
-                    <ListItem button onClick={() => handleItemPress('/pop')}>
+                    <ListItem button onClick={handleItemPress('/pop')}>
                         <ListItemText
                             primary={'POP Report'}
                             primaryTypographyProps={{ className: classes.listItemText }}

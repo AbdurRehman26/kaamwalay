@@ -20,9 +20,9 @@ class CardProductResource extends BaseResource
             "release_year" => $this->cardSet->release_year,
             "card_number_order" => $this->getFormattedCardNumber(),
             "image_path" => $this->image_path,
-            "variant_name" => $this->variant_name,
-            "variant_category" => $this->variant_category,
-            "holo_type" => $this->holo_type,
+            "variant" => $this->variant,
+            "surface" => $this->surface,
+            "edition" => $this->edition,
         ];
     }
 }

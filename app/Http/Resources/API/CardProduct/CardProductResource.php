@@ -20,6 +20,7 @@ class CardProductResource extends BaseResource
             "release_year" => $this->cardSet->release_year,
             "card_number_order" => $this->getFormattedCardNumber(),
             "image_path" => $this->image_path,
+            "language" => $this->language,
             "variant" => $this->variant,
             "surface" => $this->surface,
             "edition" => $this->edition,

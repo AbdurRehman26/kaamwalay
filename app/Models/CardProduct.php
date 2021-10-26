@@ -65,9 +65,10 @@ class CardProduct extends Model
             "release_year" => $this->cardSet->release_year,
             "card_number_order" => is_numeric($this->card_number_order) ? Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order,
             "image_path" => $this->image_path,
-            "variant_name" => $this->variant_name,
-            "variant_category" => $this->variant_category,
-            "holo_type" => $this->holo_type,
+            "variant" => $this->variant,
+            "surface" => $this->surface,
+            "edition" => $this->edition,
+            "language" => $this->language,
         ];
 
         return $array;

@@ -398,9 +398,11 @@
                                 <div class="item-name">
                                     {{$item->cardProduct->name}}
                                 </div>
-                                <div class="item-name">
-                                    {{$item->cardProduct->getShortName()}}
-                                </div>
+                                @if(!empty($item->cardProduct->getShortName()))
+                                    <div class="item-name">
+                                        {{$item->cardProduct->getShortName()}}
+                                    </div>
+                                @endif
                                 <div class="item-desc">
                                     {{$item->cardProduct->getLongName()}}
                                 </div>

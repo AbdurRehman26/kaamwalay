@@ -15,9 +15,16 @@ class AlterTableDropColumnsCardProducts extends Migration
     {
         Schema::table('card_products', function (Blueprint $table) {
             $table->dropColumn('variant_category');
+        });
+
+        Schema::table('card_products', function (Blueprint $table) {
             $table->dropColumn('variant_name');
+        });
+
+        Schema::table('card_products', function (Blueprint $table) {
             $table->dropColumn('holo_type');
         });
+
     }
 
     /**

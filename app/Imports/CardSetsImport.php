@@ -15,7 +15,6 @@ class CardSetsImport implements ToCollection, WithBatchInserts, WithChunkReading
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-
             $releaseDate = $row['release_date'];
             $releaseYear = Carbon::parse($row['release_date'])->year;
             $formattedDate = Carbon::parse($row['release_date'])->toFormattedDateString();

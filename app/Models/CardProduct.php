@@ -110,5 +110,4 @@ class CardProduct extends Model
     {
         return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->getFormattedCardNumber() . ' ' . $this->getShortName() . ' ' . $this->name;
     }
-
 }

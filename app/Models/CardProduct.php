@@ -56,10 +56,9 @@ class CardProduct extends Model
         $array = [
             "id" => $this->id,
             "name" => $this->name,
-            "search_name" => $this->getSearchableName(),
-            'log_name' => $this->getLongName(),
+            "searchable_name" => $this->getSearchableName(),
+            'long_name' => $this->getLongName(),
             "short_name" => $this->getShortName(),
-            'full_name' => $this->getSearchableName(),
             "card_category_name" => $this->cardCategory->name,
             "card_set_name" => $this->cardSet->name,
             "card_series_name" => $this->cardSet->cardSeries->name,
@@ -91,7 +90,7 @@ class CardProduct extends Model
 
     public function getShortName(): string
     {
-        $language = $this->language == 'English' ? $this->language . ' ' : '';
+        $language = $this->language != 'English' ? $this->language . ' ' : '';
         $edition = $this->edition ? $this->edition . ' ' : '';
         $surface = $this->surface ? $this->surface . ' ' : '';
         $variant = $this->variant ? $this->variant . ' ' : '';
@@ -108,7 +107,7 @@ class CardProduct extends Model
 
     public function getSearchableName(): string
     {
-        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->getFormattedCardNumber() . ' ' . $this->getShortName() . ' ' . $this->name;
+        return  $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
     }
 
 }

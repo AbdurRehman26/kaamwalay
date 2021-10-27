@@ -57,15 +57,12 @@ class OrderPayment extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * @param int<1, 3> $type
-     */
     public function getPaymentType(int $type): string
     {
         return match ($type) {
-            OrderPayment::TYPE_ORDER_PAYMENT => 'order_payment',
             OrderPayment::TYPE_EXTRA_CHARGE => 'extra_charge',
             OrderPayment::TYPE_REFUND => 'refund',
+            default => 'order_payment',
         };
     }
 }

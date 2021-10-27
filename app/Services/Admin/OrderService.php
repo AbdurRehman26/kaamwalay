@@ -228,27 +228,25 @@ class OrderService
 
             throw new FailedExtraCharge;
         }
-        DB::beginTransaction();
+        DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
+            $order->fill([
+                'extra_charge' => $order->extra_charge + $data['amount'],
+                'grand_total' => $order->grand_total + $data['amount'],
+            ]);
+            $order->save();
 
-        $order->fill([
-            'extra_charge' => $order->extra_charge + $data['amount'],
-            'grand_total' => $order->grand_total + $data['amount'],
-        ]);
-        $order->save();
-
-        OrderPayment::create([
-            'request' => json_encode($paymentResponse['request']),
-            'response' => json_encode($paymentResponse['response']),
-            'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
-            'amount' => $paymentResponse['amount'],
-            'type' => $paymentResponse['type'],
-            'notes' => $paymentResponse['notes'],
-            'order_id' => $order->id,
-            'payment_method_id' => $order->payment_method_id,
-            'user_id' => $user->id,
-        ]);
-
-        DB::commit();
+            OrderPayment::create([
+                'request' => json_encode($paymentResponse['request']),
+                'response' => json_encode($paymentResponse['response']),
+                'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
+                'amount' => $paymentResponse['amount'],
+                'type' => $paymentResponse['type'],
+                'notes' => $paymentResponse['notes'],
+                'order_id' => $order->id,
+                'payment_method_id' => $order->payment_method_id,
+                'user_id' => $user->id,
+            ]);
+        });
 
         ExtraChargeSuccessful::dispatch($order);
     }

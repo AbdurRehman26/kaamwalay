@@ -38,6 +38,10 @@ class OrderPaymentResource extends JsonResource
                 'exp_year' => $card->exp_year,
                 'last4' => $card->last4,
             ],
+            'amount' => $this->amount,
+            'notes' => $this->notes,
+            'type' => $this->getPaymentType($this->type),
+            'created_at' => $this->created_at,
         ];
     }
 

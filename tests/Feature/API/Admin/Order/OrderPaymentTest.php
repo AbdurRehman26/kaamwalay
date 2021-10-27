@@ -52,7 +52,7 @@ beforeEach(function () {
 });
 
 test('admin can create extra charge for order', function () {
-    Config::set('robograding.order_extra_charge_enabled', true);
+    Config::set('robograding.feature_order_extra_charge_enabled', true);
     Event::fake();
     $this->postJson(route('payments.extra-charge', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
@@ -81,7 +81,7 @@ test('admin can update order payment notes', function () {
 });
 
 it('does not perform extra charge when service is disabled', function () {
-    Config::set('robograding.order_extra_charge_enabled', false);
+    Config::set('robograding.feature_order_extra_charge_enabled', false);
     $this->postJson(route('payments.extra-charge', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',

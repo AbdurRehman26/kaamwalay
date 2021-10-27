@@ -232,13 +232,6 @@ class OrderService
         return '';
     }
 
-    protected function updateAgsCertificateCard(OrderItem $orderItem): array
-    {
-        $data = $this->getOrderItemCertificateData($orderItem);
-
-        return $this->agsService->createCertificates($data);
-    }
-
     /**
      * @throws FailedExtraCharge|Throwable
      */
@@ -265,5 +258,12 @@ class OrderService
         });
 
         ExtraChargeSuccessful::dispatch($order);
+    }
+
+    protected function updateAgsCertificateCard(OrderItem $orderItem): array
+    {
+        $data = $this->getOrderItemCertificateData($orderItem);
+
+        return $this->agsService->createCertificates($data);
     }
 }

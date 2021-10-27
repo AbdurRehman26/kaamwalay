@@ -67,9 +67,9 @@ class OrderService
                 'certificate_number as certificate_id',
                 'card_sets.name as set_name',
                 'card_products.card_number',
-                'card_products.variant_name',
-                'card_products.variant_category',
-                'card_products.holo_type',
+                'card_products.edition',
+                'card_products.surface',
+                'card_products.variant',
             ])
             ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')

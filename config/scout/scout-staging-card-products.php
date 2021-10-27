@@ -17,7 +17,9 @@ return [
     */
 
     'searchableAttributes' => [
-        'full_name',
+        'name',
+        'short_name',
+        'long_name',
     ],
 
     /*

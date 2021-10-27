@@ -369,10 +369,13 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.imagePath,
     );
     const cardFullName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.fullName,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.longName,
     );
     const certificateNumber = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.certificateNumber,
+    );
+    const shortName = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.shortName,
     );
     const overallGrade = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.grade);
     const overallGradeNickname = useAppSelector(
@@ -477,6 +480,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                 heading={cardName}
                 image={cardImage}
                 subheading={cardFullName}
+                shortName={shortName}
                 action={
                     <Button disabled variant={'outlined'} className={cx(classes.statusButton, classes.disabledButton)}>
                         {cardStatus}

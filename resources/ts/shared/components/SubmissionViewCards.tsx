@@ -10,6 +10,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
+import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
 import { cx } from '../lib/utils/cx';
@@ -68,6 +69,16 @@ export const useStyles = makeStyles(
             color: '#20BFB8',
             textDecoration: 'none',
         },
+        shortName: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '10px',
+            lineHeight: '14px',
+            letterSpacing: '0.6px',
+            textTransform: 'uppercase',
+            color: 'rgba(0, 0, 0, 0.54)',
+        },
         cardDataKeyText: {
             fontWeight: 'bold',
             fontSize: '12px',
@@ -121,6 +132,11 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                         />
                                         <Box display={'flex'} flexDirection={'column'} paddingLeft={1}>
                                             <Typography variant={'body2'}>{item.cardProduct.getName()}</Typography>
+                                            <div title={item.cardProduct.getShortName()}>
+                                                <Typography variant={'subtitle2'} className={classes.shortName}>
+                                                    {getStringTruncated(item.cardProduct.getShortName(), 65)}
+                                                </Typography>
+                                            </div>
                                             <Typography variant={'body2'}>
                                                 {item.cardProduct.getDescription()}
                                             </Typography>

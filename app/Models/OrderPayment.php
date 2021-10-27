@@ -60,8 +60,8 @@ class OrderPayment extends Model
     public function getPaymentType(int $type): string
     {
         return match ($type) {
-            OrderPayment::TYPE_EXTRA_CHARGE => 'extra_charge',
-            OrderPayment::TYPE_REFUND => 'refund',
+            self::TYPE_EXTRA_CHARGE => 'extra_charge',
+            self::TYPE_REFUND => 'refund',
             default => 'order_payment',
         };
     }

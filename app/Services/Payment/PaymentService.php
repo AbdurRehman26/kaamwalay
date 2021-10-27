@@ -131,7 +131,9 @@ class PaymentService
      */
     public function additionalCharge(Order $order, array $request): array
     {
-        $this->canProcessExtraCharge();
+        if (! $this->canProcessExtraCharge()) {
+            throw new FeatureNotAvailable('Extra Charge service is not available at the moment.');
+        }
 
         $this->hasProvider($order);
 
@@ -149,10 +151,8 @@ class PaymentService
     /**
      * @throws Throwable
     */
-    protected function canProcessExtraCharge(): void
+    protected function canProcessExtraCharge(): bool
     {
-        if (config('robograding.feature_order_extra_charge_enabled') !== true) {
-            throw new FeatureNotAvailable('Extra Charge service is not available at the moment.');
-        }
+        return config('robograding.feature_order_extra_charge_enabled') === true;
     }
 }

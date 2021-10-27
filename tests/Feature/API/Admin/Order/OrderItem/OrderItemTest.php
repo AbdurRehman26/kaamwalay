@@ -342,7 +342,6 @@ it('can swap card in AGS certificate', function () {
 
     $response = $agsService->createCertificates($data);
 
-    $this->assertEquals(count($response), 1);
-    $this->assertArrayHasKey('certificate_id', $response[0]);
-    $this->assertEquals($response[0]['certificate_id'], '09000000');
+    expect($response)->toHaveCount(1);
+    expect($response[0])->toMatchArray(['certificate_id' => '09000000']);
 });

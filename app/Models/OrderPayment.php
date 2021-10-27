@@ -11,6 +11,10 @@ class OrderPayment extends Model
 {
     use HasFactory, ActivityLog;
 
+    public const TYPE_ORDER_PAYMENT = 1;
+    public const TYPE_EXTRA_CHARGE = 2;
+    public const TYPE_REFUND = 3;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -43,10 +47,6 @@ class OrderPayment extends Model
         'user_id' => 'integer',
     ];
 
-    public const TYPE_ORDER_PAYMENT = 1;
-    public const TYPE_EXTRA_CHARGE = 2;
-    public const TYPE_REFUND = 3;
-
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
@@ -55,5 +55,14 @@ class OrderPayment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getPaymentType(int $type): string
+    {
+        return match ($type) {
+            self::TYPE_EXTRA_CHARGE => 'extra_charge',
+            self::TYPE_REFUND => 'refund',
+            default => 'order_payment',
+        };
     }
 }

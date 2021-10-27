@@ -42,6 +42,7 @@ class AddExtraChargeFieldsInOrderPaymentsTable extends Migration
             $table->dropColumn('type');
             $table->dropColumn('amount');
             $table->dropColumn('notes');
+            $table->dropForeign(['user_id']);
         });
     }
 }

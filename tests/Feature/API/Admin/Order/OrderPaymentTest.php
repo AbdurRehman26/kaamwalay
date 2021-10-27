@@ -52,14 +52,15 @@ beforeEach(function () {
 });
 
 test('admin can create extra charge for order', function () {
-    Config::set('robograding.order_extra_charge_enabled', true);
+    Config::set('robograding.feature_order_extra_charge_enabled', true);
     Event::fake();
     $this->postJson(route('payments.extra-charge', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
     ])
         ->assertStatus(Response::HTTP_CREATED)
-        ->assertJsonStructure(['data' => ['amount', 'user' => ['id', 'first_name', 'email']]]);
+        ->assertJsonStructure(['data' => ['amount', 'user' => ['id', 'first_name', 'email']]])
+        ->assertJsonFragment(['type' => 'extra_charge']);
 
     Event::assertDispatched(ExtraChargeSuccessful::class);
     expect($this->order->extraCharges()->count())->toEqual(1);
@@ -81,9 +82,9 @@ test('admin can update order payment notes', function () {
 });
 
 it('does not perform extra charge when service is disabled', function () {
-    Config::set('robograding.order_extra_charge_enabled', false);
+    Config::set('robograding.feature_order_extra_charge_enabled', false);
     $this->postJson(route('payments.extra-charge', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
-    ])->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE);
+    ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });

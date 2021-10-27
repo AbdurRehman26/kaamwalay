@@ -10,5 +10,5 @@ return [
     | robograding application.
     |
     */
-    'order_extra_charge_enabled' => env('ORDER_EXTRA_CHARGE_ENABLED', false),
+    'feature_order_extra_charge_enabled' => env('FEATURE_ORDER_EXTRA_CHARGE_ENABLED', false),
 ];

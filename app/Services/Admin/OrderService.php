@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin;
 
-use App\Events\API\Admin\Order\ExtraChargeFailed;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
@@ -223,11 +222,6 @@ class OrderService
      */
     public function addExtraCharge(Order $order, User $user, array $data, array $paymentResponse): void
     {
-        if (empty($paymentResponse)) {
-            ExtraChargeFailed::dispatch($order, $data);
-
-            throw new FailedExtraCharge;
-        }
         DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
             $order->fill([
                 'extra_charge_total' => $order->extra_charge_total + $data['amount'],

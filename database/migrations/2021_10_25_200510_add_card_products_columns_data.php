@@ -15,11 +15,11 @@ class AddCardProductsColumnsData extends Migration
     public function up()
     {
         DB::table('card_products')->where('variant_name', '!=', 'Reverse Holo')->update([
-            'edition' => DB::raw("`variant_name`"),
+            'edition' => DB::raw('variant_name'),
         ]);
 
         DB::table('card_products')->where('variant_name', '=', 'Reverse Holo')->update([
-            'surface' => DB::raw("`variant_name`"),
+            'surface' => DB::raw('variant_name'),
             'edition' => 'Unlimited',
         ]);
 

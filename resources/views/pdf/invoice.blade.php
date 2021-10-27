@@ -398,7 +398,7 @@
                                 <div class="item-name">
                                     {{$item->cardProduct->name}}
                                 </div>
-                                @if(!empty($item->cardProduct->getShortName()))
+                                @if(! empty($item->cardProduct->getShortName()))
                                     <div class="item-name">
                                         {{$item->cardProduct->getShortName()}}
                                     </div>

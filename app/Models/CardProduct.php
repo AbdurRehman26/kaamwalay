@@ -92,10 +92,10 @@ class CardProduct extends Model
 
     public function getShortName(): string
     {
-        $language = $this->language !== 'English' ? $this->language . ' ' : '';
-        $edition = $this->edition ? $this->edition . ' ' : '';
-        $surface = $this->surface ? $this->surface . ' ' : '';
-        $variant = $this->variant ? $this->variant . ' ' : '';
+        $language = $this->language !== 'English' ? $this->language . ' - ' : '';
+        $edition = $this->edition ? $this->edition . ' - ' : '';
+        $surface = $this->surface ? $this->surface . ' - ' : '';
+        $variant = $this->variant ? $this->variant . '' : '';
 
         return $language . $edition . $surface . $variant;
     }

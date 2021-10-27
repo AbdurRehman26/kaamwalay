@@ -3,7 +3,9 @@
 namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
+use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
+use App\Exceptions\API\FeatureNotAvailable;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
 use App\Models\OrderStatus;
@@ -69,10 +71,13 @@ class PaymentService
     public function updateOrderPayment(array $data): array
     {
         /** @noinspection JsonEncodingApiUsageInspection */
-        $this->order->orderPayment->update([
+        $this->order->firstOrderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
+            'amount' => $data['amount'] ?? $this->order->grand_total,
+            'type' => $data['type'],
+            'notes' => $data['notes'] ?? '',
         ]);
 
         return [
@@ -105,7 +110,7 @@ class PaymentService
             $this->order->paymentMethod->code
         ])->calculateFee($this->order);
 
-        $orderPayment = $this->order->orderPayment;
+        $orderPayment = $this->order->firstOrderPayment;
         $orderPayment->provider_fee = $fee;
         $orderPayment->save();
     }
@@ -119,5 +124,35 @@ class PaymentService
         $this->order = $order;
 
         return $this;
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function additionalCharge(Order $order, array $request): array
+    {
+        if (! $this->canProcessExtraCharge()) {
+            throw new FeatureNotAvailable('Extra Charge service is not available at the moment.');
+        }
+
+        $this->hasProvider($order);
+
+        $response = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->additionalCharge($this->order, $request);
+
+        if (empty($response)) {
+            throw new FailedExtraCharge;
+        }
+
+        return $response;
+    }
+
+    /**
+     * @throws Throwable
+    */
+    protected function canProcessExtraCharge(): bool
+    {
+        return config('robograding.feature_order_extra_charge_enabled') === true;
     }
 }

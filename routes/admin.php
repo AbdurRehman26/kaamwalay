@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
 use App\Http\Controllers\API\Admin\Order\UserCardController;
+use App\Http\Controllers\API\Admin\Order\OrderPaymentController;
 use App\Http\Controllers\API\Auth\Admin\LoginController;
 use App\Http\Controllers\API\Admin\OrderStatusHistoryController;
 use Illuminate\Support\Facades\Route;
@@ -36,5 +37,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('shipment', [OrderController::class, 'updateShipment']);
 
         Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
+
+        Route::post('payments/extra-charge', [OrderPaymentController::class, 'addExtraCharge'])
+            ->name('payments.extra-charge');
+        Route::put('order-payments/{orderPayment}', [OrderPaymentController::class, 'update'])
+            ->name('payments.update-notes');
     });
 });

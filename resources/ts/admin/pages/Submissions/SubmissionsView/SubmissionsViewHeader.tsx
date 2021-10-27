@@ -88,7 +88,7 @@ export function SubmissionsViewHeader({
                         trackingNumber={orderShipment?.trackingNumber}
                         shippingProvider={orderShipment?.shippingProvider}
                     />
-                    <SubmissionHeaderMoreButton orderId={orderId} />
+                    <SubmissionHeaderMoreButton orderId={orderId} orderStatus={orderStatus} />
                 </Grid>
             </Grid>
             <StatusProgressBar steps={history} />

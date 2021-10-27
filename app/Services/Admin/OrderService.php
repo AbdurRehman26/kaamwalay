@@ -16,9 +16,9 @@ use App\Services\Admin\Order\OrderItemService;
 use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
-
 class OrderService
 {
     public function __construct(
@@ -55,7 +55,7 @@ class OrderService
         return $certificates->pluck('certificate_number')->flatten()->all();
     }
 
-    protected function getCertificatesDataQuery()
+    protected function getCertificatesDataQuery(): Builder
     {
         return UserCard::select([
             'certificate_number as certificate_id',

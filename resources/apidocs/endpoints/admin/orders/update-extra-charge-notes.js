@@ -1,6 +1,6 @@
 /**
- * @api {put} /admin/orders/{order}/order-payments/{orderPayment} Update Extra Charge Note
- * @apiName Update Extra Charge Note
+ * @api {put} /admin/orders/{order}/order-payments/{orderPayment} Update Payment Notes
+ * @apiName Update Payment Notes
  * @apiGroup Admin Orders
  *
  * @apiUse header_main
@@ -24,6 +24,12 @@
  *              "notes": "Lorem ispum",
  *              "amount": "12.22",
  *              "type": "order_payment",
+ *              "created_at": "2021-08-12 02:22:46.000000",
+ *              "user": {
+ *                  "id": 1,
+ *                  "name": "Jane Doe",
+ *                  "email": "test@test.test"
+ *              }
  *        }
  *    }
  */

@@ -18,8 +18,8 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
@@ -27,7 +27,7 @@ use Throwable;
 class OrderService
 {
     public function __construct(
-        private  OrderItemService $orderItemService,
+        private OrderItemService $orderItemService,
         private AgsService $agsService
     ) {
     }
@@ -62,7 +62,14 @@ class OrderService
 
     public function getOrderCertificatesData(Order|int $order): array
     {
-        return UserCard::select('certificate_number as certificate_id', 'card_sets.name as set_name', 'card_products.card_number')
+        return UserCard::select([
+                'certificate_number as certificate_id',
+                'card_sets.name as set_name',
+                'card_products.card_number',
+                'card_products.edition',
+                'card_products.surface',
+                'card_products.variant',
+            ])
             ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id')
@@ -146,7 +153,7 @@ class OrderService
 
         $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
-        $orderPayment = OrderPaymentResource::make($order->orderPayment)->resolve();
+        $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
         $data["SUBMISSION_NUMBER"] = $order->order_number;
         $data['CUSTOMER_NAME'] = $order->user->getFullName();
@@ -213,33 +220,27 @@ class OrderService
     /**
      * @throws FailedExtraCharge|Throwable
      */
-    public function addExtraCharge(Order $order, array $data, array $paymentResponse): void
+    public function addExtraCharge(Order $order, User $user, array $data, array $paymentResponse): void
     {
-        if (empty($paymentResponse)) {
-            FailedExtraCharge::dispatch($order, $data);
+        DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
+            $order->fill([
+                'extra_charge_total' => $order->extra_charge_total + $data['amount'],
+                'grand_total' => $order->grand_total + $data['amount'],
+            ]);
+            $order->save();
 
-            throw new FailedExtraCharge;
-        }
-        DB::beginTransaction();
-
-        $order->fill([
-            'extra_charge' => $order->extra_charge + $data['amount'],
-            'grand_total' => $order->grand_total + $data['amount'],
-        ]);
-        $order->save();
-
-        $orderPayment = OrderPayment::create([
-            'request' => json_encode($paymentResponse['request']),
-            'response' => json_encode($paymentResponse['response']),
-            'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
-            'amount' => $paymentResponse['amount'],
-            'type' => $paymentResponse['type'],
-            'notes' => $paymentResponse['notes'],
-            'order_id' => $order->id,
-            'payment_method_id' => $order->payment_method_id,
-        ]);
-
-        DB::commit();
+            OrderPayment::create([
+                'request' => json_encode($paymentResponse['request']),
+                'response' => json_encode($paymentResponse['response']),
+                'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
+                'amount' => $paymentResponse['amount'],
+                'type' => $paymentResponse['type'],
+                'notes' => $paymentResponse['notes'],
+                'order_id' => $order->id,
+                'payment_method_id' => $order->payment_method_id,
+                'user_id' => $user->id,
+            ]);
+        });
 
         $orderPaymentResource = new OrderPaymentResource($orderPayment);
 

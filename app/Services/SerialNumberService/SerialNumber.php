@@ -19,7 +19,7 @@ class SerialNumber
 
     private function build(): string
     {
-        return ($this->prefix ?? '') . Str::padLeft($this->value, $this->length, $this->padding);
+        return ($this->prefix ?? '') . Str::padLeft((string) $this->value, $this->length, $this->padding);
     }
 
     public function setValue(?int $value): self

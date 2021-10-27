@@ -6,7 +6,9 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- *  @apiParamExample {json} Request-Example:
+ * @apiParam {String} status Change the status of an order [status = missing]
+ *
+ * @apiParamExample {json} Request-Example:
  *      {
  *          "status": "missing",
  *          "notes": "Lorem"
@@ -18,30 +20,32 @@
  *     HTTP/1.1 200 OK
  *     {
  *         "data": {
- *             "id": 8,
+ *             "id": 17,
+ *             "order_id": 15,
  *             "quantity": 1,
- *             "declared_value_per_unit": 20,
+ *             "declared_value_per_unit": 1,
  *             "card_product": {
  *                 "id": 3,
- *                 "name": "Victreebel",
- *                 "card_category_name": "Pokemon",
- *                 "card_set_name": "Battle Styles",
- *                 "card_series_name": "Sword & Shield Series",
- *                 "release_year": 2021,
- *                 "card_number_order": "003",
- *                 "image_path": "https://den-cards.pokellector.com/305/Victreebel.SWSH05.3.37530.png"
- *             },
- *             "status": {
- *                 "id": 100,
- *                 "order_item_status": {
- *                     "id": 2,
- *                     "code": "missing",
- *                     "name": "Missing",
- *                     "description": "Item is not present in the shipped box",
- *                 },
- *                 "notes": "Lorem"
- *             },
- *             "certificate_number": null
- *         }
+ *                  "full_name": "2021 Pokemon Sword & Shield Series Battle Styles 3 Victreebel",
+ *                  "name": "Victreebel",
+ *                  "card_category_name": "Pokemon",
+ *                  "card_set_name": "Battle Styles",
+ *                  "card_series_name": "Sword & Shield Series",
+ *                  "release_year": 2021,
+ *                  "card_number_order": "003",
+ *                  "image_path": "https://den-cards.pokellector.com/305/Victreebel.SWSH05.3.37530.png"
+ *               },
+ *               "status": {
+ *                   "id": 194,
+ *                   "order_item_status": {
+ *                       "id": 2,
+ *                       "name": "Missing",
+ *                       "description": "Item is not present in the shipped box"
+ *                   },
+ *                   "notes": "Lorem"
+ *              },
+ *              "certificate_number": null,
+ *              "user_card": null
+ *           }
  *     }
  */

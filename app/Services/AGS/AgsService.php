@@ -60,7 +60,7 @@ class AgsService
 
     public function createCertificates(array $data): array
     {
-        return $this->client->createCertificates(data: $data);
+        return $this->client->createCertificates($this->prepareDataForCertificate(data: $data));
     }
 
     public function getGrades(array $certificateIds): array
@@ -92,7 +92,7 @@ class AgsService
         return [
             'grades_available' => true,
             'certificate_id' => $data['certificate_id'] ?? null,
-            'grade' => $this->prepareGradeForPublicPage($data['grade'] ?? $data['overall_grade']),
+            'grade' => $this->prepareGradeForPublicPage($data['overall_grade'] ?? $data['grade']),
             'card' => [
                 'name' => $data['card']['name'] ?? null,
                 'full_name' => ! empty($data['card']) ? $this->getCardFullName($data['card']) : '',
@@ -122,6 +122,34 @@ class AgsService
             $card['name'];
     }
 
+    protected function prepareDataForCertificate(array $data): array
+    {
+        $cardsData = [];
+        foreach ($data as $card) {
+            $cardData = [
+                'certificate_id' => $card['certificate_id'],
+                'set_name' => $card['set_name'],
+                'card_number' => $card['card_number'],
+            ];
+
+            if (! empty($card['edition'])) {
+                $cardData['edition'] = $card['edition'];
+            }
+
+            if (! empty($card['variant'])) {
+                $cardData['variant'] = $card['variant'];
+            }
+
+            if (! empty($card['surface'])) {
+                $cardData['surface'] = $card['surface'];
+            }
+
+            $cardsData[] = $cardData;
+        }
+
+        return $cardsData;
+    }
+
     protected function prepareGradeForPublicPage(array $grade): array
     {
         return [
@@ -133,10 +161,10 @@ class AgsService
     protected function prepareOverallGradesForPublicPage(array $data): array
     {
         return [
-            'centering' => $this->preparePreciseValue($data['total_centering_grade']['grade'] ?? $data['overall_centering_grade']) ?? null,
-            'surface' => $this->preparePreciseValue($data['total_surface_grade']['grade'] ?? $data['overall_surface_grade']) ?? null,
-            'edges' => $this->preparePreciseValue($data['total_edges_grade']['grade'] ?? $data['overall_edges_grade']) ?? null,
-            'corners' => $this->preparePreciseValue($data['total_corners_grade']['grade'] ?? $data['overall_corners_grade']) ?? null,
+            'centering' => $this->preparePreciseValue($data['overall_centering_grade'] ?? $data['total_centering_grade']['grade']) ?? null,
+            'surface' => $this->preparePreciseValue($data['overall_surface_grade'] ?? $data['total_surface_grade']['grade']) ?? null,
+            'edges' => $this->preparePreciseValue($data['overall_edges_grade'] ?? $data['total_edges_grade']['grade']) ?? null,
+            'corners' => $this->preparePreciseValue($data['overall_corners_grade'] ?? $data['total_corners_grade']['grade']) ?? null,
         ];
     }
 
@@ -180,7 +208,7 @@ class AgsService
 
     protected function prepareGeneratedImagesForPublicPage(array $data): array
     {
-        return [
+        $imagesData = [
             [
                 'output_image' => $data['front_scan']['centering_result']['output_image'] ?? null,
                 'name' => 'Front Centering',
@@ -246,5 +274,9 @@ class AgsService
                 'name' => 'Laser Back Corners',
             ],
         ];
+
+        return array_filter($imagesData, function (array $imageData) {
+            return $imageData['output_image'] !== null;
+        });
     }
 }

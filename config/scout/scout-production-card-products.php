@@ -18,11 +18,8 @@ return [
 
     'searchableAttributes' => [
         'name',
-        'card_category_name',
-        'card_set_name',
-        'card_series_name',
-        'release_year',
-        'card_number_order',
+        'short_name',
+        'long_name',
     ],
 
     /*

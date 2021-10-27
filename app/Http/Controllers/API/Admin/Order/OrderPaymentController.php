@@ -25,8 +25,17 @@ class OrderPaymentController extends Controller
         OrderService $orderService,
         PaymentService $paymentService,
     ): JsonResponse {
-        $response = $paymentService->additionalCharge(order: $order, request: $request->all());
-        $orderService->addExtraCharge(order: $order, data: $request->all(), paymentResponse: $response);
+        $requestData = $request->all() + [
+            'type' => OrderPayment::TYPE_EXTRA_CHARGE,
+            'payment_method_id' => $order->payment_method_id,
+        ];
+        $extraChargeResponse = $paymentService->additionalCharge(order: $order, request: $requestData);
+        $orderService->addExtraCharge(
+            order: $order,
+            user: auth()->user(),
+            data: $request->all(),
+            paymentResponse: $extraChargeResponse,
+        );
 
         return (new OrderPaymentResource($order->lastOrderPayment))
             ->response()
@@ -40,6 +49,6 @@ class OrderPaymentController extends Controller
     ): OrderPaymentResource {
         $orderPayment->update($request->all());
 
-        return new OrderPaymentResource($order->lastOrderPayment);
+        return new OrderPaymentResource($orderPayment);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,8 +17,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 
 class Order extends Model
 {
-    use HasFactory;
-    use HasOrderPayments;
+    use HasFactory, ActivityLog, HasOrderPayments;
 
     /**
      * The attributes that are mass assignable.
@@ -46,7 +46,7 @@ class Order extends Model
         'reviewed_at',
         'graded_at',
         'auto_saved_at',
-        'extra_charge',
+        'extra_charge_total',
     ];
 
     /**
@@ -74,7 +74,7 @@ class Order extends Model
         'grand_total_cents' => 'integer',
         'reviewed_at' => 'date',
         'graded_at' => 'date',
-        'extra_charge' => 'float',
+        'extra_charge_total' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -86,7 +86,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
+            AllowedInclude::relationship('orderPayment', 'lastOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -118,7 +118,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
+            AllowedInclude::relationship('orderPayment', 'lastOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -288,7 +288,7 @@ class Order extends Model
 
     public function getGroupedOrderItems(): Collection
     {
-        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('min(declared_value_total) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
+        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('sum(declared_value_per_unit) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
         ->where('order_id', $this->id)
         ->groupBy(['card_product_id'])
         ->get();

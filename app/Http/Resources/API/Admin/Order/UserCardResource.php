@@ -17,7 +17,7 @@ class UserCardResource extends BaseResource
     public function toArray($request): array
     {
         /** @var Order $order */
-        $order = $this?->orderItem?->order;
+        $order = $this->orderItem->order;
 
         return [
             'id' => $this->id,
@@ -35,8 +35,8 @@ class UserCardResource extends BaseResource
             'generated_images' => $this->generated_images,
             'updated_at' => $this->formatDate($this->updated_at),
             'order' => [
-                'auto_saved_at' => $this->formatDate($order?->auto_saved_at),
-                'total_graded_items' => $order?->getTotalGradedItems(),
+                'auto_saved_at' => $this->formatDate($order->auto_saved_at),
+                'total_graded_items' => $order->getTotalGradedItems(),
             ],
         ];
     }

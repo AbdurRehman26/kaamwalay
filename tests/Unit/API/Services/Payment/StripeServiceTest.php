@@ -103,7 +103,7 @@ it('can charge extra for particular order', function () {
     $result = $this->stripe->additionalCharge($order, [
         'amount' => 20.00,
         'notes' => 'Extra Charge',
-        'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+        'type' => OrderPayment::TYPE_EXTRA_CHARGE,
         'payment_method_id' => $order->payment_method_id,
     ]);
     $this->assertArrayHasKey('success', $result);

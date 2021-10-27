@@ -46,6 +46,7 @@ const useStyles = makeStyles(
         },
         drawerPaper: {
             minWidth: 260,
+            maxWidth: '70%',
         },
         header: {
             flexWrap: 'nowrap',
@@ -76,7 +77,7 @@ const useStyles = makeStyles(
             alignItems: 'flex-start',
             justifyContent: 'center',
             flexGrow: 1,
-            maxWidth: 'calc(100% - 100px)',
+            maxWidth: 'calc(100% - 120px)',
         },
         closeIconHolder: {
             position: 'absolute',
@@ -148,11 +149,8 @@ export function DashboardNavigationDrawer() {
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
                 </ListItem>
-                <ListItem selected={isItemActive('/cards')} button>
+                <ListItem selected={isItemActive('/cards')} onClick={() => handleItemPress('/cards')} button>
                     <ListItemText primary={'Your Cards'} primaryTypographyProps={{ className: classes.listItemText }} />
-                    <ListItemSecondaryAction>
-                        <Chip size="small" label="Soon" color={'secondary'} />
-                    </ListItemSecondaryAction>
                 </ListItem>
                 <ListItem selected={isItemActive('/profile')} button>
                     <ListItemText primary={'Profile'} primaryTypographyProps={{ className: classes.listItemText }} />

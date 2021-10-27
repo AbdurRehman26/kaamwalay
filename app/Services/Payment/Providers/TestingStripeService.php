@@ -20,9 +20,9 @@ class TestingStripeService implements PaymentProviderServiceInterface
         $paymentData = [
             'customer_id' => Str::random(25),
             'amount' => $order->grand_total_cents,
-            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'additional_data' => [
-                'description' => "Payment for Order # {$order->id}",
+                'description' => "Payment for Order # {$order->order_number}",
                 'metadata' => [
                     'Order ID' => $order->id,
                     'User Email' => $order->user->email,
@@ -41,9 +41,9 @@ class TestingStripeService implements PaymentProviderServiceInterface
             'success' => true,
             'request' => $paymentData,
             'response' => $response,
-            'payment_provider_reference_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'amount' => $order->grand_total,
-            'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+            'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             'notes' => $paymentData['additional_data']['description'],
         ];
     }
@@ -94,6 +94,14 @@ class TestingStripeService implements PaymentProviderServiceInterface
                         'paid' => true,
                         'payment_intent' => $data['payment_intent_id'],
                         'payment_method' => 'pm_1JNQ1VJCai8r8pbffJQmzj7g',
+                        'payment_method_details' => (object) [
+                            'card' => (object) [
+                                'brand' => 'visa',
+                                'exp_month' => 12,
+                                'exp_year' => 25,
+                                'last4' => 4454,
+                            ],
+                        ],
                         'status' => 'succeeded',
                     ],
                 ],
@@ -213,14 +221,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         ];
     }
 
-    public function calculateFeeWithAmount(float $amount): float
-    {
-        $amountCharged = round($amount * 100);
-
-        return $this->calculateFee($amountCharged);
-    }
-
-    public function additionalCharge(Order $order, $request): array
+    public function additionalCharge(Order $order, array $request): array
     {
         if (! empty($request['fail'])) {
             return [];
@@ -228,7 +229,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         $paymentData = [
             'customer_id' => Str::random(25),
             'amount' => (int) $request['amount'] * 100,
-            'payment_intent_id' => $order->lastOrderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => $request['notes'],
                 'metadata' => [
@@ -246,7 +247,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
             'response' => $response,
             'payment_provider_reference_id' => $paymentData['payment_intent_id'],
             'amount' => $request['amount'],
-            'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+            'type' => OrderPayment::TYPE_EXTRA_CHARGE,
             'notes' => $paymentData['additional_data']['description'],
         ];
     }

@@ -1,5 +1,5 @@
 /**
- * @api {post} /admin/orders/{order}/extra/charge Add Extra Charge
+ * @api {post} /admin/orders/{order}/payments/extra-charge Add Extra Charge
  * @apiName Add Extra Charge
  * @apiGroup Admin Orders
  *
@@ -25,6 +25,13 @@
  *              "notes": "Lorem ispum",
  *              "amount": "12.22",
  *              "type": "order_payment",
+ *              "created_at": "2021-08-12 02:22:46.000000",
+ *              "user": {
+ *                  "id": 1,
+ *                  "first_name": "Jane",
+ *                  "last_name": "Doe",
+ *                  "email": "test@test.test"
+ *              }
  *        }
  *    }
  */

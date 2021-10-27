@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\API\BaseResource;
 
-class OrderPaymentResource extends JsonResource
+class OrderPaymentResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -38,6 +38,10 @@ class OrderPaymentResource extends JsonResource
                 'exp_year' => $card->exp_year,
                 'last4' => $card->last4,
             ],
+            'amount' => $this->amount,
+            'notes' => $this->notes,
+            'type' => $this->getPaymentType($this->type),
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 

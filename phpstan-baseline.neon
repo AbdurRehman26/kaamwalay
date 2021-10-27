@@ -1,0 +1,697 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateAdminShipments\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
+
+		-
+			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateCustomerShipments\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\IncorrectOrderStatus\\:\\:\\$code has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/IncorrectOrderStatus.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\IncorrectOrderStatus\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/IncorrectOrderStatus.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderCanNotBeMarkedAsGraded\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/Order/OrderCanNotBeMarkedAsGraded.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderFoldersOnDropboxNotCreated\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/Order/OrderFoldersOnDropboxNotCreated.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemDoesNotBelongToOrder\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/Order/OrderItem/OrderItemDoesNotBelongToOrder.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemIsNotGraded\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/Order/OrderItem/OrderItemIsNotGraded.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\ShipmentNotUpdated\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/Order/ShipmentNotUpdated.php
+
+		-
+			message: "#^Method App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/OrderCanNotBeMarkedAsReviewed.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:\\$code has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/OrderCanNotBeMarkedAsReviewed.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/OrderCanNotBeMarkedAsReviewed.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderStatusHistoryWasAlreadyAssigned\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Admin/OrderStatusHistoryWasAlreadyAssigned.php
+
+		-
+			message: "#^Method App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Auth/AuthenticationException.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:\\$code has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Auth/AuthenticationException.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Auth/AuthenticationException.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\CustomerShipmentNotUpdated\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/CustomerShipmentNotUpdated.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ErrorInCustomerAddress\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/ErrorInCustomerAddress.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ErrorInDeclaredValue\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/ErrorInDeclaredValue.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\GrandTotalValueLimitReached\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/GrandTotalValueLimitReached.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ItemDeclaredValueLimitReached\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/ItemDeclaredValueLimitReached.php
+
+		-
+			message: "#^Method App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/OrderNotPayable.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:\\$code has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/OrderNotPayable.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/OrderNotPayable.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPlaced\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/API/Customer/Order/OrderNotPlaced.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\InvoiceNotUploaded\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/Services/Payment/InvoiceNotUploaded.php
+
+		-
+			message: "#^Method App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/Services/Payment/PaymentMethodNotSupported.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:\\$code has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/Services/Payment/PaymentMethodNotSupported.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/Services/Payment/PaymentMethodNotSupported.php
+
+		-
+			message: "#^Method App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/Services/Payment/PaymentNotVerified.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:\\$code has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/Services/Payment/PaymentNotVerified.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:\\$message has no typehint specified\\.$#"
+			count: 1
+			path: app/Exceptions/Services/Payment/PaymentNotVerified.php
+
+		-
+			message: "#^Method App\\\\Http\\\\APIClients\\\\AGSClient\\:\\:createCertificates\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/APIClients/AGSClient.php
+
+		-
+			message: "#^Method App\\\\Http\\\\APIClients\\\\AGSClient\\:\\:updateHumanGrades\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/APIClients/AGSClient.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\API\\\\Auth\\\\ResetPasswordController\\:\\:sendResetFailedResponse\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/API/Auth/ResetPasswordController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\API\\\\Auth\\\\ResetPasswordController\\:\\:sendResetFailedResponse\\(\\) has parameter \\$response with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/API/Auth/ResetPasswordController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\API\\\\Auth\\\\ResetPasswordController\\:\\:sendResetResponse\\(\\) has parameter \\$response with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/API/Auth/ResetPasswordController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\API\\\\Customer\\\\Order\\\\PaymentMethodController\\:\\:index\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/API/Customer/Order/PaymentMethodController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\API\\\\Customer\\\\Order\\\\PaymentMethodController\\:\\:show\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/API/Customer/Order/PaymentMethodController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\AdminController\\:\\:getView\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AdminController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\AuthController\\:\\:getView\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\DashboardController\\:\\:getView\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/DashboardController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Filters/AdminOrderSearchFilter.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Filters/AdminOrderSearchFilter.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Filters/UserCardSearchFilter.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Filters/UserCardSearchFilter.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\Admin\\\\Order\\\\OrderResource\\:\\:gradedBy\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Resources/API/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\Admin\\\\Order\\\\OrderResource\\:\\:reviewedBy\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Resources/API/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Http/Resources/API/BaseResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$default with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Resources/API/BaseResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$internal with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Resources/API/BaseResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$relationship with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Resources/API/BaseResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$resource with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Resources/API/BaseResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\Services\\\\AGS\\\\CardGradeResource\\:\\:ignoreParams\\(\\) has parameter \\$params with no typehint specified\\.$#"
+			count: 1
+			path: app/Http/Resources/API/Services/AGS/CardGradeResource.php
+
+		-
+			message: "#^Property App\\\\Jobs\\\\Admin\\\\Order\\\\CreateOrderFoldersOnDropbox\\:\\:\\$tries has no typehint specified\\.$#"
+			count: 1
+			path: app/Jobs/Admin/Order/CreateOrderFoldersOnDropbox.php
+
+		-
+			message: "#^Property App\\\\Jobs\\\\Email\\\\SendEmail\\:\\:\\$tries has no typehint specified\\.$#"
+			count: 1
+			path: app/Jobs/Email/SendEmail.php
+
+		-
+			message: "#^Property App\\\\Jobs\\\\Email\\\\SendScheduledEmail\\:\\:\\$tries has no typehint specified\\.$#"
+			count: 1
+			path: app/Jobs/Email/SendScheduledEmail.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\Order\\\\UpdateAutoSaveAttribute\\:\\:handle\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Admin/Order/UpdateAutoSaveAttribute.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:handleGraded\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:handleGraded\\(\\) has parameter \\$event with no typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:updatePopReports\\(\\) has parameter \\$event with no typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleArrived\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleGraded\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handlePlaced\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleShipped\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:scheduleEmail\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendAdminEmail\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Services/GenerateOrderInvoice.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has parameter \\$exception with no typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Services/GenerateOrderInvoice.php
+
+		-
+			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:\\$tries has no typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Services/GenerateOrderInvoice.php
+
+		-
+			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\SendOrderPaidNotificationToSlack\\:\\:\\$tries has no typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Services/SendOrderPaidNotificationToSlack.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\UpdateRevenueStats\\:\\:handle\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Services/UpdateRevenueStats.php
+
+		-
+			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\UpdateRevenueStats\\:\\:\\$tries has no typehint specified\\.$#"
+			count: 1
+			path: app/Listeners/API/Services/UpdateRevenueStats.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItemStatus\\:\\:scopeForStatus\\(\\) has parameter \\$status with no typehint specified\\.$#"
+			count: 1
+			path: app/Models/OrderItemStatus.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:setPasswordAttribute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:setPasswordAttribute\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserCard\\:\\:getRoundedOverallValues\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Models/UserCard.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrderPaid\\:\\:toSlack\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/OrderPaid.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrderPaid\\:\\:toSlack\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/OrderPaid.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrderPaid\\:\\:via\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/OrderPaid.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrderPaid\\:\\:via\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/OrderPaid.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:toSlack\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/OrdersExported.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:toSlack\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/OrdersExported.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:via\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/OrdersExported.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:via\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/OrdersExported.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\RevenueStatsUpdated\\:\\:toSlack\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/RevenueStatsUpdated.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\RevenueStatsUpdated\\:\\:toSlack\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
+			count: 1
+			path: app/Notifications/RevenueStatsUpdated.php
+
+		-
+			message: "#^Method App\\\\Policies\\\\OrderItemPolicy\\:\\:review\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Policies/OrderItemPolicy.php
+
+		-
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:create\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Policies/OrderPolicy.php
+
+		-
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:review\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Policies/OrderPolicy.php
+
+		-
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:update\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Policies/OrderPolicy.php
+
+		-
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:view\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Policies/OrderPolicy.php
+
+		-
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:viewAny\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Policies/OrderPolicy.php
+
+		-
+			message: "#^Method App\\\\Policies\\\\UserCardPolicy\\:\\:view\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Policies/UserCardPolicy.php
+
+		-
+			message: "#^Method App\\\\Policies\\\\UserCardPolicy\\:\\:viewAny\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Policies/UserCardPolicy.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\CardGradingService\\:\\:getAverage\\(\\) has parameter \\$values with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Admin/CardGradingService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Admin/OrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:updateNotes\\(\\) has parameter \\$notes with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Admin/OrderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"
+			count: 2
+			path: app/Services/Admin/OrderStatusHistoryService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderStatusHistoryService\\:\\:addStatusToOrder\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Admin/OrderStatusHistoryService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:from\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/ConfigurationService/ConfigurationValue.php
+
+		-
+			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:from\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/ConfigurationService/ConfigurationValue.php
+
+		-
+			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:keyName\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/ConfigurationService/ConfigurationValue.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/Helpers/helpers.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:process\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:saveOrder\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:startOrder\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has parameter \\$customerAddress with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderAddresses\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderItems\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderPayment\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentMethod\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentPlan\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingFee\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingFeeAndGrandTotal\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingMethod\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/CreateOrderService.php
+
+		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:placed\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Order/OrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/OrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/RevenueStatsService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$currentDate with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/RevenueStatsService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$orderPayments with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/RevenueStatsService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$revenue with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/RevenueStatsService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:calculateStats\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/RevenueStatsService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:calculateStats\\(\\) has parameter \\$revenue with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/RevenueStatsService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\CustomerAddressValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/Validators/CustomerAddressValidator.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\GrandTotalValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/Validators/GrandTotalValidator.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\ItemsDeclaredValueValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Order/Validators/ItemsDeclaredValueValidator.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Payment\\\\InvoiceService\\:\\:createAndStoreInvoiceRecord\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/Payment/InvoiceService.php
+
+		-
+			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
+			count: 1
+			path: app/Services/Payment/Providers/StripeService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:cleanColumnName\\(\\) has parameter \\$grade with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/PopReport/PopReportService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:generateReportEmptyArray\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/PopReport/PopReportService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateCardProductsReport\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/PopReport/PopReportService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSeriesReport\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/PopReport/PopReportService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSetsReport\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: app/Services/PopReport/PopReportService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumber\\:\\:toSql\\(\\) has parameter \\$column with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/SerialNumberService/SerialNumber.php
+
+		-
+			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumberService\\:\\:get\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: app/Services/SerialNumberService/SerialNumberService.php
+

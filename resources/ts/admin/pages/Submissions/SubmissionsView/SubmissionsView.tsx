@@ -4,6 +4,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharges';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { SubmissionsViewDetails } from './SubmissionsViewDetails';
@@ -25,6 +26,7 @@ export function SubmissionsView() {
                     'orderStatus',
                     'orderItems',
                     'orderShipment',
+                    'extraCharges',
                     'orderStatusHistory.orderStatus',
                 ],
             },
@@ -65,8 +67,21 @@ export function SubmissionsView() {
                 billingAddress={data.billingAddress}
                 shippingAddress={data.shippingAddress}
                 payment={data.orderPayment}
+                refundsTotal={String(data?.refundTotal)}
+                extraChargesTotal={String(data?.extraChargeTotal)}
             />
-            <SubmissionViewCards items={data.orderItems} serviceLevelPrice={data.paymentPlan?.price} />
+            <Divider />
+            <RefundsAndExtraCharges
+                mode={'admin'}
+                orderId={id}
+                extraCharges={data?.extraCharges}
+                refunds={data?.refunds}
+            />
+            <SubmissionViewCards
+                items={data?.orderItems}
+                serviceLevelPrice={data?.paymentPlan?.price}
+                orderStatusID={data?.orderStatus?.id}
+            />
         </Grid>
     );
 }

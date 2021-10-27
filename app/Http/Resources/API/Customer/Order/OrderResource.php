@@ -39,6 +39,7 @@ class OrderResource extends BaseResource
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),
+            'extra_charge' => $this->extra_charge,
         ];
     }
 }

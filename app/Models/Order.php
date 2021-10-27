@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -17,7 +17,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 
 class Order extends Model
 {
-    use HasFactory, ActivityLog;
+    use HasFactory, ActivityLog, HasOrderPayments;
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +46,7 @@ class Order extends Model
         'reviewed_at',
         'graded_at',
         'auto_saved_at',
+        'extra_charge',
     ];
 
     /**
@@ -73,6 +74,7 @@ class Order extends Model
         'grand_total_cents' => 'integer',
         'reviewed_at' => 'date',
         'graded_at' => 'date',
+        'extra_charge' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -84,7 +86,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -92,6 +94,7 @@ class Order extends Model
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
+            AllowedInclude::relationship('extraCharges'),
         ];
     }
 
@@ -115,7 +118,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment'),
+            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -123,6 +126,7 @@ class Order extends Model
             AllowedInclude::relationship('customer', 'user'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
+            AllowedInclude::relationship('extraCharges'),
         ];
     }
 
@@ -181,11 +185,6 @@ class Order extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
-    }
-
-    public function orderPayment(): HasOne
-    {
-        return $this->hasOne(OrderPayment::class);
     }
 
     public function reviewedBy(): BelongsTo

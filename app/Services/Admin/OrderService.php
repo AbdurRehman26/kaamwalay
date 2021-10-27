@@ -2,13 +2,17 @@
 
 namespace App\Services\Admin;
 
+use App\Events\API\Admin\Order\ExtraChargeFailed;
+use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
+use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
@@ -17,7 +21,9 @@ use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
+use Throwable;
 
 class OrderService
 {
@@ -148,7 +154,7 @@ class OrderService
 
         $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
-        $orderPayment = OrderPaymentResource::make($order->orderPayment)->resolve();
+        $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
         $data["SUBMISSION_NUMBER"] = $order->order_number;
         $data['CUSTOMER_NAME'] = $order->user->getFullName();
@@ -210,5 +216,40 @@ class OrderService
         }
 
         return '';
+    }
+
+    /**
+     * @throws FailedExtraCharge|Throwable
+     */
+    public function addExtraCharge(Order $order, User $user, array $data, array $paymentResponse): void
+    {
+        if (empty($paymentResponse)) {
+            ExtraChargeFailed::dispatch($order, $data);
+
+            throw new FailedExtraCharge;
+        }
+        DB::beginTransaction();
+
+        $order->fill([
+            'extra_charge' => $order->extra_charge + $data['amount'],
+            'grand_total' => $order->grand_total + $data['amount'],
+        ]);
+        $order->save();
+
+        OrderPayment::create([
+            'request' => json_encode($paymentResponse['request']),
+            'response' => json_encode($paymentResponse['response']),
+            'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
+            'amount' => $paymentResponse['amount'],
+            'type' => $paymentResponse['type'],
+            'notes' => $paymentResponse['notes'],
+            'order_id' => $order->id,
+            'payment_method_id' => $order->payment_method_id,
+            'user_id' => $user->id,
+        ]);
+
+        DB::commit();
+
+        ExtraChargeSuccessful::dispatch($order);
     }
 }

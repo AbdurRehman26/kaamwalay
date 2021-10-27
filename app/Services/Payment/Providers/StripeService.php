@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Laravel\Cashier\Exceptions\IncompletePayment;
@@ -58,12 +59,13 @@ class StripeService implements PaymentProviderServiceInterface
 
         $paymentData = [
             'amount' => $order->grand_total_cents,
-            'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->order_number}",
                 'metadata' => [
                     'Order ID' => $order->id,
                     'User Email' => $order->user->email,
+                    'Type' => 'Order Payment',
                 ],
             ],
         ];
@@ -79,7 +81,10 @@ class StripeService implements PaymentProviderServiceInterface
                 'success' => true,
                 'request' => $paymentData,
                 'response' => $response->toArray(),
-                'payment_provider_reference_id' => $order->orderPayment->payment_provider_reference_id,
+                'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
+                'amount' => $order->grand_total,
+                'type' => OrderPayment::TYPE_ORDER_PAYMENT,
+                'notes' => $paymentData['additional_data']['description'],
             ];
         } catch (IncompletePayment $exception) {
             return [
@@ -119,7 +124,10 @@ class StripeService implements PaymentProviderServiceInterface
             $charge->amount === $order->grand_total_cents
             && $charge->outcome->type === 'authorized'
         ) {
-            $order->orderPayment->update([
+            $order->lastOrderPayment->update([
+                'type' => OrderPayment::TYPE_ORDER_PAYMENT,
+                'amount' => $order->grand_total,
+                'notes' => "Payment for Order # {$order->order_number}",
                 'response' => json_encode($paymentIntent->toArray()),
             ]);
 
@@ -127,15 +135,6 @@ class StripeService implements PaymentProviderServiceInterface
         }
 
         return false;
-    }
-
-    public function calculateFee(Order $order): float
-    {
-        $amountCharged = $order->grand_total_cents;
-
-        return round((
-            (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
-        ) / 100, 2);
     }
 
     protected function isCustomerInvalid(string $param): bool
@@ -167,5 +166,50 @@ class StripeService implements PaymentProviderServiceInterface
     {
         $this->removeOldCustomerId($user);
         $this->createCustomerIfNull($user);
+    }
+
+    public function calculateFee(Order $order): float
+    {
+        $amountCharged = $order->grand_total_cents;
+
+        return round((
+            (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
+        ) / 100, 2);
+    }
+
+    public function additionalCharge(Order $order, array $request): array
+    {
+        $paymentData = [
+            'amount' => (int) $request['amount'] * 100,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
+            'additional_data' => [
+                'description' => $request['notes'],
+                'metadata' => [
+                    'Order ID' => $order->id,
+                    'User Email' => $order->user->email,
+                    'Type' => 'Extra Charge',
+                ],
+            ],
+        ];
+
+        try {
+            $response = $order->user->charge(
+                $paymentData['amount'],
+                $paymentData['payment_intent_id'],
+                $paymentData['additional_data']
+            );
+
+            return [
+                'success' => true,
+                'request' => $paymentData,
+                'response' => $response->toArray(),
+                'payment_provider_reference_id' => $paymentData['payment_intent_id'],
+                'amount' => $request['amount'],
+                'type' => OrderPayment::TYPE_EXTRA_CHARGE,
+                'notes' => $paymentData['additional_data']['description'],
+            ];
+        } catch (IncompletePayment|InvalidRequestException|CardException $exception) {
+            return [];
+        }
     }
 }

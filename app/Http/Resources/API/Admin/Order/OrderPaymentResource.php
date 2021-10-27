@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Resources\API\Customer\Order;
+namespace App\Http\Resources\API\Admin\Order;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\API\BaseResource;
+use App\Models\OrderPayment;
 
-class OrderPaymentResource extends JsonResource
+class OrderPaymentResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -38,6 +39,10 @@ class OrderPaymentResource extends JsonResource
                 'exp_year' => $card->exp_year,
                 'last4' => $card->last4,
             ],
+            'amount' => $this->amount,
+            'notes' => $this->notes,
+            'type' => $this->getPaymentType($this->type),
+            'user' => new OrderPaymentUserResource($this->user),
         ];
     }
 
@@ -49,5 +54,17 @@ class OrderPaymentResource extends JsonResource
                 "name" => $response['payer']['name']['given_name'] ?? "N/A",
             ],
         ];
+    }
+
+    /**
+     * @param int<1, 3> $type
+     */
+    public function getPaymentType(int $type): string
+    {
+        return match ($type) {
+            OrderPayment::TYPE_ORDER_PAYMENT => 'order_payment',
+            OrderPayment::TYPE_EXTRA_CHARGE => 'extra_charge',
+            OrderPayment::TYPE_REFUND => 'refund',
+        };
     }
 }

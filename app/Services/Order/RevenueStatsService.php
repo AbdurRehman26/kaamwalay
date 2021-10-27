@@ -101,8 +101,18 @@ class RevenueStatsService
 
     protected function calculateStats(Order $order, $revenue)
     {
-        $revenue->increment('profit', $this->calculateProfit($order->orderPayment));
-        $revenue->increment('revenue', $this->calculateRevenue($order->orderPayment));
+        $calculatedProfit = $revenue->profit ?? 0;
+        $calculatedRevenue = $revenue->revenue ?? 0;
+
+        $order->orderPayments->map(function ($payment) use (&$calculatedProfit, &$calculatedRevenue) {
+            $calculatedProfit += $this->calculateProfit($payment);
+            $calculatedRevenue += $this->calculateRevenue($payment);
+
+            return $payment;
+        });
+
+        $revenue->increment('profit', $calculatedProfit);
+        $revenue->increment('revenue', $calculatedRevenue);
 
         return $revenue;
     }

@@ -98,5 +98,5 @@ test('provider fee is set after a successful payment', function () {
         (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
     ) / 100, 2);
 
-    expect($actualFee)->toBe($this->order->orderPayment->provider_fee);
+    expect($actualFee)->toBe($this->order->lastOrderPayment->provider_fee);
 })->group('payment');

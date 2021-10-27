@@ -53,6 +53,6 @@ return [
     'dropbox' => [
         'token' => env('AGS_DROPBOX_TOKEN'),
         'root_path' => env('AGS_DROPBOX_ROOT_PATH'),
-    ]
+    ],
 
 ];

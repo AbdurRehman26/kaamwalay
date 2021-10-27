@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\User\UserResource;
 use App\Models\OrderPayment;
 
 class OrderPaymentResource extends BaseResource
@@ -42,7 +43,7 @@ class OrderPaymentResource extends BaseResource
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),
-            'user' => new OrderPaymentUserResource($this->user),
+            'user' => new UserResource($this->user),
         ];
     }
 

@@ -100,7 +100,8 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                 id={userCard?.id}
                 image={userCard?.cardProduct?.imagePath}
                 name={userCard?.cardProduct?.name}
-                description={userCard?.cardProduct?.fullName ?? '-'}
+                shortName={userCard?.cardProduct?.shortName}
+                description={userCard?.cardProduct?.longName ?? '-'}
                 certification={userCard?.certificateNumber ?? '-'}
                 grade={userCard?.overallGrade ?? '-'}
             />

@@ -3,6 +3,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { cx } from '@shared/lib/utils/cx';
+import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { font } from '@shared/styles/utils';
 
 type CardPreviewOnlyImageProps = {
@@ -14,6 +15,7 @@ type CardPreviewProps = {
     id: number;
     image: string;
     name: string;
+    shortName: string;
     description: string;
     certification: string;
     grade?: string;
@@ -84,7 +86,7 @@ const useStyles = makeStyles(
  */
 export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps | CardPreviewProps>) {
     const { children, onlyImage } = props as PropsWithChildren<CardPreviewOnlyImageProps>;
-    const { id, image, grade, certification, name, description } = props as CardPreviewProps;
+    const { id, image, grade, certification, name, description, shortName } = props as CardPreviewProps;
     const classes = useStyles();
     const isGraded = !!grade && certification;
 
@@ -115,6 +117,15 @@ export function CardPreview(props: PropsWithChildren<CardPreviewOnlyImageProps |
                     >
                         {name}
                     </Typography>
+                    <div title={shortName}>
+                        <Typography
+                            color={'textPrimary'}
+                            variant={'caption'}
+                            className={cx(classes.description, classes.smallFont)}
+                        >
+                            {getStringTruncated(shortName, 40)}
+                        </Typography>
+                    </div>
                     <Typography
                         color={'textPrimary'}
                         variant={'caption'}

@@ -47,6 +47,16 @@ const useStyles = makeStyles(
             paddingTop: '0 !important',
             paddingBottom: '0 !important',
         },
+        shortNameText: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '10px',
+            lineHeight: '14px',
+            letterSpacing: '0.6px',
+            textTransform: 'uppercase',
+            color: 'rgba(0, 0, 0, 0.54)',
+        },
         actions: {
             padding: theme.spacing(2, 3),
         },
@@ -150,8 +160,9 @@ export const ManageCardDialogView = forwardRef(
                                     <Box display={'flex'} alignItems={'flex-start'} py={3}>
                                         <img src={card.imagePath} alt={card.getName()} className={classes.image} />
                                         <Box paddingLeft={2} paddingTop={1}>
-                                            <Typography variant={'h6'} gutterBottom>
-                                                {card.getName()}
+                                            <Typography variant={'h6'}>{card.getName()}</Typography>
+                                            <Typography variant={'caption'} className={classes.shortNameText}>
+                                                {card.getShortName()}
                                             </Typography>
                                             <Typography variant={'body2'}>{card.getDescription()}</Typography>
 

@@ -27,4 +27,9 @@ class CardSeries extends Model
     {
         return $this->belongsTo(CardCategory::class);
     }
+
+    public function getReleaseDateAttribute(): string
+    {
+        return $this->hasOne(CardSet::class)->oldest('release_date')->first()->release_date;
+    }
 }

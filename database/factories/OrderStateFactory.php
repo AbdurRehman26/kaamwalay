@@ -24,7 +24,7 @@ class OrderStateFactory extends Factory
     {
         return [
             'code' => $this->faker->firstName(),
-            'description' => $this->faker->text,
+            'description' => $this->faker->text(),
         ];
     }
 }

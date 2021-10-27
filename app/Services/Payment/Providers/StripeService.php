@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Laravel\Cashier\Exceptions\IncompletePayment;
+use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\CardException;
 use Stripe\Exception\InvalidRequestException;
@@ -59,7 +60,7 @@ class StripeService implements PaymentProviderServiceInterface
             'amount' => $order->grand_total_cents,
             'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
             'additional_data' => [
-                'description' => "Payment for Order # {$order->id}",
+                'description' => "Payment for Order # {$order->order_number}",
                 'metadata' => [
                     'Order ID' => $order->id,
                     'User Email' => $order->user->email,
@@ -111,6 +112,7 @@ class StripeService implements PaymentProviderServiceInterface
 
     protected function validateOrderIsPaid(Order $order, PaymentIntent $paymentIntent): bool
     {
+        /** @var Charge $charge */
         $charge = $paymentIntent->charges->first();
 
         if (

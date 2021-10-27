@@ -60,7 +60,7 @@ class AgsService
 
     public function createCertificates(array $data): array
     {
-        return $this->client->createCertificates(data: $data);
+        return $this->client->createCertificates($this->prepareDataForCertificate(data: $data));
     }
 
     public function getGrades(array $certificateIds): array
@@ -120,6 +120,34 @@ class AgsService
             $card['pokemon_set']['name'] . ' ' .
             $card['pokemon_set']['cards_number'] . ' ' .
             $card['name'];
+    }
+
+    protected function prepareDataForCertificate(array $data): array
+    {
+        $cardsData = [];
+        foreach ($data as $card) {
+            $cardData = [
+                'certificate_id' => $card['certificate_id'],
+                'set_name' => $card['set_name'],
+                'card_number' => $card['card_number'],
+            ];
+
+            if (! empty($card['edition'])) {
+                $cardData['edition'] = $card['edition'];
+            }
+
+            if (! empty($card['variant'])) {
+                $cardData['variant'] = $card['variant'];
+            }
+
+            if (! empty($card['surface'])) {
+                $cardData['surface'] = $card['surface'];
+            }
+
+            $cardsData[] = $cardData;
+        }
+
+        return $cardsData;
     }
 
     protected function prepareGradeForPublicPage(array $grade): array

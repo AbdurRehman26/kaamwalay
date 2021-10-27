@@ -172,8 +172,8 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                     name: item.title,
                     cardCategoryName: item.subtitle,
                     imagePath: item.image,
-                    shortName: item.title,
-                    fullName: item.subtitle,
+                    shortName: item.shortname,
+                    longName: item.subtitle,
                 }),
             ),
         [selectedCards],
@@ -271,16 +271,20 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                     {selectedCards.map((row: SearchResultItemCardProps) => (
                         <>
                             <div className={classes.mobileViewContainer}>
-                                <SearchResultItemCard
-                                    onPreview={handlePreview}
-                                    key={row.id}
-                                    id={row.id}
-                                    image={row.image}
-                                    subtitle={row.subtitle}
-                                    title={row.title}
-                                    addedMode
-                                    reviewMode
-                                />
+                                <div title={row.shortname || row.title}>
+                                    <SearchResultItemCard
+                                        onPreview={handlePreview}
+                                        key={row.id}
+                                        id={row.id}
+                                        image={row.image}
+                                        subtitle={row.subtitle}
+                                        shortname={row.shortname}
+                                        title={row.title}
+                                        addedMode
+                                        reviewMode
+                                    />
+                                </div>
+
                                 <div className={classes.mobileViewCardActions}>
                                     <div className={classes.mobileViewCardActionContainer}>
                                         <Typography variant={'caption'} className={classes.actionLabel}>
@@ -370,6 +374,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                             id={row.id}
                                             image={row.image}
                                             subtitle={row.subtitle}
+                                            shortname={row.shortname}
                                             title={row.title}
                                             addedMode
                                         />

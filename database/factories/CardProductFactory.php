@@ -25,9 +25,9 @@ class CardProductFactory extends Factory
     {
         return [
             'name' => $this->faker->firstName(),
-            "variant_name" => '1st Edition',
-            "variant_category" => 'Surface',
-            "holo_type" => 'REV.HOLO',
+            "edition" => '1st Edition',
+            "surface" => 'Reverse Holo',
+            "variant" => 'Next Destinies Stage 1 Blisters',
             'card_set_id' => CardSet::factory(),
             'card_category_id' => CardCategory::factory(),
             'rarity' => 'Common',

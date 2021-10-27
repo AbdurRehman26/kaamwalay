@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
+use App\Http\Resources\API\BaseResource;
 use App\Models\OrderPayment;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderPaymentResource extends JsonResource
+class OrderPaymentResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -42,7 +42,7 @@ class OrderPaymentResource extends JsonResource
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),
-            'created_at' => $this->created_at,
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 
@@ -59,7 +59,7 @@ class OrderPaymentResource extends JsonResource
     /**
      * @param int<1, 3> $type
      */
-    public function getPaymentType(int $type): string
+    protected function getPaymentType(int $type): string
     {
         return match ($type) {
             OrderPayment::TYPE_ORDER_PAYMENT => 'order_payment',

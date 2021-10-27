@@ -12,7 +12,7 @@ class FeatureNotAvailable extends Exception
     /**
      * @var int
      */
-    protected $code = Response::HTTP_SERVICE_UNAVAILABLE;
+    protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
     /**
      * @param Request|array $request

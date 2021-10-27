@@ -11,6 +11,10 @@ class OrderPayment extends Model
 {
     use HasFactory, ActivityLog;
 
+    public const TYPE_ORDER_PAYMENT = 1;
+    public const TYPE_EXTRA_CHARGE = 2;
+    public const TYPE_REFUND = 3;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,10 +46,6 @@ class OrderPayment extends Model
         'order_id' => 'integer',
         'user_id' => 'integer',
     ];
-
-    public const TYPE_ORDER_PAYMENT = 1;
-    public const TYPE_EXTRA_CHARGE = 2;
-    public const TYPE_REFUND = 3;
 
     public function order(): BelongsTo
     {

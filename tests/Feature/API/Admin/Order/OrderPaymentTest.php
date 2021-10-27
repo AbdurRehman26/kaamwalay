@@ -57,7 +57,7 @@ test('admin can create extra charge for order', function () {
     $this->postJson(route('payments.extra-charge', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
-    ])
+    ])->dump()
         ->assertStatus(Response::HTTP_CREATED)
         ->assertJsonStructure(['data' => ['amount', 'user' => ['id', 'first_name', 'email']]]);
 
@@ -85,5 +85,5 @@ it('does not perform extra charge when service is disabled', function () {
     $this->postJson(route('payments.extra-charge', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
-    ])->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE);
+    ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });

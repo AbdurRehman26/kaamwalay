@@ -44,7 +44,7 @@ class OrderPaymentResource extends BaseResource
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),
             'user' => new UserResource($this->user),
-            'created_at' => $this->created_at,
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 
@@ -61,7 +61,7 @@ class OrderPaymentResource extends BaseResource
     /**
      * @param int<1, 3> $type
      */
-    public function getPaymentType(int $type): string
+    protected function getPaymentType(int $type): string
     {
         return match ($type) {
             OrderPayment::TYPE_ORDER_PAYMENT => 'order_payment',

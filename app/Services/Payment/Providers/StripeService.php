@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
@@ -185,7 +186,7 @@ class StripeService implements PaymentProviderServiceInterface
             'additional_data' => [
                 'description' => $request['notes'],
                 'metadata' => [
-                    'Order ID' => $order->id,
+                    'Order ID' => $order->order_number,
                     'User Email' => $order->user->email,
                     'Type' => 'Extra Charge',
                 ],
@@ -209,6 +210,12 @@ class StripeService implements PaymentProviderServiceInterface
                 'notes' => $paymentData['additional_data']['description'],
             ];
         } catch (IncompletePayment|InvalidRequestException|CardException $exception) {
+            Log::error('Extra Charge failed', [
+                'exception' => $exception->getMessage(),
+                'amount' => $request['amount'],
+                'Order #' => $order->order_number,
+                'User Email' => $order->user->email,
+            ]);
             return [];
         }
     }

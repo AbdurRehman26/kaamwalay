@@ -533,7 +533,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                         </>
                     ) : null}
 
-                    {currentViewMode === 'graded' ? (
+                    {cardStatus.toLowerCase() !== 'confirmed' && currentViewMode !== 'graded_revise_mode' ? (
                         <Grid item xs>
                             <Button
                                 variant={'contained'}

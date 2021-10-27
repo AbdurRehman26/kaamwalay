@@ -14,7 +14,7 @@ class AddExtraChargeFieldInOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('extra_charge', 10, 2)
+            $table->decimal('extra_charge_total', 10, 2)
                 ->default(0)
                 ->after('grand_total')
                 ->comment('This will hold the cumulative value of all the extra charges per order');
@@ -29,7 +29,7 @@ class AddExtraChargeFieldInOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('extra_charge');
+            $table->dropColumn('extra_charge_total');
         });
     }
 }

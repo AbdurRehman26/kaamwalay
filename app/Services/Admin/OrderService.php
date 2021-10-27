@@ -230,7 +230,7 @@ class OrderService
         }
         DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
             $order->fill([
-                'extra_charge' => $order->extra_charge + $data['amount'],
+                'extra_charge_total' => $order->extra_charge_total + $data['amount'],
                 'grand_total' => $order->grand_total + $data['amount'],
             ]);
             $order->save();

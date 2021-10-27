@@ -216,6 +216,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'Order #' => $order->order_number,
                 'User Email' => $order->user->email,
             ]);
+
             return [];
         }
     }

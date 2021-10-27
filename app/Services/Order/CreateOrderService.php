@@ -193,7 +193,7 @@ class CreateOrderService
             $orderPaymentData = array_merge(
                 $orderPaymentData,
                 [
-                    'response' => $response,
+                    'response' => json_encode($response),
                     'payment_provider_reference_id' => $data['id'],
                 ]
             );

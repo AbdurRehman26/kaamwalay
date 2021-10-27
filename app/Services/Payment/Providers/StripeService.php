@@ -124,7 +124,7 @@ class StripeService implements PaymentProviderServiceInterface
             && $charge->outcome->type === 'authorized'
         ) {
             $order->lastOrderPayment->update([
-                'response' => $paymentIntent->toArray(),
+                'response' => json_encode($paymentIntent->toArray()),
             ]);
 
             return true;

@@ -38,8 +38,6 @@ class OrderPayment extends Model
         'type' => 'integer',
         'amount' => 'float',
         'order_id' => 'integer',
-        'request' => 'array',
-        'response' => 'array',
     ];
 
     public const PAYMENT_TYPES = [

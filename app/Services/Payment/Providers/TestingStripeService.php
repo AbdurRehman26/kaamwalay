@@ -140,7 +140,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
             && $charge->outcome->type === 'authorized'
         ) {
             $order->lastOrderPayment->update([
-                'response' => $paymentIntent,
+                'response' => json_encode($paymentIntent),
             ]);
 
             return true;
@@ -254,6 +254,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     public function refund(Order $order, array $data): array
     {
         $orderPayment = $order->firstOrderPayment;
+        $paymentData = json_decode($orderPayment->response, associative: true);
 
         $refundData = [
             'amount' => (int) $data['amount'] * 100,

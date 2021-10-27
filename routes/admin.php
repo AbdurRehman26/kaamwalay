@@ -40,8 +40,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
 
-        Route::post('refund', OrderRefundController::class);
         Route::apiResource('order-payments', OrderPaymentController::class)->only('update');
         Route::post('extra/charge', OrderExtraChargeController::class);
+        Route::post('order-payments/{orderPayment}/refund', OrderRefundController::class);
     });
 });

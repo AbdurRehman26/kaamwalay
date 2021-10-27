@@ -34,10 +34,10 @@ class InvoiceService
         $barcode = 'data:image/png;base64,' . BarcodeService::generate($order->order_number, BarcodeGenerator::Code39, '', 2);
 
         $orderPayment = $order->lastOrderPayment;
-        $paymentResponse = $orderPayment?->response;
+        $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
         if ($paymentResponse) {
             if ($order->paymentMethod->code === 'paypal') {
-                $orderPayment = json_decode(json_encode($this->paypalData($orderPayment->response ?? [])));
+                $orderPayment = json_decode(json_encode($this->paypalData(json_decode($orderPayment->response, associative: true) ?? [])));
             } else {
                 if (property_exists($paymentResponse, 'card')) {
                     $card = $paymentResponse->card;

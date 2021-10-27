@@ -20,14 +20,14 @@ class OrderPaymentResource extends BaseResource
         }
 
         if ($this->order->paymentMethod->code === 'paypal') {
-            return $this->paypalData($this->response ?? []);
+            return $this->paypalData(json_decode($this->response, associative: true) ?? []);
         }
         $hasCard = ! ($this->type === OrderPayment::PAYMENT_TYPES['refund']);
 
         $card = null;
 
         if ($hasCard) {
-            $providerResponse = $this->response;
+            $providerResponse = json_decode($this->response);
 
             if (! empty($providerResponse->card)) {
                 $card = $providerResponse->card;

@@ -21,7 +21,7 @@ export function PaymentAccordionItems({ refunds, extraCharges, mode, orderId }: 
             maxWidth={'100%'}
         >
             <Grid item sm={6} flexDirection={'column'}>
-                {extraCharges?.length !== 0 ? (
+                {extraCharges && extraCharges?.length > 0 ? (
                     <Typography variant={'subtitle2'} marginBottom={'12px'}>
                         Extra Charges
                     </Typography>
@@ -33,15 +33,15 @@ export function PaymentAccordionItems({ refunds, extraCharges, mode, orderId }: 
                         transactionId={item?.id}
                         orderId={orderId}
                         type={'extra_charge'}
-                        amount={item.amount}
-                        notes={item.notes}
-                        author={item.author}
-                        updatedAt={item.updatedAt}
+                        amount={item?.amount}
+                        notes={item?.notes}
+                        author={item?.user?.getFullName()}
+                        updatedAt={item?.createdAt}
                     />
                 ))}
             </Grid>
             <Grid item sm={6} flexDirection={'column'}>
-                {refunds?.length !== 0 ? (
+                {refunds && refunds?.length > 0 ? (
                     <Typography variant={'subtitle2'} marginBottom={'12px'}>
                         Refunds
                     </Typography>
@@ -53,10 +53,10 @@ export function PaymentAccordionItems({ refunds, extraCharges, mode, orderId }: 
                         transactionId={item?.id}
                         orderId={orderId}
                         type={'refund'}
-                        amount={item.amount}
-                        notes={item.notes}
-                        author={item.author}
-                        updatedAt={item.updatedAt}
+                        amount={item?.amount}
+                        notes={item?.notes}
+                        author={item?.user.getFullName()}
+                        updatedAt={item?.createdAt}
                     />
                 ))}
             </Grid>

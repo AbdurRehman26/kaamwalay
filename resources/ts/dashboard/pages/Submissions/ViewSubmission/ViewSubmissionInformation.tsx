@@ -18,6 +18,8 @@ interface ViewSubmissionInformationProps {
     customerEmail: string;
     customerPhone: string;
     customerNumber: string;
+    refundsTotal: string | number;
+    extraChargesTotal: string | number;
     serviceFee: number;
     shippingFee: number;
     total: number;
@@ -40,6 +42,8 @@ export function ViewSubmissionInformation({
     customerNumber,
     serviceFee,
     shippingFee,
+    extraChargesTotal,
+    refundsTotal,
     total,
 }: ViewSubmissionInformationProps) {
     const classes = useViewSubmissionInformationStyles();
@@ -118,6 +122,22 @@ export function ViewSubmissionInformation({
                         </TableCell>
                         <TableCell>{formatCurrency(serviceFee)}</TableCell>
                     </TableRow>
+                    {extraChargesTotal ? (
+                        <TableRow>
+                            <TableCell variant={'head'} component={'th'}>
+                                Extra Charge
+                            </TableCell>
+                            <TableCell>{formatCurrency(extraChargesTotal)}</TableCell>
+                        </TableRow>
+                    ) : null}
+                    {refundsTotal ? (
+                        <TableRow>
+                            <TableCell variant={'head'} component={'th'}>
+                                Refund
+                            </TableCell>
+                            <TableCell>-{formatCurrency(refundsTotal)}</TableCell>
+                        </TableRow>
+                    ) : null}
                     <TableRow>
                         <TableCell variant={'head'} component={'th'}>
                             Insured Shipping

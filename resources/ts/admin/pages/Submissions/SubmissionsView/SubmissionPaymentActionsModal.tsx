@@ -1,4 +1,4 @@
-import { FormControl } from '@mui/material';
+import { CircularProgress, FormControl } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -27,6 +27,7 @@ export default function SubmissionPaymentActionsModal({
 }: SubmissionPaymentActionsModalProps) {
     const [amount, setAmount] = useState('');
     const [notes, setNotes] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
 
     const handleChangeAmount = useCallback(
@@ -50,14 +51,30 @@ export default function SubmissionPaymentActionsModal({
     }, [notes, amount, setShowPaymentActionsModal]);
 
     const handleSave = useCallback(() => {
+        setIsLoading(true);
         if (openState === 'show-add-extra-charge') {
-            dispatch(addExtraChargeToOrder({ amount, notes, orderId: orderId! }));
-            handleClose();
+            dispatch(addExtraChargeToOrder({ amount, notes, orderId: orderId! }))
+                .unwrap()
+                .then(() => {
+                    setIsLoading(false);
+                    handleClose();
+                })
+                .catch(() => {
+                    setIsLoading(false);
+                });
         }
 
         if (openState === 'show-issue-refund') {
-            dispatch(refundOrderTransaction({ amount, notes, orderId: orderId! }));
-            handleClose();
+            dispatch(refundOrderTransaction({ amount, notes, orderId: orderId! }))
+                .unwrap()
+                .then(() => {
+                    setIsLoading(false);
+                    handleClose();
+                })
+                .catch(() => {
+                    setIsLoading(false);
+                    handleClose();
+                });
         }
     }, [dispatch, addExtraChargeToOrder, amount, notes, orderId, openState, handleClose]);
 
@@ -108,10 +125,10 @@ export default function SubmissionPaymentActionsModal({
                     sx={{ paddingLeft: '24px', paddingRight: '24px' }}
                     color={'primary'}
                     variant={'contained'}
-                    disabled={isSaveDisabled}
+                    disabled={isSaveDisabled || isLoading}
                     onClick={handleSave}
                 >
-                    Save
+                    {isLoading ? <CircularProgress color={'primary'} /> : 'Save'}
                 </Button>
             </DialogActions>
         </Dialog>

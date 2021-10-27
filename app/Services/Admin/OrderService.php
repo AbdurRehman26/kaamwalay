@@ -15,10 +15,11 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
+
 class OrderService
 {
     public function __construct(

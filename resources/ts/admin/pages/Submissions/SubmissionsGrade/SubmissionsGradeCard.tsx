@@ -277,7 +277,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
 
         if (cardStatus.toLowerCase() === 'graded') {
             dispatch(updateCardViewMode({ viewModeName: 'graded_revise_mode', viewModeIndex: itemIndex }));
-            setisReviseActive(true);
         }
     };
 
@@ -355,7 +354,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     function handleGradedReviseModeSave() {
         sendHumanGradesToBackend();
         dispatch(resetCardViewMode({ viewModeIndex: itemIndex, topLevelID: topLevelID }));
-        setisReviseActive(false);
     }
 
     const humanGrades = useAppSelector(
@@ -422,7 +420,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     );
 
     const [isDoneDisabled, setIsDoneDisabled] = useState(true);
-    const [isReviseActive, setisReviseActive] = useState(false);
 
     const viewModes = useAppSelector((state) => state.submissionGradesSlice.viewModes);
     const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
@@ -501,8 +498,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                     ) : null}
                 </Grid>
                 <Grid container className={classes.actions}>
-                    {cardStatus.toLowerCase() === 'confirmed' ||
-                    (cardStatus.toLowerCase() !== 'confirmed' && isReviseActive) ? (
+                    {currentViewMode === 'graded_revise_mode' ? (
                         <>
                             <Grid item xs>
                                 <Button
@@ -533,7 +529,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                         </>
                     ) : null}
 
-                    {cardStatus.toLowerCase() !== 'confirmed' && !isReviseActive ? (
+                    {currentViewMode === 'graded' ? (
                         <Grid item xs>
                             <Button
                                 variant={'contained'}

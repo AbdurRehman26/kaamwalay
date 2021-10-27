@@ -110,9 +110,7 @@ export function SubmissionsViewHeader({
 
                         <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                             {orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED) ? (
-                                <>
-                                    <MenuItem onClick={handleViewGrades}>View Grades</MenuItem>
-                                </>
+                                <MenuItem onClick={handleViewGrades}>View Grades</MenuItem>
                             ) : null}
                         </Menu>
                     </IconButton>

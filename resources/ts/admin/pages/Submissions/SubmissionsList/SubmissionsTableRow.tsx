@@ -127,9 +127,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                         {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
                     </MenuItem>
                     {order?.orderStatus.is(OrderStatusEnum.GRADED) || order?.orderStatus.is(OrderStatusEnum.SHIPPED) ? (
-                        <>
-                            <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
-                        </>
+                        <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
                     ) : null}
                 </Menu>
             </TableCell>

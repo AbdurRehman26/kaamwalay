@@ -33,6 +33,17 @@ const useStyles = makeStyles(
                 borderBottom: 'none',
             },
         },
+        shortName: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '10px',
+            lineHeight: '14px',
+            letterSpacing: '0.6px',
+            textTransform: 'uppercase',
+            color: 'rgba(0, 0, 0, 0.54)',
+            display: 'block',
+        },
         image: {
             width: 28,
             marginRight: theme.spacing(1),
@@ -93,9 +104,13 @@ export function CardItem({ label, itemId, card, labelIcon, certificateId, declar
                     <Typography variant={'body2'} className={font.fontWeightMedium}>
                         {card.getName()}
                     </Typography>
-                    <Typography variant={'caption'}>{card.getDescription()}</Typography>
-                    <br />
-                    <Typography variant={'caption'}>{card.getShortName()}</Typography>
+                    <Box flexDirection={'column'}>
+                        <Typography variant={'caption'} className={classes.shortName}>
+                            {card.getShortName()}
+                        </Typography>
+                        <Typography variant={'caption'}>{card.getDescription()}</Typography>
+                    </Box>
+
                     {certificateId || declaredValue ? (
                         <Box>
                             {certificateId && (

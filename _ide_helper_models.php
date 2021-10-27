@@ -260,6 +260,7 @@ namespace App\Models{
  * @property float|null $service_fee
  * @property float|null $shipping_fee
  * @property float|null $grand_total
+ * @property float $extra_charge_total This will hold the cumulative value of all the extra charges per order
  * @property int $user_id
  * @property int $payment_plan_id
  * @property int|null $order_status_id
@@ -280,13 +281,18 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $reviewed_at
  * @property \Illuminate\Support\Carbon|null $graded_at
  * @property-read \App\Models\OrderAddress $billingAddress
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $extraCharges
+ * @property-read int|null $extra_charges_count
+ * @property-read \App\Models\OrderPayment|null $firstOrderPayment
  * @property-read int $grand_total_cents
  * @property-read \App\Models\User|null $gradedBy
  * @property-read \App\Models\Invoice|null $invoice
+ * @property-read \App\Models\OrderPayment|null $lastOrderPayment
  * @property-read \App\Models\OrderCustomerShipment|null $orderCustomerShipment
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems
  * @property-read int|null $order_items_count
- * @property-read \App\Models\OrderPayment|null $orderPayment
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $orderPayments
+ * @property-read int|null $order_payments_count
  * @property-read \App\Models\OrderShipment|null $orderShipment
  * @property-read \App\Models\OrderStatus|null $orderStatus
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderStatusHistory[] $orderStatusHistory
@@ -310,6 +316,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAutoSavedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereBillingOrderAddressId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereExtraCharge($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereGradedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereGradedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereGrandTotal($value)
@@ -560,6 +567,9 @@ namespace App\Models{
  * @property string|null $request
  * @property string|null $response
  * @property string|null $payment_provider_reference_id
+ * @property string|null $notes
+ * @property float|null $amount
+ * @property int $type 1 => order payment, 2 => extra charge, 3 => refund
  * @property float|null $provider_fee
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -568,14 +578,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment wherePaymentMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment wherePaymentProviderReferenceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereProviderFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereRequest($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereResponse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment whereUpdatedAt($value)
  */
 	class OrderPayment extends \Eloquent {}

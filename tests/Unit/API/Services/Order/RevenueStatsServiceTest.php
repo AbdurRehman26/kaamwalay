@@ -34,7 +34,7 @@ beforeEach(function () {
 });
 
 it('adds daily revenue stats', function () {
-    $profit = ($this->order->service_fee - $this->order->orderPayment->provider_fee);
+    $profit = ($this->order->service_fee - $this->order->lastOrderPayment->provider_fee);
     $revenue = $this->order->grand_total;
     $revenueStats = $this->revenueStatsService->addDailyStats(Carbon::now()->toDateString());
     expect($revenue)->toBe($revenueStats['revenue']);
@@ -60,7 +60,7 @@ it('adds monthly revenue stats', function () {
     $orders->each(function ($order) {
         $orderPayment = OrderPayment::factory()->state(new Sequence(['created_at' => $order->created_at]))->for($order)->stripe()->create();
         $this->paymentService->calculateAndSaveFee($orderPayment->order);
-        $profit = ($order->service_fee - $order->orderPayment->provider_fee);
+        $profit = ($order->service_fee - $order->lastOrderPayment->provider_fee);
         $revenue = $order->grand_total;
         $revenueStats = $this->revenueStatsService->addMonthlyStats($order->created_at);
         expect($revenue)->toBe($revenueStats['revenue']);
@@ -69,7 +69,7 @@ it('adds monthly revenue stats', function () {
 })->group('revenue-stats');
 
 it('updates daily revenue stats', function () {
-    $profit = ($this->order->service_fee - $this->order->orderPayment->provider_fee);
+    $profit = ($this->order->service_fee - $this->order->lastOrderPayment->provider_fee);
     $revenue = $this->order->grand_total;
     $revenueStats = $this->revenueStatsService->updateStats(Carbon::now()->toDateString(), $this->order);
     expect($revenue)->toBe($revenueStats['revenue']);
@@ -77,7 +77,7 @@ it('updates daily revenue stats', function () {
 })->group('revenue-stats');
 
 it('updates monthly revenue stats', function () {
-    $profit = ($this->order->service_fee - $this->order->orderPayment->provider_fee);
+    $profit = ($this->order->service_fee - $this->order->lastOrderPayment->provider_fee);
     $revenue = $this->order->grand_total;
     $revenueStats = $this->revenueStatsService->updateMonthlyStats(Carbon::now()->toDateString(), $this->order);
     expect($revenue)->toBe($revenueStats['revenue']);

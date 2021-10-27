@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Str;
 
@@ -19,7 +20,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
         $paymentData = [
             'customer_id' => Str::random(25),
             'amount' => $order->grand_total_cents,
-            'payment_intent_id' => $order->orderPayment->payment_provider_reference_id,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->order_number}",
                 'metadata' => [
@@ -40,7 +41,10 @@ class TestingStripeService implements PaymentProviderServiceInterface
             'success' => true,
             'request' => $paymentData,
             'response' => $response,
-            'payment_provider_reference_id' => $order->orderPayment->payment_provider_reference_id,
+            'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
+            'amount' => $order->grand_total,
+            'type' => OrderPayment::TYPE_ORDER_PAYMENT,
+            'notes' => $paymentData['additional_data']['description'],
         ];
     }
 
@@ -90,6 +94,14 @@ class TestingStripeService implements PaymentProviderServiceInterface
                         'paid' => true,
                         'payment_intent' => $data['payment_intent_id'],
                         'payment_method' => 'pm_1JNQ1VJCai8r8pbffJQmzj7g',
+                        'payment_method_details' => (object) [
+                            'card' => (object) [
+                                'brand' => 'visa',
+                                'exp_month' => 12,
+                                'exp_year' => 25,
+                                'last4' => 4454,
+                            ],
+                        ],
                         'status' => 'succeeded',
                     ],
                 ],
@@ -135,7 +147,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
             $charge->amount === $order->grand_total_cents
             && $charge->outcome->type === 'authorized'
         ) {
-            $order->orderPayment->update([
+            $order->lastOrderPayment->update([
                 'response' => json_encode($paymentIntent),
             ]);
 
@@ -157,7 +169,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     {
         $amountCharged = $order->grand_total_cents;
 
-        return  round((float) (
+        return round((
             (self::STRIPE_FEE_PERCENTAGE * $amountCharged) + self::STRIPE_FEE_ADDITIONAL_AMOUNT
         ) / 100, 2);
     }
@@ -206,6 +218,37 @@ class TestingStripeService implements PaymentProviderServiceInterface
                     'last4' => 4242,
                 ],
             ],
+        ];
+    }
+
+    public function additionalCharge(Order $order, array $request): array
+    {
+        if (! empty($request['fail'])) {
+            return [];
+        }
+        $paymentData = [
+            'customer_id' => Str::random(25),
+            'amount' => (int) $request['amount'] * 100,
+            'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
+            'additional_data' => [
+                'description' => $request['notes'],
+                'metadata' => [
+                    'Order ID' => $order->id,
+                    'User Email' => $order->user->email,
+                    'Type' => 'Extra Charge',
+                ],
+            ],
+        ];
+        $response = $this->successfulPaymentResponse($paymentData);
+
+        return [
+            'success' => true,
+            'request' => $paymentData,
+            'response' => $response,
+            'payment_provider_reference_id' => $paymentData['payment_intent_id'],
+            'amount' => $request['amount'],
+            'type' => OrderPayment::TYPE_EXTRA_CHARGE,
+            'notes' => $paymentData['additional_data']['description'],
         ];
     }
 }

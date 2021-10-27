@@ -144,7 +144,7 @@ class PaymentService
     */
     protected function canProcessExtraCharge(): void
     {
-        if (config('order_robograding.extra_charge_enabled') !== true) {
+        if (config('robograding.order_extra_charge_enabled') !== true) {
             throw new FeatureNotAvailable('Extra Charge service is not available at the moment.');
         }
     }

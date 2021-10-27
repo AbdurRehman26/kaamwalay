@@ -59,7 +59,7 @@ test('admin can create extra charge for order', function () {
         'amount' => '20.00',
     ])
         ->assertStatus(Response::HTTP_CREATED)
-        ->assertJsonStructure(['data' => ['amount', 'user' => ['id', 'name', 'email']]]);
+        ->assertJsonStructure(['data' => ['amount', 'user' => ['id', 'first_name', 'email']]]);
 
     Event::assertDispatched(ExtraChargeSuccessful::class);
     expect($this->order->extraCharges()->count())->toEqual(1);

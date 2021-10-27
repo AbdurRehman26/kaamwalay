@@ -123,10 +123,13 @@ export function ReviewCardDialog(props: PropsWithChildren<ReviewCardDialogProps>
             <Grid container direction={'column'} className={classes.root}>
                 <Grid container direction={'column'}>
                     <Typography variant={'h4'} className={classes.heading}>
+                        {activeItem?.name}
+                    </Typography>
+                    <Typography variant={'body2'} className={classes.subheading}>
                         {activeItem?.shortName}
                     </Typography>
                     <Typography variant={'body2'} className={classes.subheading}>
-                        {activeItem?.fullName}
+                        {activeItem?.longName}
                     </Typography>
 
                     <IconButton className={classes.closeButton} size={'small'} onClick={handleClose}>

@@ -22,7 +22,7 @@ export class CardProductEntity extends Entity {
     }
 
     public getFullName() {
-        return this.fullName;
+        return this.longName;
     }
 
     public getShortName() {

@@ -54,7 +54,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     const item = useMemo(() => plainToClass(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
     const result = useMemo(() => fromApiPropertiesObject(hit._highlightResult), [hit]);
     const items = useMemo(() => (activeItem ? [activeItem] : []), [activeItem]);
-    const subtitle = result.fullName.value;
+    const subtitle = result.longName.value;
     const shortname = result.shortName.value;
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const isCardSelected = useMemo(

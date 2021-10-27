@@ -7,3 +7,4 @@ resources/docs/frontend.md
 *.d.ts
 docker-compose.yml
 composer.lock
+/.github/workflows

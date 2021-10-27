@@ -29,7 +29,8 @@ export function SubmissionReviewCardDialog(props: SubmissionReviewCardDialogProp
     const [loading, setLoading] = useState('');
     const order = useMemo(() => plainToClass(OrderEntity, entities[orderId]), [entities, orderId]);
     const pendingItems = useMemo(
-        () => order?.orderItems?.filter((item) => item.status?.orderItemStatus?.id === OrderItemStatusEnum.PENDING),
+        () =>
+            order?.orderItems?.filter((item) => item.status?.orderItemStatus?.id === OrderItemStatusEnum.PENDING) ?? [],
         [order],
     );
 

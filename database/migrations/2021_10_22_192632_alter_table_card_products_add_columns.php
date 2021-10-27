@@ -14,7 +14,7 @@ class AlterTableCardProductsAddColumns extends Migration
     public function up()
     {
         Schema::table('card_products', function (Blueprint $table) {
-            $table->string('card_id')->default('')->after('name');
+            $table->string('card_reference_id')->nullable()->after('name');
             $table->string('edition')->default('')->after('card_number_order');
             $table->string('surface')->default('')->after('edition');
             $table->string('variant')->default('')->after('surface');
@@ -30,7 +30,7 @@ class AlterTableCardProductsAddColumns extends Migration
     public function down()
     {
         Schema::table('card_products', function (Blueprint $table) {
-            $table->dropColumn('card_id');
+            $table->dropColumn('card_reference_id');
             $table->dropColumn('edition');
             $table->dropColumn('surface');
             $table->dropColumn('variant');

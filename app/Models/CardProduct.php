@@ -32,7 +32,7 @@ class CardProduct extends Model
         'edition',
         'surface',
         'variant',
-        'card_id',
+        'card_reference_id',
         'language',
     ];
 
@@ -54,21 +54,22 @@ class CardProduct extends Model
     public function toSearchableArray()
     {
         $array = [
-            "id" => $this->id,
-            "name" => $this->name,
-            "search_name" => $this->getSearchableName(),
-            'log_name' => $this->getLongName(),
-            "short_name" => $this->getShortName(),
-            'full_name' => $this->getSearchableName(),
-            "card_category_name" => $this->cardCategory->name,
-            "card_set_name" => $this->cardSet->name,
-            "card_series_name" => $this->cardSet->cardSeries->name,
-            "release_year" => $this->cardSet->release_year,
-            "card_number_order" => is_numeric($this->card_number_order) ? Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order,
-            "image_path" => $this->image_path,
-            "variant_name" => $this->variant_name,
-            "variant_category" => $this->variant_category,
-            "holo_type" => $this->holo_type,
+            'id' => $this->id,
+            'name' => $this->name,
+            'searchable_name' => $this->getSearchableName(),
+            'long_name' => $this->getLongName(),
+            'short_name' => $this->getShortName(),
+            'card_category_name' => $this->cardCategory->name,
+            'card_set_name' => $this->cardSet->name,
+            'card_series_name' => $this->cardSet->cardSeries->name,
+            'release_year' => $this->cardSet->release_year,
+            'card_number_order' => is_numeric($this->card_number_order) ? Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order,
+            'image_path' => $this->image_path,
+            'card_reference_id' => $this->card_reference_id,
+            'variant' => $this->variant,
+            'surface' => $this->surface,
+            'edition' => $this->edition,
+            'language' => $this->language,
         ];
 
         return $array;
@@ -91,12 +92,18 @@ class CardProduct extends Model
 
     public function getShortName(): string
     {
-        $language = $this->language == 'English' ? $this->language . ' ' : '';
-        $edition = $this->edition ? $this->edition . ' ' : '';
-        $surface = $this->surface ? $this->surface . ' ' : '';
-        $variant = $this->variant ? $this->variant . ' ' : '';
+        $language = $this->language !== 'English' ? $this->language . ' - ' : '';
+        $edition = $this->edition ? $this->edition . ' - ' : '';
+        $surface = $this->surface ? $this->surface . ' - ' : '';
+        $variant = $this->variant ?: '';
 
-        return $language . $edition . $surface . $variant;
+        $shortName = $language . $edition . $surface . $variant;
+
+        if (str_ends_with($shortName, ' - ')) {
+            $shortName = substr_replace($shortName, '', -3);
+        }
+
+        return $shortName;
     }
 
     public function getLongName(): string
@@ -108,7 +115,6 @@ class CardProduct extends Model
 
     public function getSearchableName(): string
     {
-        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $this->cardSet->cardSeries->name . ' ' . $this->cardSet->name . ' ' . $this->getFormattedCardNumber() . ' ' . $this->getShortName() . ' ' . $this->name;
+        return $this->getLongName() . ' ' . $this->getShortName() . ' ' . $this->name;
     }
-
 }

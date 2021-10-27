@@ -1,6 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import AllInboxIcon from '@mui/icons-material/AllInbox';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import StyleIcon from '@mui/icons-material/Style';
 import Avatar from '@mui/material/Avatar';
@@ -86,7 +86,7 @@ function LayoutSidebar() {
             </Grid>
 
             <List>
-                <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
+                <LayoutSidebarItem icon={Inventory2Icon} title={'Submissions'} href={'/submissions'} />
                 <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} href={'/cards'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} disabled title={'Profile'} href={'/profile'} />
                 <LayoutSidebarItem

@@ -33,7 +33,6 @@ export function ViewSubmission() {
                     'orderStatusHistory.orderStatus',
                     'invoice',
                     'extraCharges',
-                    'refunds',
                     'orderShipment',
                     'orderItems',
                     'orderStatus',
@@ -77,6 +76,8 @@ export function ViewSubmission() {
                 customerNumber={data?.customer?.customerNumber}
                 serviceFee={data?.serviceFee}
                 shippingFee={data?.shippingFee}
+                refundsTotal={data?.refundTotal}
+                extraChargesTotal={data?.extraChargeTotal}
                 total={data?.grandTotal}
             />
             <Divider />

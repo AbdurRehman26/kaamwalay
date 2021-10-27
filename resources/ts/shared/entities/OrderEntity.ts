@@ -23,6 +23,8 @@ export class OrderEntity extends Entity {
     public numberOfCards!: number;
     public totalDeclaredValue!: number;
     public grandTotal!: number;
+    public extraChargeTotal!: number;
+    public refundTotal!: number;
     public shippingFee!: number;
     public serviceFee!: number;
     public customerId!: number;
@@ -81,16 +83,6 @@ export class OrderEntity extends Entity {
 
     public get status() {
         return this.orderStatus?.code;
-    }
-
-    public getRefundsTotal() {
-        const refunds = this.refunds === undefined ? [] : this.refunds;
-        return refunds.reduce((n, { amount }) => n + Number(amount), 0);
-    }
-
-    public getExtraChargesTotal() {
-        const extraCharges = this.extraCharges === undefined ? [] : this.extraCharges;
-        return extraCharges.reduce((n, { amount }) => n + Number(amount), 0);
     }
 
     public getItemsByStatus(status: OrderItemStatusEnum): OrderItemEntity[] {

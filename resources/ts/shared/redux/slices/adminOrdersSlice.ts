@@ -146,6 +146,10 @@ export const addExtraChargeToOrder = createAsyncThunk(
 
         try {
             const extraCharge = await ordersRepository.addExtraChargeToOrder(input);
+            NotificationsService.success('Charged successfully!');
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
             return {
                 extraCharge: classToPlain(extraCharge) as OrderExtraChargeEntity,
                 orderId: input.orderId,
@@ -164,6 +168,10 @@ export const refundOrderTransaction = createAsyncThunk(
 
         try {
             const refundTransaction = await ordersRepository.refundOrderTransaction(input);
+            NotificationsService.success('Customer refunded successfully!');
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
             return {
                 extraCharge: classToPlain(refundTransaction) as OrderRefundEntity,
                 orderId: input.orderId,

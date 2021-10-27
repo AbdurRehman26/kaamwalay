@@ -266,5 +266,4 @@ class OrderService
 
         return $this->agsService->createCertificates($data);
     }
-
 }

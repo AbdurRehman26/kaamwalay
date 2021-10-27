@@ -2,7 +2,6 @@
 
 namespace App\Services\Payment;
 
-use App\Events\API\Admin\Order\ExtraChargeFailed;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
@@ -141,8 +140,6 @@ class PaymentService
         ])->additionalCharge($this->order, $request);
 
         if (empty($response)) {
-            ExtraChargeFailed::dispatch($order, $request);
-
             throw new FailedExtraCharge;
         }
 

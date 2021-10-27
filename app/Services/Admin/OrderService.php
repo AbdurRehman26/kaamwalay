@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin;
 
-use App\Events\API\Admin\Order\ExtraChargeFailed;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;

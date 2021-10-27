@@ -42,6 +42,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::apiResource('order-payments', OrderPaymentController::class)->only('update');
         Route::post('extra/charge', OrderExtraChargeController::class);
-        Route::post('order-payments/{orderPayment}/refund', OrderRefundController::class);
+        Route::post('payments/refund', OrderRefundController::class);
     });
 });

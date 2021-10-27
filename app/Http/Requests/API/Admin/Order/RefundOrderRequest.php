@@ -32,7 +32,7 @@ class RefundOrderRequest extends FormRequest
                 'required',
                 'numeric',
                 function ($attribute, $value, $fail) {
-                    $orderPayment = OrderPayment::find($this->route('orderPayment'));
+                    $orderPayment = $this->route('order')?->firstOrderPayment;
                     if (
                         $value > $orderPayment->amount
                         || $orderPayment->type === OrderPayment::PAYMENT_TYPES['refund']

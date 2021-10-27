@@ -3,7 +3,6 @@
 namespace App\Services\Admin;
 
 use App\Events\API\Admin\Order\OrderUpdated;
-use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
@@ -56,36 +55,31 @@ class OrderService
         return $certificates->pluck('certificate_number')->flatten()->all();
     }
 
-    public function getOrderCertificatesData(Order|int $order): array
+    protected function getCertificatesDataQuery()
     {
         return UserCard::select([
-                'certificate_number as certificate_id',
-                'card_sets.name as set_name',
-                'card_products.card_number',
-                'card_products.variant_name',
-                'card_products.variant_category',
-                'card_products.holo_type',
-            ])
-            ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
-            ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
-            ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id')
+            'certificate_number as certificate_id',
+            'card_sets.name as set_name',
+            'card_products.card_number',
+            'card_products.variant_name',
+            'card_products.variant_category',
+            'card_products.holo_type',
+        ])
+        ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+        ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
+        ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id');
+    }
+
+    public function getOrderCertificatesData(Order|int $order): array
+    {
+        return $this->getCertificatesDataQuery()
             ->where('order_items.order_id', getModelId($order))
             ->get()->toArray();
     }
 
     public function getOrderItemCertificateData(OrderItem|int $orderItem): array
     {
-        return UserCard::select([
-                'certificate_number as certificate_id',
-                'card_sets.name as set_name',
-                'card_products.card_number',
-                'card_products.variant_name',
-                'card_products.variant_category',
-                'card_products.holo_type',
-            ])
-            ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
-            ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
-            ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id')
+        return $this->getCertificatesDataQuery()
             ->where('user_cards.order_item_id', getModelId($orderItem))
             ->get()->toArray();
     }
@@ -114,7 +108,7 @@ class OrderService
         $orderItem->declared_value_total = $value;
         $orderItem->save();
 
-        OrderItemCardChangedEvent::dispatch($orderItem);
+        $this->updateAgsCertificateCard($orderItem);
 
         return $orderItem;
     }
@@ -230,5 +224,12 @@ class OrderService
         }
 
         return '';
+    }
+
+    protected function updateAgsCertificateCard(OrderItem $orderItem): array
+    {
+        $data = $this->getOrderItemCertificateData($orderItem);
+
+        return $this->agsService->createCertificates($data);
     }
 }

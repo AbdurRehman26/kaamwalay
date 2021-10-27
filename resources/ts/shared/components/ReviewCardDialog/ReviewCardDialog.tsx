@@ -40,7 +40,13 @@ const useStyles = makeStyles(
             fontWeight: 700,
             marginBottom: 4,
         },
-        subheading: {},
+        subheading: {
+            fontSize: '10px',
+            fontFamily: 'Roboto',
+            fontWeight: 500,
+            letterSpacing: '0.6px',
+            textTransform: 'uppercase',
+        },
         imageHolder: {
             padding: theme.spacing(2.5, 0),
         },

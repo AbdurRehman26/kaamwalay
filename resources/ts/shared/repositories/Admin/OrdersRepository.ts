@@ -53,7 +53,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     async addExtraChargeToOrder(input: AddExtraChargeToOrderDTO) {
         const { notes, amount, orderId } = input;
         const body = toApiPropertiesObject({ notes, amount });
-        const { data } = await this.endpoint.post(`${orderId}/extra/charge`, body);
+        const { data } = await this.endpoint.post(`${orderId}/payments/extra-charge`, body);
 
         return plainToClass(OrderExtraChargeEntity, data);
     }

@@ -27,7 +27,6 @@ export function SubmissionsView() {
                     'orderItems',
                     'orderShipment',
                     'extraCharges',
-                    'refunds',
                     'orderStatusHistory.orderStatus',
                 ],
             },
@@ -68,8 +67,8 @@ export function SubmissionsView() {
                 billingAddress={data.billingAddress}
                 shippingAddress={data.shippingAddress}
                 payment={data.orderPayment}
-                refundsTotal={String(data?.getRefundsTotal())}
-                extraChargesTotal={String(data?.getExtraChargesTotal())}
+                refundsTotal={String(data?.refundTotal)}
+                extraChargesTotal={String(data?.extraChargeTotal)}
             />
             <Divider />
             <RefundsAndExtraCharges

@@ -33,10 +33,10 @@ export function PaymentAccordionItems({ refunds, extraCharges, mode, orderId }: 
                         transactionId={item?.id}
                         orderId={orderId}
                         type={'extra_charge'}
-                        amount={item.amount}
-                        notes={item.notes}
-                        author={item.author}
-                        updatedAt={item.updatedAt}
+                        amount={item?.amount}
+                        notes={item?.notes}
+                        author={item?.user?.getFullName()}
+                        updatedAt={item?.createdAt}
                     />
                 ))}
             </Grid>
@@ -53,10 +53,10 @@ export function PaymentAccordionItems({ refunds, extraCharges, mode, orderId }: 
                         transactionId={item?.id}
                         orderId={orderId}
                         type={'refund'}
-                        amount={item.amount}
-                        notes={item.notes}
-                        author={item.author}
-                        updatedAt={item.updatedAt}
+                        amount={item?.amount}
+                        notes={item?.notes}
+                        author={item?.user.getFullName()}
+                        updatedAt={item?.createdAt}
                     />
                 ))}
             </Grid>

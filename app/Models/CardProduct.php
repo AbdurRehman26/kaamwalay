@@ -99,8 +99,8 @@ class CardProduct extends Model
 
         $shortName = $language . $edition . $surface . $variant;
 
-        if (str_ends_with($shortName, " - ")) {
-            $shortName = substr_replace($shortName, "", -3);
+        if (str_ends_with($shortName, ' - ')) {
+            $shortName = substr_replace($shortName, '', -3);
         }
 
         return $shortName;

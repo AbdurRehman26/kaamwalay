@@ -399,7 +399,7 @@
                                     {{$item->cardProduct->name}}
                                 </div>
                                 @if(! empty($item->cardProduct->getShortName()))
-                                    <div class="item-name">
+                                    <div class="item-desc">
                                         {{$item->cardProduct->getShortName()}}
                                     </div>
                                 @endif

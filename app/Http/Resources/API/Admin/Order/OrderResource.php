@@ -36,7 +36,7 @@ use Illuminate\Http\Request;
  * @property mixed $id
  * @property mixed $auto_saved_at
  * @property mixed $order_status_id
- * @property mixed $extra_charge
+ * @property mixed $extra_charge_total
  * @method orderItems()
  * @method orderStatusHistory()
  * @method getTotalGradedItems()
@@ -81,7 +81,7 @@ class OrderResource extends BaseResource
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),
-            'extra_charge' => $this->extra_charge,
+            'extra_charge_total' => $this->extra_charge_total,
         ];
     }
 

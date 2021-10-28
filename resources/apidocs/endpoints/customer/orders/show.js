@@ -19,6 +19,8 @@
  *                "number_of_cards": 11,
  *                "total_declared_value": 5500,
  *                "grand_total": 263,
+ *                "extra_charge_total": 0,
+ *                "refund_total": 0,
  *                "shipping_fee": 43,
  *                "created_at": {
  *                    "date": "2021-08-12 02:22:46.000000",
@@ -148,7 +150,16 @@
  *                          "amount": "12.22",
  *                          "type": "extra_charge",
  *                     }
- *                 ]
+ *                 ],
+ *                 "refunds": [
+ *                     {
+ *                         "id": 1,
+ *                         "order_id": 1,
+ *                         "notes": "Lorem Ispum",
+ *                         "amount": "10.00",
+ *                         "type": "refund"
+ *                     }
+ *                 ],
  *          }
  *        }
  */

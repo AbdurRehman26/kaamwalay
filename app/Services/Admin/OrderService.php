@@ -5,7 +5,6 @@ namespace App\Services\Admin;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Events\API\Admin\Order\RefundSuccessful;
-use App\Events\API\Customer\Order\OrderRefunded;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;

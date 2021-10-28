@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Listeners\API\Order;
+namespace App\Listeners\API\Admin\Order;
 
-use App\Events\API\Customer\Order\OrderRefunded;
+use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
@@ -22,10 +22,10 @@ class SendOrderRefundedEmail implements ShouldBeEncrypted
     /**
      * Handle the event.
      *
-     * @param  OrderRefunded  $event
+     * @param  RefundSuccessful  $event
      * @return void
      */
-    public function handle(OrderRefunded $event)
+    public function handle(RefundSuccessful $event)
     {
         $user = $event->order->user;
         $order = $event->order;

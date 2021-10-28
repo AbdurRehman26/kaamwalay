@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\Admin\Order;
 
-use App\Models\OrderPayment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RefundOrderRequest extends FormRequest
@@ -30,12 +29,13 @@ class RefundOrderRequest extends FormRequest
                 'required',
                 'numeric',
                 function ($attribute, $value, $fail) {
-                    $orderPayment = OrderPayment::find($this->route('orderPayment'));
+                    $order = $this->route('order');
+                    $orderPayment = $order?->firstOrderPayment;
+                    $refundableAmount = $orderPayment?->amount - $order->refund_total;
                     if (
-                        $value > $orderPayment->amount
-                        || $orderPayment->type === OrderPayment::PAYMENT_TYPES['refund']
+                        $value > $refundableAmount
                     ) {
-                        $fail('The '.$attribute.' is invalid.');
+                        $fail("The $attribute is invalid. The maximum refundable amount is: \$$refundableAmount");
                     }
                 },
             ],

@@ -88,6 +88,10 @@ it('returns order details', function () {
                 'customer',
                 'order_items',
             ],
+        ])
+        ->assertJsonFragment([
+            'refund_total' => 0,
+            'extra_charge_total' => 0,
         ]);
 });
 

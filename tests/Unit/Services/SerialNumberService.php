@@ -1,6 +1,6 @@
 <?php
 
-use App\Interfaces\CanBeSerialNumbered;
+use App\Services\SerialNumberService\CanBeSerialNumbered;
 use App\Services\SerialNumberService\SerialNumberService;
 
 it('should generate serial numbers correctly based on normal params', function () {

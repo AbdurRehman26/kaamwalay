@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Events\API\Customer\Order;
+namespace App\Events\API\Admin\OrderItem;
 
-use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderRefunded
+class OrderItemStatusChangedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -16,7 +16,8 @@ class OrderRefunded
      *
      * @return void
      */
-    public function __construct(public Order $order, public array $data)
+    public function __construct(public OrderItem $orderItem)
     {
+        //
     }
 }

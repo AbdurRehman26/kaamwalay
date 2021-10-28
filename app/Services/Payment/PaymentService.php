@@ -3,6 +3,8 @@
 namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
+use App\Exceptions\API\Admin\Order\FailedExtraCharge;
+use App\Exceptions\API\Admin\Order\FailedRefund;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\FeatureNotAvailable;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
@@ -70,7 +72,7 @@ class PaymentService
     public function updateOrderPayment(array $data): array
     {
         /** @noinspection JsonEncodingApiUsageInspection */
-        $this->order->lastOrderPayment->update([
+        $this->order->firstOrderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
@@ -109,7 +111,7 @@ class PaymentService
             $this->order->paymentMethod->code
         ])->calculateFee($this->order);
 
-        $orderPayment = $this->order->lastOrderPayment;
+        $orderPayment = $this->order->firstOrderPayment;
         $orderPayment->provider_fee = $fee;
         $orderPayment->save();
     }
@@ -130,31 +132,46 @@ class PaymentService
      */
     public function additionalCharge(Order $order, array $request): array
     {
-        $this->canProcessExtraCharge();
+        if (! $this->canProcessExtraCharge()) {
+            throw new FeatureNotAvailable('Extra Charge service is not available at the moment.');
+        }
 
         $this->hasProvider($order);
 
-        return resolve($this->providers[
+        $response = resolve($this->providers[
             $this->order->paymentMethod->code
         ])->additionalCharge($this->order, $request);
+
+        if (empty($response)) {
+            throw new FailedExtraCharge;
+        }
+
+        return $response;
     }
 
     /**
      * @throws Throwable
     */
-    protected function canProcessExtraCharge()
+    protected function canProcessExtraCharge(): bool
     {
-        if (config('robograding.extra_charge_enabled') !== true) {
-            throw new FeatureNotAvailable('Extra Charge service is not available at the moment.');
-        }
+        return config('robograding.feature_order_extra_charge_enabled') === true;
     }
 
+    /**
+     * @throws FailedRefund
+     */
     public function refund(Order $order, array $request): array
     {
         $this->hasProvider($order);
 
-        return resolve($this->providers[
+        $refundResponse = resolve($this->providers[
             $this->order->paymentMethod->code
         ])->refund($this->order, $request);
+
+        if (empty($refundResponse)) {
+            throw new FailedRefund;
+        }
+
+        return $refundResponse;
     }
 }

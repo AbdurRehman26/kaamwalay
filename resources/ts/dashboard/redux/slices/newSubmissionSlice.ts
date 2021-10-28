@@ -20,6 +20,7 @@ export type SearchResultItemCardProps = {
     image: string;
     title: string;
     subtitle: string;
+    shortname: string;
     addedMode?: boolean;
     id: number;
     qty?: number;
@@ -582,8 +583,9 @@ export const newSubmissionSlice = createSlice({
             state.step04Data.selectedBillingAddress.city = action.payload.billingAddress.city;
             state.step02Data.selectedCards = action.payload.orderItems.map((orderItem: any) => ({
                 image: orderItem.cardProduct.imagePath,
-                title: orderItem.cardProduct.shortName,
-                subtitle: orderItem.cardProduct.fullName,
+                title: orderItem.cardProduct.name,
+                subtitle: orderItem.cardProduct.longName,
+                shortname: orderItem.cardProduct.shortName,
                 id: orderItem.cardProduct.id,
                 qty: orderItem.quantity,
                 value: orderItem.declaredValuePerUnit,

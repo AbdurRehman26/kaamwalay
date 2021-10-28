@@ -5,6 +5,9 @@ use App\Models\OrderItem;
 use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Models\UserCard;
+use App\Services\Admin\OrderService;
+use App\Services\AGS\AgsService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -107,6 +110,10 @@ test('a new order item needs data', function () {
 });
 
 test('an admin can update order item', function () {
+    Http::fake(['*' => Http::response(json_decode(file_get_contents(
+        base_path() . '/tests/stubs/AGS_create_certificates_response_200.json'
+    ), associative: true))]);
+
     $orderItem = OrderItem::factory()->create();
 
     $this->actingAs($this->user);
@@ -316,4 +323,25 @@ test('an admin can update an existing order item status notes as empty', functio
     $this->assertDatabaseMissing('order_item_status_histories', [
         'notes' => $orderItemStatusHistory->notes,
     ]);
+});
+
+it('can swap card in AGS certificate', function () {
+    Event::fake();
+    Http::fake(['*' => Http::response(json_decode(file_get_contents(
+        base_path() . '/tests/stubs/AGS_create_certificates_response_200.json'
+    ), associative: true))]);
+
+    $userCard = UserCard::factory()->create([
+        'certificate_number' => '09000000',
+    ]);
+
+    $agsService = resolve(AgsService::class);
+    $orderService = resolve(OrderService::class);
+
+    $data = $orderService->getOrderItemCertificateData($userCard->orderItem);
+
+    $response = $agsService->createCertificates($data);
+
+    expect($response)->toHaveCount(1);
+    expect($response[0])->toMatchArray(['certificate_id' => '09000000']);
 });

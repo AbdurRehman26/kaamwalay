@@ -369,10 +369,13 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.imagePath,
     );
     const cardFullName = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.fullName,
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.longName,
     );
     const certificateNumber = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.certificateNumber,
+    );
+    const shortName = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.cardProduct.shortName,
     );
     const overallGrade = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].grade.grade);
     const overallGradeNickname = useAppSelector(
@@ -477,6 +480,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                 heading={cardName}
                 image={cardImage}
                 subheading={cardFullName}
+                shortName={shortName}
                 action={
                     <Button disabled variant={'outlined'} className={cx(classes.statusButton, classes.disabledButton)}>
                         {cardStatus}
@@ -491,14 +495,17 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                         <Typography variant={'subtitle2'} className={classes.lastGradedText}>
                             Last Graded:{' '}
                             <span className={classes.lastGradedTime}>
-                                {formatDate(gradedAt, 'MM/DD/YYYY')} at {formatDate(gradedAt, 'M:H')}
+                                {formatDate(gradedAt, 'MM/DD/YYYY')} at {formatDate(gradedAt, 'H:M')}
                             </span>{' '}
                             ({gradedBy})
                         </Typography>
                     ) : null}
                 </Grid>
                 <Grid container className={classes.actions}>
-                    {cardStatus.toLowerCase() === 'confirmed' ? (
+                    {cardStatus.toLowerCase() === 'confirmed' ||
+                    ['not_accepted_pending_notes', 'missing_pending_notes', 'graded_revise_mode'].includes(
+                        currentViewMode,
+                    ) ? (
                         <>
                             <Grid item xs>
                                 <Button
@@ -529,7 +536,10 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                         </>
                     ) : null}
 
-                    {cardStatus.toLowerCase() !== 'confirmed' ? (
+                    {cardStatus.toLowerCase() !== 'confirmed' &&
+                    !['not_accepted_pending_notes', 'missing_pending_notes', 'graded_revise_mode'].includes(
+                        currentViewMode,
+                    ) ? (
                         <Grid item xs>
                             <Button
                                 variant={'contained'}

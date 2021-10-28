@@ -17,6 +17,6 @@ class OrderPaymentController extends Controller
     ): OrderPaymentResource {
         $orderPayment->update($request->all());
 
-        return new OrderPaymentResource($order->lastOrderPayment);
+        return new OrderPaymentResource($orderPayment);
     }
 }

@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
+import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
 import { OrderItemStatusEnum } from '../constants/OrderItemStatusEnum';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
 import { DateField } from '../decorators/DateField';
@@ -21,6 +23,8 @@ export class OrderEntity extends Entity {
     public numberOfCards!: number;
     public totalDeclaredValue!: number;
     public grandTotal!: number;
+    public extraChargeTotal!: number;
+    public refundTotal!: number;
     public shippingFee!: number;
     public serviceFee!: number;
     public customerId!: number;
@@ -40,6 +44,12 @@ export class OrderEntity extends Entity {
 
     @Type(() => PaymentMethodEntity)
     public paymentMethod!: PaymentMethodEntity;
+
+    @Type(() => OrderExtraChargeEntity)
+    public extraCharges!: OrderExtraChargeEntity[];
+
+    @Type(() => OrderRefundEntity)
+    public refunds!: OrderRefundEntity[];
 
     @Type(() => ShippingMethodEntity)
     public shippingMethod!: ShippingMethodEntity;

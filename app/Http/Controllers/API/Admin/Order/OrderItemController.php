@@ -21,6 +21,7 @@ class OrderItemController extends Controller
 {
     public function getOrderCards(Request $request, Order $order): JsonResponse
     {
+        // TODO Fix the structure of response. It is not following the usual response pattern
         return new JsonResponse(
             [
                 'data' => new OrderItemCollection(

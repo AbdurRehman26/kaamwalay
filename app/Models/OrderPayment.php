@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use App\Concerns\ActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderPayment extends Model
 {
-    use HasFactory;
+    use HasFactory, ActivityLog;
+
+    public const TYPE_ORDER_PAYMENT = 1;
+    public const TYPE_EXTRA_CHARGE = 2;
+    public const TYPE_REFUND = 3;
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +30,7 @@ class OrderPayment extends Model
         'notes',
         'amount',
         'type',
+        'user_id',
     ];
 
     /**
@@ -38,16 +44,25 @@ class OrderPayment extends Model
         'type' => 'integer',
         'amount' => 'float',
         'order_id' => 'integer',
-    ];
-
-    public const PAYMENT_TYPES = [
-        'order_payment' => 1,
-        'extra_charge' => 2,
-        'refund' => 3,
+        'user_id' => 'integer',
     ];
 
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getPaymentType(int $type): string
+    {
+        return match ($type) {
+            self::TYPE_EXTRA_CHARGE => 'extra_charge',
+            self::TYPE_REFUND => 'refund',
+            default => 'order_payment',
+        };
     }
 }

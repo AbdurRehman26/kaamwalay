@@ -36,6 +36,8 @@ use Illuminate\Http\Request;
  * @property mixed $id
  * @property mixed $auto_saved_at
  * @property mixed $order_status_id
+ * @property mixed $extra_charge_total
+ * @property mixed $refund_total
  * @method orderItems()
  * @method orderStatusHistory()
  * @method getTotalGradedItems()
@@ -74,12 +76,15 @@ class OrderResource extends BaseResource
             'payment_plan' => $this->whenLoaded('paymentPlan', PaymentPlanResource::class),
             'shipping_address' => $this->whenLoaded('shippingAddress', OrderAddressResource::class),
             'billing_address' => $this->whenLoaded('billingAddress', OrderAddressResource::class),
-            'order_payment' => $this->whenLoaded('latestOrderPayment', OrderPaymentResource::class),
+            'order_payment' => $this->whenLoaded('lastOrderPayment', OrderPaymentResource::class),
             'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),
+            'refunds' => $this->whenLoaded('refunds', OrderPaymentCollection::class),
+            'extra_charge_total' => $this->extra_charge_total,
+            'refund_total' => $this->refund_total,
         ];
     }
 

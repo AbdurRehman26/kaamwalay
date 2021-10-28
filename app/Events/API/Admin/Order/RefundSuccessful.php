@@ -3,12 +3,10 @@
 namespace App\Events\API\Admin\Order;
 
 use App\Models\Order;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RefundSuccessful implements ShouldQueue, ShouldBeEncrypted
+class RefundSuccessful
 {
     use Dispatchable, SerializesModels;
 
@@ -17,7 +15,7 @@ class RefundSuccessful implements ShouldQueue, ShouldBeEncrypted
      *
      * @return void
      */
-    public function __construct(protected Order $order)
+    public function __construct(public Order $order, public array $data)
     {
         //
     }

@@ -32,11 +32,11 @@ class RefundOrderRequest extends FormRequest
                 function ($attribute, $value, $fail) {
                     $order = $this->route('order');
                     $orderPayment = $order?->firstOrderPayment;
+                    $refundableAmount = $orderPayment?->amount - $order->refund_total;
                     if (
-                        $value > ($orderPayment?->amount - $order->refund_total)
-                        || $orderPayment->type === OrderPayment::TYPE_REFUND
+                        $value > $refundableAmount
                     ) {
-                        $fail('The '.$attribute.' is invalid.');
+                        $fail("The $attribute is invalid. The maximum refundable amount is: \$$refundableAmount");
                     }
                 },
             ],

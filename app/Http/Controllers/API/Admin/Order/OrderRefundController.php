@@ -24,7 +24,12 @@ class OrderRefundController extends Controller
         OrderService $orderService,
     ): JsonResponse {
         $response = $paymentService->refund(order: $order, request: $request->all());
-        $orderService->processRefund($order, $request->all(), $response);
+        $orderService->processRefund(
+            order: $order,
+            user: auth()->user(),
+            data: $request->all(),
+            refundResponse: $response
+        );
 
         return (new OrderPaymentResource($order->lastOrderPayment))
             ->response()

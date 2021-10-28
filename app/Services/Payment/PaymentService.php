@@ -4,6 +4,7 @@ namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
+use App\Exceptions\API\Admin\Order\FailedRedund;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\FeatureNotAvailable;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
@@ -156,12 +157,21 @@ class PaymentService
         return config('robograding.feature_order_extra_charge_enabled') === true;
     }
 
+    /**
+     * @throws FailedRedund
+     */
     public function refund(Order $order, array $request): array
     {
         $this->hasProvider($order);
 
-        return resolve($this->providers[
+        $refundResponse = resolve($this->providers[
             $this->order->paymentMethod->code
         ])->refund($this->order, $request);
+
+        if (empty($refundResponse)) {
+            throw new FailedRedund;
+        }
+
+        return $refundResponse;
     }
 }

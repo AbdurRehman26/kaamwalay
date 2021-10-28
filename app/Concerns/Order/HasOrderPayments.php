@@ -3,6 +3,8 @@
 namespace App\Concerns\Order;
 
 use App\Models\OrderPayment;
+use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -43,12 +45,16 @@ trait HasOrderPayments
         $this->save();
     }
 
-    public function createOrderPayment(array $data)
+    public function createOrderPayment(array $data, User|Authenticatable $user)
     {
-        $this->orderPayments()->create([
-            'request' => json_encode($data['request']),
-            'response' => json_encode($data['response']),
-        ] + $data + ['payment_method_id' => $this->payment_method_id]);
+        $this->orderPayments()->create(
+            [
+                'request' => json_encode($data['request']),
+                'response' => json_encode($data['response']),
+                'payment_method_id' => $this->payment_method_id,
+                'user_id' => $user->id,
+            ] + $data
+        );
     }
 
     public function updateAfterRefund(float $amount): void

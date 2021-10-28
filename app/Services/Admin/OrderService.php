@@ -241,23 +241,9 @@ class OrderService
     public function addExtraCharge(Order $order, User $user, array $data, array $paymentResponse): void
     {
         DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
-            $order->fill([
-                'extra_charge_total' => $order->extra_charge_total + $data['amount'],
-                'grand_total' => $order->grand_total + $data['amount'],
-            ]);
-            $order->save();
+            $order->updateAfterExtraCharge($data['amount']);
 
-            OrderPayment::create([
-                'request' => json_encode($paymentResponse['request']),
-                'response' => json_encode($paymentResponse['response']),
-                'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
-                'amount' => $paymentResponse['amount'],
-                'type' => $paymentResponse['type'],
-                'notes' => $paymentResponse['notes'],
-                'order_id' => $order->id,
-                'payment_method_id' => $order->payment_method_id,
-                'user_id' => $user->id,
-            ]);
+            $order->createOrderPayment($paymentResponse, $user);
         });
 
         ExtraChargeSuccessful::dispatch($order);
@@ -270,20 +256,13 @@ class OrderService
         return $this->agsService->createCertificates($data);
     }
 
-    public function processRefund(Order $order, array $data, array $refundResponse)
+    public function processRefund(Order $order, User $user, array $data, array $refundResponse)
     {
-        if (empty($refundResponse)) {
-            ExtraChargeFailed::dispatch($order, $data);
+        DB::transaction(function () use ($order, $user, $data, $refundResponse) {
+            $order->updateAfterRefund($data['amount']);
 
-            throw new FailedRedund;
-        }
-        DB::beginTransaction();
-
-        $order->updateAfterRefund($data['amount']);
-
-        $order->createOrderPayment($refundResponse);
-
-        DB::commit();
+            $order->createOrderPayment($refundResponse, $user);
+        });
 
         RefundSuccessful::dispatch($order);
     }

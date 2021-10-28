@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
+use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
@@ -238,6 +239,7 @@ class OrderService
     public function addExtraCharge(Order $order, User $user, array $data, array $paymentResponse): void
     {
         DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
+
             $order->fill([
                 'extra_charge_total' => $order->extra_charge_total + $data['amount'],
                 'grand_total' => $order->grand_total + $data['amount'],
@@ -256,8 +258,14 @@ class OrderService
                 'user_id' => $user->id,
             ]);
 
+            $order->updateAfterExtraCharge($data['amount']);
+
+            $order->createOrderPayment($paymentResponse, $user);
+
             ExtraChargeSuccessful::dispatch($orderPayment);
+
         });
+
     }
 
     protected function updateAgsCertificateCard(OrderItem $orderItem): array
@@ -265,5 +273,16 @@ class OrderService
         $data = $this->getOrderItemCertificateData($orderItem);
 
         return $this->agsService->createCertificates($data);
+    }
+
+    public function processRefund(Order $order, User $user, array $data, array $refundResponse): void
+    {
+        DB::transaction(function () use ($order, $user, $data, $refundResponse) {
+            $order->updateAfterRefund($data['amount']);
+
+            $order->createOrderPayment($refundResponse, $user);
+        });
+
+        RefundSuccessful::dispatch($order);
     }
 }

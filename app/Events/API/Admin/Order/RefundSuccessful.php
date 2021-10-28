@@ -2,11 +2,11 @@
 
 namespace App\Events\API\Admin\Order;
 
-use App\Models\OrderPayment;
+use App\Models\Order;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ExtraChargeSuccessful
+class RefundSuccessful
 {
     use Dispatchable, SerializesModels;
 
@@ -15,7 +15,8 @@ class ExtraChargeSuccessful
      *
      * @return void
      */
-    public function __construct(public OrderPayment $orderPayment)
+    public function __construct(protected Order $order)
     {
+        //
     }
 }

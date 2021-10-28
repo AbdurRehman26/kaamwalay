@@ -126,10 +126,10 @@ class StripeService implements PaymentProviderServiceInterface
             && $charge->outcome->type === 'authorized'
         ) {
             $order->lastOrderPayment->update([
+                'response' => json_encode($paymentIntent->toArray()),
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'amount' => $order->grand_total,
                 'notes' => "Payment for Order # {$order->order_number}",
-                'response' => json_encode($paymentIntent->toArray()),
             ]);
 
             return true;
@@ -219,5 +219,41 @@ class StripeService implements PaymentProviderServiceInterface
 
             return [];
         }
+    }
+
+    public function refund(Order $order, array $data): array
+    {
+        $orderPayment = $order->firstOrderPayment;
+        $paymentData = json_decode($orderPayment->response, associative: true);
+
+        $refundData = [
+            'amount' => (int) $data['amount'] * 100,
+            'metadata' => [
+                'Order ID' => $order->id,
+                'Order #' => $order->order_number,
+                'Notes' => $data['notes'],
+            ],
+        ];
+
+        try {
+            $response = $order->user->refund($paymentData['id'], $refundData);
+        } catch (\Exception $exception) {
+            Log::error('Encountered error while refunding a charge', [
+                'message' => $exception->getMessage(),
+                'data' => $refundData,
+            ]);
+
+            return [];
+        }
+
+        return [
+            'success' => true,
+            'request' => $refundData,
+            'response' => $response->toArray(),
+            'payment_provider_reference_id' => $response->id,
+            'amount' => $data['amount'],
+            'type' => OrderPayment::TYPE_REFUND,
+            'notes' => $refundData['metadata']['Notes'],
+        ];
     }
 }

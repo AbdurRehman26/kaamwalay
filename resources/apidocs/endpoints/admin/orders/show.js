@@ -23,6 +23,7 @@
  *                "shipping_fee": 43,
  *                "grand_total": 263,
  *                "extra_charge_total": 0,
+ *                "refund_total": 0,
  *                "created_at": {
  *                    "date": "2021-08-12 02:22:46.000000",
  *                    "timezone_type": 3,
@@ -194,7 +195,16 @@
  *                          "amount": "12.22",
  *                          "type": "extra_charge",
  *                     }
- *                 ]
+ *                 ],
+ *                 "refunds": [
+ *                     {
+ *                         "id": 1,
+ *                         "order_id": 1,
+ *                         "notes": "Lorem Ispum",
+ *                         "amount": "10.00",
+ *                         "type": "refund"
+ *                     }
+ *                 ],
  *            }
  *        }
  */

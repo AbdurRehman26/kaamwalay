@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\API\Admin\Order;
 
-use App\Events\API\Admin\Order\ExtraChargeSuccessful;
+use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -14,7 +14,6 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,10 +36,13 @@ beforeEach(function () {
         'payment_method_id' => 1,
     ]);
 
-    OrderPayment::factory()->create([
+    $this->orderPayment = OrderPayment::factory()->create([
         'order_id' => $this->order->id,
         'payment_method_id' => 1,
+        'response' => json_encode(['id' => Str::random(25)]),
         'payment_provider_reference_id' => Str::random(25),
+        'amount' => $this->faker->randomFloat(2, 50, 70),
+        'type' => OrderPayment::TYPE_ORDER_PAYMENT,
     ]);
 
     OrderStatusHistory::factory()->create([
@@ -51,40 +53,28 @@ beforeEach(function () {
     $this->actingAs($user);
 });
 
-test('admin can create extra charge for order', function () {
-    Config::set('robograding.feature_order_extra_charge_enabled', true);
+test('admin can refund partial amount of a charge', function () {
     Event::fake();
-    $this->postJson(route('payments.extra-charge', ['order' => $this->order]), [
+    $this->postJson(route('payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
-        'amount' => '20.00',
-    ])
-        ->assertStatus(Response::HTTP_CREATED)
-        ->assertJsonStructure(['data' => ['amount', 'user' => ['id', 'first_name', 'email']]])
-        ->assertJsonFragment(['type' => 'extra_charge']);
+        'amount' => '10.00',
+    ])->assertStatus(Response::HTTP_CREATED);
 
-    Event::assertDispatched(ExtraChargeSuccessful::class);
-    expect($this->order->extraCharges()->count())->toEqual(1);
+    Event::assertDispatched(RefundSuccessful::class);
+    expect($this->order->refunds()->count())->toEqual(1);
     expect($this->order->orderPayments()->count())->toEqual(2);
 });
 
-test('admin can update order payment notes', function () {
-    $orderPayment = OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-    ]);
-    $notes = $this->faker->sentence();
-    $this->putJson(
-        route('order-payments.update', ['order' => $this->order, 'order_payment' => $orderPayment]),
-        ['notes' => $notes]
-    )
-        ->assertStatus(Response::HTTP_OK);
-    $orderPayment->refresh();
-    expect($orderPayment->notes)->toEqual($notes);
+test('admin can not refund more than the charged amount', function () {
+    $this->postJson(route('payments.refund', ['order' => $this->order]), [
+        'notes' => $this->faker->sentence(),
+        'amount' => $this->orderPayment->amount + 1,
+    ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });
 
-it('does not perform extra charge when service is disabled', function () {
-    Config::set('robograding.feature_order_extra_charge_enabled', false);
-    $this->postJson(route('payments.extra-charge', ['order' => $this->order]), [
+test('admin can not refund a transaction with type refund', function () {
+    $this->postJson(route('payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
-        'amount' => '20.00',
+        'amount' => $this->orderPayment->amount + 1,
     ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });

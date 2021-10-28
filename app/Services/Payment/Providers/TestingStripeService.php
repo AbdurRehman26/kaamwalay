@@ -59,9 +59,9 @@ class TestingStripeService implements PaymentProviderServiceInterface
         return $this->validateOrderIsPaid($order, $paymentIntent);
     }
 
-    protected function successfulPaymentResponse(array $data): array
+    protected function successfulPaymentResponse(array $data): object
     {
-        return [
+        return (object) [
             'id' => 'pi_3JPMybJCai8r8pbf0WsCQt1d',
             'object' => 'payment_intent',
             'amount' => $data['amount'],
@@ -249,6 +249,52 @@ class TestingStripeService implements PaymentProviderServiceInterface
             'amount' => $request['amount'],
             'type' => OrderPayment::TYPE_EXTRA_CHARGE,
             'notes' => $paymentData['additional_data']['description'],
+        ];
+    }
+
+    public function refund(Order $order, array $data): array
+    {
+        $orderPayment = $order->firstOrderPayment;
+        $paymentData = json_decode($orderPayment->response, associative: true);
+
+        $refundData = [
+            'amount' => (int) $data['amount'] * 100,
+            'metadata' => [
+                'Order ID' => $order->id,
+                'Order #' => $order->order_number,
+                'Notes' => $data['notes'],
+            ],
+        ];
+
+        $response = [
+            "id" => "re_3JkPiHJCai8r8pbf0rt1gnjI",
+            "object" => "refund",
+            "amount" => 100,
+            "balance_transaction" => "txn_3JkPiHJCai8r8pbf0W60PefH",
+            "charge" => "ch_3JkPiHJCai8r8pbf0zKiypJJ",
+            "created" => 1634225868,
+            "currency" => "usd",
+            "metadata" => [
+                "Order ID" => "33",
+                "Order #" => "RG000000033",
+                "Notes" => "Test",
+            ],
+            "payment_intent" => "pi_3JkPiHJCai8r8pbf0jHacjUB",
+            "reason" => null,
+            "receipt_number" => null,
+            "source_transfer_reversal" => null,
+            "status" => "succeeded",
+            "transfer_reversal" => null,
+        ];
+
+        return [
+            'success' => true,
+            'request' => $refundData,
+            'response' => $response,
+            'payment_provider_reference_id' => $response['id'],
+            'amount' => $data['amount'],
+            'type' => OrderPayment::TYPE_REFUND,
+            'notes' => $refundData['metadata']['Notes'],
         ];
     }
 }

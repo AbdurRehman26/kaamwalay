@@ -47,6 +47,7 @@ class Order extends Model
         'graded_at',
         'auto_saved_at',
         'extra_charge_total',
+        'refund_total',
     ];
 
     /**
@@ -75,6 +76,7 @@ class Order extends Model
         'reviewed_at' => 'date',
         'graded_at' => 'date',
         'extra_charge_total' => 'float',
+        'refund_total' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -95,6 +97,7 @@ class Order extends Model
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),
+            AllowedInclude::relationship('refunds'),
         ];
     }
 
@@ -127,6 +130,7 @@ class Order extends Model
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),
+            AllowedInclude::relationship('refunds'),
         ];
     }
 

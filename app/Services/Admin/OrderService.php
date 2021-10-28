@@ -241,11 +241,9 @@ class OrderService
             $order->updateAfterExtraCharge($data['amount']);
 
             $order->createOrderPayment($paymentResponse, $user);
-
         });
 
         ExtraChargeSuccessful::dispatch($order);
-
     }
 
     protected function updateAgsCertificateCard(OrderItem $orderItem): array

@@ -45,7 +45,7 @@ trait HasOrderPayments
         $this->save();
     }
 
-    public function createOrderPayment(array $data, User|Authenticatable $user)
+    public function createOrderPayment(array $data, User|Authenticatable $user): void
     {
         $this->orderPayments()->create(
             [

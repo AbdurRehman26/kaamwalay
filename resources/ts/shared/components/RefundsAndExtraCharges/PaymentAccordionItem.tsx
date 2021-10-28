@@ -93,17 +93,10 @@ export default function PaymentAccordionItem({
             if (type === 'refund') {
                 return '-';
             }
-            if (type === 'extra_charge') {
-                return '+';
-            }
         }
 
         if (mode === 'customer') {
             if (type === 'refund') {
-                return '+';
-            }
-
-            if (type === 'extra_charge') {
                 return '-';
             }
         }

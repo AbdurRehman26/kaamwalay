@@ -30,9 +30,10 @@ class RefundOrderRequest extends FormRequest
                 'required',
                 'numeric',
                 function ($attribute, $value, $fail) {
-                    $orderPayment = $this->route('order')?->firstOrderPayment;
+                    $order = $this->route('order');
+                    $orderPayment = $order?->firstOrderPayment;
                     if (
-                        $value > $orderPayment->amount
+                        $value > ($orderPayment?->amount - $order->refund_total)
                         || $orderPayment->type === OrderPayment::TYPE_REFUND
                     ) {
                         $fail('The '.$attribute.' is invalid.');

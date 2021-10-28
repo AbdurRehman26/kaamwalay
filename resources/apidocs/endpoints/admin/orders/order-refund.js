@@ -20,6 +20,23 @@
  *            "notes": "Lorem ispum",
  *            "amount": "12.22",
  *            "type": "refund",
+ *            "user": {
+ *                  "id": 1,
+ *                  "customer_number": "qPQUp1dMlg",
+ *                  "first_name": "Carlos",
+ *                  "last_name": "Morales",
+ *                  "email": "admin@robograding.com",
+ *                  "username": "favian.kunze",
+ *                  "phone": null,
+ *                  "stripe_id": null,
+ *                  "roles": [
+ *                      {
+ *                          "id": 1,
+ *                          "name": "admin"
+ *                      }
+ *                  ]
+ *              },
+ *              "created_at": "2021-10-28T09:05:23.000000Z"
  *        }
  *    }
  */

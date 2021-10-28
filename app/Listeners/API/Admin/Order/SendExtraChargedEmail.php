@@ -3,6 +3,7 @@
 namespace App\Listeners\API\Admin\Order;
 
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
+use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Services\EmailService;
 
 class SendExtraChargedEmail
@@ -26,10 +27,10 @@ class SendExtraChargedEmail
      */
     public function handle(ExtraChargeSuccessful $event)
     {
+        $orderPayment = new OrderPaymentResource($event->orderPayment);
         $order = $event->orderPayment->order;
         $user = $order->user;
-        $card = $event->orderPayment->card;
-
+        $card = $orderPayment->card;
         $this->emailService->sendEmail(
             [[ $user->email => $user->name ]],
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_SUBMISSION_EXTRA_CHARGED],
@@ -39,7 +40,7 @@ class SendExtraChargedEmail
                 'TOTAL_AMOUNT' => number_format($order->grand_total, 2),
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
-                'EXTRA_CHARGE' => number_format($event->orderPayment->amount, 2),
+                'EXTRA_CHARGE' => number_format($orderPayment->amount, 2),
                 'CARD' => $card ? ($card['brand'] . ' ending in ' . $card['last4']) : 'N/A',
                 'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',
             ],

@@ -2,7 +2,7 @@
 
 namespace App\Events\API\Admin\Order;
 
-use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
+use App\Models\OrderPayment;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -17,7 +17,7 @@ class ExtraChargeSuccessful implements ShouldQueue, ShouldBeEncrypted
      *
      * @return void
      */
-    public function __construct(public OrderPaymentResource $orderPayment)
+    public function __construct(public OrderPayment $orderPayment)
     {
     }
 }

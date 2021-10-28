@@ -256,7 +256,7 @@ class OrderService
                 'user_id' => $user->id,
             ]);
 
-            ExtraChargeSuccessful::dispatch(new OrderPaymentResource($orderPayment));
+            ExtraChargeSuccessful::dispatch($orderPayment);
 
         });
     }

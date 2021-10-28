@@ -27,6 +27,7 @@ export function SubmissionsView() {
                     'orderItems',
                     'orderShipment',
                     'extraCharges',
+                    'refunds',
                     'orderStatusHistory.orderStatus',
                 ],
             },

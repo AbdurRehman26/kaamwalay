@@ -40,13 +40,11 @@ class OrderPaymentResource extends BaseResource
 
         return [
             'id' => $this->id,
-            $this->when($hasCard === true, [
-                'card' => [
-                    'brand' => $card?->brand,
-                    'exp_month' => $card?->exp_month,
-                    'exp_year' => $card?->exp_year,
-                    'last4' => $card?->last4,
-                ],
+            'card' => $this->when($hasCard === true, [
+                'brand' => $card?->brand,
+                'exp_month' => $card?->exp_month,
+                'exp_year' => $card?->exp_year,
+                'last4' => $card?->last4,
             ]),
             'amount' => $this->amount,
             'notes' => $this->notes,

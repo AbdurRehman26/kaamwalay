@@ -9,6 +9,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 uses(WithFaker::class);
 
 test('it can create extra charge for order', function () {
+
+    Event::fake();
+
     /* @var Order $order */
     $order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,

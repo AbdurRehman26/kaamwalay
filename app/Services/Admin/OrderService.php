@@ -244,7 +244,7 @@ class OrderService
             ]);
             $order->save();
 
-            OrderPayment::create([
+            $orderPayment = OrderPayment::create([
                 'request' => json_encode($paymentResponse['request']),
                 'response' => json_encode($paymentResponse['response']),
                 'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
@@ -255,11 +255,10 @@ class OrderService
                 'payment_method_id' => $order->payment_method_id,
                 'user_id' => $user->id,
             ]);
+
+            ExtraChargeSuccessful::dispatch(new OrderPaymentResource($orderPayment));
+
         });
-
-        $orderPaymentResource = new OrderPaymentResource($orderPayment);
-
-        ExtraChargeSuccessful::dispatch($orderPaymentResource);
     }
 
     protected function updateAgsCertificateCard(OrderItem $orderItem): array

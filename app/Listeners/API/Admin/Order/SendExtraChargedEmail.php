@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\API\Order;
+namespace App\Listeners\API\Admin\Order;
 
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Services\EmailService;

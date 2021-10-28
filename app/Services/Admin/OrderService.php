@@ -257,7 +257,6 @@ class OrderService
             ]);
 
             ExtraChargeSuccessful::dispatch($orderPayment);
-
         });
     }
 

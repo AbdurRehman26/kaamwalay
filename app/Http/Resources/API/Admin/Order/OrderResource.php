@@ -82,6 +82,7 @@ class OrderResource extends BaseResource
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),
+            'refunds' => $this->whenLoaded('refunds', OrderPaymentCollection::class),
             'extra_charge_total' => $this->extra_charge_total,
             'refund_total' => $this->refund_total,
         ];

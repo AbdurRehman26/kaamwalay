@@ -58,7 +58,7 @@ test('admin can refund partial amount of a charge', function () {
     $this->postJson(route('payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '10.00',
-    ])->dump()->assertStatus(Response::HTTP_CREATED);
+    ])->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(RefundSuccessful::class);
     expect($this->order->refunds()->count())->toEqual(1);

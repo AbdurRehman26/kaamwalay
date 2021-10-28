@@ -4,7 +4,6 @@ namespace App\Concerns\Order;
 
 use App\Models\OrderPayment;
 use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 

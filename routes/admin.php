@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
-use App\Http\Controllers\API\Admin\Order\UserCardController;
 use App\Http\Controllers\API\Admin\Order\OrderPaymentController;
+use App\Http\Controllers\API\Admin\Order\OrderRefundController;
+use App\Http\Controllers\API\Admin\Order\UserCardController;
 use App\Http\Controllers\API\Auth\Admin\LoginController;
 use App\Http\Controllers\API\Admin\OrderStatusHistoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\Admin\Order\OrderExtraChargeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,9 +40,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
 
-        Route::post('payments/extra-charge', [OrderPaymentController::class, 'addExtraCharge'])
+        Route::apiResource('order-payments', OrderPaymentController::class)->only('update');
+        Route::post('payments/extra-charge', OrderExtraChargeController::class)
             ->name('payments.extra-charge');
-        Route::put('order-payments/{orderPayment}', [OrderPaymentController::class, 'update'])
-            ->name('payments.update-notes');
+        Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
     });
 });

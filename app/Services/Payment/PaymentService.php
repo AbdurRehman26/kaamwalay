@@ -4,6 +4,7 @@ namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
+use App\Exceptions\API\Admin\Order\FailedRefund;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\FeatureNotAvailable;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
@@ -154,5 +155,23 @@ class PaymentService
     protected function canProcessExtraCharge(): bool
     {
         return config('robograding.feature_order_extra_charge_enabled') === true;
+    }
+
+    /**
+     * @throws FailedRefund
+     */
+    public function refund(Order $order, array $request): array
+    {
+        $this->hasProvider($order);
+
+        $refundResponse = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->refund($this->order, $request);
+
+        if (empty($refundResponse)) {
+            throw new FailedRefund;
+        }
+
+        return $refundResponse;
     }
 }

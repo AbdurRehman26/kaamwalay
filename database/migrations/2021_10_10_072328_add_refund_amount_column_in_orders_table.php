@@ -16,7 +16,7 @@ class AddRefundAmountColumnInOrdersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->decimal('refund_total', 10, 2)
                 ->default(0.0)
-                ->after('extra_charge')
+                ->after('extra_charge_total')
                 ->comment('This will hold the cumulative value of all the refunds per order');
         });
     }

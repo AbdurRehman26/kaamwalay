@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API\Admin\Order;
 
-use App\Models\OrderPayment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RefundOrderRequest extends FormRequest

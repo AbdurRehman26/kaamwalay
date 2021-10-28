@@ -243,9 +243,9 @@ class OrderService
 
             $order->createOrderPayment($paymentResponse, $user);
 
-            ExtraChargeSuccessful::dispatch($order);
-
         });
+
+        ExtraChargeSuccessful::dispatch($order);
 
     }
 

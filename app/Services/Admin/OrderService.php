@@ -12,7 +12,6 @@ use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
@@ -240,29 +239,11 @@ class OrderService
     {
         DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
 
-            $order->fill([
-                'extra_charge_total' => $order->extra_charge_total + $data['amount'],
-                'grand_total' => $order->grand_total + $data['amount'],
-            ]);
-            $order->save();
-
-            $orderPayment = OrderPayment::create([
-                'request' => json_encode($paymentResponse['request']),
-                'response' => json_encode($paymentResponse['response']),
-                'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
-                'amount' => $paymentResponse['amount'],
-                'type' => $paymentResponse['type'],
-                'notes' => $paymentResponse['notes'],
-                'order_id' => $order->id,
-                'payment_method_id' => $order->payment_method_id,
-                'user_id' => $user->id,
-            ]);
-
             $order->updateAfterExtraCharge($data['amount']);
 
             $order->createOrderPayment($paymentResponse, $user);
 
-            ExtraChargeSuccessful::dispatch($orderPayment);
+            ExtraChargeSuccessful::dispatch($order);
 
         });
 

@@ -27,8 +27,8 @@ class SendExtraChargedEmail
      */
     public function handle(ExtraChargeSuccessful $event)
     {
-        $orderPayment = new OrderPaymentResource($event->orderPayment);
-        $order = $event->orderPayment->order;
+        $orderPayment = new OrderPaymentResource($event->order->lastOrderPayment);
+        $order = $event->order;
         $user = $order->user;
         $card = $orderPayment->card;
         $this->emailService->sendEmail(

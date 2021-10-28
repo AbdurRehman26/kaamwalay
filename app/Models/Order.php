@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,8 +17,7 @@ use Spatie\QueryBuilder\AllowedInclude;
 
 class Order extends Model
 {
-    use HasFactory;
-    use HasOrderPayments;
+    use HasFactory, ActivityLog, HasOrderPayments;
 
     /**
      * The attributes that are mass assignable.
@@ -46,8 +46,8 @@ class Order extends Model
         'reviewed_at',
         'graded_at',
         'auto_saved_at',
-        'extra_charge',
-        'refund_amount',
+        'extra_charge_total',
+        'refund_total',
     ];
 
     /**
@@ -75,8 +75,9 @@ class Order extends Model
         'grand_total_cents' => 'integer',
         'reviewed_at' => 'date',
         'graded_at' => 'date',
-        'extra_charge' => 'float',
-        'refund_amount' => 'float',
+        'extra_charge_total' => 'float',
+        'refund_total' => 'float',
+        'extra_charge_total' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -88,7 +89,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
+            AllowedInclude::relationship('orderPayment', 'lastOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),
@@ -121,7 +122,7 @@ class Order extends Model
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
-            AllowedInclude::relationship('orderPayment', 'latestOrderPayment'),
+            AllowedInclude::relationship('orderPayment', 'lastOrderPayment'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('orderStatusHistory'),

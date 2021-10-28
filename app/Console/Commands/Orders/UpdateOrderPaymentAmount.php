@@ -66,7 +66,7 @@ class UpdateOrderPaymentAmount extends Command
     protected function updateTypeAndAmount(OrderPayment $orderPayment): void
     {
         $orderPayment->amount = $orderPayment->order->grand_total;
-        $orderPayment->type = OrderPayment::PAYMENT_TYPES['order_payment'];
+        $orderPayment->type = OrderPayment::TYPE_ORDER_PAYMENT;
         $this->progressBar->advance();
         $orderPayment->save();
     }

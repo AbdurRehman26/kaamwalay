@@ -25,13 +25,12 @@ trait HasOrderPayments
 
     public function extraCharges(): HasMany
     {
-        return $this->hasMany(OrderPayment::class)
-            ->where('type', OrderPayment::PAYMENT_TYPES['extra_charge']);
+        return $this->hasMany(OrderPayment::class)->where('type', OrderPayment::TYPE_EXTRA_CHARGE);
     }
 
     public function refunds(): HasMany
     {
-        return $this->hasMany(OrderPayment::class)->where('type', OrderPayment::PAYMENT_TYPES['refund']);
+        return $this->hasMany(OrderPayment::class)->where('type', OrderPayment::TYPE_REFUND);
     }
 
     public function updateAfterExtraCharge(float $amount): void

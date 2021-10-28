@@ -61,6 +61,9 @@ namespace App\Models{
  * @property string|null $card_url
  * @property string|null $image_bucket_path
  * @property string|null $card_number_order
+ * @property string $variant_category
+ * @property string $variant_name
+ * @property string $holo_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardCategory|null $cardCategory
@@ -75,12 +78,15 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardSetId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereHoloType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereImageBucketPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereImagePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereRarity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariantCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariantName($value)
  */
 	class CardProduct extends \Eloquent {}
 }
@@ -99,6 +105,7 @@ namespace App\Models{
  * @property-read \App\Models\CardCategory $cardCategory
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSet[] $cardSets
  * @property-read int|null $card_sets_count
+ * @property-read string $release_date
  * @method static \Database\Factories\CardSeriesFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardSeries newQuery()
@@ -253,8 +260,7 @@ namespace App\Models{
  * @property float|null $service_fee
  * @property float|null $shipping_fee
  * @property float|null $grand_total
- * @property float $extra_charge This will hold the cumulative value of all the extra charges per order
- * @property float $refund_amount
+ * @property float $extra_charge_total This will hold the cumulative value of all the extra charges per order
  * @property int $user_id
  * @property int $payment_plan_id
  * @property int|null $order_status_id
@@ -293,8 +299,6 @@ namespace App\Models{
  * @property-read int|null $order_status_history_count
  * @property-read \App\Models\PaymentMethod $paymentMethod
  * @property-read \App\Models\PaymentPlan $paymentPlan
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $refunds
- * @property-read int|null $refunds_count
  * @property-read \App\Models\User|null $reviewedBy
  * @property-read \App\Models\OrderAddress $shippingAddress
  * @property-read \App\Models\ShippingMethod $shippingMethod
@@ -325,7 +329,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentPlanId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereServiceFee($value)
@@ -751,6 +754,41 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\PopReportsCard
+ *
+ * @property-read \App\Models\CardProduct $cardProduct
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard query()
+ */
+	class PopReportsCard extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\PopReportsSeries
+ *
+ * @property-read \App\Models\CardSeries|null $cardSeries
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries query()
+ */
+	class PopReportsSeries extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\PopReportsSet
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet query()
+ */
+	class PopReportsSet extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\RevenueStatsDaily
  *
  * @property int $id
@@ -919,7 +957,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  */
-	class User extends \Eloquent implements \Tymon\JWTAuth\Contracts\JWTSubject {}
+	class User extends \Eloquent {}
 }
 
 namespace App\Models{

@@ -1,9 +1,11 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { plainToClass } from 'class-transformer';
 import { useCallback, useMemo } from 'react';
@@ -31,6 +33,18 @@ const useStyles = makeStyles(
         listItemText: {
             // We subtract 34px (avatar width), 30px (action width), 8px (action padding)
             maxWidth: 'calc(100% - 72px)',
+        },
+        shortNameText: {
+            fontFamily: 'Roboto',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '10px',
+            lineHeight: '14px',
+            letterSpacing: '0.6px',
+            textTransform: 'uppercase',
+            color: 'rgba(0, 0, 0, 0.54)',
+            display: 'block',
+            marginTop: '6px',
         },
         image: {
             width: 28,
@@ -69,7 +83,21 @@ export function ManageCardDialogResultItem({ hit }: ManageCardDialogResultItemPr
                 <img className={classes.image} src={item.imagePath} alt={item.name} />
             </ListItemAvatar>
             <ListItemText
-                primary={item.getName()}
+                primary={
+                    <Box flexDirection={'column'}>
+                        <Typography
+                            variant="caption"
+                            sx={{ display: 'block', marginBottom: item.shortName ? '-6px' : 0 }}
+                        >
+                            {item.getName()}
+                        </Typography>
+                        {item.shortName ? (
+                            <Typography variant={'caption'} className={classes.shortNameText}>
+                                {item.shortName}
+                            </Typography>
+                        ) : null}
+                    </Box>
+                }
                 secondary={item.getDescription()}
                 primaryTypographyProps={{ variant: 'body2' }}
                 secondaryTypographyProps={{ variant: 'caption' }}

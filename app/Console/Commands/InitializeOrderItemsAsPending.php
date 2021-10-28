@@ -56,5 +56,7 @@ class InitializeOrderItemsAsPending extends Command
             $item->order_item_status_id = OrderItemStatus::PENDING;
             $item->save();
         }
+
+        return 0;
     }
 }

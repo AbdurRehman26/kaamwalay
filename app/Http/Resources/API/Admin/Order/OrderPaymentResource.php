@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\User\UserResource;
 use App\Models\OrderPayment;
 
 class OrderPaymentResource extends BaseResource
@@ -22,7 +23,8 @@ class OrderPaymentResource extends BaseResource
         if ($this->order->paymentMethod->code === 'paypal') {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
         }
-        $hasCard = ! ($this->type === OrderPayment::PAYMENT_TYPES['refund']);
+
+        $hasCard = ! ($this->type === OrderPayment::TYPE_REFUND);
 
         $card = null;
 
@@ -46,10 +48,11 @@ class OrderPaymentResource extends BaseResource
                     'last4' => $card?->last4,
                 ],
             ]),
-            'order_id' => $this->order_id,
             'amount' => $this->amount,
             'notes' => $this->notes,
-            'type' => array_search($this->type, OrderPayment::PAYMENT_TYPES),
+            'type' => $this->getPaymentType($this->type),
+            'user' => new UserResource($this->user),
+            'created_at' => $this->formatDate($this->created_at),
         ];
     }
 

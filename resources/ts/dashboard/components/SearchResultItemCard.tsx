@@ -13,6 +13,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback } from 'react';
 import ReactGA from 'react-ga';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
+import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { markCardAsUnselected } from '../redux/slices/newSubmissionSlice';
@@ -63,6 +64,20 @@ const useStyles = makeStyles((theme) => ({
             fontSize: '12px',
         },
     },
+    shortNameContainer: {
+        maxWidth: '80%',
+        textOverflow: 'ellipsis',
+    },
+    shortName: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 500,
+        fontSize: '10px',
+        lineHeight: '14px',
+        letterSpacing: '0.6px',
+        textTransform: 'uppercase',
+        color: 'rgba(0, 0, 0, 0.54)',
+    },
     previewOverlay: {
         backgroundColor: 'rgba(64, 64, 64, 0.6)',
         color: '#fff',
@@ -82,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
 type SearchResultItemCardProps = {
     image: string;
     subtitle: any;
+    shortname?: any;
     title: string;
     addedMode?: boolean;
     reviewMode?: boolean;
@@ -139,11 +155,22 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                         <Typography variant={'body2'} className={font.fontWeightBold} align={'left'}>
                             {title}
                         </Typography>
-
                         {/* Using dangerouslySetInnerHTML is completely safe here, because this data is coming from algolia
                         the client has no control over this data, therefore it won't result in an XSS.
                         We're using this because algolia is giving us the highlighted elements wrapper in <ais-highlight-0000000000 />
                         which we can then style to display the searched term bolded in the results*/}
+                        <div title={props.shortname.replace(/<[^>]*>?/gm, '')}>
+                            <Typography
+                                variant={'body2'}
+                                color={'textSecondary'}
+                                className={classes.shortName}
+                                align={'left'}
+                                dangerouslySetInnerHTML={{
+                                    __html: getStringTruncated(props.shortname, isMobile ? 30 : addedMode ? 50 : 70),
+                                }}
+                            />
+                        </div>
+
                         <Typography
                             variant={'body2'}
                             color={'textSecondary'}

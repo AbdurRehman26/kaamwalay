@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\ActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UserCard extends Model
 {
-    use HasFactory;
+    use HasFactory, ActivityLog;
 
     protected $fillable = [
         'order_item_id',

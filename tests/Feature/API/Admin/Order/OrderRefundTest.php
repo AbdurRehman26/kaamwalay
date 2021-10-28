@@ -44,7 +44,7 @@ beforeEach(function () {
         'response' => json_encode(['id' => Str::random(25)]),
         'payment_provider_reference_id' => Str::random(25),
         'amount' => $this->faker->randomFloat(2, 50, 70),
-        'type' => OrderPayment::PAYMENT_TYPES['order_payment'],
+        'type' => OrderPayment::TYPE_ORDER_PAYMENT,
     ]);
 
     OrderStatusHistory::factory()->create([
@@ -57,10 +57,10 @@ beforeEach(function () {
 
 test('admin can refund partial amount of a charge', function () {
     Event::fake();
-    $this->postJson('/api/admin/orders/' . $this->order->id . '/order-payments/' . $this->orderPayment->id . '/refund', [
+    $this->postJson(route('payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '10.00',
-    ])->assertStatus(Response::HTTP_CREATED);
+    ])->dump()->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(RefundSuccessful::class);
     expect($this->order->refunds()->count())->toEqual(1);
@@ -68,22 +68,14 @@ test('admin can refund partial amount of a charge', function () {
 });
 
 test('admin can not refund more than the charged amount', function () {
-    $this->postJson('/api/admin/orders/' . $this->order->id . '/order-payments/' . $this->orderPayment->id . '/refund', [
+    $this->postJson(route('payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->orderPayment->amount + 1,
     ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });
 
 test('admin can not refund a transaction with type refund', function () {
-    $orderPayment = OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-        'payment_method_id' => 1,
-        'response' => json_encode(['id' => Str::random(25)]),
-        'payment_provider_reference_id' => Str::random(25),
-        'amount' => $this->faker->randomFloat(2, 50, 70),
-        'type' => OrderPayment::PAYMENT_TYPES['refund'],
-    ]);
-    $this->postJson('/api/admin/orders/' . $this->order->id . '/order-payments/' . $orderPayment->id . '/refund', [
+    $this->postJson(route('payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->orderPayment->amount + 1,
     ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);

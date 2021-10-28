@@ -13,6 +13,7 @@ test('it can create extra charge for order', function () {
     $order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,
     ]);
+    $user = \App\Models\User::factory()->create();
     /* @var OrderService $orderService */
     $orderService = resolve(OrderService::class);
 
@@ -34,20 +35,21 @@ test('it can create extra charge for order', function () {
         'response' => [],
         'payment_provider_reference_id' => \Illuminate\Support\Str::random(25),
         'amount' => $amount,
-        'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+        'type' => OrderPayment::TYPE_EXTRA_CHARGE,
         'notes' => $this->faker->sentence(),
         'provider_fee' => 2.5,
     ];
-    $orderService->addExtraCharge($order, [
+    $orderService->addExtraCharge($order, $user, [
         'notes' => $this->faker->sentence(),
         'amount' => $amount,
         'payment_method_id' => $order->payment_method_id,
-        'type' => OrderPayment::PAYMENT_TYPES['extra_charge'],
+        'type' => OrderPayment::TYPE_EXTRA_CHARGE,
     ], $paymentResponse);
 
     $orderPayment = $order->lastOrderPayment;
 
-    expect($orderPayment->type)->toBe(OrderPayment::PAYMENT_TYPES['extra_charge']);
+    expect($orderPayment->type)->toBe(OrderPayment::TYPE_EXTRA_CHARGE);
     expect($orderPayment->order_id)->toBe($order->id);
     expect($orderPayment->amount)->toEqual($amount);
+    expect($orderPayment->user_id)->toEqual($user->id);
 });

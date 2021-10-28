@@ -69,9 +69,9 @@ class OrderService
                 'certificate_number as certificate_id',
                 'card_sets.name as set_name',
                 'card_products.card_number',
-                'card_products.variant_name',
-                'card_products.variant_category',
-                'card_products.holo_type',
+                'card_products.edition',
+                'card_products.surface',
+                'card_products.variant',
             ])
             ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
@@ -156,7 +156,7 @@ class OrderService
 
         $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
-        $orderPayment = OrderPaymentResource::make($order->lastOrderPayment)->resolve();
+        $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
         $data["SUBMISSION_NUMBER"] = $order->order_number;
         $data['CUSTOMER_NAME'] = $order->user->getFullName();
@@ -223,20 +223,27 @@ class OrderService
     /**
      * @throws FailedExtraCharge|Throwable
      */
-    public function addExtraCharge(Order $order, array $data, array $paymentResponse): void
+    public function addExtraCharge(Order $order, User $user, array $data, array $paymentResponse): void
     {
-        if (empty($paymentResponse)) {
-            ExtraChargeFailed::dispatch($order, $data);
+        DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
+            $order->fill([
+                'extra_charge_total' => $order->extra_charge_total + $data['amount'],
+                'grand_total' => $order->grand_total + $data['amount'],
+            ]);
+            $order->save();
 
-            throw new FailedExtraCharge;
-        }
-        DB::beginTransaction();
-
-        $order->updateAfterExtraCharge($data['amount']);
-
-        $order->createOrderPayment($paymentResponse);
-
-        DB::commit();
+            OrderPayment::create([
+                'request' => json_encode($paymentResponse['request']),
+                'response' => json_encode($paymentResponse['response']),
+                'payment_provider_reference_id' => $paymentResponse['payment_provider_reference_id'],
+                'amount' => $paymentResponse['amount'],
+                'type' => $paymentResponse['type'],
+                'notes' => $paymentResponse['notes'],
+                'order_id' => $order->id,
+                'payment_method_id' => $order->payment_method_id,
+                'user_id' => $user->id,
+            ]);
+        });
 
         ExtraChargeSuccessful::dispatch($order);
     }

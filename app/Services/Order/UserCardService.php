@@ -42,7 +42,7 @@ class UserCardService
         $certificate->user_card_id = $userCard->id;
         $certificate->save();
 
-        $certificateNumber = Str::padLeft($certificate->id, 8, '0');
+        $certificateNumber = Str::padLeft((string) $certificate->id, 8, '0');
         $certificate->number = $certificateNumber;
         $certificate->save();
 

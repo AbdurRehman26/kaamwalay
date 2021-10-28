@@ -4,7 +4,7 @@ namespace App\Services\Payment;
 
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
-use App\Exceptions\API\Admin\Order\FailedRedund;
+use App\Exceptions\API\Admin\Order\FailedRefund;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\FeatureNotAvailable;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
@@ -158,7 +158,7 @@ class PaymentService
     }
 
     /**
-     * @throws FailedRedund
+     * @throws FailedRefund
      */
     public function refund(Order $order, array $request): array
     {
@@ -169,7 +169,7 @@ class PaymentService
         ])->refund($this->order, $request);
 
         if (empty($refundResponse)) {
-            throw new FailedRedund;
+            throw new FailedRefund;
         }
 
         return $refundResponse;

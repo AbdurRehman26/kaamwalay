@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\Admin\Order;
 
-use App\Exceptions\API\Admin\Order\FailedRedund;
+use App\Exceptions\API\Admin\Order\FailedRefund;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\RefundOrderRequest;
 use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderRefundController extends Controller
 {
     /**
-     * @throws FailedRedund
+     * @throws FailedRefund
     */
     public function __invoke(
         RefundOrderRequest $request,

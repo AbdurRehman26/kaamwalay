@@ -261,6 +261,7 @@ namespace App\Models{
  * @property float|null $shipping_fee
  * @property float|null $grand_total
  * @property float $extra_charge_total This will hold the cumulative value of all the extra charges per order
+ * @property float $refund_total This will hold the cumulative value of all the refunds per order
  * @property int $user_id
  * @property int $payment_plan_id
  * @property int|null $order_status_id

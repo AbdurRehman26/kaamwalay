@@ -38,7 +38,7 @@ trait HasOrderPayments
     public function updateAfterExtraCharge(float $amount): void
     {
         $this->fill([
-            'extra_charge' => $this->extra_charge + $amount,
+            'extra_charge_total' => $this->extra_charge_total + $amount,
             'grand_total' => $this->grand_total + $amount,
         ]);
 
@@ -60,7 +60,7 @@ trait HasOrderPayments
     public function updateAfterRefund(float $amount): void
     {
         $this->fill([
-            'refund' => round($this->refund_amount + $amount, 2),
+            'refund_total' => round($this->refund_total + $amount, 2),
             'grand_total' => round($this->grand_total - $amount, 2),
         ]);
 

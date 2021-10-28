@@ -8,7 +8,7 @@ use App\Events\API\Admin\Order\OrderUpdated;
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
-use App\Exceptions\API\Admin\Order\FailedRedund;
+use App\Exceptions\API\Admin\Order\FailedRefund;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
@@ -256,7 +256,7 @@ class OrderService
         return $this->agsService->createCertificates($data);
     }
 
-    public function processRefund(Order $order, User $user, array $data, array $refundResponse)
+    public function processRefund(Order $order, User $user, array $data, array $refundResponse): void
     {
         DB::transaction(function () use ($order, $user, $data, $refundResponse) {
             $order->updateAfterRefund($data['amount']);

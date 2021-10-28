@@ -77,7 +77,6 @@ class Order extends Model
         'graded_at' => 'date',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
-        'extra_charge_total' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];

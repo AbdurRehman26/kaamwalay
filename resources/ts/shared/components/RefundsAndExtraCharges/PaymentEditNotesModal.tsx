@@ -47,7 +47,7 @@ export default function PaymentEditNotesModal({
 
     useEffect(() => {
         setNotes(existingNotes);
-    }, [showEditNotes]);
+    }, [existingNotes, showEditNotes]);
 
     return (
         <div>

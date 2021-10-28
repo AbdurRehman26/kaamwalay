@@ -238,7 +238,6 @@ class OrderService
     public function addExtraCharge(Order $order, User $user, array $data, array $paymentResponse): void
     {
         DB::transaction(function () use ($order, $user, $data, $paymentResponse) {
-
             $order->updateAfterExtraCharge($data['amount']);
 
             $order->createOrderPayment($paymentResponse, $user);

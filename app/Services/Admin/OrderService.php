@@ -18,6 +18,7 @@ use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\AGS\AgsService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -60,20 +61,32 @@ class OrderService
         return $certificates->pluck('certificate_number')->flatten()->all();
     }
 
-    public function getOrderCertificatesData(Order|int $order): array
+    protected function getCertificatesDataQuery(): Builder
     {
         return UserCard::select([
-                'certificate_number as certificate_id',
-                'card_sets.name as set_name',
-                'card_products.card_number',
-                'card_products.edition',
-                'card_products.surface',
-                'card_products.variant',
-            ])
-            ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
-            ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
-            ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id')
+            'certificate_number as certificate_id',
+            'card_sets.name as set_name',
+            'card_products.card_number',
+            'card_products.edition',
+            'card_products.surface',
+            'card_products.variant',
+        ])
+        ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
+        ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
+        ->join('card_sets', 'card_products.card_set_id', '=', 'card_sets.id');
+    }
+
+    public function getOrderCertificatesData(Order|int $order): array
+    {
+        return $this->getCertificatesDataQuery()
             ->where('order_items.order_id', getModelId($order))
+            ->get()->toArray();
+    }
+
+    public function getOrderItemCertificateData(OrderItem|int $orderItem): array
+    {
+        return $this->getCertificatesDataQuery()
+            ->where('user_cards.order_item_id', getModelId($orderItem))
             ->get()->toArray();
     }
 
@@ -101,6 +114,8 @@ class OrderService
         $orderItem->declared_value_total = $value;
         $orderItem->save();
 
+        $this->updateAgsCertificateCard($orderItem);
+
         return $orderItem;
     }
 
@@ -119,7 +134,7 @@ class OrderService
      */
     public function getGrades(Order $order): Collection
     {
-        if ($order->order_status_id !== OrderStatus::ARRIVED) {
+        if (! in_array($order->order_status_id, [OrderStatus::ARRIVED, OrderStatus::GRADED, OrderStatus::SHIPPED])) {
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
@@ -245,5 +260,12 @@ class OrderService
         $orderPaymentResource = new OrderPaymentResource($orderPayment);
 
         ExtraChargeSuccessful::dispatch($orderPaymentResource);
+    }
+
+    protected function updateAgsCertificateCard(OrderItem $orderItem): array
+    {
+        $data = $this->getOrderItemCertificateData($orderItem);
+
+        return $this->agsService->createCertificates($data);
     }
 }

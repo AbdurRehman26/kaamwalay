@@ -3,8 +3,10 @@
 namespace App\Listeners\API\Admin\Order;
 
 use App\Events\API\Admin\Order\OrderUpdated;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UpdateAutoSaveAttribute
+class UpdateAutoSaveAttribute implements ShouldBeEncrypted, ShouldQueue
 {
     /**
      * Create the event listener.

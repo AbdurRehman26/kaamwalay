@@ -6,7 +6,7 @@ use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Services\EmailService;
 
-class SendExtraChargedEmail
+class ExtraChargeSuccessfulListener
 {
 
     /**
@@ -32,9 +32,9 @@ class SendExtraChargedEmail
         $user = $order->user;
         $card = $orderPayment->card;
         $this->emailService->sendEmail(
-            [[ $user->email => $user->name ]],
-            $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_SUBMISSION_EXTRA_CHARGED],
-            $this->emailService::TEMPLATE_SLUG_SUBMISSION_EXTRA_CHARGED,
+            [[$user->email => $user->name]],
+            $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED],
+            $this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED,
             [
                 'ORDER_NUMBER' => $order->order_number,
                 'TOTAL_AMOUNT' => number_format($order->grand_total, 2),

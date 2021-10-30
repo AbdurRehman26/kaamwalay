@@ -6,8 +6,9 @@ use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendOrderRefundedEmail implements ShouldBeEncrypted
+class RefundSuccessfulListener implements ShouldBeEncrypted, ShouldQueue
 {
     /**
      * Create the event listener.
@@ -34,8 +35,8 @@ class SendOrderRefundedEmail implements ShouldBeEncrypted
 
         $this->emailService->sendEmail(
             [[ $user->email => $user->name ]],
-            $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_ORDER_REFUNDED],
-            $this->emailService::TEMPLATE_SLUG_ORDER_REFUNDED,
+            $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED],
+            $this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED,
             [
                 'ORDER_NUMBER' => $order->order_number,
                 'REFUNDED_AMOUNT' => $event->data['amount'],

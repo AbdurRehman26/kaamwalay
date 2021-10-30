@@ -68,6 +68,8 @@ export class APIService {
      */
     private async requestInterceptor(config: AxiosRequestConfig) {
         const accessToken = await this.authenticationService.getAccessToken();
+
+        config.headers ??= {};
         if (this.isNotExternal(config) && accessToken && !config.headers.Authorization) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
@@ -164,9 +166,5 @@ export class APIService {
         } catch (e) {
             // pass
         }
-    }
-
-    private canBeConverted(data: any) {
-        return data && typeof data === 'object';
     }
 }

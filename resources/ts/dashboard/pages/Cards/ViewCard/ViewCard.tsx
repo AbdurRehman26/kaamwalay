@@ -79,14 +79,19 @@ export function ViewCard() {
         window.location.href = `${window.location.origin}/feed/${cardData?.certificateNumber}/view`;
     }, [cardData?.certificateNumber]);
 
-    useEffect(() => {
-        async function fetchCardData() {
-            const incomingCardData: UserCardEntity = await userCardsRepository.show(id);
-            setCardData(incomingCardData);
-        }
+    useEffect(
+        () => {
+            async function fetchCardData() {
+                const incomingCardData: UserCardEntity = await userCardsRepository.show(id);
+                setCardData(incomingCardData);
+            }
 
-        fetchCardData();
-    }, []);
+            // noinspection JSIgnoredPromiseFromCall
+            fetchCardData();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     const cardImages = cardData?.generatedImages?.map((item) => ({
         title: item.name,

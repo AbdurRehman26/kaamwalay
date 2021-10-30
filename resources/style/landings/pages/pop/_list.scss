@@ -1,0 +1,181 @@
+@use '../../../shared/breakpoints';
+@use '../../../shared/theme';
+
+.pop-list {
+    padding: 48px 0;
+    background: #fff;
+    flex: 1 1 auto;
+    color: #000;
+
+    @include breakpoints.down(sm) {
+        padding-top: 24px;
+        padding-bottom: 0;
+    }
+
+    &__container {
+        @include breakpoints.down(sm) {
+            padding: 0;
+        }
+    }
+
+    &__table {
+        @apply w-full relative;
+        border-collapse: separate;
+        border-spacing: 0;
+        min-width: 900px;
+        box-sizing: border-box;
+
+        @include breakpoints.down(sm) {
+            min-width: 1200px;
+        }
+        &__container {
+            @include breakpoints.down(md) {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+
+        &-holder {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        &-body {
+            .pop-list__table-row {
+                .pop-list__table-cell--series,
+                .pop-list__table-cell--card {
+                    @apply bg-white;
+                }
+                &:nth-child(odd) {
+                    @apply bg-gray-100;
+                    .pop-list__table-cell--series,
+                    .pop-list__table-cell--card {
+                        @apply bg-gray-100;
+                    }
+                }
+            }
+        }
+
+        &-total-row {
+            @apply text-white;
+            background-color: #20bfb8;
+
+            .pop-list__table-cell--series,
+            .pop-list__table-cell--card {
+                background-color: #20bfb8;
+            }
+        }
+
+        &-cell {
+            padding: 16px 8px;
+            text-align: left;
+            @apply text-xs;
+
+            &--series,
+            &--card {
+                @apply w-64 sticky left-0;
+                @include breakpoints.down(sm) {
+                    @apply w-52 border-r-2 border-solid border-gray-300;
+                }
+            }
+
+            &--card-content {
+                @apply flex;
+            }
+
+            &--grade-title,
+            &--value,
+            &--total {
+                @apply w-16;
+                text-align: right;
+            }
+        }
+
+        &-head &-cell {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            &--series,
+            &--card {
+                @apply bg-white;
+            }
+        }
+
+        &-total-row &-cell {
+            padding-top: 32px;
+            padding-bottom: 32px;
+            @apply text-sm;
+
+            .pop-list__table__info-text {
+                @apply m-0;
+            }
+        }
+
+        &__info {
+            @apply flex items-center justify-start;
+            &-image {
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px 0 rgba(0, 0, 0, 0.12),
+                    0 1px 1px 0 rgba(0, 0, 0, 0.14);
+            }
+
+            &-text {
+                @apply ml-2;
+                max-width: 240px;
+            }
+
+            &-heading {
+                @apply text-sm;
+                font-weight: 500;
+                line-height: 24px;
+            }
+
+            &-subheading {
+                font-size: 12px;
+
+                &.display-desktop {
+                    @include breakpoints.down(sm) {
+                        @apply hidden;
+                    }
+                }
+
+                &.display-mobile {
+                    @apply hidden;
+                    @include breakpoints.down(sm) {
+                        @apply block;
+                    }
+                }
+            }
+
+            &-date {
+                @apply hidden;
+
+                @include breakpoints.down(sm) {
+                    @apply block pt-2 text-xs text-white text-opacity-70;
+                }
+            }
+        }
+    }
+
+    &__grade {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        background-color: theme.$primaryColor;
+        border-radius: 4px;
+        color: transparentize(#000, 0.13);
+        &__label {
+            margin-bottom: 6px;
+            font-size: 12px;
+            line-height: 12px;
+            color: rgba(0, 0, 0, 0.87);
+        }
+        &__value {
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 24px;
+            color: rgba(0, 0, 0, 0.87);
+        }
+    }
+}

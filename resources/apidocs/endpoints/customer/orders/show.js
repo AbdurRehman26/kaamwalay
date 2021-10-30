@@ -19,6 +19,8 @@
  *                "number_of_cards": 11,
  *                "total_declared_value": 5500,
  *                "grand_total": 263,
+ *                "extra_charge_total": 0,
+ *                "refund_total": 0,
  *                "shipping_fee": 43,
  *                "created_at": {
  *                    "date": "2021-08-12 02:22:46.000000",
@@ -84,18 +86,21 @@
  *                    }
  *                },
  *                "invoice": {
- *                    "id": 28
- *                    "invoice_number": "RG000000042"
+ *                    "id": 28,
+ *                    "invoice_number": "RG000000042",
  *                    "path": "http://minio:9000/local/invoice/89a79cd1-48a6-4ee6-a606-c62d83f80f50.pdf"
  *                },
  *                "order_payment": {
- *                    "card": {
- *                        "brand": "visa",
- *                        "exp_month": 4,
- *                        "exp_year": 2024,
- *                        "last4": "4242"
- *                    }
- *                },
+ *                      "card": {
+ *                          "brand": "visa",
+ *                          "exp_month": 4,
+ *                          "exp_year": 2024,
+ *                          "last4": "4242"
+ *                      },
+ *                      "notes": "Lorem ispum",
+ *                      "amount": "12.22",
+ *                      "type": "order_payment",
+ *                 },
  *                "order_items": [
  *                    {
  *                        "id": 42,
@@ -132,7 +137,29 @@
  *                     "id": 2,
  *                     "shipping_provider": "fedex",
  *                     "tracking_number": "020207021381215"
- *                 }
- *            }
+ *                 },
+ *                 "extra_charges": [
+ *                     {
+ *                          "card": {
+ *                              "brand": "visa",
+ *                              "exp_month": 4,
+ *                              "exp_year": 2024,
+ *                              "last4": "4242"
+ *                          },
+ *                          "notes": "Lorem ispum",
+ *                          "amount": "12.22",
+ *                          "type": "extra_charge",
+ *                     }
+ *                 ],
+ *                 "refunds": [
+ *                     {
+ *                         "id": 1,
+ *                         "order_id": 1,
+ *                         "notes": "Lorem Ispum",
+ *                         "amount": "10.00",
+ *                         "type": "refund"
+ *                     }
+ *                 ],
+ *          }
  *        }
  */

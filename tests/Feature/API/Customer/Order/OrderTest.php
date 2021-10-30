@@ -156,6 +156,11 @@ test('a customer can see his order', function () {
     $response->assertJsonStructure([
         'data' => ['id', 'order_number', 'shipping_method'],
     ]);
+
+    $response->assertJsonFragment([
+        'refund_total' => 0,
+        'extra_charge_total' => 0,
+    ]);
 });
 
 test('a customer only see own orders', function () {

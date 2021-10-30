@@ -1,0 +1,116 @@
+@use '../../../shared/breakpoints';
+
+.pop-hero {
+    $color: #fff;
+    background-color: #160056;
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        @apply pb-1;
+
+        @include breakpoints.down(xs) {
+            @apply pr-0;
+        }
+    }
+
+    &__text {
+        @apply w-11/12 flex justify-center items-start flex-col;
+        padding: 24px 0;
+        z-index: 1;
+
+        &-heading,
+        &-subheading,
+        &-series-heading,
+        &-series-subheading {
+            color: $color;
+        }
+
+        &-heading,
+        &-series-heading {
+            color: $color;
+            font-weight: 700;
+            font-size: 48px;
+            line-height: 56px;
+            letter-spacing: 0.2px;
+            margin-bottom: 4px;
+            @include breakpoints.down(sm) {
+                font-size: 24px;
+                line-height: 30px;
+                @apply mb-0;
+            }
+        }
+
+        &-subheading {
+            font-size: 16px;
+            @include breakpoints.down(sm) {
+                font-size: 14px;
+            }
+        }
+
+        &-series-heading {
+            font-size: 28px;
+            line-height: 38px;
+            @include breakpoints.down(sm) {
+                font-size: 20px;
+                line-height: 30px;
+                @apply mb-0;
+            }
+        }
+
+        &-series-subheading {
+            font-size: 14px;
+        }
+    }
+
+    &__splash {
+        @apply w-4/12 flex justify-end items-center;
+
+        @include breakpoints.down(xs) {
+            @apply w-3/12;
+        }
+
+        &-image {
+            @include breakpoints.down(xs) {
+                max-width: 175px;
+            }
+        }
+    }
+
+    &__logo {
+        @apply w-1/12 mr-1 flex justify-start items-center;
+
+        @include breakpoints.down(xs) {
+            @apply w-2/12;
+        }
+
+        &-image {
+            &--holder {
+                @apply bg-white w-20 h-20 rounded flex items-center;
+                @include breakpoints.down(xs) {
+                    @apply w-16 h-16;
+                }
+            }
+        }
+    }
+
+    &__breadcrumbs {
+        @apply rounded text-sm font-sans w-full pt-7 pb-1;
+        @include breakpoints.down(xs) {
+            @apply text-xs;
+        }
+        &__list {
+            @apply flex list-none;
+
+            li {
+                @apply text-white pr-1;
+            }
+            &__link {
+                @apply font-bold;
+                letter-spacing: 0.2px;
+                color: #42e8e0;
+            }
+        }
+    }
+}

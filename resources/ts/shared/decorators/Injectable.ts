@@ -14,8 +14,11 @@ interface InjectableOptions {
  * @param options
  * @constructor
  */
-export function Injectable(name: string | InjectableOptions, options: InjectableOptions = {}): ClassDecorator {
-    return (target) => {
+export function Injectable<T extends abstract new (...args: never) => unknown>(
+    name: string | InjectableOptions,
+    options: InjectableOptions = {},
+) {
+    return (target: T) => {
         if (name && typeof name === 'object') {
             options = name;
         }

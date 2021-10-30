@@ -4,7 +4,9 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { upperFirst } from 'lodash';
+import React from 'react';
 import { useParams } from 'react-router-dom';
+import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharges';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
@@ -30,6 +32,8 @@ export function ViewSubmission() {
                     'orderCustomerShipment',
                     'orderStatusHistory.orderStatus',
                     'invoice',
+                    'extraCharges',
+                    'refunds',
                     'orderShipment',
                     'orderItems',
                     'orderStatus',
@@ -73,6 +77,8 @@ export function ViewSubmission() {
                 customerNumber={data?.customer?.customerNumber}
                 serviceFee={data?.serviceFee}
                 shippingFee={data?.shippingFee}
+                refundsTotal={data?.refundTotal}
+                extraChargesTotal={data?.extraChargeTotal}
                 total={data?.grandTotal}
             />
             <Divider />
@@ -82,6 +88,16 @@ export function ViewSubmission() {
                 billingAddress={data?.billingAddress}
                 payment={data?.orderPayment}
             />
+            <Box marginTop={'24px'} />
+            <Divider />
+            <Box marginTop={'24px'} />
+            <RefundsAndExtraCharges
+                mode={'customer'}
+                orderId={id}
+                extraCharges={data?.extraCharges}
+                refunds={data?.refunds}
+            />
+
             <SubmissionViewCards
                 serviceLevelPrice={data?.paymentPlan?.price}
                 orderStatusID={data?.orderStatus?.id}

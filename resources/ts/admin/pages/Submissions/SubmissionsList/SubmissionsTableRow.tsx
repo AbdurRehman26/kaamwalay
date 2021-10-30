@@ -8,7 +8,9 @@ import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
@@ -23,6 +25,7 @@ interface SubmissionsTableRowProps {
 
 enum Options {
     Download,
+    ViewGrades,
 }
 
 const useStyles = makeStyles(
@@ -47,6 +50,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
+    const history = useHistory();
 
     const handleOption = useCallback(
         (option: Options) => async () => {
@@ -61,9 +65,12 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
 
                     await downloadFromUrl(order.invoice.path, `robograding-${order.invoice.invoiceNumber}.pdf`);
                     break;
+                case Options.ViewGrades:
+                    history.push(`/submissions/${order.id}/grade`);
+                    break;
             }
         },
-        [handleCloseOptions, notifications, order.invoice],
+        [handleCloseOptions, history, notifications, order.id, order.invoice],
     );
 
     return (
@@ -119,6 +126,9 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
                         {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
                     </MenuItem>
+                    {order?.orderStatus.is(OrderStatusEnum.GRADED) || order?.orderStatus.is(OrderStatusEnum.SHIPPED) ? (
+                        <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
+                    ) : null}
                 </Menu>
             </TableCell>
         </TableRow>

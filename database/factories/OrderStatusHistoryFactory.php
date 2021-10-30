@@ -28,7 +28,7 @@ class OrderStatusHistoryFactory extends Factory
             'order_id' => Order::factory(),
             'order_status_id' => OrderStatus::factory(),
             'user_id' => User::factory(),
-            'notes' => $this->faker->text,
+            'notes' => $this->faker->text(),
         ];
     }
 }

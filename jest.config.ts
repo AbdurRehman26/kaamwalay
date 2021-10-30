@@ -4,6 +4,7 @@
  */
 import * as path from 'path';
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
     preset: 'ts-jest',
 
@@ -34,7 +35,7 @@ export default {
 
     // The test environment that will be used for testing
     testEnvironment: 'jsdom',
-    testPathIgnorePatterns: ['resources/ts/__tests__/integration'],
+    testPathIgnorePatterns: ['cypress'],
 
     setupFilesAfterEnv: [path.resolve(__dirname, './resources/ts/setupTests.ts')],
 };

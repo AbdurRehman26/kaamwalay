@@ -53,7 +53,7 @@ export function DrawerNavigation() {
         (path: string) => () => {
             window.location.replace(path);
         },
-        [window.location.pathname],
+        [],
     );
 
     return (

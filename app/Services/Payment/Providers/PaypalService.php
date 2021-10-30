@@ -12,7 +12,7 @@ use PayPalHttp\HttpException;
 
 class PaypalService implements PaymentProviderServiceInterface
 {
-    protected $environment;
+    protected SandboxEnvironment|ProductionEnvironment $environment;
     protected PayPalHttpClient $client;
 
     public function __construct()
@@ -85,7 +85,7 @@ class PaypalService implements PaymentProviderServiceInterface
                 $paymentIntent['amount']['value'] == $order->grand_total
                 && $captureStatus === 'COMPLETED'
             ) {
-                $order->orderPayment->update([
+                $order->lastOrderPayment->update([
                     'response' => json_encode($data),
                 ]);
 
@@ -98,7 +98,7 @@ class PaypalService implements PaymentProviderServiceInterface
 
     public function calculateFee(Order $order): float
     {
-        $paymentResponse = json_decode($order->orderPayment->response, associative: true);
+        $paymentResponse = json_decode($order->lastOrderPayment->response, associative: true);
         if (! empty($paymentResponse['purchase_units'][0]['payments']['captures'][0])) {
             $breakdown = $paymentResponse['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
 

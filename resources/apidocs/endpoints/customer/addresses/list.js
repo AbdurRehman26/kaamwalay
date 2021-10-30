@@ -22,8 +22,6 @@
  *                  "zip": "70691",
  *                  "phone": "+1-351-520-6142",
  *                  "flat": "3",
- *                  "is_default_shipping": true,
- *                  "is_default_billing": false,
  *                  "country": {
  *                      "id": 6,
  *                      "code": "BS",
@@ -40,8 +38,6 @@
  *                  "zip": "70691",
  *                  "phone": "+1-351-520-6142",
  *                  "flat": "3",
- *                  "is_default_shipping": true,
- *                  "is_default_billing": false,
  *                  "country": {
  *                      "id": 6,
  *                      "code": "BS",

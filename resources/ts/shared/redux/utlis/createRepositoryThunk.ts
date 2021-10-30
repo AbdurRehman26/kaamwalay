@@ -35,9 +35,9 @@ export function createRepositoryThunk<
         errors: {},
     };
 
-    const listAction = createAsyncThunk(
+    const listAction = createAsyncThunk<PaginatedData<E>, void | undefined | AxiosRequestConfig>(
         name + '/list',
-        async (config: void | undefined | AxiosRequestConfig, thunkAPI) => {
+        async (config, thunkAPI) => {
             const repo = app(repository);
             try {
                 const data = await repo.list(config || {});
@@ -48,15 +48,18 @@ export function createRepositoryThunk<
         },
     );
 
-    const showAction = createAsyncThunk(name + '/show', async (args: ThunkShowActionArg, thunkAPI) => {
-        const repo = app(repository);
-        try {
-            const data = await repo.show(args.resourceId, args.config);
-            return classToPlain(data) as E;
-        } catch (e: any) {
-            return thunkAPI.rejectWithValue(e);
-        }
-    });
+    const showAction = createAsyncThunk<E, ThunkShowActionArg>(
+        name + '/show',
+        async (args: ThunkShowActionArg, thunkAPI) => {
+            const repo = app(repository);
+            try {
+                const data = await repo.show(args.resourceId, args.config);
+                return classToPlain(data) as E;
+            } catch (e: any) {
+                return thunkAPI.rejectWithValue(e);
+            }
+        },
+    );
 
     const buildReducers: CreateSliceOptions<APIState<E>, {}, N>['extraReducers'] = (builder) => {
         builder

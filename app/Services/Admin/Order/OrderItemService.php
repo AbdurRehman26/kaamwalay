@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Order;
 
+use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
 use App\Models\Order;
@@ -11,7 +12,6 @@ use App\Models\OrderItemStatusHistory;
 use App\Models\User;
 use App\Services\Admin\CardGradingService;
 use App\Services\Order\UserCardService;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Collection;
 
 class OrderItemService
@@ -25,7 +25,7 @@ class OrderItemService
     /**
      * @throws OrderItemDoesNotBelongToOrder|OrderItemIsNotGraded
      */
-    public function changeStatus(Order $order, OrderItem $item, array $request, Authenticatable $user): OrderItem
+    public function changeStatus(Order $order, OrderItem $item, array $request, User $user): OrderItem
     {
         if ($item->order_id !== $order->id) {
             throw new OrderItemDoesNotBelongToOrder;
@@ -73,6 +73,8 @@ class OrderItemService
         if ($requestStatus->id === OrderItemStatus::CONFIRMED && ! $item->userCard) {
             $this->userCardService->createItemUserCard($item);
         }
+
+        OrderItemStatusChangedEvent::dispatch($item);
 
         return $item->fresh();
     }

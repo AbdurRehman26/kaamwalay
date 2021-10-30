@@ -13,23 +13,26 @@ interface StateType extends APIState<OrderEntity> {}
 
 const ordersThunk = createRepositoryThunk('orders', OrdersRepository);
 
-export const setOrderCustomerShipment = createAsyncThunk(
-    'setOrderCustomerShipment',
-    async (input: ChangeOrderShipmentDto, thunkAPI) => {
-        const ordersRepository = app(OrdersRepository);
-        try {
-            const orderCustomerShipment = await ordersRepository.setCustomerShipment(input);
-
-            return {
-                orderCustomerShipment: classToPlain(orderCustomerShipment) as ShipmentEntity,
-                orderId: input.orderId,
-            };
-        } catch (e: any) {
-            NotificationsService.exception(e);
-            return thunkAPI.rejectWithValue(e);
-        }
+export const setOrderCustomerShipment = createAsyncThunk<
+    {
+        orderCustomerShipment: ShipmentEntity;
+        orderId: number;
     },
-);
+    ChangeOrderShipmentDto
+>('setOrderCustomerShipment', async (input: ChangeOrderShipmentDto, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+    try {
+        const orderCustomerShipment = await ordersRepository.setCustomerShipment(input);
+
+        return {
+            orderCustomerShipment: classToPlain(orderCustomerShipment) as ShipmentEntity,
+            orderId: input.orderId,
+        };
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e as Error);
+    }
+});
 
 export const ordersSlice = createSlice({
     name: ordersThunk.name,

@@ -14,7 +14,7 @@ class CustomerAddressPolicy
      * Determine whether the user can view any models.
      *
      * @param  User  $user
-     * @return Response|bool
+     * @return bool
      */
     public function viewAny(User $user): bool
     {
@@ -26,7 +26,7 @@ class CustomerAddressPolicy
      *
      * @param  User  $user
      * @param  CustomerAddress  $customerAddress
-     * @return Response|bool
+     * @return bool
      */
     public function view(User $user, CustomerAddress $customerAddress): bool
     {

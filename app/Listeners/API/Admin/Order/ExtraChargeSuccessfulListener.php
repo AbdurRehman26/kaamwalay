@@ -5,10 +5,11 @@ namespace App\Listeners\API\Admin\Order;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Services\EmailService;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ExtraChargeSuccessfulListener
+class ExtraChargeSuccessfulListener implements ShouldBeEncrypted, ShouldQueue
 {
-
     /**
      * Create the event listener.
      *

@@ -70,7 +70,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     break;
             }
         },
-        [handleCloseOptions, notifications, order.invoice],
+        [handleCloseOptions, history, notifications, order.id, order.invoice],
     );
 
     return (

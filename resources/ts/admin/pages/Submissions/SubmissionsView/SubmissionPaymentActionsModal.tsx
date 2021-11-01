@@ -30,25 +30,19 @@ export default function SubmissionPaymentActionsModal({
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
 
-    const handleChangeAmount = useCallback(
-        (e: any) => {
-            setAmount(e.target.value);
-        },
-        [amount],
-    );
+    const handleChangeAmount = useCallback((e: any) => {
+        setAmount(e.target.value);
+    }, []);
 
-    const handleChangeNotes = useCallback(
-        (e: any) => {
-            setNotes(e.target.value);
-        },
-        [notes],
-    );
+    const handleChangeNotes = useCallback((e: any) => {
+        setNotes(e.target.value);
+    }, []);
 
     const handleClose = useCallback(() => {
         setNotes('');
         setAmount('');
         setShowPaymentActionsModal(false);
-    }, [notes, amount, setShowPaymentActionsModal]);
+    }, [setShowPaymentActionsModal]);
 
     const handleSave = useCallback(() => {
         setIsLoading(true);
@@ -76,7 +70,7 @@ export default function SubmissionPaymentActionsModal({
                     handleClose();
                 });
         }
-    }, [dispatch, addExtraChargeToOrder, amount, notes, orderId, openState, handleClose]);
+    }, [dispatch, amount, notes, orderId, openState, handleClose]);
 
     const dialogState = useMemo(() => (openState ? DialogStateMap[openState] : null), [openState]);
     const isSaveDisabled = useMemo(() => amount.length === 0 || notes.length === 0, [amount, notes]);

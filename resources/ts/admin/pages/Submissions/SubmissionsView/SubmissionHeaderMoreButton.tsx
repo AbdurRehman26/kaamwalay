@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, MouseEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
@@ -39,14 +39,11 @@ export default function SubmissionHeaderMoreButton({ orderId, orderStatus }: Sub
 
     const handleViewGrades = useCallback(() => {
         history.push(`/submissions/${orderId}/grade`);
-    }, [orderId]);
+    }, [history, orderId]);
 
-    const handleClick = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>) => {
-            setAnchorEl(event.currentTarget);
-        },
-        [anchorEl],
-    );
+    const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    }, []);
 
     const handleClose = useCallback(() => {
         setAnchorEl(null);
@@ -68,7 +65,7 @@ export default function SubmissionHeaderMoreButton({ orderId, orderStatus }: Sub
                     break;
             }
         },
-        [handleClose],
+        [handleClose, handleViewGrades],
     );
 
     return (

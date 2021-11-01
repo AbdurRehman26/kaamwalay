@@ -55,7 +55,7 @@ export function PaymentAccordionItems({ refunds, extraCharges, mode, orderId }: 
                         type={'refund'}
                         amount={item?.amount}
                         notes={item?.notes}
-                        author={item?.user.getFullName()}
+                        author={item?.user?.getFullName()}
                         updatedAt={item?.createdAt}
                     />
                 ))}

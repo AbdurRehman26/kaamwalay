@@ -28,44 +28,49 @@ interface StateType extends APIState<OrderEntity> {}
 
 const adminOrdersThunk = createRepositoryThunk('adminOrders', OrdersRepository);
 
-export const changeOrderItemStatus = createAsyncThunk(
-    'changeOrderItemStatus',
-    async (input: ChangeOrderItemStatusDto, thunkAPI) => {
-        const orderItemsRepository = app(OrderItemsRepository);
-        try {
-            const item = await orderItemsRepository.changeOrderItemStatus(input);
-
-            return {
-                orderId: input.orderId,
-                orderItemId: input.orderItemId,
-                certificateNumber: item.certificateNumber,
-                status: classToPlain(item.status),
-            };
-        } catch (e: any) {
-            NotificationsService.exception(e);
-            return thunkAPI.rejectWithValue(e);
-        }
+export const changeOrderItemStatus = createAsyncThunk<
+    {
+        orderId: number;
+        orderItemId: number;
+        certificateNumber: string;
+        status: OrderItemStatusHistoryEntity;
     },
-);
+    ChangeOrderItemStatusDto
+>('changeOrderItemStatus', async (input: ChangeOrderItemStatusDto, thunkAPI) => {
+    const orderItemsRepository = app(OrderItemsRepository);
+    try {
+        const item = await orderItemsRepository.changeOrderItemStatus(input);
 
-export const changeOrderItemsStatus = createAsyncThunk(
-    'changeOrderItemsStatus',
-    async (input: ChangeOrderItemStatusBatchDto, thunkAPI) => {
-        const orderItemsRepository = app(OrderItemsRepository);
-        try {
-            const processedItems = await orderItemsRepository.changeOrderItemStatusBatch(input);
+        return {
+            orderId: input.orderId,
+            orderItemId: input.orderItemId,
+            certificateNumber: item.certificateNumber,
+            status: classToPlain(item.status) as OrderItemStatusHistoryEntity,
+        };
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
 
-            return processedItems.map((item) => ({
-                orderId: input.orderId,
-                orderItemId: item.id,
-                item: classToPlain(item),
-            }));
-        } catch (e: any) {
-            NotificationsService.exception(e);
-            return thunkAPI.rejectWithValue(e);
-        }
-    },
-);
+export const changeOrderItemsStatus = createAsyncThunk<
+    { orderId: number; orderItemId: number; item: OrderItemEntity }[],
+    ChangeOrderItemStatusBatchDto
+>('changeOrderItemsStatus', async (input: ChangeOrderItemStatusBatchDto, thunkAPI) => {
+    const orderItemsRepository = app(OrderItemsRepository);
+    try {
+        const processedItems = await orderItemsRepository.changeOrderItemStatusBatch(input);
+
+        return processedItems.map((item) => ({
+            orderId: input.orderId,
+            orderItemId: item.id,
+            item: classToPlain(item) as OrderItemEntity,
+        }));
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
 
 export const addOrderStatusHistory = createAsyncThunk(
     'addOrderStatusHistory',
@@ -91,7 +96,7 @@ export const addCardToOrder = createAsyncThunk('addCardToOrder', async (input: A
             orderItem.orderId = input.orderId;
         }
 
-        return classToPlain(orderItem);
+        return classToPlain(orderItem) as OrderItemEntity;
     } catch (e: any) {
         NotificationsService.exception(e);
         return thunkAPI.rejectWithValue(e);
@@ -114,74 +119,85 @@ export const editCardOfOrder = createAsyncThunk('editCardOfOrder', async (input:
     }
 });
 
-export const setOrderShipment = createAsyncThunk(
-    'setOrderShipment',
-    async (input: ChangeOrderShipmentDto, thunkAPI) => {
-        const ordersRepository = app(OrdersRepository);
-        try {
-            const orderShipment = await ordersRepository.setShipment(input);
-            const order = await ordersRepository.show(input.orderId, {
-                params: {
-                    include: ['orderStatus', 'orderStatusHistory.orderStatus'],
-                },
-            });
-
-            return {
-                orderShipment: classToPlain(orderShipment) as ShipmentEntity,
-                orderStatus: classToPlain(order.orderStatus) as OrderStatusEntity,
-                orderStatusHistory: classToPlain(order.orderStatusHistory) as OrderStatusHistoryEntity[],
-                orderId: input.orderId,
-            };
-        } catch (e: any) {
-            NotificationsService.exception(e);
-            return thunkAPI.rejectWithValue(e);
-        }
+export const setOrderShipment = createAsyncThunk<
+    {
+        orderShipment: ShipmentEntity;
+        orderStatus: OrderStatusEntity;
+        orderStatusHistory: OrderStatusHistoryEntity[];
+        orderId: number;
     },
-);
+    ChangeOrderShipmentDto
+>('setOrderShipment', async (input: ChangeOrderShipmentDto, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+    try {
+        const orderShipment = await ordersRepository.setShipment(input);
+        const order = await ordersRepository.show(input.orderId, {
+            params: {
+                include: ['orderStatus', 'orderStatusHistory.orderStatus'],
+            },
+        });
 
-export const addExtraChargeToOrder = createAsyncThunk(
-    'addExtraChargeToOrder',
-    async (input: AddExtraChargeToOrderDTO, thunkAPI) => {
-        const ordersRepository = app(OrdersRepository);
+        return {
+            orderShipment: classToPlain(orderShipment) as ShipmentEntity,
+            orderStatus: classToPlain(order.orderStatus) as OrderStatusEntity,
+            orderStatusHistory: classToPlain(order.orderStatusHistory) as OrderStatusHistoryEntity[],
+            orderId: input.orderId,
+        };
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
 
-        try {
-            const extraCharge = await ordersRepository.addExtraChargeToOrder(input);
-            NotificationsService.success('Charged successfully!');
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
-            return {
-                extraCharge: classToPlain(extraCharge) as OrderExtraChargeEntity,
-                orderId: input.orderId,
-            };
-        } catch (e: any) {
-            NotificationsService.exception(e);
-            return thunkAPI.rejectWithValue(e);
-        }
+export const addExtraChargeToOrder = createAsyncThunk<
+    {
+        extraCharge: OrderExtraChargeEntity;
+        orderId: number;
     },
-);
+    AddExtraChargeToOrderDTO
+>('addExtraChargeToOrder', async (input: AddExtraChargeToOrderDTO, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
 
-export const refundOrderTransaction = createAsyncThunk(
-    'refundOrderTransaction',
-    async (input: RefundOrderTransactionDTO, thunkAPI) => {
-        const ordersRepository = app(OrdersRepository);
+    try {
+        const extraCharge = await ordersRepository.addExtraChargeToOrder(input);
+        NotificationsService.success('Charged successfully!');
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+        return {
+            extraCharge: classToPlain(extraCharge) as OrderExtraChargeEntity,
+            orderId: input.orderId,
+        };
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
 
-        try {
-            const refundTransaction = await ordersRepository.refundOrderTransaction(input);
-            NotificationsService.success('Customer refunded successfully!');
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
-            return {
-                extraCharge: classToPlain(refundTransaction) as OrderRefundEntity,
-                orderId: input.orderId,
-            };
-        } catch (e: any) {
-            NotificationsService.exception(e);
-            return thunkAPI.rejectWithValue(e);
-        }
+export const refundOrderTransaction = createAsyncThunk<
+    {
+        extraCharge: OrderRefundEntity;
+        orderId: number;
     },
-);
+    RefundOrderTransactionDTO
+>('refundOrderTransaction', async (input: RefundOrderTransactionDTO, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+
+    try {
+        const refundTransaction = await ordersRepository.refundOrderTransaction(input);
+        NotificationsService.success('Customer refunded successfully!');
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+        return {
+            extraCharge: classToPlain(refundTransaction) as OrderRefundEntity,
+            orderId: input.orderId,
+        };
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
 
 export const editTransactionNotes = createAsyncThunk(
     'editTransactionNotes',

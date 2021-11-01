@@ -33,6 +33,7 @@ export function ViewSubmission() {
                     'orderStatusHistory.orderStatus',
                     'invoice',
                     'extraCharges',
+                    'refunds',
                     'orderShipment',
                     'orderItems',
                     'orderStatus',

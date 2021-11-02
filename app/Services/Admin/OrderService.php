@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Events\API\Admin\Order\RefundSuccessful;
+use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
@@ -109,6 +110,8 @@ class OrderService
             throw new OrderItemDoesNotBelongToOrder;
         }
 
+        $previousCardProduct = $orderItem->cardProduct;
+
         $orderItem->card_product_id = $card_id;
         $orderItem->declared_value_per_unit = $value;
         $orderItem->declared_value_total = $value;
@@ -116,7 +119,9 @@ class OrderService
 
         $this->updateAgsCertificateCard($orderItem);
 
-        return $orderItem;
+        OrderItemCardChangedEvent::dispatch($orderItem, $previousCardProduct);
+
+        return $orderItem->fresh();
     }
 
     public function updateNotes(Order $order, $notes): Order

@@ -16,13 +16,8 @@ class RevenueStatsService
     {
         // Using order payments instead of orders because we might take payments
         // of some orders not on the same day.
-        $orderPayments = OrderPayment::join('orders', function ($join) {
-            $join->on('orders.id', '=', 'order_payments.order_id');
-        })
-            ->join('order_status_histories', 'order_status_histories.order_id', '=', 'orders.id')
-            ->where('order_status_histories.order_status_id', OrderStatus::PLACED)
-            ->whereDate('order_payments.created_at', $currentDate)
-            ->select('order_payments.*')
+        $orderPayments = OrderPayment::withoutRefunds()
+            ->forDate($currentDate)
             ->get();
 
         $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
@@ -37,14 +32,13 @@ class RevenueStatsService
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
     {
-        $monthStart = Carbon::parse($currentDate)->firstOfMonth();
-        $monthEnd = Carbon::parse($currentDate)->endOfMonth();
-        
         $orderPayments = OrderPayment::join('orders', function ($join) {
-            $join->on('orders.id', '=', 'order_payments.order_id');
-        })->where('orders.order_status_id', OrderStatus::STATUSES['placed'])
-            ->whereBetween('order_payments.created_at', [$monthStart, $monthEnd])
-            ->select('order_payments.*')
+            $join->on('orders.id', '=', 'order_payments.order_id')
+                ->whereNotIn('orders.order_status_id', [OrderStatus::PAYMENT_PENDING, OrderStatus::CANCELLED]);
+        })
+            ->forMonth($currentDate)
+            ->groupBy('order_payments.order_id')
+            ->selectRaw('order_payments.order_id, order_payments.order_id, SUM(order_payments.amount) as amount')
             ->get();
         
         $revenue = RevenueStatsMonthly::firstOrCreate(['event_at' => $currentDate]);
@@ -66,10 +60,13 @@ class RevenueStatsService
 
         foreach ($orderPayments as $orderPayment) {
             $revenueData['profit'] += $this->calculateProfit($orderPayment);
-            $revenueData['revenue'] += $this->calculateRevenue($orderPayment);
+            $revenueData['revenue'] += $orderPayment->amount;
         }
 
-        if ($revenue['profit'] !== $revenueData['profit'] || round($revenue['revenue'], 2) !== round($revenueData['revenue'], 2)) {
+        if (
+            $revenue['profit'] !== $revenueData['profit'] ||
+            round($revenue['revenue'], 2) !== round($revenueData['revenue'], 2)
+        ) {
             Log::info("Discrepancy found in the revenue stats");
             Log::info("Revenue stats in database ->  Profit: " . $revenue['profit'] . ",  Revenue: " . $revenue['revenue']);
             Log::info("Revenue stats in calculated from Orders ->  Profit: " . $revenueData['profit'] . ",  Revenue: " . $revenueData['revenue']);

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,5 +66,23 @@ class OrderPayment extends Model
             self::TYPE_REFUND => 'refund',
             default => 'order_payment',
         };
+    }
+
+    public function scopeWithoutRefunds(Builder $query): Builder
+    {
+        return $query->where('type', '<>', self::TYPE_REFUND);
+    }
+
+    public function scopeForDate(Builder $query, string $date): Builder
+    {
+        return $query->whereDate('created_at', $date);
+    }
+
+    public function scopeForMonth(Builder $query, string $date): Builder
+    {
+        $monthStart = Carbon::parse($date)->firstOfMonth();
+        $monthEnd = Carbon::parse($date)->endOfMonth();
+
+        return $query->whereBetween('order_payments.created_at', [$monthStart, $monthEnd]);
     }
 }

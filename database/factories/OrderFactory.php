@@ -54,14 +54,21 @@ class OrderFactory extends Factory
                 $order->orderPayments()->save(
                     OrderPayment::factory()->stripe()->make([
                         'amount' => $order->grand_total,
-                        'type' => $order->order_status_id === OrderStatus::CANCELLED
-                            ? OrderPayment::TYPE_REFUND
-                            : OrderPayment::TYPE_ORDER_PAYMENT,
+                        'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                         'created_at' => $order->created_at,
+                        'provider_fee' => round(($order->grand_total * 0.029) + 0.3, 2),
                     ])
                 );
-
-                resolve(PaymentService::class)->calculateAndSaveFee($order);
+                if ($order->order_status_id === OrderStatus::CANCELLED) {
+                    $order->orderPayments()->save(
+                        OrderPayment::factory()->stripe()->make([
+                            'amount' => $order->grand_total,
+                            'type' => OrderPayment::TYPE_REFUND,
+                            'created_at' => $order->created_at,
+                            'provider_fee' => round(($order->grand_total * 0.029) + 0.3, 2),
+                        ])
+                    );
+                }
             }
         });
     }

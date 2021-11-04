@@ -3,6 +3,7 @@
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\User;
 use App\Services\Order\RevenueStatsService;
 use App\Services\Payment\PaymentService;
 use Carbon\Carbon;
@@ -45,28 +46,47 @@ it('adds daily revenue stats', function () {
     $getRandomOrder = $this->orders->random()->first();
 
     $orders = Order::whereDate('created_at', $getRandomOrder->created_at->toDateString())
+        ->where('order_status_id', '<>', OrderStatus::PAYMENT_PENDING)
         ->get();
 
     $serviceFee = $orders->sum('service_fee');
-    $providerFee = $orders->sum(fn ($order) => $order->orderPayments->sum('provider_fee'));
+    $providerFee = $orders->sum(function ($order) {
+        return $order->firstOrderPayment->provider_fee
+            + $order->extraCharges->sum('provider_fee')
+            - $order->refunds->sum('provider_fee');
+    });
 
     $profit = ($serviceFee - $providerFee);
-    $revenue = $orders->sum('grand_total');
-    $revenueStats = $this->revenueStatsService->addDailyStats($getRandomOrder->created_at->toDateString());
 
+    $revenue = $orders->sum(
+        fn (Order $order) => (
+            $order->firstOrderPayment->amount + $order->extraCharges->sum('amount') - $order->refunds->sum('amount')
+        )
+    );
+
+    $revenueStats = $this->revenueStatsService->addDailyStats($getRandomOrder->created_at->toDateString());
     expect($revenue)->toBe($revenueStats['revenue']);
     expect($profit)->toBe($revenueStats['profit']);
 })->group('revenue-stats');
 
 it('adds monthly revenue stats for the current month', function () {
     $orders = Order::whereBetween('created_at', [now()->addMonth(-1)->startOfMonth(), now()->addMonth(-1)->endOfMonth()])
+        ->where('order_status_id', '<>', OrderStatus::PAYMENT_PENDING)
         ->get();
 
     $serviceFee = $orders->sum('service_fee');
-    $providerFee = $orders->sum(fn ($order) => ($order->orderPayments->sum('provider_fee') - $order->refunds->sum('provider_fee')));
+    $providerFee = $orders->sum(function ($order) {
+        return $order->firstOrderPayment->provider_fee
+            + $order->extraCharges->sum('provider_fee')
+            - $order->refunds->sum('provider_fee');
+    });
 
     $profit = ($serviceFee - $providerFee);
-    $revenue = $orders->sum(fn ($order) => ($order->orderPayments->sum('amount') - $order->refunds->sum('amount')));
+    $revenue = $orders->sum(
+        fn (Order $order) => (
+            $order->firstOrderPayment->amount + $order->extraCharges->sum('amount') - $order->refunds->sum('amount')
+        )
+    );
 
     $revenueStats = $this->revenueStatsService->addMonthlyStats(now()->addMonth(-1)->startOfMonth()->toDateString());
 

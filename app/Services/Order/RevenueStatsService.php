@@ -20,8 +20,8 @@ class RevenueStatsService
             ->groupBy('order_payments.order_id')
             ->select(
                 'order_payments.order_id',
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.amount END) as amount'),
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.provider_fee) ELSE order_payments.provider_fee END) as provider_fee'),
             )
             ->get();
 
@@ -41,8 +41,8 @@ class RevenueStatsService
             ->groupBy('order_payments.order_id')
             ->select(
                 'order_payments.order_id',
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.amount END) as amount'),
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.provider_fee) ELSE order_payments.provider_fee END) as provider_fee'),
             )
             ->get();
 

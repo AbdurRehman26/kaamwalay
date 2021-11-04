@@ -68,11 +68,6 @@ class OrderPayment extends Model
         };
     }
 
-    public function scopeWithoutRefunds(Builder $query): Builder
-    {
-        return $query->where('type', '<>', self::TYPE_REFUND);
-    }
-
     public function scopeForDate(Builder $query, string $date): Builder
     {
         return $query->whereDate('order_payments.created_at', $date);

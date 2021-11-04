@@ -3,10 +3,8 @@
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Models\User;
 use App\Services\Order\RevenueStatsService;
 use App\Services\Payment\PaymentService;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -93,4 +91,3 @@ it('adds monthly revenue stats for the current month', function () {
     expect($revenue)->toBe($revenueStats->revenue);
     expect($profit)->toBe($revenueStats->profit);
 })->group('revenue-stats');
-

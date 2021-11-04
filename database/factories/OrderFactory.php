@@ -5,11 +5,13 @@ namespace Database\Factories;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Services\Payment\PaymentService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -43,5 +45,24 @@ class OrderFactory extends Factory
             'invoice_id' => Invoice::factory(),
             'arrived_at' => $this->faker->dateTime(),
         ];
+    }
+
+    public function withPayment(): OrderFactory
+    {
+        return $this->afterCreating(function (Order $order) {
+            if ($order->order_status_id !== OrderStatus::PAYMENT_PENDING) {
+                $order->orderPayments()->save(
+                    OrderPayment::factory()->stripe()->make([
+                        'amount' => $order->grand_total,
+                        'type' => $order->order_status_id === OrderStatus::CANCELLED
+                            ? OrderPayment::TYPE_REFUND
+                            : OrderPayment::TYPE_ORDER_PAYMENT,
+                        'created_at' => $order->created_at,
+                    ])
+                );
+
+                resolve(PaymentService::class)->calculateAndSaveFee($order);
+            }
+        });
     }
 }

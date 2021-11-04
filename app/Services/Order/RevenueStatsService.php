@@ -8,20 +8,24 @@ use App\Models\OrderStatus;
 use App\Models\RevenueStatsDaily;
 use App\Models\RevenueStatsMonthly;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RevenueStatsService
 {
     public function addDailyStats(string $currentDate): RevenueStatsDaily
     {
-        // Using order payments instead of orders because we might take payments
-        // of some orders not on the same day.
-        $orderPayments = OrderPayment::withoutRefunds()
+        $orderPayments = OrderPayment::forValidPaidOrders()
             ->forDate($currentDate)
+            ->groupBy('order_payments.order_id')
+            ->select(
+                'order_payments.order_id',
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.amount END) as amount'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
+            )
             ->get();
 
         $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
-
         
         Log::info("Calculation For Daily Stats Started");
         $this->addStats($currentDate, $orderPayments, $revenue);
@@ -32,15 +36,16 @@ class RevenueStatsService
 
     public function addMonthlyStats(string $currentDate): RevenueStatsMonthly
     {
-        $orderPayments = OrderPayment::join('orders', function ($join) {
-            $join->on('orders.id', '=', 'order_payments.order_id')
-                ->whereNotIn('orders.order_status_id', [OrderStatus::PAYMENT_PENDING, OrderStatus::CANCELLED]);
-        })
+        $orderPayments = OrderPayment::forValidPaidOrders()
             ->forMonth($currentDate)
             ->groupBy('order_payments.order_id')
-            ->selectRaw('order_payments.order_id, order_payments.order_id, SUM(order_payments.amount) as amount')
+            ->select(
+                'order_payments.order_id',
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.amount END) as amount'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
+            )
             ->get();
-        
+
         $revenue = RevenueStatsMonthly::firstOrCreate(['event_at' => $currentDate]);
         
         Log::info("Calculation For Monthly Stats Started");

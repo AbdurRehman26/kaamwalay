@@ -37,7 +37,7 @@ class UpdateRevenueStats extends Command
         )->format('Y-m-d');
 
         $this->log("Revenue Stats Daily for Date : " . $currentDate . " Starting");
-        
+
         $revenueStats = $revenueStatsService->addDailyStats($currentDate);
 
         $this->log("Revenue Stats Daily for Month : " . Carbon::parse($currentDate)->format('F-Y') . " Starting");

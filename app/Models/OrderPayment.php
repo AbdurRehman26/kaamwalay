@@ -75,7 +75,7 @@ class OrderPayment extends Model
 
     public function scopeForDate(Builder $query, string $date): Builder
     {
-        return $query->whereDate('created_at', $date);
+        return $query->whereDate('order_payments.created_at', $date);
     }
 
     public function scopeForMonth(Builder $query, string $date): Builder
@@ -84,5 +84,13 @@ class OrderPayment extends Model
         $monthEnd = Carbon::parse($date)->endOfMonth();
 
         return $query->whereBetween('order_payments.created_at', [$monthStart, $monthEnd]);
+    }
+
+    public function scopeForValidPaidOrders(Builder $query): Builder
+    {
+        return $query->join('orders', function ($join) {
+            $join->on('orders.id', '=', 'order_payments.order_id')
+                ->whereNotIn('orders.order_status_id', [OrderStatus::PAYMENT_PENDING]);
+        });
     }
 }

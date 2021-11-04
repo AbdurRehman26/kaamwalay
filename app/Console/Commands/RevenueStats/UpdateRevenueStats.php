@@ -55,7 +55,7 @@ class UpdateRevenueStats extends Command
         return 0;
     }
 
-    protected function log(string $message, array $context = [])
+    protected function log(string $message, array $context = []): void
     {
         $this->info($message);
         Log::info($message, $context);

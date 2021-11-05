@@ -3,9 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Arr;
-
+use Illuminate\Support\ServiceProvider;
 
 class QueryBuilderMacroServiceProvider extends ServiceProvider
 {
@@ -33,14 +32,15 @@ class QueryBuilderMacroServiceProvider extends ServiceProvider
                     $query->when(
                         str_contains($attribute, '.'),
                         function (Builder $query) use ($attribute, $searchTerm) {
-                            [$relationName, $relationAttribute] = preg_split('~\.(?=[^\.]*$)~', $attribute);
+                            // exploding from the last occurrence of '.' to get the attribute name and relation name
+                            [$relationName, $relationAttribute] = preg_split('~\.(?=[^.]*$)~', $attribute);
 
                             $query->orWhereHas($relationName, function (Builder $query) use ($relationAttribute, $searchTerm) {
-                                $query->where($relationAttribute, 'LIKE', "%{$searchTerm}%");
+                                return $query->where($relationAttribute, 'LIKE', "%{$searchTerm}%");
                             });
                         },
                         function (Builder $query) use ($attribute, $searchTerm) {
-                            $query->orWhere($attribute, 'LIKE', "%{$searchTerm}%");
+                            return $query->orWhere($attribute, 'LIKE', "%{$searchTerm}%");
                         }
                     );
                 }

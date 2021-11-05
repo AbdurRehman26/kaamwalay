@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -15,7 +16,6 @@ use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
-use App\Models\UserCard;
 
 beforeEach(function () {
     $this->seed([

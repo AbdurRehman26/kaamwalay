@@ -241,7 +241,7 @@ it(
     'returns orders filtered after searching the order with order number, customer number and user Name',
     function (string $value) {
         $this->getJson('/api/admin/orders?include=order_status_history&filter[search]=' . $value)
-            ->dump()->assertOk()
+            ->assertOk()
             ->assertJsonFragment([
                 'id' => $this->orders[0]->id,
             ]);

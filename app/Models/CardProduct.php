@@ -34,6 +34,9 @@ class CardProduct extends Model
         'variant',
         'card_reference_id',
         'language',
+        'description',
+        'added_manually',
+        'added_by_id',
     ];
 
     /**
@@ -75,6 +78,16 @@ class CardProduct extends Model
         return $array;
     }
 
+    /**
+     * Determine if the model should be searchable.
+     *
+     * @return bool
+     */
+    public function shouldBeSearchable()
+    {
+        return !$this->added_manually || $this->isAddedByAdmin();
+    }
+
     public function cardSet(): BelongsTo
     {
         return $this->belongsTo(CardSet::class);
@@ -85,7 +98,20 @@ class CardProduct extends Model
         return $this->belongsTo(CardCategory::class);
     }
 
-    public function getFormattedCardNumber(): string
+    public function addedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'added_by_id');
+    }
+
+    public function isAddedByAdmin(){
+        return $this->added_manually && $this->addedBy->isAdmin();
+    }
+
+    public function isAddedByCustomer(){
+        return $this->added_manually && $this->addedBy->isCustomer();
+    }
+
+    public function getFormattedCardNumber()
     {
         return is_numeric($this->card_number_order) ? Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order;
     }

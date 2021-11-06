@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Admin\Cards\CardProductController;
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
 use App\Http\Controllers\API\Admin\Order\OrderPaymentController;
@@ -42,7 +43,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::apiResource('order-payments', OrderPaymentController::class)->only('update');
         Route::post('payments/extra-charge', OrderExtraChargeController::class)
-            ->name('payments.extra-charge');
+        ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
     });
+
+    Route::post('cards',[CardProductController::class, 'store']);
 });

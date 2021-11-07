@@ -98,7 +98,7 @@ export function ManageCardDialogResultItem({ hit }: ManageCardDialogResultItemPr
                         ) : null}
                     </Box>
                 }
-                secondary={item.getDescription()}
+                secondary={item.getLongName()}
                 primaryTypographyProps={{ variant: 'body2' }}
                 secondaryTypographyProps={{ variant: 'caption' }}
                 className={classes.listItemText}

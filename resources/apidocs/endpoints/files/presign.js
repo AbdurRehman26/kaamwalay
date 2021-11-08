@@ -29,7 +29,8 @@
  * @apiParam {string} suffix The suffix path placed after hashed filename but before file extension. [Support template variables]
  *
  * @apiSuccess {Object} data              Data json object.
- * @apiSuccess {String} data.url          Presigned S3 URL.
+ * @apiSuccess {String} data.signed_url   Signed S3 URL.
+ * @apiSuccess {String} data.url          Public S3 URL.
  * @apiSuccess {Number} data.size         File size.
  * @apiSuccess {String} data.file_name    File name.
  * @apiSuccess {String} data.content_type File content type.
@@ -45,7 +46,8 @@
  *              "content_type": "plain/text",
  *              "prefix": "",
  *              "suffix": "",
- *              "url": "http://minio:9000/robograding/users/1/2021-11-08/edef9764444e6c48c098335809cf1b9f2b1bf085.http?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=sail%2F20211108%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211108T194123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Signature=761d548648a14fa00fb288bde7dc6431fe33a82655068d3761eec3cace87dd25",
+ *              "signed_url": "http://minio:9000/robograding/users/1/2021-11-08/edef9764444e6c48c098335809cf1b9f2b1bf085.http?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=sail%2F20211108%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211108T194123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Signature=761d548648a14fa00fb288bde7dc6431fe33a82655068d3761eec3cace87dd25",
+ *              "url": "http://minio:9000/robograding/users/1/2021-11-08/edef9764444e6c48c098335809cf1b9f2b1bf085.http",
  *              "key": "/users/1/2021-11-08/edef9764444e6c48c098335809cf1b9f2b1bf085.http"
  *          }
  *      }

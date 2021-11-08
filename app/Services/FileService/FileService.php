@@ -11,9 +11,10 @@ class FileService
     public function preSignFile(UploadFile $file): UploadFile
     {
         $key = $this->generateKey($file);
-        $url = $this->preSignUploadUrl($key, $file->getContentType());
+        $signedUrl = $this->preSignUploadUrl($key, $file->getContentType());
+        $url = Storage::disk('s3')->url($key);
 
-        return $file->setUrl($url)->setKey($key);
+        return $file->setUrl($url)->setSignedUrl($signedUrl)->setKey($key);
     }
 
     public function preSignFileFromRequest(UploadRequest $request): UploadFile
@@ -38,7 +39,6 @@ class FileService
         ]);
 
         $request = $client->createPresignedRequest($command, $expiry);
-
         return (string) $request->getUri();
     }
 

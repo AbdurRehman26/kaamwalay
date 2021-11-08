@@ -6,6 +6,7 @@ use App\Http\Requests\API\Files\UploadRequest;
 
 class UploadFile
 {
+    protected string $signedUrl;
     protected string $url;
     protected string $key;
 
@@ -106,6 +107,17 @@ class UploadFile
     public function setKey(string $key): static
     {
         $this->key = $key;
+        return $this;
+    }
+
+    public function getSignedUrl(): string
+    {
+        return $this->signedUrl;
+    }
+
+    public function setSignedUrl(string $signedUrl): static
+    {
+        $this->signedUrl = $signedUrl;
         return $this;
     }
 }

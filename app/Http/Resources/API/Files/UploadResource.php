@@ -20,6 +20,7 @@ class UploadResource extends BaseResource
             'content_type' => $this->getContentType(),
             'prefix' => $this->getPrefix(),
             'suffix' => $this->getSuffix(),
+            'signed_url' => $this->getSignedUrl(),
             'url' => $this->getUrl(),
             'key' => $this->getKey(),
         ];

@@ -39,6 +39,7 @@ class FileService
         ]);
 
         $request = $client->createPresignedRequest($command, $expiry);
+
         return (string) $request->getUri();
     }
 

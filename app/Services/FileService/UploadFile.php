@@ -35,6 +35,7 @@ class UploadFile
     public function setSize(int $size): static
     {
         $this->size = $size;
+
         return $this;
     }
 
@@ -63,6 +64,7 @@ class UploadFile
     public function setContentType(string $contentType): static
     {
         $this->contentType = $contentType;
+
         return $this;
     }
 
@@ -74,6 +76,7 @@ class UploadFile
     public function setPrefix(string $prefix): static
     {
         $this->prefix = $prefix;
+
         return $this;
     }
 
@@ -85,6 +88,7 @@ class UploadFile
     public function setSuffix(string $suffix): static
     {
         $this->suffix = $suffix;
+
         return $this;
     }
 
@@ -96,6 +100,7 @@ class UploadFile
     public function setUrl(string $url): static
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -107,6 +112,7 @@ class UploadFile
     public function setKey(string $key): static
     {
         $this->key = $key;
+
         return $this;
     }
 
@@ -118,6 +124,7 @@ class UploadFile
     public function setSignedUrl(string $signedUrl): static
     {
         $this->signedUrl = $signedUrl;
+
         return $this;
     }
 }

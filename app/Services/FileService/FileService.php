@@ -4,7 +4,6 @@ namespace App\Services\FileService;
 
 use App\Http\Requests\API\Files\UploadRequest;
 use Carbon\Carbon;
-use Hash;
 use Illuminate\Support\Facades\Storage;
 
 class FileService
@@ -45,26 +44,28 @@ class FileService
 
     private function generateKey(UploadFile $file): string
     {
-        $now = Carbon::now();
-
         try {
             $userId = auth()->id();
         } catch (\Exception $e) {
-            $userId = null;
+            $userId = 'guest';
         }
 
+        $now = Carbon::now();
+        $extension = pathinfo($file->getFileName(), PATHINFO_EXTENSION);
         $data = [
             "uid" => $userId,
-			"year" => $now->year,
-			"month" => $now->month,
-			"day" => $now->day,
-			"hour" => $now->hour,
-			"second" => $now->second,
+            "year" => $now->year,
+            "mon" => $now->month,
+            "day" => $now->day,
+            "hour" => $now->hour,
+            "min" => $now->minute,
+            "sec" => $now->second,
+            "ext" => $extension,
         ];
 
-        $extension = pathinfo($file->getFileName(), PATHINFO_EXTENSION);
         $hash = sha1($file->getFileName()."_".$file->getSize()."_".$file->getContentType());
         $segments = [
+            "users/{uid}/{year}-{mon}-{day}",
             $file->getPrefix(),
             $hash,
             $file->getSuffix(),
@@ -72,7 +73,30 @@ class FileService
 
         $segments = array_map('trim', $segments);
         $segments = array_values(array_filter($segments));
+        $path = implode('/', $segments);
+        $path = $this->buildPath($path, $data);
+        $path = explode('/', $path);
+        $path = array_map('rawurlencode', $path);
+        $path = array_map('trim', $path);
+        $segments = array_values(array_filter($path));
 
         return implode('/', $segments).'.'.$extension;
+    }
+
+    private function buildPath(string $path, array $data): string
+    {
+        $matches = [];
+        preg_match_all('/{([a-zA-Z0-9_]+)}/', $path, $matches);
+
+        foreach ($matches[1] as $match) {
+            $value = $data[$match] ?? '';
+            if (is_numeric($value) && $value < 10 && $match !== 'uid') {
+                $value = '0'.$value;
+            }
+
+            $path = str_replace('{'.$match.'}', $value, $path);
+        }
+
+        return $path;
     }
 }

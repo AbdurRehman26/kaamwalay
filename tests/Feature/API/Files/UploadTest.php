@@ -29,4 +29,11 @@ it("should presign correctly", function () {
     ]);
 
     $response->assertOk();
+    $response->assertJsonStructure([
+        'data' => [
+            'url',
+            'key',
+            'size',
+        ],
+    ]);
 });

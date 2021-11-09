@@ -17,7 +17,7 @@ class AdminOrderSearchFilter implements Filter
                 'user.last_name',
                 'orderItems.userCard.certificate_number',
             ],
-            $value,
+            $value
         );
     }
 }

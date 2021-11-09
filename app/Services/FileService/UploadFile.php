@@ -70,7 +70,7 @@ final class UploadFile
         return $this;
     }
 
-    public function getPrefix($default): string
+    public function getPrefix(string $default): string
     {
         if (! $this->prefix) {
             return $default;
@@ -86,7 +86,7 @@ final class UploadFile
         return $this;
     }
 
-    public function getSuffix($default): string
+    public function getSuffix(string $default): string
     {
         if (! $this->suffix) {
             return  $default;
@@ -138,7 +138,7 @@ final class UploadFile
         return $this;
     }
 
-    public function getDirectory($default): string
+    public function getDirectory(string $default): string
     {
         if (! $this->directory) {
             return $default;

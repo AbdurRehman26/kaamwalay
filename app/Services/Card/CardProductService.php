@@ -3,7 +3,6 @@
 namespace App\Services\Card;
 
 use App\Models\CardProduct;
-use Illuminate\Support\Facades\Log;
 
 class CardProductService
 {
@@ -13,7 +12,6 @@ class CardProductService
 
     public function create(array $data): CardProduct
     {
-        Log::debug($data);
         return CardProduct::create(array_merge(
             $data,
             [

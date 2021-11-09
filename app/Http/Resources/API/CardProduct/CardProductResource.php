@@ -16,7 +16,7 @@ class CardProductResource extends BaseResource
             'card_category_name' => $this->cardCategory?->name,
             'card_set_name' => $this->cardSet?->name,
             'card_series_name' => $this->cardSet?->cardSeries?->name,
-            'release_date' => $this->formatDate($this->cardSet?->release_year),
+            'release_date' => $this->formatDate($this->cardSet?->release_date),
             'release_year' => $this->cardSet?->release_year,
             'card_number_order' => $this->getFormattedCardNumber(),
             'image_path' => $this->image_path,

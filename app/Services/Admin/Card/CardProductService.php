@@ -66,7 +66,6 @@ class CardProductService
             $series->save();
         }
 
-
         $set = CardSet::where('name', $data['set'])->where('card_series_id', $series->id)->first();
 
         if(!$set){

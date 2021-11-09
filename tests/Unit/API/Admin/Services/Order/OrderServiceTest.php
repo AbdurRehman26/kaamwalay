@@ -48,7 +48,6 @@ beforeEach(function () {
     ];
 });
 
-
 test('it can create extra charge for order', function () {
     Event::fake();
 

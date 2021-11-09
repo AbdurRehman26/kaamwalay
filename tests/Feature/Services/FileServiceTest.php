@@ -14,7 +14,7 @@ it("should instantiate correctly",  function () {
 
 it("should preSign url correctly", function () {
     $file = new UploadFile("test_file_name.txt", "plain/text", 2048, "prefix/path", "suffix/file");
-    $result = $this->fileService->preSignFile($file);
+    $result = $this->fileService->presignUploadFile($file);
 
     expect($result)->toBeInstanceOf(UploadFile::class);
     expect($file->getPublicUrl())->toContain("/prefix/path/");

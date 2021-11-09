@@ -2,6 +2,7 @@
 
 namespace App\Services\FileService;
 
+use Aws\Credentials\Credentials;
 use Aws\S3\S3Client;
 use Carbon\Carbon;
 use Exception;
@@ -20,8 +21,16 @@ class FileService
 
     private function getStorageClient(): S3Client
     {
-        /* @phpstan-ignore-next-line */
-        return Storage::disk('s3')->getDriver()->getAdapter()->getClient();
+        $credentials = new Credentials(config('filesystems.disks.s3.key'), config('filesystems.disks.s3.secret'));
+
+        $client = new S3Client([
+            'version' => 'latest',
+            'region' => config('filesystems.disks.s3.region'),
+            'endpoint' => config('filesystems.disks.s3.endpoint'),
+            'credentials' => $credentials,
+        ]);
+
+        return $client;
     }
 
     protected function getSignedUrl(string $key, string $contentType): string

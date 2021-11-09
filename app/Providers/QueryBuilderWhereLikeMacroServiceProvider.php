@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
-class QueryBuilderMacroServiceProvider extends ServiceProvider
+class QueryBuilderWhereLikeMacroServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -25,6 +25,9 @@ class QueryBuilderMacroServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        /**
+         * @see https://freek.dev/1182-searching-models-using-a-where-like-query-in-laravel
+         */
         Builder::macro('whereLike', function ($attributes, string $searchTerm) {
             /** @var Builder $this */
             $this->where(function (Builder $query) use ($attributes, $searchTerm) {

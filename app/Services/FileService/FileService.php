@@ -20,6 +20,7 @@ class FileService
 
     private function getStorageClient(): S3Client
     {
+        /* @phpstan-ignore-next-line */
         return Storage::disk('s3')->getDriver()->getAdapter()->getClient();
     }
 

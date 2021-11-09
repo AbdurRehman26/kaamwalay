@@ -150,6 +150,7 @@ final class UploadFile
     public function setDirectory(string $directory): UploadFile
     {
         $this->directory = $directory;
+
         return $this;
     }
 }

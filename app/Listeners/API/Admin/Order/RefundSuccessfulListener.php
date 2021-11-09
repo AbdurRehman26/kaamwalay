@@ -5,10 +5,9 @@ namespace App\Listeners\API\Admin\Order;
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
 use App\Services\EmailService;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class RefundSuccessfulListener implements ShouldBeEncrypted, ShouldQueue
+class RefundSuccessfulListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -34,7 +33,7 @@ class RefundSuccessfulListener implements ShouldBeEncrypted, ShouldQueue
         $card = $orderPayment->card;
 
         $this->emailService->sendEmail(
-            [[ $user->email => $user->name ]],
+            [[$user->email => $user->name]],
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED],
             $this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED,
             [

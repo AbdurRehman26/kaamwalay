@@ -4,7 +4,7 @@ namespace App\Services\FileService;
 
 use App\Http\Requests\API\Files\PresignUploadRequest;
 
-class UploadFile
+final class UploadFile
 {
     protected string $signedUrl;
     protected string $publicUrl;
@@ -20,11 +20,11 @@ class UploadFile
     ) {
     }
 
-    public static function fromRequest(PresignUploadRequest $request): static
+    public static function fromRequest(PresignUploadRequest $request): UploadFile
     {
         $data = $request->validated();
 
-        return new static(
+        return new UploadFile(
             $data['file_name'],
             $data['content_type'],
             (int)$data['size'],
@@ -34,7 +34,7 @@ class UploadFile
         );
     }
 
-    public function setSize(int $size): static
+    public function setSize(int $size): UploadFile
     {
         $this->size = $size;
 
@@ -51,7 +51,7 @@ class UploadFile
         return $this->fileName;
     }
 
-    public function setFileName(string $fileName): static
+    public function setFileName(string $fileName): UploadFile
     {
         $this->fileName = $fileName;
 
@@ -63,7 +63,7 @@ class UploadFile
         return $this->contentType;
     }
 
-    public function setContentType(string $contentType): static
+    public function setContentType(string $contentType): UploadFile
     {
         $this->contentType = $contentType;
 
@@ -79,7 +79,7 @@ class UploadFile
         return $this->prefix;
     }
 
-    public function setPrefix(string $prefix): static
+    public function setPrefix(string $prefix): UploadFile
     {
         $this->prefix = $prefix;
 
@@ -95,7 +95,7 @@ class UploadFile
         return $this->suffix;
     }
 
-    public function setSuffix(string $suffix): static
+    public function setSuffix(string $suffix): UploadFile
     {
         $this->suffix = $suffix;
 
@@ -107,7 +107,7 @@ class UploadFile
         return $this->publicUrl;
     }
 
-    public function setPublicUrl(string $publicUrl): static
+    public function setPublicUrl(string $publicUrl): UploadFile
     {
         $this->publicUrl = $publicUrl;
 
@@ -119,7 +119,7 @@ class UploadFile
         return $this->key;
     }
 
-    public function setKey(string $key): static
+    public function setKey(string $key): UploadFile
     {
         $this->key = $key;
 
@@ -131,7 +131,7 @@ class UploadFile
         return $this->signedUrl;
     }
 
-    public function setSignedUrl(string $signedUrl): static
+    public function setSignedUrl(string $signedUrl): UploadFile
     {
         $this->signedUrl = $signedUrl;
 
@@ -147,7 +147,7 @@ class UploadFile
         return $this->directory;
     }
 
-    public function setDirectory(string $directory): static
+    public function setDirectory(string $directory): UploadFile
     {
         $this->directory = $directory;
         return $this;

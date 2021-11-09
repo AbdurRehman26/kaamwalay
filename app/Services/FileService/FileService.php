@@ -2,7 +2,9 @@
 
 namespace App\Services\FileService;
 
+use Aws\S3\S3Client;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 
 class FileService
@@ -16,12 +18,12 @@ class FileService
         return $file->setPublicUrl($url)->setSignedUrl($signedUrl)->setKey($key);
     }
 
-    private function getStorageClient()
+    private function getStorageClient(): S3Client
     {
         return Storage::disk('s3')->getDriver()->getAdapter()->getClient();
     }
 
-    protected function getSignedUrl($key, $contentType): string
+    protected function getSignedUrl(string $key, string $contentType): string
     {
         $client = $this->getStorageClient();
         $expiry = "+10 minutes";
@@ -41,7 +43,7 @@ class FileService
     {
         try {
             $userId = auth()->id();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $userId = 'guest';
         }
 

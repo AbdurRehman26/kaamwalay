@@ -62,7 +62,7 @@ class RevenueStatsService
         ];
 
         foreach ($orderPayments as $orderPayment) {
-            $revenueData['profit'] += $this->calculateProfit($orderPayment);
+            $revenueData['profit'] += $orderPayment->order->service_fee - $orderPayment->provider_fee;
             $revenueData['revenue'] += $orderPayment->amount;
         }
 
@@ -104,9 +104,12 @@ class RevenueStatsService
         $calculatedProfit = $revenue->profit ?? 0;
         $calculatedRevenue = $revenue->revenue ?? 0;
 
-        $order->orderPayments->map(function ($payment) use (&$calculatedProfit, &$calculatedRevenue) {
-            $calculatedProfit += $this->calculateProfit($payment);
-            $calculatedRevenue += $payment->amount;
+        $calculatedProfit += $this->calculateProfitForOrder($order);
+
+        $order->orderPayments->map(function ($payment) use (&$calculatedRevenue) {
+            $calculatedRevenue += $payment->type === OrderPayment::TYPE_REFUND
+                ? (-1 * $payment->amount)
+                : $payment->amount;
 
             return $payment;
         });
@@ -117,13 +120,15 @@ class RevenueStatsService
         return $revenue;
     }
 
-    protected function calculateRevenue(OrderPayment $orderPayment): float
+    protected function calculateProfitForOrder(Order $order): float
     {
-        return $orderPayment->order->grand_total;
+        return $order->service_fee - $this->orderTotalProviderFee($order);
     }
 
-    protected function calculateProfit(OrderPayment $orderPayment): float
+    protected function orderTotalProviderFee(Order $order)
     {
-        return ($orderPayment->order->service_fee - $orderPayment->provider_fee);
+        return $order->firstOrderPayment->provider_fee
+            + $order->extraCharges->sum('provider_fee')
+            - $order->refunds->sum('provider_fee');
     }
 }

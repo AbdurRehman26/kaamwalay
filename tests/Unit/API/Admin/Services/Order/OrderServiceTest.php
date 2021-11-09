@@ -46,7 +46,6 @@ beforeEach(function () {
         'notes' => $this->faker->sentence(),
         'provider_fee' => 2.5,
     ];
-
 });
 
 

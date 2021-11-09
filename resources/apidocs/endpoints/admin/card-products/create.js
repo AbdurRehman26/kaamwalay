@@ -10,14 +10,14 @@
  *  {
  *      "image_path": "https://www.google.com",
  *      "name": "Charizard AZ",
- *      "category": "Pokemon",
+ *      "category": 1,
  *      "release_date": "2021-11-06",
  *      "series": "Admin Series",
  *      "set": "Admin Set",
  *      "card_number": "001",
  *      "language": "English",
  *      "rarity": "Common",
- *      "edition": "1st edition",
+ *      "edition": "1st Edition",
  *      "surface": "Holo",
  *      "variant": "Lorem"
  *  }
@@ -40,7 +40,7 @@
  *              "card_number_order": "001",
  *              "image_path": "https://www.google.com",
  *              "language": "English",
- *              "edition": "1st edition",
+ *              "edition": "1st Edition",
  *              "surface": "Holo",
  *              "variant": "Lorem"
  *              "added_by_customer": false

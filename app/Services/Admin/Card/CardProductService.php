@@ -7,21 +7,52 @@ use App\Models\CardProduct;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class CardProductService
 {
+
+    public const CARD_RARITIES = [
+        'Common',
+        'Uncommon',
+        'Rare',
+    ];
+
+    public const CARD_EDITIONS = [
+        '1st Edition',
+        'Shadowless',
+        'Unlimited',
+    ];
+
+    public const CARD_SURFACES = [
+        'Holo',
+        'Cracked Ice Holo',
+        'Cosmos Holo',
+        'Reverse Holo',
+        'Reverse Foil',
+    ];
+
+    public const CARD_LANGUAGES = [
+        'Japanese',
+        'English',
+        'Dutch',
+        'German',
+        'French',
+        'Italian',
+        'Spanish',
+        'Portuguese',
+        '(South) Korean',
+        'Traditional Chinese',
+        'Russian',
+        'Polish',
+    ];
+
     public function __construct()
     {
     }
 
     public function create(array $data): CardProduct
     {
-        Log::debug($data);
-
-        $category = CardCategory::firstOrCreate([
-            'name' => $data['category']
-        ]);
+        $category = CardCategory::find($data['category']);
 
         $series = CardSeries::where('name', $data['series'])->where('card_category_id', $category->id)->first();
 
@@ -76,37 +107,10 @@ class CardProductService
     {
         return [
             'category' => CardCategory::pluck('name','id'),
-            'rarity' => [
-                'Common',
-                'Uncommon',
-                'Rare',
-            ],
-            'edition' => [
-                '1st Edition',
-                'Shadowless',
-                'Unlimited',
-            ],
-            'surface' => [
-                'Holo',
-                'Cracked Ice Holo',
-                'Cosmos Holo',
-                'Reverse Holo',
-                'Reverse Foil',
-            ],
-            'language' => [
-                'Japanese',
-                'English',
-                'Dutch',
-                'German',
-                'French',
-                'Italian',
-                'Spanish',
-                'Portuguese',
-                '(South) Korean',
-                'Traditional Chinese',
-                'Russian',
-                'Polish',
-            ]
+            'rarity' => CardProductService::CARD_RARITIES,
+            'edition' => CardProductService::CARD_EDITIONS,
+            'surface' => CardProductService::CARD_SURFACES,
+            'language' => CardProductService::CARD_LANGUAGES
         ];
     }
 }

@@ -25,6 +25,7 @@ export class FilesRepository extends Repository<UploadFileEntity> {
             contentType: input?.contentType ?? file.type,
             size: input?.size ?? file.size,
             prefix: input?.prefix ?? '',
+            directory: input?.directory ?? '',
             suffix: input?.suffix ?? '',
         });
 
@@ -34,7 +35,7 @@ export class FilesRepository extends Repository<UploadFileEntity> {
             },
         });
 
-        return data.url;
+        return data.publicUrl;
     }
 
     private async presignUploadFile(input: PresignUploadFileDto): Promise<UploadFileEntity> {

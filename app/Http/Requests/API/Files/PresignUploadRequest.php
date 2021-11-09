@@ -4,7 +4,7 @@ namespace App\Http\Requests\API\Files;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadRequest extends FormRequest
+class PresignUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,6 +28,7 @@ class UploadRequest extends FormRequest
             'content_type' => ['required'],
             'size' => ['required', 'integer'],
             'prefix' => [],
+            'directory' => [],
             'suffix' => [],
         ];
     }

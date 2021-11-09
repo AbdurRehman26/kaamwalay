@@ -31,9 +31,25 @@ it("should presign correctly", function () {
     $response->assertOk();
     $response->assertJsonStructure([
         'data' => [
-            'url',
+            'signed_url',
+            'public_url',
             'key',
             'size',
         ],
     ]);
+});
+
+it('should correctly presign custom path file', function () {
+    $this->actingAs($this->user);
+    $response = postJson('/api/files/presign', [
+        'file_name' => 'test.jpg',
+        'content_type' => 'image/jpeg',
+        'size' => 1024,
+        'directory' => 'custom-dir',
+        'prefix' => 'custom-prefix',
+        'suffix' => 'custom-suffix',
+    ]);
+
+    $response->assertOk();
+    $response->assertJsonPath('data.key', 'custom-prefix/custom-dir/custom-suffix.jpg');
 });

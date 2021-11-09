@@ -4,7 +4,7 @@ export class UploadFileEntity {
     public contentType!: string;
     public prefix!: string;
     public suffix!: string;
-    public url!: string;
+    public publicUrl!: string;
     public key!: string;
     public signedUrl!: string;
 }

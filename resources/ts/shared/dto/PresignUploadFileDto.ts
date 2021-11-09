@@ -3,5 +3,6 @@ export class PresignUploadFileDto {
     public size!: number;
     public contentType!: string;
     public prefix?: string;
+    public directory?: string;
     public suffix?: string;
 }

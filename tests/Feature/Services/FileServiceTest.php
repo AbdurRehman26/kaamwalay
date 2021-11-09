@@ -16,6 +16,6 @@ it("should preSign url correctly", function () {
     $result = $this->fileService->preSignFile($file);
 
     expect($result)->toBeInstanceOf(UploadFile::class);
-    expect($file->getUrl())->toContain("/prefix/path/");
-    expect($file->getUrl())->toContain("/suffix/file.txt");
+    expect($file->getPublicUrl())->toContain("/prefix/path/");
+    expect($file->getPublicUrl())->toContain("/suffix/file.txt");
 });

@@ -2,34 +2,28 @@
 
 namespace App\Services\FileService;
 
-use App\Http\Requests\API\Files\UploadRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
-    public function preSignFile(UploadFile $file): UploadFile
+    public function presignUploadFile(UploadFile $file): UploadFile
     {
         $key = $this->generateKey($file);
-        $signedUrl = $this->preSignUploadUrl($key, $file->getContentType());
+        $signedUrl = $this->getSignedUrl($key, $file->getContentType());
         $url = Storage::disk('s3')->url($key);
 
-        return $file->setUrl($url)->setSignedUrl($signedUrl)->setKey($key);
+        return $file->setPublicUrl($url)->setSignedUrl($signedUrl)->setKey($key);
     }
 
-    public function preSignFileFromRequest(UploadRequest $request): UploadFile
-    {
-        return $this->preSignFile(UploadFile::fromRequest($request));
-    }
-
-    private function getClient()
+    private function getStorageClient()
     {
         return Storage::disk('s3')->getDriver()->getAdapter()->getClient();
     }
 
-    protected function preSignUploadUrl($key, $contentType): string
+    protected function getSignedUrl($key, $contentType): string
     {
-        $client = $this->getClient();
+        $client = $this->getStorageClient();
         $expiry = "+10 minutes";
 
         $command = $client->getCommand('PutObject', [
@@ -39,6 +33,7 @@ class FileService
         ]);
 
         $request = $client->createPresignedRequest($command, $expiry);
+
         return (string) $request->getUri();
     }
 
@@ -52,6 +47,7 @@ class FileService
 
         $now = Carbon::now();
         $extension = pathinfo($file->getFileName(), PATHINFO_EXTENSION);
+        $hash = sha1($file->getFileName()."_".$file->getSize()."_".$file->getContentType());
         $data = [
             "uid" => $userId,
             "year" => $now->year,
@@ -61,14 +57,13 @@ class FileService
             "min" => $now->minute,
             "sec" => $now->second,
             "ext" => $extension,
+            "hash" => $hash,
         ];
 
-        $hash = sha1($file->getFileName()."_".$file->getSize()."_".$file->getContentType());
         $segments = [
-            "users/{uid}/{year}-{mon}-{day}",
-            $file->getPrefix(),
-            $hash,
-            $file->getSuffix(),
+            $file->getPrefix('users/{uid}/files'),
+            $file->getDirectory('dates/{year}-{mon}-{day}'),
+            $file->getSuffix('{hash}'),
         ];
 
         $segments = array_map('trim', $segments);
@@ -80,7 +75,11 @@ class FileService
         $path = array_map('trim', $path);
         $segments = array_values(array_filter($path));
 
-        return implode('/', $segments).'.'.$extension;
+        if ($extension) {
+            $extension = '.'.$extension;
+        }
+
+        return implode('/', $segments).$extension;
     }
 
     private function buildPath(string $path, array $data): string

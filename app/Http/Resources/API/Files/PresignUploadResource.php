@@ -4,7 +4,7 @@ namespace App\Http\Resources\API\Files;
 
 use App\Http\Resources\API\BaseResource;
 
-class UploadResource extends BaseResource
+class PresignUploadResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -18,10 +18,8 @@ class UploadResource extends BaseResource
             'size' => $this->getSize(),
             'file_name' => $this->getFileName(),
             'content_type' => $this->getContentType(),
-            'prefix' => $this->getPrefix(),
-            'suffix' => $this->getSuffix(),
             'signed_url' => $this->getSignedUrl(),
-            'url' => $this->getUrl(),
+            'public_url' => $this->getPublicUrl(),
             'key' => $this->getKey(),
         ];
     }

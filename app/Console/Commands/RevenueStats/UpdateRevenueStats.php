@@ -36,11 +36,11 @@ class UpdateRevenueStats extends Command
             Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1)
         )->format('Y-m-d');
 
-        $this->log("Revenue Stats Daily for Date : " . $currentDate . " Starting");
+        $this->log('Revenue Stats Daily for Date : ' . $currentDate . ' Starting');
 
         $revenueStats = $revenueStatsService->addDailyStats($currentDate);
 
-        $this->log("Revenue Stats Daily for Month : " . Carbon::parse($currentDate)->format('F-Y') . " Starting");
+        $this->log('Revenue Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Starting');
 
         $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($currentDate);
 
@@ -49,8 +49,8 @@ class UpdateRevenueStats extends Command
                 ->notify(new RevenueStatsUpdated($revenueStats, $revenueStatsMonthly));
         }
 
-        $this->log("Revenue Stats Daily for Date : " . $currentDate . " Completed");
-        $this->log("Revenue Stats Daily for Month : " . Carbon::parse($currentDate)->format('F-Y') . " Completed");
+        $this->log('Revenue Stats Daily for Date : ' . $currentDate . ' Completed');
+        $this->log('Revenue Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Completed');
 
         return 0;
     }

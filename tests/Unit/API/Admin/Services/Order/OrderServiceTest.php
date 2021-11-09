@@ -87,5 +87,4 @@ it('fires an event when extra charge is made', function () {
     Event::assertDispatched(function (ExtraChargeSuccessful $event) use ($order) {
         return $event->order->id === $order->id && $event->order->lastOrderPayment->id === $order->lastOrderPayment->id;
     });
-
 });

@@ -35,12 +35,12 @@ class OrderItemCardChangedListener implements ShouldQueue
         }
     }
 
-    protected function handleGraded($event)
+    protected function handleGraded(OrderItemCardChangedEvent $event): void
     {
         $this->updatePopReports($event);
     }
 
-    protected function updatePopReports($event): void
+    protected function updatePopReports(OrderItemCardChangedEvent $event): void
     {
         $this->popReportService->updateCardProductsReport($event->previousCardProduct);
         $this->popReportService->updateSetsReport($event->previousCardProduct->cardSet);

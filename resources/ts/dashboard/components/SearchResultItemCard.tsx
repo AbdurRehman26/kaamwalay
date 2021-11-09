@@ -96,9 +96,9 @@ const useStyles = makeStyles((theme) => ({
 
 type SearchResultItemCardProps = {
     image: string;
-    subtitle: any;
-    shortname?: any;
-    title: string;
+    longName: any;
+    shortName?: any;
+    name: string;
     addedMode?: boolean;
     reviewMode?: boolean;
     id: any;
@@ -109,7 +109,7 @@ type SearchResultItemCardProps = {
 function SearchResultItemCard(props: SearchResultItemCardProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const { image, title, subtitle, id, addedMode, reviewMode, onPreview, onSelectCard } = props;
+    const { image, name, longName, id, addedMode, reviewMode, onPreview, onSelectCard } = props;
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const isCardSelected = selectedCards.find((card: Record<string, any>) => card.id === id);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
@@ -127,7 +127,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
     );
 
     function handleMobileDeselect() {
-        const state = { image, title, subtitle, id };
+        const state = { image, name, longName, id };
 
         ReactGA.event({
             category: EventCategories.Cards,
@@ -143,7 +143,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
             <RootComponent className={classes.container} onClick={onSelectCard}>
                 <div className={classes.leftSide}>
                     <div className={classes.pictureContainer}>
-                        <img src={image} alt={title} className={classes.cardImage} />
+                        <img src={image} alt={name} className={classes.cardImage} />
 
                         {onPreview ? (
                             <ButtonBase component={'a'} onClick={handlePreview} className={classes.previewOverlay}>
@@ -153,20 +153,20 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                     </div>
                     <div className={classes.cardMetadataContainer}>
                         <Typography variant={'body2'} className={font.fontWeightBold} align={'left'}>
-                            {title}
+                            {name}
                         </Typography>
                         {/* Using dangerouslySetInnerHTML is completely safe here, because this data is coming from algolia
                         the client has no control over this data, therefore it won't result in an XSS.
                         We're using this because algolia is giving us the highlighted elements wrapper in <ais-highlight-0000000000 />
                         which we can then style to display the searched term bolded in the results*/}
-                        <div title={props.shortname.replace(/<[^>]*>?/gm, '')}>
+                        <div title={props.shortName.replace(/<[^>]*>?/gm, '')}>
                             <Typography
                                 variant={'body2'}
                                 color={'textSecondary'}
                                 className={classes.shortName}
                                 align={'left'}
                                 dangerouslySetInnerHTML={{
-                                    __html: getStringTruncated(props.shortname, isMobile ? 30 : addedMode ? 50 : 70),
+                                    __html: getStringTruncated(props.shortName, isMobile ? 30 : addedMode ? 50 : 70),
                                 }}
                             />
                         </div>
@@ -176,7 +176,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                             color={'textSecondary'}
                             className={classes.subtitle}
                             align={'left'}
-                            dangerouslySetInnerHTML={{ __html: props.subtitle }}
+                            dangerouslySetInnerHTML={{ __html: props.longName }}
                         />
                     </div>
                 </div>

@@ -169,11 +169,10 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
             selectedCards.map((item) =>
                 plainToClass(CardProductEntity, {
                     id: item.id,
-                    name: item.title,
-                    cardCategoryName: item.subtitle,
+                    name: item.name,
                     imagePath: item.image,
-                    shortName: item.shortname,
-                    longName: item.subtitle,
+                    shortName: item.shortName,
+                    longName: item.longName,
                 }),
             ),
         [selectedCards],
@@ -271,15 +270,15 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                     {selectedCards.map((row: SearchResultItemCardProps) => (
                         <>
                             <div className={classes.mobileViewContainer}>
-                                <div title={row.shortname || row.title}>
+                                <div title={row.shortName || row.name}>
                                     <SearchResultItemCard
                                         onPreview={handlePreview}
                                         key={row.id}
                                         id={row.id}
                                         image={row.image}
-                                        subtitle={row.subtitle}
-                                        shortname={row.shortname}
-                                        title={row.title}
+                                        longName={row.longName}
+                                        shortName={row.shortName}
+                                        name={row.name}
                                         addedMode
                                         reviewMode
                                     />
@@ -373,9 +372,9 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                             key={row.id}
                                             id={row.id}
                                             image={row.image}
-                                            subtitle={row.subtitle}
-                                            shortname={row.shortname}
-                                            title={row.title}
+                                            longName={row.longName}
+                                            shortName={row.shortName}
+                                            name={row.name}
                                             addedMode
                                         />
                                     </TableCell>

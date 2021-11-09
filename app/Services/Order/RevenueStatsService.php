@@ -16,11 +16,11 @@ class RevenueStatsService
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forDate($currentDate)
             ->groupBy('order_payments.order_id')
-            ->select(
+            ->select([
                 'order_payments.order_id',
                 DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
                 DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.provider_fee) ELSE order_payments.provider_fee END) as provider_fee'),
-            )
+            ])
             ->get();
 
         $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
@@ -37,11 +37,11 @@ class RevenueStatsService
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forMonth($currentDate)
             ->groupBy('order_payments.order_id')
-            ->select(
+            ->select([
                 'order_payments.order_id',
                 DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
                 DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.provider_fee) ELSE order_payments.provider_fee END) as provider_fee'),
-            )
+            ])
             ->get();
 
         $revenue = RevenueStatsMonthly::firstOrCreate(['event_at' => $currentDate]);
@@ -106,7 +106,7 @@ class RevenueStatsService
 
         $order->orderPayments->map(function ($payment) use (&$calculatedProfit, &$calculatedRevenue) {
             $calculatedProfit += $this->calculateProfit($payment);
-            $calculatedRevenue += $this->calculateRevenue($payment);
+            $calculatedRevenue += $payment->amount;
 
             return $payment;
         });

@@ -18,18 +18,19 @@ class CardProductsImport implements ToCollection, WithBatchInserts, WithChunkRea
         CardProduct::disableSearchSyncing();
 
         foreach ($rows as $key => $row) {
-            $cardSeries = CardSeries::where('name',  '=', $row['series'] . ' Era')
+            try {
+                $cardSeries = CardSeries::where('name',  '=', $row['series'] . ' Era')
                 ->orWhere('name', '=', $row['series'])->first();
 
-            $cardSet = CardSet::where('name', '=', $row['set'])
+                $cardSet = CardSet::where('name', '=', $row['set'])
                 ->where('card_series_id', '=', $cardSeries->id)->first();
 
-            $edition = ! empty($row['edition']) ? $row['edition'] : '';
-            $surface = ! empty($row['surface']) ? $row['surface'] : '';
-            $variant = ! empty($row['variant']) ? $row['variant'] : '';
-            $cardNumber = ! empty($row['card_number']) ? $row['card_number'] : '';
+                $edition = ! empty($row['edition']) ? $row['edition'] : '';
+                $surface = ! empty($row['surface']) ? $row['surface'] : '';
+                $variant = ! empty($row['variant']) ? $row['variant'] : '';
+                $cardNumber = ! empty($row['card_number']) ? $row['card_number'] : '';
 
-            $cardProduct = CardProduct::where('card_set_id', '=', $cardSet->id)
+                $cardProduct = CardProduct::where('card_set_id', '=', $cardSet->id)
                 ->whereName(trim($row['card_name']))
                 ->where('card_number', '=', $cardNumber)
                 ->where('edition', $edition)
@@ -39,12 +40,26 @@ class CardProductsImport implements ToCollection, WithBatchInserts, WithChunkRea
                 ->get()
                 ->first();
 
-            if ($cardProduct) {
-                continue;
-            }
+                if ($cardProduct) {
+                    continue;
+                }
 
-            dd($cardProduct);
-            dd(1);
+                $releaseDate = \Carbon\Carbon::parse($row['release_date']);
+                $cardProductData = $row->toArray();
+                $cardProductData['card_category_id'] = 1;
+                $cardProductData['name'] = $cardProductData['card_name'];
+                $cardProductData['release_date_formatted'] = $releaseDate->format('M jS Y');
+                $cardProductData['release_date'] = $releaseDate->toDateString();
+                $cardProductData['release_year'] = $releaseDate->year;
+                $cardProductData['edition'] = $edition;
+                $cardProductData['variant'] = $variant;
+                $cardProductData['surface'] = $surface;
+
+                unset($cardProductData['card_name']);
+                CardProduct::create($cardProductData);
+            } catch (\Exception $e) {
+                dd($row, $cardSeries, $cardSet);
+            }
         }
     }
 

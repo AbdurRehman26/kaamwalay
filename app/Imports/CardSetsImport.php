@@ -14,8 +14,9 @@ class CardSetsImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
+
             $cardSeries = CardSeries::whereName($row['serie_id'])->first();
-            $cardSet = CardSet::whereName($row['name'])->first();
+            $cardSet = CardSet::whereName($row['name'])->where('card_series_id', $cardSeries->id)->first();
 
             if (empty($cardSet)) {
                 $releaseDate = Carbon::parse($row['release_date']);

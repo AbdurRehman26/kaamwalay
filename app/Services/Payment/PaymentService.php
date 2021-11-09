@@ -115,6 +115,7 @@ class PaymentService
         $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
             $orderPayment->provider_fee = $providerInstance->calculateFee($orderPayment);
             $orderPayment->save();
+
             return $orderPayment;
         });
     }

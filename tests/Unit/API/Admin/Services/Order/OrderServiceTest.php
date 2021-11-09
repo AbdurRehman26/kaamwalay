@@ -48,7 +48,7 @@ beforeEach(function () {
     ];
 });
 
-test('it can create extra charge for order', function () {
+it('can create extra charge for order', function () {
     Event::fake();
 
     $order = $this->order;
@@ -72,15 +72,20 @@ test('it can create extra charge for order', function () {
     expect($orderPayment->user_id)->toEqual($user->id);
 });
 
-test('it checks if event is fired when extra charge is made', function () {
+it('fires an event when extra charge is made', function () {
     Event::fake();
 
-    $this->orderService->addExtraCharge($this->order, $this->user, [
+    $order = $this->order;
+
+    $this->orderService->addExtraCharge($order, $this->user, [
         'notes' => $this->faker->sentence(),
         'amount' => $this->amount,
-        'payment_method_id' => $this->order->payment_method_id,
+        'payment_method_id' => $order->payment_method_id,
         'type' => OrderPayment::TYPE_EXTRA_CHARGE,
     ], $this->paymentResponse);
 
-    Event::assertDispatched(ExtraChargeSuccessful::class);
+    Event::assertDispatched(function (ExtraChargeSuccessful $event) use ($order) {
+        return $event->order->id === $order->id && $event->order->lastOrderPayment->id === $order->lastOrderPayment->id;
+    });
+
 });

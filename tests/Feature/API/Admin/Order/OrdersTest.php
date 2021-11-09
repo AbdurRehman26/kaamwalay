@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Models\UserCard;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -53,6 +54,13 @@ beforeEach(function () {
             ]
         ))
         ->create();
+
+    UserCard::factory()->state(new Sequence(
+        [
+            'order_item_id' => 1,
+            'certificate_number' => '000000100',
+        ]
+    ))->create();
 
     $this->sampleAgsResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_card_grades_collection_200.json'
@@ -242,6 +250,7 @@ it(
     fn () => $this->orders[0]->order_number,
     fn () => $this->orders[0]->user->customer_number,
     fn () => $this->orders[0]->user->first_name,
+    fn () => '000000100', // cert number of the first order's first item
 ]);
 
 test('an admin can complete review of an order', function () {

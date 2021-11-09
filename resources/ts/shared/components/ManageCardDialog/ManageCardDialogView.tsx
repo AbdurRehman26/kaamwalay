@@ -164,7 +164,7 @@ export const ManageCardDialogView = forwardRef(
                                             <Typography variant={'caption'} className={classes.shortNameText}>
                                                 {card.getShortName()}
                                             </Typography>
-                                            <Typography variant={'body2'}>{card.getDescription()}</Typography>
+                                            <Typography variant={'body2'}>{card.getLongName()}</Typography>
 
                                             <Grid
                                                 container

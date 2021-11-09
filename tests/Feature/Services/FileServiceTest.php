@@ -4,6 +4,7 @@ use App\Services\FileService\FileService;
 use App\Services\FileService\UploadFile;
 
 beforeEach(function () {
+    Storage::fake('s3');
     $this->fileService = $this->app->make(FileService::class);
 });
 

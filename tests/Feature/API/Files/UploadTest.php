@@ -21,6 +21,8 @@ it("should not presign correctly due to the missing details", function () {
 });
 
 it("should presign correctly", function () {
+    Storage::fake('s3');
+
     $this->actingAs($this->user);
     $response = postJson('/api/files/presign', [
         'file_name' => 'test.jpg',
@@ -40,6 +42,8 @@ it("should presign correctly", function () {
 });
 
 it('should correctly presign custom path file', function () {
+    Storage::fake('s3');
+
     $this->actingAs($this->user);
     $response = postJson('/api/files/presign', [
         'file_name' => 'test.jpg',

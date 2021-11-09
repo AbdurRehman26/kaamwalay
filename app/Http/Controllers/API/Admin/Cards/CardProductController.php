@@ -17,7 +17,6 @@ class CardProductController extends Controller
 
     public function store(StoreCardProductRequest $request): CardProductResource | JsonResponse
     {
-        // dd($request->all());
         try {
             $card = $this->cardProductService->create($request->validated());
         } catch (Exception $e) {
@@ -32,4 +31,8 @@ class CardProductController extends Controller
         return new CardProductResource($card);
     }
 
+    public function getOptionsValues()
+    {
+        return new JsonResponse($this->cardProductService->getOptionsValues());
+    }
 }

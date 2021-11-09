@@ -71,4 +71,42 @@ class CardProductService
 
         return $card;
     }
+
+    public function getOptionsValues()
+    {
+        return [
+            'category' => CardCategory::pluck('name','id'),
+            'rarity' => [
+                'Common',
+                'Uncommon',
+                'Rare',
+            ],
+            'edition' => [
+                '1st Edition',
+                'Shadowless',
+                'Unlimited',
+            ],
+            'surface' => [
+                'Holo',
+                'Cracked Ice Holo',
+                'Cosmos Holo',
+                'Reverse Holo',
+                'Reverse Foil',
+            ],
+            'language' => [
+                'Japanese',
+                'English',
+                'Dutch',
+                'German',
+                'French',
+                'Italian',
+                'Spanish',
+                'Portuguese',
+                '(South) Korean',
+                'Traditional Chinese',
+                'Russian',
+                'Polish',
+            ]
+        ];
+    }
 }

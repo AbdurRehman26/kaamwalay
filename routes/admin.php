@@ -48,4 +48,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     Route::post('cards',[CardProductController::class, 'store']);
+    Route::get('cards/options',[CardProductController::class, 'getOptionsValues']);
 });

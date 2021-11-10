@@ -9,7 +9,6 @@ export class CardProductEntity extends Entity {
     public releaseDate!: string;
     public cardNumberOrder!: string;
     public imagePath!: string;
-    public fullName!: string;
     public shortName!: string;
     public longName!: string;
 
@@ -17,15 +16,11 @@ export class CardProductEntity extends Entity {
         return this.name || 'Unknown';
     }
 
-    public getDescription() {
-        return this.longName || 'No card description.';
-    }
-
-    public getFullName() {
-        return this.longName;
-    }
-
     public getShortName() {
         return this.shortName;
+    }
+
+    public getLongName() {
+        return this.longName || 'Unknown';
     }
 }

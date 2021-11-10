@@ -18,6 +18,7 @@ class EmailService
     public const TEMPLATE_SLUG_FORGOT_PASSWORD = 'reset-password-robograding';
     public const TEMPLATE_PASSWORD_CHANGED = 'new-password-confirmation-robograding';
     public const TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER = 'enter-tracking-robograding';
+    public const TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED = 'extra-charge-robograding';
     public const TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED = 'admin-new-submission-robograding';
 
     public const SUBJECT = [
@@ -30,6 +31,7 @@ class EmailService
         self::TEMPLATE_PASSWORD_CHANGED => 'Your password has been changed!',
         self::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER => 'Enter a tracking number!',
         self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED => 'We have issued a refund on your submission.',
+        self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED => 'There has been an extra charge on your submission.',
         self::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED => 'New Robograding Submission!',
     ];
 

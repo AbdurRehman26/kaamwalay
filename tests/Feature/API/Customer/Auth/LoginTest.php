@@ -68,12 +68,16 @@ test('ags user can login', function () {
     Config::set('services.ags.base_url', 'http://test.test');
 
     $testEmail = 'test@test.test';
+    $firstName = 'firstname';
+    $lastName = 'lastname';
     Http::fake([
         config('services.ags.base_url') . '/login/' => Http::response([
             'access_token' => 'token',
             'user' => [
                 'username' => 'test',
                 'email' => $testEmail,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
             ],
         ], 200),
     ]);
@@ -85,6 +89,8 @@ test('ags user can login', function () {
     $response->assertStatus(200);
     $response->assertJsonStructure(['access_token', 'type', 'expiry']);
     expect($user->email)->toBe($testEmail);
+    expect($user->first_name)->toBe($firstName);
+    expect($user->last_name)->toBe($lastName);
 })->group('auth');
 
 test('a logged in customer cannot login', function () {

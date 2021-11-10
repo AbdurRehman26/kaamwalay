@@ -7,6 +7,7 @@ use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\OrderService;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Events\API\Admin\Order\RefundSuccessful;
 
 uses(WithFaker::class);
 
@@ -85,6 +86,40 @@ it('fires an event when extra charge is made', function () {
     ], $this->paymentResponse);
 
     Event::assertDispatched(function (ExtraChargeSuccessful $event) use ($order) {
+        return $event->order->id === $order->id && $event->order->lastOrderPayment->id === $order->lastOrderPayment->id;
+    });
+});
+
+it('fires an event when refund is made', function () {
+    Event::fake();
+
+    $order = $this->order;
+
+    $refundResponse = [
+        'success' => true,
+        'request' => [
+            'amount' => (int) $this->amount * 100,
+            'metadata' => [
+                'Order ID' => $order->id,
+                'Order #' => $order->order_number,
+                'Notes' => $this->faker->sentence(),
+            ],
+        ],
+        'response' => [],
+        'payment_provider_reference_id' => Str::random(),
+        'amount' => $this->amount,
+        'type' => OrderPayment::TYPE_REFUND,
+        'notes' => $this->faker->sentence(),
+    ];
+
+    $this->orderService->processRefund($order, $this->user, [
+        'notes' => $this->faker->sentence(),
+        'amount' => $this->amount,
+        'payment_method_id' => $order->payment_method_id,
+        'type' => OrderPayment::TYPE_REFUND,
+    ], $refundResponse);
+
+    Event::assertDispatched(function (RefundSuccessful $event) use ($order) {
         return $event->order->id === $order->id && $event->order->lastOrderPayment->id === $order->lastOrderPayment->id;
     });
 });

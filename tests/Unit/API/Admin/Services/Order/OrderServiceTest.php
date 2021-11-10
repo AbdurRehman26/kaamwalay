@@ -64,8 +64,6 @@ beforeEach(function () {
         'type' => OrderPayment::TYPE_REFUND,
         'notes' => $this->faker->sentence(),
     ];
-
-
 });
 
 it('can create extra charge for order', function () {

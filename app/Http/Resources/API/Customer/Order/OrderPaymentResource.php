@@ -15,19 +15,16 @@ class OrderPaymentResource extends BaseResource
      */
     public function toArray($request)
     {
-        \Log::info("here");
         if (! $this->response) {
             return [];
         }
-        \Log::info("here2");
 
         if ($this->order->paymentMethod->code === 'paypal') {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
         }
-        \Log::info("here3");
 
         $hasCard = ! ($this->type === OrderPayment::TYPE_REFUND);
-        dd($hasCard);
+
         $card = null;
 
         if ($hasCard) {

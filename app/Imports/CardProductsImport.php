@@ -22,13 +22,28 @@ class CardProductsImport implements ToCollection, WithBatchInserts, WithChunkRea
                 $cardSeries = CardSeries::where('name',  '=', $row['series'] . ' Era')
                 ->orWhere('name', '=', $row['series'])->first();
 
-                $cardSet = CardSet::where('name', '=', $row['set'])
+                $cardSet = CardSet::where(function ($query) use ($row) {
+                    $query->where('name', '=', $row['set'])->
+                        orWhere('name', '=', $row['set'] . ' Set');
+                })
                 ->where('card_series_id', '=', $cardSeries->id)->first();
 
                 $edition = ! empty($row['edition']) ? $row['edition'] : '';
                 $surface = ! empty($row['surface']) ? $row['surface'] : '';
                 $variant = ! empty($row['variant']) ? $row['variant'] : '';
                 $cardNumber = ! empty($row['card_number']) ? $row['card_number'] : '';
+
+                $setNames = [
+                    'Miracle Twin',
+                    'Awakening Psychic King',
+                    'To Have Seen The Battle Rainbow',
+                    'Ultradimensional Beasts',
+                ];
+
+                if (in_array($row['set'], $setNames)) {
+                    continue;
+                }
+
 
                 $cardProduct = CardProduct::where('card_set_id', '=', $cardSet->id)
                 ->whereName(trim($row['card_name']))
@@ -58,20 +73,20 @@ class CardProductsImport implements ToCollection, WithBatchInserts, WithChunkRea
                 unset($cardProductData['card_name']);
                 CardProduct::create($cardProductData);
             } catch (\Exception $e) {
-                dd($row, $cardSeries, $cardSet);
+                dd($row, $cardSet, $key, $e->getMessage());
             }
         }
     }
 
     public function batchSize(): int
     {
-        return 1000;
+        return 9000;
         // TODO: Implement batchSize() method.
     }
 
     public function chunkSize(): int
     {
-        return 1000;
+        return 9000;
         // TODO: Implement chunkSize() method.
     }
 }

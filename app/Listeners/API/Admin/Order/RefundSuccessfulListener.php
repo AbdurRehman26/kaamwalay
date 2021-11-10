@@ -30,7 +30,7 @@ class RefundSuccessfulListener implements ShouldQueue
         $user = $event->order->user;
         $order = $event->order;
         $orderPayment = new OrderPaymentResource($event->order->firstOrderPayment);
-        $card = $orderPayment->card;
+        $card = json_decode(json_encode($orderPayment), true)['card'];
 
         $this->emailService->sendEmail(
             [[$user->email => $user->name]],

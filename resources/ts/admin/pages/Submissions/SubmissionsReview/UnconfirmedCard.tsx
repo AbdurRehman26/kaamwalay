@@ -98,7 +98,7 @@ export function UnconfirmedCard({
             <AccordionCardItemHeader
                 heading={card.getName()}
                 shortName={card.getShortName()}
-                subheading={card.getDescription()}
+                subheading={card.getLongName()}
                 image={card.imagePath}
                 onPreview={handlePreview}
                 action={

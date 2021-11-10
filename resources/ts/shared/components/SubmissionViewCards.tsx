@@ -137,9 +137,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                     {getStringTruncated(item.cardProduct.getShortName(), 65)}
                                                 </Typography>
                                             </div>
-                                            <Typography variant={'body2'}>
-                                                {item.cardProduct.getDescription()}
-                                            </Typography>
+                                            <Typography variant={'body2'}>{item.cardProduct.getLongName()}</Typography>
 
                                             {!isMobile ? (
                                                 <Box>

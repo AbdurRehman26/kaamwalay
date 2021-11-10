@@ -114,7 +114,7 @@ export function ViewCard() {
                                 {cardData?.cardProduct?.name}
                             </Typography>
                             <Typography variant={'caption'} color={'textSecondary'}>
-                                {cardData?.cardProduct?.fullName}
+                                {cardData?.cardProduct?.longName}
                             </Typography>
                         </Grid>
 

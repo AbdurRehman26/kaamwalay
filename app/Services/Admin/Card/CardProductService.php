@@ -54,32 +54,43 @@ class CardProductService
     {
         $category = CardCategory::find($data['category']);
 
-        $series = CardSeries::where('name', $data['series'])->where('card_category_id', $category->id)->first();
-
-        if(!$series){
-            $series = new CardSeries([
-                'name' => $data['series'],
-                'image_path' => '',
-                'image_bucket_path' => '',
-                'card_category_id' => $category->id,
-            ]);
-            $series->save();
+        if(array_key_exists('set_id', $data) && $data['set_id']){
+            $set = CardSet::find($data['set_id']);
         }
+        else{
 
-        $set = CardSet::where('name', $data['set'])->where('card_series_id', $series->id)->first();
+            if(array_key_exists('series_id', $data) && $data['series_id']){
+                $series = CardSeries::find($data['series_id']);
+            }
+            else{
+                $series = CardSeries::where('name', 'like' , '%' . $data['series_name'] . '%')->where('card_category_id', $category->id)->first();
 
-        if(!$set){
-            $set = new CardSet([
-                'name' => $data['set'],
-                'description' => '',
-                'image_path' => '',
-                'image_bucket_path' => '',
-                'card_category_id' => $category->id,
-                'card_series_id' => $series->id,
-                'release_date' => $data['release_date'],
-                'release_year' => (new Carbon($data['release_date']))->format('Y'),
-            ]);
-            $set->save();
+                if(!$series){
+                    $series = new CardSeries([
+                        'name' => $data['series_name'],
+                        'image_path' => $data['series_image'],
+                        'image_bucket_path' => $data['series_image'],
+                        'card_category_id' => $category->id,
+                    ]);
+                    $series->save();
+                }
+            }
+
+            $set = CardSet::where('name', 'like' , '%' . $data['set_name'] . '%')->where('card_series_id', $series->id)->first();
+
+            if(!$set){
+                $set = new CardSet([
+                    'name' => $data['set_name'],
+                    'description' => '',
+                    'image_path' => $data['set_image'],
+                    'image_bucket_path' => $data['set_image'],
+                    'card_category_id' => $category->id,
+                    'card_series_id' => $series->id,
+                    'release_date' => $data['release_date'],
+                    'release_year' => (new Carbon($data['release_date']))->format('Y'),
+                ]);
+                $set->save();
+            }
         }
 
         $card = new CardProduct([
@@ -109,7 +120,9 @@ class CardProductService
             'rarity' => CardProductService::CARD_RARITIES,
             'edition' => CardProductService::CARD_EDITIONS,
             'surface' => CardProductService::CARD_SURFACES,
-            'language' => CardProductService::CARD_LANGUAGES
+            'language' => CardProductService::CARD_LANGUAGES,
+            'series' => CardSeries::with('cardSets:id,card_series_id,name,image_path,release_date')
+                        ->select('id','name','image_path')->get(),
         ];
     }
 }

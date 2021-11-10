@@ -31,6 +31,7 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
         $order = $event->order;
         $user = $order->user;
         $card = $orderPayment->card;
+
         $this->emailService->sendEmail(
             [[$user->email => $user->name]],
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED],

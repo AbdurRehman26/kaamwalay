@@ -242,7 +242,7 @@ class OrderService
 
             $order->createOrderPayment($paymentResponse, $user);
         });
-
+        \Log::info("Extra charge");
         ExtraChargeSuccessful::dispatch($order);
     }
 

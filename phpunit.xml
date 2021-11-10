@@ -33,5 +33,7 @@
         <server name="AGS_BASE_URL" value="https://ags.api"/>
         <server name="AGS_AUTHORIZATION_TOKEN" value="12345"/>
         <server name="MANDRILL_KEY" value="12345"/>
+        <server name="AWS_BUCKET" value="robograding"/>
+        <server name="AWS_DEFAULT_REGION" value="us-west-2"/>
     </php>
 </phpunit>

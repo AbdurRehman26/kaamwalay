@@ -7,6 +7,8 @@ import { useConfiguration } from '../../hooks/useConfiguration';
 import ManageCardDialogHeader from './ManageCardDialogHeader';
 import ManageCardDialogResults from './ManageCardDialogResults';
 import ManageCardDialogSearch from './ManageCardDialogSearch';
+import ManagerCardDialogSelectedCardPreview from '@shared/components/ManageCardDialog/ManagerCardDialogSelectedCardPreview';
+import { useAppSelector } from '@admin/redux/hooks';
 
 interface ListCardsViewProps {}
 
@@ -26,6 +28,7 @@ const useStyles = makeStyles(
 export const ManageCardDialogList = forwardRef((props: ListCardsViewProps, ref: ForwardedRef<HTMLDivElement>) => {
     const classes = useStyles();
     const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
+    const selectedCard = useAppSelector((state) => state.manageCardDialog.selectedCard);
 
     const searchClient = useMemo(
         () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
@@ -38,6 +41,7 @@ export const ManageCardDialogList = forwardRef((props: ListCardsViewProps, ref: 
             <Box p={3}>
                 <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
                     <Configure hitsPerPage={32} />
+                    {selectedCard ? <ManagerCardDialogSelectedCardPreview /> : null}
                     <ManageCardDialogSearch />
                     <ManageCardDialogResults />
                 </InstantSearch>

@@ -30,7 +30,7 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
         $orderPayment = new OrderPaymentResource($event->order->lastOrderPayment);
         $order = $event->order;
         $user = $order->user;
-        $card = $orderPayment? json_decode(json_encode($orderPayment), true)['card'] : null;
+        $card = json_decode(json_encode($orderPayment), true)['card'];
 
         $this->emailService->sendEmail(
             [[$user->email => $user->name]],

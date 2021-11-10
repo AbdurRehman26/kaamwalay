@@ -66,7 +66,7 @@ return [
     |
     */
 
-//    'middleware' => ['web', 'auth.basic:web'],
+    'middleware' => ['web', 'auth.basic:web'],
 
     /*
     |--------------------------------------------------------------------------

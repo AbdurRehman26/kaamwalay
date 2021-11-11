@@ -11,9 +11,12 @@
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *          {
- *              "category": {
- *                  "1": "Pokemon"
- *              },
+ *              "category": [
+ *                  {
+ *                      "id": 1,
+ *                      "name": "Pokemon"
+ *                  }
+ *              ],
  *              "rarity": [
  *                  "Common",
  *                  "Uncommon",

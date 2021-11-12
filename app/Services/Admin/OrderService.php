@@ -261,6 +261,6 @@ class OrderService
             $order->createOrderPayment($refundResponse, $user);
         });
 
-        RefundSuccessful::dispatch($order);
+        RefundSuccessful::dispatch($order, $data);
     }
 }

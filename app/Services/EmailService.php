@@ -14,6 +14,7 @@ class EmailService
     public const TEMPLATE_SLUG_SUBMISSION_ARRIVED = 'arrived-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_SHIPPED = 'shipped-robograding';
     public const TEMPLATE_SLUG_SUBMISSION_GRADED = 'graded-robograding-1';
+    public const TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED = 'refund-robograding';
     public const TEMPLATE_SLUG_FORGOT_PASSWORD = 'reset-password-robograding';
     public const TEMPLATE_PASSWORD_CHANGED = 'new-password-confirmation-robograding';
     public const TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER = 'enter-tracking-robograding';
@@ -29,6 +30,7 @@ class EmailService
         self::TEMPLATE_SLUG_FORGOT_PASSWORD => 'Reset your password!',
         self::TEMPLATE_PASSWORD_CHANGED => 'Your password has been changed!',
         self::TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER => 'Enter a tracking number!',
+        self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED => 'We have issued a refund on your submission.',
         self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED => 'There has been an extra charge on your submission.',
         self::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED => 'New Robograding Submission!',
     ];

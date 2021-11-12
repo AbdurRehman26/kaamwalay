@@ -18,7 +18,6 @@ class CardProductReferenceIdsImport implements ToCollection, WithBatchInserts, W
         CardProduct::disableSearchSyncing();
 
         foreach ($rows as $key => $row) {
-
             $cardSeries = CardSeries::where('name',  '=', $row['series'] . ' Series')
                     ->orWhere('name', '=', $row['series'])->first();
 
@@ -29,39 +28,48 @@ class CardProductReferenceIdsImport implements ToCollection, WithBatchInserts, W
             $surface = ! empty($row['surface']) ? $row['surface'] : '';
             $variant = ! empty($row['variant']) ? $row['variant'] : '';
             $cardNumber = ! empty($row['card_number']) ? $row['card_number'] : '';
+            $cardNumberOrder = ! empty($row['card_number_order']) ? $row['card_number_order'] : '';
 
             $cardProduct = CardProduct::where('card_set_id', '=', $cardSet->id)
                     ->whereName(trim($row['card_name']))
-                    ->where('card_number', '=', $cardNumber)
-                    ->where('edition', $edition)
-//                ->where('surface', $surface)
-                    ->where('variant', $variant)
-                    ->whereNull('card_reference_id')
-                    ->get()
-                    ->first();
+                    ->whereNull('card_reference_id');
 
-            $keys = [127, 159, 173, 252, 587, 664, 665, 863, 885, 892, 1062, 1389, 1390, 1391, 1392, 1581, 1582, 1629, 1699, 2082,
-                2083, 2114, 2318, 2369, 3918, 3919, 3920, 7512, 7513, 7514, 14307, 14342, 14343, 14841,
-                ];
-
-            if (in_array($key, $keys)
-                || ($key > 255 && $key < 378)
-                || ($key > 685 && $key < 697)
-                || ($key > 1784 && $key < 1881)
-                || ($key > 4083 && $key < 4093)
-                || ($key > 4541 && $key < 4574)
-                || ($key > 10312 && $key < 10339)
-                || ($key > 11555 && $key < 11589)
-                || ($key > 11737 && $key < 11770)
-                || ($key > 13272 && $key < 13282)
-            ) {
+            if ($cardProduct->get()->count() === 1) {
                 continue;
             }
+
+            if ($cardProduct->get()->count() > 1) {
+                $cardProduct->where('image_path', '=', $row['image']);
+            }
+
+            if ($cardProduct->get()->count() > 1) {
+                $cardProduct->where('card_number_order', '=', $cardNumberOrder);
+            }
+
+            if ($cardProduct->get()->count() > 1) {
+                if ($this->compareModels($cardProduct->get())) {
+                    echo("Same models\n");
+                    continue;
+                }
+            }
+
+            if ($cardProduct->get()->count() > 1) {
+                dd($row, $cardProduct->get());
+            }
+
+            if ($cardProduct->get()->count() === 0) {
+                dd($row, $cardProduct->toSql(), $cardProduct->getBindings(), $key);
+                dd($row, $key);
+            }
+            echo $cardProduct->get()->count() . "\n";
+
+            continue;
+            dd($row, $cardProduct->get()->count());
 
             if (empty($cardProduct)) {
                 dd($variant, $edition, $cardProduct, $key, $cardSet->id, $row);
             }
-
+            echo $key;
 
             if ($cardProduct['surface'] !== $surface) {
                 \Log::info("Incorrect surface values");
@@ -70,15 +78,29 @@ class CardProductReferenceIdsImport implements ToCollection, WithBatchInserts, W
         }
     }
 
+    protected function compareModels(collection $cardProducts): bool
+    {
+        foreach ($cardProducts as $key => $cardProduct) {
+            if ($key + 1 < $cardProducts->count()) {
+                if ($cardProduct->getSearchableName() !== $cardProducts[$key + 1]->getSearchableName()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
     public function batchSize(): int
     {
-        return 15000;
+        return 25000;
         // TODO: Implement batchSize() method.
     }
 
     public function chunkSize(): int
     {
-        return 15000;
+        return 25000;
         // TODO: Implement chunkSize() method.
     }
 }

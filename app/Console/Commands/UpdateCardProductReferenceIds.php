@@ -39,7 +39,7 @@ class UpdateCardProductReferenceIds extends Command
      */
     public function handle()
     {
-        Excel::import(new CardProductReferenceIdsImport, storage_path('app/public/robograding_production_card_products.csv'));
+        Excel::import(new CardProductReferenceIdsImport, storage_path('app/public/master_robograding_production_card_products.csv'));
         return Command::SUCCESS;
     }
 }

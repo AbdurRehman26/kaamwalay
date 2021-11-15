@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { castArray } from 'lodash';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import { AuthenticationEnum } from '../constants/AuthenticationEnum';
 import { RolesEnum } from '../constants/RolesEnum';
@@ -44,7 +44,15 @@ export function ProtectedRoute({ redirectRoute, roles, ...rest }: ProtectedRoute
     }
 
     if (!authenticated || (roles && !hasAtLeastOneRole)) {
-        return <NativeRedirect to={redirectRoute ?? AuthenticationEnum.SignInRoute} />;
+        let link = redirectRoute ?? AuthenticationEnum.SignInRoute;
+        if (!link.startsWith('http') && !link.startsWith('//')) {
+            link = `${window.location.protocol}//${window.location.host}/${link.replace(/^\//, '')}`;
+        }
+
+        const url = new URL(link);
+        url.searchParams.set('from', window.location.href);
+
+        return <NativeRedirect to={url.href} />;
     }
 
     return <Route {...rest} />;

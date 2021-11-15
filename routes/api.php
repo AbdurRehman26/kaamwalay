@@ -16,7 +16,7 @@ use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\Customer\Order\ShippingMethodController;
 use App\Http\Controllers\API\Customer\PaymentCardController;
-use App\Models\CardProduct;
+use App\Http\Controllers\API\Files\UploadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,4 +71,10 @@ Route::prefix('customer')->group(function () {
 Route::prefix('configurations')->group(function () {
     Route::post('/', [ConfigurationsController::class, 'getConfigurations']);
     Route::delete('/', [ConfigurationsController::class, 'purgeConfigurations'])->middleware('auth');
+});
+
+Route::prefix('files')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::post('presign', [UploadController::class, 'presignUpload']);
+    });
 });

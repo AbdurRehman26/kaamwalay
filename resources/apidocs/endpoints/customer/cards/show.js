@@ -84,7 +84,7 @@
  *                     "name": "Back Corners",
  *                     "output_image": null
  *                 },
- *  *                 {
+ *                 {
  *                     "name": "Laser Front Centering",
  *                     "output_image": null
  *                 },
@@ -118,7 +118,12 @@
  *                 }
  *             ],
  *             "overall_grade": 7,
- *             "overall_grade_nickname": "T"
+ *             "overall_grade_nickname": "T",
+ *             "submitted_at": {
+ *                  "date": "2021-08-12 02:22:46.000000",
+ *                  "timezone_type": 3,
+ *                  "timezone": "UTC"
+ *             }
  *         }
  *     }
  */

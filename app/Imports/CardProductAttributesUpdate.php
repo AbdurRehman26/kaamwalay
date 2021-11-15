@@ -59,6 +59,7 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
                         echo $card->id . " updating for same model\n";
                         $this->updateCardProduct($card, $row);
                     }
+
                     continue;
                 }
             }

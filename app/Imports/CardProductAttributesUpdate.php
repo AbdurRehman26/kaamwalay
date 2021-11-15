@@ -22,7 +22,7 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
                     ->orWhere('name', '=', $row['series'])->first();
 
             if (empty($cardSeries)) {
-                throw new \Exception('Card series not found', 404);
+                throw new \Exception('Card series not found');
             }
 
             $cardSet = CardSet::where('name', '=', $row['set'])

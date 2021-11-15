@@ -107,17 +107,13 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
         echo $card->id . " updated\n";
     }
 
-
-
     public function batchSize(): int
     {
         return 25000;
-        // TODO: Implement batchSize() method.
     }
 
     public function chunkSize(): int
     {
         return 25000;
-        // TODO: Implement chunkSize() method.
     }
 }

@@ -30,3 +30,4 @@ resources/terraform/.terraform/providers
 /cypress/screenshots
 /cypress/videos
 tsconfig.tsbuildinfo
+.tsbuildinfo

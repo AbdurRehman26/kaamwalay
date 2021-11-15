@@ -57,7 +57,7 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
                     foreach ($cardProduct->get() as $card) {
                         $this->updateCardProduct($card, $row);
                     }
-                    echo("Same models\n");
+                    \Log::info('Duplicate models found: '. json_encode($cardProduct->get()));
 
                     continue;
                 }

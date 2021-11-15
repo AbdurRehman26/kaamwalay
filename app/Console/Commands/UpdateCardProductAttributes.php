@@ -6,7 +6,7 @@ use App\Imports\CardProductAttributesUpdate;
 use Illuminate\Console\Command;
 use Maatwebsite\Excel\Facades\Excel;
 
-class UpdateCardProductReferenceIds extends Command
+class UpdateCardProductAttributes extends Command
 {
     /**
      * The name and signature of the console command.
@@ -21,16 +21,6 @@ class UpdateCardProductReferenceIds extends Command
      * @var string
      */
     protected $description = 'Update card product attributes';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.

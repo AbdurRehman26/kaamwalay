@@ -35,8 +35,7 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
             $cardNumberOrder = ! empty($row['card_number_order']) ? $row['card_number_order'] : '';
 
             $cardProduct = CardProduct::where('card_set_id', '=', $cardSet->id)
-                    ->whereName(trim($row['card_name']))
-                    ->whereNull('card_reference_id');
+                    ->whereName(trim($row['card_name']));
 
             if ($cardProduct->get()->count() === 1) {
                 $this->updateCardProduct($cardProduct->first(), $row);

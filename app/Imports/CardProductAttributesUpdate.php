@@ -96,12 +96,11 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
         $variant = ! empty($row['variant']) ? $row['variant'] : '';
         $cardNumber = ! empty($row['card_number']) ? $row['card_number'] : '';
 
-        $card->card_number = $row['card_number'];
+        $card->card_number = $cardNumber;
         $card->variant = $variant;
         $card->edition = $edition;
         $card->surface = $surface;
         $card->rarity = $row['rarity'];
-        $card->card_number_order = $cardNumber;
         $card->card_reference_id = $row['card_id'];
         $card->save();
 

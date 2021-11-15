@@ -99,4 +99,18 @@ class AGSClient
 
         return $this->responseHandler(response: $response, route: '/robograding/certificates/', payload: [$data]);
     }
+
+    public function createCard(array $data)
+    {
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/cards/', [
+            "data" => $data,
+        ]);
+
+        if ($response->successful()) {
+            Log::debug($response->json());
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/cards/', payload: [$data]);
+    }
 }

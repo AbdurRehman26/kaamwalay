@@ -279,4 +279,10 @@ class AgsService
             return $imageData['output_image'] !== null;
         });
     }
+
+
+    public function createCard(array $data): array
+    {
+        return $this->client->createCard($data);
+    }
 }

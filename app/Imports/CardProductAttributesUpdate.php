@@ -17,7 +17,7 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
     {
         CardProduct::disableSearchSyncing();
 
-        foreach ($rows as $row) {
+        foreach ($rows as $key => $row) {
             $cardSeries = CardSeries::where('name',  '=', $row['series'] . ' Series')
                     ->orWhere('name', '=', $row['series'])->first();
 
@@ -37,8 +37,11 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
             $cardProduct = CardProduct::where('card_set_id', '=', $cardSet->id)
                     ->whereName(trim($row['card_name']));
 
+            echo 'Excel key fetched:' . $key . "\n";
+
             if ($cardProduct->count() === 1) {
                 $this->updateCardProduct($cardProduct->first(), $row);
+
                 continue;
             }
 
@@ -53,26 +56,20 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
             if ($cardProduct->count() > 1) {
                 if ($this->compareModels($cardProduct->get())) {
                     foreach ($cardProduct->get() as $card) {
+                        echo $card->id . " updating for same model\n";
                         $this->updateCardProduct($card, $row);
                     }
-                    \Log::info('Duplicate models found: '. json_encode($cardProduct->get()));
-
                     continue;
                 }
             }
 
             if ($cardProduct->count() > 1) {
-                \Log::info('Still move than one record found: '. $row['card_name'] . ' ' . $row['card_number']);
-
                 throw new \Exception('Multiple records found', 503);
             }
 
             if ($cardProduct->count() === 0) {
-                \Log::info('Product not found: '. $row['card_name'] . ' ' . $row['card_number']);
-
                 throw new \Exception('No Record found', 404);
             }
-
             $this->updateCardProduct($cardProduct->first(), $row);
         }
     }

@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, WithChunkReading, WithHeadingRow
 {
-    public function collection(Collection $rows)
+    public function collection(Collection $rows): void
     {
         CardProduct::disableSearchSyncing();
 
@@ -91,7 +91,7 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
         return true;
     }
 
-    protected function updateCardProduct(CardProduct $card, $row): void
+    protected function updateCardProduct(CardProduct $card, array $row): void
     {
         $edition = ! empty($row['edition']) ? $row['edition'] : '';
         $surface = ! empty($row['surface']) ? $row['surface'] : '';

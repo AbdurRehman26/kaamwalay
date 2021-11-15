@@ -5,5 +5,6 @@ import { useInjectable } from './useInjectable';
 
 export function useEndpoint(path: string, config?: AxiosRequestConfig): AxiosInstance {
     const apiService = useInjectable(APIService);
+    console.log('useEndpoint', path, config);
     return useMemo(() => apiService.createEndpoint(path, config), [apiService, path, config]);
 }

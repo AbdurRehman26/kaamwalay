@@ -21,7 +21,14 @@ export function GuestOnlyRoute({ redirectRoute, ...rest }: GuestOnlyRouteProps) 
 
     useEffect(() => {
         if (authenticated && !checking) {
-            window.location.replace(redirectRoute ?? AuthenticationEnum.DashboardRoute);
+            let link = redirectRoute ?? AuthenticationEnum.DashboardRoute;
+            const url = new URL(window.location.href);
+
+            if (url.searchParams.has('from')) {
+                link = url.searchParams.get('from') || link;
+            }
+
+            window.location.replace(link);
         }
     }, [authenticated, checking, redirectRoute]);
 

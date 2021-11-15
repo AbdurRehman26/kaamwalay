@@ -17,6 +17,7 @@
         "baseUrl": ".",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "incremental": true,
         "paths": {
             "@admin/*": ["resources/ts/admin/*"],
             "@auth/*": ["resources/ts/auth/*"],

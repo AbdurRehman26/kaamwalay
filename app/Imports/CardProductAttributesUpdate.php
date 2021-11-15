@@ -39,7 +39,6 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
 
             if ($cardProduct->count() === 1) {
                 $this->updateCardProduct($cardProduct->first(), $row);
-
                 continue;
             }
 

@@ -18,7 +18,7 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
     itemId: number;
     declaredValue: number;
     card: CardProductEntity;
-
+    disableConfirm?: boolean;
     onConfirm(index: number): void;
 
     onMissing(index: number): void;
@@ -57,6 +57,7 @@ export function UnconfirmedCard({
     onEdit,
     onPreview,
     onSwapCard,
+    disableConfirm,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 
@@ -115,7 +116,13 @@ export function UnconfirmedCard({
                 image={card.imagePath}
                 onPreview={handlePreview}
                 action={
-                    <Button variant={'contained'} color={'primary'} className={classes.button} onClick={handleConfirm}>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        className={classes.button}
+                        disabled={disableConfirm}
+                        onClick={handleConfirm}
+                    >
                         Confirm
                     </Button>
                 }

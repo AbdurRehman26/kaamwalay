@@ -138,6 +138,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 onConfirm={handleConfirm}
                                 onMissing={handleMissing}
                                 onEdit={handleEdit}
+                                disableConfirm={item.cardProduct.addedByCustomer}
                                 onSwapCard={handleSwapCard}
                             />
                         ))

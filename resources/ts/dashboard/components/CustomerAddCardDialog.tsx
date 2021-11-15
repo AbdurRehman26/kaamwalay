@@ -18,6 +18,8 @@ import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEvent
 import { useAppDispatch } from '@dashboard/redux/hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 interface CustomerAddCardDialogProps {
     showDialog: boolean | null;
     onClose: () => void;
@@ -30,6 +32,8 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
     const [cardDescription, setCardDescription] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
+
+    const apiService = useInjectable(APIService);
 
     const isAddCardButtonDisabled = useMemo(() => {
         return !uploadedImage || !cardName || !cardDescription;
@@ -57,15 +61,26 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
         setIsLoading(true);
         // Here we'll make the API call add the card and then with the data we get from the API
         // we'll call the function below
-        selectCard({
-            id: 999,
-            image: 'https://img.fruugo.com/product/9/01/177738019_max.jpg',
-            name: cardName,
-            shortName: 'ADDED MANUALLY',
-            longName: cardDescription,
-        });
-        setIsLoading(false);
-        handleOnClose();
+
+        const endpoint = apiService.createEndpoint(`customer/cards`);
+        endpoint
+            .post('', {
+                imagePath: 'https://img.fruugo.com/product/9/01/177738019_max.jpg',
+                name: cardName,
+                description: cardDescription,
+            })
+            .then((r) => {
+                setIsLoading(false);
+                selectCard({
+                    id: r.data.id,
+                    image: r.data.imagePath,
+                    name: r.data.name,
+                    shortName: r.data.shortName,
+                    longName: r.data.longName,
+                });
+                handleOnClose();
+            })
+            .catch((err) => console.log(err));
     }, [cardName, cardDescription, uploadedImage]);
 
     return (
@@ -98,7 +113,7 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                             marginTop={isSm ? '12px' : '0'}
                         >
                             <Typography variant={'subtitle2'} sx={{ fontWeight: 'bold', marginBottom: '-9px' }}>
-                                Photo of Front of Card*
+                                Card Name*
                             </Typography>
                             <TextField
                                 placeholder="Enter card name"

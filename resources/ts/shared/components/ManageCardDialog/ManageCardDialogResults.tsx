@@ -1,8 +1,15 @@
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Hits, Stats } from 'react-instantsearch-dom';
 import ManageCardDialogResultItem from './ManageCardDialogResultItem';
 import ManageCardDialogResultsPagination from './ManageCardDialogResultsPagination';
+import Typography from '@mui/material/Typography';
+import { font } from '@shared/styles/utils';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import { useAppDispatch } from '@admin/redux/hooks';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
+import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -40,10 +47,26 @@ const useStyles = makeStyles(
  */
 export function ManageCardDialogResults() {
     const classes = useStyles();
+    const dispatch = useAppDispatch();
+
+    const handleCreateNewCard = useCallback(() => {
+        dispatch(manageCardDialogActions.backup());
+        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Create));
+    }, []);
 
     return (
         <div className={classes.root}>
-            <Stats translations={{ stats: (nbHits) => `${nbHits} Results` }} />
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                <Stats translations={{ stats: (nbHits) => `${nbHits} Results` }} />
+                <Box>
+                    <Typography variant={'caption'} className={font.fontWeightNormal}>
+                        Can't find card?
+                    </Typography>
+                    <Button color={'primary'} variant="text" sx={{ fontSize: '12px' }} onClick={handleCreateNewCard}>
+                        CREATE A NEW CARD
+                    </Button>
+                </Box>
+            </Box>
             <Hits hitComponent={ManageCardDialogResultItem} />
             <ManageCardDialogResultsPagination />
         </div>

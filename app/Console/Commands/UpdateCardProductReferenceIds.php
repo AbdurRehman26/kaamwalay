@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Imports\CardProductReferenceIdsImport;
+use App\Imports\CardProductAttributesUpdate;
 use Illuminate\Console\Command;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -13,14 +13,14 @@ class UpdateCardProductReferenceIds extends Command
      *
      * @var string
      */
-    protected $signature = 'card-product:update-card-id';
+    protected $signature = 'card-product:update-attributes';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Update card product attributes';
 
     /**
      * Create a new command instance.
@@ -39,7 +39,8 @@ class UpdateCardProductReferenceIds extends Command
      */
     public function handle()
     {
-        Excel::import(new CardProductReferenceIdsImport, storage_path('app/public/master_robograding_production_card_products.csv'));
+        Excel::import(new CardProductAttributesUpdate, storage_path('app/public/master_robograding_production_card_products.csv'));
+
         return Command::SUCCESS;
     }
 }

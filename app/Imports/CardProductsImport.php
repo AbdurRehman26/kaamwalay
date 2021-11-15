@@ -22,9 +22,20 @@ class CardProductsImport implements ToCollection, WithBatchInserts, WithChunkRea
                 $cardSeries = CardSeries::where('name',  '=', $row['series'] . ' Era')
                 ->orWhere('name', '=', $row['series'])->first();
 
-                $cardSet = CardSet::where(function ($query) use ($row) {
-                    $query->where('name', '=', $row['set'])->
-                        orWhere('name', '=', $row['set'] . ' Set');
+                $setName = $row['set'];
+
+                if ($setName === 'Awakening Psychic King') {
+                    $setName = 'Awakening of Psychic King';
+                }
+
+                if ($setName === 'Miracle Twin') {
+                    $setName = 'Miracle Twins';
+                }
+
+
+                $cardSet = CardSet::where(function ($query) use ($setName) {
+                    $query->where('name', '=', $setName)->
+                        orWhere('name', '=', $setName . ' Set');
                 })
                 ->where('card_series_id', '=', $cardSeries->id)->first();
 
@@ -32,18 +43,6 @@ class CardProductsImport implements ToCollection, WithBatchInserts, WithChunkRea
                 $surface = ! empty($row['surface']) ? $row['surface'] : '';
                 $variant = ! empty($row['variant']) ? $row['variant'] : '';
                 $cardNumber = ! empty($row['card_number']) ? $row['card_number'] : '';
-
-                $setNames = [
-                    'Miracle Twin',
-                    'Awakening Psychic King',
-                    'To Have Seen The Battle Rainbow',
-                    'Ultradimensional Beasts',
-                ];
-
-                if (in_array($row['set'], $setNames)) {
-                    continue;
-                }
-
 
                 $cardProduct = CardProduct::where('card_set_id', '=', $cardSet->id)
                 ->whereName(trim($row['card_name']))
@@ -69,6 +68,9 @@ class CardProductsImport implements ToCollection, WithBatchInserts, WithChunkRea
                 $cardProductData['edition'] = $edition;
                 $cardProductData['variant'] = $variant;
                 $cardProductData['surface'] = $surface;
+                $cardProductData['card_set_id'] = $cardSet->id;
+                $cardProductData['card_reference_id'] = $row['card_id'];
+                $cardProductData['image_path'] = $row['image'];
 
                 unset($cardProductData['card_name']);
                 CardProduct::create($cardProductData);

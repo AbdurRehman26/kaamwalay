@@ -89,6 +89,8 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
 
     protected function updateCardProduct(CardProduct $card, Collection $row): void
     {
+        echo $card->id . " updating for card record\n";
+
         $edition = ! empty($row['edition']) ? $row['edition'] : '';
         $surface = ! empty($row['surface']) ? $row['surface'] : '';
         $variant = ! empty($row['variant']) ? $row['variant'] : '';
@@ -102,6 +104,8 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
         $card->card_number_order = $cardNumber;
         $card->card_reference_id = $row['card_id'];
         $card->save();
+
+        echo $card->id . " updated\n";
     }
 
 

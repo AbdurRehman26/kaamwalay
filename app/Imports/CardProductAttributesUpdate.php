@@ -37,21 +37,21 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
             $cardProduct = CardProduct::where('card_set_id', '=', $cardSet->id)
                     ->whereName(trim($row['card_name']));
 
-            if ($cardProduct->get()->count() === 1) {
+            if ($cardProduct->count() === 1) {
                 $this->updateCardProduct($cardProduct->first(), $row);
 
                 continue;
             }
 
-            if ($cardProduct->get()->count() > 1) {
+            if ($cardProduct->count() > 1) {
                 $cardProduct->where('image_path', '=', $row['image']);
             }
 
-            if ($cardProduct->get()->count() > 1) {
+            if ($cardProduct->count() > 1) {
                 $cardProduct->where('card_number_order', '=', $cardNumberOrder);
             }
 
-            if ($cardProduct->get()->count() > 1) {
+            if ($cardProduct->count() > 1) {
                 if ($this->compareModels($cardProduct->get())) {
                     foreach ($cardProduct->get() as $card) {
                         $this->updateCardProduct($card, $row);
@@ -62,13 +62,13 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
                 }
             }
 
-            if ($cardProduct->get()->count() > 1) {
+            if ($cardProduct->count() > 1) {
                 \Log::info('Still move than one record found: '. $row['card_name'] . ' ' . $row['card_number']);
 
                 throw new \Exception('Multiple records found', 503);
             }
 
-            if ($cardProduct->get()->count() === 0) {
+            if ($cardProduct->count() === 0) {
                 \Log::info('Product not found: '. $row['card_name'] . ' ' . $row['card_number']);
 
                 throw new \Exception('No Record found', 404);
@@ -91,7 +91,7 @@ class CardProductAttributesUpdate implements ToCollection, WithBatchInserts, Wit
         return true;
     }
 
-    protected function updateCardProduct(CardProduct $card, array $row): void
+    protected function updateCardProduct(CardProduct $card, Collection $row): void
     {
         $edition = ! empty($row['edition']) ? $row['edition'] : '';
         $surface = ! empty($row['surface']) ? $row['surface'] : '';

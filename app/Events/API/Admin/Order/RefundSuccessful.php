@@ -15,7 +15,7 @@ class RefundSuccessful
      *
      * @return void
      */
-    public function __construct(protected Order $order)
+    public function __construct(public Order $order, public array $data)
     {
         //
     }

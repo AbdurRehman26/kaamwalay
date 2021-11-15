@@ -25,9 +25,9 @@ class UserCardResource extends BaseResource
             'overall_values' => $this->overall_values,
             'human_grade_values' => $this->human_grade_values,
             'generated_images' => $this->generated_images,
-
             'overall_grade' => $this->resource->overall_grade,
             'overall_grade_nickname' => $this->resource->overall_grade_nickname,
+            'submitted_at' => $this->formatDate($this->orderItem->order->created_at),
         ];
     }
 }

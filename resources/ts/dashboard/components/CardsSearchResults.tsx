@@ -65,10 +65,10 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     function generateMarkCardDto(item: CardProductEntity) {
         return {
             image: item.imagePath,
-            title: item.getName(),
-            shortname: item.getShortName(),
+            name: item.getName(),
+            shortName: item.getShortName(),
             id: item.id,
-            subtitle: item.getFullName(),
+            longName: item.getLongName(),
         };
     }
 
@@ -136,9 +136,9 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
             />
             <SearchResultItemCard
                 image={item.imagePath}
-                title={item.getName()}
-                subtitle={subtitle}
-                shortname={shortname}
+                name={item.getName()}
+                longName={subtitle}
+                shortName={shortname}
                 id={item.id}
                 onPreview={handlePreview}
                 onSelectCard={handleSelectCard}

@@ -31,7 +31,7 @@ class RefundSuccessfulListener implements ShouldQueue
         $order = $event->order;
         $orderPayment = new OrderPaymentResource($event->order->firstOrderPayment);
         $card = json_decode(json_encode($orderPayment), true)['card'];
-        \Log::info(json_encode($order));
+
         $this->emailService->sendEmail(
             [[$user->email => $user->name]],
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED],

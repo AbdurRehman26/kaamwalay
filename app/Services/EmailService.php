@@ -52,7 +52,7 @@ class EmailService
         if (app()->environment('local')) {
             return;
         }
-
+        \Log::info('Email Sent');
         SendEmail::dispatch($recipients, $subject, $templateName, $templateContent);
     }
 

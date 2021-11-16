@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import Logo from '@shared/assets/robogradingLogo.svg';
 import CustomizedSteppers from './HeaderStepper';
+import { Theme } from '@mui/material/styles';
+import { useMediaQuery } from '@mui/material';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -50,15 +52,16 @@ const useStyles = makeStyles(
 
 function SubmissionHeader() {
     const classes = useStyles();
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     return (
         <div className={classes.root}>
             <Container>
                 <div className={classes.logoAndAvatarContainer}>
                     <Link to={'/'}>
-                        <img src={Logo} alt={'Robograding Logo'} />
+                        <img style={{ width: isMobile ? '220px' : '' }} src={Logo} alt={'Robograding Logo'} />
                     </Link>
-                    <img src={RobogradingAvatar} alt={'Robograding Avatar'} />
+                    <img style={{ width: isMobile ? '40px' : '' }} src={RobogradingAvatar} alt={'Robograding Avatar'} />
                 </div>
                 <div className={classes.headerTitleContainer}>
                     <Typography variant="h1" className={classes.headerTitle}>

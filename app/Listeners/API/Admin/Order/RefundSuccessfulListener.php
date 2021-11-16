@@ -31,7 +31,7 @@ class RefundSuccessfulListener implements ShouldQueue
         $order = $event->order;
         $orderPayment = new OrderPaymentResource($event->order->firstOrderPayment);
         $card = json_decode(json_encode($orderPayment), true)['card'];
-
+        \Log::info(json_encode($order));
         $this->emailService->sendEmail(
             [[$user->email => $user->name]],
             $this->emailService::SUBJECT[$this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED],
@@ -39,10 +39,11 @@ class RefundSuccessfulListener implements ShouldQueue
             [
                 'ORDER_NUMBER' => $order->order_number,
                 'REFUNDED_AMOUNT' => number_format($event->data['amount'], 2),
+                'REFUNDED_AMOUNT_TOTAL' => number_format($order->refund_total, 2),
                 'TOTAL_AMOUNT' => number_format($order->grand_total, 2),
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
-                'EXTRA_CHARGE' => number_format($orderPayment->amount, 2),
+                'EXTRA_CHARGE_TOTAL' => $order->extra_charge_total ? number_format($order->extra_charge_total, 2) : 'N/A',
                 'CARD' => $card ? ($card['brand'] . ' ending in ' . $card['last4']) : 'N/A',
                 'NOTES' => $order->lastOrderPayment->notes,
                 'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',

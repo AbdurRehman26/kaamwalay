@@ -42,6 +42,7 @@ class ExtraChargeSuccessfulListener implements ShouldQueue
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
                 'EXTRA_CHARGE' => number_format($orderPayment->amount, 2),
+                'EXTRA_CHARGE_TOTAL' => number_format($order->extra_charge_total, 2),
                 'NOTES' => $orderPayment->notes,
                 'CARD' => $card ? ($card['brand'] . ' ending in ' . $card['last4']) : 'N/A',
                 'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',

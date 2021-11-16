@@ -93,6 +93,7 @@ export function SubmissionReviewCardDialog({
                     disabled={loading}
                     onClick={exists ? handleRemove : handleAdd}
                     startIcon={loading ? <CircularProgress size={24} color={'inherit'} /> : null}
+                    sx={{ minWidth: '200px' }}
                     fullWidth
                 >
                     {exists ? 'Remove' : 'Add to Submission'}

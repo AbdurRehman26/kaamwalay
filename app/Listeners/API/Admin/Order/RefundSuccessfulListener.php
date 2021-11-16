@@ -38,7 +38,7 @@ class RefundSuccessfulListener implements ShouldQueue
             $this->emailService::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED,
             [
                 'ORDER_NUMBER' => $order->order_number,
-                'REFUNDED_AMOUNT' => number_format($event->data['amount'], 2),
+                'REFUNDED_AMOUNT' => $event->data['amount'],
                 'TOTAL_AMOUNT' => number_format($order->grand_total, 2),
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),

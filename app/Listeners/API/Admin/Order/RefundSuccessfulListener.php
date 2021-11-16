@@ -42,8 +42,9 @@ class RefundSuccessfulListener implements ShouldQueue
                 'TOTAL_AMOUNT' => number_format($order->grand_total, 2),
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
+                'EXTRA_CHARGE' => number_format($orderPayment->amount, 2),
                 'CARD' => $card ? ($card['brand'] . ' ending in ' . $card['last4']) : 'N/A',
-                'NOTES' => $order->lastOrderPayment->notes,
+                'NOTES' => $order->notes,
                 'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',
             ],
         );

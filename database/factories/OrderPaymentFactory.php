@@ -27,6 +27,7 @@ class OrderPaymentFactory extends Factory
             'order_id' => Order::factory(),
             'payment_method_id' => PaymentMethod::factory(),
             'type' => OrderPayment::TYPE_ORDER_PAYMENT,
+            'amount' => $this->faker->randomFloat(2, 50, 80),
         ];
     }
 

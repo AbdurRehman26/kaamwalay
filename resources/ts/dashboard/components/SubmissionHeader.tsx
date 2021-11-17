@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import Logo from '@shared/assets/robogradingLogo.svg';
 import CustomizedSteppers from './HeaderStepper';
-import { Theme } from '@mui/material/styles';
-import { useMediaQuery } from '@mui/material';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -44,6 +42,16 @@ const useStyles = makeStyles(
                 fontSize: '24px',
             },
         },
+        headerLogo: {
+            [theme.breakpoints.down('sm')]: {
+                width: '220px',
+            },
+        },
+        headerAvatar: {
+            [theme.breakpoints.down('sm')]: {
+                width: '40px',
+            },
+        },
     }),
     {
         name: 'SubmissionHeaderStyle',
@@ -52,16 +60,15 @@ const useStyles = makeStyles(
 
 function SubmissionHeader() {
     const classes = useStyles();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     return (
         <div className={classes.root}>
             <Container>
                 <div className={classes.logoAndAvatarContainer}>
                     <Link to={'/'}>
-                        <img style={{ width: isMobile ? '220px' : '' }} src={Logo} alt={'Robograding Logo'} />
+                        <img className={classes.headerLogo} src={Logo} alt={'Robograding Logo'} />
                     </Link>
-                    <img style={{ width: isMobile ? '40px' : '' }} src={RobogradingAvatar} alt={'Robograding Avatar'} />
+                    <img className={classes.headerAvatar} src={RobogradingAvatar} alt={'Robograding Avatar'} />
                 </div>
                 <div className={classes.headerTitleContainer}>
                     <Typography variant="h1" className={classes.headerTitle}>

@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OrderItemStatusChangedListener implements ShouldQueue
 {
-    /** @var bool $afterCommit */
+    /** @var bool */
     public $afterCommit = true;
 
     /**

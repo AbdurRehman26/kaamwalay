@@ -19,7 +19,7 @@ class RevenueStatsService
             ->select([
                 'order_payments.order_id',
                 DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.provider_fee) ELSE order_payments.provider_fee END) as provider_fee'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
             ])
             ->get();
 
@@ -40,7 +40,7 @@ class RevenueStatsService
             ->select([
                 'order_payments.order_id',
                 DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.amount) ELSE order_payments.amount END) as amount'),
-                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN (-1 * order_payments.provider_fee) ELSE order_payments.provider_fee END) as provider_fee'),
+                DB::raw('SUM(CASE WHEN order_payments.type = ' . OrderPayment::TYPE_REFUND . ' THEN 0 ELSE order_payments.provider_fee END) as provider_fee'),
             ])
             ->get();
 
@@ -122,13 +122,12 @@ class RevenueStatsService
 
     protected function calculateProfitForOrder(Order $order): float
     {
-        return $order->service_fee - $this->orderTotalProviderFee($order);
+        return $order->service_fee - $this->getOrderTotalProviderFee($order);
     }
 
-    protected function orderTotalProviderFee(Order $order): float
+    protected function getOrderTotalProviderFee(Order $order): float
     {
         return $order->firstOrderPayment->provider_fee
-            + $order->extraCharges->sum('provider_fee')
-            - $order->refunds->sum('provider_fee');
+            + $order->extraCharges->sum('provider_fee');
     }
 }

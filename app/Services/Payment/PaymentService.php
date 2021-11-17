@@ -9,6 +9,7 @@ use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\FeatureNotAvailable;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\PaypalService;
@@ -107,13 +108,16 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        $fee = resolve($this->providers[
+        $providerInstance = resolve($this->providers[
             $this->order->paymentMethod->code
-        ])->calculateFee($this->order);
+        ]);
 
-        $orderPayment = $this->order->firstOrderPayment;
-        $orderPayment->provider_fee = $fee;
-        $orderPayment->save();
+        $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
+            $orderPayment->provider_fee = $providerInstance->calculateFee($orderPayment);
+            $orderPayment->save();
+
+            return $orderPayment;
+        });
     }
 
     public function hasProvider(Order $order): self

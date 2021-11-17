@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 
 interface PaymentProviderServiceInterface
 {
@@ -10,5 +11,5 @@ interface PaymentProviderServiceInterface
 
     public function verify(Order $order, string $paymentIntentId): bool;
 
-    public function calculateFee(Order $order): float;
+    public function calculateFee(OrderPayment $orderPayment): float;
 }

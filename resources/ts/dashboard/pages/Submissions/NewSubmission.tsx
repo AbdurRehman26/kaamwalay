@@ -152,39 +152,35 @@ export function NewSubmission() {
         <>
             <SubmissionHeader />
             <StripeContainer>
-                <Container>
-                    <div className={classes.pageContentContainer}>
-                        {getStepContent()}
+                <div className={classes.pageContentContainer}>
+                    {getStepContent()}
 
-                        <div className={classes.buttonsContainer}>
-                            {currentStep !== 0 ? (
-                                <Button
-                                    variant={'text'}
-                                    color={'secondary'}
-                                    className={classes.backBtn}
-                                    startIcon={<ArrowBackIcon />}
-                                    onClick={handleBack}
-                                >
-                                    Back
-                                </Button>
-                            ) : null}
-                            {currentStep !== 4 ? (
-                                <Button
-                                    variant={'contained'}
-                                    disabled={isNextDisabled}
-                                    color={'primary'}
-                                    onClick={handleNext}
-                                    className={classes.nextBtn}
-                                    startIcon={
-                                        isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null
-                                    }
-                                >
-                                    Next
-                                </Button>
-                            ) : null}
-                        </div>
+                    <div className={classes.buttonsContainer}>
+                        {currentStep !== 0 ? (
+                            <Button
+                                variant={'text'}
+                                color={'secondary'}
+                                className={classes.backBtn}
+                                startIcon={<ArrowBackIcon />}
+                                onClick={handleBack}
+                            >
+                                Back
+                            </Button>
+                        ) : null}
+                        {currentStep !== 4 ? (
+                            <Button
+                                variant={'contained'}
+                                disabled={isNextDisabled}
+                                color={'primary'}
+                                onClick={handleNext}
+                                className={classes.nextBtn}
+                                startIcon={isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null}
+                            >
+                                Next
+                            </Button>
+                        ) : null}
                     </div>
-                </Container>
+                </div>
             </StripeContainer>
         </>
     );

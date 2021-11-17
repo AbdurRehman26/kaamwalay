@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
+use App\Models\OrderPayment;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
@@ -96,9 +97,9 @@ class PaypalService implements PaymentProviderServiceInterface
         return false;
     }
 
-    public function calculateFee(Order $order): float
+    public function calculateFee(OrderPayment $orderPayment): float
     {
-        $paymentResponse = json_decode($order->lastOrderPayment->response, associative: true);
+        $paymentResponse = json_decode($orderPayment->response, associative: true);
         if (! empty($paymentResponse['purchase_units'][0]['payments']['captures'][0])) {
             $breakdown = $paymentResponse['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
 

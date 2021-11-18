@@ -8,6 +8,7 @@ use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CardProductService
 {
@@ -60,71 +61,112 @@ class CardProductService
         $category = CardCategory::find($data['category']);
 
         $createData = [];
-        if(array_key_exists('set_id', $data) && $data['set_id']){
+        $seriesName = '';
+        if (array_key_exists('series_id', $data) && $data['series_id']) {
+            $series = CardSeries::find($data['series_id']);
+            $seriesName = $series->name;
+
+            $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
+
+            if ($seriesResponse["count"] > 0) {
+
+                $createData['series_id'] = $seriesResponse['results'][0]['id'];
+            }
+
+        } else if (array_key_exists('series_name', $data) && $data['series_name']) {
+            $seriesName = $data['series_name'];
+        }
+
+        if (!array_key_exists('series_id', $createData)) {
+
+            $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
+
+            if ($seriesResponse["count"] > 0) {
+
+                $createData['series_id'] = $seriesResponse['results'][0]['id'];
+            } else if ( $seriesName && $data['series_image'] ) {
+                $createSeriesResponse = $this->agsService->createSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
+
+                if ( array_key_exists('id', $createSeriesResponse) )
+                {
+                    $createData['series_id'] = $seriesResponse['id'];
+                }
+            }
+
+            $series = new CardSeries([
+                'name' => $seriesName,
+                'image_path' => $data['series_image'],
+                'image_bucket_path' => $data['series_image'],
+                'card_category_id' => $category->id,
+            ]);
+            $series->save();
+        }
+
+        $setName = '';
+        if (array_key_exists('set_id', $data) && $data['set_id']) {
             $set = CardSet::find($data['set_id']);
-            $createData = array_merge($createData,[
-                'release_date'=> $set->release_date,
-                'series_id'=> $set->series_id,
-                'set_id'=> $set->id,
+            $setName = $set->name;
+
+            $setResponse = $this->agsService->getSet([
+                'name' => $setName,
+                'serie' => $createData['series_id']
             ]);
 
+            if ($setResponse["count"] > 0) {
+                $createData['set_id'] = $setResponse['results'][0]['id'];
+            }
+
+        } else if (array_key_exists('set_name', $data) && $data['set_name']) {
+            $setName = $data['set_name'];
         }
-        else{
 
-            if(array_key_exists('series_id', $data) && $data['series_id']){
-                $series = CardSeries::find($data['series_id']);
-                $createData['series_id'] = $series->id;
-            }
-            else{
-                $series = CardSeries::where('name', 'like' , '%' . $data['series_name'] . '%')->where('card_category_id', $category->id)->first();
+        if (!array_key_exists('set_id', $createData)) {
 
-                if($series){
-                    $createData['series_id'] = $series->id;
-                }
-                else{
-                    $series = new CardSeries([
-                        'name' => $data['series_name'],
-                        'image_path' => $data['series_image'],
-                        'image_bucket_path' => $data['series_image'],
-                        'card_category_id' => $category->id,
-                    ]);
-                    $series->save();
+            $setResponse = $this->agsService->getSet(['name' => $setName, 'serie' => $createData['series_id']]);
 
-                    $createData = array_merge($createData,[
-                        'series_name'=> $data['series_name'],
-                        'series_image'=> $data['series_image'],
-                    ]);
-                }
+            if ($setResponse["count"] > 0) {
 
-            }
-
-            $set = CardSet::where('name', 'like' , '%' . $data['set_name'] . '%')->where('card_series_id', $series->id)->first();
-
-            if($set){
-                $createData = array_merge($createData,[
-                    'release_date'=> $set->release_date,
-                    'set_id'=> $set->id,
-                ]);
-            } else {
-                $set = new CardSet([
-                    'name' => $data['set_name'],
-                    'description' => '',
+                $createData['set_id'] = $setResponse['results'][0]['id'];
+            } else if ( $setName && $createData['series_id'] && $data['release_date'] && $data['set_image']) {
+                $createSetResponse = $this->agsService->createSet([
+                    'name' => $setName,
                     'image_path' => $data['set_image'],
-                    'image_bucket_path' => $data['set_image'],
-                    'card_category_id' => $category->id,
-                    'card_series_id' => $series->id,
                     'release_date' => $data['release_date'],
-                    'release_year' => (new Carbon($data['release_date']))->format('Y'),
+                    'serie_id' => $createData['series_id']
                 ]);
-                $set->save();
 
-                $createData = array_merge($createData,[
-                    'set_name'=> $data['set_name'],
-                    'set_image'=> $data['set_image'],
-                    'release_date' => $data['release_date'],
-                ]);
+                if ( array_key_exists('id', $createSetResponse) )
+                {
+                    $createData['set_id'] = $createSetResponse['id'];
+                }
             }
+
+            $set = new CardSet([
+                'name' => $setName,
+                'description' => '',
+                'image_path' => $data['set_image'],
+                'image_bucket_path' => $data['set_image'],
+                'card_category_id' => $category->id,
+                'card_series_id' => $series->id,
+                'release_date' => $data['release_date'],
+                'release_year' => (new Carbon($data['release_date']))->format('Y'),
+            ]);
+            $set->save();
         }
+
+        $createData = array_merge($createData,[
+            'name' => $data['name'],
+            'category_id' => $category->id,
+            'rarity' => $data['rarity'],
+            'card_number_order' => $data['card_number'],
+            'image_path' => $data['image_path'],
+            'edition' => $data['edition'] ?? '',
+            'surface' => $data['surface'] ?? '',
+            'variant' => $data['variant'] ?? '',
+            'language' => $data['language'],
+        ]);
+        Log::debug($createData);
+        $this->agsService->createCard($createData);
 
         $card = new CardProduct([
             'name' => $data['name'],
@@ -142,23 +184,6 @@ class CardProductService
             'added_by_id' => auth()->user()->id
         ]);
         $card->save();
-
-
-        $createData = array_merge($createData,[
-            'name' => $data['name'],
-            'category_id' => $category->id,
-            'rarity' => $data['rarity'],
-            'card_number' => $data['card_number'],
-            'card_number_order' => $data['card_number'],
-            'image_path' => $data['image_path'],
-            'edition' => $data['edition'] ?? '',
-            'surface' => $data['surface'] ?? '',
-            'variant' => $data['variant'] ?? '',
-            'language' => $data['language'],
-        ]);
-
-        \Log::debug($createData);
-        // $this->agsService->createCard($createData);
 
         return $card;
     }

@@ -9,6 +9,7 @@ use App\Models\CardSet;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 class CardProductService
 {
@@ -56,42 +57,107 @@ class CardProductService
     {
     }
 
+    protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): void
+    {
+        try {
+
+            $createData = [];
+            $createData['series_id'] = $this->getOrCreateSeriesFromAgs($seriesName, $data);
+            $createData['set_id'] = $this->getOrCreateSetFromAgs($createData['series_id'], $setName, $data);
+
+            $createData = array_merge($createData,[
+                'name' => $data['name'],
+                'category_id' => $categoryId,
+                'rarity' => $data['rarity'],
+                'card_number_order' => $data['card_number'],
+                'image_path' => $data['image_path'],
+                'edition' => $data['edition'] ?? '',
+                'surface' => $data['surface'] ?? '',
+                'variant' => $data['variant'] ?? '',
+                'language' => $data['language'],
+            ]);
+            Log::debug($createData);
+            $this->agsService->createCard($createData);
+        } catch( Exception $e ){
+            report($e);
+        }
+    }
+
+    protected function getOrCreateSeriesFromAgs(string $seriesName, array $data): int
+    {
+        $seriesId = 0;
+
+        //Store in AGS
+        $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
+
+        if ($seriesResponse["count"] > 0) {
+
+            $seriesId = $seriesResponse['results'][0]['id'];
+        } else if ( $seriesName && $data['series_image'] ) {
+            $createSeriesResponse = $this->agsService->createSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
+
+            if ( array_key_exists('id', $createSeriesResponse) )
+            {
+                $seriesId = $seriesResponse['id'];
+            }
+        }
+
+        return $seriesId;
+    }
+
+    protected function getOrCreateSetFromAgs(int $seriesId, string $setName, array $data): int
+    {
+        $setId = 0;
+
+        //Store in AGS
+        $setResponse = $this->agsService->getSet([
+            'name' => $setName,
+            'serie' => $seriesId
+        ]);
+
+        if ($setResponse["count"] > 0) {
+            $setId = $setResponse['results'][0]['id'];
+        } else if ( $setName && $seriesId && $data['release_date'] && $data['set_image']) {
+            $createSetResponse = $this->agsService->createSet([
+                'name' => $setName,
+                'image_path' => $data['set_image'],
+                'release_date' => $data['release_date'],
+                'serie_id' => $seriesId
+            ]);
+
+            if ( array_key_exists('id', $createSetResponse) )
+            {
+                $setId = $createSetResponse['id'];
+            }
+        }
+
+        return $setId;
+    }
+
     public function create(array $data): CardProduct
     {
         $category = CardCategory::find($data['category']);
 
-        $createData = [];
         $seriesName = '';
+        $setName = '';
+        $series = null;
+        $set = null;
         if (array_key_exists('series_id', $data) && $data['series_id']) {
             $series = CardSeries::find($data['series_id']);
             $seriesName = $series->name;
-
-            $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
-
-            if ($seriesResponse["count"] > 0) {
-
-                $createData['series_id'] = $seriesResponse['results'][0]['id'];
-            }
-
         } else if (array_key_exists('series_name', $data) && $data['series_name']) {
             $seriesName = $data['series_name'];
         }
 
-        if (!array_key_exists('series_id', $createData)) {
+        if (array_key_exists('set_id', $data) && $data['set_id']) {
+            $set = CardSet::find($data['set_id']);
+            $setName = $set->name;
+        } else if (array_key_exists('set_name', $data) && $data['set_name']) {
+            $setName = $data['set_name'];
+        }
 
-            $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
-
-            if ($seriesResponse["count"] > 0) {
-
-                $createData['series_id'] = $seriesResponse['results'][0]['id'];
-            } else if ( $seriesName && $data['series_image'] ) {
-                $createSeriesResponse = $this->agsService->createSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
-
-                if ( array_key_exists('id', $createSeriesResponse) )
-                {
-                    $createData['series_id'] = $seriesResponse['id'];
-                }
-            }
+        // Store in RG
+        if(!$series){
 
             $series = new CardSeries([
                 'name' => $seriesName,
@@ -102,45 +168,7 @@ class CardProductService
             $series->save();
         }
 
-        $setName = '';
-        if (array_key_exists('set_id', $data) && $data['set_id']) {
-            $set = CardSet::find($data['set_id']);
-            $setName = $set->name;
-
-            $setResponse = $this->agsService->getSet([
-                'name' => $setName,
-                'serie' => $createData['series_id']
-            ]);
-
-            if ($setResponse["count"] > 0) {
-                $createData['set_id'] = $setResponse['results'][0]['id'];
-            }
-
-        } else if (array_key_exists('set_name', $data) && $data['set_name']) {
-            $setName = $data['set_name'];
-        }
-
-        if (!array_key_exists('set_id', $createData)) {
-
-            $setResponse = $this->agsService->getSet(['name' => $setName, 'serie' => $createData['series_id']]);
-
-            if ($setResponse["count"] > 0) {
-
-                $createData['set_id'] = $setResponse['results'][0]['id'];
-            } else if ( $setName && $createData['series_id'] && $data['release_date'] && $data['set_image']) {
-                $createSetResponse = $this->agsService->createSet([
-                    'name' => $setName,
-                    'image_path' => $data['set_image'],
-                    'release_date' => $data['release_date'],
-                    'serie_id' => $createData['series_id']
-                ]);
-
-                if ( array_key_exists('id', $createSetResponse) )
-                {
-                    $createData['set_id'] = $createSetResponse['id'];
-                }
-            }
-
+        if(!$set){
             $set = new CardSet([
                 'name' => $setName,
                 'description' => '',
@@ -153,20 +181,6 @@ class CardProductService
             ]);
             $set->save();
         }
-
-        $createData = array_merge($createData,[
-            'name' => $data['name'],
-            'category_id' => $category->id,
-            'rarity' => $data['rarity'],
-            'card_number_order' => $data['card_number'],
-            'image_path' => $data['image_path'],
-            'edition' => $data['edition'] ?? '',
-            'surface' => $data['surface'] ?? '',
-            'variant' => $data['variant'] ?? '',
-            'language' => $data['language'],
-        ]);
-        Log::debug($createData);
-        $this->agsService->createCard($createData);
 
         $card = new CardProduct([
             'name' => $data['name'],
@@ -184,6 +198,9 @@ class CardProductService
             'added_by_id' => auth()->user()->id
         ]);
         $card->save();
+
+        //store in AGS
+        $this->processAgsCreate($category->id,$seriesName,$setName,$data);
 
         return $card;
     }

@@ -20,6 +20,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
+import { useRepository } from '@shared/hooks/useRepository';
+import { FilesRepository } from '@shared/repositories/FilesRepository';
+import { useNotifications } from '@shared/hooks/useNotifications';
 interface CustomerAddCardDialogProps {
     showDialog: boolean | null;
     onClose: () => void;
@@ -32,9 +35,9 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
     const [cardDescription, setCardDescription] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
-
+    const filesRepository = useRepository(FilesRepository);
     const apiService = useInjectable(APIService);
-
+    const Notifications = useNotifications();
     const isAddCardButtonDisabled = useMemo(() => {
         return !uploadedImage || !cardName || !cardDescription;
     }, [uploadedImage, cardName, cardDescription]);
@@ -57,30 +60,34 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
         onClose();
     }, [onClose]);
 
-    const handleAddCard = useCallback(() => {
+    const handleAddCard = useCallback(async () => {
+        if (uploadedImage === null) {
+            return;
+        }
+
         setIsLoading(true);
         // Here we'll make the API call add the card and then with the data we get from the API
         // we'll call the function below
-
         const endpoint = apiService.createEndpoint(`customer/cards`);
-        endpoint
-            .post('', {
-                imagePath: 'https://img.fruugo.com/product/9/01/177738019_max.jpg',
+        try {
+            const publicImageUrl = await filesRepository.uploadFile(uploadedImage);
+            const response = await endpoint.post('', {
+                imagePath: publicImageUrl,
                 name: cardName,
                 description: cardDescription,
-            })
-            .then((r) => {
-                setIsLoading(false);
-                selectCard({
-                    id: r.data.id,
-                    image: r.data.imagePath,
-                    name: r.data.name,
-                    shortName: r.data.shortName,
-                    longName: r.data.longName,
-                });
-                handleOnClose();
-            })
-            .catch((err) => console.log(err));
+            });
+            selectCard({
+                id: response.data.id,
+                image: response.data.imagePath,
+                name: response.data.name,
+                shortName: response.data.shortName,
+                longName: response.data.longName,
+            });
+        } catch (e: any) {
+            Notifications.exception(e);
+        }
+        setIsLoading(false);
+        handleOnClose();
     }, [cardName, cardDescription, uploadedImage]);
 
     return (

@@ -20,6 +20,11 @@ import ImageUploader from '@shared/components/ImageUploader';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import IconButton from '@mui/material/IconButton';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { useRepository } from '@shared/hooks/useRepository';
+import { FilesRepository } from '@shared/repositories/FilesRepository';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { batch } from 'react-redux';
+import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 
 export interface ManageCardDialogCreateCardViewProps {
     isSwappable?: boolean;
@@ -65,11 +70,14 @@ export const ManageCardDialogCreateCardView = forwardRef(
         ref: ForwardedRef<HTMLDivElement>,
     ) => {
         const classes = useStyles();
+
+        const filesRepository = useRepository(FilesRepository);
+
         const [cardCategory, setCardCategory] = useState<number | null>(null);
         const [availableCategories, setAvailableCategories] = useState<{ id: number; name: string }[]>([]);
         const [availableSeriesWithSets, setAvailableSeriesWithSets] = useState<CardSeries[]>([]);
         const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | undefined>(null);
-        const [selectedSet, setSelectedSet] = useState(null);
+        const [selectedSet, setSelectedSet] = useState<CardSets | null>(null);
         const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null>(null);
         const [availableRarities, setAvailableRarities] = useState<string[] | null>(null);
         const [selectedRarity, setSelectedRarity] = useState<string>('none');
@@ -82,7 +90,9 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const [selectedEdition, setSelectedEdition] = useState<string>('none');
         const [productVariant, setProductVariant] = useState<string>('');
         const [cardName, setCardName] = useState('');
+        const [cardNumber, setCardNumber] = useState('');
 
+        const Notifications = useNotifications();
         // New series section
         const [showNewSeries, setShowNewSeries] = useState(false);
         const [newSeriesLogo, setNewSeriesLogo] = useState<File | null>(null);
@@ -154,9 +164,10 @@ export const ManageCardDialogCreateCardView = forwardRef(
             setSelectedCardPhoto(cardImage);
         }, []);
 
-        const handleNewSeriesLogoChange = useCallback((newSeriesLogo: File | null) => {
-            setNewSeriesLogo(newSeriesLogo);
-        }, []);
+        const handleNewSeriesLogoChange = useCallback(
+            (newSeriesLogo: File | null) => setNewSeriesLogo(newSeriesLogo),
+            [],
+        );
         const handleNewSetLogoChange = useCallback((newSetLogo: File | null) => {
             setNewSetLogo(newSetLogo);
         }, []);
@@ -194,7 +205,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const handleProductVariantChange = useCallback((e) => setProductVariant(e.target.value), []);
         const handleNewSeriesNameChange = useCallback((e) => setNewSeriesName(e.target.value), []);
         const handleNewSetNameChange = useCallback((e) => setNewSetName(e.target.value), []);
-
+        const handleCardNumberChange = useCallback((e) => setCardNumber(e.target.value), []);
         const showSaveButton = useMemo(() => {
             if (showNewSetBox && !showNewSeries) {
                 return !!(
@@ -203,7 +214,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                     newSetReleaseDate &&
                     selectedCardPhoto &&
                     cardName &&
-                    releaseDate &&
+                    cardNumber &&
                     selectedRarity !== 'none' &&
                     selectedLanguage !== 'none'
                 );
@@ -215,7 +226,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                     selectedSet &&
                     selectedCardPhoto &&
                     cardName &&
-                    releaseDate &&
+                    cardNumber &&
                     selectedRarity !== 'none' &&
                     selectedLanguage !== 'none'
                 );
@@ -230,7 +241,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                     newSetReleaseDate &&
                     selectedCardPhoto &&
                     cardName &&
-                    releaseDate &&
+                    cardNumber &&
                     selectedRarity !== 'none' &&
                     selectedLanguage !== 'none'
                 );
@@ -254,7 +265,111 @@ export const ManageCardDialogCreateCardView = forwardRef(
             selectedEdition,
             selectedSurface,
             productVariant,
+            cardNumber,
         ]);
+
+        const handleAddCard = async () => {
+            const endpoint = apiService.createEndpoint('/admin/cards');
+            // Saving card with existing series but new set
+            if (showNewSetBox && !showNewSeries) {
+                try {
+                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
+                    const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
+                    const DTO = {
+                        imagePath: cardPublicImage,
+                        name: cardName,
+                        category: cardCategory,
+                        releaseDate: newSetReleaseDate,
+                        seriesId: selectedSeries?.id,
+                        seriesName: null,
+                        seriesImage: null,
+                        setId: null,
+                        setName: newSetName,
+                        setImage: setLogoPublicImage,
+                        cardNumber: cardNumber,
+                        language: selectedLanguage,
+                        rarity: selectedRarity,
+                        edition: selectedEdition !== 'none' ? selectedEdition : null,
+                        surface: selectedSurface !== 'none' ? selectedSurface : null,
+                        variant: productVariant,
+                    };
+                    const responseItem = await endpoint.post('', DTO);
+
+                    batch(() => {
+                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
+                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
+                    });
+                } catch (e: any) {
+                    Notifications.exception(e);
+                }
+            }
+
+            // Saving card with existing set & series
+            if (!showNewSeries && !showNewSetBox) {
+                try {
+                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
+                    const DTO = {
+                        imagePath: cardPublicImage,
+                        name: cardName,
+                        category: cardCategory,
+                        releaseDate: releaseDate,
+                        seriesId: selectedSeries?.id,
+                        seriesName: null,
+                        seriesImage: null,
+                        setId: selectedSet?.id,
+                        setName: null,
+                        setImage: null,
+                        cardNumber: cardNumber,
+                        language: selectedLanguage,
+                        rarity: selectedRarity,
+                        edition: selectedEdition !== 'none' ? selectedEdition : null,
+                        surface: selectedSurface !== 'none' ? selectedSurface : null,
+                        variant: productVariant,
+                    };
+                    const responseItem = await endpoint.post('', DTO);
+                    batch(() => {
+                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
+                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
+                    });
+                } catch (e: any) {
+                    Notifications.exception(e);
+                }
+            }
+
+            if (showNewSeries) {
+                try {
+                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
+                    const seriesLogoPublicImage = await filesRepository.uploadFile(newSeriesLogo!);
+                    const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
+
+                    const DTO = {
+                        imagePath: cardPublicImage,
+                        name: cardName,
+                        category: cardCategory,
+                        releaseDate: newSetReleaseDate,
+                        seriesId: null,
+                        seriesName: newSeriesName,
+                        seriesImage: seriesLogoPublicImage,
+                        setId: null,
+                        setName: newSetName,
+                        setImage: setLogoPublicImage,
+                        cardNumber: cardNumber,
+                        language: selectedLanguage,
+                        rarity: selectedRarity,
+                        edition: selectedEdition !== 'none' ? selectedEdition : null,
+                        surface: selectedSurface !== 'none' ? selectedSurface : null,
+                        variant: productVariant,
+                    };
+                    const responseItem = await endpoint.post('', DTO);
+                    batch(() => {
+                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
+                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
+                    });
+                } catch (e: any) {
+                    Notifications.exception(e);
+                }
+            }
+        };
 
         return (
             <div ref={ref}>
@@ -552,6 +667,26 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                             sx={{ minWidth: '333px' }}
                                         />
                                     </FormControl>
+
+                                    <FormControl sx={{ marginTop: '12px' }}>
+                                        <FormHelperText
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: '#000',
+                                                marginLeft: 0,
+                                                marginBottom: '12px',
+                                            }}
+                                        >
+                                            Card Number
+                                        </FormHelperText>
+                                        <TextField
+                                            variant="outlined"
+                                            value={cardNumber}
+                                            onChange={handleCardNumberChange}
+                                            placeholder={'Enter card number'}
+                                            sx={{ minWidth: '333px' }}
+                                        />
+                                    </FormControl>
                                 </Grid>
                             </Grid>
 
@@ -572,6 +707,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                             <DesktopDatePicker
                                                 inputFormat="MM/DD/yyyy"
                                                 value={releaseDate}
+                                                disabled
                                                 onChange={handleReleaseDateChange}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
@@ -715,7 +851,12 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                 Cancel
                             </Button>
 
-                            <Button variant="contained" color={'primary'} disabled={!showSaveButton}>
+                            <Button
+                                variant="contained"
+                                color={'primary'}
+                                onClick={handleAddCard}
+                                disabled={!showSaveButton}
+                            >
                                 Save
                             </Button>
                         </Box>

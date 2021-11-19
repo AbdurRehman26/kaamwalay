@@ -59,7 +59,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
                 <img
                     src={URL.createObjectURL(uploadedImage)}
                     alt=""
-                    style={{ maxWidth: '232px', maxHeight: '176px', marginTop: '6px', imageRendering: 'pixelated' }}
+                    style={{ maxWidth: '210px', maxHeight: '176px', marginTop: '6px', imageRendering: 'pixelated' }}
                 />
                 <ButtonGroup variant="contained" sx={{ marginTop: '6px', marginBottom: '6px' }}>
                     <Button onClick={deleteImage}>Delete</Button>

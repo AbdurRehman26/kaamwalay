@@ -1,6 +1,6 @@
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback } from 'react';
-import { Hits, Stats } from 'react-instantsearch-dom';
+import { connectStateResults, Hits, Stats } from 'react-instantsearch-dom';
 import ManageCardDialogResultItem from './ManageCardDialogResultItem';
 import ManageCardDialogResultsPagination from './ManageCardDialogResultsPagination';
 import Typography from '@mui/material/Typography';
@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
+import { Paper } from '@mui/material';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -45,9 +46,10 @@ const useStyles = makeStyles(
  * @date: 13.09.2021
  * @time: 23:44
  */
-export function ManageCardDialogResults() {
+const ManageCardDialogResults = connectStateResults(({ searchResults }) => {
     const classes = useStyles();
     const dispatch = useAppDispatch();
+    const hasResults = searchResults && searchResults.nbHits !== 0;
 
     const handleCreateNewCard = useCallback(() => {
         dispatch(manageCardDialogActions.backup());
@@ -67,10 +69,39 @@ export function ManageCardDialogResults() {
                     </Button>
                 </Box>
             </Box>
-            <Hits hitComponent={ManageCardDialogResultItem} />
-            <ManageCardDialogResultsPagination />
+
+            {hasResults ? (
+                <>
+                    <Hits hitComponent={ManageCardDialogResultItem} />
+                    <ManageCardDialogResultsPagination />
+                </>
+            ) : (
+                <Paper
+                    variant={'outlined'}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '36px',
+                        width: '100%',
+                    }}
+                >
+                    <Typography variant={'caption'} className={font.fontWeightNormal}>
+                        No results found
+                    </Typography>
+                    <Button
+                        color={'primary'}
+                        variant="contained"
+                        sx={{ fontSize: '12px', marginTop: '6px' }}
+                        onClick={handleCreateNewCard}
+                    >
+                        CREATE A NEW CARD
+                    </Button>
+                </Paper>
+            )}
         </div>
     );
-}
+});
 
 export default ManageCardDialogResults;

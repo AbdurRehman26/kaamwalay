@@ -9,12 +9,13 @@ use App\Models\CardProduct;
 use App\Services\Card\CardProductService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CardProductController extends Controller
 {
-    public function __construct(protected CardProductService $cardProductService) {
+    public function __construct(protected CardProductService $cardProductService)
+    {
     }
 
     public function store(StoreCardProductRequest $request): CardProductResource | JsonResponse
@@ -35,11 +36,9 @@ class CardProductController extends Controller
 
     public function delete(Request $request, CardProduct $cardProduct)
     {
-        if ($cardProduct->isAddedByCustomer() && auth()->user()->id === $cardProduct->added_by_id )
-        {
+        if ($cardProduct->isAddedByCustomer() && auth()->user()->id === $cardProduct->added_by_id) {
             return $cardProduct->delete();
-        }
-        else {
+        } else {
             return 'Forbidden';
         }
     }

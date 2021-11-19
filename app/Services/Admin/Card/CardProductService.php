@@ -9,13 +9,12 @@ use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use TypeError;
 
 class CardProductService
 {
-
     public const CARD_RARITIES = [
         'Common',
         'Uncommon',
@@ -72,13 +71,11 @@ class CardProductService
         $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
 
         if ($seriesResponse["count"] > 0) {
-
             $seriesId = $seriesResponse['results'][0]['id'];
-        } else if ( $seriesName && $data['series_image'] ) {
+        } elseif ($seriesName && $data['series_image']) {
             $createSeriesResponse = $this->agsService->createSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
 
-            if ( array_key_exists('id', $createSeriesResponse) )
-            {
+            if (array_key_exists('id', $createSeriesResponse)) {
                 $seriesId = $seriesResponse['id'];
             }
         }
@@ -93,21 +90,20 @@ class CardProductService
         //Store in AGS
         $setResponse = $this->agsService->getSet([
             'name' => $setName,
-            'serie' => $seriesId
+            'serie' => $seriesId,
         ]);
 
         if ($setResponse["count"] > 0) {
             $setId = $setResponse['results'][0]['id'];
-        } else if ( $setName && $seriesId && $data['release_date'] && $data['set_image']) {
+        } elseif ($setName && $seriesId && $data['release_date'] && $data['set_image']) {
             $createSetResponse = $this->agsService->createSet([
                 'name' => $setName,
                 'image_path' => $data['set_image'],
                 'release_date' => $data['release_date'],
-                'serie_id' => $seriesId
+                'serie_id' => $seriesId,
             ]);
 
-            if ( array_key_exists('id', $createSetResponse) )
-            {
+            if (array_key_exists('id', $createSetResponse)) {
                 $setId = $createSetResponse['id'];
             }
         }
@@ -118,7 +114,6 @@ class CardProductService
     protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): array
     {
         try {
-
             $createData = [];
             $createData['series_id'] = $this->getOrCreateSeriesFromAgs($seriesName, $data);
             $createData['set_id'] = $this->getOrCreateSetFromAgs($createData['series_id'], $setName, $data);
@@ -137,7 +132,7 @@ class CardProductService
                 'variant' => $data['variant'],
             ]);
 
-            $createData = array_merge($createData,[
+            $createData = array_merge($createData, [
                 'name' => $data['name'],
                 'category_id' => $categoryId,
                 'rarity' => $data['rarity'],
@@ -150,12 +145,15 @@ class CardProductService
                 // 'card_reference_id' => $cardReferenceId
             ]);
             Log::debug($createData);
+
             return $this->agsService->createCard($createData);
-        } catch( Exception $e ){
+        } catch (Exception $e) {
             report($e);
+
             return [];
-        } catch( TypeError $te ){
+        } catch (TypeError $te) {
             report($te);
+
             return [];
         }
     }
@@ -171,25 +169,24 @@ class CardProductService
         if (array_key_exists('series_id', $data) && $data['series_id']) {
             $series = CardSeries::find($data['series_id']);
             $seriesName = $series->name;
-        } else if (array_key_exists('series_name', $data) && $data['series_name']) {
+        } elseif (array_key_exists('series_name', $data) && $data['series_name']) {
             $seriesName = $data['series_name'];
         }
 
         if (array_key_exists('set_id', $data) && $data['set_id']) {
             $set = CardSet::find($data['set_id']);
             $setName = $set->name;
-        } else if (array_key_exists('set_name', $data) && $data['set_name']) {
+        } elseif (array_key_exists('set_name', $data) && $data['set_name']) {
             $setName = $data['set_name'];
         }
 
         //store in AGS
-        $agsResponse = $this->processAgsCreate($category->id,$seriesName,$setName,$data);
+        $agsResponse = $this->processAgsCreate($category->id, $seriesName, $setName, $data);
 
-        if ($agsResponse && array_key_exists('id', $agsResponse)){
+        if ($agsResponse && array_key_exists('id', $agsResponse)) {
 
             // Store in RG
-            if(!$series){
-
+            if (! $series) {
                 $series = new CardSeries([
                     'name' => $seriesName,
                     'image_path' => $data['series_image'],
@@ -199,7 +196,7 @@ class CardProductService
                 $series->save();
             }
 
-            if(!$set){
+            if (! $set) {
                 $set = new CardSet([
                     'name' => $setName,
                     'description' => '',
@@ -233,7 +230,6 @@ class CardProductService
 
             return $card;
         } else {
-
             throw new CardProductCanNotBeCreated;
         }
     }
@@ -241,14 +237,13 @@ class CardProductService
     public function getOptionsValues()
     {
         return [
-            'category' => CardCategory::select('id','name')->get(),
+            'category' => CardCategory::select('id', 'name')->get(),
             'rarity' => CardProductService::CARD_RARITIES,
             'edition' => CardProductService::CARD_EDITIONS,
             'surface' => CardProductService::CARD_SURFACES,
             'language' => CardProductService::CARD_LANGUAGES,
             'series' => CardSeries::with('cardSets:id,card_series_id,name,image_path,release_date')
-                        ->select('id','name','image_path')->get(),
+                        ->select('id', 'name', 'image_path')->get(),
         ];
     }
-
 }

@@ -12,7 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CardProductController extends Controller
 {
-    public function __construct(protected CardProductService $cardProductService) {
+    public function __construct(protected CardProductService $cardProductService)
+    {
     }
 
     public function store(StoreCardProductRequest $request): CardProductResource | JsonResponse
@@ -21,6 +22,7 @@ class CardProductController extends Controller
             $card = $this->cardProductService->create($request->validated());
         } catch (Exception $e) {
             report($e);
+
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

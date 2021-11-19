@@ -15,10 +15,10 @@ beforeEach(function () {
 });
 
 test('customers can create cards manually', function () {
-    $response = $this->postJson('/api/customer/cards',[
+    $response = $this->postJson('/api/customer/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
-        'image_path' => 'http://www.google.com'
+        'image_path' => 'http://www.google.com',
     ]);
 
     $response->assertSuccessful();
@@ -26,6 +26,6 @@ test('customers can create cards manually', function () {
         'name' => 'Lorem Ipsum',
         'short_name' => 'Added Manually',
         'long_name' => 'Lorem ipsum dolor sit amet.',
-        'image_path' => 'http://www.google.com'
+        'image_path' => 'http://www.google.com',
     ]);
 });

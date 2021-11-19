@@ -106,6 +106,7 @@ class AGSClient
 
         if ($response->successful()) {
             Log::debug($response->json());
+
             return $response->json();
         }
 
@@ -118,6 +119,7 @@ class AGSClient
 
         if ($response->successful()) {
             Log::debug($response->json());
+
             return $response->json();
         }
 
@@ -130,6 +132,7 @@ class AGSClient
 
         if ($response->successful()) {
             Log::debug($response->json());
+
             return $response->json();
         }
 
@@ -142,6 +145,7 @@ class AGSClient
 
         if ($response->successful()) {
             Log::debug($response->json());
+
             return $response->json();
         }
 
@@ -154,6 +158,7 @@ class AGSClient
 
         if ($response->successful()) {
             Log::debug($response->json());
+
             return $response->json();
         }
 

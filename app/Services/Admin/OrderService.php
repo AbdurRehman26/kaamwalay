@@ -120,8 +120,7 @@ class OrderService
         $orderItem->save();
 
         //Updating of certificate when swapping cards should only be done on OrderItem which is confirmed or graded
-        if(in_array($orderItem->order_item_status_id, [OrderItemStatus::CONFIRMED, OrderItemStatus::GRADED]))
-        {
+        if (in_array($orderItem->order_item_status_id, [OrderItemStatus::CONFIRMED, OrderItemStatus::GRADED])) {
             $this->updateAgsCertificateCard($orderItem);
         }
 

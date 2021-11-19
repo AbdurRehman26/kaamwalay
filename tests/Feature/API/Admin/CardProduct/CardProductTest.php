@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-use Database\Seeders\RolesSeeder;
 use Database\Seeders\CardCategoriesSeeder;
+use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Http;
 
@@ -41,10 +41,10 @@ test('admins can create cards manually', function () {
     Http::fake([
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
-        '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, [])
+        '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson('/api/admin/cards',[
+    $response = $this->postJson('/api/admin/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
@@ -59,7 +59,7 @@ test('admins can create cards manually', function () {
         'rarity' => 'Common',
         'edition' => '1st Edition',
         'surface' => 'Holo',
-        'variant' => 'Lorem'
+        'variant' => 'Lorem',
     ]);
 
     $response->assertSuccessful();
@@ -78,6 +78,6 @@ test('admins can create cards manually', function () {
         'variant' => "Lorem",
         'surface' => "Holo",
         'edition' => "1st Edition",
-        'added_by_customer' => false
+        'added_by_customer' => false,
     ]);
 });

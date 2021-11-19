@@ -1,0 +1,40 @@
+{
+    "id": 28389,
+    "category": {
+        "name": "Pokemon"
+    },
+    "set_id": 487,
+    "name": "Test Card",
+    "rarity": "Common",
+    "card_number": "001/050",
+    "set_name": "Test Set",
+    "image_path": "CARD_IMAGE_URL",
+    "card_url": null,
+    "image_bucket_path": "",
+    "pokemon_set": {
+        "id": 487,
+        "serie_id": 33,
+        "name": "Test Set",
+        "description": null,
+        "cards_number": null,
+        "secret_cards": null,
+        "release_date": "2021-11-06",
+        "image_path": "SET_IMAGE_URL",
+        "image_bucket_path": "",
+        "set_url": null
+    },
+    "pokemon_serie": {
+        "id": 33,
+        "name": "Test Serie",
+        "image_path": "SERIE_IMAGE_URL",
+        "image_bucket_path": ""
+    },
+    "card_number_order": null,
+    "language": "English",
+    "card_reference_id": null,
+    "edition": "1st Edition",
+    "surface": null,
+    "variant": null,
+    "app_status": 1,
+    "app_message": "OK"
+}

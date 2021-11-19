@@ -4,6 +4,7 @@ use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\CardCategoriesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Http;
 
 uses(WithFaker::class);
 
@@ -21,10 +22,28 @@ beforeEach(function () {
         'password' => bcrypt('password'),
     ]);
 
+    $this->sampleGetSeriesResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/AGS_get_series_response_200.json'
+    ), associative: true);
+
+    $this->sampleGetSetResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/AGS_get_set_response_200.json'
+    ), associative: true);
+
+    $this->sampleCreateCardResponse = json_decode(file_get_contents(
+        base_path() . '/tests/stubs/AGS_create_card_response_200.json'
+    ), associative: true);
+
     $this->actingAs($this->user);
 });
 
 test('admins can create cards manually', function () {
+    Http::fake([
+        '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
+        '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
+        '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, [])
+    ]);
+
     $response = $this->postJson('/api/admin/cards',[
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',

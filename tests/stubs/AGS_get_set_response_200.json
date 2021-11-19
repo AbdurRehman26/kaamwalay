@@ -1,0 +1,27 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 451,
+            "serie_id": 29,
+            "serie": {
+                "id": 29,
+                "name": "Original Era",
+                "image_path": "https://den-media.pokellector.com/logos/Original.logo.312.png",
+                "image_bucket_path": ""
+            },
+            "name": "Base Set",
+            "description": "This is the first entry in the Japanese TCG series. Though the cards were all unnumbered, we've organized them based on how they were originally printed.",
+            "cards_number": 102,
+            "secret_cards": 0,
+            "release_date": "10/20/1996",
+            "image_path": "https://den-media.pokellector.com/logos/Expansion-Pack.logo.311.png",
+            "image_bucket_path": "",
+            "set_url": "https://jp.pokellector.com/sets/EXP-Expansion-Pack"
+        }
+    ],
+    "app_status": 1,
+    "app_message": "OK"
+}

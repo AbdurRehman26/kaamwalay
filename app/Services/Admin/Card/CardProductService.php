@@ -59,34 +59,9 @@ class CardProductService
     {
     }
 
-    protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): array
+    protected function getUniqueCardId(array $data)
     {
-        try {
-
-            $createData = [];
-            $createData['series_id'] = $this->getOrCreateSeriesFromAgs($seriesName, $data);
-            $createData['set_id'] = $this->getOrCreateSetFromAgs($createData['series_id'], $setName, $data);
-
-            $createData = array_merge($createData,[
-                'name' => $data['name'],
-                'category_id' => $categoryId,
-                'rarity' => $data['rarity'],
-                'card_number_order' => $data['card_number'],
-                'image_path' => $data['image_path'],
-                'edition' => $data['edition'] ?? '',
-                'surface' => $data['surface'] ?? '',
-                'variant' => $data['variant'] ?? '',
-                'language' => $data['language'],
-            ]);
-            Log::debug($createData);
-            return $this->agsService->createCard($createData);
-        } catch( Exception $e ){
-            report($e);
-            return [];
-        } catch( TypeError $te ){
-            report($te);
-            return [];
-        }
+        return null;
     }
 
     protected function getOrCreateSeriesFromAgs(string $seriesName, array $data): int
@@ -138,6 +113,51 @@ class CardProductService
         }
 
         return $setId;
+    }
+
+    protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): array
+    {
+        try {
+
+            $createData = [];
+            $createData['series_id'] = $this->getOrCreateSeriesFromAgs($seriesName, $data);
+            $createData['set_id'] = $this->getOrCreateSetFromAgs($createData['series_id'], $setName, $data);
+
+            $cardReferenceId = $this->getUniqueCardId([
+                'series_id' => $createData['series_id'],
+                'set_id' => $createData['set_id'],
+                'name' => $data['name'],
+                'category_id' => $data['category'],
+                'release_date' => $data['release_date'],
+                'card_number' => $data['card_number'],
+                'language' => $data['language'],
+                'rarity' => $data['rarity'],
+                'edition' => $data['edition'],
+                'surface' => $data['surface'],
+                'variant' => $data['variant'],
+            ]);
+
+            $createData = array_merge($createData,[
+                'name' => $data['name'],
+                'category_id' => $categoryId,
+                'rarity' => $data['rarity'],
+                'card_number_order' => $data['card_number'],
+                'image_path' => $data['image_path'],
+                'edition' => $data['edition'] ?? '',
+                'surface' => $data['surface'] ?? '',
+                'variant' => $data['variant'] ?? '',
+                'language' => $data['language'],
+                // 'card_reference_id' => $cardReferenceId
+            ]);
+            Log::debug($createData);
+            return $this->agsService->createCard($createData);
+        } catch( Exception $e ){
+            report($e);
+            return [];
+        } catch( TypeError $te ){
+            report($te);
+            return [];
+        }
     }
 
     public function create(array $data): CardProduct
@@ -206,7 +226,8 @@ class CardProductService
                 'variant' => $data['variant'] ?? '',
                 'language' => $data['language'],
                 'added_manually' => true,
-                'added_by_id' => auth()->user()->id
+                'added_by_id' => auth()->user()->id,
+                'card_reference_id' => $agsResponse['card_reference_id'],
             ]);
             $card->save();
 

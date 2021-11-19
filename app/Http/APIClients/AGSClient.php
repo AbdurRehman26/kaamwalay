@@ -105,8 +105,6 @@ class AGSClient
         $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/series/', $data);
 
         if ($response->successful()) {
-            Log::debug($response->json());
-
             return $response->json();
         }
 
@@ -118,8 +116,6 @@ class AGSClient
         $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/series/', $data);
 
         if ($response->successful()) {
-            Log::debug($response->json());
-
             return $response->json();
         }
 
@@ -131,8 +127,6 @@ class AGSClient
         $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/sets/', $data);
 
         if ($response->successful()) {
-            Log::debug($response->json());
-
             return $response->json();
         }
 
@@ -144,8 +138,6 @@ class AGSClient
         $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/sets/', $data);
 
         if ($response->successful()) {
-            Log::debug($response->json());
-
             return $response->json();
         }
 
@@ -157,8 +149,6 @@ class AGSClient
         $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/cards/', $data);
 
         if ($response->successful()) {
-            Log::debug($response->json());
-
             return $response->json();
         }
 

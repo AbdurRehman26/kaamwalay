@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
@@ -10,21 +11,26 @@ import ListItemText from '@mui/material/ListItemText';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import { useAuth } from '@shared/hooks/useAuth';
+import PersonIcon from '@mui/icons-material/PersonOutline';
+import UploadIcon from '@mui/icons-material/FileUploadOutlined';
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
 
 const useStyles = makeStyles(
     (theme) => ({
         toggleButton: {
             position: 'absolute',
-            top: 3,
-            left: 0,
+            top: 7,
+            left: 8,
         },
         button: {
-            margin: theme.spacing(0, 1),
+            margin: theme.spacing(1.5, 2, 0),
             borderRadius: 20,
             minWidth: 120,
+            width: `calc(100% - ${theme.spacing(4)})`,
         },
         divider: {
-            margin: theme.spacing(1, 2),
+            margin: theme.spacing(1, 0),
         },
         listItemText: {
             fontWeight: 500,
@@ -111,37 +117,44 @@ export function DrawerNavigation() {
                     {/*    <ListItemText primary={'FAQ'} primaryTypographyProps={{ className: classes.listItemText }} />*/}
                     {/* </ListItem>*/}
 
-                    {/* <Divider className={classes.divider} />*/}
+                    <Divider className={classes.divider} />
+                    <Grid container direction={'column'} alignItems={'center'} justifyContent={'center'}>
+                        <Button
+                            href={'/dashboard/submissions/new'}
+                            variant={'contained'}
+                            color={'primary'}
+                            className={classes.button}
+                            startIcon={<UploadIcon />}
+                            fullWidth
+                            disableElevation
+                        >
+                            Submit Cards
+                        </Button>
 
-                    {!authenticated ? (
-                        <>
-                            <ListItem dense>
-                                <Button
-                                    href={'/auth/sign-in'}
-                                    variant={'outlined'}
-                                    color={'primary'}
-                                    className={classes.button}
-                                >
-                                    Log In
-                                </Button>
-                                <Button
-                                    href={'/auth/sign-up'}
-                                    variant={'contained'}
-                                    color={'primary'}
-                                    className={classes.button}
-                                >
-                                    Sign Up
-                                </Button>
-                            </ListItem>
-                        </>
-                    ) : (
-                        <ListItem button onClick={handleLogout}>
-                            <ListItemText
-                                primary={'Logout'}
-                                primaryTypographyProps={{ className: classes.listItemText }}
-                            />
-                        </ListItem>
-                    )}
+                        {!authenticated ? (
+                            <Button
+                                href={'/auth/sign-in'}
+                                variant={'text'}
+                                color={'inherit'}
+                                className={classes.button}
+                                startIcon={<PersonIcon />}
+                                fullWidth
+                            >
+                                Log In
+                            </Button>
+                        ) : (
+                            <Button
+                                variant={'text'}
+                                color={'inherit'}
+                                className={classes.button}
+                                onClick={handleLogout}
+                                startIcon={<LogoutIcon />}
+                                fullWidth
+                            >
+                                Sign out
+                            </Button>
+                        )}
+                    </Grid>
                 </List>
             </Drawer>
         </>

@@ -1,3 +1,5 @@
+import PersonIcon from '@mui/icons-material/PersonOutline';
+import UploadIcon from '@mui/icons-material/FileUploadOutlined';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
@@ -9,9 +11,20 @@ const useStyles = makeStyles(
         button: {
             color: theme.palette.primary.light,
             borderRadius: 24,
-            padding: theme.spacing(1.25, 3.5),
+            padding: theme.spacing(1.25, 2.5),
             fontWeight: 500,
             fontSize: 14,
+            [theme.breakpoints.down('sm')]: {
+                minWidth: 40,
+                width: 40,
+                height: 40,
+                textIndent: -9999,
+                overflow: 'hidden',
+                padding: theme.spacing(1),
+                '& .MuiButton-startIcon': {
+                    marginRight: -2,
+                },
+            },
         },
         buttonHighlighted: {
             border: `2px solid ${theme.palette.primary.light} !important`,
@@ -40,16 +53,22 @@ export function AuthControls() {
     if (!authenticated) {
         return (
             <>
-                <Button href={'/auth/sign-in'} color={'primary'} className={cx(classes.button, classes.space)}>
-                    Log in
+                <Button
+                    href={'/auth/sign-in'}
+                    color={'primary'}
+                    variant={'outlined'}
+                    className={cx(classes.button, classes.buttonHighlighted, classes.space)}
+                    startIcon={<UploadIcon />}
+                >
+                    Submit
                 </Button>
                 <Button
-                    href={'/auth/sign-up'}
-                    variant={'outlined'}
+                    href={'/auth/sign-in'}
                     color={'primary'}
-                    className={cx(classes.button, classes.buttonHighlighted)}
+                    className={cx(classes.button)}
+                    startIcon={<PersonIcon />}
                 >
-                    Sign Up
+                    Log in
                 </Button>
             </>
         );

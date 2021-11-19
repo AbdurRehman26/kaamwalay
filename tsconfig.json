@@ -17,6 +17,8 @@
         "baseUrl": ".",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "incremental": true,
+        "tsBuildInfoFile": ".tsbuildinfo",
         "paths": {
             "@admin/*": ["resources/ts/admin/*"],
             "@auth/*": ["resources/ts/auth/*"],

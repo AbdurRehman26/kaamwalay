@@ -31,6 +31,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
                 'carlos@wooter.com',
                 'nabeel@wooter.com',
                 'alinus@wooter.com',
+                'luis@wooter.com',
             ]);
         });
     }

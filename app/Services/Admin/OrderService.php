@@ -72,6 +72,7 @@ class OrderService
             'card_products.edition',
             'card_products.surface',
             'card_products.variant',
+            'card_products.card_reference_id',
         ])
         ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
         ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')

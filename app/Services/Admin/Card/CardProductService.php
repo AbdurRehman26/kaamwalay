@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
+use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
 use App\Models\CardSeries;
@@ -10,6 +11,7 @@ use App\Services\AGS\AgsService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use TypeError;
 
 class CardProductService
 {
@@ -57,7 +59,7 @@ class CardProductService
     {
     }
 
-    protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): void
+    protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): array
     {
         try {
 
@@ -77,9 +79,13 @@ class CardProductService
                 'language' => $data['language'],
             ]);
             Log::debug($createData);
-            $this->agsService->createCard($createData);
+            return $this->agsService->createCard($createData);
         } catch( Exception $e ){
             report($e);
+            return [];
+        } catch( TypeError $te ){
+            report($te);
+            return [];
         }
     }
 
@@ -156,53 +162,59 @@ class CardProductService
             $setName = $data['set_name'];
         }
 
-        // Store in RG
-        if(!$series){
-
-            $series = new CardSeries([
-                'name' => $seriesName,
-                'image_path' => $data['series_image'],
-                'image_bucket_path' => $data['series_image'],
-                'card_category_id' => $category->id,
-            ]);
-            $series->save();
-        }
-
-        if(!$set){
-            $set = new CardSet([
-                'name' => $setName,
-                'description' => '',
-                'image_path' => $data['set_image'],
-                'image_bucket_path' => $data['set_image'],
-                'card_category_id' => $category->id,
-                'card_series_id' => $series->id,
-                'release_date' => $data['release_date'],
-                'release_year' => (new Carbon($data['release_date']))->format('Y'),
-            ]);
-            $set->save();
-        }
-
-        $card = new CardProduct([
-            'name' => $data['name'],
-            'card_set_id' => $set->id,
-            'card_category_id' => $category->id,
-            'rarity' => $data['rarity'],
-            'card_number' => $data['card_number'],
-            'card_number_order' => $data['card_number'],
-            'image_path' => $data['image_path'],
-            'edition' => $data['edition'] ?? '',
-            'surface' => $data['surface'] ?? '',
-            'variant' => $data['variant'] ?? '',
-            'language' => $data['language'],
-            'added_manually' => true,
-            'added_by_id' => auth()->user()->id
-        ]);
-        $card->save();
-
         //store in AGS
-        $this->processAgsCreate($category->id,$seriesName,$setName,$data);
+        $agsResponse = $this->processAgsCreate($category->id,$seriesName,$setName,$data);
 
-        return $card;
+        if ($agsResponse && array_key_exists('id', $agsResponse)){
+
+            // Store in RG
+            if(!$series){
+
+                $series = new CardSeries([
+                    'name' => $seriesName,
+                    'image_path' => $data['series_image'],
+                    'image_bucket_path' => $data['series_image'],
+                    'card_category_id' => $category->id,
+                ]);
+                $series->save();
+            }
+
+            if(!$set){
+                $set = new CardSet([
+                    'name' => $setName,
+                    'description' => '',
+                    'image_path' => $data['set_image'],
+                    'image_bucket_path' => $data['set_image'],
+                    'card_category_id' => $category->id,
+                    'card_series_id' => $series->id,
+                    'release_date' => $data['release_date'],
+                    'release_year' => (new Carbon($data['release_date']))->format('Y'),
+                ]);
+                $set->save();
+            }
+
+            $card = new CardProduct([
+                'name' => $data['name'],
+                'card_set_id' => $set->id,
+                'card_category_id' => $category->id,
+                'rarity' => $data['rarity'],
+                'card_number' => $data['card_number'],
+                'card_number_order' => $data['card_number'],
+                'image_path' => $data['image_path'],
+                'edition' => $data['edition'] ?? '',
+                'surface' => $data['surface'] ?? '',
+                'variant' => $data['variant'] ?? '',
+                'language' => $data['language'],
+                'added_manually' => true,
+                'added_by_id' => auth()->user()->id
+            ]);
+            $card->save();
+
+            return $card;
+        } else {
+
+            throw new CardProductCanNotBeCreated;
+        }
     }
 
     public function getOptionsValues()

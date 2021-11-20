@@ -42,6 +42,16 @@ const useStyles = makeStyles(
                 fontSize: '24px',
             },
         },
+        headerLogo: {
+            [theme.breakpoints.down('sm')]: {
+                width: '220px',
+            },
+        },
+        headerAvatar: {
+            [theme.breakpoints.down('sm')]: {
+                width: '40px',
+            },
+        },
     }),
     {
         name: 'SubmissionHeaderStyle',
@@ -56,9 +66,9 @@ function SubmissionHeader() {
             <Container>
                 <div className={classes.logoAndAvatarContainer}>
                     <Link to={'/'}>
-                        <img src={Logo} alt={'Robograding Logo'} />
+                        <img className={classes.headerLogo} src={Logo} alt={'Robograding Logo'} />
                     </Link>
-                    <img src={RobogradingAvatar} alt={'Robograding Avatar'} />
+                    <img className={classes.headerAvatar} src={RobogradingAvatar} alt={'Robograding Avatar'} />
                 </div>
                 <div className={classes.headerTitleContainer}>
                     <Typography variant="h1" className={classes.headerTitle}>

@@ -32,26 +32,32 @@ class UpdateRevenueStats extends Command
      */
     public function handle(RevenueStatsService $revenueStatsService): int
     {
-        $currentDate = Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1);
-        $formattedDate = $currentDate->format('Y-m-d');
-        
-        $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
-        Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Starting");
-        $revenueStats = $revenueStatsService->addDailyStats($formattedDate);
-        $this->info("Revenue Stats Daily for Month : " . Carbon::parse($formattedDate)->format('F-Y') . " Starting");
-        Log::info("Revenue Stats Daily for Month : " . Carbon::parse($formattedDate)->format('F-Y') . " Starting");
-        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($formattedDate);
+        $currentDate = (
+            Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1)
+        )->format('Y-m-d');
+
+        $this->log('Revenue Stats Daily for Date : ' . $currentDate . ' Starting');
+
+        $revenueStats = $revenueStatsService->addDailyStats($currentDate);
+
+        $this->log('Revenue Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Starting');
+
+        $revenueStatsMonthly = $revenueStatsService->addMonthlyStats($currentDate);
 
         if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new RevenueStatsUpdated($revenueStats, $revenueStatsMonthly));
         }
 
-        $this->info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
-        Log::info("Revenue Stats Daily for Date : " . $formattedDate . " Completed");
-        $this->info("Revenue Stats Daily for Month : " . Carbon::parse($formattedDate)->format('F-Y') . " Completed");
-        Log::info("Revenue Stats Daily for Month : " . Carbon::parse($formattedDate)->format('F-Y') . " Completed");
+        $this->log('Revenue Stats Daily for Date : ' . $currentDate . ' Completed');
+        $this->log('Revenue Stats Daily for Month : ' . Carbon::parse($currentDate)->format('F-Y') . ' Completed');
 
         return 0;
+    }
+
+    protected function log(string $message, array $context = []): void
+    {
+        $this->info($message);
+        Log::info($message, $context);
     }
 }

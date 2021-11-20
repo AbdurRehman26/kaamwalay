@@ -1,4 +1,3 @@
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect } from 'react';
@@ -7,15 +6,19 @@ import { getServiceLevels } from '../redux/slices/newSubmissionSlice';
 import ServiceLevelItem from './ServiceLevelItem';
 import StepDescription from './StepDescription';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     pageContainer: {
         width: '100%',
         maxWidth: '750px',
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '100%',
+            padding: '16px',
+        },
     },
     servicesContainer: {
         marginBottom: '64px',
     },
-});
+}));
 
 export function SubmissionStep01Content() {
     const classes = useStyles();
@@ -26,7 +29,7 @@ export function SubmissionStep01Content() {
     }, [dispatch]);
 
     return (
-        <Container className={classes.pageContainer}>
+        <div className={classes.pageContainer}>
             <StepDescription
                 title="Select your service level"
                 description="Select your desired service level from the list below"
@@ -38,7 +41,7 @@ export function SubmissionStep01Content() {
             </div>
 
             <Divider light />
-        </Container>
+        </div>
     );
 }
 

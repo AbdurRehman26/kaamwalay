@@ -85,7 +85,7 @@ class CardProduct extends Model
      */
     public function shouldBeSearchable()
     {
-        return !$this->added_manually || $this->isAddedByAdmin();
+        return ! $this->added_manually || $this->isAddedByAdmin();
     }
 
     public function cardSet(): BelongsTo
@@ -103,11 +103,13 @@ class CardProduct extends Model
         return $this->belongsTo(User::class, 'added_by_id');
     }
 
-    public function isAddedByAdmin(){
+    public function isAddedByAdmin()
+    {
         return $this->added_manually && $this->addedBy->isAdmin();
     }
 
-    public function isAddedByCustomer(){
+    public function isAddedByCustomer()
+    {
         return $this->added_manually && $this->addedBy->isCustomer();
     }
 

@@ -13,6 +13,7 @@ use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
@@ -118,7 +119,10 @@ class OrderService
         $orderItem->declared_value_total = $value;
         $orderItem->save();
 
-        $this->updateAgsCertificateCard($orderItem);
+        //Updating of certificate when swapping cards should only be done on OrderItem which is confirmed or graded
+        if (in_array($orderItem->order_item_status_id, [OrderItemStatus::CONFIRMED, OrderItemStatus::GRADED])) {
+            $this->updateAgsCertificateCard($orderItem);
+        }
 
         OrderItemCardChangedEvent::dispatch($orderItem, $previousCardProduct);
 

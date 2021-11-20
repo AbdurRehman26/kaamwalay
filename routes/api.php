@@ -17,7 +17,6 @@ use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\Customer\Order\ShippingMethodController;
 use App\Http\Controllers\API\Customer\PaymentCardController;
 use App\Http\Controllers\API\Files\UploadController;
-use App\Models\CardProduct;
 use Illuminate\Support\Facades\Route;
 
 /*

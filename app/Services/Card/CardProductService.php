@@ -16,7 +16,7 @@ class CardProductService
             $data,
             [
                 'added_manually' => true,
-                'added_by_id' => auth()->user()->id
+                'added_by_id' => auth()->user()->id,
             ]
         ));
     }

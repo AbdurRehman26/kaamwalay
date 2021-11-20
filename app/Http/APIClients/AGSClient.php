@@ -99,4 +99,59 @@ class AGSClient
 
         return $this->responseHandler(response: $response, route: '/robograding/certificates/', payload: [$data]);
     }
+
+    public function getSeries(array $data)
+    {
+        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/series/', $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/series/', payload: [$data]);
+    }
+
+    public function createSeries(array $data)
+    {
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/series/', $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/series/', payload: [$data]);
+    }
+
+    public function getSet(array $data)
+    {
+        $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/sets/', $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/sets/', payload: [$data]);
+    }
+
+    public function createSet(array $data)
+    {
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/sets/', $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/sets/', payload: [$data]);
+    }
+
+    public function createCard(array $data)
+    {
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/cards/', $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->responseHandler(response: $response, route: '/cards/', payload: [$data]);
+    }
 }

@@ -132,6 +132,11 @@ class CardProductService
                 'variant' => $data['variant'],
             ]);
 
+            if ($cardReferenceId)
+            {
+                $createData['card_reference_id'] = $cardReferenceId;
+            }
+
             $createData = array_merge($createData, [
                 'name' => $data['name'],
                 'category_id' => $categoryId,
@@ -142,7 +147,6 @@ class CardProductService
                 'surface' => $data['surface'] ?? '',
                 'variant' => $data['variant'] ?? '',
                 'language' => $data['language'],
-                // 'card_reference_id' => $cardReferenceId
             ]);
             Log::debug($createData);
 

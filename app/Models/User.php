@@ -19,6 +19,8 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword;
 
+    public string $pushNotificationType = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -153,6 +155,17 @@ class User extends Authenticatable implements JWTSubject
                 'PASSWORD_RESET_LINK' => $this->getPasswordResetRoute($token),
             ],
         );
+    }
+
+    public function routeNotificationFor($driver)
+    {
+        if ($driver === 'PusherPushNotifications') {
+            return $this->email;
+        }
+
+        $class = str_replace('\\', '.', get_class($this));
+
+        return $class.'.'.$this->getKey();
     }
 
     protected function getPasswordResetRoute(string $token): string

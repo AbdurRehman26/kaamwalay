@@ -55,4 +55,9 @@ return [
         'root_path' => env('AGS_DROPBOX_ROOT_PATH'),
     ],
 
+    'pusher' => [
+        'beams_instance_id' => env('PUSHER_BEAMS_INSTANCE_ID'),
+        'beams_secret_key' => env('PUSHER_BEAMS_SECRET_KEY'),
+    ],
+
 ];

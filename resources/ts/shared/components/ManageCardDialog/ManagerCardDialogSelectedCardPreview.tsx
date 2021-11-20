@@ -5,6 +5,10 @@ import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
+import Lightbox from 'react-awesome-lightbox';
+import 'react-awesome-lightbox/build/style.css';
+import ButtonBase from '@mui/material/ButtonBase';
+import { useCallback, useState } from 'react';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -13,6 +17,15 @@ const useStyles = makeStyles(
             backgroundColor: '#F9F9F9',
             border: '1px solid #DDDDDD',
             marginBottom: '12px',
+        },
+        previewOverlay: {
+            backgroundColor: 'rgba(64, 64, 64, 0.6)',
+            color: '#fff',
+            opacity: 0,
+            transition: theme.transitions.create('opacity'),
+            '&:hover': {
+                opacity: 1,
+            },
         },
         listAvatar: {
             minWidth: 39,
@@ -45,6 +58,11 @@ const useStyles = makeStyles(
 export default function ManagerCardDialogSelectedCardPreview() {
     const classes = useStyles();
     const selectedCard = useAppSelector((state) => state.manageCardDialog.selectedCard);
+    const [showLightbox, setShowLightbox] = useState(false);
+
+    const handleToggleLightbox = useCallback(() => {
+        setShowLightbox((state) => !state);
+    }, []);
 
     return (
         <ListItem
@@ -55,7 +73,16 @@ export default function ManagerCardDialogSelectedCardPreview() {
             alignItems={'flex-start'}
         >
             <ListItemAvatar className={classes.listAvatar}>
-                <img className={classes.image} src={selectedCard?.imagePath} alt={selectedCard?.name} />
+                <ButtonBase onClick={handleToggleLightbox}>
+                    <img className={classes.image} src={selectedCard?.imagePath} alt={selectedCard?.name} />
+                </ButtonBase>
+                {showLightbox ? (
+                    <Lightbox
+                        image={selectedCard?.imagePath}
+                        title={selectedCard?.name}
+                        onClose={handleToggleLightbox}
+                    />
+                ) : null}
             </ListItemAvatar>
             <ListItemText
                 primary={

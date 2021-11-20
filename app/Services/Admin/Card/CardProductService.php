@@ -132,8 +132,7 @@ class CardProductService
                 'variant' => $data['variant'],
             ]);
 
-            if ($cardReferenceId)
-            {
+            if ($cardReferenceId) {
                 $createData['card_reference_id'] = $cardReferenceId;
             }
 

@@ -77,7 +77,7 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function handleConfirmed(OrderStatusChangedEvent $event)
+    protected function handleConfirmed(OrderStatusChangedEvent $event): void
     {
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_CONFIRMED, [
             'ORDER_NUMBER' => $event->order->order_number,

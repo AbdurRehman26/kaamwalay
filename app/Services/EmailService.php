@@ -24,7 +24,7 @@ class EmailService
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
         self::TEMPLATE_SLUG_SUBMISSION_PLACED => 'Submission Placed!',
-        self::TEMPLATE_SLUG_SUBMISSION_CONFIRMED => 'Your submission has confirmed!',
+        self::TEMPLATE_SLUG_SUBMISSION_CONFIRMED => 'Your submission is confirmed!',
         self::TEMPLATE_SLUG_SUBMISSION_SHIPPED => 'Your cards have shipped!',
         self::TEMPLATE_SLUG_SUBMISSION_GRADED => 'Your cards have been graded',
         self::TEMPLATE_SLUG_FORGOT_PASSWORD => 'Reset your password!',

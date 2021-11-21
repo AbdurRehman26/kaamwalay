@@ -2,6 +2,8 @@
 
 namespace App\Notifications\Order;
 
+use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -12,26 +14,54 @@ class OrderStatusChanged extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    protected const STATUS_MAP = [
+        OrderStatus::PLACED => 'placed',
+        OrderStatus::ARRIVED => 'confirmed',
+        OrderStatus::GRADED => 'graded',
+        OrderStatus::SHIPPED => 'shipped',
+    ];
+
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct(public Order $order) {
+    }
+
     /**
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return [PusherChannel::class];
     }
 
-    public function toPushNotification($notifiable)
+    /**
+     * @throws \NotificationChannels\PusherPushNotifications\Exceptions\CouldNotCreateMessage
+     */
+    public function toPushNotification($notifiable): PusherMessage
     {
         return PusherMessage::create()
-            ->withWeb(
-                PusherMessage::create()
-                    ->icon('https://d2eli1wrotxo1h.cloudfront.net/assets/robograding-favicon.png')
-                    ->title('Test')
-                    ->body("Your {$notifiable->name} account was approved!")
-                    ->link('http://robograding.test')
-            );
+            ->platform('web')
+            ->title($this->getTitle())
+            ->body($this->getBody())
+            ->setOption('web.data', [
+                'intent' => 'SUBMISSION_DETAIL_VIEW',
+                'object_id' => $this->order->id,
+            ]);
+    }
+
+    protected function getTitle(): string
+    {
+        return 'Submission ' . ucfirst(self::STATUS_MAP[$this->order->order_status_id]);
+    }
+
+    protected function getBody(): string
+    {
+        return "Your submission # {$this->order->order_number} has been " . self::STATUS_MAP[$this->order->order_status_id];
     }
 }

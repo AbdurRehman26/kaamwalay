@@ -18,7 +18,7 @@ class UpdateArrivedStatusToConfirmedForOrders extends Migration
             ->update([
                 'code' => 'confirmed',
                 'name' => 'Confirmed',
-                'description' => 'Order has arrived and confirmed at our grading facility',
+                'description' => 'Order is confirmed.',
             ]);
     }
 

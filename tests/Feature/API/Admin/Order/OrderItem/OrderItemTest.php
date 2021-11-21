@@ -251,7 +251,7 @@ test('an admin can mark multiple order items as pending', function () {
 
     $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status', [
         "items" => [$orderItem->id],
-        "status" => OrderStatus::ARRIVED,
+        "status" => OrderStatus::CONFIRMED,
     ]);
 
     $response->assertStatus(200);
@@ -271,7 +271,7 @@ test('a customer can not mark multiple order items as pending', function () {
 
     $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status', [
         "items" => [$orderItem->id],
-        "status" => OrderStatus::ARRIVED,
+        "status" => OrderStatus::CONFIRMED,
     ]);
 
     $response->assertStatus(403);

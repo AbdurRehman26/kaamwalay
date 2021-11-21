@@ -66,7 +66,7 @@ class OrderResource extends BaseResource
             'graded_by' => $this->gradedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
             'graded_at' => $this->gradedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
             'auto_saved_at' => $this->formatDate($this->auto_saved_at),
-            'total_graded_items' => $this->when($this->order_status_id === OrderStatus::ARRIVED, fn () => $this->getTotalGradedItems()),
+            'total_graded_items' => $this->when($this->order_status_id === OrderStatus::CONFIRMED, fn () => $this->getTotalGradedItems()),
             'notes' => $this->notes,
 
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
@@ -90,8 +90,8 @@ class OrderResource extends BaseResource
 
     private function reviewedBy(Closure $selector)
     {
-        return $this->when($this->order_status_id >= OrderStatus::ARRIVED, function () use ($selector) {
-            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::ARRIVED)->latest()->first());
+        return $this->when($this->order_status_id >= OrderStatus::CONFIRMED, function () use ($selector) {
+            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::CONFIRMED)->latest()->first());
         });
     }
 

@@ -19,7 +19,7 @@ import SearchResultItemCard from './SearchResultItemCard';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import CustomerAddCardDialog from '@dashboard/components/CustomerAddCardDialog';
+import CustomerAddCardDialog from './CustomerAddCardDialog';
 
 const useStyles = makeStyles((theme) => ({
     container: {

@@ -14,6 +14,14 @@ import { Paper } from '@mui/material';
 
 const useStyles = makeStyles(
     (theme) => ({
+        noResultsContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '36px',
+            width: '100%',
+        },
         root: {
             marginTop: theme.spacing(3),
             '& .ais-Hits-item': {
@@ -76,17 +84,7 @@ const ManageCardDialogResults = connectStateResults(({ searchResults }) => {
                     <ManageCardDialogResultsPagination />
                 </>
             ) : (
-                <Paper
-                    variant={'outlined'}
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        padding: '36px',
-                        width: '100%',
-                    }}
-                >
+                <Paper variant={'outlined'} className={classes.noResultsContainer}>
                     <Typography variant={'caption'} className={font.fontWeightNormal}>
                         No results found
                     </Typography>

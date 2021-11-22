@@ -130,8 +130,12 @@ export default function CustomizedSteppers() {
     const steps = getSteps();
 
     const onStepPress = useCallback(
-        (stepIndex: number) => () => {
-            if (stepIndex < currentStep) dispatch(setCustomStep(stepIndex));
+        (stepIndex: number) => {
+            return () => {
+                if (stepIndex < currentStep) {
+                    dispatch(setCustomStep(stepIndex));
+                }
+            };
         },
         [currentStep],
     );

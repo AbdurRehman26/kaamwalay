@@ -11,10 +11,12 @@ import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ReactComponent as Step01Icon } from '@shared/assets/step01Icon.svg';
 import { ReactComponent as Step02Icon } from '@shared/assets/step02Icon.svg';
-import { useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setCustomStep } from '@dashboard/redux/slices/newSubmissionSlice';
+import { cx } from '@shared/lib/utils/cx';
 
 const ColorlibConnector = withStyles({
     alternativeLabel: {
@@ -99,6 +101,9 @@ const useStyles = makeStyles((theme: Theme) =>
                 width: 'auto',
             },
         },
+        hoverCursor: {
+            cursor: 'pointer',
+        },
         stepperContainer: {
             display: 'flex',
             flexDirection: 'row',
@@ -121,7 +126,15 @@ function getSteps() {
 export default function CustomizedSteppers() {
     const classes = useStyles();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
+    const dispatch = useAppDispatch();
     const steps = getSteps();
+
+    const onStepPress = useCallback(
+        (stepIndex: number) => () => {
+            if (stepIndex < currentStep) dispatch(setCustomStep(stepIndex));
+        },
+        [currentStep],
+    );
 
     return (
         <div className={classes.stepperContainer}>
@@ -131,8 +144,12 @@ export default function CustomizedSteppers() {
                 activeStep={currentStep}
                 connector={<ColorlibConnector />}
             >
-                {steps.map((label) => (
-                    <Step key={label}>
+                {steps.map((label, index) => (
+                    <Step
+                        key={label}
+                        onClick={onStepPress(index)}
+                        className={cx({ [classes.hoverCursor]: index < currentStep })}
+                    >
                         <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
                     </Step>
                 ))}

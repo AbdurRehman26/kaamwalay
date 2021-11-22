@@ -32,7 +32,7 @@ export function SubmissionsList() {
                     <SubmissionsTable search={search} tabFilter={OrderStatusEnum.PLACED} />
                 </TabContent>
                 <TabContent value={'reviewed'}>
-                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.ARRIVED} />
+                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.CONFIRMED} />
                 </TabContent>
                 <TabContent value={'graded'}>
                     <SubmissionsTable search={search} tabFilter={OrderStatusEnum.GRADED} />

@@ -24,10 +24,9 @@ class OrderPaid extends Notification
         $emoji = ':robot_face:';
         $userName = $this->order->user->getFullName();
 
-        if (!$userName)
-        {
+        if (! $userName) {
             $userName = $this->order->shippingAddress->getFullName();
-        } 
+        }
 
         if ($this->order->grand_total >= 5000) {
             $emoji = ':space_invader:';

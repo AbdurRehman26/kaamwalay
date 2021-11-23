@@ -19,7 +19,7 @@ const useStyles = makeStyles(
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            maxHeight: '80px',
+            height: '80px',
             border: '2px solid #DDDDDD',
             marginBottom: '12px',
             borderRadius: '2px',

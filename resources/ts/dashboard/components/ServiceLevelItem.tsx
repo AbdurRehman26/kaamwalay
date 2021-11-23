@@ -9,6 +9,7 @@ import NumberFormat from 'react-number-format';
 import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
+import Box from '@mui/material/Box';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles(
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            maxHeight: '64px',
+            maxHeight: '80px',
             border: '2px solid #DDDDDD',
             marginBottom: '12px',
             borderRadius: '2px',
@@ -94,6 +95,16 @@ const useStyles = makeStyles(
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.54)',
         },
+        priceBeforeDiscount: {
+            textDecorationLine: 'line-through',
+            color: 'rgba(0, 0, 0, 0.54)',
+            fontSize: '13px',
+            marginBottom: '3px',
+        },
+        discountPercentage: {
+            fontWeight: 'bold',
+            color: '#20BFB8',
+        },
         protectionTextContainer: {
             display: 'flex',
             flexDirection: 'row',
@@ -116,7 +127,7 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
     const currentSelectedLevel = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel);
     const classes = useStyles({ id: props.id, currentSelectedLevelId: currentSelectedLevel?.id });
     const dispatch = useAppDispatch();
-    const { id, price, turnaround, type, maxProtectionAmount } = props;
+    const { id, price, turnaround, type, maxProtectionAmount, priceBeforeDiscount, discountPercentage } = props;
 
     const handleSetServiceLevel = useCallback(() => {
         dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount }));
@@ -135,16 +146,31 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                     <GreenRadio checked={currentSelectedLevel?.id === id} />
                 </div>
                 <div className={classes.rightSide}>
-                    <Typography variant={'subtitle2'} className={classes.levelTitle}>
-                        <NumberFormat
-                            value={price}
-                            displayType={'text'}
-                            thousandSeparator
-                            decimalSeparator={'.'}
-                            prefix={'$'}
-                        />
-                        &nbsp;<span className={classes.cardText}> / Card </span>
-                    </Typography>
+                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
+                        {priceBeforeDiscount ? (
+                            <NumberFormat
+                                value={priceBeforeDiscount}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                                className={classes.priceBeforeDiscount}
+                            />
+                        ) : null}
+                        <Typography variant={'subtitle2'} className={classes.levelTitle}>
+                            <NumberFormat
+                                value={price}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                            &nbsp;<span className={classes.cardText}> / Card </span>
+                        </Typography>
+                        {priceBeforeDiscount ? (
+                            <Typography className={classes.discountPercentage}>{discountPercentage}</Typography>
+                        ) : null}
+                    </Box>
                 </div>
             </div>
 

@@ -101,9 +101,9 @@ const useStyles = makeStyles(
             fontSize: '13px',
             marginBottom: '3px',
         },
-        percentOff: {
+        discountPercentage: {
             fontWeight: 'bold',
-            color: '#20BFB8;',
+            color: '#20BFB8',
         },
         protectionTextContainer: {
             display: 'flex',
@@ -168,7 +168,7 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                             &nbsp;<span className={classes.cardText}> / Card </span>
                         </Typography>
                         {priceBeforeDiscount ? (
-                            <Typography className={classes.percentOff}>{discountPercentage}</Typography>
+                            <Typography className={classes.discountPercentage}>{discountPercentage}</Typography>
                         ) : null}
                     </Box>
                 </div>

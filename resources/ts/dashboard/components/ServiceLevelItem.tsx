@@ -103,6 +103,7 @@ const useStyles = makeStyles(
         },
         discountPercentage: {
             fontWeight: 'bold',
+            fontSize: '13px',
             color: '#20BFB8',
         },
         protectionTextContainer: {

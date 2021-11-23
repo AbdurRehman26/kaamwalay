@@ -80,7 +80,7 @@ export function SubmissionActionButton({
         );
     }
 
-    if (orderStatus.is(OrderStatusEnum.ARRIVED)) {
+    if (orderStatus.is(OrderStatusEnum.CONFIRMED)) {
         return (
             <Button component={Link} to={`/submissions/${orderId}/grade`} {...sharedProps}>
                 Grade

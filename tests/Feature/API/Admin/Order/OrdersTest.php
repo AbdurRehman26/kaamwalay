@@ -30,7 +30,7 @@ beforeEach(function () {
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
         ['order_status_id' => OrderStatus::PLACED],
-        ['order_status_id' => OrderStatus::ARRIVED],
+        ['order_status_id' => OrderStatus::CONFIRMED],
         ['order_status_id' => OrderStatus::GRADED],
         ['order_status_id' => OrderStatus::SHIPPED],
         ['order_status_id' => OrderStatus::REVIEWED]
@@ -276,7 +276,7 @@ test('an admin can not complete review of an order if error occurred with AGS cl
     ]);
 
     $this->postJson('/api/admin/orders/' . $this->orders[1]->id . '/status-history', [
-        'order_status_id' => OrderStatus::ARRIVED,
+        'order_status_id' => OrderStatus::CONFIRMED,
     ])->assertStatus(422);
 });
 
@@ -318,12 +318,12 @@ it('should send an event when order status gets changed', function () {
     /** @var Order $order */
     $order = Order::factory()->create();
     $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
-        'order_status_id' => OrderStatus::ARRIVED,
+        'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
     $response->assertSuccessful();
     Event::assertDispatched(function (OrderStatusChangedEvent $event) use ($order) {
-        return $event->order->id === $order->id && $event->orderStatus->id === OrderStatus::ARRIVED;
+        return $event->order->id === $order->id && $event->orderStatus->id === OrderStatus::CONFIRMED;
     });
 });
 
@@ -335,7 +335,7 @@ it('dispatches job for creating folders on dropbox when an order is reviewed', f
     /** @var Order $order */
     $order = Order::factory()->create();
     $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
-        'order_status_id' => OrderStatus::ARRIVED,
+        'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
     Bus::assertDispatchedTimes(CreateOrderFoldersOnDropbox::class);

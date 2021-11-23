@@ -27,7 +27,7 @@ beforeEach(function () {
                 'payment_method_id' => 1,
                 'order_status_id' => $this->faker->randomElement([
                     OrderStatus::PLACED,
-                    OrderStatus::ARRIVED,
+                    OrderStatus::CONFIRMED,
                     OrderStatus::GRADED,
                     OrderStatus::SHIPPED,
                     OrderStatus::CANCELLED,

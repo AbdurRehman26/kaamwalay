@@ -22,6 +22,12 @@ class OrderPaid extends Notification
         $paymentCode = ucfirst($this->order->paymentMethod->code);
         $totalCards = $this->order->orderItems->sum('quantity');
         $emoji = ':robot_face:';
+        $userName = $this->order->user->getFullName();
+
+        if (!$userName)
+        {
+            $userName = $this->order->shippingAddress->getFullName();
+        } 
 
         if ($this->order->grand_total >= 5000) {
             $emoji = ':space_invader:';
@@ -29,6 +35,6 @@ class OrderPaid extends Notification
 
         return (new SlackMessage)
             ->from('Robograding', $emoji)
-            ->content("{$this->order->user->getFullName()}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}");
+            ->content("{$userName}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}");
     }
 }

@@ -87,12 +87,14 @@ export function SubmissionsGradeCards() {
         [id],
     );
 
-    setTimeout(() => {
-        const item = document.getElementById('card-id-' + reviseGradeItemId);
-        if (item) {
-            window.scrollTo(item.getBoundingClientRect());
-        }
-    }, 2000);
+    useEffect(() => {
+        setTimeout(() => {
+            const item = document.getElementById('card-id-' + reviseGradeItemId);
+            if (item) {
+                window.scrollTo(item.getBoundingClientRect());
+            }
+        }, 2000);
+    });
 
     return (
         <Grid container direction={'column'} className={classes.root}>

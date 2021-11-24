@@ -62,7 +62,7 @@ Route::prefix('customer')->group(function () {
             Route::get('/', [UserCardController::class, 'index']);
             Route::get('/{userCard}', [UserCardController::class, 'show']);
 
-            Route::post('/',[CardProductController::class, 'store']);
+            Route::post('/', [CardProductController::class, 'store']);
         });
     });
 });

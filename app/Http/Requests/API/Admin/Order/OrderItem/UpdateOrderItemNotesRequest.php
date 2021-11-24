@@ -24,7 +24,7 @@ class UpdateOrderItemNotesRequest extends FormRequest
     public function rules()
     {
         return [
-            'notes' => ['required', 'string', 'max:300'],
+            'notes' => ['nullable', 'string', 'max:300'],
         ];
     }
 }

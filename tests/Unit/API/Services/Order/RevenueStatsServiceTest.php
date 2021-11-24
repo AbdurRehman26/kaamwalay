@@ -50,8 +50,7 @@ it('adds daily revenue stats', function () {
     $serviceFee = $orders->sum('service_fee');
     $providerFee = $orders->sum(function ($order) {
         return $order->firstOrderPayment->provider_fee
-            + $order->extraCharges->sum('provider_fee')
-            - $order->refunds->sum('provider_fee');
+            + $order->extraCharges->sum('provider_fee');
     });
 
     $profit = ($serviceFee - $providerFee);

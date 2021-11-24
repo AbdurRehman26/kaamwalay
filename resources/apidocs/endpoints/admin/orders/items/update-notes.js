@@ -1,5 +1,5 @@
 /**
- * @api {put} /api/admin/orders/{order}/items/{item} Update Order Item Notes
+ * @api {put} /api/admin/orders/{order}/items/{item}/notes Update Order Item Notes
  * @apiName Update Order Item Notes
  * @apiGroup Order Cards
  *

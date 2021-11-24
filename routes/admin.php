@@ -43,10 +43,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::apiResource('order-payments', OrderPaymentController::class)->only('update');
         Route::post('payments/extra-charge', OrderExtraChargeController::class)
-        ->name('payments.extra-charge');
+            ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
     });
 
-    Route::post('cards',[CardProductController::class, 'store']);
-    Route::get('cards/options',[CardProductController::class, 'getOptionsValues']);
+    Route::post('cards', [CardProductController::class, 'store']);
+    Route::get('cards/options', [CardProductController::class, 'getOptionsValues']);
 });

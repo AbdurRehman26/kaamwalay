@@ -50,15 +50,11 @@ class CardProductService
         'Polish',
     ];
 
-    public const CARD_CATEGORY_CODES = [
-        'Pokemon' => 'PKM',
-    ];
-
     public function __construct(protected AgsService $agsService)
     {
     }
 
-    protected function getUniqueCardId(array $data)
+    protected function getReferenceId(array $data)
     {
         return null;
     }
@@ -70,7 +66,7 @@ class CardProductService
         //Store in AGS
         $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
 
-        if ($seriesResponse["count"] > 0) {
+        if ($seriesResponse['count'] > 0) {
             $seriesId = $seriesResponse['results'][0]['id'];
         } elseif ($seriesName && $data['series_image']) {
             $createSeriesResponse = $this->agsService->createSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
@@ -93,7 +89,7 @@ class CardProductService
             'serie' => $seriesId,
         ]);
 
-        if ($setResponse["count"] > 0) {
+        if ($setResponse['count'] > 0) {
             $setId = $setResponse['results'][0]['id'];
         } elseif ($setName && $seriesId && $data['release_date'] && $data['set_image']) {
             $createSetResponse = $this->agsService->createSet([
@@ -118,7 +114,7 @@ class CardProductService
             $createData['series_id'] = $this->getOrCreateSeriesFromAgs($seriesName, $data);
             $createData['set_id'] = $this->getOrCreateSetFromAgs($createData['series_id'], $setName, $data);
 
-            $cardReferenceId = $this->getUniqueCardId([
+            $cardReferenceId = $this->getReferenceId([
                 'series_id' => $createData['series_id'],
                 'set_id' => $createData['set_id'],
                 'name' => $data['name'],
@@ -147,16 +143,11 @@ class CardProductService
                 'variant' => $data['variant'] ?? '',
                 'language' => $data['language'],
             ]);
-            Log::debug($createData);
 
             return $this->agsService->createCard($createData);
         } catch (Exception $e) {
-            report($e);
-
             return [];
         } catch (TypeError $te) {
-            report($te);
-
             return [];
         }
     }
@@ -186,55 +177,54 @@ class CardProductService
         //store in AGS
         $agsResponse = $this->processAgsCreate($category->id, $seriesName, $setName, $data);
 
-        if ($agsResponse && array_key_exists('id', $agsResponse)) {
-
-            // Store in RG
-            if (! $series) {
-                $series = new CardSeries([
-                    'name' => $seriesName,
-                    'image_path' => $data['series_image'],
-                    'image_bucket_path' => $data['series_image'],
-                    'card_category_id' => $category->id,
-                ]);
-                $series->save();
-            }
-
-            if (! $set) {
-                $set = new CardSet([
-                    'name' => $setName,
-                    'description' => '',
-                    'image_path' => $data['set_image'],
-                    'image_bucket_path' => $data['set_image'],
-                    'card_category_id' => $category->id,
-                    'card_series_id' => $series->id,
-                    'release_date' => $data['release_date'],
-                    'release_year' => (new Carbon($data['release_date']))->format('Y'),
-                ]);
-                $set->save();
-            }
-
-            $card = new CardProduct([
-                'name' => $data['name'],
-                'card_set_id' => $set->id,
-                'card_category_id' => $category->id,
-                'rarity' => $data['rarity'],
-                'card_number' => $data['card_number'],
-                'card_number_order' => $data['card_number'],
-                'image_path' => $data['image_path'],
-                'edition' => $data['edition'] ?? '',
-                'surface' => $data['surface'] ?? '',
-                'variant' => $data['variant'] ?? '',
-                'language' => $data['language'],
-                'added_manually' => true,
-                'added_by_id' => auth()->user()->id,
-                'card_reference_id' => $agsResponse['card_reference_id'],
-            ]);
-            $card->save();
-
-            return $card;
-        } else {
+        if (!$agsResponse || !array_key_exists('id', $agsResponse)) {
             throw new CardProductCanNotBeCreated;
         }
+
+        // Store in RG
+        if (! $series) {
+            $series = new CardSeries([
+                'name' => $seriesName,
+                'image_path' => $data['series_image'],
+                'image_bucket_path' => $data['series_image'],
+                'card_category_id' => $category->id,
+            ]);
+            $series->save();
+        }
+
+        if (! $set) {
+            $set = new CardSet([
+                'name' => $setName,
+                'description' => '',
+                'image_path' => $data['set_image'],
+                'image_bucket_path' => $data['set_image'],
+                'card_category_id' => $category->id,
+                'card_series_id' => $series->id,
+                'release_date' => $data['release_date'],
+                'release_year' => (new Carbon($data['release_date']))->format('Y'),
+            ]);
+            $set->save();
+        }
+
+        $card = new CardProduct([
+            'name' => $data['name'],
+            'card_set_id' => $set->id,
+            'card_category_id' => $category->id,
+            'rarity' => $data['rarity'],
+            'card_number' => $data['card_number'],
+            'card_number_order' => $data['card_number'],
+            'image_path' => $data['image_path'],
+            'edition' => $data['edition'] ?? '',
+            'surface' => $data['surface'] ?? '',
+            'variant' => $data['variant'] ?? '',
+            'language' => $data['language'],
+            'added_manually' => true,
+            'added_by_id' => auth()->user()->id,
+            'card_reference_id' => $agsResponse['card_reference_id'],
+        ]);
+        $card->save();
+
+        return $card;
     }
 
     public function getOptionsValues()

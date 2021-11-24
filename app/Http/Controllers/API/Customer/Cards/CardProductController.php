@@ -34,12 +34,4 @@ class CardProductController extends Controller
         return new CardProductResource($card);
     }
 
-    public function delete(Request $request, CardProduct $cardProduct)
-    {
-        if ($cardProduct->isAddedByCustomer() && auth()->user()->id === $cardProduct->added_by_id) {
-            return $cardProduct->delete();
-        } else {
-            return 'Forbidden';
-        }
-    }
 }

@@ -21,8 +21,6 @@ class CardProductController extends Controller
         try {
             $card = $this->cardProductService->create($request->validated());
         } catch (Exception $e) {
-            report($e);
-
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

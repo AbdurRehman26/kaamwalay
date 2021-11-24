@@ -733,15 +733,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                         </OutlinedCard>
                     </>
                 ) : null}
-                <TextField
-                    label="Card Notes"
-                    multiline
-                    rows={4}
-                    value={cardNotes}
-                    sx={{ marginTop: '16px' }}
-                    fullWidth
-                    onChange={handleNotesChange}
-                />
+
                 {cardStatus.toLowerCase() !== 'missing' && cardStatus.toLowerCase() !== 'not accepted' ? (
                     <>
                         {currentViewMode === 'not_accepted_pending_notes' ||
@@ -758,6 +750,15 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                     heading={'Robogrades'}
                                     itemIndex={itemIndex}
                                     icon={<OutlinedToyIcon className={classes.headingIcon} />}
+                                />
+                                <TextField
+                                    label="Card Notes"
+                                    multiline
+                                    rows={4}
+                                    value={cardNotes}
+                                    sx={{ marginTop: '16px' }}
+                                    fullWidth
+                                    onChange={handleNotesChange}
                                 />
                                 <SubmissionGradeCardUpload itemIndex={itemIndex} />
 

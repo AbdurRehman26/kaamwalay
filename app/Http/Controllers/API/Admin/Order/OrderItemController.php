@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\AddExtraCardRequest;
 use App\Http\Requests\API\Admin\Order\MarkItemsPendingRequest;
 use App\Http\Requests\API\Admin\Order\OrderItem\ChangeStatusRequest;
+use App\Http\Requests\API\Admin\Order\OrderItem\UpdateOrderItemNotesRequest;
 use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
@@ -96,5 +97,12 @@ class OrderItemController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
+    }
+
+    public function updateNotes(UpdateOrderItemNotesRequest $request, OrderItem $orderItem): OrderItemResource
+    {
+        $orderItem->update($request->only('notes'));
+
+        return new OrderItemResource($orderItem);
     }
 }

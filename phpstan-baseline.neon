@@ -306,11 +306,6 @@ parameters:
 			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleArrived\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
-
-		-
 			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleGraded\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/OrderStatusChangedListener.php

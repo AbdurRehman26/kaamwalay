@@ -12,7 +12,7 @@ class OrderStatus extends Model
 
     public const PAYMENT_PENDING = 1;
     public const PLACED = 2;
-    public const ARRIVED = 3;
+    public const CONFIRMED = 3;
     public const GRADED = 4;
     public const SHIPPED = 5;
     public const CANCELLED = 6;

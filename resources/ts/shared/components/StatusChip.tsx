@@ -5,7 +5,7 @@ const colorsMap = {
     pending: '#e1e1e1',
     placed: '#e1e1e1',
     reviewed: '#fff06c',
-    arrived: '#fff06c',
+    confirmed: '#fff06c',
     graded: '#81d5f9',
     shipped: '#8feca9',
     // eslint-disable-next-line camelcase

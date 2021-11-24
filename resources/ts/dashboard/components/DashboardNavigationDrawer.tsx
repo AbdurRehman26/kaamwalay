@@ -1,3 +1,4 @@
+// TODO: Merge into a general component
 import CloseIcon from '@mui/icons-material/Close';
 import { ListItemSecondaryAction } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -6,17 +7,26 @@ import Drawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
+import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
 import { useHistory } from 'react-router-dom';
 import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setNavigationDrawerOpen } from '@dashboard/redux/slices/dashboardSlice';
+import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
+import StyleIcon from '@mui/icons-material/StyleOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircleOutlined';
+import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
+import HomeIcon from '@mui/icons-material/HomeOutlined';
+import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
+import FeedIcon from '@mui/icons-material/FeedOutlined';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -31,11 +41,12 @@ const useStyles = makeStyles(
             minWidth: 120,
         },
         divider: {
-            margin: theme.spacing(1, 2),
+            margin: theme.spacing(1, 0),
         },
         listItemText: {
             fontWeight: 500,
             paddingLeft: theme.spacing(2),
+            color: theme.palette.text.primary,
         },
         listItemAction: {
             fontWeight: 'normal',
@@ -45,8 +56,8 @@ const useStyles = makeStyles(
             backgroundColor: '#d2f2f1',
         },
         drawerPaper: {
-            minWidth: 260,
-            maxWidth: '70%',
+            width: '100%',
+            maxWidth: 300,
         },
         header: {
             flexWrap: 'nowrap',
@@ -108,8 +119,10 @@ export function DashboardNavigationDrawer() {
     }
 
     function handleItemPress(path: string) {
-        history.push(path);
-        dispatch(setNavigationDrawerOpen(false));
+        return () => {
+            history.push(path);
+            dispatch(setNavigationDrawerOpen(false));
+        };
     }
 
     return (
@@ -139,26 +152,34 @@ export function DashboardNavigationDrawer() {
                 </div>
             </Grid>
             <List>
-                <ListItem
-                    selected={isItemActive('/submissions')}
-                    onClick={() => handleItemPress('/submissions')}
-                    button
-                >
+                <ListItem selected={isItemActive('/submissions')} onClick={handleItemPress('/submissions')} button>
+                    <StyledListItemIcon>
+                        <InventoryIcon />
+                    </StyledListItemIcon>
                     <ListItemText
                         primary={'Submissions'}
                         primaryTypographyProps={{ className: classes.listItemText }}
                     />
                 </ListItem>
-                <ListItem selected={isItemActive('/cards')} onClick={() => handleItemPress('/cards')} button>
+                <ListItem selected={isItemActive('/cards')} onClick={handleItemPress('/cards')} button>
+                    <StyledListItemIcon>
+                        <StyleIcon />
+                    </StyledListItemIcon>
                     <ListItemText primary={'Your Cards'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
                 <ListItem selected={isItemActive('/profile')} button>
+                    <StyledListItemIcon>
+                        <AccountCircleIcon />
+                    </StyledListItemIcon>
                     <ListItemText primary={'Profile'} primaryTypographyProps={{ className: classes.listItemText }} />
                     <ListItemSecondaryAction>
                         <Chip size="small" label="Soon" color={'secondary'} />
                     </ListItemSecondaryAction>
                 </ListItem>
                 <ListItem selected={isItemActive('/profile/payments')} button>
+                    <StyledListItemIcon>
+                        <CreditCardIcon />
+                    </StyledListItemIcon>
                     <ListItemText
                         primary={'Saved Credit Cards'}
                         primaryTypographyProps={{ className: classes.listItemText }}
@@ -168,6 +189,9 @@ export function DashboardNavigationDrawer() {
                     </ListItemSecondaryAction>
                 </ListItem>
                 <ListItem selected={isItemActive('/profile/addresses')} button>
+                    <StyledListItemIcon>
+                        <HomeIcon />
+                    </StyledListItemIcon>
                     <ListItemText
                         primary={'Address Book'}
                         primaryTypographyProps={{ className: classes.listItemText }}
@@ -176,7 +200,26 @@ export function DashboardNavigationDrawer() {
                         <Chip size="small" label="Soon" color={'secondary'} />
                     </ListItemSecondaryAction>
                 </ListItem>
+
+                <Divider className={classes.divider} />
+
+                <ListItem component={'a'} href={'/feed'}>
+                    <StyledListItemIcon>
+                        <FeedIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary={'Live Feed'} primaryTypographyProps={{ className: classes.listItemText }} />
+                </ListItem>
+                <ListItem component={'a'} href={'/pop'}>
+                    <StyledListItemIcon>
+                        <AssessmentIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary={'POP Report'} primaryTypographyProps={{ className: classes.listItemText }} />
+                </ListItem>
             </List>
         </Drawer>
     );
 }
+
+const StyledListItemIcon = styled(ListItemIcon)({
+    minWidth: 24,
+});

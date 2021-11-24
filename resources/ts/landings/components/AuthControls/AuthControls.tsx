@@ -1,8 +1,11 @@
-import PersonIcon from '@mui/icons-material/PersonOutline';
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
+import PersonIcon from '@mui/icons-material/PersonOutline';
+import { ButtonBase } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
+import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
 
@@ -50,18 +53,22 @@ export function AuthControls() {
         return null;
     }
 
-    if (!authenticated) {
-        return (
-            <>
-                <Button
-                    href={'/auth/sign-in'}
-                    color={'primary'}
-                    variant={'outlined'}
-                    className={cx(classes.button, classes.buttonHighlighted, classes.space)}
-                    startIcon={<UploadIcon />}
-                >
-                    Submit
-                </Button>
+    return (
+        <>
+            <Button
+                href={'/dashboard/submissions/new'}
+                color={'primary'}
+                variant={'outlined'}
+                className={cx(classes.button, classes.buttonHighlighted, classes.space)}
+                startIcon={<UploadIcon />}
+            >
+                Submit
+            </Button>
+            {authenticated ? (
+                <ButtonBase href={'/dashboard'}>
+                    <Avatar src={dummyLargeAvatar} />
+                </ButtonBase>
+            ) : (
                 <Button
                     href={'/auth/sign-in'}
                     color={'primary'}
@@ -70,14 +77,8 @@ export function AuthControls() {
                 >
                     Log in
                 </Button>
-            </>
-        );
-    }
-
-    return (
-        <Button href={'/dashboard'} className={classes.dashboardBtn}>
-            Dashboard
-        </Button>
+            )}
+        </>
     );
 }
 

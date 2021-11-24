@@ -14,7 +14,7 @@ test('a user can see payment plans', function () {
     $response->assertJsonCount(7, 'data');
     $response->assertJsonStructure([
         'data' => [
-            '*' => ['id', 'price', 'max_protection_amount', 'turnaround'],
+            '*' => ['id', 'price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround'],
         ],
     ]);
 });
@@ -27,9 +27,9 @@ test('a user can see specific payment plan', function () {
         ->create();
     $response = $this->getJson('/api/customer/orders/payment-plans/1');
 
-    $response->assertJsonCount(4, 'data');
+    $response->assertJsonCount(6, 'data');
     $response->assertJsonStructure([
-        'data' => ['id', 'price', 'max_protection_amount', 'turnaround'],
+        'data' => ['id', 'price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround'],
     ]);
 });
 

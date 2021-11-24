@@ -12,7 +12,7 @@ class MigrateOrderItemNotes extends Command
      *
      * @var string
      */
-    protected $signature = 'order_items:notes';
+    protected $signature = 'order-items:migrate-notes';
 
     /**
      * The console command description.
@@ -31,12 +31,7 @@ class MigrateOrderItemNotes extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function handle(): void
     {
         $this->info('Starting to migrate notes from order item status histories to order items');
 

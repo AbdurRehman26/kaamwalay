@@ -16,9 +16,9 @@ class AddManualCardProductsColumns extends Migration
         Schema::table('card_products', function (Blueprint $table) {
             $table->text('description')->nullable();
             $table->boolean('added_manually')->default(false);
-            $table->unsignedBigInteger('added_by_id')->nullable();
+            $table->unsignedBigInteger('added_by')->nullable();
 
-            $table->foreign('added_by_id')->references('id')->on('users');
+            $table->foreign('added_by')->references('id')->on('users');
 
         });
     }
@@ -36,7 +36,7 @@ class AddManualCardProductsColumns extends Migration
 
             $table->dropForeign('card_products_added_by_id_foreign');
             $table->dropIndex('card_products_added_by_id_foreign');
-            $table->dropColumn('added_by_id');
+            $table->dropColumn('added_by');
 
         });
     }

@@ -218,7 +218,7 @@ class CardProductService
             'variant' => $data['variant'] ?? '',
             'language' => $data['language'],
             'added_manually' => true,
-            'added_by_id' => auth()->user()->id,
+            'added_by' => auth()->user()->id,
             'card_reference_id' => $agsResponse['card_reference_id'],
         ]);
         $card->save();

@@ -36,7 +36,7 @@ class CardProduct extends Model
         'language',
         'description',
         'added_manually',
-        'added_by_id',
+        'added_by',
     ];
 
     /**
@@ -100,7 +100,7 @@ class CardProduct extends Model
 
     public function addedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'added_by_id');
+        return $this->belongsTo(User::class, 'added_by');
     }
 
     public function isAddedByAdmin(): bool

@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
     AccordionCardItem,
     AccordionCardItemHeader,
@@ -13,12 +13,14 @@ import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
+import { TextField } from '@mui/material';
+import Box from '@mui/material/Box';
 
 interface UnconfirmedCardProps extends AccordionCardItemProps {
     itemId: number;
     declaredValue: number;
     card: CardProductEntity;
-
+    notes?: string;
     onConfirm(index: number): void;
 
     onMissing(index: number): void;
@@ -26,6 +28,8 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
     onEdit(index: number): void;
 
     onPreview(index: number): void;
+
+    onCardNotesChange(index: number): void;
 }
 
 const useStyles = makeStyles(
@@ -54,11 +58,22 @@ export function UnconfirmedCard({
     onMissing,
     onEdit,
     onPreview,
+    notes,
+    onCardNotesChange,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
+    const [cardNotes, setCardNotes] = useState(notes);
+
     const notification = useNotifications();
+
+    const handleSetCardNotes = useCallback(
+        (event) => {
+            setCardNotes(event.target.value);
+        },
+        [setCardNotes, cardNotes],
+    );
 
     const handlePreview = useCallback(() => onPreview(itemId), [onPreview, itemId]);
 
@@ -93,6 +108,25 @@ export function UnconfirmedCard({
         setLoading(false);
     }, [itemId, notification, onEdit]);
 
+    const handleCardNotesChange = useCallback(async () => {
+        setLoading(true);
+        try {
+            await onCardNotesChange(itemId, cardNotes);
+        } catch (e: any) {
+            notification.exception(e);
+        }
+        setLoading(false);
+    }, [itemId, notification, onCardNotesChange, cardNotes]);
+
+    useEffect(() => {
+        // Calling notes api whenever user stops typing
+        let debouncer = setTimeout(() => {
+            handleCardNotesChange(itemId, cardNotes);
+        }, 400);
+        return () => {
+            clearTimeout(debouncer);
+        };
+    }, [cardNotes]);
     return (
         <AccordionCardItem divider>
             <AccordionCardItemHeader
@@ -113,14 +147,32 @@ export function UnconfirmedCard({
                     <span>{formatCurrency(declaredValue)}</span>
                 </Typography>
 
-                <Grid container alignItems={'center'} className={classes.buttons}>
-                    <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
-                        Missing
-                    </Button>
-                    <Button variant={'contained'} color={'inherit'} onClick={handleEdit} className={classes.leftSpace}>
-                        Edit
-                    </Button>
+                <Grid container direction={'column'} className={classes.buttons}>
+                    <Box display={'flex'} flexDirection={'row'}>
+                        <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
+                            Missing
+                        </Button>
+                        <Button
+                            variant={'contained'}
+                            color={'inherit'}
+                            onClick={handleEdit}
+                            className={classes.leftSpace}
+                        >
+                            Edit
+                        </Button>
+                    </Box>
                 </Grid>
+                <Box marginTop={'18px'} width={'100%'}>
+                    <TextField
+                        label="Enter Notes"
+                        fullWidth
+                        multiline
+                        value={cardNotes}
+                        onChange={handleSetCardNotes}
+                        placeholder={'Notes'}
+                        rows={4}
+                    />
+                </Box>
             </AccordionCardItemHeader>
             <AccordionCardItemLoader show={loading} />
         </AccordionCardItem>

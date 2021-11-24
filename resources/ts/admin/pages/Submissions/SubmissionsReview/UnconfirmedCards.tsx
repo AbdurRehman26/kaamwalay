@@ -10,7 +10,7 @@ import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { useNotesDialog } from '@shared/hooks/useNotesDialog';
-import { changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
+import { changeOrderItemNotes, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -94,6 +94,18 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
         [dispatch, orderId],
     );
 
+    const handleCardNotesChange = useCallback(
+        async (orderItemId: number, notes: string) => {
+            await dispatch(
+                changeOrderItemNotes({
+                    orderItemId,
+                    orderId,
+                    notes,
+                }),
+            );
+        },
+        [dispatch, orderId],
+    );
     return (
         <>
             <Card variant={'outlined'} className={classes.root}>
@@ -117,7 +129,10 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 onPreview={handlePreview}
                                 onConfirm={handleConfirm}
                                 onMissing={handleMissing}
+                                onCardNotesChange={handleCardNotesChange}
                                 onEdit={handleEdit}
+                                orderId={item.orderId}
+                                notes={item.notes}
                             />
                         ))
                     ) : (

@@ -94,6 +94,7 @@ export function SubmissionsGradeCards() {
                         key={item.orderItem.id}
                         orderID={Number(id)}
                         itemIndex={index}
+                        notes={item.orderItem.notes}
                         itemId={item.orderItem.id}
                         gradeData={item}
                     />

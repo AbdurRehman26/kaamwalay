@@ -23,6 +23,7 @@ import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntit
 import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { NotificationsService } from '../../services/NotificationsService';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
+import { ChangeOrderItemNotesDTO } from '@shared/dto/ChangeOrderItemNotesDTO';
 
 interface StateType extends APIState<OrderEntity> {}
 
@@ -46,6 +47,29 @@ export const changeOrderItemStatus = createAsyncThunk<
             orderItemId: input.orderItemId,
             certificateNumber: item.certificateNumber,
             status: classToPlain(item.status) as OrderItemStatusHistoryEntity,
+        };
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
+export const changeOrderItemNotes = createAsyncThunk<
+    {
+        orderId: number;
+        orderItemId: number;
+        notes: string;
+    },
+    ChangeOrderItemStatusDto
+>('changeOrderItemNotes', async (input: ChangeOrderItemNotesDTO, thunkAPI) => {
+    const orderItemsRepository = app(OrderItemsRepository);
+    try {
+        const item = await orderItemsRepository.changeOrderItemNotes(input);
+
+        return {
+            orderId: input.orderId,
+            orderItemId: input.orderItemId,
+            notes: item.notes,
         };
     } catch (e: any) {
         NotificationsService.exception(e);
@@ -244,6 +268,20 @@ export const adminOrdersSlice = createSlice({
                     item.status = plainToClass(OrderItemStatusHistoryEntity, status);
                 }
 
+                return item;
+            });
+
+            state.entities[orderId] = classToPlain(order) as any;
+        });
+
+        builder.addCase(changeOrderItemNotes.fulfilled, (state, { payload }) => {
+            const { orderId, orderItemId, notes } = payload;
+            const order = plainToClass(OrderEntity, state.entities[orderId]);
+
+            order.orderItems = (order.orderItems ?? []).map((item) => {
+                if (item.id === orderItemId) {
+                    item.notes = notes;
+                }
                 return item;
             });
 

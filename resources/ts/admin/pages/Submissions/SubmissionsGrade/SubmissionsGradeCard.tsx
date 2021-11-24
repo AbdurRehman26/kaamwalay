@@ -30,10 +30,12 @@ import {
     updateExistingCardStatus,
 } from '@admin/redux/slices/submissionGradeSlice';
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
+import { changeOrderItemNotes } from '@shared/redux/slices/adminOrdersSlice';
 
 interface SubmissionsGradeCardProps {
     itemId: any;
     itemIndex: number;
+    notes?: string;
     orderID: number;
     gradeData: any;
 }
@@ -252,11 +254,17 @@ const useStyles = makeStyles(
  * @date: 28.08.2021
  * @time: 19:09
  */
-export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: SubmissionsGradeCardProps) {
+export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, notes }: SubmissionsGradeCardProps) {
     const classes = useStyles();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
+    const [cardNotes, setCardNotes] = useState(notes);
+
+    const handleNotesChange = (event: any) => {
+        setCardNotes(event.target.value);
+    };
+
     const handleNotAccepted = useCallback(
         (e) => {
             e.preventDefault();
@@ -473,6 +481,29 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
             return true;
         }
     }
+
+    const handleUpdateCardNotes = useCallback(
+        async (orderItemId: number, notes: string) => {
+            await dispatch(
+                changeOrderItemNotes({
+                    orderItemId,
+                    orderId: orderID,
+                    notes,
+                }),
+            );
+        },
+        [dispatch, orderID, itemId],
+    );
+
+    useEffect(() => {
+        // Calling notes api whenever user stops typing
+        let debouncer = setTimeout(() => {
+            handleUpdateCardNotes(itemId, cardNotes);
+        }, 400);
+        return () => {
+            clearTimeout(debouncer);
+        };
+    }, [cardNotes]);
 
     return (
         <AccordionCardItem variant={'outlined'}>
@@ -718,6 +749,16 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                                     icon={<OutlinedToyIcon className={classes.headingIcon} />}
                                 />
                                 <SubmissionGradeCardUpload itemIndex={itemIndex} />
+                                <TextField
+                                    label="Card Notes"
+                                    multiline
+                                    rows={4}
+                                    value={cardNotes}
+                                    sx={{ marginTop: '16px' }}
+                                    fullWidth
+                                    onChange={handleNotesChange}
+                                />
+
                                 <Grid container justifyContent={'flex-end'}>
                                     {currentViewMode === 'graded_revise_mode' ? (
                                         <>

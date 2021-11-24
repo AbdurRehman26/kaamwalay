@@ -9,6 +9,7 @@ export class OrderItemEntity extends Entity {
     public declaredValuePerUnit!: number;
     public certificateNumber!: string;
     public orderId!: number;
+    public notes!: string;
 
     @Type(() => OrderItemStatusHistoryEntity)
     public status!: OrderItemStatusHistoryEntity;

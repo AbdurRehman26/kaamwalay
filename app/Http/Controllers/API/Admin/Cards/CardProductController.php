@@ -32,7 +32,7 @@ class CardProductController extends Controller
         return new CardProductResource($card);
     }
 
-    public function getOptionsValues()
+    public function getOptionsValues(): JsonResponse
     {
         return new JsonResponse($this->cardProductService->getOptionsValues());
     }

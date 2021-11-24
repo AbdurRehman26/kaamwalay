@@ -103,17 +103,17 @@ class CardProduct extends Model
         return $this->belongsTo(User::class, 'added_by_id');
     }
 
-    public function isAddedByAdmin()
+    public function isAddedByAdmin(): bool
     {
         return $this->added_manually && $this->addedBy->isAdmin();
     }
 
-    public function isAddedByCustomer()
+    public function isAddedByCustomer(): bool
     {
         return $this->added_manually && $this->addedBy->isCustomer();
     }
 
-    public function getFormattedCardNumber()
+    public function getFormattedCardNumber(): string | null
     {
         return is_numeric($this->card_number_order) ? Str::padLeft($this->card_number_order, 3, '0') : $this->card_number_order;
     }

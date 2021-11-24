@@ -54,7 +54,7 @@ class CardProductService
     {
     }
 
-    protected function getReferenceId(array $data)
+    protected function getReferenceId(array $data): string | null
     {
         return null;
     }
@@ -227,7 +227,7 @@ class CardProductService
         return $card;
     }
 
-    public function getOptionsValues()
+    public function getOptionsValues(): array
     {
         return [
             'category' => CardCategory::select('id', 'name')->get(),

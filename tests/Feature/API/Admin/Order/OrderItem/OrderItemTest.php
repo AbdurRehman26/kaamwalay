@@ -362,3 +362,20 @@ test('admin can update order item notes', function () {
 
     expect($orderItem->notes)->toBe($notes);
 });
+
+test('admin can remove notes from order item', function () {
+    $orderItem = OrderItem::factory()->create();
+    $this->actingAs($this->user);
+
+    $notes = '';
+
+    $this->putJson(
+        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        ['notes' => '']
+    )
+        ->assertOk();
+
+    $orderItem->refresh();
+
+    expect($orderItem->notes)->toBe(null);
+});

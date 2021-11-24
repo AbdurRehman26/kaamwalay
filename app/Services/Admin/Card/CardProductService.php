@@ -164,8 +164,7 @@ class CardProductService
             $setName = $data['set_name'];
         }
 
-        if(!isset($seriesName) || !isset($setName) || !isset($data))
-        {
+        if (! isset($seriesName) || ! isset($setName) || ! isset($data)) {
             throw new CardDataIsMissing;
         }
 

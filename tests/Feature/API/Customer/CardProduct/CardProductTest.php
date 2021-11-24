@@ -8,8 +8,9 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
 
-    $this->user = User::factory()->create();
-    $this->user->assignCustomerRole();
+    $this->user = User::factory()
+        ->withRole(config('permission.roles.customer'))
+        ->create();
 
     $this->actingAs($this->user);
 });

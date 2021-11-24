@@ -14,13 +14,10 @@ beforeEach(function () {
         CardCategoriesSeeder::class,
     ]);
 
-    $this->user = User::createAdmin([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
-        'password' => bcrypt('password'),
-    ]);
+    $this->user = User::factory()
+        ->admin()
+        ->withRole(config('permission.roles.admin'))
+        ->create();
 
     $this->sampleGetSeriesResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_get_series_response_200.json'

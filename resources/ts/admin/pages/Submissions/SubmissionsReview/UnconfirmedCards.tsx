@@ -16,6 +16,7 @@ import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 import UnconfirmedCard from './UnconfirmedCard';
+import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 
 interface UnconfirmedCardsProps {
     orderId: number;
@@ -64,6 +65,25 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
     );
 
     const handleMissing = useCallback((orderItemId) => handleOpen({ orderItemId }), [handleOpen]);
+
+    const handleSwapCard = useCallback(
+        (orderItemId) => {
+            const activeItem = items.find((item) => item.id === orderItemId);
+            if (activeItem) {
+                dispatch(
+                    manageCardDialogActions.editCard({
+                        orderItemId,
+                        card: activeItem.cardProduct,
+                        declaredValue: activeItem.declaredValuePerUnit,
+                    }),
+                );
+                dispatch(manageCardDialogActions.backup());
+                dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.List));
+            }
+        },
+        [dispatch, items],
+    );
+
     const handleEdit = useCallback(
         (orderItemId) => {
             const activeItem = items.find((item) => item.id === orderItemId);
@@ -118,6 +138,8 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 onConfirm={handleConfirm}
                                 onMissing={handleMissing}
                                 onEdit={handleEdit}
+                                disableConfirm={item.cardProduct.addedByCustomer}
+                                onSwapCard={handleSwapCard}
                             />
                         ))
                     ) : (

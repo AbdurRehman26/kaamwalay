@@ -6,6 +6,7 @@ import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogView
 import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
 import ManageCardDialogList from './ManageCardDialogList';
 import ManageCardDialogView, { ManageCardDialogViewProps } from './ManageCardDialogView';
+import ManageCardDialogCreateCard from '@shared/components/ManageCardDialog/ManageCardDialogCreateCard';
 
 export interface ManageCardDialogProps extends Omit<DialogProps, 'open'> {
     onAdd: ManageCardDialogViewProps['onAdd'];
@@ -33,7 +34,7 @@ export function ManageCardDialog({ onAdd, ...rest }: ManageCardDialogProps) {
     const dialogState = useManageCardDialogState();
 
     return (
-        <Dialog open={dialogState.open} classes={{ paper: classes.paper }} maxWidth={'sm'} {...rest}>
+        <Dialog open={dialogState.open} classes={{ paper: classes.paper }} scroll={'body'} maxWidth={'sm'} {...rest}>
             <Slide
                 in={dialogState.view === ManageCardDialogViewEnum.List}
                 direction={'left'}
@@ -57,6 +58,14 @@ export function ManageCardDialog({ onAdd, ...rest }: ManageCardDialogProps) {
                 exit={false}
             >
                 <ManageCardDialogEdit onAdd={onAdd} declaredValue={dialogState.declaredValue} />
+            </Slide>
+            <Slide
+                in={dialogState.view === ManageCardDialogViewEnum.Create}
+                direction={'left'}
+                unmountOnExit
+                exit={false}
+            >
+                <ManageCardDialogCreateCard onAdd={onAdd} declaredValue={dialogState.declaredValue} />
             </Slide>
         </Dialog>
     );

@@ -18,7 +18,7 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
     itemId: number;
     declaredValue: number;
     card: CardProductEntity;
-
+    disableConfirm?: boolean;
     onConfirm(index: number): void;
 
     onMissing(index: number): void;
@@ -26,6 +26,8 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
     onEdit(index: number): void;
 
     onPreview(index: number): void;
+
+    onSwapCard(index: number): void;
 }
 
 const useStyles = makeStyles(
@@ -54,6 +56,8 @@ export function UnconfirmedCard({
     onMissing,
     onEdit,
     onPreview,
+    onSwapCard,
+    disableConfirm,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 
@@ -93,6 +97,16 @@ export function UnconfirmedCard({
         setLoading(false);
     }, [itemId, notification, onEdit]);
 
+    const handleSwapCard = useCallback(async () => {
+        setLoading(true);
+        try {
+            await onSwapCard(itemId);
+        } catch (e: any) {
+            notification.exception(e);
+        }
+        setLoading(false);
+    }, [itemId, notification, onEdit]);
+
     return (
         <AccordionCardItem divider>
             <AccordionCardItemHeader
@@ -102,7 +116,13 @@ export function UnconfirmedCard({
                 image={card.imagePath}
                 onPreview={handlePreview}
                 action={
-                    <Button variant={'contained'} color={'primary'} className={classes.button} onClick={handleConfirm}>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        className={classes.button}
+                        disabled={disableConfirm}
+                        onClick={handleConfirm}
+                    >
                         Confirm
                     </Button>
                 }
@@ -119,6 +139,14 @@ export function UnconfirmedCard({
                     </Button>
                     <Button variant={'contained'} color={'inherit'} onClick={handleEdit} className={classes.leftSpace}>
                         Edit
+                    </Button>
+                    <Button
+                        variant={'contained'}
+                        color={'inherit'}
+                        onClick={handleSwapCard}
+                        className={classes.leftSpace}
+                    >
+                        Swap Card
                     </Button>
                 </Grid>
             </AccordionCardItemHeader>

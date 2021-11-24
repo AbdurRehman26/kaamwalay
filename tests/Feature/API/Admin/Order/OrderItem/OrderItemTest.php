@@ -345,3 +345,20 @@ it('can swap card in AGS certificate', function () {
     expect($response)->toHaveCount(1);
     expect($response[0])->toMatchArray(['certificate_id' => '09000000']);
 });
+
+test('admin can update order item notes', function () {
+    $orderItem = OrderItem::factory()->create();
+    $this->actingAs($this->user);
+
+    $notes = $this->faker->sentence();
+
+    $this->putJson(
+        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        ['notes' => $notes]
+    )
+        ->assertOk();
+
+    $orderItem->refresh();
+
+    expect($orderItem->notes)->toBe($notes);
+});

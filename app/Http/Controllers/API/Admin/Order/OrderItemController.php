@@ -99,8 +99,11 @@ class OrderItemController extends Controller
         }
     }
 
-    public function updateNotes(UpdateOrderItemNotesRequest $request, OrderItem $orderItem): OrderItemResource
-    {
+    public function updateNotes(
+        UpdateOrderItemNotesRequest $request,
+        Order $order,
+        OrderItem $orderItem
+    ): OrderItemResource {
         $orderItem->update($request->only('notes'));
 
         return new OrderItemResource($orderItem);

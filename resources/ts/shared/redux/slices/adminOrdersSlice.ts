@@ -60,7 +60,7 @@ export const changeOrderItemNotes = createAsyncThunk<
         orderItemId: number;
         notes: string;
     },
-    ChangeOrderItemStatusDto
+    ChangeOrderItemNotesDTO
 >('changeOrderItemNotes', async (input: ChangeOrderItemNotesDTO, thunkAPI) => {
     const orderItemsRepository = app(OrderItemsRepository);
     try {

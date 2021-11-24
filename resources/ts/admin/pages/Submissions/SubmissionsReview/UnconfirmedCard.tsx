@@ -21,15 +21,16 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
     declaredValue: number;
     card: CardProductEntity;
     notes?: string;
+    orderId: number;
     onConfirm(index: number): void;
 
-    onMissing(index: number): void;
+    onMissing: any;
 
     onEdit(index: number): void;
 
     onPreview(index: number): void;
 
-    onCardNotesChange(index: number): void;
+    onCardNotesChange: any;
 }
 
 const useStyles = makeStyles(
@@ -60,6 +61,7 @@ export function UnconfirmedCard({
     onPreview,
     notes,
     onCardNotesChange,
+    orderId,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 
@@ -121,7 +123,7 @@ export function UnconfirmedCard({
     useEffect(() => {
         // Calling notes api whenever user stops typing
         let debouncer = setTimeout(() => {
-            handleCardNotesChange(itemId, cardNotes);
+            handleCardNotesChange();
         }, 400);
         return () => {
             clearTimeout(debouncer);

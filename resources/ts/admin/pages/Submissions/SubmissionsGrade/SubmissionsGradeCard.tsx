@@ -498,7 +498,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
     useEffect(() => {
         // Calling notes api whenever user stops typing
         let debouncer = setTimeout(() => {
-            handleUpdateCardNotes(itemId, cardNotes);
+            handleUpdateCardNotes(itemId, cardNotes!);
         }, 400);
         return () => {
             clearTimeout(debouncer);
@@ -670,17 +670,20 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                 {(cardStatus.toLowerCase() === 'missing' ||
                                     cardStatus.toLowerCase() === 'not accepted') &&
                                 viewModes[itemIndex]?.notes === '' ? (
-                                    <div className={classes.noNotesContainer}>
-                                        <Typography className={classes.noNotesTitle}>No notes.</Typography>
-                                        <Typography className={classes.noNotesDescription}>
-                                            No notes have been added. Click “Revise” to add notes.{' '}
-                                        </Typography>
-                                    </div>
+                                    <TextField
+                                        label="Card Notes"
+                                        multiline
+                                        rows={4}
+                                        value={cardNotes}
+                                        sx={{ marginTop: '16px' }}
+                                        fullWidth
+                                        onChange={handleNotesChange}
+                                    />
                                 ) : (
                                     <div className={classes.existingNotesContainer}>
                                         <Typography className={classes.existingNotesTitle}>Notes: </Typography>
                                         <Typography className={classes.existingNotesDescription}>
-                                            {viewModes[itemIndex]?.notes}
+                                            {cardNotes}
                                         </Typography>
                                     </div>
                                 )}
@@ -699,14 +702,13 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                 Notes: {viewModes[itemIndex]?.areNotesRequired ? '*' : null}
                             </Typography>
                             <TextField
-                                variant={'outlined'}
-                                value={viewModes[itemIndex]?.notes ?? ''}
-                                onChange={handleActionNotesChange}
-                                placeholder={viewModes[itemIndex]?.notesPlaceholder}
-                                fullWidth
+                                label="Card Notes"
                                 multiline
-                                disabled={false}
-                                rows={3}
+                                rows={4}
+                                value={cardNotes}
+                                sx={{ marginTop: '16px' }}
+                                fullWidth
+                                onChange={handleNotesChange}
                             />
                             <div className={classes.noteActionsContainer}>
                                 <Button
@@ -731,6 +733,15 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                         </OutlinedCard>
                     </>
                 ) : null}
+                <TextField
+                    label="Card Notes"
+                    multiline
+                    rows={4}
+                    value={cardNotes}
+                    sx={{ marginTop: '16px' }}
+                    fullWidth
+                    onChange={handleNotesChange}
+                />
                 {cardStatus.toLowerCase() !== 'missing' && cardStatus.toLowerCase() !== 'not accepted' ? (
                     <>
                         {currentViewMode === 'not_accepted_pending_notes' ||
@@ -749,15 +760,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                     icon={<OutlinedToyIcon className={classes.headingIcon} />}
                                 />
                                 <SubmissionGradeCardUpload itemIndex={itemIndex} />
-                                <TextField
-                                    label="Card Notes"
-                                    multiline
-                                    rows={4}
-                                    value={cardNotes}
-                                    sx={{ marginTop: '16px' }}
-                                    fullWidth
-                                    onChange={handleNotesChange}
-                                />
 
                                 <Grid container justifyContent={'flex-end'}>
                                     {currentViewMode === 'graded_revise_mode' ? (

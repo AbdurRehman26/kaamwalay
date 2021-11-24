@@ -94,7 +94,7 @@ export function SubmissionsGradeCards() {
                 window.scrollTo(item.getBoundingClientRect());
             }
         }, 2000);
-    });
+    }, [reviseGradeItemId]);
 
     return (
         <Grid container direction={'column'} className={classes.root}>

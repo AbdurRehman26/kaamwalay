@@ -10,7 +10,6 @@ use App\Models\CardSet;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use TypeError;
 
 class CardProductService
@@ -177,7 +176,7 @@ class CardProductService
         //store in AGS
         $agsResponse = $this->processAgsCreate($category->id, $seriesName, $setName, $data);
 
-        if (!$agsResponse || !array_key_exists('id', $agsResponse)) {
+        if (! $agsResponse || ! array_key_exists('id', $agsResponse)) {
             throw new CardProductCanNotBeCreated;
         }
 

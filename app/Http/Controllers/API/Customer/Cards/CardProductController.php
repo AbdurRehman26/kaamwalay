@@ -5,11 +5,9 @@ namespace App\Http\Controllers\API\Customer\Cards;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Card\StoreCardProductRequest;
 use App\Http\Resources\API\CardProduct\CardProductResource;
-use App\Models\CardProduct;
 use App\Services\Card\CardProductService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CardProductController extends Controller
@@ -33,5 +31,4 @@ class CardProductController extends Controller
 
         return new CardProductResource($card);
     }
-
 }

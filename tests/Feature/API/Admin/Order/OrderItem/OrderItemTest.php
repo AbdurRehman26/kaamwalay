@@ -364,10 +364,8 @@ test('admin can update order item notes', function () {
 });
 
 test('admin can remove notes from order item', function () {
-    $orderItem = OrderItem::factory()->create();
+    $orderItem = OrderItem::factory()->create(['notes' => 'Lorem ispum']);
     $this->actingAs($this->user);
-
-    $notes = '';
 
     $this->putJson(
         route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),

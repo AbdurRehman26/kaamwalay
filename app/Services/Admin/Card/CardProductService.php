@@ -10,7 +10,6 @@ use App\Models\CardSet;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
 use Exception;
-use TypeError;
 
 class CardProductService
 {
@@ -58,30 +57,26 @@ class CardProductService
         return null;
     }
 
-    protected function getOrCreateSeriesFromAgs(string $seriesName, array $data): int
+    protected function getOrCreateSeriesFromAgs(string $seriesName, array $data): int | null
     {
-        $seriesId = 0;
-
         //Store in AGS
         $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
 
         if ($seriesResponse['count'] > 0) {
-            $seriesId = $seriesResponse['results'][0]['id'];
+            return $seriesResponse['results'][0]['id'];
         } elseif ($seriesName && $data['series_image']) {
             $createSeriesResponse = $this->agsService->createSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
 
             if (array_key_exists('id', $createSeriesResponse)) {
-                $seriesId = $seriesResponse['id'];
+                return $seriesResponse['id'];
             }
         }
 
-        return $seriesId;
+        return null;
     }
 
-    protected function getOrCreateSetFromAgs(int $seriesId, string $setName, array $data): int
+    protected function getOrCreateSetFromAgs(int $seriesId, string $setName, array $data): int | null
     {
-        $setId = 0;
-
         //Store in AGS
         $setResponse = $this->agsService->getSet([
             'name' => $setName,
@@ -89,7 +84,7 @@ class CardProductService
         ]);
 
         if ($setResponse['count'] > 0) {
-            $setId = $setResponse['results'][0]['id'];
+            return $setResponse['results'][0]['id'];
         } elseif ($setName && $seriesId && $data['release_date'] && $data['set_image']) {
             $createSetResponse = $this->agsService->createSet([
                 'name' => $setName,
@@ -99,11 +94,11 @@ class CardProductService
             ]);
 
             if (array_key_exists('id', $createSetResponse)) {
-                $setId = $createSetResponse['id'];
+                return $createSetResponse['id'];
             }
         }
 
-        return $setId;
+        return null;
     }
 
     protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): array
@@ -146,8 +141,6 @@ class CardProductService
             return $this->agsService->createCard($createData);
         } catch (Exception $e) {
             return [];
-        } catch (TypeError $te) {
-            return [];
         }
     }
 
@@ -155,8 +148,6 @@ class CardProductService
     {
         $category = CardCategory::find($data['category']);
 
-        $seriesName = '';
-        $setName = '';
         $series = null;
         $set = null;
         if (array_key_exists('series_id', $data) && $data['series_id']) {

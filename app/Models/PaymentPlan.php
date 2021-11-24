@@ -14,7 +14,7 @@ class PaymentPlan extends Model
      *
      * @var array
      */
-    protected $fillable = ['price', 'max_protection_amount', 'turnaround', 'display_position'];
+    protected $fillable = ['price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround', 'display_position'];
 
     /**
      * The attributes that should be cast to native types.
@@ -24,6 +24,8 @@ class PaymentPlan extends Model
     protected $casts = [
         'id' => 'integer',
         'price' => 'float',
+        'price_before_discount' => 'float',
+        'discount_percentage' => 'string',
         'turnaround' => 'string',
         'max_protection_amount' => 'float',
         'display_position' => 'integer',

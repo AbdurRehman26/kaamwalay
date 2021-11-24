@@ -27,6 +27,7 @@ class OrderItemResource extends BaseResource
             'user_card' => $this->whenLoaded('userCard', UserCardResource::class),
             'graded_by' => $this->when($isGraded, fn () => $this->getGradedStatusHistory()?->user?->getFullName()),
             'graded_at' => $this->when($isGraded, fn () => $this->formatDate($this->getGradedStatusHistory()?->updated_at)),
+            'notes' => $this->notes ?? '',
         ];
     }
 

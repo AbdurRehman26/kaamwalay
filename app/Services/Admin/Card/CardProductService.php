@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
+use App\Exceptions\API\Admin\CardDataIsMissing;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
@@ -104,7 +105,6 @@ class CardProductService
     protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): array
     {
         try {
-            $createData = [];
             $createData['series_id'] = $this->getOrCreateSeriesFromAgs($seriesName, $data);
             $createData['set_id'] = $this->getOrCreateSetFromAgs($createData['series_id'], $setName, $data);
 
@@ -162,6 +162,11 @@ class CardProductService
             $setName = $set->name;
         } elseif (array_key_exists('set_name', $data) && $data['set_name']) {
             $setName = $data['set_name'];
+        }
+
+        if(!isset($seriesName) || !isset($setName) || !isset($data))
+        {
+            throw new CardDataIsMissing;
         }
 
         //store in AGS

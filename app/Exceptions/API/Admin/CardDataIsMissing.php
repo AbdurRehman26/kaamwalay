@@ -7,10 +7,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CardProductCanNotBeCreated extends Exception
+class CardDataIsMissing extends Exception
 {
     /** @var string */
-    protected $message = 'Card can not be created due to an error occurred with AGS client.';
+    protected $message = 'Card can not be created because there is information missing.';
 
     /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;

@@ -32,15 +32,12 @@ beforeEach(function () {
 });
 
 test('admins can get card set list', function () {
-
     $response = $this->getJson('/api/admin/sets');
 
     $response->assertSuccessful();
-
 });
 
 test('admins can filter card set list by series', function () {
-
     $response = $this->getJson('/api/admin/sets?series_id=' . $this->series[0]->id);
 
     $response->assertSuccessful();

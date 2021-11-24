@@ -16,7 +16,7 @@ class CardSetService
     {
         $query = CardSet::select('id', 'name', 'card_series_id', 'release_date', 'image_path');
 
-        if(request('series_id')) {
+        if (request('series_id')) {
             $query->where('card_series_id', request('series_id'));
         }
 

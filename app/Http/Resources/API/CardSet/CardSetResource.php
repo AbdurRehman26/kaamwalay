@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\CardSet;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\CardSeries\CardSeriesResource;
 use Illuminate\Http\Request;
 
 class CardSetResource extends BaseResource

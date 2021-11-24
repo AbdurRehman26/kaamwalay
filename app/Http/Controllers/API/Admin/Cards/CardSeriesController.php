@@ -18,5 +18,4 @@ class CardSeriesController extends Controller
             $this->cardSeriesService->search()
         );
     }
-
 }

@@ -82,7 +82,7 @@ test('admins can create cards manually', function () {
     ]);
 });
 
-it('fails on repeated series name', function() {
+it('fails on repeated series name', function () {
     Http::fake([
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
@@ -109,11 +109,11 @@ it('fails on repeated series name', function() {
 
     $response->assertStatus(422);
     $response->assertJsonFragment([
-        'series_name' => ['This series name already exists in this category']
+        'series_name' => ['This series name already exists in this category'],
     ]);
 });
 
-it('fails on repeated set name', function() {
+it('fails on repeated set name', function () {
     Http::fake([
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
@@ -139,11 +139,11 @@ it('fails on repeated set name', function() {
 
     $response->assertStatus(422);
     $response->assertJsonFragment([
-        'set_name' => ['This set name already exists in this series']
+        'set_name' => ['This set name already exists in this series'],
     ]);
 });
 
-it('fails on repeated card number', function() {
+it('fails on repeated card number', function () {
     Http::fake([
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
@@ -168,6 +168,6 @@ it('fails on repeated card number', function() {
 
     $response->assertStatus(422);
     $response->assertJsonFragment([
-        'card_number' => ['This card number already exists in this set']
+        'card_number' => ['This card number already exists in this set'],
     ]);
 });

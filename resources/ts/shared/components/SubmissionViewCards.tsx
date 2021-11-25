@@ -262,7 +262,6 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                             {isMobile ? null : (
                                                 <div className={classes.gradeColumn}>
                                                     <a
-                                                        target={'_blank'}
                                                         href={
                                                             `/admin/submissions/${item.orderId}/grade?item_id=` +
                                                             item.id

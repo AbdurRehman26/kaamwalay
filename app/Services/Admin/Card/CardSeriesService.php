@@ -16,7 +16,7 @@ class CardSeriesService
     {
         $query = CardSeries::select('id', 'name', 'card_category_id', 'image_path');
 
-        if(request('category_id')) {
+        if (request('category_id')) {
             $query->where('card_category_id', request('category_id'));
         }
 

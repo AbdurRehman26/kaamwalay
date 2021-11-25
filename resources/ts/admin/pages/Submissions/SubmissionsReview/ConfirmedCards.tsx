@@ -54,7 +54,7 @@ export function ConfirmedCards({ items, orderId }: ConfirmedCardsProps) {
     return (
         <>
             <CardsList
-                heading={'Confirmed cards'}
+                heading={'Confirmed Cards'}
                 totals={(items || []).length}
                 onClear={!hasNoCards ? handleClear : null}
                 extraAction={

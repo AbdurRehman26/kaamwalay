@@ -10,8 +10,8 @@ class CardProductResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'long_name' => $this->isAddedByCustomer() ? $this->description : $this->getLongName(),
-            'short_name' => $this->isAddedByCustomer() ? 'Added Manually' : $this->getShortName(),
+            'long_name' => $this->getLongName(),
+            'short_name' => $this->getShortName(),
             'name' => $this->name,
             'card_category_name' => $this->cardCategory?->name,
             'card_set_name' => $this->cardSet?->name,
@@ -24,7 +24,7 @@ class CardProductResource extends BaseResource
             'variant' => $this->variant,
             'surface' => $this->surface,
             'edition' => $this->edition,
-            'added_by_customer' => $this->isAddedByCustomer(),
+            'added_by_customer' => ! $this->isCardInformationComplete(),
         ];
     }
 }

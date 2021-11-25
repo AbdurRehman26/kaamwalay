@@ -53,30 +53,25 @@ class CardProductService
     {
     }
 
-    protected function getReferenceId(array $data): string | null
-    {
-        return null;
-    }
-
-    protected function getOrCreateSeriesFromAgs(string $seriesName, array $data): int | null
+    protected function getOrCreateSeriesFromAgs(string $seriesName, string $seriesImage, array $data): int | null
     {
         //Store in AGS
         $seriesResponse = $this->agsService->getCardSeries(['name' => $seriesName]);
 
         if ($seriesResponse['count'] > 0) {
             return $seriesResponse['results'][0]['id'];
-        } elseif ($seriesName && $data['series_image']) {
-            $createSeriesResponse = $this->agsService->createCardSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
+        } elseif ($seriesName && $seriesImage) {
+            $createSeriesResponse = $this->agsService->createCardSeries(['name' => $seriesName, 'image_path' => $seriesImage]);
 
             if (array_key_exists('id', $createSeriesResponse)) {
-                return $seriesResponse['id'];
+                return $createSeriesResponse['id'];
             }
         }
 
         return null;
     }
 
-    protected function getOrCreateSetFromAgs(int $seriesId, string $setName, array $data): int | null
+    protected function getOrCreateSetFromAgs(int $seriesId, string $setName, string $setImage, array $data): int | null
     {
         //Store in AGS
         $setResponse = $this->agsService->getCardSet([
@@ -86,10 +81,10 @@ class CardProductService
 
         if ($setResponse['count'] > 0) {
             return $setResponse['results'][0]['id'];
-        } elseif ($setName && $seriesId && $data['release_date'] && $data['set_image']) {
+        } elseif ($setName && $seriesId && $data['release_date'] && $setImage) {
             $createSetResponse = $this->agsService->createCardSet([
                 'name' => $setName,
-                'image_path' => $data['set_image'],
+                'image_path' => $setImage,
                 'release_date' => $data['release_date'],
                 'serie_id' => $seriesId,
             ]);
@@ -102,29 +97,11 @@ class CardProductService
         return null;
     }
 
-    protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): array
+    protected function processAgsCreate(int $categoryId, string $seriesName, string $seriesImage, string $setName, string $setImage, array $data): array
     {
         try {
-            $createData['series_id'] = $this->getOrCreateSeriesFromAgs($seriesName, $data);
-            $createData['set_id'] = $this->getOrCreateSetFromAgs($createData['series_id'], $setName, $data);
-
-            $cardReferenceId = $this->getReferenceId([
-                'series_id' => $createData['series_id'],
-                'set_id' => $createData['set_id'],
-                'name' => $data['name'],
-                'category_id' => $data['category'],
-                'release_date' => $data['release_date'],
-                'card_number' => $data['card_number'],
-                'language' => $data['language'],
-                'rarity' => $data['rarity'],
-                'edition' => $data['edition'],
-                'surface' => $data['surface'],
-                'variant' => $data['variant'],
-            ]);
-
-            if ($cardReferenceId) {
-                $createData['card_reference_id'] = $cardReferenceId;
-            }
+            $createData['series_id'] = $this->getOrCreateSeriesFromAgs($seriesName, $seriesImage, $data);
+            $createData['set_id'] = $this->getOrCreateSetFromAgs($createData['series_id'], $setName, $setImage, $data);
 
             $createData = array_merge($createData, [
                 'name' => $data['name'],
@@ -153,23 +130,27 @@ class CardProductService
         if (array_key_exists('series_id', $data) && $data['series_id']) {
             $series = CardSeries::find($data['series_id']);
             $seriesName = $series->name;
+            $seriesImage = $series->image_path;
         } elseif (array_key_exists('series_name', $data) && $data['series_name']) {
             $seriesName = $data['series_name'];
+            $seriesImage = $data['series_image'];
         }
 
         if (array_key_exists('set_id', $data) && $data['set_id']) {
             $set = CardSet::find($data['set_id']);
             $setName = $set->name;
+            $setImage = $set->image_path;
         } elseif (array_key_exists('set_name', $data) && $data['set_name']) {
             $setName = $data['set_name'];
+            $setImage = $data['set_image'];
         }
 
-        if (! isset($seriesName) || ! isset($setName)) {
+        if (! isset($seriesName) || ! isset($setName) || ! isset($seriesImage) || ! isset($setImage)) {
             throw new CardDataIsMissing;
         }
 
         //store in AGS
-        $agsResponse = $this->processAgsCreate($category->id, $seriesName, $setName, $data);
+        $agsResponse = $this->processAgsCreate($category->id, $seriesName, $seriesImage, $setName, $setImage, $data);
 
         if (! $agsResponse || ! array_key_exists('id', $agsResponse)) {
             throw new CardProductCanNotBeCreated;

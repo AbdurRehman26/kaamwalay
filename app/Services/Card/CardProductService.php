@@ -6,10 +6,6 @@ use App\Models\CardProduct;
 
 class CardProductService
 {
-    public function __construct()
-    {
-    }
-
     public function create(array $data): CardProduct
     {
         return CardProduct::create(array_merge(

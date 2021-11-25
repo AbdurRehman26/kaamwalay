@@ -8,10 +8,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CardSetService
 {
-    public function __construct()
-    {
-    }
-
     public function search(): Collection
     {
         $query = CardSet::select('id', 'name', 'card_series_id', 'release_date', 'image_path');

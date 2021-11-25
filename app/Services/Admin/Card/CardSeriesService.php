@@ -8,10 +8,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CardSeriesService
 {
-    public function __construct()
-    {
-    }
-
     public function search(): Collection
     {
         $query = CardSeries::select('id', 'name', 'card_category_id', 'image_path');

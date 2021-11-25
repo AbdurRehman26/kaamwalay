@@ -85,7 +85,7 @@ class CardProduct extends Model
      */
     public function shouldBeSearchable()
     {
-        return ! $this->added_manually || $this->isAddedByAdmin();
+        return ! $this->added_manually || $this->isCardInformationComplete();
     }
 
     public function cardSet(): BelongsTo
@@ -103,14 +103,9 @@ class CardProduct extends Model
         return $this->belongsTo(User::class, 'added_by');
     }
 
-    public function isAddedByAdmin(): bool
+    public function isCardInformationComplete(): bool
     {
-        return $this->added_manually && $this->addedBy->isAdmin();
-    }
-
-    public function isAddedByCustomer(): bool
-    {
-        return $this->added_manually && $this->addedBy->isCustomer();
+        return $this->card_category_id && $this->card_set_id && $this->card_number_order;
     }
 
     public function getFormattedCardNumber(): string | null
@@ -120,25 +115,33 @@ class CardProduct extends Model
 
     public function getShortName(): string
     {
-        $language = $this->language !== 'English' ? $this->language . ' - ' : '';
-        $edition = $this->edition !== 'Unlimited' ? $this->edition . ' - ' : '';
-        $surface = $this->surface ? $this->surface . ' - ' : '';
-        $variant = $this->variant ?: '';
+        if ($this->isCardInformationComplete()) {
+            $language = $this->language !== 'English' ? $this->language . ' - ' : '';
+            $edition = $this->edition !== 'Unlimited' ? $this->edition . ' - ' : '';
+            $surface = $this->surface ? $this->surface . ' - ' : '';
+            $variant = $this->variant ?: '';
 
-        $shortName = $language . $edition . $surface . $variant;
+            $shortName = $language . $edition . $surface . $variant;
 
-        if (str_ends_with($shortName, ' - ')) {
-            $shortName = substr_replace($shortName, '', -3);
+            if (str_ends_with($shortName, ' - ')) {
+                $shortName = substr_replace($shortName, '', -3);
+            }
+
+            return $shortName;
         }
 
-        return $shortName;
+        return 'Added Manually';
     }
 
     public function getLongName(): string
     {
-        $series = $this->cardSet->cardSeries->name == $this->cardSet->name ? '' :  $this->cardSet->cardSeries->name . ' ';
+        if ($this->isCardInformationComplete()) {
+            $series = $this->cardSet->cardSeries->name == $this->cardSet->name ? '' :  $this->cardSet->cardSeries->name . ' ';
 
-        return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $series . $this->cardSet->name . ' ' . $this->card_number_order;
+            return $this->cardSet->release_year . ' ' . $this->cardCategory->name . ' ' . $series . $this->cardSet->name . ' ' . $this->card_number_order;
+        }
+
+        return $this->description;
     }
 
     public function getSearchableName(): string

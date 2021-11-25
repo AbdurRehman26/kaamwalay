@@ -279,4 +279,29 @@ class AgsService
             return $imageData['output_image'] !== null;
         });
     }
+
+    public function getCardSeries(array $data): array
+    {
+        return $this->client->getCardSeries($data);
+    }
+
+    public function createCardSeries(array $data): array
+    {
+        return $this->client->createCardSeries($data);
+    }
+
+    public function getCardSet(array $data): array
+    {
+        return $this->client->getCardSet($data);
+    }
+
+    public function createCardSet(array $data): array
+    {
+        return $this->client->createCardSet($data);
+    }
+
+    public function createCard(array $data): array
+    {
+        return $this->client->createCard($data);
+    }
 }

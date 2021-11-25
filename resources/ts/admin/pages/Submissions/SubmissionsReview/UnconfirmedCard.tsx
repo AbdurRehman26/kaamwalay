@@ -20,6 +20,7 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
     itemId: number;
     declaredValue: number;
     card: CardProductEntity;
+    disableConfirm?: boolean;
     notes?: string;
     orderId: number;
     onConfirm(index: number): void;
@@ -30,6 +31,7 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
 
     onPreview(index: number): void;
 
+    onSwapCard(index: number): void;
     onCardNotesChange: any;
 }
 
@@ -59,6 +61,8 @@ export function UnconfirmedCard({
     onMissing,
     onEdit,
     onPreview,
+    onSwapCard,
+    disableConfirm,
     notes,
     onCardNotesChange,
 }: UnconfirmedCardProps) {
@@ -111,6 +115,16 @@ export function UnconfirmedCard({
         setLoading(false);
     }, [itemId, notification, onEdit]);
 
+    const handleSwapCard = useCallback(async () => {
+        setLoading(true);
+        try {
+            await onSwapCard(itemId);
+        } catch (e: any) {
+            notification.exception(e);
+        }
+        setLoading(false);
+    }, [itemId, notification, onEdit]);
+
     function handleCardNotesChange(newNotes: string) {
         setLoading(true);
         try {
@@ -132,7 +146,13 @@ export function UnconfirmedCard({
                 image={card.imagePath}
                 onPreview={handlePreview}
                 action={
-                    <Button variant={'contained'} color={'primary'} className={classes.button} onClick={handleConfirm}>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        className={classes.button}
+                        disabled={disableConfirm}
+                        onClick={handleConfirm}
+                    >
                         Confirm
                     </Button>
                 }
@@ -155,6 +175,14 @@ export function UnconfirmedCard({
                             className={classes.leftSpace}
                         >
                             Edit
+                        </Button>
+                        <Button
+                            variant={'contained'}
+                            color={'inherit'}
+                            onClick={handleSwapCard}
+                            className={classes.leftSpace}
+                        >
+                            Swap Card
                         </Button>
                     </Box>
                 </Grid>

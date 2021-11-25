@@ -17,6 +17,9 @@ import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { markCardAsSelected, markCardAsUnselected } from '@dashboard/redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CustomerAddCardDialog from './CustomerAddCardDialog';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -149,23 +152,39 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
 
 function CardsSearchResults() {
     const classes = useStyles();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const ResultsWrapper = isMobile ? 'div' : Paper;
+    const [showAddCardDialog, setShowAddCardDialog] = useState<boolean | null>(null);
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const ResultsWrapper = isSm ? 'div' : Paper;
+
+    const toggleAddCardDialog = useCallback(() => {
+        setShowAddCardDialog(!showAddCardDialog);
+    }, [showAddCardDialog]);
 
     return (
         <div className={classes.container}>
-            <Typography variant={'caption'} className={font.fontWeightMedium}>
-                <Stats
-                    translations={{
-                        stats(nbHits, processingTimeMS, nbSortedHits, areHitsSorted) {
-                            // This condition will be true when we'll implement different filtering methods for cards
-                            return areHitsSorted && nbHits !== nbSortedHits
-                                ? `${nbSortedHits!.toLocaleString()} relevant results sorted out of ${nbHits.toLocaleString()} found in ${processingTimeMS.toLocaleString()}ms`
-                                : `${nbHits.toLocaleString()} results found`;
-                        },
-                    }}
-                />
-            </Typography>
+            <CustomerAddCardDialog showDialog={showAddCardDialog} onClose={toggleAddCardDialog} />
+            <Box display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+                <Typography variant={'caption'} className={font.fontWeightMedium}>
+                    <Stats
+                        translations={{
+                            stats(nbHits, processingTimeMS, nbSortedHits, areHitsSorted) {
+                                // This condition will be true when we'll implement different filtering methods for cards
+                                return areHitsSorted && nbHits !== nbSortedHits
+                                    ? `${nbSortedHits!.toLocaleString()} relevant results sorted out of ${nbHits.toLocaleString()} found in ${processingTimeMS.toLocaleString()}ms`
+                                    : `${nbHits.toLocaleString()} results`;
+                            },
+                        }}
+                    />
+                </Typography>
+                <Box flexDirection={'row'}>
+                    <Typography variant={'caption'} className={font.fontWeightNormal}>
+                        Can't find your card?
+                    </Typography>
+                    <Button color={'primary'} variant="text" sx={{ fontSize: '12px' }} onClick={toggleAddCardDialog}>
+                        ADD CARD MANUALLY
+                    </Button>
+                </Box>
+            </Box>
             <ResultsWrapper className={classes.resultsContainer} variant={'outlined'}>
                 <Hits hitComponent={ResultWrapper} />
                 <CustomPagination />

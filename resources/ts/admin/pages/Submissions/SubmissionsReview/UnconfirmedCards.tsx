@@ -6,16 +6,15 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
-import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
-import { useNotesDialog } from '@shared/hooks/useNotesDialog';
 import { changeOrderItemNotes, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 import UnconfirmedCard from './UnconfirmedCard';
+import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 
 interface UnconfirmedCardsProps {
     orderId: number;
@@ -59,6 +58,24 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
             );
         },
         [dispatch, orderId],
+    );
+
+    const handleSwapCard = useCallback(
+        (orderItemId) => {
+            const activeItem = items.find((item) => item.id === orderItemId);
+            if (activeItem) {
+                dispatch(
+                    manageCardDialogActions.editCard({
+                        orderItemId,
+                        card: activeItem.cardProduct,
+                        declaredValue: activeItem.declaredValuePerUnit,
+                    }),
+                );
+                dispatch(manageCardDialogActions.backup());
+                dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.List));
+            }
+        },
+        [dispatch, items],
     );
 
     const handleEdit = useCallback(
@@ -127,6 +144,8 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 onMissing={handleMarkCardMissing}
                                 onCardNotesChange={handleCardNotesChange}
                                 onEdit={handleEdit}
+                                disableConfirm={item.cardProduct.addedByCustomer}
+                                onSwapCard={handleSwapCard}
                                 orderId={item.orderId}
                                 notes={item.notes}
                             />

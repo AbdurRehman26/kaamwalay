@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\Admin\Cards\CardProductController;
+use App\Http\Controllers\API\Admin\Cards\CardSeriesController;
+use App\Http\Controllers\API\Admin\Cards\CardSetController;
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
 use App\Http\Controllers\API\Admin\Order\OrderPaymentController;
@@ -46,5 +49,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('payments/extra-charge', OrderExtraChargeController::class)
             ->name('payments.extra-charge');
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
+    });
+
+    Route::prefix('cards')->group(function () {
+        Route::get('sets', [CardSetController::class, 'index']);
+        Route::get('series', [CardSeriesController::class, 'index']);
+        Route::post('/', [CardProductController::class, 'store']);
+        Route::get('options', [CardProductController::class, 'getOptionsValues']);
     });
 });

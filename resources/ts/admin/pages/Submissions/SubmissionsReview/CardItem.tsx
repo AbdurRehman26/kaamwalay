@@ -11,8 +11,6 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { cx } from '@shared/lib/utils/cx';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CustomAccordion } from '@admin/pages/Submissions/SubmissionsReview/CustomAccordion';
 interface CardItemProps {
     label: any | string;

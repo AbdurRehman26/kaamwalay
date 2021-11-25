@@ -2,9 +2,6 @@
 
 namespace App\Http\Requests\API\Admin\Card;
 
-use App\Models\CardProduct;
-use App\Models\CardSeries;
-use App\Models\CardSet;
 use App\Services\Admin\Card\CardProductService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -28,9 +25,9 @@ class StoreCardProductRequest extends FormRequest
                 'required_without:series_id',
                 'nullable',
                 'string',
-                Rule::unique('card_series', 'name')->where(function($query) {
+                Rule::unique('card_series', 'name')->where(function ($query) {
                     return $query->where('card_category_id', $this->category);
-                })
+                }),
             ],
             'series_image' => ['required_without:series_id', 'nullable', 'string'],
             'set_id' => ['sometimes', 'nullable', 'numeric'],
@@ -38,17 +35,17 @@ class StoreCardProductRequest extends FormRequest
                 'required_without:set_id',
                 'nullable',
                 'string',
-                Rule::unique('card_sets', 'name')->where(function($query) {
+                Rule::unique('card_sets', 'name')->where(function ($query) {
                     return $query->where('card_series_id', $this->series_id);
-                })
+                }),
             ],
             'set_image' => ['required_without:set_id', 'nullable', 'string'],
             'card_number' => [
                 'required',
                 'string',
-                Rule::unique('card_products', 'card_number_order')->where(function($query) {
+                Rule::unique('card_products', 'card_number_order')->where(function ($query) {
                     return $query->where('card_set_id', $this->set_id);
-                })
+                }),
             ],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],
             'rarity' => ['required', 'string', Rule::in(CardProductService::CARD_RARITIES)],
@@ -61,7 +58,7 @@ class StoreCardProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'card_number.unique' => 'This card number already exists in this set'
+            'card_number.unique' => 'This card number already exists in this set',
         ];
     }
 }

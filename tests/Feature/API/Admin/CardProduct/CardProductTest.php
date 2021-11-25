@@ -109,7 +109,7 @@ it('fails on repeated series name', function () {
 
     $response->assertStatus(422);
     $response->assertJsonFragment([
-        'series_name' => ['The series name has already been taken.']
+        'series_name' => ['The series name has already been taken.'],
     ]);
 });
 
@@ -139,7 +139,7 @@ it('fails on repeated set name', function () {
 
     $response->assertStatus(422);
     $response->assertJsonFragment([
-        'set_name' => ['The set name has already been taken.']
+        'set_name' => ['The set name has already been taken.'],
     ]);
 });
 

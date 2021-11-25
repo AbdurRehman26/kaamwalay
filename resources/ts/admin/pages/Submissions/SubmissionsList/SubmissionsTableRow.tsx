@@ -18,6 +18,7 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
+import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -51,6 +52,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const history = useHistory();
+    const [statusType, statusLabel] = useOrderStatus(order?.orderStatus);
 
     const handleOption = useCallback(
         (option: Options) => async () => {
@@ -103,7 +105,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
             </TableCell>
             <TableCell>{order.numberOfCards}</TableCell>
             <TableCell>
-                <StatusChip label={order.orderStatus?.name} color={order.orderStatus?.code as any} />
+                <StatusChip label={statusLabel} color={statusType} />
             </TableCell>
             <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
             <TableCell>{formatCurrency(order.grandTotal)}</TableCell>

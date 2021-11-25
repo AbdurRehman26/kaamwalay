@@ -97,7 +97,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
                             <TableRow>
                                 <TableCell variant={'head'}>Submission #</TableCell>
                                 <TableCell variant={'head'}>Date Placed</TableCell>
-                                <TableCell variant={'head'}>Date Arrived</TableCell>
+                                <TableCell variant={'head'}>Date Confirmed</TableCell>
                                 <TableCell variant={'head'}>Service Level</TableCell>
                                 <TableCell variant={'head'}># Cards</TableCell>
                                 <TableCell variant={'head'}>Status</TableCell>

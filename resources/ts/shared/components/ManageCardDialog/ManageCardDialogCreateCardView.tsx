@@ -864,7 +864,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                 onClick={handleAddCard}
                                 disabled={!showSaveButton || isLoading}
                             >
-                                {isLoading ? <CircularProgress color={'secondary'} /> : 'Save'}
+                                {isLoading ? <CircularProgress color={'primary'} /> : 'Save'}
                             </Button>
                         </Box>
                     </Box>

@@ -100,7 +100,7 @@ class AGSClient
         return $this->responseHandler(response: $response, route: '/robograding/certificates/', payload: [$data]);
     }
 
-    public function getSeries(array $data): array
+    public function getCardSeries(array $data): array
     {
         $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/series/', $data);
 
@@ -111,7 +111,7 @@ class AGSClient
         return $this->responseHandler(response: $response, route: '/series/', payload: [$data]);
     }
 
-    public function createSeries(array $data): array
+    public function createCardSeries(array $data): array
     {
         $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/series/', $data);
 
@@ -122,7 +122,7 @@ class AGSClient
         return $this->responseHandler(response: $response, route: '/series/', payload: [$data]);
     }
 
-    public function getSet(array $data): array
+    public function getCardSet(array $data): array
     {
         $response = Http::withToken($this->getAuthToken())->get($this->getBaseUrl() . '/sets/', $data);
 
@@ -133,7 +133,7 @@ class AGSClient
         return $this->responseHandler(response: $response, route: '/sets/', payload: [$data]);
     }
 
-    public function createSet(array $data): array
+    public function createCardSet(array $data): array
     {
         $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/sets/', $data);
 

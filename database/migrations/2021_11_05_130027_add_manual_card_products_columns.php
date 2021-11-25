@@ -35,9 +35,7 @@ class AddManualCardProductsColumns extends Migration
             $table->dropColumn('added_manually');
 
             $table->dropForeign(['added_by']);
-            $table->dropIndex('card_products_added_by_foreign');
             $table->dropColumn('added_by');
-
         });
     }
 }

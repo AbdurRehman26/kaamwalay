@@ -1,5 +1,5 @@
 /**
- * @api {get} /admin/sets List Sets
+ * @api {get} /admin/cards/sets List Sets
  * @apiName List Sets
  * @apiGroup Admin Card Sets
  *

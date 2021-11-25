@@ -49,8 +49,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('payments/refund', OrderRefundController::class)->name('payments.refund');
     });
 
-    Route::get('sets', [CardSetController::class, 'index']);
-    Route::get('series', [CardSeriesController::class, 'index']);
-    Route::post('cards', [CardProductController::class, 'store']);
-    Route::get('cards/options', [CardProductController::class, 'getOptionsValues']);
+    Route::prefix('cards')->group(function () {
+        Route::get('sets', [CardSetController::class, 'index']);
+        Route::get('series', [CardSeriesController::class, 'index']);
+        Route::post('/', [CardProductController::class, 'store']);
+        Route::get('options', [CardProductController::class, 'getOptionsValues']);
+    });
 });

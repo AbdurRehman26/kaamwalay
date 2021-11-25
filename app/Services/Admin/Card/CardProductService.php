@@ -61,12 +61,12 @@ class CardProductService
     protected function getOrCreateSeriesFromAgs(string $seriesName, array $data): int | null
     {
         //Store in AGS
-        $seriesResponse = $this->agsService->getSeries(['name' => $seriesName]);
+        $seriesResponse = $this->agsService->getCardSeries(['name' => $seriesName]);
 
         if ($seriesResponse['count'] > 0) {
             return $seriesResponse['results'][0]['id'];
         } elseif ($seriesName && $data['series_image']) {
-            $createSeriesResponse = $this->agsService->createSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
+            $createSeriesResponse = $this->agsService->createCardSeries(['name' => $seriesName, 'image_path' => $data['series_image']]);
 
             if (array_key_exists('id', $createSeriesResponse)) {
                 return $seriesResponse['id'];
@@ -79,7 +79,7 @@ class CardProductService
     protected function getOrCreateSetFromAgs(int $seriesId, string $setName, array $data): int | null
     {
         //Store in AGS
-        $setResponse = $this->agsService->getSet([
+        $setResponse = $this->agsService->getCardSet([
             'name' => $setName,
             'serie' => $seriesId,
         ]);
@@ -87,7 +87,7 @@ class CardProductService
         if ($setResponse['count'] > 0) {
             return $setResponse['results'][0]['id'];
         } elseif ($setName && $seriesId && $data['release_date'] && $data['set_image']) {
-            $createSetResponse = $this->agsService->createSet([
+            $createSetResponse = $this->agsService->createCardSet([
                 'name' => $setName,
                 'image_path' => $data['set_image'],
                 'release_date' => $data['release_date'],

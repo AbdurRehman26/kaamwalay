@@ -280,24 +280,24 @@ class AgsService
         });
     }
 
-    public function getSeries(array $data): array
+    public function getCardSeries(array $data): array
     {
-        return $this->client->getSeries($data);
+        return $this->client->getCardSeries($data);
     }
 
-    public function createSeries(array $data): array
+    public function createCardSeries(array $data): array
     {
-        return $this->client->createSeries($data);
+        return $this->client->createCardSeries($data);
     }
 
-    public function getSet(array $data): array
+    public function getCardSet(array $data): array
     {
-        return $this->client->getSet($data);
+        return $this->client->getCardSet($data);
     }
 
-    public function createSet(array $data): array
+    public function createCardSet(array $data): array
     {
-        return $this->client->createSet($data);
+        return $this->client->createCardSet($data);
     }
 
     public function createCard(array $data): array

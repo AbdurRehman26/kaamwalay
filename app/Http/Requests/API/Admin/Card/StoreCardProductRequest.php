@@ -28,12 +28,9 @@ class StoreCardProductRequest extends FormRequest
                 'required_without:series_id',
                 'nullable',
                 'string',
-                function ($attribute, $value, $fail) {
-                    $seriesCount = CardSeries::select('id')->where('card_category_id', $this->category)->where('name', 'like', $value)->count();
-                    if ($seriesCount > 0) {
-                        $fail('This series name already exists in this category');
-                    }
-                },
+                Rule::unique('card_series', 'name')->where(function($query) {
+                    return $query->where('card_category_id', $this->category);
+                })
             ],
             'series_image' => ['required_without:series_id', 'nullable', 'string'],
             'set_id' => ['sometimes', 'nullable', 'numeric'],
@@ -41,33 +38,30 @@ class StoreCardProductRequest extends FormRequest
                 'required_without:set_id',
                 'nullable',
                 'string',
-                function ($attribute, $value, $fail) {
-                    if ($this->series_id) {
-                        $setCount = CardSet::select('id')->where('card_series_id', $this->series_id)->where('name', 'like', $value)->count();
-                        if ($setCount > 0) {
-                            $fail('This set name already exists in this series');
-                        }
-                    }
-                },
+                Rule::unique('card_sets', 'name')->where(function($query) {
+                    return $query->where('card_series_id', $this->series_id);
+                })
             ],
             'set_image' => ['required_without:set_id', 'nullable', 'string'],
             'card_number' => [
                 'required',
                 'string',
-                function ($attribute, $value, $fail) {
-                    if ($this->set_id) {
-                        $cardCount = CardProduct::select('id')->where('card_set_id', $this->set_id)->where('card_number_order', 'like', $value)->count();
-                        if ($cardCount > 0) {
-                            $fail('This card number already exists in this set');
-                        }
-                    }
-                },
+                Rule::unique('card_products', 'card_number_order')->where(function($query) {
+                    return $query->where('card_set_id', $this->set_id);
+                })
             ],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],
             'rarity' => ['required', 'string', Rule::in(CardProductService::CARD_RARITIES)],
             'edition' => ['sometimes', 'nullable', 'string', Rule::in(CardProductService::CARD_EDITIONS)],
             'surface' => ['sometimes', 'nullable', 'string', Rule::in(CardProductService::CARD_SURFACES)],
             'variant' => ['sometimes', 'nullable', 'string'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'card_number.unique' => 'This card number already exists in this set'
         ];
     }
 }

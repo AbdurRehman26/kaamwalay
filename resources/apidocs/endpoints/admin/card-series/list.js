@@ -1,5 +1,5 @@
 /**
- * @api {get} /admin/series List series
+ * @api {get} /admin/cards/series List series
  * @apiName List Series
  * @apiGroup Admin Card Series
  *

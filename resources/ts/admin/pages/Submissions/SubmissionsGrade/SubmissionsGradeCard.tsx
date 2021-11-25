@@ -31,6 +31,7 @@ import {
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 import { changeOrderItemNotes } from '@shared/redux/slices/adminOrdersSlice';
 import { useLocation } from 'react-router-dom';
+import _ from 'lodash';
 
 interface SubmissionsGradeCardProps {
     itemId: any;
@@ -262,9 +263,11 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
     const [cardNotes, setCardNotes] = useState(notes);
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
+    const debounceNotes = useCallback(_.debounce(handleUpdateCardNotes, 500), []);
 
     const handleNotesChange = (event: any) => {
         setCardNotes(event.target.value);
+        debounceNotes(itemId, event.target.value);
     };
 
     const handleNotAccepted = useCallback(
@@ -480,29 +483,15 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
         }
     }
 
-    const handleUpdateCardNotes = useCallback(
-        async (orderItemId: number, notes: string) => {
-            await dispatch(
-                changeOrderItemNotes({
-                    orderItemId,
-                    orderId: orderID,
-                    notes,
-                }),
-            );
-        },
-        [dispatch, orderID, itemId],
-    );
-
-    useEffect(() => {
-        // Calling notes api whenever user stops typing
-        const debouncer = setTimeout(() => {
-            handleUpdateCardNotes(itemId, cardNotes!);
-        }, 400);
-        return () => {
-            clearTimeout(debouncer);
-        };
-    }, [cardNotes]);
-
+    function handleUpdateCardNotes(orderItemId: number, notes: string) {
+        dispatch(
+            changeOrderItemNotes({
+                orderItemId,
+                orderId: orderID,
+                notes,
+            }),
+        );
+    }
     return (
         <AccordionCardItem variant={'outlined'}>
             <AccordionCardItemHeader

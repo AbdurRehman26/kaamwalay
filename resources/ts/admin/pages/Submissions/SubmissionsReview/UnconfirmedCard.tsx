@@ -15,7 +15,7 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 import { TextField } from '@mui/material';
 import Box from '@mui/material/Box';
-
+import _ from 'lodash';
 interface UnconfirmedCardProps extends AccordionCardItemProps {
     itemId: number;
     declaredValue: number;
@@ -69,10 +69,12 @@ export function UnconfirmedCard({
     const [cardNotes, setCardNotes] = useState(notes);
 
     const notification = useNotifications();
+    const debounceNotes = useCallback(_.debounce(handleCardNotesChange, 500), []);
 
     const handleSetCardNotes = useCallback(
         (event) => {
             setCardNotes(event.target.value);
+            debounceNotes(event.target.value);
         },
         [setCardNotes, cardNotes],
     );
@@ -110,25 +112,17 @@ export function UnconfirmedCard({
         setLoading(false);
     }, [itemId, notification, onEdit]);
 
-    const handleCardNotesChange = useCallback(async () => {
+    function handleCardNotesChange(newNotes) {
         setLoading(true);
         try {
-            await onCardNotesChange(itemId, cardNotes);
+            onCardNotesChange(itemId, newNotes).then(() => {
+                setLoading(false);
+            });
         } catch (e: any) {
             notification.exception(e);
         }
-        setLoading(false);
-    }, [itemId, notification, onCardNotesChange, cardNotes]);
+    }
 
-    useEffect(() => {
-        // Calling notes api whenever user stops typing
-        let debouncer = setTimeout(() => {
-            handleCardNotesChange();
-        }, 400);
-        return () => {
-            clearTimeout(debouncer);
-        };
-    }, [cardNotes]);
     return (
         <AccordionCardItem divider>
             <AccordionCardItemHeader

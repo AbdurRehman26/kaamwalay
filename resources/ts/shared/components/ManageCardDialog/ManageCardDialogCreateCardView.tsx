@@ -10,7 +10,7 @@ import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import ManageCardDialogHeader from './ManageCardDialogHeader';
-import { FormControl, FormHelperText, Select } from '@mui/material';
+import { CircularProgress, FormControl, FormHelperText, Select } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
@@ -73,6 +73,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
 
         const filesRepository = useRepository(FilesRepository);
 
+        const [isLoading, setIsLoading] = useState(false);
         const [cardCategory, setCardCategory] = useState<number | null>(null);
         const [availableCategories, setAvailableCategories] = useState<{ id: number; name: string }[]>([]);
         const [availableSeriesWithSets, setAvailableSeriesWithSets] = useState<CardSeries[]>([]);
@@ -272,6 +273,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
             const endpoint = apiService.createEndpoint('/admin/cards');
             // Saving card with existing series but new set
             if (showNewSetBox && !showNewSeries) {
+                setIsLoading(true);
                 try {
                     const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
                     const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
@@ -302,10 +304,12 @@ export const ManageCardDialogCreateCardView = forwardRef(
                 } catch (e: any) {
                     Notifications.exception(e);
                 }
+                setIsLoading(false);
             }
 
             // Saving card with existing set & series
             if (!showNewSeries && !showNewSetBox) {
+                setIsLoading(true);
                 try {
                     const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
                     const DTO = {
@@ -334,9 +338,11 @@ export const ManageCardDialogCreateCardView = forwardRef(
                 } catch (e: any) {
                     Notifications.exception(e);
                 }
+                setIsLoading(false);
             }
 
             if (showNewSeries) {
+                setIsLoading(true);
                 try {
                     const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
                     const seriesLogoPublicImage = await filesRepository.uploadFile(newSeriesLogo!);
@@ -368,6 +374,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                 } catch (e: any) {
                     Notifications.exception(e);
                 }
+                setIsLoading(false);
             }
         };
 
@@ -855,9 +862,9 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                 variant="contained"
                                 color={'primary'}
                                 onClick={handleAddCard}
-                                disabled={!showSaveButton}
+                                disabled={!showSaveButton || isLoading}
                             >
-                                Save
+                                {isLoading ? <CircularProgress color={'secondary'} /> : 'Save'}
                             </Button>
                         </Box>
                     </Box>

@@ -10,7 +10,7 @@ import NotesDialog from '@shared/components/NotesDialog/NotesDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { useNotesDialog } from '@shared/hooks/useNotesDialog';
-import { changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
+import { changeOrderItemNotes, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
@@ -43,8 +43,6 @@ const useStyles = makeStyles(
 export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
     const [activeItemId, setActiveItemId] = useState<number | null>(null);
 
-    const { handleOpen, ...notesDialogProps } = useNotesDialog();
-
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const handlePreview = useCallback((value) => setActiveItemId(value), [setActiveItemId]);
@@ -63,7 +61,6 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
         [dispatch, orderId],
     );
 
-    const handleMissing = useCallback((orderItemId) => handleOpen({ orderItemId }), [handleOpen]);
     const handleEdit = useCallback(
         (orderItemId) => {
             const activeItem = items.find((item) => item.id === orderItemId);
@@ -80,20 +77,31 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
         [dispatch, items],
     );
 
-    const handleSubmitNotes = useCallback(
-        async (notes: string, { orderItemId }) => {
+    const handleMarkCardMissing = useCallback(
+        async (orderItemId: number) => {
             await dispatch(
                 changeOrderItemStatus({
                     orderItemId,
                     orderId,
                     orderItemStatus: OrderItemStatusEnum.MISSING,
-                    notes,
                 }),
             );
         },
         [dispatch, orderId],
     );
 
+    const handleCardNotesChange = useCallback(
+        async (orderItemId: number, notes: string) => {
+            await dispatch(
+                changeOrderItemNotes({
+                    orderItemId,
+                    orderId,
+                    notes,
+                }),
+            );
+        },
+        [dispatch, orderId],
+    );
     return (
         <>
             <Card variant={'outlined'} className={classes.root}>
@@ -116,8 +124,11 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 card={item.cardProduct}
                                 onPreview={handlePreview}
                                 onConfirm={handleConfirm}
-                                onMissing={handleMissing}
+                                onMissing={handleMarkCardMissing}
+                                onCardNotesChange={handleCardNotesChange}
                                 onEdit={handleEdit}
+                                orderId={item.orderId}
+                                notes={item.notes}
                             />
                         ))
                     ) : (
@@ -143,16 +154,10 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                 onClose={handleClosePreview}
                 itemId={activeItemId!}
                 orderId={orderId}
-                onMissing={handleMissing}
+                onMissing={handleMarkCardMissing}
                 onConfirm={handleConfirm}
                 onEdit={handleEdit}
                 onChangeItemId={handlePreview}
-            />
-            <NotesDialog
-                heading={'Add Notes'}
-                description={'Add notes for the missing status of the order item.'}
-                onSubmitNotes={handleSubmitNotes}
-                {...notesDialogProps}
             />
         </>
     );

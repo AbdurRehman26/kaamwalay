@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
     AccordionCardItem,
     AccordionCardItemHeader,
@@ -61,7 +61,6 @@ export function UnconfirmedCard({
     onPreview,
     notes,
     onCardNotesChange,
-    orderId,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 
@@ -112,7 +111,7 @@ export function UnconfirmedCard({
         setLoading(false);
     }, [itemId, notification, onEdit]);
 
-    function handleCardNotesChange(newNotes) {
+    function handleCardNotesChange(newNotes: string) {
         setLoading(true);
         try {
             onCardNotesChange(itemId, newNotes).then(() => {

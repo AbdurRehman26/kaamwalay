@@ -671,7 +671,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                     cardStatus.toLowerCase() === 'not accepted') &&
                                 viewModes[itemIndex]?.notes === '' ? (
                                     <TextField
-                                        label="Card Notes"
+                                        label="Enter Notes"
                                         multiline
                                         rows={4}
                                         value={cardNotes}
@@ -681,7 +681,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                     />
                                 ) : (
                                     <div className={classes.existingNotesContainer}>
-                                        <Typography className={classes.existingNotesTitle}>Notes: </Typography>
                                         <Typography className={classes.existingNotesDescription}>
                                             {cardNotes}
                                         </Typography>
@@ -698,11 +697,8 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                             heading={viewModes[itemIndex]?.sectionTitle}
                             className={classes.cardViewModeActionsContainer}
                         >
-                            <Typography variant={'subtitle2'}>
-                                Notes: {viewModes[itemIndex]?.areNotesRequired ? '*' : null}
-                            </Typography>
                             <TextField
-                                label="Card Notes"
+                                label="Enter Notes"
                                 multiline
                                 rows={4}
                                 value={cardNotes}
@@ -752,7 +748,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                     icon={<OutlinedToyIcon className={classes.headingIcon} />}
                                 />
                                 <TextField
-                                    label="Card Notes"
+                                    label="Enter Notes"
                                     multiline
                                     rows={4}
                                     value={cardNotes}

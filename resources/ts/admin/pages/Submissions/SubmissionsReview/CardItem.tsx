@@ -13,6 +13,7 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { CustomAccordion } from '@admin/pages/Submissions/SubmissionsReview/CustomAccordion';
 interface CardItemProps {
     label: any | string;
     itemId: number;
@@ -141,17 +142,7 @@ export function CardItem({
                             )}
                         </Box>
                     ) : null}
-
-                    {notes ? (
-                        <Accordion sx={{ marginTop: '6px' }}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <Typography>Notes</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <Typography>{notes}</Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                    ) : null}
+                    {notes ? <CustomAccordion title={'Notes'} content={notes} /> : null}
                 </Box>
             </Box>
 

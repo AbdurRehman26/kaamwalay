@@ -144,6 +144,10 @@ class AgsService
                 $cardData['surface'] = $card['surface'];
             }
 
+            if (! empty($card['card_reference_id'])) {
+                $cardData['card_reference_id'] = $card['card_reference_id'];
+            }
+
             $cardsData[] = $cardData;
         }
 

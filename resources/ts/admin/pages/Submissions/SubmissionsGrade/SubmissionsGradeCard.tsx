@@ -680,11 +680,15 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                         onChange={handleNotesChange}
                                     />
                                 ) : (
-                                    <div className={classes.existingNotesContainer}>
-                                        <Typography className={classes.existingNotesDescription}>
-                                            {cardNotes}
-                                        </Typography>
-                                    </div>
+                                    <TextField
+                                        label="Enter Notes"
+                                        multiline
+                                        rows={4}
+                                        value={cardNotes}
+                                        sx={{ marginTop: '16px' }}
+                                        fullWidth
+                                        onChange={handleNotesChange}
+                                    />
                                 )}
                             </OutlinedCard>
                         )}

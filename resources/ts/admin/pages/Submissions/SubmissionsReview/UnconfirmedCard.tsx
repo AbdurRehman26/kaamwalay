@@ -120,6 +120,7 @@ export function UnconfirmedCard({
             });
         } catch (e: any) {
             notification.exception(e);
+            setLoading(false);
         }
     }
 

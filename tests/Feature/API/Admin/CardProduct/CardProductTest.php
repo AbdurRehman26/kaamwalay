@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CardProduct;
 use App\Models\User;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\RolesSeeder;
@@ -13,6 +14,8 @@ beforeEach(function () {
         RolesSeeder::class,
         CardCategoriesSeeder::class,
     ]);
+
+    $this->card = CardProduct::factory()->create();
 
     $this->user = User::factory()
         ->admin()
@@ -76,5 +79,95 @@ test('admins can create cards manually', function () {
         'surface' => "Holo",
         'edition' => "1st Edition",
         'added_by_customer' => false,
+    ]);
+});
+
+it('fails on repeated series name', function() {
+    Http::fake([
+        '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
+        '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
+        '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+    ]);
+
+    $response = $this->postJson('/api/admin/cards', [
+        'name' => 'Lorem Ipsum',
+        'description' => 'Lorem ipsum dolor sit amet.',
+        'image_path' => 'http://www.google.com',
+        'category' => $this->card->cardSet->cardSeries->card_category_id,
+        'release_date' => '2021-11-06',
+        'series_name' => $this->card->cardSet->cardSeries->name,
+        'series_image' => 'http://www.google.com',
+        'set_name' => 'Admin Set',
+        'set_image' => 'http://www.google.com',
+        'card_number' => '001',
+        'language' => 'English',
+        'rarity' => 'Common',
+        'edition' => '1st Edition',
+        'surface' => 'Holo',
+        'variant' => 'Lorem',
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonFragment([
+        'series_name' => ['This series name already exists in this category']
+    ]);
+});
+
+it('fails on repeated set name', function() {
+    Http::fake([
+        '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
+        '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
+        '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+    ]);
+
+    $response = $this->postJson('/api/admin/cards', [
+        'name' => 'Lorem Ipsum',
+        'description' => 'Lorem ipsum dolor sit amet.',
+        'image_path' => 'http://www.google.com',
+        'category' => $this->card->cardSet->cardSeries->card_category_id,
+        'release_date' => '2021-11-06',
+        'series_id' => $this->card->cardSet->card_series_id,
+        'set_name' => $this->card->cardSet->name,
+        'set_image' => 'http://www.google.com',
+        'card_number' => '001',
+        'language' => 'English',
+        'rarity' => 'Common',
+        'edition' => '1st Edition',
+        'surface' => 'Holo',
+        'variant' => 'Lorem',
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonFragment([
+        'set_name' => ['This set name already exists in this series']
+    ]);
+});
+
+it('fails on repeated card number', function() {
+    Http::fake([
+        '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
+        '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
+        '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
+    ]);
+
+    $response = $this->postJson('/api/admin/cards', [
+        'name' => 'Lorem Ipsum',
+        'description' => 'Lorem ipsum dolor sit amet.',
+        'image_path' => 'http://www.google.com',
+        'category' => $this->card->cardSet->cardSeries->card_category_id,
+        'release_date' => '2021-11-06',
+        'series_id' => $this->card->cardSet->card_series_id,
+        'set_id' => $this->card->card_set_id,
+        'card_number' => strval($this->card->card_number_order),
+        'language' => 'English',
+        'rarity' => 'Common',
+        'edition' => '1st Edition',
+        'surface' => 'Holo',
+        'variant' => 'Lorem',
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonFragment([
+        'card_number' => ['This card number already exists in this set']
     ]);
 });

@@ -62,9 +62,6 @@ class StoreCardProductRequest extends FormRequest
                         }
                     }
                 },
-                function ($attribute, $value, $fail) {
-                    $fail('Test This card number already exists in this set');
-                },
             ],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],
             'rarity' => ['required', 'string', Rule::in(CardProductService::CARD_RARITIES)],

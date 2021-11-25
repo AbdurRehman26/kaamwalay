@@ -1,6 +1,6 @@
 export enum SubmissionSteps {
     Placed = 'Placed',
-    Arrived = 'Arrived',
+    Confirmed = 'Confirmed',
     Graded = 'Graded',
     Shipped = 'Shipped',
 }
@@ -10,8 +10,8 @@ export const SubmissionDetails: Record<SubmissionSteps, string[]> = {
         'Your submission has been placed. The next step is to ship the cards to us.',
         'Once we receive the shipment arrives we will begin grading your cards.',
     ],
-    Arrived: [
-        'We have received your cards and will start grading them soon.',
+    Confirmed: [
+        'We have reviewed your cards and will start grading them soon.',
         'You will receive an email as soon as grading is complete.',
     ],
     Graded: [

@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { PropsWithChildren, ReactNode, useCallback, useMemo } from 'react';
+import { PropsWithChildren, ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { useAccordionCardItemContext } from './AccordionCardItemContext';
 
 interface AccordionCardItemHeaderProps {
@@ -15,6 +15,7 @@ interface AccordionCardItemHeaderProps {
     heading: string;
     subheading: any;
     shortName?: string;
+    expand?: boolean;
     action?: ReactNode;
     onPreview?: () => void;
 }
@@ -135,6 +136,7 @@ export function AccordionCardItemHeader({
     heading,
     subheading,
     image,
+    expand,
     action,
     children,
     shortName,
@@ -147,6 +149,10 @@ export function AccordionCardItemHeader({
     const handleExpand = useCallback(() => {
         setIsExpanded((prev) => !prev);
     }, [setIsExpanded]);
+
+    useEffect(() => {
+        setIsExpanded(expand ?? false);
+    }, [expand]);
 
     return (
         <header className={classes.root}>

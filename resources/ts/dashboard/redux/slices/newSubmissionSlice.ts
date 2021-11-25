@@ -8,6 +8,8 @@ export interface SubmissionService {
     maxProtectionAmount: number;
     turnaround: string;
     price: number;
+    priceBeforeDiscount?: string;
+    discountPercentage?: string;
 }
 
 export interface Step01Data {
@@ -112,48 +114,6 @@ const initialState: NewSubmissionSliceState = {
                 maxProtectionAmount: 500,
                 turnaround: '28-30 Day',
                 price: 20,
-            },
-            {
-                id: 2,
-                type: 'card',
-                maxProtectionAmount: 1000,
-                turnaround: '12-14 Day',
-                price: 50,
-            },
-            {
-                id: 3,
-                type: 'card',
-                maxProtectionAmount: 2500,
-                turnaround: '5-7 Day',
-                price: 100,
-            },
-            {
-                id: 4,
-                type: 'card',
-                maxProtectionAmount: 10000,
-                turnaround: '2-3 Day',
-                price: 250,
-            },
-            {
-                id: 5,
-                type: 'card',
-                maxProtectionAmount: 50000,
-                turnaround: '1 Day',
-                price: 1000,
-            },
-            {
-                id: 6,
-                type: 'card',
-                maxProtectionAmount: 100000,
-                turnaround: '1 Day',
-                price: 2000,
-            },
-            {
-                id: 7,
-                type: 'card',
-                maxProtectionAmount: 1000000,
-                turnaround: 'Same Day',
-                price: 5000,
             },
         ],
         selectedServiceLevel: {
@@ -283,6 +243,8 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
         maxProtectionAmount: serviceLevel.maxProtectionAmount,
         turnaround: serviceLevel.turnaround,
         price: serviceLevel.price,
+        priceBeforeDiscount: serviceLevel.priceBeforeDiscount,
+        discountPercentage: serviceLevel.discountPercentage,
     }));
 });
 

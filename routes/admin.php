@@ -38,6 +38,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('items/{orderItem}', [OrderItemController::class, 'update']);
         Route::get('items', [OrderItemController::class, 'getOrderCards']);
         Route::post('items', [OrderItemController::class, 'store']);
+        Route::put('items/{orderItem}/notes', [OrderItemController::class, 'updateNotes'])
+            ->name('update.orderItem.notes');
         Route::get('grades', [OrderController::class, 'getGrades']);
         Route::post('shipment', [OrderController::class, 'updateShipment']);
 

@@ -17,6 +17,8 @@ class PaymentPlanResource extends JsonResource
         return [
             'id' => $this->id,
             'price' => $this->price,
+            'price_before_discount' => $this->price_before_discount,
+            'discount_percentage' => $this->discount_percentage,
             'max_protection_amount' => $this->max_protection_amount,
             'turnaround' => $this->turnaround,
         ];

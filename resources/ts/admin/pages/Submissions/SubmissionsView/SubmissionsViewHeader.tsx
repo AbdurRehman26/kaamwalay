@@ -55,7 +55,7 @@ export function SubmissionsViewHeader({
         () =>
             [
                 OrderStatusEnum.PAYMENT_PENDING,
-                OrderStatusEnum.ARRIVED,
+                OrderStatusEnum.CONFIRMED,
                 OrderStatusEnum.GRADED,
                 OrderStatusEnum.SHIPPED,
             ].map((status) => {

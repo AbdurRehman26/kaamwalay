@@ -39,8 +39,8 @@ class OrderStatusChangedListener implements ShouldQueue
                 $this->handlePlaced($event);
 
                 break;
-            case OrderStatus::ARRIVED:
-                $this->handleArrived($event);
+            case OrderStatus::CONFIRMED:
+                $this->handleConfirmed($event);
 
                 break;
             case OrderStatus::GRADED:
@@ -77,9 +77,9 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function handleArrived(OrderStatusChangedEvent $event)
+    protected function handleConfirmed(OrderStatusChangedEvent $event): void
     {
-        $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_ARRIVED, [
+        $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_CONFIRMED, [
             'ORDER_NUMBER' => $event->order->order_number,
             'FIRST_NAME' => $event->order->user->first_name,
         ]);

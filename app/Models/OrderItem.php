@@ -33,6 +33,7 @@ class OrderItem extends Model
         'description',
         'declared_value_per_unit',
         'declared_value_total',
+        'notes',
     ];
 
     /**

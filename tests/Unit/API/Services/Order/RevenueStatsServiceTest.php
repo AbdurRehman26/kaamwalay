@@ -27,7 +27,7 @@ beforeEach(function () {
                 'payment_method_id' => 1,
                 'order_status_id' => $this->faker->randomElement([
                     OrderStatus::PLACED,
-                    OrderStatus::ARRIVED,
+                    OrderStatus::CONFIRMED,
                     OrderStatus::GRADED,
                     OrderStatus::SHIPPED,
                     OrderStatus::CANCELLED,
@@ -50,8 +50,7 @@ it('adds daily revenue stats', function () {
     $serviceFee = $orders->sum('service_fee');
     $providerFee = $orders->sum(function ($order) {
         return $order->firstOrderPayment->provider_fee
-            + $order->extraCharges->sum('provider_fee')
-            - $order->refunds->sum('provider_fee');
+            + $order->extraCharges->sum('provider_fee');
     });
 
     $profit = ($serviceFee - $providerFee);

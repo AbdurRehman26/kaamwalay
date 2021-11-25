@@ -238,7 +238,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                         </Typography>
 
                         <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                            Date Arrived:{' '}
+                            Date Confirmed:{' '}
                             <span className={classes.submissionPropertyValue}>
                                 {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
                             </span>

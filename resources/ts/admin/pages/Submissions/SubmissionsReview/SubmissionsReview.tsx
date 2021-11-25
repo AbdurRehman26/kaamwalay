@@ -38,7 +38,7 @@ export function SubmissionsReview() {
         await dispatch(
             addOrderStatusHistory({
                 orderId: data?.id,
-                orderStatusId: OrderStatusEnum.ARRIVED,
+                orderStatusId: OrderStatusEnum.CONFIRMED,
             }),
         );
         setLoading(true);
@@ -84,7 +84,7 @@ export function SubmissionsReview() {
 
     const pendingItems = data.getItemsByStatus(OrderItemStatusEnum.PENDING);
     if (pendingItems.length === 0) {
-        if (data.hasOrderStatus(OrderStatusEnum.ARRIVED)) {
+        if (data.hasOrderStatus(OrderStatusEnum.CONFIRMED)) {
             if (!data.hasOrderStatus(OrderStatusEnum.GRADED)) {
                 return <Redirect to={`/submissions/${data.id}/grade`} />;
             }

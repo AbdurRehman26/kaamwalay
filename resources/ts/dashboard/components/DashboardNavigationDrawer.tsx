@@ -172,9 +172,6 @@ export function DashboardNavigationDrawer() {
                         <AccountCircleIcon />
                     </StyledListItemIcon>
                     <ListItemText primary={'Profile'} primaryTypographyProps={{ className: classes.listItemText }} />
-                    <ListItemSecondaryAction>
-                        <Chip size="small" label="Soon" color={'secondary'} />
-                    </ListItemSecondaryAction>
                 </ListItem>
                 <ListItem selected={isItemActive('/profile/payments')} button>
                     <StyledListItemIcon>

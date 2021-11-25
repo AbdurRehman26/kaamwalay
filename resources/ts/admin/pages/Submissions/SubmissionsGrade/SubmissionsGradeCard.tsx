@@ -23,7 +23,6 @@ import SubmissionGradeCardUpload from '@admin/pages/Submissions/SubmissionsGrade
 import { SubmissionsGradeCardRoboGrades } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardRoboGrades';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import {
-    handleActionNotesInput,
     resetCardViewMode,
     updateCardViewMode,
     updateExistingCardData,
@@ -31,6 +30,7 @@ import {
 } from '@admin/redux/slices/submissionGradeSlice';
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 import { changeOrderItemNotes } from '@shared/redux/slices/adminOrdersSlice';
+import { useLocation } from 'react-router-dom';
 
 interface SubmissionsGradeCardProps {
     itemId: any;
@@ -260,6 +260,8 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [cardNotes, setCardNotes] = useState(notes);
+    const search = useLocation().search;
+    const reviseGradeItemId = new URLSearchParams(search).get('item_id');
 
     const handleNotesChange = (event: any) => {
         setCardNotes(event.target.value);
@@ -337,10 +339,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
             dispatch(updateExistingCardStatus({ status: response.data.status.orderItemStatus.name, id: topLevelID }));
         }
         notifications.success('Card graded successfully!.', 'Success');
-    }
-
-    async function handleActionNotesChange(e: any) {
-        dispatch(handleActionNotesInput({ viewModeIndex: itemIndex, notes: e.target.value }));
     }
 
     function isNotesDoneBtnDisabled() {
@@ -497,7 +495,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
 
     useEffect(() => {
         // Calling notes api whenever user stops typing
-        let debouncer = setTimeout(() => {
+        const debouncer = setTimeout(() => {
             handleUpdateCardNotes(itemId, cardNotes!);
         }, 400);
         return () => {
@@ -510,6 +508,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
             <AccordionCardItemHeader
                 heading={cardName}
                 image={cardImage}
+                expand={parseInt(reviseGradeItemId as string) === itemId}
                 subheading={cardFullName}
                 shortName={shortName}
                 action={

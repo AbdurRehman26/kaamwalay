@@ -60,7 +60,7 @@ class AgsService
 
     public function createCertificates(array $data): array
     {
-        return $this->client->createCertificates(data: $data);
+        return $this->client->createCertificates($this->prepareDataForCertificate(data: $data));
     }
 
     public function getGrades(array $certificateIds): array
@@ -79,241 +79,15 @@ class AgsService
 
     public function getGradesForPublicPage(string $certificateId): array
     {
-        // $data = $this->getGradesByCertificateId($certificateId);
-
-        $data = '{
-            "count": 1,
-            "next": null,
-            "previous": null,
-            "results": [{
-                "id": "497e4591-0bf2-4518-8af2-b1c8c4cae3b9",
-                "certificate_id": "00001479",
-                "scan_version": "/api/v2",
-                "filename": "lugia_neo_genesis",
-                "grade": null,
-                "final_value_to_compare": null,
-                "card": {
-                    "id": 12336,
-                    "set_id": 122,
-                    "name": "Lugia",
-                    "rarity": "Rare",
-                    "card_number": "9/111",
-                    "set_name": "Neo Genesis",
-                    "image_path": "https://den-cards.pokellector.com/113/Lugia.N1.9.png",
-                    "card_url": "https://www.pokellector.com/card/Lugia-Neo-Genesis-N1-9",
-                    "image_bucket_path": "https://wooter-ags-database-cards.s3.amazonaws.com/pokemon_cards_images/cards_images/Lugia.N1.9.png",
-                    "pokemon_set": {
-                        "id": 122,
-                        "serie_id": 14,
-                        "name": "Neo Genesis",
-                        "description": "This is the first set to include Gen II (Johto Region) pokemon",
-                        "cards_number": 111,
-                        "secret_cards": -1,
-                        "release_date": "2000-06-11",
-                        "image_path": "https://den-media.pokellector.com/logos/Neo-Genesis.logo.113.png",
-                        "image_bucket_path": "https://wooter-ags-database-cards.s3.amazonaws.com/pokemon_cards_images/sets_images/Neo-Genesis.logo.113.png",
-                        "set_url": "https://www.pokellector.com/sets/N1-Neo-Genesis"
-                    },
-                    "pokemon_serie": {
-                        "id": 14,
-                        "name": "Neo Genesis Series",
-                        "image_path": "https://den-media.pokellector.com/logos/Neo-Genesis.logo.113.png",
-                        "image_bucket_path": "https://wooter-ags-database-cards.s3.amazonaws.com/pokemon_cards_images/series_images/Neo-Genesis.logo.113.png"
-                    },
-                    "variant_category": "Edition",
-                    "variant_name": "Unlimited",
-                    "holo_type": ""
-                },
-                "front_scan": null,
-                "back_scan": null,
-                "total_centering_grade": null,
-                "total_corners_grade": null,
-                "total_edges_grade": null,
-                "total_surface_grade": null,
-                "total_centering_value_to_compare": null,
-                "total_corners_value_to_compare": null,
-                "total_edges_value_to_compare": null,
-                "total_surface_value_to_compare": null,
-                "front_centering_human_grade": "8.50",
-                "front_corners_human_grade": "9.00",
-                "front_edges_human_grade": "9.00",
-                "front_surface_human_grade": "6.00",
-                "back_centering_human_grade": "8.50",
-                "back_corners_human_grade": "8.50",
-                "back_edges_human_grade": "6.50",
-                "back_surface_human_grade": "5.50",
-                "overall_centering_grade": "8.50",
-                "overall_corners_grade": "8.80",
-                "overall_edges_grade": "8.00",
-                "overall_surface_grade": "5.80",
-                "overall_grade": {
-                    "grade": 8,
-                    "nickname": "NM-MT"
-                },
-                "laser_grade": {
-                    "grade": "9.00",
-                    "nickname": "MINT"
-                },
-                "laser_total_centering_grade": {
-                    "grade": "10.00",
-                    "nickname": "GEM-MT"
-                },
-                "laser_total_corners_grade": {
-                    "grade": "8.00",
-                    "nickname": "NM-MT"
-                },
-                "laser_total_edges_grade": {
-                    "grade": "8.00",
-                    "nickname": "NM-MT"
-                },
-                "laser_total_surface_grade": {
-                    "grade": "6.00",
-                    "nickname": "EX-MT"
-                },
-                "laser_front_scan": {
-                    "centering_grade": {
-                        "grade": "10.00",
-                        "nickname": "GEM-MT"
-                    },
-                    "corners_grade": {
-                        "grade": "8.00",
-                        "nickname": "NM-MT"
-                    },
-                    "edges_grade": {
-                        "grade": "10.00",
-                        "nickname": "GEM-MT"
-                    },
-                    "surface_grade": {
-                        "grade": "6.00",
-                        "nickname": "EX-MT"
-                    },
-                    "centering_result": {
-                        "id": "b49a5e40-7f45-4177-bdee-be26cac82296",
-                        "output_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/centering/centering_front_lugia_neo_genesis.jpg",
-                        "results": {
-                            "dif_x": 0.0005283707296191547,
-                            "dif_y": 0.0015481882813665486,
-                            "grade": 9.5
-                        }
-                    },
-                    "corners_result": {
-                        "id": "568e19f7-9e6b-475c-8e5a-44cd9d097e93",
-                        "output_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/corners/corners_front_lugia_neo_genesis.jpg",
-                        "results": {
-                            "grade": 8.0,
-                            "minor_defect": {
-                                "pct_pixels": 0.0,
-                                "split_pct_pixels": [0.0, 0.0, 0.0, 0.0]
-                            }
-                        }
-                    },
-                    "edges_result": {
-                        "id": "b40c6c2e-0336-4d4e-b4b0-eff5844178bc",
-                        "output_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/edges/edges_front_lugia_neo_genesis.jpg",
-                        "results": {
-                            "grade": 9.5,
-                            "minor_defect": {
-                                "pct_pixels": 0.11720802001329812,
-                                "split_pct_pixels": [0.07551364893706905, 0.041694371076229066, 0.0, 0.0]
-                            }
-                        }
-                    },
-                    "surface_result": {
-                        "id": "c875bdc6-82f6-44b6-adbd-e25653fbec50",
-                        "output_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/surface/surface_front_lugia_neo_genesis.jpg",
-                        "results": {
-                            "grade": 6.0,
-                            "minor_defect": {
-                                "pct_pixels": 10.697602389987473,
-                                "split_pct_pixels": [7.065898688188554, 2.86719975460934, 0.5765808044258484, 0.18792314276373068]
-                            }
-                        }
-                    },
-                    "input_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/front/lugia_neo_genesis_front.jpg"
-                },
-                "laser_back_scan": {
-                    "centering_grade": {
-                        "grade": "9.00",
-                        "nickname": "MINT"
-                    },
-                    "corners_grade": {
-                        "grade": "9.00",
-                        "nickname": "MINT"
-                    },
-                    "edges_grade": {
-                        "grade": "7.00",
-                        "nickname": "NM"
-                    },
-                    "surface_grade": {
-                        "grade": "6.00",
-                        "nickname": "EX-MT"
-                    },
-                    "centering_result": {
-                        "id": "4c82d357-99ad-4a86-8204-672ce56743e8",
-                        "output_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/centering/centering_back_lugia_neo_genesis.jpg",
-                        "results": {
-                            "dif_x": 0.0026064893231771474,
-                            "dif_y": 0.0015775160849179908,
-                            "grade": 9.0
-                        }
-                    },
-                    "corners_result": {
-                        "id": "06e71c03-4f07-4fd9-8540-227d3040e258",
-                        "output_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/corners/corners_back_lugia_neo_genesis.jpg",
-                        "results": {
-                            "grade": 9.0,
-                            "minor_defect": {
-                                "pct_pixels": 0.00860894784194339,
-                                "split_pct_pixels": [0.00860894784194339, 0.0, 0.0, 0.0]
-                            }
-                        }
-                    },
-                    "edges_result": {
-                        "id": "6a899962-8613-4e7f-930e-36e03fb7723c",
-                        "output_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/edges/edges_back_lugia_neo_genesis.jpg",
-                        "results": {
-                            "grade": 7.0,
-                            "minor_defect": {
-                                "pct_pixels": 0.5469321956972248,
-                                "split_pct_pixels": [0.32872406439676644, 0.2182081313004585, 0.0, 0.0]
-                            }
-                        }
-                    },
-                    "surface_result": {
-                        "id": "ec234bba-9f83-45a2-ab33-1077796cd9a5",
-                        "output_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/surface/surface_back_lugia_neo_genesis.jpg",
-                        "results": {
-                            "grade": 6.0,
-                            "minor_defect": {
-                                "pct_pixels": 11.017260825637125,
-                                "split_pct_pixels": [3.9791934357117063, 3.0066004229174323, 2.63022870186479, 1.4012382651431967]
-                            }
-                        }
-                    },
-                    "input_image": "https://s3.us-south.cloud-object-storage.appdomain.cloud/pokemon-statics/media/back/lugia_neo_genesis_back.jpg"
-                },
-                "graded_via": {
-                    "username": "robograding",
-                    "email": "",
-                    "name": "",
-                    "date_joined": "2021-09-10 17:28:56"
-                },
-                "is_testing": false,
-                "timestamp": "2021-10-20 03:13:05"
-            }],
-            "app_status": 1,
-            "app_message": "OK"
-        }';
-
-        $data = json_decode($data, true); 
+        $data = $this->getGradesByCertificateId($certificateId);
 
         if (empty($data) || $data['count'] === 0 || (empty($data['results'][0]['grade']) && empty($data['results'][0]['overall_grade']))) {
             return [
                 'grades_available' => false,
             ];
         }
+
         $data = $data['results'][0];
-        // dd($data);
 
         return [
             'grades_available' => true,
@@ -346,6 +120,34 @@ class AgsService
             $card['pokemon_set']['name'] . ' ' .
             $card['pokemon_set']['cards_number'] . ' ' .
             $card['name'];
+    }
+
+    protected function prepareDataForCertificate(array $data): array
+    {
+        $cardsData = [];
+        foreach ($data as $card) {
+            $cardData = [
+                'certificate_id' => $card['certificate_id'],
+                'set_name' => $card['set_name'],
+                'card_number' => $card['card_number'],
+            ];
+
+            if (! empty($card['edition'])) {
+                $cardData['edition'] = $card['edition'];
+            }
+
+            if (! empty($card['variant'])) {
+                $cardData['variant'] = $card['variant'];
+            }
+
+            if (! empty($card['surface'])) {
+                $cardData['surface'] = $card['surface'];
+            }
+
+            $cardsData[] = $cardData;
+        }
+
+        return $cardsData;
     }
 
     protected function prepareGradeForPublicPage(array $grade): array
@@ -406,7 +208,7 @@ class AgsService
 
     protected function prepareGeneratedImagesForPublicPage(array $data): array
     {
-        return [
+        $imagesData = [
             [
                 'output_image' => $data['front_scan']['centering_result']['output_image'] ?? null,
                 'name' => 'Front Centering',
@@ -472,5 +274,9 @@ class AgsService
                 'name' => 'Laser Back Corners',
             ],
         ];
+
+        return array_filter($imagesData, function (array $imageData) {
+            return $imageData['output_image'] !== null;
+        });
     }
 }

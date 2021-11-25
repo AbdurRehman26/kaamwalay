@@ -54,7 +54,7 @@ class OrderStatusHistoryService
             OrderCanNotBeMarkedAsGraded::class
         );
 
-        if ($orderStatusId === OrderStatus::ARRIVED) {
+        if ($orderStatusId === OrderStatus::CONFIRMED) {
             $data = $this->orderService->getOrderCertificatesData($order);
 
             $response = $this->agsService->createCertificates($data);
@@ -70,7 +70,7 @@ class OrderStatusHistoryService
                 [
                     'order_status_id' => $orderStatusId,
                 ],
-                $orderStatusId === OrderStatus::ARRIVED ? ['arrived_at' => Carbon::now()]: [],
+                $orderStatusId === OrderStatus::CONFIRMED ? ['arrived_at' => Carbon::now()]: [],
             ));
 
         // TODO: replace find with the model.

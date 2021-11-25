@@ -299,7 +299,7 @@ test('a customer can not complete review of an order', function () {
     OrderItem::factory()->for($order)->create();
 
     $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
-        'order_status_id' => OrderStatus::ARRIVED,
+        'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
     $response->assertStatus(403);

@@ -432,6 +432,7 @@ namespace App\Models{
  * @property float $declared_value_total
  * @property string|null $name
  * @property string|null $description
+ * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $order_item_customer_shipment_id
@@ -599,6 +600,9 @@ namespace App\Models{
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\OrderPaymentFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forDate(string $date)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forMonth(string $date)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forValidPaidOrders()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment query()

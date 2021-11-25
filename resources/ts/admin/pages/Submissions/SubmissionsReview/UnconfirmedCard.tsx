@@ -13,19 +13,26 @@ import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
-
+import { TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import _ from 'lodash';
 interface UnconfirmedCardProps extends AccordionCardItemProps {
     itemId: number;
     declaredValue: number;
     card: CardProductEntity;
-
+    disableConfirm?: boolean;
+    notes?: string;
+    orderId: number;
     onConfirm(index: number): void;
 
-    onMissing(index: number): void;
+    onMissing: any;
 
     onEdit(index: number): void;
 
     onPreview(index: number): void;
+
+    onSwapCard(index: number): void;
+    onCardNotesChange: any;
 }
 
 const useStyles = makeStyles(
@@ -54,11 +61,26 @@ export function UnconfirmedCard({
     onMissing,
     onEdit,
     onPreview,
+    onSwapCard,
+    disableConfirm,
+    notes,
+    onCardNotesChange,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
+    const [cardNotes, setCardNotes] = useState(notes);
+
     const notification = useNotifications();
+    const debounceNotes = useCallback(_.debounce(handleCardNotesChange, 500), []);
+
+    const handleSetCardNotes = useCallback(
+        (event) => {
+            setCardNotes(event.target.value);
+            debounceNotes(event.target.value);
+        },
+        [setCardNotes, cardNotes],
+    );
 
     const handlePreview = useCallback(() => onPreview(itemId), [onPreview, itemId]);
 
@@ -93,6 +115,28 @@ export function UnconfirmedCard({
         setLoading(false);
     }, [itemId, notification, onEdit]);
 
+    const handleSwapCard = useCallback(async () => {
+        setLoading(true);
+        try {
+            await onSwapCard(itemId);
+        } catch (e: any) {
+            notification.exception(e);
+        }
+        setLoading(false);
+    }, [itemId, notification, onEdit]);
+
+    function handleCardNotesChange(newNotes: string) {
+        setLoading(true);
+        try {
+            onCardNotesChange(itemId, newNotes).then(() => {
+                setLoading(false);
+            });
+        } catch (e: any) {
+            notification.exception(e);
+            setLoading(false);
+        }
+    }
+
     return (
         <AccordionCardItem divider>
             <AccordionCardItemHeader
@@ -102,7 +146,13 @@ export function UnconfirmedCard({
                 image={card.imagePath}
                 onPreview={handlePreview}
                 action={
-                    <Button variant={'contained'} color={'primary'} className={classes.button} onClick={handleConfirm}>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        className={classes.button}
+                        disabled={disableConfirm}
+                        onClick={handleConfirm}
+                    >
                         Confirm
                     </Button>
                 }
@@ -113,14 +163,40 @@ export function UnconfirmedCard({
                     <span>{formatCurrency(declaredValue)}</span>
                 </Typography>
 
-                <Grid container alignItems={'center'} className={classes.buttons}>
-                    <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
-                        Missing
-                    </Button>
-                    <Button variant={'contained'} color={'inherit'} onClick={handleEdit} className={classes.leftSpace}>
-                        Edit
-                    </Button>
+                <Grid container direction={'column'} className={classes.buttons}>
+                    <Box display={'flex'} flexDirection={'row'}>
+                        <Button variant={'contained'} color={'inherit'} onClick={handleMissing}>
+                            Missing
+                        </Button>
+                        <Button
+                            variant={'contained'}
+                            color={'inherit'}
+                            onClick={handleEdit}
+                            className={classes.leftSpace}
+                        >
+                            Edit
+                        </Button>
+                        <Button
+                            variant={'contained'}
+                            color={'inherit'}
+                            onClick={handleSwapCard}
+                            className={classes.leftSpace}
+                        >
+                            Swap Card
+                        </Button>
+                    </Box>
                 </Grid>
+                <Box marginTop={'18px'} width={'100%'}>
+                    <TextField
+                        label="Enter Notes"
+                        fullWidth
+                        multiline
+                        value={cardNotes}
+                        onChange={handleSetCardNotes}
+                        placeholder={'Notes'}
+                        rows={4}
+                    />
+                </Box>
             </AccordionCardItemHeader>
             <AccordionCardItemLoader show={loading} />
         </AccordionCardItem>

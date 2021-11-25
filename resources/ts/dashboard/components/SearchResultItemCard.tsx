@@ -10,7 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ReactGA from 'react-ga';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
@@ -138,6 +138,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
 
     const RootComponent = addedMode ? 'div' : ButtonBase;
 
+    const shortNameWithoutHtmlTags = useMemo(() => props.shortName.replace(/<[^>]*>?/gm, ''), [props.shortName]);
     return (
         <>
             <RootComponent className={classes.container} onClick={onSelectCard}>
@@ -159,14 +160,17 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
                         the client has no control over this data, therefore it won't result in an XSS.
                         We're using this because algolia is giving us the highlighted elements wrapper in <ais-highlight-0000000000 />
                         which we can then style to display the searched term bolded in the results*/}
-                        <div title={props.shortName.replace(/<[^>]*>?/gm, '')}>
+                        <div title={shortNameWithoutHtmlTags}>
                             <Typography
                                 variant={'body2'}
                                 color={'textSecondary'}
                                 className={classes.shortName}
                                 align={'left'}
                                 dangerouslySetInnerHTML={{
-                                    __html: getStringTruncated(props.shortName, isMobile ? 30 : addedMode ? 50 : 70),
+                                    __html: getStringTruncated(
+                                        shortNameWithoutHtmlTags,
+                                        isMobile ? 30 : addedMode ? 50 : 70,
+                                    ),
                                 }}
                             />
                         </div>

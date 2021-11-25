@@ -87,6 +87,7 @@ test('provider fee is set after a successful payment', function () {
         'order_id' => $this->order->id,
         'payment_method_id' => 1,
         'payment_provider_reference_id' => Str::random(25),
+        'amount' => $this->order->grand_total,
     ]);
     $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments");
 

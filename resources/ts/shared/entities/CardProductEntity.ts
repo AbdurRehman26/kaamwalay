@@ -11,6 +11,7 @@ export class CardProductEntity extends Entity {
     public imagePath!: string;
     public shortName!: string;
     public longName!: string;
+    public addedByCustomer!: boolean;
 
     public getName() {
         return this.name || 'Unknown';

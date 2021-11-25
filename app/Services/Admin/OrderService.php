@@ -11,8 +11,10 @@ use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
+use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
@@ -71,6 +73,7 @@ class OrderService
             'card_products.edition',
             'card_products.surface',
             'card_products.variant',
+            'card_products.card_reference_id',
         ])
         ->join('order_items', 'user_cards.order_item_id', '=', 'order_items.id')
         ->join('card_products', 'order_items.card_product_id', '=', 'card_products.id')
@@ -117,7 +120,10 @@ class OrderService
         $orderItem->declared_value_total = $value;
         $orderItem->save();
 
-        $this->updateAgsCertificateCard($orderItem);
+        //Updating of certificate when swapping cards should only be done on OrderItem which is confirmed or graded
+        if (in_array($orderItem->order_item_status_id, [OrderItemStatus::CONFIRMED, OrderItemStatus::GRADED])) {
+            $this->updateAgsCertificateCard($orderItem);
+        }
 
         OrderItemCardChangedEvent::dispatch($orderItem, $previousCardProduct);
 
@@ -139,7 +145,7 @@ class OrderService
      */
     public function getGrades(Order $order): Collection
     {
-        if (! in_array($order->order_status_id, [OrderStatus::ARRIVED, OrderStatus::GRADED, OrderStatus::SHIPPED])) {
+        if (! in_array($order->order_status_id, [OrderStatus::CONFIRMED, OrderStatus::GRADED, OrderStatus::SHIPPED])) {
             throw new IncorrectOrderStatus;
         }
         $grades = $this->agsService->getGrades($this->getOrderCertificates($order));
@@ -187,7 +193,7 @@ class OrderService
             $items[] = [
                 "CARD_IMAGE_URL" => $card->image_path,
                 "CARD_NAME" => $card->name,
-                "CARD_FULL_NAME" => $card->getSearchableName(),
+                "CARD_FULL_NAME" => $this->getCardFullName($card),
                 "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
                 "CARD_QUANTITY" => $orderItem->quantity,
                 "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
@@ -210,6 +216,11 @@ class OrderService
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
+    }
+
+    protected function getCardFullName(CardProduct $card): string
+    {
+        return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name . ' (Added Manually)';
     }
 
     protected function getAddressData($address): array

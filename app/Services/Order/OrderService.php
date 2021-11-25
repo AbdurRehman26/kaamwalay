@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
+use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -51,7 +52,7 @@ class OrderService
             $items[] = [
                 "CARD_IMAGE_URL" => $card->image_path,
                 "CARD_NAME" => $card->name,
-                "CARD_FULL_NAME" => $card->getSearchableName(),
+                "CARD_FULL_NAME" => $this->getCardFullName($card),
                 "CARD_VALUE" => number_format($orderItem->declared_value_per_unit, 2),
                 "CARD_QUANTITY" => $orderItem->quantity,
                 "CARD_COST" => number_format($orderItem->quantity * $paymentPlan->price, 2),
@@ -74,6 +75,11 @@ class OrderService
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
+    }
+
+    protected function getCardFullName(CardProduct $card): string
+    {
+        return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name . ' (Added Manually)';
     }
 
     protected function getAddressData($address): array

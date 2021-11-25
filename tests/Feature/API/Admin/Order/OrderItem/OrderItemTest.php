@@ -251,7 +251,7 @@ test('an admin can mark multiple order items as pending', function () {
 
     $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status', [
         "items" => [$orderItem->id],
-        "status" => OrderStatus::ARRIVED,
+        "status" => OrderStatus::CONFIRMED,
     ]);
 
     $response->assertStatus(200);
@@ -271,7 +271,7 @@ test('a customer can not mark multiple order items as pending', function () {
 
     $response = $this->postJson('/api/admin/orders/' . $orderItem->order_id . '/items/bulk/change-status', [
         "items" => [$orderItem->id],
-        "status" => OrderStatus::ARRIVED,
+        "status" => OrderStatus::CONFIRMED,
     ]);
 
     $response->assertStatus(403);
@@ -344,4 +344,36 @@ it('can swap card in AGS certificate', function () {
 
     expect($response)->toHaveCount(1);
     expect($response[0])->toMatchArray(['certificate_id' => '09000000']);
+});
+
+test('admin can update order item notes', function () {
+    $orderItem = OrderItem::factory()->create();
+    $this->actingAs($this->user);
+
+    $notes = $this->faker->sentence();
+
+    $this->putJson(
+        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        ['notes' => $notes]
+    )
+        ->assertOk();
+
+    $orderItem->refresh();
+
+    expect($orderItem->notes)->toBe($notes);
+});
+
+test('admin can remove notes from order item', function () {
+    $orderItem = OrderItem::factory()->create(['notes' => 'Lorem ispum']);
+    $this->actingAs($this->user);
+
+    $this->putJson(
+        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        ['notes' => '']
+    )
+        ->assertOk();
+
+    $orderItem->refresh();
+
+    expect($orderItem->notes)->toBe(null);
 });

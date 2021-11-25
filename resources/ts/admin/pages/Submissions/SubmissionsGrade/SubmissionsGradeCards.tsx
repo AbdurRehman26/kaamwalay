@@ -12,6 +12,7 @@ import { font } from '@shared/styles/utils';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import { getAllSubmissions, matchExistingOrderItemsToViewModes } from '@admin/redux/slices/submissionGradeSlice';
 import SubmissionsGradeCard from './SubmissionsGradeCard';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -29,6 +30,9 @@ export function SubmissionsGradeCards() {
     const dispatch = useAppDispatch();
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
+
+    const search = useLocation().search;
+    const reviseGradeItemId = new URLSearchParams(search).get('item_id');
 
     function isCompleteGradingBtnEnabled() {
         if (allCards.length === 0) {
@@ -83,6 +87,15 @@ export function SubmissionsGradeCards() {
         [id],
     );
 
+    useEffect(() => {
+        setTimeout(() => {
+            const item = document.getElementById('card-id-' + reviseGradeItemId);
+            if (item) {
+                window.scrollTo(item.getBoundingClientRect());
+            }
+        }, 2000);
+    }, [reviseGradeItemId]);
+
     return (
         <Grid container direction={'column'} className={classes.root}>
             <Typography variant={'body1'}>
@@ -90,13 +103,15 @@ export function SubmissionsGradeCards() {
             </Typography>
             <Grid container direction={'column'} className={classes.cards}>
                 {allCards.map((item: any, index: number) => (
-                    <SubmissionsGradeCard
-                        key={item.orderItem.id}
-                        orderID={Number(id)}
-                        itemIndex={index}
-                        itemId={item.orderItem.id}
-                        gradeData={item}
-                    />
+                    <div id={'card-id-' + item.orderItem.id} key={item.orderItem.id}>
+                        <SubmissionsGradeCard
+                            key={item.orderItem.id}
+                            orderID={Number(id)}
+                            itemIndex={index}
+                            itemId={item.orderItem.id}
+                            gradeData={item}
+                        />
+                    </div>
                 ))}
             </Grid>
             {isCompleteGradingBtnEnabled() ? (

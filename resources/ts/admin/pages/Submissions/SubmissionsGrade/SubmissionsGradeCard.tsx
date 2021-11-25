@@ -30,6 +30,7 @@ import {
     updateExistingCardStatus,
 } from '@admin/redux/slices/submissionGradeSlice';
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
+import { useLocation } from 'react-router-dom';
 
 interface SubmissionsGradeCardProps {
     itemId: any;
@@ -257,6 +258,9 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
+    const search = useLocation().search;
+    const reviseGradeItemId = new URLSearchParams(search).get('item_id');
+
     const handleNotAccepted = useCallback(
         (e) => {
             e.preventDefault();
@@ -479,6 +483,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
             <AccordionCardItemHeader
                 heading={cardName}
                 image={cardImage}
+                expand={parseInt(reviseGradeItemId as string) === itemId}
                 subheading={cardFullName}
                 shortName={shortName}
                 action={

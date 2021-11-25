@@ -93,6 +93,9 @@ export const useStyles = makeStyles(
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
         },
+        gradeColumn: {
+            marginTop: -25,
+        },
     }),
     { name: 'SubmissionViewCards' },
 );
@@ -245,26 +248,44 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                             flexDirection={'column'}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            <Typography
-                                                variant={'body2'}
-                                                className={cx(
-                                                    font.fontWeightBold,
-                                                    isMobile ? classes.gradeBadge : null,
-                                                )}
-                                            >
-                                                {item?.userCard?.overallGrade}
-                                            </Typography>
-                                            {isMobile ? null : (
-                                                <a
-                                                    target={'_blank'}
-                                                    href={`/feed/${item.certificateNumber}/view`}
-                                                    style={{ textDecoration: 'none' }}
-                                                    rel="noreferrer"
+                                            <div>
+                                                <Typography
+                                                    variant={'body2'}
+                                                    className={cx(
+                                                        font.fontWeightBold,
+                                                        isMobile ? classes.gradeBadge : null,
+                                                    )}
                                                 >
-                                                    <Typography variant={'body2'} className={classes.viewGradeText}>
-                                                        View Grade
-                                                    </Typography>
-                                                </a>
+                                                    {item?.userCard?.overallGrade}
+                                                </Typography>
+                                            </div>
+                                            {isMobile ? null : (
+                                                <div className={classes.gradeColumn}>
+                                                    <a
+                                                        target={'_blank'}
+                                                        href={
+                                                            `/admin/submissions/${item.orderId}/grade?item_id=` +
+                                                            item.id
+                                                        }
+                                                        style={{ textDecoration: 'none' }}
+                                                        rel="noreferrer"
+                                                    >
+                                                        <Typography variant={'body2'} className={classes.viewGradeText}>
+                                                            Revise Grade
+                                                        </Typography>
+                                                    </a>
+
+                                                    <a
+                                                        target={'_blank'}
+                                                        href={`/feed/${item.certificateNumber}/view`}
+                                                        style={{ textDecoration: 'none' }}
+                                                        rel="noreferrer"
+                                                    >
+                                                        <Typography variant={'body2'} className={classes.viewGradeText}>
+                                                            View Grade
+                                                        </Typography>
+                                                    </a>
+                                                </div>
                                             )}
                                         </GradeRoot>
                                     ) : (

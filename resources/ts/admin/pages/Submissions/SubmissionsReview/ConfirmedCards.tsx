@@ -80,6 +80,7 @@ export function ConfirmedCards({ items, orderId }: ConfirmedCardsProps) {
                             card={item.cardProduct}
                             certificateId={item.certificateNumber}
                             declaredValue={item.declaredValuePerUnit}
+                            notes={item.notes}
                             onRemove={handleRemove}
                         />
                     ))

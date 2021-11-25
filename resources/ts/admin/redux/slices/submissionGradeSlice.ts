@@ -110,7 +110,7 @@ export const submissionGradesSlice = createSlice({
                 state.viewModes[viewModeIndex].sectionTitle = 'Card Not Accepted';
                 state.viewModes[viewModeIndex].notesPlaceholder =
                     'Enter notes explaining why this card cannot be accepted';
-                state.viewModes[viewModeIndex].areNotesRequired = true;
+                state.viewModes[viewModeIndex].areNotesRequired = false;
                 state.viewModes[viewModeIndex].name = incomingViewModeName;
             }
 

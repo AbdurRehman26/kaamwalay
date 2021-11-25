@@ -3,6 +3,7 @@ import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBa
 import { ChangeOrderItemStatusDto } from '../../dto/ChangeOrderItemStatusDto';
 import { OrderItemEntity } from '../../entities/OrderItemEntity';
 import { Repository } from '../Repository';
+import { ChangeOrderItemNotesDTO } from '@shared/dto/ChangeOrderItemNotesDTO';
 
 @Injectable('OrderItemsRepository')
 export class OrderItemsRepository extends Repository<OrderItemEntity> {
@@ -21,6 +22,20 @@ export class OrderItemsRepository extends Repository<OrderItemEntity> {
             },
         );
 
+        return this.toEntity(data);
+    }
+
+    public async changeOrderItemNotes(input: ChangeOrderItemNotesDTO) {
+        const { orderId, orderItemId, notes } = input;
+        const { data } = await this.endpoint.put(
+            `${orderItemId}/notes`,
+            { notes },
+            {
+                params: {
+                    orderId,
+                },
+            },
+        );
         return this.toEntity(data);
     }
 

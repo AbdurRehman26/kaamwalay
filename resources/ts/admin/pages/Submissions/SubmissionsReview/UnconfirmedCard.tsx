@@ -65,7 +65,6 @@ export function UnconfirmedCard({
     disableConfirm,
     notes,
     onCardNotesChange,
-    orderId,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 

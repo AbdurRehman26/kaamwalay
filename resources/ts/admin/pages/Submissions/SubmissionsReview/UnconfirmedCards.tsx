@@ -61,7 +61,6 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
         [dispatch, orderId],
     );
 
-    // const handleMissing = useCallback((orderItemId) => handleOpen({ orderItemId }), [handleOpen]);
     const handleEdit = useCallback(
         (orderItemId) => {
             const activeItem = items.find((item) => item.id === orderItemId);

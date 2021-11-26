@@ -112,6 +112,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasRole(config('permission.roles.admin'));
     }
 
+    public function isCustomer(): bool
+    {
+        return $this->hasRole(config('permission.roles.customer'));
+    }
+
     public function getNameAttribute(): string
     {
         return $this->getFullName();

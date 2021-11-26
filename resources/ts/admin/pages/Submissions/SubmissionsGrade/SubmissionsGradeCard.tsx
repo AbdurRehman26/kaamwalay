@@ -23,17 +23,20 @@ import SubmissionGradeCardUpload from '@admin/pages/Submissions/SubmissionsGrade
 import { SubmissionsGradeCardRoboGrades } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardRoboGrades';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import {
-    handleActionNotesInput,
     resetCardViewMode,
     updateCardViewMode,
     updateExistingCardData,
     updateExistingCardStatus,
 } from '@admin/redux/slices/submissionGradeSlice';
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
+import { changeOrderItemNotes } from '@shared/redux/slices/adminOrdersSlice';
+import { useLocation } from 'react-router-dom';
+import _ from 'lodash';
 
 interface SubmissionsGradeCardProps {
     itemId: any;
     itemIndex: number;
+    notes?: string;
     orderID: number;
     gradeData: any;
 }
@@ -252,11 +255,21 @@ const useStyles = makeStyles(
  * @date: 28.08.2021
  * @time: 19:09
  */
-export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: SubmissionsGradeCardProps) {
+export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, notes }: SubmissionsGradeCardProps) {
     const classes = useStyles();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
+    const [cardNotes, setCardNotes] = useState(notes);
+    const search = useLocation().search;
+    const reviseGradeItemId = new URLSearchParams(search).get('item_id');
+    const debounceNotes = useCallback(_.debounce(handleUpdateCardNotes, 500), []);
+
+    const handleNotesChange = (event: any) => {
+        setCardNotes(event.target.value);
+        debounceNotes(itemId, event.target.value);
+    };
+
     const handleNotAccepted = useCallback(
         (e) => {
             e.preventDefault();
@@ -329,10 +342,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
             dispatch(updateExistingCardStatus({ status: response.data.status.orderItemStatus.name, id: topLevelID }));
         }
         notifications.success('Card graded successfully!.', 'Success');
-    }
-
-    async function handleActionNotesChange(e: any) {
-        dispatch(handleActionNotesInput({ viewModeIndex: itemIndex, notes: e.target.value }));
     }
 
     function isNotesDoneBtnDisabled() {
@@ -474,11 +483,21 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
         }
     }
 
+    function handleUpdateCardNotes(orderItemId: number, notes: string) {
+        dispatch(
+            changeOrderItemNotes({
+                orderItemId,
+                orderId: orderID,
+                notes,
+            }),
+        );
+    }
     return (
         <AccordionCardItem variant={'outlined'}>
             <AccordionCardItemHeader
                 heading={cardName}
                 image={cardImage}
+                expand={parseInt(reviseGradeItemId as string) === itemId}
                 subheading={cardFullName}
                 shortName={shortName}
                 action={
@@ -639,19 +658,25 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                                 {(cardStatus.toLowerCase() === 'missing' ||
                                     cardStatus.toLowerCase() === 'not accepted') &&
                                 viewModes[itemIndex]?.notes === '' ? (
-                                    <div className={classes.noNotesContainer}>
-                                        <Typography className={classes.noNotesTitle}>No notes.</Typography>
-                                        <Typography className={classes.noNotesDescription}>
-                                            No notes have been added. Click “Revise” to add notes.{' '}
-                                        </Typography>
-                                    </div>
+                                    <TextField
+                                        label="Enter Notes"
+                                        multiline
+                                        rows={4}
+                                        value={cardNotes}
+                                        sx={{ marginTop: '16px' }}
+                                        fullWidth
+                                        onChange={handleNotesChange}
+                                    />
                                 ) : (
-                                    <div className={classes.existingNotesContainer}>
-                                        <Typography className={classes.existingNotesTitle}>Notes: </Typography>
-                                        <Typography className={classes.existingNotesDescription}>
-                                            {viewModes[itemIndex]?.notes}
-                                        </Typography>
-                                    </div>
+                                    <TextField
+                                        label="Enter Notes"
+                                        multiline
+                                        rows={4}
+                                        value={cardNotes}
+                                        sx={{ marginTop: '16px' }}
+                                        fullWidth
+                                        onChange={handleNotesChange}
+                                    />
                                 )}
                             </OutlinedCard>
                         )}
@@ -664,18 +689,14 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                             heading={viewModes[itemIndex]?.sectionTitle}
                             className={classes.cardViewModeActionsContainer}
                         >
-                            <Typography variant={'subtitle2'}>
-                                Notes: {viewModes[itemIndex]?.areNotesRequired ? '*' : null}
-                            </Typography>
                             <TextField
-                                variant={'outlined'}
-                                value={viewModes[itemIndex]?.notes ?? ''}
-                                onChange={handleActionNotesChange}
-                                placeholder={viewModes[itemIndex]?.notesPlaceholder}
-                                fullWidth
+                                label="Enter Notes"
                                 multiline
-                                disabled={false}
-                                rows={3}
+                                rows={4}
+                                value={cardNotes}
+                                sx={{ marginTop: '16px' }}
+                                fullWidth
+                                onChange={handleNotesChange}
                             />
                             <div className={classes.noteActionsContainer}>
                                 <Button
@@ -700,6 +721,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                         </OutlinedCard>
                     </>
                 ) : null}
+
                 {cardStatus.toLowerCase() !== 'missing' && cardStatus.toLowerCase() !== 'not accepted' ? (
                     <>
                         {currentViewMode === 'not_accepted_pending_notes' ||
@@ -717,7 +739,17 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                                     itemIndex={itemIndex}
                                     icon={<OutlinedToyIcon className={classes.headingIcon} />}
                                 />
+                                <TextField
+                                    label="Enter Notes"
+                                    multiline
+                                    rows={4}
+                                    value={cardNotes}
+                                    sx={{ marginTop: '16px' }}
+                                    fullWidth
+                                    onChange={handleNotesChange}
+                                />
                                 <SubmissionGradeCardUpload itemIndex={itemIndex} />
+
                                 <Grid container justifyContent={'flex-end'}>
                                     {currentViewMode === 'graded_revise_mode' ? (
                                         <>

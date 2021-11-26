@@ -140,7 +140,6 @@ export function BasicInfo() {
             <Typography variant={'h1'} className={classes.headingLabel}>
                 Profile
             </Typography>
-            <hr />
 
             <Paper className={classes.mainContainer} variant={'outlined'}>
                 <Typography variant={'h1'} className={classes.subHeadingLabel}>
@@ -259,7 +258,7 @@ export function BasicInfo() {
                     <Table className={classes.table}>
                         <TableBody>
                             <TableRow>
-                                <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                <Typography variant={'subtitle1'} className={classes.valueLabel}>
                                     Would you like to receive promotional emails from Robograding and AGS?
                                 </Typography>
                             </TableRow>

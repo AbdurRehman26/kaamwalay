@@ -74,3 +74,5 @@ Route::prefix('files')->group(function () {
         Route::post('presign', [UploadController::class, 'presignUpload']);
     });
 });
+
+Route::get('update-profile', [\App\Http\Controllers\API\Customer\CustomerController::class, 'updateProfile']);

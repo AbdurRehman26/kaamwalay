@@ -11,9 +11,19 @@ import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import { CameraAlt } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
-    addedCardsContainer: {
+    mainContainer: {
         width: '100%',
         padding: '16px',
+        marginTop: '25px',
+    },
+    headingLabel: {
+        fontFamily: 'DDT',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        fontSize: '32px',
+        lineHeight: '44px',
+        letterSpacing: '0.1px',
+        color: 'rgba(0, 0, 0, 0.87)',
     },
     subHeadingLabel: {
         fontFamily: 'Roboto',
@@ -22,6 +32,24 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '20px',
         lineHeight: '24px',
         letterSpacing: '0.1px',
+        color: 'rgba(0, 0, 0, 0.87)',
+    },
+    textLabel: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: '12px',
+        lineHeight: '16px',
+        letterSpacing: '0.4px',
+        color: 'rgba(0, 0, 0, 0.54)',
+    },
+    valueLabel: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.87)',
     },
     emptyStateContainer: {
@@ -40,47 +68,24 @@ const useStyles = makeStyles((theme) => ({
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.54)',
     },
-    qtyField: {
-        width: '80px',
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-    },
-    valueField: {
-        width: '150px',
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-    },
     table: {
         minWidth: '100%',
+        '& .MuiTableRow-root:last-child .MuiTableCell-root': {
+            borderBottom: 'none',
+        },
     },
     editBtn: {
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: 500,
-        fontSize: '14px',
+        fontSize: 14,
         lineHeight: '20px',
-        letterSpacing: '0.35px',
-        marginLeft: '12px',
-        '&:hover': {
-            cursor: 'pointer',
-        },
         color: '#20BFB8',
     },
     titleContainer: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    tableRowText: {
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: '14px',
-        lineHeight: '20px',
-        letterSpacing: '0.2px',
-        color: 'rgba(0, 0, 0, 0.87)',
     },
     mobileViewContainer: {
         display: 'flex',
@@ -98,10 +103,6 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
         marginTop: '24px',
         marginBottom: '12px',
-    },
-    actionLabel: {
-        fontWeight: 'bold',
-        marginBottom: '6px',
     },
 }));
 
@@ -124,63 +125,139 @@ export function BasicInfo() {
     );
 
     return (
-        <Paper className={classes.addedCardsContainer} variant={'outlined'}>
-            <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                Basic Info
+        <>
+            <Typography variant={'h1'} className={classes.headingLabel}>
+                Profile
             </Typography>
-            <div className={classes.emptyStateContainer}>
-                <Table className={classes.table}>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell component="th" scope="row" align={'left'}>
-                                <Typography variant={'subtitle1'} className={classes.tableRowText}>
-                                    PHOTO
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="left">Personalize your account with a photo</TableCell>
-                            <TableCell align="right">{avatarIcon}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell component="th" scope="row" align={'left'}>
-                                <Typography variant={'subtitle1'} className={classes.tableRowText}>
-                                    NAME
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="left">{user$?.firstName + ' ' + user$?.lastName}</TableCell>
-                            <TableCell align="right">EDIT</TableCell>
-                        </TableRow>
+            <hr />
 
-                        <TableRow>
-                            <TableCell component="th" scope="row" align={'left'}>
-                                <Typography variant={'subtitle1'} className={classes.tableRowText}>
-                                    USERNAME
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="left">{user$?.username}</TableCell>
-                            <TableCell align="right">EDIT</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell component="th" scope="row" align={'left'}>
-                                <Typography variant={'subtitle1'} className={classes.tableRowText}>
-                                    PASSWORD
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="left">********</TableCell>
-                            <TableCell align="right">EDIT</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell component="th" scope="row" align={'left'}>
-                                <Typography variant={'subtitle1'} className={classes.tableRowText}>
-                                    CUSTOMER ID
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="left">{user$?.customerNumber}</TableCell>
-                            <TableCell align="right">EDIT</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-        </Paper>
+            <Paper className={classes.mainContainer} variant={'outlined'}>
+                <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                    Basic Info
+                </Typography>
+                <div className={classes.emptyStateContainer}>
+                    <Table className={classes.table}>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell component="th" scope="row" align={'left'}>
+                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                        PHOTO
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left">Personalize your account with a photo</TableCell>
+                                <TableCell align="right">{avatarIcon}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row" align={'left'}>
+                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                        NAME
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left">{user$?.firstName + ' ' + user$?.lastName}</TableCell>
+                                <TableCell align="right" className={classes.editBtn}>
+                                    EDIT
+                                </TableCell>
+                            </TableRow>
+
+                            <TableRow>
+                                <TableCell component="th" scope="row" align={'left'}>
+                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                        USERNAME
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left" className={classes.valueLabel}>
+                                    {user$?.username}
+                                </TableCell>
+                                <TableCell align="right" className={classes.editBtn}>
+                                    EDIT
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row" align={'left'}>
+                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                        PASSWORD
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left" className={classes.valueLabel}>
+                                    ********
+                                </TableCell>
+                                <TableCell align="right" className={classes.editBtn}>
+                                    EDIT
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row" align={'left'}>
+                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                        CUSTOMER ID
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left" className={classes.valueLabel}>
+                                    {user$?.customerNumber}
+                                </TableCell>
+                                <TableCell align="right" className={classes.editBtn}>
+                                    EDIT
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+            </Paper>
+            <Paper className={classes.mainContainer} variant={'outlined'}>
+                <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                    Contact Info
+                </Typography>
+                <div className={classes.emptyStateContainer}>
+                    <Table className={classes.table}>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell component="th" scope="row" align={'left'}>
+                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                        EMAIL
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left" className={classes.valueLabel}>
+                                    Personalize your account with a photo
+                                </TableCell>
+                                <TableCell align="right" className={classes.editBtn}>
+                                    EDIT
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row" align={'left'}>
+                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                        PHONE
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left" className={classes.valueLabel}>
+                                    {user$?.customerNumber}
+                                </TableCell>
+                                <TableCell align="right" className={classes.editBtn}>
+                                    EDIT
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+            </Paper>
+
+            <Paper className={classes.mainContainer} variant={'outlined'}>
+                <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                    Email Subscription
+                </Typography>
+                <div className={classes.emptyStateContainer}>
+                    <Table className={classes.table}>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell align="left" className={classes.valueLabel}>
+                                    Personalize your account with a photo
+                                </TableCell>
+                            </TableRow>
+                            <TableRow></TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+            </Paper>
+        </>
     );
 }
 

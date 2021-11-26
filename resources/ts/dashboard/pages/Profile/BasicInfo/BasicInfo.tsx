@@ -9,6 +9,8 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import { CameraAlt } from '@mui/icons-material';
+import Radio, { RadioProps } from '@mui/material/Radio';
+import withStyles from '@mui/styles/withStyles';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -105,6 +107,15 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '12px',
     },
 }));
+
+const GreenRadio = withStyles({
+    root: {
+        '&$checked': {
+            color: '#20BFB8',
+        },
+    },
+    checked: {},
+})((props: RadioProps) => <Radio color="default" {...props} />);
 
 /**
  *
@@ -248,11 +259,14 @@ export function BasicInfo() {
                     <Table className={classes.table}>
                         <TableBody>
                             <TableRow>
-                                <TableCell align="left" className={classes.valueLabel}>
-                                    Personalize your account with a photo
-                                </TableCell>
+                                <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                    Would you like to receive promotional emails from Robograding and AGS?
+                                </Typography>
                             </TableRow>
-                            <TableRow></TableRow>
+                            <TableRow>
+                                <GreenRadio checked={true} /> Yes
+                                <GreenRadio checked={false} /> No
+                            </TableRow>
                         </TableBody>
                     </Table>
                 </div>

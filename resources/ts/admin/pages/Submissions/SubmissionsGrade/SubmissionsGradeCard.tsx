@@ -710,7 +710,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData }: 
                                     disabled={!areRoboGradesAvailable()}
                                     itemIndex={itemIndex}
                                     orderID={orderID}
-                                    heading={`Human Grades`}
+                                    heading={`Enhanced Robogrades`}
                                 />
                                 <SubmissionsGradeCardRoboGrades
                                     heading={'Robogrades'}

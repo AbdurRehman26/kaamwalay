@@ -129,6 +129,21 @@ export function BasicInfo() {
 
     const user$ = useSharedSelector((state) => state.authentication.user);
 
+    const onChangeFile = ({ target }: any) => {
+        console.log();
+        const formData = new FormData();
+        formData.append('file', target.files[0]);
+
+        const requestOptions = {
+            method: 'POST',
+            body: formData,
+        };
+        fetch('http://localhost/api/upload-file', requestOptions)
+            .then((response) => response.json())
+            .then((data) => console.log(data.id));
+
+        // `current` points to the mounted file input element
+    };
     const avatarIcon = (
         <IconButton aria-label="delete" size="small">
             <CameraAlt fontSize="medium" />
@@ -155,7 +170,16 @@ export function BasicInfo() {
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="left">Personalize your account with a photo</TableCell>
-                                <TableCell align="right">{avatarIcon}</TableCell>
+                                <TableCell align="right">
+                                    {avatarIcon}
+                                    <input
+                                        onChange={onChangeFile}
+                                        accept="image/*"
+                                        id="outlined-button-file"
+                                        multiple
+                                        type="file"
+                                    />
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row" align={'left'}>

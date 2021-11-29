@@ -24,6 +24,9 @@ class UserCard extends Model
         'generated_images',
         'grading_id',
         'certificate_number',
+        'grade_delta',
+        'overall_grade_nickname',
+        'overall_grade_nickname_nickname',
     ];
 
     protected $casts = [
@@ -35,6 +38,8 @@ class UserCard extends Model
         'overall_values' => 'array',
         'generated_images' => 'array',
         'graded_at' => 'datetime',
+        'grade_delta' => 'float',
+        'overall_grade_adjusted' => 'float',
     ];
 
     public function user(): BelongsTo

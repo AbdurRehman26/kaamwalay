@@ -140,6 +140,26 @@ class CardGradingService
         ];
     }
 
+    public function updateGradeDeltaValue(UserCard $userCard, float $gradeDelta): UserCard
+    {
+        $updatedGrade = $userCard->overall_grade + $gradeDelta;
+
+        if ($updatedGrade < 1) {
+            $updatedGrade = 1;
+        } else if ($updatedGrade > 10) {
+            $updatedGrade = 10;
+        }
+
+        $updatedNickname = $this->getGradeNickname($updatedGrade);
+
+        $userCard->overall_grade_adjusted = $updatedGrade;
+        $userCard->overall_grade_adjusted_nickname = $updatedNickname;
+        $userCard->grade_delta = $updatedGrade - $userCard->overall_grade;
+        $userCard->save();
+
+        return $userCard;
+    }
+
     protected function getAverage(...$values): float
     {
         return (float) number_format((float) (array_sum($values) / count($values)), 2);

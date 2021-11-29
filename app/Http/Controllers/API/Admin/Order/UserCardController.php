@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Admin\Order;
 
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeDeltaRequest;
 use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeRequest;
 use App\Http\Resources\API\Admin\Order\UserCardResource;
 use App\Models\Order;
@@ -42,6 +43,16 @@ class UserCardController extends Controller
             $card->updateFromAgsResponse($response);
         }
 
+        return new UserCardResource($card);
+    }
+
+    public function updateGradeDeltaValue(
+        UserCardGradeDeltaRequest $request,
+        Order $order,
+        UserCard $card,
+        CardGradingService $cardGradingService
+    ) : UserCardResource {
+        $card = $cardGradingService->updateGradeDeltaValue($card, $request->grade_delta);
         return new UserCardResource($card);
     }
 }

@@ -50,9 +50,20 @@ class UserCardController extends Controller
         UserCardGradeDeltaRequest $request,
         Order $order,
         UserCard $card,
+        AgsService $agsService,
         CardGradingService $cardGradingService
     ) : UserCardResource {
         $card = $cardGradingService->updateGradeDeltaValue($card, $request->grade_delta);
+
+        OrderUpdated::dispatch($order);
+        if ($cardGradingService->validateIfHumanGradesAreCompleted($card->human_grade_values)) {
+            $response = $agsService->updateHumanGrades(
+                $card->userCardCertificate->number,
+                $card->only('human_grade_values', 'overall_values', 'overall_grade', 'overall_grade_nickname')
+            );
+            $card->updateFromAgsResponse($response);
+        }
+
         return new UserCardResource($card);
     }
 }

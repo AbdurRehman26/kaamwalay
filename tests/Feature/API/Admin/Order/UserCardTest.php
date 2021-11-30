@@ -71,3 +71,40 @@ it('stores the human grades and update data on AGS', function () {
         return $request->url() == 'https://ags.api/v2/robograding/certificates/?certificate_id=' . $this->userCardCertificate->number;
     });
 });
+
+it('updates overall grade with delta and update data on AGS', function () {
+    Http::fake([
+        'https://ags.api/v2/robograding/certificates/?certificate_id=' . $this->userCardCertificate->number =>
+            Http::response(json_decode(file_get_contents(
+                base_path() . '/tests/stubs/AGS_patch_human_grade_response_200.json'
+            ), associative: true)),
+    ]);
+
+    $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
+        'human_grade_values' => [
+            'front' => [
+                'center' => 2.50,
+                'surface' => 2.50,
+                'edge' => 2.50,
+                'corner' => 2.50,
+            ],
+            'back' => [
+                'center' => 2.50,
+                'surface' => 2.50,
+                'edge' => 2.50,
+                'corner' => 2.50,
+            ],
+        ],
+    ]);
+
+    $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grade-delta', [
+        'grade_delta' => 2.5
+    ])
+    ->assertOk()
+    ->assertJsonFragment(['grade' => 5.0])
+    ->assertJsonFragment(['nickname' => 'EX']);
+
+    Http::assertSent(function ($request) {
+        return $request->url() == 'https://ags.api/v2/robograding/certificates/?certificate_id=' . $this->userCardCertificate->number;
+    });
+});

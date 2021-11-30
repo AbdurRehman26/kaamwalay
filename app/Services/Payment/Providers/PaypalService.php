@@ -114,6 +114,13 @@ class PaypalService implements PaymentProviderServiceInterface
         return 0.0;
     }
 
+    public function additionalCharge(Order $order, array $data): array
+    {
+        // Can not have extra charged with the payment flow we have right now. Added
+        // this method so that it won't break the functionality and throws exception
+        return [];
+    }
+
     public function refund(Order $order, array $data): array
     {
         $orderPayment = $order->firstOrderPayment;

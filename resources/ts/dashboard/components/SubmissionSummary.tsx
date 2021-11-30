@@ -16,7 +16,7 @@ import { APIService } from '@shared/services/APIService';
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
-import { PURCHASE } from '@shared/constants/FacebookPixelEvents';
+import { PURCHASE } from '../../shared/constants/FacebookPixelEvents';
 
 const useStyles = makeStyles((theme) => ({
     container: {

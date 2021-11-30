@@ -13,6 +13,8 @@ import { AuthenticationRepository } from '@shared/repositories/AuthenticationRep
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
+import trackFbPixelEvent from '@shared/lib/utils/trackFbPixelEvent';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 
 interface StateType {
     checking: boolean;
@@ -57,7 +59,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
         NotificationsService.success('Register successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
-
+        trackFbPixelEvent(FacebookPixelEvents.CompleteRegistration);
         thunkAPI.dispatch(authenticateCheckAction());
     } catch (e: any) {
         NotificationsService.exception(e);

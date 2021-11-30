@@ -16,7 +16,8 @@ import { APIService } from '@shared/services/APIService';
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
-import { PURCHASE } from '../../shared/constants/FacebookPixelEvents';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
+import trackFbPixelEvent from '@shared/lib/utils/trackFbPixelEvent';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -240,7 +241,7 @@ function SubmissionSummary() {
                 category: EventCategories.Submissions,
                 action: SubmissionEvents.paid,
             });
-            window.fbq('track', PURCHASE, {
+            trackFbPixelEvent(FacebookPixelEvents.Purchase, {
                 value: grandTotal,
                 currency: 'USD',
             });
@@ -279,7 +280,7 @@ function SubmissionSummary() {
                             category: EventCategories.Submissions,
                             action: SubmissionEvents.paid,
                         });
-                        window.fbq('track', PURCHASE, {
+                        trackFbPixelEvent(FacebookPixelEvents.Purchase, {
                             value: grandTotal,
                             currency: 'USD',
                         });

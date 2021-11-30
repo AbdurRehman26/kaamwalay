@@ -52,8 +52,5 @@ return [
         'google_analytics_tracking_code' => [
             'value' => env('GOOGLE_ANALYTICS_TRACKING_CODE'),
         ],
-        'facebook_pixel_id' => [
-            'value' => env('FACEBOOK_PIXEL_ID'),
-        ],
     ],
 ];

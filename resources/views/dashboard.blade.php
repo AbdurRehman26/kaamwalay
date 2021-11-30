@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
 
-        @if(config('configuration.keys.facebook_pixel_id.value'))
+        @if(config('services.facebook.pixel_id'))
         <!-- Facebook Pixel Code -->
         <script>
             !function(f,b,e,v,n,t,s)
@@ -19,11 +19,11 @@
                 t.src=v;s=b.getElementsByTagName(e)[0];
                 s.parentNode.insertBefore(t,s)}(window, document,'script',
                 'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', "{{ config('configuration.keys.facebook_pixel_id.value') }}");
+            fbq('init', "{{ config('services.facebook.pixel_id') }}");
             fbq('track', 'PageView');
         </script>
         <noscript><img height="1" width="1" style="display:none"
-                       src="https://www.facebook.com/tr?id={{ config('configuration.keys.facebook_pixel_id.value') }}&ev=PageView&noscript=1"
+                       src="https://www.facebook.com/tr?id={{ config('services.facebook.pixel_id') }}&ev=PageView&noscript=1"
             /></noscript>
         <!-- End Facebook Pixel Code -->
         @endif

@@ -146,7 +146,7 @@ class CardGradingService
 
         if ($updatedGrade < 1) {
             $updatedGrade = 1;
-        } else if ($updatedGrade > 10) {
+        } elseif ($updatedGrade > 10) {
             $updatedGrade = 10;
         }
 

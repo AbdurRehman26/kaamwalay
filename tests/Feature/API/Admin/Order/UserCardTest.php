@@ -98,7 +98,7 @@ it('updates overall grade with delta and update data on AGS', function () {
     ]);
 
     $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grade-delta', [
-        'grade_delta' => 2.5
+        'grade_delta' => 2.5,
     ])
     ->assertOk()
     ->assertJsonFragment(['grade' => 5.0])

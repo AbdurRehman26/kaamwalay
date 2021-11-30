@@ -18,6 +18,7 @@ import CustomerStripeCardItem from '@dashboard/components/PaymentForm/CustomerSt
 import useStyles from '@dashboard/components/PaymentForm/style';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { saveStripeCustomerCards } from '@dashboard/redux/slices/newSubmissionSlice';
+import { ADD_PAYMENT_INFO } from '@shared/constants/FacebookPixelEvents';
 
 const CARD_OPTIONS = {
     iconStyle: 'solid',
@@ -121,6 +122,7 @@ export function PaymentForm() {
                 category: EventCategories.PaymentMethods,
                 action: PaymentMethodEvents.addedNewStripeCard,
             });
+            window.fbq('track', ADD_PAYMENT_INFO);
         }
     };
 

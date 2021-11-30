@@ -78,7 +78,7 @@ class PaymentService
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
             'amount' => $data['amount'] ?? $this->order->grand_total,
-            'type' => $data['type'],
+            'type' => $data['type'] ?? null, // in case of paypal
             'notes' => $data['notes'] ?? '',
         ]);
 

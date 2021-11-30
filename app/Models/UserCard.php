@@ -25,8 +25,8 @@ class UserCard extends Model
         'grading_id',
         'certificate_number',
         'grade_delta',
-        'overall_grade_nickname',
-        'overall_grade_nickname_nickname',
+        'overall_grade_ajusted',
+        'overall_grade_ajusted_nickname',
     ];
 
     protected $casts = [

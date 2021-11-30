@@ -24,6 +24,7 @@ class UserCardGradeRequest extends FormRequest
     public function rules()
     {
         return [
+            'grade_delta' => ['sometimes', 'nullable', 'regex:/^(-)?\d(\.[0|5])?$/', 'numeric'],
             'human_grade_values' => ['required', 'array'],
             'human_grade_values.front' => ['required', 'array'],
             'human_grade_values.front.center' => ['numeric','max:10','min:0', 'regex:/^\d+(\.\d{1,2})?$/'],

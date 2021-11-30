@@ -14,8 +14,6 @@ class AddGradeDeltaToUserCards extends Migration
     public function up()
     {
         Schema::table('user_cards', function (Blueprint $table) {
-            $table->decimal('overall_grade_adjusted')->nullable();
-            $table->string('overall_grade_adjusted_nickname')->nullable();
             $table->decimal('grade_delta')->default(0)->nullable();
         });
     }
@@ -28,8 +26,6 @@ class AddGradeDeltaToUserCards extends Migration
     public function down()
     {
         Schema::table('user_cards', function (Blueprint $table) {
-            $table->dropColumn('overall_grade_adjusted');
-            $table->dropColumn('overall_grade_adjusted_nickname');
             $table->dropColumn('grade_delta');
         });
     }

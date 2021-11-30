@@ -72,7 +72,7 @@ it('stores the human grades and update data on AGS', function () {
     });
 });
 
-it('updates overall grade with delta and update data on AGS', function () {
+it('updates overall grade based on delta value and updates to AGS', function () {
     Http::fake([
         'https://ags.api/v2/robograding/certificates/?certificate_id=' . $this->userCardCertificate->number =>
             Http::response(json_decode(file_get_contents(
@@ -95,9 +95,6 @@ it('updates overall grade with delta and update data on AGS', function () {
                 'corner' => 2.50,
             ],
         ],
-    ]);
-
-    $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grade-delta', [
         'grade_delta' => 2.5,
     ])
     ->assertOk()

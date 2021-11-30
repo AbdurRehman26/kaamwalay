@@ -93,7 +93,7 @@ class PaypalService implements PaymentProviderServiceInterface
                     'response' => json_encode($data),
                     'amount' => $order->grand_total,
                     'type' => OrderPayment::TYPE_ORDER_PAYMENT,
-                    'notes' => "Pending Paypal Payment for " . $order->order_number,
+                    'notes' => 'Paypal Payment for ' . $order->order_number,
                 ]);
 
                 return true;

@@ -32,6 +32,7 @@ import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 import { changeOrderItemNotes } from '@shared/redux/slices/adminOrdersSlice';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
+import CustomGradeStepper from '@admin/pages/Submissions/SubmissionsGrade/CustomGradeStepper';
 
 interface SubmissionsGradeCardProps {
     itemId: any;
@@ -570,6 +571,10 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                             </Button>
                         </Grid>
                     ) : null}
+
+                    <Grid item xs>
+                        <CustomGradeStepper orderId={2} orderItemId={2} currentGrade={7} gradeDelta={0} />
+                    </Grid>
                 </Grid>
             </AccordionCardItemHeader>
 

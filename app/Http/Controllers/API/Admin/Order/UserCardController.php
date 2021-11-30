@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\Admin\Order;
 
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeDeltaRequest;
 use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeRequest;
 use App\Http\Resources\API\Admin\Order\UserCardResource;
 use App\Models\Order;
@@ -33,7 +32,7 @@ class UserCardController extends Controller
                 'overall_values' => $overallValues,
                 'overall_grade' => $grade,
                 'overall_grade_nickname' => $nickname,
-                'grade_delta' => $gradeDelta
+                'grade_delta' => $gradeDelta,
             ]
         );
 
@@ -48,5 +47,4 @@ class UserCardController extends Controller
 
         return new UserCardResource($card);
     }
-
 }

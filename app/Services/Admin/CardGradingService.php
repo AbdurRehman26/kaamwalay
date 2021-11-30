@@ -138,7 +138,7 @@ class CardGradingService
 
         if ($overallGrade > 10) {
             $overallGrade = 10;
-        } else if ($overallGrade < 1) {
+        } elseif ($overallGrade < 1) {
             $overallGrade = 1;
         }
 

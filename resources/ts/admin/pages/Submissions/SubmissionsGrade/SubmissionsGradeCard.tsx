@@ -266,7 +266,6 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [cardNotes, setCardNotes] = useState(notes);
-    // Condition here as initial state should be wether gradeDelta is not 0.
     const [showEditGradeStepper, setShowEditGradeStepper] = useState(false);
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');

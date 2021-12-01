@@ -14,12 +14,15 @@ import withStyles from '@mui/styles/withStyles';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
         width: '100%',
         padding: '16px',
         marginTop: '0px',
+        marginBottom: 25,
     },
     editContainer: {
         padding: 20,
@@ -150,6 +153,10 @@ function reducer(state: any, action: { type: string }) {
             return { ...state, editName: !state.editName };
         case 'EDIT_USERNAME':
             return { ...state, editUserName: !state.editUserName };
+        case 'EDIT_PASSWORD':
+            return { ...state, editPassword: !state.editPassword };
+        case 'EDIT_PHONE':
+            return { ...state, editPhone: !state.editPhone };
         default:
             return { ...state };
     }
@@ -168,8 +175,12 @@ export function BasicInfo() {
         type: '',
         editName: false,
         editUserName: false,
+        editPhone: false,
     });
 
+    const apiService = useInjectable(APIService);
+    const endpoint = apiService.createEndpoint(`api/user`);
+    console.log(endpoint);
     const user$ = useSharedSelector((state) => state.authentication.user);
 
     const avatarIcon = (
@@ -229,12 +240,22 @@ export function BasicInfo() {
 
                                 {state.editName && (
                                     <div className={classes.editContainer}>
-                                        <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                                        <Typography variant={'subtitle1'} className={classes.valueLabel}>
                                             Name
                                         </Typography>
 
-                                        <TextField label="Enter Notes" rows={1} sx={{ marginTop: '16px' }} fullWidth />
-                                        <TextField label="Enter Notes" rows={1} sx={{ marginTop: '16px' }} fullWidth />
+                                        <TextField
+                                            label="Enter first name"
+                                            rows={1}
+                                            sx={{ marginTop: '16px' }}
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            label="Enter last name"
+                                            rows={1}
+                                            sx={{ marginTop: '16px' }}
+                                            fullWidth
+                                        />
 
                                         <div className={classes.buttonsContainer}>
                                             <Button
@@ -280,11 +301,16 @@ export function BasicInfo() {
 
                                 {state.editUserName && (
                                     <div className={classes.editContainer}>
-                                        <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                                        <Typography variant={'subtitle1'} className={classes.valueLabel}>
                                             Username
                                         </Typography>
 
-                                        <TextField label="Enter Notes" rows={1} sx={{ marginTop: '16px' }} fullWidth />
+                                        <TextField
+                                            label="Enter Username"
+                                            rows={1}
+                                            sx={{ marginTop: '16px' }}
+                                            fullWidth
+                                        />
 
                                         <div className={classes.buttonsContainer}>
                                             <Button
@@ -305,23 +331,70 @@ export function BasicInfo() {
                                 )}
                             </TableRow>
                             <TableRow>
-                                <TableCell component="th" scope="row" align={'left'}>
-                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
-                                        PASSWORD
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="left" className={classes.valueLabel}>
-                                    ********
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Button
-                                        variant={'text'}
-                                        size={'medium'}
-                                        onClick={() => dispatch({ type: 'EDIT_NAME' })}
-                                    >
-                                        Edit
-                                    </Button>
-                                </TableCell>
+                                {!state.editPassword && (
+                                    <>
+                                        <TableCell component="th" scope="row" align={'left'}>
+                                            <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                                PASSWORD
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="left" className={classes.valueLabel}>
+                                            ********
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Button
+                                                variant={'text'}
+                                                size={'medium'}
+                                                onClick={() => dispatch({ type: 'EDIT_PASSWORD' })}
+                                            >
+                                                Edit
+                                            </Button>
+                                        </TableCell>
+                                    </>
+                                )}
+
+                                {state.editPassword && (
+                                    <div className={classes.editContainer}>
+                                        <Typography variant={'subtitle1'} className={classes.valueLabel}>
+                                            Change Password
+                                        </Typography>
+
+                                        <TextField
+                                            label="Enter Current Password"
+                                            rows={1}
+                                            sx={{ marginTop: '16px' }}
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            label="Enter New Password"
+                                            rows={1}
+                                            sx={{ marginTop: '16px' }}
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            label="Confirm New Password"
+                                            rows={1}
+                                            sx={{ marginTop: '16px' }}
+                                            fullWidth
+                                        />
+
+                                        <div className={classes.buttonsContainer}>
+                                            <Button
+                                                variant={'text'}
+                                                color={'secondary'}
+                                                className={classes.backBtn}
+                                                onClick={() => {
+                                                    dispatch({ type: 'EDIT_PASSWORD' });
+                                                }}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
+                                                Save
+                                            </Button>
+                                        </div>
+                                    </div>
+                                )}
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row" align={'left'}>
@@ -351,36 +424,63 @@ export function BasicInfo() {
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="left" className={classes.valueLabel}>
-                                    Personalize your account with a photo
+                                    {user$?.email}
                                 </TableCell>
-                                <TableCell align="right">
-                                    <Button
-                                        variant={'text'}
-                                        size={'medium'}
-                                        onClick={() => dispatch({ type: 'EDIT_NAME' })}
-                                    >
-                                        Edit
-                                    </Button>
-                                </TableCell>
+                                <TableCell align="right"></TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell component="th" scope="row" align={'left'}>
-                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
-                                        PHONE
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="left" className={classes.valueLabel}>
-                                    {user$?.customerNumber}
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Button
-                                        variant={'text'}
-                                        size={'medium'}
-                                        onClick={() => dispatch({ type: 'EDIT_NAME' })}
-                                    >
-                                        Edit
-                                    </Button>
-                                </TableCell>
+                                {!state.editPhone && (
+                                    <>
+                                        <TableCell component="th" scope="row" align={'left'}>
+                                            <Typography variant={'subtitle1'} className={classes.textLabel}>
+                                                PHONE
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="left" className={classes.valueLabel}>
+                                            {user$?.phone ?? 'N/A'}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Button
+                                                variant={'text'}
+                                                size={'medium'}
+                                                onClick={() => dispatch({ type: 'EDIT_PHONE' })}
+                                            >
+                                                Edit
+                                            </Button>
+                                        </TableCell>
+                                    </>
+                                )}
+
+                                {state.editPhone && (
+                                    <div className={classes.editContainer}>
+                                        <Typography variant={'subtitle1'} className={classes.valueLabel}>
+                                            Change Password
+                                        </Typography>
+
+                                        <TextField
+                                            label="Confirm New Password"
+                                            rows={1}
+                                            sx={{ marginTop: '16px' }}
+                                            fullWidth
+                                        />
+
+                                        <div className={classes.buttonsContainer}>
+                                            <Button
+                                                variant={'text'}
+                                                color={'secondary'}
+                                                className={classes.backBtn}
+                                                onClick={() => {
+                                                    dispatch({ type: 'EDIT_PHONE' });
+                                                }}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
+                                                Save
+                                            </Button>
+                                        </div>
+                                    </div>
+                                )}
                             </TableRow>
                         </TableBody>
                     </Table>

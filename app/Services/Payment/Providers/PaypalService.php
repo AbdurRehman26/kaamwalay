@@ -10,6 +10,7 @@ use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use PayPalCheckoutSdk\Payments\CapturesGetRequest;
 use PayPalCheckoutSdk\Payments\CapturesRefundRequest;
 use PayPalHttp\HttpException;
 
@@ -90,6 +91,7 @@ class PaypalService implements PaymentProviderServiceInterface
                 && $captureStatus === 'COMPLETED'
             ) {
                 $order->lastOrderPayment->update([
+                    'payment_provider_reference_id' => $data['purchase_units'][0]['payments']['captures'][0]['id'],
                     'response' => json_encode($data),
                     'amount' => $order->grand_total,
                     'type' => OrderPayment::TYPE_ORDER_PAYMENT,
@@ -136,7 +138,7 @@ class PaypalService implements PaymentProviderServiceInterface
         ];
 
         try {
-            $refundRequest = new CapturesRefundRequest($paymentData['id']);
+            $refundRequest = new CapturesRefundRequest($paymentData['purchase_units'][0]['payments']['captures'][0]['id']);
             $refundRequest->prefer('return=representation');
             $refundRequest->body = $refundData;
 
@@ -155,7 +157,7 @@ class PaypalService implements PaymentProviderServiceInterface
             'request' => $refundData,
             'response' => json_decode(json_encode($response->result), associative: true),
             'payment_provider_reference_id' => $paymentData['id'],
-            'amount' => $data['amount']['value'],
+            'amount' => $data['amount'],
             'type' => OrderPayment::TYPE_REFUND,
             'notes' => $refundData['note_to_payer'],
         ];

@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: '24px',
         letterSpacing: '0.1px',
         color: 'rgba(0, 0, 0, 0.87)',
+        marginBottom: 20,
     },
     textLabel: {
         fontFamily: 'Roboto',
@@ -135,6 +136,11 @@ const useStyles = makeStyles((theme) => ({
     backBtn: {
         marginRight: '12px',
         color: '#20BFB8',
+    },
+    subscriptionCheckBtn: {
+        marginTop: 5,
+        paddingLeft: 0,
+        paddingTop: 10,
     },
 }));
 
@@ -500,8 +506,10 @@ export function BasicInfo() {
                                 </Typography>
                             </TableRow>
                             <TableRow>
-                                <GreenRadio checked={true} /> Yes
-                                <GreenRadio checked={false} /> No
+                                <TableCell align={'left'} className={classes.subscriptionCheckBtn}>
+                                    <GreenRadio checked={true} /> Yes
+                                    <GreenRadio checked={false} /> No
+                                </TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>

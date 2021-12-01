@@ -44,7 +44,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('shipment', [OrderController::class, 'updateShipment']);
 
         Route::put('cards/{card}/grades', [UserCardController::class, 'updateGradingValues']);
-        Route::put('cards/{card}/grade-delta', [UserCardController::class, 'updateGradeDeltaValue']);
 
         Route::apiResource('order-payments', OrderPaymentController::class)->only('update');
         Route::post('payments/extra-charge', OrderExtraChargeController::class)

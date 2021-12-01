@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\Admin\Order;
 
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeDeltaRequest;
 use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeRequest;
 use App\Http\Resources\API\Admin\Order\UserCardResource;
 use App\Models\Order;
@@ -23,14 +22,17 @@ class UserCardController extends Controller
     ): UserCardResource {
         $overallValues = $cardGradingService->calculateOverallValues($request->get('human_grade_values'));
 
-        ['grade' => $grade, 'nickname' => $nickname] = $cardGradingService
-            ->calculateOverallAverage($overallValues);
+        $gradeDelta = $request->get('grade_delta') ?? 0;
+
+        ['grade' => $grade, 'nickname' => $nickname, 'grade_delta' => $gradeDelta] = $cardGradingService
+            ->calculateOverallAverage($overallValues, $gradeDelta);
 
         $card->update(
             $request->only('human_grade_values') + [
                 'overall_values' => $overallValues,
                 'overall_grade' => $grade,
                 'overall_grade_nickname' => $nickname,
+                'grade_delta' => $gradeDelta,
             ]
         );
 
@@ -43,16 +45,6 @@ class UserCardController extends Controller
             $card->updateFromAgsResponse($response);
         }
 
-        return new UserCardResource($card);
-    }
-
-    public function updateGradeDeltaValue(
-        UserCardGradeDeltaRequest $request,
-        Order $order,
-        UserCard $card,
-        CardGradingService $cardGradingService
-    ) : UserCardResource {
-        $card = $cardGradingService->updateGradeDeltaValue($card, $request->grade_delta);
         return new UserCardResource($card);
     }
 }

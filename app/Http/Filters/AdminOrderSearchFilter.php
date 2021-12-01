@@ -15,6 +15,7 @@ class AdminOrderSearchFilter implements Filter
                 'user.customer_number',
                 'user.first_name',
                 'user.last_name',
+                'user.email',
                 'orderItems.userCard.certificate_number',
             ],
             $value

@@ -73,7 +73,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                         <TableRow>
                             <TableCell variant={'head'}>Submission #</TableCell>
                             <TableCell variant={'head'}>Placed</TableCell>
-                            <TableCell variant={'head'}>Arrived</TableCell>
+                            <TableCell variant={'head'}>Reviewed</TableCell>
                             <TableCell variant={'head'}>Customer</TableCell>
                             <TableCell variant={'head'}>Cards</TableCell>
                             <TableCell variant={'head'}>Status</TableCell>

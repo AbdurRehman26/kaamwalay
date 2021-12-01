@@ -11,12 +11,13 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { cx } from '@shared/lib/utils/cx';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
-
+import { CustomAccordion } from '@admin/pages/Submissions/SubmissionsReview/CustomAccordion';
 interface CardItemProps {
     label: any | string;
     itemId: number;
     card: CardProductEntity;
     labelIcon?: any;
+    notes?: string;
 
     certificateId?: number | string;
     declaredValue?: number;
@@ -71,7 +72,16 @@ const useStyles = makeStyles(
     { name: 'CardItem' },
 );
 
-export function CardItem({ label, itemId, card, labelIcon, certificateId, declaredValue, onRemove }: CardItemProps) {
+export function CardItem({
+    label,
+    itemId,
+    card,
+    labelIcon,
+    certificateId,
+    declaredValue,
+    onRemove,
+    notes,
+}: CardItemProps) {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const notifications = useNotifications();
@@ -130,6 +140,7 @@ export function CardItem({ label, itemId, card, labelIcon, certificateId, declar
                             )}
                         </Box>
                     ) : null}
+                    {notes ? <CustomAccordion title={'Notes'} content={notes} /> : null}
                 </Box>
             </Box>
 

@@ -161,7 +161,7 @@ export function SubmissionReviewCardDialog(props: SubmissionReviewCardDialogProp
                     size={'large'}
                     fullWidth
                     onClick={handleConfirm}
-                    disabled={loading !== ''}
+                    disabled={currentItem?.cardProduct.addedByCustomer || loading !== ''}
                     startIcon={loading === 'confirm' ? <CircularProgress size={24} color={'inherit'} /> : null}
                 >
                     Confirm

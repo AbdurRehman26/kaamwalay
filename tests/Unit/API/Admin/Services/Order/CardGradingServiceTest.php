@@ -105,8 +105,8 @@ test('it returns right nicknames', function ($value) {
 
 test('it returns overall average and nickname', function ($value) {
     expect(
-        $this->service->calculateOverallAverage($value['overall'], 0)
-    )->toBe(['grade' => $value['grade'], 'nickname' => $value['nickname'], 'grade_delta' => 0.0]);
+        $this->service->calculateOverallAverage($value['overall'])
+    )->toBe(['grade' => $value['grade'], 'nickname' => $value['nickname']]);
 })->with([
     fn () => (['overall' => ['center' => 6.50,'surface' => 5.00,'edge' => 9.80,'corner' => 2.25], 'grade' => 6.00, 'nickname' => 'EX-MT']),
     fn () => (['overall' => ['center' => 9.50,'surface' => 7.00,'edge' => 9.00,'corner' => 8.25], 'grade' => 8.50, 'nickname' => 'NM-MT+']),

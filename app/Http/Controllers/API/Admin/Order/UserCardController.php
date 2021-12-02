@@ -24,8 +24,11 @@ class UserCardController extends Controller
 
         $gradeDelta = $request->get('grade_delta') ?? 0;
 
+        ['grade' => $grade, 'nickname' => $nickname] = $cardGradingService
+            ->calculateOverallAverage($overallValues);
+
         ['grade' => $grade, 'nickname' => $nickname, 'grade_delta' => $gradeDelta] = $cardGradingService
-            ->calculateOverallAverage($overallValues, $gradeDelta);
+            ->addDeltaValueToOverallGrade($grade, $gradeDelta);
 
         $card->update(
             $request->only('human_grade_values') + [

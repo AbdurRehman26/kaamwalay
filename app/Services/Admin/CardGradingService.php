@@ -123,9 +123,9 @@ class CardGradingService
         ];
     }
 
-    public function calculateOverallAverage(array $overAllValues, float $delta): array
+    public function calculateOverallAverage(array $overAllValues): array
     {
-        $calculatedGrade = $this->getRoundedValue(
+        $overallGrade = $this->getRoundedValue(
             $this->getAverage(
                 $overAllValues['center'],
                 $overAllValues['surface'],
@@ -134,18 +134,26 @@ class CardGradingService
             )
         );
 
-        $overallGrade = $calculatedGrade + $delta;
-
-        if ($overallGrade > 10) {
-            $overallGrade = 10;
-        } elseif ($overallGrade < 1) {
-            $overallGrade = 1;
-        }
-
         return [
             'grade' => $overallGrade,
             'nickname' => $this->getGradeNickname($overallGrade),
-            'grade_delta' => $overallGrade - $calculatedGrade,
+        ];
+    }
+
+    public function addDeltaValueToOverallGrade(float $overallGrade, float $delta): array
+    {
+        $adjustedGrade = $overallGrade + $delta;
+
+        if ($adjustedGrade > 10) {
+            $adjustedGrade = 10;
+        } elseif ($adjustedGrade < 1) {
+            $adjustedGrade = 1;
+        }
+
+        return [
+            'grade' => $adjustedGrade,
+            'nickname' => $this->getGradeNickname($adjustedGrade),
+            'grade_delta' => $adjustedGrade - $overallGrade,
         ];
     }
 

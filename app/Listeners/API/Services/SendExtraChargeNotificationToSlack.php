@@ -11,6 +11,11 @@ class SendExtraChargeNotificationToSlack implements ShouldQueue
 {
     use InteractsWithQueue;
 
+     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
     public $tries = 3;
 
     /**
@@ -21,9 +26,9 @@ class SendExtraChargeNotificationToSlack implements ShouldQueue
      */
     public function handle(ExtraChargeSuccessful $event): void
     {
-        if (app()->environment('local')) {
-            return;
-        }
+        // if (app()->environment('local')) {
+        //     return;
+        // }
         
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
             ->notify(new \App\Notifications\ExtraCharge($event->order));

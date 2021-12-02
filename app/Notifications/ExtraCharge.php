@@ -13,11 +13,23 @@ class ExtraCharge extends Notification
     {
     }
 
+   /**
+     * Get the notification's delivery channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
     public function via($notifiable)
     {
         return ['slack'];
     }
 
+    /**
+     * Get the Slack representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\SlackMessage
+     */
     public function toSlack($notifiable)
     {
         $paymentCode = ucfirst($this->order->paymentMethod->code);

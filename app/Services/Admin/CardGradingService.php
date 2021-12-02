@@ -136,7 +136,6 @@ class CardGradingService
 
         return [
             'grade' => $overallGrade,
-            'nickname' => $this->getGradeNickname($overallGrade),
         ];
     }
 

@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
+use App\Models\Order;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
@@ -13,12 +13,12 @@ class ExtraCharge extends Notification
     {
     }
 
-   /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
+    /**
+      * Get the notification's delivery channels.
+      *
+      * @param  mixed  $notifiable
+      * @return array
+      */
     public function via($notifiable)
     {
         return ['slack'];

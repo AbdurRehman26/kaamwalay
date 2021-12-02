@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
 use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
+use App\Models\Order;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 

@@ -287,7 +287,7 @@ export function SubmissionsGradeCardGrades({
                             />
                         ) : (
                             <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Edges</div>
+                                <div className={classes.gradeReadLabel}>Corners</div>
                                 <div className={classes.gradeReadValue}>{backCorner}</div>
                             </div>
                         )}

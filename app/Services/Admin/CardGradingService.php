@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Exceptions\Services\Admin\CardGradeIsInvalid;
 use App\Models\UserCard;
 use Illuminate\Support\Arr;
 
@@ -123,9 +124,9 @@ class CardGradingService
         ];
     }
 
-    public function calculateOverallAverage(array $overAllValues, float $delta): array
+    public function calculateOverallAverage(array $overAllValues): float
     {
-        $calculatedGrade = $this->getRoundedValue(
+        return $this->getRoundedValue(
             $this->getAverage(
                 $overAllValues['center'],
                 $overAllValues['surface'],
@@ -133,19 +134,20 @@ class CardGradingService
                 $overAllValues['corner'],
             )
         );
+    }
 
-        $overallGrade = $calculatedGrade + $delta;
+    public function addDeltaValueToOverallGrade(float $overallGrade, float $delta): array
+    {
+        $adjustedGrade = $overallGrade + $delta;
 
-        if ($overallGrade > 10) {
-            $overallGrade = 10;
-        } elseif ($overallGrade < 1) {
-            $overallGrade = 1;
+        if ($adjustedGrade > 10 || $adjustedGrade < 1) {
+            throw new CardGradeIsInvalid;
         }
 
         return [
-            'grade' => $overallGrade,
-            'nickname' => $this->getGradeNickname($overallGrade),
-            'grade_delta' => $overallGrade - $calculatedGrade,
+            'grade' => $adjustedGrade,
+            'nickname' => $this->getGradeNickname($adjustedGrade),
+            'grade_delta' => $delta,
         ];
     }
 

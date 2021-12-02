@@ -72,13 +72,8 @@ it('stores the human grades and update data on AGS', function () {
     });
 });
 
-it('updates overall grade based on delta value and updates to AGS', function () {
-    Http::fake([
-        'https://ags.api/v2/robograding/certificates/?certificate_id=' . $this->userCardCertificate->number =>
-            Http::response(json_decode(file_get_contents(
-                base_path() . '/tests/stubs/AGS_patch_human_grade_response_200.json'
-            ), associative: true)),
-    ]);
+it('updates overall grade based on delta value', function () {
+    Http::fake();
 
     $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
         'human_grade_values' => [
@@ -100,8 +95,4 @@ it('updates overall grade based on delta value and updates to AGS', function () 
     ->assertOk()
     ->assertJsonFragment(['grade' => 5.0])
     ->assertJsonFragment(['nickname' => 'EX']);
-
-    Http::assertSent(function ($request) {
-        return $request->url() == 'https://ags.api/v2/robograding/certificates/?certificate_id=' . $this->userCardCertificate->number;
-    });
 });

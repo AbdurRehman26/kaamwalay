@@ -132,6 +132,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
+    public function devices(): HasMany
+    {
+        return $this->hasMany(UserDevice::class);
+    }
+
     public function assignCustomerNumber(): self
     {
         if (! $this->customer_number) {
@@ -162,7 +167,7 @@ class User extends Authenticatable implements JWTSubject
         );
     }
 
-    public function routeNotificationFor($driver)
+    public function routeNotificationFor(string $driver): string
     {
         if ($driver === 'PusherPushNotifications') {
             return $this->email;

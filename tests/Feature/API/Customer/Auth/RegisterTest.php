@@ -89,4 +89,4 @@ test('a logged in customer cannot register', function () {
 
     $response = $this->postJson('api/auth/register');
     $response->assertRedirect();
-});
+})->group('auth');

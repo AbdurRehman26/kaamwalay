@@ -11,7 +11,7 @@ class PushNotificationController extends Controller
     /**
      * @throws Exception
      */
-    public function auth()
+    public function auth(): array
     {
         $config = config('services.pusher');
 

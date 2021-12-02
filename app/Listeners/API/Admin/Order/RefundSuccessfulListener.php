@@ -4,8 +4,10 @@ namespace App\Listeners\API\Admin\Order;
 
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
+use App\Models\Order;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Arr;
 
 class RefundSuccessfulListener implements ShouldQueue
 {
@@ -30,7 +32,10 @@ class RefundSuccessfulListener implements ShouldQueue
         $user = $event->order->user;
         $order = $event->order;
         $orderPayment = new OrderPaymentResource($event->order->firstOrderPayment);
-        $card = json_decode(json_encode($orderPayment), true)['card'];
+        $paymentDetails = json_decode(json_encode($orderPayment), true);
+        $paymentOptionInformation = $this->isPaymentMethodStripe($paymentDetails)
+            ? $this->extractCardDetails($paymentDetails)
+            : $this->extractPaypalDetails($event->order);
 
         $this->emailService->sendEmail(
             [[$user->email => $user->name]],
@@ -44,10 +49,29 @@ class RefundSuccessfulListener implements ShouldQueue
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
                 'EXTRA_CHARGE_TOTAL' => $order->extra_charge_total ? '$' . number_format($order->extra_charge_total, 2) : 'N/A',
-                'CARD' => $card ? ($card['brand'] . ' ending in ' . $card['last4']) : 'N/A',
+                'CARD' => $paymentOptionInformation,
                 'NOTES' => $order->lastOrderPayment->notes,
                 'SUBMISSION_URL' => config('app.url') . '/dashboard/submissions/' . $order->id . '/view',
             ],
         );
+    }
+
+    protected function extractCardDetails(array $paymentData): string
+    {
+        $card = $paymentData['card'];
+
+        return $card['brand'] . ' ending in ' . $card['last4'];
+    }
+
+    protected function extractPaypalDetails(Order $order): string
+    {
+        $paypalPaymentData = json_decode($order->firstOrderPayment->response, associative: true);
+
+        return 'Paypal Account: ' . $paypalPaymentData['payer']['email_address'] ?? "N/A";
+    }
+
+    protected function isPaymentMethodStripe(array $data): bool
+    {
+        return Arr::has($data, 'card');
     }
 }

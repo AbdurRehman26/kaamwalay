@@ -4,11 +4,13 @@ namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
 use App\Models\OrderPayment;
+use Illuminate\Support\Facades\Log;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use PayPalCheckoutSdk\Payments\CapturesRefundRequest;
 use PayPalHttp\HttpException;
 
 class PaypalService implements PaymentProviderServiceInterface
@@ -56,6 +58,7 @@ class PaypalService implements PaymentProviderServiceInterface
                 'request' => $requestData,
                 'response' => json_decode(json_encode($response->result), associative: true),
                 'payment_provider_reference_id' => $response->result->id,
+                'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             ];
         } catch (HttpException $e) {
             return ['message' => $e->getMessage()];
@@ -87,7 +90,11 @@ class PaypalService implements PaymentProviderServiceInterface
                 && $captureStatus === 'COMPLETED'
             ) {
                 $order->lastOrderPayment->update([
+                    'payment_provider_reference_id' => $data['purchase_units'][0]['payments']['captures'][0]['id'],
                     'response' => json_encode($data),
+                    'amount' => $order->grand_total,
+                    'type' => OrderPayment::TYPE_ORDER_PAYMENT,
+                    'notes' => 'Paypal Payment for ' . $order->order_number,
                 ]);
 
                 return true;
@@ -107,5 +114,51 @@ class PaypalService implements PaymentProviderServiceInterface
         }
 
         return 0.0;
+    }
+
+    public function additionalCharge(Order $order, array $data): array
+    {
+        // Can not have extra charged with the payment flow we have right now. Added
+        // this method so that it won't break the functionality and throws exception
+        return [];
+    }
+
+    public function refund(Order $order, array $data): array
+    {
+        $orderPayment = $order->firstOrderPayment;
+        $paymentData = json_decode($orderPayment->response, associative: true);
+
+        $refundData = [
+            'amount' => [
+                'value' => $data['amount'],
+                'currency_code' => 'USD',
+            ],
+            'note_to_payer' => $data['notes'],
+        ];
+
+        try {
+            $refundRequest = new CapturesRefundRequest($paymentData['purchase_units'][0]['payments']['captures'][0]['id']);
+            $refundRequest->prefer('return=representation');
+            $refundRequest->body = $refundData;
+
+            $response = $this->client->execute($refundRequest);
+        } catch (\Exception $exception) {
+            Log::error('Encountered error while refunding a charge with Paypal', [
+                'message' => $exception->getMessage(),
+                'data' => $refundData,
+            ]);
+
+            return [];
+        }
+
+        return [
+            'success' => true,
+            'request' => $refundData,
+            'response' => json_decode(json_encode($response->result), associative: true),
+            'payment_provider_reference_id' => $paymentData['id'],
+            'amount' => $data['amount'],
+            'type' => OrderPayment::TYPE_REFUND,
+            'notes' => $refundData['note_to_payer'],
+        ];
     }
 }

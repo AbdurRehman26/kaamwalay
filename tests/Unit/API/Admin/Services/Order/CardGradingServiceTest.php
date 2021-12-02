@@ -1,7 +1,7 @@
 <?php
 
-use App\Services\Admin\CardGradingService;
 use App\Exceptions\Services\Admin\CardGradeIsInvalid;
+use App\Services\Admin\CardGradingService;
 
 beforeEach(fn () => $this->service = new CardGradingService);
 

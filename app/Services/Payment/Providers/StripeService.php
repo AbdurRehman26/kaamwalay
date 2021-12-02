@@ -238,7 +238,7 @@ class StripeService implements PaymentProviderServiceInterface
         try {
             $response = $order->user->refund($paymentData['id'], $refundData);
         } catch (\Exception $exception) {
-            Log::error('Encountered error while refunding a charge', [
+            Log::error('Encountered error while refunding a charge with Stripe', [
                 'message' => $exception->getMessage(),
                 'data' => $refundData,
             ]);

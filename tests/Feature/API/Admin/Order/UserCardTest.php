@@ -95,5 +95,4 @@ it('updates overall grade based on delta value', function () {
     ->assertOk()
     ->assertJsonFragment(['grade' => 5.0])
     ->assertJsonFragment(['nickname' => 'EX']);
-
 });

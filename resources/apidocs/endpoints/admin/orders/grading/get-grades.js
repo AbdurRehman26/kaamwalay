@@ -82,9 +82,10 @@
  *                     "surface": 0
  *                 },
  *                 "grade": {
- *                     "grade": 0,
- *                     "nickname": null
+ *                     "grade": 3.5,
+ *                     "nickname": "VG+"
  *                 },
+ *                 "grade_delta": 3.5,
  *                 "grading_id": "a099624b-ec8b-483d-afe2-201b452508d4",
  *                 "ai_model_numbers": null,
  *                 "generated_images": [
@@ -192,6 +193,7 @@
  *                     "grade": 0,
  *                     "nickname": null
  *                 },
+ *                 "grade_delta": 0,
  *                 "grading_id": "a099624b-ec8b-483d-afe2-201b452508d4",
  *                 "ai_model_numbers": null,
  *                 "generated_images": [

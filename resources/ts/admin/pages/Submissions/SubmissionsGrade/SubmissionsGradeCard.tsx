@@ -32,7 +32,10 @@ import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 import { changeOrderItemNotes } from '@shared/redux/slices/adminOrdersSlice';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
-
+import CustomGradeStepper from '@admin/pages/Submissions/SubmissionsGrade/CustomGradeStepper';
+import Box from '@mui/material/Box';
+import EditIcon from '@mui/icons-material/Edit';
+import ButtonBase from '@mui/material/ButtonBase';
 interface SubmissionsGradeCardProps {
     itemId: any;
     itemIndex: number;
@@ -83,6 +86,8 @@ const useStyles = makeStyles(
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: '100%',
+            maxHeight: '123px',
+            marginTop: '24px',
         },
         gradeItemLabel: {
             fontFamily: 'Roboto',
@@ -261,6 +266,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [cardNotes, setCardNotes] = useState(notes);
+    const [showEditGradeStepper, setShowEditGradeStepper] = useState(false);
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const debounceNotes = useCallback(_.debounce(handleUpdateCardNotes, 500), []);
@@ -278,6 +284,10 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
         },
         [dispatch, itemIndex],
     );
+
+    const handleGradeEditPress = useCallback(() => {
+        setShowEditGradeStepper((prev) => !prev);
+    }, [showEditGradeStepper]);
 
     const handleRevisePress = () => {
         if (cardStatus.toLowerCase() === 'not accepted') {
@@ -356,6 +366,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${topLevelID}/grades`);
         const response = await endpoint.put('', {
             humanGradeValues: humanGrades,
+            gradeDelta: gradeDeltaValues,
         });
         dispatch(updateExistingCardData({ id: topLevelID, data: response.data }));
     }
@@ -367,6 +378,9 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
 
     const humanGrades = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex]?.humanGradeValues,
+    );
+    const gradeDeltaValues = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].gradeDelta,
     );
 
     const orderItemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.id);
@@ -492,6 +506,21 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
             }),
         );
     }
+
+    function isOverallGradeBtnVisible() {
+        return (
+            frontCentering > 0 &&
+            frontEdge > 0 &&
+            frontCorner > 0 &&
+            frontSurface > 0 &&
+            backCenter > 0 &&
+            backEdge > 0 &&
+            backCorner > 0 &&
+            backSurface > 0 &&
+            areRoboGradesAvailable()
+        );
+    }
+
     return (
         <AccordionCardItem variant={'outlined'}>
             <AccordionCardItemHeader
@@ -578,21 +607,37 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                     <>
                         {currentViewMode === 'not_accepted_pending_notes' ||
                         currentViewMode === 'missing_pending_notes' ? null : (
-                            <div className={classes.gradeDetailsContainer}>
-                                <Paper variant={'outlined'} className={classes.gradeItemSingular}>
-                                    <Typography variant={'h5'} className={classes.gradeItemLabel}>
-                                        Overall Grade
-                                    </Typography>
-                                    <div className={classes.overallGradeTextContainer}>
-                                        <Typography variant={'h5'} className={classes.gradeItemValue}>
-                                            {overallGrade !== 0 ? overallGrade : '-'}
-                                        </Typography>
-                                        <Typography variant={'h5'} className={classes.gradeNickname}>
-                                            {overallGrade !== 0 ? overallGradeNickname : '-'}
-                                        </Typography>
-                                    </div>
-                                </Paper>
-
+                            <Box display={'flex'} flexDirection={'row'}>
+                                <div className={classes.gradeDetailsContainer}>
+                                    <Paper variant={'outlined'} className={classes.gradeItemSingular}>
+                                        <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+                                            <Typography variant={'h5'} className={classes.gradeItemLabel}>
+                                                Overall Grade
+                                            </Typography>
+                                            {isOverallGradeBtnVisible() ? (
+                                                <ButtonBase onClick={handleGradeEditPress} sx={{ marginLeft: '8px' }}>
+                                                    <EditIcon sx={{ width: '24px', height: '24px' }} />
+                                                </ButtonBase>
+                                            ) : null}
+                                        </Box>
+                                        <div className={classes.overallGradeTextContainer}>
+                                            <Typography variant={'h5'} className={classes.gradeItemValue}>
+                                                {overallGrade !== 0 ? overallGrade : '-'}
+                                            </Typography>
+                                            <Typography variant={'h5'} className={classes.gradeNickname}>
+                                                {overallGrade !== 0 ? overallGradeNickname : '-'}
+                                            </Typography>
+                                        </div>
+                                        {showEditGradeStepper || gradeDeltaValues !== 0 ? (
+                                            <CustomGradeStepper
+                                                orderID={orderID}
+                                                currentGrade={overallGrade}
+                                                gradeDelta={gradeDeltaValues}
+                                                itemIndex={itemIndex}
+                                            />
+                                        ) : null}
+                                    </Paper>
+                                </div>
                                 <Paper variant={'outlined'} className={classes.gradeSectionLarge}>
                                     <div className={classes.gradeItem}>
                                         <Typography variant={'h5'} className={classes.gradeItemLabelSecondary}>
@@ -642,7 +687,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                         </Typography>
                                     </div>
                                 </Paper>
-                            </div>
+                            </Box>
                         )}
                     </>
                 ) : null}

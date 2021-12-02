@@ -104,6 +104,9 @@ export function SubmissionsGradeCardGrades({
     const humanGrades = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues,
     );
+    const gradeDeltaValues = useAppSelector(
+        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].gradeDelta,
+    );
 
     const cardStatus = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name,
@@ -125,6 +128,7 @@ export function SubmissionsGradeCardGrades({
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
         const response = await endpoint.put('', {
             humanGradeValues: humanGrades,
+            gradeDelta: gradeDeltaValues,
         });
         dispatch(updateExistingCardData({ id: itemID, data: response.data }));
     }

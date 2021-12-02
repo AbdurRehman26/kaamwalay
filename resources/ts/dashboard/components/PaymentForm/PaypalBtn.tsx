@@ -10,7 +10,7 @@ import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
-import trackFbPixelEvent from '@shared/lib/utils/trackFbPixelEvent';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 
 function PaypalBtn() {
@@ -89,7 +89,7 @@ function PaypalBtn() {
                             notifications.success('Order paid!', 'Success!');
                             dispatch(clearSubmissionState());
                             dispatch(invalidateOrders());
-                            trackFbPixelEvent(FacebookPixelEvents.Purchase, {
+                            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
                                 value: grandTotal,
                                 currency: 'USD',
                             });

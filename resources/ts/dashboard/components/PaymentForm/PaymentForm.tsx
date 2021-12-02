@@ -19,7 +19,7 @@ import useStyles from '@dashboard/components/PaymentForm/style';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { saveStripeCustomerCards } from '@dashboard/redux/slices/newSubmissionSlice';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
-import trackFbPixelEvent from '@shared/lib/utils/trackFbPixelEvent';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 
 const CARD_OPTIONS = {
     iconStyle: 'solid',
@@ -123,7 +123,7 @@ export function PaymentForm() {
                 category: EventCategories.PaymentMethods,
                 action: PaymentMethodEvents.addedNewStripeCard,
             });
-            trackFbPixelEvent(FacebookPixelEvents.AddPaymentInfo);
+            trackFacebookPixelEvent(FacebookPixelEvents.AddPaymentInfo);
         }
     };
 

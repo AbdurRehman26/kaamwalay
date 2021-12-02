@@ -124,7 +124,7 @@ test('it returns right rounded values', function () {
 });
 
 it('throws exception if grade values for calculation are invalid', function (float $grade, float $delta) {
-    $this->service->addDeltaValueToOverallGrade(7, 4);
+    $this->service->addDeltaValueToOverallGrade($grade, $delta);
 })->with([
     [7, 4],
     [2, -5],

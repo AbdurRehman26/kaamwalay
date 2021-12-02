@@ -22,7 +22,12 @@ export class AddressEntity extends Entity {
     }
 
     public getAddressLine2() {
-        const lines = [this.city, `${this.state ?? ''} ${this.zip ?? ''}`, this.country.code];
+        const lines = [
+            this.city,
+            `${this.state ?? ''} ${this.zip ?? ''}`,
+            this.country.code,
+            this.flat ? `APT # ${this.flat}` : '',
+        ];
         return lines
             .map((line) => `${line ?? ''}`.trim())
             .filter(Boolean)

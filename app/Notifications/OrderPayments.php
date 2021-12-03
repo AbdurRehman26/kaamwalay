@@ -38,20 +38,18 @@ class OrderPayments extends Notification
             $customerFullName = $this->order->shippingAddress->getFullName();
         }
         
-        if ($this->paymentType == 'OrderPaid')
-        {
+        if ($this->paymentType == 'OrderPaid') {
             $message = "{$customerFullName}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}";
         }
 
-        if ($this->paymentType == 'ExtraCharge')
-        {
+        if ($this->paymentType == 'ExtraCharge') {
             $message = "Extra Charge, {$orderPayment->amount}, {$paymentCode}, {$this->order->order_number}, by {$adminName}";
         }
 
-        if ($this->paymentType == 'Refund')
-        {
+        if ($this->paymentType == 'Refund') {
             $message = "Refund, -{$orderPayment->amount}, {$paymentCode}, {$this->order->order_number}, by {$adminName}";
         }
+
         return $message;
     }
 
@@ -60,9 +58,10 @@ class OrderPayments extends Notification
         $emoji = ':robot_face:';
         $orderPayment = new OrderPaymentResource($this->order->firstOrderPayment);
         
-        if($orderPayment->type === OrderPayment::TYPE_ORDER_PAYMENT && $orderPayment->amount > 5000) {
+        if ($orderPayment->type === OrderPayment::TYPE_ORDER_PAYMENT && $orderPayment->amount > 5000) {
             $emoji = ':space_invader:';
         }
+
         return $emoji;
     }
 

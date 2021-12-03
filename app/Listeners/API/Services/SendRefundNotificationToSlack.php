@@ -33,6 +33,6 @@ class SendRefundNotificationToSlack implements ShouldQueue
         $paymentType = 'Refund';
 
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-            ->notify(new \App\Notifications\OrderPayments($event->order , $paymentType));
+            ->notify(new \App\Notifications\OrderPayments($event->order, $paymentType));
     }
 }

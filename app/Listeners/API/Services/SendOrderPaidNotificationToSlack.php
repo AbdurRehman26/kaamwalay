@@ -19,7 +19,9 @@ class SendOrderPaidNotificationToSlack implements ShouldQueue
             return;
         }
 
+        $paymentType = 'OrderPaid';
+
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-            ->notify(new \App\Notifications\OrderPaid($event->order));
+            ->notify(new \App\Notifications\OrderPayments($event->order , $paymentType));
     }
 }

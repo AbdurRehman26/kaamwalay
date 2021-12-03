@@ -29,8 +29,10 @@ class SendExtraChargeNotificationToSlack implements ShouldQueue
         if (app()->environment('local')) {
             return;
         }
-        
+
+        $paymentType = 'ExtraCharge';
+
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-            ->notify(new \App\Notifications\ExtraCharge($event->order));
+            ->notify(new \App\Notifications\OrderPayments($event->order , $paymentType));
     }
 }

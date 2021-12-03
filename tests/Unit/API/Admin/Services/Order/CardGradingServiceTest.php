@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\Services\Admin\CardGradeIsInvalid;
 use App\Services\Admin\CardGradingService;
 
 beforeEach(fn () => $this->service = new CardGradingService);
@@ -105,8 +106,8 @@ test('it returns right nicknames', function ($value) {
 
 test('it returns overall average and nickname', function ($value) {
     expect(
-        $this->service->calculateOverallAverage($value['overall'], 0)
-    )->toBe(['grade' => $value['grade'], 'nickname' => $value['nickname'], 'grade_delta' => 0.0]);
+        $this->service->calculateOverallAverage($value['overall'])
+    )->toBe($value['grade']);
 })->with([
     fn () => (['overall' => ['center' => 6.50,'surface' => 5.00,'edge' => 9.80,'corner' => 2.25], 'grade' => 6.00, 'nickname' => 'EX-MT']),
     fn () => (['overall' => ['center' => 9.50,'surface' => 7.00,'edge' => 9.00,'corner' => 8.25], 'grade' => 8.50, 'nickname' => 'NM-MT+']),
@@ -121,3 +122,10 @@ test('it returns right rounded values', function () {
     expect($method->invokeArgs($this->service, [8.55]))->toBe(8.5);
     expect($method->invokeArgs($this->service, [8.85]))->toBe(9.0);
 });
+
+it('throws exception if grade values for calculation are invalid', function (float $grade, float $delta) {
+    $this->service->addDeltaValueToOverallGrade($grade, $delta);
+})->with([
+    [7, 4],
+    [2, -5],
+])->throws(CardGradeIsInvalid::class, 'Overall grade can not be greater than 10 or less than 1.');

@@ -55,4 +55,8 @@ return [
         'root_path' => env('AGS_DROPBOX_ROOT_PATH'),
     ],
 
+    'facebook' => [
+        'pixel_id' => env('FACEBOOK_PIXEL_ID'),
+    ],
+
 ];

@@ -36,6 +36,7 @@ class CardProductFactory extends Factory
             'card_url' => 'https://www.pokellector.com/card/Bellsprout-Battle-Styles-SWSH05-1',
             'image_bucket_path' => 's3://wooter-ags-database-cards/pokemon_cards_images/cards_images/Bellsprout.SWSH05.1.37528.png',
             'card_number_order' => $this->faker->randomNumber(3),
+            'description' => $this->faker->word(),
         ];
     }
 }

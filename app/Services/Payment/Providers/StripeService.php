@@ -7,6 +7,7 @@ use App\Models\OrderPayment;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
@@ -59,7 +60,7 @@ class StripeService implements PaymentProviderServiceInterface
         $user = auth()->user();
 
         $paymentData = [
-            'amount' => $order->grand_total_cents,
+            'amount' => $this->getAmount($order),
             'payment_intent_id' => $order->firstOrderPayment->payment_provider_reference_id,
             'additional_data' => [
                 'description' => "Payment for Order # {$order->order_number}",
@@ -122,7 +123,7 @@ class StripeService implements PaymentProviderServiceInterface
         $charge = $paymentIntent->charges->first();
 
         if (
-            $charge->amount === $order->grand_total_cents
+            $charge->amount === $this->getAmount($order)
             && $charge->outcome->type === 'authorized'
         ) {
             $order->lastOrderPayment->update([
@@ -255,5 +256,15 @@ class StripeService implements PaymentProviderServiceInterface
             'type' => OrderPayment::TYPE_REFUND,
             'notes' => $refundData['metadata']['Notes'],
         ];
+    }
+
+    protected function getAmount(Order $order): int
+    {
+        // TODO Hacky hotfix for reducing price for specific admins, must be removed after coupon system is ready
+        if (in_array($order->user->email, Str::of(config('robograding.special_admins'))->explode(',')->toArray())) {
+            return 1000;
+        }
+
+        return $order->grand_total_cents;
     }
 }

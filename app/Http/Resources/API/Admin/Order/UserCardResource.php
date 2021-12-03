@@ -30,6 +30,7 @@ class UserCardResource extends BaseResource
                 'grade' => $this->resource->overall_grade,
                 'nickname' => $this->overall_grade_nickname,
             ],
+            'grade_delta' => $this->grade_delta,
             'grading_id' => $this->grading_id,
             'ai_model_numbers' => $this->ai_model_numbers,
             'generated_images' => $this->generated_images,

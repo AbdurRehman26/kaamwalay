@@ -16,8 +16,8 @@ use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\Customer\Order\ShippingMethodController;
 use App\Http\Controllers\API\Customer\PaymentCardController;
+use App\Http\Controllers\API\Customer\PushNotificationController;
 use App\Http\Controllers\API\Files\UploadController;
-use App\Http\Controllers\API\PushNotificationController;
 use Illuminate\Support\Facades\Route;
 
 /*

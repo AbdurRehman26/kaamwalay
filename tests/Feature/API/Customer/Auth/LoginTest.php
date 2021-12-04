@@ -134,4 +134,3 @@ test('user cannot login with invalid platform', function () {
         'platform' => 'The selected platform is invalid.',
     ]);
 })->group('auth');
-

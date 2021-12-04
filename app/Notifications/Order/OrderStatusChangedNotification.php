@@ -21,7 +21,9 @@ class OrderStatusChangedNotification extends PushNotification
      *
      * @return void
      */
-    public function __construct(public Order $order) {}
+    public function __construct(public Order $order)
+    {
+    }
 
     protected function getTitle(): string
     {

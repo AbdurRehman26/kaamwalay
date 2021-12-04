@@ -26,7 +26,8 @@ class OrderStatusChangedListener implements ShouldQueue
         protected EmailService $emailService,
         protected OrderService $orderService,
         protected AdminOrderService $adminOrderService
-    ) {}
+    ) {
+    }
 
     /**
      * Handle the event.

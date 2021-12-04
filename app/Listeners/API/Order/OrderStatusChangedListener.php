@@ -5,6 +5,7 @@ namespace App\Listeners\API\Order;
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Notifications\Order\OrderStatusChangedNotification;
 use App\Services\Admin\OrderService as AdminOrderService;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
@@ -21,10 +22,11 @@ class OrderStatusChangedListener implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(private EmailService $emailService, private OrderService $orderService, private AdminOrderService $adminOrderService)
-    {
-        //
-    }
+    public function __construct(
+        protected EmailService $emailService,
+        protected OrderService $orderService,
+        protected AdminOrderService $adminOrderService
+    ) {}
 
     /**
      * Handle the event.
@@ -33,6 +35,12 @@ class OrderStatusChangedListener implements ShouldQueue
      * @return void
      */
     public function handle(OrderStatusChangedEvent $event)
+    {
+        $this->processEmails($event);
+        $this->processPushNotification($event);
+    }
+
+    protected function processEmails(OrderStatusChangedEvent $event): void
     {
         switch ($event->orderStatus->id) {
             case OrderStatus::PLACED:
@@ -135,5 +143,12 @@ class OrderStatusChangedListener implements ShouldQueue
             $template,
             $vars
         );
+    }
+
+    protected function processPushNotification(OrderStatusChangedEvent $event): void
+    {
+        if ($event->orderStatus->id !== OrderStatus::PAYMENT_PENDING) {
+            $event->order->user->notify(new OrderStatusChangedNotification($event->order));
+        }
     }
 }

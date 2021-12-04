@@ -168,7 +168,7 @@ class User extends Authenticatable implements JWTSubject
         );
     }
 
-    public function routeNotificationForPusherChannel(Notification $notification = null): string
+    public function routeNotificationForPusherPushNotifications(): string
     {
         return $this->email;
     }

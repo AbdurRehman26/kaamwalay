@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Notifications\PushNotification;
 
-class OrderStatusChanged extends PushNotification
+class OrderStatusChangedNotification extends PushNotification
 {
     protected const INTENT = 'SUBMISSION_DETAIL_VIEW';
     protected const STATUS_MAP = [

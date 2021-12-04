@@ -65,6 +65,8 @@ Route::prefix('customer')->group(function () {
 
             Route::post('/', [CardProductController::class, 'store']);
         });
+
+        Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
     });
 });
 
@@ -78,5 +80,3 @@ Route::prefix('files')->group(function () {
         Route::post('presign', [UploadController::class, 'presignUpload']);
     });
 });
-
-Route::get('push-notification/auth', [PushNotificationController::class, 'auth'])->middleware('auth');

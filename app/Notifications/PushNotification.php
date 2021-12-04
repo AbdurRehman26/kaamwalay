@@ -30,6 +30,10 @@ abstract class PushNotification extends Notification implements ShouldQueue
             return [];
         }
 
+        if ($notifiable->devices()->whereIn('platform', self::ALLOWED_PLATFORMS)->doesntExist()) {
+            return [];
+        }
+
         return [PusherChannel::class];
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Auth\CustomerAuthenticated;
 use App\Events\API\Auth\CustomerRegistered;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
@@ -14,7 +15,7 @@ beforeEach(function () {
     Event::fake();
 });
 
-test('user can register as customer', function () {
+test('customer can register without platform', function () {
     $email = $this->faker->safeEmail();
     $response = $this->postJson('/api/auth/register', [
         'first_name' => $this->faker->firstName(),
@@ -66,8 +67,7 @@ test('user can not register with duplicate username', function () {
     ]);
 })->group('auth');
 
-test('user registration triggers registered event', function () {
-    Event::fake();
+test('user registration triggers events', function () {
     $email = $this->faker->safeEmail();
     $this->postJson('/api/auth/register', [
         'first_name' => $this->faker->firstName(),
@@ -80,6 +80,7 @@ test('user registration triggers registered event', function () {
     ]);
 
     Event::assertDispatched(CustomerRegistered::class);
+    Event::assertDispatched(CustomerAuthenticated::class);
 })->group('auth');
 
 test('a logged in customer cannot register', function () {
@@ -90,3 +91,41 @@ test('a logged in customer cannot register', function () {
     $response = $this->postJson('api/auth/register');
     $response->assertRedirect();
 })->group('auth');
+
+test('customer can register with valid platform', function () {
+    $email = $this->faker->safeEmail();
+    $response = $this->postJson('/api/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'username' => $this->faker->userName(),
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+        'platform' => $this->faker()->randomElement(['web', 'ios', 'android']),
+    ]);
+
+    $response->assertStatus(Response::HTTP_CREATED);
+    $response->assertJsonStructure([
+        'access_token', 'type', 'expiry',
+    ]);
+});
+
+test('customer cannot register with invalid platform', function () {
+    $email = $this->faker->safeEmail();
+    $response = $this->postJson('/api/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'username' => $this->faker->userName(),
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+        'platform' => 'foo',
+    ]);
+
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    $response->assertJsonValidationErrors([
+        'platform' => 'The selected platform is invalid.',
+    ]);
+});

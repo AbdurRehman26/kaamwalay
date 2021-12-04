@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Laravel\Cashier\Billable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -167,15 +168,9 @@ class User extends Authenticatable implements JWTSubject
         );
     }
 
-    public function routeNotificationFor(string $driver): string
+    public function routeNotificationForPusherChannel(Notification $notification = null): string
     {
-        if ($driver === 'PusherPushNotifications') {
-            return $this->email;
-        }
-
-        $class = str_replace('\\', '.', get_class($this));
-
-        return $class.'.'.$this->getKey();
+        return $this->email;
     }
 
     protected function getPasswordResetRoute(string $token): string

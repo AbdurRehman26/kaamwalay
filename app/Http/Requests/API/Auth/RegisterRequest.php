@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
@@ -37,6 +38,10 @@ class RegisterRequest extends FormRequest
                     ->numbers(),
             ],
             'username' => ['required', 'string', 'unique:users', 'max:50'],
+            'platform' => [
+                'sometimes',
+                Rule::in(['web', 'ios', 'android']),
+            ],
         ];
     }
 

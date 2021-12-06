@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Concerns\AGS\AuthenticatableWithAGS;
+use App\Events\API\Auth\CustomerAuthenticated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\LoginRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
@@ -15,9 +16,11 @@ class LoginController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
     {
-        if (! ($token = auth()->attempt($request->validated()))) {
+        if (! ($token = auth()->attempt($request->only('email', 'password')))) {
             $token = $this->loginAGS($request);
         }
+
+        CustomerAuthenticated::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
 
         return new JsonResponse(
             [

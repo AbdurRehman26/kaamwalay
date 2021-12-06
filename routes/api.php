@@ -16,6 +16,7 @@ use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\Customer\Order\ShippingMethodController;
 use App\Http\Controllers\API\Customer\PaymentCardController;
+use App\Http\Controllers\API\Customer\PushNotificationController;
 use App\Http\Controllers\API\Files\UploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,8 @@ Route::prefix('customer')->group(function () {
 
             Route::post('/', [CardProductController::class, 'store']);
         });
+
+        Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
     });
 });
 

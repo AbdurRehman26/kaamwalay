@@ -15,18 +15,18 @@ class UpdateCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => ['string', 'max: 255'],
-            'last_name' => ['string', 'max: 255'],
-            'email' => ['email', 'unique:users'],
+            'first_name' => ['sometimes', 'required', 'string', 'max: 255'],
+            'last_name' => ['sometimes', 'required', 'string', 'max: 255'],
             'phone' => ['string'],
             'password' => [
+                'sometimes',
+                'required',
                 Password::min(8)
                     ->letters()
                     ->mixedCase()
                     ->numbers(),
                ],
-            'username' => ['string', 'unique:users', 'max:50'],
-            'customer_number' => ['string', 'unique:users'],
+            'username' => ['sometimes', 'required', 'string', 'unique:users', 'max:50'],
         ];
     }
 }

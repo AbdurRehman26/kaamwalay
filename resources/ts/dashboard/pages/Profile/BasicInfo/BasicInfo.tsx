@@ -14,8 +14,6 @@ import withStyles from '@mui/styles/withStyles';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useInjectable } from '@shared/hooks/useInjectable';
-import { APIService } from '@shared/services/APIService';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -184,9 +182,6 @@ export function BasicInfo() {
         editPhone: false,
     });
 
-    const apiService = useInjectable(APIService);
-    const endpoint = apiService.createEndpoint(`api/user`);
-    console.log(endpoint);
     const user$ = useSharedSelector((state) => state.authentication.user);
 
     const avatarIcon = (

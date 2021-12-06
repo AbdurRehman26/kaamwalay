@@ -78,5 +78,5 @@ Route::prefix('files')->group(function () {
     });
 });
 
-Route::get('update-profile', [\App\Http\Controllers\API\Customer\CustomerController::class, 'updateProfile']);
+Route::post('update-profile', [\App\Http\Controllers\API\Customer\CustomerController::class, 'update']);
 Route::post('upload-file', [\App\Http\Controllers\API\Customer\CustomerController::class, 'uploadFile']);

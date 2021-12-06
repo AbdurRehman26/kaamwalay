@@ -6,7 +6,7 @@ use App\Models\User;
 
 class CustomerProfileService
 {
-    public function updateCustomer(User $user, array $data): User
+    public function update(User $user, array $data): User
     {
         $user->update($data);
         return $user;

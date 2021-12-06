@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class OrderPayments extends Notification
 {
-    public function __construct(public Order $order, public string $paymentType)
+    public function __construct(public Order $order, public int $paymentType)
     {
     }
 
@@ -25,46 +25,6 @@ class OrderPayments extends Notification
         return ['slack'];
     }
 
-    private function getMessage():string
-    {
-        $paymentCode = ucfirst($this->order->paymentMethod->code);
-        $orderPayment = new OrderPaymentResource($this->order->lastOrderPayment);
-        $adminName = $orderPayment->user?->first_name . ' ' .$orderPayment->user?->last_name;
-        $totalCards = $this->order->orderItems->sum('quantity');
-        $message = null;
-        $customerFullName = $this->order->user->getFullName();
-        
-        if (empty($customerFullName)) {
-            $customerFullName = $this->order->shippingAddress->getFullName();
-        }
-        
-        if ($this->paymentType == 'OrderPaid') {
-            $message = "{$customerFullName}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}";
-        }
-
-        if ($this->paymentType == 'ExtraCharge') {
-            $message = "Extra Charge, {$orderPayment->amount}, {$paymentCode}, {$this->order->order_number}, by {$adminName}";
-        }
-
-        if ($this->paymentType == 'Refund') {
-            $message = "Refund, -{$orderPayment->amount}, {$paymentCode}, {$this->order->order_number}, by {$adminName}";
-        }
-
-        return $message;
-    }
-
-    private function getEmoji():string
-    {
-        $emoji = ':robot_face:';
-        $orderPayment = new OrderPaymentResource($this->order->firstOrderPayment);
-        
-        if ($orderPayment->type === OrderPayment::TYPE_ORDER_PAYMENT && $orderPayment->amount > 5000) {
-            $emoji = ':space_invader:';
-        }
-
-        return $emoji;
-    }
-
     /**
      * Get the Slack representation of the notification.
      *
@@ -73,10 +33,66 @@ class OrderPayments extends Notification
      */
     public function toSlack($notifiable)
     {
-        $SLACK_USERNAME = 'Robograding';
-
         return (new SlackMessage)
-        ->from($SLACK_USERNAME, $this->getEmoji())
+        ->from('Robograding', $this->getEmoji())
         ->content($this->getMessage());
+    }
+
+    protected function getMessage():string
+    {
+        $paymentCode = ucfirst($this->order->paymentMethod->code);
+        $message = null;
+    
+        switch ($this->paymentType) {
+            case OrderPayment::TYPE_ORDER_PAYMENT:
+                $message = $this->getMessageForOrderPaid($paymentCode);
+
+                break;
+            case OrderPayment::TYPE_EXTRA_CHARGE:
+                $message = $this->getMessageForExtraChargeAndRefund($paymentCode);
+
+                break;
+            case OrderPayment::TYPE_REFUND:
+                $message = $this->getMessageForExtraChargeAndRefund($paymentCode);
+
+                break;
+          }
+
+        return $message;
+    }
+
+    protected function getMessageForOrderPaid(String $paymentCode):string
+    {
+        $totalCards = $this->order->orderItems->sum('quantity');
+        $customerFullName = $this->order->user->getFullName();
+        
+        if (empty($customerFullName)) {
+            $customerFullName = $this->order->shippingAddress->getFullName();
+        }
+        
+        return "{$customerFullName}, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, {$totalCards}";
+    }
+
+    protected function getMessageForExtraChargeAndRefund(String $paymentCode):string
+    {   
+        $orderPayment = new OrderPaymentResource($this->order->lastOrderPayment);
+        $adminName = $orderPayment->user->getFullName();
+
+        if($this->paymentType === OrderPayment::TYPE_EXTRA_CHARGE) {
+            return "Extra Charge, {$orderPayment->amount}, {$paymentCode}, {$this->order->order_number}, by {$adminName}";
+        }
+        
+        return "Refund, -{$orderPayment->amount}, {$paymentCode}, {$this->order->order_number}, by {$adminName}";
+    }
+
+    protected function getEmoji():string
+    {
+        $emoji = ':robot_face:';
+        
+        if ($this->paymentType === OrderPayment::TYPE_ORDER_PAYMENT && $this->order->grand_total >= 5000) {
+            $emoji = ':space_invader:';
+        }
+
+        return $emoji;
     }
 }

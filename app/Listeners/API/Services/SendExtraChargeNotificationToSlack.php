@@ -3,6 +3,7 @@
 namespace App\Listeners\API\Services;
 
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
+use App\Models\OrderPayment;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
@@ -11,12 +12,7 @@ class SendExtraChargeNotificationToSlack implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    /**
-    * The number of times the job may be attempted.
-    *
-    * @var int
-    */
-    public $tries = 3;
+    public int $tries = 3;
 
     /**
      * Handle the event.
@@ -30,9 +26,7 @@ class SendExtraChargeNotificationToSlack implements ShouldQueue
             return;
         }
 
-        $paymentType = 'ExtraCharge';
-
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-            ->notify(new \App\Notifications\OrderPayments($event->order, $paymentType));
+            ->notify(new \App\Notifications\OrderPayments($event->order, OrderPayment::TYPE_EXTRA_CHARGE));
     }
 }

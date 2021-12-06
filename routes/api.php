@@ -9,6 +9,7 @@ use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\Customer\Address\StateController;
 use App\Http\Controllers\API\Customer\Cards\CardProductController;
 use App\Http\Controllers\API\Customer\Cards\UserCardController;
+use App\Http\Controllers\API\Customer\CustomerController;
 use App\Http\Controllers\API\Customer\Order\OrderController;
 use App\Http\Controllers\API\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\Customer\Order\PaymentMethodController;
@@ -64,6 +65,7 @@ Route::prefix('customer')->group(function () {
 
             Route::post('/', [CardProductController::class, 'store']);
         });
+        Route::post('update-profile', [CustomerController::class, 'update']);
     });
 });
 
@@ -78,5 +80,3 @@ Route::prefix('files')->group(function () {
     });
 });
 
-Route::post('update-profile', [\App\Http\Controllers\API\Customer\CustomerController::class, 'update']);
-Route::post('upload-file', [\App\Http\Controllers\API\Customer\CustomerController::class, 'uploadFile']);

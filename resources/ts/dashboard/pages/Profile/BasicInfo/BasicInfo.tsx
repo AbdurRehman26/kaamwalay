@@ -1,6 +1,6 @@
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
@@ -163,11 +163,76 @@ const GreenRadio = withStyles({
  */
 export function BasicInfo() {
     const classes = useStyles();
+    const user$ = useSharedSelector((state) => state.authentication.user);
 
     const [showName, setShowName] = useState<boolean>(false);
     const [showUserName, setShowUserName] = useState<boolean>(false);
     const [showPhone, setShowPhone] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+
+    const [newFirstName, setNewFirstName] = useState<string>(user$?.firstName || '');
+    const [newLastName, setNewLastName] = useState<string>(user$?.lastName || '');
+    const [isNewNameSaveDisabled, setIsNewNameSaveDisabled] = useState<boolean>(false);
+
+    const [newUserName, setNewUserName] = useState<string>(user$?.username || '');
+    const [isNewUserNameSaveDisabled, setIsNewUserNameSaveDisabled] = useState<boolean>(false);
+
+    const [currentPassword, setCurrentPassword] = useState<string>('');
+    const [newPassword, setNewPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [isPasswordSaveDisabled, setIsPasswordSaveDisabled] = useState<boolean>(false);
+
+    const [newPhone, setNewPhone] = useState<string>(user$?.phone || '');
+    const [isNewPhoneSaveDisabled, setIsNewPhoneSaveDisabled] = useState<boolean>(false);
+
+    const onPhoneChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            setNewPhone(event.target.value);
+        },
+        [setNewPhone],
+    );
+
+    const onCurrentPasswordChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setCurrentPassword(e.target.value);
+        },
+        [currentPassword],
+    );
+
+    const onNewPasswordChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewPassword(e.target.value);
+        },
+        [newPassword],
+    );
+
+    const onConfirmPasswordChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setConfirmPassword(e.target.value);
+        },
+        [confirmPassword],
+    );
+
+    const onNewUserNameChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewUserName(e.target.value);
+        },
+        [newUserName],
+    );
+
+    const onNewFirstNameChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewFirstName(e.target.value);
+        },
+        [newFirstName],
+    );
+
+    const onNewLastNameChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewLastName(e.target.value);
+        },
+        [newLastName],
+    );
 
     const handleOnNameEdit = useCallback(() => {
         toggleExceptFor('name');
@@ -185,12 +250,12 @@ export function BasicInfo() {
         toggleExceptFor('password');
     }, [showPassword]);
 
-    const user$ = useSharedSelector((state) => state.authentication.user);
-
     function toggleExceptFor(field: string) {
         switch (field) {
             case 'name':
                 setShowName((prev) => !prev);
+                setNewFirstName(user$?.firstName || '');
+                setNewLastName(user$?.lastName || '');
                 setShowUserName(false);
                 setShowPhone(false);
                 setShowPassword(false);
@@ -198,6 +263,7 @@ export function BasicInfo() {
             case 'userName':
                 setShowName(false);
                 setShowUserName((prev) => !prev);
+                setNewUserName(user$?.username || '');
                 setShowPhone(false);
                 setShowPassword(false);
                 break;
@@ -205,6 +271,7 @@ export function BasicInfo() {
                 setShowName(false);
                 setShowUserName(false);
                 setShowPhone((prev) => !prev);
+                setNewPhone(user$?.phone || '');
                 setShowPassword(false);
                 break;
             case 'password':
@@ -217,6 +284,42 @@ export function BasicInfo() {
                 break;
         }
     }
+
+    useEffect(() => {
+        if (newFirstName.length > 0 && newLastName.length > 0) {
+            setIsNewNameSaveDisabled(false);
+        } else {
+            setIsNewNameSaveDisabled(true);
+        }
+    }, [newFirstName, newLastName]);
+
+    useEffect(() => {
+        if (newUserName.length > 4) {
+            setIsNewUserNameSaveDisabled(false);
+        } else {
+            setIsNewUserNameSaveDisabled(true);
+        }
+    }, [newUserName]);
+
+    useEffect(() => {
+        if (newPassword.length > 0 && confirmPassword.length > 0 && currentPassword.length > 0) {
+            if (newPassword === confirmPassword) {
+                setIsPasswordSaveDisabled(false);
+            } else {
+                setIsPasswordSaveDisabled(true);
+            }
+        } else {
+            setIsPasswordSaveDisabled(true);
+        }
+    }, [newPassword, confirmPassword, currentPassword]);
+
+    useEffect(() => {
+        if (newPhone.length > 1) {
+            setIsNewPhoneSaveDisabled(false);
+        } else {
+            setIsNewPhoneSaveDisabled(true);
+        }
+    }, [newPhone]);
 
     return (
         <>
@@ -243,8 +346,22 @@ export function BasicInfo() {
                             Name
                         </Typography>
 
-                        <TextField label="Enter first name" rows={1} className={classes.textField} fullWidth />
-                        <TextField label="Enter last name" rows={1} className={classes.textField} fullWidth />
+                        <TextField
+                            label="Enter first name"
+                            rows={1}
+                            value={newFirstName}
+                            onChange={onNewFirstNameChange}
+                            className={classes.textField}
+                            fullWidth
+                        />
+                        <TextField
+                            label="Enter last name"
+                            rows={1}
+                            value={newLastName}
+                            onChange={onNewLastNameChange}
+                            className={classes.textField}
+                            fullWidth
+                        />
 
                         <div className={classes.buttonsContainer}>
                             <Button
@@ -255,7 +372,12 @@ export function BasicInfo() {
                             >
                                 Cancel
                             </Button>
-                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
+                            <Button
+                                variant={'contained'}
+                                disabled={isNewNameSaveDisabled}
+                                color={'primary'}
+                                className={classes.nextBtn}
+                            >
                                 Save
                             </Button>
                         </div>
@@ -274,7 +396,14 @@ export function BasicInfo() {
                             Username
                         </Typography>
 
-                        <TextField label="Enter Username" rows={1} className={classes.textField} fullWidth />
+                        <TextField
+                            label="Enter Username"
+                            value={newUserName}
+                            onChange={onNewUserNameChange}
+                            rows={1}
+                            className={classes.textField}
+                            fullWidth
+                        />
 
                         <div className={classes.buttonsContainer}>
                             <Button
@@ -285,7 +414,12 @@ export function BasicInfo() {
                             >
                                 Cancel
                             </Button>
-                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
+                            <Button
+                                variant={'contained'}
+                                color={'primary'}
+                                disabled={isNewUserNameSaveDisabled}
+                                className={classes.nextBtn}
+                            >
                                 Save
                             </Button>
                         </div>
@@ -304,9 +438,30 @@ export function BasicInfo() {
                             Change Password
                         </Typography>
 
-                        <TextField label="Enter Current Password" rows={1} className={classes.textField} fullWidth />
-                        <TextField label="Enter New Password" rows={1} className={classes.textField} fullWidth />
-                        <TextField label="Confirm New Password" rows={1} className={classes.textField} fullWidth />
+                        <TextField
+                            label="Enter Current Password"
+                            value={currentPassword}
+                            onChange={onCurrentPasswordChange}
+                            rows={1}
+                            className={classes.textField}
+                            fullWidth
+                        />
+                        <TextField
+                            label="Enter New Password"
+                            rows={10}
+                            value={newPassword}
+                            onChange={onNewPasswordChange}
+                            className={classes.textField}
+                            fullWidth
+                        />
+                        <TextField
+                            label="Confirm New Password"
+                            rows={1}
+                            value={confirmPassword}
+                            onChange={onConfirmPasswordChange}
+                            className={classes.textField}
+                            fullWidth
+                        />
 
                         <div className={classes.buttonsContainer}>
                             <Button
@@ -317,7 +472,12 @@ export function BasicInfo() {
                             >
                                 Cancel
                             </Button>
-                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
+                            <Button
+                                variant={'contained'}
+                                color={'primary'}
+                                disabled={isPasswordSaveDisabled}
+                                className={classes.nextBtn}
+                            >
                                 Save
                             </Button>
                         </div>
@@ -345,69 +505,53 @@ export function BasicInfo() {
                     Contact Info
                 </Typography>
                 <div className={classes.emptyStateContainer}>
-                    <Table className={classes.table}>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell component="th" scope="row" align={'left'}>
-                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
-                                        EMAIL
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="left" className={classes.valueLabel}>
-                                    {user$?.email}
-                                </TableCell>
-                                <TableCell align="right"></TableCell>
-                            </TableRow>
-                            <TableRow>
-                                {!showPhone && (
-                                    <>
-                                        <TableCell component="th" scope="row" align={'left'}>
-                                            <Typography variant={'subtitle1'} className={classes.textLabel}>
-                                                PHONE
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="left" className={classes.valueLabel}>
-                                            {user$?.phone ?? 'N/A'}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Button variant={'text'} size={'medium'} onClick={handleOnPhoneEdit}>
-                                                Edit
-                                            </Button>
-                                        </TableCell>
-                                    </>
-                                )}
+                    <BasicInfoRow
+                        label={'Email'}
+                        value={user$?.email || '-'}
+                        shown={false}
+                        onSave={() => ''}
+                        onEdit={() => ''}
+                        onCancel={() => ''}
+                    />
 
-                                {showPhone && (
-                                    <div className={classes.editContainer}>
-                                        <Typography variant={'subtitle1'} className={classes.valueLabel}>
-                                            Change Phone Number
-                                        </Typography>
+                    <BasicInfoRow
+                        label={'Phone'}
+                        value={user$?.phone || '-'}
+                        shown={showPhone}
+                        onSave={() => ''}
+                        onEdit={handleOnPhoneEdit}
+                        onCancel={handleOnPhoneEdit}
+                    >
+                        <div className={classes.editContainer}>
+                            <Typography variant={'subtitle1'} className={classes.valueLabel}>
+                                Change Phone Number
+                            </Typography>
 
-                                        <TextField
-                                            label="Confirm New Phone Number"
-                                            rows={1}
-                                            className={classes.textField}
-                                            fullWidth
-                                        />
+                            <TextField
+                                label="Confirm New Phone Number"
+                                rows={1}
+                                value={newPhone}
+                                onChange={onPhoneChange}
+                                className={classes.textField}
+                                fullWidth
+                            />
 
-                                        <div className={classes.buttonsContainer}>
-                                            <Button
-                                                variant={'text'}
-                                                color={'secondary'}
-                                                className={classes.backBtn}
-                                                onClick={handleOnPhoneEdit}
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
-                                                Save
-                                            </Button>
-                                        </div>
-                                    </div>
-                                )}
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+                            <div className={classes.buttonsContainer}>
+                                <Button
+                                    variant={'text'}
+                                    color={'secondary'}
+                                    className={classes.backBtn}
+                                    disabled={isNewPhoneSaveDisabled}
+                                    onClick={handleOnPhoneEdit}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
+                                    Save
+                                </Button>
+                            </div>
+                        </div>
+                    </BasicInfoRow>
                 </div>
             </Paper>
 

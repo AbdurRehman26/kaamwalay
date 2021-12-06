@@ -29,7 +29,7 @@ class UpdateCardProductAttributes extends Command
      */
     public function handle()
     {
-        Excel::import(new CardProductAttributesUpdate, storage_path('app/public/master_robograding_production_card_products.csv'));
+        Excel::import(new CardProductAttributesUpdate, storage_path('app/public/japanese_cards_update.csv'));
 
         return Command::SUCCESS;
     }

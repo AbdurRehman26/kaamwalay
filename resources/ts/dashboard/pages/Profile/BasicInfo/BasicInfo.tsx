@@ -10,19 +10,20 @@ import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import Radio, { RadioProps } from '@mui/material/Radio';
 import withStyles from '@mui/styles/withStyles';
 import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { BasicInfoRow } from '@dashboard/pages/Profile/BasicInfo/BasicInfoRow';
+import Box from '@mui/material/Box';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
         width: '100%',
-        padding: '16px',
         marginTop: '0px',
         marginBottom: 25,
     },
-    editContainer: {
+    editInputsContainer: {
         padding: 20,
+        display: 'flex',
+        flexDirection: 'column',
         backgroundColor: '#F9F9F9',
     },
     headingLabel: {
@@ -83,43 +84,18 @@ const useStyles = makeStyles((theme) => ({
             borderBottom: 'none',
         },
     },
-    editBtn: {
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 500,
-        fontSize: 14,
-        lineHeight: '20px',
-        color: '#20BFB8',
-    },
     textField: {
         marginTop: '16px',
         width: '300px',
     },
-    titleContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    mobileViewContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: '12px',
-    },
-    mobileViewCardActionContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '45%',
-    },
-    mobileViewCardActions: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: '24px',
-        marginBottom: '12px',
-    },
     divider: {
         width: '100%',
         margin: theme.spacing(2.5, 0, 2.5),
+    },
+    subscriptionCheckBtn: {
+        marginTop: 5,
+        paddingLeft: 0,
+        paddingTop: 10,
     },
     buttonsContainer: {
         width: '100%',
@@ -129,19 +105,14 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '40px',
         marginBottom: '64px',
     },
-    nextBtn: {
+    saveBtn: {
         color: '#fff',
         width: '140px',
         height: '48px',
     },
-    backBtn: {
+    cancelBtn: {
         marginRight: '12px',
         color: '#20BFB8',
-    },
-    subscriptionCheckBtn: {
-        marginTop: 5,
-        paddingLeft: 0,
-        paddingTop: 10,
     },
 }));
 
@@ -154,13 +125,13 @@ const GreenRadio = withStyles({
     checked: {},
 })((props: RadioProps) => <Radio color="default" {...props} />);
 
-/**
- *
- * @author: Kazmi <abdur.rehman@wooter.co>
- * @component: BasicInfo
- * @date: 25.11.2022
- * @time: 01:39
- */
+const CustomTextField = withStyles({
+    root: {
+        backgroundColor: '#fff',
+    },
+    checked: {},
+})((props: TextFieldProps) => <TextField {...props} />);
+
 export function BasicInfo() {
     const classes = useStyles();
     const user$ = useSharedSelector((state) => state.authentication.user);
@@ -330,23 +301,28 @@ export function BasicInfo() {
             <Divider className={classes.divider} />
 
             <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                    Basic Info
-                </Typography>
+                <Box paddingLeft={'16px'} paddingTop={'24px'}>
+                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                        Basic Info
+                    </Typography>
+                </Box>
+
+                <BasicInfoRow label={'photo'} value={'Personalize your account with a photo'} shown={false} />
                 <BasicInfoRow
                     label={'Name'}
                     value={user$?.firstName + ' ' + user$?.lastName}
                     shown={showName}
                     onSave={() => ''}
                     onEdit={handleOnNameEdit}
+                    isSaveBtnDisabled={isNewNameSaveDisabled}
                     onCancel={handleOnNameEdit}
                 >
-                    <div className={classes.editContainer}>
+                    <div className={classes.editInputsContainer}>
                         <Typography variant={'subtitle1'} className={classes.valueLabel}>
                             Name
                         </Typography>
 
-                        <TextField
+                        <CustomTextField
                             label="Enter first name"
                             rows={1}
                             value={newFirstName}
@@ -354,7 +330,7 @@ export function BasicInfo() {
                             className={classes.textField}
                             fullWidth
                         />
-                        <TextField
+                        <CustomTextField
                             label="Enter last name"
                             rows={1}
                             value={newLastName}
@@ -362,25 +338,6 @@ export function BasicInfo() {
                             className={classes.textField}
                             fullWidth
                         />
-
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                onClick={handleOnNameEdit}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                variant={'contained'}
-                                disabled={isNewNameSaveDisabled}
-                                color={'primary'}
-                                className={classes.nextBtn}
-                            >
-                                Save
-                            </Button>
-                        </div>
                     </div>
                 </BasicInfoRow>
                 <BasicInfoRow
@@ -390,39 +347,21 @@ export function BasicInfo() {
                     onSave={() => ''}
                     onEdit={handleOnUserNameEdit}
                     onCancel={handleOnUserNameEdit}
+                    isSaveBtnDisabled={isNewUserNameSaveDisabled}
                 >
-                    <div className={classes.editContainer}>
+                    <div className={classes.editInputsContainer}>
                         <Typography variant={'subtitle1'} className={classes.valueLabel}>
                             Username
                         </Typography>
 
-                        <TextField
-                            label="Enter Username"
+                        <CustomTextField
+                            label="Enter Username "
                             value={newUserName}
                             onChange={onNewUserNameChange}
                             rows={1}
                             className={classes.textField}
                             fullWidth
                         />
-
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                onClick={handleOnUserNameEdit}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                variant={'contained'}
-                                color={'primary'}
-                                disabled={isNewUserNameSaveDisabled}
-                                className={classes.nextBtn}
-                            >
-                                Save
-                            </Button>
-                        </div>
                     </div>
                 </BasicInfoRow>
                 <BasicInfoRow
@@ -432,13 +371,14 @@ export function BasicInfo() {
                     onSave={() => ''}
                     onEdit={handleOnPasswordEdit}
                     onCancel={handleOnPasswordEdit}
+                    isSaveBtnDisabled={isPasswordSaveDisabled}
                 >
-                    <div className={classes.editContainer}>
+                    <div className={classes.editInputsContainer}>
                         <Typography variant={'subtitle1'} className={classes.valueLabel}>
                             Change Password
                         </Typography>
 
-                        <TextField
+                        <CustomTextField
                             label="Enter Current Password"
                             value={currentPassword}
                             onChange={onCurrentPasswordChange}
@@ -446,7 +386,7 @@ export function BasicInfo() {
                             className={classes.textField}
                             fullWidth
                         />
-                        <TextField
+                        <CustomTextField
                             label="Enter New Password"
                             rows={10}
                             value={newPassword}
@@ -454,7 +394,7 @@ export function BasicInfo() {
                             className={classes.textField}
                             fullWidth
                         />
-                        <TextField
+                        <CustomTextField
                             label="Confirm New Password"
                             rows={1}
                             value={confirmPassword}
@@ -462,57 +402,19 @@ export function BasicInfo() {
                             className={classes.textField}
                             fullWidth
                         />
-
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                onClick={handleOnPasswordEdit}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                variant={'contained'}
-                                color={'primary'}
-                                disabled={isPasswordSaveDisabled}
-                                className={classes.nextBtn}
-                            >
-                                Save
-                            </Button>
-                        </div>
                     </div>
                 </BasicInfoRow>
-                <BasicInfoRow
-                    label={'customer id'}
-                    value={user$?.customerNumber || '-'}
-                    shown={false}
-                    onSave={() => ''}
-                    onEdit={() => ''}
-                    onCancel={() => ''}
-                />
-                <BasicInfoRow
-                    label={'photo'}
-                    value={'Personalize your account with a photo'}
-                    shown={false}
-                    onSave={() => ''}
-                    onEdit={() => ''}
-                    onCancel={() => ''}
-                />
+                <BasicInfoRow label={'customer id'} value={user$?.customerNumber || '-'} shown={false} hideDivider />
             </Paper>
+
             <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                    Contact Info
-                </Typography>
+                <Box paddingLeft={'16px'} paddingTop={'24px'}>
+                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                        Contact Info
+                    </Typography>
+                </Box>
                 <div className={classes.emptyStateContainer}>
-                    <BasicInfoRow
-                        label={'Email'}
-                        value={user$?.email || '-'}
-                        shown={false}
-                        onSave={() => ''}
-                        onEdit={() => ''}
-                        onCancel={() => ''}
-                    />
+                    <BasicInfoRow label={'Email'} value={user$?.email || '-'} shown={false} />
 
                     <BasicInfoRow
                         label={'Phone'}
@@ -521,13 +423,15 @@ export function BasicInfo() {
                         onSave={() => ''}
                         onEdit={handleOnPhoneEdit}
                         onCancel={handleOnPhoneEdit}
+                        hideDivider
+                        isSaveBtnDisabled={isNewPhoneSaveDisabled}
                     >
-                        <div className={classes.editContainer}>
+                        <div className={classes.editInputsContainer}>
                             <Typography variant={'subtitle1'} className={classes.valueLabel}>
                                 Change Phone Number
                             </Typography>
 
-                            <TextField
+                            <CustomTextField
                                 label="Confirm New Phone Number"
                                 rows={1}
                                 value={newPhone}
@@ -535,31 +439,18 @@ export function BasicInfo() {
                                 className={classes.textField}
                                 fullWidth
                             />
-
-                            <div className={classes.buttonsContainer}>
-                                <Button
-                                    variant={'text'}
-                                    color={'secondary'}
-                                    className={classes.backBtn}
-                                    disabled={isNewPhoneSaveDisabled}
-                                    onClick={handleOnPhoneEdit}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
-                                    Save
-                                </Button>
-                            </div>
                         </div>
                     </BasicInfoRow>
                 </div>
             </Paper>
 
             <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                    Email Subscription
-                </Typography>
-                <div className={classes.emptyStateContainer}>
+                <Box paddingLeft={'16px'} paddingTop={'24px'}>
+                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                        Email Subscription
+                    </Typography>
+                </Box>
+                <Box paddingLeft={'16px'} className={classes.emptyStateContainer}>
                     <Table className={classes.table}>
                         <TableBody>
                             <TableRow>
@@ -575,7 +466,7 @@ export function BasicInfo() {
                             </TableRow>
                         </TableBody>
                     </Table>
-                </div>
+                </Box>
             </Paper>
         </>
     );

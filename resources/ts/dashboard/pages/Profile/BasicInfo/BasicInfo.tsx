@@ -164,10 +164,19 @@ const GreenRadio = withStyles({
 export function BasicInfo() {
     const classes = useStyles();
 
+    const user$ = useSharedSelector((state) => state.authentication.user);
+
     const [showName, setShowName] = useState<boolean>(false);
     const [showUserName, setShowUserName] = useState<boolean>(false);
     const [showPhone, setShowPhone] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+
+    const [firstName, setFirstName] = useState<string>(user$?.firstName || '');
+    const [lastName, setLastName] = useState<string>(user$?.lastName || '');
+    const [username, setUsername] = useState<string>(user$?.username || '');
+    const [currentPassword, setCurrentPassword] = useState<string>('');
+    const [newPassword, setNewPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
 
     const handleOnNameEdit = useCallback(() => {
         toggleExceptFor('name');
@@ -184,8 +193,6 @@ export function BasicInfo() {
     const handleOnPasswordEdit = useCallback(() => {
         toggleExceptFor('password');
     }, [showPassword]);
-
-    const user$ = useSharedSelector((state) => state.authentication.user);
 
     function toggleExceptFor(field: string) {
         switch (field) {
@@ -218,6 +225,30 @@ export function BasicInfo() {
         }
     }
 
+    const handleOnChangeFirstName = useCallback((e) => {
+        setFirstName(e.target.value);
+    }, []);
+
+    const handleOnChangeLastName = useCallback((e) => {
+        setLastName(e.target.value);
+    }, []);
+
+    const handleOnChangeUsername = useCallback((e) => {
+        setUsername(e.target.value);
+    }, []);
+
+    const handleOnChangeCurrentPassword = useCallback((e) => {
+        setCurrentPassword(e.target.value);
+    }, []);
+
+    const handleOnChangeNewPassword = useCallback((e) => {
+        setNewPassword(e.target.value);
+    }, []);
+
+    const handleOnChangeConfirmPassword = useCallback((e) => {
+        setConfirmPassword(e.target.value);
+    }, []);
+
     return (
         <>
             <Typography variant={'h1'} className={classes.headingLabel}>
@@ -243,8 +274,20 @@ export function BasicInfo() {
                             Name
                         </Typography>
 
-                        <TextField label="Enter first name" rows={1} className={classes.textField} fullWidth />
-                        <TextField label="Enter last name" rows={1} className={classes.textField} fullWidth />
+                        <TextField
+                            label="Enter first name"
+                            value={firstName}
+                            onChange={handleOnChangeFirstName}
+                            className={classes.textField}
+                            fullWidth
+                        />
+                        <TextField
+                            label="Enter last name"
+                            value={lastName}
+                            onChange={handleOnChangeLastName}
+                            className={classes.textField}
+                            fullWidth
+                        />
 
                         <div className={classes.buttonsContainer}>
                             <Button
@@ -274,7 +317,13 @@ export function BasicInfo() {
                             Username
                         </Typography>
 
-                        <TextField label="Enter Username" rows={1} className={classes.textField} fullWidth />
+                        <TextField
+                            label="Enter Username"
+                            value={username}
+                            onChange={handleOnChangeUsername}
+                            className={classes.textField}
+                            fullWidth
+                        />
 
                         <div className={classes.buttonsContainer}>
                             <Button
@@ -304,9 +353,27 @@ export function BasicInfo() {
                             Change Password
                         </Typography>
 
-                        <TextField label="Enter Current Password" rows={1} className={classes.textField} fullWidth />
-                        <TextField label="Enter New Password" rows={1} className={classes.textField} fullWidth />
-                        <TextField label="Confirm New Password" rows={1} className={classes.textField} fullWidth />
+                        <TextField
+                            label="Enter Current Password"
+                            value={currentPassword}
+                            onChange={handleOnChangeCurrentPassword}
+                            className={classes.textField}
+                            fullWidth
+                        />
+                        <TextField
+                            label="Enter New Password"
+                            value={newPassword}
+                            onChange={handleOnChangeNewPassword}
+                            className={classes.textField}
+                            fullWidth
+                        />
+                        <TextField
+                            label="Confirm New Password"
+                            value={confirmPassword}
+                            onChange={handleOnChangeConfirmPassword}
+                            className={classes.textField}
+                            fullWidth
+                        />
 
                         <div className={classes.buttonsContainer}>
                             <Button

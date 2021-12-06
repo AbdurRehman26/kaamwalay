@@ -82,16 +82,28 @@ export function NewSubmission() {
     }, [currentStep]);
 
     const handleNext = async () => {
-        window.scroll(0, 0);
         // Executing different stuff before next step loads
+
+        if (currentStep === 0) {
+            dispatch(setIsNextLoading(true));
+            dispatch(nextStep());
+            dispatch(setIsNextLoading(false));
+            window.scroll(0, 0);
+        }
+
         if (currentStep === 1) {
+            dispatch(setIsNextLoading(true));
             await dispatch(getShippingFee(selectedCards));
             await dispatch(getStatesList());
             await dispatch(getSavedAddresses());
             dispatch(nextStep());
+            dispatch(setIsNextLoading(false));
+            window.scroll(0, 0);
             return;
         }
+
         if (currentStep === 2) {
+            dispatch(setIsNextLoading(true));
             ReactGA.event({
                 category: EventCategories.ShippingAddresses,
                 action:
@@ -100,6 +112,8 @@ export function NewSubmission() {
                         : ShippingAddressEvents.continuedWithExisting,
             });
             dispatch(nextStep());
+            dispatch(setIsNextLoading(false));
+            window.scroll(0, 0);
             return;
         }
         if (currentStep === 3) {
@@ -115,6 +129,7 @@ export function NewSubmission() {
                 });
                 dispatch(setIsNextLoading(false));
                 dispatch(nextStep());
+                window.scroll(0, 0);
                 return;
             } catch (error: any) {
                 dispatch(setIsNextLoading(false));
@@ -122,7 +137,6 @@ export function NewSubmission() {
                 return;
             }
         }
-        dispatch(nextStep());
     };
 
     const handleBack = async () => {
@@ -169,7 +183,7 @@ export function NewSubmission() {
                         {currentStep !== 4 ? (
                             <Button
                                 variant={'contained'}
-                                disabled={isNextDisabled}
+                                disabled={isNextDisabled || isNextLoading}
                                 color={'primary'}
                                 onClick={handleNext}
                                 className={classes.nextBtn}

@@ -29,7 +29,9 @@ class UpdateCardProductAttributes extends Command
      */
     public function handle()
     {
-        Excel::import(new CardProductAttributesUpdate, storage_path('app/public/master_robograding_production_card_products.csv'));
+        $fileName = $this->ask('Filename (storage/app/)');
+
+        Excel::import(new CardProductAttributesUpdate, $fileName);
 
         return Command::SUCCESS;
     }

@@ -17,7 +17,8 @@ class UpdateCustomerRequest extends FormRequest
         return [
             'first_name' => ['sometimes', 'required', 'string', 'max: 255'],
             'last_name' => ['sometimes', 'required', 'string', 'max: 255'],
-            'phone' => ['string'],
+            'phone' => ['sometimes', 'string'],
+            'email_subscription' => ['sometimes', 'boolean'],
             'password' => [
                 'sometimes',
                 'required',

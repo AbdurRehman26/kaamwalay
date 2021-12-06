@@ -22,6 +22,7 @@ class CustomerController extends Controller
             'last_name',
             'username',
             'phone',
+            'email_subscription',
             'profile_image'
         ]);
 

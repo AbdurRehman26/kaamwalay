@@ -3,12 +3,8 @@
 namespace App\Imports;
 
 use App\Models\CardProduct;
-use App\Models\CardSeries;
-use App\Models\CardSet;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class CardProductAttributesUpdate implements ToCollection, WithHeadingRow

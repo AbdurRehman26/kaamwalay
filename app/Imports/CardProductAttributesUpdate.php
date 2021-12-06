@@ -18,8 +18,6 @@ class CardProductAttributesUpdate implements ToCollection, WithHeadingRow
      */
     public function collection(Collection $rows): void
     {
-        CardProduct::disableSearchSyncing();
-
         foreach ($rows as $key => $row) {
 
             $cardProduct = CardProduct::where('card_reference_id', '=', $row['card_id']);

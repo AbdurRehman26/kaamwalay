@@ -15,18 +15,16 @@ class CardProductAttributesUpdate implements ToCollection, WithHeadingRow
     public function collection(Collection $rows): void
     {
         foreach ($rows as $key => $row) {
-
             $cardProduct = CardProduct::where('card_reference_id', '=', $row['card_id']);
 
             echo 'Excel key fetched:' . $key . "\n";
 
-            throw_if(!$cardProduct->count());
+            throw_if(! $cardProduct->count());
 
             $cardProduct = $cardProduct->first();
             $cardProduct->card_url = $row['card_url'];
             $cardProduct->image_path = $row['image'];
             $cardProduct->save();
-
         }
     }
 }

@@ -32,7 +32,7 @@ class ChangePasswordRequest extends FormRequest
                     ->letters()
                     ->mixedCase()
                     ->numbers(),
-                'confirmed'
+                'confirmed',
             ],
         ];
     }

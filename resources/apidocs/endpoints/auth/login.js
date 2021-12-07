@@ -1,12 +1,13 @@
 /**
- * @api {post} /auth/login User Login
- * @apiName User Login
+ * @api {post} /auth/login Login User
+ * @apiName Login User
  * @apiGroup Authentication
  *
  * @apiUse header_main
  *
  * @apiParam { String } email email of the user
  * @apiParam { String } password password of the user
+ * @apiParam { String } [platform] Platform of User device. Possible values [web, ios, android]
  *
  * @apiSuccess { String } data.token authentication token
  * @apiSuccess { String } data.type  type of authentication token

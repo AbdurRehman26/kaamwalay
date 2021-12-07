@@ -19,7 +19,7 @@ test('a customer can update his profile', function () {
             'email_subscription' => true,
             'phone' => '1234567890',
             'username' => 'test24',
-            'profile_image' => 'https://via.placeholder.com/150'
+            'profile_image' => 'https://via.placeholder.com/150',
     ]);
 
     $response->assertSuccessful();
@@ -50,7 +50,7 @@ test('customer profile update required fields error', function () {
         'email_subscription' => '',
         'phone' => '',
         'username' => '',
-        'profile_image' => ''
+        'profile_image' => '',
     ]);
 
     $response->assertInvalid([
@@ -69,5 +69,4 @@ test('a customer`s username can not be duplicate', function () {
     ]);
 
     $response->assertUnprocessable();
-
 });

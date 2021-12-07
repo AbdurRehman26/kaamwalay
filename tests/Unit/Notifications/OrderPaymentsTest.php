@@ -1,14 +1,10 @@
 <?php
 
-use App\Events\API\Admin\Order\ExtraChargeSuccessful;
-use App\Events\API\Admin\Order\RefundSuccessful;
-use App\Notifications\OrderPayments;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\OrderService;
-use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Foundation\Testing\WithFaker;
 
 uses(WithFaker::class);
@@ -81,7 +77,7 @@ it('sends notification when extra charge is made', function () {
     ], $this->paymentResponse);
 
     Notification::assertNotSentTo(
-        [$order], AnotherNotification::class
+        [$order],
+        AnotherNotification::class
     );
 });
-

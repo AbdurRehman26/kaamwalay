@@ -38,6 +38,5 @@ class ChangePasswordController extends Controller
 
         $user->save();
     }
-
 }
 

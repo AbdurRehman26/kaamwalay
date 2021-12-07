@@ -2,12 +2,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect, useState } from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import Table from '@mui/material/Table';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import TableBody from '@mui/material/TableBody';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
-import Radio, { RadioProps } from '@mui/material/Radio';
 import withStyles from '@mui/styles/withStyles';
 import Divider from '@mui/material/Divider';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
@@ -16,7 +11,6 @@ import Box from '@mui/material/Box';
 import { ChangeUserProfilePicDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserProfilePicDialog';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
-import { FormControl, FormControlLabel, RadioGroup } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -120,15 +114,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const GreenRadio = withStyles({
-    root: {
-        '&$checked': {
-            color: '#20BFB8',
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-
 const CustomTextField = withStyles({
     root: {
         backgroundColor: '#fff',
@@ -146,7 +131,6 @@ export function BasicInfo() {
     const [showPhone, setShowPhone] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showProfilePicDialog, setShowProfilePicDialog] = useState<boolean>(false);
-    const [emailSubscription, setEmailSubscription] = useState(user$?.emailSubscription);
 
     const [newFirstName, setNewFirstName] = useState<string>(user$?.firstName || '');
     const [newLastName, setNewLastName] = useState<string>(user$?.lastName || '');
@@ -338,17 +322,6 @@ export function BasicInfo() {
         );
     }, [newPassword, currentPassword, confirmPassword]);
 
-    const handleChangeEmailSubscription = useCallback(
-        (e: any) => {
-            setEmailSubscription(e.nativeEvent.target.value);
-            dispatch(
-                updateUserProfile({
-                    emailSubscription: Number(e.nativeEvent.target.value),
-                }),
-            );
-        },
-        [emailSubscription],
-    );
     return (
         <>
             <ChangeUserProfilePicDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
@@ -509,39 +482,6 @@ export function BasicInfo() {
                         </div>
                     </BasicInfoRow>
                 </div>
-            </Paper>
-
-            <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Box paddingLeft={'16px'} paddingTop={'24px'}>
-                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                        Email Subscription
-                    </Typography>
-                </Box>
-                <Box paddingLeft={'16px'} className={classes.emptyStateContainer}>
-                    <Table className={classes.table}>
-                        <TableBody>
-                            <TableRow>
-                                <Typography variant={'subtitle1'} className={classes.valueLabel}>
-                                    Would you like to receive promotional emails from Robograding and AGS?
-                                </Typography>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell align={'left'} className={classes.subscriptionCheckBtn}>
-                                    <FormControl component="fieldset">
-                                        <RadioGroup
-                                            value={emailSubscription}
-                                            sx={{ display: 'flex', flexDirection: 'row' }}
-                                            onChange={handleChangeEmailSubscription}
-                                        >
-                                            <FormControlLabel value={1} control={<GreenRadio />} label="Yes" />
-                                            <FormControlLabel value={0} control={<GreenRadio />} label="No" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </Box>
             </Paper>
         </>
     );

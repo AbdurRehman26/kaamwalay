@@ -15,7 +15,7 @@ class AlterTableUsersAddColumnsImageEmailSubscription extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('email_subscription')->default(false);
-            $table->string('profile_image')->default('');
+            $table->string('profile_image', 1000)->default('');
         });
     }
 

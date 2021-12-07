@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class UpdateCustomerRequest extends FormRequest
@@ -17,8 +18,8 @@ class UpdateCustomerRequest extends FormRequest
         return [
             'first_name' => ['sometimes', 'required', 'string', 'max: 255'],
             'last_name' => ['sometimes', 'required', 'string', 'max: 255'],
-            'phone' => ['sometimes', 'string'],
-            'email_subscription' => ['sometimes', 'boolean'],
+            'email_subscription' => ['sometimes', 'required', 'boolean'],
+            'current_password' => ['sometimes', 'required', 'password'],
             'password' => [
                 'sometimes',
                 'required',
@@ -26,8 +27,16 @@ class UpdateCustomerRequest extends FormRequest
                     ->letters()
                     ->mixedCase()
                     ->numbers(),
-               ],
-            'username' => ['sometimes', 'required', 'string', 'unique:users', 'max:50'],
+               'confirmed'
+                ],
+            'username' => [
+                'sometimes',
+                'required',
+                'string',
+                Rule::unique('users')->ignore(auth()->user()->id),
+                'max:50'],
+            'profile_image' => ['string', 'nullable'],
+            'phone' => ['string', 'nullable'],
         ];
     }
 }

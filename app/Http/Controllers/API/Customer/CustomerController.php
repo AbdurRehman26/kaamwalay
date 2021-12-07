@@ -9,8 +9,6 @@ use App\Http\Resources\API\Customer\User\UserResource;
 use App\Models\User;
 use App\Services\Customer\CustomerProfileService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomerController extends Controller
@@ -40,21 +38,5 @@ class CustomerController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
-    }
-
-    public function uploadProfileImage()
-    {
-        dd(request()->file);
-    }
-
-
-    protected function uploadToCloud(string $pdfData): string
-    {
-        $filePath = 'invoice/' . Str::uuid() . '.pdf';
-
-        if (Storage::disk('s3')->put($filePath, $pdfData)) {
-            return Storage::disk('s3')->url($filePath);
-        }
-
     }
 }

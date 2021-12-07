@@ -19,16 +19,6 @@ class UpdateCustomerRequest extends FormRequest
             'first_name' => ['sometimes', 'required', 'string', 'max: 255'],
             'last_name' => ['sometimes', 'required', 'string', 'max: 255'],
             'email_subscription' => ['sometimes', 'required', 'boolean'],
-            'current_password' => ['sometimes', 'required', 'password'],
-            'password' => [
-                'sometimes',
-                'required',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers(),
-               'confirmed'
-                ],
             'username' => [
                 'sometimes',
                 'required',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Auth\ChangePasswordController;
 use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Auth\RegisterController;
@@ -35,6 +36,7 @@ Route::prefix('auth')->group(function () {
     Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
     Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
+    Route::post('password/change', [ChangePasswordController::class, 'change']);
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 

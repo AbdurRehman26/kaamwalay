@@ -19,7 +19,6 @@ class CustomerController extends Controller
             'first_name',
             'last_name',
             'username',
-            'password',
             'phone',
             'email_subscription',
             'profile_image'

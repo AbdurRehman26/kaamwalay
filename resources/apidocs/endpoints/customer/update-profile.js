@@ -5,11 +5,13 @@
  *
  * @apiUse header_main
  *
- * @apiParam { String } [first_name] first name First Name of the User
- * @apiParam { String } [last_name] last name Last Name of the User
+ * @apiParam { String } [first_name] First Name of the User
+ * @apiParam { String } [last_name] Last Name of the User
  * @apiParam { String } [email] email Unique Email of the User
  * @apiParam { String } [username] username Unique Username of the User
- * @apiParam { String } [password] password Password of the User
+ * @apiParam { String } [current_password] Current Password of the User
+ * @apiParam { String } [password] Password of the User
+ * @apiParam { String } [password_confirmation] Password Confirmation of the User
  * @apiParam { String } [phone] phone number of the User
  * @apiParam { String } [profile_image] profile image of the User
  * @apiParam { boolean } [email_subscription] email subscription selection of the User

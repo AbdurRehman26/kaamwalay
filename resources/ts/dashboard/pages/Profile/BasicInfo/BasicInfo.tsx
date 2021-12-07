@@ -1,6 +1,6 @@
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
@@ -10,19 +10,21 @@ import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import Radio, { RadioProps } from '@mui/material/Radio';
 import withStyles from '@mui/styles/withStyles';
 import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { BasicInfoRow } from '@dashboard/pages/Profile/BasicInfo/BasicInfoRow';
+import Box from '@mui/material/Box';
+import { ChangeUserProfilePicDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserProfilePicDialog';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
         width: '100%',
-        padding: '16px',
         marginTop: '0px',
         marginBottom: 25,
     },
-    editContainer: {
+    editInputsContainer: {
         padding: 20,
+        display: 'flex',
+        flexDirection: 'column',
         backgroundColor: '#F9F9F9',
     },
     headingLabel: {
@@ -83,43 +85,18 @@ const useStyles = makeStyles((theme) => ({
             borderBottom: 'none',
         },
     },
-    editBtn: {
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 500,
-        fontSize: 14,
-        lineHeight: '20px',
-        color: '#20BFB8',
-    },
     textField: {
         marginTop: '16px',
         width: '300px',
     },
-    titleContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    mobileViewContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: '12px',
-    },
-    mobileViewCardActionContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '45%',
-    },
-    mobileViewCardActions: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: '24px',
-        marginBottom: '12px',
-    },
     divider: {
         width: '100%',
         margin: theme.spacing(2.5, 0, 2.5),
+    },
+    subscriptionCheckBtn: {
+        marginTop: 5,
+        paddingLeft: 0,
+        paddingTop: 10,
     },
     buttonsContainer: {
         width: '100%',
@@ -129,19 +106,14 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '40px',
         marginBottom: '64px',
     },
-    nextBtn: {
+    saveBtn: {
         color: '#fff',
         width: '140px',
         height: '48px',
     },
-    backBtn: {
+    cancelBtn: {
         marginRight: '12px',
         color: '#20BFB8',
-    },
-    subscriptionCheckBtn: {
-        marginTop: 5,
-        paddingLeft: 0,
-        paddingTop: 10,
     },
 }));
 
@@ -154,29 +126,90 @@ const GreenRadio = withStyles({
     checked: {},
 })((props: RadioProps) => <Radio color="default" {...props} />);
 
-/**
- *
- * @author: Kazmi <abdur.rehman@wooter.co>
- * @component: BasicInfo
- * @date: 25.11.2022
- * @time: 01:39
- */
+const CustomTextField = withStyles({
+    root: {
+        backgroundColor: '#fff',
+    },
+    checked: {},
+})((props: TextFieldProps) => <TextField {...props} />);
+
 export function BasicInfo() {
     const classes = useStyles();
-
     const user$ = useSharedSelector((state) => state.authentication.user);
 
     const [showName, setShowName] = useState<boolean>(false);
     const [showUserName, setShowUserName] = useState<boolean>(false);
     const [showPhone, setShowPhone] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showProfilePicDialog, setShowProfilePicDialog] = useState<boolean>(false);
 
-    const [firstName, setFirstName] = useState<string>(user$?.firstName || '');
-    const [lastName, setLastName] = useState<string>(user$?.lastName || '');
-    const [username, setUsername] = useState<string>(user$?.username || '');
+    const [newFirstName, setNewFirstName] = useState<string>(user$?.firstName || '');
+    const [newLastName, setNewLastName] = useState<string>(user$?.lastName || '');
+    const [isNewNameSaveDisabled, setIsNewNameSaveDisabled] = useState<boolean>(false);
+
+    const [newUserName, setNewUserName] = useState<string>(user$?.username || '');
+    const [isNewUserNameSaveDisabled, setIsNewUserNameSaveDisabled] = useState<boolean>(false);
+
     const [currentPassword, setCurrentPassword] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [isPasswordSaveDisabled, setIsPasswordSaveDisabled] = useState<boolean>(false);
+
+    const [newPhone, setNewPhone] = useState<string>(user$?.phone || '');
+    const [isNewPhoneSaveDisabled, setIsNewPhoneSaveDisabled] = useState<boolean>(false);
+
+    const onToggleProfilePicDialog = useCallback(() => {
+        setShowProfilePicDialog((prev) => !prev);
+    }, [showProfilePicDialog]);
+
+    const onPhoneChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            setNewPhone(event.target.value);
+        },
+        [setNewPhone],
+    );
+
+    const onCurrentPasswordChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setCurrentPassword(e.target.value);
+        },
+        [currentPassword],
+    );
+
+    const onNewPasswordChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewPassword(e.target.value);
+        },
+        [newPassword],
+    );
+
+    const onConfirmPasswordChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setConfirmPassword(e.target.value);
+        },
+        [confirmPassword],
+    );
+
+    const onNewUserNameChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewUserName(e.target.value);
+        },
+        [newUserName],
+    );
+
+    const onNewFirstNameChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewFirstName(e.target.value);
+        },
+        [newFirstName],
+    );
+
+    const onNewLastNameChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewLastName(e.target.value);
+        },
+        [newLastName],
+    );
 
     const handleOnNameEdit = useCallback(() => {
         toggleExceptFor('name');
@@ -198,6 +231,8 @@ export function BasicInfo() {
         switch (field) {
             case 'name':
                 setShowName((prev) => !prev);
+                setNewFirstName(user$?.firstName || '');
+                setNewLastName(user$?.lastName || '');
                 setShowUserName(false);
                 setShowPhone(false);
                 setShowPassword(false);
@@ -205,6 +240,7 @@ export function BasicInfo() {
             case 'userName':
                 setShowName(false);
                 setShowUserName((prev) => !prev);
+                setNewUserName(user$?.username || '');
                 setShowPhone(false);
                 setShowPassword(false);
                 break;
@@ -212,6 +248,7 @@ export function BasicInfo() {
                 setShowName(false);
                 setShowUserName(false);
                 setShowPhone((prev) => !prev);
+                setNewPhone(user$?.phone || '');
                 setShowPassword(false);
                 break;
             case 'password':
@@ -225,32 +262,45 @@ export function BasicInfo() {
         }
     }
 
-    const handleOnChangeFirstName = useCallback((e) => {
-        setFirstName(e.target.value);
-    }, []);
+    useEffect(() => {
+        if (newFirstName.length > 0 && newLastName.length > 0) {
+            setIsNewNameSaveDisabled(false);
+        } else {
+            setIsNewNameSaveDisabled(true);
+        }
+    }, [newFirstName, newLastName]);
 
-    const handleOnChangeLastName = useCallback((e) => {
-        setLastName(e.target.value);
-    }, []);
+    useEffect(() => {
+        if (newUserName.length > 4) {
+            setIsNewUserNameSaveDisabled(false);
+        } else {
+            setIsNewUserNameSaveDisabled(true);
+        }
+    }, [newUserName]);
 
-    const handleOnChangeUsername = useCallback((e) => {
-        setUsername(e.target.value);
-    }, []);
+    useEffect(() => {
+        if (newPassword.length > 0 && confirmPassword.length > 0 && currentPassword.length > 0) {
+            if (newPassword === confirmPassword) {
+                setIsPasswordSaveDisabled(false);
+            } else {
+                setIsPasswordSaveDisabled(true);
+            }
+        } else {
+            setIsPasswordSaveDisabled(true);
+        }
+    }, [newPassword, confirmPassword, currentPassword]);
 
-    const handleOnChangeCurrentPassword = useCallback((e) => {
-        setCurrentPassword(e.target.value);
-    }, []);
-
-    const handleOnChangeNewPassword = useCallback((e) => {
-        setNewPassword(e.target.value);
-    }, []);
-
-    const handleOnChangeConfirmPassword = useCallback((e) => {
-        setConfirmPassword(e.target.value);
-    }, []);
+    useEffect(() => {
+        if (newPhone.length > 1) {
+            setIsNewPhoneSaveDisabled(false);
+        } else {
+            setIsNewPhoneSaveDisabled(true);
+        }
+    }, [newPhone]);
 
     return (
         <>
+            <ChangeUserProfilePicDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
             <Typography variant={'h1'} className={classes.headingLabel}>
                 Profile
             </Typography>
@@ -258,50 +308,49 @@ export function BasicInfo() {
             <Divider className={classes.divider} />
 
             <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                    Basic Info
-                </Typography>
+                <Box paddingLeft={'16px'} paddingTop={'24px'}>
+                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                        Basic Info
+                    </Typography>
+                </Box>
+
+                <BasicInfoRow
+                    label={'photo'}
+                    value={'Personalize your account with a photo'}
+                    shown={false}
+                    showProfilePic
+                    onProfilePicPress={onToggleProfilePicDialog}
+                />
                 <BasicInfoRow
                     label={'Name'}
                     value={user$?.firstName + ' ' + user$?.lastName}
                     shown={showName}
                     onSave={() => ''}
                     onEdit={handleOnNameEdit}
+                    isSaveBtnDisabled={isNewNameSaveDisabled}
                     onCancel={handleOnNameEdit}
                 >
-                    <div className={classes.editContainer}>
+                    <div className={classes.editInputsContainer}>
                         <Typography variant={'subtitle1'} className={classes.valueLabel}>
                             Name
                         </Typography>
 
-                        <TextField
+                        <CustomTextField
                             label="Enter first name"
-                            value={firstName}
-                            onChange={handleOnChangeFirstName}
+                            rows={1}
+                            value={newFirstName}
+                            onChange={onNewFirstNameChange}
                             className={classes.textField}
                             fullWidth
                         />
-                        <TextField
+                        <CustomTextField
                             label="Enter last name"
-                            value={lastName}
-                            onChange={handleOnChangeLastName}
+                            rows={1}
+                            value={newLastName}
+                            onChange={onNewLastNameChange}
                             className={classes.textField}
                             fullWidth
                         />
-
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                onClick={handleOnNameEdit}
-                            >
-                                Cancel
-                            </Button>
-                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
-                                Save
-                            </Button>
-                        </div>
                     </div>
                 </BasicInfoRow>
                 <BasicInfoRow
@@ -311,33 +360,21 @@ export function BasicInfo() {
                     onSave={() => ''}
                     onEdit={handleOnUserNameEdit}
                     onCancel={handleOnUserNameEdit}
+                    isSaveBtnDisabled={isNewUserNameSaveDisabled}
                 >
-                    <div className={classes.editContainer}>
+                    <div className={classes.editInputsContainer}>
                         <Typography variant={'subtitle1'} className={classes.valueLabel}>
                             Username
                         </Typography>
 
-                        <TextField
-                            label="Enter Username"
-                            value={username}
-                            onChange={handleOnChangeUsername}
+                        <CustomTextField
+                            label="Enter Username "
+                            value={newUserName}
+                            onChange={onNewUserNameChange}
+                            rows={1}
                             className={classes.textField}
                             fullWidth
                         />
-
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                onClick={handleOnUserNameEdit}
-                            >
-                                Cancel
-                            </Button>
-                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
-                                Save
-                            </Button>
-                        </div>
                     </div>
                 </BasicInfoRow>
                 <BasicInfoRow
@@ -347,142 +384,86 @@ export function BasicInfo() {
                     onSave={() => ''}
                     onEdit={handleOnPasswordEdit}
                     onCancel={handleOnPasswordEdit}
+                    isSaveBtnDisabled={isPasswordSaveDisabled}
                 >
-                    <div className={classes.editContainer}>
+                    <div className={classes.editInputsContainer}>
                         <Typography variant={'subtitle1'} className={classes.valueLabel}>
                             Change Password
                         </Typography>
 
-                        <TextField
+                        <CustomTextField
                             label="Enter Current Password"
                             value={currentPassword}
-                            onChange={handleOnChangeCurrentPassword}
+                            onChange={onCurrentPasswordChange}
+                            rows={1}
                             className={classes.textField}
                             fullWidth
                         />
-                        <TextField
+                        <CustomTextField
                             label="Enter New Password"
+                            rows={10}
                             value={newPassword}
-                            onChange={handleOnChangeNewPassword}
+                            onChange={onNewPasswordChange}
                             className={classes.textField}
                             fullWidth
                         />
-                        <TextField
+                        <CustomTextField
                             label="Confirm New Password"
+                            rows={1}
                             value={confirmPassword}
-                            onChange={handleOnChangeConfirmPassword}
+                            onChange={onConfirmPasswordChange}
                             className={classes.textField}
                             fullWidth
                         />
-
-                        <div className={classes.buttonsContainer}>
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                onClick={handleOnPasswordEdit}
-                            >
-                                Cancel
-                            </Button>
-                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
-                                Save
-                            </Button>
-                        </div>
                     </div>
                 </BasicInfoRow>
-                <BasicInfoRow
-                    label={'customer id'}
-                    value={user$?.customerNumber || '-'}
-                    shown={false}
-                    onSave={() => ''}
-                    onEdit={() => ''}
-                    onCancel={() => ''}
-                />
-                <BasicInfoRow
-                    label={'photo'}
-                    value={'Personalize your account with a photo'}
-                    shown={false}
-                    onSave={() => ''}
-                    onEdit={() => ''}
-                    onCancel={() => ''}
-                />
+                <BasicInfoRow label={'customer id'} value={user$?.customerNumber || '-'} shown={false} hideDivider />
             </Paper>
+
             <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                    Contact Info
-                </Typography>
+                <Box paddingLeft={'16px'} paddingTop={'24px'}>
+                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                        Contact Info
+                    </Typography>
+                </Box>
                 <div className={classes.emptyStateContainer}>
-                    <Table className={classes.table}>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell component="th" scope="row" align={'left'}>
-                                    <Typography variant={'subtitle1'} className={classes.textLabel}>
-                                        EMAIL
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="left" className={classes.valueLabel}>
-                                    {user$?.email}
-                                </TableCell>
-                                <TableCell align="right"></TableCell>
-                            </TableRow>
-                            <TableRow>
-                                {!showPhone && (
-                                    <>
-                                        <TableCell component="th" scope="row" align={'left'}>
-                                            <Typography variant={'subtitle1'} className={classes.textLabel}>
-                                                PHONE
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="left" className={classes.valueLabel}>
-                                            {user$?.phone ?? 'N/A'}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Button variant={'text'} size={'medium'} onClick={handleOnPhoneEdit}>
-                                                Edit
-                                            </Button>
-                                        </TableCell>
-                                    </>
-                                )}
+                    <BasicInfoRow label={'Email'} value={user$?.email || '-'} shown={false} />
 
-                                {showPhone && (
-                                    <div className={classes.editContainer}>
-                                        <Typography variant={'subtitle1'} className={classes.valueLabel}>
-                                            Change Phone Number
-                                        </Typography>
+                    <BasicInfoRow
+                        label={'Phone'}
+                        value={user$?.phone || '-'}
+                        shown={showPhone}
+                        onSave={() => ''}
+                        onEdit={handleOnPhoneEdit}
+                        onCancel={handleOnPhoneEdit}
+                        hideDivider
+                        isSaveBtnDisabled={isNewPhoneSaveDisabled}
+                    >
+                        <div className={classes.editInputsContainer}>
+                            <Typography variant={'subtitle1'} className={classes.valueLabel}>
+                                Change Phone Number
+                            </Typography>
 
-                                        <TextField
-                                            label="Confirm New Phone Number"
-                                            rows={1}
-                                            className={classes.textField}
-                                            fullWidth
-                                        />
-
-                                        <div className={classes.buttonsContainer}>
-                                            <Button
-                                                variant={'text'}
-                                                color={'secondary'}
-                                                className={classes.backBtn}
-                                                onClick={handleOnPhoneEdit}
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button variant={'contained'} color={'primary'} className={classes.nextBtn}>
-                                                Save
-                                            </Button>
-                                        </div>
-                                    </div>
-                                )}
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+                            <CustomTextField
+                                label="Confirm New Phone Number"
+                                rows={1}
+                                value={newPhone}
+                                onChange={onPhoneChange}
+                                className={classes.textField}
+                                fullWidth
+                            />
+                        </div>
+                    </BasicInfoRow>
                 </div>
             </Paper>
 
             <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                    Email Subscription
-                </Typography>
-                <div className={classes.emptyStateContainer}>
+                <Box paddingLeft={'16px'} paddingTop={'24px'}>
+                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
+                        Email Subscription
+                    </Typography>
+                </Box>
+                <Box paddingLeft={'16px'} className={classes.emptyStateContainer}>
                     <Table className={classes.table}>
                         <TableBody>
                             <TableRow>
@@ -498,7 +479,7 @@ export function BasicInfo() {
                             </TableRow>
                         </TableBody>
                     </Table>
-                </div>
+                </Box>
             </Paper>
         </>
     );

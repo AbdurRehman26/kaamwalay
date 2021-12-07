@@ -10,6 +10,7 @@ import makeStyles from '@mui/styles/makeStyles';
 
 interface ImageUploaderProps {
     onChange: (file: File | null) => void;
+    profilePicMode?: boolean;
 }
 
 const useStyles = makeStyles(
@@ -80,6 +81,40 @@ export default function ImageUploader(props: ImageUploaderProps) {
                     <Button onClick={deleteImage}>Delete</Button>
                     <Button onClick={replaceImage}>Replace</Button>
                 </ButtonGroup>
+            </Box>
+        );
+    }
+
+    if (props.profilePicMode) {
+        return (
+            <Box
+                sx={{
+                    cursor: 'pointer',
+                    backgroundColor: '#F9F9F9',
+                    border: '1px solid #E0E0E0',
+                }}
+                minHeight={'254px'}
+                minWidth={'100%'}
+                display={'flex'}
+                flexDirection={'column'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                {...getRootProps()}
+            >
+                <input {...getInputProps()} />
+                {!isDragActive ? (
+                    <>
+                        <FileUploadOutlinedIcon />
+                        <Typography variant={'subtitle1'} sx={{ fontWeight: 'bold' }}>
+                            Upload Image
+                        </Typography>
+                        {!isSm ? <Typography variant={'subtitle1'}>or drag and drop</Typography> : null}
+                    </>
+                ) : (
+                    <Typography variant={'subtitle1'} sx={{ fontWeight: 'bold' }}>
+                        Drop it
+                    </Typography>
+                )}
             </Box>
         );
     }

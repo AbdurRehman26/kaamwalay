@@ -15,7 +15,7 @@ export const updateUserProfile = createAsyncThunk(
             const { data } = await userRepository.updateUserProfile(input);
             thunkAPI.dispatch(updateUserProfileData(data));
             NotificationsService.success('Profile updated successfully!');
-        } catch (error) {
+        } catch (error: any) {
             NotificationsService.exception(error);
             return thunkAPI.rejectWithValue(error);
         }
@@ -31,7 +31,7 @@ export const updateUserPassword = createAsyncThunk(
             const { data } = await userRepository.updateUserPassword(input);
             await authenticationService.setAccessToken(data.accessToken);
             NotificationsService.success('Password changed successfully!');
-        } catch (error) {
+        } catch (error: any) {
             NotificationsService.exception(error);
             return thunkAPI.rejectWithValue(error);
         }

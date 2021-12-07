@@ -77,12 +77,12 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
 
     const user$ = useSharedSelector((state) => state.authentication.user);
     const [viewMode, setViewMode] = useState<ViewModes>(
-        user$?.profilePicture ? ViewModes.hasProfilePic : ViewModes.noProfilePic,
+        user$?.profileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic,
     );
     const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
     const handleClose = useCallback(() => {
-        setViewMode(user$?.profilePicture ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
+        setViewMode(user$?.profileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
         toggle();
     }, [toggle]);
 

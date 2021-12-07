@@ -16,7 +16,6 @@ export class UserRepository extends Repository<UserEntity> {
 
     public async updateUserPassword(input: ChangeUserPasswordDTO) {
         const data = await this.endpoint.post('auth/password/change', input);
-        console.log(data, 'from repo');
         return data;
     }
 }

@@ -126,7 +126,7 @@ export function BasicInfoRow(props: BasicInfoRowProps) {
                             {showProfilePic ? (
                                 <Box paddingRight={'12px'}>
                                     <ButtonBase onClick={onProfilePicPress}>
-                                        <Avatar src={user$?.profilePicture || RobogradingAvatar} />
+                                        <Avatar src={user$?.profileImage || RobogradingAvatar} />
                                     </ButtonBase>
                                 </Box>
                             ) : null}

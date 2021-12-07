@@ -430,6 +430,7 @@ export function BasicInfo() {
 
                         <CustomTextField
                             label="Enter Current Password"
+                            type="password"
                             value={currentPassword}
                             onChange={onCurrentPasswordChange}
                             rows={1}
@@ -438,6 +439,7 @@ export function BasicInfo() {
                         />
                         <CustomTextField
                             label="Enter New Password"
+                            type="password"
                             rows={10}
                             value={newPassword}
                             onChange={onNewPasswordChange}
@@ -446,6 +448,7 @@ export function BasicInfo() {
                         />
                         <CustomTextField
                             label="Confirm New Password"
+                            type="password"
                             rows={1}
                             value={confirmPassword}
                             onChange={onConfirmPasswordChange}

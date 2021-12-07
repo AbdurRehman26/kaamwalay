@@ -13,6 +13,7 @@ import Divider from '@mui/material/Divider';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { BasicInfoRow } from '@dashboard/pages/Profile/BasicInfo/BasicInfoRow';
 import Box from '@mui/material/Box';
+import { ChangeUserProfilePicDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserProfilePicDialog';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -140,6 +141,7 @@ export function BasicInfo() {
     const [showUserName, setShowUserName] = useState<boolean>(false);
     const [showPhone, setShowPhone] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showProfilePicDialog, setShowProfilePicDialog] = useState<boolean>(false);
 
     const [newFirstName, setNewFirstName] = useState<string>(user$?.firstName || '');
     const [newLastName, setNewLastName] = useState<string>(user$?.lastName || '');
@@ -155,6 +157,10 @@ export function BasicInfo() {
 
     const [newPhone, setNewPhone] = useState<string>(user$?.phone || '');
     const [isNewPhoneSaveDisabled, setIsNewPhoneSaveDisabled] = useState<boolean>(false);
+
+    const onToggleProfilePicDialog = useCallback(() => {
+        setShowProfilePicDialog((prev) => !prev);
+    }, [showProfilePicDialog]);
 
     const onPhoneChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -294,6 +300,7 @@ export function BasicInfo() {
 
     return (
         <>
+            <ChangeUserProfilePicDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
             <Typography variant={'h1'} className={classes.headingLabel}>
                 Profile
             </Typography>
@@ -307,7 +314,13 @@ export function BasicInfo() {
                     </Typography>
                 </Box>
 
-                <BasicInfoRow label={'photo'} value={'Personalize your account with a photo'} shown={false} />
+                <BasicInfoRow
+                    label={'photo'}
+                    value={'Personalize your account with a photo'}
+                    shown={false}
+                    showProfilePic
+                    onProfilePicPress={onToggleProfilePicDialog}
+                />
                 <BasicInfoRow
                     label={'Name'}
                     value={user$?.firstName + ' ' + user$?.lastName}

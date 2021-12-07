@@ -4,6 +4,11 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import makeStyles from '@mui/styles/makeStyles';
 import Divider from '@mui/material/Divider';
+import Avatar from '@mui/material/Avatar';
+import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
+import Box from '@mui/material/Box';
+import { useSharedSelector } from '@shared/hooks/useSharedSelector';
+import ButtonBase from '@mui/material/ButtonBase';
 
 interface BasicInfoRowProps {
     label: string;
@@ -15,6 +20,8 @@ interface BasicInfoRowProps {
     isSaveBtnDisabled?: boolean;
     children?: any;
     hideDivider?: boolean;
+    showProfilePic?: boolean;
+    onProfilePicPress?: any;
 }
 
 const useStyle = makeStyles(
@@ -75,7 +82,19 @@ const useStyle = makeStyles(
 
 export function BasicInfoRow(props: BasicInfoRowProps) {
     const classes = useStyle();
-    const { label, value, shown, children, onEdit, hideDivider, onSave, isSaveBtnDisabled } = props;
+    const {
+        label,
+        value,
+        shown,
+        children,
+        onEdit,
+        hideDivider,
+        onSave,
+        showProfilePic,
+        isSaveBtnDisabled,
+        onProfilePicPress,
+    } = props;
+    const user$ = useSharedSelector((state) => state.authentication.user);
 
     return (
         <>
@@ -103,6 +122,13 @@ export function BasicInfoRow(props: BasicInfoRowProps) {
                                 <Button variant={'text'} size={'medium'} onClick={onEdit}>
                                     Edit
                                 </Button>
+                            ) : null}
+                            {showProfilePic ? (
+                                <Box paddingRight={'12px'}>
+                                    <ButtonBase onClick={onProfilePicPress}>
+                                        <Avatar src={user$?.profilePicture || RobogradingAvatar} />
+                                    </ButtonBase>
+                                </Box>
                             ) : null}
                         </Grid>
                         {!hideDivider ? <Divider sx={{ width: '100%', marginTop: '16px' }} /> : null}

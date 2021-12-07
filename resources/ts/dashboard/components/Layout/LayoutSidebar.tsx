@@ -14,6 +14,7 @@ import React from 'react';
 import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import LayoutSidebarItem from './LayoutSidebarItem';
+import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 
 const useStyles = makeStyles(
     {
@@ -67,13 +68,14 @@ function LayoutSidebar() {
     const classes = useStyles();
     const { logout, user } = useAuth();
 
+    const user$ = useSharedSelector((state) => state.authentication.user);
     const userFullName = user.getFullName();
 
     return (
         <Paper variant={'outlined'} className={classes.root}>
             <Grid container direction={'row'} alignItems={'center'} className={classes.header}>
                 <div className={classes.headerAvatarHolder}>
-                    <Avatar src={UserAvatar} className={classes.headerAvatar} />
+                    <Avatar src={user$?.profileImage ?? UserAvatar} className={classes.headerAvatar} />
                 </div>
                 <div className={classes.headerInfoHolder}>
                     <Typography variant={'h6'} noWrap title={userFullName} className={classes.headerUserName}>

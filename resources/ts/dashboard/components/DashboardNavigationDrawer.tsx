@@ -27,6 +27,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import HomeIcon from '@mui/icons-material/HomeOutlined';
 import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
 import FeedIcon from '@mui/icons-material/FeedOutlined';
+import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -109,6 +110,7 @@ export function DashboardNavigationDrawer() {
     const { logout, user } = useAuth();
     const dispatch = useAppDispatch();
     const history = useHistory();
+    const user$ = useSharedSelector((state) => state.authentication.user);
 
     function isItemActive(itemPath: string) {
         return history.location.pathname === itemPath;
@@ -134,7 +136,7 @@ export function DashboardNavigationDrawer() {
         >
             <Grid container direction={'row'} alignItems={'center'} className={classes.header}>
                 <div className={classes.headerAvatarHolder}>
-                    <Avatar src={UserAvatar} className={classes.headerAvatar} />
+                    <Avatar src={user$?.profileImage ?? UserAvatar} className={classes.headerAvatar} />
                 </div>
                 <div className={classes.headerInfoHolder}>
                     <Typography variant={'h6'} noWrap className={classes.headerUserName}>

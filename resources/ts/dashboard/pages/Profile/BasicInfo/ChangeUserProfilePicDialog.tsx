@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent } from '@mui/material';
+import { CircularProgress, Dialog, DialogActions, DialogContent } from '@mui/material';
 import Button from '@mui/material/Button';
 import React, { useCallback, useState } from 'react';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
@@ -13,6 +13,11 @@ import ImageUploader from '@shared/components/ImageUploader';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { updateUserProfile } from '@shared/redux/slices/userSlice';
+import { FilesRepository } from '@shared/repositories/FilesRepository';
+import { useRepository } from '@shared/hooks/useRepository';
+import { NotificationsService } from '@shared/services/NotificationsService';
 
 interface ChangeUserProfilePicDialogProps {
     show: boolean;
@@ -75,11 +80,15 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
     const { toggle, show } = props;
     const classes = useStyles();
 
+    const dispatch = useSharedDispatch();
+    const filesRepository = useRepository(FilesRepository);
+
     const user$ = useSharedSelector((state) => state.authentication.user);
     const [viewMode, setViewMode] = useState<ViewModes>(
         user$?.profileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic,
     );
     const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+    const [isUploading, setIsUploading] = useState<boolean>(false);
 
     const handleClose = useCallback(() => {
         setViewMode(user$?.profileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
@@ -106,9 +115,21 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
         [uploadedImage, viewMode],
     );
 
-    const handleSaveProfilePic = useCallback(() => {
+    const handleSaveProfilePic = useCallback(async () => {
         // dispatch action to upload image to backend
-        setViewMode(ViewModes.hasProfilePic);
+        try {
+            setIsUploading(true);
+            const imageUrl = await filesRepository.uploadFile(uploadedImage!);
+            await dispatch(
+                updateUserProfile({
+                    profileImage: imageUrl,
+                }),
+            );
+            setViewMode(ViewModes.hasProfilePic);
+            setIsUploading(false);
+        } catch (e: any) {
+            NotificationsService.error(e);
+        }
     }, [uploadedImage, viewMode]);
 
     const handleDeleteProfilePic = useCallback(() => {
@@ -132,11 +153,7 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
                 </Box>
                 <DialogContent>
                     <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-                        <img
-                            src={URL.createObjectURL(uploadedImage)}
-                            alt="Profile Avatar"
-                            className={classes.profilePicture}
-                        />
+                        <img src={user$?.profileImage} alt="Profile Avatar" className={classes.profilePicture} />
                         <Typography variant={'h2'} className={classes.profilePicLabel}>
                             Profile Picture
                         </Typography>
@@ -205,7 +222,12 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
                     <Button onClick={handleClose} variant="text">
                         Close
                     </Button>
-                    <Button onClick={handleSaveProfilePic} variant={'contained'}>
+                    <Button
+                        onClick={handleSaveProfilePic}
+                        startIcon={isUploading ? <CircularProgress color={'primary'} /> : null}
+                        disabled={isUploading}
+                        variant={'contained'}
+                    >
                         Save
                     </Button>
                 </DialogActions>

@@ -14,6 +14,8 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { BasicInfoRow } from '@dashboard/pages/Profile/BasicInfo/BasicInfoRow';
 import Box from '@mui/material/Box';
 import { ChangeUserProfilePicDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserProfilePicDialog';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -136,6 +138,7 @@ const CustomTextField = withStyles({
 export function BasicInfo() {
     const classes = useStyles();
     const user$ = useSharedSelector((state) => state.authentication.user);
+    const dispatch = useSharedDispatch();
 
     const [showName, setShowName] = useState<boolean>(false);
     const [showUserName, setShowUserName] = useState<boolean>(false);
@@ -298,6 +301,40 @@ export function BasicInfo() {
         }
     }, [newPhone]);
 
+    const onNewNameSave = useCallback(async () => {
+        dispatch(
+            updateUserProfile({
+                firstName: newFirstName,
+                lastName: newLastName,
+            }),
+        );
+    }, [newFirstName, newLastName, user$?.firstName, user$?.lastName]);
+
+    const onNewUserNameSave = useCallback(async () => {
+        dispatch(
+            updateUserProfile({
+                username: newUserName,
+            }),
+        );
+    }, [newUserName, user$?.username]);
+
+    const onNewPhoneSave = useCallback(async () => {
+        dispatch(
+            updateUserProfile({
+                phone: newPhone,
+            }),
+        );
+    }, [newPhone, user$?.phone]);
+
+    const onNewPasswordSave = useCallback(async () => {
+        dispatch(
+            updateUserPassword({
+                currentPassword,
+                password: newPassword,
+                passwordConfirmation: confirmPassword,
+            }),
+        );
+    }, [newPassword, currentPassword, confirmPassword]);
     return (
         <>
             <ChangeUserProfilePicDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
@@ -325,7 +362,7 @@ export function BasicInfo() {
                     label={'Name'}
                     value={user$?.firstName + ' ' + user$?.lastName}
                     shown={showName}
-                    onSave={() => ''}
+                    onSave={onNewNameSave}
                     onEdit={handleOnNameEdit}
                     isSaveBtnDisabled={isNewNameSaveDisabled}
                     onCancel={handleOnNameEdit}
@@ -357,7 +394,7 @@ export function BasicInfo() {
                     label={'username'}
                     value={user$?.username || '-'}
                     shown={showUserName}
-                    onSave={() => ''}
+                    onSave={onNewUserNameSave}
                     onEdit={handleOnUserNameEdit}
                     onCancel={handleOnUserNameEdit}
                     isSaveBtnDisabled={isNewUserNameSaveDisabled}
@@ -381,7 +418,7 @@ export function BasicInfo() {
                     label={'password'}
                     value={'********'}
                     shown={showPassword}
-                    onSave={() => ''}
+                    onSave={onNewPasswordSave}
                     onEdit={handleOnPasswordEdit}
                     onCancel={handleOnPasswordEdit}
                     isSaveBtnDisabled={isPasswordSaveDisabled}
@@ -433,7 +470,7 @@ export function BasicInfo() {
                         label={'Phone'}
                         value={user$?.phone || '-'}
                         shown={showPhone}
-                        onSave={() => ''}
+                        onSave={onNewPhoneSave}
                         onEdit={handleOnPhoneEdit}
                         onCancel={handleOnPhoneEdit}
                         hideDivider

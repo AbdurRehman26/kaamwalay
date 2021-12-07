@@ -13,7 +13,7 @@ export class UserEntity extends Entity {
     public lastName!: string;
     public stripeId!: string;
     public customerNumber!: string;
-    public profilePicture!: string | null;
+    public profileImage!: string | null;
 
     @DateField()
     public emailVerifiedAt!: Moment;

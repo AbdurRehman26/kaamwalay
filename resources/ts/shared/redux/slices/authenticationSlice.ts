@@ -120,7 +120,11 @@ export const authenticationSlice = createSlice({
         accessToken: null,
         user: null,
     } as StateType,
-    reducers: {},
+    reducers: {
+        updateUserProfileData: (state, action: PayloadAction<UserEntity>) => {
+            state.user = action.payload;
+        },
+    },
     extraReducers: {
         [authenticateAction.rejected as any]: (state) => {
             state.authenticated = false;
@@ -164,3 +168,5 @@ export const authenticationSlice = createSlice({
         },
     },
 });
+
+export const { updateUserProfileData } = authenticationSlice.actions;

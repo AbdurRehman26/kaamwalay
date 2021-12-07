@@ -14,6 +14,7 @@ export class UserEntity extends Entity {
     public stripeId!: string;
     public customerNumber!: string;
     public profileImage!: string | null;
+    public emailSubscription!: number;
 
     @DateField()
     public emailVerifiedAt!: Moment;

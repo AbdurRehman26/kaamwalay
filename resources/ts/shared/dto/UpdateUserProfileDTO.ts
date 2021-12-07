@@ -6,5 +6,5 @@ export class UpdateUserProfileDTO {
     password?: string;
     phone?: string;
     profileImage?: string;
-    emailSubscription?: boolean;
+    emailSubscription?: number;
 }

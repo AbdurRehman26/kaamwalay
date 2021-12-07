@@ -16,6 +16,7 @@ import Box from '@mui/material/Box';
 import { ChangeUserProfilePicDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserProfilePicDialog';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
+import { FormControl, FormControlLabel, RadioGroup } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -145,6 +146,7 @@ export function BasicInfo() {
     const [showPhone, setShowPhone] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showProfilePicDialog, setShowProfilePicDialog] = useState<boolean>(false);
+    const [emailSubscription, setEmailSubscription] = useState(user$?.emailSubscription);
 
     const [newFirstName, setNewFirstName] = useState<string>(user$?.firstName || '');
     const [newLastName, setNewLastName] = useState<string>(user$?.lastName || '');
@@ -335,6 +337,18 @@ export function BasicInfo() {
             }),
         );
     }, [newPassword, currentPassword, confirmPassword]);
+
+    const handleChangeEmailSubscription = useCallback(
+        (e: any) => {
+            setEmailSubscription(e.nativeEvent.target.value);
+            dispatch(
+                updateUserProfile({
+                    emailSubscription: Number(e.nativeEvent.target.value),
+                }),
+            );
+        },
+        [emailSubscription],
+    );
     return (
         <>
             <ChangeUserProfilePicDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
@@ -513,8 +527,16 @@ export function BasicInfo() {
                             </TableRow>
                             <TableRow>
                                 <TableCell align={'left'} className={classes.subscriptionCheckBtn}>
-                                    <GreenRadio checked={true} /> Yes
-                                    <GreenRadio checked={false} /> No
+                                    <FormControl component="fieldset">
+                                        <RadioGroup
+                                            value={emailSubscription}
+                                            sx={{ display: 'flex', flexDirection: 'row' }}
+                                            onChange={handleChangeEmailSubscription}
+                                        >
+                                            <FormControlLabel value={1} control={<GreenRadio />} label="Yes" />
+                                            <FormControlLabel value={0} control={<GreenRadio />} label="No" />
+                                        </RadioGroup>
+                                    </FormControl>
                                 </TableCell>
                             </TableRow>
                         </TableBody>

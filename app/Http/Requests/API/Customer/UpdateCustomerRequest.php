@@ -4,7 +4,6 @@ namespace App\Http\Requests\API\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 
 class UpdateCustomerRequest extends FormRequest
 {
@@ -24,7 +23,7 @@ class UpdateCustomerRequest extends FormRequest
                 'required',
                 'string',
                 Rule::unique('users')->ignore(auth()->user()->id),
-                'max:50'],
+                'max:50', ],
             'profile_image' => ['string', 'nullable'],
             'phone' => ['string', 'nullable'],
         ];

@@ -21,7 +21,7 @@ class CustomerController extends Controller
             'username',
             'phone',
             'email_subscription',
-            'profile_image'
+            'profile_image',
         ]);
 
         /** @var User $user */

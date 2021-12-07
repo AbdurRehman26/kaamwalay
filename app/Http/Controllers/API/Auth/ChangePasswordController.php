@@ -28,7 +28,6 @@ class ChangePasswordController extends Controller
             'type' => 'bearer',
             'expiry' => config('jwt.ttl'),
         ], Response::HTTP_CREATED);
-
     }
 
     protected function changePassword(Authenticatable $user, string $password)
@@ -39,4 +38,3 @@ class ChangePasswordController extends Controller
         $user->save();
     }
 }
-

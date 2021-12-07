@@ -8,4 +8,3 @@ class CustomerProfileNotUpdated extends Exception
 {
     protected $message = 'Customer profile could not be updated';
 }
-

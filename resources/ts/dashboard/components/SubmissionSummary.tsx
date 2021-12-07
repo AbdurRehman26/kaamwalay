@@ -16,6 +16,8 @@ import { APIService } from '@shared/services/APIService';
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -239,6 +241,10 @@ function SubmissionSummary() {
                 category: EventCategories.Submissions,
                 action: SubmissionEvents.paid,
             });
+            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
+                value: grandTotal,
+                currency: 'USD',
+            });
             sendECommerceDataToGA();
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
@@ -273,6 +279,10 @@ function SubmissionSummary() {
                         ReactGA.event({
                             category: EventCategories.Submissions,
                             action: SubmissionEvents.paid,
+                        });
+                        trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
+                            value: grandTotal,
+                            currency: 'USD',
                         });
                         sendECommerceDataToGA();
                         history.push(`/submissions/${orderID}/confirmation`);

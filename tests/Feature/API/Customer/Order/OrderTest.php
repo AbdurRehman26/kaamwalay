@@ -199,8 +199,8 @@ test('a customer does not see payment pending orders', function () {
         ->has(OrderItem::factory())
         ->count(2)
         ->state(new Sequence(
-            ['order_status_id' => OrderStatus::STATUSES['placed']],
-            ['order_status_id' => OrderStatus::STATUSES['payment_pending']],
+            ['order_status_id' => OrderStatus::PLACED],
+            ['order_status_id' => OrderStatus::PAYMENT_PENDING],
         ))
         ->create();
 

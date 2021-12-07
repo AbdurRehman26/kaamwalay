@@ -17,6 +17,7 @@
  * @apiParam {Float} human_grade_values.back.surface back surfacing value for card. E.g. surface=8.5
  * @apiParam {Float} human_grade_values.back.edge back edges value for card. E.g. edge=6.0
  * @apiParam {Float} human_grade_values.back.corner back corners value for card. E.g. corner=3.5
+ * @apiParam {Float} grade_delta stepper modifier for overall grade. E.g. grade_delta=3.5
  *
  *  @apiParamExample {json} Request-Example:
  *      {
@@ -33,7 +34,8 @@
  *                  "edge": 3,
  *                  "corner": 9
  *              }
- *          }
+ *          },
+ *          "grade_delta": 3.5
  *      }
  *
  * @apiSuccess {Object} data UserCardResource
@@ -84,7 +86,11 @@
  *                  "edge": 3.5,
  *                  "corner": 8.5
  *              },
- *              "overall_grade": 5.3,
+ *              "grade": {
+ *                  "grade": 6.5,
+ *                  "nickname": "EX-MT+"
+ *              },
+ *              "grade_delta": 3.5,
  *              "grading_id": null,
  *              "ai_model_numbers": null,
  *              "generated_images": [

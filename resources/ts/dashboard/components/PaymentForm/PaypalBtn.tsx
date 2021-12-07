@@ -10,6 +10,8 @@ import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 
 function PaypalBtn() {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -87,6 +89,10 @@ function PaypalBtn() {
                             notifications.success('Order paid!', 'Success!');
                             dispatch(clearSubmissionState());
                             dispatch(invalidateOrders());
+                            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
+                                value: grandTotal,
+                                currency: 'USD',
+                            });
                             sendECommerceDataToGA();
                             history.push(`/submissions/${orderID}/confirmation`);
                         } catch (err: any) {

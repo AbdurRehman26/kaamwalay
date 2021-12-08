@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Events\API\Order;
+namespace App\Events\API\Auth;
 
-use App\Models\Order;
-use App\Models\OrderStatus;
+use App\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderStatusChangedEvent
+class CustomerAuthenticated
 {
     use Dispatchable, SerializesModels;
 
@@ -17,8 +16,8 @@ class OrderStatusChangedEvent
      * @return void
      */
     public function __construct(
-        public Order $order,
-        public OrderStatus $orderStatus
+        public User $user,
+        public ?string $platform
     ) {
     }
 }

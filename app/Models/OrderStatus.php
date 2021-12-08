@@ -19,10 +19,6 @@ class OrderStatus extends Model
     public const REVIEWED = 7;
 
     public const DEFAULT_ORDER_STATUS = self::PAYMENT_PENDING;
-    public const STATUSES = [
-        'payment_pending' => self::PAYMENT_PENDING,
-        'placed' => self::PLACED,
-    ];
 
     /**
      * The attributes that are mass assignable.

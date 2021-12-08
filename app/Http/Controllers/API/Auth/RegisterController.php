@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Auth;
 
+use App\Events\API\Auth\CustomerAuthenticated;
 use App\Events\API\Auth\CustomerRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\RegisterRequest;
@@ -15,9 +16,11 @@ class RegisterController extends Controller
     {
         $user = User::createCustomer($request->validated());
 
-        CustomerRegistered::dispatch($user, $request->only('password'));
+        CustomerRegistered::dispatch($user, $request->only('password', 'platform'));
 
         $token = auth()->guard()->login($user);
+
+        CustomerAuthenticated::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
 
         return new JsonResponse([
             'access_token' => $token,

@@ -27,7 +27,6 @@ import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import HomeIcon from '@mui/icons-material/HomeOutlined';
 import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
 import FeedIcon from '@mui/icons-material/FeedOutlined';
-import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -110,7 +109,7 @@ export function DashboardNavigationDrawer() {
     const { logout, user } = useAuth();
     const dispatch = useAppDispatch();
     const history = useHistory();
-    const user$ = useSharedSelector((state) => state.authentication.user);
+    const user$ = useAuth().user;
 
     function isItemActive(itemPath: string) {
         return history.location.pathname === itemPath;

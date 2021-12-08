@@ -2,15 +2,15 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect, useState } from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import withStyles from '@mui/styles/withStyles';
 import Divider from '@mui/material/Divider';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { BasicInfoRow } from '@dashboard/pages/Profile/BasicInfo/BasicInfoRow';
 import Box from '@mui/material/Box';
-import { ChangeUserProfilePicDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserProfilePicDialog';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
+import { useAuth } from '@shared/hooks/useAuth';
+import { ChangeUserPictureDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserPictureDialog';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -123,7 +123,7 @@ const CustomTextField = withStyles({
 
 export function BasicInfo() {
     const classes = useStyles();
-    const user$ = useSharedSelector((state) => state.authentication.user);
+    const user$ = useAuth().user;
     const dispatch = useSharedDispatch();
 
     const [showName, setShowName] = useState<boolean>(false);
@@ -335,7 +335,7 @@ export function BasicInfo() {
 
     return (
         <>
-            <ChangeUserProfilePicDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
+            <ChangeUserPictureDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
             <Typography variant={'h1'} className={classes.headingLabel}>
                 Profile
             </Typography>

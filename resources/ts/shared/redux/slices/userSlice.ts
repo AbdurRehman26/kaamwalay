@@ -12,7 +12,7 @@ export const updateUserProfile = createAsyncThunk(
     async (input: UpdateUserProfileDTO, thunkAPI) => {
         const userRepository = app(UserRepository);
         try {
-            const { data } = await userRepository.updateUserProfile(input);
+            const data = await userRepository.updateUserProfile(input);
             thunkAPI.dispatch(updateUserProfileData(data));
             NotificationsService.success('Profile updated successfully!');
         } catch (error: any) {
@@ -28,7 +28,7 @@ export const updateUserPassword = createAsyncThunk(
         const authenticationService = app(AuthenticationService);
         const userRepository = app(UserRepository);
         try {
-            const { data } = await userRepository.updateUserPassword(input);
+            const data = await userRepository.updateUserPassword(input);
             await authenticationService.setAccessToken(data.accessToken);
             NotificationsService.success('Password changed successfully!');
         } catch (error: any) {

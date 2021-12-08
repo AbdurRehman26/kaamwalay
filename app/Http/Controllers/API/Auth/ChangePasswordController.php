@@ -30,7 +30,7 @@ class ChangePasswordController extends Controller
         ], Response::HTTP_CREATED);
     }
 
-    protected function changePassword(Authenticatable $user, string $password)
+    protected function changePassword(User $user, string $password): void
     {
         $user->password = $password;
         $user->setRememberToken(Str::random(60));

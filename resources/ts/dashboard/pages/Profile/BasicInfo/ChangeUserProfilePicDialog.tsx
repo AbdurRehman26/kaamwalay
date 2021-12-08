@@ -1,6 +1,6 @@
 import { CircularProgress, Dialog, DialogActions, DialogContent } from '@mui/material';
 import Button from '@mui/material/Button';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -17,7 +17,7 @@ import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { updateUserProfile } from '@shared/redux/slices/userSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useRepository } from '@shared/hooks/useRepository';
-import { NotificationsService } from '@shared/services/NotificationsService';
+import { useNotifications } from '@shared/hooks/useNotifications';
 
 interface ChangeUserProfilePicDialogProps {
     show: boolean;
@@ -82,18 +82,18 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
 
     const dispatch = useSharedDispatch();
     const filesRepository = useRepository(FilesRepository);
-
-    const user$ = useSharedSelector((state) => state.authentication.user);
+    const notifications = useNotifications();
+    const userProfileImage = useSharedSelector((state) => state.authentication.user?.profileImage);
     const [viewMode, setViewMode] = useState<ViewModes>(
-        user$?.profileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic,
+        userProfileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic,
     );
     const [uploadedImage, setUploadedImage] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState<boolean>(false);
 
     const handleClose = useCallback(() => {
-        setViewMode(user$?.profileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
+        setViewMode(userProfileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
         toggle();
-    }, [toggle]);
+    }, [toggle, userProfileImage]);
 
     const handleAddProfilePicPress = () => {
         setViewMode(ViewModes.uploadProfilePic);
@@ -101,7 +101,11 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
 
     const handleBackPress = () => {
         if (viewMode === ViewModes.uploadProfilePic) {
-            setViewMode(ViewModes.noProfilePic);
+            if (userProfileImage) {
+                setViewMode(ViewModes.hasProfilePic);
+            } else {
+                setViewMode(ViewModes.noProfilePic);
+            }
         } else if (viewMode === ViewModes.previewProfilePic) {
             setViewMode(ViewModes.uploadProfilePic);
         }
@@ -116,7 +120,6 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
     );
 
     const handleSaveProfilePic = useCallback(async () => {
-        // dispatch action to upload image to backend
         try {
             setIsUploading(true);
             const imageUrl = await filesRepository.uploadFile(uploadedImage!);
@@ -128,22 +131,32 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
             setViewMode(ViewModes.hasProfilePic);
             setIsUploading(false);
         } catch (e: any) {
-            NotificationsService.error(e);
+            notifications.exception(e);
         }
-    }, [uploadedImage, viewMode]);
+    }, [uploadedImage, viewMode, userProfileImage]);
 
-    const handleDeleteProfilePic = useCallback(() => {
-        setViewMode(ViewModes.noProfilePic);
-    }, [viewMode]);
+    const handleDeleteProfilePic = useCallback(async () => {
+        try {
+            await dispatch(
+                updateUserProfile({
+                    profileImage: '',
+                }),
+            );
+            setViewMode(ViewModes.noProfilePic);
+        } catch (e: any) {
+            notifications.exception(e);
+        }
+    }, [viewMode, userProfileImage]);
 
     const handleEditProfilePic = useCallback(() => {
         setViewMode(ViewModes.uploadProfilePic);
-    }, [viewMode]);
+    }, [viewMode, userProfileImage]);
+
+    useEffect(() => {
+        setViewMode(userProfileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
+    }, [dispatch]);
 
     if (viewMode === ViewModes.hasProfilePic) {
-        if (!uploadedImage) {
-            return null;
-        }
         return (
             <Dialog open={show} onClose={handleClose} fullWidth maxWidth={'sm'}>
                 <Box width={'100%'} display={'flex'} flexDirection={'row'} justifyContent={'flex-end'} padding={'16px'}>
@@ -153,7 +166,7 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
                 </Box>
                 <DialogContent>
                     <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-                        <img src={user$?.profileImage} alt="Profile Avatar" className={classes.profilePicture} />
+                        <img src={userProfileImage} alt="Profile Avatar" className={classes.profilePicture} />
                         <Typography variant={'h2'} className={classes.profilePicLabel}>
                             Profile Picture
                         </Typography>

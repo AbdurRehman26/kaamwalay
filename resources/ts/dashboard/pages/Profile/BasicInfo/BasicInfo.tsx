@@ -147,6 +147,13 @@ export function BasicInfo() {
     const [newPhone, setNewPhone] = useState<string>(user$?.phone || '');
     const [isNewPhoneSaveDisabled, setIsNewPhoneSaveDisabled] = useState<boolean>(false);
 
+    const hideRows = () => {
+        setShowName(false);
+        setShowUserName(false);
+        setShowPhone(false);
+        setShowPassword(false);
+    };
+
     const onToggleProfilePicDialog = useCallback(() => {
         setShowProfilePicDialog((prev) => !prev);
     }, [showProfilePicDialog]);
@@ -288,38 +295,42 @@ export function BasicInfo() {
     }, [newPhone]);
 
     const onNewNameSave = useCallback(async () => {
-        dispatch(
+        await dispatch(
             updateUserProfile({
                 firstName: newFirstName,
                 lastName: newLastName,
             }),
         );
+        hideRows();
     }, [newFirstName, newLastName, user$?.firstName, user$?.lastName]);
 
     const onNewUserNameSave = useCallback(async () => {
-        dispatch(
+        await dispatch(
             updateUserProfile({
                 username: newUserName,
             }),
         );
+        hideRows();
     }, [newUserName, user$?.username]);
 
     const onNewPhoneSave = useCallback(async () => {
-        dispatch(
+        await dispatch(
             updateUserProfile({
                 phone: newPhone,
             }),
         );
+        hideRows();
     }, [newPhone, user$?.phone]);
 
     const onNewPasswordSave = useCallback(async () => {
-        dispatch(
+        await dispatch(
             updateUserPassword({
                 currentPassword,
                 password: newPassword,
                 passwordConfirmation: confirmPassword,
             }),
         );
+        hideRows();
     }, [newPassword, currentPassword, confirmPassword]);
 
     return (

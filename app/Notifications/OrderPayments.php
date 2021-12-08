@@ -74,11 +74,11 @@ class OrderPayments extends Notification
     }
 
     protected function getMessageForExtraChargeAndRefund(String $paymentCode):string
-    {   
+    {
         $orderPayment = new OrderPaymentResource($this->order->lastOrderPayment);
         $adminName = $orderPayment->user->getFullName();
 
-        if($this->paymentType === OrderPayment::TYPE_EXTRA_CHARGE) {
+        if ($this->paymentType === OrderPayment::TYPE_EXTRA_CHARGE) {
             return "Extra Charge, {$orderPayment->amount}, {$paymentCode}, {$this->order->order_number}, by {$adminName}";
         }
         

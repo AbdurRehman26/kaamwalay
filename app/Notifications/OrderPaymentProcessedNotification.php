@@ -49,7 +49,7 @@ class OrderPaymentProcessedNotification extends Notification
         };
     }
 
-    protected function getMessageForOrderPaid(String $paymentCode): string
+    protected function getMessageForOrderPaid(string $paymentCode): string
     {
         $totalCards = $this->order->orderItems->sum('quantity');
         $customerFullName = $this->order->user->getFullName();
@@ -61,7 +61,7 @@ class OrderPaymentProcessedNotification extends Notification
         return "$customerFullName, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, $totalCards";
     }
 
-    protected function getMessageForExtraChargeAndRefund(String $paymentCode): string
+    protected function getMessageForExtraChargeAndRefund(string $paymentCode): string
     {
         $orderPayment = new OrderPaymentResource($this->order->lastOrderPayment);
         $adminName = $orderPayment->user->getFullName();

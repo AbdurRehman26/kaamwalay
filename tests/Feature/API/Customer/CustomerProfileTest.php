@@ -29,7 +29,6 @@ test('a customer can update his profile', function () {
             'id',
             'first_name',
             'last_name',
-            'email_subscription',
             'phone',
             'username',
             'email',
@@ -47,7 +46,6 @@ test('customer profile update required fields error', function () {
     $response = $this->postJson('/api/customer/update-profile', [
         'first_name' => '',
         'last_name' => '',
-        'email_subscription' => '',
         'phone' => '',
         'username' => '',
         'profile_image' => '',
@@ -56,7 +54,6 @@ test('customer profile update required fields error', function () {
     $response->assertInvalid([
         'first_name',
         'last_name',
-        'email_subscription',
         'username',
     ]);
 });

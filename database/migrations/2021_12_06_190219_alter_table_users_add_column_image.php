@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableUsersAddColumnsImageEmailSubscription extends Migration
+class AlterTableUsersAddColumnImage extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AlterTableUsersAddColumnsImageEmailSubscription extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('email_subscription')->default(false);
-            $table->string('profile_image', 1000)->default('');
+            $table->string('profile_image', 1000)->nullable();
         });
     }
 
@@ -27,7 +26,6 @@ class AlterTableUsersAddColumnsImageEmailSubscription extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('email_subscription');
             $table->dropColumn('profile_image');
         });
     }

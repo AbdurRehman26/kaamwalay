@@ -75,12 +75,10 @@ class OrderPaymentProcessedNotification extends Notification
 
     protected function getEmoji(): string
     {
-        $emoji = ':robot_face:';
-
         if ($this->paymentType === OrderPayment::TYPE_ORDER_PAYMENT && $this->order->grand_total >= 5000) {
-            $emoji = ':space_invader:';
+            return ':space_invader:';
         }
 
-        return $emoji;
+        return ':robot_face:';
     }
 }

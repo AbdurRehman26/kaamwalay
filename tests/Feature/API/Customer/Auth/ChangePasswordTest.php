@@ -35,5 +35,4 @@ test('user is validated while changing password', function () {
         'password',
     ]);
 
-
 })->group('auth');

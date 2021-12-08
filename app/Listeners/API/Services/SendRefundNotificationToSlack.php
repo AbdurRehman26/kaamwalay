@@ -4,6 +4,7 @@ namespace App\Listeners\API\Services;
 
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Models\OrderPayment;
+use App\Notifications\OrderPaymentProcessedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
@@ -27,6 +28,6 @@ class SendRefundNotificationToSlack implements ShouldQueue
         }
 
         Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
-            ->notify(new \App\Notifications\OrderPayments($event->order, OrderPayment::TYPE_REFUND));
+            ->notify(new OrderPaymentProcessedNotification($event->order, OrderPayment::TYPE_REFUND));
     }
 }

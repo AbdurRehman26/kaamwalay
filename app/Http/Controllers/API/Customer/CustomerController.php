@@ -7,9 +7,9 @@ use App\Http\Requests\API\Customer\UpdateCustomerRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
 use App\Models\User;
 use App\Services\Customer\CustomerProfileService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Exception;
 
 class CustomerController extends Controller
 {

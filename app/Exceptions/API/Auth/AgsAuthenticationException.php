@@ -15,5 +15,4 @@ class AgsAuthenticationException extends Exception
     {
         return new JsonResponse([ 'error' => $this->message ], $this->code);
     }
-
 }

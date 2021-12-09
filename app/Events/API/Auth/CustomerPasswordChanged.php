@@ -18,5 +18,4 @@ class CustomerPasswordChanged
         public array $request
     ) {
     }
-
 }

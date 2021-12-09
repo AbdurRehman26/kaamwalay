@@ -14,8 +14,8 @@ class AlterTableUsersAddColumns extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->longText('ags_access_token');
             $table->string('profile_image', 1000)->nullable();
-            $table->string('ags_access_token');
         });
     }
 
@@ -27,8 +27,8 @@ class AlterTableUsersAddColumns extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('profile_image');
             $table->dropColumn('ags_access_token');
+            $table->dropColumn('profile_image');
         });
     }
 }

@@ -7,6 +7,8 @@ use App\Events\API\Auth\CustomerAuthenticated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\LoginRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
+use App\Models\User;
+use App\Services\Customer\CustomerProfileService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,9 +34,14 @@ class LoginController extends Controller
         );
     }
 
-    public function authenticateUserOnAgs(LoginRequest $request): JsonResponse
+    public function authenticateUserOnAgs(LoginRequest $request, CustomerProfileService $customerProfileService): JsonResponse
     {
-        $this->agsService->login(data: $request->validated());
+        $response = $this->agsService->login(data: $request->validated());
+
+        $customerProfileService->update(
+            User::where($request->only('email'))->first(),
+            ['ags_access_token' => $response['access_token']]
+        );
 
         return new JsonResponse(
             [ 'message' => 'User authenticated successfully.' ],

@@ -2,6 +2,7 @@
 
 namespace App\Http\APIClients;
 
+use App\Models\User;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -41,10 +42,21 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/registration/', payload: $data);
     }
 
+    public function updateUserData(User $user, array $data): array
+    {
+        $response = Http::withToken($user->ags_access_token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponse(response: $response, route: '/users/me/', payload: $data);
+    }
+
     public function changePassword(array $data): array
     {
         $response = Http::post(url: $this->getBaseUrl() . '/password/change/', data: $data);
-        dd($response);
+
         if ($response->successful()) {
             return $response->json();
         }

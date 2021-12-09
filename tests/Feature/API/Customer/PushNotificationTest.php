@@ -27,7 +27,7 @@ test('a customer can get Pusher auth token with valid platform', function () {
     $this->actingAs($user);
 
     $response = postJson('api/customer/push-notifications/auth', [
-        'platform' => 'android'
+        'platform' => 'android',
     ]);
 
     Bus::assertDispatched(CreateUserDeviceJob::class);
@@ -41,7 +41,7 @@ test('a customer cannot get Pusher auth token with invalid platform', function (
     $this->actingAs($user);
 
     $response = postJson('api/customer/push-notifications/auth', [
-        'platform' => 'foo'
+        'platform' => 'foo',
     ]);
 
     Bus::assertNotDispatched(CreateUserDeviceJob::class);

@@ -30,7 +30,7 @@ class ChangePasswordRequest extends FormRequest
                 'required',
                 Password::min(8)
                     ->letters()
-//                    ->mixedCase()
+                    ->mixedCase()
                     ->numbers(),
                 'confirmed',
             ],

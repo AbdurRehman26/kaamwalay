@@ -310,7 +310,7 @@ export function BasicInfo() {
             }),
         );
         hideRows();
-        if (result?.payload?.response?.status === 400) {
+        if (result?.payload?.response?.status === 422) {
             setShowAskForPasswordDialog(true);
             setPasswordConfirmCallback(() => async () => {
                 await dispatch(

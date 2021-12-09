@@ -17,6 +17,10 @@ class InvalidAgsDataForCustomer extends Exception
      */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
+    /**
+     * @param $request
+     * @return JsonResponse
+     */
     public function render($request): JsonResponse
     {
         return new JsonResponse(['error' => $this->message], $this->code);

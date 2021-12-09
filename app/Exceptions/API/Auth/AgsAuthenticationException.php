@@ -17,6 +17,10 @@ class AgsAuthenticationException extends Exception
      */
     protected $code = Response::HTTP_BAD_REQUEST;
 
+    /**
+     * @param $request
+     * @return JsonResponse
+     */
     public function render($request): JsonResponse
     {
         return new JsonResponse(['error' => $this->message], $this->code);

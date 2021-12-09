@@ -190,7 +190,7 @@ class AGSClient
 
             return [
                 'code' => $exception->getCode(),
-                'message' => $exception->getMessage(),
+                'message' => ! empty(json_decode($response->body())->app_message) ? json_decode($response->body())->app_message[0] : '',
             ];
         }
 

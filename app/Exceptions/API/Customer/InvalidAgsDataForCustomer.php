@@ -8,7 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InvalidAgsDataForCustomer extends Exception
 {
+    /**
+     * @var string
+     */
     protected $message = 'The data provided is invalid.';
+    /**
+     * @var int
+     */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
     public function render($request): JsonResponse

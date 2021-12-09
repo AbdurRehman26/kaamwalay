@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Support\Arr;
@@ -133,4 +134,16 @@ test('user cannot login with invalid platform', function () {
     $response->assertJsonValidationErrors([
         'platform' => 'The selected platform is invalid.',
     ]);
+})->group('auth');
+
+it('dispatches jobs', function () {
+    Bus::fake();
+    $user = User::factory()->create();
+    $this->postJson('api/auth/login', [
+        'email' => $user->email,
+        'password' => 'password',
+        'platform' => Arr::random(['web', 'ios', 'android']),
+    ]);
+
+    Bus::assertDispatched(CreateUserDeviceJob::class);
 })->group('auth');

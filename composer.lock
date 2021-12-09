@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcd45f2e6270407fd96458e8a87450fd",
+    "content-hash": "db4334e51f595bfd31884c14d0e07dd5",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -6755,6 +6755,75 @@
                 }
             ],
             "time": "2021-11-17T15:39:59+00:00"
+        },
+        {
+            "name": "spatie/laravel-webhook-client",
+            "version": "3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-webhook-client.git",
+                "reference": "d71a8e81c01f1f1b83f776b536320e1ee51e9cdd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-webhook-client/zipball/d71a8e81c01f1f1b83f776b536320e1ee51e9cdd",
+                "reference": "d71a8e81c01f1f1b83f776b536320e1ee51e9cdd",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/bus": "^8.50",
+                "illuminate/database": "^8.50",
+                "illuminate/support": "^8.50",
+                "php": "^8.0",
+                "spatie/laravel-package-tools": "^1.9"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.3",
+                "spatie/laravel-ray": "^1.24"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\WebhookClient\\WebhookClientServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\WebhookClient\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Receive webhooks in Laravel apps",
+            "homepage": "https://github.com/spatie/laravel-webhook-client",
+            "keywords": [
+                "laravel-webhook-client",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-webhook-client/issues",
+                "source": "https://github.com/spatie/laravel-webhook-client/tree/3.0.3"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2021-12-07T09:02:55+00:00"
         },
         {
             "name": "stripe/stripe-php",

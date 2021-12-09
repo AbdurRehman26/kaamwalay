@@ -41,6 +41,17 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/registration/', payload: $data);
     }
 
+    public function changePassword(array $data): array
+    {
+        $response = Http::post(url: $this->getBaseUrl() . '/password/change/', data: $data);
+        dd($response);
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponse(response: $response, route: '/password/change/', payload: $data);
+    }
+
     public function getGrades(array $data): array
     {
         $response = Http::withToken($this->getAuthToken())->get(url: $this->getBaseUrl() . self::API_VERSION_2 . '/robograding/scan-results/', query: $data);

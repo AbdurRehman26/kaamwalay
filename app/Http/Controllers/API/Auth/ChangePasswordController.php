@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Auth;
 
+use App\Events\API\Auth\CustomerPasswordChanged;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\ChangePasswordRequest;
 use App\Models\User;
@@ -17,6 +18,8 @@ class ChangePasswordController extends Controller
 
         /* @var User */
         $user = auth()->user();
+
+        CustomerPasswordChanged::dispatch($request->only('current_password', 'password', 'password_confirmation', 'platform'));
 
         $this->changePassword($user, $password);
 

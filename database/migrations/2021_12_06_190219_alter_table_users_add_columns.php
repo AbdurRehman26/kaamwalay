@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableUsersAddColumnImage extends Migration
+class AlterTableUsersAddColumns extends Migration
 {
     /**
      * Run the migrations.
@@ -15,6 +15,7 @@ class AlterTableUsersAddColumnImage extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('profile_image', 1000)->nullable();
+            $table->string('ags_access_token');
         });
     }
 
@@ -27,6 +28,7 @@ class AlterTableUsersAddColumnImage extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('profile_image');
+            $table->dropColumn('ags_access_token');
         });
     }
 }

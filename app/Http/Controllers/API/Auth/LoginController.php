@@ -32,6 +32,17 @@ class LoginController extends Controller
         );
     }
 
+    public function authenticateUserOnAgs(LoginRequest $request): JsonResponse
+    {
+        $this->agsService->login(data: $request->validated());
+
+        return new JsonResponse(
+            [ 'message' => 'User authenticated successfully.' ],
+            Response::HTTP_OK,
+        );
+
+    }
+    
     public function me(): JsonResponse
     {
         return new JsonResponse([

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Customer;
 
+use App\Exceptions\API\Auth\AgsAuthenticationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\UpdateCustomerRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
@@ -13,6 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomerController extends Controller
 {
+    /**
+     * @throws \Throwable
+     */
     public function update(UpdateCustomerRequest $request, CustomerProfileService $customerProfileService): JsonResponse|UserResource
     {
         try {
@@ -27,7 +31,10 @@ class CustomerController extends Controller
             /** @var User $user */
             $user = auth()->user();
 
+            throw_if(!$user->ags_access_token, AgsAuthenticationException::class);
+
             $userResponse = $customerProfileService->update($user, $data);
+
         } catch (Exception $e) {
             return new JsonResponse(
                 [

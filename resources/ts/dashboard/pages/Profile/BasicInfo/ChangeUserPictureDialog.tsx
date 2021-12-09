@@ -19,7 +19,7 @@ import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useRepository } from '@shared/hooks/useRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
 
-interface ChangeUserProfilePicDialogProps {
+interface ChangeUserPictureDialogProps {
     show: boolean;
     toggle: () => void;
 }
@@ -76,7 +76,7 @@ const useStyles = makeStyles(() => {
     };
 });
 
-export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProps) {
+export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
     const { toggle, show } = props;
     const classes = useStyles();
 
@@ -132,6 +132,7 @@ export function ChangeUserProfilePicDialog(props: ChangeUserProfilePicDialogProp
             setIsUploading(false);
         } catch (e: any) {
             notifications.exception(e);
+            setIsUploading(false);
         }
     }, [uploadedImage, viewMode, userProfileImage]);
 

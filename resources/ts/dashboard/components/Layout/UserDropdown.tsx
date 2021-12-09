@@ -12,7 +12,6 @@ import { MouseEvent, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
-import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -25,7 +24,7 @@ export function UserDropdown() {
     const history = useHistory();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
-    const user$ = useSharedSelector((state) => state.authentication.user);
+    const user$ = useAuth().user;
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),

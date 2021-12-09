@@ -90,9 +90,9 @@ export default function ImageUploader(props: ImageUploaderProps) {
             <Box
                 sx={{
                     cursor: 'pointer',
-                    backgroundColor: '#F9F9F9',
-                    border: '1px solid #E0E0E0',
                 }}
+                bgcolor={'#F9F9F9'}
+                border={'1px solid #E0E0E0'}
                 minHeight={'254px'}
                 minWidth={'100%'}
                 display={'flex'}

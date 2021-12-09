@@ -14,7 +14,6 @@ import React from 'react';
 import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import LayoutSidebarItem from './LayoutSidebarItem';
-import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 
 const useStyles = makeStyles(
     {
@@ -68,7 +67,7 @@ function LayoutSidebar() {
     const classes = useStyles();
     const { logout, user } = useAuth();
 
-    const user$ = useSharedSelector((state) => state.authentication.user);
+    const user$ = useAuth().user;
     const userFullName = user.getFullName();
 
     return (

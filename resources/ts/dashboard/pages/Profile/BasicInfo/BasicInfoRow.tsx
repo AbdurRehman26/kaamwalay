@@ -7,8 +7,8 @@ import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import Box from '@mui/material/Box';
-import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import ButtonBase from '@mui/material/ButtonBase';
+import { useAuth } from '@shared/hooks/useAuth';
 
 interface BasicInfoRowProps {
     label: string;
@@ -94,7 +94,7 @@ export function BasicInfoRow(props: BasicInfoRowProps) {
         isSaveBtnDisabled,
         onProfilePicPress,
     } = props;
-    const user$ = useSharedSelector((state) => state.authentication.user);
+    const user$ = useAuth().user;
 
     return (
         <>

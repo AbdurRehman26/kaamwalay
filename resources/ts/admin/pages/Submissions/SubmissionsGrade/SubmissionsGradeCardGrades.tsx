@@ -125,6 +125,7 @@ export function SubmissionsGradeCardGrades({
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
         const response = await endpoint.put('', {
             humanGradeValues: humanGrades,
+            gradeDelta: 0,
         });
         dispatch(updateExistingCardData({ id: itemID, data: response.data }));
     }
@@ -287,7 +288,7 @@ export function SubmissionsGradeCardGrades({
                             />
                         ) : (
                             <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Edges</div>
+                                <div className={classes.gradeReadLabel}>Corners</div>
                                 <div className={classes.gradeReadValue}>{backCorner}</div>
                             </div>
                         )}

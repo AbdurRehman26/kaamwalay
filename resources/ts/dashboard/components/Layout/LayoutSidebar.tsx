@@ -67,13 +67,14 @@ function LayoutSidebar() {
     const classes = useStyles();
     const { logout, user } = useAuth();
 
+    const user$ = useAuth().user;
     const userFullName = user.getFullName();
 
     return (
         <Paper variant={'outlined'} className={classes.root}>
             <Grid container direction={'row'} alignItems={'center'} className={classes.header}>
                 <div className={classes.headerAvatarHolder}>
-                    <Avatar src={UserAvatar} className={classes.headerAvatar} />
+                    <Avatar src={user$?.profileImage ?? UserAvatar} className={classes.headerAvatar} />
                 </div>
                 <div className={classes.headerInfoHolder}>
                     <Typography variant={'h6'} noWrap title={userFullName} className={classes.headerUserName}>
@@ -88,7 +89,7 @@ function LayoutSidebar() {
             <List>
                 <LayoutSidebarItem icon={Inventory2Icon} title={'Submissions'} href={'/submissions'} />
                 <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} href={'/cards'} />
-                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} disabled title={'Profile'} href={'/profile'} />
+                <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Profile'} href={'/profile'} />
                 <LayoutSidebarItem
                     exact
                     icon={PaymentOutlinedIcon}

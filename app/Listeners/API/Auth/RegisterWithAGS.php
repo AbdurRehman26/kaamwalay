@@ -30,11 +30,13 @@ class RegisterWithAGS implements ShouldQueue, ShouldBeEncrypted
         $password = $event->request['password'];
         $passwordKeysForAgs = ['password1', 'password2'];
         $user = $event->user;
+        $platform = $event->request['platform'] ?? [];
 
         $response = $this->agsService->register(
             data: array_merge(
                 $user->only('first_name', 'last_name', 'username', 'email'),
                 array_fill_keys($passwordKeysForAgs, $password),
+                $platform,
                 ['app_generated_id' => 'w' . Str::random(5) . time()]
             )
         );

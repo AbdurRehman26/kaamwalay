@@ -1,11 +1,13 @@
 <?php
 
+use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
-test('user can login with valid credentials', function () {
+test('user can login with valid credentials without platform', function () {
     $user = User::factory()->create();
 
     $response = $this->postJson('api/auth/login', [
@@ -100,4 +102,48 @@ test('a logged in customer cannot login', function () {
 
     $response = $this->postJson('api/auth/login');
     $response->assertRedirect();
+})->group('auth');
+
+test('user can login with valid platform', function () {
+    $user = User::factory()->create();
+
+    $response = $this->postJson('api/auth/login', [
+        'email' => $user->email,
+        'password' => 'password',
+        'platform' => Arr::random(['web', 'ios', 'android']),
+    ]);
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'access_token',
+        'type',
+        'expiry',
+    ]);
+})->group('auth');
+
+test('user cannot login with invalid platform', function () {
+    $user = User::factory()->create();
+
+    $response = $this->postJson('api/auth/login', [
+        'email' => $user->email,
+        'password' => 'password',
+        'platform' => 'foo',
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors([
+        'platform' => 'The selected platform is invalid.',
+    ]);
+})->group('auth');
+
+it('dispatches jobs', function () {
+    Bus::fake();
+    $user = User::factory()->create();
+    $this->postJson('api/auth/login', [
+        'email' => $user->email,
+        'password' => 'password',
+        'platform' => Arr::random(['web', 'ios', 'android']),
+    ]);
+
+    Bus::assertDispatched(CreateUserDeviceJob::class);
 })->group('auth');

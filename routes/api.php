@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Auth\ChangePasswordController;
 use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Auth\RegisterController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\Customer\Order\ShippingMethodController;
 use App\Http\Controllers\API\Customer\PaymentCardController;
+use App\Http\Controllers\API\Customer\ProfileController;
+use App\Http\Controllers\API\Customer\PushNotificationController;
 use App\Http\Controllers\API\Files\UploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,11 +32,14 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class, 'login'])->middleware('guest');
+    Route::post('login/ags', [LoginController::class, 'authenticateAndUpdateAgsUserToken'])->middleware('auth');
     Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
     Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
+    Route::post('password/change', [ChangePasswordController::class, 'change']);
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 
@@ -64,6 +70,8 @@ Route::prefix('customer')->group(function () {
 
             Route::post('/', [CardProductController::class, 'store']);
         });
+        Route::put('profile', [ProfileController::class, 'update']);
+        Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
     });
 });
 
@@ -77,3 +85,4 @@ Route::prefix('files')->group(function () {
         Route::post('presign', [UploadController::class, 'presignUpload']);
     });
 });
+

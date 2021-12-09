@@ -28,7 +28,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/login/', payload: $data);
+        return $this->handleErrorResponse(response: $response, route: '/login/', payload: $data);
     }
 
     public function register(array $data): array
@@ -38,7 +38,29 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/registration/', payload: $data);
+        return $this->handleErrorResponse(response: $response, route: '/registration/', payload: $data);
+    }
+
+    public function updateUserData(string $token, array $data): array
+    {
+        $response = Http::withToken($token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponseWithCode(response: $response, route: '/users/me/', payload: $data);
+    }
+
+    public function changePassword(string $token, array $data): array
+    {
+        $response = Http::withToken($token)->post(url: $this->getBaseUrl() . '/password/change/', data: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponseWithCode(response: $response, route: '/password/change/', payload: $data);
     }
 
     public function getGrades(array $data): array
@@ -49,24 +71,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/robograding/scan-results/', payload: $data);
-    }
-
-    protected function responseHandler(Response $response, string $route, array $payload = []): array
-    {
-        try {
-            $response->throw();
-        } catch (RequestException $exception) {
-            Log::error('Error occurred with AGS API', [
-                'route' => $route,
-                'message' => $exception->getMessage(),
-                'payload' => $payload,
-            ]);
-
-            return [];
-        }
-
-        return [];
+        return $this->handleErrorResponse(response: $response, route: '/robograding/scan-results/', payload: $data);
     }
 
     public function updateHumanGrades(string $certificateId, array $payload)
@@ -80,7 +85,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(
+        return $this->handleErrorResponse(
             response: $response,
             route: '/robograding/certificates/',
             payload: ['data' => $payload, 'certificate_id' => $certificateId]
@@ -97,7 +102,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/robograding/certificates/', payload: [$data]);
+        return $this->handleErrorResponse(response: $response, route: '/robograding/certificates/', payload: [$data]);
     }
 
     public function getCardSeries(array $data): array
@@ -108,7 +113,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/series/', payload: [$data]);
+        return $this->handleErrorResponse(response: $response, route: '/series/', payload: [$data]);
     }
 
     public function createCardSeries(array $data): array
@@ -119,7 +124,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/series/', payload: [$data]);
+        return $this->handleErrorResponse(response: $response, route: '/series/', payload: [$data]);
     }
 
     public function getCardSet(array $data): array
@@ -130,7 +135,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/sets/', payload: [$data]);
+        return $this->handleErrorResponse(response: $response, route: '/sets/', payload: [$data]);
     }
 
     public function createCardSet(array $data): array
@@ -141,7 +146,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/sets/', payload: [$data]);
+        return $this->handleErrorResponse(response: $response, route: '/sets/', payload: [$data]);
     }
 
     public function createCard(array $data): array
@@ -152,6 +157,43 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->responseHandler(response: $response, route: '/cards/', payload: [$data]);
+        return $this->handleErrorResponse(response: $response, route: '/cards/', payload: [$data]);
+    }
+
+    protected function handleErrorResponse(Response $response, string $route, array $payload = []): array
+    {
+        try {
+            $response->throw();
+        } catch (RequestException $exception) {
+            Log::error('Error occurred with AGS API', [
+                'route' => $route,
+                'message' => $exception->getMessage(),
+                'payload' => $payload,
+            ]);
+
+            return [];
+        }
+
+        return [];
+    }
+
+    protected function handleErrorResponseWithCode(Response $response, string $route, array $payload = []): array
+    {
+        try {
+            $response->throw();
+        } catch (RequestException $exception) {
+            Log::error('Error occurred with AGS API', [
+                'route' => $route,
+                'message' => $exception->getMessage(),
+                'payload' => $payload,
+            ]);
+
+            return [
+                'code' => $exception->getCode(),
+                'message' => ! empty(json_decode($response->body())->app_message) ? json_decode($response->body())->app_message[0] : '',
+            ];
+        }
+
+        return [];
     }
 }

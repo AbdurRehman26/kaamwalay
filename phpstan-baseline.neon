@@ -386,26 +386,6 @@ parameters:
 			path: app/Models/UserCard.php
 
 		-
-			message: "#^Method App\\\\Notifications\\\\OrderPaid\\:\\:toSlack\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: app/Notifications/OrderPaid.php
-
-		-
-			message: "#^Method App\\\\Notifications\\\\OrderPaid\\:\\:toSlack\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
-			count: 1
-			path: app/Notifications/OrderPaid.php
-
-		-
-			message: "#^Method App\\\\Notifications\\\\OrderPaid\\:\\:via\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: app/Notifications/OrderPaid.php
-
-		-
-			message: "#^Method App\\\\Notifications\\\\OrderPaid\\:\\:via\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
-			count: 1
-			path: app/Notifications/OrderPaid.php
-
-		-
 			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:toSlack\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: app/Notifications/OrdersExported.php

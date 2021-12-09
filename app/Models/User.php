@@ -19,12 +19,14 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword;
 
+    public string $pushNotificationType = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -41,6 +43,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'id' => 'integer',
         'email_verified_at' => 'datetime',
+        'ags_access_token' => 'encrypted',
     ];
 
     /**
@@ -130,6 +133,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
+    public function devices(): HasMany
+    {
+        return $this->hasMany(UserDevice::class);
+    }
+
     public function assignCustomerNumber(): self
     {
         if (! $this->customer_number) {
@@ -158,6 +166,11 @@ class User extends Authenticatable implements JWTSubject
                 'PASSWORD_RESET_LINK' => $this->getPasswordResetRoute($token),
             ],
         );
+    }
+
+    public function routeNotificationForPusherPushNotifications(): string
+    {
+        return $this->email;
     }
 
     protected function getPasswordResetRoute(string $token): string

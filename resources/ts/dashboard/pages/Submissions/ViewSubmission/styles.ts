@@ -81,7 +81,7 @@ export const useViewSubmissionStatusBarStyles = makeStyles(
                 position: 'absolute',
                 border: '24px solid transparent',
                 borderLeftColor: '#e0e0e0',
-                right: -48,
+                right: -47,
             },
             '&:before': {
                 content: '""',
@@ -96,6 +96,10 @@ export const useViewSubmissionStatusBarStyles = makeStyles(
             fontWeight: 500,
             '&&': {
                 zIndex: 10,
+            },
+            [theme.breakpoints.down('sm')]: {
+                fontSize: '12px',
+                marginLeft: '14px',
             },
         },
         itemActive: {

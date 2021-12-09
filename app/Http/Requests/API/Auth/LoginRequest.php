@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LoginRequest extends FormRequest
 {
@@ -26,6 +27,10 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required'],
             'password' => ['required'],
+            'platform' => [
+                'sometimes',
+                Rule::in(['web', 'ios', 'android']),
+            ],
         ];
     }
 }

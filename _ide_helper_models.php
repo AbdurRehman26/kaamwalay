@@ -71,6 +71,7 @@ namespace App\Models{
  * @property string $holo_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $addedBy
  * @property-read \App\Models\CardCategory|null $cardCategory
  * @property-read \App\Models\CardSet|null $cardSet
  * @method static \Database\Factories\CardProductFactory factory(...$parameters)
@@ -459,6 +460,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereOrderItemCustomerShipmentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereOrderItemShipmentId($value)
@@ -766,6 +768,8 @@ namespace App\Models{
  *
  * @property int $id
  * @property float $price
+ * @property float|null $price_before_discount It can be used to show a pre-discount price.
+ * @property string|null $discount_percentage
  * @property float $max_protection_amount
  * @property string $turnaround
  * @property int $display_position
@@ -776,10 +780,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan query()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDiscountPercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDisplayPosition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereMaxProtectionAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan wherePriceBeforeDiscount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereTurnaround($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereUpdatedAt($value)
  */
@@ -1215,5 +1221,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCardCertificate whereUserCardId($value)
  */
 	class UserCardCertificate extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\UserDevice
+ *
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|UserDevice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserDevice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserDevice query()
+ */
+	class UserDevice extends \Eloquent {}
 }
 

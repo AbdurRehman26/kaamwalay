@@ -10,7 +10,8 @@
  * @apiParam { String } email Unique Email of the User
  * @apiParam { String } username Unique Username of the User
  * @apiParam { String } password Password of the User
- * @apiParam { String } [phone] Optional phone number of the User
+ * @apiParam { String } [phone] Phone number of the User
+ * @apiParam { String } [platform] Platform of User device. Possible values [web, ios, android]
  *
  * @apiSuccess { String } data.token authentication token
  * @apiSuccess { String } data.type  type of authentication token

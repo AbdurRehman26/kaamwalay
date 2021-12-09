@@ -21,15 +21,18 @@ class UserCardController extends Controller
         CardGradingService $cardGradingService,
     ): UserCardResource {
         $overallValues = $cardGradingService->calculateOverallValues($request->get('human_grade_values'));
+        $gradeDelta = $request->get('grade_delta') ?? 0;
+        $grade = $cardGradingService->calculateOverallAverage($overallValues);
 
-        ['grade' => $grade, 'nickname' => $nickname] = $cardGradingService
-            ->calculateOverallAverage($overallValues);
+        ['grade' => $grade, 'nickname' => $nickname, 'grade_delta' => $gradeDelta] = $cardGradingService
+            ->addDeltaValueToOverallGrade($grade, $gradeDelta);
 
         $card->update(
             $request->only('human_grade_values') + [
                 'overall_values' => $overallValues,
                 'overall_grade' => $grade,
                 'overall_grade_nickname' => $nickname,
+                'grade_delta' => $gradeDelta,
             ]
         );
 

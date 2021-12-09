@@ -20,6 +20,5 @@ class OrderStatusChangedEvent
         public Order $order,
         public OrderStatus $orderStatus
     ) {
-        //
     }
 }

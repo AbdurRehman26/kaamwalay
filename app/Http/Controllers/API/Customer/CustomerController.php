@@ -37,8 +37,10 @@ class CustomerController extends Controller
 
             $response = $agsService->updateUserData($user, $data);
 
-            throw_if($response['code'] === Response::HTTP_UNPROCESSABLE_ENTITY, InvalidAgsDataForCustomer::class);
-            throw_if($response['code'] === Response::HTTP_UNAUTHORIZED, AgsAuthenticationException::class);
+            if(!empty($response['code'])){
+                throw_if($response['code'] === Response::HTTP_BAD_REQUEST, InvalidAgsDataForCustomer::class);
+                throw_if($response['code'] === Response::HTTP_UNAUTHORIZED, AgsAuthenticationException::class);
+            }
 
             $userResponse = $customerProfileService->update($user, $data);
 

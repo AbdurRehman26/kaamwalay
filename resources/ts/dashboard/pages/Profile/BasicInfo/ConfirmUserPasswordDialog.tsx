@@ -29,7 +29,12 @@ export function ConfirmUserPasswordDialog(props: ConfirmUserPasswordDialogProps)
     }, [onClose]);
 
     const handleSave = useCallback(async () => {
-        dispatch(confirmPasswordWithAGS({ password, email: userEmail }));
+        const result: any = await dispatch(confirmPasswordWithAGS({ password, email: userEmail }));
+
+        if (result?.error?.message) {
+            return;
+        }
+
         afterSaveCallback();
         handleClose();
     }, [onClose, password, afterSaveCallback]);

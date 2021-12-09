@@ -3,6 +3,7 @@ import { Repository } from '@shared/repositories/Repository';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { UpdateUserProfileDTO } from '@shared/dto/UpdateUserProfileDTO';
 import { ChangeUserPasswordDTO } from '@shared/dto/ChangeUserPasswordDTO';
+import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 
 @Injectable('UserRepository')
 export class UserRepository extends Repository<UserEntity> {
@@ -12,6 +13,11 @@ export class UserRepository extends Repository<UserEntity> {
     public async updateUserProfile(input: UpdateUserProfileDTO) {
         const { data } = await this.endpoint.post('/customer/update-profile', input);
         return this.toEntity(data);
+    }
+
+    public async confirmPasswordWithAGS(input: LoginRequestDto) {
+        const { data } = await this.endpoint.post('/auth/login/ags', input);
+        return data;
     }
 
     public async updateUserPassword(input: ChangeUserPasswordDTO) {

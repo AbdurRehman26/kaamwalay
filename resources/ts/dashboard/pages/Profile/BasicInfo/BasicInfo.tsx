@@ -11,6 +11,7 @@ import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
 import { useAuth } from '@shared/hooks/useAuth';
 import { ChangeUserPictureDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserPictureDialog';
+import { ConfirmUserPasswordDialog } from '@dashboard/pages/Profile/BasicInfo/ConfirmUserPasswordDialog';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -146,6 +147,13 @@ export function BasicInfo() {
 
     const [newPhone, setNewPhone] = useState<string>(user$?.phone || '');
     const [isNewPhoneSaveDisabled, setIsNewPhoneSaveDisabled] = useState<boolean>(false);
+
+    const [showAskForPasswordDialog, setShowAskForPasswordDialog] = useState<boolean>(false);
+    const [passwordConfirmCallback, setPasswordConfirmCallback] = useState<any>(() => {});
+
+    const toggleAskForPasswordDialog = useCallback(() => {
+        setShowAskForPasswordDialog((prev) => !prev);
+    }, [showAskForPasswordDialog]);
 
     const hideRows = () => {
         setShowName(false);
@@ -295,13 +303,24 @@ export function BasicInfo() {
     }, [newPhone]);
 
     const onNewNameSave = useCallback(async () => {
-        await dispatch(
+        const result: any = await dispatch(
             updateUserProfile({
                 firstName: newFirstName,
                 lastName: newLastName,
             }),
         );
         hideRows();
+        if (result?.payload?.response?.status === 400) {
+            setShowAskForPasswordDialog(true);
+            setPasswordConfirmCallback(() => async () => {
+                await dispatch(
+                    updateUserProfile({
+                        firstName: newFirstName,
+                        lastName: newLastName,
+                    }),
+                );
+            });
+        }
     }, [newFirstName, newLastName, user$?.firstName, user$?.lastName]);
 
     const onNewUserNameSave = useCallback(async () => {
@@ -310,6 +329,7 @@ export function BasicInfo() {
                 username: newUserName,
             }),
         );
+
         hideRows();
     }, [newUserName, user$?.username]);
 
@@ -335,6 +355,11 @@ export function BasicInfo() {
 
     return (
         <>
+            <ConfirmUserPasswordDialog
+                open={showAskForPasswordDialog}
+                onClose={toggleAskForPasswordDialog}
+                afterSaveCallback={passwordConfirmCallback}
+            />
             <ChangeUserPictureDialog show={showProfilePicDialog} toggle={onToggleProfilePicDialog} />
             <Typography variant={'h1'} className={classes.headingLabel}>
                 Profile

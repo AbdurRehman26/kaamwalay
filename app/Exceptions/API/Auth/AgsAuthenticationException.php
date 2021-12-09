@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AgsAuthenticationException extends Exception
 {
-    protected $message = 'The ags token is invalid or not found.';
+    protected $message = 'Please enter your AGS password.';
     protected $code = Response::HTTP_BAD_REQUEST;
 
     public function render($request): JsonResponse

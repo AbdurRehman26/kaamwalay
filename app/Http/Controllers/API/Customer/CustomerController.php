@@ -50,7 +50,7 @@ class CustomerController extends Controller
                 [
                     'error' => $e->getMessage(),
                 ],
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                $e->getCode()
             );
         }
 

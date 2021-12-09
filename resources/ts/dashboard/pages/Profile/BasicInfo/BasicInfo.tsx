@@ -122,6 +122,8 @@ const CustomTextField = withStyles({
     checked: {},
 })((props: TextFieldProps) => <TextField {...props} />);
 
+const HTTP_AGS_UNAUTHORIZED = 400;
+
 export function BasicInfo() {
     const classes = useStyles();
     const user$ = useAuth().user;
@@ -310,7 +312,7 @@ export function BasicInfo() {
             }),
         );
         hideRows();
-        if (result?.payload?.response?.status === 422) {
+        if (result?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
             setShowAskForPasswordDialog(true);
             setPasswordConfirmCallback(() => async () => {
                 await dispatch(
@@ -330,7 +332,7 @@ export function BasicInfo() {
             }),
         );
         hideRows();
-        if (result?.payload?.response?.status === 422) {
+        if (result?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
             setShowAskForPasswordDialog(true);
             setPasswordConfirmCallback(() => async () => {
                 await dispatch(
@@ -348,7 +350,7 @@ export function BasicInfo() {
                 phone: newPhone,
             }),
         );
-        if (result?.payload?.response?.status === 422) {
+        if (result?.payload?.response?.status === HTTP_AGS_UNAUTHORIZED) {
             setShowAskForPasswordDialog(true);
             setPasswordConfirmCallback(() => async () => {
                 await dispatch(

@@ -18,6 +18,7 @@ import { updateUserProfile } from '@shared/redux/slices/userSlice';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useRepository } from '@shared/hooks/useRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { ConfirmUserPasswordDialog } from '@dashboard/pages/Profile/BasicInfo/ConfirmUserPasswordDialog';
 
 interface ChangeUserPictureDialogProps {
     show: boolean;
@@ -90,6 +91,13 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
     const [uploadedImage, setUploadedImage] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState<boolean>(false);
 
+    const [showAskForPasswordDialog, setShowAskForPasswordDialog] = useState<boolean>(false);
+    const [passwordConfirmCallback, setPasswordConfirmCallback] = useState<any>(() => {});
+
+    const toggleAskForPasswordDialog = useCallback(() => {
+        setShowAskForPasswordDialog((prev) => !prev);
+    }, [showAskForPasswordDialog]);
+
     const handleClose = useCallback(() => {
         setViewMode(userProfileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
         toggle();
@@ -123,11 +131,21 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
         try {
             setIsUploading(true);
             const imageUrl = await filesRepository.uploadFile(uploadedImage!);
-            await dispatch(
+            const result = await dispatch(
                 updateUserProfile({
                     profileImage: imageUrl,
                 }),
             );
+            if (result?.payload?.response?.status === 400) {
+                setShowAskForPasswordDialog(true);
+                setPasswordConfirmCallback(() => async () => {
+                    await dispatch(
+                        updateUserProfile({
+                            profileImage: imageUrl,
+                        }),
+                    );
+                });
+            }
             setViewMode(ViewModes.hasProfilePic);
             setIsUploading(false);
         } catch (e: any) {
@@ -206,6 +224,11 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
         }
         return (
             <Dialog open={show} onClose={handleClose} fullWidth maxWidth={'sm'}>
+                <ConfirmUserPasswordDialog
+                    open={showAskForPasswordDialog}
+                    onClose={toggleAskForPasswordDialog}
+                    afterSaveCallback={passwordConfirmCallback}
+                />
                 <Box
                     width={'100%'}
                     display={'flex'}

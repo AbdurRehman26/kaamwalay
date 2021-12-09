@@ -16,19 +16,17 @@ class ProcessCvatWebhookJob extends ProcessWebhookJob
     {
         $payload = $this->webhookCall->getAttribute('payload');
         if (! isset($payload['action'], $payload['values'])) {
-            /** @noinspection ThrowRawExceptionInspection */
             throw new Exception("Invalid payload: '".json_encode(
                 $payload,
                 JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT
             )."'");
         }
 
-        if ($payload['action'] === 'human_grades') {
-            $this->processHumanGrades($payload['values'], $cardGradingService);
-        } else {
-            /** @noinspection ThrowRawExceptionInspection */
+        if ($payload['action'] !== 'human_grades') {
             throw new Exception("Undefined case for action: '{$payload['action']}'");
         }
+
+        $this->processHumanGrades($payload['values'], $cardGradingService);
     }
 
     /**

@@ -31,8 +31,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::webhooks('webhooks/cvat-grades', 'cvat-grades');
-
 Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class, 'login'])->middleware('guest');
     Route::post('register', [RegisterController::class, 'register'])->middleware('guest');

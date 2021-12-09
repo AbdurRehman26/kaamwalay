@@ -41,6 +41,28 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/registration/', payload: $data);
     }
 
+    public function updateUserData(string $token, array $data): array
+    {
+        $response = Http::withToken($token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleUserUpdateErrorResponse(response: $response, route: '/users/me/', payload: $data);
+    }
+
+    public function changePassword(string $token, array $data): array
+    {
+        $response = Http::withToken($token)->post(url: $this->getBaseUrl() . '/password/change/', data: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponse(response: $response, route: '/password/change/', payload: $data);
+    }
+
     public function getGrades(array $data): array
     {
         $response = Http::withToken($this->getAuthToken())->get(url: $this->getBaseUrl() . self::API_VERSION_2 . '/robograding/scan-results/', query: $data);
@@ -150,6 +172,26 @@ class AGSClient
             ]);
 
             return [];
+        }
+
+        return [];
+    }
+
+    protected function handleUserUpdateErrorResponse(Response $response, string $route, array $payload = []): array
+    {
+        try {
+            $response->throw();
+        } catch (RequestException $exception) {
+            Log::error('Error occurred with AGS API', [
+                'route' => $route,
+                'message' => $exception->getMessage(),
+                'payload' => $payload,
+            ]);
+
+            return [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
+            ];
         }
 
         return [];

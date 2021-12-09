@@ -27,6 +27,16 @@ class AgsService
         return $this->client->register(data: $data);
     }
 
+    public function changePassword(string $token, array $data): array
+    {
+        return $this->client->changePassword($token, data: $data);
+    }
+
+    public function updateUserData(string $token, array $data): array
+    {
+        return $this->client->updateUserData($token, data: $data);
+    }
+
     public function updateHumanGrades(string $certificateId, array $data): array
     {
         $response = $this->client->updateHumanGrades($certificateId, $this->prepareHumanGradeData($data));

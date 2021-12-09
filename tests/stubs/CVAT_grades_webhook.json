@@ -1,0 +1,21 @@
+{
+    "action": "human_grades",
+    "values": {
+        "certificateId": "00000501",
+        "grades": {
+            "front_centering_human_grade": 1,
+            "front_corners_human_grade": 3,
+            "front_edges_human_grade": 2,
+            "front_surface_human_grade": 4,
+            "back_centering_human_grade": 1,
+            "back_corners_human_grade": 3,
+            "back_edges_human_grade": 2,
+            "back_surface_human_grade": 4,
+            "overall_centering_grade": 1,
+            "overall_corners_grade": 3,
+            "overall_edges_grade": 2,
+            "overall_surface_grade": 4,
+            "overall_grade": { "grade": 2.5, "nickname": "GOOD+" }
+        }
+    }
+}

@@ -47,7 +47,6 @@ class LoginController extends Controller
             [ 'message' => 'User authenticated successfully.' ],
             Response::HTTP_OK,
         );
-
     }
     
     public function me(): JsonResponse

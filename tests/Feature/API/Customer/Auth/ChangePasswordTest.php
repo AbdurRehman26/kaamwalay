@@ -11,7 +11,6 @@ beforeEach(function () {
 });
 
 test('user can change password', function () {
-
     $user = User::factory()->create();
 
     $this->actingAs($user);

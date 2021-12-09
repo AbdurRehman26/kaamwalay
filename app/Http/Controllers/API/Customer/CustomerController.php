@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Customer;
 
 use App\Exceptions\API\Auth\AgsAuthenticationException;
+use App\Exceptions\API\Customer\InvalidAgsDataForCustomer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\UpdateCustomerRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
@@ -34,15 +35,20 @@ class CustomerController extends Controller
 
             throw_if(! $user->ags_access_token, AgsAuthenticationException::class);
 
-            $agsService->updateUserData($user, $data);
+            $response = $agsService->updateUserData($user, $data);
+
+            throw_if($response['code'] === Response::HTTP_UNPROCESSABLE_ENTITY, InvalidAgsDataForCustomer::class);
+            throw_if($response['code'] === Response::HTTP_UNAUTHORIZED, AgsAuthenticationException::class);
 
             $userResponse = $customerProfileService->update($user, $data);
+
         } catch (Exception $e) {
+
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
                 ],
-                Response::HTTP_BAD_REQUEST
+                Response::HTTP_UNPROCESSABLE_ENTITY
             );
         }
 

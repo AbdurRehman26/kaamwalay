@@ -15,17 +15,15 @@ class ChangePasswordController extends Controller
 {
     use AuthenticatableWithAGS;
 
-    public function change(ChangePasswordRequest $request, ): JsonResponse
+    public function change(ChangePasswordRequest $request): JsonResponse
     {
-        $password = $request->password;
-
         $user = auth()->user();
 
         CustomerPasswordChanged::dispatch($user, $request->only('current_password', 'password', 'password_confirmation', 'platform'));
 
-        $this->changePassword($user, $password);
+        $this->changePassword($user, $request->password);
 
-        $token = $this->customerLoginAndFetchToken($user, $request->password);
+        $token = $this->fetchAuthTokenFromAgs($user, $request->password);
 
         return new JsonResponse([
             'access_token' => $token,
@@ -42,16 +40,15 @@ class ChangePasswordController extends Controller
         $user->save();
     }
 
-    private function customerLoginAndFetchToken(Authenticatable $user, string $password): string
+    protected function fetchAuthTokenFromAgs(Authenticatable $user, string $password): string
     {
         $credentials = ['email' => $user->email, 'password' => $password];
         $response = $this->agsService->login($credentials);
 
-        if(!empty($response['access_token'])){
+        if (! empty($response['access_token'])) {
             $user->ags_access_token = $response['access_token'];
         }
 
         return auth()->guard()->attempt($credentials);
-
     }
 }

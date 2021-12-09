@@ -11,7 +11,7 @@ export class UserRepository extends Repository<UserEntity> {
     readonly model = UserEntity;
 
     public async updateUserProfile(input: UpdateUserProfileDTO) {
-        const { data } = await this.endpoint.post('/customer/update-profile', input);
+        const { data } = await this.endpoint.put('/customer/profile', input);
         return this.toEntity(data);
     }
 

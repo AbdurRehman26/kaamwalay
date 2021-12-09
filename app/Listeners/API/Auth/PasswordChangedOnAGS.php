@@ -35,20 +35,17 @@ class PasswordChangedOnAGS
         $platform = $event->request['platform'] ?? [];
 
         $response = $this->agsService->changePassword(
-            $event->user,
+            $event->user->ags_access_token,
             data: array_merge(
                 $passwordsAgs,
                 $platform,
             )
         );
 
-        if(! empty($response)){
-
-            throw_if( !empty($response['code']) && $response['code'] === Response::HTTP_BAD_REQUEST, InvalidAgsDataForCustomer::class);
+        if (! empty($response)) {
+            throw_if(! empty($response['code']) && $response['code'] === Response::HTTP_BAD_REQUEST, InvalidAgsDataForCustomer::class);
 
             logger('Password updated on AgsService successfully.');
         }
-
-
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\APIClients;
 
-use App\Models\User;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -42,9 +41,9 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/registration/', payload: $data);
     }
 
-    public function updateUserData(User $user, array $data): array
+    public function updateUserData($token, array $data): array
     {
-        $response = Http::withToken($user->ags_access_token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
+        $response = Http::withToken($token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -53,9 +52,9 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/users/me/', payload: $data);
     }
 
-    public function changePassword(User $user, array $data): array
+    public function changePassword($token, array $data): array
     {
-        $response = Http::withToken($user->ags_access_token)->post(url: $this->getBaseUrl() . '/password/change/', data: $data);
+        $response = Http::withToken($token)->post(url: $this->getBaseUrl() . '/password/change/', data: $data);
 
         if ($response->successful()) {
             return $response->json();
@@ -171,9 +170,10 @@ class AGSClient
                 'message' => $exception->getMessage(),
                 'payload' => $payload,
             ]);
+
             return [
                 'code' => $exception->getCode(),
-                'message' => $exception->getMessage()
+                'message' => $exception->getMessage(),
             ];
         }
 

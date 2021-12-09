@@ -1,5 +1,5 @@
 /**
- * @api {post} /customer/update-profile Update Customer Profile
+ * @api {put} /customer/profile Update Customer Profile
  * @apiName Update Customer Profile
  * @apiGroup Customer
  *

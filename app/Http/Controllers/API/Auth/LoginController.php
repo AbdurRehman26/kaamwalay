@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\LoginRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
 use App\Jobs\Auth\CreateUserDeviceJob;
-use App\Services\Customer\CustomerProfileService;
+use App\Services\CustomerProfileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

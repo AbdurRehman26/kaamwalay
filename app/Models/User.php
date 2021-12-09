@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Crypt;
 use Laravel\Cashier\Billable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -43,7 +42,8 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'id' => 'integer',
-        'email_verified_at' => 'datetime'
+        'email_verified_at' => 'datetime',
+        'ags_access_token' => 'encrypted',
     ];
 
     /**
@@ -56,16 +56,6 @@ class User extends Authenticatable implements JWTSubject
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
-    }
-
-    public function setAgsAccessTokenAttribute($value)
-    {
-        $this->attributes['ags_access_token'] = Crypt::encryptString($value);
-    }
-
-    public function getAgsAccessTokenAttribute($value): string
-    {
-        return $value ? Crypt::decryptString($value) : '';
     }
 
     public static function createCustomer(array $data): self

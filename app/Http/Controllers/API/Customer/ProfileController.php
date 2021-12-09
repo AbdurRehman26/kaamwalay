@@ -9,12 +9,12 @@ use App\Http\Requests\API\Customer\UpdateCustomerRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
 use App\Models\User;
 use App\Services\AGS\AgsService;
-use App\Services\Customer\CustomerProfileService;
+use App\Services\CustomerProfileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomerController extends Controller
+class ProfileController extends Controller
 {
     /**
      * @throws \Throwable
@@ -35,7 +35,7 @@ class CustomerController extends Controller
 
             throw_if(! $user->ags_access_token, AgsAuthenticationException::class);
 
-            $response = $agsService->updateUserData($user, $data);
+            $response = $agsService->updateUserData($user->ags_access_token, $data);
 
 
             if (! empty($response['code'])) {
@@ -44,6 +44,7 @@ class CustomerController extends Controller
             }
 
             $userResponse = $customerProfileService->update($user, $data);
+
         } catch (Exception $e) {
             return new JsonResponse(
                 [

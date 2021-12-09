@@ -29,7 +29,7 @@ it('should correctly set the cvat grades', function () {
     $overallGradeNickname = $this->card->overall_grade_nickname;
 
     expect($humanGradeValues['back']['center'])->toBe($this->event['values']['grades']['back_centering_human_grade']);
-    expect($humanGradeValues['back']['edge'])->toBe( $this->event['values']['grades']['back_edges_human_grade']);
+    expect($humanGradeValues['back']['edge'])->toBe($this->event['values']['grades']['back_edges_human_grade']);
     expect($humanGradeValues['back']['corner'])->toBe($this->event['values']['grades']['back_corners_human_grade']);
     expect($humanGradeValues['back']['surface'])->toBe($this->event['values']['grades']['back_surface_human_grade']);
 

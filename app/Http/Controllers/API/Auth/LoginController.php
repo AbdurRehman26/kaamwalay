@@ -40,7 +40,7 @@ class LoginController extends Controller
         try {
             $response = $this->agsService->login(data: $request->validated());
 
-            throw_if(! empty($response['code']), AuthenticationException::class);
+            throw_if(empty($response), AuthenticationException::class);
 
             $customerProfileService->update(
                 auth()->guard()->user(),

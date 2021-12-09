@@ -23,14 +23,14 @@ class ChangePasswordController extends Controller
         $user = auth()->user();
 
         if (! $user->ags_access_token) {
-            $this->fetchAuthTokenFromAgs($user, $request->current_password);
+            $this->fetchAndSaveAuthTokenFromAgs($user, $request->current_password);
         }
 
         $this->changePasswordOnAgs($user, $request->only('current_password', 'password', 'password_confirmation'));
 
         $this->changePassword($user, $request->password);
 
-        $this->fetchAuthTokenFromAgs($user, $request->password);
+        $this->fetchAndSaveAuthTokenFromAgs($user, $request->password);
 
         $token = auth()->guard()->attempt(['email' => $user->email, 'password' => $request->password]);
 
@@ -49,7 +49,7 @@ class ChangePasswordController extends Controller
         $user->save();
     }
 
-    protected function fetchAuthTokenFromAgs(User $user, string $password): void
+    protected function fetchAndSaveAuthTokenFromAgs(User $user, string $password): void
     {
         $credentials = ['email' => $user->email, 'password' => $password];
         $response = $this->agsService->login($credentials);

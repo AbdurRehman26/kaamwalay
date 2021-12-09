@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Concerns\AGS\AuthenticatableWithAGS;
-use App\Events\API\Auth\CustomerPasswordChanged;
+use App\Exceptions\API\Customer\InvalidAgsDataForCustomer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\ChangePasswordRequest;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -15,11 +15,14 @@ class ChangePasswordController extends Controller
 {
     use AuthenticatableWithAGS;
 
+    /**
+     * @throws \Throwable
+     */
     public function change(ChangePasswordRequest $request): JsonResponse
     {
         $user = auth()->user();
 
-        CustomerPasswordChanged::dispatch($user, $request->only('current_password', 'password', 'password_confirmation', 'platform'));
+        $this->changePasswordOnAgs($user, $request->only('current_password', 'password', 'password_confirmation', 'platform'));
 
         $this->changePassword($user, $request->password);
 
@@ -50,5 +53,38 @@ class ChangePasswordController extends Controller
         }
 
         return auth()->guard()->attempt($credentials);
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    protected function changePasswordOnAgs(Authenticatable $user, $data): void
+    {
+        if (! $this->agsService->isEnabled()) {
+            logger('Skipping AgsService as it is disabled.');
+
+            return;
+        }
+
+        $passwordsAgs['old_password'] = $data['current_password'];
+        $passwordsAgs['new_password1'] = $data['password'];
+        $passwordsAgs['new_password2'] = $data['password_confirmation'];
+
+        $platform = $event->request['platform'] ?? [];
+
+        $response = $this->agsService->changePassword(
+            $user->ags_access_token,
+            data: array_merge(
+                $passwordsAgs,
+                $platform,
+            )
+        );
+
+        if (! empty($response)) {
+            throw_if(
+                ! empty($response['code']) && $response['code'] === Response::HTTP_BAD_REQUEST,
+                InvalidAgsDataForCustomer::class
+            );
+        }
     }
 }

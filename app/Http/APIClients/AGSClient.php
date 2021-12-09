@@ -170,6 +170,8 @@ class AGSClient
                 'message' => $exception->getMessage(),
                 'payload' => $payload,
             ]);
+
+            return [];
         }
 
         return [];

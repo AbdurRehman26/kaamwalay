@@ -6,6 +6,7 @@ import { updateUserProfileData } from '@shared/redux/slices/authenticationSlice'
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { ChangeUserPasswordDTO } from '@shared/dto/ChangeUserPasswordDTO';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 
 export const updateUserProfile = createAsyncThunk(
     'user/updateProfile',
@@ -14,6 +15,20 @@ export const updateUserProfile = createAsyncThunk(
         try {
             const data = await userRepository.updateUserProfile(input);
             thunkAPI.dispatch(updateUserProfileData(data));
+            NotificationsService.success('Profile updated successfully!');
+        } catch (error: any) {
+            NotificationsService.exception(error);
+            return thunkAPI.rejectWithValue(error);
+        }
+    },
+);
+
+export const confirmPasswordWithAGS = createAsyncThunk(
+    'user/confirmPasswordWithAGS',
+    async (input: LoginRequestDto, thunkAPI) => {
+        const userRepository = app(UserRepository);
+        try {
+            await userRepository.confirmPasswordWithAGS(input);
             NotificationsService.success('Profile updated successfully!');
         } catch (error: any) {
             NotificationsService.exception(error);
@@ -42,5 +57,9 @@ export const userSlice = createSlice({
     name: 'userSlice',
     initialState: {},
     reducers: {},
-    extraReducers: {},
+    extraReducers: {
+        [updateUserProfile.rejected as any]: (state, action) => {
+            return action.payload;
+        },
+    },
 });

@@ -65,7 +65,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getAgsAccessTokenAttribute($value): string
     {
-        return Crypt::decryptString($value);
+        return $value ? Crypt::decryptString($value) : '';
     }
 
     public static function createCustomer(array $data): self

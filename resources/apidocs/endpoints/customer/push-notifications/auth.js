@@ -1,10 +1,12 @@
 /**
- * @api {get} /customer/push-notifications/auth Get Pusher Token
+ * @api {post} /customer/push-notifications/auth Get Pusher Token
  * @apiName Get Pusher Token
  * @apiGroup Customer Push Notifications
  *
  * @apiUse header_main
  * @apiUse Authorization
+ *
+ * @apiParam { String } [platform] Platform of User device. Possible values [web, ios, android]
  *
  * @apiSuccess { String } Token Pusher token which is used by Pusher client SDKs
  *

@@ -42,13 +42,10 @@ class PasswordChangedOnAGS
             )
         );
 
-        if(! empty($response)){
-
-            throw_if( !empty($response['code']) && $response['code'] === Response::HTTP_BAD_REQUEST, InvalidAgsDataForCustomer::class);
+        if (! empty($response)) {
+            throw_if(! empty($response['code']) && $response['code'] === Response::HTTP_BAD_REQUEST, InvalidAgsDataForCustomer::class);
 
             logger('Password updated on AgsService successfully.');
         }
-
-
     }
 }

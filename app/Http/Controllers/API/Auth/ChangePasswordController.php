@@ -47,11 +47,10 @@ class ChangePasswordController extends Controller
         $credentials = ['email' => $user->email, 'password' => $password];
         $response = $this->agsService->login($credentials);
 
-        if(!empty($response['access_token'])){
+        if (! empty($response['access_token'])) {
             $user->ags_access_token = $response['access_token'];
         }
 
         return auth()->guard()->attempt($credentials);
-
     }
 }

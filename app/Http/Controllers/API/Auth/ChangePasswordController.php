@@ -58,7 +58,7 @@ class ChangePasswordController extends Controller
     /**
      * @throws \Throwable
      */
-    protected function changePasswordOnAgs(Authenticatable $user, $data): void
+    protected function changePasswordOnAgs(Authenticatable $user, array $data): void
     {
         if (! $this->agsService->isEnabled()) {
             logger('Skipping AgsService as it is disabled.');

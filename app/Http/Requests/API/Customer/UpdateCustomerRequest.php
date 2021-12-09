@@ -22,7 +22,8 @@ class UpdateCustomerRequest extends FormRequest
                 'required',
                 'string',
                 Rule::unique('users')->ignore(auth()->user()->id),
-                'max:50', ],
+                'max:50',
+            ],
             'profile_image' => ['string', 'nullable'],
             'phone' => ['string', 'nullable'],
         ];

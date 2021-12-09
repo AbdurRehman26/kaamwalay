@@ -57,11 +57,9 @@ export function ConfirmUserPasswordDialog(props: ConfirmUserPasswordDialogProps)
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>One more thing ☝️</DialogTitle>
+                <DialogTitle>Confirm Password</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        We need to confirm your account password in order save your changes
-                    </DialogContentText>
+                    <DialogContentText>Please enter your password.</DialogContentText>
                     <TextField
                         margin="dense"
                         id="name"

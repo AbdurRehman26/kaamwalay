@@ -35,7 +35,7 @@ class LoginController extends Controller
         );
     }
 
-    public function authenticateUserOnAgs(LoginRequest $request, CustomerProfileService $customerProfileService): JsonResponse
+    public function authenticateAndUpdateAgsUserToken(LoginRequest $request, CustomerProfileService $customerProfileService): JsonResponse
     {
         try {
             $response = $this->agsService->login(data: $request->validated());

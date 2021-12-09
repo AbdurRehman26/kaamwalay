@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [LoginController::class, 'login'])->middleware('guest');
-    Route::post('login/ags', [LoginController::class, 'authenticateUserOnAgs'])->middleware('auth');
+    Route::post('login/ags', [LoginController::class, 'authenticateAndUpdateAgsUserToken'])->middleware('auth');
     Route::post('register', [RegisterController::class, 'register'])->middleware('guest');
     Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);

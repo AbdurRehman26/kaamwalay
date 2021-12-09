@@ -13,16 +13,13 @@ class AgsAuthenticationException extends Exception
      * @var string
      */
     protected $message = 'Please enter your AGS password.';
+
     /**
      * @var int
      */
     protected $code = Response::HTTP_BAD_REQUEST;
 
-    /**
-     * @param Request|array $request
-     * @return JsonResponse
-     */
-    public function render($request): JsonResponse
+    public function render(Request $request): JsonResponse
     {
         return new JsonResponse(['error' => $this->message], $this->code);
     }

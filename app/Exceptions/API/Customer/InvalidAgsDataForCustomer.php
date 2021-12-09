@@ -13,16 +13,13 @@ class InvalidAgsDataForCustomer extends Exception
      * @var string
      */
     protected $message = 'The data provided is invalid.';
+
     /**
      * @var int
      */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
-    /**
-     * @param Request|array $request
-     * @return JsonResponse
-     */
-    public function render($request): JsonResponse
+    public function render(Request $request): JsonResponse
     {
         return new JsonResponse(['error' => $this->message], $this->code);
     }

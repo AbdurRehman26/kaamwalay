@@ -189,9 +189,9 @@ class AGSClient
             ]);
 
             return [
-                    'code' => $exception->getCode(),
-                    'message' => $exception->getMessage(),
-                ];
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
+            ];
         }
 
         return [];

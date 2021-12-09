@@ -22,7 +22,7 @@ class ChangePasswordController extends Controller
     {
         $user = auth()->user();
 
-        $this->changePasswordOnAgs($user, $request->only('current_password', 'password', 'password_confirmation', 'platform'));
+        $this->changePasswordOnAgs($user, $request->only('current_password', 'password', 'password_confirmation'));
 
         $this->changePassword($user, $request->password);
 
@@ -70,14 +70,9 @@ class ChangePasswordController extends Controller
         $passwordsAgs['new_password1'] = $data['password'];
         $passwordsAgs['new_password2'] = $data['password_confirmation'];
 
-        $platform = $event->request['platform'] ?? [];
-
         $response = $this->agsService->changePassword(
             $user->ags_access_token,
-            data: array_merge(
-                $passwordsAgs,
-                $platform,
-            )
+            data: $passwordsAgs
         );
 
         if (! empty($response)) {

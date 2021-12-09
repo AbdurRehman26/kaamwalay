@@ -15,7 +15,7 @@ class AlterTableUsersAddColumns extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->text('ags_access_token')->after('remember_token')->nullable();
-            $table->string('profile_image', 1000)->after('phone')->nullable();
+            $table->string('profile_image')->after('phone')->nullable();
         });
     }
 

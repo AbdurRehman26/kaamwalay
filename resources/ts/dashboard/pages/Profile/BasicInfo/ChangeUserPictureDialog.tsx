@@ -131,7 +131,7 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
         try {
             setIsUploading(true);
             const imageUrl = await filesRepository.uploadFile(uploadedImage!);
-            const result = await dispatch(
+            const result: any = await dispatch(
                 updateUserProfile({
                     profileImage: imageUrl,
                 }),
@@ -144,15 +144,20 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
                             profileImage: imageUrl,
                         }),
                     );
+                    setViewMode(ViewModes.hasProfilePic);
                 });
             }
-            setViewMode(ViewModes.hasProfilePic);
+
+            if (!result?.error) {
+                setViewMode(ViewModes.hasProfilePic);
+            }
+
             setIsUploading(false);
         } catch (e: any) {
             notifications.exception(e);
             setIsUploading(false);
         }
-    }, [uploadedImage, viewMode, userProfileImag, showAskForPasswordDialog, passwordConfirmCallback]);
+    }, [uploadedImage, viewMode, userProfileImage, showAskForPasswordDialog, passwordConfirmCallback]);
 
     const handleDeleteProfilePic = useCallback(async () => {
         try {

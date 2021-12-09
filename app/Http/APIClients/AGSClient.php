@@ -49,7 +49,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->handleErrorResponse(response: $response, route: '/users/me/', payload: $data);
+        return $this->handleUserUpdateErrorResponse(response: $response, route: '/users/me/', payload: $data);
     }
 
     public function changePassword($token, array $data): array
@@ -171,10 +171,32 @@ class AGSClient
                 'payload' => $payload,
             ]);
 
-            return [
+            if (in_array($route, ['/users/me/', '/password/change/'])) {
+                return [
                 'code' => $exception->getCode(),
                 'message' => $exception->getMessage(),
             ];
+            }
+        }
+
+        return [];
+    }
+
+    protected function handleUserUpdateErrorResponse(Response $response, string $route, array $payload = []): array
+    {
+        try {
+            $response->throw();
+        } catch (RequestException $exception) {
+            Log::error('Error occurred with AGS API', [
+                'route' => $route,
+                'message' => $exception->getMessage(),
+                'payload' => $payload,
+            ]);
+
+            return [
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                ];
         }
 
         return [];

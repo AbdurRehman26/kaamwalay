@@ -15,10 +15,12 @@ class ProcessCvatWebhookJob extends ProcessWebhookJob
     public function handle(CardGradingService $cardGradingService): void
     {
         $payload = $this->webhookCall->getAttribute('payload');
-        if (!isset($payload['action'], $payload['values'])) {
+        if (! isset($payload['action'], $payload['values'])) {
             /** @noinspection ThrowRawExceptionInspection */
-            throw new Exception("Invalid payload: '".json_encode($payload,
-                    JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)."'");
+            throw new Exception("Invalid payload: '".json_encode(
+                $payload,
+                JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT
+            )."'");
         }
 
         if ($payload['action'] === 'human_grades') {
@@ -34,7 +36,7 @@ class ProcessCvatWebhookJob extends ProcessWebhookJob
      */
     private function processHumanGrades(array $values, CardGradingService $cardGradingService): void
     {
-        if (!isset($values['grades'])) {
+        if (! isset($values['grades'])) {
             throw new Exception("No grades available.");
         }
 
@@ -57,7 +59,7 @@ class ProcessCvatWebhookJob extends ProcessWebhookJob
                     "center" => $grades['front_centering_human_grade'],
                     "corner" => $grades['front_corners_human_grade'],
                     "surface" => $grades['front_surface_human_grade'],
-                ]
+                ],
             ],
             'overall_values' => [
                 "edge" => $grades['overall_edges_grade'],

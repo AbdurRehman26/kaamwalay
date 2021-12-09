@@ -4,6 +4,7 @@ namespace App\Exceptions\API\Customer;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class InvalidAgsDataForCustomer extends Exception
@@ -18,7 +19,7 @@ class InvalidAgsDataForCustomer extends Exception
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
     /**
-     * @param $request
+     * @param Request|array $request
      * @return JsonResponse
      */
     public function render($request): JsonResponse

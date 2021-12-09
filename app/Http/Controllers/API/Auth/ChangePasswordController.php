@@ -6,7 +6,7 @@ use App\Concerns\AGS\AuthenticatableWithAGS;
 use App\Exceptions\API\Customer\InvalidAgsDataForCustomer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\ChangePasswordRequest;
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +35,7 @@ class ChangePasswordController extends Controller
         ], Response::HTTP_CREATED);
     }
 
-    protected function changePassword(Authenticatable $user, string $password): void
+    protected function changePassword(User $user, string $password): void
     {
         $user->password = $password;
         $user->setRememberToken(Str::random(60));
@@ -43,7 +43,7 @@ class ChangePasswordController extends Controller
         $user->save();
     }
 
-    protected function fetchAuthTokenFromAgs(Authenticatable $user, string $password): string
+    protected function fetchAuthTokenFromAgs(User $user, string $password): string
     {
         $credentials = ['email' => $user->email, 'password' => $password];
         $response = $this->agsService->login($credentials);
@@ -58,7 +58,7 @@ class ChangePasswordController extends Controller
     /**
      * @throws \Throwable
      */
-    protected function changePasswordOnAgs(Authenticatable $user, array $data): void
+    protected function changePasswordOnAgs(User $user, array $data): void
     {
         if (! $this->agsService->isEnabled()) {
             logger('Skipping AgsService as it is disabled.');

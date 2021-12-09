@@ -182,7 +182,6 @@ class AGSClient
         try {
             $response->throw();
         } catch (RequestException $exception) {
-
             Log::error('Error occurred with AGS API', [
                 'route' => $route,
                 'message' => $exception->getMessage(),

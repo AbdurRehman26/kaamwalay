@@ -1,17 +1,19 @@
 <?php
 
-use App\Events\API\Auth\CustomerAuthenticated;
 use App\Events\API\Auth\CustomerRegistered;
+use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Bus;
 use Symfony\Component\HttpFoundation\Response;
 
 uses(WithFaker::class);
 
 beforeEach(function () {
     $this->seed(RolesSeeder::class);
+    Bus::fake();
     Event::fake();
 });
 
@@ -67,7 +69,7 @@ test('user can not register with duplicate username', function () {
     ]);
 })->group('auth');
 
-test('user registration triggers events', function () {
+test('user registration dispatches events and jobs', function () {
     $email = $this->faker->safeEmail();
     $this->postJson('/api/auth/register', [
         'first_name' => $this->faker->firstName(),
@@ -80,7 +82,7 @@ test('user registration triggers events', function () {
     ]);
 
     Event::assertDispatched(CustomerRegistered::class);
-    Event::assertDispatched(CustomerAuthenticated::class);
+    Bus::assertDispatched(CreateUserDeviceJob::class);
 })->group('auth');
 
 test('a logged in customer cannot register', function () {

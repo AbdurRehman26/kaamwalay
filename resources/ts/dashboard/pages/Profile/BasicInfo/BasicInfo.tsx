@@ -324,21 +324,40 @@ export function BasicInfo() {
     }, [newFirstName, newLastName, user$?.firstName, user$?.lastName]);
 
     const onNewUserNameSave = useCallback(async () => {
-        await dispatch(
+        const result: any = await dispatch(
             updateUserProfile({
                 username: newUserName,
             }),
         );
-
         hideRows();
+        if (result?.payload?.response?.status === 422) {
+            setShowAskForPasswordDialog(true);
+            setPasswordConfirmCallback(() => async () => {
+                await dispatch(
+                    updateUserProfile({
+                        username: newUserName,
+                    }),
+                );
+            });
+        }
     }, [newUserName, user$?.username]);
 
     const onNewPhoneSave = useCallback(async () => {
-        await dispatch(
+        const result: any = await dispatch(
             updateUserProfile({
                 phone: newPhone,
             }),
         );
+        if (result?.payload?.response?.status === 422) {
+            setShowAskForPasswordDialog(true);
+            setPasswordConfirmCallback(() => async () => {
+                await dispatch(
+                    updateUserProfile({
+                        phone: newPhone,
+                    }),
+                );
+            });
+        }
         hideRows();
     }, [newPhone, user$?.phone]);
 

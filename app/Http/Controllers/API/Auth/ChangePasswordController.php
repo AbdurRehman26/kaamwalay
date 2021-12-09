@@ -22,11 +22,17 @@ class ChangePasswordController extends Controller
     {
         $user = auth()->user();
 
+        if (! $user->ags_access_token) {
+            $this->fetchAndSaveAuthTokenFromAgs($user, $request->current_password);
+        }
+
         $this->changePasswordOnAgs($user, $request->only('current_password', 'password', 'password_confirmation'));
 
         $this->changePassword($user, $request->password);
 
-        $token = $this->fetchAuthTokenFromAgs($user, $request->password);
+        $this->fetchAndSaveAuthTokenFromAgs($user, $request->password);
+
+        $token = auth()->guard()->attempt(['email' => $user->email, 'password' => $request->password]);
 
         return new JsonResponse([
             'access_token' => $token,
@@ -43,16 +49,15 @@ class ChangePasswordController extends Controller
         $user->save();
     }
 
-    protected function fetchAuthTokenFromAgs(User $user, string $password): string
+    protected function fetchAndSaveAuthTokenFromAgs(User $user, string $password): void
     {
         $credentials = ['email' => $user->email, 'password' => $password];
         $response = $this->agsService->login($credentials);
 
         if (! empty($response['access_token'])) {
             $user->ags_access_token = $response['access_token'];
+            $user->save();
         }
-
-        return auth()->guard()->attempt($credentials);
     }
 
     /**
@@ -75,10 +80,10 @@ class ChangePasswordController extends Controller
             data: $passwordsAgs
         );
 
-        if (! empty($response)) {
+        if (! empty($response['code'])) {
             throw_if(
                 ! empty($response['code']) && $response['code'] === Response::HTTP_BAD_REQUEST,
-                InvalidAgsDataForCustomer::class
+                new InvalidAgsDataForCustomer($response['message'], Response::HTTP_UNPROCESSABLE_ENTITY)
             );
         }
     }

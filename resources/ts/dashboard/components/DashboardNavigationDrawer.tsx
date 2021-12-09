@@ -168,7 +168,7 @@ export function DashboardNavigationDrawer() {
                     </StyledListItemIcon>
                     <ListItemText primary={'Your Cards'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
-                <ListItem selected={isItemActive('/profile')} button>
+                <ListItem selected={isItemActive('/profile')} onClick={handleItemPress('/profile')} button>
                     <StyledListItemIcon>
                         <AccountCircleIcon />
                     </StyledListItemIcon>

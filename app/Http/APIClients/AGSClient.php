@@ -182,6 +182,7 @@ class AGSClient
         try {
             $response->throw();
         } catch (RequestException $exception) {
+
             Log::error('Error occurred with AGS API', [
                 'route' => $route,
                 'message' => $exception->getMessage(),
@@ -190,7 +191,7 @@ class AGSClient
 
             return [
                 'code' => $exception->getCode(),
-                'message' => $exception->getMessage(),
+                'message' => ! empty(json_decode($response->body())->app_message) ? json_decode($response->body())->app_message[0] : '',
             ];
         }
 

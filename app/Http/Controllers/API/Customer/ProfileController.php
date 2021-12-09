@@ -38,7 +38,7 @@ class ProfileController extends Controller
             $response = $agsService->updateUserData($user->ags_access_token, $data);
 
             if (! empty($response['code'])) {
-                throw_if($response['code'] === Response::HTTP_BAD_REQUEST, InvalidAgsDataForCustomer::class);
+                throw_if($response['code'] === Response::HTTP_BAD_REQUEST, new InvalidAgsDataForCustomer($response['message'], Response::HTTP_UNPROCESSABLE_ENTITY));
                 throw_if($response['code'] === Response::HTTP_UNAUTHORIZED, AgsAuthenticationException::class);
             }
 

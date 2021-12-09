@@ -33,8 +33,10 @@ it('should correctly set the cvat grades', function () {
     $this->assertEquals($humanGradeValues['back']['corner'], $this->event['values']['grades']['back_corners_human_grade']);
     $this->assertEquals($humanGradeValues['back']['surface'], $this->event['values']['grades']['back_surface_human_grade']);
 
-    $this->assertEquals($humanGradeValues['front']['center'],
-        $this->event['values']['grades']['front_centering_human_grade']);
+    $this->assertEquals(
+        $humanGradeValues['front']['center'],
+        $this->event['values']['grades']['front_centering_human_grade']
+    );
     $this->assertEquals($humanGradeValues['front']['edge'], $this->event['values']['grades']['front_edges_human_grade']);
     $this->assertEquals($humanGradeValues['front']['corner'], $this->event['values']['grades']['front_corners_human_grade']);
     $this->assertEquals($humanGradeValues['front']['surface'], $this->event['values']['grades']['front_surface_human_grade']);

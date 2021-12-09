@@ -4,6 +4,7 @@ namespace App\Services\AGS;
 
 use App\Http\APIClients\AGSClient;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
+use App\Models\User;
 use Carbon\Carbon;
 
 class AgsService
@@ -31,6 +32,19 @@ class AgsService
     {
         return $this->client->changePassword(data: $data);
     }
+
+    public function updateUserData(User $user, array $data): array
+    {
+        return $this->client->updateUserData($user, data: $this->prepareUserData($data));
+    }
+
+    protected function prepareUserData($data): array
+    {
+        // Current we do not require any key change but if we do
+        // we can do it here
+        return $data;
+    }
+
 
     public function updateHumanGrades(string $certificateId, array $data): array
     {

@@ -53,9 +53,9 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/users/me/', payload: $data);
     }
 
-    public function changePassword(array $data): array
+    public function changePassword(User $user, array $data): array
     {
-        $response = Http::post(url: $this->getBaseUrl() . '/password/change/', data: $data);
+        $response = Http::withToken($user->ags_access_token)->post(url: $this->getBaseUrl() . '/password/change/', data: $data);
 
         if ($response->successful()) {
             return $response->json();

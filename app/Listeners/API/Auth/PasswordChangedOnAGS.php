@@ -3,7 +3,9 @@
 namespace App\Listeners\API\Auth;
 
 use App\Events\API\Auth\CustomerPasswordChanged;
+use App\Exceptions\API\Customer\InvalidAgsDataForCustomer;
 use App\Services\AGS\AgsService;
+use Symfony\Component\HttpFoundation\Response;
 
 class PasswordChangedOnAGS
 {
@@ -14,8 +16,9 @@ class PasswordChangedOnAGS
     /**
      * Handle the event.
      *
-     * @param  CustomerPasswordChanged $event
+     * @param  CustomerPasswordChanged  $event
      * @return void
+     * @throws \Throwable
      */
     public function handle(CustomerPasswordChanged $event)
     {
@@ -32,11 +35,15 @@ class PasswordChangedOnAGS
         $platform = $event->request['platform'] ?? [];
 
         $response = $this->agsService->changePassword(
+            $event->user,
             data: array_merge(
                 $passwordsAgs,
                 $platform,
             )
         );
+
+        throw_if(!empty($response['code'] === Response::HTTP_BAD_REQUEST), InvalidAgsDataForCustomer::class);
+
         if (! empty($response)) {
             logger('Password updated on AgsService successfully.');
         }

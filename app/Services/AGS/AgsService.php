@@ -28,9 +28,9 @@ class AgsService
         return $this->client->register(data: $data);
     }
 
-    public function changePassword(array $data): array
+    public function changePassword(User $user, array $data): array
     {
-        return $this->client->changePassword(data: $data);
+        return $this->client->changePassword($user, data: $data);
     }
 
     public function updateUserData(User $user, array $data): array

@@ -19,7 +19,7 @@ class ChangePasswordController extends Controller
         /* @var User */
         $user = auth()->user();
 
-        CustomerPasswordChanged::dispatch($request->only('current_password', 'password', 'password_confirmation', 'platform'));
+        CustomerPasswordChanged::dispatch($user, $request->only('current_password', 'password', 'password_confirmation', 'platform'));
 
         $this->changePassword($user, $password);
 

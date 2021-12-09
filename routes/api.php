@@ -67,7 +67,7 @@ Route::prefix('customer')->group(function () {
             Route::post('/', [CardProductController::class, 'store']);
         });
 
-        Route::post('push-notifications/auth', [PushNotificationController::class, 'auth']);
+        Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
     });
 });
 

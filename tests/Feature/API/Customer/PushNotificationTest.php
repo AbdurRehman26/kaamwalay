@@ -3,20 +3,20 @@
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
 
-use function Pest\Laravel\postJson;
+use function Pest\Laravel\getJson;
 
 test('a customer can get Pusher auth token without platform', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $response = postJson('api/customer/push-notifications/auth');
+    $response = getJson('api/customer/push-notifications/auth');
 
     expect($response)->isOk();
     expect($response)->assertJsonStructure(['token']);
 })->group('push-notification');
 
 test('a guest cannot get Pusher auth token', function () {
-    $response = postJson('api/customer/push-notifications/auth');
+    $response = getJson('api/customer/push-notifications/auth');
 
     expect($response)->assertUnauthorized();
 })->group('push-notification');
@@ -26,9 +26,7 @@ test('a customer can get Pusher auth token with valid platform', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $response = postJson('api/customer/push-notifications/auth', [
-        'platform' => 'android',
-    ]);
+    $response = getJson('api/customer/push-notifications/auth?platform=android');
 
     Bus::assertDispatched(CreateUserDeviceJob::class);
     expect($response)->isOk();
@@ -40,9 +38,7 @@ test('a customer cannot get Pusher auth token with invalid platform', function (
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $response = postJson('api/customer/push-notifications/auth', [
-        'platform' => 'foo',
-    ]);
+    $response = getJson('api/customer/push-notifications/auth?platform=foo');
 
     Bus::assertNotDispatched(CreateUserDeviceJob::class);
     expect($response)->assertUnprocessable()->assertInvalid([

@@ -152,7 +152,7 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
             notifications.exception(e);
             setIsUploading(false);
         }
-    }, [uploadedImage, viewMode, userProfileImage]);
+    }, [uploadedImage, viewMode, userProfileImag, showAskForPasswordDialog, passwordConfirmCallback]);
 
     const handleDeleteProfilePic = useCallback(async () => {
         try {

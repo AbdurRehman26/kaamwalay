@@ -41,7 +41,7 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/registration/', payload: $data);
     }
 
-    public function updateUserData($token, array $data): array
+    public function updateUserData(string $token, array $data): array
     {
         $response = Http::withToken($token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
 
@@ -52,7 +52,7 @@ class AGSClient
         return $this->handleUserUpdateErrorResponse(response: $response, route: '/users/me/', payload: $data);
     }
 
-    public function changePassword($token, array $data): array
+    public function changePassword(string $token, array $data): array
     {
         $response = Http::withToken($token)->post(url: $this->getBaseUrl() . '/password/change/', data: $data);
 

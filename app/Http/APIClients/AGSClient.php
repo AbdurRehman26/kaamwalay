@@ -170,13 +170,6 @@ class AGSClient
                 'message' => $exception->getMessage(),
                 'payload' => $payload,
             ]);
-
-            if (in_array($route, ['/users/me/', '/password/change/'])) {
-                return [
-                'code' => $exception->getCode(),
-                'message' => $exception->getMessage(),
-            ];
-            }
         }
 
         return [];

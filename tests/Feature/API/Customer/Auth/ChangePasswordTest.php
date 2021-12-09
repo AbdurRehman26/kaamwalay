@@ -2,7 +2,16 @@
 
 use App\Models\User;
 
+beforeEach(function () {
+    Http::fake([
+        // Faking AGS for password change and login API
+        'ags.api/login/' => Http::response([]),
+        'ags.api/password/change/' => Http::response([]),
+    ]);
+});
+
 test('user can change password', function () {
+
     $user = User::factory()->create();
 
     $this->actingAs($user);

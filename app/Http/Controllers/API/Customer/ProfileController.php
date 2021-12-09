@@ -44,6 +44,7 @@ class ProfileController extends Controller
 
             $userResponse = $customerProfileService->update($user, $data);
         } catch (Exception $e) {
+            dd($e);
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

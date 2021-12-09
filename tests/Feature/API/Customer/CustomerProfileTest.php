@@ -6,6 +6,11 @@ use Illuminate\Foundation\Testing\WithFaker;
 uses(WithFaker::class);
 
 beforeEach(function () {
+    Http::fake([
+        // Faking AGS update user API
+        'ags.api/users/me/' => Http::response([]),
+    ]);
+
     $this->user = User::factory()->create();
     $this->anotherUser = User::factory()->create();
 });

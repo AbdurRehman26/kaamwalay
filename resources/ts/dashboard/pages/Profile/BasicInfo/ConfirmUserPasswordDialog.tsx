@@ -34,6 +34,13 @@ export function ConfirmUserPasswordDialog(props: ConfirmUserPasswordDialogProps)
         handleClose();
     }, [onClose, password, afterSaveCallback]);
 
+    const handlePasswordChange = useCallback(
+        (event: any) => {
+            setPassword(event.target.value);
+        },
+        [password],
+    );
+
     useEffect(() => {
         if (password.length > 0) {
             setIsSaveButtonDisabled(false);
@@ -50,7 +57,16 @@ export function ConfirmUserPasswordDialog(props: ConfirmUserPasswordDialogProps)
                     <DialogContentText>
                         We need to confirm your account password in order save your changes
                     </DialogContentText>
-                    <TextField margin="dense" id="name" label="Password" type="password" fullWidth variant="standard" />
+                    <TextField
+                        margin="dense"
+                        id="name"
+                        onChange={handlePasswordChange}
+                        value={password}
+                        label="Password"
+                        type="password"
+                        fullWidth
+                        variant="standard"
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>

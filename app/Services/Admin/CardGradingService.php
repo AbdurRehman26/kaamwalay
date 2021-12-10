@@ -136,11 +136,14 @@ class CardGradingService
         );
     }
 
+    /**
+     * @throws CardGradeIsInvalid
+     */
     public function addDeltaValueToOverallGrade(float $overallGrade, float $delta): array
     {
         $adjustedGrade = $overallGrade + $delta;
 
-        if ($adjustedGrade > 10 || $adjustedGrade < 1) {
+        if ($delta !== 0.0 && ($adjustedGrade > 10 || $adjustedGrade < 1)) {
             throw new CardGradeIsInvalid;
         }
 

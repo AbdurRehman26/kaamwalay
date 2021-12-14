@@ -35,7 +35,7 @@ class CouponService
     public function changeStatus(Coupon $coupon, string $status)
     {
         $coupon->update([
-            'coupon_status_id' =>
+            'coupon_status_id' => $status,
         ]);
     }
 }

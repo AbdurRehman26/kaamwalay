@@ -30,6 +30,7 @@ export function SubmissionsGradeCards() {
     const dispatch = useAppDispatch();
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
+
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
 
@@ -108,6 +109,7 @@ export function SubmissionsGradeCards() {
                             orderID={Number(id)}
                             itemIndex={index}
                             notes={item.orderItem.notes}
+                            internalNotes={item.orderItem.internalNotes}
                             itemId={item.orderItem.id}
                             gradeData={item}
                         />

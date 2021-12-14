@@ -57,4 +57,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/', [CardProductController::class, 'store']);
         Route::get('options', [CardProductController::class, 'getOptionsValues']);
     });
+
+    // Coupons
+//    Route::apiResource('coupons', CouponController::class)->except('update');
 });

@@ -28,7 +28,7 @@ class CreateCouponStatusHistoriesTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->unique(['coupon_id', 'coupon_status_history_id']);
+            $table->unique(['coupon_id', 'coupon_status_history_id'], 'unique_coupon_id_status_history_id');
         });
     }
 

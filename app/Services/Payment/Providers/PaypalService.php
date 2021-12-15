@@ -106,8 +106,9 @@ class PaypalService implements PaymentProviderServiceInterface
 
     public function calculateFee(OrderPayment $orderPayment): float
     {
+        // TODO Fix why we do not receive seller_receivable_breakdown, hence unable to calculate fee
         $paymentResponse = json_decode($orderPayment->response, associative: true);
-        if (! empty($paymentResponse['purchase_units'][0]['payments']['captures'][0])) {
+        if (! empty($paymentResponse['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'])) {
             $breakdown = $paymentResponse['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown'];
 
             return $breakdown['paypal_fee']['value'];

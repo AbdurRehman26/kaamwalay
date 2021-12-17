@@ -2,9 +2,9 @@
 
 use App\Models\User;
 
-use Spatie\Permission\Models\Role;
-
 use function Pest\Laravel\postJson;
+
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
     $this->user = User::factory()->create();

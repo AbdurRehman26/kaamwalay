@@ -39,7 +39,7 @@ class FileService
         if ($bucket) {
             try {
                 /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-                if (!auth()->user()?->isAdmin()) {
+                if (! auth()->user()?->isAdmin()) {
                     $bucket = null;
                 }
             } catch (Exception $e) {
@@ -47,7 +47,7 @@ class FileService
             }
         }
 
-        if (!$bucket) {
+        if (! $bucket) {
             $bucket = (string) config('filesystems.disks.s3.bucket');
         }
 

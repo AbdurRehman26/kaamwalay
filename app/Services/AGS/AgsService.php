@@ -318,4 +318,9 @@ class AgsService
     {
         return $this->client->createCard($data);
     }
+
+    public function createCardLabel(array $data): array
+    {
+        return $this->client->createCardLabel($data);
+    }
 }

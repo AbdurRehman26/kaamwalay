@@ -378,7 +378,7 @@ test('admin can remove notes from order item', function () {
     expect($orderItem->notes)->toBe(null);
 });
 
-test('admin can update order item internal notes', function(){
+test('admin can update order item internal notes', function () {
     $orderItem = OrderItem::factory()->create();
     $this->actingAs($this->user);
 

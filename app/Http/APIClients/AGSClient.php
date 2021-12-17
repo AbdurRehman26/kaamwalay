@@ -49,7 +49,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->handleUserUpdateErrorResponse(response: $response, route: '/users/me/', payload: $data);
+        return $this->handleErrorResponseWithCode(response: $response, route: '/users/me/', payload: $data);
     }
 
     public function changePassword(string $token, array $data): array
@@ -60,7 +60,7 @@ class AGSClient
             return $response->json();
         }
 
-        return $this->handleErrorResponse(response: $response, route: '/password/change/', payload: $data);
+        return $this->handleErrorResponseWithCode(response: $response, route: '/password/change/', payload: $data);
     }
 
     public function getGrades(array $data): array
@@ -188,7 +188,7 @@ class AGSClient
         return [];
     }
 
-    protected function handleUserUpdateErrorResponse(Response $response, string $route, array $payload = []): array
+    protected function handleErrorResponseWithCode(Response $response, string $route, array $payload = []): array
     {
         try {
             $response->throw();

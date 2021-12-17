@@ -115,7 +115,7 @@ function OrderReviewSection() {
                         className={classes.darkBodyText}
                     >{`${billingAddress.firstName} ${billingAddress.lastName}`}</Typography>
                     <Typography className={classes.darkBodyText}>{`${billingAddress.address} ${
-                        billingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
+                        billingAddress?.flat ? `apt: ${billingAddress?.flat}` : ''
                     }`}</Typography>
                     <Typography
                         className={classes.darkBodyText}

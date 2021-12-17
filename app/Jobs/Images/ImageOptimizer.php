@@ -2,9 +2,7 @@
 
 namespace App\Jobs\Images;
 
-use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -32,7 +30,8 @@ class ImageOptimizer implements ShouldQueue
         protected int $outputWidth = 788,
         protected int $outputHeight = 788,
         protected int $outputQuality = 100,
-        protected bool $removeExif = true)
+        protected bool $removeExif = true
+    )
     {
         //
     }
@@ -85,7 +84,7 @@ class ImageOptimizer implements ShouldQueue
         $img = Image::load(Storage::path($fullPath));
 
         // If there are optimizations, include Jpegoptim process
-        if( count($optimizations) > 0 ) {
+        if (count($optimizations) > 0) {
             $img->optimize([Jpegoptim::class => $optimizations]);
         }
         // Set output width and height and save optimized image to desired location
@@ -108,6 +107,5 @@ class ImageOptimizer implements ShouldQueue
         // Removed downloaded and optimized image from local disk
         Storage::delete($fullPath);
         Storage::delete($path . 'optimized/' . $imageName . '.' . $this->outputExt);
-
     }
 }

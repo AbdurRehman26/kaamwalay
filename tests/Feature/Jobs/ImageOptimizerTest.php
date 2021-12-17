@@ -14,5 +14,4 @@ it('can optimize image and update it on server and model', function () {
 
     expect(count($storageCards))->toEqual(1);
     expect(CardProduct::find($card->id)->image_path)->toEqual(Storage::disk('s3')->url($storageCards[0]));
-
 });

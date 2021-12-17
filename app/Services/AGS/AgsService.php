@@ -27,6 +27,16 @@ class AgsService
         return $this->client->register(data: $data);
     }
 
+    public function changePassword(string $token, array $data): array
+    {
+        return $this->client->changePassword($token, data: $data);
+    }
+
+    public function updateUserData(string $token, array $data): array
+    {
+        return $this->client->updateUserData($token, data: $data);
+    }
+
     public function updateHumanGrades(string $certificateId, array $data): array
     {
         $response = $this->client->updateHumanGrades($certificateId, $this->prepareHumanGradeData($data));
@@ -103,7 +113,7 @@ class AgsService
                 'release_date' => ! empty($data['card']['pokemon_set']['release_date']) ?
                     Carbon::parse($data['card']['pokemon_set']['release_date'])->format('F d, Y') :
                     null,
-                'number' => $data['card']['pokemon_set']['cards_number'] ?? null,
+                'number' => $data['card']['card_number_order'] ?? null,
             ],
             'overall' => $this->prepareOverallGradesForPublicPage($data),
             'front_scan' => $this->prepareFrontScanGradesForPublicPage($data),
@@ -118,7 +128,7 @@ class AgsService
             'Pokemon' . ' ' .
             $card['pokemon_serie']['name'] . ' ' .
             $card['pokemon_set']['name'] . ' ' .
-            $card['pokemon_set']['cards_number'] . ' ' .
+            $card['card_number_order'] . ' ' .
             $card['name'];
     }
 

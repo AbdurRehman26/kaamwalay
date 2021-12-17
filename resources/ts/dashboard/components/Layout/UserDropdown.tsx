@@ -24,6 +24,7 @@ export function UserDropdown() {
     const history = useHistory();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
+    const user$ = useAuth().user;
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -48,7 +49,7 @@ export function UserDropdown() {
     return (
         <>
             <IconButton onClick={handleUserProfileOpen}>
-                <Avatar src={RobogradingAvatar} alt={'Robograding Avatar'} />
+                <Avatar src={user$?.profileImage ?? RobogradingAvatar} alt={'Robograding Avatar'} />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

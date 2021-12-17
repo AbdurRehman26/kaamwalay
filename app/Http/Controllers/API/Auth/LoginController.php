@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Concerns\AGS\AuthenticatableWithAGS;
+use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\LoginRequest;
 use App\Http\Resources\API\Customer\User\UserResource;
 use App\Jobs\Auth\CreateUserDeviceJob;
+use App\Services\CustomerProfileService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,6 +35,32 @@ class LoginController extends Controller
         );
     }
 
+    public function authenticateAndUpdateAgsUserToken(LoginRequest $request, CustomerProfileService $customerProfileService): JsonResponse
+    {
+        try {
+            $response = $this->agsService->login(data: $request->validated());
+
+            throw_if(empty($response), AuthenticationException::class);
+
+            $customerProfileService->update(
+                auth()->guard()->user(),
+                ['ags_access_token' => $response['access_token']]
+            );
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
+
+        return new JsonResponse(
+            [ 'message' => 'User authenticated successfully.' ],
+            Response::HTTP_OK,
+        );
+    }
+    
     public function me(): JsonResponse
     {
         return new JsonResponse([

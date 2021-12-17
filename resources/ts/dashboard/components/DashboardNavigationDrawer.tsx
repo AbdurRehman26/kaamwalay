@@ -109,6 +109,7 @@ export function DashboardNavigationDrawer() {
     const { logout, user } = useAuth();
     const dispatch = useAppDispatch();
     const history = useHistory();
+    const user$ = useAuth().user;
 
     function isItemActive(itemPath: string) {
         return history.location.pathname === itemPath;
@@ -134,7 +135,7 @@ export function DashboardNavigationDrawer() {
         >
             <Grid container direction={'row'} alignItems={'center'} className={classes.header}>
                 <div className={classes.headerAvatarHolder}>
-                    <Avatar src={UserAvatar} className={classes.headerAvatar} />
+                    <Avatar src={user$?.profileImage ?? UserAvatar} className={classes.headerAvatar} />
                 </div>
                 <div className={classes.headerInfoHolder}>
                     <Typography variant={'h6'} noWrap className={classes.headerUserName}>
@@ -167,14 +168,11 @@ export function DashboardNavigationDrawer() {
                     </StyledListItemIcon>
                     <ListItemText primary={'Your Cards'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
-                <ListItem selected={isItemActive('/profile')} button>
+                <ListItem selected={isItemActive('/profile')} onClick={handleItemPress('/profile')} button>
                     <StyledListItemIcon>
                         <AccountCircleIcon />
                     </StyledListItemIcon>
                     <ListItemText primary={'Profile'} primaryTypographyProps={{ className: classes.listItemText }} />
-                    <ListItemSecondaryAction>
-                        <Chip size="small" label="Soon" color={'secondary'} />
-                    </ListItemSecondaryAction>
                 </ListItem>
                 <ListItem selected={isItemActive('/profile/payments')} button>
                     <StyledListItemIcon>

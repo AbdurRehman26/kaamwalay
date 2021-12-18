@@ -3,11 +3,10 @@
 namespace App\Jobs\OrderLabel;
 
 use App\Exports\LabelContentExport;
-use App\Events\API\Order\OrderStatusChangedEvent;
-use App\Services\AGS\AgsService;
 use App\Models\Order;
 use App\Models\OrderLabel;
 use App\Models\UserCard;
+use App\Services\AGS\AgsService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,7 +24,7 @@ class CreateOrderLabel implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(protected Order $order) 
+    public function __construct(protected Order $order)
     {
     }
 
@@ -51,26 +50,25 @@ class CreateOrderLabel implements ShouldQueue
             )
         );
 
-      $this->saveCardLabelToExcel($response);
-
+        $this->saveCardLabelToExcel($response);
     }
   
-    protected function saveCardLabelToExcel(array $response): void 
+    protected function saveCardLabelToExcel(array $response): void
     {
-      $filePath = 'order-label-contents/'.$this->order->order_number.'_label.xlsx';
-      Excel::store(new LabelContentExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
-      $filePathUrl = Storage::disk('s3')->url($filePath);
-      $this->saveCardLabelData($filePathUrl);
+        $filePath = 'order-label-contents/'.$this->order->order_number.'_label.xlsx';
+        Excel::store(new LabelContentExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
+        $filePathUrl = Storage::disk('s3')->url($filePath);
+        $this->saveCardLabelData($filePathUrl);
     }
 
     protected function saveCardLabelData(string $filePathUrl): void
     {
-      $orderLabels = new OrderLabel();
-      $orderLabels->order_number = $this->order->order_number;
-      $orderLabels->path = $filePathUrl;
-      $orderLabels->save();
+        $orderLabels = new OrderLabel();
+        $orderLabels->order_number = $this->order->order_number;
+        $orderLabels->path = $filePathUrl;
+        $orderLabels->save();
 
-      $this->order->order_label_id = $orderLabels->id;
-      $this->order->save();
+        $this->order->order_label_id = $orderLabels->id;
+        $this->order->save();
     }
 }

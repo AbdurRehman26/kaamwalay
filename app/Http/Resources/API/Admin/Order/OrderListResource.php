@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\Customer\Order\OrderLabel\OrderLabelResource;
 use Illuminate\Http\Request;
 
 class OrderListResource extends BaseResource
@@ -25,6 +26,7 @@ class OrderListResource extends BaseResource
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
+            'orderLabel' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'arrived' => ! is_null($this->arrived_at),
             'arrived_at' => $this->formatDate($this->arrived_at),

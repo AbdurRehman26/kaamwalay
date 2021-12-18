@@ -69,5 +69,8 @@ class CreateOrderLabel implements ShouldQueue
       $orderLabels->order_number = $this->order->order_number;
       $orderLabels->path = $filePathUrl;
       $orderLabels->save();
+
+      $this->order->order_label_id = $orderLabels->id;
+      $this->order->save();
     }
 }

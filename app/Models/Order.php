@@ -37,6 +37,7 @@ class Order extends Model
         'payment_method_id',
         'shipping_method_id',
         'invoice_id',
+        'order_label_id',
         'order_shipment_id',
         'order_customer_shipment_id',
         'arrived_at',
@@ -68,6 +69,7 @@ class Order extends Model
         'payment_method_id' => 'integer',
         'shipping_method_id' => 'integer',
         'invoice_id' => 'integer',
+        'order_label_id' => 'integer',
         'order_status_id' => 'integer',
         'arrived_at' => 'date',
         'reviewed_by_id' => 'integer',
@@ -85,6 +87,7 @@ class Order extends Model
     {
         return [
             AllowedInclude::relationship('invoice'),
+            AllowedInclude::relationship('orderLabel'),
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
@@ -118,6 +121,7 @@ class Order extends Model
     {
         return [
             AllowedInclude::relationship('invoice'),
+            AllowedInclude::relationship('orderLabel'),
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
@@ -184,6 +188,11 @@ class Order extends Model
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function orderLabel(): BelongsTo
+    {
+        return $this->belongsTo(OrderLabel::class);
     }
 
     public function orderItems(): HasMany

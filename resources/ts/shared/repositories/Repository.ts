@@ -1,5 +1,5 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { ClassConstructor, ClassTransformOptions, plainToClass } from 'class-transformer';
+import { ClassConstructor, ClassTransformOptions, plainToInstance } from 'class-transformer';
 import { PaginatedData } from '../classes/PaginatedData';
 import { Injectable } from '../decorators/Injectable';
 import { app } from '../lib/app';
@@ -90,7 +90,7 @@ export abstract class Repository<T> {
         options?: ClassTransformOptions | null,
         transformModel?: ClassConstructor<R>,
     ): R {
-        return plainToClass((transformModel || this.model) as ClassConstructor<R>, data, options || {});
+        return plainToInstance((transformModel || this.model) as ClassConstructor<R>, data, options || {});
     }
 
     public toEntities<R = T>(
@@ -98,7 +98,7 @@ export abstract class Repository<T> {
         options?: ClassTransformOptions | null,
         transformModel?: ClassConstructor<R>,
     ): R[] {
-        return plainToClass((transformModel || this.model) as ClassConstructor<R>, data, options || {});
+        return plainToInstance((transformModel || this.model) as ClassConstructor<R>, data, options || {});
     }
 
     public async list<R = T>(

@@ -20,7 +20,7 @@ export function SubmissionsList() {
     const { tab } = useParams<{ tab: string }>();
     const [search, setSearch] = useState('');
     return (
-        <TabContext value={tab}>
+        <TabContext value={tab ?? 'all'}>
             <Grid container direction={'column'}>
                 <SubmissionsListHeader onSearch={setSearch} />
 

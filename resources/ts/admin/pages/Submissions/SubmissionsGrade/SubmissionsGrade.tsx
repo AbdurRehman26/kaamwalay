@@ -24,7 +24,7 @@ const useStyles = makeStyles(
 );
 
 export function SubmissionsGrade() {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<'id'>();
     const classes = useStyles();
     const allSubmissions = useAppSelector((state) => state.submissionGradesSlice.allSubmissions);
 
@@ -37,7 +37,7 @@ export function SubmissionsGrade() {
     useSidebarHidden();
 
     const { data } = useAdminOrderQuery({
-        resourceId: id,
+        resourceId: Number(id),
         config: {
             params: {
                 include: ['orderItems', 'orderStatus', 'orderStatusHistory.orderStatus'],
@@ -48,7 +48,7 @@ export function SubmissionsGrade() {
     return (
         <Grid container direction={'column'}>
             <SubmissionsGradeHeader
-                orderId={id}
+                orderId={Number(id)}
                 cardsGraded={getGradedCards()}
                 cardsInOrder={allSubmissions.length}
                 orderNumber={data?.orderNumber}

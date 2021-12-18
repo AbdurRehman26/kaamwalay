@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderEntity } from '@shared/entities/OrderEntity';
@@ -51,7 +51,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
-    const history = useHistory();
+    const navigate = useNavigate();
     const [statusType, statusLabel] = useOrderStatus(order?.orderStatus);
 
     const handleOption = useCallback(
@@ -68,11 +68,11 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     await downloadFromUrl(order.invoice.path, `robograding-${order.invoice.invoiceNumber}.pdf`);
                     break;
                 case Options.ViewGrades:
-                    history.push(`/submissions/${order.id}/grade`);
+                    navigate(`/submissions/${order.id}/grade`);
                     break;
             }
         },
-        [handleCloseOptions, history, notifications, order.id, order.invoice],
+        [handleCloseOptions, navigate, notifications, order.id, order.invoice],
     );
 
     return (

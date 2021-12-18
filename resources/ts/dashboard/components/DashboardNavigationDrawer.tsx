@@ -15,7 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -108,11 +108,12 @@ export function DashboardNavigationDrawer() {
     const isNavigationDrawerOpen = useAppSelector((state) => state.dashboardSlice.isNavigationDrawerOpen);
     const { logout, user } = useAuth();
     const dispatch = useAppDispatch();
-    const history = useHistory();
+    const location = useLocation();
+    const navigate = useNavigate();
     const user$ = useAuth().user;
 
     function isItemActive(itemPath: string) {
-        return history.location.pathname === itemPath;
+        return location.pathname === itemPath;
     }
 
     function handleClose() {
@@ -121,7 +122,7 @@ export function DashboardNavigationDrawer() {
 
     function handleItemPress(path: string) {
         return () => {
-            history.push(path);
+            navigate(path);
             dispatch(setNavigationDrawerOpen(false));
         };
     }

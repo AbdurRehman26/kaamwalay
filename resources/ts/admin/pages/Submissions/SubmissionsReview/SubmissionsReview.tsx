@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useState } from 'react';
-import { Link, Redirect, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import ManageCardDialog, { ManageCardDialogProps } from '@shared/components/ManageCardDialog/ManageCardDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
@@ -20,12 +20,12 @@ import MissingCards from './MissingCards';
 import UnconfirmedCards from './UnconfirmedCards';
 
 export function SubmissionsReview() {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<'id'>();
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
 
     const { data, isLoading } = useAdminOrderQuery({
-        resourceId: id,
+        resourceId: Number(id),
         config: {
             params: {
                 include: ['orderItems', 'orderStatus', 'orderStatusHistory.orderStatus'],
@@ -86,10 +86,10 @@ export function SubmissionsReview() {
     if (pendingItems.length === 0) {
         if (data.hasOrderStatus(OrderStatusEnum.CONFIRMED)) {
             if (!data.hasOrderStatus(OrderStatusEnum.GRADED)) {
-                return <Redirect to={`/submissions/${data.id}/grade`} />;
+                return <Navigate to={`/submissions/${data.id}/grade`} replace />;
             }
 
-            return <Redirect to={`/submissions/${data.id}/view`} />;
+            return <Navigate to={`/submissions/${data.id}/view`} replace />;
         }
     }
 

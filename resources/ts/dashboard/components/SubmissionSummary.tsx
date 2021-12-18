@@ -7,7 +7,7 @@ import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -159,7 +159,7 @@ function SubmissionSummary() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const stripe = useStripe();
-    const history = useHistory();
+    const navigate = useNavigate();
     const notifications = useNotifications();
     const apiService = useInjectable(APIService);
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
@@ -246,7 +246,7 @@ function SubmissionSummary() {
                 currency: 'USD',
             });
             sendECommerceDataToGA();
-            history.push(`/submissions/${orderID}/confirmation`);
+            navigate(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
@@ -285,7 +285,7 @@ function SubmissionSummary() {
                             currency: 'USD',
                         });
                         sendECommerceDataToGA();
-                        history.push(`/submissions/${orderID}/confirmation`);
+                        navigate(`/submissions/${orderID}/confirmation`);
                     });
                 }
             }

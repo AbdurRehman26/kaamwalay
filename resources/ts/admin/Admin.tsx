@@ -1,15 +1,15 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Submissions } from './pages/Submissions';
 
 export function Admin() {
     return (
         <Layout>
-            <Switch>
-                <Redirect exact from={'/'} to={'/submissions'} />
-                <Route path={'/submissions'} component={Submissions} />
-            </Switch>
+            <Routes>
+                <Route path={''} element={<Navigate to={'/submissions'} replace />} />
+                <Route path={'/submissions/*'} element={<Submissions />} />
+            </Routes>
         </Layout>
     );
 }

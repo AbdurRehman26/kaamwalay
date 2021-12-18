@@ -14,5 +14,4 @@ it('dispatches job for creating files for order labels when order is marked as g
     ]);
     CreateOrderLabel::dispatchSync($order);
     Bus::assertDispatched(CreateOrderLabel::class);
-    
 });

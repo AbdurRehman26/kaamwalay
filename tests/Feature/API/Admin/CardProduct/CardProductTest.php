@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ProcessImage;
 use App\Models\CardProduct;
 use App\Models\User;
 use Database\Seeders\CardCategoriesSeeder;
@@ -38,6 +39,8 @@ beforeEach(function () {
 });
 
 test('admins can create cards manually', function () {
+    Bus::fake();
+
     Http::fake([
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
@@ -80,6 +83,7 @@ test('admins can create cards manually', function () {
         'edition' => "1st Edition",
         'added_by_customer' => false,
     ]);
+    Bus::assertDispatched(ProcessImage::class);
 });
 
 it('fails on repeated series name', function () {

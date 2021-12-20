@@ -4,7 +4,7 @@ namespace App\Services\Admin\Card;
 
 use App\Exceptions\API\Admin\CardDataIsMissing;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
-use App\Jobs\Images\ImageOptimizer;
+use App\Jobs\ProcessImage;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
 use App\Models\CardSeries;
@@ -200,7 +200,7 @@ class CardProductService
         ]);
         $card->save();
 
-        ImageOptimizer::dispatch($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
+        ProcessImage::dispatch($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
 
         return $card;
     }

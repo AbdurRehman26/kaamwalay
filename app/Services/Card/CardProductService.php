@@ -2,7 +2,7 @@
 
 namespace App\Services\Card;
 
-use App\Jobs\Images\ImageOptimizer;
+use App\Jobs\ProcessImage;
 use App\Models\CardProduct;
 
 class CardProductService
@@ -17,7 +17,7 @@ class CardProductService
             ]
         ));
 
-        ImageOptimizer::dispatch($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
+        ProcessImage::dispatch($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
 
         return $card;
     }

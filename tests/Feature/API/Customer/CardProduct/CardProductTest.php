@@ -1,9 +1,9 @@
 <?php
 
-use App\Jobs\Images\ImageOptimizer;
+use App\Jobs\ProcessImage;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
-use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Bus;
 
 beforeEach(function () {
     $this->seed([
@@ -18,7 +18,7 @@ beforeEach(function () {
 });
 
 test('customers can create cards manually', function () {
-    Queue::fake();
+    Bus::fake();
 
     $response = $this->postJson('/api/customer/cards', [
         'name' => 'Lorem Ipsum',
@@ -34,5 +34,5 @@ test('customers can create cards manually', function () {
         'image_path' => 'http://www.google.com',
     ]);
 
-    Queue::assertPushed(ImageOptimizer::class);
+    Bus::assertDispatched(ProcessImage::class);
 });

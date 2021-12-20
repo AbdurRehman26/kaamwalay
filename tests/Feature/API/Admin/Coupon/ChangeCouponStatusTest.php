@@ -16,14 +16,18 @@ beforeEach(function () {
         ->create();
 });
 
-test('admin can change coupon status', function () {
+test('admin can change coupon status', function (string $status) {
     $this->actingAs($this->user);
 
     $coupon = Coupon::factory()->create();
 
     $this->putJson(route('coupons.change-status', ['coupon' => $coupon]), [
-        'status' => 'inactive',
+        'status' => $status,
     ])->assertOk();
 
     expect(CouponStatusHistory::count())->toBe(1);
-});
+})->with([
+    fn () => 'active',
+    fn () => 'inactive',
+    fn () => 'expired',
+]);

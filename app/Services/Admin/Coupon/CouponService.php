@@ -6,7 +6,7 @@ use App\Events\API\Admin\Coupon\NewCouponAdded;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
 use App\Models\CouponStatus;
-use App\Services\Admin\Card\CouponCodeService;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -68,12 +68,13 @@ class CouponService
     /**
      * @throws CouponCodeAlreadyExistsException
      */
-    public function storeCoupon(array $data): Coupon
+    public function storeCoupon(array $data, User $user): Coupon
     {
         $coupon = new Coupon(Arr::except(array: $data, keys: ['code']));
 
         $coupon->code = $this->getCouponCode($data['code']);
         $coupon->coupon_status_id = $this->getNewCouponStatus($coupon);
+        $coupon->user_id = $user->id;
 
         $coupon->save();
 
@@ -115,7 +116,7 @@ class CouponService
 
     protected function addCouponStatusHistory(Coupon $coupon, int $status): Coupon
     {
-        $couponStatus = CouponStatus::forStatus($status);
+        $couponStatus = CouponStatus::forStatus($status)->first();
 
         return $this->couponStatusService->changeStatus($coupon, $couponStatus);
     }

@@ -27,7 +27,7 @@ class CouponController extends Controller
      */
     public function store(StoreCouponRequest $request): CouponResource
     {
-        $coupon = $this->couponService->storeCoupon($request->validated());
+        $coupon = $this->couponService->storeCoupon($request->validated(), $request->user());
 
         return new CouponResource($coupon);
     }

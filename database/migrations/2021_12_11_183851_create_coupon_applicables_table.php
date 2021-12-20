@@ -17,7 +17,7 @@ class CreateCouponApplicablesTable extends Migration
             $table->id();
             $table->string('code');
             $table->string('label');
-            $table->string('api_suffix');
+            $table->string('api_suffix')->nullable();
             $table->string('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

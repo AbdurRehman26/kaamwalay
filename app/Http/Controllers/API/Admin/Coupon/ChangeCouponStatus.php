@@ -7,7 +7,6 @@ use App\Http\Requests\API\Admin\Coupon\ChangeCouponStatusRequest;
 use App\Http\Resources\API\Admin\Coupon\CouponResource;
 use App\Models\Coupon;
 use App\Services\Admin\Coupon\CouponService;
-use Illuminate\Http\Request;
 
 class ChangeCouponStatus extends Controller
 {

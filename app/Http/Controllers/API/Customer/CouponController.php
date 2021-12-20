@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Admin\Coupon\CouponResource;
-use App\Models\Coupon;
 use App\Services\Coupon\CouponService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +20,7 @@ class CouponController extends Controller
     public function show(string $couponCode): JsonResponse|CouponResource
     {
         try {
-
             $coupon = $this->couponService->returnCouponIfValid($couponCode);
-
         } catch (\Exception $e) {
             return new JsonResponse(
                 [

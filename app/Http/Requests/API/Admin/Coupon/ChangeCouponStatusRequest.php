@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\Admin\Coupon;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ChangeCouponStatusRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class ChangeCouponStatusRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->isAdmin();
     }
 
     /**
@@ -24,7 +25,11 @@ class ChangeCouponStatusRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'status' => [
+                'required',
+                Rule::when(fn ($value) => is_numeric($value->status), 'exists:coupon_statuses,id'),
+                Rule::when(fn ($value) => ! is_numeric($value->status), 'exists:coupon_statuses,code'),
+            ],
         ];
     }
 }

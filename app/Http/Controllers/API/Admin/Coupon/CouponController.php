@@ -4,14 +4,10 @@ namespace App\Http\Controllers\API\Admin\Coupon;
 
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Admin\Coupon\ChangeCouponStatusRequest;
 use App\Http\Requests\API\Admin\Coupon\StoreCouponRequest;
 use App\Http\Resources\API\Admin\Coupon\CouponCollection;
 use App\Http\Resources\API\Admin\Coupon\CouponResource;
-use App\Models\Coupon;
 use App\Services\Admin\Coupon\CouponService;
-use Illuminate\Http\Request;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class CouponController extends Controller
 {
@@ -36,8 +32,10 @@ class CouponController extends Controller
         return new CouponResource($coupon);
     }
 
-    public function changeStatus(ChangeCouponStatusRequest $request)
+    public function show(int $coupon): CouponResource
     {
+        $coupon = $this->couponService->getCoupon($coupon);
 
+        return new CouponResource($coupon);
     }
 }

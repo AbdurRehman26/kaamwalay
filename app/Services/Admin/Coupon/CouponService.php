@@ -12,6 +12,8 @@ use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 
 class CouponService
 {
+    const LIST_COUPONS_PER_PAGE = 15;
+
     public function __construct(protected CouponCodeService $couponCodeService)
     {
     }
@@ -30,7 +32,7 @@ class CouponService
                 'discount_value',
             ])
             ->defaultSort('-created_at')
-            ->paginate(request('per_page', 15));
+            ->paginate(request('per_page', self::LIST_COUPONS_PER_PAGE));
     }
 
     /**

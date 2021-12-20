@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Admin\Coupon;
 
+use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Coupon\ChangeCouponStatusRequest;
 use App\Http\Requests\API\Admin\Coupon\StoreCouponRequest;
@@ -18,14 +19,17 @@ class CouponController extends Controller
     {
     }
 
-    public function index()
+    public function index(): CouponCollection
     {
         $coupons = $this->couponService->getCoupons();
 
         return new CouponCollection($coupons);
     }
 
-    public function store(StoreCouponRequest $request)
+    /**
+     * @throws CouponCodeAlreadyExistsException
+     */
+    public function store(StoreCouponRequest $request): CouponResource
     {
         $coupon = $this->couponService->storeCoupon($request->validated());
 

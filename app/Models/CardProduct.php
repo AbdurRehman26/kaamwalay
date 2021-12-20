@@ -105,7 +105,7 @@ class CardProduct extends Model
 
     public function isCardInformationComplete(): bool
     {
-        return $this->card_category_id && $this->card_set_id && !is_null($this->card_number_order);
+        return $this->card_category_id && $this->card_set_id && ! is_null($this->card_number_order);
     }
 
     public function getFormattedCardNumber(): string | null

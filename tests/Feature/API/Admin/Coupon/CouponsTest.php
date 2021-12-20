@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Coupon;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -13,6 +14,13 @@ beforeEach(function () {
         ->withRole(config('permission.roles.admin'))
         ->create();
 });
+
+test('admin can get a list of coupons', function () {
+    $this->actingAs($this->user);
+    $this->getJson(route('coupons.index'))
+        ->assertOk();
+});
+
 test('admin can create coupon', function () {
     $this->actingAs($this->user);
     $this->postJson(route('coupons.store'), [
@@ -25,4 +33,11 @@ test('admin can create coupon', function () {
     ])
         ->dump()
         ->assertCreated();
+});
+
+test('admin can get a single coupon', function () {
+    $coupon = Coupon::factory()->create();
+    $this->actingAs($this->user);
+    $this->getJson(route('coupons.show', ['coupon' => $coupon->id]))
+        ->assertOk();
 });

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\Coupons\CanHaveCoupons;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -17,7 +18,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword;
+    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons;
 
     public string $pushNotificationType = 'users';
 

@@ -11,14 +11,8 @@ class Couponable extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'related_model',
-        'api_suffix',
-        'is_active',
+        'couponable_id',
+        'couponable_type',
+        'coupon_id',
     ];
-
-    public function coupons(): HasMany
-    {
-        return $this->hasMany(Coupon::class);
-    }
 }

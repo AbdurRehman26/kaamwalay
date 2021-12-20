@@ -58,6 +58,11 @@ class Coupon extends Model
         return $this->belongsTo(CouponApplicable::class);
     }
 
+    public function couponAble(): HasOne
+    {
+        return $this->hasOne(Couponable::class, );
+    }
+
     public function couponStats(): HasOne
     {
         return $this->hasOne(CouponStat::class);
@@ -70,7 +75,8 @@ class Coupon extends Model
 
     public function scopeValidOnCurrentDate(Builder $query): Builder
     {
-        return $query->where('available_from', '>=', now()->toDateString())->where('available_till', '<=', now()->toDateString());
+        return $query->where('available_from', '<=', now())->where(function ($subQuery) {
+            $subQuery->where('available_till', '>=', now())->orWhereNull('available_till');
+        });
     }
-
 }

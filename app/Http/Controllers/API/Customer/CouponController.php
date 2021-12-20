@@ -18,11 +18,11 @@ class CouponController extends Controller
         $this->couponService = $couponService;
     }
 
-    public function show($code): JsonResponse|CouponResource
+    public function show(string $couponCode): JsonResponse|CouponResource
     {
         try {
 
-            $coupon = $this->couponService->checkIfCouponIsValid($code);
+            $coupon = $this->couponService->returnCouponIfValid($couponCode);
 
         } catch (\Exception $e) {
             return new JsonResponse(

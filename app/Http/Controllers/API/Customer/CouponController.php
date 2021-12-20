@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Services\CouponService;
+use App\Http\Requests\API\Customer\Coupon\ShowCouponRequest;
+use App\Models\Coupon;
+use App\Services\Coupon\CouponService;
 
 class CouponController extends Controller
 {
@@ -14,8 +16,10 @@ class CouponController extends Controller
         $this->couponService = $couponService;
     }
 
-    public function show($coupon)
+    public function show(ShowCouponRequest $request, Coupon $coupon)
     {
+
+        $this->couponService->checkCouponIsValid($coupon);
         dd($coupon);
 
         return false;

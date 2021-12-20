@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\CouponType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -63,5 +64,10 @@ class Coupon extends Model
     public function couponLogs(): HasMany
     {
         return $this->hasMany(CouponLog::class);
+    }
+
+    public function scopeValidInRange(Builder $query, ): bool
+    {
+
     }
 }

@@ -8,7 +8,7 @@ use App\Http\Requests\API\Admin\Coupon\StoreCouponRequest;
 use App\Http\Resources\API\Admin\Coupon\CouponCollection;
 use App\Http\Resources\API\Admin\Coupon\CouponResource;
 use App\Models\Coupon;
-use App\Services\Admin\CouponService;
+use App\Services\Admin\Coupon\CouponService;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 

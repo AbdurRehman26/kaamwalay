@@ -1,13 +1,21 @@
 <?php
 
-namespace App\Services\Admin;
+namespace App\Services\Admin\Coupon;
 
+use App\Events\API\Admin\Coupon\NewCouponAdded;
 use App\Models\Coupon;
+use App\Services\Admin\Card\CouponCodeService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Exceptions\API\Admin\Coupon\CouponAlreadyExistsException;
 
 class CouponService
 {
+    public function __construct(protected CouponCodeService $couponCodeService)
+    {
+    }
+
     public function getCoupons(): LengthAwarePaginator
     {
         return QueryBuilder::for(Coupon::class)
@@ -25,9 +33,18 @@ class CouponService
             ->paginate(request('per_page', 15));
     }
 
+    /**
+     * @throws CouponAlreadyExistsException
+     */
     public function storeCoupon(array $data): Coupon
     {
-        $coupon = Coupon::create($data);
+        $coupon = new Coupon(Arr::except(array: $data, keys: ['code']));
+
+        $coupon->code = $this->getCouponCode($data['code']);
+
+        $coupon->save();
+
+        NewCouponAdded::dispatch($coupon);
 
         return $coupon;
     }
@@ -37,5 +54,14 @@ class CouponService
         $coupon->update([
             'coupon_status_id' => $status,
         ]);
+    }
+
+
+    /**
+     * @throws CouponAlreadyExistsException
+     */
+    protected function getCouponCode(string $code): string
+    {
+        return $this->couponCodeService->newCoupon(code: $code);
     }
 }

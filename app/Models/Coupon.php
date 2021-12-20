@@ -39,8 +39,8 @@ class Coupon extends Model
         'capped_amount' => 'float',
         'is_capped' => 'boolean',
         'type' => CouponType::class,
-        'available_from' => 'timestamp',
-        'available_till' => 'timestamp',
+        'available_from' => 'datetime',
+        'available_till' => 'datetime',
     ];
 
     public function couponStatusHistories(): HasMany

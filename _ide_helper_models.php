@@ -220,7 +220,7 @@ namespace App\Models{
  * @property float $discount_value
  * @property bool $is_capped
  * @property float $capped_amount
- * @property \Illuminate\Support\Carbon|null $available_from
+ * @property \Illuminate\Support\Carbon $available_from
  * @property \Illuminate\Support\Carbon|null $available_till
  * @property int $coupon_applicable_id
  * @property int $coupon_status_id

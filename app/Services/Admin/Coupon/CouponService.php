@@ -5,6 +5,7 @@ namespace App\Services\Admin\Coupon;
 use App\Events\API\Admin\Coupon\NewCouponAdded;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
+use App\Models\CouponStat;
 use App\Models\CouponStatus;
 use App\Services\Admin\Card\CouponCodeService;
 use Illuminate\Database\Eloquent\Model;
@@ -73,12 +74,15 @@ class CouponService
         $coupon = new Coupon(Arr::except(array: $data, keys: ['code']));
 
         $coupon->code = $this->getCouponCode($data['code']);
+        $coupon->coupon_status_id = $this->getNewCouponStatus($coupon);
 
         $coupon->save();
 
+        $this->addCouponStatusHistory($coupon);
+
         NewCouponAdded::dispatch($coupon);
 
-        return $coupon;
+        return $coupon->refresh();
     }
 
     public function changeStatus(Coupon $coupon, string|int $status): Coupon
@@ -99,5 +103,21 @@ class CouponService
     protected function getCouponCode(string $code): string
     {
         return $this->couponCodeService->newCoupon(code: $code);
+    }
+
+    protected function getNewCouponStatus(Coupon $coupon): int
+    {
+        if ($coupon->available_from->isPast()) {
+            return CouponStatus::STATUS_ACTIVE;
+        }
+
+        return CouponStatus::STATUS_QUEUED;
+    }
+
+    protected function addCouponStatusHistory(Coupon $coupon, int $status)
+    {
+        $couponStatus = CouponStatus::forStatus($status);
+
+        return $this->couponStatusService->changeStatus($coupon, $couponStatus);
     }
 }

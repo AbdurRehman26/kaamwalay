@@ -61,6 +61,6 @@ class SeedInitialCouponApplicablesData extends Migration
      */
     public function down()
     {
-        //
+        DB::table(self::TABLE)->truncate();
     }
 }

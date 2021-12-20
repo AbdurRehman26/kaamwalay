@@ -38,8 +38,8 @@ class CreateCouponsTable extends Migration
             $table->unsignedDecimal('discount_value', 10);
             $table->boolean('is_capped')->default(false);
             $table->unsignedDecimal('capped_amount', 10)->nullable();
-            $table->dateTime('available_from');
-            $table->dateTime('available_till')
+            $table->timestamp('available_from');
+            $table->timestamp('available_till')
                 ->nullable()
                 ->comment('if its null then the coupon is permanent');
             $table->foreignIdFor(CouponApplicable::class)

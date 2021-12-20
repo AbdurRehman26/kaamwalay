@@ -47,7 +47,7 @@ class Coupon extends Model
         return $this->hasMany(CouponStatusHistory::class);
     }
 
-    public function couponStatus()
+    public function couponStatus(): BelongsTo
     {
         return $this->belongsTo(CouponStatus::class);
     }
@@ -75,5 +75,10 @@ class Coupon extends Model
     public function paymentPlans(): MorphToMany
     {
         return $this->morphedByMany(PaymentPlan::class, 'couponables');
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->coupon_status_id === CouponStatus::STATUS_EXPIRED;
     }
 }

@@ -10,8 +10,6 @@ use App\Http\Resources\API\Admin\Coupon\CouponCollection;
 use App\Http\Resources\API\Admin\Coupon\CouponResource;
 use App\Models\Coupon;
 use App\Services\Admin\Coupon\CouponService;
-use Illuminate\Http\Request;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class CouponController extends Controller
 {
@@ -36,8 +34,17 @@ class CouponController extends Controller
         return new CouponResource($coupon);
     }
 
-    public function changeStatus(ChangeCouponStatusRequest $request)
+    public function show(int $coupon): CouponResource
     {
+        $coupon = $this->couponService->getCoupon($coupon);
 
+        return new CouponResource($coupon);
+    }
+
+    public function changeStatus(Coupon $coupon, ChangeCouponStatusRequest $request)
+    {
+        $coupon = $this->couponService->changeStatus($coupon, $request->get('status'));
+
+        return new CouponResource($coupon);
     }
 }

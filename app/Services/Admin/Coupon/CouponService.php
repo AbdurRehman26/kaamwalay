@@ -4,18 +4,23 @@ namespace App\Services\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
 use App\Models\Coupon;
+use App\Models\CouponStatus;
 use App\Services\Admin\Card\CouponCodeService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class CouponService
 {
     const LIST_COUPONS_PER_PAGE = 15;
 
-    public function __construct(protected CouponCodeService $couponCodeService)
-    {
+    public function __construct(
+        protected CouponCodeService $couponCodeService,
+        protected CouponStatusService $couponStatusService
+    ) {
     }
 
     public function getCoupons(): LengthAwarePaginator
@@ -31,9 +36,34 @@ class CouponService
                 'discount',
                 'discount_value',
             ])
+            ->allowedIncludes([
+                'couponStatus',
+                'couponApplicable',
+                'couponStats',
+                'couponLogs',
+                'users',
+                'paymentPlans',
+            ])
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::LIST_COUPONS_PER_PAGE));
     }
+
+
+
+    public function getCoupon(int $couponId): Model|QueryBuilder
+    {
+        return QueryBuilder::for(Coupon::class)
+            ->allowedIncludes([
+                'couponStatus',
+                'couponApplicable',
+                'couponStats',
+                'couponLogs',
+                'users',
+                'paymentPlans',
+            ])
+            ->findOrFail($couponId);
+    }
+
 
     /**
      * @throws CouponCodeAlreadyExistsException
@@ -51,11 +81,15 @@ class CouponService
         return $coupon;
     }
 
-    public function changeStatus(Coupon $coupon, string $status)
+    public function changeStatus(Coupon $coupon, string|int $status): Coupon
     {
-        $coupon->update([
-            'coupon_status_id' => $status,
-        ]);
+        if ($coupon->isExpired()) {
+            throw new UnprocessableEntityHttpException('Status of expired coupon can not be changed');
+        }
+
+        $couponStatus = CouponStatus::forStatus($status)->first();
+
+        return $this->couponStatusService->changeStatus($coupon, $couponStatus);
     }
 
 

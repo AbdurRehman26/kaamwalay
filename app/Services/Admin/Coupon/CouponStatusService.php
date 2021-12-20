@@ -5,10 +5,11 @@ namespace App\Services\Admin\Coupon;
 use App\Models\Coupon;
 use App\Models\CouponStatus;
 use App\Models\CouponStatusHistory;
+use Illuminate\Database\Eloquent\Builder;
 
 class CouponStatusService
 {
-    public function changeStatus(Coupon $coupon, CouponStatus $newCouponStatus, string $referrer = 'admin'): Coupon
+    public function changeStatus(Coupon $coupon, Builder|CouponStatus $newCouponStatus, string $referrer = 'admin'): Coupon
     {
         $coupon->coupon_status_id = $newCouponStatus->id;
         $coupon->save();
@@ -18,7 +19,7 @@ class CouponStatusService
         return $coupon;
     }
 
-    protected function createStatusHistory(Coupon $coupon, string $referrer)
+    protected function createStatusHistory(Coupon $coupon, string $referrer): void
     {
         CouponStatusHistory::create([
             'coupon_status_id' => $coupon->coupon_status_id,

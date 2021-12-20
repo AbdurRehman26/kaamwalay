@@ -9,7 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CouponCodeAlreadyExistsException extends Exception
 {
+    /** @var string */
     protected $message = 'Coupon code already exists.';
+
+    /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
     /**

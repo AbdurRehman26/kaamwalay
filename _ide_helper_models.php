@@ -220,11 +220,11 @@ namespace App\Models{
  * @property float $discount_value
  * @property bool $is_capped
  * @property float $capped_amount
- * @property string $available_from
- * @property string $available_till
+ * @property \Illuminate\Support\Carbon $available_from
+ * @property \Illuminate\Support\Carbon|null $available_till
  * @property int $coupon_applicable_id
  * @property int $coupon_status_id
- * @property string $deleted_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property int $user_id
  * @property-read \App\Models\CouponApplicable $couponApplicable
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponLog[] $couponLogs

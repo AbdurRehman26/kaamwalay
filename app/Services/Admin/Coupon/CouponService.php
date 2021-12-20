@@ -7,8 +7,8 @@ use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
 use App\Models\CouponStatus;
 use App\Services\Admin\Card\CouponCodeService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -73,12 +73,15 @@ class CouponService
         $coupon = new Coupon(Arr::except(array: $data, keys: ['code']));
 
         $coupon->code = $this->getCouponCode($data['code']);
+        $coupon->coupon_status_id = $this->getNewCouponStatus($coupon);
 
         $coupon->save();
 
+        $this->addCouponStatusHistory($coupon, $this->getNewCouponStatus($coupon));
+
         NewCouponAdded::dispatch($coupon);
 
-        return $coupon;
+        return $coupon->refresh();
     }
 
     public function changeStatus(Coupon $coupon, string|int $status): Coupon
@@ -99,5 +102,21 @@ class CouponService
     protected function getCouponCode(string $code): string
     {
         return $this->couponCodeService->newCoupon(code: $code);
+    }
+
+    protected function getNewCouponStatus(Coupon $coupon): int
+    {
+        if ($coupon->available_from->isPast()) {
+            return CouponStatus::STATUS_ACTIVE;
+        }
+
+        return CouponStatus::STATUS_QUEUED;
+    }
+
+    protected function addCouponStatusHistory(Coupon $coupon, int $status): Coupon
+    {
+        $couponStatus = CouponStatus::forStatus($status);
+
+        return $this->couponStatusService->changeStatus($coupon, $couponStatus);
     }
 }

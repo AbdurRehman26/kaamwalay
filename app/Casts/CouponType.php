@@ -6,7 +6,6 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class CouponType implements CastsAttributes
 {
-
     /**
      * @inheritDoc
      */
@@ -23,7 +22,7 @@ class CouponType implements CastsAttributes
         return $this->values()[$value];
     }
 
-    protected function values()
+    protected function values(): array
     {
         return [
             'fixed' => 1,

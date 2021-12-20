@@ -2,7 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Couponable;
+use App\Models\CouponApplicable;
+use App\Models\CouponStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -19,8 +20,8 @@ class CouponFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'coupon_status_id' => \App\Models\CouponStatus::factory(),
-            'coupon_applicable_id' => \App\Models\CouponApplicable::factory(),
+            'coupon_applicable_id' => CouponApplicable::factory(),
+            'coupon_status_id' => CouponStatus::factory(),
             'code' => Str::random(10),
             'type' => Arr::random(['fixed', 'percentage']),
             'discount_value' => random_int(5, 25),

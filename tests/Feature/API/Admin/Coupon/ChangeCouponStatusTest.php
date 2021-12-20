@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\API\Admin\Coupon;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ChangeCouponStatusTest extends TestCase

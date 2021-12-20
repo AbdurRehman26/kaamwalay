@@ -6,13 +6,12 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class CouponType implements CastsAttributes
 {
-
     /**
      * @inheritDoc
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        return $this->values()[$value];
+        return array_search($value, $this->values());
     }
 
     /**
@@ -20,7 +19,7 @@ class CouponType implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        return array_search($value, $this->values());
+        return $this->values()[$value];
     }
 
     protected function values(): array

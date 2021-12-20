@@ -10,6 +10,7 @@ use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\Customer\Address\StateController;
 use App\Http\Controllers\API\Customer\Cards\CardProductController;
 use App\Http\Controllers\API\Customer\Cards\UserCardController;
+use App\Http\Controllers\API\Customer\CouponController;
 use App\Http\Controllers\API\Customer\Order\OrderController;
 use App\Http\Controllers\API\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\Customer\Order\PaymentMethodController;
@@ -43,11 +44,16 @@ Route::prefix('auth')->group(function () {
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 
+Route::get('coupons/{code}', [CouponController::class, 'show'])->middleware('guest');
+
 Route::prefix('customer')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
+//        Route::apiResource('coupons', CouponController::class)
+//            ->only(['show']);
+
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
 

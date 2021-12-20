@@ -62,5 +62,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Coupons
     Route::apiResource('coupons', CouponController::class)->except('update', 'destroy');
-    Route::put('coupons/{coupon}/change-status', ChangeCouponStatus::class);
+    Route::put('coupons/{coupon}/change-status', ChangeCouponStatus::class)->name('coupons.change-status');
 });

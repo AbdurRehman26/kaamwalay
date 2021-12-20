@@ -22,7 +22,7 @@ class CouponStatus extends Model
         'description',
     ];
 
-    public function scopeForStatus(Builder $query, $status): Builder
+    public function scopeForStatus(Builder $query, int|string $status): Builder
     {
         return $query
             ->where('id', $status)

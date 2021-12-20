@@ -23,7 +23,7 @@ class CouponType implements CastsAttributes
         return array_search($value, $this->values());
     }
 
-    protected function values()
+    protected function values(): array
     {
         return [
             'fixed' => 1,

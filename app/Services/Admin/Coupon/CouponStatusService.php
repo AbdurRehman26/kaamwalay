@@ -18,7 +18,7 @@ class CouponStatusService
         return $coupon;
     }
 
-    protected function createStatusHistory(Coupon $coupon, string $referrer)
+    protected function createStatusHistory(Coupon $coupon, string $referrer): void
     {
         CouponStatusHistory::create([
             'coupon_status_id' => $coupon->coupon_status_id,

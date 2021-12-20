@@ -78,7 +78,7 @@ class CouponService
 
         $coupon->save();
 
-        $this->addCouponStatusHistory($coupon);
+        $this->addCouponStatusHistory($coupon, $this->getNewCouponStatus($coupon));
 
         NewCouponAdded::dispatch($coupon);
 
@@ -114,7 +114,7 @@ class CouponService
         return CouponStatus::STATUS_QUEUED;
     }
 
-    protected function addCouponStatusHistory(Coupon $coupon, int $status)
+    protected function addCouponStatusHistory(Coupon $coupon, int $status): Coupon
     {
         $couponStatus = CouponStatus::forStatus($status);
 

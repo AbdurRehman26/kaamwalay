@@ -3,6 +3,7 @@
 namespace App\Services\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
+use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
 use App\Models\CouponStatus;
 use App\Services\Admin\Card\CouponCodeService;
@@ -10,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class CouponService

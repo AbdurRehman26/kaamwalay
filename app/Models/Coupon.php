@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\CouponType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,4 +65,10 @@ class Coupon extends Model
     {
         return $this->hasMany(CouponLog::class);
     }
+
+    public function scopeValidOnCurrentDate(Builder $query): Builder
+    {
+        return $query->where('available_from', '>=', now()->toDateString())->where('available_till', '<=', now()->toDateString());
+    }
+
 }

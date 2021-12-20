@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Customer\Coupon\ShowCouponRequest;
+use App\Http\Resources\API\Admin\Coupon\CouponResource;
 use App\Models\Coupon;
 use App\Services\Coupon\CouponService;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CouponController extends Controller
 {
@@ -16,12 +18,21 @@ class CouponController extends Controller
         $this->couponService = $couponService;
     }
 
-    public function show(ShowCouponRequest $request, Coupon $coupon)
+    public function show($code): JsonResponse|CouponResource
     {
+        try {
 
-        $this->couponService->checkCouponIsValid($coupon);
-        dd($coupon);
+            $coupon = $this->couponService->checkIfCouponIsValid($code);
 
-        return false;
+        } catch (\Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => 'Coupon not found.',
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return new CouponResource($coupon);
     }
 }

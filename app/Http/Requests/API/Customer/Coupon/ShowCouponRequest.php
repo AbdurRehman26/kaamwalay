@@ -24,7 +24,6 @@ class ShowCouponRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => ['exists'],
         ];
     }
 }

@@ -19,7 +19,8 @@ class CouponFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'coupon_applicable_id' => Couponable::factory(),
+            'coupon_status_id' => \App\Models\CouponStatus::factory(),
+            'coupon_applicable_id' => \App\Models\CouponApplicable::factory(),
             'code' => Str::random(10),
             'type' => Arr::random(['fixed', 'percentage']),
             'discount_value' => random_int(5, 25),

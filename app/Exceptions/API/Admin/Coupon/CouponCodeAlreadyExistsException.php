@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CouponAlreadyExistsException extends Exception
+class CouponCodeAlreadyExistsException extends Exception
 {
     protected $message = 'Coupon code already exists.';
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;

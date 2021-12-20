@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
-use App\Exceptions\API\Admin\Coupon\CouponAlreadyExistsException;
+use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
 use Illuminate\Support\Str;
 
@@ -18,7 +18,7 @@ class CouponCodeService
     }
 
     /**
-     * @throws CouponAlreadyExistsException
+     * @throws CouponCodeAlreadyExistsException
      */
     public function newCoupon(string $code, bool $shouldSystemGenerate = false): string
     {
@@ -26,7 +26,7 @@ class CouponCodeService
             return $this->generateValidCoupon();
         }
         if ($this->exists($code)) {
-            throw new CouponAlreadyExistsException;
+            throw new CouponCodeAlreadyExistsException;
         }
 
         return $code;

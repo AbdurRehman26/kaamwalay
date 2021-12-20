@@ -28,7 +28,6 @@ class Coupon extends Model
         'capped_amount',
         'available_from',
         'available_till',
-        'coupon_applicable_id',
         'coupon_status_id',
         'deleted_at',
     ];

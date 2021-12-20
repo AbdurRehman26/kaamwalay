@@ -8,7 +8,7 @@ use App\Services\Admin\Card\CouponCodeService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Exceptions\API\Admin\Coupon\CouponAlreadyExistsException;
+use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 
 class CouponService
 {
@@ -34,7 +34,7 @@ class CouponService
     }
 
     /**
-     * @throws CouponAlreadyExistsException
+     * @throws CouponCodeAlreadyExistsException
      */
     public function storeCoupon(array $data): Coupon
     {
@@ -58,7 +58,7 @@ class CouponService
 
 
     /**
-     * @throws CouponAlreadyExistsException
+     * @throws CouponCodeAlreadyExistsException
      */
     protected function getCouponCode(string $code): string
     {

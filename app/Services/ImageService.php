@@ -61,7 +61,8 @@ class ImageService
         return Str::uuid();
     }
 
-    protected function applyOptimizations(string $fullPath, string $outputFullPath, int $outputWidth, int $outputHeight, int $outputQuality, bool $removeExif){
+    protected function applyOptimizations(string $fullPath, string $outputFullPath, int $outputWidth, int $outputHeight, int $outputQuality, bool $removeExif): void
+    {
         // Create optimizations array given parameters
         $optimizations = [];
         if ($removeExif) {

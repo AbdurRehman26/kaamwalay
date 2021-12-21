@@ -40,6 +40,6 @@ class CouponApplicable extends Model
 
     public function scopeOnlyActive(Builder $query): Builder
     {
-        return $query->where('is_active', value: true);
+        return $query->where('is_active', true);
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Services\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
-use App\Exceptions\API\Admin\Coupon\CouponableEntityNotImplementedException;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
+use App\Http\Filters\AdminCouponSearchFilter;
 use App\Models\Coupon;
 use App\Models\CouponApplicable;
 use App\Models\CouponStatus;
@@ -14,6 +14,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -34,6 +35,7 @@ class CouponService
             ->allowedFilters([
                 'status',
                 'code',
+                AllowedFilter::custom('search', new AdminCouponSearchFilter),
             ])
             ->allowedSorts([
                 'available_from',

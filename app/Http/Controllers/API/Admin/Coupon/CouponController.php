@@ -8,6 +8,8 @@ use App\Http\Requests\API\Admin\Coupon\StoreCouponRequest;
 use App\Http\Resources\API\Admin\Coupon\CouponCollection;
 use App\Http\Resources\API\Admin\Coupon\CouponResource;
 use App\Services\Admin\Coupon\CouponService;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CouponController extends Controller
 {
@@ -37,5 +39,12 @@ class CouponController extends Controller
         $coupon = $this->couponService->getCoupon($coupon);
 
         return new CouponResource($coupon);
+    }
+
+    public function destroy(Coupon $coupon): JsonResponse
+    {
+        $coupon->delete();
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 }

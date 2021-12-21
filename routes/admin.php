@@ -5,6 +5,7 @@ use App\Http\Controllers\API\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\Admin\Cards\CardSetController;
 use App\Http\Controllers\API\Admin\Coupon\ChangeCouponStatus;
 use App\Http\Controllers\API\Admin\Coupon\CouponController;
+use App\Http\Controllers\API\Admin\Coupon\ListCouponApplicable;
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
 use App\Http\Controllers\API\Admin\Order\OrderPaymentController;
@@ -61,8 +62,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     // Coupons
-    Route::apiResource('coupons', CouponController::class)->except('update', 'destroy');
+    Route::apiResource('coupons', CouponController::class)->except('update');
     Route::put('coupons/{coupon}/change-status', ChangeCouponStatus::class)
         ->name('coupons.change-status');
-    Route::get('coupon-applicables', );
+    Route::get('coupon-applicables', ListCouponApplicable::class);
 });

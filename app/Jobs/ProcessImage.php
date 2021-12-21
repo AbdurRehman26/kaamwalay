@@ -4,11 +4,14 @@ namespace App\Jobs;
 
 use App\Services\ImageService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Filesystem\FileExistsException;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Spatie\Image\Exceptions\InvalidManipulation;
 
 class ProcessImage implements ShouldQueue
 {
@@ -34,6 +37,9 @@ class ProcessImage implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws FileExistsException
+     * @throws FileNotFoundException
+     * @throws InvalidManipulation
      */
     public function handle()
     {

@@ -14,7 +14,7 @@ class OrderLabel extends Model
      *
      * @var array
      */
-    protected $fillable = ['order_number', 'path'];
+    protected $fillable = ['order_id', 'path'];
 
     /**
      * The attributes that should be cast to native types.

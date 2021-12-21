@@ -3,7 +3,6 @@
 namespace App\Listeners\API\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
-use App\Services\Admin\Coupon\CouponService;
 
 class NewCouponAddedListener
 {

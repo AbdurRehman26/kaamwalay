@@ -3,7 +3,6 @@
 namespace App\Services\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
-use App\Exceptions\API\Admin\Coupon\CouponableEntityNotImplementedException;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
 use App\Models\CouponApplicable;

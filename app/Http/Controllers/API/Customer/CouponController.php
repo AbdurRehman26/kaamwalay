@@ -25,7 +25,6 @@ class CouponController extends Controller
     {
         try {
             $coupon = $this->couponService->returnCouponIfValid($couponCode);
-<<<<<<< HEAD
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
@@ -50,8 +49,6 @@ class CouponController extends Controller
         );
 
         try {
-=======
->>>>>>> fdb56458c82f9d155ef4b9d2d78ec67067eb8804
         } catch (\Exception $e) {
             return new JsonResponse(
                 [

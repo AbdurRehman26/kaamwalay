@@ -11,8 +11,8 @@ class CouponApplicable extends Model
 {
     use HasFactory;
 
-    const FOR_USERS = 1;
-    const FOR_PAYMENT_PLANS = 2;
+    const FOR_USERS = 2;
+    const FOR_PAYMENT_PLANS = 3;
     const COUPON_APPLICABLE_WITH_ENTITIES = [
         self::FOR_USERS,
         self::FOR_PAYMENT_PLANS,

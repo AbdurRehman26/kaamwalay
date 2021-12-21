@@ -11,11 +11,12 @@ use Illuminate\Support\Str;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
+use function Pest\Laravel\seed;
 
 uses(WithFaker::class);
 
 beforeEach(function () {
-    $this->seed(RolesSeeder::class);
+    seed(RolesSeeder::class);
     $this->user = User::factory()
         ->admin()
         ->withRole(config('permission.roles.admin'))
@@ -31,7 +32,7 @@ test('admin can get a list of coupons', function () {
 });
 
 test('admin can create coupon', function () {
-    $this->actingAs($this->user);
+    actingAs($this->user);
     postJson(route('coupons.store'), [
         'code' => $this->faker->word,
         'type' => 'fixed',
@@ -46,13 +47,13 @@ test('admin can create coupon', function () {
 
 test('admin can get a single coupon', function () {
     $coupon = Coupon::factory()->create();
-    $this->actingAs($this->user);
+    actingAs($this->user);
     getJson(route('coupons.show', ['coupon' => $coupon->id]))
         ->assertOk();
 });
 
 test('admin can create coupon for specific users', function () {
-    $this->actingAs($this->user);
+    actingAs($this->user);
     $users = User::factory(5)->create()->pluck('id');
     postJson(route('coupons.store'), [
         'code' => $this->faker->word,
@@ -70,7 +71,7 @@ test('admin can create coupon for specific users', function () {
 });
 
 test('admin can create coupon for specific payment plan', function () {
-    $this->actingAs($this->user);
+    actingAs($this->user);
     $paymentPlans = PaymentPlan::factory(5)->create()->pluck('id');
     postJson(route('coupons.store'), [
         'code' => $this->faker->word,
@@ -88,7 +89,7 @@ test('admin can create coupon for specific payment plan', function () {
 });
 
 test('admin can request related models for coupon list', function (string $relationShip) {
-    $this->actingAs($this->user);
+    actingAs($this->user);
 
     getJson(route('coupons.index', ['include[]' => $relationShip]))
         ->dump()
@@ -104,7 +105,7 @@ test('admin can request related models for coupon list', function (string $relat
 ]);
 
 test('admin can search for specific coupon with coupon code from the coupon list', function (array $data) {
-    $this->actingAs($this->user);
+    actingAs($this->user);
 
     getJson(route('coupons.index', ['filters[search]' => $data['code']]))
         ->dump()
@@ -120,7 +121,7 @@ test('admin can search for specific coupon with coupon code from the coupon list
 ]);
 
 test('admin can search for specific coupon with coupon status from the coupon list', function (array $data) {
-    $this->actingAs($this->user);
+    actingAs($this->user);
 
     getJson(route('coupons.index', ['filters[search]' => $data['status']]))
         ->dump()

@@ -4,9 +4,7 @@ namespace App\Http\Resources\API\Admin\Coupon;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanCollection;
-use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\User\UserCollection;
-use App\Http\Resources\API\Customer\User\UserResource;
 
 class CouponResource extends BaseResource
 {

@@ -1,7 +1,7 @@
 /**
  * @api {get} /customer/coupons/HvTGSYpak9 Show Coupon
  * @apiName Show Coupon
- * @apiGroup Customer Coupon
+ * @apiGroup Customer Coupons
  *
  * @apiUse header_main
  * @apiUse Authorization

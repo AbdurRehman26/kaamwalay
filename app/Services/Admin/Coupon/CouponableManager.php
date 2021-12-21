@@ -9,7 +9,6 @@ use App\Services\Admin\Coupon\Couponables\CouponableUserService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use PHPStan\BetterReflection\Reflection\Adapter\Exception\NotImplemented;
 
 class CouponableManager implements Contracts\CouponableManagerInterface
 {

@@ -36,6 +36,4 @@ class CouponService
             default => new ServiceLevelCoupon(),
         };
     }
-
-
 }

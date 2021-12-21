@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Coupon\StoreCouponRequest;
 use App\Http\Resources\API\Admin\Coupon\CouponCollection;
 use App\Http\Resources\API\Admin\Coupon\CouponResource;
+use App\Models\Coupon;
 use App\Services\Admin\Coupon\CouponService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

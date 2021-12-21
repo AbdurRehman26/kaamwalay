@@ -3,11 +3,12 @@
 namespace App\Http\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\QueryBuilder\Filters\Filter;
 
-class AdminCouponSearchFilter implements \Spatie\QueryBuilder\Filters\Filter
+class AdminCouponSearchFilter implements Filter
 {
 
-    public function __invoke(Builder $query, $value, string $property)
+    public function __invoke(Builder $query, $value, string $property): void
     {
         $query->whereLike(
             [

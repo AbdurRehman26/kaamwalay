@@ -7,6 +7,7 @@ use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Http\Filters\AdminCouponSearchFilter;
 use App\Models\Coupon;
 use App\Models\CouponApplicable;
+use App\Models\CouponStat;
 use App\Models\CouponStatus;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
@@ -173,5 +174,10 @@ class CouponService
         $coupons->each(function ($coupon) {
             $this->changeStatus($coupon, CouponStatus::STATUS_EXPIRED, referrer: 'system');
         });
+    }
+
+    public function createCouponStats(Coupon $coupon)
+    {
+        $coupon->couponStats()->save(new CouponStat());
     }
 }

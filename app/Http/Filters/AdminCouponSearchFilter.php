@@ -15,7 +15,6 @@ class AdminCouponSearchFilter implements Filter
                 'available_from',
                 'couponStatus.code',
                 'couponStatus.name',
-                'couponStatus.name',
             ],
             $value
         );

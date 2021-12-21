@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Concerns\Coupons\CanHaveCoupons;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PaymentPlan extends Model
 {
-    use HasFactory;
+    use HasFactory, CanHaveCoupons;
 
     /**
      * The attributes that are mass assignable.

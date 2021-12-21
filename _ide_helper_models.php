@@ -71,13 +71,18 @@ namespace App\Models{
  * @property string $holo_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User $addedBy
+ * @property string|null $description
+ * @property int $added_manually
+ * @property int|null $added_by
+ * @property-read \App\Models\User|null $addedBy
  * @property-read \App\Models\CardCategory|null $cardCategory
  * @property-read \App\Models\CardSet|null $cardSet
  * @method static \Database\Factories\CardProductFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereAddedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereAddedManually($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardNumberOrder($value)
@@ -85,6 +90,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardSetId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCardUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereEdition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereHoloType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereId($value)
@@ -198,6 +204,129 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Country whereUpdatedAt($value)
  */
 	class Country extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Coupon
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property string $description
+ * @property float $max_usage_allowed
+ * @property int $usage_allowed_per_user
+ * @property string $type
+ * @property float $discount_value
+ * @property bool $is_capped
+ * @property float $capped_amount
+ * @property \Illuminate\Support\Carbon $available_from
+ * @property \Illuminate\Support\Carbon|null $available_till
+ * @property int $coupon_applicable_id
+ * @property int $coupon_status_id
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int $user_id
+ * @property-read \App\Models\CouponApplicable $couponApplicable
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponLog[] $couponLogs
+ * @property-read int|null $coupon_logs_count
+ * @property-read \App\Models\CouponStat|null $couponStats
+ * @property-read \App\Models\CouponStatus $couponStatus
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponStatusHistory[] $couponStatusHistories
+ * @property-read int|null $coupon_status_histories_count
+ * @method static \Database\Factories\CouponFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Coupon onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon query()
+ * @method static \Illuminate\Database\Query\Builder|Coupon withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Coupon withoutTrashed()
+ */
+	class Coupon extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CouponApplicable
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
+ * @property-read int|null $coupons_count
+ * @method static \Database\Factories\CouponApplicableFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponApplicable newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponApplicable newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponApplicable query()
+ */
+	class CouponApplicable extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CouponLog
+ *
+ * @property-read \App\Models\Coupon $coupon
+ * @property-read \App\Models\Couponable $couponable
+ * @property-read \App\Models\Order $order
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\CouponLogFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponLog query()
+ */
+	class CouponLog extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CouponStat
+ *
+ * @property-read \App\Models\Coupon $coupon
+ * @method static \Database\Factories\CouponStatFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStat newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStat newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStat query()
+ */
+	class CouponStat extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CouponStatus
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponStatusHistory[] $couponStatusHistories
+ * @property-read int|null $coupon_status_histories_count
+ * @method static \Database\Factories\CouponStatusFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStatus query()
+ */
+	class CouponStatus extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CouponStatusHistory
+ *
+ * @property-read \App\Models\Coupon $coupon
+ * @property-read \App\Models\CouponStatus $couponStatus
+ * @method static \Database\Factories\CouponStatusHistoryFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStatusHistory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStatusHistory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStatusHistory query()
+ */
+	class CouponStatusHistory extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Couponable
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
+ * @property-read int|null $coupons_count
+ * @method static \Database\Factories\CouponableFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Couponable newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Couponable newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Couponable query()
+ */
+	class Couponable extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -1117,6 +1246,8 @@ namespace App\Models{
  * @property string|null $customer_number
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CustomerAddress[] $customerAddresses
  * @property-read int|null $customer_addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserDevice[] $devices
+ * @property-read int|null $devices_count
  * @property-read string $name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
@@ -1228,6 +1359,7 @@ namespace App\Models{
  * App\Models\UserDevice
  *
  * @property-read \App\Models\User $user
+ * @method static \Database\Factories\UserDeviceFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|UserDevice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserDevice newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserDevice query()

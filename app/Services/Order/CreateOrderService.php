@@ -201,4 +201,15 @@ class CreateOrderService
 
         OrderPayment::create($orderPaymentData);
     }
+
+    public function createDummyOrder(array $orderData): Order
+    {
+        $order = new Order();
+        $order->payment_plan_id = $orderData['payment_plan']['id'] ?? null;
+        $order->payment_method_id = $orderData['payment_method']['id'] ?? null;
+        $order->shipping_method_id = $orderData['shipping_method']['id'] ?? null;
+        $order->items = $orderData['items'];
+
+        return $order;
+    }
 }

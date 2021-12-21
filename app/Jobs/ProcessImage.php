@@ -28,7 +28,8 @@ class ProcessImage implements ShouldQueue
         protected int $outputHeight = 788,
         protected int $outputQuality = 100,
         protected bool $removeExif = true
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.

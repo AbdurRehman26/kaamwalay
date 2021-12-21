@@ -41,7 +41,6 @@ test('admin can create coupon', function () {
         'available_from' => now()->addDays(2)->toDateTimeString(),
         'is_permanent' => false,
     ])
-        ->dump()
         ->assertCreated();
 });
 
@@ -64,7 +63,6 @@ test('admin can create coupon for specific users', function () {
         'is_permanent' => false,
         'couponables' => $users,
     ])
-        ->dump()
         ->assertCreated();
 
     expect(Couponable::count())->toBe(5);
@@ -82,7 +80,6 @@ test('admin can create coupon for specific payment plan', function () {
         'is_permanent' => false,
         'couponables' => $paymentPlans,
     ])
-        ->dump()
         ->assertCreated();
 
     expect(Couponable::count())->toBe(5);
@@ -92,7 +89,6 @@ test('admin can request related models for coupon list', function (string $relat
     actingAs($this->user);
 
     getJson(route('coupons.index', ['include[]' => $relationShip]))
-        ->dump()
         ->assertOk()
         ->assertJsonStructure(['data' => [[Str::snake($relationShip)]]]);
 })->with([
@@ -108,7 +104,6 @@ test('admin can search for specific coupon with coupon code from the coupon list
     actingAs($this->user);
 
     getJson(route('coupons.index', ['filters[search]' => $data['code']]))
-        ->dump()
         ->assertOk()
         ->assertJsonFragment(['id' => $data['id']]);
 })->with([
@@ -124,7 +119,6 @@ test('admin can search for specific coupon with coupon status from the coupon li
     actingAs($this->user);
 
     getJson(route('coupons.index', ['filters[search]' => $data['status']]))
-        ->dump()
         ->assertOk()
         ->assertJsonFragment(['id' => $data['id']]);
 })->with([

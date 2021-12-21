@@ -41,7 +41,6 @@ class CouponService
             ->allowedSorts([
                 'available_from',
                 'available_till',
-                'discount',
                 'discount_value',
             ])
             ->allowedIncludes([
@@ -82,13 +81,15 @@ class CouponService
 
         $coupon->code = $this->getCouponCode($data['code']);
         $coupon->coupon_status_id = $this->getNewCouponStatus($coupon);
-        $coupon->user_id = $user->id;
+        $coupon->created_by = $user->id;
 
         $coupon->save();
 
         $this->addCouponStatusHistory($coupon, $this->getNewCouponStatus($coupon));
 
         $this->addCouponables($coupon, $data);
+
+        $this->createCouponStats($coupon);
 
         NewCouponAdded::dispatch($coupon);
 
@@ -176,7 +177,7 @@ class CouponService
         });
     }
 
-    public function createCouponStats(Coupon $coupon): void
+    protected function createCouponStats(Coupon $coupon): void
     {
         $coupon->couponStats()->save(new CouponStat());
     }

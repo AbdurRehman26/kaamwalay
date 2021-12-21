@@ -12,11 +12,9 @@ class CouponStat extends Model
 
     protected $fillable = [
         'coupon_id',
-        'times_used_till_date',
-        'total_discount_given',
-        'times_used_by_unique_users',
-        'times_used_by_all_users',
-        'total_revenue_generated',
+        'times_used',
+        'total_discount',
+        'total_revenue',
     ];
 
     public function coupon(): BelongsTo

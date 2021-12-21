@@ -38,7 +38,7 @@ test('admin can create coupon', function () {
         'type' => 'fixed',
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
-        'available_from' => now()->addDays(2)->toDateTimeString(),
+        'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => false,
     ])
         ->assertCreated();
@@ -59,7 +59,7 @@ test('admin can create coupon for specific users', function () {
         'type' => 'fixed',
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::FOR_USERS,
-        'available_from' => now()->addDays(2)->toDateTimeString(),
+        'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => false,
         'couponables' => $users,
     ])
@@ -76,7 +76,7 @@ test('admin can create coupon for specific payment plan', function () {
         'type' => 'fixed',
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
-        'available_from' => now()->addDays(2)->toDateTimeString(),
+        'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => false,
         'couponables' => $paymentPlans,
     ])

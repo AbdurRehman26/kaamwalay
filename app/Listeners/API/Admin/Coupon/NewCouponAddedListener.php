@@ -12,7 +12,7 @@ class NewCouponAddedListener
      *
      * @return void
      */
-    public function __construct(protected CouponService $couponService)
+    public function __construct()
     {
     }
 
@@ -24,6 +24,5 @@ class NewCouponAddedListener
      */
     public function handle(NewCouponAdded $event)
     {
-        $this->couponService->createCouponStats($event->coupon);
     }
 }

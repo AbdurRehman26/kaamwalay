@@ -19,46 +19,46 @@ class CouponableSeeder extends Seeder
     {
         Couponable::factory()->count(5)->state(new Sequence(
             [
-                'couponable_type' => PaymentPlan::class,
-                'couponable_id' => PaymentPlan::inRandomOrder()->first()->id,
+                'couponables_type' => PaymentPlan::class,
+                'couponables_id' => PaymentPlan::inRandomOrder()->first()->id,
             ],
             [
-                'couponable_type' => PaymentPlan::class,
-                'couponable_id' => PaymentPlan::inRandomOrder()->first()->id,
+                'couponables_type' => PaymentPlan::class,
+                'couponables_id' => PaymentPlan::inRandomOrder()->first()->id,
             ],
             [
-                'couponable_type' => PaymentPlan::class,
-                'couponable_id' => PaymentPlan::inRandomOrder()->first()->id,
+                'couponables_type' => PaymentPlan::class,
+                'couponables_id' => PaymentPlan::inRandomOrder()->first()->id,
             ],
             [
-                'couponable_type' => PaymentPlan::class,
-                'couponable_id' => PaymentPlan::inRandomOrder()->first()->id,
+                'couponables_type' => PaymentPlan::class,
+                'couponables_id' => PaymentPlan::inRandomOrder()->first()->id,
             ],
             [
-                'couponable_type' => PaymentPlan::class,
-                'couponable_id' => PaymentPlan::inRandomOrder()->first()->id,
+                'couponables_type' => PaymentPlan::class,
+                'couponables_id' => PaymentPlan::inRandomOrder()->first()->id,
             ],
         ))->create();
         Couponable::factory()->count(5)->state(new Sequence(
             [
-                'couponable_type' => User::class,
-                'couponable_id' => User::inRandomOrder()->first()->id,
+                'couponables_type' => User::class,
+                'couponables_id' => User::inRandomOrder()->first()->id,
             ],
             [
-                'couponable_type' => User::class,
-                'couponable_id' => User::inRandomOrder()->first()->id,
+                'couponables_type' => User::class,
+                'couponables_id' => User::inRandomOrder()->first()->id,
             ],
             [
-                'couponable_type' => User::class,
-                'couponable_id' => User::inRandomOrder()->first()->id,
+                'couponables_type' => User::class,
+                'couponables_id' => User::inRandomOrder()->first()->id,
             ],
             [
-                'couponable_type' => User::class,
-                'couponable_id' => User::inRandomOrder()->first()->id,
+                'couponables_type' => User::class,
+                'couponables_id' => User::inRandomOrder()->first()->id,
             ],
             [
-                'couponable_type' => User::class,
-                'couponable_id' => User::inRandomOrder()->first()->id,
+                'couponables_type' => User::class,
+                'couponables_id' => User::inRandomOrder()->first()->id,
             ],
         ))->create();
     }

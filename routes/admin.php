@@ -65,5 +65,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::apiResource('coupons', CouponController::class)->except('update');
     Route::put('coupons/{coupon}/change-status', ChangeCouponStatus::class)
         ->name('coupons.change-status');
-    Route::get('coupon-applicables', ListCouponApplicable::class);
+    Route::get('coupons/applicables', ListCouponApplicable::class)->name('coupons.applicables');
 });

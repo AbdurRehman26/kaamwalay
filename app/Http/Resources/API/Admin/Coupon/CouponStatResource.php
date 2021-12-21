@@ -15,11 +15,9 @@ class CouponStatResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'times_used_till_date' => $this->times_used_till_date,
-            'total_discount_given' => $this->total_discount_given,
-            'times_used_by_unique_users' => $this->times_used_by_unique_users,
-            'times_used_by_all_users' => $this->times_used_by_all_users,
-            'total_revenue_generated' => $this->total_revenue_generated,
+            'times_used' => $this->times_used,
+            'total_discount' => $this->total_discount,
+            'total_revenue' => $this->total_revenue,
         ];
     }
 }

@@ -225,7 +225,7 @@ namespace App\Models{
  * @property int $coupon_applicable_id
  * @property int $coupon_status_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property int $user_id
+ * @property int $created_by
  * @property-read \App\Models\CouponApplicable $couponApplicable
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponLog[] $couponLogs
  * @property-read int|null $coupon_logs_count

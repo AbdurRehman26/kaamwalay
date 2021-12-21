@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Jobs\OrderLabel;
+namespace App\Jobs\Admin\Order;
 
-use App\Exports\LabelContentExport;
+use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
 use App\Models\UserCard;
@@ -14,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class CreateOrderLabel implements ShouldQueue
 {
@@ -55,8 +56,8 @@ class CreateOrderLabel implements ShouldQueue
   
     protected function saveCardLabelToExcel(array $response): void
     {
-        $filePath = 'order-label-contents/'.$this->order->order_number.'_label.xlsx';
-        Excel::store(new LabelContentExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
+        $filePath = 'order-labels/'.$this->order->order_number.'_label_' . Str::uuid() .'.xlsx';
+        Excel::store(new OrdersLabelExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
         $filePathUrl = Storage::disk('s3')->url($filePath);
         $this->saveCardLabelData($filePathUrl);
     }
@@ -64,7 +65,7 @@ class CreateOrderLabel implements ShouldQueue
     protected function saveCardLabelData(string $filePathUrl): void
     {
         $orderLabels = new OrderLabel();
-        $orderLabels->order_number = $this->order->order_number;
+        $orderLabels->order_id = $this->order->order_number;
         $orderLabels->path = $filePathUrl;
         $orderLabels->save();
 

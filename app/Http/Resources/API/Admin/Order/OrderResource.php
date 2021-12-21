@@ -6,7 +6,7 @@ use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderAddressResource;
-use App\Http\Resources\API\Customer\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\OrderStatus;
@@ -81,7 +81,7 @@ class OrderResource extends BaseResource
             'order_payment' => $this->whenLoaded('firstOrderPayment', OrderPaymentResource::class),
             'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
-            'orderLabel' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
+            'order_label' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),

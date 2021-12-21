@@ -121,7 +121,6 @@ class Order extends Model
     {
         return [
             AllowedInclude::relationship('invoice'),
-            AllowedInclude::relationship('orderLabel'),
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),

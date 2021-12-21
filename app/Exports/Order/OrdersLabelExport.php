@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Order;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class LabelContentExport implements FromArray, WithHeadings, WithStyles
+class OrdersLabelExport implements FromArray, WithHeadings, WithStyles
 {
     public function __construct(protected array $data)
     {
@@ -15,9 +15,8 @@ class LabelContentExport implements FromArray, WithHeadings, WithStyles
 
     public function styles(Worksheet $sheet): void
     {
+        $sheet->getStyle('A:E')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
         $sheet->getStyle('1')->getFont()->setBold(true);
-        $sheet->getStyle('A')->getAlignment()->setWrapText(true);
-        $sheet->getStyle('B')->getAlignment()->setWrapText(true);
     }
 
 
@@ -39,13 +38,13 @@ class LabelContentExport implements FromArray, WithHeadings, WithStyles
         foreach ($this->data as $data) {
             $cardLabelData [] = [
                 $data['label_line_one']. "\n" .$data['label_line_two']. "\n" .$data['label_line_three']. "\n" .$data['card_number'],
-                $data['grade_nickname']. "\n" .$data['certificate_id'],
+                $data['grade_nickname']."\n \n \n".$data['certificate_id'],
                 $data['final_grade'],
-                'https://robograding.com/card/'.$data['certificate_id'],
+                env('APP_URL').'/card/'.$data['certificate_id'],
                 $data['certificate_id'],
             ];
         }
-
+        
         return $cardLabelData;
     }
 }

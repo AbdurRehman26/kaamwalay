@@ -15,7 +15,7 @@ class CreateOrderLabelsTable extends Migration
     {
         Schema::create('order_labels', function (Blueprint $table) {
             $table->id();
-            $table->string('order_number');
+            $table->string('order_id');
             $table->string('path');
             $table->timestamps();
         });

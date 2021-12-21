@@ -1,6 +1,6 @@
 <?php
 
-use App\Jobs\OrderLabel\CreateOrderLabel;
+use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use Illuminate\Support\Facades\Bus;

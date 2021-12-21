@@ -9,10 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Spatie\Image\Image;
-use Spatie\ImageOptimizer\Optimizers\Jpegoptim;
 
 class ProcessImage implements ShouldQueue
 {
@@ -32,8 +28,7 @@ class ProcessImage implements ShouldQueue
         protected int $outputHeight = 788,
         protected int $outputQuality = 100,
         protected bool $removeExif = true
-    )
-    {
+    ) {
         //
     }
 

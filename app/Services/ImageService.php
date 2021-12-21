@@ -22,8 +22,7 @@ class ImageService
         int $outputHeight = 788,
         int $outputQuality = 100,
         bool $removeExif = true
-    ): void
-    {
+    ): void {
         // Get Image URL from Model
         $imageUrl = $model->$columnName;
 
@@ -61,7 +60,8 @@ class ImageService
         return Str::uuid();
     }
 
-    protected function applyOptimizations(string $fullPath, string $outputFullPath, int $outputWidth, int $outputHeight, int $outputQuality, bool $removeExif){
+    protected function applyOptimizations(string $fullPath, string $outputFullPath, int $outputWidth, int $outputHeight, int $outputQuality, bool $removeExif)
+    {
         // Create optimizations array given parameters
         $optimizations = [];
         if ($removeExif) {

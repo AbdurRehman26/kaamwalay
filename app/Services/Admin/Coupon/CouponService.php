@@ -7,6 +7,7 @@ use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
 use App\Models\CouponStatus;
 use App\Models\User;
+use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -80,6 +81,8 @@ class CouponService
 
         $this->addCouponStatusHistory($coupon, $this->getNewCouponStatus($coupon));
 
+        $this->addCouponables($coupon, $data);
+
         NewCouponAdded::dispatch($coupon);
 
         return $coupon->refresh();
@@ -119,5 +122,28 @@ class CouponService
         $couponStatus = CouponStatus::forStatus($status)->first();
 
         return $this->couponStatusService->changeStatus($coupon, $couponStatus);
+    }
+
+    protected function addCouponables(Coupon $coupon, array $data): Coupon
+    {
+        $couponableManager = app(CouponableManager::class);
+        
+        $entityType = $this->getCouponableEntityFromRequest($data);
+        /** @var CouponableEntityInterface $couponableEntity */
+        $couponableEntity = $couponableManager->entity($entityType);
+
+        return $couponableEntity
+            ->setIds($data[$entityType])
+            ->save($coupon);
+    }
+
+    protected function getCouponableEntityFromRequest(array $data): string
+    {
+        if (Arr::has($data, 'users')) {
+            return 'users';
+        }
+        if (Arr::has($data, 'payment_plans')) {
+            return 'payment_plans';
+        }
     }
 }

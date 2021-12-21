@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Coupon;
+use App\Models\CouponApplicable;
+use App\Models\PaymentPlan;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,7 +29,7 @@ test('admin can create coupon', function () {
         'code' => $this->faker->word,
         'type' => 'fixed',
         'discount_value' => random_int(10, 50),
-        'coupon_applicable_id' => \App\Models\CouponApplicable::factory()->create()->id,
+        'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
         'available_from' => now()->addDays(2)->toDateTimeString(),
         'is_permanent' => false,
     ])
@@ -40,4 +42,40 @@ test('admin can get a single coupon', function () {
     $this->actingAs($this->user);
     $this->getJson(route('coupons.show', ['coupon' => $coupon->id]))
         ->assertOk();
+});
+
+test('admin can create coupon for specific users', function () {
+    $this->actingAs($this->user);
+    $users = User::factory(5)->create()->pluck('id');
+    $this->postJson(route('coupons.store'), [
+        'code' => $this->faker->word,
+        'type' => 'fixed',
+        'discount_value' => random_int(10, 50),
+        'coupon_applicable_id' => CouponApplicable::FOR_USERS,
+        'available_from' => now()->addDays(2)->toDateTimeString(),
+        'is_permanent' => false,
+        'users' => $users,
+    ])
+        ->dump()
+        ->assertCreated();
+
+    expect(\App\Models\Couponable::count())->toBe(5);
+});
+
+test('admin can create coupon for specific payment plan', function () {
+    $this->actingAs($this->user);
+    $paymentPlans = PaymentPlan::factory(5)->create()->pluck('id');
+    $this->postJson(route('coupons.store'), [
+        'code' => $this->faker->word,
+        'type' => 'fixed',
+        'discount_value' => random_int(10, 50),
+        'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
+        'available_from' => now()->addDays(2)->toDateTimeString(),
+        'is_permanent' => false,
+        'payment_plans' => $paymentPlans,
+    ])
+        ->dump()
+        ->assertCreated();
+
+    expect(\App\Models\Couponable::count())->toBe(5);
 });

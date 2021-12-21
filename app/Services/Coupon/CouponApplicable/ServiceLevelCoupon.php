@@ -5,11 +5,12 @@ namespace App\Services\Coupon\CouponApplicable;
 use App\Models\Coupon;
 use App\Models\Order;
 
-class ServiceLevelCoupon implements CouponApplicableInterface
+class ServiceLevelCoupon extends CouponApplicables implements CouponApplicableInterface
 {
     public function calculateDiscount(Coupon $coupon, Order $order): float
     {
-        dd($order->paymentPlan->price, $coupon);
-        // TODO: Implement isCouponValid() method.
+        $serviceFee = $order->paymentPlan->price * array_sum(array_column($order->items, 'quantity'));
+
+        return $this->getDiscountedAmount($coupon, $serviceFee);
     }
 }

@@ -43,7 +43,7 @@ class CouponController extends Controller
 
         $discountedAmount = $this->couponService->calculateDiscount(
             $coupon,
-            $this->createOrderService->createDummyOrder(
+            $this->createOrderService->createDraftOrder(
                 $request->safe()->only('payment_plan', 'payment_method', 'shipping_method', 'items')
             )
         );
@@ -58,6 +58,11 @@ class CouponController extends Controller
             );
         }
 
-        return new CouponResource($coupon);
+        return response()->json(['data' =>
+                [
+                    'discounted_amount' => $discountedAmount,
+                    'coupon' => new CouponResource($coupon),
+                ],
+        ]);
     }
 }

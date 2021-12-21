@@ -49,6 +49,7 @@ class StoreOrderRequest extends FormRequest
             'payment_method.id' => 'required|integer|exists:payment_methods,id',
             'payment_provider_reference' => 'nullable|array',
             'payment_provider_reference.id' => 'nullable|string',
+            'coupon.code' => 'sometimes|exists:coupons,code',
         ];
     }
 }

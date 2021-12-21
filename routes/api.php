@@ -44,16 +44,14 @@ Route::prefix('auth')->group(function () {
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 
-Route::get('customer/coupons/{coupon:code}', [CouponController::class, 'show'])->middleware('guest');
-Route::post('customer/coupons/calculate-discount', [CouponController::class, 'calculateDiscount'])->middleware('guest');
 
 Route::prefix('customer')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
-//        Route::apiResource('coupons', CouponController::class)
-//            ->only(['show']);
+        Route::get('coupons/{coupon:code}', [CouponController::class, 'show']);
+        Route::post('coupons/calculate-discount', [CouponController::class, 'calculateDiscount']);
 
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);

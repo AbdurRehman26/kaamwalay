@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Services\ProcessImageService;
+use App\Services\ImageService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +26,7 @@ class ProcessImage implements ShouldQueue
     public function __construct(
         protected Model $model,
         protected string $columnName,
-        protected string $s3Folder,
+        protected string $directory,
         protected string $outputExt = 'jpg',
         protected int $outputWidth = 788,
         protected int $outputHeight = 788,
@@ -44,6 +44,6 @@ class ProcessImage implements ShouldQueue
      */
     public function handle()
     {
-        (new ProcessImageService)->process($this->model, $this->columnName, $this->s3Folder, $this->outputExt, $this->outputWidth, $this->outputHeight, $this->outputQuality, $this->removeExif);
+        (new ImageService)->process($this->model, $this->columnName, $this->directory, $this->outputExt, $this->outputWidth, $this->outputHeight, $this->outputQuality, $this->removeExif);
     }
 }

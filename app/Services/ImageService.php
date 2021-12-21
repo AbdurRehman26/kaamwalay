@@ -8,12 +8,15 @@ use Illuminate\Support\Str;
 use Spatie\Image\Image;
 use Spatie\ImageOptimizer\Optimizers\Jpegoptim;
 
-class ProcessImageService
+class ImageService
 {
+    // Set base path where images will be downloaded to
+    protected const PATH = 'images/';
+
     public function process(
         Model $model,
         string $columnName,
-        string $s3Folder,
+        string $directory,
         string $outputExt = 'jpg',
         int $outputWidth = 788,
         int $outputHeight = 788,
@@ -30,29 +33,27 @@ class ProcessImageService
         // Download file from URL
         $contents = file_get_contents($imageUrl);
 
-        // Set base path where images will be downloaded to
-        $path = 'public/images/';
         // Set base path where processed images will be saved into
-        $outputPath = storage_path('app/' . $path) . 'optimized/';
+        $outputPath = storage_path('app/' . self::PATH) . 'optimized/';
         // Get image path from source
         $ext = substr($imageUrl, strrpos($imageUrl, '.'));
         // Build full path for downloaded image
-        $fullPath = $path . $imageName . $ext;
+        $fullPath = self::PATH . $imageName . $ext;
         // Build full path for optimized image
         $outputFullPath = $outputPath . $imageName . '.' . $outputExt;
-        // Build S3 Full Path
-        $s3FullPath = $s3Folder . '/' . $imageName . '.' . $outputExt;
+        // Build cloud Full Path
+        $cloudFullPath = $directory . '/' . $imageName . '.' . $outputExt;
 
         //Save image in disk
         Storage::put($fullPath, $contents);
 
         $this->applyOptimizations($fullPath, $outputFullPath, $outputWidth, $outputHeight, $outputQuality, $removeExif);
 
-        $s3Url = $this->uploadFileToS3($imageName, $outputExt, $path, $s3FullPath);
+        $cloudUrl = $this->uploadFileToCloud($imageName, $outputExt, $cloudFullPath);
 
-        $this->updateModel($model, $columnName, $s3Url);
+        $this->updateModel($model, $columnName, $cloudUrl);
 
-        $this->removeOldImages($imageName, $imageUrl, $outputExt, $path, $fullPath);
+        $this->removeOldImages($imageName, $imageUrl, $outputExt, $fullPath);
     }
 
     protected function getImageName(): string
@@ -67,7 +68,7 @@ class ProcessImageService
             array_push($optimizations, '--strip-all');
         }
 
-        if ($outputQuality < 100 && $outputQuality > 0) {
+        if ($outputQuality > 0 && $outputQuality < 100) {
             array_push($optimizations, '-m' . $outputQuality);
         }
 
@@ -83,30 +84,29 @@ class ProcessImageService
             ->save($outputFullPath);
     }
 
-    protected function uploadFileToS3(string $imageName, string $outputExt, string $path, string $s3FullPath): string
+    protected function uploadFileToCloud(string $imageName, string $outputExt, string $cloudFullPath): string
     {
+        // Upload image to cloud
+        Storage::disk('s3')->writeStream($cloudFullPath, Storage::readStream(self::PATH . 'optimized/' . $imageName . '.' . $outputExt));
 
-        // Upload image to S3
-        Storage::disk('s3')->writeStream($s3FullPath, Storage::readStream($path . 'optimized/' . $imageName . '.' . $outputExt));
-
-        // Get new S3 URL for image and return it
-        return Storage::disk('s3')->url($s3FullPath);
+        // Get new cloud URL for image and return it
+        return Storage::disk('s3')->url($cloudFullPath);
     }
 
-    protected function updateModel(Model $model, string $columnName, string $s3Url): void
+    protected function updateModel(Model $model, string $columnName, string $cloudUrl): void
     {
         // Update model image property
-        $model->$columnName = $s3Url;
+        $model->$columnName = $cloudUrl;
         $model->save();
     }
 
-    protected function removeOldImages(string $imageName, string $imageUrl, string $outputExt, string $path, string $fullPath): void
+    protected function removeOldImages(string $imageName, string $imageUrl, string $outputExt, string $fullPath): void
     {
-        // Remove S3 original image
+        // Remove cloud original image
         Storage::disk('s3')->delete(str_replace(config('filesystems.disks.s3.endpoint') . '/' . config('filesystems.disks.s3.bucket') . '/', '', $imageUrl));
 
         // Removed downloaded and optimized image from local disk
         Storage::delete($fullPath);
-        Storage::delete($path . 'optimized/' . $imageName . '.' . $outputExt);
+        Storage::delete(self::PATH . 'optimized/' . $imageName . '.' . $outputExt);
     }
 }

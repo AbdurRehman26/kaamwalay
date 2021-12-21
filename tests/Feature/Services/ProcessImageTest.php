@@ -1,14 +1,14 @@
 <?php
 
 use App\Models\CardProduct;
-use App\Services\ProcessImageService;
+use App\Services\ImageService;
 use Illuminate\Support\Facades\Storage;
 
 it('can optimize image and update it on server and model', function () {
     Storage::fake('s3');
     $card = CardProduct::factory()->create();
 
-    (new ProcessImageService)->process($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
+    (new ImageService)->process($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
 
     $storageCards = Storage::disk('s3')->allFiles('cards');
 

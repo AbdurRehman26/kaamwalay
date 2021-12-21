@@ -13,6 +13,14 @@ class CouponApplicable extends Model
 
     const FOR_USERS = 2;
     const FOR_PAYMENT_PLANS = 3;
+    const COUPON_APPLICABLE_WITH_ENTITIES = [
+        self::FOR_USERS,
+        self::FOR_PAYMENT_PLANS,
+    ];
+    const ENTITIES_MAPPING = [
+        self::FOR_USERS => 'users',
+        self::FOR_PAYMENT_PLANS => 'payment_plans',
+    ];
 
     protected $fillable = [
         'code',

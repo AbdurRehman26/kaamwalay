@@ -6,6 +6,7 @@ use App\Events\API\Admin\Coupon\NewCouponAdded;
 use App\Exceptions\API\Admin\Coupon\CouponableEntityNotImplementedException;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
+use App\Models\CouponApplicable;
 use App\Models\CouponStatus;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
@@ -127,15 +128,19 @@ class CouponService
 
     protected function addCouponables(Coupon $coupon, array $data): Coupon
     {
-        $couponableManager = app(CouponableManager::class);
+        if (in_array($data['coupon_applicable_id'], CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES)) {
+            $couponableManager = app(CouponableManager::class);
 
-        $entityType = $this->getCouponableEntityFromRequest($data);
-        /** @var CouponableEntityInterface $couponableEntity */
-        $couponableEntity = $couponableManager->entity($entityType);
+            $entityType = $this->getCouponableEntityFromRequest($data);
+            /** @var CouponableEntityInterface $couponableEntity */
+            $couponableEntity = $couponableManager->entity($entityType);
 
-        return $couponableEntity
-            ->setIds($data[$entityType])
-            ->save($coupon);
+            return $couponableEntity
+                ->setIds($data[$entityType])
+                ->save($coupon);
+        }
+
+        return $coupon;
     }
 
     /**
@@ -143,13 +148,6 @@ class CouponService
      */
     protected function getCouponableEntityFromRequest(array $data): string
     {
-        if (Arr::has($data, 'users')) {
-            return 'users';
-        }
-        if (Arr::has($data, 'payment_plans')) {
-            return 'payment_plans';
-        }
-
-        throw new CouponableEntityNotImplementedException;
+        return CouponApplicable::ENTITIES_MAPPING[$data['coupon_applicable_id']];
     }
 }

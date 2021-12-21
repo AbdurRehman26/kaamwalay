@@ -3,6 +3,7 @@
 namespace App\Services\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
+use App\Exceptions\API\Admin\Coupon\CouponableEntityNotImplementedException;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;
 use App\Models\CouponStatus;
@@ -127,7 +128,7 @@ class CouponService
     protected function addCouponables(Coupon $coupon, array $data): Coupon
     {
         $couponableManager = app(CouponableManager::class);
-        
+
         $entityType = $this->getCouponableEntityFromRequest($data);
         /** @var CouponableEntityInterface $couponableEntity */
         $couponableEntity = $couponableManager->entity($entityType);
@@ -137,6 +138,9 @@ class CouponService
             ->save($coupon);
     }
 
+    /**
+     * @throws CouponableEntityNotImplementedException
+     */
     protected function getCouponableEntityFromRequest(array $data): string
     {
         if (Arr::has($data, 'users')) {
@@ -145,5 +149,7 @@ class CouponService
         if (Arr::has($data, 'payment_plans')) {
             return 'payment_plans';
         }
+
+        throw new CouponableEntityNotImplementedException;
     }
 }

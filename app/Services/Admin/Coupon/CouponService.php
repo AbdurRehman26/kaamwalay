@@ -11,6 +11,7 @@ use App\Models\CouponStatus;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -90,7 +91,7 @@ class CouponService
         return $coupon->refresh();
     }
 
-    public function changeStatus(Coupon $coupon, string|int $status): Coupon
+    public function changeStatus(Coupon $coupon, string|int $status, string $referrer = 'admin'): Coupon
     {
         if ($coupon->isExpired()) {
             throw new UnprocessableEntityHttpException('Status of expired coupon can not be changed');
@@ -98,7 +99,7 @@ class CouponService
 
         $couponStatus = CouponStatus::forStatus($status)->first();
 
-        return $this->couponStatusService->changeStatus($coupon, $couponStatus);
+        return $this->couponStatusService->changeStatus($coupon, $couponStatus, $referrer);
     }
 
 
@@ -149,5 +150,32 @@ class CouponService
     protected function getCouponableEntityFromRequest(array $data): string
     {
         return CouponApplicable::ENTITIES_MAPPING[$data['coupon_applicable_id']];
+    }
+
+    public function getQueuedCouponsNearingActivation(): Collection
+    {
+        return Coupon::where('coupon_status_id', CouponStatus::STATUS_QUEUED)
+            ->where('available_from', '<=', now())
+            ->get();
+    }
+
+    public function activateCoupons(Collection $coupons): void
+    {
+        $coupons->each(function ($coupon) {
+            $this->changeStatus($coupon, CouponStatus::STATUS_ACTIVE, referrer: 'system');
+        });
+    }
+
+    public function getCouponsNearingExpiry(): Collection
+    {
+        return Coupon::where('available_till', '<=', now())
+            ->get();
+    }
+
+    public function expireCoupons(Collection $coupons): void
+    {
+        $coupons->each(function ($coupon) {
+            $this->changeStatus($coupon, CouponStatus::STATUS_EXPIRED, referrer: 'system');
+        });
     }
 }

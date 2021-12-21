@@ -3,7 +3,9 @@
 namespace App\Http\Resources\API\Admin\Coupon;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
+use App\Http\Resources\API\Customer\User\UserCollection;
 use App\Http\Resources\API\Customer\User\UserResource;
 
 class CouponResource extends BaseResource
@@ -28,8 +30,10 @@ class CouponResource extends BaseResource
             'is_permanent' => is_null($this->available_till),
             'coupon_applicable' => $this->whenLoaded('couponApplicable', CouponApplicableResource::class),
             'coupon_status' => $this->whenLoaded('couponStatus', CouponStatusResource::class),
-            'payment_plans' => $this->whenLoaded('paymentPlans', PaymentPlanResource::class),
-            'users' => $this->whenLoaded('users', UserResource::class),
+            'coupon_stats' => $this->whenLoaded('couponStats', CouponStatResource::class),
+            'coupon_logs' => $this->whenLoaded('couponLogs', CouponLogCollection::class),
+            'payment_plans' => $this->whenLoaded('paymentPlans', PaymentPlanCollection::class),
+            'users' => $this->whenLoaded('users', UserCollection::class),
         ];
     }
 }

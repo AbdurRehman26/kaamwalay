@@ -16,8 +16,8 @@ class CouponableFactory extends Factory
     {
         return [
             'coupon_id' => Coupon::factory(),
-            'couponable_id' => $this->faker->numberBetween(1, 10),
-            'couponable_type' => $this->faker->word(),
+            'couponables_id' => $this->faker->numberBetween(1, 10),
+            'couponables_type' => $this->faker->word(),
         ];
     }
 }

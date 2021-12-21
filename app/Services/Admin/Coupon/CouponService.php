@@ -64,7 +64,7 @@ class CouponService
             ->allowedIncludes([
                 'couponStatus',
                 'couponApplicable',
-                'couponStats',
+                'couponStat',
                 'couponLogs',
                 'users',
                 'paymentPlans',

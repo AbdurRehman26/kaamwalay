@@ -16,15 +16,6 @@ class SeedInitialCouponApplicablesData extends Migration
     {
         DB::table(self::TABLE)->insert([
             [
-                'code' => 'service_fee',
-                'label' => 'Total Service Fee',
-                'api_suffix' => null,
-                'description' => 'Coupon code will be applied to total service fee value only',
-                'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
                 'code' => 'service_level',
                 'label' => 'Select Service Levels',
                 'api_suffix' => 'payment_plans',

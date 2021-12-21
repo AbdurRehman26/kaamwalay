@@ -9,7 +9,6 @@ use App\Http\Resources\API\Admin\Coupon\CouponResource;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\CreateOrderService;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class CouponController extends Controller
 {
@@ -25,9 +24,7 @@ class CouponController extends Controller
     public function show(string $couponCode, ShowCouponRequest $request): JsonResponse|CouponResource
     {
         try {
-
             $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponable_type', 'couponable_id'));
-
         } catch (\Exception $e) {
             return new JsonResponse(
                 [

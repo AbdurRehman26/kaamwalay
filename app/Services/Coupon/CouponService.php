@@ -4,7 +4,6 @@ namespace App\Services\Coupon;
 
 use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
 use App\Models\Coupon;
-use App\Models\Couponable;
 use App\Models\Order;
 use App\Services\Coupon\CouponApplicable\CouponApplicableInterface;
 use App\Services\Coupon\CouponApplicable\ServiceFeeCoupon;

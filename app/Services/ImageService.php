@@ -121,7 +121,7 @@ class ImageService
     protected function removeOldImages(string $imageUrl, string $fullPath): void
     {
         // Remove cloud original image
-        Storage::disk('s3')->delete(str_replace(config('filesystems.disks.s3.endpoint') . '/' . config('filesystems.disks.s3.bucket') . '/', '', $imageUrl));
+        Storage::disk('s3')->delete(parse_url($imageUrl)['path']);
 
         // Removed image from local disk
         Storage::delete($fullPath);

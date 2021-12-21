@@ -54,7 +54,7 @@ test('admin can create coupon for specific users', function () {
         'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         'available_from' => now()->addDays(2)->toDateTimeString(),
         'is_permanent' => false,
-        'users' => $users,
+        'couponables' => $users,
     ])
         ->dump()
         ->assertCreated();
@@ -72,7 +72,7 @@ test('admin can create coupon for specific payment plan', function () {
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
         'available_from' => now()->addDays(2)->toDateTimeString(),
         'is_permanent' => false,
-        'payment_plans' => $paymentPlans,
+        'couponables' => $paymentPlans,
     ])
         ->dump()
         ->assertCreated();

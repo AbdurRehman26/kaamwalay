@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class CouponService
 {
+    const COUPONABLES_REQUEST_KEY = 'couponables';
     const LIST_COUPONS_PER_PAGE = 15;
 
     public function __construct(
@@ -132,24 +133,17 @@ class CouponService
         if (in_array($data['coupon_applicable_id'], CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES)) {
             $couponableManager = app(CouponableManager::class);
 
-            $entityType = $this->getCouponableEntityFromRequest($data);
             /** @var CouponableEntityInterface $couponableEntity */
-            $couponableEntity = $couponableManager->entity($entityType);
+            $couponableEntity = $couponableManager->entity(
+                CouponApplicable::ENTITIES_MAPPING[$data['coupon_applicable_id']]
+            );
 
             return $couponableEntity
-                ->setIds($data[$entityType])
+                ->setIds($data[self::COUPONABLES_REQUEST_KEY])
                 ->save($coupon);
         }
 
         return $coupon;
-    }
-
-    /**
-     * @throws CouponableEntityNotImplementedException
-     */
-    protected function getCouponableEntityFromRequest(array $data): string
-    {
-        return CouponApplicable::ENTITIES_MAPPING[$data['coupon_applicable_id']];
     }
 
     public function getQueuedCouponsNearingActivation(): Collection

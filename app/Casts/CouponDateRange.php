@@ -10,6 +10,7 @@ class CouponDateRange implements CastsAttributes
 
     /**
      * @inheritDoc
+     * @retrun Carbon
      */
     public function get($model, string $key, $value, array $attributes)
     {
@@ -24,6 +25,7 @@ class CouponDateRange implements CastsAttributes
         return match ($key) {
             'available_from' => Carbon::parse($value)->startOfDay()->toDateTimeString(),
             'available_till' => Carbon::parse($value)->endOfDay()->toDateTimeString(),
+            default => null,
         };
     }
 }

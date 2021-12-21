@@ -28,9 +28,7 @@ class ProcessImage implements ShouldQueue
         protected int $outputHeight = 788,
         protected int $outputQuality = 100,
         protected bool $removeExif = true
-    ) {
-        //
-    }
+    ) {}
 
     /**
      * Execute the job.
@@ -39,6 +37,15 @@ class ProcessImage implements ShouldQueue
      */
     public function handle()
     {
-        (new ImageService)->process($this->model, $this->columnName, $this->directory, $this->outputExt, $this->outputWidth, $this->outputHeight, $this->outputQuality, $this->removeExif);
+        (new ImageService)->process(
+            $this->model,
+            $this->columnName,
+            $this->directory,
+            $this->outputExt,
+            $this->outputWidth,
+            $this->outputHeight,
+            $this->outputQuality,
+            $this->removeExif
+        );
     }
 }

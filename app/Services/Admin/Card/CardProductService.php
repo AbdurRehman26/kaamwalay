@@ -4,7 +4,6 @@ namespace App\Services\Admin\Card;
 
 use App\Exceptions\API\Admin\CardDataIsMissing;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
-use App\Jobs\ProcessImage;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
 use App\Models\CardSeries;
@@ -199,8 +198,6 @@ class CardProductService
             'card_reference_id' => $agsResponse['card_reference_id'],
         ]);
         $card->save();
-
-        ProcessImage::dispatch($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
 
         return $card;
     }

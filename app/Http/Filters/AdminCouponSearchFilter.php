@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AdminCouponSearchFilter implements \Spatie\QueryBuilder\Filters\Filter
 {
-
     public function __invoke(Builder $query, $value, string $property)
     {
         $query->whereLike(

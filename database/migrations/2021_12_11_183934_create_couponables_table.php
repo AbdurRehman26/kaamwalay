@@ -20,8 +20,7 @@ class CreateCouponablesTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->unsignedBigInteger('couponable_id')->index();
-            $table->string('couponable_type')->index();
+            $table->morphs('couponables');
             $table->timestamps();
         });
     }

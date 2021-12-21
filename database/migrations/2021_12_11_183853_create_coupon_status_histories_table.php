@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\CouponStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Coupon;
-use App\Models\CouponStatusHistory;
 
 class CreateCouponStatusHistoriesTable extends Migration
 {
@@ -21,7 +21,7 @@ class CreateCouponStatusHistoriesTable extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignIdFor(CouponStatusHistory::class)
+            $table->foreignIdFor(CouponStatus::class)
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

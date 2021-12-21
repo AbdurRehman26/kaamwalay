@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Admin\Card;
+namespace App\Services\Admin\Coupon;
 
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Models\Coupon;

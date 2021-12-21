@@ -176,7 +176,7 @@ class CouponService
         });
     }
 
-    public function createCouponStats(Coupon $coupon)
+    public function createCouponStats(Coupon $coupon): void
     {
         $coupon->couponStats()->save(new CouponStat());
     }

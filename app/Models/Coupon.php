@@ -87,9 +87,13 @@ class Coupon extends Model
 
     public function scopeValidOnCouponable(Builder $query, array $couponParams): Builder
     {
+        if (empty($couponParams)) {
+            return $query;
+        }
+
         return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
             $subQuery->where('couponable_type', '=', Couponable::COUPONABLE_TYPES[$couponParams['couponable_type']])
                     ->where('couponable_id', '=', $couponParams['couponable_id']);
-        });
+        })->orDoesntHave('couponAble');
     }
 }

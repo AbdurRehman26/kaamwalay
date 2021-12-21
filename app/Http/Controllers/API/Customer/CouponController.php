@@ -31,9 +31,9 @@ class CouponController extends Controller
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
-                    'error' => 'Invalid or expired coupon.',
+                    'error' => $e->getMessage(),
                 ],
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                $e->getCode()
             );
         }
 
@@ -55,9 +55,9 @@ class CouponController extends Controller
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
-                    'error' => 'Invalid or expired coupon.',
+                    'error' => $e->getMessage(),
                 ],
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                $e->getCode()
             );
         }
 

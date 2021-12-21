@@ -58,7 +58,7 @@ export const changeOrderItemNotes = createAsyncThunk<
     {
         orderId: number;
         orderItemId: number;
-        notes?: string;
+        notes: string;
         internalNotes?: string;
     },
     ChangeOrderItemNotesDTO

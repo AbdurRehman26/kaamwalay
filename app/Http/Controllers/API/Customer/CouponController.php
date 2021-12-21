@@ -25,7 +25,6 @@ class CouponController extends Controller
     {
         try {
             $coupon = $this->couponService->returnCouponIfValid($couponCode);
-<<<<<<< HEAD
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
@@ -44,14 +43,12 @@ class CouponController extends Controller
 
         $discountedAmount = $this->couponService->calculateDiscount(
             $coupon,
-            $this->createOrderService->createDummyOrder(
+            $this->createOrderService->createDraftOrder(
                 $request->safe()->only('payment_plan', 'payment_method', 'shipping_method', 'items')
             )
         );
 
         try {
-=======
->>>>>>> fdb56458c82f9d155ef4b9d2d78ec67067eb8804
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
@@ -61,6 +58,11 @@ class CouponController extends Controller
             );
         }
 
-        return new CouponResource($coupon);
+        return response()->json(['data' =>
+                [
+                    'discounted_amount' => $discountedAmount,
+                    'coupon' => new CouponResource($coupon),
+                ],
+        ]);
     }
 }

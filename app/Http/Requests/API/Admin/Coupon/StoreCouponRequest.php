@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\API\Admin\Coupon;
 
+use App\Models\CouponApplicable;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class StoreCouponRequest extends FormRequest
@@ -26,12 +28,25 @@ class StoreCouponRequest extends FormRequest
     {
         return [
             'code' => ['required'],
-            'discount_type' => ['required', 'in:fixed,percentage'],
+            'type' => ['required', 'in:fixed,percentage'],
             'discount_value' => ['required', 'numeric'],
-            'coupon_applicable_id' => ['required', 'exists:coupon_applicables'],
+            'coupon_applicable_id' => ['required', 'exists:coupon_applicables,id'],
             'available_from' => ['required', 'date_format:Y-m-d H:i:s'],
             'is_permanent' => ['required', 'filled'],
             'available_till' => [Rule::requiredIf(boolval($this->get('is_permanent'))), 'date_format:Y-m-d H:i:s'],
+            'couponables' => [
+                Rule::requiredIf(Arr::has(CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES, $this->get('coupon_applicable_id'))),
+                'array',
+            ],
+            'couponables.*' => [
+                Rule::when(
+                    Arr::has(
+                        CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES,
+                        $this->get('coupon_applicable_id')
+                    ),
+                    Rule::exists(CouponApplicable::ENTITIES_MAPPING[$this->get('coupon_applicable_id')] ?? null, 'id')
+                ),
+            ],
         ];
     }
 }

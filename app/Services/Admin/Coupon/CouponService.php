@@ -4,17 +4,24 @@ namespace App\Services\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
+use App\Http\Filters\AdminCouponSearchFilter;
 use App\Models\Coupon;
+use App\Models\CouponApplicable;
+use App\Models\CouponStat;
 use App\Models\CouponStatus;
-use App\Services\Admin\Card\CouponCodeService;
+use App\Models\User;
+use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class CouponService
 {
+    const COUPONABLES_REQUEST_KEY = 'couponables';
     const LIST_COUPONS_PER_PAGE = 15;
 
     public function __construct(
@@ -29,6 +36,7 @@ class CouponService
             ->allowedFilters([
                 'status',
                 'code',
+                AllowedFilter::custom('search', new AdminCouponSearchFilter),
             ])
             ->allowedSorts([
                 'available_from',
@@ -68,23 +76,26 @@ class CouponService
     /**
      * @throws CouponCodeAlreadyExistsException
      */
-    public function storeCoupon(array $data): Coupon
+    public function storeCoupon(array $data, User $user): Coupon
     {
         $coupon = new Coupon(Arr::except(array: $data, keys: ['code']));
 
         $coupon->code = $this->getCouponCode($data['code']);
         $coupon->coupon_status_id = $this->getNewCouponStatus($coupon);
+        $coupon->user_id = $user->id;
 
         $coupon->save();
 
         $this->addCouponStatusHistory($coupon, $this->getNewCouponStatus($coupon));
+
+        $this->addCouponables($coupon, $data);
 
         NewCouponAdded::dispatch($coupon);
 
         return $coupon->refresh();
     }
 
-    public function changeStatus(Coupon $coupon, string|int $status): Coupon
+    public function changeStatus(Coupon $coupon, string|int $status, string $referrer = 'admin'): Coupon
     {
         if ($coupon->isExpired()) {
             throw new UnprocessableEntityHttpException('Status of expired coupon can not be changed');
@@ -92,7 +103,7 @@ class CouponService
 
         $couponStatus = CouponStatus::forStatus($status)->first();
 
-        return $this->couponStatusService->changeStatus($coupon, $couponStatus);
+        return $this->couponStatusService->changeStatus($coupon, $couponStatus, $referrer);
     }
 
 
@@ -115,8 +126,58 @@ class CouponService
 
     protected function addCouponStatusHistory(Coupon $coupon, int $status): Coupon
     {
-        $couponStatus = CouponStatus::forStatus($status);
+        $couponStatus = CouponStatus::forStatus($status)->first();
 
         return $this->couponStatusService->changeStatus($coupon, $couponStatus);
+    }
+
+    protected function addCouponables(Coupon $coupon, array $data): Coupon
+    {
+        if (in_array($data['coupon_applicable_id'], CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES)) {
+            $couponableManager = app(CouponableManager::class);
+
+            /** @var CouponableEntityInterface $couponableEntity */
+            $couponableEntity = $couponableManager->entity(
+                CouponApplicable::ENTITIES_MAPPING[$data['coupon_applicable_id']]
+            );
+
+            return $couponableEntity
+                ->setIds($data[self::COUPONABLES_REQUEST_KEY])
+                ->save($coupon);
+        }
+
+        return $coupon;
+    }
+
+    public function getQueuedCouponsNearingActivation(): Collection
+    {
+        return Coupon::where('coupon_status_id', CouponStatus::STATUS_QUEUED)
+            ->where('available_from', '<=', now())
+            ->get();
+    }
+
+    public function activateCoupons(Collection $coupons): void
+    {
+        $coupons->each(function ($coupon) {
+            $this->changeStatus($coupon, CouponStatus::STATUS_ACTIVE, referrer: 'system');
+        });
+    }
+
+    public function getCouponsNearingExpiry(): Collection
+    {
+        return Coupon::where('available_till', '<=', now())
+            ->get();
+    }
+
+    public function expireCoupons(Collection $coupons): void
+    {
+        $coupons->each(function ($coupon) {
+            $this->changeStatus($coupon, CouponStatus::STATUS_EXPIRED, referrer: 'system');
+        });
+    }
+
+    public function createCouponStats(Coupon $coupon)
+    {
+        $coupon->couponStats()->save(new CouponStat());
     }
 }

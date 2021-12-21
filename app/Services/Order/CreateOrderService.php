@@ -17,6 +17,7 @@ use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -202,14 +203,29 @@ class CreateOrderService
         OrderPayment::create($orderPaymentData);
     }
 
-    public function createDummyOrder(array $orderData): Order
+    public function createDraftOrder(array $orderData): Order
     {
         $order = new Order();
         $order->payment_plan_id = $orderData['payment_plan']['id'] ?? null;
         $order->payment_method_id = $orderData['payment_method']['id'] ?? null;
         $order->shipping_method_id = $orderData['shipping_method']['id'] ?? null;
-        $order->items = $orderData['items'];
+        $order->items = $this->prepareOrderItemData($orderData['items']);
 
         return $order;
+    }
+
+    protected function prepareOrderItemData(array $orderItems): Collection
+    {
+        $orderItemsCollection = Collection::empty();
+        foreach ($orderItems as $item) {
+            $orderItem = new OrderItem();
+            $orderItem->card_product_id = $item['card_product']['id'];
+            $orderItem->quantity = 1;
+            $orderItem->declared_value_per_unit = $item['declared_value_per_unit'];
+            $orderItem->declared_value_total = $item['declared_value_per_unit'];
+            $orderItemsCollection->add($orderItem);
+        }
+
+        return $orderItemsCollection;
     }
 }

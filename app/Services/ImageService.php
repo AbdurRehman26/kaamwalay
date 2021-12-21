@@ -22,8 +22,7 @@ class ImageService
         int $outputHeight = 788,
         int $outputQuality = 100,
         bool $removeExif = true
-    ): void
-    {
+    ): void {
         // Get Image URL from Model
         $imageUrl = $model->$columnName;
 
@@ -81,8 +80,8 @@ class ImageService
             $img->optimize([Jpegoptim::class => $optimizations]);
         }
         // Set output width and height and save optimized image to desired location
-        $img->width($outputWidth)->height($outputHeight)
-            ->save($outputFullPath);
+        $img->width($outputWidth)->height($outputHeight);
+        $img->save($outputFullPath);
     }
 
     protected function uploadFileToCloud(string $imageName, string $outputExt, string $cloudFullPath): string

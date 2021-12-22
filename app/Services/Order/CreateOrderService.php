@@ -82,7 +82,7 @@ class CreateOrderService
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
-        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : null);
+        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeShippingFeeAndGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
@@ -209,12 +209,11 @@ class CreateOrderService
         OrderPayment::create($orderPaymentData);
     }
 
-    protected function storeCouponAndDiscount(array|null $couponData): void
+    protected function storeCouponAndDiscount(array $couponData): void
     {
         if (! empty($couponData['code'])) {
             $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
-            unset($this->order->items);
             $this->order->save();
         }
     }

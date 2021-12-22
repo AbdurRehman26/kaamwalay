@@ -11,6 +11,7 @@ use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\Customer\User\UserResource;
+use App\Models\Coupon;
 
 class OrderResource extends BaseResource
 {
@@ -21,6 +22,8 @@ class OrderResource extends BaseResource
             'order_number' => $this->order_number,
             'number_of_cards' => (int) $this->orderItems()->sum('quantity'),
             'total_declared_value' => (float) $this->orderItems()->sum('declared_value_total'),
+            'coupon' => $this->whenLoaded('coupon', Coupon::class),
+            'discounted_amount' => $this->discounted_amount,
             'status' => $this->orderStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,

@@ -93,8 +93,8 @@ class Coupon extends Model
         }
 
         return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
-            $subQuery->where('couponable_type', '=', Couponable::COUPONABLE_TYPES[$couponParams['couponable_type']])
-                    ->where('couponable_id', '=', $couponParams['couponable_id']);
+            $subQuery->where('couponables_type', '=', Couponable::COUPONABLE_TYPES[$couponParams['couponables_type']])
+                    ->where('couponables_id', '=', $couponParams['couponables_id']);
         })->orDoesntHave('couponAble');
     }
 

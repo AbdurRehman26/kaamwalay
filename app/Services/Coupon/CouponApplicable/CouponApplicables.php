@@ -10,29 +10,27 @@ class CouponApplicables
 {
     public function calculateDiscount(Coupon $coupon, Order|array $order): float
     {
-        return $order instanceof Order ? $this->calculateDiscountForOrder($coupon, $order) : $this->calculateDiscountForData($coupon, $order);
-    }
-
-    protected function calculateDiscountForOrder(Coupon $coupon, Order $order): float
-    {
-        return $this->getDiscountedAmount($coupon, $order);
-    }
-
-    protected function calculateDiscountForData(Coupon $coupon, array $orderData)
-    {
-        return $this->getDiscountedAmount($coupon, $orderData);
-    }
-
-    protected function getDiscountedAmount(Coupon $coupon, Order|array $order)
-    {
         return match ($coupon->type) {
             'percentage' => $this->getPercentageDiscount($coupon, $order),
             default => $this->getFixedDiscount($coupon, $order),
         };
     }
 
-    protected function getPaymentPlan(string $id): PaymentPlan
+    protected function getPaymentPlan(array|Order $order): PaymentPlan
     {
-        return PaymentPlan::find($id);
+        if (! empty($order['payment_plan']['id'])) {
+            return PaymentPlan::find($order['payment_plan']['id']);
+        }
+
+        return $order->paymentPlan;
+    }
+
+    protected function getOrderItems(array|Order $order)
+    {
+        if (! empty($order['items'])) {
+            return $order['items'];
+        }
+
+        return $order->orderItems->toArray();
     }
 }

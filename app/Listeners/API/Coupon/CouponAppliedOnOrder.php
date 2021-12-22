@@ -16,7 +16,7 @@ class CouponAppliedOnOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(protected CouponService $couponService, protected CouponStatService $couponStatService)
+    public function __construct(protected CouponService $couponService)
     {
     }
 
@@ -28,11 +28,11 @@ class CouponAppliedOnOrder implements ShouldQueue
      */
     public function handle(OrderPaid $event)
     {
-        if (! $event->order->coupon || $event->order->discounted_amount) {
+        if (! $event->order->coupon || ! $event->order->discounted_amount) {
             return;
         }
 
-        $this->couponService->updateCouponStats($event->order);
         $this->couponService->updateCouponLogs($event->order);
+        $this->couponService->updateCouponStats($event->order->coupon);
     }
 }

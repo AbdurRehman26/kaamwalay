@@ -1,17 +1,21 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
+import { OrderLabelEntity } from '@shared/entities/OrderLabelEntity';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 import SubmissionHeaderMoreButton from '@admin/pages/Submissions/SubmissionsView/SubmissionHeaderMoreButton';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
+import { Button, Icon } from '@mui/material';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
+import { useNotifications } from '@shared/hooks/useNotifications';
 
 interface SubmissionViewHeaderProps {
     orderId: number;
@@ -19,6 +23,7 @@ interface SubmissionViewHeaderProps {
     orderStatus: OrderStatusEntity;
     orderStatusHistory: OrderStatusHistoryEntity[];
     orderShipment?: ShipmentEntity | null;
+    orderLabel?: OrderLabelEntity | null;
 }
 
 const useStyles = makeStyles(
@@ -37,6 +42,17 @@ const useStyles = makeStyles(
         menuButton: {
             marginLeft: theme.spacing(2),
         },
+        printButton: {
+            color: 'white',
+            background: '#424242',
+            borderRadius: 24,
+            marginRight: theme.spacing(2),
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+            '&:hover': {
+                background: '#424242',
+            },
+        },
     }),
     { name: 'SubmissionViewHeader' },
 );
@@ -47,10 +63,21 @@ export function SubmissionsViewHeader({
     orderStatus,
     orderStatusHistory,
     orderShipment,
+    orderLabel,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
     const [statusType, statusLabel] = useOrderStatus(orderStatus);
+    const notifications = useNotifications();
 
+    const sharedProps: any = useMemo(
+        () => ({
+            variant: 'contained',
+            color: 'primary',
+            size: 'large',
+            className: classes.printButton,
+        }),
+        [classes.printButton],
+    );
     const history = useMemo(
         () =>
             [
@@ -71,6 +98,14 @@ export function SubmissionsViewHeader({
             }),
         [orderStatusHistory],
     );
+    const DownloadOrderLabel = useCallback(async () => {
+        if (!orderLabel) {
+            notifications.error('Order Label is generating at the moment, try again in some minutes!');
+            return;
+        }
+
+        await downloadFromUrl(orderLabel.path, `${orderNumber}_label.xlsx`);
+    }, [notifications, orderLabel, orderNumber]);
 
     return (
         <Grid container className={classes.root}>
@@ -82,6 +117,16 @@ export function SubmissionsViewHeader({
                     <StatusChip color={statusType} label={statusLabel} />
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
+                    {orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED) ? (
+                        <Button
+                            {...sharedProps}
+                            startIcon={<Icon>printer</Icon>}
+                            onClick={DownloadOrderLabel}
+                            disabled={!orderLabel}
+                        >
+                            {orderLabel ? 'Print' : 'Generating'}&nbsp;Stickers
+                        </Button>
+                    ) : null}
                     <SubmissionActionButton
                         orderId={orderId}
                         orderStatus={orderStatus}

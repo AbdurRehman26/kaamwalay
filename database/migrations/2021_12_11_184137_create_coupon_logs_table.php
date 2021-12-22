@@ -23,10 +23,6 @@ class CreateCouponLogsTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignIdFor(Couponable::class)
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->foreignIdFor(Order::class)
                 ->constrained()
                 ->cascadeOnUpdate()

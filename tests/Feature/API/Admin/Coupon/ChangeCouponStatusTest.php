@@ -5,11 +5,14 @@ use App\Models\CouponStatusHistory;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\putJson;
+use function Pest\Laravel\seed;
 
 uses(WithFaker::class);
 
 beforeEach(function () {
-    $this->seed(RolesSeeder::class);
+    seed(RolesSeeder::class);
     $this->user = User::factory()
         ->admin()
         ->withRole(config('permission.roles.admin'))
@@ -17,11 +20,11 @@ beforeEach(function () {
 });
 
 test('admin can change coupon status', function (string $status) {
-    $this->actingAs($this->user);
+    actingAs($this->user);
 
     $coupon = Coupon::factory()->create();
 
-    $this->putJson(route('coupons.change-status', ['coupon' => $coupon]), [
+    putJson(route('coupons.change-status', ['coupon' => $coupon]), [
         'status' => $status,
     ])->assertOk();
 

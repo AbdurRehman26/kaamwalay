@@ -12,7 +12,7 @@ class ExpireCoupon extends Command
      *
      * @var string
      */
-    protected $signature = 'expire:coupons';
+    protected $signature = 'coupons:expire';
 
     /**
      * The console command description.

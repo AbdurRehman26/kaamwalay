@@ -20,15 +20,11 @@ class CreateCouponStatsTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->unsignedInteger('times_used_till_date')
+            $table->unsignedInteger('times_used')
                 ->default(0);
-            $table->unsignedDecimal('total_discount_given', 10)
+            $table->unsignedDecimal('total_discount', 10)
                 ->default(0.0);
-            $table->unsignedInteger('times_used_by_unique_users')
-                ->default(0);
-            $table->unsignedInteger('times_used_by_all_users')
-                ->default(0);
-            $table->unsignedDecimal('total_revenue_generated', 10)
+            $table->unsignedDecimal('total_revenue', 10)
                 ->default(0.0);
             $table->timestamps();
         });

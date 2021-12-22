@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources\API\Admin\Coupon;
 
+use App\Http\Resources\API\Admin\Order\OrderResource;
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\User\UserResource;
 
-class CouponApplicableResource extends BaseResource
+class CouponLogResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +17,8 @@ class CouponApplicableResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'code' => $this->code,
-            'label' => $this->label,
-            'api_suffix' => $this->api_suffix ?? '',
-            'description' => $this->description,
-            'is_active' => $this->is_active,
+            'user' => new UserResource($this->user),
+            'order' => new OrderResource($this->order),
         ];
     }
 }

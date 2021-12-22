@@ -13,7 +13,7 @@ class ActivateCoupon extends Command
      *
      * @var string
      */
-    protected $signature = 'activate:coupons';
+    protected $signature = 'coupons:activate';
 
     /**
      * The console command description.

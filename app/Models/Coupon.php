@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\CouponDateRange;
 use App\Casts\CouponType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +17,7 @@ class Coupon extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id',
+        'created_by',
         'coupon_applicable_id',
         'code',
         'name',
@@ -39,8 +40,8 @@ class Coupon extends Model
         'capped_amount' => 'float',
         'is_capped' => 'boolean',
         'type' => CouponType::class,
-        'available_from' => 'datetime',
-        'available_till' => 'datetime',
+        'available_from' => CouponDateRange::class,
+        'available_till' => CouponDateRange::class,
     ];
 
     public function couponStatusHistories(): HasMany

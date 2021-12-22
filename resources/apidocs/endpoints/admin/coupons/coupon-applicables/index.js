@@ -13,6 +13,7 @@
  *        {
  *            "data": [
  *                {
+ *                    "id": 1,
  *                    "code": "service_fee",
  *                    "label": "Total Service Fee",
  *                    "api_suffix": "",
@@ -20,6 +21,7 @@
  *                    "is_active": true
  *                 },
  *                 {
+ *                    "id": 2,
  *                    "code": "service_level",
  *                    "label": "Select Service Levels",
  *                    "api_suffix": "payment_plans",
@@ -27,6 +29,7 @@
  *                    "is_active": true
  *                 },
  *                 {
+ *                    "id": 3,
  *                    "code": "user",
  *                    "label": "Select Users",
  *                    "api_suffix": "users",
@@ -34,6 +37,7 @@
  *                    "is_active": true
  *                 },
  *                 {
+ *                    "id": 4,
  *                    "code": "shipping_fee",
  *                    "label": "Total Shipping Fee",
  *                    "api_suffix": "",

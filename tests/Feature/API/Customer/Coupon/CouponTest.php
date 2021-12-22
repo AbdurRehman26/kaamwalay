@@ -5,7 +5,6 @@ use App\Models\Couponable;
 use App\Models\User;
 
 beforeEach(function () {
-
     $this->coupon = Coupon::factory()->count(5)->create();
     $this->couponables = Couponable::factory()->count(2)->create();
     $this->user = User::factory()
@@ -13,12 +12,10 @@ beforeEach(function () {
         ->create();
 
     $this->actingAs($this->user);
-
 });
 
 
 test('customer checks for valid coupon', function () {
-
     $this->actingAs($this->user);
     dd($this->coupon);
     $response = $this->getJson('/api/customer/coupons/' . $this->coupon->code, [

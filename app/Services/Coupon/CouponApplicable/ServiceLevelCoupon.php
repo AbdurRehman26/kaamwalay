@@ -15,6 +15,7 @@ class ServiceLevelCoupon extends CouponApplicables implements CouponApplicableIn
     public function getPercentageDiscount(Coupon $coupon, Order|array $order): float
     {
         $serviceFee = $this->getPaymentPlan($order['payment_plan']['id'])->price * array_sum(array_column($order['items'], 'quantity'));
+
         return (($coupon->discount_value * $serviceFee) / 100);
     }
 }

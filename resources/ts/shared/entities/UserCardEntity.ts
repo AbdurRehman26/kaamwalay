@@ -4,6 +4,7 @@ import { UserCardGeneratedImagesEntity } from '@shared/entities/UserCardGenerate
 import { UserCardGradesEntity } from '@shared/entities/UserCardGradesEntity';
 import { UserCardHumanGradesEntity } from '@shared/entities/UserCardHumanGradesEntity';
 import { Entity } from './Entity';
+import { OrderItemEntity } from './OrderItemEntity';
 
 export class UserCardEntity extends Entity {
     public overallGrade!: string;
@@ -12,7 +13,6 @@ export class UserCardEntity extends Entity {
     public orderNumber!: number | string;
     public orderId!: number | string;
     public shortName!: string;
-    public notes!: string;
 
     @Type(() => CardProductEntity)
     public cardProduct!: CardProductEntity;
@@ -25,4 +25,7 @@ export class UserCardEntity extends Entity {
 
     @Type(() => UserCardGeneratedImagesEntity)
     public generatedImages!: UserCardGeneratedImagesEntity[];
+
+    @Type(() => OrderItemEntity)
+    public orderItem!: OrderItemEntity;
 }

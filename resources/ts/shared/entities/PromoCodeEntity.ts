@@ -7,17 +7,15 @@ import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
 
 export class PromoCodeEntity extends Entity {
     public promoCode!: string;
-    public discount!: string;
+    public discountValue!: string;
     public appliesTo!: string;
     public date!: string;
     public status!: string;
     public timesUsed!: number;
     public totalDiscounts!: string;
-    public flatDiscountValue!: string;
-    public percentOffValue!: string;
     public discountStartDate!: string;
     public discountEndDate!: string;
-    public discountType!: DiscountTypeEnums;
+    public type!: DiscountTypeEnums;
     public discountApplicationType!: DiscountApplicationEnums;
     public discountDateType!: DiscountDateTypeEnum;
 

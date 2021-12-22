@@ -1,4 +1,4 @@
 export const enum DiscountTypeEnums {
-    percentOff = 'percentOff',
-    flatDiscount = 'flatDiscount',
+    percentage = 'percentage',
+    fixed = 'fixed',
 }

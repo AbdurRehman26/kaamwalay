@@ -19,8 +19,7 @@ import {
     setDiscountEndDate,
     setDiscountStartDate,
     setDiscountType,
-    setFlatDiscountValue,
-    setPercentOffValue,
+    setDiscountValue,
     setPromoCodeTextValue,
     setShowNewPromoCodeDialog,
     toggleSelectedServiceLevel,
@@ -69,9 +68,8 @@ export function PromoCodeModal() {
     const dispatch = useSharedDispatch();
     const modalTitle = useSharedSelector((state) => state.adminNewPromoCodeSlice.modalTitle);
     const promoCodeValue = useSharedSelector((state) => state.adminNewPromoCodeSlice.promoCode);
-    const discountType = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountType);
-    const flatDiscountValue = useSharedSelector((state) => state.adminNewPromoCodeSlice.flatDiscountValue);
-    const percentOffValue = useSharedSelector((state) => state.adminNewPromoCodeSlice.percentOffValue);
+    const discountType = useSharedSelector((state) => state.adminNewPromoCodeSlice.type);
+    const discountValue = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountValue);
     const discountApplicationType = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountApplicationType);
     const discountDateType = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountDateType);
     const discountStartDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountStartDate);
@@ -97,23 +95,19 @@ export function PromoCodeModal() {
         [promoCodeValue],
     );
 
-    const handlePercentOffChange = useCallback(
+    const handleDiscountValueChange = useCallback(
         (event: any) => {
-            dispatch(setPercentOffValue(event.target.value));
+            dispatch(setDiscountValue(event.target.value));
         },
-        [percentOffValue],
-    );
-
-    const handleFlatDiscountValueChange = useCallback(
-        (event: any) => {
-            dispatch(setFlatDiscountValue(event.target.value));
-        },
-        [flatDiscountValue],
+        [discountValue],
     );
 
     const handleDiscountTypeRadioPress = useCallback(
         (newDiscountType: DiscountTypeEnums) => {
             return () => {
+                if (newDiscountType !== discountType) {
+                    dispatch(setDiscountValue(''));
+                }
                 dispatch(setDiscountType(newDiscountType));
             };
         },
@@ -163,11 +157,8 @@ export function PromoCodeModal() {
         if (!promoCodeValue) {
             validationErrors.push('Promo code is required');
         }
-        if (discountType === DiscountTypeEnums.flatDiscount && !flatDiscountValue) {
-            validationErrors.push('Flat discount value is required');
-        }
-        if (discountType === DiscountTypeEnums.percentOff && !percentOffValue) {
-            validationErrors.push('Percent Off value is required');
+        if (!discountValue) {
+            validationErrors.push('Discount value is required');
         }
         if (
             discountApplicationType === DiscountApplicationEnums.selectServiceLevels &&
@@ -222,24 +213,24 @@ export function PromoCodeModal() {
                         <Paper
                             variant={'outlined'}
                             className={classes.discountOption}
-                            onClick={handleDiscountTypeRadioPress(DiscountTypeEnums.percentOff)}
+                            onClick={handleDiscountTypeRadioPress(DiscountTypeEnums.percentage)}
                         >
                             <Radio
-                                checked={discountType === DiscountTypeEnums.percentOff}
-                                onChange={handleDiscountTypeRadioPress(DiscountTypeEnums.percentOff)}
-                                value={DiscountTypeEnums.percentOff}
+                                checked={discountType === DiscountTypeEnums.percentage}
+                                onChange={handleDiscountTypeRadioPress(DiscountTypeEnums.percentage)}
+                                value={DiscountTypeEnums.percentage}
                             />
                             <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
                                 <Typography
                                     variant={'caption'}
                                     className={classes.secondaryLabel}
                                     sx={{
-                                        fontWeight: discountType === DiscountTypeEnums.percentOff ? 'bold' : 'normal',
+                                        fontWeight: discountType === DiscountTypeEnums.percentage ? 'bold' : 'normal',
                                     }}
                                 >
                                     Percent Off
                                 </Typography>
-                                {discountType === DiscountTypeEnums.percentOff ? (
+                                {discountType === DiscountTypeEnums.percentage ? (
                                     <TextField
                                         placeholder={'0.00'}
                                         InputProps={{
@@ -248,8 +239,8 @@ export function PromoCodeModal() {
                                         size={'small'}
                                         sx={{ maxWidth: '120px', marginLeft: '3px' }}
                                         variant="outlined"
-                                        value={percentOffValue}
-                                        onChange={handlePercentOffChange}
+                                        value={discountValue}
+                                        onChange={handleDiscountValueChange}
                                     />
                                 ) : null}
                             </Box>
@@ -257,24 +248,24 @@ export function PromoCodeModal() {
                         <Paper
                             variant={'outlined'}
                             className={classes.discountOption}
-                            onClick={handleDiscountTypeRadioPress(DiscountTypeEnums.flatDiscount)}
+                            onClick={handleDiscountTypeRadioPress(DiscountTypeEnums.fixed)}
                         >
                             <Radio
-                                checked={discountType === DiscountTypeEnums.flatDiscount}
-                                onChange={handleDiscountTypeRadioPress(DiscountTypeEnums.flatDiscount)}
-                                value={DiscountTypeEnums.flatDiscount}
+                                checked={discountType === DiscountTypeEnums.fixed}
+                                onChange={handleDiscountTypeRadioPress(DiscountTypeEnums.fixed)}
+                                value={DiscountTypeEnums.fixed}
                             />
                             <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
                                 <Typography
                                     variant={'caption'}
                                     className={classes.secondaryLabel}
                                     sx={{
-                                        fontWeight: discountType === DiscountTypeEnums.flatDiscount ? 'bold' : 'normal',
+                                        fontWeight: discountType === DiscountTypeEnums.fixed ? 'bold' : 'normal',
                                     }}
                                 >
                                     Flat Discount
                                 </Typography>
-                                {discountType === DiscountTypeEnums.flatDiscount ? (
+                                {discountType === DiscountTypeEnums.fixed ? (
                                     <TextField
                                         placeholder={'0.00'}
                                         InputProps={{
@@ -283,8 +274,8 @@ export function PromoCodeModal() {
                                         size={'small'}
                                         sx={{ maxWidth: '120px', marginLeft: '3px' }}
                                         variant="outlined"
-                                        value={flatDiscountValue}
-                                        onChange={handleFlatDiscountValueChange}
+                                        value={discountValue}
+                                        onChange={handleDiscountValueChange}
                                     />
                                 ) : null}
                             </Box>

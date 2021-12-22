@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
 import { DiscountApplicationEnums } from '@shared/constants/DiscountApplicationEnum';
 import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
@@ -11,11 +11,10 @@ export interface NewPromoCodeDialogState {
         value: string;
         id: number;
     }[];
-    discountType: DiscountTypeEnums;
+    type: DiscountTypeEnums;
     discountApplicationType: DiscountApplicationEnums;
     selectedDiscountApplicationServiceLevelsIds: number[];
-    flatDiscountValue?: string;
-    percentOffValue?: string;
+    discountValue?: string;
     discountStartDate?: string;
     discountEndDate?: string;
     discountDateType: DiscountDateTypeEnum;
@@ -25,10 +24,9 @@ const initialState: NewPromoCodeDialogState = {
     showNewPromoCodeDialog: false,
     modalTitle: 'Create New Promo Code',
     promoCode: '',
-    flatDiscountValue: '',
-    percentOffValue: '',
     discountStartDate: '',
     discountEndDate: '',
+    discountValue: '',
     availableApplicationServiceLevels: [
         {
             id: 2,
@@ -64,7 +62,7 @@ const initialState: NewPromoCodeDialogState = {
         },
     ],
     selectedDiscountApplicationServiceLevelsIds: [-2],
-    discountType: DiscountTypeEnums.percentOff,
+    type: DiscountTypeEnums.percentage,
     discountApplicationType: DiscountApplicationEnums.totalServiceFee,
     discountDateType: DiscountDateTypeEnum.permanent,
 };
@@ -77,19 +75,16 @@ export const adminNewPromoCodeSlice = createSlice({
             state.promoCode = action.payload;
         },
         setDiscountType: (state, action: PayloadAction<DiscountTypeEnums>) => {
-            state.discountType = action.payload;
-        },
-        setFlatDiscountValue: (state, action: PayloadAction<string>) => {
-            state.flatDiscountValue = action.payload;
-        },
-        setPercentOffValue: (state, action: PayloadAction<string>) => {
-            state.percentOffValue = action.payload;
+            state.type = action.payload;
         },
         setDiscountApplicationType: (state, action: PayloadAction<DiscountApplicationEnums>) => {
             state.discountApplicationType = action.payload;
         },
         setSelectedServiceLevels: (state, action: PayloadAction<number[]>) => {
             state.selectedDiscountApplicationServiceLevelsIds = action.payload;
+        },
+        setDiscountValue: (state, action: PayloadAction<string>) => {
+            state.discountValue = action.payload;
         },
         toggleSelectedServiceLevel: (state, action: PayloadAction<number>) => {
             const isAlreadySelected =
@@ -135,9 +130,7 @@ export const adminNewPromoCodeSlice = createSlice({
 
 export const {
     setPromoCodeTextValue,
-    setPercentOffValue,
     setDiscountType,
-    setFlatDiscountValue,
     setDiscountApplicationType,
     toggleSelectedServiceLevel,
     setDiscountDateType,
@@ -148,4 +141,5 @@ export const {
     setModalTitle,
     setAvailableServiceLevels,
     setSelectedServiceLevels,
+    setDiscountValue,
 } = adminNewPromoCodeSlice.actions;

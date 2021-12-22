@@ -1,6 +1,5 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
-import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
@@ -22,13 +21,11 @@ import {
     setDiscountEndDate,
     setDiscountStartDate,
     setDiscountType,
-    setFlatDiscountValue,
+    setDiscountValue,
     setModalTitle,
-    setPercentOffValue,
     setPromoCodeTextValue,
     setSelectedServiceLevels,
     setShowNewPromoCodeDialog,
-    toggleSelectedServiceLevel,
 } from '@shared/redux/slices/adminNewPromoCodeSlice';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
 import { DiscountApplicationEnums } from '@shared/constants/DiscountApplicationEnum';
@@ -105,9 +102,8 @@ export function PromoCodesTableRow({ promoCode }: PromoCodesTableRowProps) {
                 case Options.Reactivate:
                     dispatch(setModalTitle('Reactivate Promo Code'));
                     dispatch(setPromoCodeTextValue(promoCode.promoCode));
-                    dispatch(setDiscountType(promoCode?.discountType as DiscountTypeEnums));
-                    dispatch(setFlatDiscountValue(promoCode?.flatDiscountValue));
-                    dispatch(setPercentOffValue(promoCode?.percentOffValue));
+                    dispatch(setDiscountType(promoCode?.type as DiscountTypeEnums));
+                    dispatch(setDiscountValue(promoCode?.discountValue));
                     dispatch(
                         setDiscountApplicationType(promoCode?.discountApplicationType as DiscountApplicationEnums),
                     );
@@ -143,7 +139,7 @@ export function PromoCodesTableRow({ promoCode }: PromoCodesTableRowProps) {
             <TableCell align={'left'} sx={{ fontWeight: 'bold' }}>
                 {promoCode?.promoCode}
             </TableCell>
-            <TableCell align={'left'}>{promoCode?.discount}</TableCell>
+            <TableCell align={'left'}>{promoCode?.discountValue}</TableCell>
             <TableCell align={'left'}>{promoCode?.appliesTo}</TableCell>
             <TableCell align={'left'}>{promoCode?.date}</TableCell>
             <TableCell>

@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Coupon;
 use App\Models\Couponable;
 use App\Models\CouponApplicable;
+use App\Models\CouponStat;
 use App\Models\CouponStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -29,5 +31,12 @@ class CouponFactory extends Factory
             'available_from' => now()->addDays(random_int(-5, 10)),
             'available_till' => now()->addDays(random_int(10, 15)),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Coupon $coupon) {
+            $coupon->couponStats()->save(new CouponStat([]));
+        });
     }
 }

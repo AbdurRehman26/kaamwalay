@@ -54,7 +54,7 @@ class OrderStatusHistoryService
             getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
             OrderCanNotBeMarkedAsGraded::class
         );
-                
+
         if ($orderStatusId === OrderStatus::CONFIRMED) {
             $data = $this->orderService->getOrderCertificatesData($order);
 

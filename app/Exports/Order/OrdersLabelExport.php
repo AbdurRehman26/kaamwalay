@@ -40,7 +40,7 @@ class OrdersLabelExport implements FromArray, WithHeadings, WithStyles
                 $data['label_line_one'] . "\n" . $data['label_line_two'] . "\n" . $data['label_line_three'] . "\n" . $data['card_number'],
                 $data['grade_nickname'] . "\n \n \n" . $data['certificate_id'],
                 $data['final_grade'],
-                config('APP_URL') . '/card/' . $data['certificate_id'],
+                config('app.url') . '/card/' . $data['certificate_id'],
                 $data['certificate_id'],
             ];
         }

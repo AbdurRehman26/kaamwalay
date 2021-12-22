@@ -12,6 +12,5 @@ it('dispatches job for creating files for order labels when order is marked as g
     $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::GRADED,
     ]);
-    CreateOrderLabel::dispatchSync($order);
     Bus::assertDispatched(CreateOrderLabel::class);
 });

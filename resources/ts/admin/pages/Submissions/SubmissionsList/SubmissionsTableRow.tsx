@@ -75,7 +75,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                         return;
                     }
 
-                    await downloadFromUrl(order.orderLabel.path, `${order.orderLabel.orderId}_label.xlsx`);
+                    await downloadFromUrl(order.orderLabel.path, `${order.orderNumber}_label.xlsx`);
                     break;
                 case Options.ViewGrades:
                     history.push(`/submissions/${order.id}/grade`);
@@ -142,7 +142,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                         <Box>
                             <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
                             <MenuItem onClick={handleOption(Options.DownloadOrderLabel)} disabled={!order.orderLabel}>
-                                {order.orderLabel ? 'Print' : 'Generating'}&nbsp; Stickers
+                                {order.orderLabel ? 'Print' : 'Generating'}&nbsp;Stickers
                             </MenuItem>
                         </Box>
                     ) : null}

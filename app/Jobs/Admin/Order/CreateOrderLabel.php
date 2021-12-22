@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderLabel;
 use App\Models\UserCard;
 use App\Services\AGS\AgsService;
+use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,7 +40,7 @@ class CreateOrderLabel implements ShouldQueue
         if (! $agsService->isEnabled()) {
             logger('Skipping AgsService as it is disabled.');
 
-            return;
+            $this->fail(new AgsServiceIsDisabled);
         }
         
         $certList = UserCard::where('order_item_id', $this->order->id)->pluck('certificate_number');
@@ -56,7 +57,7 @@ class CreateOrderLabel implements ShouldQueue
   
     protected function saveCardLabelToExcel(array $response): void
     {
-        $filePath = 'order-labels/'.$this->order->order_number.'_label_' . Str::uuid() .'.xlsx';
+        $filePath = 'order-labels/' . $this->order->order_number . '_label_' . Str::uuid() . '.xlsx';
         Excel::store(new OrdersLabelExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
         $filePathUrl = Storage::disk('s3')->url($filePath);
         $this->saveCardLabelData($filePathUrl);
@@ -64,12 +65,9 @@ class CreateOrderLabel implements ShouldQueue
 
     protected function saveCardLabelData(string $filePathUrl): void
     {
-        $orderLabels = new OrderLabel();
-        $orderLabels->order_id = $this->order->order_number;
-        $orderLabels->path = $filePathUrl;
-        $orderLabels->save();
-
-        $this->order->order_label_id = $orderLabels->id;
-        $this->order->save();
+        $orderLabel = new OrderLabel();
+        $orderLabel->order_id = $this->order->id;
+        $orderLabel->path = $filePathUrl;
+        $orderLabel->save();
     }
 }

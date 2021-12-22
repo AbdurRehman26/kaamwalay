@@ -15,7 +15,7 @@ class CreateOrderLabelsTable extends Migration
     {
         Schema::create('order_labels', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id');
+            $table->foreignId('order_id')->constrained();
             $table->string('path');
             $table->timestamps();
         });

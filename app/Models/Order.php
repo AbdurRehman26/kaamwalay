@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -189,9 +190,9 @@ class Order extends Model
         return $this->belongsTo(Invoice::class);
     }
 
-    public function orderLabel(): BelongsTo
+    public function orderLabel(): HasOne
     {
-        return $this->belongsTo(OrderLabel::class);
+        return $this->hasOne(OrderLabel::class);
     }
 
     public function orderItems(): HasMany

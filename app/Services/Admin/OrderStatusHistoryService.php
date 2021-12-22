@@ -54,11 +54,7 @@ class OrderStatusHistoryService
             getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
             OrderCanNotBeMarkedAsGraded::class
         );
-        
-        if ($orderStatusId === OrderStatus::GRADED) {
-            CreateOrderLabel::dispatch($order);
-        }
-        
+                
         if ($orderStatusId === OrderStatus::CONFIRMED) {
             $data = $this->orderService->getOrderCertificatesData($order);
 
@@ -66,6 +62,10 @@ class OrderStatusHistoryService
             throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
 
             CreateOrderFoldersOnDropbox::dispatch($order);
+        }
+
+        if ($orderStatusId === OrderStatus::GRADED) {
+            CreateOrderLabel::dispatch($order);
         }
 
         Order::query()

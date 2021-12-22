@@ -13,7 +13,8 @@ import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 import SubmissionHeaderMoreButton from '@admin/pages/Submissions/SubmissionsView/SubmissionHeaderMoreButton';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
-import { Button, Icon } from '@mui/material';
+import Button from '@mui/material/Button';
+import Icon from '@mui/material/Icon';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { useNotifications } from '@shared/hooks/useNotifications';
 

@@ -22,6 +22,7 @@ class AlterTableOrdersAddColumnsCoupons extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->decimal('discounted_amount', 10)->default(0)->after('grand_total')->nullable();
+            $table->decimal('grand_total_before_discount', 10)->default(0)->after('grand_total')->nullable();
         });
     }
 
@@ -34,6 +35,7 @@ class AlterTableOrdersAddColumnsCoupons extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('discounted_amount');
+            $table->dropColumn('grand_total_before_discount');
             $table->dropConstrainedForeignId('coupon_id');
         });
     }

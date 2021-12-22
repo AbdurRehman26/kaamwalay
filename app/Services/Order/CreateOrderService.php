@@ -213,7 +213,6 @@ class CreateOrderService
     {
         if (! empty($couponData['code'])) {
             $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
-            $this->order->items = $this->order->orderItems->toArray();
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
             unset($this->order->items);
             $this->order->save();

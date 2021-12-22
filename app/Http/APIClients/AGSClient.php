@@ -160,6 +160,17 @@ class AGSClient
         return $this->handleErrorResponse(response: $response, route: '/cards/', payload: [$data]);
     }
 
+    public function createCardLabel(array $data): array
+    {
+        $response = Http::withToken($this->getAuthToken())->post($this->getBaseUrl() . '/card-labels/', $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponse(response: $response, route: '/card-labels/', payload: [$data]);
+    }
+
     protected function handleErrorResponse(Response $response, string $route, array $payload = []): array
     {
         try {

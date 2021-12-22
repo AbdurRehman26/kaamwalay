@@ -9,12 +9,12 @@ use App\Models\PaymentMethod;
 
 class PaymentMethodController extends Controller
 {
-    public function index()
+    public function index(): PaymentMethodCollection
     {
         return new PaymentMethodCollection(PaymentMethod::enabled()->get());
     }
 
-    public function show(PaymentMethod $paymentMethod)
+    public function show(PaymentMethod $paymentMethod): PaymentMethodResource
     {
         return new PaymentMethodResource($paymentMethod);
     }

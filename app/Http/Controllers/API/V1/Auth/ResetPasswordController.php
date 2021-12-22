@@ -31,12 +31,12 @@ class ResetPasswordController extends Controller
             : $this->sendResetFailedResponse($response);
     }
 
-    protected function sendResetResponse($response): JsonResponse
+    protected function sendResetResponse(mixed $response): JsonResponse
     {
         return new JsonResponse(['message' => trans($response)], 200);
     }
 
-    protected function sendResetFailedResponse($response)
+    protected function sendResetFailedResponse(mixed $response): JsonResponse
     {
         throw ValidationException::withMessages([
             'email' => [trans($response)],

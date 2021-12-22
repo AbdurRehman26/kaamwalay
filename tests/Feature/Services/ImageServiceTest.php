@@ -12,7 +12,7 @@ DoaJhascVmuj/uJcfv+05CjUVeot4MYZ/39xxAY6rPSoSo6bs/uRTenZKAJWNbjXkufeCjiatEQLTNJv
 8iQ3XtR9xbHOxA32VScwEebvXEzusFQYJpiEyWBTu4oDLXdBR3fitdXGOAKctDVjpH1DQuJJsXtRjZqMLalDm9uLt647ZcURQALun0l5Aw6+IDatrUVjpt1asH1fqBSG1olqKldkREzh9j+oBCotS7U4YiK1AeaxWIpZWwysZM0YuyICtQZjMro2885iE36gij4bPmAbLySwlPV2/FRzEQpQNn8efmaNb8wrNFvzPKbcsIuVqvFlrfqXEBs0BlyspGMFwG7vrESsRYzlqm921mZXBDsPANGMfiInKTXypDW+rsJpvZtqRDgcJYtm4FYFAt9I+HGPExsfTBS4LPEDmo3YeI5aU4GCsYh7lKb4ZEt/XiMKYAFTY4T1LCJ3nQot6vIl4h0Ve2ojh4Er/EEUTbntq8/EqYMpYDWgC1+TjzEJbctZWMreER6YSw28zgMnbK+4DAqcmBi+GuljMYzbOdBjSYzFl51Vc9YuE8SoxgtV9ts3doYkG7XYS3SG57qt1fH2QwIbDFYrjeudcTQEoKFCGNc/cTOdZgVZywVcGY5uex1/d+YoqYMRckcRSqe5asS19UYr/Myizgzz7ggUt3j9ygILDdwVpdDRsrnREBbvuOpbxUPcGbiWysVdAH036g7AqemQoxrDN99MtP0OHNGC/xuWvQcm0WcHxGKFpQt/Q/3VQTBgWBXVtb+oTyYJRZvxAU1QTkt/7ERLrkIW1Z6qDDKt6juuF4LcMd4c+CIxQCI0uahbBrtbXD5Q0FDv8A7ZbAYuh9ZhZuPKxx8x6w7o5ucZiNShspfl717lgXOWaRv4g1pBVAPicxouqS8C3nvXMrgBEh1MU4P+Eb0reWzcwPD2w/MW4lixfn4gm6KwP3HGVmq/vl9kRRuqhT/ExJdYrE4ApOYN82pNmc/Ewb4ADdCjdvc1XIQyt5tfVe74lFLUQ8qzUcTWlXuf1/mNwbTeVzzggeu3AJvRWXz51iFE6g5DtH9o7C1ALVzbHaniN28ueI9mTP/9k='));
 
     $card = CardProduct::factory()->create([
-        'image_path' => Storage::disk('s3')->path('testCard.jpg')
+        'image_path' => Storage::disk('s3')->path('testCard.jpg'),
     ]);
 
     (new ImageService)->process($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
@@ -22,5 +22,4 @@ DoaJhascVmuj/uJcfv+05CjUVeot4MYZ/39xxAY6rPSoSo6bs/uRTenZKAJWNbjXkufeCjiatEQLTNJv
     expect(count($storageCards))->toEqual(1);
     expect(CardProduct::find($card->id)->image_path)->toEqual(Storage::disk('s3')->url($storageCards[0]));
     expect(Storage::allFiles())->toBeEmpty();
-
 });

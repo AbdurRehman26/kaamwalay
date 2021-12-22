@@ -6,6 +6,8 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
+ * @apiParam {Number} coupon_applicable_id Resource ID of coupon applicable
+ *
  * @apiSuccess {Object} data Couponable Entities (Example of payment plans)
  *
  * @apiSuccessExample Success-Response:

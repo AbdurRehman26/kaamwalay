@@ -69,7 +69,6 @@ export function UnconfirmedCard({
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
-    // const [cardNotes, setCardNotes] = useState(internalNotes);
     const [cardInternalNotes, setInternalNotes] = useState(internalNotes);
     const notification = useNotifications();
     const debounceNotes = useCallback(_.debounce(handleCardNotesChange, 500), []);

@@ -75,6 +75,7 @@ export function PromoCodeModal() {
     const discountStartDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountStartDate);
     const discountEndDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountEndDate);
     const showModal = useSharedSelector((state) => state.adminNewPromoCodeSlice.showNewPromoCodeDialog);
+    const applicables = useSharedSelector((state) => state.adminNewPromoCodeSlice.applicables);
 
     const handleCloseModal = useCallback(() => {
         dispatch(setShowNewPromoCodeDialog(false));
@@ -115,7 +116,7 @@ export function PromoCodeModal() {
     );
 
     const handleDiscountApplicationTypeRadioPress = useCallback(
-        (newDiscountApplicationType: DiscountApplicationEnums) => {
+        (newDiscountApplicationType: any) => {
             return () => {
                 dispatch(setDiscountApplicationType(newDiscountApplicationType));
             };
@@ -174,6 +175,7 @@ export function PromoCodeModal() {
         }
         return !!validationErrors.length;
     };
+
     return (
         <Dialog onClose={handleCloseModal} open={showModal} maxWidth={'sm'} fullWidth>
             <DialogTitle>
@@ -286,27 +288,26 @@ export function PromoCodeModal() {
                             Applies To
                         </Typography>
                         <Box display={'flex'} flexDirection={'column'} minWidth={'100%'}>
-                            <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px' }}>
-                                <Radio
-                                    checked={discountApplicationType === DiscountApplicationEnums.totalServiceFee}
-                                    onChange={handleDiscountApplicationTypeRadioPress(
-                                        DiscountApplicationEnums.totalServiceFee,
-                                    )}
-                                    value={DiscountApplicationEnums.totalServiceFee}
-                                />
-                                <Typography
-                                    variant={'caption'}
-                                    className={classes.secondaryLabel}
-                                    sx={{
-                                        fontWeight:
-                                            discountApplicationType === DiscountApplicationEnums.totalServiceFee
-                                                ? 'bold'
-                                                : 'normal',
-                                    }}
-                                >
-                                    Total Service Fee
-                                </Typography>
-                            </Paper>
+                            {applicables?.map((item) => {
+                                return (
+                                    <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px' }}>
+                                        <Radio
+                                            checked={discountApplicationType === item.code}
+                                            onChange={handleDiscountApplicationTypeRadioPress(item.code)}
+                                            value={item.code}
+                                        />
+                                        <Typography
+                                            variant={'caption'}
+                                            className={classes.secondaryLabel}
+                                            sx={{
+                                                fontWeight: discountApplicationType === item.code ? 'bold' : 'normal',
+                                            }}
+                                        >
+                                            {item.label}
+                                        </Typography>
+                                    </Paper>
+                                );
+                            })}
 
                             <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px', marginTop: '8px' }}>
                                 <Radio

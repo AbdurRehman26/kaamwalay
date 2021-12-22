@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import Tab from '@mui/material/Tab';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
@@ -15,7 +14,9 @@ import { font } from '@shared/styles/utils';
 import AddIcon from '@mui/icons-material/Add';
 import { PromoCodeModal } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodeModal';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import { setShowNewPromoCodeDialog } from '@shared/redux/slices/adminNewPromoCodeSlice';
+import { setApplicables, setShowNewPromoCodeDialog } from '@shared/redux/slices/adminNewPromoCodeSlice';
+import { app } from '@shared/lib/app';
+import { AdminPromoCodesRepository } from '@shared/repositories/Admin/PromoCodesRepository';
 
 interface PromoCodesListHeaderProps {
     onSearch?: (query: string) => void;
@@ -57,7 +58,7 @@ export function PromoCodesListHeader({ onSearch }: PromoCodesListHeaderProps) {
     const classes = useStyles();
     const dispatch = useSharedDispatch();
     const [search, setSearch] = useState('');
-
+    const promoCodeRepository = app(AdminPromoCodesRepository);
     const handleSearch = useCallback(
         (e) => {
             setSearch(e.target.value);
@@ -70,7 +71,9 @@ export function PromoCodesListHeader({ onSearch }: PromoCodesListHeaderProps) {
         [setSearch, onSearch],
     );
 
-    const onNewPromoCodePress = useCallback(() => {
+    const onNewPromoCodePress = useCallback(async () => {
+        const applicables = await promoCodeRepository.getCouponApplicables();
+        dispatch(setApplicables(applicables));
         dispatch(setShowNewPromoCodeDialog(true));
     }, []);
     return (

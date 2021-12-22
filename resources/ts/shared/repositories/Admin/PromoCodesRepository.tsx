@@ -4,8 +4,13 @@ import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 
 @Injectable('AdminPromoCodesRepository')
 export class AdminPromoCodesRepository extends Repository<PromoCodeEntity> {
-    readonly endpointPath: string = 'admin/promo-codes';
+    readonly endpointPath: string = 'admin/';
     readonly model = PromoCodeEntity;
+
+    async getCouponApplicables() {
+        const { data } = await this.endpoint.get(`coupon-applicables`);
+        return data;
+    }
 
     async deactivatePromoCode(input: { promoCodeID: number }) {
         const { promoCodeID } = input;

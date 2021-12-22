@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
 import { DiscountApplicationEnums } from '@shared/constants/DiscountApplicationEnum';
 import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
+import { CouponApplicableEntity } from '@shared/entities/CouponApplicableEntity';
 
 export interface NewPromoCodeDialogState {
     showNewPromoCodeDialog: boolean;
@@ -18,6 +19,7 @@ export interface NewPromoCodeDialogState {
     discountStartDate?: string;
     discountEndDate?: string;
     discountDateType: DiscountDateTypeEnum;
+    applicables?: CouponApplicableEntity[];
 }
 
 const initialState: NewPromoCodeDialogState = {
@@ -77,7 +79,7 @@ export const adminNewPromoCodeSlice = createSlice({
         setDiscountType: (state, action: PayloadAction<DiscountTypeEnums>) => {
             state.type = action.payload;
         },
-        setDiscountApplicationType: (state, action: PayloadAction<DiscountApplicationEnums>) => {
+        setDiscountApplicationType: (state, action: PayloadAction<any>) => {
             state.discountApplicationType = action.payload;
         },
         setSelectedServiceLevels: (state, action: PayloadAction<number[]>) => {
@@ -123,6 +125,9 @@ export const adminNewPromoCodeSlice = createSlice({
         ) => {
             state.availableApplicationServiceLevels = action.payload;
         },
+        setApplicables: (state, action: PayloadAction<CouponApplicableEntity[]>) => {
+            state.applicables = action.payload;
+        },
         clearNewPromoCodeState: (state) => initialState,
     },
     extraReducers: {},
@@ -142,4 +147,5 @@ export const {
     setAvailableServiceLevels,
     setSelectedServiceLevels,
     setDiscountValue,
+    setApplicables,
 } = adminNewPromoCodeSlice.actions;

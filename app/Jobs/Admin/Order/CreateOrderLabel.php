@@ -2,12 +2,12 @@
 
 namespace App\Jobs\Admin\Order;
 
+use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
 use App\Models\UserCard;
 use App\Services\AGS\AgsService;
-use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

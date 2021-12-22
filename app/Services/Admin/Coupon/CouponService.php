@@ -11,10 +11,12 @@ use App\Models\CouponStat;
 use App\Models\CouponStatus;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
+use Countable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use IteratorAggregate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -183,7 +185,7 @@ class CouponService
         $coupon->couponStats()->save(new CouponStat());
     }
 
-    public function getCouponableEntities(int $couponApplicableId)
+    public function getCouponableEntities(int $couponApplicableId): Countable|IteratorAggregate
     {
         $couponableManager = app(CouponableManager::class);
 

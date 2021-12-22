@@ -1,5 +1,5 @@
 /**
- * @api {get} /admin/coupons/applicables List Coupon Applicables
+ * @api {get} /admin/coupon-applicables List Coupon Applicables
  * @apiName List Coupon Applicables
  * @apiGroup Admin Coupons
  *

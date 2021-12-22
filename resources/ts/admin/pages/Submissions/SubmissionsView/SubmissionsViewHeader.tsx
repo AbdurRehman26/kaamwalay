@@ -125,7 +125,7 @@ export function SubmissionsViewHeader({
                             onClick={DownloadOrderLabel}
                             disabled={!orderLabel}
                         >
-                            {orderLabel ? 'Print' : 'Generating'}&nbsp;Stickers
+                            Print Stickers
                         </Button>
                     ) : null}
                     <SubmissionActionButton

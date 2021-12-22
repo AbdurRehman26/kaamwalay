@@ -142,7 +142,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                         <Box>
                             <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
                             <MenuItem onClick={handleOption(Options.DownloadOrderLabel)} disabled={!order.orderLabel}>
-                                {order.orderLabel ? 'Print' : 'Generating'}&nbsp;Stickers
+                                Print Stickers
                             </MenuItem>
                         </Box>
                     ) : null}

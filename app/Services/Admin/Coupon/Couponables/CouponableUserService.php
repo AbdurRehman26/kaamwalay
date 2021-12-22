@@ -2,8 +2,12 @@
 
 namespace App\Services\Admin\Coupon\Couponables;
 
+use App\Http\Resources\API\Admin\Coupon\Couponable\CustomerCollection;
 use App\Models\Coupon;
+use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
+use Countable;
+use IteratorAggregate;
 
 class CouponableUserService implements CouponableEntityInterface
 {
@@ -26,5 +30,12 @@ class CouponableUserService implements CouponableEntityInterface
         $coupon->users()->sync($this->ids);
 
         return $coupon;
+    }
+
+    public function get(): CustomerCollection
+    {
+        $customers = User::customers()->get();
+
+        return new CustomerCollection($customers);
     }
 }

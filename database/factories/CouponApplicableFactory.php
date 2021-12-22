@@ -17,7 +17,6 @@ class CouponApplicableFactory extends Factory
         return [
             'code' => $this->faker->word(),
             'label' => Str::title($this->faker->word()),
-            'api_suffix' => $this->faker->word(),
             'description' => $this->faker->sentence(),
             'is_active' => $this->faker->boolean(),
         ];

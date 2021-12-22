@@ -182,4 +182,16 @@ class CouponService
     {
         $coupon->couponStats()->save(new CouponStat());
     }
+
+    public function getCouponableEntities(int $couponApplicableId)
+    {
+        $couponableManager = app(CouponableManager::class);
+
+        /** @var CouponableEntityInterface $couponableEntity */
+        $couponableEntity = $couponableManager->entity(
+            CouponApplicable::ENTITIES_MAPPING[$couponApplicableId]
+        );
+
+        return $couponableEntity->get();
+    }
 }

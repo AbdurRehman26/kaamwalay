@@ -252,6 +252,21 @@ export function CardGradeScore({ cardData }: CardGradeScoreProps) {
                 </div>
             </Grid>
             <Divider className={classes.spacing} />
+            {cardData?.orderItem.notes ? (
+                <>
+                    <Grid container className={classes.spacing}>
+                        <Grid item xs={12} className={classes.titleHolder}>
+                            <Typography variant={'h6'} className={font.fontWeightMedium}>
+                                Notes
+                            </Typography>
+                        </Grid>
+                        <div>
+                            <Typography variant={'body2'}>{cardData.orderItem.notes}</Typography>
+                        </div>
+                    </Grid>
+                    <Divider className={classes.spacing} />
+                </>
+            ) : null}
         </Grid>
     );
 }

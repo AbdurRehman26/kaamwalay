@@ -40,6 +40,7 @@ interface SubmissionsGradeCardProps {
     itemId: any;
     itemIndex: number;
     notes?: string;
+    internalNotes?: string;
     orderID: number;
     gradeData: any;
 }
@@ -260,20 +261,34 @@ const useStyles = makeStyles(
  * @date: 28.08.2021
  * @time: 19:09
  */
-export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, notes }: SubmissionsGradeCardProps) {
+export function SubmissionsGradeCard({
+    itemId,
+    itemIndex,
+    orderID,
+    gradeData,
+    notes,
+    internalNotes,
+}: SubmissionsGradeCardProps) {
     const classes = useStyles();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [cardNotes, setCardNotes] = useState(notes);
+    const [cardInternalNotes, setInternalNotes] = useState(internalNotes);
     const [showEditGradeStepper, setShowEditGradeStepper] = useState(false);
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const debounceNotes = useCallback(_.debounce(handleUpdateCardNotes, 500), []);
+    const debounceInternalNotes = useCallback(_.debounce(handleUpdateInternalCardNotes, 500), []);
 
     const handleNotesChange = (event: any) => {
         setCardNotes(event.target.value);
         debounceNotes(itemId, event.target.value);
+    };
+
+    const handleInternalNotesChange = (event: any) => {
+        setInternalNotes(event.target.value);
+        debounceInternalNotes(itemId, event.target.value);
     };
 
     const handleNotAccepted = useCallback(
@@ -503,6 +518,16 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                 orderItemId,
                 orderId: orderID,
                 notes,
+            }),
+        );
+    }
+
+    function handleUpdateInternalCardNotes(orderItemId: number, internalNotes: string) {
+        dispatch(
+            changeOrderItemNotes({
+                orderItemId,
+                orderId: orderID,
+                internalNotes,
             }),
         );
     }
@@ -785,7 +810,7 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                     icon={<OutlinedToyIcon className={classes.headingIcon} />}
                                 />
                                 <TextField
-                                    label="Enter Notes"
+                                    label="Notes to Customer"
                                     multiline
                                     rows={4}
                                     value={cardNotes}
@@ -794,7 +819,15 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                     onChange={handleNotesChange}
                                 />
                                 <SubmissionGradeCardUpload itemIndex={itemIndex} />
-
+                                <TextField
+                                    label="Internal Notes"
+                                    multiline
+                                    rows={4}
+                                    value={cardInternalNotes}
+                                    sx={{ marginTop: '16px' }}
+                                    fullWidth
+                                    onChange={handleInternalNotesChange}
+                                />
                                 <Grid container justifyContent={'flex-end'}>
                                     {currentViewMode === 'graded_revise_mode' ? (
                                         <>

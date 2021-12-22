@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\V1\Customer\UserCard;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\CardProduct\CardProductResource;
+use App\Http\Resources\API\V1\Customer\Order\OrderItem\OrderItemResource;
 use Illuminate\Http\Request;
 
 class UserCardResource extends BaseResource
@@ -27,6 +28,7 @@ class UserCardResource extends BaseResource
             'generated_images' => $this->generated_images,
             'overall_grade' => $this->resource->overall_grade,
             'overall_grade_nickname' => $this->resource->overall_grade_nickname,
+            'order_item' => new OrderItemResource($this->orderItem),
             'submitted_at' => $this->formatDate($this->orderItem->order->created_at),
         ];
     }

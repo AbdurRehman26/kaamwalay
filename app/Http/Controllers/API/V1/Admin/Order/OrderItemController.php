@@ -104,7 +104,7 @@ class OrderItemController extends Controller
         Order $order,
         OrderItem $orderItem
     ): OrderItemResource {
-        $orderItem->update($request->only('notes'));
+        $orderItem->update($request->only(['notes', 'internal_notes']));
 
         return new OrderItemResource($orderItem);
     }

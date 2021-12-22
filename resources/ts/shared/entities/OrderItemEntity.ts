@@ -10,6 +10,7 @@ export class OrderItemEntity extends Entity {
     public certificateNumber!: string;
     public orderId!: number;
     public notes!: string;
+    public internalNotes!: string;
 
     @Type(() => OrderItemStatusHistoryEntity)
     public status!: OrderItemStatusHistoryEntity;

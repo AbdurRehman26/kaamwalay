@@ -166,6 +166,8 @@ function SubmissionSummary() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
+    const discountValue = useAppSelector((state) => state.newSubmission.couponState.appliedCouponData.discountValue);
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -501,6 +503,20 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
+                            {isCouponApplied ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
+                                    <NumberFormat
+                                        value={discountValue}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'-$'}
+                                    />
+                                </div>
+                            ) : null}
+
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
                                 <NumberFormat
@@ -525,7 +541,11 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
                                     <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice + shippingFee}
+                                        value={
+                                            numberOfSelectedCards * serviceLevelPrice +
+                                            shippingFee -
+                                            Number(discountValue)
+                                        }
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

@@ -92,6 +92,17 @@ export interface NewSubmissionSliceState {
     orderID: number;
     grandTotal: number;
     orderNumber: string;
+    couponState: {
+        isCouponValid: boolean;
+        couponCode: string;
+        validCouponId: number;
+        isCouponApplied: boolean;
+        appliedCouponData: {
+            id: number;
+            discountStatement: string;
+            discountValue: string;
+        };
+    };
     step01Data: Step01Data;
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
@@ -105,6 +116,17 @@ const initialState: NewSubmissionSliceState = {
     isNextDisabled: false,
     isNextLoading: false,
     currentStep: 0,
+    couponState: {
+        isCouponValid: false,
+        couponCode: '',
+        validCouponId: -1,
+        isCouponApplied: false,
+        appliedCouponData: {
+            id: -1,
+            discountStatement: '',
+            discountValue: '',
+        },
+    },
     step01Status: null,
     step01Data: {
         availableServiceLevels: [
@@ -366,6 +388,13 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     ? currentSubmission.step04Data.selectedCreditCard.id
                     : null,
         },
+        coupon: {
+            code: currentSubmission?.couponState?.couponCode ?? null,
+            id:
+                currentSubmission?.couponState?.appliedCouponData.id !== -1
+                    ? currentSubmission?.couponState?.appliedCouponData.id
+                    : null,
+        },
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
@@ -495,6 +524,24 @@ export const newSubmissionSlice = createSlice({
         setIsMobileSearchModalOpen: (state, action: PayloadAction<boolean>) => {
             state.step02Data.isMobileSearchModalOpen = action.payload;
         },
+        setIsCouponValid: (state, action: PayloadAction<boolean>) => {
+            state.couponState.isCouponValid = action.payload;
+        },
+        setValidCouponId: (state, action: PayloadAction<number>) => {
+            state.couponState.validCouponId = action.payload;
+        },
+        setCouponCode: (state, action: PayloadAction<string>) => {
+            state.couponState.couponCode = action.payload;
+        },
+        setIsCouponApplied: (state, action: PayloadAction<boolean>) => {
+            state.couponState.isCouponApplied = action.payload;
+        },
+        setAppliedCouponData: (
+            state,
+            action: PayloadAction<{ id: number; discountStatement: string; discountValue: string }>,
+        ) => {
+            state.couponState.appliedCouponData = action.payload;
+        },
         clearSubmissionState: (state) => initialState,
     },
     extraReducers: {
@@ -588,4 +635,9 @@ export const {
     setIsNextLoading,
     clearSubmissionState,
     setIsMobileSearchModalOpen,
+    setIsCouponValid,
+    setCouponCode,
+    setValidCouponId,
+    setIsCouponApplied,
+    setAppliedCouponData,
 } = newSubmissionSlice.actions;

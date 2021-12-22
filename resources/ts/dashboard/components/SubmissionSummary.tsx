@@ -166,7 +166,9 @@ function SubmissionSummary() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
-    const discountValue = useAppSelector((state) => state.newSubmission.couponState.appliedCouponData.discountValue);
+    const discountedValue = useAppSelector(
+        (state) => state.newSubmission.couponState.appliedCouponData.discountedValue,
+    );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -507,7 +509,7 @@ function SubmissionSummary() {
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
                                     <NumberFormat
-                                        value={discountValue}
+                                        value={discountedValue}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator
@@ -544,7 +546,7 @@ function SubmissionSummary() {
                                         value={
                                             numberOfSelectedCards * serviceLevelPrice +
                                             shippingFee -
-                                            Number(discountValue)
+                                            Number(discountedValue)
                                         }
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}

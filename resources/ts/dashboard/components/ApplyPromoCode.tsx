@@ -57,7 +57,7 @@ export function ApplyPromoCode() {
     const notifications = useNotifications();
     const checkCouponCode = async (newCouponCode: string) => {
         const checkCouponEndpoint = apiService.createEndpoint(
-            `customer/coupons/${newCouponCode}?service_level=${selectedServiceLevelID}`,
+            `customer/coupons/${newCouponCode}?couponable_type=service_level&couponable_id=${selectedServiceLevelID}`,
         );
         try {
             const response = await checkCouponEndpoint.get('');
@@ -125,6 +125,7 @@ export function ApplyPromoCode() {
                     id: appliedCouponResponse.data.coupon.id,
                     discountStatement: appliedCouponResponse.data.coupon.discountStatement,
                     discountValue: appliedCouponResponse.data.coupon.discountValue,
+                    discountedValue: appliedCouponResponse.data.discountedValue,
                 }),
             );
         } catch (error: any) {

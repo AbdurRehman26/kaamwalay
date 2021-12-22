@@ -101,6 +101,7 @@ export interface NewSubmissionSliceState {
             id: number;
             discountStatement: string;
             discountValue: string;
+            discountedValue: number;
         };
     };
     step01Data: Step01Data;
@@ -125,6 +126,7 @@ const initialState: NewSubmissionSliceState = {
             id: -1,
             discountStatement: '',
             discountValue: '',
+            discountedValue: 0,
         },
     },
     step01Status: null,
@@ -538,7 +540,12 @@ export const newSubmissionSlice = createSlice({
         },
         setAppliedCouponData: (
             state,
-            action: PayloadAction<{ id: number; discountStatement: string; discountValue: string }>,
+            action: PayloadAction<{
+                id: number;
+                discountStatement: string;
+                discountValue: string;
+                discountedValue: number;
+            }>,
         ) => {
             state.couponState.appliedCouponData = action.payload;
         },
@@ -602,6 +609,20 @@ export const newSubmissionSlice = createSlice({
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
                 (plan) => plan.id === action.payload.paymentPlan.id,
             ) as any;
+            state.couponState.isCouponValid = Boolean(action.payload.discountedValue);
+            state.couponState.validCouponId = action.payload.discountedValue ? action.payload.coupon.id : -1;
+            state.couponState.isCouponApplied = Boolean(action.payload.discountedValue);
+            state.couponState.couponCode = action.payload.discountedValue ? action.payload.coupon.code : '';
+            state.couponState.appliedCouponData.id = action.payload.discountedValue ? action.payload.coupon.id : -1;
+            state.couponState.appliedCouponData.discountStatement = action.payload.discountedValue
+                ? action.payload.coupon.discountStatement
+                : '';
+            state.couponState.appliedCouponData.discountValue = action.payload.discountedValue
+                ? action.payload.coupon.discountValue
+                : '';
+            state.couponState.appliedCouponData.discountedValue = action.payload.discountedValue
+                ? action.payload.discountedValue
+                : '';
         },
     },
 });

@@ -6,8 +6,6 @@ use App\Http\Resources\API\Admin\Coupon\Couponable\CustomerCollection;
 use App\Models\Coupon;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
-use Countable;
-use IteratorAggregate;
 
 class CouponableUserService implements CouponableEntityInterface
 {

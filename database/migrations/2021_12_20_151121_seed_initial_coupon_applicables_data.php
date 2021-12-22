@@ -47,7 +47,7 @@ class SeedInitialCouponApplicablesData extends Migration
                 'label' => 'Total Shipping Fee',
                 'api_suffix' => null,
                 'description' => 'Coupon code will be applied to total shipping fee value only',
-                'is_active' => true,
+                'is_active' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

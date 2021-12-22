@@ -12,7 +12,9 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Coupon\CouponService;
 use App\Services\Order\Shipping\ShippingFeeService;
+use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
@@ -29,7 +31,8 @@ class CreateOrderService
 
     public function __construct(
         private OrderStatusHistoryService $orderStatusHistoryService,
-        private OrderItemService $orderItemService
+        private OrderItemService $orderItemService,
+        private CouponService $couponService
     ) {
     }
 
@@ -60,6 +63,7 @@ class CreateOrderService
     {
         ItemsDeclaredValueValidator::validate($this->data);
         CustomerAddressValidator::validate($this->data);
+        CouponAppliedValidator::validate($this->data);
     }
 
     /**

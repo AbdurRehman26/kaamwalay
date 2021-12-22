@@ -2,6 +2,7 @@
 
 namespace App\Services\Coupon;
 
+use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Services\Coupon\CouponApplicable\CouponApplicableInterface;
@@ -11,11 +12,11 @@ use App\Services\Coupon\CouponApplicable\ShippingFeeCoupon;
 
 class CouponService
 {
-    public function returnCouponIfValid(string $couponCode): Coupon
+    public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon
     {
-        $coupon = Coupon::whereCode($couponCode)->ValidOnCurrentDate()->first();
+        $coupon = Coupon::whereCode($couponCode)->IsActive()->ValidOnCurrentDate()->ValidOnCouponable($couponParams)->first();
 
-        throw_if(! $coupon);
+        throw_if(! $coupon, CouponExpiredOrInvalid::class);
 
         return $coupon;
     }

@@ -44,6 +44,8 @@ Route::prefix('auth')->group(function () {
     Route::get('me', [LoginController::class, 'me'])->middleware('auth');
 });
 
+Route::get('coupons/{coupon:code}', [CouponController::class, 'show'])->middleware('guest');
+Route::post('coupons/calculate-discount', [CouponController::class, 'calculateDiscount'])->middleware('guest');
 
 Route::prefix('customer')->group(function () {
     Route::middleware('auth')->group(function () {

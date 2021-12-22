@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\Customer\Coupon;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ShowCouponRequest extends FormRequest
 {
@@ -24,6 +25,8 @@ class ShowCouponRequest extends FormRequest
     public function rules()
     {
         return [
+            'couponable_type' => ['required', Rule::in(['service_level'])],
+            'couponable_id' => 'required',
         ];
     }
 }

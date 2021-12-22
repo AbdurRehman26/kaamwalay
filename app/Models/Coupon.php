@@ -73,10 +73,27 @@ class Coupon extends Model
         return $this->hasMany(CouponLog::class);
     }
 
+    public function scopeIsActive(Builder $query): Builder
+    {
+        return $query->where('coupon_status_id', '=', CouponStatus::STATUS_ACTIVE);
+    }
+
     public function scopeValidOnCurrentDate(Builder $query): Builder
     {
         return $query->where('available_from', '<=', now())->where(function ($subQuery) {
             $subQuery->where('available_till', '>=', now())->orWhereNull('available_till');
         });
+    }
+
+    public function scopeValidOnCouponable(Builder $query, array $couponParams): Builder
+    {
+        if (empty($couponParams)) {
+            return $query;
+        }
+
+        return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
+            $subQuery->where('couponable_type', '=', Couponable::COUPONABLE_TYPES[$couponParams['couponable_type']])
+                    ->where('couponable_id', '=', $couponParams['couponable_id']);
+        })->orDoesntHave('couponAble');
     }
 }

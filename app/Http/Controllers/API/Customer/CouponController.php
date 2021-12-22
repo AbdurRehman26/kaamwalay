@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Coupon\CalculateCouponDiscountRequest;
+use App\Http\Requests\API\Customer\Coupon\ShowCouponRequest;
 use App\Http\Resources\API\Admin\Coupon\CouponResource;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\CreateOrderService;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class CouponController extends Controller
 {
@@ -21,16 +21,16 @@ class CouponController extends Controller
         $this->createOrderService = $createOrderService;
     }
 
-    public function show(string $couponCode): JsonResponse|CouponResource
+    public function show(string $couponCode, ShowCouponRequest $request): JsonResponse|CouponResource
     {
         try {
-            $coupon = $this->couponService->returnCouponIfValid($couponCode);
+            $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponable_type', 'couponable_id'));
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
-                    'error' => 'Coupon not found.',
+                    'error' => $e->getMessage(),
                 ],
-                Response::HTTP_NOT_FOUND
+                $e->getCode()
             );
         }
 
@@ -39,7 +39,7 @@ class CouponController extends Controller
 
     public function calculateDiscount(CalculateCouponDiscountRequest $request)
     {
-        $coupon = $this->couponService->returnCouponIfValid($request->coupon['code']);
+        $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $request->safe()->only('couponable_type', 'couponable_id'));
 
         $discountedAmount = $this->couponService->calculateDiscount(
             $coupon,
@@ -52,9 +52,9 @@ class CouponController extends Controller
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
-                    'error' => 'Coupon not found.',
+                    'error' => $e->getMessage(),
                 ],
-                Response::HTTP_NOT_FOUND
+                $e->getCode()
             );
         }
 

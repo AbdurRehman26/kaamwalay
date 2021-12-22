@@ -96,4 +96,12 @@ class Coupon extends Model
                     ->where('couponable_id', '=', $couponParams['couponable_id']);
         })->orDoesntHave('couponAble');
     }
+
+    public function discountStatement()
+    {
+        return match ($this->type) {
+            'percentage' => (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label ?: '',
+            default => $this->discount_value . ' Off',
+        };
+    }
 }

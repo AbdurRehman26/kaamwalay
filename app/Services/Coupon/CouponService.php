@@ -5,12 +5,16 @@ namespace App\Services\Coupon;
 use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
 use App\Models\Coupon;
 use App\Models\Order;
-use App\Services\Coupon\CouponApplicable\CouponApplicableInterface;
 use App\Services\Coupon\CouponApplicable\ServiceFeeCoupon;
 use App\Services\Coupon\CouponApplicable\ServiceLevelCoupon;
 
 class CouponService
 {
+    protected $couponApplicables = [
+        'service_level' => ServiceLevelCoupon::class,
+        'service_fee' => ServiceFeeCoupon::class,
+    ];
+
     public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon
     {
         $coupon = Coupon::whereCode($couponCode)->IsActive()->ValidOnCouponable($couponParams)->first();
@@ -20,19 +24,11 @@ class CouponService
         return $coupon;
     }
 
-    public function calculateDiscount(Coupon $coupon, Order $order): float
+    public function calculateDiscount(Coupon $coupon, array|Order $order): float
     {
-        $couponApplication = $this->getCouponApplicationType($coupon->couponApplicable->code);
+        $couponApplication = resolve($this->couponApplicables[$coupon->couponApplicable->code]);
 
         return $couponApplication->calculateDiscount($coupon, $order);
-    }
-
-    protected function getCouponApplicationType($code): CouponApplicableInterface
-    {
-        return resolve(match ($code) {
-            'service_level' => ServiceLevelCoupon::class,
-            default => ServiceFeeCoupon::class,
-        });
     }
 
     public function updateCouponStats(Order $order)

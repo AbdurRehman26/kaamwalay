@@ -7,9 +7,14 @@ use App\Models\Order;
 
 class ServiceFeeCoupon extends CouponApplicables implements CouponApplicableInterface
 {
-    public function calculateDiscount(Coupon $coupon, Order $order): float
+    public function getFixedDiscount(Coupon $coupon, Order|array $order): float
     {
-        $serviceFee = $order->paymentPlan->price * array_sum(array_column($order->items, 'quantity'));
-        return $this->getDiscountedAmount($coupon, applyDiscountOnAmount: $serviceFee);
+        return ($this->getPaymentPlan($order['payment_plan']['id'])->price - $coupon->discount_value) * array_sum(array_column($order['items'], 'quantity'));
+    }
+
+    public function getPercentageDiscount(Coupon $coupon, Order|array $order): float
+    {
+        $serviceFee = $this->getPaymentPlan($order['payment_plan']['id'])->price * array_sum(array_column($order['items'], 'quantity'));
+        return (($coupon->discount_value * $serviceFee) / 100);
     }
 }

@@ -5,11 +5,10 @@ namespace App\Http\Controllers\API\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Coupon\CalculateCouponDiscountRequest;
 use App\Http\Requests\API\Customer\Coupon\ShowCouponRequest;
-use App\Http\Resources\API\Admin\Coupon\CouponResource;
+use App\Http\Resources\API\Customer\Coupon\CouponResource;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\CreateOrderService;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class CouponController extends Controller
 {
@@ -40,13 +39,16 @@ class CouponController extends Controller
 
     public function calculateDiscount(CalculateCouponDiscountRequest $request)
     {
-        $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $request->safe()->only('couponable_type', 'couponable_id'));
+        $couponParams = [
+            'couponable_type' => 'service_level',
+            'couponable_id' => $request->payment_plan['id'],
+        ];
+
+        $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $couponParams);
 
         $discountedAmount = $this->couponService->calculateDiscount(
             $coupon,
-            $this->createOrderService->createDraftOrder(
-                $request->safe()->only('payment_plan', 'items')
-            )
+            $request->safe()->only('payment_plan', 'items')
         );
 
         try {

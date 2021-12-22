@@ -20,7 +20,6 @@ class CouponResource extends BaseResource
             'id' => $this->id,
             'code' => $this->code,
             'type' => $this->type,
-            'discount_statement' => $this->discountStatement(),
             'discount_value' => $this->discount_value,
             'coupon_applicable_id' => $this->coupon_applicable_id,
             'coupon_status_id' => $this->coupon_status_id,
@@ -32,13 +31,5 @@ class CouponResource extends BaseResource
             'payment_plans' => $this->whenLoaded('paymentPlans', PaymentPlanResource::class),
             'users' => $this->whenLoaded('users', UserResource::class),
         ];
-    }
-
-    protected function discountStatement(): string
-    {
-        return match ($this->type) {
-            'percentage' => (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label ?: '',
-            default => $this->discount_value . ' Off',
-        };
     }
 }

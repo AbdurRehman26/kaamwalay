@@ -3,7 +3,7 @@
 namespace App\Listeners\API\Admin\Order;
 
 use App\Events\API\Admin\Order\RefundSuccessful;
-use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
+use App\Http\Resources\API\V1\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -9,8 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-use function abort_unless;
-
 class ConfigurationsController extends Controller
 {
     public function getConfigurations(ConfigurationService $configurationService): JsonResponse

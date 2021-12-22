@@ -7,8 +7,6 @@ use App\Services\Order\Shipping\ShippingFeeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-use function collect;
-
 class ShippingFeeController extends Controller
 {
     public function __invoke(Request $request): JsonResponse

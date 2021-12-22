@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Admin\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\UpdateOrderPaymentRequest;
-use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
+use App\Http\Resources\API\V1\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Models\OrderPayment;
 

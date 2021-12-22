@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Files;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Files\PresignUploadRequest;
-use App\Http\Resources\API\Files\PresignUploadResource;
+use App\Http\Resources\API\V1\Files\PresignUploadResource;
 use App\Services\FileService\FileService;
 use App\Services\FileService\UploadFile;
 

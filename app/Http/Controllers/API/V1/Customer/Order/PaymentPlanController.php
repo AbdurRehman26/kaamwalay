@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanCollection;
-use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
+use App\Http\Resources\API\V1\Customer\Order\PaymentPlan\PaymentPlanCollection;
+use App\Http\Resources\API\V1\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Models\PaymentPlan;
 use Illuminate\Support\Facades\Cache;
-
-use function now;
 
 class PaymentPlanController extends Controller
 {

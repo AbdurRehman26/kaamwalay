@@ -12,9 +12,6 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-use function event;
-use function trans;
-
 class ResetPasswordController extends Controller
 {
     public function reset(ResetPasswordRequest $request): JsonResponse

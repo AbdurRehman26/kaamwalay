@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\API\V1\Customer\Cards;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\Customer\UserCard\UserCardListCollection;
-use App\Http\Resources\API\Customer\UserCard\UserCardResource;
+use App\Http\Resources\API\V1\Customer\UserCard\UserCardListCollection;
+use App\Http\Resources\API\V1\Customer\UserCard\UserCardResource;
 use App\Models\UserCard;
 use App\Services\Order\UserCardService;
 use Illuminate\Http\JsonResponse;
-
-use function auth;
 
 class UserCardController extends Controller
 {

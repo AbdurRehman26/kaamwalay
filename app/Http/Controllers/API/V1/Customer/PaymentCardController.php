@@ -8,9 +8,6 @@ use App\Services\Payment\Providers\StripeService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-use function auth;
-use function resolve;
-
 class PaymentCardController extends Controller
 {
     public function index(): JsonResponse

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V1\Services\AGS;
+namespace App\Http\Resources\API\Services\AGS;
 
 use App\Http\Resources\API\BaseResource;
 

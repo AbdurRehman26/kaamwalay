@@ -8,9 +8,6 @@ use App\Jobs\Auth\CreateUserDeviceJob;
 use Exception;
 use Pusher\PushNotifications\PushNotifications;
 
-use function auth;
-use function config;
-
 class PushNotificationController extends Controller
 {
     /**

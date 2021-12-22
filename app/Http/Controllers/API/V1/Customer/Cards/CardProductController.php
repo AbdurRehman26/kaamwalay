@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Customer\Cards;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\Card\StoreCardProductRequest;
-use App\Http\Resources\API\CardProduct\CardProductResource;
+use App\Http\Resources\API\V1\CardProduct\CardProductResource;
 use App\Services\Card\CardProductService;
 use Exception;
 use Illuminate\Http\JsonResponse;

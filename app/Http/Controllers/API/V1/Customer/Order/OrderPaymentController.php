@@ -10,8 +10,6 @@ use App\Services\Payment\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-use function throw_unless;
-
 class OrderPaymentController extends Controller
 {
     public function __construct(protected PaymentService $paymentService)

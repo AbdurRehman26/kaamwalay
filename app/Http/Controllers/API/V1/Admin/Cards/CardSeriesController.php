@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Admin\Cards;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\CardSeries\CardSeriesCollection;
+use App\Http\Resources\API\V1\CardSeries\CardSeriesCollection;
 use App\Services\Admin\Card\CardSeriesService;
 
 class CardSeriesController extends Controller

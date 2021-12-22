@@ -1,25 +1,25 @@
 <?php
 
-use App\Http\Controllers\API\Auth\ChangePasswordController;
-use App\Http\Controllers\API\Auth\ForgotPasswordController;
-use App\Http\Controllers\API\Auth\LoginController;
-use App\Http\Controllers\API\Auth\RegisterController;
-use App\Http\Controllers\API\Auth\ResetPasswordController;
-use App\Http\Controllers\API\ConfigurationsController;
-use App\Http\Controllers\API\Customer\Address\CustomerAddressController;
-use App\Http\Controllers\API\Customer\Address\StateController;
-use App\Http\Controllers\API\Customer\Cards\CardProductController;
-use App\Http\Controllers\API\Customer\Cards\UserCardController;
-use App\Http\Controllers\API\Customer\Order\OrderController;
-use App\Http\Controllers\API\Customer\Order\OrderPaymentController;
-use App\Http\Controllers\API\Customer\Order\PaymentMethodController;
-use App\Http\Controllers\API\Customer\Order\PaymentPlanController;
-use App\Http\Controllers\API\Customer\Order\ShippingFeeController;
-use App\Http\Controllers\API\Customer\Order\ShippingMethodController;
-use App\Http\Controllers\API\Customer\PaymentCardController;
-use App\Http\Controllers\API\Customer\ProfileController;
-use App\Http\Controllers\API\Customer\PushNotificationController;
-use App\Http\Controllers\API\Files\UploadController;
+use App\Http\Controllers\API\V1\Auth\ChangePasswordController;
+use App\Http\Controllers\API\V1\Auth\ForgotPasswordController;
+use App\Http\Controllers\API\V1\Auth\LoginController;
+use App\Http\Controllers\API\V1\Auth\RegisterController;
+use App\Http\Controllers\API\V1\Auth\ResetPasswordController;
+use App\Http\Controllers\API\V1\ConfigurationsController;
+use App\Http\Controllers\API\V1\Customer\Address\CustomerAddressController;
+use App\Http\Controllers\API\V1\Customer\Address\StateController;
+use App\Http\Controllers\API\V1\Customer\Cards\CardProductController;
+use App\Http\Controllers\API\V1\Customer\Cards\UserCardController;
+use App\Http\Controllers\API\V1\Customer\Order\OrderController;
+use App\Http\Controllers\API\V1\Customer\Order\OrderPaymentController;
+use App\Http\Controllers\API\V1\Customer\Order\PaymentMethodController;
+use App\Http\Controllers\API\V1\Customer\Order\PaymentPlanController;
+use App\Http\Controllers\API\V1\Customer\Order\ShippingFeeController;
+use App\Http\Controllers\API\V1\Customer\Order\ShippingMethodController;
+use App\Http\Controllers\API\V1\Customer\PaymentCardController;
+use App\Http\Controllers\API\V1\Customer\ProfileController;
+use App\Http\Controllers\API\V1\Customer\PushNotificationController;
+use App\Http\Controllers\API\V1\Files\UploadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,4 +85,3 @@ Route::prefix('files')->group(function () {
         Route::post('presign', [UploadController::class, 'presignUpload']);
     });
 });
-

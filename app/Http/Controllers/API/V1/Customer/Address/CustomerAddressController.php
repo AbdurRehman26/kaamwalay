@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\API\V1\Customer\Address;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\Customer\Address\CustomerAddressCollection;
-use App\Http\Resources\API\Customer\Address\CustomerAddressResource;
+use App\Http\Resources\API\V1\Customer\Address\CustomerAddressCollection;
+use App\Http\Resources\API\V1\Customer\Address\CustomerAddressResource;
 use App\Models\CustomerAddress;
-
-use function auth;
 
 class CustomerAddressController extends Controller
 {

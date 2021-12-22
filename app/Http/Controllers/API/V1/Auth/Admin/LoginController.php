@@ -9,11 +9,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-use function auth;
-use function config;
-use function throw_if;
-use function throw_unless;
-
 class LoginController extends Controller
 {
     public function __invoke(LoginRequest $request): JsonResponse

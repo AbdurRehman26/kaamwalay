@@ -6,16 +6,13 @@ use App\Exceptions\API\Auth\AgsAuthenticationException;
 use App\Exceptions\API\Customer\InvalidAgsDataForCustomer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Customer\UpdateCustomerRequest;
-use App\Http\Resources\API\Customer\User\UserResource;
+use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Models\User;
 use App\Services\AGS\AgsService;
 use App\Services\CustomerProfileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-
-use function auth;
-use function throw_if;
 
 class ProfileController extends Controller
 {

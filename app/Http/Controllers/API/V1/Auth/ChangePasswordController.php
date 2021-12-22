@@ -11,11 +11,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
-use function auth;
-use function config;
-use function logger;
-use function throw_if;
-
 class ChangePasswordController extends Controller
 {
     use AuthenticatableWithAGS;

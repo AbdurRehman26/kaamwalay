@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\API\V1\Customer\Address;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\Customer\Address\State\StateCollection;
-use App\Http\Resources\API\Customer\Address\State\StateResource;
+use App\Http\Resources\API\V1\Customer\Address\State\StateCollection;
+use App\Http\Resources\API\V1\Customer\Address\State\StateResource;
 use App\Models\State;
 use Illuminate\Support\Facades\Cache;
-
-use function now;
 
 class StateController extends Controller
 {

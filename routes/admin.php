@@ -1,17 +1,17 @@
 <?php
 
-use App\Http\Controllers\API\Admin\Cards\CardProductController;
-use App\Http\Controllers\API\Admin\Cards\CardSeriesController;
-use App\Http\Controllers\API\Admin\Cards\CardSetController;
-use App\Http\Controllers\API\Admin\Order\OrderController;
-use App\Http\Controllers\API\Admin\Order\OrderItemController;
-use App\Http\Controllers\API\Admin\Order\OrderPaymentController;
-use App\Http\Controllers\API\Admin\Order\OrderRefundController;
-use App\Http\Controllers\API\Admin\Order\UserCardController;
-use App\Http\Controllers\API\Auth\Admin\LoginController;
-use App\Http\Controllers\API\Admin\OrderStatusHistoryController;
+use App\Http\Controllers\API\V1\Admin\Cards\CardProductController;
+use App\Http\Controllers\API\V1\Admin\Cards\CardSeriesController;
+use App\Http\Controllers\API\V1\Admin\Cards\CardSetController;
+use App\Http\Controllers\API\V1\Admin\Order\OrderController;
+use App\Http\Controllers\API\V1\Admin\Order\OrderExtraChargeController;
+use App\Http\Controllers\API\V1\Admin\Order\OrderItemController;
+use App\Http\Controllers\API\V1\Admin\Order\OrderPaymentController;
+use App\Http\Controllers\API\V1\Admin\Order\OrderRefundController;
+use App\Http\Controllers\API\V1\Admin\Order\UserCardController;
+use App\Http\Controllers\API\V1\Admin\OrderStatusHistoryController;
+use App\Http\Controllers\API\V1\Auth\Admin\LoginController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\Admin\Order\OrderExtraChargeController;
 
 /*
 |--------------------------------------------------------------------------

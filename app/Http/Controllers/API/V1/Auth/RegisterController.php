@@ -10,9 +10,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-use function auth;
-use function config;
-
 class RegisterController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse

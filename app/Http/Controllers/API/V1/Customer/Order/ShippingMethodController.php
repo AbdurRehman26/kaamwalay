@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodCollection;
-use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
+use App\Http\Resources\API\V1\Customer\Order\ShippingMethod\ShippingMethodCollection;
+use App\Http\Resources\API\V1\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\ShippingMethod;
 
 class ShippingMethodController extends Controller

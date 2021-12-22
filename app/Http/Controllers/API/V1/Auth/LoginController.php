@@ -6,16 +6,12 @@ use App\Concerns\AGS\AuthenticatableWithAGS;
 use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Auth\LoginRequest;
-use App\Http\Resources\API\Customer\User\UserResource;
+use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Services\CustomerProfileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-
-use function auth;
-use function config;
-use function throw_if;
 
 class LoginController extends Controller
 {

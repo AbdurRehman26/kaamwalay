@@ -5,14 +5,12 @@ namespace App\Http\Controllers\API\V1\Admin\Order;
 use App\Exceptions\API\Admin\Order\FailedRefund;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Admin\Order\RefundOrderRequest;
-use App\Http\Resources\API\Admin\Order\OrderPaymentResource;
+use App\Http\Resources\API\V1\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Services\Admin\OrderService;
 use App\Services\Payment\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-
-use function auth;
 
 class OrderRefundController extends Controller
 {

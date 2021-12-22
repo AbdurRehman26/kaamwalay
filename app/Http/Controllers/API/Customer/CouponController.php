@@ -25,9 +25,7 @@ class CouponController extends Controller
     public function show(string $couponCode, ShowCouponRequest $request): JsonResponse|CouponResource
     {
         try {
-
             $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponable_type', 'couponable_id'));
-
         } catch (\Exception $e) {
             return new JsonResponse(
                 [
@@ -47,7 +45,7 @@ class CouponController extends Controller
         $discountedAmount = $this->couponService->calculateDiscount(
             $coupon,
             $this->createOrderService->createDraftOrder(
-                $request->safe()->only('payment_plan', 'payment_method', 'shipping_method', 'items')
+                $request->safe()->only('payment_plan', 'items')
             )
         );
 

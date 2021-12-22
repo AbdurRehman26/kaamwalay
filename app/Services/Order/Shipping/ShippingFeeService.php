@@ -16,9 +16,4 @@ class ShippingFeeService
     {
         return InsuredShippingFeeCalculator::calculateForOrder($order);
     }
-
-    public static function calculateForDraftOrder(Order $order): float
-    {
-        return InsuredShippingFeeCalculator::calculateForDraftOrder($order);
-    }
 }

@@ -10,7 +10,6 @@ class ServiceFeeCoupon extends CouponApplicables implements CouponApplicableInte
     public function calculateDiscount(Coupon $coupon, Order $order): float
     {
         $serviceFee = $order->paymentPlan->price * array_sum(array_column($order->items, 'quantity'));
-
-        return $this->getDiscountedAmount($coupon, $serviceFee);
+        return $this->getDiscountedAmount($coupon, applyDiscountOnAmount: $serviceFee);
     }
 }

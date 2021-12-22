@@ -82,6 +82,7 @@ class CreateOrderService
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
+        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : null);
         $this->storeShippingFee();
         $this->storeShippingFeeAndGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
@@ -180,7 +181,8 @@ class CreateOrderService
     protected function storeShippingFeeAndGrandTotal()
     {
         $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;
+        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount;
 
         GrandTotalValidator::validate($this->order);
 
@@ -231,5 +233,16 @@ class CreateOrderService
         }
 
         return $orderItemsCollection;
+    }
+
+    protected function storeCouponAndDiscount(array|null $couponData): void
+    {
+        if (! empty($couponData['code'])) {
+            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
+            $this->order->items = $this->order->orderItems->toArray();
+            $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+            unset($this->order->items);
+            $this->order->save();
+        }
     }
 }

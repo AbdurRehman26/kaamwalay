@@ -16,6 +16,13 @@ class Coupon extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const TYPE_FIXED = 1;
+    const TYPE_PERCENTAGE = 2;
+    const COUPON_TYPE_MAPPING = [
+        'fixed' => self::TYPE_FIXED,
+        'percentage' => self::TYPE_PERCENTAGE,
+    ];
+
     protected $fillable = [
         'created_by',
         'coupon_applicable_id',

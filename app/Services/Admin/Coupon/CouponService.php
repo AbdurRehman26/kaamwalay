@@ -9,6 +9,7 @@ use App\Models\Coupon;
 use App\Models\CouponApplicable;
 use App\Models\CouponStat;
 use App\Models\CouponStatus;
+use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
 use Countable;
@@ -16,6 +17,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 use IteratorAggregate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -57,8 +59,6 @@ class CouponService
             ->paginate(request('per_page', self::LIST_COUPONS_PER_PAGE));
     }
 
-
-
     public function getCoupon(int $couponId): Model|QueryBuilder
     {
         return QueryBuilder::for(Coupon::class)
@@ -73,12 +73,12 @@ class CouponService
             ->findOrFail($couponId);
     }
 
-
     /**
      * @throws CouponCodeAlreadyExistsException
      */
     public function storeCoupon(array $data, User $user): Coupon
     {
+        $this->validateDiscountValue($data);
         $coupon = new Coupon(Arr::except(array: $data, keys: ['code']));
 
         $coupon->code = $this->getCouponCode($data['code']);
@@ -108,7 +108,6 @@ class CouponService
 
         return $this->couponStatusService->changeStatus($coupon, $couponStatus, $referrer);
     }
-
 
     /**
      * @throws CouponCodeAlreadyExistsException
@@ -195,5 +194,49 @@ class CouponService
         );
 
         return $couponableEntity->get();
+    }
+
+    protected function validateDiscountValue(array $data): void
+    {
+        if (
+            $data['type'] === array_search(Coupon::TYPE_PERCENTAGE, Coupon::COUPON_TYPE_MAPPING)
+        ) {
+            $this->validatePercentageDiscountValue($data['discount_value']);
+
+            return;
+        }
+        $this->validateFixedDiscountValue(
+            $data['coupon_applicable_id'],
+            $data['discount_value'],
+            $data['couponables'] ?? []
+        );
+    }
+
+    protected function validatePercentageDiscountValue(int|float $discountValue): void
+    {
+        if ($discountValue > 100) {
+            throw ValidationException::withMessages([
+                'discount_value' => 'Discount value can not be more than 100',
+            ]);
+        }
+    }
+
+    protected function validateFixedDiscountValue(
+        int $couponApplicableId,
+        int|float $discountValue,
+        array $couponables
+    ): void {
+        if ($couponApplicableId === CouponApplicable::FOR_PAYMENT_PLANS) {
+            $invalidCouponables = collect($couponables)->contains(function (int $couponable) use ($discountValue) {
+                $couponable = PaymentPlan::find($couponable);
+
+                return $discountValue > $couponable->price;
+            });
+            if ($invalidCouponables) {
+                throw ValidationException::withMessages([
+                    'discount_value' => 'Discount value can not be more than selected price level.',
+                ]);
+            }
+        }
     }
 }

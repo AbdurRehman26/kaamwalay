@@ -32,10 +32,6 @@ class CalculateCouponDiscountRequest extends FormRequest
             'items.*.card_product.id' => 'required|integer',
             'items.*.quantity' => 'required|integer',
             'items.*.declared_value_per_unit' => 'required|integer',
-            'shipping_method' => 'required|array',
-            'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
-            'payment_method' => 'required|array',
-            'payment_method.id' => 'required|integer|exists:payment_methods,id',
         ];
     }
 }

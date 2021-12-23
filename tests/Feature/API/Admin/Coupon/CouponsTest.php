@@ -150,7 +150,6 @@ test('admin can create coupon 100% discount', function () {
         'type' => 'percentage',
         'discount_value' => 100,
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
-        'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => true,
     ])
         ->assertCreated();

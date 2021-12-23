@@ -20,6 +20,21 @@ class StoreCouponRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        // The design does not have a date picker when is_permanent is selected
+        if ($this->get('is_permanent')) {
+            $this->merge([
+                'available_from' => now()->startOfDay()->toDateString(),
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array

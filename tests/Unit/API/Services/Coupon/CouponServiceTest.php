@@ -61,10 +61,10 @@ it('calculates discount for service level order', function () {
     $discount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
     if ($this->coupon->type === 'fixed') {
-        $couponDiscount = ($this->paymentPlan->price - $this->coupon->discount_value) * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+        $couponDiscount = (float) ($this->coupon->discount_value) * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
     } else {
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
-        $couponDiscount = (($this->coupon->discount_value * $serviceFee) / 100);
+        $couponDiscount = (float) (($this->coupon->discount_value * $serviceFee) / 100);
     }
 
     expect($discount)->toBe($couponDiscount);
@@ -79,8 +79,7 @@ it('calculates discount for service fee order', function () {
     $discount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
     if ($this->coupon->type === 'fixed') {
-        $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
-        $couponDiscount = min(($serviceFee - $this->coupon->discount_value), $serviceFee);
+        $couponDiscount = $this->coupon->discount_value;
     } else {
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $couponDiscount = (($this->coupon->discount_value * $serviceFee) / 100);

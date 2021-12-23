@@ -26,10 +26,10 @@ export class OrderItemsRepository extends Repository<OrderItemEntity> {
     }
 
     public async changeOrderItemNotes(input: ChangeOrderItemNotesDTO) {
-        const { orderId, orderItemId, notes } = input;
+        const { orderId, orderItemId, notes, internalNotes } = input;
         const { data } = await this.endpoint.put(
             `${orderItemId}/notes`,
-            { notes },
+            { notes, internalNotes },
             {
                 params: {
                     orderId,

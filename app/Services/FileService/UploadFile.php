@@ -17,6 +17,7 @@ final class UploadFile
         protected string $prefix = '',
         protected string $suffix = '',
         protected string $directory = '',
+        protected string $bucket = '',
     ) {
     }
 
@@ -31,6 +32,7 @@ final class UploadFile
             $data['prefix'] ?? '',
             $data['suffix'] ?? '',
             $data['directory'] ?? '',
+            $data['bucket'] ?? '',
         );
     }
 
@@ -150,6 +152,18 @@ final class UploadFile
     public function setDirectory(string $directory): UploadFile
     {
         $this->directory = $directory;
+
+        return $this;
+    }
+
+    public function getBucket(): string
+    {
+        return $this->bucket;
+    }
+
+    public function setBucket(string $bucket): UploadFile
+    {
+        $this->bucket = $bucket;
 
         return $this;
     }

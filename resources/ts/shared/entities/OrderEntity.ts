@@ -17,11 +17,13 @@ import { PaymentPlanEntity } from './PaymentPlanEntity';
 import { ShipmentEntity } from './ShipmentEntity';
 import { ShippingMethodEntity } from './ShippingMethodEntity';
 import { UserEntity } from './UserEntity';
+import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 
 export class OrderEntity extends Entity {
     public orderNumber!: string;
     public numberOfCards!: number;
     public totalDeclaredValue!: number;
+    public discountedAmount!: string;
     public grandTotal!: number;
     public extraChargeTotal!: number;
     public refundTotal!: number;
@@ -32,6 +34,9 @@ export class OrderEntity extends Entity {
     public reviewedAt!: string;
     public reviewedBy!: string;
     public notes!: string;
+
+    @Type(() => OrderCouponEntity)
+    public coupon!: OrderCouponEntity;
 
     @Type(() => OrderStatusEntity)
     public orderStatus!: OrderStatusEntity;

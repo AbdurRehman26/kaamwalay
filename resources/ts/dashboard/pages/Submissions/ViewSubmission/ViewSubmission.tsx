@@ -37,6 +37,7 @@ export function ViewSubmission() {
                     'orderShipment',
                     'orderItems',
                     'orderStatus',
+                    'coupon',
                 ],
             },
         },
@@ -68,6 +69,7 @@ export function ViewSubmission() {
             <ViewSubmissionInformation
                 serviceLevel={`$${data?.paymentPlan?.price} / Card`}
                 numberOfCards={data?.numberOfCards}
+                discountedAmount={data?.discountedAmount}
                 shippingMethod={data?.shippingMethod?.name}
                 createdAt={data?.createdAt}
                 declaredValue={data?.totalDeclaredValue}
@@ -86,6 +88,7 @@ export function ViewSubmission() {
             <SubmissionViewBilling
                 shippingAddress={data?.shippingAddress}
                 billingAddress={data?.billingAddress}
+                coupon={data?.coupon}
                 payment={data?.orderPayment}
             />
             <Box marginTop={'24px'} />

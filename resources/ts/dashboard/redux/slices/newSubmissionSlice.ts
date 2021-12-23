@@ -549,6 +549,20 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData = action.payload;
         },
         clearSubmissionState: (state) => initialState,
+        resetCouponState: (state) => {
+            state.couponState = {
+                isCouponValid: false,
+                couponCode: '',
+                validCouponId: -1,
+                isCouponApplied: false,
+                appliedCouponData: {
+                    id: -1,
+                    discountStatement: '',
+                    discountValue: '',
+                    discountedAmount: 0,
+                },
+            };
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state) => {

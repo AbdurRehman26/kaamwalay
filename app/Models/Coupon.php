@@ -97,6 +97,11 @@ class Coupon extends Model
         return $this->coupon_status_id === CouponStatus::STATUS_EXPIRED;
     }
 
+    public function isActive(): bool
+    {
+        return $this->coupon_status_id === CouponStatus::STATUS_ACTIVE;
+    }
+
     public function scopeIsActive(Builder $query): Builder
     {
         return $query->where('coupon_status_id', '=', CouponStatus::STATUS_ACTIVE);
@@ -119,16 +124,6 @@ class Coupon extends Model
             $subQuery->where('couponables_type', '=', Couponable::COUPONABLE_TYPES[$couponParams['couponables_type']])
                     ->where('couponables_id', '=', $couponParams['couponables_id']);
         })->orDoesntHave('couponAble');
-    }
-
-    public function discountStatement(): string
-    {
-        switch ($this->type) {
-            case 'percentage':
-                return (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label;
-            default:
-                return $this->discount_value . ' Off';
-        }
     }
 
     public function scopeStatus(Builder $query, string|int $status): Builder

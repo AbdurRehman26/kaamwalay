@@ -132,6 +132,7 @@ class Order extends Model
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),
             AllowedInclude::relationship('refunds'),
+            AllowedInclude::relationship('coupon'),
         ];
     }
 

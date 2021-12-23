@@ -359,6 +359,16 @@
                                     ${{number_format($order->service_fee,2)}}
                                 </td>
                             </tr>
+                            @if(! empty($order->discounted_amount))
+                                <tr class="info-line">
+                                    <td class="info-title">
+                                        Promo Code Discount:
+                                    </td>
+                                    <td class="info-content">
+                                        -${{number_format($order->discounted_amount,2)}}
+                                    </td>
+                                </tr>
+                            @endif
                             <tr class="info-line">
                                 <td class="info-title">
                                     Insured Shipping:

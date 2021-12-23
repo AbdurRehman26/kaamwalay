@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Coupon;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -11,7 +12,6 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Services\Payment\PaymentService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -36,6 +36,7 @@ class OrderFactory extends Factory
             'service_fee' => $this->faker->randomFloat(2, 50, 500),
             'grand_total' => $this->faker->randomFloat(2, 20, 10000),
             'user_id' => User::factory()->withRole(config('permission.roles.customer')),
+            'coupon_id' => Coupon::factory()->create(),
             'order_status_id' => OrderStatus::factory(),
             'payment_plan_id' => PaymentPlan::factory(),
             'shipping_order_address_id' => OrderAddress::factory(),

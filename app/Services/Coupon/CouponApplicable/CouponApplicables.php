@@ -2,7 +2,6 @@
 
 namespace App\Services\Coupon\CouponApplicable;
 
-use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\PaymentPlan;
 

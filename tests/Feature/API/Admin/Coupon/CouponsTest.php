@@ -206,3 +206,35 @@ test('admin can create coupon with same start and end date date of coupon availa
     ])
         ->assertCreated();
 });
+
+test('admin can create coupon with today start date', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'percentage',
+        'discount_value' => 10,
+        'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
+        'available_from' => now()->toDateString(),
+        'is_permanent' => false,
+        'available_till' => now()->addDays(2)->toDateString(),
+        'couponables' => [1,2,3],
+    ])
+        ->assertCreated();
+});
+
+test('admin can not create coupon with past start date', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'percentage',
+        'discount_value' => 10,
+        'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
+        'available_from' => now()->subDays(2)->toDateString(),
+        'is_permanent' => false,
+        'available_till' => now()->addDays(2)->toDateString(),
+        'couponables' => [1,2,3],
+    ])
+        ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+});

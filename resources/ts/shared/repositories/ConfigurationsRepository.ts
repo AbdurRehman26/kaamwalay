@@ -8,7 +8,7 @@ export class ConfigurationsRepository extends Repository<ConfigurationEntity> {
     readonly model = ConfigurationEntity;
 
     public async getConfigurations() {
-        const { data } = await this.endpoint.get('');
+        const { data } = await this.endpoint.post('');
         return this.toEntity(data);
     }
 }

@@ -76,7 +76,7 @@ Route::prefix('customer')->group(function () {
 });
 
 Route::prefix('configurations')->group(function () {
-    Route::get('/', [ConfigurationsController::class, 'getConfigurations']);
+    Route::post('/', [ConfigurationsController::class, 'getConfigurations']);
     Route::delete('/', [ConfigurationsController::class, 'purgeConfigurations'])->middleware('auth');
 });
 

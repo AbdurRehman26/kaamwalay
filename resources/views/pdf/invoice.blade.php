@@ -336,7 +336,7 @@
                     @else
                         {{$billingAddress->getFullName()}}
                         <br/>
-                        {{$billingAddress->address}}
+                        {{$billingAddress->address}}@if($billingAddress->flat), APT # {{ $billingAddress->flat }}@endif
                         <br/>
                         {{$billingAddress->city}}, {{$billingAddress->state}} {{$billingAddress->zip}}, {{$billingAddress->country->code}}
                         <br/>

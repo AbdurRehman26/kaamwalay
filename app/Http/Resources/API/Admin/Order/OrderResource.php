@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\Admin\Order;
 
 use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCollection;
+use App\Http\Resources\API\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderAddressResource;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
  * @property mixed $reviewedBy
  * @property mixed $orderItems
  * @property mixed $invoice
+ * @property mixed $orderLabel
  * @property mixed $orderPayment
  * @property mixed $billingAddress
  * @property mixed $shippingAddress
@@ -79,6 +81,7 @@ class OrderResource extends BaseResource
             'order_payment' => $this->whenLoaded('firstOrderPayment', OrderPaymentResource::class),
             'order_items' => $this->whenLoaded('orderItems', OrderItemCollection::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
+            'order_label' => $this->whenLoaded('orderLabel', OrderLabelResource::class),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
             'extra_charges' => $this->whenLoaded('extraCharges', OrderPaymentCollection::class),

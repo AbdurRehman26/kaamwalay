@@ -6,6 +6,7 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
+use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
@@ -61,6 +62,10 @@ class OrderStatusHistoryService
             throw_if(empty($response), OrderCanNotBeMarkedAsReviewed::class);
 
             CreateOrderFoldersOnDropbox::dispatch($order);
+        }
+
+        if ($orderStatusId === OrderStatus::GRADED) {
+            CreateOrderLabel::dispatch($order);
         }
 
         Order::query()

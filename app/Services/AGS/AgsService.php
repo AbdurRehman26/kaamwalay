@@ -113,7 +113,7 @@ class AgsService
                 'release_date' => ! empty($data['card']['pokemon_set']['release_date']) ?
                     Carbon::parse($data['card']['pokemon_set']['release_date'])->format('F d, Y') :
                     null,
-                'number' => $data['card']['pokemon_set']['cards_number'] ?? null,
+                'number' => $data['card']['card_number_order'] ?? null,
             ],
             'overall' => $this->prepareOverallGradesForPublicPage($data),
             'front_scan' => $this->prepareFrontScanGradesForPublicPage($data),
@@ -128,7 +128,7 @@ class AgsService
             'Pokemon' . ' ' .
             $card['pokemon_serie']['name'] . ' ' .
             $card['pokemon_set']['name'] . ' ' .
-            $card['pokemon_set']['cards_number'] . ' ' .
+            $card['card_number_order'] . ' ' .
             $card['name'];
     }
 
@@ -317,5 +317,10 @@ class AgsService
     public function createCard(array $data): array
     {
         return $this->client->createCard($data);
+    }
+
+    public function createCardLabel(array $data): array
+    {
+        return $this->client->createCardLabel($data);
     }
 }

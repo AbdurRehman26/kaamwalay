@@ -43,12 +43,18 @@ class StoreCouponRequest extends FormRequest
     {
         return [
             'code' => ['required'],
+            'description' => ['required', 'max:250'],
             'type' => ['required', 'in:fixed,percentage'],
             'discount_value' => ['required', 'numeric'],
             'coupon_applicable_id' => ['required', 'exists:coupon_applicables,id'],
             'available_from' => ['required', 'date_format:Y-m-d'],
             'is_permanent' => ['required', 'filled'],
-            'available_till' => [Rule::requiredIf(! boolval($this->get('is_permanent'))), 'nullable', 'date_format:Y-m-d'],
+            'available_till' => [
+                Rule::requiredIf(! boolval($this->get('is_permanent'))),
+                'nullable',
+                'date_format:Y-m-d',
+                'after_or_equal:available_from',
+            ],
             'couponables' => [
                 Rule::requiredIf(in_array($this->get('coupon_applicable_id'), CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES)),
                 'array',

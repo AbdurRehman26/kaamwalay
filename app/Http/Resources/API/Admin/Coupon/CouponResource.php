@@ -19,6 +19,7 @@ class CouponResource extends BaseResource
         return [
             'id' => $this->id,
             'code' => $this->code,
+            'description' => $this->description,
             'type' => $this->type,
             'discount_value' => $this->discount_value,
             'coupon_applicable_id' => $this->coupon_applicable_id,

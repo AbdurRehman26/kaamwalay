@@ -35,7 +35,8 @@ test('admin can get a list of coupons', function () {
 test('admin can create coupon', function () {
     actingAs($this->user);
     postJson(route('coupons.store'), [
-        'code' => $this->faker->word,
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
         'type' => 'fixed',
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
@@ -56,7 +57,8 @@ test('admin can create coupon for specific users', function () {
     actingAs($this->user);
     $users = User::factory(5)->create()->pluck('id');
     postJson(route('coupons.store'), [
-        'code' => $this->faker->word,
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
         'type' => 'fixed',
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::FOR_USERS,
@@ -73,7 +75,8 @@ test('admin can create coupon for specific payment plan', function () {
     actingAs($this->user);
     $paymentPlans = PaymentPlan::factory(5)->create()->pluck('id');
     postJson(route('coupons.store'), [
-        'code' => $this->faker->word,
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
         'type' => 'fixed',
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
@@ -133,7 +136,8 @@ test('admin can search for specific coupon with coupon status from the coupon li
 test('admin can not create coupon with more than 100% discount', function () {
     actingAs($this->user);
     postJson(route('coupons.store'), [
-        'code' => $this->faker->word,
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
         'type' => 'percentage',
         'discount_value' => 101,
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
@@ -146,7 +150,8 @@ test('admin can not create coupon with more than 100% discount', function () {
 test('admin can create coupon 100% discount', function () {
     actingAs($this->user);
     postJson(route('coupons.store'), [
-        'code' => $this->faker->word,
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
         'type' => 'percentage',
         'discount_value' => 100,
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
@@ -158,7 +163,8 @@ test('admin can create coupon 100% discount', function () {
 test('admin can not create coupon with fixed value more than service level', function () {
     actingAs($this->user);
     postJson(route('coupons.store'), [
-        'code' => $this->faker->word,
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
         'type' => 'percentage',
         'discount_value' => 1000000000000000,
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
@@ -167,4 +173,36 @@ test('admin can not create coupon with fixed value more than service level', fun
         'couponables' => [1,2,3],
     ])
         ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+});
+
+test('admin can not create coupon with end date less than the start date of coupon availability', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'percentage',
+        'discount_value' => 10,
+        'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
+        'available_from' => now()->addDays(2)->toDateString(),
+        'is_permanent' => false,
+        'available_till' => now()->toDateString(),
+        'couponables' => [1,2,3],
+    ])
+        ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+});
+
+test('admin can create coupon with same start and end date date of coupon availability', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'percentage',
+        'discount_value' => 10,
+        'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
+        'available_from' => now()->addDays(2)->toDateString(),
+        'is_permanent' => false,
+        'available_till' => now()->addDays(2)->toDateString(),
+        'couponables' => [1,2,3],
+    ])
+        ->assertCreated();
 });

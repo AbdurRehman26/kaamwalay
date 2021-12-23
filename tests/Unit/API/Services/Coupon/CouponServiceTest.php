@@ -58,7 +58,6 @@ beforeEach(function () {
 });
 
 it('calculates discount for service level order', function () {
-
     $discount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
     if ($this->coupon->type === 'fixed') {
@@ -72,7 +71,6 @@ it('calculates discount for service level order', function () {
 });
 
 it('calculates discount for service fee order', function () {
-
     $this->coupon->couponable()->delete();
     $this->coupon->couponApplicable()->update(
         ['code' => 'service_fee', 'label' => 'Service Fee']
@@ -81,10 +79,8 @@ it('calculates discount for service fee order', function () {
     $discount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
     if ($this->coupon->type === 'fixed') {
-
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $couponDiscount = min(($serviceFee - $this->coupon->discount_value), $serviceFee);
-
     } else {
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $couponDiscount = (($this->coupon->discount_value * $serviceFee) / 100);

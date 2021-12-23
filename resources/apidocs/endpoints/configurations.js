@@ -1,5 +1,5 @@
 /**
- * @api {post} /configurations List configurations
+ * @api {get} /configurations List configurations
  * @apiGroup Configurations
  * @apiName List configurations
  *

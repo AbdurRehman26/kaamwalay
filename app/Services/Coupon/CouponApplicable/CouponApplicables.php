@@ -2,12 +2,23 @@
 
 namespace App\Services\Coupon\CouponApplicable;
 
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\PaymentPlan;
 
-class CouponApplicables
+trait CouponApplicables
 {
-    protected function getPaymentPlan(array|Order $order): PaymentPlan
+    public function calculateDiscount(Coupon $coupon, Order|array $order): float
+    {
+        switch ($coupon->type) {
+            case 'percentage':
+                return $this->getPercentageDiscount($coupon, $order);
+            default:
+                return $this->getFixedDiscount($coupon, $order);
+        }
+    }
+
+    public function getPaymentPlan(array|Order $order): PaymentPlan
     {
         if (! empty($order['payment_plan']['id'])) {
             return PaymentPlan::find($order['payment_plan']['id']);
@@ -16,7 +27,7 @@ class CouponApplicables
         return $order->paymentPlan;
     }
 
-    protected function getOrderItems(array|Order $order): array
+    public function getOrderItems(array|Order $order): array
     {
         if (! empty($order['items'])) {
             return $order['items'];

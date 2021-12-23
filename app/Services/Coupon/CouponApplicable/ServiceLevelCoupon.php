@@ -5,17 +5,9 @@ namespace App\Services\Coupon\CouponApplicable;
 use App\Models\Coupon;
 use App\Models\Order;
 
-class ServiceLevelCoupon extends CouponApplicables implements CouponApplicableInterface
+class ServiceLevelCoupon implements CouponApplicableInterface
 {
-    public function calculateDiscount(Coupon $coupon, Order|array $order): float
-    {
-        switch ($coupon->type) {
-            case 'percentage':
-                return $this->getPercentageDiscount($coupon, $order);
-            default:
-                return $this->getFixedDiscount($coupon, $order);
-        }
-    }
+    use CouponApplicables;
 
     public function getFixedDiscount(Coupon $coupon, Order|array $order): float
     {

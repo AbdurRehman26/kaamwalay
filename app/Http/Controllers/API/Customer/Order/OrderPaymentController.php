@@ -21,7 +21,7 @@ class OrderPaymentController extends Controller
     {
         $this->authorize('view', $order);
 
-        throw_if(! $order->coupon->isActive(), CouponExpiredOrInvalid::class);
+        throw_if((! empty($order->coupon) && ! $order->coupon->isActive()), CouponExpiredOrInvalid::class);
         throw_unless($order->isPayable(), OrderNotPayable::class);
 
         $response = $this->paymentService->charge($order);

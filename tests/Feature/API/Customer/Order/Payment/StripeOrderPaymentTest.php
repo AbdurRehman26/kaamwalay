@@ -18,6 +18,7 @@ beforeEach(function () {
 
     $this->order = Order::factory()->create([
         'user_id' => $user->id,
+        'coupon_id' => null,
         'payment_method_id' => 1,
         'order_status_id' => OrderStatus::PAYMENT_PENDING,
     ]);
@@ -37,7 +38,6 @@ test('user can be charged successfully', function () {
         'payment_provider_reference_id' => Str::random(25),
     ]);
     $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments");
-
     $response->assertOk();
     $response->assertJsonStructure(['data' => ['id', 'charges']]);
     $response->assertJsonPath('data.amount', $this->order->grand_total_cents);

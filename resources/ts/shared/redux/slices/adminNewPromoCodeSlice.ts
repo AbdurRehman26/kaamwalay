@@ -21,10 +21,12 @@ export interface NewPromoCodeDialogState {
     discountDateType: DiscountDateTypeEnum;
     isPermanent: boolean;
     applicables?: CouponApplicableEntity[];
+    isTableLoading: boolean;
 }
 
 const initialState: NewPromoCodeDialogState = {
     showNewPromoCodeDialog: false,
+    isTableLoading: false,
     modalTitle: 'Create New Promo Code',
     promoCode: '',
     availableFrom: '',
@@ -98,6 +100,9 @@ export const adminNewPromoCodeSlice = createSlice({
         setApplicables: (state, action: PayloadAction<CouponApplicableEntity[]>) => {
             state.applicables = action.payload;
         },
+        setIsTableLoading: (state, action: PayloadAction<boolean>) => {
+            state.isTableLoading = action.payload;
+        },
         setCouponablesForApplicables: (
             state,
             action: PayloadAction<{ applicableCode: string; couponables: any[] }>,
@@ -129,4 +134,5 @@ export const {
     setDiscountValue,
     setApplicables,
     setCouponablesForApplicables,
+    setIsTableLoading,
 } = adminNewPromoCodeSlice.actions;

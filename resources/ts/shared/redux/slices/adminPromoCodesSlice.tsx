@@ -6,7 +6,11 @@ import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { app } from '@shared/lib/app';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { StoreCouponDTO } from '@shared/dto/StoreCouponDTO';
-import { clearNewPromoCodeState, setShowNewPromoCodeDialog } from '@shared/redux/slices/adminNewPromoCodeSlice';
+import {
+    clearNewPromoCodeState,
+    setIsTableLoading,
+    setShowNewPromoCodeDialog,
+} from '@shared/redux/slices/adminNewPromoCodeSlice';
 
 interface StateType extends APIState<PromoCodeEntity> {}
 
@@ -17,12 +21,14 @@ export const changePromoCodeStatus = createAsyncThunk(
     async (input: { promoCodeID: number; newStatus: number }, thunkAPI) => {
         const promoCodesRepository = app(AdminPromoCodesRepository);
         try {
+            thunkAPI.dispatch(setIsTableLoading(true));
             const newStatusResponse = await promoCodesRepository.changePromoCodeStatus(input);
             NotificationsService.success('Promo Code Updated!');
-            window.location.reload();
+            thunkAPI.dispatch(setIsTableLoading(false));
             return newStatusResponse.data;
         } catch (e: any) {
             NotificationsService.exception(e);
+            thunkAPI.dispatch(setIsTableLoading(false));
             return thunkAPI.rejectWithValue(e);
         }
     },
@@ -31,12 +37,14 @@ export const changePromoCodeStatus = createAsyncThunk(
 export const deletePromoCode = createAsyncThunk('deletePromoCode', async (input: { promoCodeID: number }, thunkAPI) => {
     const promoCodesRepository = app(AdminPromoCodesRepository);
     try {
+        thunkAPI.dispatch(setIsTableLoading(true));
         await promoCodesRepository.deletePromoCode(input);
         NotificationsService.success('Promo Code Deleted');
-        window.location.reload();
+        thunkAPI.dispatch(setIsTableLoading(false));
         return input as any;
     } catch (e: any) {
         NotificationsService.exception(e);
+        thunkAPI.dispatch(setIsTableLoading(false));
         return thunkAPI.rejectWithValue(e);
     }
 });
@@ -44,14 +52,16 @@ export const deletePromoCode = createAsyncThunk('deletePromoCode', async (input:
 export const storeCoupon = createAsyncThunk('storeCoupon', async (input: StoreCouponDTO, thunkAPI) => {
     const promoCodesRepository = app(AdminPromoCodesRepository);
     try {
+        thunkAPI.dispatch(setIsTableLoading(true));
         const newCoupon = await promoCodesRepository.storeCoupon(input);
         NotificationsService.success('Promo Code Created!');
         thunkAPI.dispatch(setShowNewPromoCodeDialog(false));
         thunkAPI.dispatch(clearNewPromoCodeState());
-        window.location.reload();
+        thunkAPI.dispatch(setIsTableLoading(false));
         return newCoupon as any;
     } catch (e: any) {
         NotificationsService.exception(e);
+        thunkAPI.dispatch(setIsTableLoading(false));
         return thunkAPI.rejectWithValue(e);
     }
 });

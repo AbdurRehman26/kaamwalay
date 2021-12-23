@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import { Paper, TextField } from '@mui/material';
 import {
     clearNewPromoCodeState,
+    setCouponablesForApplicables,
     setDiscountApplicationType,
     setDiscountDateType,
     setDiscountEndDate,
@@ -31,9 +32,12 @@ import Checkbox from '@mui/material/Checkbox';
 import { LocalizationProvider } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import { DiscountApplicationEnums } from '@shared/constants/DiscountApplicationEnum';
-import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
+import { ServiceLevelApplicableItemEntity } from '@shared/entities/ServiceLevelApplicableItemEntity';
+import { storeCoupon } from '@shared/redux/slices/adminPromoCodesSlice';
+import moment from 'moment/moment';
 
 const useStyles = makeStyles(
     () => {
@@ -71,20 +75,26 @@ export function PromoCodeModal() {
     const discountType = useSharedSelector((state) => state.adminNewPromoCodeSlice.type);
     const discountValue = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountValue);
     const discountApplicationType = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountApplicationType);
-    const discountDateType = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountDateType);
-    const discountStartDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountStartDate);
-    const discountEndDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountEndDate);
+    const isPermanent = useSharedSelector((state) => state.adminNewPromoCodeSlice.isPermanent);
+    const discountStartDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.availableFrom);
+    const discountEndDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.availableTill);
     const showModal = useSharedSelector((state) => state.adminNewPromoCodeSlice.showNewPromoCodeDialog);
     const applicables = useSharedSelector((state) => state.adminNewPromoCodeSlice.applicables);
+    // @ts-ignore
+    const serviceLevelApplicableIndex = applicables.findIndex(
+        (applicableItem) => applicableItem.code === 'service_level',
+    );
+    const serviceLevelCouponables = useSharedSelector(
+        // @ts-ignore
+        (state) => state.adminNewPromoCodeSlice.applicables[serviceLevelApplicableIndex]?.couponables,
+    );
+    const apiService = useInjectable(APIService);
 
     const handleCloseModal = useCallback(() => {
         dispatch(setShowNewPromoCodeDialog(false));
         dispatch(clearNewPromoCodeState());
     }, [showModal]);
 
-    const availableServiceLevels = useSharedSelector(
-        (state) => state.adminNewPromoCodeSlice.availableApplicationServiceLevels,
-    );
     const selectedDiscountApplicationServiceLevels = useSharedSelector(
         (state) => state.adminNewPromoCodeSlice.selectedDiscountApplicationServiceLevelsIds,
     );
@@ -116,21 +126,34 @@ export function PromoCodeModal() {
     );
 
     const handleDiscountApplicationTypeRadioPress = useCallback(
-        (newDiscountApplicationType: any) => {
-            return () => {
-                dispatch(setDiscountApplicationType(newDiscountApplicationType));
+        (applicableId: number, applicableCode) => {
+            return async () => {
+                if (applicableCode === 'service_level') {
+                    const couponablesEndpoint = apiService.createEndpoint(
+                        `admin/couponable/entities?coupon_applicable_id=${applicableId}`,
+                    );
+                    const couponables = await couponablesEndpoint.get('');
+                    const mappedCouponables: ServiceLevelApplicableItemEntity[] = couponables.data.map((item: any) => {
+                        return {
+                            id: item.id,
+                            label: item.price,
+                        };
+                    });
+                    dispatch(setCouponablesForApplicables({ applicableCode, couponables: mappedCouponables }));
+                }
+                dispatch(setDiscountApplicationType(applicableCode));
             };
         },
         [discountApplicationType],
     );
 
     const handleDiscountDateTypeRadioPress = useCallback(
-        (newDiscountDateType: DiscountDateTypeEnum) => {
+        (incomingDateType: boolean) => {
             return () => {
-                dispatch(setDiscountDateType(newDiscountDateType));
+                dispatch(setDiscountDateType(incomingDateType));
             };
         },
-        [discountDateType],
+        [isPermanent],
     );
 
     const onServiceLevelPress = (serviceLevelId: number) => {
@@ -161,21 +184,33 @@ export function PromoCodeModal() {
         if (!discountValue) {
             validationErrors.push('Discount value is required');
         }
-        if (
-            discountApplicationType === DiscountApplicationEnums.selectServiceLevels &&
-            !selectedDiscountApplicationServiceLevels.length
-        ) {
+        if (discountApplicationType === 'service_level' && selectedDiscountApplicationServiceLevels.length === 1) {
             validationErrors.push('At least one service level must be selected');
         }
-        if (discountDateType === DiscountDateTypeEnum.dateRange && !discountStartDate) {
+        if (!isPermanent && !discountStartDate) {
             validationErrors.push('Start date is required');
         }
-        if (discountDateType === DiscountDateTypeEnum.dateRange && !discountEndDate) {
+        if (!isPermanent && !discountEndDate) {
             validationErrors.push('End date is required');
         }
         return !!validationErrors.length;
     };
 
+    const handleStorePromoCode = async () => {
+        dispatch(
+            storeCoupon({
+                code: promoCodeValue!,
+                type: discountType!,
+                couponApplicableId:
+                    applicables?.filter((applicable) => applicable?.code === discountApplicationType)[0].id ?? 0,
+                availableFrom: !isPermanent ? moment(discountStartDate!).format('YYYY-MM-DD') : null,
+                availableTill: !isPermanent ? moment(discountEndDate!).format('YYYY-MM-DD') : null,
+                isPermanent: isPermanent!,
+                couponables: selectedDiscountApplicationServiceLevels.filter((serviceLevel) => serviceLevel !== -2)!,
+                discountValue: discountValue!,
+            }),
+        );
+    };
     return (
         <Dialog onClose={handleCloseModal} open={showModal} maxWidth={'sm'} fullWidth>
             <DialogTitle>
@@ -293,7 +328,7 @@ export function PromoCodeModal() {
                                     <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px' }}>
                                         <Radio
                                             checked={discountApplicationType === item.code}
-                                            onChange={handleDiscountApplicationTypeRadioPress(item.code)}
+                                            onChange={handleDiscountApplicationTypeRadioPress(item.id, item.code)}
                                             value={item.code}
                                         />
                                         <Typography
@@ -305,62 +340,65 @@ export function PromoCodeModal() {
                                         >
                                             {item.label}
                                         </Typography>
+
+                                        {/* // @ts-ignore*/}
+                                        {discountApplicationType === 'service_level' &&
+                                        item.code === 'service_level' ? (
+                                            <Box
+                                                display={'flex'}
+                                                flexDirection={'row'}
+                                                flexWrap={'wrap'}
+                                                justifyContent={'space-around'}
+                                                maxWidth={'176px'}
+                                            >
+                                                {serviceLevelCouponables?.map((item2: any) => {
+                                                    return (
+                                                        <Box
+                                                            display={'flex'}
+                                                            flexDirection={'row'}
+                                                            alignItems={'center'}
+                                                            width={'69px'}
+                                                        >
+                                                            <Checkbox
+                                                                checked={selectedDiscountApplicationServiceLevels?.includes(
+                                                                    item2.id,
+                                                                )}
+                                                                onChange={onServiceLevelPress(item2.id)}
+                                                            />
+                                                            <Typography sx={{ marginLeft: '3px' }} variant={'caption'}>
+                                                                ${item2.label}
+                                                            </Typography>
+                                                        </Box>
+                                                    );
+                                                })}
+                                            </Box>
+                                        ) : null}
                                     </Paper>
                                 );
                             })}
 
-                            <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px', marginTop: '8px' }}>
-                                <Radio
-                                    checked={discountApplicationType === DiscountApplicationEnums.selectServiceLevels}
-                                    onChange={handleDiscountApplicationTypeRadioPress(
-                                        DiscountApplicationEnums.selectServiceLevels,
-                                    )}
-                                    value={DiscountApplicationEnums.selectServiceLevels}
-                                />
-                                <Typography
-                                    variant={'caption'}
-                                    className={classes.secondaryLabel}
-                                    sx={{
-                                        fontWeight:
-                                            discountApplicationType === DiscountApplicationEnums.selectServiceLevels
-                                                ? 'bold'
-                                                : 'normal',
-                                    }}
-                                >
-                                    Select Service Levels
-                                </Typography>
+                            {/* <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px', marginTop: '8px' }}>*/}
+                            {/*    <Radio*/}
+                            {/*        checked={discountApplicationType === DiscountApplicationEnums.selectServiceLevels}*/}
+                            {/*        onChange={handleDiscountApplicationTypeRadioPress(*/}
+                            {/*            DiscountApplicationEnums.selectServiceLevels,*/}
+                            {/*        )}*/}
+                            {/*        value={DiscountApplicationEnums.selectServiceLevels}*/}
+                            {/*    />*/}
+                            {/*    <Typography*/}
+                            {/*        variant={'caption'}*/}
+                            {/*        className={classes.secondaryLabel}*/}
+                            {/*        sx={{*/}
+                            {/*            fontWeight:*/}
+                            {/*                discountApplicationType === DiscountApplicationEnums.selectServiceLevels*/}
+                            {/*                    ? 'bold'*/}
+                            {/*                    : 'normal',*/}
+                            {/*        }}*/}
+                            {/*    >*/}
+                            {/*        Select Service Levels*/}
+                            {/*    </Typography>*/}
 
-                                {discountApplicationType === DiscountApplicationEnums.selectServiceLevels ? (
-                                    <Box
-                                        display={'flex'}
-                                        flexDirection={'row'}
-                                        flexWrap={'wrap'}
-                                        justifyContent={'space-around'}
-                                        maxWidth={'176px'}
-                                    >
-                                        {availableServiceLevels?.map((item) => {
-                                            return (
-                                                <Box
-                                                    display={'flex'}
-                                                    flexDirection={'row'}
-                                                    alignItems={'center'}
-                                                    width={'69px'}
-                                                >
-                                                    <Checkbox
-                                                        checked={selectedDiscountApplicationServiceLevels?.includes(
-                                                            item.id,
-                                                        )}
-                                                        onChange={onServiceLevelPress(item.id)}
-                                                    />
-                                                    <Typography sx={{ marginLeft: '3px' }} variant={'caption'}>
-                                                        ${item.value}
-                                                    </Typography>
-                                                </Box>
-                                            );
-                                        })}
-                                    </Box>
-                                ) : null}
-                            </Paper>
+                            {/* </Paper>*/}
                         </Box>
                     </Box>
                 </Box>
@@ -372,15 +410,15 @@ export function PromoCodeModal() {
                     <Box display={'flex'} flexDirection={'column'} minWidth={'100%'}>
                         <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px' }}>
                             <Radio
-                                checked={discountDateType === DiscountDateTypeEnum.permanent}
-                                onChange={handleDiscountDateTypeRadioPress(DiscountDateTypeEnum.permanent)}
-                                value={DiscountDateTypeEnum.permanent}
+                                checked={isPermanent}
+                                onChange={handleDiscountDateTypeRadioPress(true)}
+                                value={true}
                             />
                             <Typography
                                 variant={'caption'}
                                 className={classes.secondaryLabel}
                                 sx={{
-                                    fontWeight: discountDateType === DiscountDateTypeEnum.permanent ? 'bold' : 'normal',
+                                    fontWeight: isPermanent ? 'bold' : 'normal',
                                 }}
                             >
                                 Permanent
@@ -389,20 +427,20 @@ export function PromoCodeModal() {
 
                         <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px', marginTop: '8px' }}>
                             <Radio
-                                checked={discountDateType === DiscountDateTypeEnum.dateRange}
-                                onChange={handleDiscountDateTypeRadioPress(DiscountDateTypeEnum.dateRange)}
-                                value={DiscountDateTypeEnum.dateRange}
+                                checked={!isPermanent}
+                                onChange={handleDiscountDateTypeRadioPress(false)}
+                                value={false}
                             />
                             <Typography
                                 variant={'caption'}
                                 className={classes.secondaryLabel}
                                 sx={{
-                                    fontWeight: discountDateType === DiscountDateTypeEnum.dateRange ? 'bold' : 'normal',
+                                    fontWeight: !isPermanent ? 'bold' : 'normal',
                                 }}
                             >
                                 Date Range
                             </Typography>
-                            {discountDateType === DiscountDateTypeEnum.dateRange ? (
+                            {!isPermanent ? (
                                 <Box
                                     display={'flex'}
                                     flexDirection={'row'}
@@ -433,7 +471,7 @@ export function PromoCodeModal() {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleCloseModal}>Cancel</Button>
-                <Button variant={'contained'} disabled={isSaveButtonDisabled()} onClick={() => ''}>
+                <Button variant={'contained'} disabled={isSaveButtonDisabled()} onClick={handleStorePromoCode}>
                     Save
                 </Button>
             </DialogActions>

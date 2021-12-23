@@ -26,11 +26,12 @@ interface PromoCodesTableProps {
 }
 
 export function PromoCodesTable({ tabFilter, all, search }: PromoCodesTableProps) {
-    const status = useMemo(() => PromoCodeStatusMap[tabFilter || PromoCodeStatusEnum.ACTIVE], [tabFilter]);
+    const status = useMemo(() => PromoCodeStatusMap[tabFilter || PromoCodeStatusEnum.active], [tabFilter]);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
 
     const promoCodes$ = useListAdminPromoCodesQuery({
         params: {
+            include: ['couponStatus', 'couponStats', 'couponApplicable'],
             filter: {
                 search,
                 status: all ? 'all' : tabFilter,
@@ -85,7 +86,11 @@ export function PromoCodesTable({ tabFilter, all, search }: PromoCodesTableProps
                         <TableBody>
                             {promoCodes$.data?.length > 0 ? (
                                 promoCodes$.data.map((promoCode) => (
-                                    <PromoCodesTableRow promoCode={promoCode} key={promoCode.id} />
+                                    <PromoCodesTableRow
+                                        promoCode={promoCode}
+                                        key={promoCode.id}
+                                        reloadCallback={promoCodes$.search}
+                                    />
                                 ))
                             ) : (
                                 <TableRow>

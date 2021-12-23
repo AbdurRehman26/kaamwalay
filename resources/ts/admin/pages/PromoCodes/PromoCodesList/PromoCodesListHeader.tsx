@@ -14,9 +14,13 @@ import { font } from '@shared/styles/utils';
 import AddIcon from '@mui/icons-material/Add';
 import { PromoCodeModal } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodeModal';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import { setApplicables, setShowNewPromoCodeDialog } from '@shared/redux/slices/adminNewPromoCodeSlice';
-import { app } from '@shared/lib/app';
-import { AdminPromoCodesRepository } from '@shared/repositories/Admin/PromoCodesRepository';
+import {
+    setApplicables,
+    setDiscountApplicationType,
+    setShowNewPromoCodeDialog,
+} from '@shared/redux/slices/adminNewPromoCodeSlice';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 
 interface PromoCodesListHeaderProps {
     onSearch?: (query: string) => void;
@@ -58,7 +62,7 @@ export function PromoCodesListHeader({ onSearch }: PromoCodesListHeaderProps) {
     const classes = useStyles();
     const dispatch = useSharedDispatch();
     const [search, setSearch] = useState('');
-    const promoCodeRepository = app(AdminPromoCodesRepository);
+    const apiService = useInjectable(APIService);
     const handleSearch = useCallback(
         (e) => {
             setSearch(e.target.value);
@@ -72,7 +76,10 @@ export function PromoCodesListHeader({ onSearch }: PromoCodesListHeaderProps) {
     );
 
     const onNewPromoCodePress = useCallback(async () => {
-        const applicables = await promoCodeRepository.getCouponApplicables();
+        const applicablesEndpoint = apiService.createEndpoint('/admin/coupon-applicables');
+        const applicablesResponse = await applicablesEndpoint.get('');
+        const applicables = applicablesResponse.data;
+        dispatch(setDiscountApplicationType(applicables[0].code));
         dispatch(setApplicables(applicables));
         dispatch(setShowNewPromoCodeDialog(true));
     }, []);

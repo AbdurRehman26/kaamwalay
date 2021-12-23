@@ -6,8 +6,6 @@ import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PromoCodesListHeader from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesListHeader';
-import { SubmissionsTable } from '@admin/pages/Submissions/SubmissionsList/SubmissionsTable';
-import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { PromoCodesTable } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesTable';
 import { PromoCodeStatusEnum } from '@shared/constants/PromoCodeStatusEnum';
 
@@ -31,10 +29,10 @@ export function PromoCodesList() {
                     <PromoCodesTable search={search} all />
                 </TabContent>
                 <TabContent value={'active'}>
-                    <PromoCodesTable search={search} tabFilter={PromoCodeStatusEnum.ACTIVE} />
+                    <PromoCodesTable search={search} tabFilter={PromoCodeStatusEnum.active} />
                 </TabContent>
                 <TabContent value={'inactive'}>
-                    <PromoCodesTable search={search} tabFilter={PromoCodeStatusEnum.INACTIVE} />
+                    <PromoCodesTable search={search} tabFilter={PromoCodeStatusEnum.inactive} />
                 </TabContent>
             </Grid>
         </TabContext>

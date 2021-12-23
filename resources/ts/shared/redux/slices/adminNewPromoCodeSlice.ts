@@ -1,9 +1,9 @@
+// @ts-nocheck
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
-import { DiscountApplicationEnums } from '@shared/constants/DiscountApplicationEnum';
 import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
 import { CouponApplicableEntity } from '@shared/entities/CouponApplicableEntity';
-
 export interface NewPromoCodeDialogState {
     showNewPromoCodeDialog: boolean;
     modalTitle: string;
@@ -13,12 +13,13 @@ export interface NewPromoCodeDialogState {
         id: number;
     }[];
     type: DiscountTypeEnums;
-    discountApplicationType: DiscountApplicationEnums;
+    discountApplicationType: string;
     selectedDiscountApplicationServiceLevelsIds: number[];
     discountValue?: string;
-    discountStartDate?: string;
-    discountEndDate?: string;
+    availableFrom?: string;
+    availableTill?: string;
     discountDateType: DiscountDateTypeEnum;
+    isPermanent: boolean;
     applicables?: CouponApplicableEntity[];
 }
 
@@ -26,47 +27,27 @@ const initialState: NewPromoCodeDialogState = {
     showNewPromoCodeDialog: false,
     modalTitle: 'Create New Promo Code',
     promoCode: '',
-    discountStartDate: '',
-    discountEndDate: '',
+    availableFrom: '',
+    availableTill: '',
     discountValue: '',
-    availableApplicationServiceLevels: [
+    applicables: [
         {
-            id: 2,
-            value: '50',
-        },
-        {
-            id: 22,
-            value: '60',
-        },
-        {
-            id: 3,
-            value: '80',
-        },
-        {
-            id: 8,
-            value: '50',
-        },
-        {
-            id: 231,
-            value: '55',
-        },
-        {
-            id: 111,
-            value: '332',
-        },
-        {
-            id: 664,
-            value: '112',
-        },
-        {
-            id: 4411,
-            value: '23',
+            id: -1,
+            code: '',
+            label: '',
+            apiSuffix: '',
+            description: '',
+            isActive: false,
+            couponables: [],
+            createdAt: '' as any,
+            updatedAt: '' as any,
         },
     ],
     selectedDiscountApplicationServiceLevelsIds: [-2],
     type: DiscountTypeEnums.percentage,
-    discountApplicationType: DiscountApplicationEnums.totalServiceFee,
+    discountApplicationType: '',
     discountDateType: DiscountDateTypeEnum.permanent,
+    isPermanent: true,
 };
 
 export const adminNewPromoCodeSlice = createSlice({
@@ -100,13 +81,13 @@ export const adminNewPromoCodeSlice = createSlice({
             }
         },
         setDiscountStartDate: (state, action: PayloadAction<string>) => {
-            state.discountStartDate = action.payload;
+            state.availableFrom = action.payload;
         },
         setDiscountEndDate: (state, action: PayloadAction<string>) => {
-            state.discountEndDate = action.payload;
+            state.availableTill = action.payload;
         },
-        setDiscountDateType: (state, action: PayloadAction<DiscountDateTypeEnum>) => {
-            state.discountDateType = action.payload;
+        setDiscountDateType: (state, action: PayloadAction<boolean>) => {
+            state.isPermanent = action.payload;
         },
         setShowNewPromoCodeDialog: (state, action: PayloadAction<boolean>) => {
             state.showNewPromoCodeDialog = action.payload;
@@ -114,19 +95,19 @@ export const adminNewPromoCodeSlice = createSlice({
         setModalTitle: (state, action: PayloadAction<string>) => {
             state.modalTitle = action.payload;
         },
-        setAvailableServiceLevels: (
-            state,
-            action: PayloadAction<
-                {
-                    value: string;
-                    id: number;
-                }[]
-            >,
-        ) => {
-            state.availableApplicationServiceLevels = action.payload;
-        },
         setApplicables: (state, action: PayloadAction<CouponApplicableEntity[]>) => {
             state.applicables = action.payload;
+        },
+        setCouponablesForApplicables: (
+            state,
+            action: PayloadAction<{ applicableCode: string; couponables: any[] }>,
+        ) => {
+            const applicableIndex = state?.applicables?.findIndex(
+                (item) => item.code === action.payload.applicableCode,
+            );
+            if (applicableIndex !== -1) {
+                state.applicables[applicableIndex].couponables = action.payload.couponables;
+            }
         },
         clearNewPromoCodeState: (state) => initialState,
     },
@@ -144,8 +125,8 @@ export const {
     setShowNewPromoCodeDialog,
     clearNewPromoCodeState,
     setModalTitle,
-    setAvailableServiceLevels,
     setSelectedServiceLevels,
     setDiscountValue,
     setApplicables,
+    setCouponablesForApplicables,
 } = adminNewPromoCodeSlice.actions;

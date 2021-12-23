@@ -1,11 +1,11 @@
 export enum PromoCodeStatusEnum {
-    ACTIVE = 'active',
-    QUEUED = 'queued',
-    INACTIVE = 'inactive',
+    active = 'active',
+    queued = 'queued',
+    inactive = 'inactive',
 }
 
 export const PromoCodeStatusMap = {
-    [PromoCodeStatusEnum.ACTIVE]: { label: 'Active', value: 'active' },
-    [PromoCodeStatusEnum.QUEUED]: { label: 'Queued', value: 'queued' },
-    [PromoCodeStatusEnum.INACTIVE]: { label: 'Inactive', value: 'inactive' },
+    [PromoCodeStatusEnum.active]: { label: 'Active', value: 'active' },
+    [PromoCodeStatusEnum.queued]: { label: 'Queued', value: 'queued' },
+    [PromoCodeStatusEnum.inactive]: { label: 'Inactive', value: 'inactive' },
 };

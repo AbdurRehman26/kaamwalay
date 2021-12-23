@@ -7,6 +7,16 @@ use App\Models\Order;
 
 class ServiceLevelCoupon extends CouponApplicables implements CouponApplicableInterface
 {
+    public function calculateDiscount(Coupon $coupon, Order|array $order): float
+    {
+        switch ($coupon->type) {
+            case 'percentage':
+                return $this->getPercentageDiscount($coupon, $order);
+            default:
+                return $this->getFixedDiscount($coupon, $order);
+        }
+    }
+
     public function getFixedDiscount(Coupon $coupon, Order|array $order): float
     {
         return ($coupon->discount_value) * array_sum(array_column($this->getOrderItems($order), 'quantity'));

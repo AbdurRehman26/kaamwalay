@@ -123,10 +123,12 @@ class Coupon extends Model
 
     public function discountStatement(): string
     {
-        return match ($this->type) {
-            'percentage' => (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label ?: '',
-            default => $this->discount_value . ' Off',
-        };
+        switch ($this->type) {
+            case 'percentage':
+                return (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label;
+            default:
+                return $this->discount_value . ' Off';
+        }
     }
 
     public function scopeStatus(Builder $query, string|int $status): Builder

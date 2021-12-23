@@ -2,12 +2,11 @@
 
 namespace App\Jobs\Admin\Order;
 
-use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
+use App\Services\Admin\Order\OrderLabelService;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
 use App\Models\UserCard;
-use App\Services\AGS\AgsService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -35,23 +34,9 @@ class CreateOrderLabel implements ShouldQueue
      *
      * @return void
      */
-    public function handle(AgsService $agsService)
+    public function handle(OrderLabelService $orderLabelService)
     {
-        if (! $agsService->isEnabled()) {
-            logger('Skipping AgsService as it is disabled.');
-
-            $this->fail(new AgsServiceIsDisabled);
-        }
-        
-        $certList = UserCard::where('order_item_id', $this->order->id)->pluck('certificate_number');
-
-        $response = $agsService->createCardLabel(
-            data: array_merge(
-                ['order_id' => $this->order->order_number],
-                ['certificate_list' => $certList]
-            )
-        );
-
+        $response = $orderLabelService->getCardLabelData($this->order);
         $this->saveCardLabelToExcel($response);
     }
   

@@ -9,4 +9,5 @@ export class StoreCouponDTO {
     availableTill!: string | null;
     isPermanent!: boolean;
     couponables!: number[];
+    description!: string;
 }

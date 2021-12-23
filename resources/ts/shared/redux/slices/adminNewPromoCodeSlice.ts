@@ -22,11 +22,13 @@ export interface NewPromoCodeDialogState {
     isPermanent: boolean;
     applicables?: CouponApplicableEntity[];
     isTableLoading: boolean;
+    description: string;
 }
 
 const initialState: NewPromoCodeDialogState = {
     showNewPromoCodeDialog: false,
     isTableLoading: false,
+    description: '',
     modalTitle: 'Create New Promo Code',
     promoCode: '',
     availableFrom: '',
@@ -103,6 +105,9 @@ export const adminNewPromoCodeSlice = createSlice({
         setIsTableLoading: (state, action: PayloadAction<boolean>) => {
             state.isTableLoading = action.payload;
         },
+        setDescription: (state, action: PayloadAction<string>) => {
+            state.description = action.payload;
+        },
         setCouponablesForApplicables: (
             state,
             action: PayloadAction<{ applicableCode: string; couponables: any[] }>,
@@ -135,4 +140,5 @@ export const {
     setApplicables,
     setCouponablesForApplicables,
     setIsTableLoading,
+    setDescription,
 } = adminNewPromoCodeSlice.actions;

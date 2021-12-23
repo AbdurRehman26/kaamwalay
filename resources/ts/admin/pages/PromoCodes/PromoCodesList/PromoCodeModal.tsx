@@ -15,6 +15,7 @@ import { Paper, TextField } from '@mui/material';
 import {
     clearNewPromoCodeState,
     setCouponablesForApplicables,
+    setDescription,
     setDiscountApplicationType,
     setDiscountDateType,
     setDiscountEndDate,
@@ -80,6 +81,8 @@ export function PromoCodeModal() {
     const discountEndDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.availableTill);
     const showModal = useSharedSelector((state) => state.adminNewPromoCodeSlice.showNewPromoCodeDialog);
     const applicables = useSharedSelector((state) => state.adminNewPromoCodeSlice.applicables);
+    const description = useSharedSelector((state) => state.adminNewPromoCodeSlice.description);
+
     // @ts-ignore
     const serviceLevelApplicableIndex = applicables.findIndex(
         (applicableItem) => applicableItem.code === 'service_level',
@@ -97,6 +100,13 @@ export function PromoCodeModal() {
 
     const selectedDiscountApplicationServiceLevels = useSharedSelector(
         (state) => state.adminNewPromoCodeSlice.selectedDiscountApplicationServiceLevelsIds,
+    );
+
+    const handleDescriptionChange = useCallback(
+        (event: any) => {
+            dispatch(setDescription(event.target.value));
+        },
+        [description],
     );
 
     const handlePromoCodeChange = useCallback(
@@ -181,6 +191,9 @@ export function PromoCodeModal() {
         if (!promoCodeValue) {
             validationErrors.push('Promo code is required');
         }
+        if (!description) {
+            validationErrors.push('Description is required');
+        }
         if (!discountValue) {
             validationErrors.push('Discount value is required');
         }
@@ -208,9 +221,31 @@ export function PromoCodeModal() {
                 isPermanent: isPermanent!,
                 couponables: selectedDiscountApplicationServiceLevels.filter((serviceLevel) => serviceLevel !== -2)!,
                 discountValue: discountValue!,
+                description: description,
             }),
         );
     };
+
+    function getMinDateProp() {
+        if (discountStartDate) {
+            return {
+                minDate: discountStartDate,
+            };
+        } else {
+            return {};
+        }
+    }
+
+    function getMaxDateProp() {
+        if (discountEndDate) {
+            return {
+                maxDate: discountEndDate,
+            };
+        } else {
+            return {};
+        }
+    }
+
     return (
         <Dialog onClose={handleCloseModal} open={showModal} maxWidth={'sm'} fullWidth>
             <DialogTitle>
@@ -240,6 +275,19 @@ export function PromoCodeModal() {
                         variant="outlined"
                         value={promoCodeValue}
                         onChange={handlePromoCodeChange}
+                    />
+                </Box>
+                <Box className={classes.inputWithLabelContainer} sx={{ marginTop: '32px' }}>
+                    <Typography variant={'subtitle1'} className={classes.label}>
+                        Description
+                    </Typography>
+                    <TextField
+                        fullWidth
+                        placeholder={'Enter a description'}
+                        size={'small'}
+                        variant="outlined"
+                        value={description}
+                        onChange={handleDescriptionChange}
                     />
                 </Box>
                 <Box className={classes.inputWithLabelContainer} marginTop={'32px'}>
@@ -454,6 +502,7 @@ export function PromoCodeModal() {
                                             value={discountStartDate}
                                             onChange={handleDiscountStartDateChange}
                                             renderInput={(params) => <TextField {...params} />}
+                                            {...getMaxDateProp()}
                                         />
                                         <Typography variant={'caption'}>{' to '}</Typography>
                                         <DateTimePicker
@@ -461,6 +510,7 @@ export function PromoCodeModal() {
                                             value={discountEndDate}
                                             onChange={handleDiscountEndDateChange}
                                             renderInput={(params) => <TextField {...params} />}
+                                            {...getMinDateProp()}
                                         />
                                     </LocalizationProvider>
                                 </Box>

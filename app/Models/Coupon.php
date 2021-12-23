@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\CouponDateRange;
 use App\Casts\CouponType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -89,5 +90,21 @@ class Coupon extends Model
     public function isExpired(): bool
     {
         return $this->coupon_status_id === CouponStatus::STATUS_EXPIRED;
+    }
+
+    public function scopeStatus(Builder $query, string|int $status): Builder
+    {
+        return $query->whereHas(
+            'couponStatus',
+            function (Builder $query) use ($status) {
+                if (! $status || $status === 'all') {
+                    return $query;
+                }
+
+                return $query
+                    ->where('id', $status)
+                    ->orWhere('code', $status);
+            }
+        );
     }
 }

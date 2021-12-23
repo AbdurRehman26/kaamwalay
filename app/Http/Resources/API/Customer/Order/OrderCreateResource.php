@@ -18,6 +18,7 @@ class OrderCreateResource extends JsonResource
             'order_items' => new OrderItemCollection($this->getGroupedOrderItems()),
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),
             'coupon' => new CouponResource($this->coupon),
+            'discounted_amount' => $this->discounted_amount,
             'order_payment' => new OrderPaymentResource($this->firstOrderPayment),
             'billing_address' => new OrderAddressResource($this->billingAddress),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),

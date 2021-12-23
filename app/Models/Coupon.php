@@ -56,7 +56,7 @@ class Coupon extends Model
         return $this->hasMany(CouponStatusHistory::class);
     }
 
-    public function couponStatus()
+    public function couponStatus(): BelongsTo
     {
         return $this->belongsTo(CouponStatus::class);
     }
@@ -105,7 +105,7 @@ class Coupon extends Model
         })->orDoesntHave('couponAble');
     }
 
-    public function discountStatement()
+    public function discountStatement(): string
     {
         return match ($this->type) {
             'percentage' => (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label ?: '',

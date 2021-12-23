@@ -101,7 +101,7 @@ export interface NewSubmissionSliceState {
             id: number;
             discountStatement: string;
             discountValue: string;
-            discountedValue: number;
+            discountedAmount: number;
         };
     };
     step01Data: Step01Data;
@@ -126,7 +126,7 @@ const initialState: NewSubmissionSliceState = {
             id: -1,
             discountStatement: '',
             discountValue: '',
-            discountedValue: 0,
+            discountedAmount: 0,
         },
     },
     step01Status: null,
@@ -390,13 +390,12 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     ? currentSubmission.step04Data.selectedCreditCard.id
                     : null,
         },
-        coupon: {
-            code: currentSubmission?.couponState?.couponCode ?? null,
-            id:
-                currentSubmission?.couponState?.appliedCouponData.id !== -1
-                    ? currentSubmission?.couponState?.appliedCouponData.id
-                    : null,
-        },
+        coupon: currentSubmission.couponState.isCouponApplied
+            ? {
+                  code: currentSubmission?.couponState?.couponCode,
+                  id: currentSubmission?.couponState?.appliedCouponData.id,
+              }
+            : null,
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
@@ -544,7 +543,7 @@ export const newSubmissionSlice = createSlice({
                 id: number;
                 discountStatement: string;
                 discountValue: string;
-                discountedValue: number;
+                discountedAmount: number;
             }>,
         ) => {
             state.couponState.appliedCouponData = action.payload;
@@ -609,19 +608,19 @@ export const newSubmissionSlice = createSlice({
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
                 (plan) => plan.id === action.payload.paymentPlan.id,
             ) as any;
-            state.couponState.isCouponValid = Boolean(action.payload.discountedValue);
-            state.couponState.validCouponId = action.payload.discountedValue ? action.payload.coupon.id : -1;
-            state.couponState.isCouponApplied = Boolean(action.payload.discountedValue);
-            state.couponState.couponCode = action.payload.discountedValue ? action.payload.coupon.code : '';
-            state.couponState.appliedCouponData.id = action.payload.discountedValue ? action.payload.coupon.id : -1;
-            state.couponState.appliedCouponData.discountStatement = action.payload.discountedValue
+            state.couponState.isCouponValid = Boolean(action.payload.discountedAmount);
+            state.couponState.validCouponId = action.payload.discountedAmount ? action.payload.coupon.id : -1;
+            state.couponState.isCouponApplied = Boolean(action.payload.discountedAmount);
+            state.couponState.couponCode = action.payload.discountedAmount ? action.payload.coupon.code : '';
+            state.couponState.appliedCouponData.id = action.payload.discountedAmount ? action.payload.coupon.id : -1;
+            state.couponState.appliedCouponData.discountStatement = action.payload.discountedAmount
                 ? action.payload.coupon.discountStatement
                 : '';
-            state.couponState.appliedCouponData.discountValue = action.payload.discountedValue
+            state.couponState.appliedCouponData.discountValue = action.payload.discountedAmount
                 ? action.payload.coupon.discountValue
                 : '';
-            state.couponState.appliedCouponData.discountedValue = action.payload.discountedValue
-                ? action.payload.discountedValue
+            state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
+                ? action.payload.discountedAmount
                 : '';
         },
     },

@@ -3,7 +3,6 @@
 use App\Models\Order;
 
 it('generates missing order labels for already graded orders', function () {
-
     $order = Order::factory()->create();
 
     $this->artisan('orderLabels:generate ' . $order->order_number)

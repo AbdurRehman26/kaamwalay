@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Orders;
 
+use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Jobs\Admin\Order\CreateOrderLabel;
 use Illuminate\Console\Command;
 
 class GenerateOrderLabels extends Command
@@ -35,33 +35,25 @@ class GenerateOrderLabels extends Command
 
     public function handle(): int
     {
-        if (!$this->argument('orderNumber'))
-        {
+        if (! $this->argument('orderNumber')) {
             $orders = Order::where('order_status_id', '=', OrderStatus::GRADED)->get();
-            foreach($orders as $order)
-            {
-                if(!$order->orderLabel)
-                {
+            foreach ($orders as $order) {
+                if (! $order->orderLabel) {
                     $this->info('Generating order label for order # ' . $order->order_number);
                     CreateOrderLabel::dispatch($order);
                     $this->info('Order label for order # ' . $order->order_number . ' is generated');
                 }
             }
-        }
-        else {
+        } else {
             $order = Order::where('order_number', $this->argument('orderNumber'))->first();
 
-            if ($order->order_status_id != OrderStatus::GRADED)
-            {
+            if ($order->order_status_id != OrderStatus::GRADED) {
                 $this->info('Order is not graded yet');
-            }
-            else if (!$order->orderLabel) {
+            } elseif (! $order->orderLabel) {
                 $this->info('Generating order label for order # ' . $order->order_number);
                 CreateOrderLabel::dispatch($order);
                 $this->info('Order label for order # ' . $order->order_number . ' is generated');
-                
-            }
-            else {
+            } else {
                 $this->info('Order Label already exist');
             }
         }

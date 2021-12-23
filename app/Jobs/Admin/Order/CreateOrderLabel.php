@@ -2,11 +2,10 @@
 
 namespace App\Jobs\Admin\Order;
 
-use App\Services\Admin\Order\OrderLabelService;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
-use App\Models\UserCard;
+use App\Services\Admin\Order\OrderLabelService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

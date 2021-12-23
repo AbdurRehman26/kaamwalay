@@ -3,13 +3,13 @@
 namespace App\Services\Admin\Order;
 
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
-use App\Services\AGS\AgsService;
 use App\Models\Order;
 use App\Models\UserCard;
+use App\Services\AGS\AgsService;
 
 class OrderLabelService
 {
-    public function __construct(protected AgsService $agsService) 
+    public function __construct(protected AgsService $agsService)
     {
     }
 
@@ -29,6 +29,7 @@ class OrderLabelService
                 ['certificate_list' => $certList]
             )
         );
+
         return $response;
     }
 }

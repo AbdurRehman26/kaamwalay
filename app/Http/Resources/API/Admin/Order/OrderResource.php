@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\Admin\Order;
 
+use App\Http\Resources\API\Admin\Coupon\CouponResource;
 use App\Http\Resources\API\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
@@ -85,6 +86,7 @@ class OrderResource extends BaseResource
             'refunds' => $this->whenLoaded('refunds', OrderPaymentCollection::class),
             'extra_charge_total' => $this->extra_charge_total,
             'refund_total' => $this->refund_total,
+            'coupon' => $this->whenLoaded('coupon', CouponResource::class),
         ];
     }
 

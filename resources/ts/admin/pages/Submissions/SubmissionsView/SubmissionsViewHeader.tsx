@@ -21,6 +21,7 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 interface SubmissionViewHeaderProps {
     orderId: number;
     orderNumber: string;
+    orderCustomerId: number;
     orderStatus: OrderStatusEntity;
     orderStatusHistory: OrderStatusHistoryEntity[];
     orderShipment?: ShipmentEntity | null;
@@ -61,6 +62,7 @@ const useStyles = makeStyles(
 export function SubmissionsViewHeader({
     orderId,
     orderNumber,
+    orderCustomerId,
     orderStatus,
     orderStatusHistory,
     orderShipment,
@@ -134,7 +136,11 @@ export function SubmissionsViewHeader({
                         trackingNumber={orderShipment?.trackingNumber}
                         shippingProvider={orderShipment?.shippingProvider}
                     />
-                    <SubmissionHeaderMoreButton orderId={orderId} orderStatus={orderStatus} />
+                    <SubmissionHeaderMoreButton
+                        orderId={orderId}
+                        orderStatus={orderStatus}
+                        orderCustomerId={orderCustomerId}
+                    />
                 </Grid>
             </Grid>
             <StatusProgressBar steps={history} />

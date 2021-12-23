@@ -48,6 +48,7 @@ export function SubmissionsView() {
             <SubmissionsViewHeader
                 orderId={Number(id)}
                 orderNumber={data?.orderNumber ?? ''}
+                orderCustomerId={data?.customerId ?? 0}
                 orderStatus={data?.orderStatus}
                 orderStatusHistory={data?.orderStatusHistory}
                 orderShipment={data?.orderShipment}

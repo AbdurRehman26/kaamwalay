@@ -2,17 +2,14 @@
 
 use App\Models\User;
 
+use Database\Seeders\RolesSeeder;
 use function Pest\Laravel\postJson;
 
-use Spatie\Permission\Models\Role;
-
 beforeEach(function () {
+    $this->seed(RolesSeeder::class);
+
     $this->user = User::factory()->create();
-    $this->admin = User::factory()->create();
-
-    Role::create(['name' => config('permission.roles.admin')])->save();
-
-    $this->admin->assignRole(Role::findByName(config('permission.roles.admin')));
+    $this->admin = User::factory()->withRole(config('permission.roles.admin'))->create();
 });
 
 it("should not allow guest users to presign files", function () {

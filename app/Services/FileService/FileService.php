@@ -36,15 +36,8 @@ class FileService
         $client = $this->getStorageClient();
         $expiry = "+10 minutes";
 
-        if ($bucket) {
-            try {
-                /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-                if (! auth()->user()?->isAdmin()) {
-                    $bucket = null;
-                }
-            } catch (Exception $e) {
-                $bucket = null;
-            }
+        if ($bucket && ! auth()->user()->isAdmin()) {
+            $bucket = null;
         }
 
         if (! $bucket) {

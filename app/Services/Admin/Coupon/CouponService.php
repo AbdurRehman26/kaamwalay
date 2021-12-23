@@ -95,6 +95,8 @@ class CouponService
 
         NewCouponAdded::dispatch($coupon);
 
+        $coupon->load('couponStatus', 'couponStats');
+
         return $coupon->refresh();
     }
 

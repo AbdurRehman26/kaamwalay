@@ -12,6 +12,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\seed;
+use Symfony\Component\HttpFoundation\Response;
 
 uses(WithFaker::class);
 
@@ -39,7 +40,7 @@ test('admin can create coupon', function () {
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
         'available_from' => now()->addDays(2)->toDateString(),
-        'is_permanent' => false,
+        'is_permanent' => true,
     ])
         ->assertCreated();
 });
@@ -60,7 +61,7 @@ test('admin can create coupon for specific users', function () {
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         'available_from' => now()->addDays(2)->toDateString(),
-        'is_permanent' => false,
+        'is_permanent' => true,
         'couponables' => $users,
     ])
         ->assertCreated();
@@ -77,7 +78,7 @@ test('admin can create coupon for specific payment plan', function () {
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
         'available_from' => now()->addDays(2)->toDateString(),
-        'is_permanent' => false,
+        'is_permanent' => true,
         'couponables' => $paymentPlans,
     ])
         ->assertCreated();
@@ -128,3 +129,42 @@ test('admin can search for specific coupon with coupon status from the coupon li
     fn () => ['id' => $this->coupons[3]->id, 'status' => $this->coupons[3]->couponStatus->code],
     fn () => ['id' => $this->coupons[4]->id, 'status' => $this->coupons[4]->couponStatus->code],
 ]);
+
+test('admin can not create coupon with more than 100% discount', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word,
+        'type' => 'percentage',
+        'discount_value' => 101,
+        'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
+        'available_from' => now()->addDays(2)->toDateString(),
+        'is_permanent' => true,
+    ])
+        ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+});
+
+test('admin can create coupon 100% discount', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word,
+        'type' => 'percentage',
+        'discount_value' => 100,
+        'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
+        'is_permanent' => true,
+    ])
+        ->assertCreated();
+});
+
+test('admin can not create coupon with fixed value more than service level', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word,
+        'type' => 'percentage',
+        'discount_value' => 1000000000000000,
+        'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
+        'available_from' => now()->addDays(2)->toDateString(),
+        'is_permanent' => true,
+        'couponables' => [1,2,3],
+    ])
+        ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+});

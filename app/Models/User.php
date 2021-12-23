@@ -181,4 +181,10 @@ class User extends Authenticatable implements JWTSubject
             'email' => $this->getEmailForPasswordReset(),
         ]);
     }
+
+    public function scopeCustomers(Builder $query): Builder
+    {
+        // @phpstan-ignore-next-line
+        return $query->role(Role::findByName(config('permission.roles.customer')));
+    }
 }

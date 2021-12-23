@@ -16,6 +16,13 @@ class Coupon extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const TYPE_FIXED = 1;
+    const TYPE_PERCENTAGE = 2;
+    const COUPON_TYPE_MAPPING = [
+        'fixed' => self::TYPE_FIXED,
+        'percentage' => self::TYPE_PERCENTAGE,
+    ];
+
     protected $fillable = [
         'created_by',
         'coupon_applicable_id',
@@ -104,5 +111,21 @@ class Coupon extends Model
             'percentage' => (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label ?: '',
             default => $this->discount_value . ' Off',
         };
+    }
+
+    public function scopeStatus(Builder $query, string|int $status): Builder
+    {
+        return $query->whereHas(
+            'couponStatus',
+            function (Builder $query) use ($status) {
+                if (! $status || $status === 'all') {
+                    return $query;
+                }
+
+                return $query
+                    ->where('id', $status)
+                    ->orWhere('code', $status);
+            }
+        );
     }
 }

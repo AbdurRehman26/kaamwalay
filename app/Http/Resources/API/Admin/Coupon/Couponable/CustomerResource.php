@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\API\Admin\Coupon;
+namespace App\Http\Resources\API\Admin\Coupon\Couponable;
 
 use App\Http\Resources\API\BaseResource;
 
-class CouponApplicableResource extends BaseResource
+class CustomerResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,8 @@ class CouponApplicableResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'code' => $this->code,
-            'label' => $this->label,
-            'description' => $this->description,
-            'is_active' => $this->is_active,
+            'name' => $this->getFullName(),
+            'email' => $this->email,
         ];
     }
 }

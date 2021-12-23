@@ -2,7 +2,9 @@
 
 namespace App\Services\Admin\Coupon\Couponables;
 
+use App\Http\Resources\API\Admin\Coupon\Couponable\PaymentPlanCollection;
 use App\Models\Coupon;
+use App\Models\PaymentPlan;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
 
 class CouponablePaymentPlanService implements CouponableEntityInterface
@@ -26,5 +28,12 @@ class CouponablePaymentPlanService implements CouponableEntityInterface
         $coupon->paymentPlans()->sync($this->ids);
 
         return $coupon;
+    }
+
+    public function get(): PaymentPlanCollection
+    {
+        $paymentPlans = PaymentPlan::orderBy('display_position')->get();
+
+        return new PaymentPlanCollection($paymentPlans);
     }
 }

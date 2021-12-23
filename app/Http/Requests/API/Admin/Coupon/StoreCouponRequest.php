@@ -20,6 +20,21 @@ class StoreCouponRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        // The design does not have a date picker when is_permanent is selected
+        if ($this->get('is_permanent')) {
+            $this->merge([
+                'available_from' => now()->startOfDay()->toDateString(),
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -33,9 +48,9 @@ class StoreCouponRequest extends FormRequest
             'coupon_applicable_id' => ['required', 'exists:coupon_applicables,id'],
             'available_from' => ['required', 'date_format:Y-m-d'],
             'is_permanent' => ['required', 'filled'],
-            'available_till' => [Rule::requiredIf(boolval($this->get('is_permanent'))), 'date_format:Y-m-d'],
+            'available_till' => [Rule::requiredIf(! boolval($this->get('is_permanent'))), 'date_format:Y-m-d'],
             'couponables' => [
-                Rule::requiredIf(Arr::has(CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES, $this->get('coupon_applicable_id'))),
+                Rule::requiredIf(in_array($this->get('coupon_applicable_id'), CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES)),
                 'array',
             ],
             'couponables.*' => [

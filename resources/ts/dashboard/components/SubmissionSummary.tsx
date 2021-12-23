@@ -360,6 +360,20 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
+                            {isCouponApplied ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
+                                    <NumberFormat
+                                        value={discountedValue}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'-$'}
+                                    />
+                                </div>
+                            ) : null}
+
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
                                 <NumberFormat

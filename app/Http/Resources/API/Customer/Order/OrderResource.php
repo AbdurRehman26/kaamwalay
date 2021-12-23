@@ -6,6 +6,7 @@ use App\Http\Resources\API\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\Coupon\CouponResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
@@ -42,6 +43,8 @@ class OrderResource extends BaseResource
             'refunds' => $this->whenLoaded('refunds', OrderPaymentCollection::class),
             'extra_charge_total' => $this->extra_charge_total,
             'refund_total' => $this->refund_total,
+            'coupon' => new CouponResource($this->coupon),
+            'discounted_amount' => $this->discounted_amount,
         ];
     }
 }

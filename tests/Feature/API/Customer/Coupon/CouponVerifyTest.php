@@ -10,7 +10,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
 beforeEach(function () {
-    $paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
 
     CouponStatus::factory()->count(2)->create();
 
@@ -36,7 +36,7 @@ beforeEach(function () {
             [
                 'coupon_id' => $this->coupon->id,
                 'couponables_type' => Couponable::COUPONABLE_TYPES['service_level'],
-                'couponables_id' => $paymentPlan->id,
+                'couponables_id' => $this->paymentPlan->id,
 
             ]
         );
@@ -44,22 +44,17 @@ beforeEach(function () {
     $this->user = User::factory()
         ->withRole(config('permission.roles.customer'))
         ->create();
-
-    $this->actingAs($this->user);
 });
 
 
 test('customer checks for valid coupon', function () {
     actingAs($this->user);
 
-    getJson(route(
-        'coupon.verify',
-        [
+    getJson(route('coupon.verify', [
             $this->coupon->code,
-            'couponables_type' => $this->couponable->code,
-            'couponables_id' => $this->couponable->id,
-        ]
-    ))
+            'couponables_type' => 'service_level',
+            'couponables_id' => $this->paymentPlan->id,
+        ]))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -71,18 +66,19 @@ test('customer checks for valid coupon', function () {
 });
 
 test('customer checks for invalid coupon code', function () {
-    $this->actingAs($this->user);
+    actingAs($this->user);
 
     getJson(route('coupon.verify', $this->coupon->code . 'test'))
         ->assertStatus(422);
 });
 
 test('customer checks for valid coupon code on wrong service level', function () {
-    $this->actingAs($this->user);
+    actingAs($this->user);
 
     getJson(route('coupon.verify', [
         $this->coupon->code,
         'couponables_type' => 'service_level',
-        'couponables_id' => 5,
-    ]))->assertStatus(422);
+        'couponables_id' => 100,
+    ]))
+        ->assertStatus(422);
 });

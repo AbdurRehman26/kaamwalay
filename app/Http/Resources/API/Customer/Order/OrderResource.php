@@ -6,12 +6,12 @@ use App\Http\Resources\API\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\Customer\Coupon\CouponResource;
 use App\Http\Resources\API\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\Customer\User\UserResource;
-use App\Models\Coupon;
 
 class OrderResource extends BaseResource
 {
@@ -22,7 +22,7 @@ class OrderResource extends BaseResource
             'order_number' => $this->order_number,
             'number_of_cards' => (int) $this->orderItems()->sum('quantity'),
             'total_declared_value' => (float) $this->orderItems()->sum('declared_value_total'),
-            'coupon' => $this->whenLoaded('coupon', Coupon::class),
+            'coupon' => new CouponResource($this->coupon),
             'discounted_amount' => $this->discounted_amount,
             'status' => $this->orderStatus->name ?? null,
             'service_fee' => $this->service_fee,

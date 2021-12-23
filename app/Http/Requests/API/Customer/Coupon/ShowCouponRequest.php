@@ -25,8 +25,8 @@ class ShowCouponRequest extends FormRequest
     public function rules()
     {
         return [
-            'couponable_type' => [ 'sometimes', Rule::in(['service_level'])],
-            'couponable_id' => 'sometimes',
+            'couponables_type' => [ 'sometimes', Rule::in(['service_level'])],
+            'couponables_id' => 'sometimes',
         ];
     }
 }

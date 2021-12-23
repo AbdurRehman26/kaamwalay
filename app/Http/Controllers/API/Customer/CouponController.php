@@ -7,25 +7,23 @@ use App\Http\Requests\API\Customer\Coupon\CalculateCouponDiscountRequest;
 use App\Http\Requests\API\Customer\Coupon\ShowCouponRequest;
 use App\Http\Resources\API\Customer\Coupon\CouponResource;
 use App\Services\Coupon\CouponService;
-use App\Services\Order\CreateOrderService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CouponController extends Controller
 {
     private CouponService $couponService;
-    private CreateOrderService $createOrderService;
 
-    public function __construct(CouponService $couponService, CreateOrderService $createOrderService)
+    public function __construct(CouponService $couponService)
     {
         $this->couponService = $couponService;
-        $this->createOrderService = $createOrderService;
     }
 
     public function show(string $couponCode, ShowCouponRequest $request): JsonResponse|CouponResource
     {
         try {
             $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_type', 'couponables_id'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
@@ -37,22 +35,21 @@ class CouponController extends Controller
         return new CouponResource($coupon);
     }
 
-    public function calculateDiscount(CalculateCouponDiscountRequest $request)
+    public function calculateDiscount(CalculateCouponDiscountRequest $request): JsonResponse
     {
-        $couponParams = [
-            'couponables_type' => 'service_level',
-            'couponables_id' => $request->payment_plan['id'],
-        ];
-
-        $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $couponParams);
-
-        $discountedAmount = $this->couponService->calculateDiscount(
-            $coupon,
-            $request->safe()->only('payment_plan', 'items')
-        );
-
         try {
-        } catch (\Exception $e) {
+            $couponParams = [
+                'couponables_type' => 'service_level',
+                'couponables_id' => $request->payment_plan['id'],
+            ];
+
+            $coupon = $this->couponService->returnCouponIfValid($request->coupon['code'], $couponParams);
+
+            $discountedAmount = $this->couponService->calculateDiscount(
+                $coupon,
+                $request->safe()->only('payment_plan', 'items')
+            );
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

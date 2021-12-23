@@ -19,7 +19,6 @@ use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -82,6 +81,7 @@ class CreateOrderService
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
+        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeShippingFeeAndGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
@@ -180,7 +180,8 @@ class CreateOrderService
     protected function storeShippingFeeAndGrandTotal()
     {
         $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee;
+        $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;
+        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount;
 
         GrandTotalValidator::validate($this->order);
 
@@ -207,29 +208,12 @@ class CreateOrderService
         OrderPayment::create($orderPaymentData);
     }
 
-    public function createDraftOrder(array $orderData): Order
+    protected function storeCouponAndDiscount(array $couponData): void
     {
-        $order = new Order();
-        $order->payment_plan_id = $orderData['payment_plan']['id'] ?? null;
-        $order->payment_method_id = $orderData['payment_method']['id'] ?? null;
-        $order->shipping_method_id = $orderData['shipping_method']['id'] ?? null;
-        $order->items = $this->prepareOrderItemData($orderData['items']);
-
-        return $order;
-    }
-
-    protected function prepareOrderItemData(array $orderItems): Collection
-    {
-        $orderItemsCollection = Collection::empty();
-        foreach ($orderItems as $item) {
-            $orderItem = new OrderItem();
-            $orderItem->card_product_id = $item['card_product']['id'];
-            $orderItem->quantity = 1;
-            $orderItem->declared_value_per_unit = $item['declared_value_per_unit'];
-            $orderItem->declared_value_total = $item['declared_value_per_unit'];
-            $orderItemsCollection->add($orderItem);
+        if (! empty($couponData['code'])) {
+            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
+            $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+            $this->order->save();
         }
-
-        return $orderItemsCollection;
     }
 }

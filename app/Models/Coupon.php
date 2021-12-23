@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\CouponDateRange;
 use App\Casts\CouponType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,8 +16,15 @@ class Coupon extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const TYPE_FIXED = 1;
+    const TYPE_PERCENTAGE = 2;
+    const COUPON_TYPE_MAPPING = [
+        'fixed' => self::TYPE_FIXED,
+        'percentage' => self::TYPE_PERCENTAGE,
+    ];
+
     protected $fillable = [
-        'user_id',
+        'created_by',
         'coupon_applicable_id',
         'code',
         'name',
@@ -39,8 +47,8 @@ class Coupon extends Model
         'capped_amount' => 'float',
         'is_capped' => 'boolean',
         'type' => CouponType::class,
-        'available_from' => 'datetime',
-        'available_till' => 'datetime',
+        'available_from' => CouponDateRange::class,
+        'available_till' => CouponDateRange::class,
     ];
 
     public function couponStatusHistories(): HasMany
@@ -48,7 +56,7 @@ class Coupon extends Model
         return $this->hasMany(CouponStatusHistory::class);
     }
 
-    public function couponStatus()
+    public function couponStatus(): BelongsTo
     {
         return $this->belongsTo(CouponStatus::class);
     }
@@ -92,8 +100,32 @@ class Coupon extends Model
         }
 
         return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
-            $subQuery->where('couponable_type', '=', Couponable::COUPONABLE_TYPES[$couponParams['couponable_type']])
-                    ->where('couponable_id', '=', $couponParams['couponable_id']);
+            $subQuery->where('couponables_type', '=', Couponable::COUPONABLE_TYPES[$couponParams['couponables_type']])
+                    ->where('couponables_id', '=', $couponParams['couponables_id']);
         })->orDoesntHave('couponAble');
+    }
+
+    public function discountStatement(): string
+    {
+        return match ($this->type) {
+            'percentage' => (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label ?: '',
+            default => $this->discount_value . ' Off',
+        };
+    }
+
+    public function scopeStatus(Builder $query, string|int $status): Builder
+    {
+        return $query->whereHas(
+            'couponStatus',
+            function (Builder $query) use ($status) {
+                if (! $status || $status === 'all') {
+                    return $query;
+                }
+
+                return $query
+                    ->where('id', $status)
+                    ->orWhere('code', $status);
+            }
+        );
     }
 }

@@ -13,7 +13,6 @@ class CouponLog extends Model
     protected $fillable = [
         'user_id',
         'order_id',
-        'couponable_id',
         'coupon_id',
     ];
 
@@ -30,10 +29,5 @@ class CouponLog extends Model
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
-    }
-
-    public function couponable(): BelongsTo
-    {
-        return $this->belongsTo(Couponable::class);
     }
 }

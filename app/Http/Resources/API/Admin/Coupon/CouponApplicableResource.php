@@ -15,9 +15,9 @@ class CouponApplicableResource extends BaseResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'code' => $this->code,
             'label' => $this->label,
-            'api_suffix' => $this->api_suffix ?? '',
             'description' => $this->description,
             'is_active' => $this->is_active,
         ];

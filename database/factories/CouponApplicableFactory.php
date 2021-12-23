@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class CouponApplicableFactory extends Factory
@@ -15,9 +16,8 @@ class CouponApplicableFactory extends Factory
     public function definition()
     {
         return [
-            'code' => $this->faker->word(),
+            'code' => Arr::random(['service_fee', 'service_level', 'shipping_fee']),
             'label' => Str::title($this->faker->word()),
-            'api_suffix' => $this->faker->word(),
             'description' => $this->faker->sentence(),
             'is_active' => $this->faker->boolean(),
         ];

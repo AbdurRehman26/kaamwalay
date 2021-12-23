@@ -3,7 +3,6 @@
 namespace App\Listeners\API\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
-use App\Services\Admin\Coupon\CouponService;
 
 class NewCouponAddedListener
 {
@@ -12,7 +11,7 @@ class NewCouponAddedListener
      *
      * @return void
      */
-    public function __construct(protected CouponService $couponService)
+    public function __construct()
     {
     }
 
@@ -24,6 +23,5 @@ class NewCouponAddedListener
      */
     public function handle(NewCouponAdded $event)
     {
-        $this->couponService->createCouponStats($event->coupon);
     }
 }

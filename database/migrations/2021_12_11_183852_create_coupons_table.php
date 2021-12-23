@@ -18,9 +18,8 @@ class CreateCouponsTable extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)
-                ->comment('person who adds the coupon')
-                ->constrained()
+            $table->foreignId('created_by')
+                ->constrained('users')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->foreignIdFor(CouponStatus::class)

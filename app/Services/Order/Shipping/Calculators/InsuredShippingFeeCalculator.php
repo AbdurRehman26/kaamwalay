@@ -17,15 +17,6 @@ class InsuredShippingFeeCalculator
         );
     }
 
-    public static function calculateForDraftOrder(Order $order): float
-    {
-        return self::calculate(
-            self::calculateTotalDeclaredValue($order->items),
-            self::calculateTotalNumberOfItems($order->items)
-        );
-    }
-
-
     public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems): float
     {
         self::$shippingFee = self::calculateBasicShippingFee($totalDeclaredValue, $totalNumberOfItems);

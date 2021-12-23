@@ -3,14 +3,34 @@
 namespace App\Services\Coupon\CouponApplicable;
 
 use App\Models\Coupon;
+use App\Models\Order;
+use App\Models\PaymentPlan;
 
 class CouponApplicables
 {
-    protected function getDiscountedAmount(Coupon $coupon, $applyDiscountOnAmount)
+    public function calculateDiscount(Coupon $coupon, Order|array $order): float
     {
         return match ($coupon->type) {
-            'fixed' => $applyDiscountOnAmount - $coupon->discount_value < 0 || $applyDiscountOnAmount - $coupon->discount_value > $applyDiscountOnAmount ? $applyDiscountOnAmount : (float) $coupon->discount_value,
-            default => min(($coupon->discount_value * $applyDiscountOnAmount) / 100, $applyDiscountOnAmount),
+            'percentage' => $this->getPercentageDiscount($coupon, $order),
+            default => $this->getFixedDiscount($coupon, $order),
         };
+    }
+
+    protected function getPaymentPlan(array|Order $order): PaymentPlan
+    {
+        if (! empty($order['payment_plan']['id'])) {
+            return PaymentPlan::find($order['payment_plan']['id']);
+        }
+
+        return $order->paymentPlan;
+    }
+
+    protected function getOrderItems(array|Order $order): array
+    {
+        if (! empty($order['items'])) {
+            return $order['items'];
+        }
+
+        return $order->orderItems->toArray();
     }
 }

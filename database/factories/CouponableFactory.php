@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Coupon;
+use App\Models\Couponable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CouponableFactory extends Factory
@@ -16,8 +17,8 @@ class CouponableFactory extends Factory
     {
         return [
             'coupon_id' => Coupon::factory(),
-            'couponable_id' => $this->faker->numberBetween(1, 10),
-            'couponable_type' => $this->faker->word(),
+            'couponables_id' => $this->faker->numberBetween(1, 10),
+            'couponables_type' => Couponable::COUPONABLE_TYPES['service_level'],
         ];
     }
 }

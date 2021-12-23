@@ -4,36 +4,52 @@ namespace App\Services\Coupon;
 
 use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
 use App\Models\Coupon;
+use App\Models\CouponLog;
+use App\Models\CouponStat;
 use App\Models\Order;
-use App\Services\Coupon\CouponApplicable\CouponApplicableInterface;
 use App\Services\Coupon\CouponApplicable\ServiceFeeCoupon;
 use App\Services\Coupon\CouponApplicable\ServiceLevelCoupon;
-use App\Services\Coupon\CouponApplicable\ShippingFeeCoupon;
 
 class CouponService
 {
+    protected array $couponApplicables = [
+        'service_level' => ServiceLevelCoupon::class,
+        'service_fee' => ServiceFeeCoupon::class,
+    ];
+
     public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon
     {
-        $coupon = Coupon::whereCode($couponCode)->IsActive()->ValidOnCurrentDate()->ValidOnCouponable($couponParams)->first();
+        $coupon = Coupon::whereCode($couponCode)->IsActive()->ValidOnCouponable($couponParams)->first();
 
         throw_if(! $coupon, CouponExpiredOrInvalid::class);
 
         return $coupon;
     }
 
-    public function calculateDiscount(Coupon $coupon, Order $order): float
+    public function calculateDiscount(Coupon $coupon, array|Order $order): float
     {
-        $couponApplication = $this->getCouponApplicationType($coupon->couponApplicable->code);
+        $couponApplication = resolve($this->couponApplicables[$coupon->couponApplicable->code]);
 
         return $couponApplication->calculateDiscount($coupon, $order);
     }
 
-    protected function getCouponApplicationType($code): CouponApplicableInterface
+    public function updateCouponLogs(Order $order): void
     {
-        return match ($code) {
-            'service_level' => new ServiceLevelCoupon(),
-            'shipping_fee' => new ShippingFeeCoupon(),
-            default => new ServiceFeeCoupon(),
-        };
+        CouponLog::create([
+            'order_id' => $order->id,
+            'user_id' => $order->user_id,
+            'coupon_id' => $order->coupon->id,
+        ]);
+    }
+
+    public function updateCouponStats(Coupon $coupon): void
+    {
+        $couponStat = CouponStat::updateOrCreate(['coupon_id' => $coupon->id]);
+        $orderCouponLog = Order::join('coupon_logs', 'coupon_logs.order_id', 'orders.id');
+
+        $couponStat->times_used = CouponLog::whereCouponId($coupon->id)->count();
+        $couponStat->total_revenue = $orderCouponLog->sum('grand_total');
+        $couponStat->total_discount = $orderCouponLog->sum('discounted_amount');
+        $couponStat->save();
     }
 }

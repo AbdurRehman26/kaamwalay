@@ -7,15 +7,15 @@ use App\Services\Coupon\CouponService;
 
 class CouponAppliedValidator
 {
-    public static function validate(array $data)
+    public static function validate(array $data): void
     {
         if (! empty($data['coupon']['code'])) {
             throw_unless(
                 CouponService::returnCouponIfValid(
                     $data['coupon']['code'],
                     [
-                        'couponable_type' => $data['coupon']['couponable_type'] ?? 'service_level',
-                        'couponable_id' => $data['coupon']['couponable_id'] ?? $data['payment_plan']['id'],
+                        'couponables_type' => $data['coupon']['couponables_type'] ?? 'service_level',
+                        'couponables_id' => $data['coupon']['couponables_id'] ?? $data['payment_plan']['id'],
                     ]
                 ),
                 CouponExpiredOrInvalid::class

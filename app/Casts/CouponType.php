@@ -2,6 +2,7 @@
 
 namespace App\Casts;
 
+use App\Models\Coupon;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class CouponType implements CastsAttributes
@@ -11,7 +12,7 @@ class CouponType implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        return array_search($value, $this->values());
+        return array_search($value, Coupon::COUPON_TYPE_MAPPING);
     }
 
     /**
@@ -19,14 +20,6 @@ class CouponType implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        return $this->values()[$value];
-    }
-
-    protected function values(): array
-    {
-        return [
-            'fixed' => 1,
-            'percentage' => 2,
-        ];
+        return Coupon::COUPON_TYPE_MAPPING[$value];
     }
 }

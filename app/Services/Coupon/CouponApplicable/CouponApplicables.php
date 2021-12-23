@@ -25,7 +25,7 @@ class CouponApplicables
         return $order->paymentPlan;
     }
 
-    protected function getOrderItems(array|Order $order)
+    protected function getOrderItems(array|Order $order): array
     {
         if (! empty($order['items'])) {
             return $order['items'];

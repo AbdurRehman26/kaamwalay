@@ -12,7 +12,7 @@ use App\Services\Coupon\CouponApplicable\ServiceLevelCoupon;
 
 class CouponService
 {
-    protected $couponApplicables = [
+    protected array $couponApplicables = [
         'service_level' => ServiceLevelCoupon::class,
         'service_fee' => ServiceFeeCoupon::class,
     ];
@@ -47,7 +47,7 @@ class CouponService
         $couponStat = CouponStat::updateOrCreate(['coupon_id' => $coupon->id]);
         $orderCouponLog = Order::join('coupon_logs', 'coupon_logs.order_id', 'orders.id');
 
-        $couponStat->times_used = CouponLog::whereCouponId($coupon->id)->get()->count();
+        $couponStat->times_used = CouponLog::whereCouponId($coupon->id)->count();
         $couponStat->total_revenue = $orderCouponLog->sum('grand_total');
         $couponStat->total_discount = $orderCouponLog->sum('discounted_amount');
         $couponStat->save();

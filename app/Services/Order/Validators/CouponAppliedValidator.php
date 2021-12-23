@@ -7,7 +7,7 @@ use App\Services\Coupon\CouponService;
 
 class CouponAppliedValidator
 {
-    public static function validate(array $data)
+    public static function validate(array $data): void
     {
         if (! empty($data['coupon']['code'])) {
             throw_unless(

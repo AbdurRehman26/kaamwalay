@@ -38,8 +38,8 @@ class CouponService
     {
         return QueryBuilder::for(Coupon::class)
             ->allowedFilters([
-                'status',
                 'code',
+                AllowedFilter::scope('status'),
                 AllowedFilter::custom('search', new AdminCouponSearchFilter),
             ])
             ->allowedSorts([

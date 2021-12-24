@@ -1,5 +1,5 @@
 /**
- * @api {get} /customer/coupons/HvTGSYpak9?couponables_type=service_leve&couponables_id=1 Show Coupon
+ * @api {get} /customer/coupons/HvTGSYpak9?couponables_id=1 Show Coupon
  * @apiName Show Coupon
  * @apiGroup Customer Coupons
  *

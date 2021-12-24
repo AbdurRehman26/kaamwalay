@@ -90,7 +90,6 @@ it('calculates discount for service fee order', function () {
 });
 
 it('calculates stats for coupon', function () {
-
     $this->order->discounted_amount = (float)$this->couponService->calculateDiscount($this->order->coupon, $this->order);
     $this->order->grand_total = $this->order->grand_total - $this->order->discounted_amount;
     $this->order->save();

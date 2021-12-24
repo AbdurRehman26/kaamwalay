@@ -4,6 +4,8 @@ namespace App\Services\Admin\Coupon;
 
 use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
+use App\Services\Admin\Coupon\Couponables\CouponablePaymentPlanService;
+use App\Services\Admin\Coupon\Couponables\CouponableUserService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

@@ -99,6 +99,6 @@ it('calculates stats for coupon', function () {
     $this->couponService->updateCouponStats($this->order->coupon);
     $couponStat = CouponStat::whereCouponId($this->order->coupon->id)->first();
 
-    expect($couponStat->times_used)->toBe(1);
+    expect((int)$couponStat->times_used)->toBe(1);
     expect($this->order->discounted_amount)->toBe((float)$couponStat->total_discount);
 });

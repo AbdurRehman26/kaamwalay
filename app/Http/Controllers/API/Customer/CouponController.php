@@ -22,7 +22,7 @@ class CouponController extends Controller
     public function show(string $couponCode, ShowCouponRequest $request): JsonResponse|CouponResource
     {
         try {
-            $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_type', 'couponables_id'));
+            $coupon = $this->couponService->returnCouponIfValid($couponCode, $request->only('couponables_id'));
         } catch (Exception $e) {
             return new JsonResponse(
                 [

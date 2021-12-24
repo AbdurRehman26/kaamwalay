@@ -356,7 +356,7 @@
                                     Service Fee:
                                 </td>
                                 <td class="info-content">
-                                    ${{number_format($order->service_fee,2)}}
+                                    ${{number_format($order->service_fee, 2)}}
                                 </td>
                             </tr>
                             @if(! empty($order->discounted_amount))
@@ -365,7 +365,7 @@
                                         Promo Code Discount:
                                     </td>
                                     <td class="info-content">
-                                        -${{number_format($order->discounted_amount,2)}}
+                                        -${{number_format($order->discounted_amount, 2)}}
                                     </td>
                                 </tr>
                             @endif
@@ -374,7 +374,7 @@
                                     Insured Shipping:
                                 </td>
                                 <td class="info-content">
-                                    ${{number_format($order->shipping_fee,2)}}
+                                    ${{number_format($order->shipping_fee, 2)}}
                                 </td>
                             </tr>
                             <tr class="info-line">
@@ -382,7 +382,7 @@
                                     Total:
                                 </td>
                                 <td class="info-content">
-                                    ${{number_format($order->grand_total,2)}}
+                                    ${{number_format($order->grand_total, 2)}}
                                 </td>
                             </tr>
                         </tbody>
@@ -421,7 +421,7 @@
                                 {{$item->quantity}}
                             </td>
                             <td class="value">
-                                ${{number_format($item->declared_value_per_unit,2)}}
+                                ${{number_format($item->declared_value_per_unit, 2)}}
                             </td>
                         </tr>
                     @endforeach
@@ -429,7 +429,7 @@
             </table>
         </div>
         <div class="total-declared-section">
-            Total Declared Value: <b>${{number_format($orderItems->sum('declared_value_total'),2)}}</b>
+            Total Declared Value: <b>${{number_format($orderItems->sum('declared_value_total'), 2)}}</b>
         </div>
     </main>
 </body>

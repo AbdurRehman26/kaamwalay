@@ -38,6 +38,7 @@ test('user can be charged successfully', function () {
         'payment_provider_reference_id' => Str::random(25),
     ]);
     $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments");
+
     $response->assertOk();
     $response->assertJsonStructure(['data' => ['id', 'charges']]);
     $response->assertJsonPath('data.amount', $this->order->grand_total_cents);

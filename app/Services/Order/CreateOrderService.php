@@ -83,7 +83,7 @@ class CreateOrderService
         $this->storeOrderItems($this->data['items']);
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
-        $this->storeShippingFeeAndGrandTotal();
+        $this->storeServiceFeeAndGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
@@ -177,7 +177,7 @@ class CreateOrderService
         $this->order->save();
     }
 
-    protected function storeShippingFeeAndGrandTotal()
+    protected function storeServiceFeeAndGrandTotal()
     {
         $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
         $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;

@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\Admin\Coupon;
 
 use App\Http\Resources\API\Admin\Coupon\Couponable\CustomerCollection;
-use App\Http\Resources\API\Admin\Coupon\Couponable\CustomerResource;
 use App\Http\Resources\API\Admin\Coupon\Couponable\PaymentPlanCollection;
 use App\Http\Resources\API\BaseResource;
 

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Coupon;
-use App\Models\Couponable;
 use App\Models\CouponApplicable;
 use App\Models\CouponStat;
 use App\Models\CouponStatus;
@@ -29,7 +28,7 @@ class CouponFactory extends Factory
             'description' => $this->faker->sentence(),
             'type' => Arr::random(['fixed', 'percentage']),
             'discount_value' => random_int(5, 25),
-            'available_from' => now()->addDays(random_int(-5, 10)),
+            'available_from' => now()->addDays(random_int(-5, 2)),
             'available_till' => now()->addDays(random_int(10, 15)),
         ];
     }

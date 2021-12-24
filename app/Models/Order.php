@@ -37,6 +37,7 @@ class Order extends Model
         'billing_order_address_id',
         'payment_method_id',
         'shipping_method_id',
+        'coupon_id',
         'invoice_id',
         'order_label_id',
         'order_shipment_id',
@@ -136,6 +137,7 @@ class Order extends Model
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),
             AllowedInclude::relationship('refunds'),
+            AllowedInclude::relationship('coupon'),
         ];
     }
 
@@ -306,5 +308,10 @@ class Order extends Model
         ->where('order_id', $this->id)
         ->groupBy(['card_product_id'])
         ->get();
+    }
+
+    public function coupon(): BelongsTo
+    {
+        return $this->belongsTo(Coupon::class);
     }
 }

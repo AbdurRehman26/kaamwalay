@@ -2,8 +2,8 @@
 
 namespace App\Console;
 
-use App\Console\Commands\Coupon\ActivateCoupon;
-use App\Console\Commands\Coupon\ExpireCoupon;
+use App\Console\Commands\Coupon\ActivateCoupons;
+use App\Console\Commands\Coupon\ExpireCoupons;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
 use App\Console\Commands\SendScheduledEmails;
 use Carbon\Carbon;
@@ -33,8 +33,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateRevenueStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
             ->dailyAt('00:20');
         $schedule->command(SendScheduledEmails::class)->everyFifteenMinutes();
-        $schedule->command(ActivateCoupon::class)->everyThirtyMinutes();
-        $schedule->command(ExpireCoupon::class)->everyThirtyMinutes();
+        $schedule->command(ActivateCoupons::class)->everyThirtyMinutes();
+        $schedule->command(ExpireCoupons::class)->everyThirtyMinutes();
     }
 
     /**

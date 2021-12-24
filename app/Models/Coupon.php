@@ -118,4 +118,16 @@ class Coupon extends Model
     {
         $this->attributes['code'] = Str::upper($value);
     }
+
+    public static function getAllowedAdminIncludes(): array
+    {
+        return [
+            'couponStatus',
+            'couponApplicable',
+            'couponStats',
+            'couponLogs',
+            'users',
+            'paymentPlans',
+        ];
+    }
 }

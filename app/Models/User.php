@@ -155,6 +155,12 @@ class User extends Authenticatable implements JWTSubject
         return $query->role(Role::findByName(config('permission.roles.admin')));
     }
 
+    public function scopeCustomer(Builder $query): Builder
+    {
+        // @phpstan-ignore-next-line
+        return $query->role(Role::findByName(config('permission.roles.customer')));
+    }
+
     public function sendPasswordResetNotification($token)
     {
         /* @var EmailService $emailService */
@@ -180,11 +186,5 @@ class User extends Authenticatable implements JWTSubject
             'token' => $token,
             'email' => $this->getEmailForPasswordReset(),
         ]);
-    }
-
-    public function scopeCustomers(Builder $query): Builder
-    {
-        // @phpstan-ignore-next-line
-        return $query->role(Role::findByName(config('permission.roles.customer')));
     }
 }

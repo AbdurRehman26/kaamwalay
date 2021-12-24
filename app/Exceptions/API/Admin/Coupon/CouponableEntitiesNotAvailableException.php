@@ -11,6 +11,7 @@ class CouponableEntitiesNotAvailableException extends Exception
 {
     /** @var string */
     protected $message = 'Requested coupon applicable doesn\'t require entities';
+
     /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class SeedInitialCouponApplicablesData extends Migration
 {
-    const TABLE = 'coupon_applicables';
+    protected const TABLE = 'coupon_applicables';
     /**
      * Run the migrations.
      *

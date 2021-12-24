@@ -7,10 +7,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CouponableEntityNotImplementedException extends Exception
+class CouponApplicableController extends Exception
 {
     /** @var string */
-    protected $message = 'Requested entity is not yet implemented';
+    protected $message = 'Requested entity does not exist.';
+
     /** @var int */
     protected $code = Response::HTTP_NOT_IMPLEMENTED;
 

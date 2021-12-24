@@ -15,7 +15,7 @@ class ChangeCouponStatus extends Controller
         ChangeCouponStatusRequest $request,
         CouponService $couponService
     ): CouponResource {
-        $coupon = $couponService->changeStatus($coupon, $request->get('status'));
+        $coupon = $couponService->changeStatus($coupon, $request->input('status'));
 
         return new CouponResource($coupon);
     }

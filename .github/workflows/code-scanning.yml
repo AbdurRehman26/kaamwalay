@@ -1,4 +1,5 @@
 name: Code Scanning
+
 on:
   workflow_dispatch:
 

@@ -8,9 +8,9 @@ use Illuminate\Support\Str;
 
 class CouponCodeService
 {
-    const COUPON_CODE_PREFIX = 'AGS';
-    const COUPON_CODE_MAX_LENGTH = 12;
-    const COUPON_LENGTH_WITHOUT_PREFIX = 9;
+    protected const COUPON_CODE_PREFIX = 'AGS';
+    protected const COUPON_CODE_MAX_LENGTH = 12;
+    protected const COUPON_LENGTH_WITHOUT_PREFIX = 9;
 
     public function exists(string $code): bool
     {
@@ -22,7 +22,7 @@ class CouponCodeService
      */
     public function newCoupon(string $code, bool $shouldSystemGenerate = false): string
     {
-        if ($shouldSystemGenerate === true) {
+        if ($shouldSystemGenerate) {
             return $this->generateValidCoupon();
         }
         if ($this->exists($code)) {

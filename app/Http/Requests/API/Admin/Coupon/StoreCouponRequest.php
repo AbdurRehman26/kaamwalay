@@ -54,22 +54,22 @@ class StoreCouponRequest extends FormRequest
             ],
             'is_permanent' => ['required', 'filled'],
             'available_till' => [
-                Rule::requiredIf(! boolval($this->get('is_permanent'))),
+                Rule::requiredIf(! boolval($this->input('is_permanent'))),
                 'nullable',
                 'date_format:Y-m-d',
                 'after_or_equal:available_from',
             ],
             'couponables' => [
-                Rule::requiredIf(in_array($this->get('coupon_applicable_id'), CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES)),
+                Rule::requiredIf(in_array($this->input('coupon_applicable_id'), CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES)),
                 'array',
             ],
             'couponables.*' => [
                 Rule::when(
                     Arr::has(
                         CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES,
-                        $this->get('coupon_applicable_id')
+                        $this->input('coupon_applicable_id')
                     ),
-                    Rule::exists(CouponApplicable::ENTITIES_MAPPING[$this->get('coupon_applicable_id')] ?? null, 'id')
+                    Rule::exists(CouponApplicable::ENTITIES_MAPPING[$this->input('coupon_applicable_id')] ?? null, 'id')
                 ),
             ],
         ];

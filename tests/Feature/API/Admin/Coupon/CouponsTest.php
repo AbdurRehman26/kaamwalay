@@ -73,7 +73,9 @@ test('admin can create coupon for specific users', function () {
 
 test('admin can create coupon for specific payment plan', function () {
     actingAs($this->user);
+
     $paymentPlans = PaymentPlan::factory(5)->create()->pluck('id');
+    
     postJson(route('coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),

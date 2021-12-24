@@ -3,10 +3,10 @@
 use App\Http\Controllers\API\Admin\Cards\CardProductController;
 use App\Http\Controllers\API\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\Admin\Cards\CardSetController;
-use App\Http\Controllers\API\Admin\Coupon\ChangeCouponStatus;
+use App\Http\Controllers\API\Admin\Coupon\CouponStatusController;
 use App\Http\Controllers\API\Admin\Coupon\CouponController;
-use App\Http\Controllers\API\Admin\Coupon\ListCouponableEntity;
-use App\Http\Controllers\API\Admin\Coupon\ListCouponApplicable;
+use App\Http\Controllers\API\Admin\Coupon\CouponableEntityController;
+use App\Http\Controllers\API\Admin\Coupon\CouponApplicableController;
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
 use App\Http\Controllers\API\Admin\Order\OrderPaymentController;
@@ -64,8 +64,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Coupons
     Route::apiResource('coupons', CouponController::class)->except('update');
-    Route::put('coupons/{coupon}/change-status', ChangeCouponStatus::class)
+    Route::put('coupons/{coupon}/change-status', CouponStatusController::class)
         ->name('coupons.change-status');
-    Route::get('coupon-applicables', ListCouponApplicable::class)->name('coupon.applicables');
-    Route::get('couponable/entities', ListCouponableEntity::class)->name('couponable.entities');
+    Route::get('coupon-applicables', CouponApplicableController::class)->name('coupon.applicables');
+    Route::get('couponable/entities', CouponableEntityController::class)->name('couponable.entities');
 });

@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 
 class CouponableManager implements Contracts\CouponableManagerInterface
 {
+    protected const ENTITY_CLASS_NAMESPACE = '\App\Services\Admin\Coupon\Couponables\\';
     public function __construct(
         protected Application $app,
         protected array $entities = []
@@ -30,22 +31,13 @@ class CouponableManager implements Contracts\CouponableManagerInterface
      */
     protected function getEntity(string $entity): CouponableEntityInterface
     {
-        $createMethod = 'createCouponable' . Str::singular(Str::camel($entity)) . 'Service';
-        if (! method_exists($this, $createMethod)) {
+        $entityClass = 'Couponable' . Str::singular(Str::Title(Str::camel($entity))) . 'Service';
+
+        if (! class_exists(self::ENTITY_CLASS_NAMESPACE . $entityClass)) {
             throw new CouponableEntityDoesNotExistException;
         }
-        $service = $this->{$createMethod}();
+        $service = new (self::ENTITY_CLASS_NAMESPACE . $entityClass)();
 
         return $this->entities[$entity] = $service;
-    }
-
-    protected function createCouponableUserService(): CouponableEntityInterface
-    {
-        return new CouponableUserService();
-    }
-
-    protected function createCouponablePaymentPlanService(): CouponableEntityInterface
-    {
-        return new CouponablePaymentPlanService();
     }
 }

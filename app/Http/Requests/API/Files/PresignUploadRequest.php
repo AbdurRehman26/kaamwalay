@@ -30,6 +30,7 @@ class PresignUploadRequest extends FormRequest
             'prefix' => [],
             'directory' => [],
             'suffix' => [],
+            'bucket' => [],
         ];
     }
 }

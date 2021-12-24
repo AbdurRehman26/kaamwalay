@@ -10,17 +10,17 @@ use App\Services\Admin\Coupon\CouponService;
 use Countable;
 use IteratorAggregate;
 
-class ListCouponableEntity extends Controller
+class CouponableEntityController extends Controller
 {
     /**
      * @throws CouponableEntitiesNotAvailableException
      */
     public function __invoke(CouponableEntityRequest $request, CouponService $couponService): Countable|IteratorAggregate
     {
-        if (! isset(CouponApplicable::ENTITIES_MAPPING[$request->get('coupon_applicable_id')])) {
+        if (! isset(CouponApplicable::ENTITIES_MAPPING[$request->input('coupon_applicable_id')])) {
             throw new CouponableEntitiesNotAvailableException;
         }
 
-        return $couponService->getCouponableEntities($request->get('coupon_applicable_id'));
+        return $couponService->getCouponableEntities($request->input('coupon_applicable_id'));
     }
 }

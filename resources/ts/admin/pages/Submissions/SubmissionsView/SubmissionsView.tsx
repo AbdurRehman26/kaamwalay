@@ -28,6 +28,7 @@ export function SubmissionsView() {
                     'orderShipment',
                     'extraCharges',
                     'refunds',
+                    'orderLabel',
                     'orderStatusHistory.orderStatus',
                     'coupon',
                 ],
@@ -51,6 +52,7 @@ export function SubmissionsView() {
                 orderStatus={data?.orderStatus}
                 orderStatusHistory={data?.orderStatusHistory}
                 orderShipment={data?.orderShipment}
+                orderLabel={data?.orderLabel}
             />
             <Divider />
             <SubmissionsViewDetails

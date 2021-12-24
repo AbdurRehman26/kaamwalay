@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Coupon extends Model
 {
@@ -67,6 +68,11 @@ class Coupon extends Model
         return $this->belongsTo(CouponApplicable::class);
     }
 
+    public function couponAble(): HasOne
+    {
+        return $this->hasOne(Couponable::class, );
+    }
+
     public function couponStats(): HasOne
     {
         return $this->hasOne(CouponStat::class);
@@ -92,6 +98,34 @@ class Coupon extends Model
         return $this->coupon_status_id === CouponStatus::STATUS_EXPIRED;
     }
 
+    public function isActive(): bool
+    {
+        return $this->coupon_status_id === CouponStatus::STATUS_ACTIVE;
+    }
+
+    public function scopeIsActive(Builder $query): Builder
+    {
+        return $query->where('coupon_status_id', '=', CouponStatus::STATUS_ACTIVE);
+    }
+
+    public function scopeValidOnCurrentDate(Builder $query): Builder
+    {
+        return $query->where('available_from', '<=', now())->where(function ($subQuery) {
+            $subQuery->where('available_till', '>=', now())->orWhereNull('available_till');
+        });
+    }
+
+    public function scopeValidOnCouponable(Builder $query, array $couponParams): Builder
+    {
+        if (empty($couponParams)) {
+            return $query;
+        }
+
+        return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
+            $subQuery->where('couponables_id', '=', $couponParams['couponables_id']);
+        })->orDoesntHave('couponAble');
+    }
+
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
         return $query->whereHas(
@@ -106,5 +140,27 @@ class Coupon extends Model
                     ->orWhere('code', $status);
             }
         );
+    }
+
+    public function getCodeAttribute(string $value): string
+    {
+        return Str::upper($value);
+    }
+
+    public function setCodeAttribute(string $value): void
+    {
+        $this->attributes['code'] = Str::upper($value);
+    }
+
+    public static function getAllowedAdminIncludes(): array
+    {
+        return [
+            'couponStatus',
+            'couponApplicable',
+            'couponStats',
+            'couponLogs',
+            'users',
+            'paymentPlans',
+        ];
     }
 }

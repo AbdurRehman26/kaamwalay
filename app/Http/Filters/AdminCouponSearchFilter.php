@@ -15,9 +15,7 @@ class AdminCouponSearchFilter implements Filter
         $query->whereLike(
             [
                 'code',
-                'available_from',
-                'couponStatus.code',
-                'couponStatus.name',
+                'description',
             ],
             $value
         );

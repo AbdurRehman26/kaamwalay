@@ -8,6 +8,7 @@ import { DateField } from '../decorators/DateField';
 import { AddressEntity } from './AddressEntity';
 import { Entity } from './Entity';
 import { InvoiceEntity } from './InvoiceEntity';
+import { OrderLabelEntity } from './OrderLabelEntity';
 import { OrderItemEntity } from './OrderItemEntity';
 import { OrderPaymentEntity } from './OrderPaymentEntity';
 import { OrderStatusEntity } from './OrderStatusEntity';
@@ -85,6 +86,9 @@ export class OrderEntity extends Entity {
 
     @Type(() => InvoiceEntity)
     public invoice!: InvoiceEntity | null;
+
+    @Type(() => OrderLabelEntity)
+    public orderLabel!: OrderLabelEntity | null;
 
     public get status() {
         return this.orderStatus?.code;

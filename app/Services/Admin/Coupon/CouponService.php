@@ -25,8 +25,8 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class CouponService
 {
-    const COUPONABLES_REQUEST_KEY = 'couponables';
-    const LIST_COUPONS_PER_PAGE = 15;
+    protected const COUPONABLES_REQUEST_KEY = 'couponables';
+    protected const LIST_COUPONS_PER_PAGE = 15;
 
     public function __construct(
         protected CouponCodeService $couponCodeService,
@@ -47,14 +47,7 @@ class CouponService
                 'available_till',
                 'discount_value',
             ])
-            ->allowedIncludes([
-                'couponStatus',
-                'couponApplicable',
-                'couponStats',
-                'couponLogs',
-                'users',
-                'paymentPlans',
-            ])
+            ->allowedIncludes(Coupon::getAllowedAdminIncludes())
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::LIST_COUPONS_PER_PAGE));
     }
@@ -62,14 +55,7 @@ class CouponService
     public function getCoupon(int $couponId): Model|QueryBuilder
     {
         return QueryBuilder::for(Coupon::class)
-            ->allowedIncludes([
-                'couponStatus',
-                'couponApplicable',
-                'couponStat',
-                'couponLogs',
-                'users',
-                'paymentPlans',
-            ])
+            ->allowedIncludes(Coupon::getAllowedAdminIncludes())
             ->findOrFail($couponId);
     }
 

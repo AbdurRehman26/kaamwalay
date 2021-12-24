@@ -28,6 +28,7 @@ class OrderItemResource extends BaseResource
             'graded_by' => $this->when($isGraded, fn () => $this->getGradedStatusHistory()?->user?->getFullName()),
             'graded_at' => $this->when($isGraded, fn () => $this->formatDate($this->getGradedStatusHistory()?->updated_at)),
             'notes' => $this->notes ?? '',
+            'internal_notes' => $this->internal_notes ?? '',
         ];
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Coupon;
 
-use App\Exceptions\API\Admin\Coupon\CouponableEntityNotImplementedException;
+use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
 use App\Services\Admin\Coupon\Couponables\CouponablePaymentPlanService;
 use App\Services\Admin\Coupon\Couponables\CouponableUserService;
@@ -26,13 +26,13 @@ class CouponableManager implements Contracts\CouponableManagerInterface
     }
 
     /**
-     * @throws CouponableEntityNotImplementedException
+     * @throws CouponableEntityDoesNotExistException
      */
     protected function getEntity(string $entity): CouponableEntityInterface
     {
         $createMethod = 'createCouponable' . Str::singular(Str::camel($entity)) . 'Service';
         if (! method_exists($this, $createMethod)) {
-            throw new CouponableEntityNotImplementedException;
+            throw new CouponableEntityDoesNotExistException;
         }
         $service = $this->{$createMethod}();
 

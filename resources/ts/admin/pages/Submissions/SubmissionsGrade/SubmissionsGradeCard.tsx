@@ -40,6 +40,7 @@ interface SubmissionsGradeCardProps {
     itemId: any;
     itemIndex: number;
     notes?: string;
+    internalNotes?: string;
     orderID: number;
     gradeData: any;
 }
@@ -260,20 +261,34 @@ const useStyles = makeStyles(
  * @date: 28.08.2021
  * @time: 19:09
  */
-export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, notes }: SubmissionsGradeCardProps) {
+export function SubmissionsGradeCard({
+    itemId,
+    itemIndex,
+    orderID,
+    gradeData,
+    notes,
+    internalNotes,
+}: SubmissionsGradeCardProps) {
     const classes = useStyles();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
     const notifications = useNotifications();
     const [cardNotes, setCardNotes] = useState(notes);
+    const [cardInternalNotes, setInternalNotes] = useState(internalNotes);
     const [showEditGradeStepper, setShowEditGradeStepper] = useState(false);
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
     const debounceNotes = useCallback(_.debounce(handleUpdateCardNotes, 500), []);
+    const debounceInternalNotes = useCallback(_.debounce(handleUpdateInternalCardNotes, 500), []);
 
     const handleNotesChange = (event: any) => {
         setCardNotes(event.target.value);
         debounceNotes(itemId, event.target.value);
+    };
+
+    const handleInternalNotesChange = (event: any) => {
+        setInternalNotes(event.target.value);
+        debounceInternalNotes(itemId, event.target.value);
     };
 
     const handleNotAccepted = useCallback(
@@ -503,6 +518,16 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                 orderItemId,
                 orderId: orderID,
                 notes,
+            }),
+        );
+    }
+
+    function handleUpdateInternalCardNotes(orderItemId: number, internalNotes: string) {
+        dispatch(
+            changeOrderItemNotes({
+                orderItemId,
+                orderId: orderID,
+                internalNotes,
             }),
         );
     }
@@ -772,6 +797,15 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                         {currentViewMode === 'not_accepted_pending_notes' ||
                         currentViewMode === 'missing_pending_notes' ? null : (
                             <>
+                                <TextField
+                                    label="Notes to Customer"
+                                    multiline
+                                    rows={4}
+                                    value={cardNotes}
+                                    sx={{ marginTop: '16px' }}
+                                    fullWidth
+                                    onChange={handleNotesChange}
+                                />
                                 <SubmissionsGradeCardGrades
                                     icon={<FaceIcon className={classes.headingIcon} />}
                                     disabled={!areRoboGradesAvailable()}
@@ -784,17 +818,16 @@ export function SubmissionsGradeCard({ itemId, itemIndex, orderID, gradeData, no
                                     itemIndex={itemIndex}
                                     icon={<OutlinedToyIcon className={classes.headingIcon} />}
                                 />
+                                <SubmissionGradeCardUpload itemIndex={itemIndex} />
                                 <TextField
-                                    label="Enter Notes"
+                                    label="Internal Notes"
                                     multiline
                                     rows={4}
-                                    value={cardNotes}
+                                    value={cardInternalNotes}
                                     sx={{ marginTop: '16px' }}
                                     fullWidth
-                                    onChange={handleNotesChange}
+                                    onChange={handleInternalNotesChange}
                                 />
-                                <SubmissionGradeCardUpload itemIndex={itemIndex} />
-
                                 <Grid container justifyContent={'flex-end'}>
                                     {currentViewMode === 'graded_revise_mode' ? (
                                         <>

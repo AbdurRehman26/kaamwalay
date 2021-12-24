@@ -21,7 +21,7 @@ interface UnconfirmedCardProps extends AccordionCardItemProps {
     declaredValue: number;
     card: CardProductEntity;
     disableConfirm?: boolean;
-    notes?: string;
+    internalNotes?: string;
     orderId: number;
     onConfirm(index: number): void;
 
@@ -63,23 +63,22 @@ export function UnconfirmedCard({
     onPreview,
     onSwapCard,
     disableConfirm,
-    notes,
+    internalNotes,
     onCardNotesChange,
 }: UnconfirmedCardProps) {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
-    const [cardNotes, setCardNotes] = useState(notes);
-
+    const [cardInternalNotes, setInternalNotes] = useState(internalNotes);
     const notification = useNotifications();
     const debounceNotes = useCallback(_.debounce(handleCardNotesChange, 500), []);
 
     const handleSetCardNotes = useCallback(
         (event) => {
-            setCardNotes(event.target.value);
+            setInternalNotes(event.target.value);
             debounceNotes(event.target.value);
         },
-        [setCardNotes, cardNotes],
+        [setInternalNotes, cardInternalNotes],
     );
 
     const handlePreview = useCallback(() => onPreview(itemId), [onPreview, itemId]);
@@ -188,12 +187,12 @@ export function UnconfirmedCard({
                 </Grid>
                 <Box marginTop={'18px'} width={'100%'}>
                     <TextField
-                        label="Enter Notes"
+                        label="Internal Notes"
                         fullWidth
                         multiline
-                        value={cardNotes}
+                        value={cardInternalNotes}
                         onChange={handleSetCardNotes}
-                        placeholder={'Notes'}
+                        placeholder={'Internal Notes'}
                         rows={4}
                     />
                 </Box>

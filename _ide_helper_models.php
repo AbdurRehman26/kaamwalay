@@ -214,7 +214,7 @@ namespace App\Models{
  * App\Models\Coupon
  *
  * @property int $id
- * @property CouponType $code
+ * @property string $code
  * @property string $name
  * @property string $description
  * @property float $max_usage_allowed

@@ -109,12 +109,12 @@ class Coupon extends Model
         );
     }
 
-    public function getCodeAttribute($value): string
+    public function getCodeAttribute(string $value): string
     {
         return Str::upper($value);
     }
 
-    public function setCodeAttribute($value): void
+    public function setCodeAttribute(string $value): void
     {
         $this->attributes['code'] = Str::upper($value);
     }

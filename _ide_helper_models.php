@@ -207,11 +207,14 @@ namespace App\Models{
 }
 
 namespace App\Models{
-/**
+
+    use App\Casts\CouponType;
+
+    /**
  * App\Models\Coupon
  *
  * @property int $id
- * @property string $code
+ * @property CouponType $code
  * @property string $name
  * @property string $description
  * @property float $max_usage_allowed

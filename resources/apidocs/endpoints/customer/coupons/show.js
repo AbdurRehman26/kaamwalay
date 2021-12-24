@@ -1,12 +1,11 @@
 /**
- * @api {get} /customer/coupons/HvTGSYpak9?service_level=1 Show Coupon
+ * @api {get} /customer/coupons/HvTGSYpak9?couponables_type=service_leve&couponables_id=1 Show Coupon
  * @apiName Show Coupon
  * @apiGroup Customer Coupons
  *
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {String} code coupon code
  * @apiParam {String} code coupon code
  *
  * @apiSuccess {Object} data Order object

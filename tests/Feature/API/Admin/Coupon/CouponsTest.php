@@ -93,7 +93,6 @@ test('admin can create coupon for specific payment plan', function () {
 
 test('admin can request related models for coupon list', function (string $relationShip) {
     actingAs($this->user);
-    dump($relationShip);
 
     getJson(route('coupons.index', ['include[]' => $relationShip]))
         ->assertOk()

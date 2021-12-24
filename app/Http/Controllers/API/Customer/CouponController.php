@@ -39,7 +39,6 @@ class CouponController extends Controller
     {
         try {
             $couponParams = [
-                'couponables_type' => 'service_level',
                 'couponables_id' => $request->payment_plan['id'],
             ];
 

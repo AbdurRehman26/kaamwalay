@@ -177,7 +177,7 @@ class CreateOrderService
         $this->order->save();
     }
 
-    protected function storeServiceFeeAndGrandTotal()
+    protected function storeServiceFeeAndGrandTotal(): void
     {
         $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
         $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;

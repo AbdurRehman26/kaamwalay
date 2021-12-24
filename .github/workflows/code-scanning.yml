@@ -2,6 +2,10 @@ name: Code Scanning
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
+      - dev
 
 jobs:
   qodana:

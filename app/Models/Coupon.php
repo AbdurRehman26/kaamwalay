@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\CouponCode;
 use App\Casts\CouponDateRange;
 use App\Casts\CouponType;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Coupon extends Model
 {
@@ -51,7 +51,6 @@ class Coupon extends Model
         'type' => CouponType::class,
         'available_from' => CouponDateRange::class,
         'available_till' => CouponDateRange::class,
-        'code' => CouponCode::class,
     ];
 
     public function couponStatusHistories(): HasMany
@@ -108,5 +107,15 @@ class Coupon extends Model
                     ->orWhere('code', $status);
             }
         );
+    }
+
+    public function getCodeAttribute($value): string
+    {
+        return Str::upper($value);
+    }
+
+    public function setCodeAttribute($value): void
+    {
+        $this->attributes['code'] = Str::upper($value);
     }
 }

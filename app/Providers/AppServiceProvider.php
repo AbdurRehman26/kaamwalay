@@ -19,9 +19,6 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
-        $this->app->bind(CouponableManager::class, function ($app) {
-            return new CouponableManager($app);
-        });
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\CouponCode;
 use App\Casts\CouponDateRange;
 use App\Casts\CouponType;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,6 +51,7 @@ class Coupon extends Model
         'type' => CouponType::class,
         'available_from' => CouponDateRange::class,
         'available_till' => CouponDateRange::class,
+        'code' => CouponCode::class,
     ];
 
     public function couponStatusHistories(): HasMany

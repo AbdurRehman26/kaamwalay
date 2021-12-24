@@ -25,6 +25,7 @@ class UpdateOrderItemNotesRequest extends FormRequest
     {
         return [
             'notes' => ['nullable', 'string', 'max:300'],
+            'internal_notes' => ['nullable', 'string', 'max:300'],
         ];
     }
 }

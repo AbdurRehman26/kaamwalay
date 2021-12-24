@@ -1,7 +1,9 @@
 <?php
 
+use App\Jobs\ProcessImage;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
+use Illuminate\Support\Facades\Bus;
 
 beforeEach(function () {
     $this->seed([
@@ -16,6 +18,8 @@ beforeEach(function () {
 });
 
 test('customers can create cards manually', function () {
+    Bus::fake();
+
     $response = $this->postJson('/api/customer/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
@@ -29,4 +33,6 @@ test('customers can create cards manually', function () {
         'long_name' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
     ]);
+
+    Bus::assertDispatched(ProcessImage::class);
 });

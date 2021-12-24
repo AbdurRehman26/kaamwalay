@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Coupon extends Model
 {
@@ -140,5 +141,15 @@ class Coupon extends Model
                     ->orWhere('code', $status);
             }
         );
+    }
+
+    public function getCodeAttribute(string $value): string
+    {
+        return Str::upper($value);
+    }
+
+    public function setCodeAttribute(string $value): void
+    {
+        $this->attributes['code'] = Str::upper($value);
     }
 }

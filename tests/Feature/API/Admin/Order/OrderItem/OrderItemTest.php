@@ -377,3 +377,35 @@ test('admin can remove notes from order item', function () {
 
     expect($orderItem->notes)->toBe(null);
 });
+
+test('admin can update order item internal notes', function () {
+    $orderItem = OrderItem::factory()->create();
+    $this->actingAs($this->user);
+
+    $internalNotes = $this->faker->sentence();
+
+    $this->putJson(
+        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        ['internal_notes' => $internalNotes]
+    )
+        ->assertOk();
+
+    $orderItem->refresh();
+
+    expect($orderItem->internal_notes)->toBe($internalNotes);
+});
+
+test('admin can remove order item internal notes', function () {
+    $orderItem = OrderItem::factory()->create(['internal_notes' => 'Lorem ispum']);
+    $this->actingAs($this->user);
+
+    $this->putJson(
+        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        ['internal_notes' => '']
+    )
+        ->assertOk();
+
+    $orderItem->refresh();
+
+    expect($orderItem->internal_notes)->toBe(null);
+});

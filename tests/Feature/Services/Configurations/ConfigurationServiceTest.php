@@ -14,11 +14,11 @@ it('should get guest keys', function () {
     config([
         'configuration.keys' => [
             'APP_ENV' => [
-                'value' => env('APP_ENV'),
+                'value' => config('app.env'),
                 'auth' => false,
             ],
             'APP_URL' => [
-                'value' => env('APP_URL'),
+                'value' => config('app.env'),
                 'auth' => true,
             ],
         ],
@@ -26,6 +26,6 @@ it('should get guest keys', function () {
 
     $data = $this->configurationService->getAllConfigurations();
     $this->assertEquals([
-        'app_env' => env('APP_ENV'),
+        'app_env' => config('app.env'),
     ], $data);
 });

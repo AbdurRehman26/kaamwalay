@@ -207,7 +207,10 @@ namespace App\Models{
 }
 
 namespace App\Models{
-/**
+
+    use App\Casts\CouponType;
+
+    /**
  * App\Models\Coupon
  *
  * @property int $id

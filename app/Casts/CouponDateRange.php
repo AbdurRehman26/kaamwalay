@@ -14,7 +14,7 @@ class CouponDateRange implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        return Carbon::parse($value);
+        return is_null($value) ? null : Carbon::parse($value);
     }
 
     /**

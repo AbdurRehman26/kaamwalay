@@ -25,6 +25,7 @@ class CouponFactory extends Factory
             'coupon_applicable_id' => CouponApplicable::factory(),
             'coupon_status_id' => CouponStatus::factory(),
             'code' => Str::random(10),
+            'description' => $this->faker->sentence(),
             'type' => Arr::random(['fixed', 'percentage']),
             'discount_value' => random_int(5, 25),
             'available_from' => now()->addDays(random_int(-5, 2)),

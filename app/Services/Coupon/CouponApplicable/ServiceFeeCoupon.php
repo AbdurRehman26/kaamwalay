@@ -5,8 +5,10 @@ namespace App\Services\Coupon\CouponApplicable;
 use App\Models\Coupon;
 use App\Models\Order;
 
-class ServiceFeeCoupon extends CouponApplicables implements CouponApplicableInterface
+class ServiceFeeCoupon implements CouponApplicableInterface
 {
+    use CouponApplicables;
+
     public function getFixedDiscount(Coupon $coupon, Order|array $order): float
     {
         return $coupon->discount_value;

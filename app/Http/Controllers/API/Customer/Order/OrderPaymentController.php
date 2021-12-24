@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\Payment\PaymentService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderPaymentController extends Controller
@@ -19,6 +20,10 @@ class OrderPaymentController extends Controller
     public function charge(Order $order): JsonResponse
     {
         $this->authorize('view', $order);
+
+        throw_if(! empty($order->coupon) && ! $order->coupon->isActive(), ValidationException::withMessages([
+            'message' => 'Coupon is either expired or invalid.',
+        ]));
 
         throw_unless($order->isPayable(), OrderNotPayable::class);
 

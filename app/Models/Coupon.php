@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Coupon extends Model
 {
@@ -81,6 +83,26 @@ class Coupon extends Model
         return $this->hasMany(CouponLog::class);
     }
 
+    public function users(): MorphToMany
+    {
+        return $this->morphedByMany(User::class, 'couponables');
+    }
+
+    public function paymentPlans(): MorphToMany
+    {
+        return $this->morphedByMany(PaymentPlan::class, 'couponables');
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->coupon_status_id === CouponStatus::STATUS_EXPIRED;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->coupon_status_id === CouponStatus::STATUS_ACTIVE;
+    }
+
     public function scopeIsActive(Builder $query): Builder
     {
         return $query->where('coupon_status_id', '=', CouponStatus::STATUS_ACTIVE);
@@ -100,17 +122,8 @@ class Coupon extends Model
         }
 
         return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
-            $subQuery->where('couponables_type', '=', Couponable::COUPONABLE_TYPES[$couponParams['couponables_type']])
-                    ->where('couponables_id', '=', $couponParams['couponables_id']);
+            $subQuery->where('couponables_id', '=', $couponParams['couponables_id']);
         })->orDoesntHave('couponAble');
-    }
-
-    public function discountStatement(): string
-    {
-        return match ($this->type) {
-            'percentage' => (int) $this->discount_value . '% Off ' . $this->couponApplicable?->label ?: '',
-            default => $this->discount_value . ' Off',
-        };
     }
 
     public function scopeStatus(Builder $query, string|int $status): Builder
@@ -127,5 +140,27 @@ class Coupon extends Model
                     ->orWhere('code', $status);
             }
         );
+    }
+
+    public function getCodeAttribute(string $value): string
+    {
+        return Str::upper($value);
+    }
+
+    public function setCodeAttribute(string $value): void
+    {
+        $this->attributes['code'] = Str::upper($value);
+    }
+
+    public static function getAllowedAdminIncludes(): array
+    {
+        return [
+            'couponStatus',
+            'couponApplicable',
+            'couponStats',
+            'couponLogs',
+            'users',
+            'paymentPlans',
+        ];
     }
 }

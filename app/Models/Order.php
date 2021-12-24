@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -38,6 +39,7 @@ class Order extends Model
         'shipping_method_id',
         'coupon_id',
         'invoice_id',
+        'order_label_id',
         'order_shipment_id',
         'order_customer_shipment_id',
         'arrived_at',
@@ -69,6 +71,7 @@ class Order extends Model
         'payment_method_id' => 'integer',
         'shipping_method_id' => 'integer',
         'invoice_id' => 'integer',
+        'order_label_id' => 'integer',
         'order_status_id' => 'integer',
         'arrived_at' => 'date',
         'reviewed_by_id' => 'integer',
@@ -86,6 +89,7 @@ class Order extends Model
     {
         return [
             AllowedInclude::relationship('invoice'),
+            AllowedInclude::relationship('orderLabel'),
             AllowedInclude::relationship('paymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
@@ -99,6 +103,7 @@ class Order extends Model
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),
             AllowedInclude::relationship('refunds'),
+            AllowedInclude::relationship('coupon'),
         ];
     }
 
@@ -132,6 +137,7 @@ class Order extends Model
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),
             AllowedInclude::relationship('refunds'),
+            AllowedInclude::relationship('coupon'),
         ];
     }
 
@@ -185,6 +191,11 @@ class Order extends Model
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function orderLabel(): HasOne
+    {
+        return $this->hasOne(OrderLabel::class);
     }
 
     public function orderItems(): HasMany

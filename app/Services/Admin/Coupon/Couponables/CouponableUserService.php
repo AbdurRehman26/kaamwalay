@@ -32,7 +32,7 @@ class CouponableUserService implements CouponableEntityInterface
 
     public function get(): CustomerCollection
     {
-        $customers = User::customers()->get();
+        $customers = User::customer()->get();
 
         return new CustomerCollection($customers);
     }

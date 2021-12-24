@@ -19,7 +19,7 @@ class CouponService
 
     public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon
     {
-        $coupon = Coupon::whereCode($couponCode)->IsActive()->ValidOnCouponable($couponParams)->first();
+        $coupon = Coupon::whereCode($couponCode)->isActive()->validOnCouponable($couponParams)->first();
 
         throw_if(! $coupon, CouponExpiredOrInvalid::class);
 
@@ -45,7 +45,8 @@ class CouponService
     public function updateCouponStats(Coupon $coupon): void
     {
         $couponStat = CouponStat::updateOrCreate(['coupon_id' => $coupon->id]);
-        $orderCouponLog = Order::join('coupon_logs', 'coupon_logs.order_id', 'orders.id');
+        $orderCouponLog = Order::join('coupon_logs', 'coupon_logs.order_id', 'orders.id')
+                            ->where('orders.coupon_id', $coupon->id);
 
         $couponStat->times_used = CouponLog::whereCouponId($coupon->id)->count();
         $couponStat->total_revenue = $orderCouponLog->sum('grand_total');

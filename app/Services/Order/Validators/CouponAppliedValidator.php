@@ -14,7 +14,6 @@ class CouponAppliedValidator
                 CouponService::returnCouponIfValid(
                     $data['coupon']['code'],
                     [
-                        'couponables_type' => $data['coupon']['couponables_type'] ?? 'service_level',
                         'couponables_id' => $data['coupon']['couponables_id'] ?? $data['payment_plan']['id'],
                     ]
                 ),

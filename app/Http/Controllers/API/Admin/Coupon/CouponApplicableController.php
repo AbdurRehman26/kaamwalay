@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\Admin\Coupon\CouponApplicableCollection;
 use App\Models\CouponApplicable;
 
-class ListCouponApplicable extends Controller
+class CouponApplicableController extends Controller
 {
     public function __invoke(): CouponApplicableCollection
     {

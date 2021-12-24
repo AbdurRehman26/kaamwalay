@@ -7,7 +7,7 @@ use App\Services\Coupon\CouponService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class CouponAppliedOnOrder implements ShouldQueue
+class UpdateCouponLogsAndStatsListener implements ShouldQueue
 {
     use InteractsWithQueue;
 

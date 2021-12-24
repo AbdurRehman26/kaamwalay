@@ -4,22 +4,23 @@ namespace App\Console\Commands\Coupon;
 
 use App\Services\Admin\Coupon\CouponService;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
-class ExpireCoupon extends Command
+class ActivateCoupons extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'coupons:expire';
+    protected $signature = 'coupons:activate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'This command will expire all the coupons when they reach their end of availability date';
+    protected $description = 'This command will activate coupons when they reach availability date';
 
     /**
      * Create a new command instance.
@@ -38,14 +39,14 @@ class ExpireCoupon extends Command
      */
     public function handle()
     {
-        $coupons = $this->couponService->getCouponsNearingExpiry();
+        $queuedCoupons = $this->couponService->getQueuedCouponsNearingActivation();
 
-        $this->info("Total of {$coupons->count()} will be expired.");
+        $this->info("Total of {$queuedCoupons->count()} will be activated.");
 
-        $this->couponService->expireCoupons($coupons);
+        $this->couponService->activateCoupons($queuedCoupons);
 
-        $this->info("Total of {$coupons->count()} are now expired.");
+        $this->info("Total of {$queuedCoupons->count()} are now activated.");
 
-        return Command::SUCCESS;
+        return CommandAlias::SUCCESS;
     }
 }

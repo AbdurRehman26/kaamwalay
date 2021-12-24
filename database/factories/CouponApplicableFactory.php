@@ -16,7 +16,7 @@ class CouponApplicableFactory extends Factory
     public function definition()
     {
         return [
-            'code' => Arr::random(['service_fee', 'service_level', 'shipping_fee']),
+            'code' => Arr::random(['service_level', 'shipping_fee']),
             'label' => Str::title($this->faker->word()),
             'description' => $this->faker->sentence(),
             'is_active' => $this->faker->boolean(),

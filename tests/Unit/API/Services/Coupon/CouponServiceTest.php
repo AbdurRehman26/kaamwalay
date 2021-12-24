@@ -4,6 +4,7 @@ use App\Models\CardProduct;
 use App\Models\Coupon;
 use App\Models\Couponable;
 use App\Models\CouponApplicable;
+use App\Models\CouponStat;
 use App\Models\CouponStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -79,11 +80,24 @@ it('calculates discount for service fee order', function () {
     $discount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
     if ($this->coupon->type === 'fixed') {
-        $couponDiscount = $this->coupon->discount_value;
+        $couponDiscount = (float) $this->coupon->discount_value;
     } else {
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
-        $couponDiscount = (($this->coupon->discount_value * $serviceFee) / 100);
+        $couponDiscount = (float) (($this->coupon->discount_value * $serviceFee) / 100);
     }
 
     expect($discount)->toBe($couponDiscount);
+});
+
+it('calculates stats for coupon', function () {
+    $this->order->discounted_amount = (float)$this->couponService->calculateDiscount($this->order->coupon, $this->order);
+    $this->order->grand_total = $this->order->grand_total - $this->order->discounted_amount;
+    $this->order->save();
+
+    $this->couponService->updateCouponLogs($this->order);
+    $this->couponService->updateCouponStats($this->order->coupon);
+    $couponStat = CouponStat::whereCouponId($this->order->coupon->id)->first();
+
+    expect((int)$couponStat->times_used)->toBe(1);
+    expect($this->order->discounted_amount)->toBe((float)$couponStat->total_discount);
 });

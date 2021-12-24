@@ -18,6 +18,7 @@ beforeEach(function () {
 
     $this->order = Order::factory()->create([
         'user_id' => $user->id,
+        'coupon_id' => null,
         'payment_method_id' => 1,
         'order_status_id' => OrderStatus::PAYMENT_PENDING,
     ]);

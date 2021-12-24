@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Exceptions\API\Admin\Coupon;
+namespace App\Exceptions\Services\AGS;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CouponableEntitiesNotAvailableException extends Exception
+class AgsServiceIsDisabled extends Exception
 {
     /** @var string */
-    protected $message = 'Requested coupon applicable doesn\'t require entities';
+    protected $message = 'Skipping AgsService as it is disabled.';
 
     /** @var int */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;

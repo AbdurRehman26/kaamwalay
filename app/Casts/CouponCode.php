@@ -13,7 +13,7 @@ class CouponCode implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        return Str::upper($value);
+        return Str::upper((string) $value);
     }
 
     /**
@@ -21,6 +21,6 @@ class CouponCode implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        return Str::upper($value);
+        return Str::upper((string) $value);
     }
 }

@@ -9,8 +9,20 @@ use Illuminate\Support\Str;
 
 class CouponableManager
 {
-    public function __construct(protected array $entities = [])
+    private static ?CouponableManager $instance = null;
+
+    public function __construct(
+        protected array $entities = [],
+    ) {
+    }
+
+    public static function getInstance(): self
     {
+        if (is_null(self::$instance)) {
+            return self::$instance = new static();
+        }
+
+        return self::$instance;
     }
 
     /**

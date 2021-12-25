@@ -30,8 +30,6 @@ class CouponableManager
     {
         $entityServiceClass = $this->createEntityClassName($entity);
 
-        dump($entityServiceClass);
-
         if (! class_exists($entityServiceClass)) {
             throw new CouponableEntityDoesNotExistException;
         }

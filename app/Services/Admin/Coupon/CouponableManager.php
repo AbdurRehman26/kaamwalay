@@ -41,6 +41,6 @@ class CouponableManager
 
     protected function createEntityClassName(string $entity): string
     {
-        return __NAMESPACE__ . '\\Couponables\\Couponable' . Str::singular(Str::title(Str::camel($entity))) . 'Service';
+        return __NAMESPACE__ . '\\Couponables\\Couponable' . Str::singular(Str::ucfirst(Str::camel($entity))) . 'Service';
     }
 }

@@ -7,7 +7,7 @@ use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class CouponableManager
+final class CouponableManager
 {
     private static ?CouponableManager $instance = null;
 

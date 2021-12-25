@@ -4,20 +4,18 @@ namespace App\Services\Admin\Coupon;
 
 use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;
-use App\Services\Admin\Coupon\Couponables\CouponablePaymentPlanService;
-use App\Services\Admin\Coupon\Couponables\CouponableUserService;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class CouponableManager implements Contracts\CouponableManagerInterface
+class CouponableManager
 {
-    public function __construct(
-        protected Application $app,
-        protected array $entities = []
-    ) {
+    public function __construct(protected array $entities = [])
+    {
     }
 
+    /**
+     * @throws CouponableEntityDoesNotExistException
+     */
     public function entity(string $entity): CouponableEntityInterface
     {
         $entityService = Arr::get($this->entities, $entity);
@@ -30,22 +28,17 @@ class CouponableManager implements Contracts\CouponableManagerInterface
      */
     protected function getEntity(string $entity): CouponableEntityInterface
     {
-        $createMethod = 'createCouponable' . Str::singular(Str::camel($entity)) . 'Service';
-        if (! method_exists($this, $createMethod)) {
+        $entityServiceClass = $this->createEntityClassName($entity);
+
+        if (! class_exists($entityServiceClass)) {
             throw new CouponableEntityDoesNotExistException;
         }
-        $service = $this->{$createMethod}();
 
-        return $this->entities[$entity] = $service;
+        return $this->entities[$entity] = new $entityServiceClass();
     }
 
-    protected function createCouponableUserService(): CouponableEntityInterface
+    protected function createEntityClassName(string $entity): string
     {
-        return new CouponableUserService();
-    }
-
-    protected function createCouponablePaymentPlanService(): CouponableEntityInterface
-    {
-        return new CouponablePaymentPlanService();
+        return __NAMESPACE__ . '\\Couponables\\Couponable' . Str::singular(Str::title(Str::camel($entity))) . 'Service';
     }
 }

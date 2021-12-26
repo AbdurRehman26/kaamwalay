@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\Coupons\CanHaveCoupons;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
+use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -134,6 +135,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
+    public function getTotalSubmissions(): int
+    {
+        return $this->orders()->count();
+    }
+
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
@@ -147,6 +153,11 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $this;
+    }
+
+    public function scopeSignedUpBetween(Builder $query, $startDate, $endDate): Builder
+    {
+        return $query->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)]);
     }
 
     public function scopeAdmin(Builder $query): Builder

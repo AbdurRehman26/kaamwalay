@@ -7,6 +7,7 @@ use App\Http\Controllers\API\Admin\Coupon\CouponStatusController;
 use App\Http\Controllers\API\Admin\Coupon\CouponController;
 use App\Http\Controllers\API\Admin\Coupon\CouponableEntityController;
 use App\Http\Controllers\API\Admin\Coupon\CouponApplicableController;
+use App\Http\Controllers\API\Admin\CustomerController;
 use App\Http\Controllers\API\Admin\Order\OrderController;
 use App\Http\Controllers\API\Admin\Order\OrderItemController;
 use App\Http\Controllers\API\Admin\Order\OrderPaymentController;
@@ -68,4 +69,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ->name('coupons.change-status');
     Route::get('coupon-applicables', CouponApplicableController::class)->name('coupon.applicables');
     Route::get('couponable/entities', CouponableEntityController::class)->name('couponable.entities');
+
+    // Customers
+    Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
+
 });

@@ -152,7 +152,7 @@ export function AccordionCardItemHeader({
 
     useEffect(() => {
         setIsExpanded(expand ?? false);
-    }, [expand]);
+    }, [expand, setIsExpanded]);
 
     return (
         <header className={classes.root}>

@@ -5,13 +5,13 @@ import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import Divider from '@mui/material/Divider';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { BasicInfoRow } from '@dashboard/pages/Profile/BasicInfo/BasicInfoRow';
+import { BasicInfoRow } from './BasicInfoRow';
 import Box from '@mui/material/Box';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
 import { useAuth } from '@shared/hooks/useAuth';
-import { ChangeUserPictureDialog } from '@dashboard/pages/Profile/BasicInfo/ChangeUserPictureDialog';
-import { ConfirmUserPasswordDialog } from '@dashboard/pages/Profile/BasicInfo/ConfirmUserPasswordDialog';
+import { ChangeUserPictureDialog } from './ChangeUserPictureDialog';
+import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -155,7 +155,7 @@ export function BasicInfo() {
 
     const toggleAskForPasswordDialog = useCallback(() => {
         setShowAskForPasswordDialog((prev) => !prev);
-    }, [showAskForPasswordDialog]);
+    }, []);
 
     const hideRows = () => {
         setShowName(false);
@@ -166,7 +166,7 @@ export function BasicInfo() {
 
     const onToggleProfilePicDialog = useCallback(() => {
         setShowProfilePicDialog((prev) => !prev);
-    }, [showProfilePicDialog]);
+    }, []);
 
     const onPhoneChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,98 +175,83 @@ export function BasicInfo() {
         [setNewPhone],
     );
 
-    const onCurrentPasswordChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            setCurrentPassword(e.target.value);
-        },
-        [currentPassword],
-    );
+    const onCurrentPasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setCurrentPassword(e.target.value);
+    }, []);
 
-    const onNewPasswordChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            setNewPassword(e.target.value);
-        },
-        [newPassword],
-    );
+    const onNewPasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewPassword(e.target.value);
+    }, []);
 
-    const onConfirmPasswordChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            setConfirmPassword(e.target.value);
-        },
-        [confirmPassword],
-    );
+    const onConfirmPasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setConfirmPassword(e.target.value);
+    }, []);
 
-    const onNewUserNameChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            setNewUserName(e.target.value);
-        },
-        [newUserName],
-    );
+    const onNewUserNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewUserName(e.target.value);
+    }, []);
 
-    const onNewFirstNameChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            setNewFirstName(e.target.value);
-        },
-        [newFirstName],
-    );
+    const onNewFirstNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewFirstName(e.target.value);
+    }, []);
 
-    const onNewLastNameChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            setNewLastName(e.target.value);
+    const onNewLastNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewLastName(e.target.value);
+    }, []);
+
+    const toggleExceptFor = useCallback(
+        (field: string) => {
+            switch (field) {
+                case 'name':
+                    setShowName((prev) => !prev);
+                    setNewFirstName(user$?.firstName || '');
+                    setNewLastName(user$?.lastName || '');
+                    setShowUserName(false);
+                    setShowPhone(false);
+                    setShowPassword(false);
+                    break;
+                case 'userName':
+                    setShowName(false);
+                    setShowUserName((prev) => !prev);
+                    setNewUserName(user$?.username || '');
+                    setShowPhone(false);
+                    setShowPassword(false);
+                    break;
+                case 'phone':
+                    setShowName(false);
+                    setShowUserName(false);
+                    setShowPhone((prev) => !prev);
+                    setNewPhone(user$?.phone || '');
+                    setShowPassword(false);
+                    break;
+                case 'password':
+                    setShowName(false);
+                    setShowUserName(false);
+                    setShowPhone(false);
+                    setShowPassword((prev) => !prev);
+                    break;
+                default:
+                    break;
+            }
         },
-        [newLastName],
+        [user$?.firstName, user$?.lastName, user$?.phone, user$?.username],
     );
 
     const handleOnNameEdit = useCallback(() => {
         toggleExceptFor('name');
-    }, [showName]);
+    }, [toggleExceptFor]);
 
     const handleOnUserNameEdit = useCallback(() => {
         toggleExceptFor('userName');
-    }, [showUserName]);
+    }, [toggleExceptFor]);
 
     const handleOnPhoneEdit = useCallback(() => {
         toggleExceptFor('phone');
-    }, [showPhone]);
+    }, [toggleExceptFor]);
 
     const handleOnPasswordEdit = useCallback(() => {
         toggleExceptFor('password');
-    }, [showPassword]);
-
-    function toggleExceptFor(field: string) {
-        switch (field) {
-            case 'name':
-                setShowName((prev) => !prev);
-                setNewFirstName(user$?.firstName || '');
-                setNewLastName(user$?.lastName || '');
-                setShowUserName(false);
-                setShowPhone(false);
-                setShowPassword(false);
-                break;
-            case 'userName':
-                setShowName(false);
-                setShowUserName((prev) => !prev);
-                setNewUserName(user$?.username || '');
-                setShowPhone(false);
-                setShowPassword(false);
-                break;
-            case 'phone':
-                setShowName(false);
-                setShowUserName(false);
-                setShowPhone((prev) => !prev);
-                setNewPhone(user$?.phone || '');
-                setShowPassword(false);
-                break;
-            case 'password':
-                setShowName(false);
-                setShowUserName(false);
-                setShowPhone(false);
-                setShowPassword((prev) => !prev);
-                break;
-            default:
-                break;
-        }
-    }
+    }, [toggleExceptFor]);
 
     useEffect(() => {
         if (newFirstName.length > 0 && newLastName.length > 0) {
@@ -323,7 +308,7 @@ export function BasicInfo() {
                 );
             });
         }
-    }, [newFirstName, newLastName, user$?.firstName, user$?.lastName]);
+    }, [dispatch, newFirstName, newLastName]);
 
     const onNewUserNameSave = useCallback(async () => {
         const result: any = await dispatch(
@@ -342,7 +327,7 @@ export function BasicInfo() {
                 );
             });
         }
-    }, [newUserName, user$?.username]);
+    }, [dispatch, newUserName]);
 
     const onNewPhoneSave = useCallback(async () => {
         const result: any = await dispatch(
@@ -361,7 +346,7 @@ export function BasicInfo() {
             });
         }
         hideRows();
-    }, [newPhone, user$?.phone]);
+    }, [dispatch, newPhone]);
 
     const onNewPasswordSave = useCallback(async () => {
         await dispatch(
@@ -372,7 +357,7 @@ export function BasicInfo() {
             }),
         );
         hideRows();
-    }, [newPassword, currentPassword, confirmPassword]);
+    }, [dispatch, currentPassword, newPassword, confirmPassword]);
 
     return (
         <>

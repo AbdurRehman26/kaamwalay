@@ -12,6 +12,7 @@ export class UserCardEntity extends Entity {
     public orderNumber!: number | string;
     public orderId!: number | string;
     public shortName!: string;
+    public notes!: string;
 
     @Type(() => CardProductEntity)
     public cardProduct!: CardProductEntity;

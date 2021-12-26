@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
-import { Paper } from '@mui/material';
+import Paper from '@mui/material/Paper';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -62,7 +62,7 @@ const ManageCardDialogResults = connectStateResults(({ searchResults }) => {
     const handleCreateNewCard = useCallback(() => {
         dispatch(manageCardDialogActions.backup());
         dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Create));
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className={classes.root}>

@@ -19,6 +19,7 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
+import Box from '@mui/material/Box';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -26,6 +27,7 @@ interface SubmissionsTableRowProps {
 
 enum Options {
     Download,
+    DownloadOrderLabel,
     ViewGrades,
 }
 
@@ -67,12 +69,20 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
 
                     await downloadFromUrl(order.invoice.path, `robograding-${order.invoice.invoiceNumber}.pdf`);
                     break;
+                case Options.DownloadOrderLabel:
+                    if (!order.orderLabel) {
+                        notifications.error('Order Label is generating at the moment, try again in some minutes!');
+                        return;
+                    }
+
+                    await downloadFromUrl(order.orderLabel.path, `${order.orderNumber}_label.xlsx`);
+                    break;
                 case Options.ViewGrades:
                     navigate(`/submissions/${order.id}/grade`);
                     break;
             }
         },
-        [handleCloseOptions, navigate, notifications, order.id, order.invoice],
+        [handleCloseOptions, navigate, notifications, order.id, order.invoice, order.orderLabel, order.orderNumber],
     );
 
     return (
@@ -129,7 +139,12 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                         {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
                     </MenuItem>
                     {order?.orderStatus.is(OrderStatusEnum.GRADED) || order?.orderStatus.is(OrderStatusEnum.SHIPPED) ? (
-                        <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
+                        <Box>
+                            <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
+                            <MenuItem onClick={handleOption(Options.DownloadOrderLabel)} disabled={!order.orderLabel}>
+                                Print Stickers
+                            </MenuItem>
+                        </Box>
                     ) : null}
                 </Menu>
             </TableCell>

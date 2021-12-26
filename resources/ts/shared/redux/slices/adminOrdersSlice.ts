@@ -59,6 +59,7 @@ export const changeOrderItemNotes = createAsyncThunk<
         orderId: number;
         orderItemId: number;
         notes: string;
+        internalNotes?: string;
     },
     ChangeOrderItemNotesDTO
 >('changeOrderItemNotes', async (input: ChangeOrderItemNotesDTO, thunkAPI) => {
@@ -70,6 +71,7 @@ export const changeOrderItemNotes = createAsyncThunk<
             orderId: input.orderId,
             orderItemId: input.orderItemId,
             notes: item.notes,
+            internalNotes: item.internalNotes,
         };
     } catch (e: any) {
         NotificationsService.exception(e);

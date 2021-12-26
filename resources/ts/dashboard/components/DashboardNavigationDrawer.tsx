@@ -1,6 +1,6 @@
 // TODO: Merge into a general component
 import CloseIcon from '@mui/icons-material/Close';
-import { ListItemSecondaryAction } from '@mui/material';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Drawer from '@mui/material/Drawer';

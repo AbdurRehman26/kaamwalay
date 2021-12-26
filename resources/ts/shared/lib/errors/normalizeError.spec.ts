@@ -9,6 +9,7 @@ describe('lib/errors/normalizeError', function () {
     it('should normalize axios error correctly', async function () {
         let error: any = null;
         const apiService = app(APIService);
+        // eslint-disable-next-line robograding/api-service-create-endpoint
         const endpoint = apiService.createEndpoint('/random/path/to/fail/404');
         try {
             await endpoint.get('/');

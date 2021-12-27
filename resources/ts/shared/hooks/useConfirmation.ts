@@ -13,15 +13,8 @@ export function useConfirmation() {
 
     return useMemo(
         () =>
-            async (message?: string, title?: string, config: Partial<ConfirmationDialogContextState> = {}) => {
+            async (config: Partial<ConfirmationDialogContextState> = {}) => {
                 const defer = new Defer();
-                if (title) {
-                    config.title = title;
-                }
-                if (message) {
-                    config.message = message;
-                }
-
                 state.open(defer, { ...config });
                 return defer.wait();
             },

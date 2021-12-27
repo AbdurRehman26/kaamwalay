@@ -72,7 +72,7 @@ beforeEach(function () {
 uses()->group('admin', 'admin_orders');
 
 it('returns orders list for admin', function () {
-    $this->getJson('/api/admin/orders')
+    $this->getJson('/api/v1/admin/orders')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -87,7 +87,7 @@ it('returns orders list for admin', function () {
 });
 
 it('returns order details', function () {
-    $this->getJson('api/admin/orders/1?include=customer,orderItems')
+    $this->getJson('/api/v1/admin/orders/1?include=customer,orderItems')
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -106,18 +106,18 @@ it('returns order details', function () {
 
 test('orders throws error for roles other than admin', function () {
     $this->actingAs(User::factory()->withRole(config('permission.roles.customer'))->create())
-        ->getJson('api/admin/orders/1')
+        ->getJson('/api/v1/admin/orders/1')
         ->assertForbidden();
 });
 
 test('order details throws error for roles other than admin', function () {
     $this->actingAs(User::factory()->withRole(config('permission.roles.customer'))->create())
-        ->getJson('api/admin/orders/1')
+        ->getJson('/api/v1/admin/orders/1')
         ->assertForbidden();
 });
 
 it('filters orders by id', function () {
-    $this->getJson('/api/admin/orders?filter[order_id]=' . $this->orders[0]->id)
+    $this->getJson('/api/v1/admin/orders?filter[order_id]=' . $this->orders[0]->id)
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -126,7 +126,7 @@ it('filters orders by id', function () {
 });
 
 it('returns only placed orders', function () {
-    $this->getJson('/api/admin/orders?include=order_status_history&filter[status]=placed')
+    $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[status]=placed')
         ->assertOk()
         ->assertJsonFragment([
             'order_status_id' => OrderStatus::PLACED,
@@ -134,7 +134,7 @@ it('returns only placed orders', function () {
 });
 
 it('returns only reviewed orders', function () {
-    $this->getJson('/api/admin/orders?include=order_status_history&filter[status]=reviewed')
+    $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[status]=reviewed')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -143,7 +143,7 @@ it('returns only reviewed orders', function () {
 });
 
 it('returns only graded orders', function () {
-    $this->getJson('/api/admin/orders?include=order_status_history&filter[status]=graded')
+    $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[status]=graded')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -152,7 +152,7 @@ it('returns only graded orders', function () {
 });
 
 it('returns only shipped orders', function () {
-    $this->getJson('/api/admin/orders?include=order_status_history&filter[status]=shipped')
+    $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[status]=shipped')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -161,7 +161,7 @@ it('returns only shipped orders', function () {
 });
 
 it('returns orders order by asc grand_total', function () {
-    $response = $this->getJson('/api/admin/orders?sort=grand_total')
+    $response = $this->getJson('/api/v1/admin/orders?sort=grand_total')
         ->assertOk();
     $this->assertEquals(
         Order::orderBy('grand_total')->pluck('id')->toArray(),
@@ -170,7 +170,7 @@ it('returns orders order by asc grand_total', function () {
 });
 
 it('returns orders order by desc grand_total', function () {
-    $response = $this->getJson('/api/admin/orders?sort=-grand_total')
+    $response = $this->getJson('/api/v1/admin/orders?sort=-grand_total')
         ->assertOk();
     $this->assertEquals(
         Order::orderBy('grand_total', 'DESC')->pluck('id')->toArray(),
@@ -180,7 +180,7 @@ it('returns orders order by desc grand_total', function () {
 
 test('orders are filterable by customer first name', function () {
     $user = $this->orders[0]->user;
-    $this->getJson('/api/admin/orders?include=customer&filter[customer_name]=' . $user->first_name)
+    $this->getJson('/api/v1/admin/orders?include=customer&filter[customer_name]=' . $user->first_name)
         ->assertOk()
         ->assertJsonCount($user->orders->count(), ['data'])
         ->assertJsonFragment([
@@ -190,7 +190,7 @@ test('orders are filterable by customer first name', function () {
 
 test('orders are filterable by customer ID', function () {
     $user = $this->orders[0]->user;
-    $this->getJson('/api/admin/orders?include=customer&filter[customer_id]=' . $user->id)
+    $this->getJson('/api/v1/admin/orders?include=customer&filter[customer_id]=' . $user->id)
         ->assertOk()
         ->assertJsonCount($user->orders->count(), ['data'])
         ->assertJsonFragment([
@@ -199,7 +199,7 @@ test('orders are filterable by customer ID', function () {
 });
 
 test('an admin can update order notes', function () {
-    $response = $this->putJson('/api/admin/orders/' . $this->orders[0]->id . '/notes', [
+    $response = $this->putJson('/api/v1/admin/orders/' . $this->orders[0]->id . '/notes', [
         'notes' => 'Lorem Ipsum',
     ])->assertOk();
 });
@@ -209,14 +209,14 @@ test('a customer can not update order notes', function () {
 
     $this->actingAs($customerUser);
 
-    $response = $this->putJson('/api/admin/orders/' . $this->orders[0]->id . '/notes', [
+    $response = $this->putJson('/api/v1/admin/orders/' . $this->orders[0]->id . '/notes', [
         'notes' => 'Lorem Ipsum',
     ])->assertForbidden();
 });
 
 test('an admin can get order cards grades', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse, 200, [])]);
-    $this->getJson('/api/admin/orders/' . $this->orders[1]->id . '/grades')
+    $this->getJson('/api/v1/admin/orders/' . $this->orders[1]->id . '/grades')
     ->assertOk();
 });
 
@@ -227,13 +227,13 @@ test('a customer can not get order cards grades', function () {
 
     Http::fake(['*' => Http::response($this->sampleAgsResponse, 200, [])]);
 
-    $this->getJson('/api/admin/orders/' . $this->orders[1]->id . '/grades')
+    $this->getJson('/api/v1/admin/orders/' . $this->orders[1]->id . '/grades')
     ->assertForbidden();
 });
 
 it('can not get order grades if order is not reviewed', function () {
     Http::fake(['*' => Http::response($this->sampleAgsResponse, 200, [])]);
-    $response = $this->getJson('/api/admin/orders/' . $this->orders[0]->id . '/grades');
+    $response = $this->getJson('/api/v1/admin/orders/' . $this->orders[0]->id . '/grades');
     $response->assertJsonStructure([ 'error' ]);
     $response->assertJsonPath('error', (new IncorrectOrderStatus)->getMessage());
 });
@@ -241,7 +241,7 @@ it('can not get order grades if order is not reviewed', function () {
 it(
     'returns orders filtered after searching the order with order number, customer number and user Name',
     function (string $value) {
-        $this->getJson('/api/admin/orders?include=order_status_history&filter[search]=' . $value)
+        $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[search]=' . $value)
             ->assertOk()
             ->assertJsonFragment([
                 'id' => $this->orders[0]->id,
@@ -258,7 +258,7 @@ test('an admin can complete review of an order', function () {
     Http::fake([
         'ags.api/*/certificates/*' => Http::response(['data']),
     ]);
-    $response = $this->postJson('/api/admin/orders/' . $this->orders[0]->id . '/status-history', [
+    $response = $this->postJson('/api/v1/admin/orders/' . $this->orders[0]->id . '/status-history', [
         'order_status_id' => OrderStatus::REVIEWED,
     ]);
 
@@ -276,7 +276,7 @@ test('an admin can not complete review of an order if error occurred with AGS cl
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
 
-    $this->postJson('/api/admin/orders/' . $this->orders[1]->id . '/status-history', [
+    $this->postJson('/api/v1/admin/orders/' . $this->orders[1]->id . '/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ])->assertStatus(422);
 });
@@ -286,7 +286,7 @@ test('an admin can get order cards if AGS API fails to return grades', function 
     \App\Models\UserCard::factory()->create([
         'order_item_id' => $this->orders[1]->orderItems->first()->id,
     ]);
-    $this->getJson('/api/admin/orders/' . $this->orders[1]->id . '/grades')
+    $this->getJson('/api/v1/admin/orders/' . $this->orders[1]->id . '/grades')
         ->assertOk()
         ->assertJsonFragment([
             'robo_grade_values' => null,
@@ -302,7 +302,7 @@ test('an admin can get order cards if AGS API returns grades', function () {
         'order_item_id' => $orderItemId,
         'certificate_number' => '09000000',
     ]);
-    $this->getJson('/api/admin/orders/' . $this->orders[1]->id . '/grades')
+    $this->getJson('/api/v1/admin/orders/' . $this->orders[1]->id . '/grades')
         ->assertJsonFragment([
                 'center' => '2.00',
         ])
@@ -318,7 +318,7 @@ it('should send an event when order status gets changed', function () {
 
     /** @var Order $order */
     $order = Order::factory()->create();
-    $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+    $response = $this->postJson('/api/v1/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
@@ -335,7 +335,7 @@ it('dispatches job for creating folders on dropbox when an order is reviewed', f
 
     /** @var Order $order */
     $order = Order::factory()->create();
-    $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v1/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
@@ -349,7 +349,7 @@ it('dispatches job for creating files for order labels when order is marked as g
 
     /** @var Order $order */
     $order = Order::factory()->create();
-    $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+    $this->postJson('/api/v1/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::GRADED,
     ]);
 

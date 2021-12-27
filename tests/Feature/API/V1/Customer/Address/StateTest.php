@@ -14,7 +14,7 @@ test('a user can see states', function () {
     State::factory()
         ->count(5)
         ->create();
-    $response = $this->getJson('/api/customer/addresses/states/');
+    $response = $this->getJson('/api/v1/customer/addresses/states/');
 
     $response->assertJsonCount(5, 'data');
     $response->assertJsonStructure([
@@ -31,7 +31,7 @@ test('a user can see specific state', function () {
     State::factory()
         ->count(1)
         ->create();
-    $response = $this->getJson('/api/customer/addresses/states/1');
+    $response = $this->getJson('/api/v1/customer/addresses/states/1');
 
     $response->assertJsonCount(3, 'data');
     $response->assertJsonStructure([
@@ -40,7 +40,7 @@ test('a user can see specific state', function () {
 });
 
 test('a guest cannot get states', function () {
-    $response = $this->getJson('/api/customer/addresses/states/');
+    $response = $this->getJson('/api/v1/customer/addresses/states/');
 
     $response->assertUnauthorized();
 });

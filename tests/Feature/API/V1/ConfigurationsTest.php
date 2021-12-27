@@ -9,7 +9,7 @@ beforeEach(function () {
 it('should not return any keys on empty configuration', function () {
     config(['configuration.keys' => []]);
 
-    $response = $this->post('/api/configurations');
+    $response = $this->post('/api/v1/configurations');
     $response->assertOk();
     $response->assertJsonPath('data', []);
     $response->assertJsonPath('data.app_env', null);
@@ -29,7 +29,7 @@ it('should return correct configuration', function () {
         ],
     ]);
 
-    $response = $this->post('/api/configurations');
+    $response = $this->post('/api/v1/configurations');
     $response->assertOk();
     $response->assertExactJson([
         'data' => [
@@ -53,7 +53,7 @@ it('should return correct configuration when using alias', function () {
         ],
     ]);
 
-    $response = $this->post('/api/configurations');
+    $response = $this->post('/api/v1/configurations');
     $response->assertOk();
     $response->assertJsonPath('data.APP_ENV', null);
     $response->assertExactJson([
@@ -80,7 +80,7 @@ it('should correctly include auth keys for authenticated user', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->post('/api/configurations');
+    $response = $this->post('/api/v1/configurations');
     $response->assertOk();
     $response->assertExactJson([
         'data' => [
@@ -104,7 +104,7 @@ it('should not include auth keys for guest user', function () {
         ],
     ]);
 
-    $response = $this->post('/api/configurations');
+    $response = $this->post('/api/v1/configurations');
     $response->assertOk();
     $response->assertExactJson([
         'data' => [

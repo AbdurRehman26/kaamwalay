@@ -11,7 +11,7 @@ beforeEach(fn () => $this->seed(RolesSeeder::class));
 test('admin can login', function () {
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
-    $response = $this->postJson('api/admin/auth/login', [
+    $response = $this->postJson('/api/v1/admin/auth/login', [
         'email' => $user->email,
         'password' => 'password',
     ]);
@@ -27,7 +27,7 @@ test('admin can login', function () {
 test('customer can not login with admin route', function () {
     $user = User::factory()->withRole(config('permission.roles.customer'))->create();
 
-    $response = $this->postJson('api/admin/auth/login', [
+    $response = $this->postJson('/api/v1/admin/auth/login', [
         'email' => $user->email,
         'password' => 'password',
     ]);
@@ -40,7 +40,7 @@ test('customer can not login with admin route', function () {
 test('admin can not login with invalid password', function () {
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
-    $response = $this->postJson('api/admin/auth/login', [
+    $response = $this->postJson('/api/v1/admin/auth/login', [
         'email' => $user->email,
         'password' => 'passWord12',
     ]);

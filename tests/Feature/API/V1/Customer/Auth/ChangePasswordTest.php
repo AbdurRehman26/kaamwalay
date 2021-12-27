@@ -15,7 +15,7 @@ test('user can change password', function () {
 
     $this->actingAs($user);
 
-    $response = $this->postJson('/api/auth/password/change', [
+    $response = $this->postJson('/api/v1/auth/password/change', [
         'current_password' => 'password',
         'password' => '123Robograding456',
         'password_confirmation' => '123Robograding456',
@@ -29,7 +29,7 @@ test('user is validated while changing password', function () {
 
     $this->actingAs($user);
 
-    $response = $this->postJson('/api/auth/password/change', [
+    $response = $this->postJson('/api/v1/auth/password/change', [
         'current_password' => '1password',
         'password' => 'password',
         'password_confirmation' => '1password',

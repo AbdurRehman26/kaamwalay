@@ -14,7 +14,7 @@ beforeEach(function () {
 test('a customer can update order shipment details', function () {
     $this->actingAs($this->order->user);
 
-    $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+    $response = $this->postJson('/api/v1/customer/orders/'.$this->order->id.'/customer-shipment', [
         'shipping_provider' => $this->shippingProvider,
         'tracking_number' => $this->trackingNumber,
     ]);
@@ -26,7 +26,7 @@ test('a customer can update order shipment details', function () {
 });
 
 test('a guest cannot update order shipment details', function () {
-    $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+    $response = $this->postJson('/api/v1/customer/orders/'.$this->order->id.'/customer-shipment', [
         'shipping_provider' => $this->shippingProvider,
         'tracking_number' => $this->trackingNumber,
     ]);
@@ -40,7 +40,7 @@ test('a customer cannot update order shipment details from other user', function
 
     $this->actingAs($otherCustomer);
 
-    $response = $this->postJson('/api/customer/orders/'.$this->order->id.'/customer-shipment', [
+    $response = $this->postJson('/api/v1/customer/orders/'.$this->order->id.'/customer-shipment', [
         'shipping_provider' => $this->shippingProvider,
         'tracking_number' => $this->trackingNumber,
     ]);

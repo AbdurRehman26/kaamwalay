@@ -18,7 +18,7 @@ beforeEach(function () {
 test('a customer can update his profile', function () {
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/customer/profile', [
+    $response = $this->putJson('/api/v1/customer/profile', [
             'first_name' => 'first',
             'last_name' => 'Last',
             'email_subscription' => true,
@@ -48,7 +48,7 @@ test('customer profile update required fields error', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/customer/profile', [
+    $response = $this->putJson('/api/v1/customer/profile', [
         'first_name' => '',
         'last_name' => '',
         'phone' => '',
@@ -66,7 +66,7 @@ test('customer profile update required fields error', function () {
 test('a customer`s username can not be duplicate', function () {
     $this->actingAs($this->user);
 
-    $response = $this->putJson('/api/customer/profile', [
+    $response = $this->putJson('/api/v1/customer/profile', [
         'username' => $this->anotherUser->username,
     ]);
 

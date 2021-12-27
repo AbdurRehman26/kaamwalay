@@ -37,7 +37,7 @@ test('user can be charged successfully', function () {
         'payment_method_id' => 1,
         'payment_provider_reference_id' => Str::random(25),
     ]);
-    $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments");
+    $response = $this->postJson("/api/v1/customer/orders/{$this->order->id}/payments");
 
     $response->assertOk();
     $response->assertJsonStructure(['data' => ['id', 'charges']]);
@@ -50,7 +50,7 @@ test('user receives incomplete payment response', function () {
         'payment_method_id' => 1,
         'payment_provider_reference_id' => 'incomplete',
     ]);
-    $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments");
+    $response = $this->postJson("/api/v1/customer/orders/{$this->order->id}/payments");
 
     $response->assertStatus(Response::HTTP_PAYMENT_REQUIRED);
     $response->assertJsonStructure(['payment_intent' => ['id']]);
@@ -62,7 +62,7 @@ test('user can verify a successful payment', function () {
         'payment_method_id' => 1,
         'payment_provider_reference_id' => Str::random(25),
     ]);
-    $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments/" . Str::random(25));
+    $response = $this->postJson("/api/v1/customer/orders/{$this->order->id}/payments/" . Str::random(25));
     $response->assertOk();
     $response->assertJson([
         'message' => 'Payment verified successfully',
@@ -75,7 +75,7 @@ test('user cannot verify a failed payment', function () {
         'payment_method_id' => 1,
         'payment_provider_reference_id' => 'incomplete',
     ]);
-    $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments/incomplete");
+    $response = $this->postJson("/api/v1/customer/orders/{$this->order->id}/payments/incomplete");
     $exception = new PaymentNotVerified();
     $response->assertStatus($exception->getCode());
     $response->assertJson([
@@ -90,7 +90,7 @@ test('provider fee is set after a successful payment', function () {
         'payment_provider_reference_id' => Str::random(25),
         'amount' => $this->order->grand_total,
     ]);
-    $response = $this->postJson("/api/customer/orders/{$this->order->id}/payments");
+    $response = $this->postJson("/api/v1/customer/orders/{$this->order->id}/payments");
 
     $response->assertOk();
     $response->assertJsonPath('data.amount', $this->order->grand_total_cents);

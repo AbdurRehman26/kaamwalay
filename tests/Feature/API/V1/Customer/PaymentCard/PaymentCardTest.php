@@ -8,7 +8,7 @@ beforeEach(function () {
 });
 
 test('user can receive payment cards', function () {
-    $response = $this->get('api/customer/payment-cards');
+    $response = $this->get('/api/v1/customer/payment-cards');
 
     $response->assertOk();
 
@@ -25,7 +25,7 @@ test('user can receive payment cards', function () {
 })->group('payment');
 
 test('user can create card setup intent', function () {
-    $response = $this->post('api/customer/payment-cards/setup');
+    $response = $this->post('/api/v1/customer/payment-cards/setup');
 
     $response->assertOk();
 

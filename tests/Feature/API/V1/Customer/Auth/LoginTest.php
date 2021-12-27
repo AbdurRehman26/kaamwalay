@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 test('user can login with valid credentials without platform', function () {
     $user = User::factory()->create();
 
-    $response = $this->postJson('api/auth/login', [
+    $response = $this->postJson('/api/v1/auth/login', [
         'email' => $user->email,
         'password' => 'password',
     ]);
@@ -27,7 +27,7 @@ test('user can not login with invalid email', function () {
     Http::fake([
         'https://ags.api/login/' => Http::response([]),
     ]);
-    $response = $this->postJson('api/auth/login', [
+    $response = $this->postJson('/api/v1/auth/login', [
         'email' => 'test@test.test',
         'password' => 'password',
     ]);
@@ -43,7 +43,7 @@ test('user can not login with invalid password', function () {
         'https://ags.api/login/' => Http::response([]),
     ]);
 
-    $response = $this->postJson('api/auth/login', [
+    $response = $this->postJson('/api/v1/auth/login', [
         'email' => $user->email,
         'password' => 'passWord12',
     ]);
@@ -57,7 +57,7 @@ test('user receives his own information', function () {
     /** @var User $user */
     $user = User::factory()->create();
     $this->actingAs($user);
-    $response = $this->getJson('api/auth/me');
+    $response = $this->getJson('/api/v1/auth/me');
     $response->assertStatus(200);
     $response->assertJsonStructure(['data' => ['user']]);
     $response->assertJsonPath('data.user.email', $user->email);
@@ -83,7 +83,7 @@ test('ags user can login', function () {
             ],
         ], 200),
     ]);
-    $response = $this->postJson('api/auth/login', [
+    $response = $this->postJson('/api/v1/auth/login', [
         'email' => $testEmail,
         'password' => 'Asdasd1',
     ]);
@@ -100,14 +100,14 @@ test('a logged in customer cannot login', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $response = $this->postJson('api/auth/login');
+    $response = $this->postJson('/api/v1/auth/login');
     $response->assertRedirect();
 })->group('auth');
 
 test('user can login with valid platform', function () {
     $user = User::factory()->create();
 
-    $response = $this->postJson('api/auth/login', [
+    $response = $this->postJson('/api/v1/auth/login', [
         'email' => $user->email,
         'password' => 'password',
         'platform' => Arr::random(['web', 'ios', 'android']),
@@ -124,7 +124,7 @@ test('user can login with valid platform', function () {
 test('user cannot login with invalid platform', function () {
     $user = User::factory()->create();
 
-    $response = $this->postJson('api/auth/login', [
+    $response = $this->postJson('/api/v1/auth/login', [
         'email' => $user->email,
         'password' => 'password',
         'platform' => 'foo',
@@ -139,7 +139,7 @@ test('user cannot login with invalid platform', function () {
 it('dispatches jobs', function () {
     Bus::fake();
     $user = User::factory()->create();
-    $this->postJson('api/auth/login', [
+    $this->postJson('/api/v1/auth/login', [
         'email' => $user->email,
         'password' => 'password',
         'platform' => Arr::random(['web', 'ios', 'android']),

@@ -44,7 +44,7 @@ test('admins can create cards manually', function () {
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson('/api/admin/cards', [
+    $response = $this->postJson('/api/v1/admin/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
@@ -89,7 +89,7 @@ it('fails on repeated series name', function () {
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson('/api/admin/cards', [
+    $response = $this->postJson('/api/v1/admin/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
@@ -120,7 +120,7 @@ it('fails on repeated set name', function () {
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson('/api/admin/cards', [
+    $response = $this->postJson('/api/v1/admin/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
@@ -150,7 +150,7 @@ it('fails on repeated card number', function () {
         '*/cards/*' => Http::response($this->sampleCreateCardResponse, 200, []),
     ]);
 
-    $response = $this->postJson('/api/admin/cards', [
+    $response = $this->postJson('/api/v1/admin/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',

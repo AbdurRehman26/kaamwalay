@@ -18,7 +18,7 @@ beforeEach(function () {
 test('an admin can update order shipment', function () {
     Event::fake();
 
-    $this->postJson('/api/admin/orders/' . $this->order->id . '/shipment', [
+    $this->postJson('/api/v1/admin/orders/' . $this->order->id . '/shipment', [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])
@@ -39,7 +39,7 @@ test('a customer can not update order shipment', function () {
     $customerUser = User::factory()->withRole(config('permission.roles.customer'))->create();
     $this->actingAs($customerUser);
 
-    $this->postJson('/api/admin/orders/' . $this->order->id . '/shipment', [
+    $this->postJson('/api/v1/admin/orders/' . $this->order->id . '/shipment', [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])

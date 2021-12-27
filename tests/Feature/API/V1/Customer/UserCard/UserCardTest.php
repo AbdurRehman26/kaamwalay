@@ -71,13 +71,13 @@ beforeEach(function () {
 });
 
 test('customers can see their cards', function () {
-    $response = $this->getJson('/api/customer/cards');
+    $response = $this->getJson('/api/v1/customer/cards');
 
     $response->assertStatus(200);
 });
 
 test('customers can see their card details', function () {
-    $response = $this->getJson('/api/customer/cards/' . $this->userCards[0]->id);
+    $response = $this->getJson('/api/v1/customer/cards/' . $this->userCards[0]->id);
 
     $response->assertStatus(200);
 });
@@ -86,13 +86,13 @@ test('a customer can not see details of a card owned by others', function () {
     $otherUser = User::factory()->create();
     $this->actingAs($otherUser);
 
-    $response = $this->getJson('/api/customer/cards/' . $this->userCards[0]->id);
+    $response = $this->getJson('/api/v1/customer/cards/' . $this->userCards[0]->id);
 
     $response->assertForbidden();
 });
 
 it('sorts cards by date asc', function () {
-    $response = $this->getJson('/api/customer/cards?sort=date')
+    $response = $this->getJson('/api/v1/customer/cards?sort=date')
         ->assertOk();
 
     $this->assertEquals(
@@ -107,7 +107,7 @@ it('sorts cards by date asc', function () {
 });
 
 it('sorts cards by date desc', function () {
-    $response = $this->getJson('/api/customer/cards?sort=-date')
+    $response = $this->getJson('/api/v1/customer/cards?sort=-date')
         ->assertOk();
 
     $this->assertEquals(
@@ -122,7 +122,7 @@ it('sorts cards by date desc', function () {
 });
 
 it('sorts cards alphabetically', function () {
-    $response = $this->getJson('/api/customer/cards?sort=name')
+    $response = $this->getJson('/api/v1/customer/cards?sort=name')
         ->assertOk();
 
     $this->assertEquals(
@@ -138,7 +138,7 @@ it('sorts cards alphabetically', function () {
 
 it('filters cards by name', function () {
     $searchName = $this->userCards[0]->orderItem->cardProduct->name;
-    $this->getJson('/api/customer/cards?filter[search]=' . $searchName)
+    $this->getJson('/api/v1/customer/cards?filter[search]=' . $searchName)
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([

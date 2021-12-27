@@ -19,7 +19,7 @@ beforeEach(function () {
 
 test('customer can register without platform', function () {
     $email = $this->faker->safeEmail();
-    $response = $this->postJson('/api/auth/register', [
+    $response = $this->postJson('/api/v1/auth/register', [
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'email' => $email,
@@ -37,7 +37,7 @@ test('customer can register without platform', function () {
 
 test('user can not register with duplicate email', function () {
     $existingUser = User::factory()->create();
-    $response = $this->postJson('/api/auth/register', [
+    $response = $this->postJson('/api/v1/auth/register', [
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'email' => $existingUser->email,
@@ -54,7 +54,7 @@ test('user can not register with duplicate email', function () {
 
 test('user can not register with duplicate username', function () {
     $existingUser = User::factory()->create();
-    $response = $this->postJson('/api/auth/register', [
+    $response = $this->postJson('/api/v1/auth/register', [
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'email' => $this->faker->safeEmail(),
@@ -71,7 +71,7 @@ test('user can not register with duplicate username', function () {
 
 test('user registration dispatches events and jobs', function () {
     $email = $this->faker->safeEmail();
-    $this->postJson('/api/auth/register', [
+    $this->postJson('/api/v1/auth/register', [
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'email' => $email,
@@ -90,13 +90,13 @@ test('a logged in customer cannot register', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $response = $this->postJson('api/auth/register');
+    $response = $this->postJson('/api/v1/auth/register');
     $response->assertRedirect();
 })->group('auth');
 
 test('customer can register with valid platform', function () {
     $email = $this->faker->safeEmail();
-    $response = $this->postJson('/api/auth/register', [
+    $response = $this->postJson('/api/v1/auth/register', [
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'email' => $email,
@@ -115,7 +115,7 @@ test('customer can register with valid platform', function () {
 
 test('customer cannot register with invalid platform', function () {
     $email = $this->faker->safeEmail();
-    $response = $this->postJson('/api/auth/register', [
+    $response = $this->postJson('/api/v1/auth/register', [
         'first_name' => $this->faker->firstName(),
         'last_name' => $this->faker->lastName(),
         'email' => $email,

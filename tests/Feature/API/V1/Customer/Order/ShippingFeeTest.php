@@ -9,7 +9,7 @@ beforeEach(function () {
 test('a user can get shipping fee', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/customer/orders/shipping-fee/', [
+    $response = $this->postJson('/api/v1/customer/orders/shipping-fee/', [
         'items' => [
             [
                 'quantity' => 1,
@@ -30,7 +30,7 @@ test('a user can get shipping fee', function () {
 test('shipping fee needs items', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/customer/orders/shipping-fee/');
+    $response = $this->postJson('/api/v1/customer/orders/shipping-fee/');
 
     $response->assertJsonValidationErrors([
         'items' => 'The items field is required.',
@@ -38,7 +38,7 @@ test('shipping fee needs items', function () {
 });
 
 test('a guest cannot get shipping fee', function () {
-    $response = $this->postJson('/api/customer/orders/shipping-fee/');
+    $response = $this->postJson('/api/v1/customer/orders/shipping-fee/');
 
     $response->assertUnauthorized();
 });

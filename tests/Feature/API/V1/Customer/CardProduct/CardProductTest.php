@@ -20,7 +20,7 @@ beforeEach(function () {
 test('customers can create cards manually', function () {
     Bus::fake();
 
-    $response = $this->postJson('/api/customer/cards', [
+    $response = $this->postJson('/api/v1/customer/cards', [
         'name' => 'Lorem Ipsum',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',

@@ -8,7 +8,7 @@ beforeEach(function () {
 
 test('a customer can get shipping methods', function () {
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/customer/orders/shipping-methods');
+    $response = $this->getJson('/api/v1/customer/orders/shipping-methods');
 
     $response->assertJsonStructure([
         'data' => [
@@ -19,7 +19,7 @@ test('a customer can get shipping methods', function () {
 
 test('a customer can get specific shipping method', function () {
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/customer/orders/shipping-methods/1');
+    $response = $this->getJson('/api/v1/customer/orders/shipping-methods/1');
 
     $response->assertJsonStructure([
         'data' => ['id', 'code', 'name'],
@@ -27,7 +27,7 @@ test('a customer can get specific shipping method', function () {
 });
 
 test('a guest cannot get shipping methods', function () {
-    $response = $this->getJson('/api/customer/orders/shipping-methods');
+    $response = $this->getJson('/api/v1/customer/orders/shipping-methods');
 
     $response->assertUnauthorized();
 });

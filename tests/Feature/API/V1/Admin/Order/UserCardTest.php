@@ -17,7 +17,7 @@ uses()->group('admin', 'grading');
 
 it('stores the human grades with calculations of overall and does not update data on AGS', function () {
     Http::fake();
-    $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
+    $this->putJson('/api/v1/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,
@@ -46,7 +46,7 @@ it('stores the human grades and update data on AGS', function () {
                 base_path() . '/tests/stubs/AGS_patch_human_grade_response_200.json'
             ), associative: true)),
     ]);
-    $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
+    $this->putJson('/api/v1/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,
@@ -75,7 +75,7 @@ it('stores the human grades and update data on AGS', function () {
 it('updates overall grade based on delta value', function () {
     Http::fake();
 
-    $this->putJson('/api/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
+    $this->putJson('/api/v1/admin/orders/' . $this->order->id . '/cards/' . $this->userCard->id . '/grades', [
         'human_grade_values' => [
             'front' => [
                 'center' => 2.50,

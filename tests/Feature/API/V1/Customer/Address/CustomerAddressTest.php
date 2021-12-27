@@ -9,20 +9,20 @@ beforeEach(function () {
 });
 
 test('user can receive addresses', function () {
-    $response = $this->getJson('/api/customer/addresses');
+    $response = $this->getJson('/api/v1/customer/addresses');
     $response->assertJsonStructure([
         'data' => [['id', 'first_name', 'last_name', 'state']],
     ]);
 });
 
 test('user can receive single address', function () {
-    $response = $this->getJson('/api/customer/addresses/1');
+    $response = $this->getJson('/api/v1/customer/addresses/1');
     $response->assertJsonStructure([
         'data' => ['id', 'first_name', 'last_name', 'state'],
     ]);
 });
 
 test('user can not receive other user address', function () {
-    $response = $this->getJson('/api/customer/addresses/2');
+    $response = $this->getJson('/api/v1/customer/addresses/2');
     $response->assertStatus(403);
 });

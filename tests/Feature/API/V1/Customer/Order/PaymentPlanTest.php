@@ -9,7 +9,7 @@ beforeEach(function () {
 
 test('a user can see payment plans', function () {
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/customer/orders/payment-plans/');
+    $response = $this->getJson('/api/v1/customer/orders/payment-plans/');
 
     $response->assertJsonCount(7, 'data');
     $response->assertJsonStructure([
@@ -25,7 +25,7 @@ test('a user can see specific payment plan', function () {
     PaymentPlan::factory()
         ->count(1)
         ->create();
-    $response = $this->getJson('/api/customer/orders/payment-plans/1');
+    $response = $this->getJson('/api/v1/customer/orders/payment-plans/1');
 
     $response->assertJsonCount(6, 'data');
     $response->assertJsonStructure([
@@ -34,7 +34,7 @@ test('a user can see specific payment plan', function () {
 });
 
 test('a guest cannot get payment plans', function () {
-    $response = $this->getJson('/api/customer/orders/payment-plans');
+    $response = $this->getJson('/api/v1/customer/orders/payment-plans');
 
     $response->assertUnauthorized();
 });

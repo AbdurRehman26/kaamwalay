@@ -34,7 +34,7 @@ beforeEach(function () {
 test('a customer can place order', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/customer/orders', [
+    $response = $this->postJson('/api/v1/customer/orders', [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
         ],
@@ -119,7 +119,7 @@ test('a customer can place order', function () {
 test('an order needs data', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/customer/orders/');
+    $response = $this->postJson('/api/v1/customer/orders/');
 
     $response->assertJsonValidationErrors([
         'payment_plan' => 'The payment plan field is required.',
@@ -132,7 +132,7 @@ test('an order needs data', function () {
 });
 
 test('a guest cannot place order', function () {
-    $response = $this->postJson('/api/customer/orders/');
+    $response = $this->postJson('/api/v1/customer/orders/');
 
     $response->assertUnauthorized();
 });
@@ -140,7 +140,7 @@ test('a guest cannot place order', function () {
 test('a guest cannot see order', function () {
     Order::factory()->for($this->user)->create();
 
-    $response = $this->getJson('/api/customer/orders/1');
+    $response = $this->getJson('/api/v1/customer/orders/1');
 
     $response->assertUnauthorized();
 });
@@ -150,7 +150,7 @@ test('a customer can see his order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->getJson('/api/customer/orders/' . $order->id);
+    $response = $this->getJson('/api/v1/customer/orders/' . $order->id);
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -185,7 +185,7 @@ test('a customer only see own orders', function () {
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id, $order->user_id);
     });
 
-    $response = $this->getJson('/api/customer/orders');
+    $response = $this->getJson('/api/v1/customer/orders');
 
     $response->assertOk();
     $response->assertJsonCount(2, ['data']);
@@ -209,7 +209,7 @@ test('a customer does not see payment pending orders', function () {
     });
 
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/customer/orders');
+    $response = $this->getJson('/api/v1/customer/orders');
 
     $response->assertOk();
     $response->assertJsonCount(1, ['data']);
@@ -220,13 +220,13 @@ test('a customer cannot see order by another customer', function () {
     $order = Order::factory()->for($someOtherCustomer)->create();
 
     $this->actingAs($this->user);
-    $response = $this->getJson('/api/customer/orders/' . $order->id);
+    $response = $this->getJson('/api/v1/customer/orders/' . $order->id);
 
     $response->assertForbidden();
 });
 
 test('a guest cannot see orders', function () {
-    $response = $this->getJson('/api/customer/orders/');
+    $response = $this->getJson('/api/v1/customer/orders/');
 
     $response->assertUnauthorized();
 });
@@ -236,7 +236,7 @@ test('a customer can see invoice in order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->getJson('/api/customer/orders/' . $order->id);
+    $response = $this->getJson('/api/v1/customer/orders/' . $order->id);
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -278,7 +278,7 @@ test('a customer can filter orders by order number', function () {
         ))
         ->create();
 
-    $response = $this->getJson('/api/customer/orders?filter[order_number]=RG000000001');
+    $response = $this->getJson('/api/v1/customer/orders?filter[order_number]=RG000000001');
 
     $response->assertOk();
     $response->assertJsonCount(1, ['data']);
@@ -298,7 +298,7 @@ test('a customer can not complete review of an order', function () {
     $order = Order::factory()->for($this->user)->create();
     OrderItem::factory()->for($order)->create();
 
-    $response = $this->postJson('/api/admin/orders/' . $order->id . '/status-history', [
+    $response = $this->postJson('/api/v1/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::CONFIRMED,
     ]);
 
@@ -308,7 +308,7 @@ test('a customer can not complete review of an order', function () {
 test('a customer cannot place order with item declared value greater than schema limit', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson('/api/customer/orders/', [
+    $response = $this->postJson('/api/v1/customer/orders/', [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
         ],

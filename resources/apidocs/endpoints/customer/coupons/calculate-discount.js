@@ -46,18 +46,11 @@
  *   HTTP/1.1 200 OK
  *    {
  *        "data": {
- *            "discounted_value": 29,
+ *            "discounted_amount": 29,
  *            "coupon": {
  *                  id: 1,
- *              code: "HvTGSYpak9",
- *              type: "fixed",
- *              discount_statement: "20.00 Off",
- *              discount_value: "20.00",
- *              coupon_applicable_id: 5,
- *              coupon_status_id: 5,
- *              available_from: "2021-12-20T18:06:17.000000Z",
- *              available_till: "2022-01-01T18:06:17.000000Z",
- *              is_permanent: false
+ *                  code: "HvTGSYpak9",
+ *                  discount_statement: "20.00 Off",
  *            }
  *        }
  *    }

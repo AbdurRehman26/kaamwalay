@@ -54,7 +54,11 @@
  *          },
  *          "payment_method": {
  *              "id": 1
- *          }
+ *          },
+ *          "coupon": {
+ *              "code": HvTGSYpak9,
+ *              "id": 2
+ *          },
  *      }
  *
  * @apiSuccess {Object} data Order object

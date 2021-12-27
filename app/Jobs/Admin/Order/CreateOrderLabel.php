@@ -6,6 +6,7 @@ use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
+use App\Models\OrderItem;
 use App\Models\UserCard;
 use App\Services\AGS\AgsService;
 use Illuminate\Bus\Queueable;
@@ -43,7 +44,8 @@ class CreateOrderLabel implements ShouldQueue
             $this->fail(new AgsServiceIsDisabled);
         }
         
-        $certList = UserCard::where('order_item_id', $this->order->id)->pluck('certificate_number');
+        $orderItemId = OrderItem::where('order_id', $this->order->id)->pluck('id');
+        $certList = UserCard::whereIn('order_item_id', $orderItemId)->pluck('certificate_number');
 
         $response = $agsService->createCardLabel(
             data: array_merge(

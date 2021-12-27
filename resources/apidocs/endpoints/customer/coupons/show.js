@@ -15,9 +15,9 @@
  *     HTTP/1.1 200 OK
  *     {
  *          data: {
- *              id: 1,
- *              code: "HvTGSYpak9",
- *              discount_statement: "20.00 Off",
+ *              "id": 1,
+ *              "code": "HvTGSYpak9",
+ *              "discount_statement": "20.00 Off",
  *          }
  *      }
  */

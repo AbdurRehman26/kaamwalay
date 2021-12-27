@@ -56,7 +56,7 @@
  *              "id": 1
  *          },
  *          "coupon": {
- *              "code": HvTGSYpak9,
+ *              "code": "HvTGSYpak9",
  *              "id": 2
  *          },
  *      }
@@ -169,9 +169,9 @@
  *                "name": "Insured Shipping"
  *            },
  *            "coupon": {
- *                  id: 1,
- *                  code: "HvTGSYpak9",
- *                  discount_statement: "20.00 Off",
+ *                  "id": 1,
+ *                  "code": "HvTGSYpak9",
+ *                  "discount_statement": "20.00 Off",
  *            },
  *            "discounted_amount" : 40.00,
  *            "service_fee": 2556,

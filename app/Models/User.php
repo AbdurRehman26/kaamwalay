@@ -155,7 +155,7 @@ class User extends Authenticatable implements JWTSubject
         return $query->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)]);
     }
 
-    public function scopeSubmissions(Builder $query, int $submissionsCount): Builder
+    public function scopeSubmissions(Builder $query, string $submissionsCount): Builder
     {
         return $query->has('orders', $submissionsCount);
     }

@@ -4,11 +4,11 @@ use App\Models\CouponApplicable;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-use Symfony\Component\HttpFoundation\Response;
-
 use function Pest\Laravel\actingAs;
+
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\seed;
+use Symfony\Component\HttpFoundation\Response;
 
 uses(WithFaker::class);
 

@@ -90,6 +90,7 @@ class OrderResource extends BaseResource
             'extra_charge_total' => $this->extra_charge_total,
             'refund_total' => $this->refund_total,
             'coupon' => $this->whenLoaded('coupon', CouponResource::class),
+            'discounted_amount' => $this->discounted_amount,
         ];
     }
 

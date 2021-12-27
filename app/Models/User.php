@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Concerns\Coupons\CanHaveCoupons;
+use App\Http\Filters\AdminCustomerSearchFilter;
+use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use Carbon\Carbon;
@@ -15,6 +17,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -80,6 +84,25 @@ class User extends Authenticatable implements JWTSubject
         return $user;
     }
 
+    public static function getAllowedAdminFilters(): array
+    {
+        return [
+            AllowedFilter::custom('search', new AdminCustomerSearchFilter),
+            AllowedFilter::scope('signed_up_between'),
+            AllowedFilter::scope('submissions'),
+        ];
+    }
+
+    public static function getAllowedAdminSorts(): array
+    {
+        return [
+            AllowedSort::field('submissions', 'orders_count'),
+            AllowedSort::field('signed_up', 'created_at'),
+            AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
+            'email', 'customer_number'
+        ];
+    }
+    
     public function customerAddresses(): HasMany
     {
         return $this->hasMany(CustomerAddress::class, 'user_id');

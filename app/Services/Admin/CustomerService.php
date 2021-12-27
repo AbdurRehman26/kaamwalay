@@ -18,17 +18,8 @@ class CustomerService
     public function getCustomers(): LengthAwarePaginator
     {
         return QueryBuilder::for(User::withCount('orders')->customer())
-            ->allowedFilters([
-                AllowedFilter::custom('search', new AdminCustomerSearchFilter),
-                AllowedFilter::scope('signed_up_between'),
-                AllowedFilter::scope('submissions'),
-            ])
-            ->allowedSorts([
-                AllowedSort::field('submissions', 'orders_count'),
-                AllowedSort::field('signed_up', 'created_at'),
-                AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
-                'email', 'customer_number'
-            ])
+            ->allowedFilters(User::getAllowedAdminFilters())
+            ->allowedSorts(User::getAllowedAdminSorts())
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::PER_PAGE));
     }

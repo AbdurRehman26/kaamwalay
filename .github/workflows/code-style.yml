@@ -128,4 +128,4 @@ jobs:
         run: yarn install --ignore-scripts --pure-lockfile --non-interactive
 
       - name: Typecheck
-        run: yarn typecheck
+        run: yarn test

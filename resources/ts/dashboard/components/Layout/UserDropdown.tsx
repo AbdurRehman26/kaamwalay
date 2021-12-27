@@ -2,6 +2,7 @@ import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import StyleIcon from '@mui/icons-material/Style';
 import Avatar from '@mui/material/Avatar';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -12,6 +13,7 @@ import { MouseEvent, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
+import { RolesEnum } from '@shared/constants/RolesEnum';
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -25,6 +27,7 @@ export function UserDropdown() {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
     const user$ = useAuth().user;
+    const isAdmin = user$.hasRole(RolesEnum.Admin);
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -38,6 +41,9 @@ export function UserDropdown() {
             switch (href) {
                 case '/logout':
                     logout();
+                    break;
+                case '/admin':
+                    window.location.href = '/admin';
                     break;
                 default:
                     history.push(href);
@@ -75,6 +81,14 @@ export function UserDropdown() {
                     </ListItemIcon>
                     Your Cards
                 </StyledMenuItem>
+                {isAdmin ? (
+                    <StyledMenuItem onClick={handleUserProfileClick('/admin')}>
+                        <ListItemIcon>
+                            <AccountCircleIcon />
+                        </ListItemIcon>
+                        Admin
+                    </StyledMenuItem>
+                ) : null}
                 <Divider />
                 <StyledMenuItem onClick={handleUserProfileClick('/logout')}>
                     <ListItemIcon>

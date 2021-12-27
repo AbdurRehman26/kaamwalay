@@ -69,8 +69,7 @@ jobs:
         with:
           path: |
             .eslintrc.json
-            node_modules
-          key: ${{ runner.os }}-eslint-v1-${{ hashFiles('**/.eslintrc.json') }}
+          key: ${{ runner.os }}-eslint-v1-${{ hashFiles('.eslintrc.json') }}
           restore-keys: |
             ${{ runner.os }}-eslint-v1
 
@@ -98,6 +97,15 @@ jobs:
           key: ${{ runner.os }}-yarn-v1-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-v1
+
+      - name: Restore typescript cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .tsbuildinfo
+          key: ${{ runner.os }}-tsc-v1-${{ hashFiles('.tsbuildinfo') }}
+          restore-keys: |
+            ${{ runner.os }}-tsc-v1
 
       - name: Dependency install
         run: yarn install --ignore-scripts --pure-lockfile --non-interactive

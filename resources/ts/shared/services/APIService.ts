@@ -24,17 +24,18 @@ export class APIService {
      * const api = app(APIService);
      * const users$ = api.createEndpoint('users');
      * ...
-     * users$.get('').then(..);
+     * users$.get('').then(...);
      * ```
      * @param path
      * @param config
      */
     public createEndpoint(path: string, config?: AxiosRequestConfig) {
+        const isExternal = path.startsWith('http');
         const path$ = path.replace(/^\/?api/i, '').replace(/^\//g, '');
 
         return this.createAxios({
             ...config,
-            baseURL: `/api/${path$}`,
+            baseURL: isExternal ? path$ : `/api/${path$}`,
         });
     }
 

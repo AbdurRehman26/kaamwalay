@@ -3,6 +3,7 @@
 namespace App\Services\Admin\Coupon;
 
 use App\Events\API\Admin\Coupon\NewCouponAdded;
+use App\Exceptions\API\Admin\Coupon\CouponableEntityDoesNotExistException;
 use App\Exceptions\API\Admin\Coupon\CouponCodeAlreadyExistsException;
 use App\Http\Filters\AdminCouponSearchFilter;
 use App\Models\Coupon;
@@ -60,7 +61,7 @@ class CouponService
     }
 
     /**
-     * @throws CouponCodeAlreadyExistsException
+     * @throws CouponCodeAlreadyExistsException|CouponableEntityDoesNotExistException
      */
     public function storeCoupon(array $data, User $user): Coupon
     {
@@ -122,15 +123,13 @@ class CouponService
         return $this->couponStatusService->changeStatus($coupon, $couponStatus);
     }
 
+    /**
+     * @throws CouponableEntityDoesNotExistException
+     */
     protected function addCouponables(Coupon $coupon, array $data): Coupon
     {
         if (in_array($data['coupon_applicable_id'], CouponApplicable::COUPON_APPLICABLE_WITH_ENTITIES)) {
-            $couponableManager = app(CouponableManager::class);
-
-            /** @var CouponableEntityInterface $couponableEntity */
-            $couponableEntity = $couponableManager->entity(
-                CouponApplicable::ENTITIES_MAPPING[$data['coupon_applicable_id']]
-            );
+            $couponableEntity = $this->getCouponableEntityService($data['coupon_applicable_id']);
 
             return $couponableEntity
                 ->setIds($data[self::COUPONABLES_REQUEST_KEY])
@@ -172,14 +171,12 @@ class CouponService
         $coupon->couponStats()->save(new CouponStat());
     }
 
+    /**
+     * @throws CouponableEntityDoesNotExistException
+     */
     public function getCouponableEntities(int $couponApplicableId): Countable|IteratorAggregate
     {
-        $couponableManager = app(CouponableManager::class);
-
-        /** @var CouponableEntityInterface $couponableEntity */
-        $couponableEntity = $couponableManager->entity(
-            CouponApplicable::ENTITIES_MAPPING[$couponApplicableId]
-        );
+        $couponableEntity = $this->getCouponableEntityService($couponApplicableId);
 
         return $couponableEntity->get();
     }
@@ -226,5 +223,17 @@ class CouponService
                 ]);
             }
         }
+    }
+
+    /**
+     * @throws CouponableEntityDoesNotExistException
+     */
+    protected function getCouponableEntityService(int $couponApplicableId): CouponableEntityInterface
+    {
+        $couponableManager = CouponableManager::getInstance();
+
+        return $couponableManager->entity(
+            CouponApplicable::ENTITIES_MAPPING[$couponApplicableId]
+        );
     }
 }

@@ -86,11 +86,11 @@ export function SubmissionViewBilling({
 
         return null;
     }, [card?.expMonth, card?.expYear, card?.last4, cardBrand, isPaypal, payer?.email]);
-
-    const columnWidths = coupon?.code ? 3 : 4;
+ 
+    const columnWidth = coupon?.code ? 3 : 4;
     return (
-        <Grid container direction={'row'} spacing={2} className={classes.root}>
-            <Grid item xs={12} sm={3}>
+        <Grid container direction={'row'} spacing={4} className={classes.root}>
+            <Grid item xs={12} sm={columnWidth}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Shipping Address
                 </Typography>
@@ -100,7 +100,7 @@ export function SubmissionViewBilling({
                 <Typography variant={'body2'}>{shippingAddress?.phone}</Typography>
             </Grid>
             {hasPayment ? (
-                <Grid item xs={12} sm={columnWidths}>
+                <Grid item xs={12} sm={columnWidth}>
                     <Typography variant={'body1'} className={font.fontWeightMedium}>
                         Payment Method
                     </Typography>
@@ -136,16 +136,14 @@ export function SubmissionViewBilling({
                 )}
             </Grid>
             {coupon?.code ? (
-                <Grid item xs={12} sm={columnWidths}>
+                <Grid item xs={12} sm={columnWidth}>
                     <Typography variant={'body1'} className={font.fontWeightMedium}>
-                        Coupon Code
+                        Promo Code
                     </Typography>
-                    <>
-                        <Typography variant={'body2'}>{coupon?.code}</Typography>
-                        <Typography variant={'body2'} sx={{ color: '#a9a9a9' }}>
-                            {coupon?.discountStatement}
-                        </Typography>
-                    </>
+                    <Typography variant={'body2'}>{coupon?.code}</Typography>
+                    <Typography variant={'body2'} sx={{ color: '#a9a9a9' }}>
+                        {coupon?.discountStatement}
+                    </Typography>
                 </Grid>
             ) : null}
         </Grid>

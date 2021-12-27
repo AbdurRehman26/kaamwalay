@@ -142,7 +142,7 @@ export function SubmissionViewBilling({
                     </Typography>
                     <Typography variant={'body2'}>{coupon?.code}</Typography>
                     <Typography variant={'body2'} sx={{ color: '#a9a9a9' }}>
-                        {coupon?.discountStatement}
+                        {coupon?.description}
                     </Typography>
                 </Grid>
             ) : null}

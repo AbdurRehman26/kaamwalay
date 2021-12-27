@@ -35,7 +35,7 @@ export default {
 
     // The test environment that will be used for testing
     testEnvironment: 'jsdom',
-    testPathIgnorePatterns: ['cypress'],
+    testPathIgnorePatterns: ['cypress', 'resources/eslint'],
 
     setupFilesAfterEnv: [path.resolve(__dirname, './resources/ts/setupTests.ts')],
 };

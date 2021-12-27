@@ -23,7 +23,8 @@
         "lint:fix": "yarn -s lint --fix",
         "prepare": "husky install && cd ./resources/apidocs && yarn install",
         "dep:upgrade": "npx npm-check-updates -i",
-        "test:e2e": "cypress run"
+        "test:e2e": "cypress run",
+        "typecheck": "tsc -p ./tsconfig.json --noEmit"
     },
     "dependencies": {
         "@emotion/react": "11.7.1",

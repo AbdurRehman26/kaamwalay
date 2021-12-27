@@ -112,7 +112,7 @@ export function PromoCodeModal() {
 
     const handlePromoCodeChange = useCallback(
         (event: any) => {
-            dispatch(setPromoCodeTextValue(event.target.value));
+            dispatch(setPromoCodeTextValue(event.target.value.toUpperCase()));
         },
         [promoCodeValue],
     );
@@ -395,10 +395,11 @@ export function PromoCodeModal() {
                                         item.code === 'service_level' ? (
                                             <Box
                                                 display={'flex'}
-                                                flexDirection={'row'}
+                                                flexDirection={'column'}
                                                 flexWrap={'wrap'}
                                                 justifyContent={'space-around'}
                                                 maxWidth={'176px'}
+                                                maxHeight={'250px'}
                                             >
                                                 {serviceLevelCouponables?.map((item2: any) => {
                                                     return (
@@ -406,7 +407,7 @@ export function PromoCodeModal() {
                                                             display={'flex'}
                                                             flexDirection={'row'}
                                                             alignItems={'center'}
-                                                            width={'69px'}
+                                                            width={'120px'}
                                                         >
                                                             <Checkbox
                                                                 checked={selectedDiscountApplicationServiceLevels?.includes(
@@ -425,29 +426,6 @@ export function PromoCodeModal() {
                                     </Paper>
                                 );
                             })}
-
-                            {/* <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px', marginTop: '8px' }}>*/}
-                            {/*    <Radio*/}
-                            {/*        checked={discountApplicationType === DiscountApplicationEnums.selectServiceLevels}*/}
-                            {/*        onChange={handleDiscountApplicationTypeRadioPress(*/}
-                            {/*            DiscountApplicationEnums.selectServiceLevels,*/}
-                            {/*        )}*/}
-                            {/*        value={DiscountApplicationEnums.selectServiceLevels}*/}
-                            {/*    />*/}
-                            {/*    <Typography*/}
-                            {/*        variant={'caption'}*/}
-                            {/*        className={classes.secondaryLabel}*/}
-                            {/*        sx={{*/}
-                            {/*            fontWeight:*/}
-                            {/*                discountApplicationType === DiscountApplicationEnums.selectServiceLevels*/}
-                            {/*                    ? 'bold'*/}
-                            {/*                    : 'normal',*/}
-                            {/*        }}*/}
-                            {/*    >*/}
-                            {/*        Select Service Levels*/}
-                            {/*    </Typography>*/}
-
-                            {/* </Paper>*/}
                         </Box>
                     </Box>
                 </Box>

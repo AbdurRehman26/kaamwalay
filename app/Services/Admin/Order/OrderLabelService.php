@@ -3,14 +3,17 @@
 namespace App\Services\Admin\Order;
 
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
+use App\Services\Admin\OrderService;
 use App\Models\Order;
 use App\Models\UserCard;
 use App\Services\AGS\AgsService;
 
 class OrderLabelService
 {
-    public function __construct(protected AgsService $agsService)
-    {
+    public function __construct(
+        protected AgsService $agsService, 
+        protected OrderService $orderService
+    ) {
     }
 
     public function getCardLabelData(Order $order): array
@@ -21,7 +24,7 @@ class OrderLabelService
             throw new AgsServiceIsDisabled;
         }
         
-        $certList = UserCard::where('order_item_id', $order->id)->pluck('certificate_number');
+        $certList = $this->orderService->getOrderCertificates($order);
 
         $response = $this->agsService->createCardLabel(
             data: array_merge(

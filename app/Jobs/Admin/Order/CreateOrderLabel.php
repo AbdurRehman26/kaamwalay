@@ -6,7 +6,6 @@ use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Services\Admin\OrderService;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\OrderLabel;
 use App\Models\UserCard;
 use App\Services\AGS\AgsService;

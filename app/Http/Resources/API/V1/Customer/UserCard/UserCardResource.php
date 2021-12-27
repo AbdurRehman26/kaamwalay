@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Resources\API\Customer\UserCard;
+namespace App\Http\Resources\API\V1\Customer\UserCard;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\CardProduct\CardProductResource;
+use App\Http\Resources\API\V1\CardProduct\CardProductResource;
 use Illuminate\Http\Request;
 
 class UserCardResource extends BaseResource

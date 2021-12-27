@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 use App\Concerns\AGS\AuthenticatableWithAGS;
 use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Auth\LoginRequest;
+use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Services\CustomerProfileService;

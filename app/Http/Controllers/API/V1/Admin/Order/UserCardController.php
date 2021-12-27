@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Admin\Order;
 
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Admin\Order\Grades\UserCardGradeRequest;
+use App\Http\Requests\API\V1\Admin\Order\Grades\UserCardGradeRequest;
 use App\Http\Resources\API\V1\Admin\Order\UserCardResource;
 use App\Models\Order;
 use App\Models\UserCard;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Auth\RegisterRequest;
+use App\Http\Requests\API\V1\Auth\RegisterRequest;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;

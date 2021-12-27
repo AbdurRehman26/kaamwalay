@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V1\Admin\Order;
 
-use App\Http\Resources\API\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V1\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V1\Customer\Order\Invoice\InvoiceResource;
 use Illuminate\Http\Request;
 

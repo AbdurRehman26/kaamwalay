@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Customer\PushNotificationRequest;
+use App\Http\Requests\API\V1\Customer\PushNotificationRequest;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use Exception;
 use Pusher\PushNotifications\PushNotifications;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\V1\Customer;
 use App\Exceptions\API\Auth\AgsAuthenticationException;
 use App\Exceptions\API\Customer\InvalidAgsDataForCustomer;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Customer\UpdateCustomerRequest;
+use App\Http\Requests\API\V1\Customer\UpdateCustomerRequest;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Models\User;
 use App\Services\AGS\AgsService;

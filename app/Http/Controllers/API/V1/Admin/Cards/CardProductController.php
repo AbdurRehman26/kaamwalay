@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Admin\Cards;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Admin\Card\StoreCardProductRequest;
+use App\Http\Requests\API\V1\Admin\Card\StoreCardProductRequest;
 use App\Http\Resources\API\V1\CardProduct\CardProductResource;
 use App\Services\Admin\Card\CardProductService;
 use Exception;

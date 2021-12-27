@@ -6,6 +6,7 @@ use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\V1\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V1\Admin\Order\OrderStatusResource;
+use App\Http\Resources\API\V1\Customer\Coupon\CouponResource;
 use App\Http\Resources\API\V1\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V1\Customer\Order\PaymentPlan\PaymentPlanResource;

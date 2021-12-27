@@ -3,8 +3,8 @@
 namespace App\Http\Resources\API\V1\Customer\Order\OrderItem;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\CardProduct\CardProductResource;
-use App\Http\Resources\API\Customer\UserCard\UserCardResource;
+use App\Http\Resources\API\V1\CardProduct\CardProductResource;
+use App\Http\Resources\API\V1\Customer\UserCard\UserCardResource;
 
 class OrderItemResource extends BaseResource
 {

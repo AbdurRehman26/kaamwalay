@@ -4,10 +4,10 @@ namespace App\Http\Controllers\API\V1\Admin\Order;
 
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Admin\Order\AddExtraCardRequest;
-use App\Http\Requests\API\Admin\Order\MarkItemsPendingRequest;
-use App\Http\Requests\API\Admin\Order\OrderItem\ChangeStatusRequest;
-use App\Http\Requests\API\Admin\Order\OrderItem\UpdateOrderItemNotesRequest;
+use App\Http\Requests\API\V1\Admin\Order\AddExtraCardRequest;
+use App\Http\Requests\API\V1\Admin\Order\MarkItemsPendingRequest;
+use App\Http\Requests\API\V1\Admin\Order\OrderItem\ChangeStatusRequest;
+use App\Http\Requests\API\V1\Admin\Order\OrderItem\UpdateOrderItemNotesRequest;
 use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemResource;
 use App\Models\Order;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Customer\Order;
 
+use App\Http\Resources\API\V1\Customer\Coupon\CouponResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V1\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V1\Customer\Order\ShippingMethod\ShippingMethodResource;

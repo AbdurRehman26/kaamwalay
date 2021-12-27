@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 use App\Concerns\AGS\AuthenticatableWithAGS;
 use App\Exceptions\API\Customer\InvalidAgsDataForCustomer;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Auth\ChangePasswordRequest;
+use App\Http\Requests\API\V1\Auth\ChangePasswordRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;

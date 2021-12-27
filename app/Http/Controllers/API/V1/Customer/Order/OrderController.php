@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Customer\Order\StoreOrderRequest;
-use App\Http\Requests\API\Customer\Order\UpdateCustomerShipmentRequest;
+use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest;
+use App\Http\Requests\API\V1\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Resources\API\V1\Customer\Order\OrderCollection;
 use App\Http\Resources\API\V1\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderCustomerShipmentResource;

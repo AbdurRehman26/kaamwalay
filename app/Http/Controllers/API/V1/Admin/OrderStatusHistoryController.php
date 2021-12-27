@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Admin;
 
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\Admin\Order\AssignOrderStatusHistoryRequest;
+use App\Http\Requests\API\V1\Admin\Order\AssignOrderStatusHistoryRequest;
 use App\Http\Resources\API\V1\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V1\Admin\Order\OrderStatusHistoryResource;
 use App\Models\Order;

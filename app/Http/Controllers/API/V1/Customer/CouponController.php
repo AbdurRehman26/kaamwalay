@@ -10,8 +10,6 @@ use App\Services\Coupon\CouponService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
-use function response;
-
 class CouponController extends Controller
 {
     private CouponService $couponService;

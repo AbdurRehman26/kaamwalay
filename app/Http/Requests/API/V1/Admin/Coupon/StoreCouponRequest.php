@@ -7,8 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
-use function now;
-
 class StoreCouponRequest extends FormRequest
 {
     /**

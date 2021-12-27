@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\API\V1\Customer;
 
-use function auth;
 use Illuminate\Foundation\Http\FormRequest;
-
 use Illuminate\Validation\Rule;
 
 class UpdateCustomerRequest extends FormRequest

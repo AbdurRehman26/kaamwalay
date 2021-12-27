@@ -8,11 +8,13 @@ import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
 import { getPaymentIcon, getPaymentTitle } from '../lib/payments';
 import font from '../styles/font.module.css';
+import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 
 interface SubmissionViewBillingProps {
     shippingAddress?: AddressEntity;
     billingAddress?: AddressEntity;
     payment?: OrderPaymentEntity;
+    coupon?: OrderCouponEntity;
 }
 
 export const useStyles = makeStyles(
@@ -37,7 +39,12 @@ export const useStyles = makeStyles(
  * @private
  * @constructor
  */
-export function SubmissionViewBilling({ shippingAddress, billingAddress, payment }: SubmissionViewBillingProps) {
+export function SubmissionViewBilling({
+    shippingAddress,
+    billingAddress,
+    payment,
+    coupon,
+}: SubmissionViewBillingProps) {
     const classes = useStyles();
     const { card, payer } = payment ?? {};
     const hasPayment = !!card || !!payer;
@@ -80,9 +87,10 @@ export function SubmissionViewBilling({ shippingAddress, billingAddress, payment
         return null;
     }, [card?.expMonth, card?.expYear, card?.last4, cardBrand, isPaypal, payer?.email]);
 
+    const columnWidth = coupon?.code ? 3 : 4;
     return (
         <Grid container direction={'row'} spacing={4} className={classes.root}>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={columnWidth}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Shipping Address
                 </Typography>
@@ -92,7 +100,7 @@ export function SubmissionViewBilling({ shippingAddress, billingAddress, payment
                 <Typography variant={'body2'}>{shippingAddress?.phone}</Typography>
             </Grid>
             {hasPayment ? (
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={columnWidth}>
                     <Typography variant={'body1'} className={font.fontWeightMedium}>
                         Payment Method
                     </Typography>
@@ -112,7 +120,7 @@ export function SubmissionViewBilling({ shippingAddress, billingAddress, payment
                     </Box>
                 </Grid>
             ) : null}
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={columnWidth}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Billing Address
                 </Typography>
@@ -127,6 +135,17 @@ export function SubmissionViewBilling({ shippingAddress, billingAddress, payment
                     </>
                 )}
             </Grid>
+            {coupon?.code ? (
+                <Grid item xs={12} sm={columnWidth}>
+                    <Typography variant={'body1'} className={font.fontWeightMedium}>
+                        Promo Code
+                    </Typography>
+                    <Typography variant={'body2'}>{coupon?.code}</Typography>
+                    <Typography variant={'body2'} sx={{ color: '#a9a9a9' }}>
+                        {coupon?.discountStatement}
+                    </Typography>
+                </Grid>
+            ) : null}
         </Grid>
     );
 }

@@ -10,7 +10,7 @@ describe('lib/errors/normalizeError', function () {
         let error: any = null;
         const apiService = app(APIService);
         // eslint-disable-next-line robograding/api-service-create-endpoint
-        const endpoint = apiService.createEndpoint('/random/path/to/fail/404');
+        const endpoint = apiService.createEndpoint('https://staging.robograding.com/random/path/to/fail/404');
         try {
             await endpoint.get('/');
         } catch (e: any) {

@@ -4,7 +4,6 @@ namespace App\Services\Admin;
 
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Sorts\AdminCustomerFullNameSort;
-use App\Http\Sorts\FullNameSort;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -27,7 +26,7 @@ class CustomerService
                 AllowedSort::field('submissions', 'orders_count'),
                 AllowedSort::field('signed_up', 'created_at'),
                 AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
-                'email', 'customer_number'
+                'email', 'customer_number',
             ])
             ->defaultSort('-created_at')
             ->paginate(request('per_page', self::PER_PAGE));

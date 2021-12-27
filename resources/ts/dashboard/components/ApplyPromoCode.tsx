@@ -80,10 +80,10 @@ export function ApplyPromoCode() {
 
     const handleChange = (e: any) => {
         if (e.target.value.length > 0) {
-            dispatch(setCouponCode(e.target.value));
+            dispatch(setCouponCode(e.target.value.toUpperCase()));
             debounceCheckCoupon(e.target.value);
         }
-        dispatch(setCouponCode(e.target.value));
+        dispatch(setCouponCode(e.target.value.toUpperCase()));
     };
 
     useEffect(() => {

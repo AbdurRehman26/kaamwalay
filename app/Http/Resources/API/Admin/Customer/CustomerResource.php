@@ -22,7 +22,7 @@ class CustomerResource extends BaseResource
             'email' => $this->email,
             'phone' => $this->phone,
             'signed_up' => Carbon::parse($this->created_at)->toDateString(),
-            'submissions' => $this->getTotalSubmissions(),
+            'submissions' => $this->orders_count,
         ];
     }
 }

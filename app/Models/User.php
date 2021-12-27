@@ -135,11 +135,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
-    public function getTotalSubmissions(): int
-    {
-        return $this->orders()->count();
-    }
-
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
@@ -158,6 +153,11 @@ class User extends Authenticatable implements JWTSubject
     public function scopeSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
     {
         return $query->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)]);
+    }
+
+    public function scopeSubmissions(Builder $query, int $submissionsCount): Builder
+    {
+        return $query->has('orders', $submissionsCount);
     }
 
     public function scopeAdmin(Builder $query): Builder

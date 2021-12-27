@@ -426,29 +426,6 @@ export function PromoCodeModal() {
                                     </Paper>
                                 );
                             })}
-
-                            {/* <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px', marginTop: '8px' }}>*/}
-                            {/*    <Radio*/}
-                            {/*        checked={discountApplicationType === DiscountApplicationEnums.selectServiceLevels}*/}
-                            {/*        onChange={handleDiscountApplicationTypeRadioPress(*/}
-                            {/*            DiscountApplicationEnums.selectServiceLevels,*/}
-                            {/*        )}*/}
-                            {/*        value={DiscountApplicationEnums.selectServiceLevels}*/}
-                            {/*    />*/}
-                            {/*    <Typography*/}
-                            {/*        variant={'caption'}*/}
-                            {/*        className={classes.secondaryLabel}*/}
-                            {/*        sx={{*/}
-                            {/*            fontWeight:*/}
-                            {/*                discountApplicationType === DiscountApplicationEnums.selectServiceLevels*/}
-                            {/*                    ? 'bold'*/}
-                            {/*                    : 'normal',*/}
-                            {/*        }}*/}
-                            {/*    >*/}
-                            {/*        Select Service Levels*/}
-                            {/*    </Typography>*/}
-
-                            {/* </Paper>*/}
                         </Box>
                     </Box>
                 </Box>

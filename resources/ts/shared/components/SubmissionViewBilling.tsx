@@ -86,7 +86,7 @@ export function SubmissionViewBilling({
 
         return null;
     }, [card?.expMonth, card?.expYear, card?.last4, cardBrand, isPaypal, payer?.email]);
-
+ 
     const columnWidth = coupon?.code ? 3 : 4;
     return (
         <Grid container direction={'row'} spacing={4} className={classes.root}>
@@ -120,7 +120,7 @@ export function SubmissionViewBilling({
                     </Box>
                 </Grid>
             ) : null}
-            <Grid item xs={12} sm={columnWidth}>
+            <Grid item xs={12} sm={columnWidths}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Billing Address
                 </Typography>

@@ -28,7 +28,9 @@ export function SubmissionsView() {
                     'orderShipment',
                     'extraCharges',
                     'refunds',
+                    'orderLabel',
                     'orderStatusHistory.orderStatus',
+                    'coupon',
                 ],
             },
         },
@@ -50,12 +52,15 @@ export function SubmissionsView() {
                 orderStatus={data?.orderStatus}
                 orderStatusHistory={data?.orderStatusHistory}
                 orderShipment={data?.orderShipment}
+                orderLabel={data?.orderLabel}
             />
             <Divider />
             <SubmissionsViewDetails
                 serviceLevelFee={data.paymentPlan?.price}
-                numberOfCards={data.numberOfCards}
-                placedAt={data.createdAt}
+                numberOfCards={data?.numberOfCards}
+                discountedAmount={data?.discountedAmount}
+                coupon={data?.coupon}
+                placedAt={data?.createdAt}
                 declaredValue={data.totalDeclaredValue}
                 serviceFee={data.serviceFee}
                 shippingFee={data.shippingFee}

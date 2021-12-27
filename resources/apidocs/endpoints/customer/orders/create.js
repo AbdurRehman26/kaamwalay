@@ -54,7 +54,11 @@
  *          },
  *          "payment_method": {
  *              "id": 1
- *          }
+ *          },
+ *          "coupon": {
+ *              "code": "HvTGSYpak9",
+ *              "id": 2
+ *          },
  *      }
  *
  * @apiSuccess {Object} data Order object
@@ -164,6 +168,12 @@
  *                "code": "insured_shipping",
  *                "name": "Insured Shipping"
  *            },
+ *            "coupon": {
+ *                  "id": 1,
+ *                  "code": "HvTGSYpak9",
+ *                  "discount_statement": "20.00 Off",
+ *            },
+ *            "discounted_amount" : 40.00,
  *            "service_fee": 2556,
  *            "shipping_fee": 43,
  *            "grand_total": 263

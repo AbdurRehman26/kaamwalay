@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\Customer\Order;
 
+use App\Http\Resources\API\Customer\Coupon\CouponResource;
 use App\Http\Resources\API\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\Customer\Order\ShippingMethod\ShippingMethodResource;
@@ -16,6 +17,8 @@ class OrderCreateResource extends JsonResource
             'order_number' => $this->order_number,
             'order_items' => new OrderItemCollection($this->getGroupedOrderItems()),
             'payment_plan' => new PaymentPlanResource($this->paymentPlan),
+            'coupon' => new CouponResource($this->coupon),
+            'discounted_amount' => $this->discounted_amount,
             'order_payment' => new OrderPaymentResource($this->firstOrderPayment),
             'billing_address' => new OrderAddressResource($this->billingAddress),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),

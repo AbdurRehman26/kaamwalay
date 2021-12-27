@@ -13,7 +13,7 @@ class FileService
     public function presignUploadFile(UploadFile $file): UploadFile
     {
         $key = $this->generateKey($file);
-        $signedUrl = $this->getSignedUrl($key, $file->getContentType());
+        $signedUrl = $this->getSignedUrl($key, $file->getContentType(), $file->getBucket());
         $url = Storage::disk('s3')->url($key);
 
         return $file->setPublicUrl($url)->setSignedUrl($signedUrl)->setKey($key);
@@ -23,23 +23,29 @@ class FileService
     {
         $credentials = new Credentials(config('filesystems.disks.s3.key'), config('filesystems.disks.s3.secret'));
 
-        $client = new S3Client([
+        return new S3Client([
             'version' => 'latest',
             'region' => config('filesystems.disks.s3.region'),
             'endpoint' => config('filesystems.disks.s3.endpoint'),
             'credentials' => $credentials,
         ]);
-
-        return $client;
     }
 
-    protected function getSignedUrl(string $key, string $contentType): string
+    protected function getSignedUrl(string $key, string $contentType, ?string $bucket = null): string
     {
         $client = $this->getStorageClient();
         $expiry = "+10 minutes";
 
+        if ($bucket && ! auth()->user()->isAdmin()) {
+            $bucket = null;
+        }
+
+        if (! $bucket) {
+            $bucket = (string) config('filesystems.disks.s3.bucket');
+        }
+
         $command = $client->getCommand('PutObject', [
-            'Bucket' => config('filesystems.disks.s3.bucket'),
+            'Bucket' => $bucket,
             'Key' => $key,
             'ContentType' => $contentType,
         ]);

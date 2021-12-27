@@ -556,11 +556,6 @@ parameters:
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingFeeAndGrandTotal\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingMethod\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php

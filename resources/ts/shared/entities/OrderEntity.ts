@@ -8,6 +8,7 @@ import { DateField } from '../decorators/DateField';
 import { AddressEntity } from './AddressEntity';
 import { Entity } from './Entity';
 import { InvoiceEntity } from './InvoiceEntity';
+import { OrderLabelEntity } from './OrderLabelEntity';
 import { OrderItemEntity } from './OrderItemEntity';
 import { OrderPaymentEntity } from './OrderPaymentEntity';
 import { OrderStatusEntity } from './OrderStatusEntity';
@@ -17,11 +18,13 @@ import { PaymentPlanEntity } from './PaymentPlanEntity';
 import { ShipmentEntity } from './ShipmentEntity';
 import { ShippingMethodEntity } from './ShippingMethodEntity';
 import { UserEntity } from './UserEntity';
+import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 
 export class OrderEntity extends Entity {
     public orderNumber!: string;
     public numberOfCards!: number;
     public totalDeclaredValue!: number;
+    public discountedAmount!: string;
     public grandTotal!: number;
     public extraChargeTotal!: number;
     public refundTotal!: number;
@@ -32,6 +35,9 @@ export class OrderEntity extends Entity {
     public reviewedAt!: string;
     public reviewedBy!: string;
     public notes!: string;
+
+    @Type(() => OrderCouponEntity)
+    public coupon!: OrderCouponEntity;
 
     @Type(() => OrderStatusEntity)
     public orderStatus!: OrderStatusEntity;
@@ -80,6 +86,9 @@ export class OrderEntity extends Entity {
 
     @Type(() => InvoiceEntity)
     public invoice!: InvoiceEntity | null;
+
+    @Type(() => OrderLabelEntity)
+    public orderLabel!: OrderLabelEntity | null;
 
     public get status() {
         return this.orderStatus?.code;

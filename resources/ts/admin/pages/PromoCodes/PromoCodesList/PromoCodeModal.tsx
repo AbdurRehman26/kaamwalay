@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -83,10 +83,11 @@ export function PromoCodeModal() {
     const applicables = useSharedSelector((state) => state.adminNewPromoCodeSlice.applicables);
     const description = useSharedSelector((state) => state.adminNewPromoCodeSlice.description);
 
-    // @ts-ignore
-    const serviceLevelApplicableIndex = applicables.findIndex(
-        (applicableItem) => applicableItem.code === 'service_level',
+    const serviceLevelApplicableIndex = useMemo(
+        () => applicables!.findIndex((applicableItem) => applicableItem.code === 'service_level'),
+        [applicables],
     );
+
     const serviceLevelCouponables = useSharedSelector(
         // @ts-ignore
         (state) => state.adminNewPromoCodeSlice.applicables[serviceLevelApplicableIndex]?.couponables,

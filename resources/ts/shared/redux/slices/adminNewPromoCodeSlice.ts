@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
 import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
@@ -116,6 +114,7 @@ export const adminNewPromoCodeSlice = createSlice({
                 (item) => item.code === action.payload.applicableCode,
             );
             if (applicableIndex !== -1) {
+                // @ts-ignore
                 state.applicables[applicableIndex].couponables = action.payload.couponables;
             }
         },

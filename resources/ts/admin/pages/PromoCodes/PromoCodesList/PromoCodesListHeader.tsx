@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { TabList } from '@mui/lab';
+import TabList from '@mui/lab/TabList';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';

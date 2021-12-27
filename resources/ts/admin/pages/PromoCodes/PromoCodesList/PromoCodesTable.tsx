@@ -1,4 +1,3 @@
-import { CircularProgress } from '@mui/material';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
@@ -18,6 +17,7 @@ import { PromoCodeStatusEnum, PromoCodeStatusMap } from '@shared/constants/Promo
 import { useListAdminPromoCodesQuery } from '@shared/redux/hooks/usePromoCodesQuery';
 import { PromoCodesTableRow } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesTableRow';
 import { ConfirmProvider } from 'material-ui-confirm';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface PromoCodesTableProps {
     tabFilter?: PromoCodeStatusEnum;

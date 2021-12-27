@@ -52,5 +52,9 @@ return [
         'google_analytics_tracking_code' => [
             'value' => env('GOOGLE_ANALYTICS_TRACKING_CODE'),
         ],
+        'paypal_client_id' => [
+            'auth' => true,
+            'value' => env('PAYPAL_CLIENT_ID'),
+        ],
     ],
 ];

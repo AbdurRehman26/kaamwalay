@@ -797,6 +797,15 @@ export function SubmissionsGradeCard({
                         {currentViewMode === 'not_accepted_pending_notes' ||
                         currentViewMode === 'missing_pending_notes' ? null : (
                             <>
+                                <TextField
+                                    label="Notes to Customer"
+                                    multiline
+                                    rows={4}
+                                    value={cardNotes}
+                                    sx={{ marginTop: '16px' }}
+                                    fullWidth
+                                    onChange={handleNotesChange}
+                                />
                                 <SubmissionsGradeCardGrades
                                     icon={<FaceIcon className={classes.headingIcon} />}
                                     disabled={!areRoboGradesAvailable()}
@@ -808,15 +817,6 @@ export function SubmissionsGradeCard({
                                     heading={'Robogrades'}
                                     itemIndex={itemIndex}
                                     icon={<OutlinedToyIcon className={classes.headingIcon} />}
-                                />
-                                <TextField
-                                    label="Notes to Customer"
-                                    multiline
-                                    rows={4}
-                                    value={cardNotes}
-                                    sx={{ marginTop: '16px' }}
-                                    fullWidth
-                                    onChange={handleNotesChange}
                                 />
                                 <SubmissionGradeCardUpload itemIndex={itemIndex} />
                                 <TextField

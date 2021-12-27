@@ -12,6 +12,7 @@ use App\Http\Controllers\API\V1\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V1\Admin\OrderStatusHistoryController;
 use App\Http\Controllers\API\V1\Auth\Admin\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\Admin\Order\OrderExtraChargeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,4 +58,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/', [CardProductController::class, 'store']);
         Route::get('options', [CardProductController::class, 'getOptionsValues']);
     });
+
+    // Coupons
+    Route::apiResource('coupons', CouponController::class)->except('update');
+    Route::put('coupons/{coupon}/change-status', CouponStatusController::class)
+        ->name('coupons.change-status');
+    Route::get('coupon-applicables', CouponApplicableController::class)->name('coupon.applicables');
+    Route::get('couponable/entities', CouponableEntityController::class)->name('couponable.entities');
 });

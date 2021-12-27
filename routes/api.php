@@ -48,6 +48,7 @@ Route::prefix('customer')->group(function () {
         Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
+
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
 
@@ -62,6 +63,11 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::apiResource('/', OrderController::class)->only(['index', 'store']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
+        });
+
+        Route::prefix('coupons')->group(function () {
+            Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');
+            Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('coupon.discount');
         });
 
         Route::prefix('cards')->group(function () {

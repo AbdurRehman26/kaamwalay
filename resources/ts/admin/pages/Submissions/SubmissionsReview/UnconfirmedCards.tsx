@@ -108,12 +108,12 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
     );
 
     const handleCardNotesChange = useCallback(
-        async (orderItemId: number, notes: string) => {
+        async (orderItemId: number, internalNotes: string) => {
             await dispatch(
                 changeOrderItemNotes({
                     orderItemId,
                     orderId,
-                    notes,
+                    internalNotes,
                 }),
             );
         },
@@ -147,7 +147,7 @@ export function UnconfirmedCards({ items, orderId }: UnconfirmedCardsProps) {
                                 disableConfirm={item.cardProduct.addedByCustomer}
                                 onSwapCard={handleSwapCard}
                                 orderId={item.orderId}
-                                notes={item.notes}
+                                internalNotes={item.internalNotes}
                             />
                         ))
                     ) : (

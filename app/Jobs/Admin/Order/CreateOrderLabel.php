@@ -5,7 +5,8 @@ namespace App\Jobs\Admin\Order;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
-use App\Services\Admin\Order\OrderLabelService;
+use App\Services\Admin\OrderService;
+use App\Services\AGS\AgsService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,9 +34,23 @@ class CreateOrderLabel implements ShouldQueue
      *
      * @return void
      */
-    public function handle(OrderLabelService $orderLabelService)
+    public function handle(AgsService $agsService, OrderService $orderService)
     {
-        $response = $orderLabelService->getCardLabelData($this->order);
+        if (! $agsService->isEnabled()) {
+            logger('Skipping AgsService as it is disabled.');
+
+            $this->fail(new AgsServiceIsDisabled);
+        }
+        
+        $certList = $orderService->getOrderCertificates($this->order);
+
+        $response = $agsService->createCardLabel(
+            data: array_merge(
+                ['order_id' => $this->order->order_number],
+                ['certificate_list' => $certList]
+            )
+        );
+
         $this->saveCardLabelToExcel($response);
     }
   

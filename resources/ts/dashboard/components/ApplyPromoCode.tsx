@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Button, Paper, TextField } from '@mui/material';
 import { debounce } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -55,6 +55,7 @@ export function ApplyPromoCode() {
     const selectedCreditCardID = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
+
     const checkCouponCode = async (newCouponCode: string) => {
         const checkCouponEndpoint = apiService.createEndpoint(
             `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
@@ -71,7 +72,11 @@ export function ApplyPromoCode() {
             dispatch(setValidCouponId(-1));
         }
     };
-    const debounceCheckCoupon = debounce((newCouponCode: string) => checkCouponCode(newCouponCode), 500);
+
+    const debounceCheckCoupon = useMemo(
+        () => debounce((newCouponCode: string) => checkCouponCode(newCouponCode), 500),
+        [couponCode],
+    );
 
     const handleChange = (e: any) => {
         if (e.target.value.length > 0) {

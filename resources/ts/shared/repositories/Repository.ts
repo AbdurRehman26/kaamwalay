@@ -4,12 +4,15 @@ import { PaginatedData } from '../classes/PaginatedData';
 import { Injectable } from '../decorators/Injectable';
 import { app } from '../lib/app';
 import { APIService } from '../services/APIService';
+import { APIEndpointConfig } from '../interfaces/APIEndpointConfig';
 
 @Injectable('Repository')
 export abstract class Repository<T> {
-    protected abstract readonly endpointPath: string;
     protected abstract readonly model: ClassConstructor<T>;
-    private readonly apiService: APIService;
+    protected abstract readonly endpointPath: string;
+    protected readonly endpointConfig: APIEndpointConfig = {};
+
+    protected readonly apiService: APIService;
     private _endpoint!: AxiosInstance;
 
     constructor() {
@@ -18,7 +21,7 @@ export abstract class Repository<T> {
 
     protected get endpoint() {
         if (!this._endpoint) {
-            this._endpoint = this.apiService.createEndpoint(this.endpointPath);
+            this._endpoint = this.apiService.createEndpoint(this.endpointPath, this.endpointConfig);
         }
         return this._endpoint;
     }

@@ -375,7 +375,7 @@ export function PromoCodeModal() {
                         <Box display={'flex'} flexDirection={'column'} minWidth={'100%'}>
                             {applicables?.map((item) => {
                                 return (
-                                    <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px' }}>
+                                    <Paper variant={'outlined'} key={item.id} sx={{ width: '100%', padding: '8px' }}>
                                         <Radio
                                             checked={discountApplicationType === item.code}
                                             onChange={handleDiscountApplicationTypeRadioPress(item.id, item.code)}

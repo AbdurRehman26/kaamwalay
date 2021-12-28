@@ -25,6 +25,10 @@ ruleTester.run('api-service-create-endpoint', rule, {
             filename: '/home/code/src/resources/ts/shared/repositories/TestRepository.ts',
             code: "api.createEndpoint('/test')",
         },
+        {
+            filename: '/home/code/src/resources/ts/shared/services/APIService.spec.ts',
+            code: "api.createEndpoint('/test')",
+        },
     ],
 
     invalid: [
@@ -34,7 +38,7 @@ ruleTester.run('api-service-create-endpoint', rule, {
             errors: [
                 {
                     message:
-                        'API Service Create endpoint method should be used outside repositories or redux directories',
+                        'API Service Create endpoint method should not be used outside a Repository, Hook or Redux',
                     type: 'MemberExpression',
                 },
             ],
@@ -45,7 +49,7 @@ ruleTester.run('api-service-create-endpoint', rule, {
             errors: [
                 {
                     message:
-                        'API Service Create endpoint method should be used outside repositories or redux directories',
+                        'API Service Create endpoint method should not be used outside a Repository, Hook or Redux',
                     type: 'MemberExpression',
                 },
             ],

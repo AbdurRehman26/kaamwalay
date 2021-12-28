@@ -98,7 +98,7 @@ export function PromoCodeModal() {
     const handleCloseModal = useCallback(() => {
         dispatch(setShowNewPromoCodeDialog(false));
         dispatch(clearNewPromoCodeState());
-    }, [showModal]);
+    }, [dispatch]);
 
     const selectedDiscountApplicationServiceLevels = useSharedSelector(
         (state) => state.adminNewPromoCodeSlice.selectedDiscountApplicationServiceLevelsIds,
@@ -108,21 +108,21 @@ export function PromoCodeModal() {
         (event: any) => {
             dispatch(setDescription(event.target.value));
         },
-        [description],
+        [dispatch],
     );
 
     const handlePromoCodeChange = useCallback(
         (event: any) => {
             dispatch(setPromoCodeTextValue(event.target.value.toUpperCase()));
         },
-        [promoCodeValue],
+        [dispatch],
     );
 
     const handleDiscountValueChange = useCallback(
         (event: any) => {
             dispatch(setDiscountValue(event.target.value));
         },
-        [discountValue],
+        [dispatch],
     );
 
     const handleDiscountTypeRadioPress = useCallback(
@@ -134,7 +134,7 @@ export function PromoCodeModal() {
                 dispatch(setDiscountType(newDiscountType));
             };
         },
-        [discountType],
+        [discountType, dispatch],
     );
 
     const handleDiscountApplicationTypeRadioPress = useCallback(
@@ -156,7 +156,7 @@ export function PromoCodeModal() {
                 dispatch(setDiscountApplicationType(applicableCode));
             };
         },
-        [discountApplicationType],
+        [apiService, dispatch],
     );
 
     const handleDiscountDateTypeRadioPress = useCallback(
@@ -165,7 +165,7 @@ export function PromoCodeModal() {
                 dispatch(setDiscountDateType(incomingDateType));
             };
         },
-        [isPermanent],
+        [dispatch],
     );
 
     const onServiceLevelPress = (serviceLevelId: number) => {
@@ -178,14 +178,14 @@ export function PromoCodeModal() {
         (date: any) => {
             dispatch(setDiscountStartDate(date));
         },
-        [discountStartDate],
+        [dispatch],
     );
 
     const handleDiscountEndDateChange = useCallback(
         (date: any) => {
             dispatch(setDiscountEndDate(date));
         },
-        [discountEndDate],
+        [dispatch],
     );
 
     const isSaveButtonDisabled = () => {

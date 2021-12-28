@@ -46,11 +46,14 @@ module.exports = {
                 const right = node.property.name;
 
                 if (/api(Service)?/i.test(left) && /createEndpoint/i.test(right)) {
-                    if (!/^\/ts\/(.*)\/(repositories|redux)/i.test(tail)) {
+                    if (
+                        !/^\/ts\/(.*)\/(repositories|hooks|services|redux)/i.test(tail) &&
+                        !/spec\.(ts|tsx)$/i.test(tail)
+                    ) {
                         context.report({
                             node: node,
                             message:
-                                'API Service Create endpoint method should be used outside repositories or redux directories',
+                                'API Service Create endpoint method should not be used outside a Repository, Hook, Service or Redux',
                             type: node.type,
                         });
                     }

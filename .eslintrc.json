@@ -19,8 +19,9 @@
         }
     },
     "rules": {
-        "eqeqeq": "error",
         "robograding/api-service-create-endpoint": "warn",
+        "react-hooks/exhaustive-deps": "error",
+        "eqeqeq": "error",
         "require-jsdoc": "off",
         "valid-jsdoc": "off",
         "new-cap": "off",

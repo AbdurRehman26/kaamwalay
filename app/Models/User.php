@@ -180,7 +180,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeSubmissions(Builder $query, string $submissionsCount): Builder
     {
-        return $query->has('orders', (int) $submissionsCount);
+        return $query->has('orders', $submissionsCount);
     }
 
     public function scopeAdmin(Builder $query): Builder

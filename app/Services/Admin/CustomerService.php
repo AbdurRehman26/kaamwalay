@@ -4,7 +4,6 @@ namespace App\Services\Admin;
 
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Sorts\AdminCustomerFullNameSort;
-use App\Http\Sorts\FullNameSort;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;

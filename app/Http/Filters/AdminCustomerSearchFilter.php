@@ -7,7 +7,6 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class AdminCustomerSearchFilter implements Filter
 {
-
     public function __invoke(Builder $query, $value, string $property)
     {
         $query->whereLike(

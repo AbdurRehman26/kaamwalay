@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Order;
 use App\Models\User;
-use Database\Seeders\OrderSeeder;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UsersSeeder;
 use function Pest\Laravel\actingAs;
@@ -11,10 +11,12 @@ beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
         UsersSeeder::class,
-        OrderSeeder::class,
     ]);
 
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
+    $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create();
+    Order::factory()->for($this->customer)->count(10)->create();
+
 });
 
 it('returns customers list for admin', function () {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\Admin\Customer;
+namespace App\Http\Resources\API\V1\Admin\Customer;
 
 use App\Http\Resources\API\BaseResource;
 use Carbon\Carbon;

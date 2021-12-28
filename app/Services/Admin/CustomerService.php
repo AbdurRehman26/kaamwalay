@@ -2,12 +2,8 @@
 
 namespace App\Services\Admin;
 
-use App\Http\Filters\AdminCustomerSearchFilter;
-use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CustomerService

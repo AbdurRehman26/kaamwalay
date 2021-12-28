@@ -5,6 +5,7 @@ use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
+
 const CUSTOMERS_COUNT = 1;
 
 beforeEach(function () {
@@ -21,7 +22,7 @@ beforeEach(function () {
 
 it('filters customers by submissions', function () {
     getJson(route('customers.index', [
-        'filter[submissions]' => $this->customer->orders->count()
+        'filter[submissions]' => $this->customer->orders->count(),
     ]))
         ->assertOk()
         ->assertJsonCount(CUSTOMERS_COUNT, ['data'])
@@ -32,7 +33,7 @@ it('filters customers by submissions', function () {
 
 it('filters customers by full name', function () {
     getJson(route('customers.index', [
-        'filter[search]' => $this->customer->fullName
+        'filter[search]' => $this->customer->fullName,
     ]))
         ->assertOk()
         ->assertJsonCount(CUSTOMERS_COUNT, ['data'])
@@ -43,7 +44,7 @@ it('filters customers by full name', function () {
 
 it('filters customers by email', function () {
     getJson(route('customers.index', [
-        'filter[search]' => $this->customer->email
+        'filter[search]' => $this->customer->email,
     ]))
         ->assertOk()
         ->assertJsonCount(CUSTOMERS_COUNT, ['data'])
@@ -54,7 +55,7 @@ it('filters customers by email', function () {
 
 it('filters customers by customer number', function () {
     getJson(route('customers.index', [
-        'filter[search]' => $this->customer->customer_number
+        'filter[search]' => $this->customer->customer_number,
     ]))
         ->assertOk()
         ->assertJsonCount(CUSTOMERS_COUNT, ['data'])

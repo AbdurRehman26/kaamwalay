@@ -55,7 +55,7 @@ foo.sayHi();
 // Usage inside component
 const confirm = useConfirmation();
 
-const result = await confirm('your message');
+const result = await confirm({ message: 'your message' });
 // returning a boolean depending on pressed button
 ```
 

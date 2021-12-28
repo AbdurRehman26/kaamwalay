@@ -12,6 +12,7 @@ import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 
 interface SubmissionsViewDetailsProps {
     serviceLevelFee: number;
@@ -31,6 +32,8 @@ interface SubmissionsViewDetailsProps {
     extraChargesTotal: string;
     refundsTotal: string;
     payment: OrderPaymentEntity;
+    discountedAmount: string;
+    coupon: OrderCouponEntity;
 }
 
 const useStyles = makeStyles(
@@ -61,6 +64,8 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         payment,
         extraChargesTotal,
         refundsTotal,
+        discountedAmount,
+        coupon,
     } = props;
 
     const classes = useStyles();
@@ -98,6 +103,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         () => ({
             'Total Declared Value:': formatCurrency(declaredValue),
             'Service Fee:': formatCurrency(serviceFee),
+            ...(Number(discountedAmount) > 0 && { 'Promo Code Discount:': `-${formatCurrency(discountedAmount)}` }),
             'Insured Shipping:': formatCurrency(shippingFee),
             ...(Number(extraChargesTotal) > 0 && { 'Extra Charge:': formatCurrency(extraChargesTotal) }),
             ...(Number(refundsTotal) > 0 && { 'Refund:': formatCurrency(refundsTotal) }),
@@ -125,6 +131,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             <SubmissionViewBilling
                 billingAddress={billingAddress}
                 shippingAddress={shippingAddress}
+                coupon={coupon}
                 payment={payment}
             />
         </Grid>

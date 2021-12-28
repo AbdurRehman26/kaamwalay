@@ -19,7 +19,7 @@ jobs:
             node_modules
           key: ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-v1
+            ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
 
       - name: Dependency install
         run: yarn install --ignore-scripts --pure-lockfile --non-interactive
@@ -62,7 +62,7 @@ jobs:
             node_modules
           key: ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-v1
+            ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
 
       - name: Restore eslint cache
         uses: actions/cache@v2
@@ -96,7 +96,7 @@ jobs:
             node_modules
           key: ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-v1
+            ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
 
       - name: Restore typescript cache
         uses: actions/cache@v2
@@ -130,7 +130,7 @@ jobs:
             node_modules
           key: ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-v1
+            ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
 
       - name: Dependency install
         run: yarn install --ignore-scripts --pure-lockfile --non-interactive

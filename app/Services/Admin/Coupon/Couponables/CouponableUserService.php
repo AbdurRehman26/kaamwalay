@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Coupon\Couponables;
 
-use App\Http\Resources\API\Admin\Coupon\Couponable\CustomerCollection;
+use App\Http\Resources\API\V1\Admin\Coupon\Couponable\CustomerCollection;
 use App\Models\Coupon;
 use App\Models\User;
 use App\Services\Admin\Coupon\Contracts\CouponableEntityInterface;

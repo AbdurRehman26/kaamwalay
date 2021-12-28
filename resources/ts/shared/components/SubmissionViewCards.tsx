@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -16,6 +17,8 @@ import { OrderItemEntity } from '../entities/OrderItemEntity';
 import { cx } from '../lib/utils/cx';
 import { formatCurrency } from '../lib/utils/formatCurrency';
 import font from '../styles/font.module.css';
+import { useAuth } from '../hooks/useAuth';
+import { RolesEnum } from '../constants/RolesEnum';
 
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
@@ -93,9 +96,7 @@ export const useStyles = makeStyles(
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
         },
-        gradeColumn: {
-            marginTop: -25,
-        },
+        gradeColumn: {},
     }),
     { name: 'SubmissionViewCards' },
 );
@@ -103,8 +104,10 @@ export const useStyles = makeStyles(
 export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }: SubmissionViewCardsProps) {
     const classes = useStyles();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'));
-
+    // TODO: replace with a dedicated hook `useUser`
+    const { user } = useAuth();
     const GradeRoot = isMobile ? 'a' : Box;
+
     return (
         <Box px={3} className={classes.containerBox}>
             <TableContainer className={classes.root}>
@@ -261,29 +264,28 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                             </div>
                                             {isMobile ? null : (
                                                 <div className={classes.gradeColumn}>
-                                                    <a
-                                                        href={
-                                                            `/admin/submissions/${item.orderId}/grade?item_id=` +
-                                                            item.id
-                                                        }
-                                                        style={{ textDecoration: 'none' }}
-                                                        rel="noreferrer"
-                                                    >
-                                                        <Typography variant={'body2'} className={classes.viewGradeText}>
+                                                    {user.hasRole(RolesEnum.Admin) && (
+                                                        <MuiLink
+                                                            href={`/admin/submissions/${item.orderId}/grade?item_id=${item.id}`}
+                                                            rel={'noreferrer'}
+                                                            underline={'hover'}
+                                                            variant={'body2'}
+                                                            className={classes.viewGradeText}
+                                                        >
                                                             Revise Grade
-                                                        </Typography>
-                                                    </a>
+                                                        </MuiLink>
+                                                    )}
 
-                                                    <a
+                                                    <MuiLink
                                                         target={'_blank'}
                                                         href={`/feed/${item.certificateNumber}/view`}
-                                                        style={{ textDecoration: 'none' }}
-                                                        rel="noreferrer"
+                                                        rel={'noreferrer'}
+                                                        underline={'hover'}
+                                                        variant={'body2'}
+                                                        className={classes.viewGradeText}
                                                     >
-                                                        <Typography variant={'body2'} className={classes.viewGradeText}>
-                                                            View Grade
-                                                        </Typography>
-                                                    </a>
+                                                        View Grade
+                                                    </MuiLink>
                                                 </div>
                                             )}
                                         </GradeRoot>

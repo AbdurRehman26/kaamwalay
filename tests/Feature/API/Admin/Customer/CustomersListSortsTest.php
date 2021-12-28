@@ -18,7 +18,7 @@ beforeEach(function () {
 it('returns customers list order by asc email', function () {
     actingAs($this->user);
     $response = getJson(route('customers.index',  [
-        'sort' => 'email'
+        'sort' => 'email',
     ]));
 
     $this->assertEquals(
@@ -29,7 +29,7 @@ it('returns customers list order by asc email', function () {
 
 it('returns customers list order by desc email', function () {
     $response = getJson(route('customers.index', [
-        'sort' => '-email'
+        'sort' => '-email',
     ]))
         ->assertOk();
 
@@ -41,7 +41,7 @@ it('returns customers list order by desc email', function () {
 
 it('returns customers list order by asc customer number', function () {
     $response = $this->getJson(route('customers.index', [
-        'sort' => 'customer_number'
+        'sort' => 'customer_number',
     ]))
         ->assertOk();
 
@@ -53,7 +53,7 @@ it('returns customers list order by asc customer number', function () {
 
 it('returns customers list order by desc customer_number', function () {
     $response = $this->getJson(route('customers.index', [
-        'sort' => '-customer_number'
+        'sort' => '-customer_number',
     ]))
         ->assertOk();
 
@@ -65,7 +65,7 @@ it('returns customers list order by desc customer_number', function () {
 
 it('returns customers list order by asc full name', function () {
     $response = $this->getJson(route('customers.index', [
-        'sort' => 'full_name'
+        'sort' => 'full_name',
     ]))->assertOk();
 
     $this->assertEquals(
@@ -76,7 +76,7 @@ it('returns customers list order by asc full name', function () {
 
 it('returns customers list order by desc full name', function () {
     $response = $this->getJson(route('customers.index', [
-        'sort' => '-full_name'
+        'sort' => '-full_name',
     ]))->assertOk();
 
     $this->assertEquals(
@@ -87,7 +87,7 @@ it('returns customers list order by desc full name', function () {
 
 it('returns customers list order by asc signed up date', function () {
     $response = $this->getJson(route('customers.index', [
-        'sort' => 'signed_up'
+        'sort' => 'signed_up',
     ]))->assertOk();
 
     $this->assertEquals(
@@ -98,7 +98,7 @@ it('returns customers list order by asc signed up date', function () {
 
 it('returns customers list order by desc signed up date', function () {
     $response = $this->getJson(route('customers.index', [
-        'sort' => '-signed_up'
+        'sort' => '-signed_up',
     ]))->assertOk();
 
     $this->assertEquals(

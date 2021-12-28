@@ -16,7 +16,6 @@ beforeEach(function () {
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create();
     Order::factory()->for($this->customer)->count(10)->create();
-
 });
 
 it('returns customers list for admin', function () {

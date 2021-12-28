@@ -255,6 +255,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
             </div>
 
             <SubmissionReviewCardDialog
+                reviewMode={reviewMode}
                 items={selectedCardEntities}
                 itemsLength={selectedCardEntities.length}
                 activeId={activeItem?.id}

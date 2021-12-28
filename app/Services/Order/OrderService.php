@@ -2,7 +2,7 @@
 
 namespace App\Services\Order;
 
-use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
+use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\User;

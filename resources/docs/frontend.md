@@ -55,7 +55,7 @@ foo.sayHi();
 // Usage inside component
 const confirm = useConfirmation();
 
-const result = await confirm('your message');
+const result = await confirm({ message: 'your message' });
 // returning a boolean depending on pressed button
 ```
 
@@ -96,6 +96,17 @@ const saveData: MyEntity = await repository.save({ name: 'test' }); // send `POS
 const updateData: MyEntity = await repository.update(1, { name: 'test' }); // send `PUT /api/my/endpoint/1` with body `{"name":"test"}`
 const destroyData: MyEntity = await repository.destroy(1); // send `DELETE /api/my/endpoint/1`
 const customData: MyEntity = await repository.getCustomData(); // send `GET /api/my/endpoint/only-names`
+```
+
+##### Define endpoint version
+```typescript
+// shared/repositories/MyRepository.ts
+@Injectable('MyRepository')
+export class MyRepository extends Repository<MyEntity> {
+    readonly endpointPath: string = 'my/endpoint';
+    readonly endpointConfig = { version: 'v2' };
+    readonly model = MyEntity;
+}
 ```
 
 ### Repositories and data fetching hooks

@@ -30,7 +30,7 @@ it('returns customers list for admin', function () {
                     'customer_number',
                     'email',
                     'phone',
-                    'signed_up',
+                    'created_at',
                     'submissions',
                 ],
             ],

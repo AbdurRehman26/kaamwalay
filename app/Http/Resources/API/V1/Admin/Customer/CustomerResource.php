@@ -21,7 +21,7 @@ class CustomerResource extends BaseResource
             'customer_number' => $this->customer_number,
             'email' => $this->email,
             'phone' => $this->phone,
-            'signed_up' => Carbon::parse($this->created_at)->toDateString(),
+            'created_at' => $this->formatDate($this->created_at),
             'submissions' => $this->orders_count,
         ];
     }

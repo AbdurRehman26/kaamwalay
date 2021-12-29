@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\V1\Admin\Customer;
 
 use App\Http\Resources\API\BaseResource;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CustomerResource extends BaseResource

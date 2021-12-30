@@ -89,6 +89,8 @@ export function NewSubmission() {
             dispatch(nextStep());
             dispatch(setIsNextLoading(false));
             window.scroll(0, 0);
+            // @ts-ignore
+            window.dataLayer.push({ event: 'google-ads-service-selected' });
         }
 
         if (currentStep === 1) {
@@ -99,6 +101,8 @@ export function NewSubmission() {
             dispatch(nextStep());
             dispatch(setIsNextLoading(false));
             window.scroll(0, 0);
+            // @ts-ignore
+            window.dataLayer.push({ event: 'google-ads-cards-selected' });
             return;
         }
 
@@ -114,6 +118,8 @@ export function NewSubmission() {
             dispatch(nextStep());
             dispatch(setIsNextLoading(false));
             window.scroll(0, 0);
+            // @ts-ignore
+            window.dataLayer.push({ event: 'google-ads-shipping-info-submitted' });
             return;
         }
         if (currentStep === 3) {
@@ -130,6 +136,8 @@ export function NewSubmission() {
                 dispatch(setIsNextLoading(false));
                 dispatch(nextStep());
                 window.scroll(0, 0);
+                // @ts-ignore
+                window.dataLayer.push({ event: 'google-ads-payment-info-submitted' });
                 return;
             } catch (error: any) {
                 dispatch(setIsNextLoading(false));

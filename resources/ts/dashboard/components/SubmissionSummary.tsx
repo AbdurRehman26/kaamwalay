@@ -250,6 +250,8 @@ function SubmissionSummary() {
                 currency: 'USD',
             });
             sendECommerceDataToGA();
+            // @ts-ignore
+            window.dataLayer.push({ event: 'google-ads-purchased', orderTotal: grandTotal });
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {

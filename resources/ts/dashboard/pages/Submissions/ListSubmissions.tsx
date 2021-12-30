@@ -30,6 +30,8 @@ export function ListSubmissions() {
             action: SubmissionEvents.initiated,
         });
         history.push('/submissions/new');
+        // @ts-ignore
+        window.dataLayer.push({ event: 'google-ads-started-submission-process' });
     }
 
     return (

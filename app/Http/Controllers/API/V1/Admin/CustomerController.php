@@ -14,8 +14,6 @@ class CustomerController extends Controller
 
     public function index(): CustomerCollection
     {
-        $coupons = $this->customerService->getCustomers();
-
-        return new CustomerCollection($coupons);
+        return new CustomerCollection($this->customerService->getCustomers());
     }
 }

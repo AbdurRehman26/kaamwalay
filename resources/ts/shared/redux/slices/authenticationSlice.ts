@@ -15,6 +15,7 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
 import { trackFacebookPixelEvent } from '../../lib/utils/trackFacebookPixelEvent';
 import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 interface StateType {
     checking: boolean;
@@ -33,8 +34,7 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         const authenticatedUser = await authenticationRepository.postLogin(input);
         NotificationsService.success('Login successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
-        // @ts-ignore
-        window.dataLayer.push({ event: 'google-ads-authenticated' });
+        pushToDataLayer({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
         // serialize class objects to plain objects according redux toolkit error
@@ -60,8 +60,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
         const authenticatedUser = await authenticationRepository.postRegister(input);
         NotificationsService.success('Register successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
-        // @ts-ignore
-        window.dataLayer.push({ event: 'google-ads-authenticated' });
+        pushToDataLayer({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
         trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
         thunkAPI.dispatch(authenticateCheckAction());

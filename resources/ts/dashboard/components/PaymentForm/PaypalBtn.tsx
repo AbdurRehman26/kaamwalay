@@ -12,6 +12,7 @@ import { useAppSelector } from '@dashboard/redux/hooks';
 import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 function PaypalBtn() {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -94,6 +95,7 @@ function PaypalBtn() {
                                 currency: 'USD',
                             });
                             sendECommerceDataToGA();
+                            pushToDataLayer({ event: 'google-ads-purchased', orderTotal: grandTotal });
                             history.push(`/submissions/${orderID}/confirmation`);
                         } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');

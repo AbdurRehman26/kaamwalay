@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -250,8 +251,7 @@ function SubmissionSummary() {
                 currency: 'USD',
             });
             sendECommerceDataToGA();
-            // @ts-ignore
-            window.dataLayer.push({ event: 'google-ads-purchased', orderTotal: grandTotal });
+            pushToDataLayer({ event: 'google-ads-purchased', orderTotal: grandTotal });
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {

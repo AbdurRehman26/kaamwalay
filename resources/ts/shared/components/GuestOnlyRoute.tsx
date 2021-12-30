@@ -1,11 +1,10 @@
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect } from 'react';
-import { Route, RouteProps } from 'react-router-dom';
 import { AuthenticationEnum } from '../constants/AuthenticationEnum';
 import { useAuth } from '../hooks/useAuth';
 
-interface GuestOnlyRouteProps extends RouteProps {
+interface GuestOnlyRouteProps {
     redirectRoute?: string;
 }
 
@@ -16,38 +15,39 @@ interface GuestOnlyRouteProps extends RouteProps {
  * @date: 09.08.2021
  * @time: 05:46
  */
-export function GuestOnlyRoute({ redirectRoute, ...rest }: GuestOnlyRouteProps) {
-    const { authenticated, checking } = useAuth();
+export function GuestOnlyRoute(Component: React.ElementType, { redirectRoute }: GuestOnlyRouteProps = {}) {
+    function Wrapper() {
+        const { authenticated, checking } = useAuth();
 
-    useEffect(() => {
-        if (authenticated && !checking) {
-            let link = redirectRoute ?? AuthenticationEnum.DashboardRoute;
-            const url = new URL(window.location.href);
+        useEffect(() => {
+            if (authenticated && !checking) {
+                let link = redirectRoute ?? AuthenticationEnum.DashboardRoute;
+                const url = new URL(window.location.href);
 
-            if (url.searchParams.has('from')) {
-                link = url.searchParams.get('from') || link;
+                if (url.searchParams.has('from')) {
+                    link = url.searchParams.get('from') || link;
+                }
+
+                window.location.replace(link);
             }
+        }, [authenticated, checking]);
 
-            window.location.replace(link);
-        }
-    }, [authenticated, checking, redirectRoute]);
-
-    if (checking) {
-        const { component, render, children, ...partial } = rest;
-        return (
-            <Route {...partial}>
+        if (checking) {
+            return (
                 <Box padding={10} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                     <CircularProgress />
                 </Box>
-            </Route>
-        );
+            );
+        }
+
+        if (authenticated) {
+            return null;
+        }
+
+        return <Component />;
     }
 
-    if (authenticated) {
-        return null;
-    }
-
-    return <Route {...rest} />;
+    return <Wrapper />;
 }
 
 export default GuestOnlyRoute;

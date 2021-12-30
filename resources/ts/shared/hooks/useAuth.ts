@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { useCallback, useMemo } from 'react';
 import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
 import { SignUpRequestDto } from '../dto/SignUpRequestDto';
@@ -21,7 +21,7 @@ export function useAuth() {
     const authenticated = useSharedSelector((state) => state.authentication.authenticated);
     const checking = useSharedSelector((state) => state.authentication.checking);
 
-    const user$ = useMemo<UserEntity>(() => plainToClass(UserEntity, user), [user]);
+    const user$ = useMemo<UserEntity>(() => plainToInstance(UserEntity, user), [user]);
 
     const login = useCallback(
         (email: string, password: string) => dispatch(authenticateAction({ email, password })),

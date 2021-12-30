@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -35,7 +35,11 @@ function OrderReviewSection() {
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
-
+    const discountCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+    const discountStatement = useAppSelector(
+        (state) => state.newSubmission.couponState.appliedCouponData.discountStatement,
+    );
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const finalShippingAddress =
         existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
             ? selectedExistingAddress
@@ -121,6 +125,15 @@ function OrderReviewSection() {
                         className={classes.darkBodyText}
                     >{`${billingAddress.city}, ${billingAddress.state.code} ${billingAddress.zipCode}, US`}</Typography>
                 </OrderDetailItem>
+                {isCouponApplied ? (
+                    <>
+                        {!isMobile ? <Spacer top={'48px'} /> : null}
+                        <OrderDetailItem title={'Promo Code'} editStep={3}>
+                            <Typography className={classes.darkBodyText}>{discountCode}</Typography>
+                            <Typography className={classes.greyBodyText}>{discountStatement}</Typography>
+                        </OrderDetailItem>
+                    </>
+                ) : null}
             </div>
         </Paper>
     );

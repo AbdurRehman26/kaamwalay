@@ -1,4 +1,5 @@
-import { CircularProgress, useMediaQuery } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
@@ -26,6 +27,7 @@ import {
 import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
+import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -337,6 +339,13 @@ export function SubmissionStep04Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
+                        <div className={classes.shippingMethodContainer}>
+                            <Typography className={classes.sectionLabel}> Add a Promo Code </Typography>
+                            <div className={classes.shippingMethodItemContainer}>
+                                <ApplyPromoCode />
+                            </div>
+                        </div>
+                        <Divider light sx={{ marginBottom: '6px' }} />
                         <div className={classes.shippingMethodContainer}>
                             <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
 

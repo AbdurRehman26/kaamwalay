@@ -1,5 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { CircularProgress } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect } from 'react';

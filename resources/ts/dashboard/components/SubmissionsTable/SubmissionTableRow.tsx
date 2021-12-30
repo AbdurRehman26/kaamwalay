@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Moment } from 'moment';
 import { MouseEventHandler, useCallback, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { useConfirmation } from '@shared/hooks/useConfirmation';
@@ -116,7 +116,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
 
     const submissionViewUrl = `submissions/${id}/view`;
 
-    const history = useHistory();
+    const navigate = useNavigate();
     const confirm = useConfirmation();
     const classes = useStyles();
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
@@ -131,13 +131,13 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
 
             switch (option) {
                 case Options.View:
-                    history.push(`/submissions/${id}/view`);
+                    navigate(`/submissions/${id}/view`);
                     break;
                 case Options.ViewInstructions:
-                    history.push(`/submissions/${id}/confirmation`);
+                    navigate(`/submissions/${id}/confirmation`);
                     break;
                 case Options.Edit:
-                    history.push(`/submissions/${id}/edit`);
+                    navigate(`/submissions/${id}/edit`);
                     break;
                 case Options.ToggleShipmentTrackingModal:
                     setShowShipmentTrackingModal(!showShipmentTrackingModal);
@@ -153,7 +153,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     break;
             }
         },
-        [handleCloseOptions, history, id, confirm, invoice, invoiceNumber, showShipmentTrackingModal],
+        [handleCloseOptions, navigate, id, showShipmentTrackingModal, confirm, invoice, invoiceNumber],
     );
 
     const handleShipmentSubmit = useCallback(

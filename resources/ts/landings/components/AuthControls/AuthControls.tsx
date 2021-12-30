@@ -1,6 +1,6 @@
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
 import PersonIcon from '@mui/icons-material/PersonOutline';
-import { ButtonBase } from '@mui/material';
+import ButtonBase from '@mui/material/ButtonBase';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';

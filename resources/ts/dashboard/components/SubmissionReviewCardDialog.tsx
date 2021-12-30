@@ -6,6 +6,7 @@ import { ReviewCardDialog, ReviewCardDialogProps } from '@shared/components/Revi
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 
 interface SubmissionReviewCardDialogProps extends Omit<ReviewCardDialogProps, 'children'> {
+    reviewMode?: boolean;
     items: CardProductEntity[];
     activeId?: number | null;
     exists?: boolean;
@@ -15,6 +16,7 @@ interface SubmissionReviewCardDialogProps extends Omit<ReviewCardDialogProps, 'c
 }
 
 export function SubmissionReviewCardDialog({
+    reviewMode,
     items,
     activeId,
     open,
@@ -86,19 +88,21 @@ export function SubmissionReviewCardDialog({
                     Close
                 </Button>
             </Grid>
-            <Grid item xs={12} sm>
-                <Button
-                    variant={'contained'}
-                    size={'large'}
-                    disabled={loading}
-                    onClick={exists ? handleRemove : handleAdd}
-                    startIcon={loading ? <CircularProgress size={24} color={'inherit'} /> : null}
-                    sx={{ minWidth: '200px' }}
-                    fullWidth
-                >
-                    {exists ? 'Remove' : 'Add to Submission'}
-                </Button>
-            </Grid>
+            {!reviewMode ? (
+                <Grid item xs={12} sm>
+                    <Button
+                        variant={'contained'}
+                        size={'large'}
+                        disabled={loading}
+                        onClick={exists ? handleRemove : handleAdd}
+                        startIcon={loading ? <CircularProgress size={24} color={'inherit'} /> : null}
+                        sx={{ minWidth: '200px' }}
+                        fullWidth
+                    >
+                        {exists ? 'Remove' : 'Add to Submission'}
+                    </Button>
+                </Grid>
+            ) : null}
         </ReviewCardDialog>
     );
 }

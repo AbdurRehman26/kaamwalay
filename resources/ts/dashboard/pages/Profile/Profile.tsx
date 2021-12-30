@@ -1,6 +1,7 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { BasicInfo } from './BasicInfo';
+
 /**
  *
  * @author: Dumitrana Alinus <alinus@wooter.co>
@@ -10,9 +11,9 @@ import { BasicInfo } from './BasicInfo';
  */
 export function Profile() {
     return (
-        <Switch>
-            <Route exact path={'/profile'} component={BasicInfo} />
-        </Switch>
+        <Routes>
+            <Route path={''} element={<BasicInfo />} />
+        </Routes>
     );
 }
 

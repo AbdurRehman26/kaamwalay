@@ -27,6 +27,6 @@ Some details about how the changes were tested
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have changed the status of the task to `PR Pushed`
 - [ ] I have submitted my changes into the `dev` branch <!-- Replace dev with master in case of hotfix-->
-- [ ] I have updated the [documentation](https://github.com/opencv/cvat/blob/dev/resources/docs/frontend.md) accordingly
+- [ ] I have updated the [documentation](https://github.com/woozard/robograding/blob/dev/resources/docs/frontend.md) accordingly
 - [ ] I have added tests to cover my changes
 - [ ] My changes generate no new warnings

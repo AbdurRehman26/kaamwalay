@@ -1,0 +1,139 @@
+name: 'Code style'
+
+on: pull_request
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            yarn.lock
+            node_modules
+          key: ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
+
+      - name: Dependency install
+        run: yarn install --ignore-scripts --pure-lockfile --non-interactive
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+        continue-on-error: true
+
+      - name: Pretty code
+        run: |
+          files="";
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            if echo "$changed_file" | grep -Eq "(json|js|jsx|ts|tsx|css|scss)$"; then
+              if [[ -f "$changed_file" ]]; then
+                files="$files $changed_file";
+              fi
+           fi
+          done;
+          yarn prettier -w ${files:-.}
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Prettier changes
+
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Restore yarn cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            yarn.lock
+            node_modules
+          key: ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
+
+      - name: Restore eslint cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .eslintrc.json
+          key: ${{ runner.os }}-eslint-v1-${{ hashFiles('.eslintrc.json') }}
+          restore-keys: |
+            ${{ runner.os }}-eslint-v1
+
+      - name: Dependency install
+        run: yarn install --ignore-scripts --pure-lockfile --non-interactive
+
+      - name: Linting
+        run: yarn lint
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            yarn.lock
+            node_modules
+          key: ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
+
+      - name: Restore typescript cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .tsbuildinfo
+          key: ${{ runner.os }}-tsc-v1-${{ hashFiles('.tsbuildinfo') }}
+          restore-keys: |
+            ${{ runner.os }}-tsc-v1
+
+      - name: Dependency install
+        run: yarn install --ignore-scripts --pure-lockfile --non-interactive
+
+      - name: Typecheck
+        run: yarn typecheck
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            yarn.lock
+            node_modules
+          key: ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-v1-${{ hashFiles('yarn.lock') }}
+
+      - name: Dependency install
+        run: yarn install --ignore-scripts --pure-lockfile --non-interactive
+
+      - name: Typecheck
+        run: yarn test

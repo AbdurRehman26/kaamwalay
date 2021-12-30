@@ -82,7 +82,8 @@ export function PromoCodesListHeader({ onSearch }: PromoCodesListHeaderProps) {
         dispatch(setDiscountApplicationType(applicables[0].code));
         dispatch(setApplicables(applicables));
         dispatch(setShowNewPromoCodeDialog(true));
-    }, []);
+    }, [apiService, dispatch]);
+
     return (
         <Grid component={'header'} container className={classes.root}>
             <PromoCodeModal />

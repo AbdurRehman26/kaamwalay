@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';

@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
     AccordionCardItem,
     AccordionCardItemHeader,
@@ -13,9 +13,10 @@ import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import _ from 'lodash';
+import { debounce } from 'lodash';
+
 interface UnconfirmedCardProps extends AccordionCardItemProps {
     itemId: number;
     declaredValue: number;
@@ -71,14 +72,30 @@ export function UnconfirmedCard({
     const [loading, setLoading] = useState(false);
     const [cardInternalNotes, setInternalNotes] = useState(internalNotes);
     const notification = useNotifications();
-    const debounceNotes = useCallback(_.debounce(handleCardNotesChange, 500), []);
+
+    const handleCardNotesChange = useCallback(
+        (newNotes: string) => {
+            setLoading(true);
+            try {
+                onCardNotesChange(itemId, newNotes).then(() => {
+                    setLoading(false);
+                });
+            } catch (e: any) {
+                notification.exception(e);
+                setLoading(false);
+            }
+        },
+        [itemId, notification, onCardNotesChange],
+    );
+
+    const debounceNotes = useMemo(() => debounce(handleCardNotesChange, 500), [handleCardNotesChange]);
 
     const handleSetCardNotes = useCallback(
         (event) => {
             setInternalNotes(event.target.value);
             debounceNotes(event.target.value);
         },
-        [setInternalNotes, cardInternalNotes],
+        [debounceNotes],
     );
 
     const handlePreview = useCallback(() => onPreview(itemId), [onPreview, itemId]);
@@ -122,19 +139,7 @@ export function UnconfirmedCard({
             notification.exception(e);
         }
         setLoading(false);
-    }, [itemId, notification, onEdit]);
-
-    function handleCardNotesChange(newNotes: string) {
-        setLoading(true);
-        try {
-            onCardNotesChange(itemId, newNotes).then(() => {
-                setLoading(false);
-            });
-        } catch (e: any) {
-            notification.exception(e);
-            setLoading(false);
-        }
-    }
+    }, [itemId, notification, onSwapCard]);
 
     return (
         <AccordionCardItem divider>

@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';

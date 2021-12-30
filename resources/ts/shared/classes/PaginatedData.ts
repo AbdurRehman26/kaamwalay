@@ -1,4 +1,4 @@
-import { plainToClass, Type } from 'class-transformer';
+import { plainToInstance, Type } from 'class-transformer';
 import { PaginationLinks } from './PaginationLinks';
 import { PaginationMeta } from './PaginationMeta';
 
@@ -20,12 +20,12 @@ export class PaginatedData<T> {
 
         // noinspection SuspiciousTypeOfGuard
         if (!(pagination.links instanceof PaginationLinks)) {
-            pagination.links = plainToClass(PaginationLinks, pagination.links as any);
+            pagination.links = plainToInstance(PaginationLinks, pagination.links as any);
         }
 
         // noinspection SuspiciousTypeOfGuard
         if (!(pagination.meta instanceof PaginationMeta)) {
-            pagination.meta = plainToClass(PaginationMeta, pagination.meta as any);
+            pagination.meta = plainToInstance(PaginationMeta, pagination.meta as any);
         }
 
         return pagination;

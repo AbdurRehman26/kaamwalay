@@ -1,7 +1,7 @@
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Snackbar from '@mui/material/Snackbar';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { NotificationItem } from '../../classes/NotificationItem';
 import { NotificationTypeEnum } from '../../constants/NotificationTypeEnum';
@@ -24,7 +24,7 @@ export function NotificationsContainer() {
     useEffect(() => {
         setActive((previous) => {
             if (!previous && notifications && notifications.length > 0) {
-                return plainToClass(NotificationItem, notifications[0] as NotificationItem);
+                return plainToInstance(NotificationItem, notifications[0] as NotificationItem);
             }
 
             return previous;

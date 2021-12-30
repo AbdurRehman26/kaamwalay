@@ -12,7 +12,7 @@ import MuiLink from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Form, Formik, FormikProps } from 'formik';
 import { ForwardedRef, forwardRef, useCallback, useMemo, useRef } from 'react';
 import { batch } from 'react-redux';
@@ -82,7 +82,7 @@ export const ManageCardDialogView = forwardRef(
         const formikRef = useRef<FormikProps<{ declaredValue: number }> | null>(null);
 
         const card = useMemo(
-            () => plainToClass(CardProductEntity, dialogState.selectedCard),
+            () => plainToInstance(CardProductEntity, dialogState.selectedCard),
             [dialogState.selectedCard],
         );
 

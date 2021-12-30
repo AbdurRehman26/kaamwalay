@@ -16,7 +16,6 @@ import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { PromoCodeStatusEnum, PromoCodeStatusMap } from '@shared/constants/PromoCodeStatusEnum';
 import { useListAdminPromoCodesQuery } from '@shared/redux/hooks/usePromoCodesQuery';
 import { PromoCodesTableRow } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesTableRow';
-import { ConfirmProvider } from 'material-ui-confirm';
 import CircularProgress from '@mui/material/CircularProgress';
 
 interface PromoCodesTableProps {
@@ -62,57 +61,55 @@ export function PromoCodesTable({ tabFilter, all, search }: PromoCodesTableProps
     }
 
     return (
-        <ConfirmProvider>
-            <Grid container direction={'column'}>
-                <Box pt={2.5} px={2} pb={2}>
-                    <Typography variant={'h6'}>
-                        {heading} {totals > 0 ? `(${totals})` : null}
-                    </Typography>
-                </Box>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
+        <Grid container direction={'column'}>
+            <Box pt={2.5} px={2} pb={2}>
+                <Typography variant={'h6'}>
+                    {heading} {totals > 0 ? `(${totals})` : null}
+                </Typography>
+            </Box>
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell variant={'head'}>Promo Code</TableCell>
+                            <TableCell variant={'head'}>Discount</TableCell>
+                            <TableCell variant={'head'}>Applies To</TableCell>
+                            <TableCell variant={'head'}>Date</TableCell>
+                            <TableCell variant={'head'}>Status</TableCell>
+                            <TableCell variant={'head'}>Times Used</TableCell>
+                            <TableCell variant={'head'}>Total Discounts</TableCell>
+                            <TableCell variant={'head'} />
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {promoCodes$.data?.length > 0 ? (
+                            promoCodes$.data.map((promoCode) => (
+                                <PromoCodesTableRow
+                                    promoCode={promoCode}
+                                    key={promoCode.id}
+                                    reloadCallback={promoCodes$.search}
+                                />
+                            ))
+                        ) : (
                             <TableRow>
-                                <TableCell variant={'head'}>Promo Code</TableCell>
-                                <TableCell variant={'head'}>Discount</TableCell>
-                                <TableCell variant={'head'}>Applies To</TableCell>
-                                <TableCell variant={'head'}>Date</TableCell>
-                                <TableCell variant={'head'}>Status</TableCell>
-                                <TableCell variant={'head'}>Times Used</TableCell>
-                                <TableCell variant={'head'}>Total Discounts</TableCell>
-                                <TableCell variant={'head'} />
+                                <TableCell align={'center'} colSpan={9}>
+                                    <Box padding={2}>
+                                        <Typography variant={'subtitle2'}>
+                                            There doesn't seem to be any promo code. Start by creating one
+                                        </Typography>
+                                    </Box>
+                                </TableCell>
                             </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {promoCodes$.data?.length > 0 ? (
-                                promoCodes$.data.map((promoCode) => (
-                                    <PromoCodesTableRow
-                                        promoCode={promoCode}
-                                        key={promoCode.id}
-                                        reloadCallback={promoCodes$.search}
-                                    />
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell align={'center'} colSpan={9}>
-                                        <Box padding={2}>
-                                            <Typography variant={'subtitle2'}>
-                                                There doesn't seem to be any promo code. Start by creating one
-                                            </Typography>
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                        <TableFooter>
-                            <TableRow>
-                                <TablePagination {...promoCodes$.paginationProps} />
-                            </TableRow>
-                        </TableFooter>
-                    </Table>
-                </TableContainer>
-            </Grid>
-        </ConfirmProvider>
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination {...promoCodes$.paginationProps} />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
+        </Grid>
     );
 }
 

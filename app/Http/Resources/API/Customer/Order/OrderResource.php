@@ -42,6 +42,8 @@ class OrderResource extends BaseResource
             'refunds' => $this->whenLoaded('refunds', OrderPaymentCollection::class),
             'extra_charge_total' => $this->extra_charge_total,
             'refund_total' => $this->refund_total,
+            'payment_network' => $this->payment_network,
+            'is_payment_completed' => $this->getIsPaymentCompleted(),
         ];
     }
 }

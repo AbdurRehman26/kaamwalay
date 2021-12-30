@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
+use App\Services\Payment\Providers\CollectorCoinService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -50,6 +51,7 @@ class Order extends Model
         'auto_saved_at',
         'extra_charge_total',
         'refund_total',
+        'payment_network',
     ];
 
     /**
@@ -305,5 +307,13 @@ class Order extends Model
         ->where('order_id', $this->id)
         ->groupBy(['card_product_id'])
         ->get();
+    }
+
+    public function getIsPaymentCompleted(): bool
+    {
+        if ($this->paymentMethod->code === 'ags') {
+            return (new CollectorCoinService($this->payment_network))->getTransactionDetails($this->firstOrderPayment->payment_provider_reference_id)['status'] === '1';
+        }
+        return null;
     }
 }

@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 const useStyles = makeStyles(
     {
@@ -30,6 +31,7 @@ export function ListSubmissions() {
             action: SubmissionEvents.initiated,
         });
         history.push('/submissions/new');
+        pushToDataLayer({ event: 'google-ads-started-submission-process' });
     }
 
     return (

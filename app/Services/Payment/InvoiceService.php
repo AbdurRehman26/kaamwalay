@@ -38,6 +38,13 @@ class InvoiceService
         if ($paymentResponse) {
             if ($order->paymentMethod->code === 'paypal') {
                 $orderPayment = json_decode(json_encode($this->paypalData(json_decode($orderPayment->response, associative: true) ?? [])));
+            } else if ($order->paymentMethod->code === 'ags') {
+                $orderPayment = json_decode(json_encode([
+                    'transaction' => [
+                        'amount' => $orderPayment->amount,
+                        'hash' => substr($orderPayment->payment_provider_reference_id, 0, 5) . '...' . substr($orderPayment->payment_provider_reference_id, -4),
+                    ]
+                ]));
             } else {
                 if (property_exists($paymentResponse, 'card')) {
                     $card = $paymentResponse->card;

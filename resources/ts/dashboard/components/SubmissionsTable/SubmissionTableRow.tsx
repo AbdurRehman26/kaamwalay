@@ -114,8 +114,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         isSm,
     } = props;
 
-    const submissionViewUrl = `submissions/${id}/view`;
-
+    const submissionViewUrl = `/submissions/${id}/view`;
     const navigate = useNavigate();
     const confirm = useConfirmation();
     const classes = useStyles();
@@ -224,7 +223,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             ) : (
                 <div className={classes.submissionHolder}>
                     <div className={classes.submissionLeftSide}>
-                        <Link to={`submissions/${id}/view`} style={{ textDecoration: 'none' }}>
+                        <Link to={`/submissions/${id}/view`} style={{ textDecoration: 'none' }}>
                             <Typography variant={'subtitle1'} className={classes.orderNumber}>
                                 {orderNumber}
                             </Typography>

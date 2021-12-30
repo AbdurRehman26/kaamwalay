@@ -277,6 +277,8 @@ page as it says, to only guest users (sign in page for example, if you are logge
 Usage:
 
 ```tsx
+// @DEPRECATED
+
 // Behind the sceene you will have same Route of react-router-dom package, but under the hood,
 // the component it's doing all the checks and wait for the auth, deciding what to do when it's completed.
 // In case of Loading, the page will show a circular progress

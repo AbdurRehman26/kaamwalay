@@ -1,4 +1,4 @@
-import { classToPlain, plainToClass } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Inject } from '../decorators/Inject';
 import { Injectable } from '../decorators/Injectable';
 import { ValidateMethodParamsAsync } from '../decorators/ValidateMethodParams';
@@ -23,7 +23,7 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
     @ValidateMethodParamsAsync()
     public async postLogin(input: LoginRequestDto) {
         const { data } = await this.endpoint.post('/login', input);
-        return plainToClass(AuthenticatedUserEntity, data);
+        return plainToInstance(AuthenticatedUserEntity, data);
     }
 
     @ValidateMethodParamsAsync()
@@ -33,12 +33,12 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
             '/register',
             toApiPropertiesObject({ ...rest, ...this.parseName(fullName) }),
         );
-        return plainToClass(AuthenticatedUserEntity, data);
+        return plainToInstance(AuthenticatedUserEntity, data);
     }
 
     public async whoami() {
         const { data } = await this.endpoint.get('/me');
-        return plainToClass(UserEntity, data.user);
+        return plainToInstance(UserEntity, data.user);
     }
 
     public async forgotPassword(email: string) {
@@ -48,7 +48,7 @@ export class AuthenticationRepository extends Repository<AuthenticatedUserEntity
 
     @ValidateMethodParamsAsync()
     public async resetPassword(input: ResetPasswordRequestDto) {
-        const { data } = await this.endpoint.post<{ message: string }>('/password/reset', classToPlain(input));
+        const { data } = await this.endpoint.post<{ message: string }>('/password/reset', instanceToPlain(input));
         return data;
     }
 

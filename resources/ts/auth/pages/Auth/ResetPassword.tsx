@@ -5,7 +5,7 @@ import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { ResetPasswordRequestDto } from '@shared/dto/ResetPasswordRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
@@ -26,7 +26,7 @@ import { ResetPasswordValidationRules } from './validation';
 export function ResetPassword() {
     const { token, email } = useLocationQuery<{ token: string; email: string }>();
     const notifications = useNotifications();
-    const history = useHistory();
+    const navigate = useNavigate();
     const classes = useStyles();
     const { resetPassword } = useAuth();
     const initialState = useMemo<ResetPasswordRequestDto>(
@@ -51,13 +51,13 @@ export function ResetPassword() {
                 notifications.success(payload?.message);
             }
 
-            history.push('/sign-in');
+            navigate('/sign-in');
         },
-        [history, notifications, resetPassword],
+        [navigate, notifications, resetPassword],
     );
 
     if (!email || !token) {
-        return <Redirect to={'/password/forgot'} />;
+        return <Navigate to={'/password/forgot'} replace />;
     }
 
     return (

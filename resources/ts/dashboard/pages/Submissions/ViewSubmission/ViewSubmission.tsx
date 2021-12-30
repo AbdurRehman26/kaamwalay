@@ -21,9 +21,9 @@ import { ViewSubmissionStatus } from './ViewSubmissionStatus';
  * @constructor
  */
 export function ViewSubmission() {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<'id'>();
     const { isLoading, isError, data } = useOrderQuery({
-        resourceId: id,
+        resourceId: Number(id),
         config: {
             params: {
                 include: [
@@ -96,7 +96,7 @@ export function ViewSubmission() {
             <Box marginTop={'24px'} />
             <RefundsAndExtraCharges
                 mode={'customer'}
-                orderId={id}
+                orderId={Number(id)}
                 extraCharges={data?.extraCharges}
                 refunds={data?.refunds}
             />

@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Injectable } from '@shared/decorators/Injectable';
 import { AddCardToOrderDto } from '@shared/dto/AddCardToOrderDto';
 import { AddExtraChargeToOrderDTO } from '@shared/dto/AddExtraChargeToOrderDTO';
@@ -31,7 +31,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
             },
         });
 
-        return plainToClass(OrderStatusHistoryEntity, data);
+        return plainToInstance(OrderStatusHistoryEntity, data);
     }
 
     async addCard(input: AddCardToOrderDto) {
@@ -39,7 +39,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const body = toApiPropertiesObject({ cardId, value });
         const { data } = await this.endpoint.post('/items', body, { params: { orderId } });
 
-        return plainToClass(OrderItemEntity, data);
+        return plainToInstance(OrderItemEntity, data);
     }
 
     async editCard(input: EditCardOfOrderDto) {
@@ -47,7 +47,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const body = toApiPropertiesObject({ cardId, value });
         const { data } = await this.endpoint.put(`/items/:orderItemId`, body, { params: { orderItemId, orderId } });
 
-        return plainToClass(OrderItemEntity, data);
+        return plainToInstance(OrderItemEntity, data);
     }
 
     async addExtraChargeToOrder(input: AddExtraChargeToOrderDTO) {
@@ -55,7 +55,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const body = toApiPropertiesObject({ notes, amount });
         const { data } = await this.endpoint.post(`${orderId}/payments/extra-charge`, body);
 
-        return plainToClass(OrderExtraChargeEntity, data);
+        return plainToInstance(OrderExtraChargeEntity, data);
     }
 
     async refundOrderTransaction(input: RefundOrderTransactionDTO) {
@@ -63,7 +63,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const body = toApiPropertiesObject({ notes, amount });
         const { data } = await this.endpoint.post(`${orderId}/payments/refund`, body);
 
-        return plainToClass(OrderRefundEntity, data);
+        return plainToInstance(OrderRefundEntity, data);
     }
 
     async editTransactionNotes(input: EditTransactionNotesDTO) {
@@ -71,7 +71,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
         const body = toApiPropertiesObject({ notes });
         const { data } = await this.endpoint.put(`${orderId}/order-payments/${transactionId}`, body);
 
-        return plainToClass(OrderItemEntity, data);
+        return plainToInstance(OrderItemEntity, data);
     }
 
     public async setShipment(input: ChangeOrderShipmentDto) {
@@ -89,6 +89,6 @@ export class OrdersRepository extends Repository<OrderEntity> {
             },
         );
 
-        return plainToClass(ShipmentEntity, data);
+        return plainToInstance(ShipmentEntity, data);
     }
 }

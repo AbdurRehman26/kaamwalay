@@ -10,7 +10,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { MouseEvent, useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import { RolesEnum } from '@shared/constants/RolesEnum';
@@ -23,7 +23,7 @@ import { RolesEnum } from '@shared/constants/RolesEnum';
  */
 export function UserDropdown() {
     const { logout } = useAuth();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
     const user$ = useAuth().user;
@@ -46,10 +46,10 @@ export function UserDropdown() {
                     window.location.href = '/admin';
                     break;
                 default:
-                    history.push(href);
+                    navigate(href);
             }
         },
-        [history, logout],
+        [navigate, logout],
     );
 
     return (

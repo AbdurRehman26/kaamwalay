@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import React from 'react';
-import { Redirect, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import GuestOnlyRoute from '@shared/components/GuestOnlyRoute';
 import { AuthBanner } from './components/AuthBanner';
 import { Page } from './components/Page';
@@ -27,13 +27,13 @@ export function Auth() {
                 </AuthBanner>
             </Grid>
             <Grid container item xs>
-                <Switch>
-                    <Redirect exact from={'/'} to={'/sign-in'} />
-                    <GuestOnlyRoute exact path={'/sign-in'} component={SignIn} />
-                    <GuestOnlyRoute exact path={'/sign-up'} component={SignUp} />
-                    <GuestOnlyRoute exact path={'/password/forgot'} component={ForgotPassword} />
-                    <GuestOnlyRoute exact path={'/password/reset'} component={ResetPassword} />
-                </Switch>
+                <Routes>
+                    <Route path={'/'} element={<Navigate to={'/sign-in'} replace />} />
+                    <Route path={'/sign-in'} element={GuestOnlyRoute(SignIn)} />
+                    <Route path={'/sign-up'} element={GuestOnlyRoute(SignUp)} />
+                    <Route path={'/password/forgot'} element={GuestOnlyRoute(ForgotPassword)} />
+                    <Route path={'/password/reset'} element={GuestOnlyRoute(ResetPassword)} />
+                </Routes>
             </Grid>
         </Page>
     );

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { classToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 import ReactGA from 'react-ga';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
@@ -36,7 +36,7 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
         // serialize class objects to plain objects according redux toolkit error
-        return classToPlain(authenticatedUser);
+        return instanceToPlain(authenticatedUser);
     } catch (e: any) {
         if (isAxiosError(e) || isException(e)) {
             ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
@@ -78,7 +78,7 @@ export const authenticateCheckAction = createAsyncThunk('auth/check', async () =
     const user = await authenticationRepository.whoami();
     return {
         accessToken,
-        user: classToPlain(user),
+        user: instanceToPlain(user),
     };
 });
 

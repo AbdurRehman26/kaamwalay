@@ -11,10 +11,10 @@ import { SubmissionsViewDetails } from './SubmissionsViewDetails';
 import { SubmissionsViewHeader } from './SubmissionsViewHeader';
 
 export function SubmissionsView() {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<'id'>();
 
     const { data, isLoading } = useAdminOrderQuery({
-        resourceId: id,
+        resourceId: Number(id),
         config: {
             params: {
                 include: [
@@ -79,7 +79,7 @@ export function SubmissionsView() {
             <Divider />
             <RefundsAndExtraCharges
                 mode={'admin'}
-                orderId={id}
+                orderId={Number(id)}
                 extraCharges={data?.extraCharges}
                 refunds={data?.refunds}
             />

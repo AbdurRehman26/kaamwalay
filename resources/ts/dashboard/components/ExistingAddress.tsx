@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';

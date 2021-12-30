@@ -1,20 +1,23 @@
 import { isPlain } from '@reduxjs/toolkit';
 import { Exception } from '@shared/exceptions/Exception';
 import { isAxiosError } from '@shared/lib/api/isAxiosError';
-import { app } from '@shared/lib/app';
 import { normalizeError } from '@shared/lib/errors/normalizeError';
-import { APIService } from '@shared/services/APIService';
 
 describe('lib/errors/normalizeError', function () {
     it('should normalize axios error correctly', async function () {
-        let error: any = null;
-        const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint('/random/path/to/fail/404');
-        try {
-            await endpoint.get('/');
-        } catch (e: any) {
-            error = e;
-        }
+        const error: any = {
+            isAxiosError: true,
+            message: 'Request failed with status code 404',
+            response: {
+                data: {
+                    message: '',
+                    exception: 'Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException',
+                    file: '/home/code/src/vendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php',
+                    line: 43,
+                    trace: [],
+                },
+            },
+        };
 
         expect(error).not.toBeNull();
         expect(error).not.toBeUndefined();

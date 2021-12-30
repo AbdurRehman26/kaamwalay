@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment\Providers;
 
+use App\Exceptions\API\Customer\Order\IncorrectOrderPayment;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use Web3\Formatters\HexToBigInteger;
@@ -32,36 +33,43 @@ class CollectorCoinService
 
     public function charge(Order $order, array $data): array{
         
-        $transactionData = $this->getTransaction($data['txn']);
+        try {
+            $transactionData = $this->getTransaction($data['txn']);
+    
+            $this->validateTransaction($data, $transactionData);
+    
+            $orderPayment = $order->firstOrderPayment;
+            $orderPayment->amount = $data['amount'];
+            $orderPayment->payment_provider_reference_id = $data['txn'];
+            $orderPayment->update();
+    
+            $order->payment_network = $data['network'];
+            $order->save();
+            
+            return [
+                'success' => true,
+                'request' => $data,
+                'response' => $transactionData,
+                'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
+                'amount' => $order->firstOrderPayment->amount,
+                'type' => OrderPayment::TYPE_ORDER_PAYMENT,
+                'notes' => null,
+            ];
 
-        // dd($data, $transactionData, $order);
+        } catch ( IncorrectOrderPayment $e) {
+            return [
+                'message' => $e->getMessage(),
+            ];
+        }
 
-        $this->validateTransaction($data, $transactionData);
-
-        $orderPayment = $order->firstOrderPayment;
-        $orderPayment->amount = $data['amount'];
-        $orderPayment->payment_provider_reference_id = $data['txn'];
-        $orderPayment->update();
-
-        $order->payment_network = $data['network'];
-        $order->save();
-        
-        return [
-            'success' => true,
-            'request' => $data,
-            'response' => $transactionData,
-            'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
-            'amount' => $order->firstOrderPayment->amount,
-            'type' => OrderPayment::TYPE_ORDER_PAYMENT,
-            'notes' => null,
-        ];
+        return ['message' => 'Unable to handle your request at the moment.'];
     }
 
     protected function validateTransaction(array $data, array $transactionData): bool {
         
         if ($transactionData['to'] !== config('configuration.web3_tokens.' . $data['txt'])
         || $transactionData['token_amount'] !== $data['amount']) {
-            //Throw error
+            throw new IncorrectOrderPayment;
         }
         
         return true;

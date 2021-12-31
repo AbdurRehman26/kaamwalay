@@ -2,7 +2,7 @@
 
 namespace App\Services\FileService;
 
-use App\Http\Requests\API\Files\PresignUploadRequest;
+use App\Http\Requests\API\V1\Files\PresignUploadRequest;
 
 final class UploadFile
 {

@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderEntity } from '@shared/entities/OrderEntity';
@@ -19,7 +19,7 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -53,7 +53,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
-    const history = useHistory();
+    const navigate = useNavigate();
     const [statusType, statusLabel] = useOrderStatus(order?.orderStatus);
 
     const handleOption = useCallback(
@@ -78,11 +78,11 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     await downloadFromUrl(order.orderLabel.path, `${order.orderNumber}_label.xlsx`);
                     break;
                 case Options.ViewGrades:
-                    history.push(`/submissions/${order.id}/grade`);
+                    navigate(`/submissions/${order.id}/grade`);
                     break;
             }
         },
-        [handleCloseOptions, history, notifications, order.id, order.invoice, order.orderLabel],
+        [handleCloseOptions, navigate, notifications, order.id, order.invoice, order.orderLabel, order.orderNumber],
     );
 
     return (

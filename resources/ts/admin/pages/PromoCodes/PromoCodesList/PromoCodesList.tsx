@@ -10,7 +10,7 @@ import { PromoCodesTable } from '@admin/pages/PromoCodes/PromoCodesList/PromoCod
 import { PromoCodeStatusEnum } from '@shared/constants/PromoCodeStatusEnum';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import Box from '@mui/material/Box';
-import { CircularProgress } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const TabContent = styled(TabPanel)(
     {
@@ -32,7 +32,7 @@ export function PromoCodesList() {
         );
     }
     return (
-        <TabContext value={tab}>
+        <TabContext value={tab || 'all'}>
             <Grid container direction={'column'}>
                 <PromoCodesListHeader onSearch={setSearch} />
 

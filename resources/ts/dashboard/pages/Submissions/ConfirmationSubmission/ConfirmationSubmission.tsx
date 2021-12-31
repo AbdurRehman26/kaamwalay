@@ -27,7 +27,7 @@ export function ConfirmationSubmission() {
     return (
         <Grid container>
             <Grid item className={classes.sidebar}>
-                <ConfirmationSubmissionSidebar orderId={parseInt(id)} />
+                <ConfirmationSubmissionSidebar orderId={Number(id)} />
             </Grid>
             <Grid item className={classes.content}>
                 <Box paddingTop={3} paddingBottom={2.5}>
@@ -37,7 +37,7 @@ export function ConfirmationSubmission() {
                 </Box>
                 <Divider />
                 <Box component={'section'} paddingY={3.5}>
-                    <PrintingInformation orderId={parseInt(id)} />
+                    <PrintingInformation orderId={Number(id)} />
                 </Box>
                 <Box component={'section'} paddingY={3.5}>
                     <PackingInstructions />

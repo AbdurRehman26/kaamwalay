@@ -1,4 +1,4 @@
-import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Map } from 'immutable';
 import { Inject } from '../decorators/Inject';
 import { Injectable } from '../decorators/Injectable';
@@ -7,6 +7,8 @@ import { cleanPath } from '../lib/strings/cleanPath';
 import { fromApiPropertiesObject } from '../lib/utils/fromApiPropertiesObject';
 import { toApiPropertiesObject } from '../lib/utils/toApiPropertiesObject';
 import { AuthenticationService } from './AuthenticationService';
+import { APIEndpointConfig } from '@shared/interfaces/APIEndpointConfig';
+import { DefaultAPIEndpointOptions } from '@shared/constants/DefaultAPIEndpointOptions';
 
 @Injectable('APIService')
 export class APIService {
@@ -24,17 +26,23 @@ export class APIService {
      * const api = app(APIService);
      * const users$ = api.createEndpoint('users');
      * ...
-     * users$.get('').then(..);
+     * users$.get('').then(...);
      * ```
      * @param path
-     * @param config
+     * @param endpointConfig
      */
-    public createEndpoint(path: string, config?: AxiosRequestConfig) {
+    public createEndpoint(path: string, endpointConfig?: APIEndpointConfig): AxiosInstance {
+        const isExternal = path.startsWith('http');
+        const { version, ...config } = {
+            ...DefaultAPIEndpointOptions,
+            ...endpointConfig,
+        };
+
         const path$ = path.replace(/^\/?api/i, '').replace(/^\//g, '');
 
         return this.createAxios({
             ...config,
-            baseURL: `/api/${path$}`,
+            baseURL: isExternal ? path$ : `/api/${version}/${path$}`,
         });
     }
 

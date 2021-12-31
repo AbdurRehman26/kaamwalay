@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
-import { classToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 import { ConfigurationEntity } from '../../entities/ConfigurationEntity';
 import { app } from '../../lib/app';
 import { ConfigurationsRepository } from '../../repositories/ConfigurationsRepository';
@@ -14,7 +14,7 @@ export const loadConfigurationsAction = createAsyncThunk('configuration/load', a
     const configurationsRepository = app(ConfigurationsRepository);
     const data = await configurationsRepository.getConfigurations();
 
-    return classToPlain(data) as ConfigurationEntity;
+    return instanceToPlain(data) as ConfigurationEntity;
 });
 
 interface ConfigSetter<K extends keyof ConfigurationEntity = keyof ConfigurationEntity> {

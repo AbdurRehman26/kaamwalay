@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { useViewSubmissionHeaderStyles } from './styles';
@@ -22,7 +22,7 @@ interface ViewSubmissionHeaderProps {
 export function ViewSubmissionHeader({ orderNumber, invoicePath, invoiceNumber }: ViewSubmissionHeaderProps) {
     const classes = useViewSubmissionHeaderStyles();
     const { id }: any = useParams();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handlePrintPackingSlipPress = useCallback(() => {
         // noinspection JSIgnoredPromiseFromCall
@@ -30,8 +30,8 @@ export function ViewSubmissionHeader({ orderNumber, invoicePath, invoiceNumber }
     }, [invoicePath, invoiceNumber]);
 
     const shippingInstructionsPress = useCallback(() => {
-        history.push(`/submissions/${id}/confirmation`);
-    }, [history, id]);
+        navigate(`/submissions/${id}/confirmation`);
+    }, [navigate, id]);
 
     return (
         <Grid container alignItems={'center'} className={classes.root}>

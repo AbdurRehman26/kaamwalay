@@ -11,7 +11,8 @@ import Typography from '@mui/material/Typography';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import makeStyles from '@mui/styles/makeStyles';
 import Box from '@mui/material/Box';
-import { Paper, TextField } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
 import {
     clearNewPromoCodeState,
     setCouponablesForApplicables,
@@ -30,7 +31,7 @@ import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import Radio from '@mui/material/Radio';
 import InputAdornment from '@mui/material/InputAdornment';
 import Checkbox from '@mui/material/Checkbox';
-import { LocalizationProvider } from '@mui/lab';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
@@ -97,7 +98,7 @@ export function PromoCodeModal() {
     const handleCloseModal = useCallback(() => {
         dispatch(setShowNewPromoCodeDialog(false));
         dispatch(clearNewPromoCodeState());
-    }, [showModal]);
+    }, [dispatch]);
 
     const selectedDiscountApplicationServiceLevels = useSharedSelector(
         (state) => state.adminNewPromoCodeSlice.selectedDiscountApplicationServiceLevelsIds,
@@ -107,21 +108,21 @@ export function PromoCodeModal() {
         (event: any) => {
             dispatch(setDescription(event.target.value));
         },
-        [description],
+        [dispatch],
     );
 
     const handlePromoCodeChange = useCallback(
         (event: any) => {
             dispatch(setPromoCodeTextValue(event.target.value.toUpperCase()));
         },
-        [promoCodeValue],
+        [dispatch],
     );
 
     const handleDiscountValueChange = useCallback(
         (event: any) => {
             dispatch(setDiscountValue(event.target.value));
         },
-        [discountValue],
+        [dispatch],
     );
 
     const handleDiscountTypeRadioPress = useCallback(
@@ -133,7 +134,7 @@ export function PromoCodeModal() {
                 dispatch(setDiscountType(newDiscountType));
             };
         },
-        [discountType],
+        [discountType, dispatch],
     );
 
     const handleDiscountApplicationTypeRadioPress = useCallback(
@@ -155,7 +156,7 @@ export function PromoCodeModal() {
                 dispatch(setDiscountApplicationType(applicableCode));
             };
         },
-        [discountApplicationType],
+        [apiService, dispatch],
     );
 
     const handleDiscountDateTypeRadioPress = useCallback(
@@ -164,7 +165,7 @@ export function PromoCodeModal() {
                 dispatch(setDiscountDateType(incomingDateType));
             };
         },
-        [isPermanent],
+        [dispatch],
     );
 
     const onServiceLevelPress = (serviceLevelId: number) => {
@@ -177,14 +178,14 @@ export function PromoCodeModal() {
         (date: any) => {
             dispatch(setDiscountStartDate(date));
         },
-        [discountStartDate],
+        [dispatch],
     );
 
     const handleDiscountEndDateChange = useCallback(
         (date: any) => {
             dispatch(setDiscountEndDate(date));
         },
-        [discountEndDate],
+        [dispatch],
     );
 
     const isSaveButtonDisabled = () => {
@@ -374,7 +375,7 @@ export function PromoCodeModal() {
                         <Box display={'flex'} flexDirection={'column'} minWidth={'100%'}>
                             {applicables?.map((item) => {
                                 return (
-                                    <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px' }}>
+                                    <Paper variant={'outlined'} key={item.id} sx={{ width: '100%', padding: '8px' }}>
                                         <Radio
                                             checked={discountApplicationType === item.code}
                                             onChange={handleDiscountApplicationTypeRadioPress(item.id, item.code)}

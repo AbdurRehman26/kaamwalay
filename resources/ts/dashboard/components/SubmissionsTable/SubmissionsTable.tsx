@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import TableBody from '@mui/material/TableBody';

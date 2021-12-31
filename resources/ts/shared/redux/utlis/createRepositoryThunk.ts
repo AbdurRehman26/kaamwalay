@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder, AsyncThunk, createAsyncThunk, CreateSliceOptions } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
-import { ClassConstructor, classToPlain } from 'class-transformer';
+import { ClassConstructor, instanceToPlain } from 'class-transformer';
 import { uniq } from 'lodash';
 import { PaginatedData } from '@shared/classes/PaginatedData';
 import { Entity } from '@shared/entities/Entity';
@@ -41,7 +41,7 @@ export function createRepositoryThunk<
             const repo = app(repository);
             try {
                 const data = await repo.list(config || {});
-                return classToPlain(data) as PaginatedData<E>;
+                return instanceToPlain(data) as PaginatedData<E>;
             } catch (e: any) {
                 return thunkAPI.rejectWithValue(e);
             }
@@ -54,7 +54,7 @@ export function createRepositoryThunk<
             const repo = app(repository);
             try {
                 const data = await repo.show(args.resourceId, args.config);
-                return classToPlain(data) as E;
+                return instanceToPlain(data) as E;
             } catch (e: any) {
                 return thunkAPI.rejectWithValue(e);
             }

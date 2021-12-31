@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { classToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 import { NotificationItem } from '@shared/classes/NotificationItem';
 
 interface StateType {
@@ -10,7 +10,7 @@ export const enqueueNotification = createAsyncThunk(
     'notifications/enqueueNotification',
     async (notification: NotificationItem) => {
         await notification.checksum();
-        return classToPlain(notification);
+        return instanceToPlain(notification);
     },
 );
 
@@ -21,7 +21,7 @@ export const dequeueNotification = createAsyncThunk(
             // noinspection SuspiciousTypeOfGuard
             if (notification instanceof NotificationItem) {
                 await notification.checksum();
-                return classToPlain(notification);
+                return instanceToPlain(notification);
             }
         } else {
             return { key: notification };

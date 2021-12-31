@@ -3,15 +3,14 @@
 namespace App\Services\Admin\Order;
 
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
-use App\Services\Admin\OrderService;
 use App\Models\Order;
-use App\Models\UserCard;
+use App\Services\Admin\OrderService;
 use App\Services\AGS\AgsService;
 
 class OrderLabelService
 {
     public function __construct(
-        protected AgsService $agsService, 
+        protected AgsService $agsService,
         protected OrderService $orderService
     ) {
     }

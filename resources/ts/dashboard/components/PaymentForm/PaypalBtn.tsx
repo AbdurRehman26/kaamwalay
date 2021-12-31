@@ -95,7 +95,7 @@ function PaypalBtn() {
                                 currency: 'USD',
                             });
                             sendECommerceDataToGA();
-                            pushToDataLayer({ event: 'google-ads-purchased', orderTotal: grandTotal });
+                            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
                             history.push(`/submissions/${orderID}/confirmation`);
                         } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');

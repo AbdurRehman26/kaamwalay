@@ -251,7 +251,7 @@ function SubmissionSummary() {
                 currency: 'USD',
             });
             sendECommerceDataToGA();
-            pushToDataLayer({ event: 'google-ads-purchased', orderTotal: grandTotal });
+            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {

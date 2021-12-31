@@ -6,7 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import React, { useCallback, useMemo, useState } from 'react';
 import packingSlip from '@shared/assets/packingSlip.jpg';
 import { OrderEntity } from '@shared/entities/OrderEntity';
@@ -33,7 +33,7 @@ export function PrintPackingSlip({ orderId }: PrintPackingSlipProps) {
     const notifications = useNotifications();
     const classes = usePrintPackingSlipStyles();
     const dispatch = useAppDispatch();
-    const order = useAppSelector((state) => plainToClass(OrderEntity, state.orders.entities[orderId]));
+    const order = useAppSelector((state) => plainToInstance(OrderEntity, state.orders.entities[orderId]));
     const isLoading = useAppSelector((state) => state.orders.isLoading[orderId]);
     const error = useAppSelector((state) => state.orders.errors[`show_${orderId}`]);
     const isError = !!error;

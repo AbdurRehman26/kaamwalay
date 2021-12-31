@@ -1,4 +1,4 @@
-import { ListItemSecondaryAction } from '@mui/material';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Chip from '@mui/material/Chip';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -51,7 +51,7 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, exact, disabled } = props;
+    const { icon: Icon, title, href, disabled } = props;
 
     const location = useLocation();
     const classes = useStyles({ disabled });
@@ -64,14 +64,7 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
         [classes.root, classes.selected],
     );
 
-    const isActive = useMemo(
-        () =>
-            !!matchPath(location.pathname, {
-                path: href,
-                exact,
-            }),
-        [location.pathname, href, exact],
-    );
+    const isActive = useMemo(() => !!matchPath(location.pathname, href), [location.pathname, href]);
 
     return (
         <ListItem selected={isActive} button component={Link} to={!disabled ? href : '#'} classes={itemClasses}>

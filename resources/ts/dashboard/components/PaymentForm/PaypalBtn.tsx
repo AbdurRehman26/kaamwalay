@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -12,6 +12,7 @@ import { useAppSelector } from '@dashboard/redux/hooks';
 import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 function PaypalBtn() {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -31,7 +32,7 @@ function PaypalBtn() {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const numberOfSelectedCards = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
     const notifications = useNotifications();
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const sendECommerceDataToGA = () => {
@@ -94,7 +95,8 @@ function PaypalBtn() {
                                 currency: 'USD',
                             });
                             sendECommerceDataToGA();
-                            history.push(`/submissions/${orderID}/confirmation`);
+                            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+                            navigate(`/submissions/${orderID}/confirmation`);
                         } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');
                         }

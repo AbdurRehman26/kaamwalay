@@ -3,7 +3,8 @@ import Typography from '@mui/material/Typography';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { DropzoneOptions, useDropzone } from 'react-dropzone';
 import { useCallback, useState } from 'react';
-import { ButtonGroup, useMediaQuery } from '@mui/material';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Button from '@mui/material/Button';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
@@ -35,7 +36,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
             setUploadedImage(acceptedFiles[acceptedFiles.length - 1]);
             props.onChange(acceptedFiles[acceptedFiles.length - 1]);
         },
-        [uploadedImage],
+        [props],
     );
     const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({
         accept: 'image/*',
@@ -49,7 +50,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
             setUploadedImage(null);
             props.onChange(null);
         },
-        [uploadedImage],
+        [props],
     );
 
     const replaceImage = useCallback(
@@ -60,7 +61,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
                 inputRef.current.click();
             }
         },
-        [uploadedImage],
+        [inputRef],
     );
 
     if (uploadedImage) {

@@ -2,10 +2,11 @@ import Button from '@mui/material/Button';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 const useStyles = makeStyles(
     {
@@ -21,7 +22,7 @@ const useStyles = makeStyles(
 
 export function ListSubmissions() {
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [search, setSearch] = useState('');
 
     function handleOnClick() {
@@ -29,7 +30,8 @@ export function ListSubmissions() {
             category: EventCategories.Submissions,
             action: SubmissionEvents.initiated,
         });
-        history.push('/submissions/new');
+        pushToDataLayer({ event: 'google-ads-started-submission-process' });
+        navigate('/submissions/new');
     }
 
     return (

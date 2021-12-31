@@ -16,7 +16,7 @@ export function CustomAccordion(props: CustomAccordionProps) {
 
     const handleClick = useCallback(() => {
         setIsOpen((prev) => !prev);
-    }, [isOpen]);
+    }, []);
 
     return (
         <>

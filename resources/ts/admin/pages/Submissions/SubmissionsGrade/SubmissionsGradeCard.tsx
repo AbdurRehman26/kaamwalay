@@ -1,11 +1,11 @@
 import FaceIcon from '@mui/icons-material/Face';
-import { Paper } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ReactComponent as OutlinedToyIcon } from '@shared/assets/icons/optimisedSmartToyIcon.svg';
 import {
     AccordionCardItem,
@@ -31,7 +31,7 @@ import {
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 import { changeOrderItemNotes } from '@shared/redux/slices/adminOrdersSlice';
 import { useLocation } from 'react-router-dom';
-import _ from 'lodash';
+import { debounce } from 'lodash';
 import CustomGradeStepper from '@admin/pages/Submissions/SubmissionsGrade/CustomGradeStepper';
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
@@ -278,8 +278,38 @@ export function SubmissionsGradeCard({
     const [showEditGradeStepper, setShowEditGradeStepper] = useState(false);
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
-    const debounceNotes = useCallback(_.debounce(handleUpdateCardNotes, 500), []);
-    const debounceInternalNotes = useCallback(_.debounce(handleUpdateInternalCardNotes, 500), []);
+
+    const handleUpdateCardNotes = useCallback(
+        (orderItemId: number, notes: string) => {
+            dispatch(
+                changeOrderItemNotes({
+                    orderItemId,
+                    orderId: orderID,
+                    notes,
+                }),
+            );
+        },
+        [dispatch, orderID],
+    );
+
+    const handleUpdateInternalCardNotes = useCallback(
+        (orderItemId: number, internalNotes: string) => {
+            dispatch(
+                changeOrderItemNotes({
+                    orderItemId,
+                    orderId: orderID,
+                    internalNotes,
+                }),
+            );
+        },
+        [dispatch, orderID],
+    );
+
+    const debounceNotes = useMemo(() => debounce(handleUpdateCardNotes, 500), [handleUpdateCardNotes]);
+    const debounceInternalNotes = useMemo(
+        () => debounce(handleUpdateInternalCardNotes, 500),
+        [handleUpdateInternalCardNotes],
+    );
 
     const handleNotesChange = (event: any) => {
         setCardNotes(event.target.value);
@@ -302,7 +332,7 @@ export function SubmissionsGradeCard({
 
     const handleGradeEditPress = useCallback(() => {
         setShowEditGradeStepper((prev) => !prev);
-    }, [showEditGradeStepper]);
+    }, []);
 
     const handleRevisePress = () => {
         if (cardStatus.toLowerCase() === 'not accepted') {
@@ -387,6 +417,7 @@ export function SubmissionsGradeCard({
     }
 
     function handleGradedReviseModeSave() {
+        // noinspection JSIgnoredPromiseFromCall
         sendHumanGradesToBackend();
         dispatch(resetCardViewMode({ viewModeIndex: itemIndex, topLevelID: topLevelID }));
     }
@@ -510,26 +541,6 @@ export function SubmissionsGradeCard({
         } else {
             return true;
         }
-    }
-
-    function handleUpdateCardNotes(orderItemId: number, notes: string) {
-        dispatch(
-            changeOrderItemNotes({
-                orderItemId,
-                orderId: orderID,
-                notes,
-            }),
-        );
-    }
-
-    function handleUpdateInternalCardNotes(orderItemId: number, internalNotes: string) {
-        dispatch(
-            changeOrderItemNotes({
-                orderItemId,
-                orderId: orderID,
-                internalNotes,
-            }),
-        );
     }
 
     function isOverallGradeBtnVisible() {

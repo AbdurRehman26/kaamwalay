@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { classToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
@@ -25,7 +25,7 @@ export const setOrderCustomerShipment = createAsyncThunk<
         const orderCustomerShipment = await ordersRepository.setCustomerShipment(input);
 
         return {
-            orderCustomerShipment: classToPlain(orderCustomerShipment) as ShipmentEntity,
+            orderCustomerShipment: instanceToPlain(orderCustomerShipment) as ShipmentEntity,
             orderId: input.orderId,
         };
     } catch (e: any) {

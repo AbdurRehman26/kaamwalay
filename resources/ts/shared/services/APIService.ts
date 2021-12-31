@@ -26,12 +26,13 @@ export class APIService {
      * const api = app(APIService);
      * const users$ = api.createEndpoint('users');
      * ...
-     * users$.get('').then(..);
+     * users$.get('').then(...);
      * ```
      * @param path
      * @param endpointConfig
      */
     public createEndpoint(path: string, endpointConfig?: APIEndpointConfig): AxiosInstance {
+        const isExternal = path.startsWith('http');
         const { version, ...config } = {
             ...DefaultAPIEndpointOptions,
             ...endpointConfig,
@@ -41,7 +42,7 @@ export class APIService {
 
         return this.createAxios({
             ...config,
-            baseURL: `/api/${version}/${path$}`,
+            baseURL: isExternal ? path$ : `/api/${version}/${path$}`,
         });
     }
 

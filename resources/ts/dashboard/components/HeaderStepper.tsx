@@ -137,7 +137,7 @@ export default function CustomizedSteppers() {
                 }
             };
         },
-        [currentStep],
+        [currentStep, dispatch],
     );
 
     return (

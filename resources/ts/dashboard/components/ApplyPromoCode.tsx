@@ -1,9 +1,11 @@
 import makeStyles from '@mui/styles/makeStyles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Button, Paper, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
 import { debounce } from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -56,39 +58,45 @@ export function ApplyPromoCode() {
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
 
-    const checkCouponCode = async (newCouponCode: string) => {
-        const checkCouponEndpoint = apiService.createEndpoint(
-            `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
-        );
-        try {
-            const response = await checkCouponEndpoint.get('');
-            dispatch(setIsCouponValid(true));
-            dispatch(setValidCouponId(response.data.id));
-            if (showInvalidState) {
-                setShowInvalidState(false);
+    const checkCouponCode = useCallback(
+        async (newCouponCode: string) => {
+            const checkCouponEndpoint = apiService.createEndpoint(
+                `customer/coupons/${newCouponCode}?couponables_type=service_level&couponables_id=${selectedServiceLevelID}`,
+            );
+            try {
+                const response = await checkCouponEndpoint.get('');
+                dispatch(setIsCouponValid(true));
+                dispatch(setValidCouponId(response.data.id));
+                if (showInvalidState) {
+                    setShowInvalidState(false);
+                }
+            } catch (error: any) {
+                dispatch(setIsCouponValid(false));
+                dispatch(setValidCouponId(-1));
             }
-        } catch (error: any) {
-            dispatch(setIsCouponValid(false));
-            dispatch(setValidCouponId(-1));
-        }
-    };
+        },
+        [apiService, dispatch, selectedServiceLevelID, showInvalidState],
+    );
 
     const debounceCheckCoupon = useMemo(
         () => debounce((newCouponCode: string) => checkCouponCode(newCouponCode), 500),
-        [couponCode],
+        [checkCouponCode],
     );
 
-    const handleChange = (e: any) => {
-        if (e.target.value.length > 0) {
+    const handleChange = useCallback(
+        (e: any) => {
+            if (e.target.value.length > 0) {
+                dispatch(setCouponCode(e.target.value.toUpperCase()));
+                debounceCheckCoupon(e.target.value.toUpperCase());
+            }
             dispatch(setCouponCode(e.target.value.toUpperCase()));
-            debounceCheckCoupon(e.target.value.toUpperCase());
-        }
-        dispatch(setCouponCode(e.target.value.toUpperCase()));
-    };
+        },
+        [debounceCheckCoupon, dispatch],
+    );
 
     useEffect(() => {
         handleChange({ target: { value: couponCode } });
-    }, [isCouponValid, showInvalidState]);
+    }, [couponCode, handleChange, isCouponValid, showInvalidState]);
 
     const handleOnBlur = () => {
         if (!isCouponValid) {

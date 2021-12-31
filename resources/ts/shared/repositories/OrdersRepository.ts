@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Injectable } from '../decorators/Injectable';
 import { ChangeOrderShipmentDto } from '../dto/ChangeOrderShipmentDto';
 import { OrderEntity } from '../entities/OrderEntity';
@@ -17,6 +17,6 @@ export class OrdersRepository extends Repository<OrderEntity> {
             trackingNumber,
         });
 
-        return plainToClass(ShipmentEntity, data);
+        return plainToInstance(ShipmentEntity, data);
     }
 }

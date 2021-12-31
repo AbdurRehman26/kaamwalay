@@ -5,7 +5,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { CircularProgress, useMediaQuery } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { Theme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -23,6 +24,7 @@ import { APIService } from '@shared/services/APIService';
 import { useRepository } from '@shared/hooks/useRepository';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
+
 interface CustomerAddCardDialogProps {
     showDialog: boolean | null;
     onClose: () => void;
@@ -88,7 +90,16 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
         }
         setIsLoading(false);
         handleOnClose();
-    }, [cardName, cardDescription, uploadedImage]);
+    }, [
+        uploadedImage,
+        apiService,
+        handleOnClose,
+        filesRepository,
+        cardName,
+        cardDescription,
+        selectCard,
+        Notifications,
+    ]);
 
     return (
         <Dialog fullScreen={isSm} maxWidth={'md'} fullWidth open={Boolean(showDialog)} onClose={onClose}>

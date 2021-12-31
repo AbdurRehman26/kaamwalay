@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { classToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 import ReactGA from 'react-ga';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
@@ -15,6 +15,7 @@ import { NotificationsService } from '@shared/services/NotificationsService';
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
 import { trackFacebookPixelEvent } from '../../lib/utils/trackFacebookPixelEvent';
 import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 interface StateType {
     checking: boolean;
@@ -33,10 +34,11 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         const authenticatedUser = await authenticationRepository.postLogin(input);
         NotificationsService.success('Login successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
+        pushToDataLayer({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
         // serialize class objects to plain objects according redux toolkit error
-        return classToPlain(authenticatedUser);
+        return instanceToPlain(authenticatedUser);
     } catch (e: any) {
         if (isAxiosError(e) || isException(e)) {
             ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
@@ -58,6 +60,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
         const authenticatedUser = await authenticationRepository.postRegister(input);
         NotificationsService.success('Register successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
+        pushToDataLayer({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
         trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
         thunkAPI.dispatch(authenticateCheckAction());
@@ -78,7 +81,7 @@ export const authenticateCheckAction = createAsyncThunk('auth/check', async () =
     const user = await authenticationRepository.whoami();
     return {
         accessToken,
-        user: classToPlain(user),
+        user: instanceToPlain(user),
     };
 });
 

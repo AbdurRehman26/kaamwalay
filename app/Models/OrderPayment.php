@@ -16,6 +16,7 @@ class OrderPayment extends Model
     public const TYPE_ORDER_PAYMENT = 1;
     public const TYPE_EXTRA_CHARGE = 2;
     public const TYPE_REFUND = 3;
+    public const TYPE_REFUND_TO_WALLET = 4;
 
     /**
      * The attributes that are mass assignable.

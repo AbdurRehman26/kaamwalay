@@ -42,7 +42,7 @@ class CreateWalletTransactionsTable extends Migration
             $table->tinyInteger('type')
                 ->comment('1 => credit, 2 => debit');
             $table->tinyInteger('reason')
-                ->comment('1 => order_payment, 2 => refund, 3 => wallet_addition');
+                ->comment('1 => refund, 2 => order_payment, 3 => wallet_payment');
             $table->boolean('is_success');
             $table->timestamps();
         });

@@ -15,7 +15,8 @@ class WalletPaymentResource extends BaseResource
     public function toArray($request): array
     {
         return [
-            ''
+            'date' => $this->formatDate($this->created_at),
+            'amount' => $this->balance
         ];
     }
 }

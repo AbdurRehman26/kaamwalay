@@ -9,6 +9,8 @@ use App\Models\WalletTransaction;
 
 class WalletService
 {
+    protected const TRANSACTIONS_PER_PAGE = 15;
+
     public function createWallet(array $attributes)
     {
         $wallet = new Wallet($attributes);

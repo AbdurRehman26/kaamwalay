@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\V1\Customer\User;
 
 use App\Http\Resources\API\V1\Customer\Role\RoleCollection;
+use App\Http\Resources\API\V1\Customer\Wallet\WalletResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource

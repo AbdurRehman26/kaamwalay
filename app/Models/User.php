@@ -159,6 +159,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
+    public function paidOrders(): HasMany
+    {
+        return $this->hasMany(Order::class)->where('order_status_id', '>', OrderStatus::PAYMENT_PENDING);
+    }
+
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
@@ -179,9 +184,10 @@ class User extends Authenticatable implements JWTSubject
         return $query->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)]);
     }
 
-    public function scopeSubmissions(Builder $query, string $submissionsCount): Builder
+    public function scopeSubmissions(Builder $query, string $minSubmissionCount, string $maxSubmissionCount): Builder
     {
-        return $query->has('orders', '=', (int) $submissionsCount);
+        return $query->has('paidOrders', '>=', (int) $minSubmissionCount)
+            ->has('paidOrders', '<=', (int) $maxSubmissionCount);
     }
 
     public function scopeAdmin(Builder $query): Builder

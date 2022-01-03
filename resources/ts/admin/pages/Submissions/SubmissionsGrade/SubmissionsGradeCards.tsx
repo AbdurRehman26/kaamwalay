@@ -9,7 +9,6 @@ import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDial
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
 import { font } from '@shared/styles/utils';
-import { cx } from '@shared/lib/utils/cx';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
 import { getAllSubmissions, matchExistingOrderItemsToViewModes } from '@admin/redux/slices/submissionGradeSlice';
 import SubmissionsGradeCard from './SubmissionsGradeCard';
@@ -20,9 +19,7 @@ const useStyles = makeStyles(
         root: {},
         cards: {
             padding: theme.spacing(2, 0, 3),
-        },
-        margin: {
-            marginBottom: theme.spacing(2),
+            marginBottom: theme.spacing(7),
         },
     }),
     { name: 'SubmissionsGradeCards' },
@@ -104,7 +101,7 @@ export function SubmissionsGradeCards() {
             <Typography variant={'body1'}>
                 <span className={font.fontWeightMedium}>Cards</span>&nbsp;({allCards.length})
             </Typography>
-            <Grid container direction={'column'} className={cx(classes.cards, classes.margin)}>
+            <Grid container direction={'column'} className={classes.cards}>
                 {allCards.map((item: any, index: number) => (
                     <div id={'card-id-' + item.orderItem.id} key={item.orderItem.id}>
                         <SubmissionsGradeCard

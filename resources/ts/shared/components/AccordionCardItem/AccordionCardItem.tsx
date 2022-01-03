@@ -25,7 +25,7 @@ const useStyles = makeStyles(
         outlined: {
             border: `1px solid #e0e0e0`,
             borderRadius: 4,
-            marginBottom: theme.spacing(4),
+            marginBottom: theme.spacing(1),
         },
     }),
     { name: 'AccordionCardItem' },

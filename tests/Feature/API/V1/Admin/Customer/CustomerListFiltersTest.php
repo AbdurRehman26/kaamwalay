@@ -21,19 +21,19 @@ beforeEach(function () {
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))
         ->state(new Sequence(
             [
-                'created_at' => now()->subDays(10)->toDateString()
+                'created_at' => now()->subDays(10)->toDateString(),
             ]
         ))->create();
 
     Order::factory()->for($this->customer)->state(new Sequence(
         [
-            'order_status_id' => 5
+            'order_status_id' => 5,
         ]
     ))->count(10)->create();
 
     Order::factory()->state(new Sequence(
         [
-            'order_status_id' => 1
+            'order_status_id' => 1,
         ]
     ))->count(10)->create();
 

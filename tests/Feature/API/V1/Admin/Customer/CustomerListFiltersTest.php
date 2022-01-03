@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
-const CUSTOMERS_COUNT = 1;
-
 beforeEach(function () {
     $this->seed([
         RolesSeeder::class,
@@ -45,7 +43,7 @@ it('filters customers by submissions', function () {
         'filter[submissions]' => [1, $this->customer->orders->where('order_status_id', '>', OrderStatus::PAYMENT_PENDING)->count()],
     ]))
         ->assertOk()
-        ->assertJsonCount(CUSTOMERS_COUNT, ['data'])
+        ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
             'email' => $this->customer->email,
         ]);
@@ -77,7 +75,7 @@ it('filters customers by signup date', function () {
         'filter[signed_up_between]' => [now()->subDays(15)->toDateString(), now()->subDays(5)->toDateString()],
     ]))
         ->assertOk()
-        ->assertJsonCount(CUSTOMERS_COUNT, ['data'])
+        ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
             'email' => $this->customer->email,
         ]);
@@ -109,7 +107,7 @@ it('filters customers by name', function () {
         'filter[search]' => $this->customer->first_name,
     ]))
         ->assertOk()
-        ->assertJsonCount(CUSTOMERS_COUNT, ['data'])
+        ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
             'email' => $this->customer->email,
         ]);
@@ -128,7 +126,7 @@ it('filters customers by email', function () {
         'filter[search]' => $this->customer->email,
     ]))
         ->assertOk()
-        ->assertJsonCount(CUSTOMERS_COUNT, ['data'])
+        ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
             'email' => $this->customer->email,
         ]);
@@ -147,7 +145,7 @@ it('filters customers by customer number', function () {
         'filter[search]' => $this->customer->customer_number,
     ]))
         ->assertOk()
-        ->assertJsonCount(CUSTOMERS_COUNT, ['data'])
+        ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
             'customer_number' => $this->customer->customer_number,
         ]);

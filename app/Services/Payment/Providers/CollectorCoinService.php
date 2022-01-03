@@ -5,8 +5,8 @@ namespace App\Services\Payment\Providers;
 use App\Exceptions\API\Customer\Order\IncorrectOrderPayment;
 use App\Models\Order;
 use App\Models\OrderPayment;
-use Web3\Formatters\HexToBigInteger;
 use Web3\Web3;
+use Web3\ValueObjects\Wei;
 
 class CollectorCoinService
 {
@@ -22,7 +22,7 @@ class CollectorCoinService
     public function getTransaction(string $txn): array {
         $transaction = $this->web3->eth()->getTransactionByHash($txn);
 
-        $transaction['token_amount'] = HexToBigInteger::format(substr($transaction['input'], 74));
+        $transaction['token_amount'] = Wei::fromHex(substr($transaction['input'], 74))->toEth();
         
         return $transaction;
     }

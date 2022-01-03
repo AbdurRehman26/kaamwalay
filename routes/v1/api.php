@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\API\V1\Admin\Coupon\WalletController;
 use App\Http\Controllers\API\V1\Auth\ChangePasswordController;
 use App\Http\Controllers\API\V1\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\V1\Auth\LoginController;
@@ -80,9 +79,6 @@ Route::prefix('customer')->group(function () {
         });
         Route::put('profile', [ProfileController::class, 'update']);
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
-
-        Route::get('wallet/transactions', [WalletController::class, 'getTransactions'])->name('wallet.transactions');
-
     });
 });
 

@@ -98,7 +98,9 @@ class User extends Authenticatable implements JWTSubject
         return [
             AllowedSort::field('submissions', 'orders_count'),
             AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
-            'email', 'customer_number', 'created_at',
+            'email',
+            'customer_number',
+            'created_at',
         ];
     }
     

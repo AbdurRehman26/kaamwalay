@@ -8,7 +8,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CustomerService
 {
-    private const PER_PAGE = 20;
+    protected const PER_PAGE = 20;
 
     public function getCustomers(): LengthAwarePaginator
     {

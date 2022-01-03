@@ -8,7 +8,7 @@ use Spatie\QueryBuilder\Filters\Filter;
 class AdminCustomerSearchFilter implements Filter
 {
     /**
-     * @param string|int $value
+     * @param string $value
      */
     public function __invoke(Builder $query, $value, string $property): void
     {

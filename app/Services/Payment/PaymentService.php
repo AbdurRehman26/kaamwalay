@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Payment\Providers\CollectorCoinService;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
 use Throwable;
@@ -26,6 +27,7 @@ class PaymentService
     protected array $providers = [
         'stripe' => StripeService::class,
         'paypal' => PaypalService::class,
+        'ags' => CollectorCoinService::class,
     ];
 
     public function __construct(
@@ -33,13 +35,23 @@ class PaymentService
     ) {
     }
 
-    public function charge(Order $order): array
+    public function charge(Order $order, array $data = []): array
     {
         $this->hasProvider($order);
 
-        $data = resolve($this->providers[
-            $this->order->paymentMethod->code
-        ])->charge($this->order);
+        if($this->order->paymentMethod->code === 'ags'){
+            $data = resolve($this->providers[
+                $this->order->paymentMethod->code
+            ], [
+                'network' => $data['network']
+            ])->charge($this->order, $data);
+
+        } else {
+
+            $data = resolve($this->providers[
+                $this->order->paymentMethod->code
+            ])->charge($this->order);
+        }
 
         if (! empty($data['message']) || ! empty($data['payment_intent'])) {
             return $data;

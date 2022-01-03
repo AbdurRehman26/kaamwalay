@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Services\Payment\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderPaymentController extends Controller
@@ -17,7 +18,7 @@ class OrderPaymentController extends Controller
     {
     }
 
-    public function charge(Order $order): JsonResponse
+    public function charge(Request $request, Order $order): JsonResponse
     {
         $this->authorize('view', $order);
 
@@ -27,7 +28,7 @@ class OrderPaymentController extends Controller
 
         throw_unless($order->isPayable(), OrderNotPayable::class);
 
-        $response = $this->paymentService->charge($order);
+        $response = $this->paymentService->charge($order, $request->all());
 
         if (! empty($response['data'])) {
             return new JsonResponse($response);

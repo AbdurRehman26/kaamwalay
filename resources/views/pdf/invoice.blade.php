@@ -320,6 +320,10 @@
                             {{$orderPayment->payer->email}}
                             <br/>
                             {{$orderPayment->payer->name}}
+                        @elseif(property_exists($orderPayment,'transaction'))
+                            Collector Coin ({{$orderPayment->transaction->amount}} AGS)
+                            <br/>
+                            {{$orderPayment->transaction->hash}}
                         @endif
                     @else
                         No payment found

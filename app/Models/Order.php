@@ -317,7 +317,7 @@ class Order extends Model
         return $this->belongsTo(Coupon::class);
     }
 
-    public function getIsPaymentCompleted(): bool
+    public function getIsPaymentCompleted(): bool | null
     {
         if ($this->paymentMethod->code === 'ags') {
             return (new CollectorCoinService($this->payment_network))->getTransactionDetails($this->firstOrderPayment->payment_provider_reference_id)['status'] === '1';

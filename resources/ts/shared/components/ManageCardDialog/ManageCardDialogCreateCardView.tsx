@@ -10,11 +10,9 @@ import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import ManageCardDialogHeader from './ManageCardDialogHeader';
-import { CircularProgress, FormControl, FormHelperText, Select } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
-import { Autocomplete, DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AddIcon from '@mui/icons-material/Add';
 import ImageUploader from '@shared/components/ImageUploader';
 import DateAdapter from '@mui/lab/AdapterMoment';
@@ -25,6 +23,14 @@ import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { batch } from 'react-redux';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Select from '@mui/material/Select';
+
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 export interface ManageCardDialogCreateCardViewProps {
     isSwappable?: boolean;
@@ -112,54 +118,53 @@ export const ManageCardDialogCreateCardView = forwardRef(
             dispatch(manageCardDialogActions.setOpen(false));
         }, [dispatch]);
 
-        useEffect(() => {
-            async function fetchDropdownsData() {
-                const endpoint = apiService.createEndpoint(`admin/cards/options`);
-                const response = await endpoint.get('');
-                setAvailableCategories(response.data.category);
-                setCardCategory(response.data.category[0].id);
-                setAvailableSeriesWithSets(
-                    response.data.series.map((item: CardSeries) => {
-                        // TODO: This is a workaround to add 'label' alongside name on these objects. I'm sure there's a better way to do this but it's 4AM and I can't think of it.
-                        return {
-                            id: item.id,
-                            label: item.name,
-                            name: item.name,
-                            imagePath: item.imagePath,
-                            cardSets: item.cardSets.map((set) => ({
-                                id: set.id,
-                                cardSeriesId: set.cardSeriesId,
-                                label: set.name,
-                                name: set.name,
-                                imagePath: set.imagePath,
-                                releaseDate: set.releaseDate,
-                            })),
-                        };
-                    }),
-                );
-                setAvailableRarities(response.data.rarity);
-                setAvailableSurfaces(response.data.surface);
-                setAvailableLanguages(response.data.language);
-                setAvailableEditions(response.data.edition);
-            }
-            fetchDropdownsData();
+        useEffect(
+            () => {
+                async function fetchDropdownsData() {
+                    const endpoint = apiService.createEndpoint(`admin/cards/options`);
+                    const response = await endpoint.get('');
+                    setAvailableCategories(response.data.category);
+                    setCardCategory(response.data.category[0].id);
+                    setAvailableSeriesWithSets(
+                        response.data.series.map((item: CardSeries) => {
+                            // TODO: This is a workaround to add 'label' alongside name on these objects. I'm sure there's a better way to do this but it's 4AM and I can't think of it.
+                            return {
+                                id: item.id,
+                                label: item.name,
+                                name: item.name,
+                                imagePath: item.imagePath,
+                                cardSets: item.cardSets.map((set) => ({
+                                    id: set.id,
+                                    cardSeriesId: set.cardSeriesId,
+                                    label: set.name,
+                                    name: set.name,
+                                    imagePath: set.imagePath,
+                                    releaseDate: set.releaseDate,
+                                })),
+                            };
+                        }),
+                    );
+                    setAvailableRarities(response.data.rarity);
+                    setAvailableSurfaces(response.data.surface);
+                    setAvailableLanguages(response.data.language);
+                    setAvailableEditions(response.data.edition);
+                }
+
+                fetchDropdownsData();
+            },
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            [],
+        );
+
+        const handleSeriesChange = useCallback((e, newValue) => {
+            setSelectedSeries(newValue);
+            setSelectedSet(null);
         }, []);
 
-        const handleSeriesChange = useCallback(
-            (e, newValue) => {
-                setSelectedSeries(newValue);
-                setSelectedSet(null);
-            },
-            [availableSeriesWithSets, selectedSeries, selectedSet],
-        );
-
-        const handleSetChange = useCallback(
-            (e, newValue) => {
-                setSelectedSet(newValue);
-                setReleaseDate(new Date(newValue?.releaseDate));
-            },
-            [availableSeriesWithSets, selectedSeries, selectedSet],
-        );
+        const handleSetChange = useCallback((e, newValue) => {
+            setSelectedSet(newValue);
+            setReleaseDate(new Date(newValue?.releaseDate));
+        }, []);
 
         const handleCardPhotoChange = useCallback((cardImage: File | null) => {
             setSelectedCardPhoto(cardImage);
@@ -189,14 +194,14 @@ export const ManageCardDialogCreateCardView = forwardRef(
             setNewSeriesLogo(null);
             setNewSeriesName('');
             setShowNewSeries(!showNewSeries);
-        }, [showNewSeries, newSeriesLogo, newSeriesName]);
+        }, [showNewSeries]);
 
         const toggleNewSet = useCallback(() => {
             setNewSetLogo(null);
             setNewSetName('');
             setNewSetReleaseDate(null);
             setShowNewSetBox(!showNewSetBox);
-        }, [showNewSetBox, newSetLogo, newSetName, newSetReleaseDate]);
+        }, [showNewSetBox]);
 
         const handleCardCategoryChange = useCallback((e) => setCardCategory(e.target.value), []);
         const handleRarityChange = useCallback((e) => setSelectedRarity(e.target.value), []);
@@ -248,7 +253,6 @@ export const ManageCardDialogCreateCardView = forwardRef(
                 );
             }
         }, [
-            cardCategory,
             selectedSeries,
             showNewSeries,
             newSeriesLogo,
@@ -260,12 +264,8 @@ export const ManageCardDialogCreateCardView = forwardRef(
             selectedSet,
             selectedCardPhoto,
             cardName,
-            releaseDate,
             selectedLanguage,
             selectedRarity,
-            selectedEdition,
-            selectedSurface,
-            productVariant,
             cardNumber,
         ]);
 

@@ -1,4 +1,5 @@
 # Robgrading
+[![Code style](https://github.com/woozard/robograding/actions/workflows/code-style.yml/badge.svg)](https://github.com/woozard/robograding/actions/workflows/code-style.yml)
 
 The project is based on
 

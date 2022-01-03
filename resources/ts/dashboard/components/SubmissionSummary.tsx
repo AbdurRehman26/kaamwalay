@@ -7,7 +7,7 @@ import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
 
 const useStyles = makeStyles((theme) => ({
@@ -160,7 +161,7 @@ function SubmissionSummary() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const stripe = useStripe();
-    const history = useHistory();
+    const navigate = useNavigate();
     const notifications = useNotifications();
     const apiService = useInjectable(APIService);
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
@@ -237,9 +238,6 @@ function SubmissionSummary() {
             // Try to charge the customer
             await endpoint.post('', {
                 paymentMethodId: stripePaymentMethod,
-                network: 'bsc',
-                txn: '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                amount: 1,
             });
 
             setIsStripePaymentLoading(false);
@@ -254,7 +252,8 @@ function SubmissionSummary() {
                 currency: 'USD',
             });
             sendECommerceDataToGA();
-            history.push(`/submissions/${orderID}/confirmation`);
+            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+            navigate(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
@@ -293,7 +292,7 @@ function SubmissionSummary() {
                             currency: 'USD',
                         });
                         sendECommerceDataToGA();
-                        history.push(`/submissions/${orderID}/confirmation`);
+                        navigate(`/submissions/${orderID}/confirmation`);
                     });
                 }
             }

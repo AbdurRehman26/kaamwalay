@@ -3,7 +3,7 @@
 namespace App\Concerns\AGS;
 
 use App\Exceptions\API\Auth\AuthenticationException;
-use App\Http\Requests\API\Auth\LoginRequest;
+use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Models\User;
 use App\Services\AGS\AgsService;
 use App\Services\Payment\Providers\StripeService;

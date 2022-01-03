@@ -4,7 +4,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState, MouseEvent } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
@@ -35,11 +35,11 @@ export default function SubmissionHeaderMoreButton({ orderId, orderStatus }: Sub
     const [showPaymentActionsModal, setShowPaymentActionsModal] = useState<DialogStateEnum | null>(null);
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const open = Boolean(anchorEl);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleViewGrades = useCallback(() => {
-        history.push(`/submissions/${orderId}/grade`);
-    }, [history, orderId]);
+        navigate(`/submissions/${orderId}/grade`);
+    }, [navigate, orderId]);
 
     const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);

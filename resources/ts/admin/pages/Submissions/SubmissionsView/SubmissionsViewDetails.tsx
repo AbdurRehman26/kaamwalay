@@ -109,7 +109,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             ...(Number(refundsTotal) > 0 && { 'Refund:': formatCurrency(refundsTotal) }),
             'Total:': formatCurrency(grandTotal),
         }),
-        [declaredValue, grandTotal, serviceFee, shippingFee, extraChargesTotal, refundsTotal],
+        [declaredValue, serviceFee, discountedAmount, shippingFee, extraChargesTotal, refundsTotal, grandTotal],
     );
 
     return (

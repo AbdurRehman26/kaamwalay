@@ -1,4 +1,4 @@
-import { useTheme } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';

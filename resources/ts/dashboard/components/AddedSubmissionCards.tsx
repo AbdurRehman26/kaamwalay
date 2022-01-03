@@ -11,7 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import React, { useCallback, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
@@ -167,7 +167,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     const selectedCardEntities = useMemo(
         () =>
             selectedCards.map((item) =>
-                plainToClass(CardProductEntity, {
+                plainToInstance(CardProductEntity, {
                     id: item.id,
                     name: item.name,
                     imagePath: item.image,
@@ -255,6 +255,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
             </div>
 
             <SubmissionReviewCardDialog
+                reviewMode={reviewMode}
                 items={selectedCardEntities}
                 itemsLength={selectedCardEntities.length}
                 activeId={activeItem?.id}

@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { addOrderStatusHistory, editCardOfOrder } from '@shared/redux/slices/adminOrdersSlice';
@@ -28,8 +28,8 @@ export function SubmissionsGradeCards() {
     const classes = useStyles();
     const allCards = useAppSelector((state) => state.submissionGradesSlice.allSubmissions);
     const dispatch = useAppDispatch();
-    const { id } = useParams<{ id: string }>();
-    const history = useHistory();
+    const { id } = useParams<'id'>();
+    const navigate = useNavigate();
     const search = useLocation().search;
     const reviseGradeItemId = new URLSearchParams(search).get('item_id');
 
@@ -51,11 +51,11 @@ export function SubmissionsGradeCards() {
             }),
         );
 
-        history.push(`/submissions/${id}/view`);
+        navigate(`/submissions/${id}/view`);
     }
 
     const loadGrades = useCallback(() => {
-        dispatch(getAllSubmissions(id))
+        dispatch(getAllSubmissions(Number(id)))
             .unwrap()
             .then(() => dispatch(matchExistingOrderItemsToViewModes()));
     }, [dispatch, id]);

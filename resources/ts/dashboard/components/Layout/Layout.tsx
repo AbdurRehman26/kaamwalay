@@ -19,7 +19,7 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
     const { authenticated } = useAuth();
     const options = useMemo(() => {
         const routes = routeOptions || {};
-        const currentRoute = Object.keys(routes).find((path) => !!matchPath(location.pathname, { path, exact: true }));
+        const currentRoute = Object.keys(routes).find((path) => !!matchPath(location.pathname, path));
         return currentRoute ? routes[currentRoute] : LayoutOptions.build();
     }, [routeOptions, location.pathname]);
 

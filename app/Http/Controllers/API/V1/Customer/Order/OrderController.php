@@ -16,6 +16,7 @@ use App\Services\Order\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -80,4 +81,28 @@ class OrderController extends Controller
             );
         }
     }
-}
+
+    public function calculateAgsPrice(Request $request, Order $order): JsonResponse {
+        $this->authorize('calculateAgs', $order);
+
+        try{
+            $agsPrice = $this->orderService->calculateAgsPrice($order, $request->network ?? 1);
+
+            return new JsonResponse(
+                [
+                    'value' => $agsPrice
+                ],
+                200
+            );
+
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    }
+
+} 

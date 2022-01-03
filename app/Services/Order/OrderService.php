@@ -6,6 +6,7 @@ use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\User;
+use App\Services\Payment\Providers\CollectorCoinService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -75,6 +76,12 @@ class OrderService
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
+    }
+
+    public function calculateAgsPrice(Order $order, int $network): float {
+        $agsPrice = (new CollectorCoinService($network))->getAgsPriceFromUsd($order->grand_total);
+
+        return $agsPrice;
     }
 
     protected function getCardFullName(CardProduct $card): string

@@ -8,6 +8,7 @@ import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
 import { useAppDispatch } from '../redux/hooks';
 import { updatePaymentMethodId } from '../redux/slices/newSubmissionSlice';
+import Avatar from '@mui/material/Avatar';
 
 const useStyles = makeStyles(
     {
@@ -39,6 +40,11 @@ const useStyles = makeStyles(
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+        },
+        rightSideColumn: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
         },
         radioBtnContainer: {
             display: 'flex',
@@ -124,11 +130,32 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
                 <div className={classes.radioBtnContainer}>
                     <GreenRadio checked={isSelected} />
                 </div>
-                {methodId === 1 ? <ColoredCC /> : <PaypalLogo />}
+                {methodId === 1 ? <ColoredCC /> : <div />}
+                {methodId === 2 ? <PaypalLogo /> : <div />}
+                {methodId === 3 ? (
+                    <Avatar src={'https://i.imgur.com/fjRxNJr.png'} sx={{ width: '30px', height: '30px' }} />
+                ) : (
+                    <div />
+                )}
+
                 {methodId === 1 ? (
                     <div className={classes.rightSide}>
                         <Typography variant={'subtitle2'} className={classes.levelTitle}>
                             {methodName}
+                        </Typography>
+                    </div>
+                ) : null}
+
+                {methodId === 3 ? (
+                    <div className={classes.rightSideColumn}>
+                        <Typography variant={'subtitle2'} className={classes.levelTitle}>
+                            {methodName}
+                        </Typography>
+                        <Typography
+                            variant={'subtitle2'}
+                            sx={{ fontSize: '14px', color: '#20BFB8', marginLeft: '12px' }}
+                        >
+                            Save 15%
                         </Typography>
                     </div>
                 ) : null}

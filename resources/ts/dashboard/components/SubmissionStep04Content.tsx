@@ -632,14 +632,25 @@ export function SubmissionStep04Content() {
                                     )}
                                 </div>
                             </>
-                        ) : (
+                        ) : null}
+                        {paymentMethodId === 2 ? (
                             <div className={classes.sectionContainer}>
                                 <Typography className={classes.sectionLabel}>Paypal</Typography>
                                 <Typography variant={'subtitle2'}>
                                     You will be redirected to the PayPal site after reviewing your order.{' '}
                                 </Typography>
                             </div>
-                        )}
+                        ) : null}
+
+                        {paymentMethodId === 3 ? (
+                            <div className={classes.sectionContainer}>
+                                <Typography className={classes.sectionLabel}>Pay with Collector Coin</Typography>
+                                <Typography variant={'subtitle2'}>
+                                    Instructions for how to pay with Collector Coin will be provided in the next step.
+                                </Typography>
+                                <Typography variant={'subtitle2'}>All you need is a MetaMask crypto wallet</Typography>
+                            </div>
+                        ) : null}
                     </div>
                 </Grid>
                 <Grid item xs={12} md={4}>

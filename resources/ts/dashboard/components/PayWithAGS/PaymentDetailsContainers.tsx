@@ -4,13 +4,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch } from '@dashboard/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import contractAbi from '@shared/assets/bscContract.json';
 import Web3 from 'web3';
 import { Alert } from '@mui/material';
 import { networksMap, supportedNetworks } from './utils';
+
 const useStyles = makeStyles(
     () => {
         return {
@@ -60,7 +61,6 @@ enum metamaskStatuses {
 const web3: any = new Web3(window?.web3?.currentProvider);
 
 function openMetaMaskExtensionLink() {
-    // note: all these conditions are generated using Github Copilot
     const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
     const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
     const isSafari = navigator.userAgent.toLowerCase().indexOf('safari') > -1;
@@ -104,6 +104,7 @@ export function AGSPaymentDetailsContainers() {
     const [currentNetworkID, setCurrentNetworkID] = useState<number>(0);
     const [selectedAccount, setSelectedAccount] = useState('');
     const [agsBalance, setAgsBalance] = useState(0);
+    const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     let detailsChildren;
 
     function getCurrentContract(currentNetworkId: number) {

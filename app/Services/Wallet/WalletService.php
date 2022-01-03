@@ -4,8 +4,12 @@ namespace App\Services\Wallet;
 
 use App\Models\Order;
 use App\Models\OrderPayment;
+use App\Models\User;
 use App\Models\Wallet;
+use App\Models\WalletPayment;
 use App\Models\WalletTransaction;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class WalletService
 {
@@ -84,5 +88,15 @@ class WalletService
         ]);
 
         $wallet->decrement('balance', $amount);
+    }
+
+    public function getWalletPayments(): LengthAwarePaginator
+    {
+        /* @var User $user */
+        $user = auth()->user();
+
+        return QueryBuilder::for(WalletPayment::where('wallet_id', $user->wallet->id))
+            ->defaultSort('-created_at')
+            ->paginate(request('per_page', self::TRANSACTIONS_PER_PAGE));
     }
 }

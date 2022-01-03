@@ -3,7 +3,7 @@
 namespace App\Listeners\API\Admin\Order;
 
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
-use App\Http\Resources\API\Customer\Order\OrderPaymentResource;
+use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

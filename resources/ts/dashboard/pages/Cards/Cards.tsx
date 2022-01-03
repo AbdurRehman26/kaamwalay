@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { ListCards } from './ListCards';
 import { ViewCard } from './ViewCard';
 
@@ -12,10 +12,10 @@ import { ViewCard } from './ViewCard';
  */
 export function Cards() {
     return (
-        <Switch>
-            <Route exact path={'/cards'} component={ListCards} />
-            <Route exact path={'/cards/:id/view'} component={ViewCard} />
-        </Switch>
+        <Routes>
+            <Route path={''} element={<ListCards />} />
+            <Route path={'/:id/view'} element={<ViewCard />} />
+        </Routes>
     );
 }
 

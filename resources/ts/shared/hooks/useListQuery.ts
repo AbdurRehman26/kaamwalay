@@ -1,7 +1,7 @@
 import { TablePaginationProps } from '@mui/material/TablePagination';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
-import { ClassConstructor, plainToClass } from 'class-transformer';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { useCallback, useEffect, useMemo } from 'react';
 import { PaginatedData } from '../classes/PaginatedData';
 import { GlobalStateType } from '../redux/store';
@@ -38,7 +38,7 @@ export function useListQuery<
         //     list = list.slice(offset, offset + perPage);
         // }
 
-        return plainToClass(entity, list);
+        return plainToInstance(entity, list);
     }, [ids, entity, entities]);
 
     const fetch = useCallback(

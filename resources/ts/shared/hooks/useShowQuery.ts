@@ -1,6 +1,6 @@
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
-import { ClassConstructor, plainToClass } from 'class-transformer';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { useCallback, useEffect, useMemo } from 'react';
 import { GlobalStateType } from '../redux/store';
 import { APIService } from '../services/APIService';
@@ -24,7 +24,7 @@ export function useShowQuery<
     const isLoading = useSharedSelector((state) => selector(state as any).isLoading[resourceId]);
     const entities = useSharedSelector((state) => selector(state as any).entities);
 
-    const data = useMemo(() => plainToClass(entity, entities[resourceId as any]), [entities, entity, resourceId]);
+    const data = useMemo(() => plainToInstance(entity, entities[resourceId as any]), [entities, entity, resourceId]);
 
     const request = useCallback(
         function request(requestConfig?: AxiosRequestConfig) {

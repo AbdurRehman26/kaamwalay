@@ -1,15 +1,18 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { ClassConstructor, ClassTransformOptions, plainToClass } from 'class-transformer';
+import { ClassConstructor, ClassTransformOptions, plainToInstance } from 'class-transformer';
 import { PaginatedData } from '../classes/PaginatedData';
 import { Injectable } from '../decorators/Injectable';
 import { app } from '../lib/app';
 import { APIService } from '../services/APIService';
+import { APIEndpointConfig } from '../interfaces/APIEndpointConfig';
 
 @Injectable('Repository')
 export abstract class Repository<T> {
-    protected abstract readonly endpointPath: string;
     protected abstract readonly model: ClassConstructor<T>;
-    private readonly apiService: APIService;
+    protected abstract readonly endpointPath: string;
+    protected readonly endpointConfig: APIEndpointConfig = {};
+
+    protected readonly apiService: APIService;
     private _endpoint!: AxiosInstance;
 
     constructor() {
@@ -18,7 +21,7 @@ export abstract class Repository<T> {
 
     protected get endpoint() {
         if (!this._endpoint) {
-            this._endpoint = this.apiService.createEndpoint(this.endpointPath);
+            this._endpoint = this.apiService.createEndpoint(this.endpointPath, this.endpointConfig);
         }
         return this._endpoint;
     }
@@ -90,7 +93,7 @@ export abstract class Repository<T> {
         options?: ClassTransformOptions | null,
         transformModel?: ClassConstructor<R>,
     ): R {
-        return plainToClass((transformModel || this.model) as ClassConstructor<R>, data, options || {});
+        return plainToInstance((transformModel || this.model) as ClassConstructor<R>, data, options || {});
     }
 
     public toEntities<R = T>(
@@ -98,7 +101,7 @@ export abstract class Repository<T> {
         options?: ClassTransformOptions | null,
         transformModel?: ClassConstructor<R>,
     ): R[] {
-        return plainToClass((transformModel || this.model) as ClassConstructor<R>, data, options || {});
+        return plainToInstance((transformModel || this.model) as ClassConstructor<R>, data, options || {});
     }
 
     public async list<R = T>(

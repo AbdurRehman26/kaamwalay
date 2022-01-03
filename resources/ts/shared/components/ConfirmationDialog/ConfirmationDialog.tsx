@@ -17,6 +17,9 @@ import { ConfirmationDialogContext } from '../../contexts/ConfirmationDialogCont
 export function ConfirmationDialog() {
     const state = useContext(ConfirmationDialogContext);
 
+    const { onClick: onCancel, ...cancelProps } = state.cancelButtonProps ?? {};
+    const { onClick: onConfirm, ...confirmProps } = state.confirmButtonProps ?? {};
+
     return (
         <Dialog open={state.isOpen} onClose={state.reject} fullWidth maxWidth={'xs'}>
             <DialogTitle>{state.title}</DialogTitle>
@@ -26,8 +29,12 @@ export function ConfirmationDialog() {
                 </DialogContent>
             )}
             <DialogActions>
-                {state.cancelText && <Button onClick={state.reject}>{state.cancelText}</Button>}
-                {state.okText && <Button onClick={state.resolve}>{state.okText}</Button>}
+                <Button onClick={state.reject} {...cancelProps}>
+                    {state.cancelText ?? 'Cancel'}
+                </Button>
+                <Button onClick={state.resolve} {...confirmProps}>
+                    {state.confirmText ?? 'Ok'}
+                </Button>
             </DialogActions>
         </Dialog>
     );

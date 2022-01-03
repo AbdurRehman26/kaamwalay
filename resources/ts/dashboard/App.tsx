@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { GoogleAnalyticsSetup } from '@dashboard/../shared/components/GoogleAnalyticsSetup';
 import { LayoutOptions } from '@dashboard/components/Layout/LayoutOptions';
 import { Dashboard } from './Dashboard';
@@ -15,9 +15,9 @@ function App() {
         <BrowserRouter basename={'/dashboard'}>
             <GoogleAnalyticsSetup />
             <Layout routeOptions={RoutesOptions}>
-                <Switch>
-                    <Route path={'/'} component={Dashboard} />
-                </Switch>
+                <Routes>
+                    <Route path={'/*'} element={<Dashboard />} />
+                </Routes>
             </Layout>
         </BrowserRouter>
     );

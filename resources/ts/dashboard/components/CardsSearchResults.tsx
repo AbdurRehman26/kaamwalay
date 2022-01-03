@@ -1,9 +1,9 @@
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import React, { useCallback, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Hit } from 'react-instantsearch-core';
@@ -54,7 +54,7 @@ interface ResultsWrapperProps {
 function ResultWrapper({ hit }: ResultsWrapperProps) {
     const dispatch = useAppDispatch();
     const [activeItem, setActiveItem] = useState<CardProductEntity | null>(null);
-    const item = useMemo(() => plainToClass(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
+    const item = useMemo(() => plainToInstance(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
     const result = useMemo(() => fromApiPropertiesObject(hit._highlightResult), [hit]);
     const items = useMemo(() => (activeItem ? [activeItem] : []), [activeItem]);
     const subtitle = result.longName.value;

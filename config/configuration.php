@@ -56,13 +56,9 @@ return [
             'auth' => true,
             'value' => env('PAYPAL_CLIENT_ID'),
         ],
-        'web3_networks' => [
-            'bsc' => env('WEB3_BSC_NETWORK'),
-            'eth' => env('WEB3_ETH_NETWORK'),
-        ],
-        'web3_tokens' => [
-            'bsc' => env('WEB3_BSC_TOKEN'),
-            'eth' => env('WEB3_ETH_TOKEN'),
-        ],
+        'web3_configurations' => [
+            'suported_networks' => env('WEB3_SUPPORTED_NETWORKS'),
+            'testnet_token_value' => env('WEB3_TESTNET_TOKEN_VALUE'),
+        ]
     ],
 ];

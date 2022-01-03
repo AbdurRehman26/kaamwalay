@@ -43,7 +43,7 @@ class PaymentService
             $data = resolve($this->providers[
                 $this->order->paymentMethod->code
             ], [
-                'network' => $data['network']
+                'network' => json_decode($order->firstOrderPayment->response, true)['network']
             ])->charge($this->order, $data);
 
         } else {
@@ -57,7 +57,8 @@ class PaymentService
             return $data;
         }
 
-        if (! empty($data['success'])) {
+        // This updates should only be done if the payment method is not Collector Coin (AGS)
+        if (! empty($data['success']) && $this->order->paymentMethod->code !== 'ags') {
             $this->calculateAndSaveFee($order);
             $this->updateOrderStatus();
         }

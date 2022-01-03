@@ -8,6 +8,7 @@ import OrderReviewSection from '@dashboard/components/SubmissionOrderReview/Orde
 import AddedSubmissionCards from './AddedSubmissionCards';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
+import { AGSPaymentDetailsContainers } from '@dashboard/components/PayWithAGS/PaymentDetailsContainers';
 
 const useStyles = makeStyles({
     stepDescriptionContainer: {
@@ -23,10 +24,8 @@ const useStyles = makeStyles({
         marginTop: '16px',
     },
 });
-
 function SubmissionStep05Content() {
     const classes = useStyles();
-
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -45,6 +44,7 @@ function SubmissionStep05Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
+                        <AGSPaymentDetailsContainers />
                         <AddedSubmissionCards reviewMode />
                         <OrderReviewSection />
                     </div>

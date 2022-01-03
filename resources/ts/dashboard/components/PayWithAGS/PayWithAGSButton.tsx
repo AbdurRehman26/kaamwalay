@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import Web3 from 'web3';
-import contractAbi from '../../shared/assets/bscContract.json';
+import contractAbi from '@shared/assets/bscContract.json';
 
 const contractAddress = '0x73ffdf2d2afb3def5b10bf967da743f2306a51db';
 const agsWallet = '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d';

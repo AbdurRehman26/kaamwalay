@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
+import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -306,18 +307,19 @@ function SubmissionSummary() {
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            {paymentMethodID === 1 ? (
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={isStripePaymentLoading}
-                                    onClick={handleConfirmStripePayment}
-                                >
-                                    {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
-                                </Button>
-                            ) : (
-                                <PaypalBtn />
-                            )}
+                            {/*{paymentMethodID === 1 ? (*/}
+                            {/*    <Button*/}
+                            {/*        variant="contained"*/}
+                            {/*        color="primary"*/}
+                            {/*        disabled={isStripePaymentLoading}*/}
+                            {/*        onClick={handleConfirmStripePayment}*/}
+                            {/*    >*/}
+                            {/*        {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}*/}
+                            {/*    </Button>*/}
+                            {/*) : (*/}
+                            {/*    <PaypalBtn />*/}
+                            {/*)}*/}
+                            <PayWithCollectorCoinButton />
                         </>
 
                         <Typography className={classes.greyDescriptionText}>

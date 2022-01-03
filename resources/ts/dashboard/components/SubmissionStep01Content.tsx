@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getServiceLevels } from '../redux/slices/newSubmissionSlice';
 import ServiceLevelItem from './ServiceLevelItem';
 import StepDescription from './StepDescription';
-import { PayWithAGSButton } from '@dashboard/components/PayWithAGSButton';
 
 const useStyles = makeStyles((theme) => ({
     pageContainer: {
@@ -35,7 +34,6 @@ export function SubmissionStep01Content() {
                 title="Select your service level"
                 description="Select your desired service level from the list below"
             />
-            <PayWithAGSButton />
             <div className={classes.servicesContainer}>
                 {serviceLevels.map((item: any) => (
                     <ServiceLevelItem {...item} key={item.id} />

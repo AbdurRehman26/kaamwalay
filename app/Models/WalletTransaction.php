@@ -11,6 +11,11 @@ class WalletTransaction extends Model
 {
     use HasFactory;
 
+    const TYPE_DEBIT = 'debit';
+    const TYPE_CREDIT = 'credit';
+    const REASON_REFUND = 'refund';
+    const REASON_ORDER_PAYMENT = 'order_payment';
+    const REASON_WALLET_PAYMENT = 'wallet_payment';
     protected $fillable = [
         'wallet_id',
         'user_id',

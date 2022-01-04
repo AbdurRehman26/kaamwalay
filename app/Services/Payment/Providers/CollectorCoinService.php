@@ -7,6 +7,7 @@ use App\Exceptions\API\Customer\Order\NotSupportedPaymentNetwork;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use Config;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Stripe\Exception\ApiErrorException;
@@ -25,10 +26,10 @@ class CollectorCoinService
         $this->networkId = $networkId;
 
         throw_unless(
-            in_array($networkId, explode(',', config('configurations.web3_configurations.supported_networks'))),
+            in_array($networkId, explode(',', config('configuration.keys.web3_configurations.supported_networks'))),
             NotSupportedPaymentNetwork::class
         );
-        
+
         $this->web3 = new Web3(config('web3networks.' . $this->networkId. '.rpc_urls')[0]);
     }
 

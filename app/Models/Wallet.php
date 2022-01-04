@@ -45,9 +45,12 @@ class Wallet extends Model
         return $this->hasOne(WalletTransaction::class)->latestOfMany();
     }
 
-    public function createWallet(array $attributes)
+    public function createWallet(User $user)
     {
-        event(new WalletCreated($attributes));
+        event(new WalletCreated([
+            'user_id' => $user->id,
+            'balance' => 0,
+        ]));
     }
 
     public function makeTransaction(float $amount, string $reason, int $userId, ?Order $order = null)

@@ -9,6 +9,11 @@ use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
 class WalletProjector extends Projector
 {
+    protected array $handlesEvents = [
+        WalletCreated::class => 'onWalletCreated',
+        TransactionHappened::class => 'onTransactionHappened',
+    ];
+
     public function __construct(protected WalletService $service)
     {
     }

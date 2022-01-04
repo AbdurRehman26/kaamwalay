@@ -36,7 +36,6 @@ class WalletService
 
     private function processRefund(Wallet $wallet, float $amount, int $userId, ?int $orderId)
     {
-        dd(23);
         $order = Order::first($orderId);
 
         WalletTransaction::create([
@@ -57,7 +56,7 @@ class WalletService
 
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
-            'user_id' => '',
+            'user_id' => $order->user_id,
             'order_id' => $order->id,
             'type' => WalletTransaction::TYPE_DEBIT,
             'is_success' => true,
@@ -71,13 +70,13 @@ class WalletService
     {
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
-            'user_id' => '',
+            'user_id' => $wallet->user_id,
             'wallet_payment_id' => $wallet->lastTransaction->id,
             'type' => WalletTransaction::TYPE_CREDIT,
             'is_success' => true,
             'reason' => WalletTransaction::REASON_WALLET_PAYMENT,
         ]);
 
-        $wallet->decrement('balance', $amount);
+        $wallet->increment('balance', $amount);
     }
 }

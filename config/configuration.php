@@ -62,6 +62,9 @@ return [
         'web3_configurations' => [
             'supported_networks' => env('WEB3_SUPPORTED_NETWORKS'),
             'testnet_token_value' => env('WEB3_TESTNET_TOKEN_VALUE'),
+            'bsc_wallet' => env('BSC_WALLET'),
+            'eth_wallet' => env('ETH_WALLET'),
+            'test_wallet' => env('TEST_WALLET'),
         ]
     ],
 ];

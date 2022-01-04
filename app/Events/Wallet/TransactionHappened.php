@@ -11,6 +11,7 @@ class TransactionHappened extends ShouldBeStored
         public int $walletId,
         public float $amount,
         public string $reason,
+        public int $userId,
         public ?int $orderId
     ) {
     }

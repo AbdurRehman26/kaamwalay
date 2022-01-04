@@ -50,12 +50,13 @@ class Wallet extends Model
         event(new WalletCreated($attributes));
     }
 
-    public function makeTransaction(float $amount, string $reason, ?Order $order = null)
+    public function makeTransaction(float $amount, string $reason, int $userId, ?Order $order = null)
     {
         event(new TransactionHappened(
             $this->id,
             $amount,
             $reason,
+            $userId,
             $order?->id,
         ));
     }

@@ -315,6 +315,10 @@ export function SubmissionStep04Content() {
         if (paymentMethodId === 2) {
             dispatch(setIsNextDisabled(false));
         }
+
+        if (paymentMethodId === 3) {
+            dispatch(setIsNextDisabled(false));
+        }
     }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
 
     useEffect(

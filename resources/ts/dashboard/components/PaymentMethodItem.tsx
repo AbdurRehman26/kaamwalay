@@ -9,6 +9,7 @@ import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
 import { useAppDispatch } from '../redux/hooks';
 import { updatePaymentMethodId } from '../redux/slices/newSubmissionSlice';
 import Avatar from '@mui/material/Avatar';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 const useStyles = makeStyles(
     {
@@ -119,7 +120,7 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
     const classes = useStyles(props);
     const dispatch = useAppDispatch();
     const { isSelected, methodName, methodId } = props;
-
+    const { collectorCoinDiscountPercentage } = useConfiguration();
     function handleOnChange() {
         dispatch(updatePaymentMethodId(methodId));
     }
@@ -155,7 +156,7 @@ function PaymentMethodItem(props: PaymentMethodItemProps) {
                             variant={'subtitle2'}
                             sx={{ fontSize: '14px', color: '#20BFB8', marginLeft: '12px' }}
                         >
-                            Save 15%
+                            {`Save ${collectorCoinDiscountPercentage}%`}
                         </Typography>
                     </div>
                 ) : null}

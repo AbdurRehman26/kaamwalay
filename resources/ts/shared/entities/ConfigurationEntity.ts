@@ -5,4 +5,5 @@ export class ConfigurationEntity {
     public algoliaPublicKey!: string;
     public stripeKey!: string;
     public googleAnalyticsTrackingCode!: string;
+    public collectorCoinDiscountPercentage!: string;
 }

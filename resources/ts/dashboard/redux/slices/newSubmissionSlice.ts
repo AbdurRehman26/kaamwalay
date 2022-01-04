@@ -87,7 +87,7 @@ export interface PaymentSubmissionState {
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
-
+    agsDiscountedAmount: number;
     currentStep: number;
     step01Status: any;
     orderID: number;
@@ -111,10 +111,11 @@ export interface NewSubmissionSliceState {
     step04Data: PaymentSubmissionState;
 }
 
-const initialState1: NewSubmissionSliceState = {
+const initialState: NewSubmissionSliceState = {
     orderID: -1,
     grandTotal: 0,
     orderNumber: '',
+    agsDiscountedAmount: 0,
     isNextDisabled: false,
     isNextLoading: false,
     currentStep: 0,
@@ -258,9 +259,10 @@ const initialState1: NewSubmissionSliceState = {
     },
 };
 
-const initialState: NewSubmissionSliceState = {
+const initialState1: NewSubmissionSliceState = {
     orderID: 42,
     grandTotal: 34,
+    agsDiscountedAmount: 20,
     orderNumber: 'RG000000042',
     isNextDisabled: false,
     isNextLoading: false,

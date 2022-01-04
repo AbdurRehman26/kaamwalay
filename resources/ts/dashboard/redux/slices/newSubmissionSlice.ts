@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
+import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
+import ReactGA from 'react-ga';
+import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 
 export interface SubmissionService {
     id: number;
@@ -1044,6 +1049,16 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
     },
 );
 
+export const verifyOrderStatus = createAsyncThunk(
+    'newSubmission/verifyOrderStatus',
+    async (input: { orderID: number; txHash: string }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments`);
+        const response = await endpoint.post('', { transactionHash: input.txHash });
+        return response.data;
+    },
+);
+
 export const createOrder = createAsyncThunk('newSubmission/createOrder', async (_, { getState }: any) => {
     const currentSubmission: any = getState().newSubmission;
     const finalShippingAddress =
@@ -1316,6 +1331,9 @@ export const newSubmissionSlice = createSlice({
         },
         [getTotalInAGS.fulfilled as any]: (state, action) => {
             state.totalInAgs = action.payload;
+        },
+        [verifyOrderStatus.fulfilled as any]: (state, action) => {
+            // handle success
         },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;

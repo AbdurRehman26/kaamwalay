@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
+import { clearSubmissionState, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 
 // @ts-ignore
@@ -52,12 +52,22 @@ export function PayWithCollectorCoinButton() {
                 to: getCurrentContract(currentNetworkID),
             };
 
-            web3.eth.sendTransaction(tx, (err: any, txHash: string) => {
-                dispatch(clearSubmissionState());
-                dispatch(invalidateOrders());
-                navigate(`/submissions/${orderID}/collector-coin/confirmation`);
+            web3.eth.sendTransaction(tx, async (err: any, txHash: string) => {
+                if (err) {
+                    setIsLoading(false);
+                    return;
+                }
+                setIsLoading(true);
+                setTimeout(async () => {
+                    await dispatch(verifyOrderStatus({ orderID, txHash: txHash })).unwrap();
+                    dispatch(clearSubmissionState());
+                    dispatch(invalidateOrders());
+                    setIsLoading(false);
+                    navigate(`/submissions/${orderID}/collector-coin/confirmation`);
+                }, 5000);
             });
         } catch (error: any) {
+            setIsLoading(false);
             console.log(error);
         }
     }

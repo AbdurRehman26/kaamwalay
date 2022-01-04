@@ -39,7 +39,7 @@ class CollectorCoinService
     public function charge(Order $order, array $data): array{
 
         try {
-            $transactionData = $this->getTransaction($data['txn']);
+            $transactionData = $this->getTransaction($order->firstOrderPayment->payment_provider_reference_id);
             //Get AGS amount from USD (Order grand total)
             $response = json_decode($order->firstOrderPayment->response, true);
             $data['amount'] = $response['amount'];
@@ -47,7 +47,7 @@ class CollectorCoinService
             $this->validateTransaction($data, $transactionData);
 
             // Include Transaction Hash in response in case validation goes through
-            $response['txn_hash'] = $data['txn'];
+            $response['txn_hash'] = $order->firstOrderPayment->payment_provider_reference_id;
 
             return [
                 'success' => true,
@@ -68,10 +68,10 @@ class CollectorCoinService
         return ['message' => 'Unable to handle your request at the moment.'];
     }
 
-    public function verify(Order $order, string $transactionHash): bool | array
+    public function verify(Order $order): bool | array
     {
         try {
-            return $this->validateOrderIsPaid($order, $transactionHash);
+            return $this->validateOrderIsPaid($order);
         } catch (ApiErrorException $e) {
             return false;
         }

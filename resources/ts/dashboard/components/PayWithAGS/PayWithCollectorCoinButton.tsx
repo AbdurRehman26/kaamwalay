@@ -6,6 +6,8 @@ import { useAppSelector } from '@dashboard/redux/hooks';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
+import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
@@ -42,19 +44,20 @@ export function PayWithCollectorCoinButton() {
         }
 
         try {
-            setIsLoading(true);
             const tx = {
                 // @ts-ignore
                 from: currentAccounts[0],
                 data: contract.methods.transfer(agsWallet, web3.utils.toWei(String(totalInAGS))).encodeABI(),
                 to: getCurrentContract(currentNetworkID),
             };
-            await web3.eth.sendTransaction(tx);
-            setIsLoading(false);
-            navigate(`/submissions/${orderID}/confirmation`);
+
+            web3.eth.sendTransaction(tx, (err: any, txHash: string) => {
+                dispatch(clearSubmissionState());
+                dispatch(invalidateOrders());
+                navigate(`/submissions/${orderID}/collector-coin/confirmation`);
+            });
         } catch (error: any) {
             console.log(error);
-            setIsLoading(false);
         }
     }
 

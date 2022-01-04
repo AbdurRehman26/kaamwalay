@@ -10,7 +10,7 @@ import Chip from '@mui/material/Chip';
 import contractAbi from '@shared/assets/bscContract.json';
 import Web3 from 'web3';
 import { Alert } from '@mui/material';
-import { networksMap, supportedNetworks } from './utils';
+import { networksMap, supportedNetworks, shortenWalletAddress, openMetaMaskExtensionLink } from './utils';
 
 const useStyles = makeStyles(
     () => {
@@ -59,43 +59,6 @@ enum metamaskStatuses {
 
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
-
-function openMetaMaskExtensionLink() {
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-    const isSafari = navigator.userAgent.toLowerCase().indexOf('safari') > -1;
-    const isOpera = navigator.userAgent.toLowerCase().indexOf('opr') > -1;
-    const isEdge = navigator.userAgent.toLowerCase().indexOf('edge') > -1;
-    const isBrave = navigator.userAgent.toLowerCase().indexOf('brave') > -1;
-
-    if (isChrome || isBrave) {
-        window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
-    }
-    if (isFirefox) {
-        window.open('https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/', '_blank');
-    }
-    // For Safari MetaMask isn't available, so we'll take the user to the homepage to check the available options
-    if (isSafari) {
-        window.open('https://metamask.io/', '_blank');
-    }
-    if (isOpera) {
-        window.open('https://addons.opera.com/en/extensions/details/metamask/', '_blank');
-    }
-    if (isEdge) {
-        window.open(
-            'https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm?hl=en-US',
-            '_blank',
-        );
-    }
-}
-
-function shortenWalletAddress(address: string) {
-    // ex: 0x7FfcFF7C927e268C2d7Af93E07F37F2449EaFE56 -> 0x7Ff...FE56
-    const beginning = address.slice(0, 5);
-    const ending = address.slice(address.length - 4, address.length);
-    return `${beginning}...${ending}`;
-}
-
 export function AGSPaymentDetailsContainers() {
     const dispatch = useAppDispatch();
 

@@ -89,6 +89,8 @@ export interface NewSubmissionSliceState {
     isNextLoading: boolean;
     totalInAgs: number;
     agsDiscountedAmount: number;
+    orderTransactionHash: string;
+    confirmedCollectorCoinPayment: boolean;
     currentStep: number;
     step01Status: any;
     orderID: number;
@@ -115,6 +117,8 @@ export interface NewSubmissionSliceState {
 const initialState: NewSubmissionSliceState = {
     orderID: -1,
     totalInAgs: 0,
+    confirmedCollectorCoinPayment: false,
+    orderTransactionHash: '',
     grandTotal: 0,
     orderNumber: '',
     agsDiscountedAmount: 0,
@@ -266,6 +270,8 @@ const initialState1: NewSubmissionSliceState = {
     grandTotal: 34,
     totalInAgs: 0,
     agsDiscountedAmount: 20,
+    confirmedCollectorCoinPayment: false,
+    orderTransactionHash: '',
     orderNumber: 'RG000000042',
     isNextDisabled: false,
     isNextLoading: false,
@@ -1028,6 +1034,16 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
     return formattedAddresses;
 });
 
+export const getCollectorCoinPaymentStatus = createAsyncThunk(
+    'newSubmission/getCollectorCoinPaymentStatus',
+    async (input: { orderID: number }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/verify-ags`);
+        const response = await endpoint.post('');
+        return response.data;
+    },
+);
+
 export const createOrder = createAsyncThunk('newSubmission/createOrder', async (_, { getState }: any) => {
     const currentSubmission: any = getState().newSubmission;
     const finalShippingAddress =
@@ -1277,6 +1293,10 @@ export const newSubmissionSlice = createSlice({
         },
         [getServiceLevels.rejected as any]: (state) => {
             state.step01Data.status = 'failed';
+        },
+        [getCollectorCoinPaymentStatus.fulfilled as any]: (state, action) => {
+            state.confirmedCollectorCoinPayment = action.payload.status === 'success';
+            state.orderTransactionHash = action.payload.transactionHash;
         },
         [getStatesList.pending as any]: (state) => {
             state.step03Data.fetchingStatus = 'loading';

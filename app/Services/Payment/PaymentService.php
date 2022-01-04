@@ -43,7 +43,7 @@ class PaymentService
             $data = resolve($this->providers[
                 $this->order->paymentMethod->code
             ], [
-                'network' => json_decode($order->firstOrderPayment->response, true)['network']
+                'networkId' => json_decode($order->firstOrderPayment->response, true)['network']
             ])->charge($this->order, $data);
 
         } else {
@@ -81,6 +81,24 @@ class PaymentService
         }
 
         return $data;
+    }
+
+    public function verifyAgs(Order $order): array
+    {
+        $this->hasProvider($order);
+
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ], [
+            'networkId' => json_decode($order->firstOrderPayment->response, true)['network']
+        ])->verify($this->order);
+
+        if ($data['status'] === 'success' && $this->order->orderStatus->id === OrderStatus::PAYMENT_PENDING) {
+            $this->updateOrderStatus();
+        }
+
+        return $data;
+
     }
 
     public function updateOrderPayment(array $data): array

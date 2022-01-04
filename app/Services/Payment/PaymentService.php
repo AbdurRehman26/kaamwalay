@@ -11,6 +11,7 @@ use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Models\PaymentMethod;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
@@ -164,8 +165,12 @@ class PaymentService
     /**
      * @throws FailedRefund
      */
-    public function refund(Order $order, array $request): array
+    public function refund(Order $order, array $request, bool $returnInWallet): array
     {
+        if ($returnInWallet) {
+            return $this->refundToWallet($order, $request);
+        }
+
         $this->hasProvider($order);
 
         $refundResponse = resolve($this->providers[
@@ -177,5 +182,24 @@ class PaymentService
         }
 
         return $refundResponse;
+    }
+
+    protected function refundToWallet(Order $order, $request)
+    {
+        $order->user->wallet->makeTransaction(
+            $request['amount'],
+            'refund',
+            $order
+        );
+
+        return [
+            'success' => true,
+            'request' => [],
+            'response' => [],
+            'payment_provider_reference_id' => null,
+            'amount' => $request['amount'],
+            'type' => OrderPayment::TYPE_REFUND,
+            'notes' => $request['notes'],
+        ];
     }
 }

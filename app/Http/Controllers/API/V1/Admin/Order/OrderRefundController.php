@@ -23,12 +23,17 @@ class OrderRefundController extends Controller
         PaymentService $paymentService,
         OrderService $orderService,
     ): JsonResponse {
-        $response = $paymentService->refund(order: $order, request: $request->all());
+        $response = $paymentService->refund(
+            order: $order,
+            request: $request->all(),
+            returnInWallet: $request->input('add_to_wallet')
+        );
         $orderService->processRefund(
             order: $order,
             user: auth()->user(),
             data: $request->all(),
-            refundResponse: $response
+            refundResponse: $response,
+            refundedInWallet: $request->input('add_to_wallet')
         );
 
         return (new OrderPaymentResource($order->lastOrderPayment))

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPaymentNetworkToOrder extends Migration
+class AddAgsDiscountedAmountToOrders extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddPaymentNetworkToOrder extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('payment_network')->nullable()->after('payment_method_id');
+            $table->decimal('ags_discounted_amount', 10)->default(0)->after('discounted_amount')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddPaymentNetworkToOrder extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('payment_network');
+            $table->dropColumn('ags_discounted_amount');
         });
     }
 }

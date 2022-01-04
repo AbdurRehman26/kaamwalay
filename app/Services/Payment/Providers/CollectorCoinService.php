@@ -39,22 +39,18 @@ class CollectorCoinService
         try {
             $transactionData = $this->getTransaction($data['txn']);
             //Get AGS amount from USD (Order grand total)
-            $data['amount'] = $this->getAgsPriceFromUsd($order->grand_total, $data['network']);
+            $response = json_decode($order->firstOrderPayment->response, true);
+            $data['amount'] = $response['amount'];
 
             $this->validateTransaction($data, $transactionData);
     
-            $orderPayment = $order->firstOrderPayment;
-            $orderPayment->amount = $data['amount'];
-            $orderPayment->payment_provider_reference_id = $data['txn'];
-            $orderPayment->update();
-    
-            $order->payment_network = $data['network'];
-            $order->save();
+            // Include Transaction Hash in response in case validation goes through
+            $response['txn_hash'] = $data['txn'];
             
             return [
                 'success' => true,
                 'request' => $data,
-                'response' => $transactionData,
+                'response' => $response,
                 'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
                 'amount' => $order->firstOrderPayment->amount,
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,

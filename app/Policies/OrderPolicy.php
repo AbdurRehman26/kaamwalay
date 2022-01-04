@@ -37,7 +37,7 @@ class OrderPolicy
 
     public function calculateAgs(User $user, Order $order) 
     {
-        return ($user->isAdmin() || $order->user()->is($user)) 
+        return ($user->isAdmin() || $order->user()->is($user))
         && $order->user->orders()->latest()->first()->is($order);
     }
 }

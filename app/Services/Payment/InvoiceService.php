@@ -41,7 +41,7 @@ class InvoiceService
             } else if ($order->paymentMethod->code === 'ags') {
                 $orderPayment = json_decode(json_encode([
                     'transaction' => [
-                        'amount' => $orderPayment->amount,
+                        'amount' => $paymentResponse->amount,
                         'hash' => substr($orderPayment->payment_provider_reference_id, 0, 5) . '...' . substr($orderPayment->payment_provider_reference_id, -4),
                     ]
                 ]));

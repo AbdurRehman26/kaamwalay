@@ -10,6 +10,7 @@ use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Models\PaymentMethod;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Coupon\CouponService;
@@ -84,6 +85,8 @@ class CreateOrderService
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFeeAndGrandTotal();
+        $this->storePaymentMethodDiscount($this->data['payment_method']);
+        $this->updateGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
@@ -215,5 +218,24 @@ class CreateOrderService
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
             $this->order->save();
         }
+    }
+
+    protected function storePaymentMethodDiscount(array $paymentMethod): void
+    {
+        $paymentMethod = PaymentMethod::find($paymentMethod['id']);
+
+        if ($paymentMethod->code === 'ags') {
+            $this->order->ags_discounted_amount = round($this->order->grand_total * config('configurations.collector_coin_discount_percentage.value') / 100, 2);
+            $this->order->save();
+        }
+    }
+
+    protected function updateGrandTotal(): void
+    {
+        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->ags_discounted_amount;
+
+        GrandTotalValidator::validate($this->order);
+
+        $this->order->save();
     }
 }

@@ -53,4 +53,13 @@ class OrderPaymentController extends Controller
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);
     }
+
+    public function verifyAgs(Order $order): JsonResponse
+    {
+        $this->authorize('view', $order);
+
+        $result = $this->paymentService->verifyAgs($order);
+
+        return new JsonResponse($result, Response::HTTP_OK);
+    }
 }

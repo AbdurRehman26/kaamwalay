@@ -82,7 +82,7 @@ Route::prefix('customer')->group(function () {
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
 
         Route::prefix('wallet')->group(function () {
-            Route::get('payments', [WalletController::class, 'getPayments'])->name('wallet.transactions');
+            Route::get('payments', [WalletController::class, 'getPayments'])->name('wallet.payments');
             Route::get('me', [WalletController::class, 'myWallet'])->name('wallet.me');
         });
     });

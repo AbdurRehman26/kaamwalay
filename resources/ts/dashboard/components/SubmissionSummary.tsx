@@ -170,6 +170,7 @@ function SubmissionSummary() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
+    const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
@@ -313,19 +314,18 @@ function SubmissionSummary() {
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            {/*{paymentMethodID === 1 ? (*/}
-                            {/*    <Button*/}
-                            {/*        variant="contained"*/}
-                            {/*        color="primary"*/}
-                            {/*        disabled={isStripePaymentLoading}*/}
-                            {/*        onClick={handleConfirmStripePayment}*/}
-                            {/*    >*/}
-                            {/*        {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}*/}
-                            {/*    </Button>*/}
-                            {/*) : (*/}
-                            {/*    <PaypalBtn />*/}
-                            {/*)}*/}
-                            <PayWithCollectorCoinButton />
+                            {paymentMethodID === 1 ? (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isStripePaymentLoading}
+                                    onClick={handleConfirmStripePayment}
+                                >
+                                    {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
+                                </Button>
+                            ) : null}
+                            {paymentMethodID === 2 ? <PaypalBtn /> : null}
+                            {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
                         </>
 
                         <Typography className={classes.greyDescriptionText}>
@@ -418,6 +418,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowLeftText}>Total:</Typography>
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
+                                    {totalInAGS > 0 && paymentMethodID == 3 ? `(${totalInAGS} AGS) ` : null}
                                     <NumberFormat
                                         value={grandTotal}
                                         className={classes.rowRightBoldText}

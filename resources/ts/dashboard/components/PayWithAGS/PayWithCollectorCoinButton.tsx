@@ -11,6 +11,7 @@ const agsWallet = '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d';
 
 export function PayWithCollectorCoinButton() {
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
+    const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const notifications = useNotifications();
 
     async function handleClick() {
@@ -38,7 +39,7 @@ export function PayWithCollectorCoinButton() {
             const tx = {
                 // @ts-ignore
                 from: currentAccounts[0],
-                data: contract.methods.transfer(agsWallet, web3.utils.toWei('1')).encodeABI(),
+                data: contract.methods.transfer(agsWallet, web3.utils.toWei(String(totalInAGS))).encodeABI(),
                 to: getCurrentContract(currentNetworkID),
             };
             await web3.eth.sendTransaction(tx);

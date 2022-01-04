@@ -87,6 +87,7 @@ export interface PaymentSubmissionState {
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
+    totalInAgs: number;
     agsDiscountedAmount: number;
     currentStep: number;
     step01Status: any;
@@ -113,6 +114,7 @@ export interface NewSubmissionSliceState {
 
 const initialState: NewSubmissionSliceState = {
     orderID: -1,
+    totalInAgs: 0,
     grandTotal: 0,
     orderNumber: '',
     agsDiscountedAmount: 0,
@@ -262,6 +264,7 @@ const initialState: NewSubmissionSliceState = {
 const initialState1: NewSubmissionSliceState = {
     orderID: 42,
     grandTotal: 34,
+    totalInAgs: 0,
     agsDiscountedAmount: 20,
     orderNumber: 'RG000000042',
     isNextDisabled: false,
@@ -961,6 +964,16 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
     }));
 });
 
+export const getTotalInAGS = createAsyncThunk(
+    'newSubmission/getTotalInAGS',
+    async (input: { orderID: number; chainID: number }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/ags?network=${input?.chainID}`);
+        const response = await endpoint.get('');
+        return response.data.value;
+    },
+);
+
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses/states');
@@ -1281,6 +1294,9 @@ export const newSubmissionSlice = createSlice({
         [getSavedAddresses.fulfilled as any]: (state, action) => {
             state.step03Data.existingAddresses = action.payload;
         },
+        [getTotalInAGS.fulfilled as any]: (state, action) => {
+            state.totalInAgs = action.payload;
+        },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;
             state.orderNumber = action.payload.orderNumber;
@@ -1325,6 +1341,7 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
                 ? action.payload.discountedAmount
                 : '';
+            state.agsDiscountedAmount = action.payload.agsDiscountedAmount;
         },
     },
 });

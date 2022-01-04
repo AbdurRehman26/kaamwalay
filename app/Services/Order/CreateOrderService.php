@@ -222,17 +222,18 @@ class CreateOrderService
 
     protected function storePaymentMethodDiscount(array $paymentMethod): void
     {
+        $this->order->fresh();
         $paymentMethod = PaymentMethod::find($paymentMethod['id']);
 
         if ($paymentMethod->code === 'ags') {
-            $this->order->ags_discounted_amount = round($this->order->grand_total * config('configurations.collector_coin_discount_percentage.value') / 100, 2);
+            $this->order->pm_discounted_amount = round($this->order->grand_total * config('configurations.collector_coin_discount_percentage.value') / 100, 2);
             $this->order->save();
         }
     }
 
     protected function updateGrandTotal(): void
     {
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->ags_discounted_amount;
+        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->pm_discounted_amount;
 
         GrandTotalValidator::validate($this->order);
 

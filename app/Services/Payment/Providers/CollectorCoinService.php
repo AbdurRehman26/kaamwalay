@@ -28,7 +28,17 @@ class CollectorCoinService
     public function getTransaction(string $txn): array {
         $transaction = $this->web3->eth()->getTransactionByHash($txn);
 
-        $transaction['token_amount'] = Wei::fromHex(substr($transaction['input'], 74))->toEth();
+        // Extract information from 'input'
+        // 0xa9059cbb000000000000000000000000b2a7f8ba330ebe430521eb13f615bd8f15bf3c4d0000000000000000000000000000000000000000000000068155a43676e00000
+        // Where the first 34 bits represent text of the function signature (0xa9059cbb)
+        // The next 256 bit block represent the address where token is sent to (000000000000000000000000b2a7f8ba330ebe430521eb13f615bd8f15bf3c4d)
+        // And next block is the pa id amount (in hex) (0000000000000000000000000000000000000000000000068155a43676e00000)
+
+        // Get destination wallet from input's first 256 bit block
+        $transaction['destination_wallet'] = preg_replace('/^[0]+/','0x',substr($transaction['input'], 10, 64));
+        
+        // Get correct token amount
+        $transaction['token_amount'] = Wei::fromHex(substr($transaction['input'], 74, 64))->toEth();
 
         return $transaction;
     }
@@ -47,8 +57,9 @@ class CollectorCoinService
 
             $this->validateTransaction($data, $transactionData);
 
-            // Include Transaction Hash in response in case validation goes through
+            // Include Transaction Hash and destination wallet in response in case validation goes through
             $response['txn_hash'] = $data['transaction_hash'];
+            $response['destination_wallet'] = $transactionData['destination_wallet'];
 
             return [
                 'success' => true,
@@ -105,7 +116,7 @@ class CollectorCoinService
 
         $ags = $value / $divider;
 
-        return $ags;
+        return round($ags, 2);
     }
 
     public function calculateFee(OrderPayment $orderPayment): float

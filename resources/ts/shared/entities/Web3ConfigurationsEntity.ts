@@ -1,6 +1,4 @@
-import { Entity } from '@shared/entities/Entity';
-
-export class Web3ConfigurationsEntity extends Entity {
+export class Web3ConfigurationsEntity {
     public supportedNetworks!: string[];
     public bscWallet!: string;
     public ethWallet!: string;

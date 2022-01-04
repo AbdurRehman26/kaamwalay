@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Web3 from 'web3';
 import contractAbi from '@shared/assets/bscContract.json';
 import { getCurrentContract } from '@dashboard/components/PayWithAGS/utils';
-import { useAppSelector } from '@dashboard/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -18,6 +18,7 @@ export function PayWithCollectorCoinButton() {
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useAppDispatch();
 
     const notifications = useNotifications();
     const navigate = useNavigate();

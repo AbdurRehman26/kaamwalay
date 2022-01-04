@@ -222,7 +222,6 @@ class CreateOrderService
 
     protected function storePaymentMethodDiscount(array $paymentMethod): void
     {
-        $this->order->fresh();
         $paymentMethod = PaymentMethod::find($paymentMethod['id']);
 
         if ($paymentMethod->code === 'ags') {

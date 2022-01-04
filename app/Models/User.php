@@ -103,7 +103,7 @@ class User extends Authenticatable implements JWTSubject
             'created_at',
         ];
     }
-    
+
     public function customerAddresses(): HasMany
     {
         return $this->hasMany(CustomerAddress::class, 'user_id');
@@ -159,11 +159,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class);
     }
 
-    public function paidOrders(): HasMany
-    {
-        return $this->hasMany(Order::class)->where('order_status_id', '>', OrderStatus::PAYMENT_PENDING);
-    }
-
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
@@ -186,8 +181,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeSubmissions(Builder $query, string $minSubmissionCount, string $maxSubmissionCount): Builder
     {
-        return $query->has('paidOrders', '>=', (int) $minSubmissionCount)
-            ->has('paidOrders', '<=', (int) $maxSubmissionCount);
+        return $query->whereHas('orders', function($subQuery){
+                    $subQuery->paid();
+        }, '>=', $minSubmissionCount)->whereHas('orders', function($subQuery){
+                    $subQuery->paid();
+        }, '<=', $maxSubmissionCount);
     }
 
     public function scopeAdmin(Builder $query): Builder

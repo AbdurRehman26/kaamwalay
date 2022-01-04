@@ -230,6 +230,11 @@ class Order extends Model
         });
     }
 
+    public function scopePaid(Builder $query): Builder
+    {
+        return $query->where('order_status_id', '>', OrderStatus::PAYMENT_PENDING);
+    }
+
     public function getGrandTotalCentsAttribute(): int
     {
         return $this->grand_total * 100;

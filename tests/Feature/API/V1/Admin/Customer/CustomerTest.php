@@ -37,12 +37,12 @@ it('returns customers list for admin', function () {
         ]);
 });
 
-it('does not return customers list for guest', function () {
+test('a guest can not get customers list', function () {
     getJson(route('customers.index'))
         ->assertStatus(401);
 });
 
-it('does not return customers list for customer', function () {
+test('a customer can not get customers list', function () {
     $user = User::factory()->withRole(config('permission.roles.customer'))->create();
     actingAs($user);
     getJson(route('customers.index'))

@@ -113,7 +113,7 @@ it('filters customers by name', function () {
         ]);
 });
 
-it('does not filter customers by name', function () {
+it('does not filter customers by incorrect name', function () {
     getJson(route('customers.index', [
         'filter[search]' => $this->customer->first_name . 'Testing',
     ]))
@@ -132,7 +132,7 @@ it('filters customers by email', function () {
         ]);
 });
 
-it('does not filter customers by email', function () {
+it('does not filter customers by incorrect email', function () {
     getJson(route('customers.index', [
         'filter[search]' => $this->customer->email . 'Testing',
     ]))
@@ -151,7 +151,7 @@ it('filters customers by customer number', function () {
         ]);
 });
 
-it('does not filter customers by customer number', function () {
+it('does not filter customers by incorrect customer number', function () {
     getJson(route('customers.index', [
         'filter[search]' => $this->customer->customer_number . 'Testing',
     ]))

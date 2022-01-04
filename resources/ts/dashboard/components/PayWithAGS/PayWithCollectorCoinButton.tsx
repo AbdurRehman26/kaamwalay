@@ -4,6 +4,8 @@ import contractAbi from '@shared/assets/bscContract.json';
 import { getCurrentContract } from '@dashboard/components/PayWithAGS/utils';
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
@@ -12,7 +14,11 @@ const agsWallet = '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d';
 export function PayWithCollectorCoinButton() {
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
+    const orderID = useAppSelector((state) => state.newSubmission.orderID);
+    const [isLoading, setIsLoading] = useState(false);
+
     const notifications = useNotifications();
+    const navigate = useNavigate();
 
     async function handleClick() {
         // @ts-ignore
@@ -36,6 +42,7 @@ export function PayWithCollectorCoinButton() {
         }
 
         try {
+            setIsLoading(true);
             const tx = {
                 // @ts-ignore
                 from: currentAccounts[0],
@@ -43,15 +50,17 @@ export function PayWithCollectorCoinButton() {
                 to: getCurrentContract(currentNetworkID),
             };
             await web3.eth.sendTransaction(tx);
-            console.log('success');
+            setIsLoading(false);
+            navigate(`/submissions/${orderID}/confirmation`);
         } catch (error: any) {
             console.log(error);
+            setIsLoading(false);
         }
     }
 
     return (
-        <Button variant={'contained'} onClick={handleClick}>
-            Pay With Collector Coin
+        <Button variant={'contained'} disabled={isLoading} onClick={handleClick}>
+            {isLoading ? 'Processing Payment...' : 'Pay With Collector Coin'}
         </Button>
     );
 }

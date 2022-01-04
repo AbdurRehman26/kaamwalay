@@ -181,10 +181,10 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeSubmissions(Builder $query, string $minSubmissionCount, string $maxSubmissionCount): Builder
     {
-        return $query->whereHas('orders', function($subQuery){
-                    $subQuery->paid();
-        }, '>=', $minSubmissionCount)->whereHas('orders', function($subQuery){
-                    $subQuery->paid();
+        return $query->whereHas('orders', function ($subQuery) {
+            $subQuery->paid();
+        }, '>=', $minSubmissionCount)->whereHas('orders', function ($subQuery) {
+            $subQuery->paid();
         }, '<=', $maxSubmissionCount);
     }
 

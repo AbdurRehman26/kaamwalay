@@ -46,7 +46,7 @@ class OrderResource extends BaseResource
             'coupon' => $this->whenLoaded('coupon', CouponResource::class),
             'discounted_amount' => $this->discounted_amount,
             'ags_discounted_amount' => $this->ags_discounted_amount,
-            'is_payment_completed' => $this->getIsPaymentCompleted(),
+            // 'is_payment_completed' => $this->getIsPaymentCompleted(),
         ];
     }
 }

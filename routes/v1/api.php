@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\API\V1\Admin\Coupon\WalletController;
 use App\Http\Controllers\API\V1\Auth\ChangePasswordController;
 use App\Http\Controllers\API\V1\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\V1\Auth\LoginController;
@@ -21,6 +20,7 @@ use App\Http\Controllers\API\V1\Customer\Order\ShippingMethodController;
 use App\Http\Controllers\API\V1\Customer\PaymentCardController;
 use App\Http\Controllers\API\V1\Customer\ProfileController;
 use App\Http\Controllers\API\V1\Customer\PushNotificationController;
+use App\Http\Controllers\API\V1\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V1\Files\UploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -81,8 +81,10 @@ Route::prefix('customer')->group(function () {
         Route::put('profile', [ProfileController::class, 'update']);
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
 
-        Route::get('wallet/transactions', [WalletController::class, 'getTransactions'])->name('wallet.transactions');
-
+        Route::prefix('wallet')->group(function () {
+            Route::get('payments', [WalletController::class, 'getPayments'])->name('wallet.transactions');
+            Route::get('me', [WalletController::class, 'myWallet'])->name('wallet.me');
+        });
     });
 });
 

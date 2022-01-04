@@ -183,9 +183,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $query->whereHas('orders', function($subQuery){
                     $subQuery->paid();
-        }, '>=', $minSubmissionCount)->whereHas('orders', function($subQuery){
+        }, '>=', (int) $minSubmissionCount)->whereHas('orders', function($subQuery){
                     $subQuery->paid();
-        }, '<=', $maxSubmissionCount);
+        }, '<=', (int) $maxSubmissionCount);
     }
 
     public function scopeAdmin(Builder $query): Builder

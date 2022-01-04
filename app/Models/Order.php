@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Http\Filters\AdminOrderSearchFilter;
-use App\Services\Payment\Providers\CollectorCoinService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -52,7 +51,7 @@ class Order extends Model
         'auto_saved_at',
         'extra_charge_total',
         'refund_total',
-        'ags_discounted_amount',
+        'pm_discounted_amount',
     ];
 
     /**
@@ -83,7 +82,7 @@ class Order extends Model
         'graded_at' => 'date',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
-        'ags_discounted_amount' => 'float',
+        'pm_discounted_amount' => 'float',
     ];
 
     protected $appends = ['grand_total_cents'];
@@ -318,11 +317,4 @@ class Order extends Model
         return $this->belongsTo(Coupon::class);
     }
 
-    // public function getIsPaymentCompleted(): bool | null
-    // {
-    //     if ($this->paymentMethod->code === 'ags') {
-    //         return (new CollectorCoinService($this->payment_network))->getTransactionDetails($this->firstOrderPayment->payment_provider_reference_id)['status'] === '1';
-    //     }
-    //     return null;
-    // }
 }

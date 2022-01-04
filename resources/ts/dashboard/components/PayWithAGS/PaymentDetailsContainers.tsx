@@ -10,7 +10,8 @@ import Chip from '@mui/material/Chip';
 import contractAbi from '@shared/assets/bscContract.json';
 import Web3 from 'web3';
 import { Alert } from '@mui/material';
-import { networksMap, supportedNetworks, shortenWalletAddress, openMetaMaskExtensionLink } from './utils';
+import { networksMap, shortenWalletAddress, openMetaMaskExtensionLink } from './utils';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 const useStyles = makeStyles(
     () => {
@@ -67,11 +68,14 @@ export function AGSPaymentDetailsContainers() {
     const [currentNetworkID, setCurrentNetworkID] = useState<number>(0);
     const [selectedAccount, setSelectedAccount] = useState('');
     const [agsBalance, setAgsBalance] = useState(0);
+    const {
+        web3Configurations: { supportedNetworks },
+    } = useConfiguration();
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     let detailsChildren;
 
     function getCurrentContract(currentNetworkId: number) {
-        if (supportedNetworks.includes(currentNetworkId)) {
+        if (supportedNetworks.includes(String(currentNetworkId))) {
             return {
                 // ETH MainNet
                 1: '0x667fd83e24ca1d935d36717d305d54fa0cac991c',
@@ -221,7 +225,8 @@ export function AGSPaymentDetailsContainers() {
                 <Typography variant={'caption'}>
                     For information on Collector Coin and how to buy it visit collectorcoin.com
                 </Typography>
-                {!supportedNetworks.includes(currentNetworkID) && metamaskStatus === metamaskStatuses.connected ? (
+                {!supportedNetworks.includes(String(currentNetworkID)) &&
+                metamaskStatus === metamaskStatuses.connected ? (
                     <Alert severity="error" sx={{ width: '100%' }}>
                         Collector Coin is only available on Binance Smart Chain & Ethereum
                     </Alert>

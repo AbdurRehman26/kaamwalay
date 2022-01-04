@@ -1,3 +1,7 @@
+import { Type } from 'class-transformer';
+import { CardEntity } from '@shared/entities/CardEntity';
+import { Web3ConfigurationsEntity } from '@shared/entities/Web3ConfigurationsEntity';
+
 export class ConfigurationEntity {
     public appEnv!: string;
     public appUrl!: string;
@@ -6,4 +10,7 @@ export class ConfigurationEntity {
     public stripeKey!: string;
     public googleAnalyticsTrackingCode!: string;
     public collectorCoinDiscountPercentage!: string;
+
+    @Type(() => Web3ConfigurationsEntity)
+    public web3Configurations!: Web3ConfigurationsEntity;
 }

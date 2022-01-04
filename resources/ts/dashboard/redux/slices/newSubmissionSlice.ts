@@ -1380,6 +1380,7 @@ export const newSubmissionSlice = createSlice({
                 ? action.payload.discountedAmount
                 : '';
             state.agsDiscountedAmount = action.payload.agsDiscountedAmount;
+            state.step04Data.paymentMethodId = action.payload.paymentMethodId;
         },
     },
 });

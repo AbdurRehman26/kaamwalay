@@ -8,10 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { clearSubmissionState, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
-const agsWallet = '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d';
 
 export function PayWithCollectorCoinButton() {
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
@@ -19,9 +19,27 @@ export function PayWithCollectorCoinButton() {
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
+    const {
+        web3Configurations: { bscWallet, ethWallet, testWallet },
+    } = useConfiguration();
 
     const notifications = useNotifications();
     const navigate = useNavigate();
+
+    function getRecipientWalletFromNetwork(networkID: string | number) {
+        switch (String(networkID)) {
+            case '1':
+                return ethWallet;
+            case '4':
+                return testWallet;
+            case '56':
+                return bscWallet;
+            case '97':
+                return testWallet;
+            default:
+                return ethWallet;
+        }
+    }
 
     async function handleClick() {
         // @ts-ignore
@@ -48,7 +66,9 @@ export function PayWithCollectorCoinButton() {
             const tx = {
                 // @ts-ignore
                 from: currentAccounts[0],
-                data: contract.methods.transfer(agsWallet, web3.utils.toWei(String(totalInAGS))).encodeABI(),
+                data: contract.methods
+                    .transfer(getRecipientWalletFromNetwork(currentNetworkID), web3.utils.toWei(String(totalInAGS)))
+                    .encodeABI(),
                 to: getCurrentContract(currentNetworkID),
             };
 

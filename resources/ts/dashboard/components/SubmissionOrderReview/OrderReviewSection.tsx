@@ -113,9 +113,13 @@ function OrderReviewSection() {
                                 </div>
                             </div>
                         </>
-                    ) : (
-                        <Typography className={classes.darkBodyText}>PayPal</Typography>
-                    )}
+                    ) : null}
+
+                    {paymentMethodId === 2 ? <Typography className={classes.darkBodyText}>PayPal</Typography> : null}
+
+                    {paymentMethodId === 3 ? (
+                        <Typography className={classes.darkBodyText}>Collector Coin (AGS)</Typography>
+                    ) : null}
                 </OrderDetailItem>
                 {!isMobile ? <Spacer top={'48px'} /> : null}
                 {paymentMethodId !== 3 ? (

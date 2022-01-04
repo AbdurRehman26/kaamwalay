@@ -8,6 +8,7 @@ use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\Payment\PaymentService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class OrderPaymentController extends Controller
             if (! empty($response['data'])) {
                 return new JsonResponse($response);
             }
-        } catch (NotSupportedPaymentNetwork $e) {
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'message' => $e->getMessage(),

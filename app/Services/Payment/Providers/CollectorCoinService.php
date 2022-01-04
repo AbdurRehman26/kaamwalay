@@ -6,6 +6,7 @@ use App\Exceptions\API\Customer\Order\IncorrectOrderPayment;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Stripe\Exception\ApiErrorException;
 use Web3\Web3;
@@ -39,7 +40,7 @@ class CollectorCoinService
     public function charge(Order $order, array $data): array{
 
         try {
-            $transactionData = $this->getTransaction($order->firstOrderPayment->payment_provider_reference_id);
+            $transactionData = $this->getTransaction($data['transaction_hash']);
             //Get AGS amount from USD (Order grand total)
             $response = json_decode($order->firstOrderPayment->response, true);
             $data['amount'] = $response['amount'];
@@ -47,13 +48,13 @@ class CollectorCoinService
             $this->validateTransaction($data, $transactionData);
 
             // Include Transaction Hash in response in case validation goes through
-            $response['txn_hash'] = $order->firstOrderPayment->payment_provider_reference_id;
+            $response['txn_hash'] = $data['transaction_hash'];
 
             return [
                 'success' => true,
                 'request' => $data,
                 'response' => $response,
-                'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
+                'payment_provider_reference_id' => $data['transaction_hash'],
                 'amount' => $order->firstOrderPayment->amount,
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => null,
@@ -63,6 +64,8 @@ class CollectorCoinService
             return [
                 'message' => $e->getMessage(),
             ];
+        } catch ( Exception $e) {
+            return ['message' => 'Unable to handle your request at the moment.'];
         }
 
         return ['message' => 'Unable to handle your request at the moment.'];
@@ -157,8 +160,10 @@ class CollectorCoinService
 
     protected function validateTransaction(array $data, array $transactionData): bool {
 
+        //Verify that transaction is going to correct destination and amount is between 2% tange
         if ($transactionData['to'] !== config('web3networks.' . $this->networkId. '.ags_token')
-        || $transactionData['token_amount'] !== $data['amount']) {
+        || $transactionData['token_amount'] < $data['amount'] * 0.98
+        || $transactionData['token_amount'] > $data['amount'] * 1.02 ) {
             throw new IncorrectOrderPayment;
         }
 

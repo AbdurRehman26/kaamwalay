@@ -67,7 +67,7 @@ class OrderPaymentController extends Controller
     public function verifyAgs(Order $order): JsonResponse
     {
         $this->authorize('view', $order);
-        
+
         try {
 
             $result = $this->paymentService->verifyAgs($order);
@@ -77,6 +77,7 @@ class OrderPaymentController extends Controller
             return new JsonResponse(
                 [
                     'message' => $e->getMessage(),
+                    'value' => 0.0
                 ],
                 Response::HTTP_PAYMENT_REQUIRED
             );

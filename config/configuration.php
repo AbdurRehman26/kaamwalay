@@ -60,7 +60,7 @@ return [
             'value' => env('PAYPAL_CLIENT_ID'),
         ],
         'web3_configurations' => [
-            'suported_networks' => env('WEB3_SUPPORTED_NETWORKS'),
+            'supported_networks' => env('WEB3_SUPPORTED_NETWORKS'),
             'testnet_token_value' => env('WEB3_TESTNET_TOKEN_VALUE'),
         ]
     ],

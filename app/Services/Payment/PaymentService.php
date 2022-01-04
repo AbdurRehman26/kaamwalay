@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
+use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
@@ -165,10 +166,10 @@ class PaymentService
     /**
      * @throws FailedRefund
      */
-    public function refund(Order $order, array $request, bool $returnInWallet): array
+    public function refund(Order $order, array $request, User $user, bool $returnInWallet): array
     {
         if ($returnInWallet) {
-            return $this->refundToWallet($order, $request);
+            return $this->refundToWallet($order, $request, $user);
         }
 
         $this->hasProvider($order);
@@ -184,11 +185,12 @@ class PaymentService
         return $refundResponse;
     }
 
-    protected function refundToWallet(Order $order, $request)
+    protected function refundToWallet(Order $order, $request, User $user)
     {
         $order->user->wallet->makeTransaction(
             $request['amount'],
             'refund',
+            $user->id,
             $order
         );
 

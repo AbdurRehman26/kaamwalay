@@ -26,6 +26,7 @@ class OrderRefundController extends Controller
         $response = $paymentService->refund(
             order: $order,
             request: $request->all(),
+            user: $request->user(),
             returnInWallet: $request->input('add_to_wallet')
         );
         $orderService->processRefund(

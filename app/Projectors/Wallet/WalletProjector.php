@@ -23,6 +23,7 @@ class WalletProjector extends Projector
             $event->walletId,
             $event->amount,
             $event->reason,
+            $event->userId,
             $event->orderId,
         );
     }

@@ -17,12 +17,12 @@ class WalletService
         $wallet->save();
     }
 
-    public function processTransaction(int $walletId, float $amount, string $reason, ?int $orderId)
+    public function processTransaction(int $walletId, float $amount, string $reason, int $userId, ?int $orderId)
     {
         $wallet = Wallet::find($walletId);
 
         if ($reason === WalletTransaction::REASON_REFUND) {
-            $this->processRefund($wallet, $amount, $orderId);
+            $this->processRefund($wallet, $amount, $userId, $orderId);
         }
 
         if ($reason === WalletTransaction::REASON_ORDER_PAYMENT) {
@@ -34,19 +34,14 @@ class WalletService
         }
     }
 
-    private function processRefund(Wallet $wallet, float $amount, ?int $orderId)
+    private function processRefund(Wallet $wallet, float $amount, int $userId, ?int $orderId)
     {
+        dd(23);
         $order = Order::first($orderId);
-
-        OrderPayment::create([
-            'payment_method_id' => $order->firstOrderPayment->payment_method_id,
-            'type' => OrderPayment::TYPE_REFUND_TO_WALLET,
-            'amount' => $amount,
-        ]);
 
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
-            'user_id' => '',
+            'user_id' => $userId,
             'order_id' => $order->id,
             'type' => WalletTransaction::TYPE_CREDIT,
             'is_success' => true,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
+use App\Exceptions\API\Customer\Order\NotSupportedPaymentNetwork;
 use App\Exceptions\API\Customer\Order\OrderNotPayable;
 use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
@@ -21,17 +22,26 @@ class OrderPaymentController extends Controller
     public function charge(Request $request, Order $order): JsonResponse
     {
         $this->authorize('view', $order);
+        try {
 
-        throw_if(! empty($order->coupon) && ! $order->coupon->isActive(), ValidationException::withMessages([
-            'message' => 'Coupon is either expired or invalid.',
-        ]));
+            throw_if(! empty($order->coupon) && ! $order->coupon->isActive(), ValidationException::withMessages([
+                'message' => 'Coupon is either expired or invalid.',
+            ]));
 
-        throw_unless($order->isPayable(), OrderNotPayable::class);
+            throw_unless($order->isPayable(), OrderNotPayable::class);
 
-        $response = $this->paymentService->charge($order, $request->all());
+            $response = $this->paymentService->charge($order, $request->all());
 
-        if (! empty($response['data'])) {
-            return new JsonResponse($response);
+            if (! empty($response['data'])) {
+                return new JsonResponse($response);
+            }
+        } catch (NotSupportedPaymentNetwork $e) {
+            return new JsonResponse(
+                [
+                    'message' => $e->getMessage(),
+                ],
+                Response::HTTP_PAYMENT_REQUIRED
+            );
         }
 
         return new JsonResponse(
@@ -58,8 +68,20 @@ class OrderPaymentController extends Controller
     {
         $this->authorize('view', $order);
 
-        $result = $this->paymentService->verifyAgs($order);
+        try {
 
-        return new JsonResponse($result, Response::HTTP_OK);
+            $result = $this->paymentService->verifyAgs($order);
+
+            return new JsonResponse($result, Response::HTTP_OK);
+        } catch (NotSupportedPaymentNetwork $e) {
+            return new JsonResponse(
+                [
+                    'message' => $e->getMessage(),
+                    'value' => 0.0
+                ],
+                Response::HTTP_PAYMENT_REQUIRED
+            );
+        }
+
     }
 }

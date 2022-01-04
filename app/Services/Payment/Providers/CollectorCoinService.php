@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Providers;
 
 use App\Exceptions\API\Customer\Order\IncorrectOrderPayment;
+use App\Exceptions\API\Customer\Order\NotSupportedPaymentNetwork;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -22,6 +23,12 @@ class CollectorCoinService
 
     public function __construct(int $networkId){
         $this->networkId = $networkId;
+
+        throw_unless(
+            in_array($networkId, explode(',', config('configurations.web3_configurations.supported_networks'))),
+            NotSupportedPaymentNetwork::class
+        );
+        
         $this->web3 = new Web3(config('web3networks.' . $this->networkId. '.rpc_urls')[0]);
     }
 

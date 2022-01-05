@@ -1,5 +1,4 @@
 import { Type } from 'class-transformer';
-import { CardEntity } from '@shared/entities/CardEntity';
 import { Web3ConfigurationsEntity } from '@shared/entities/Web3ConfigurationsEntity';
 
 export class ConfigurationEntity {

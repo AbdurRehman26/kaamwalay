@@ -82,19 +82,19 @@ class OrderController extends Controller
         }
     }
 
-    public function calculateAgsPrice(Request $request, Order $order): JsonResponse {
+    public function calculateAgsPrice(Request $request, Order $order): JsonResponse
+    {
         $this->authorize('calculateAgs', $order);
 
-        try{
+        try {
             $agsPrice = $this->orderService->calculateAgsPrice($order, $request->network ?? 1);
 
             return new JsonResponse(
                 [
-                    'value' => $agsPrice
+                    'value' => $agsPrice,
                 ],
                 200
             );
-
         } catch (Exception $e) {
             return new JsonResponse(
                 [
@@ -104,5 +104,4 @@ class OrderController extends Controller
             );
         }
     }
-
 }

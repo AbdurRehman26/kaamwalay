@@ -7,12 +7,11 @@ use App\Exceptions\API\Customer\Order\NotSupportedPaymentNetwork;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
-use Config;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Stripe\Exception\ApiErrorException;
-use Web3\Web3;
 use Web3\ValueObjects\Wei;
+use Web3\Web3;
 
 class CollectorCoinService
 {
@@ -22,7 +21,8 @@ class CollectorCoinService
     protected $web3;
     protected $networkId;
 
-    public function __construct(int $networkId){
+    public function __construct(int $networkId)
+    {
         $this->networkId = $networkId;
 
         throw_unless(
@@ -33,7 +33,8 @@ class CollectorCoinService
         $this->web3 = new Web3(config('web3networks.' . $this->networkId. '.rpc_urls')[0]);
     }
 
-    public function getTransaction(string $txn): array {
+    public function getTransaction(string $txn): array
+    {
         $transaction = $this->web3->eth()->getTransactionByHash($txn);
 
         // Extract information from 'input'
@@ -43,7 +44,7 @@ class CollectorCoinService
         // And next block is the pa id amount (in hex) (0000000000000000000000000000000000000000000000068155a43676e00000)
 
         // Get destination wallet from input's first 256 bit block
-        $transaction['destination_wallet'] = preg_replace('/^[0]+/','0x',substr($transaction['input'], 10, 64));
+        $transaction['destination_wallet'] = preg_replace('/^[0]+/', '0x', substr($transaction['input'], 10, 64));
         
         // Get correct token amount
         $transaction['token_amount'] = Wei::fromHex(substr($transaction['input'], 74, 64))->toEth();
@@ -51,12 +52,13 @@ class CollectorCoinService
         return $transaction;
     }
 
-    public function getTransactionDetails(string $txn): array {
+    public function getTransactionDetails(string $txn): array
+    {
         return $this->web3->eth()->getTransactionReceipt($txn);
     }
 
-    public function charge(Order $order, array $data): array{
-
+    public function charge(Order $order, array $data): array
+    {
         try {
             $transactionData = $this->getTransaction($data['transaction_hash']);
             //Get AGS amount from USD (Order grand total)
@@ -78,12 +80,11 @@ class CollectorCoinService
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => null,
             ];
-
-        } catch ( IncorrectOrderPayment $e) {
+        } catch (IncorrectOrderPayment $e) {
             return [
                 'message' => $e->getMessage(),
             ];
-        } catch ( Exception $e) {
+        } catch (Exception $e) {
             return ['message' => 'Unable to handle your request at the moment.'];
         }
 
@@ -116,7 +117,7 @@ class CollectorCoinService
             $response = Http::get($baseUrl . '/binance-smart-chain?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
 
             $divider = $response->json()[$web3BscToken]['usd'];
-        } else if ($this->networkId === 1) { //Is ETH
+        } elseif ($this->networkId === 1) { //Is ETH
             $response = Http::get($baseUrl . '/ethereum?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
 
             $divider = $response->json()[$web3BscToken]['usd'];
@@ -137,20 +138,18 @@ class CollectorCoinService
         $transactionHash = $order->firstOrderPayment->payment_provider_reference_id;
 
         //TODO: Check if we also should support this for confirmed/graded orders
-        if ($order->order_status_id === OrderStatus::PLACED)
-        {
+        if ($order->order_status_id === OrderStatus::PLACED) {
             return [
                 'transaction_hash' => $transactionHash,
-                'status' => 'success'
+                'status' => 'success',
             ];
-        }
-        else {
+        } else {
             return $this->validateTransactionIsSuccessful($transactionHash);
         }
 
         return [
             'transaction_hash' => $transactionHash,
-            'status' => 'processing'
+            'status' => 'processing',
         ];
     }
 
@@ -161,28 +160,33 @@ class CollectorCoinService
         switch ($transactionDetails['status']) {
             case '0':
                 $status = 'fail';
+
                 break;
 
             case '1':
                 $status = 'success';
+
                 break;
 
             default:
                 $status = 'processing';
+
                 break;
         }
+
         return [
             'transaction_hash' => $transactionHash,
             'status' => $status,
         ];
     }
 
-    protected function validateTransaction(array $data, array $transactionData): bool {
+    protected function validateTransaction(array $data, array $transactionData): bool
+    {
 
         //Verify that transaction is going to correct destination and amount is between 2% tange
         if ($transactionData['destination_wallet'] !== config('web3networks.' . $this->networkId. '.ags_wallet')
         || $transactionData['token_amount'] < $data['amount'] * 0.98
-        || $transactionData['token_amount'] > $data['amount'] * 1.02 ) {
+        || $transactionData['token_amount'] > $data['amount'] * 1.02) {
             throw new IncorrectOrderPayment;
         }
 

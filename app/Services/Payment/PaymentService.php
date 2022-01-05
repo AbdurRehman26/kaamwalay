@@ -39,15 +39,13 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        if($this->order->paymentMethod->code === 'ags'){
+        if ($this->order->paymentMethod->code === 'ags') {
             $data = resolve($this->providers[
                 $this->order->paymentMethod->code
             ], [
-                'networkId' => json_decode($order->firstOrderPayment->response, true)['network']
+                'networkId' => json_decode($order->firstOrderPayment->response, true)['network'],
             ])->charge($this->order, $data);
-
         } else {
-
             $data = resolve($this->providers[
                 $this->order->paymentMethod->code
             ])->charge($this->order);
@@ -98,7 +96,6 @@ class PaymentService
         }
 
         return $data;
-
     }
 
     public function updateOrderPayment(array $data): array

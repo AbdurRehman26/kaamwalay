@@ -78,7 +78,8 @@ class OrderService
         return $data;
     }
 
-    public function calculateAgsPrice(Order $order, int $network): float {
+    public function calculateAgsPrice(Order $order, int $network): float
+    {
         $agsPrice = (new CollectorCoinService($network))->getAgsPriceFromUsd($order->grand_total);
 
         $orderPayment = $order->firstOrderPayment;

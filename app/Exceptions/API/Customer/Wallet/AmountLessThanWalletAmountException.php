@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WalletAmountLessThanEnteredAmount extends Exception
+class AmountLessThanWalletAmountException extends Exception
 {
     /**
      * @var string

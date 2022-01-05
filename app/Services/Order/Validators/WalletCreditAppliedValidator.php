@@ -2,7 +2,7 @@
 
 namespace App\Services\Order\Validators;
 
-use App\Exceptions\API\Customer\Wallet\WalletAmountLessThanEnteredAmount;
+use App\Exceptions\API\Customer\Wallet\EnteredAmountLessThanWalletAmountException;
 use App\Services\Wallet\WalletService;
 
 class WalletCreditAppliedValidator
@@ -14,7 +14,7 @@ class WalletCreditAppliedValidator
                 WalletService::validateWalletAmount(
                     $data['payment_by_wallet']
                 ),
-                EnteredAmountIsLessThanWalletAmount::class
+                EnteredAmountLessThanWalletAmountException::class
             );
         }
     }

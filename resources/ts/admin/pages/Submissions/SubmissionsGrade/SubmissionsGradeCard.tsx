@@ -27,6 +27,7 @@ import {
     updateCardViewMode,
     updateExistingCardData,
     updateExistingCardStatus,
+    getAllSubmissions,
 } from '@admin/redux/slices/submissionGradeSlice';
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 import { changeOrderItemNotes } from '@shared/redux/slices/adminOrdersSlice';
@@ -409,11 +410,16 @@ export function SubmissionsGradeCard({
 
     async function sendHumanGradesToBackend() {
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${topLevelID}/grades`);
-        const response = await endpoint.put('', {
-            humanGradeValues: humanGrades,
-            gradeDelta: 0,
-        });
-        dispatch(updateExistingCardData({ id: topLevelID, data: response.data }));
+        try {
+            const response = await endpoint.put('', {
+                humanGradeValues: humanGrades,
+                gradeDelta: 0,
+            });
+            dispatch(updateExistingCardData({ id: topLevelID, data: response.data }));
+        } catch (error: any) {
+            dispatch(getAllSubmissions(orderID));
+            notifications.exception(error);
+        }
     }
 
     function handleGradedReviseModeSave() {

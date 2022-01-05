@@ -43,7 +43,7 @@ export const submissionGradesSlice = createSlice({
             action: PayloadAction<{ itemIndex: number; side: string; part: string; gradeValue: string }>,
         ) => {
             // Regex Expression to detect if the incoming string contains any letters
-            const lettersReg = /[a-zA-Z]/g;
+            const lettersReg = /[a-zA-Z!@#$%^&*~()_+\-=\[\]{};':"\\|,`<>\/?]/g;
             let incomingGrade = action.payload.gradeValue;
 
             if (

@@ -64,7 +64,7 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
         [classes.root, classes.selected],
     );
 
-    const isActive = useMemo(() => !!matchPath(location.pathname, href), [location.pathname, href]);
+    const isActive = useMemo(() => !!matchPath(href, location.pathname), [location.pathname, href]);
 
     return (
         <ListItem selected={isActive} button component={Link} to={!disabled ? href : '#'} classes={itemClasses}>

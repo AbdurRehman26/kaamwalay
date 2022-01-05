@@ -50,13 +50,13 @@ class VerifyUnpaidOrders extends Command
             return $query->where('code', 'ags');
         })->get();
 
-        foreach($unpaidOrders as $unpaidOrder) 
-        {
+        foreach ($unpaidOrders as $unpaidOrder) {
             $this->info("Processing Order: $unpaidOrder->id");
 
-            try{
+            try {
                 $paymentService->verifyAgs($unpaidOrder);
-            } catch(NotSupportedPaymentNetwork $nsn){}
+            } catch (NotSupportedPaymentNetwork $nsn) {
+            }
         }
     }
 }

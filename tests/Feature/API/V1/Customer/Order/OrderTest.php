@@ -370,9 +370,9 @@ test('a customer cannot place order with item declared value greater than schema
     $response->assertJsonStructure(['data' => 'error']);
 });
 
-it('can calculate AGS price for an order', function (){
+it('can calculate AGS price for an order', function () {
     config([
-        'configuration.keys.web3_configurations.supported_networks' => '97'
+        'configuration.keys.web3_configurations.supported_networks' => '97',
     ]);
 
     config([
@@ -391,7 +391,7 @@ it('can calculate AGS price for an order', function (){
                 'ags_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
                 'ags_wallet' => env('TEST_WALLET'),
             ],
-        ]
+        ],
         ]);
 
     $this->actingAs($this->user);
@@ -405,12 +405,11 @@ it('can calculate AGS price for an order', function (){
     $response->assertJsonStructure([
         'value',
     ]);
-
 });
 
-it('throws error if using unsupported network', function (){
+it('throws error if using unsupported network', function () {
     config([
-        'configuration.keys.web3_configurations.supported_networks' => '97'
+        'configuration.keys.web3_configurations.supported_networks' => '97',
     ]);
 
     $this->actingAs($this->user);
@@ -420,12 +419,11 @@ it('throws error if using unsupported network', function (){
 
     $response->assertStatus(400);
     $response->assertJsonStructure([
-        'error', 'value'
+        'error', 'value',
     ]);
 
     $response->assertJsonFragment([
         'error' => 'This network is not supported.',
-        'value' => 0.0
+        'value' => 0.0,
     ]);
-
 });

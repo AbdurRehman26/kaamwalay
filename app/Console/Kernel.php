@@ -4,7 +4,6 @@ namespace App\Console;
 
 use App\Console\Commands\Coupon\ActivateCoupons;
 use App\Console\Commands\Coupon\ExpireCoupons;
-use App\Console\Commands\Orders\VerifyUnpaidOrders;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
 use App\Console\Commands\SendScheduledEmails;
 use Carbon\Carbon;

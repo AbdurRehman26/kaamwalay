@@ -10,9 +10,9 @@ beforeEach(function () {
     $this->user = User::factory()->create();
 });
 
-it('can verfy completion of AGS paid order', function (){
+it('can verfy completion of AGS paid order', function () {
     config([
-        'configuration.keys.web3_configurations.supported_networks' => '97'
+        'configuration.keys.web3_configurations.supported_networks' => '97',
     ]);
 
     config([
@@ -31,16 +31,16 @@ it('can verfy completion of AGS paid order', function (){
                 'ags_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
                 'ags_wallet' => env('TEST_WALLET'),
             ],
-        ]
+        ],
         ]);
 
     $bscTestTransactionHash = '0x7ee79769e935f914ec5ff3ccc10d767bf5800bc506f2df8e0c274034a3d61a52';
     $this->actingAs($this->user);
     $paymentMethod = PaymentMethod::factory()->create([
-        'code' => 'ags'
+        'code' => 'ags',
     ]);
     $order = Order::factory()->for($this->user)->create([
-        'payment_method_id' => $paymentMethod->id
+        'payment_method_id' => $paymentMethod->id,
     ]);
     OrderItem::factory()->for($order)->create();
     OrderPayment::factory()->for($order)->create([
@@ -48,9 +48,9 @@ it('can verfy completion of AGS paid order', function (){
             [
                 'network' => 97,
                 'txn_hash' => $bscTestTransactionHash,
-                'amount' => 120
+                'amount' => 120,
             ]
-            ),
+        ),
         'payment_provider_reference_id' => $bscTestTransactionHash,
         'payment_method_id' => $paymentMethod->id,
     ]);
@@ -59,7 +59,6 @@ it('can verfy completion of AGS paid order', function (){
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
-        'transaction_hash', 'status'
+        'transaction_hash', 'status',
     ]);
-
 });

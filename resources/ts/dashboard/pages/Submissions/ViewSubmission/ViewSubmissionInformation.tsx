@@ -24,6 +24,7 @@ interface ViewSubmissionInformationProps {
     shippingFee: number;
     total: number;
     discountedAmount: string;
+    pmDiscountedAmount: string;
 }
 
 /**
@@ -47,6 +48,7 @@ export function ViewSubmissionInformation({
     refundsTotal,
     total,
     discountedAmount,
+    pmDiscountedAmount,
 }: ViewSubmissionInformationProps) {
     const classes = useViewSubmissionInformationStyles();
 
@@ -124,6 +126,14 @@ export function ViewSubmissionInformation({
                         </TableCell>
                         <TableCell>{formatCurrency(serviceFee)}</TableCell>
                     </TableRow>
+                    {Number(pmDiscountedAmount) > 0 ? (
+                        <TableRow>
+                            <TableCell variant={'head'} component={'th'}>
+                                Collector Coin Discount
+                            </TableCell>
+                            <TableCell>{`-${formatCurrency(Number(pmDiscountedAmount))}`}</TableCell>
+                        </TableRow>
+                    ) : null}
                     {Number(discountedAmount) > 0 ? (
                         <TableRow>
                             <TableCell variant={'head'} component={'th'}>

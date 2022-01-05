@@ -175,7 +175,7 @@ function SubmissionSummary() {
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const agsDiscountedAmount = useAppSelector((state) => state.newSubmission.agsDiscountedAmount);
+    const pmDiscountedAmount = useAppSelector((state) => state.newSubmission.pmDiscountedAmount);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -368,11 +368,11 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
-                            {agsDiscountedAmount > 0 ? (
+                            {pmDiscountedAmount > 0 ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
                                     <NumberFormat
-                                        value={agsDiscountedAmount}
+                                        value={pmDiscountedAmount}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator
@@ -418,7 +418,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowLeftText}>Total:</Typography>
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
-                                    {totalInAGS > 0 && paymentMethodID == 3 ? `(${totalInAGS} AGS) ` : null}
+                                    {totalInAGS > 0 && paymentMethodID === 3 ? `(${totalInAGS} AGS) ` : null}
                                     <NumberFormat
                                         value={grandTotal}
                                         className={classes.rowRightBoldText}

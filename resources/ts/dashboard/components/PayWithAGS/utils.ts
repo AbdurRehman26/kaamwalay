@@ -1,4 +1,4 @@
-export const supportedNetworks = [1, 4, 56, 97]; // This will be different on staging & prod
+export const supportedNetworks = process.env.NODE_ENV !== 'production' ? [4, 97] : [1, 56];
 
 export const networksMap: any = {
     1: {

@@ -70,6 +70,7 @@ export function ViewSubmission() {
                 serviceLevel={`$${data?.paymentPlan?.price} / Card`}
                 numberOfCards={data?.numberOfCards}
                 discountedAmount={data?.discountedAmount}
+                pmDiscountedAmount={data?.pmDiscountedAmount}
                 shippingMethod={data?.shippingMethod?.name}
                 createdAt={data?.createdAt}
                 declaredValue={data?.totalDeclaredValue}
@@ -90,6 +91,7 @@ export function ViewSubmission() {
                 billingAddress={data?.billingAddress}
                 coupon={data?.coupon}
                 payment={data?.orderPayment}
+                paymentMethodId={data?.paymentMethodId}
             />
             <Box marginTop={'24px'} />
             <Divider />

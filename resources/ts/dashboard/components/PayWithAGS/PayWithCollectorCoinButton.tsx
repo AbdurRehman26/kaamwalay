@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { clearSubmissionState, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
-import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
@@ -19,25 +18,27 @@ export function PayWithCollectorCoinButton() {
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
-    const {
-        web3Configurations: { bscWallet, ethWallet, testWallet },
-    } = useConfiguration();
 
     const notifications = useNotifications();
     const navigate = useNavigate();
 
-    function getRecipientWalletFromNetwork(networkID: string | number) {
-        switch (String(networkID)) {
-            case '1':
-                return ethWallet;
-            case '4':
-                return testWallet;
-            case '56':
-                return bscWallet;
-            case '97':
-                return testWallet;
+    function getRecipientWalletFromNetwork(networkID: number) {
+        const wallets = {
+            ethWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
+            bscWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
+            testWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
+        };
+        switch (networkID) {
+            case 1:
+                return wallets.ethWallet;
+            case 4:
+                return wallets.testWallet;
+            case 56:
+                return wallets.bscWallet;
+            case 97:
+                return wallets.testWallet;
             default:
-                return ethWallet;
+                return wallets.ethWallet;
         }
     }
 
@@ -63,6 +64,8 @@ export function PayWithCollectorCoinButton() {
         }
 
         try {
+            console.log(getRecipientWalletFromNetwork(currentNetworkID), 'wallet wallet ');
+            console.log(currentNetworkID, 'currentNetworkID');
             const tx = {
                 // @ts-ignore
                 from: currentAccounts[0],
@@ -79,12 +82,17 @@ export function PayWithCollectorCoinButton() {
                 }
                 setIsLoading(true);
                 setTimeout(async () => {
-                    await dispatch(verifyOrderStatus({ orderID, txHash: txHash })).unwrap();
-                    dispatch(clearSubmissionState());
-                    dispatch(invalidateOrders());
-                    setIsLoading(false);
-                    navigate(`/submissions/${orderID}/collector-coin/confirmation`);
-                }, 5000);
+                    try {
+                        await dispatch(verifyOrderStatus({ orderID, txHash: txHash })).unwrap();
+                        dispatch(clearSubmissionState());
+                        dispatch(invalidateOrders());
+                        setIsLoading(false);
+                        navigate(`/submissions/${orderID}/collector-coin/confirmation`);
+                    } catch (error: any) {
+                        setIsLoading(false);
+                        notifications.error('Order payment information is incorrect');
+                    }
+                }, 8000);
             });
         } catch (error: any) {
             setIsLoading(false);

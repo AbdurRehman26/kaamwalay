@@ -2,6 +2,7 @@
 
 namespace App\Services\Wallet;
 
+use App\Exceptions\API\Wallet\InvalidWalletTransactionException;
 use App\Models\Order;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
@@ -20,21 +21,13 @@ class WalletService
     {
         $wallet = Wallet::find($walletId);
 
-        if ($reason === WalletTransaction::REASON_REFUND) {
-            $this->processRefund($wallet, $amount, $userId, $orderId);
-        }
-
-        if ($reason === WalletTransaction::REASON_ORDER_PAYMENT) {
-            $this->processOrderPayment($wallet, $amount, $orderId);
-        }
-
-        if ($reason === WalletTransaction::REASON_WALLET_CREDIT) {
-            $this->processCustomerWalletCredit($wallet, $amount, $userId);
-        }
-
-        if ($reason === WalletTransaction::REASON_WALLET_PAYMENT) {
-            $this->processWalletPayment($wallet, $amount);
-        }
+        match ($reason) {
+            WalletTransaction::REASON_REFUND => $this->processRefund($wallet, $amount, $userId, $orderId),
+            WalletTransaction::REASON_ORDER_PAYMENT => $this->processOrderPayment($wallet, $amount, $orderId),
+            WalletTransaction::REASON_WALLET_CREDIT => $this->processCustomerWalletCredit($wallet, $amount, $userId),
+            WalletTransaction::REASON_WALLET_PAYMENT => $this->processWalletPayment($wallet, $amount),
+            default => new InvalidWalletTransactionException,
+        };
     }
 
     private function processRefund(Wallet $wallet, float $amount, int $userId, ?int $orderId)

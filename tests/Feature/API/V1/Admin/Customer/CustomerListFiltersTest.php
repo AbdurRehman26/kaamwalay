@@ -2,6 +2,7 @@
 
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -23,11 +24,21 @@ beforeEach(function () {
             ]
         ))->create();
 
-    Order::factory()->for($this->customer)->state(new Sequence(
+
+    $this->orders = Order::factory()->for($this->customer)->state(new Sequence(
         [
             'order_status_id' => 5,
         ]
     ))->count(10)->create();
+
+
+    OrderStatusHistory::factory()->count(5)->sequence(
+        ['order_status_id' => OrderStatus::PLACED, 'order_id' => $this->orders[0]->id, 'user_id' => $this->customer->id],
+        ['order_status_id' => OrderStatus::PLACED, 'order_id' => $this->orders[1]->id, 'user_id' => $this->customer->id],
+        ['order_status_id' => OrderStatus::PLACED, 'order_id' => $this->orders[2]->id, 'user_id' => $this->customer->id],
+        ['order_status_id' => OrderStatus::PLACED, 'order_id' => $this->orders[3]->id, 'user_id' => $this->customer->id],
+        ['order_status_id' => OrderStatus::PLACED, 'order_id' => $this->orders[4]->id, 'user_id' => $this->customer->id]
+    )->create();
 
     Order::factory()->state(new Sequence(
         [
@@ -40,7 +51,7 @@ beforeEach(function () {
 
 it('filters customers by submissions', function () {
     getJson(route('customers.index', [
-        'filter[submissions]' => [1, $this->customer->orders->where('order_status_id', '>', OrderStatus::PAYMENT_PENDING)->count()],
+        'filter[submissions]' => [1, $this->customer->orders()->placed()->count()],
     ]))
         ->assertOk()
         ->assertJsonCount(1, ['data'])

@@ -21,7 +21,7 @@ class CustomerResource extends BaseResource
             'email' => $this->email,
             'phone' => $this->phone,
             'created_at' => $this->formatDate($this->created_at),
-            'submissions' => $this->orders()->paid()->count(),
+            'submissions' => $this->orders()->placed()->count(),
         ];
     }
 }

@@ -12,7 +12,7 @@ class CustomerService
 
     public function getCustomers(): LengthAwarePaginator
     {
-        return QueryBuilder::for(User::withCount('orders')->customer())
+        return QueryBuilder::for(User::customer())
             ->allowedFilters(User::getAllowedAdminFilters())
             ->allowedSorts(User::getAllowedAdminSorts())
             ->defaultSort('-created_at')

@@ -99,6 +99,7 @@ class OrderController extends Controller
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
+                    'value' => 0.0,
                 ],
                 Response::HTTP_BAD_REQUEST
             );

@@ -35,6 +35,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(SendScheduledEmails::class)->everyFifteenMinutes();
         $schedule->command(ActivateCoupons::class)->everyThirtyMinutes();
         $schedule->command(ExpireCoupons::class)->everyThirtyMinutes();
+        $schedule->command('orders:verify-unpaid-ags --email=platform@robograding.com')->everyMinute();
     }
 
     /**

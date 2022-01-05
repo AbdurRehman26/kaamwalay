@@ -182,9 +182,8 @@ class CollectorCoinService
 
     protected function validateTransaction(array $data, array $transactionData): bool
     {
-
         //Verify that transaction is going to correct destination and amount is between 2% tange
-        if ($transactionData['destination_wallet'] !== config('web3networks.' . $this->networkId. '.ags_wallet')
+        if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->networkId. '.ags_wallet'))
         || $transactionData['token_amount'] < $data['amount'] * 0.98
         || $transactionData['token_amount'] > $data['amount'] * 1.02) {
             throw new IncorrectOrderPayment;

@@ -56,8 +56,6 @@ export function PayWithCollectorCoinButton() {
         }
 
         try {
-            console.log(getRecipientWalletFromNetwork(currentNetworkID), 'wallet wallet ');
-            console.log(currentNetworkID, 'currentNetworkID');
             const tx = {
                 from: currentAccounts[0],
                 data: contract.methods
@@ -87,7 +85,6 @@ export function PayWithCollectorCoinButton() {
             });
         } catch (error: any) {
             setIsLoading(false);
-            console.log(error);
         }
     }
 

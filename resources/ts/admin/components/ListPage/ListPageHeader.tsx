@@ -1,15 +1,16 @@
-import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
-import InputAdornment from '@mui/material/InputAdornment';
-import { useCallback, useState, ChangeEvent, KeyboardEvent } from 'react';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 
 interface Props {
     title: string;
+    value?: string;
     searchField?: boolean;
     onSearch?: (search: string) => void;
 }
@@ -38,17 +39,29 @@ const Root = styled('header')(({ theme }) => ({
  * @date: 23.12.2021
  * @time: 21:44
  */
-export function ListPageHeader({ title, searchField, onSearch }: Props) {
-    const [search, setSearch] = useState('');
+export function ListPageHeader({ title, searchField, value, onSearch }: Props) {
+    const [search, setSearch] = useState(value ?? '');
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
-    const handleSearch = useCallback(() => onSearch && onSearch(search), [onSearch, search]);
+
+    const handleSearch = useCallback(() => {
+        setTimeout(() => {
+            if (onSearch) {
+                onSearch(search);
+            }
+        }, 300);
+    }, [onSearch, search]);
+
     const handleKeyDown = useCallback(
         (e: KeyboardEvent<HTMLInputElement>) => {
             e.key === 'Enter' && handleSearch();
         },
         [handleSearch],
     );
+
+    useEffect(() => {
+        setSearch(value ?? '');
+    }, [value]);
 
     return (
         <Root>
@@ -69,13 +82,14 @@ export function ListPageHeader({ title, searchField, onSearch }: Props) {
                                     <SearchIcon />
                                 </InputAdornment>
                             ),
-                            endAdornment: search ? (
-                                <InputAdornment position={'end'}>
-                                    <IconButton onClick={handleSearch}>
-                                        <SendIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            ) : null,
+                            endAdornment:
+                                search || search === '' ? (
+                                    <InputAdornment position={'end'}>
+                                        <IconButton onClick={handleSearch}>
+                                            <SendIcon />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ) : null,
                         }}
                     />
                 )}

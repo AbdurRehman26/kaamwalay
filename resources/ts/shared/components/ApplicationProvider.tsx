@@ -1,5 +1,7 @@
+import DateAdapter from '@mui/lab/AdapterMoment';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles';
+import { StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import React, { PropsWithChildren, useMemo } from 'react';
 import { Provider } from 'react-redux';
@@ -32,35 +34,39 @@ interface ApplicationProviderProps {
  * @date: 09.08.2021
  * @time: 06:23
  */
-export function ApplicationProvider({
-    children,
-    store,
-    noSplashScreen,
-    splashScreenProps,
-    noConfigurationLoad,
-    noAuthenticationCheck,
-    noNotificationsContainer,
-    noCssBaseline,
-}: PropsWithChildren<ApplicationProviderProps>) {
+export function ApplicationProvider(props: PropsWithChildren<ApplicationProviderProps>) {
+    const {
+        children,
+        store,
+        noSplashScreen,
+        splashScreenProps,
+        noConfigurationLoad,
+        noAuthenticationCheck,
+        noNotificationsContainer,
+        noCssBaseline,
+    } = props;
+
     const content = useMemo(
         () => (!noSplashScreen ? <SplashScreen {...splashScreenProps}>{children}</SplashScreen> : children),
         [children, noSplashScreen, splashScreenProps],
     );
 
     return (
-        <Provider store={store}>
-            <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={materialUiTheme}>
-                    <>
-                        {!noConfigurationLoad && <ConfigurationLoad />}
-                        {!noAuthenticationCheck && <AuthenticationCheck />}
-                        {!noNotificationsContainer && <NotificationsContainer />}
-                        {!noCssBaseline && <CssBaseline />}
-                        <ConfirmationDialogProvider>{content}</ConfirmationDialogProvider>
-                    </>
-                </ThemeProvider>
-            </StyledEngineProvider>
-        </Provider>
+        <LocalizationProvider dateAdapter={DateAdapter}>
+            <Provider store={store}>
+                <StyledEngineProvider injectFirst>
+                    <ThemeProvider theme={materialUiTheme}>
+                        <>
+                            {!noConfigurationLoad && <ConfigurationLoad />}
+                            {!noAuthenticationCheck && <AuthenticationCheck />}
+                            {!noNotificationsContainer && <NotificationsContainer />}
+                            {!noCssBaseline && <CssBaseline />}
+                            <ConfirmationDialogProvider>{content}</ConfirmationDialogProvider>
+                        </>
+                    </ThemeProvider>
+                </StyledEngineProvider>
+            </Provider>
+        </LocalizationProvider>
     );
 }
 

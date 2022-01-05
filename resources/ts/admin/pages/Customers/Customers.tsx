@@ -1,6 +1,6 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
 import React from 'react';
-import CustomersListPage from './CustomersListPage';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { CustomersListPage } from './CustomersListPage';
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>

@@ -24,7 +24,7 @@ import { ResetPasswordValidationRules } from './validation';
  * @time: 05:52
  */
 export function ResetPassword() {
-    const { token, email } = useLocationQuery<{ token: string; email: string }>();
+    const [{ token, email }] = useLocationQuery<{ token: string; email: string }>();
     const notifications = useNotifications();
     const navigate = useNavigate();
     const classes = useStyles();

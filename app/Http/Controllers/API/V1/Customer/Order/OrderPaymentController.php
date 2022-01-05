@@ -78,7 +78,6 @@ class OrderPaymentController extends Controller
             return new JsonResponse(
                 [
                     'message' => $e->getMessage(),
-                    'value' => 0.0
                 ],
                 Response::HTTP_PAYMENT_REQUIRED
             );

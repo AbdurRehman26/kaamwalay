@@ -1,18 +1,18 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace Database\Seeders;
 
-class AddPlatformAdminUser extends Migration
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
+class AddPlatformAdminUserSeeder extends Seeder
 {
     /**
-     * Run the migrations.
+     * Run the database seeds.
      *
      * @return void
      */
-    public function up()
+    public function run()
     {
         User::factory()
             ->admin()
@@ -23,17 +23,5 @@ class AddPlatformAdminUser extends Migration
                 'email' => 'platform@robograding.com',
                 'username' => 'robograding.platform'
             ]);
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
     }
 }

@@ -4,6 +4,7 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
@@ -367,4 +368,64 @@ test('a customer cannot place order with item declared value greater than schema
 
     $response->assertStatus(400);
     $response->assertJsonStructure(['data' => 'error']);
+});
+
+it('can calculate AGS price for an order', function (){
+    config([
+        'configuration.keys.web3_configurations.supported_networks' => '97'
+    ]);
+
+    config([
+        'web3networks' => [
+            97 => [
+                'chain_id' => '0x61',
+                'chain_name' => 'Binance Smart Chain - Testnet',
+                'native_currency' => [
+                    'name' => 'tBnb',
+                    'symbol' => 'tBNB',
+                    'decimals' => 18,
+                ],
+                'rpc_urls' => ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+                'block_explorer_urls' => ['https://testnet.bscscan.com'],
+                'is_testnet' => true,
+                'ags_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
+                'ags_wallet' => env('TEST_WALLET'),
+            ],
+        ]
+        ]);
+
+    $this->actingAs($this->user);
+    $order = Order::factory()->for($this->user)->create();
+    OrderItem::factory()->for($order)->create();
+    OrderPayment::factory()->for($order)->create();
+
+    $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/ags?network=97');
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'value',
+    ]);
+
+});
+
+it('throws error if using unsupported network', function (){
+    config([
+        'configuration.keys.web3_configurations.supported_networks' => '97'
+    ]);
+
+    $this->actingAs($this->user);
+    $order = Order::factory()->for($this->user)->create();
+
+    $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/ags?network=1');
+
+    $response->assertStatus(400);
+    $response->assertJsonStructure([
+        'error', 'value'
+    ]);
+
+    $response->assertJsonFragment([
+        'error' => 'This network is not supported.',
+        'value' => 0.0
+    ]);
+
 });

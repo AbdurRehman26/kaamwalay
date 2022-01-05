@@ -8,9 +8,12 @@ import { OutlinedCard } from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import { updateExistingCardData, updateHumanGradeValue } from '@admin/redux/slices/submissionGradeSlice';
+import {
+    updateExistingCardData,
+    updateHumanGradeValue,
+    getAllSubmissions,
+} from '@admin/redux/slices/submissionGradeSlice';
 import { useNotifications } from '@shared/hooks/useNotifications';
-
 interface SubmissionsGradeCardGradesProps {
     heading: string;
     disabled?: boolean;
@@ -131,6 +134,7 @@ export function SubmissionsGradeCardGrades({
             });
             dispatch(updateExistingCardData({ id: itemID, data: response.data }));
         } catch (error: any) {
+            dispatch(getAllSubmissions(orderID));
             notifications.exception(error);
         }
     }

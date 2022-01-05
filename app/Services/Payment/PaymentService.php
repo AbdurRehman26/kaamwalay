@@ -87,11 +87,11 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        $data = resolve($this->providers[
-            $this->order->paymentMethod->code
-        ], [
-            'networkId' => json_decode($order->firstOrderPayment->response, true)['network']
-        ])->verify($this->order);
+        $collectorCoinService = new CollectorCoinService(
+            json_decode($order->firstOrderPayment->response, true)['network']
+        );
+
+        $data = $collectorCoinService->verify($this->order);
 
         if ($data['status'] === 'success' && $this->order->orderStatus->id === OrderStatus::PAYMENT_PENDING) {
             $this->updateOrderStatus();

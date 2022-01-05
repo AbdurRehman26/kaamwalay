@@ -6,14 +6,22 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         <link rel="stylesheet" type="text/css"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" integrity="sha512-Velp0ebMKjcd9RiCoaHhLXkR1sFoCCWXNp6w4zj1hfMifYB5441C+sKeBl/T/Ka6NjBiRfBBQRaQq65ekYz3UQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.0/dist/imagebox.min.css">
     </x-slot>
     <x-slot name="body">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/fslightbox@3.3.0-2/index.js" integrity="sha256-XDXybe19IazSiJEOLnRr+TK7f+lLK5gV1VJpC1Nfdk0=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/tobiasroeder/imagebox@1.3.0/dist/imagebox.min.js"></script>
 
         <script defer>
+            imagebox.options({
+                info: false,
+                swipeToChange: true,
+                swipeToClose: true,
+                closeEverywhere: true,
+                keyControls: true,
+            });
+
             $(function() {
                 $('.feed-view__slider--js').slick({
                     infinite: true,
@@ -256,11 +264,12 @@
                 <div class="feed-view__slider feed-view__slider--js">
                     @foreach($generated_images as $generated_image)
                         <div class="feed-view__slider__item">
-                            <a href="{{ $generated_image['output_image'] }}" class="feed-view__slider__link" data-fslightbox="cards-gallery" data-type="image">
-                                <img class="feed-view__slider__image"
-                                     src="{{ $generated_image['output_image'] }}" alt="{{ $generated_image['name'] }}">
-                                <p class="feed-view__slider__caption">{{ $generated_image['name'] }}</p>
-                            </a>
+                            <img class="feed-view__slider__image"
+                                src="{{ $generated_image['output_image'] }}" alt="{{ $generated_image['name'] }}" 
+                                data-imagebox="gallery"
+                                data-imagebox-caption="{{ $generated_image['name'] }}"
+                            >
+                            <p class="feed-view__slider__caption">{{ $generated_image['name'] }}</p>
                         </div>
                     @endforeach
                 </div>

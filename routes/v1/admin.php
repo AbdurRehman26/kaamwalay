@@ -7,6 +7,7 @@ use App\Http\Controllers\API\V1\Admin\Coupon\CouponableEntityController;
 use App\Http\Controllers\API\V1\Admin\Coupon\CouponApplicableController;
 use App\Http\Controllers\API\V1\Admin\Coupon\CouponController;
 use App\Http\Controllers\API\V1\Admin\Coupon\CouponStatusController;
+use App\Http\Controllers\API\V1\Admin\CustomerController;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController;
 use App\Http\Controllers\API\V1\Admin\Order\OrderExtraChargeController;
 use App\Http\Controllers\API\V1\Admin\Order\OrderItemController;
@@ -69,7 +70,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ->name('coupons.change-status');
     Route::get('coupon-applicables', CouponApplicableController::class)->name('coupon.applicables');
     Route::get('couponable/entities', CouponableEntityController::class)->name('couponable.entities');
-
+  
+    
+    // Customers
+    Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
+  
+    // wallet
     Route::post('wallets/{wallet}/credit', CustomerWalletCreditController::class)
         ->name('customer-wallet-credit');
 });

@@ -1,8 +1,6 @@
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,7 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import moment from 'moment';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { FormikButton } from '@shared/components/fields/FormikButton';
 import { FormikDesktopDatePicker } from '@shared/components/fields/FormikDesktopDatePicker';
@@ -26,6 +24,8 @@ import { nameInitials } from '@shared/lib/strings/initials';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
+import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
+import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 
 type InitialValues = {
     minSubmissions: string;
@@ -53,6 +53,10 @@ const getFilters = (values: InitialValues) => ({
     submissions: submissionsFilter(values.minSubmissions, values.maxSubmissions),
 });
 
+enum RowOption {
+    CreditCustomer,
+}
+
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
  * @component: CustomersListPage
@@ -60,6 +64,8 @@ const getFilters = (values: InitialValues) => ({
  * @time: 21:39
  */
 export function CustomersListPage() {
+    const [customerId, setCustomerId] = useState<number>(0);
+
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
 
@@ -73,6 +79,8 @@ export function CustomersListPage() {
         }),
         [query.minSubmissions, query.maxSubmissions, query.signedUpStart, query.signedUpEnd, query.search],
     );
+
+    const handleCreditDialogClose = useCallback(() => setCustomerId(0), []);
 
     const customers = useAdminCustomersQuery({
         params: {
@@ -142,6 +150,14 @@ export function CustomersListPage() {
         },
         [customers, setQuery],
     );
+
+    const handleOption = useCallback((action: RowOption, value?: any) => {
+        switch (action) {
+            case RowOption.CreditCustomer:
+                setCustomerId(value);
+                break;
+        }
+    }, []);
 
     return (
         <Grid container>
@@ -287,9 +303,11 @@ export function CustomersListPage() {
                                     {formatCurrency(customer.walletBalance ?? 0)}
                                 </TableCell>
                                 <TableCell variant={'body'} align={'right'}>
-                                    <IconButton>
-                                        <MoreVertIcon />
-                                    </IconButton>
+                                    <OptionsMenu onClick={handleOption}>
+                                        <OptionsMenuItem action={RowOption.CreditCustomer} value={customer.id}>
+                                            Credit Customer
+                                        </OptionsMenuItem>
+                                    </OptionsMenu>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -301,6 +319,8 @@ export function CustomersListPage() {
                     </TableFooter>
                 </Table>
             </TableContainer>
+
+            <CustomerCreditDialog customerId={customerId} open={!!customerId} onClose={handleCreditDialogClose} />
         </Grid>
     );
 }

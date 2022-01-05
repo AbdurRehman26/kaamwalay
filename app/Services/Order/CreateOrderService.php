@@ -234,5 +234,4 @@ class CreateOrderService
             $this->order->save();
         }
     }
-
 }

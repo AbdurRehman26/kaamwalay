@@ -11,8 +11,8 @@ import CustomersListPage from './CustomersListPage';
 export function Customers() {
     return (
         <Routes>
-            <Route path={'/customers'} element={<Navigate to={'/customers/list'} replace />} />
-            <Route path={'/customers/list'} element={<CustomersListPage />} />
+            <Route path={''} element={<Navigate to={'/customers/list'} replace />} />
+            <Route path={'list'} element={<CustomersListPage />} />
         </Routes>
     );
 }

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 const useStyles = makeStyles(
     {
@@ -29,6 +30,7 @@ export function ListSubmissions() {
             category: EventCategories.Submissions,
             action: SubmissionEvents.initiated,
         });
+        pushToDataLayer({ event: 'google-ads-started-submission-process' });
         navigate('/submissions/new');
     }
 

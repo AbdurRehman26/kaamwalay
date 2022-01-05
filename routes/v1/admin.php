@@ -14,6 +14,7 @@ use App\Http\Controllers\API\V1\Admin\Order\OrderPaymentController;
 use App\Http\Controllers\API\V1\Admin\Order\OrderRefundController;
 use App\Http\Controllers\API\V1\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V1\Admin\OrderStatusHistoryController;
+use App\Http\Controllers\API\V1\Admin\Wallet\CustomerWalletCreditController;
 use App\Http\Controllers\API\V1\Auth\Admin\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,4 +69,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ->name('coupons.change-status');
     Route::get('coupon-applicables', CouponApplicableController::class)->name('coupon.applicables');
     Route::get('couponable/entities', CouponableEntityController::class)->name('couponable.entities');
+
+    Route::post('wallets/{wallet}/credit', CustomerWalletCreditController::class)
+        ->name('customer-wallet-credit');
 });

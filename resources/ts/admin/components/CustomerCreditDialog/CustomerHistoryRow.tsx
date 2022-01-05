@@ -1,4 +1,4 @@
-import { TableCell } from '@mui/material';
+import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';

@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import React from 'react';
 import CustomersListPage from './CustomersListPage';
 
@@ -10,10 +10,10 @@ import CustomersListPage from './CustomersListPage';
  */
 export function Customers() {
     return (
-        <Switch>
-            <Redirect exact from={'/customers'} to={'/customers/list'} />
-            <Route exact path={'/customers/list'} component={CustomersListPage} />
-        </Switch>
+        <Routes>
+            <Route path={'/customers'} element={<Navigate to={'/customers/list'} replace />} />
+            <Route path={'/customers/list'} element={<CustomersListPage />} />
+        </Routes>
     );
 }
 

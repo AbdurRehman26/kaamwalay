@@ -11,10 +11,10 @@ import { SubmissionsViewDetails } from './SubmissionsViewDetails';
 import { SubmissionsViewHeader } from './SubmissionsViewHeader';
 
 export function SubmissionsView() {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<'id'>();
 
     const { data, isLoading } = useAdminOrderQuery({
-        resourceId: id,
+        resourceId: Number(id),
         config: {
             params: {
                 include: [
@@ -30,6 +30,7 @@ export function SubmissionsView() {
                     'refunds',
                     'orderLabel',
                     'orderStatusHistory.orderStatus',
+                    'coupon',
                 ],
             },
         },
@@ -57,8 +58,10 @@ export function SubmissionsView() {
             <Divider />
             <SubmissionsViewDetails
                 serviceLevelFee={data.paymentPlan?.price}
-                numberOfCards={data.numberOfCards}
-                placedAt={data.createdAt}
+                numberOfCards={data?.numberOfCards}
+                discountedAmount={data?.discountedAmount}
+                coupon={data?.coupon}
+                placedAt={data?.createdAt}
                 declaredValue={data.totalDeclaredValue}
                 serviceFee={data.serviceFee}
                 shippingFee={data.shippingFee}
@@ -77,7 +80,7 @@ export function SubmissionsView() {
             <Divider />
             <RefundsAndExtraCharges
                 mode={'admin'}
-                orderId={id}
+                orderId={Number(id)}
                 extraCharges={data?.extraCharges}
                 refunds={data?.refunds}
             />

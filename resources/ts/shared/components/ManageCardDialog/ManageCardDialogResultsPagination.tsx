@@ -1,4 +1,4 @@
-import { Pagination } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback } from 'react';
 import { connectPagination } from 'react-instantsearch-dom';

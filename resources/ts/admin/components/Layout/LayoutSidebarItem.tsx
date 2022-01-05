@@ -68,12 +68,8 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
     );
 
     const isActive = useMemo(
-        () =>
-            !!matchPath(location.pathname, {
-                path: href,
-                exact,
-            }),
-        [location.pathname, href, exact],
+        () => !!matchPath({ path: exact ? href : `${href}/*` }, location.pathname),
+        [location.pathname, exact, href],
     );
 
     const rest = !comingSoon

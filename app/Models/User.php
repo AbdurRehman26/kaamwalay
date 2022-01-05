@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Concerns\Coupons\CanHaveCoupons;
+use App\Http\Filters\AdminCustomerSearchFilter;
+use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
+use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,11 +17,13 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword;
+    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons;
 
     public string $pushNotificationType = 'users';
 
@@ -76,6 +82,26 @@ class User extends Authenticatable implements JWTSubject
         $user->assignRole(Role::findByName(config('permission.roles.admin')));
 
         return $user;
+    }
+
+    public static function getAllowedAdminFilters(): array
+    {
+        return [
+            AllowedFilter::custom('search', new AdminCustomerSearchFilter),
+            AllowedFilter::scope('signed_up_between'),
+            AllowedFilter::scope('submissions'),
+        ];
+    }
+
+    public static function getAllowedAdminSorts(): array
+    {
+        return [
+            AllowedSort::field('submissions', 'orders_count'),
+            AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
+            'email',
+            'customer_number',
+            'created_at',
+        ];
     }
 
     public function customerAddresses(): HasMany
@@ -148,10 +174,30 @@ class User extends Authenticatable implements JWTSubject
         return $this;
     }
 
+    public function scopeSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
+    {
+        return $query->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)]);
+    }
+
+    public function scopeSubmissions(Builder $query, string $minSubmissionCount, string $maxSubmissionCount): Builder
+    {
+        return $query->whereHas('orders', function ($subQuery) {
+            $subQuery->placed();
+        }, '>=', (int) $minSubmissionCount)->whereHas('orders', function ($subQuery) {
+            $subQuery->placed();
+        }, '<=', (int) $maxSubmissionCount);
+    }
+
     public function scopeAdmin(Builder $query): Builder
     {
         // @phpstan-ignore-next-line
         return $query->role(Role::findByName(config('permission.roles.admin')));
+    }
+
+    public function scopeCustomer(Builder $query): Builder
+    {
+        // @phpstan-ignore-next-line
+        return $query->role(Role::findByName(config('permission.roles.customer')));
     }
 
     public function sendPasswordResetNotification($token)

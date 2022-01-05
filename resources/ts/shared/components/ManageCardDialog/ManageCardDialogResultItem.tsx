@@ -7,7 +7,7 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { useCallback, useMemo } from 'react';
 import { Hit } from 'react-instantsearch-core';
 import { batch } from 'react-redux';
@@ -60,7 +60,7 @@ const useStyles = makeStyles(
  * @time: 23:53
  */
 export function ManageCardDialogResultItem({ hit }: ManageCardDialogResultItemProps) {
-    const item = useMemo(() => plainToClass(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
+    const item = useMemo(() => plainToInstance(CardProductEntity, fromApiPropertiesObject(hit)), [hit]);
     const classes = useStyles();
     const dispatch = useSharedDispatch();
 

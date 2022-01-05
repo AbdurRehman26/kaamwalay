@@ -1,14 +1,17 @@
 import { Defer } from '@shared/classes/Defer';
+import { DialogProps } from '@mui/material/Dialog';
+import { ButtonProps } from '@mui/material/Button';
 
 export interface ConfirmationDialogContextState {
     isOpen: boolean;
     title: string;
     message: string;
-    okText: string;
+    confirmText: string;
     cancelText: string;
-    okDisabled: boolean;
-    cancelDisabled: boolean;
     breakpoint: Defer | null;
+    dialogProps: Omit<DialogProps, 'open' | 'onClose'>;
+    confirmButtonProps: ButtonProps;
+    cancelButtonProps: ButtonProps;
 }
 
 export interface ConfirmationDialogContextMethods {
@@ -18,11 +21,12 @@ export interface ConfirmationDialogContextMethods {
 }
 
 export const initialState: ConfirmationDialogContextState = {
-    cancelDisabled: false,
+    dialogProps: {},
+    cancelButtonProps: {},
+    confirmButtonProps: {},
     cancelText: 'Cancel',
     message: '',
-    okDisabled: false,
-    okText: 'Ok',
+    confirmText: 'Ok',
     isOpen: false,
     title: 'Are you sure?',
     breakpoint: null,

@@ -7,7 +7,7 @@ import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -159,13 +160,17 @@ function SubmissionSummary() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const stripe = useStripe();
-    const history = useHistory();
+    const navigate = useNavigate();
     const notifications = useNotifications();
     const apiService = useInjectable(APIService);
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
+    const discountedValue = useAppSelector(
+        (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
+    );
+    const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -246,7 +251,8 @@ function SubmissionSummary() {
                 currency: 'USD',
             });
             sendECommerceDataToGA();
-            history.push(`/submissions/${orderID}/confirmation`);
+            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+            navigate(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
@@ -285,7 +291,7 @@ function SubmissionSummary() {
                             currency: 'USD',
                         });
                         sendECommerceDataToGA();
-                        history.push(`/submissions/${orderID}/confirmation`);
+                        navigate(`/submissions/${orderID}/confirmation`);
                     });
                 }
             }
@@ -356,6 +362,20 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
+                            {isCouponApplied ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
+                                    <NumberFormat
+                                        value={discountedValue}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'-$'}
+                                    />
+                                </div>
+                            ) : null}
+
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
                                 <NumberFormat
@@ -501,6 +521,20 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
+                            {isCouponApplied ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
+                                    <NumberFormat
+                                        value={discountedValue}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'-$'}
+                                    />
+                                </div>
+                            ) : null}
+
                             <div className={classes.row} style={{ marginTop: '16px' }}>
                                 <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
                                 <NumberFormat
@@ -525,7 +559,11 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
                                     <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice + shippingFee}
+                                        value={
+                                            numberOfSelectedCards * serviceLevelPrice +
+                                            shippingFee -
+                                            Number(isCouponApplied ? discountedValue : 0)
+                                        }
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

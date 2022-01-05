@@ -546,12 +546,12 @@ function SubmissionSummary() {
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
                                     <NumberFormat
-                                        value={
+                                        value={(
                                             (Number(collectorCoinDiscountPercentage) / 100) *
                                             (numberOfSelectedCards * serviceLevelPrice +
                                                 shippingFee -
                                                 Number(isCouponApplied ? discountedValue : 0))
-                                        }
+                                        ).toFixed(2)}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

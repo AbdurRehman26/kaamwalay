@@ -7,7 +7,6 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class WalletTransactionReason implements CastsAttributes
 {
-
     public function get($model, string $key, $value, array $attributes)
     {
         return match ($value) {

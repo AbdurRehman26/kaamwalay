@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\V1\Customer\User;
 
 use App\Http\Resources\API\V1\Customer\Role\RoleCollection;
-use App\Http\Resources\API\V1\Customer\Wallet\WalletResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -26,7 +25,7 @@ class UserResource extends JsonResource
             'profile_image' => $this->profile_image,
             'phone' => $this->phone,
             'stripe_id' => $this->stripe_id,
-            'roles' => new RoleCollection($this->roles)
+            'roles' => new RoleCollection($this->roles),
         ];
     }
 }

@@ -47,6 +47,7 @@ class CreateUserWallet extends Command
                 }
             });
         $this->info('wallets created');
+
         return CommandAlias::SUCCESS;
     }
 }

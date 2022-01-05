@@ -2,7 +2,6 @@
 
 namespace App\Events\Wallet;
 
-use App\Models\Wallet;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class TransactionHappened extends ShouldBeStored

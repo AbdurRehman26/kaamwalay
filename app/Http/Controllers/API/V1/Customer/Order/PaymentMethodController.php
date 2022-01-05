@@ -12,6 +12,7 @@ class PaymentMethodController extends Controller
     public function index(): PaymentMethodCollection
     {
         $paymentMethods = PaymentMethod::enabled()->visible()->get();
+
         return new PaymentMethodCollection($paymentMethods);
     }
 

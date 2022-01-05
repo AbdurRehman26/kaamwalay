@@ -11,7 +11,6 @@ use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
-use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\PaypalService;

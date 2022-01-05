@@ -14,7 +14,7 @@ class WalletController extends Controller
     {
     }
 
-    public function myWallet(): WalletResource
+    public function getWallet(): WalletResource
     {
         /* @var User */
         $user = auth()->user();

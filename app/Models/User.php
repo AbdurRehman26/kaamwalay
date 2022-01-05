@@ -193,9 +193,4 @@ class User extends Authenticatable implements JWTSubject
             'email' => $this->getEmailForPasswordReset(),
         ]);
     }
-
-    public function wallet(): HasOne
-    {
-        return $this->hasOne(Wallet::class);
-    }
 }

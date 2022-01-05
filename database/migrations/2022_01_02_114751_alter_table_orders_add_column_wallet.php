@@ -14,7 +14,10 @@ class AlterTableOrdersAddColumnWallet extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('amount_paid_from_wallet', 10, 2)->default(0.00)->nullable();
+            $table->decimal('amount_paid_from_wallet', 10)
+                ->after('grand_total')
+                ->default(0.00)
+                ->nullable();
         });
     }
 

@@ -83,7 +83,7 @@ Route::prefix('customer')->group(function () {
 
         Route::prefix('wallet')->group(function () {
             Route::get('payments', [WalletController::class, 'getPayments'])->name('wallet.payments');
-            Route::get('me', [WalletController::class, 'myWallet'])->name('wallet.me');
+            Route::get('/', [WalletController::class, 'getWallet'])->name('wallet.me');
         });
     });
 });

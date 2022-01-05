@@ -10,6 +10,7 @@ use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Models\PaymentMethod;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Coupon\CouponService;
@@ -18,6 +19,7 @@ use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
+use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -63,6 +65,7 @@ class CreateOrderService
         ItemsDeclaredValueValidator::validate($this->data);
         CustomerAddressValidator::validate($this->data);
         CouponAppliedValidator::validate($this->data);
+        WalletCreditAppliedValidator::validate($this->data);
     }
 
     /**
@@ -76,15 +79,18 @@ class CreateOrderService
         $this->startOrder();
         $this->storePaymentPlan($this->data['payment_plan']);
         $this->storeShippingMethod($this->data['shipping_method']);
-        $this->storePaymentMethod($this->data['payment_method']);
+        $this->storePaymentMethod(
+            $this->getPaymentMethod($this->data)
+        );
         $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address'], $this->data['customer_address']);
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
+        $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFeeAndGrandTotal();
-        $this->storeOrderPayment($this->data['payment_provider_reference']);
+        $this->storeOrderPayment($this->data);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
 
@@ -104,6 +110,11 @@ class CreateOrderService
     protected function storeShippingMethod(array $shippingMethod)
     {
         $this->order->shipping_method_id = $shippingMethod['id'];
+    }
+
+    protected function getPaymentMethod(array $data): array
+    {
+        return ! empty($data['payment_method']) ? $data['payment_method'] : PaymentMethod::getWalletPaymentMethod()->toArray();
     }
 
     protected function storePaymentMethod(array $paymentMethod)
@@ -188,6 +199,11 @@ class CreateOrderService
         $this->order->save();
     }
 
+    protected function storeOrderPayments()
+    {
+        dd($this);
+    }
+
     protected function storeOrderPayment(array $data)
     {
         $orderPaymentData = [
@@ -214,6 +230,13 @@ class CreateOrderService
             $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
             $this->order->save();
+        }
+    }
+
+    protected function storeWalletPaymentAmount(float $balance): void
+    {
+        if ( !empty($balance)) {
+            $this->order->amount_paid_from_wallet = $balance;
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Services\Wallet;
 
 use App\Models\Order;
-use App\Models\OrderPayment;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\WalletPayment;
@@ -83,6 +82,11 @@ class WalletService
         ]);
 
         $wallet->decrement('balance', $amount);
+    }
+
+    public static function validateWalletAmount(float $balance): bool
+    {
+        return Wallet::forCurrentUser()->isActive()->where('balance', '>', $balance)->exists();
     }
 
     public function getWalletPayments(): LengthAwarePaginator

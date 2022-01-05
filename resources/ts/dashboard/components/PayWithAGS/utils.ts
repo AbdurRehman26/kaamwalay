@@ -99,3 +99,11 @@ export function openMetaMaskExtensionLink() {
         );
     }
 }
+
+export function getEthereum() {
+    // @ts-ignore
+    if (window.ethereum) {
+        // @ts-ignore
+        return window.ethereum;
+    }
+}

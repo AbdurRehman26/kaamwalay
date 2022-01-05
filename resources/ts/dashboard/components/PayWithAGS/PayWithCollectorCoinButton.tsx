@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import Web3 from 'web3';
 import contractAbi from '@shared/assets/bscContract.json';
-import { getCurrentContract } from '@dashboard/components/PayWithAGS/utils';
+import { getCurrentContract, getEthereum } from '@dashboard/components/PayWithAGS/utils';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
@@ -45,17 +45,9 @@ export function PayWithCollectorCoinButton() {
     async function handleClick() {
         // @ts-ignore
         const currentNetworkID = await web3.eth.net.getId();
-        // @ts-ignore
-
-        const currentAccounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        // @ts-ignore
-
+        const currentAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });
         const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID));
-        // @ts-ignore
-
         const balanceResult = await contract.methods.balanceOf(currentAccounts[0]).call();
-        // @ts-ignore
-
         const balance = await web3.utils.fromWei(balanceResult, 'ether');
 
         if (balance <= grandTotal) {
@@ -67,7 +59,6 @@ export function PayWithCollectorCoinButton() {
             console.log(getRecipientWalletFromNetwork(currentNetworkID), 'wallet wallet ');
             console.log(currentNetworkID, 'currentNetworkID');
             const tx = {
-                // @ts-ignore
                 from: currentAccounts[0],
                 data: contract.methods
                     .transfer(getRecipientWalletFromNetwork(currentNetworkID), web3.utils.toWei(String(totalInAGS)))

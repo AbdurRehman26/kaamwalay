@@ -10,7 +10,7 @@ import Chip from '@mui/material/Chip';
 import contractAbi from '@shared/assets/bscContract.json';
 import Web3 from 'web3';
 import Alert from '@mui/material/Alert';
-import { networksMap, shortenWalletAddress, openMetaMaskExtensionLink, supportedNetworks } from './utils';
+import { networksMap, shortenWalletAddress, openMetaMaskExtensionLink, supportedNetworks, getEthereum } from './utils';
 
 const useStyles = makeStyles(
     () => {
@@ -59,6 +59,24 @@ enum metamaskStatuses {
 
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
+
+function getCurrentContract(currentNetworkId: number) {
+    if (supportedNetworks.includes(currentNetworkId)) {
+        return {
+            // ETH MainNet
+            1: '0x667fd83e24ca1d935d36717d305d54fa0cac991c',
+            // ETH TestNet Rinkeby
+            4: '0x23863db3e66d94dba2a2ae157de8082cf772b115',
+            // BSC MainNet
+            56: '0x73ffdf2d2afb3def5b10bf967da743f2306a51db',
+            // BSC TestNet
+            97: '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
+        }[currentNetworkId];
+    } else {
+        return '';
+    }
+}
+
 export function AGSPaymentDetailsContainers() {
     const dispatch = useAppDispatch();
     const classes = useStyles();
@@ -68,24 +86,7 @@ export function AGSPaymentDetailsContainers() {
     const [agsBalance, setAgsBalance] = useState(0);
     let detailsChildren;
 
-    function getCurrentContract(currentNetworkId: number) {
-        if (supportedNetworks.includes(currentNetworkId)) {
-            return {
-                // ETH MainNet
-                1: '0x667fd83e24ca1d935d36717d305d54fa0cac991c',
-                // ETH TestNet Rinkeby
-                4: '0x23863db3e66d94dba2a2ae157de8082cf772b115',
-                // BSC MainNet
-                56: '0x73ffdf2d2afb3def5b10bf967da743f2306a51db',
-                // BSC TestNet
-                97: '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-            }[currentNetworkId];
-        } else {
-            return '';
-        }
-    }
-
-    const updateAgsBalance = useCallback(async () => {
+    const updateAgsBalance = useCallback(async (walletAddress: string) => {
         const currentNetworkID = await web3.eth.net.getId();
         const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID));
         const result = await contract.methods.balanceOf(walletAddress).call();
@@ -95,8 +96,7 @@ export function AGSPaymentDetailsContainers() {
     }, []);
 
     const handleMetamaskConnect = useCallback(async () => {
-        // @ts-ignore
-        const metamaskAccounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const metamaskAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });
         if (metamaskAccounts.length > 0) {
             setSelectedAccount(metamaskAccounts[0]);
             setMetamaskStatus(metamaskStatuses.connected);
@@ -148,8 +148,7 @@ export function AGSPaymentDetailsContainers() {
         );
     }
 
-    // @ts-ignore
-    if (!window.ethereum) {
+    if (!getEthereum()) {
         detailsChildren = (
             <Box className={classes.metamaskInfo}>
                 <Avatar
@@ -172,14 +171,10 @@ export function AGSPaymentDetailsContainers() {
 
     useEffect(() => {
         async function checkIfMetamaskIsConnected() {
-            // Check if metamask is installed
-            // @ts-ignore
-            if (!window.ethereum) {
+            if (!getEthereum()) {
                 setMetamaskStatus(metamaskStatuses.notInstalled);
                 return;
             }
-
-            // Check if metamask is connected
             // @ts-ignore
             if (window.ethereum.selectedAddress) {
                 setMetamaskStatus(metamaskStatuses.connected);
@@ -191,8 +186,7 @@ export function AGSPaymentDetailsContainers() {
         checkIfMetamaskIsConnected();
     }, [dispatch, metamaskStatus, handleMetamaskConnect]);
 
-    // @ts-ignore
-    if (window.ethereum) {
+    if (getEthereum()) {
         // @ts-ignore
         window.ethereum.on('accountsChanged', (accounts) => {
             if (accounts.length > 0) {
@@ -203,8 +197,7 @@ export function AGSPaymentDetailsContainers() {
             }
         });
 
-        // @ts-ignore
-        window.ethereum.on('chainChanged', (chainId) => {
+        getEthereum().on('chainChanged', (chainId: number) => {
             window.location.reload();
         });
     }
@@ -224,7 +217,6 @@ export function AGSPaymentDetailsContainers() {
                     </Alert>
                 ) : null}
             </Box>
-            {/* @ts-ignore*/}
             <Box className={classes.detailsContainer}>{detailsChildren}</Box>
         </Paper>
     );

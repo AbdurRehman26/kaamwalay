@@ -11,13 +11,13 @@ class WalletService
 {
     protected const TRANSACTIONS_PER_PAGE = 15;
 
-    public function createWallet(array $attributes)
+    public function createWallet(array $attributes): void
     {
         $wallet = new Wallet($attributes);
         $wallet->save();
     }
 
-    public function processTransaction(int $walletId, float $amount, string $reason, int $userId, ?int $orderId)
+    public function processTransaction(int $walletId, float $amount, string $reason, int $userId, ?int $orderId): void
     {
         $wallet = Wallet::find($walletId);
 
@@ -30,9 +30,9 @@ class WalletService
         };
     }
 
-    private function processRefund(Wallet $wallet, float $amount, int $userId, ?int $orderId)
+    private function processRefund(Wallet $wallet, float $amount, int $userId, ?int $orderId): void
     {
-        $order = Order::first($orderId);
+        $order = Order::find($orderId);
 
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
@@ -46,9 +46,9 @@ class WalletService
         $wallet->increment('balance', $amount);
     }
 
-    private function processOrderPayment($wallet, float $amount, ?int $orderId)
+    private function processOrderPayment(Wallet $wallet, float $amount, ?int $orderId): void
     {
-        $order = Order::first($orderId);
+        $order = Order::find($orderId);
 
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
@@ -62,7 +62,7 @@ class WalletService
         $wallet->decrement('balance', $amount);
     }
 
-    private function processWalletPayment(Wallet $wallet, float $amount)
+    private function processWalletPayment(Wallet $wallet, float $amount): void
     {
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
@@ -76,7 +76,7 @@ class WalletService
         $wallet->increment('balance', $amount);
     }
 
-    private function processCustomerWalletCredit(Wallet $wallet, float $amount, int $userId)
+    private function processCustomerWalletCredit(Wallet $wallet, float $amount, int $userId): void
     {
         WalletTransaction::create([
             'wallet_id' => $wallet->id,

@@ -57,16 +57,16 @@ class StoreOrderRequest extends FormRequest
             'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
             'payment_method' => [
                 Rule::requiredIf(empty($this->payment_by_wallet)),
-                'array'
+                'array',
             ],
             'payment_method.id' => [
                 Rule::requiredIf(empty($this->payment_by_wallet)),
                 'integer',
-                'exists:payment_methods,id'
+                'exists:payment_methods,id',
             ],
             'payment_by_wallet' => [
                 Rule::requiredIf(empty($this->payment_method)),
-                'numeric'
+                'numeric',
             ],
             'payment_provider_reference' => 'nullable|array',
             'payment_provider_reference.id' => 'nullable|string',

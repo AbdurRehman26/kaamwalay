@@ -11,7 +11,7 @@ class WalletAmountGrandTotalValidator
     {
         if (
             ($order->paymentMethod->isWallet() && $order->grand_total !== $amount) ||
-            (!$order->paymentMethod->isWallet() && $amount >= $order->grand_total)
+            (! $order->paymentMethod->isWallet() && $amount >= $order->grand_total)
         ) {
             throw new WalletBalanceGreaterThanOrderTotalException;
         }

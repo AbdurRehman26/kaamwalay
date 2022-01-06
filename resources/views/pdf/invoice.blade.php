@@ -382,7 +382,7 @@
                             @if(! empty($order->pm_discounted_amount))
                                 <tr class="info-line">
                                     <td class="info-title">
-                                        AGS Discount:
+                                        Payment Method Discount:
                                     </td>
                                     <td class="info-content">
                                         -${{number_format($order->pm_discounted_amount, 2)}}

@@ -18,7 +18,15 @@ class CollectorCoinService
     // Status Values
     // 0: Fail
     // 1: Completed
+    
+    /**
+     * @var Web3
+     */
     protected $web3;
+
+    /**
+     * @var int
+     */
     protected $networkId;
 
     public function __construct(int $networkId)
@@ -61,7 +69,7 @@ class CollectorCoinService
     {
         try {
             $transactionData = $this->getTransaction($data['transaction_hash']);
-            //Get AGS amount from USD (Order grand total)
+            //Get Collector Coin amount from USD (Order grand total)
             $response = json_decode($order->firstOrderPayment->response, true);
             $data['amount'] = $response['amount'];
 
@@ -87,8 +95,6 @@ class CollectorCoinService
         } catch (Exception $e) {
             return ['message' => 'Unable to handle your request at the moment.'];
         }
-
-        return ['message' => 'Unable to handle your request at the moment.'];
     }
 
     public function verify(Order $order): bool | array
@@ -100,9 +106,9 @@ class CollectorCoinService
         }
     }
 
-    public function getAgsPriceFromUsd(float $value): float
+    public function getCollectorCoinPriceFromUsd(float $value): float
     {
-        $ags = 0.0;
+        $collectorCoin = 0.0;
         $divider = 1;
 
         $baseUrl = 'https://api.coingecko.com/api/v3/simple/token_price';
@@ -112,7 +118,7 @@ class CollectorCoinService
             $divider = config('configuration.keys.web3_configurations.testnet_token_value', 1);
         }
 
-        $web3BscToken = $networkData['ags_token'];
+        $web3BscToken = $networkData['collector_coin_token'];
         if ($this->networkId === 56) { //Is BSC
             $response = Http::get($baseUrl . '/binance-smart-chain?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
 
@@ -123,9 +129,9 @@ class CollectorCoinService
             $divider = $response->json()[$web3BscToken]['usd'];
         }
 
-        $ags = $value / $divider;
+        $collectorCoin = $value / $divider;
 
-        return round($ags, 2);
+        return round($collectorCoin, 2);
     }
 
     public function calculateFee(OrderPayment $orderPayment): float
@@ -146,11 +152,6 @@ class CollectorCoinService
         } else {
             return $this->validateTransactionIsSuccessful($transactionHash);
         }
-
-        return [
-            'transaction_hash' => $transactionHash,
-            'status' => 'processing',
-        ];
     }
 
     protected function validateTransactionIsSuccessful(string $transactionHash): array
@@ -183,7 +184,7 @@ class CollectorCoinService
     protected function validateTransaction(array $data, array $transactionData): bool
     {
         //Verify that transaction is going to correct destination and amount is between 2% tange
-        if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->networkId. '.ags_wallet'))
+        if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->networkId. '.collector_coin_wallet'))
         || $transactionData['token_amount'] < $data['amount'] * 0.98
         || $transactionData['token_amount'] > $data['amount'] * 1.02) {
             throw new IncorrectOrderPayment;

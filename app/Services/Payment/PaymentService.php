@@ -27,7 +27,7 @@ class PaymentService
     protected array $providers = [
         'stripe' => StripeService::class,
         'paypal' => PaypalService::class,
-        'ags' => CollectorCoinService::class,
+        'collector_coin' => CollectorCoinService::class,
     ];
 
     public function __construct(
@@ -39,7 +39,7 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        if ($this->order->paymentMethod->code === 'ags') {
+        if ($this->order->paymentMethod->code === 'collector_coin') {
             $data = resolve($this->providers[
                 $this->order->paymentMethod->code
             ], [
@@ -55,8 +55,8 @@ class PaymentService
             return $data;
         }
 
-        // This updates should only be done if the payment method is not Collector Coin (AGS)
-        if (! empty($data['success']) && $this->order->paymentMethod->code !== 'ags') {
+        // This updates should only be done if the payment method is not Collector Coin
+        if (! empty($data['success']) && $this->order->paymentMethod->code !== 'collector_coin') {
             $this->calculateAndSaveFee($order);
             $this->updateOrderStatus();
         }
@@ -81,7 +81,7 @@ class PaymentService
         return $data;
     }
 
-    public function verifyAgs(Order $order): array
+    public function verifyCollectorCoin(Order $order): array
     {
         $this->hasProvider($order);
 

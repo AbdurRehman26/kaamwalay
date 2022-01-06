@@ -22,7 +22,7 @@ class OrderPaymentResource extends BaseResource
 
         if ($this->order->paymentMethod->code === 'paypal' && $this->type !== OrderPayment::TYPE_REFUND) {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
-        } elseif ($this->order->paymentMethod->code === 'ags') {
+        } elseif ($this->order->paymentMethod->code === 'collector_coin') {
             return $this->collectorCoinData(json_decode($this->response, associative: true) ?? []);
         }
 

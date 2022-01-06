@@ -65,12 +65,12 @@ class OrderPaymentController extends Controller
         ], Response::HTTP_OK);
     }
 
-    public function verifyAgs(Order $order): JsonResponse
+    public function verifyCollectorCoin(Order $order): JsonResponse
     {
         $this->authorize('view', $order);
 
         try {
-            $result = $this->paymentService->verifyAgs($order);
+            $result = $this->paymentService->verifyCollectorCoin($order);
 
             return new JsonResponse($result, Response::HTTP_OK);
         } catch (NotSupportedPaymentNetwork $e) {

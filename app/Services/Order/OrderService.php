@@ -78,15 +78,15 @@ class OrderService
         return $data;
     }
 
-    public function calculateAgsPrice(Order $order, int $network): float
+    public function calculateCollectorCoinPrice(Order $order, int $network): float
     {
-        $agsPrice = (new CollectorCoinService($network))->getAgsPriceFromUsd($order->grand_total);
+        $collectorCoinPrice = (new CollectorCoinService($network))->getCollectorCoinPriceFromUsd($order->grand_total);
 
         $orderPayment = $order->firstOrderPayment;
-        $orderPayment->response = json_encode(['amount' => $agsPrice, 'network' => $network]);
+        $orderPayment->response = json_encode(['amount' => $collectorCoinPrice, 'network' => $network]);
         $orderPayment->update();
 
-        return $agsPrice;
+        return $collectorCoinPrice;
     }
 
     protected function getCardFullName(CardProduct $card): string

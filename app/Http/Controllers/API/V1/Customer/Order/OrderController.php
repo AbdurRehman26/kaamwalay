@@ -82,16 +82,16 @@ class OrderController extends Controller
         }
     }
 
-    public function calculateAgsPrice(Request $request, Order $order): JsonResponse
+    public function calculateCollectorCoinPrice(Request $request, Order $order): JsonResponse
     {
-        $this->authorize('calculateAgs', $order);
+        $this->authorize('calculateCollectorCoin', $order);
 
         try {
-            $agsPrice = $this->orderService->calculateAgsPrice($order, $request->network ?? 1);
+            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $request->network ?? 1);
 
             return new JsonResponse(
                 [
-                    'value' => $agsPrice,
+                    'value' => $collectorCoinPrice,
                 ],
                 200
             );

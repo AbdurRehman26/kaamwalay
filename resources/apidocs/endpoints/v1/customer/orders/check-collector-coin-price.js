@@ -1,6 +1,6 @@
 /**
- * @api {get} /v1/customer/orders/{order}/ags Calculate AGS Price
- * @apiName Calculate AGS Price for order
+ * @api {get} /v1/customer/orders/{order}/collector-coin Calculate Collector Coin Price
+ * @apiName Calculate Collector Coin Price for order
  * @apiGroup Customer-Orders
  *
  * @apiVersion 1.0.0
@@ -10,7 +10,7 @@
  * 
  * @apiParam {Integer} id Order unique ID
  *
- * @apiSuccess {float} value AGS equivalent for order total value
+ * @apiSuccess {float} value Collector Coin equivalent for order total value
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK

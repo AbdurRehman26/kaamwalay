@@ -38,7 +38,7 @@ class InvoiceService
         if ($paymentResponse) {
             if ($order->paymentMethod->code === 'paypal') {
                 $orderPayment = json_decode(json_encode($this->paypalData(json_decode($orderPayment->response, associative: true) ?? [])));
-            } elseif ($order->paymentMethod->code === 'ags') {
+            } elseif ($order->paymentMethod->code === 'collector_coin') {
                 $orderPayment = json_decode(json_encode([
                     'transaction' => [
                         'amount' => $paymentResponse->amount,

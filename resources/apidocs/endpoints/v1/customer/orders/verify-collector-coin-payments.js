@@ -1,6 +1,6 @@
 /**
- * @api {post} /v1/customer/orders/{order}/payments/verify-ags Verify AGS Order Payment
- * @apiName Verify Order Payment For AGS Payments
+ * @api {post} /v1/customer/orders/{order}/payments/verify-collector-coin Verify AGS Order Payment
+ * @apiName Verify Order Payment For Collector Coin Payments
  * @apiGroup Customer-Orders
  *
  * @apiVersion 1.0.0

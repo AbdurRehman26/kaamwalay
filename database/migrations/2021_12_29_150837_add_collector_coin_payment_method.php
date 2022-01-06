@@ -15,7 +15,7 @@ class AddCollectorCoinPaymentMethod extends Migration
     {
         DB::table('payment_methods')->insert([
             [
-                'code' => 'ags',
+                'code' => 'collector_coin',
                 'name' => 'Collector Coin (AGS)',
                 'created_at' => new \Datetime(),
                 'updated_at' => new \Datetime(),

@@ -10,7 +10,7 @@ beforeEach(function () {
     $this->user = User::factory()->create();
 });
 
-it('can verfy completion of AGS paid order', function () {
+it('can verfy completion of collector coin paid order', function () {
     config([
         'configuration.keys.web3_configurations.supported_networks' => '97',
     ]);
@@ -28,8 +28,8 @@ it('can verfy completion of AGS paid order', function () {
                 'rpc_urls' => ['https://data-seed-prebsc-1-s1.binance.org:8545'],
                 'block_explorer_urls' => ['https://testnet.bscscan.com'],
                 'is_testnet' => true,
-                'ags_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                'ags_wallet' => env('TEST_WALLET'),
+                'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
+                'collector_coin_wallet' => env('TEST_WALLET'),
             ],
         ],
         ]);
@@ -37,7 +37,7 @@ it('can verfy completion of AGS paid order', function () {
     $bscTestTransactionHash = '0x7ee79769e935f914ec5ff3ccc10d767bf5800bc506f2df8e0c274034a3d61a52';
     $this->actingAs($this->user);
     $paymentMethod = PaymentMethod::factory()->create([
-        'code' => 'ags',
+        'code' => 'collector_coin',
     ]);
     $order = Order::factory()->for($this->user)->create([
         'payment_method_id' => $paymentMethod->id,
@@ -55,7 +55,7 @@ it('can verfy completion of AGS paid order', function () {
         'payment_method_id' => $paymentMethod->id,
     ]);
 
-    $response = $this->postJson('/api/v1/customer/orders/' . $order->id . '/payments/verify-ags');
+    $response = $this->postJson('/api/v1/customer/orders/' . $order->id . '/payments/verify-collector-coin');
 
     $response->assertStatus(200);
     $response->assertJsonStructure([

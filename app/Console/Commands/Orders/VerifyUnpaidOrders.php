@@ -16,14 +16,14 @@ class VerifyUnpaidOrders extends Command
      *
      * @var string
      */
-    protected $signature = 'orders:verify-unpaid-ags {--email=}';
+    protected $signature = 'orders:verify-unpaid-collector-coin {--email=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Verify transaction status for unpaid AGS orders';
+    protected $description = 'Verify transaction status for unpaid Collector Coin orders';
 
     /**
      * Create a new command instance.
@@ -47,14 +47,14 @@ class VerifyUnpaidOrders extends Command
         auth()->login($user);
 
         $unpaidOrders = Order::where('order_status_id', OrderStatus::PAYMENT_PENDING)->whereHas('paymentMethod', function ($query) {
-            return $query->where('code', 'ags');
+            return $query->where('code', 'collector_coin');
         })->get();
 
         foreach ($unpaidOrders as $unpaidOrder) {
             $this->info("Processing Order: $unpaidOrder->id");
 
             try {
-                $paymentService->verifyAgs($unpaidOrder);
+                $paymentService->verifyCollectorCoin($unpaidOrder);
             } catch (NotSupportedPaymentNetwork $nsn) {
             }
         }

@@ -128,7 +128,7 @@ test('an order needs data', function () {
         'shipping_address' => 'The shipping address field is required.',
         'billing_address' => 'The billing address field is required.',
         'shipping_method' => 'The shipping method field is required.',
-        'payment_method' => 'The payment method field is required unless payment by wallet is in null.'
+        'payment_method' => 'The payment method field is required unless payment by wallet is in null.',
     ]);
 });
 

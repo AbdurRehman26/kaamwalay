@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\WalletTransactionType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +28,6 @@ class WalletTransaction extends Model
         'is_success',
     ];
     protected $casts = [
-        'type' => WalletTransactionType::class,
         'amount' => 'float',
         'is_success' => 'boolean',
     ];

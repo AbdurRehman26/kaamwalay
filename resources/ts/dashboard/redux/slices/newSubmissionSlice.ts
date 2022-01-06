@@ -284,7 +284,9 @@ export const getTotalInAGS = createAsyncThunk(
     'newSubmission/getTotalInAGS',
     async (input: { orderID: number; chainID: number }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/ags?network=${input?.chainID}`);
+        const endpoint = apiService.createEndpoint(
+            `customer/orders/${input.orderID}/collector-coin?network=${input?.chainID}`,
+        );
         const response = await endpoint.get('');
         return response.data.value;
     },
@@ -348,7 +350,7 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
     'newSubmission/getCollectorCoinPaymentStatus',
     async (input: { orderID: number }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/verify-ags`);
+        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/verify-collector-coin`);
         const response = await endpoint.post('');
         return response.data;
     },

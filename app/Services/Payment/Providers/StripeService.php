@@ -9,7 +9,6 @@ use App\Services\Payment\Providers\Interfaces\PaymentProviderServiceFeeInterface
 use App\Services\Payment\Providers\Interfaces\PaymentProviderServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
@@ -86,7 +85,7 @@ class StripeService implements PaymentProviderServiceInterface, PaymentProviderS
                 'request' => $paymentData,
                 'response' => $response->toArray(),
                 'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
-                'amount' => $order->grand_total,
+                'amount' => $order->grand_total_to_be_paid,
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => $paymentData['additional_data']['description'],
             ];
@@ -131,7 +130,7 @@ class StripeService implements PaymentProviderServiceInterface, PaymentProviderS
             $order->lastOrderPayment->update([
                 'response' => json_encode($paymentIntent->toArray()),
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
-                'amount' => $order->grand_total,
+                'amount' => $order->grand_total_to_be_paid,
                 'notes' => "Payment for Order # {$order->order_number}",
             ]);
 

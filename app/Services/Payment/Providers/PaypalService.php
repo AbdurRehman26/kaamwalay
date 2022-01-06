@@ -45,7 +45,7 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderS
             "purchase_units" => [[
                 "reference_id" => $order->order_number,
                 "amount" => [
-                    "value" => $order->grand_total,
+                    "value" => $order->grand_total_to_be_paid,
                     "currency_code" => "USD",
                 ],
             ]],
@@ -88,13 +88,13 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderS
             $captureStatus = $data['status'];
 
             if (
-                $paymentIntent['amount']['value'] == $order->grand_total
+                $paymentIntent['amount']['value'] == $order->grand_total_to_be_paid
                 && $captureStatus === 'COMPLETED'
             ) {
                 $order->lastOrderPayment->update([
                     'payment_provider_reference_id' => $data['purchase_units'][0]['payments']['captures'][0]['id'],
                     'response' => json_encode($data),
-                    'amount' => $order->grand_total,
+                    'amount' => $order->grand_total_to_be_paid,
                     'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                     'notes' => 'Paypal Payment for ' . $order->order_number,
                 ]);

@@ -83,7 +83,10 @@ class Order extends Model
         'refund_total' => 'float',
     ];
 
-    protected $appends = ['grand_total_cents'];
+    protected $appends = [
+        'grand_total_cents',
+        'grand_total_to_be_paid'
+    ];
 
     public static function getAllowedAdminIncludes(): array
     {
@@ -232,7 +235,12 @@ class Order extends Model
 
     public function getGrandTotalCentsAttribute(): int
     {
-        return $this->grand_total * 100;
+        return ($this->grand_total - $this->amount_paid_from_wallet) * 100;
+    }
+
+    public function getGrandTotalToBePaidAttribute(): int
+    {
+        return $this->grand_total - $this->amount_paid_from_wallet;
     }
 
     public function getTotalGradedItems(): int

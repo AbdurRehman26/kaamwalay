@@ -84,9 +84,9 @@ class CreateOrderService
         $this->storeOrderItems($this->data['items']);
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
-        $this->storeServiceFeeAndGrandTotal();
+        $this->storeServiceFee();
         $this->storePaymentMethodDiscount($this->data['payment_method']);
-        $this->updateGrandTotal();
+        $this->storeGrandTotal();
         $this->storeOrderPayment($this->data['payment_provider_reference']);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
@@ -180,11 +180,16 @@ class CreateOrderService
         $this->order->save();
     }
 
-    protected function storeServiceFeeAndGrandTotal(): void
+    protected function storeServiceFee(): void
     {
         $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
+        $this->order->save();
+    }
+
+    protected function storeGrandTotal(): void
+    {
         $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount;
+        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->pm_discounted_amount;
 
         GrandTotalValidator::validate($this->order);
 
@@ -225,17 +230,8 @@ class CreateOrderService
         $paymentMethod = PaymentMethod::find($paymentMethod['id']);
 
         if ($paymentMethod->code === 'ags') {
-            $this->order->pm_discounted_amount = round($this->order->grand_total * config('configuration.keys.collector_coin_discount_percentage.value') / 100, 2);
+            $this->order->pm_discounted_amount = round($this->order->service_fee * config('configuration.keys.collector_coin_discount_percentage.value') / 100, 2);
             $this->order->save();
         }
-    }
-
-    protected function updateGrandTotal(): void
-    {
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->pm_discounted_amount;
-
-        GrandTotalValidator::validate($this->order);
-
-        $this->order->save();
     }
 }

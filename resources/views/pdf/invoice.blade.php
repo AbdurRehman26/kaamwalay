@@ -195,10 +195,16 @@
         .info-box-content table{
             width: 100%;
         }
-        .info-line .info-title{
-            width: 83.5%;
+        .info-line {
+            font-size: 12px;
         }
-
+        .info-content {
+            font-size: 11px;
+            text-align: right;
+        }
+        .info-line .info-title{
+            width: 70%;
+        }
     </style>
 </head>
 <body>
@@ -370,6 +376,16 @@
                                     </td>
                                     <td class="info-content">
                                         -${{number_format($order->discounted_amount, 2)}}
+                                    </td>
+                                </tr>
+                            @endif
+                            @if(! empty($order->pm_discounted_amount))
+                                <tr class="info-line">
+                                    <td class="info-title">
+                                        AGS Discount:
+                                    </td>
+                                    <td class="info-content">
+                                        -${{number_format($order->pm_discounted_amount, 2)}}
                                     </td>
                                 </tr>
                             @endif

@@ -20,7 +20,6 @@ class CouponApplicableFactory extends Factory
             'label' => Str::title($this->faker->word()),
             'description' => $this->faker->sentence(),
             'is_active' => $this->faker->boolean(),
-            'api_suffix' => ''
         ];
     }
 }

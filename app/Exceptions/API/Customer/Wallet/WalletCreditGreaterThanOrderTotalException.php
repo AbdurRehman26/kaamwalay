@@ -12,7 +12,7 @@ class WalletCreditGreaterThanOrderTotalException extends Exception
     /**
      * @var string
      */
-    protected $message = 'You do not have the entered amount in your wallet.';
+    protected $message = 'Entered amount must be equal or less than order amount.';
 
     /**
      * @var int

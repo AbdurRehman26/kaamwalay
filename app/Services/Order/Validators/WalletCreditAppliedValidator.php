@@ -3,7 +3,7 @@
 namespace App\Services\Order\Validators;
 
 use App\Exceptions\API\Customer\Wallet\AmountLessThanWalletAmountException;
-use App\Services\Wallet\WalletService;
+use App\Models\Wallet;
 
 class WalletCreditAppliedValidator
 {
@@ -11,7 +11,7 @@ class WalletCreditAppliedValidator
     {
         if (!empty($data['payment_by_wallet'])) {
             throw_unless(
-                WalletService::validateWalletAmount(
+                Wallet::validateWalletAmount(
                     $data['payment_by_wallet']
                 ),
                 AmountLessThanWalletAmountException::class

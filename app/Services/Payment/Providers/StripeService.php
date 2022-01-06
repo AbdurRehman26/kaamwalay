@@ -5,8 +5,6 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
-use App\Services\Payment\Providers\Interfaces\PaymentProviderServiceFeeInterface;
-use App\Services\Payment\Providers\Interfaces\PaymentProviderServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Exceptions\IncompletePayment;
@@ -17,7 +15,7 @@ use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
 use Stripe\SetupIntent;
 
-class StripeService implements PaymentProviderServiceInterface, PaymentProviderServiceFeeInterface
+class StripeService implements PaymentProviderServiceInterface
 {
     // stripe charges 2.9% x (amount) + 30cents
     public const STRIPE_FEE_PERCENTAGE = 0.029;

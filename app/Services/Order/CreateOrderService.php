@@ -43,6 +43,9 @@ class CreateOrderService
      */
     public function create(array $data): Order
     {
+        unset($data['payment_method'], $data['payment_provider_reference']);
+
+        $data['payment_by_wallet'] = 34;
         $this->data = $data;
 
         try {

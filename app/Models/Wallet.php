@@ -63,6 +63,11 @@ class Wallet extends Model
         event(new WalletCreated($attributes));
     }
 
+    public static function validateWalletAmount(float $balance): bool
+    {
+        return Wallet::forCurrentUser()->isActive()->where('balance', '>', $balance)->exists();
+    }
+
     public function makeTransaction(float $amount, string $reason, int $userId, ?Order $order = null)
     {
         event(new TransactionHappened(

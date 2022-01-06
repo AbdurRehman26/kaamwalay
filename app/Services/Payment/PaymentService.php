@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
+use App\Services\Payment\Providers\WalletService;
 use Throwable;
 
 class PaymentService
@@ -28,6 +29,7 @@ class PaymentService
     protected array $providers = [
         'stripe' => StripeService::class,
         'paypal' => PaypalService::class,
+        'wallet' => WalletService::class,
     ];
 
     public function __construct(
@@ -49,6 +51,16 @@ class PaymentService
 
         if (! empty($data['success'])) {
             $this->calculateAndSaveFee($order);
+
+            /* Partial Payments */
+            if ($this->checkForPartialPayment()){
+
+                resolve($this->providers[
+                    'wallet'
+                ])->charge($this->order);
+
+            }
+
             $this->updateOrderStatus();
         }
 
@@ -79,7 +91,7 @@ class PaymentService
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
-            'amount' => $data['amount'] ?? $this->order->grand_total,
+            'amount' => $data['amount'] ?? $this->order->grand_total_to_be_paid,
             'type' => $data['type'],
             'notes' => $data['notes'] ?? '',
         ]);
@@ -203,5 +215,10 @@ class PaymentService
             'type' => OrderPayment::TYPE_REFUND,
             'notes' => $request['notes'],
         ];
+    }
+
+    protected function checkForPartialPayment(): bool
+    {
+        return !$this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet;
     }
 }

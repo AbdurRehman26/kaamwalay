@@ -84,11 +84,6 @@ class WalletService
         $wallet->decrement('balance', $amount);
     }
 
-    public static function validateWalletAmount(float $balance): bool
-    {
-        return Wallet::forCurrentUser()->isActive()->where('balance', '>', $balance)->exists();
-    }
-
     public function getWalletPayments(): LengthAwarePaginator
     {
         /* @var User $user */

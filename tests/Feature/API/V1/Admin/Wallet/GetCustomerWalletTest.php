@@ -2,9 +2,7 @@
 
 use App\Models\User;
 use App\Models\Wallet;
-use App\Models\WalletTransaction;
 
-use Illuminate\Database\Eloquent\Factories\Sequence;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;

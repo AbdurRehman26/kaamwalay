@@ -4,7 +4,6 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;

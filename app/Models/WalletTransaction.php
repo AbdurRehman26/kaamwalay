@@ -22,6 +22,7 @@ class WalletTransaction extends Model
         'initiated_by',
         'order_id',
         'wallet_payment_id',
+        'amount',
         'type',
         'reason',
         'is_success',

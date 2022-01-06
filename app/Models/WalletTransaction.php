@@ -30,6 +30,7 @@ class WalletTransaction extends Model
     protected $casts = [
         'type' => WalletTransactionType::class,
         'reason' => WalletTransactionReason::class,
+        'amount' => 'float',
         'is_success' => 'boolean',
     ];
 }

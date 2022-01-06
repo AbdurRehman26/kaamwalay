@@ -58,5 +58,7 @@ class VerifyUnpaidOrders extends Command
             } catch (NotSupportedPaymentNetwork $nsn) {
             }
         }
+
+        return 0;
     }
 }

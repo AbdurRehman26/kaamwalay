@@ -18,7 +18,15 @@ class CollectorCoinService
     // Status Values
     // 0: Fail
     // 1: Completed
+    
+    /**
+     * @var Web3
+     */
     protected $web3;
+
+    /**
+     * @var int
+     */
     protected $networkId;
 
     public function __construct(int $networkId)
@@ -88,7 +96,6 @@ class CollectorCoinService
             return ['message' => 'Unable to handle your request at the moment.'];
         }
 
-        return ['message' => 'Unable to handle your request at the moment.'];
     }
 
     public function verify(Order $order): bool | array
@@ -146,11 +153,6 @@ class CollectorCoinService
         } else {
             return $this->validateTransactionIsSuccessful($transactionHash);
         }
-
-        return [
-            'transaction_hash' => $transactionHash,
-            'status' => 'processing',
-        ];
     }
 
     protected function validateTransactionIsSuccessful(string $transactionHash): array

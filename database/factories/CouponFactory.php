@@ -21,7 +21,7 @@ class CouponFactory extends Factory
     public function definition()
     {
         return [
-            'created_by' => User::factory()->create()->id,
+            'user_id' => User::factory()->create()->id,
             'coupon_applicable_id' => CouponApplicable::factory(),
             'coupon_status_id' => CouponStatus::factory(),
             'code' => Str::random(10),

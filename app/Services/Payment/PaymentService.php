@@ -72,6 +72,12 @@ class PaymentService
         ])->verify($this->order, $paymentIntentId);
 
         if ($data) {
+
+            /* Partial Payments */
+            if ($this->checkForPartialPayment()) {
+                $this->updatePartialPayment();
+            }
+
             $this->calculateAndSaveFee($order);
 
             return $this->updateOrderStatus();

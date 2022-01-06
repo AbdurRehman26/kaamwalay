@@ -43,6 +43,7 @@ class CreateOrderService
      */
     public function create(array $data): Order
     {
+        $data['payment_by_wallet'] = 10;
         $this->data = $data;
 
         try {

@@ -29,7 +29,10 @@ class WalletTransactionResource extends BaseResource
 
     private function getTransactionDescription(User $user): string
     {
-        if ($user->isAdmin() && ! $user->is($user?->wallet?->user)) {
+        if (
+            $user->isAdmin()
+            && (! $user->isCustomer() || ! $user->is($user->wallet->user ?? null))
+        ) {
             return $user->getFullName() . ' added to user\'s wallet';
         }
 

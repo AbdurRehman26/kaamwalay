@@ -11,6 +11,9 @@ use App\Services\Admin\OrderStatusHistoryService;
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {
+
+    Storage::fake('s3');
+
     $this->user = User::factory()->create([
         'stripe_id' => Str::random(25),
     ]);

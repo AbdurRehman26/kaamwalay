@@ -15,8 +15,8 @@
  *        {
  *            "data": [
  *                {
- *                      "date": '2022/01/05',
- *                      "reason": 'AGS credited $50 in your wallet.',
+ *                      "created_at": '2022/01/05',
+ *                      "description": 'AGS credited $50 in your wallet.',
  *                      "amount": 50,
  *                }
  *            ],

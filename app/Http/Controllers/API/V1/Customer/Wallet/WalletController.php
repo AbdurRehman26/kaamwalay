@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Customer\Wallet;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\API\V1\Customer\Wallet\WalletPaymentCollection;
+use App\Http\Resources\API\V1\Admin\Wallet\WalletTransactionCollection;
 use App\Http\Resources\API\V1\Customer\Wallet\WalletResource;
 use App\Models\User;
 use App\Services\Wallet\WalletService;
@@ -22,8 +22,8 @@ class WalletController extends Controller
         return new WalletResource($user->wallet);
     }
 
-    public function getTransactions(): WalletPaymentCollection
+    public function getTransactions(): WalletTransactionCollection
     {
-        return new WalletPaymentCollection($this->walletService->getWalletPayments());
+        return new WalletTransactionCollection($this->walletService->getWalletTransactions());
     }
 }

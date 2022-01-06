@@ -39,8 +39,8 @@ it('gets wallet transactions for logged in user', function () {
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'date',
-                    'reason',
+                    'created_at',
+                    'description',
                     'amount',
                 ],
             ],

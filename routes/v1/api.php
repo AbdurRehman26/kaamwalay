@@ -90,7 +90,7 @@ Route::prefix('customer')->group(function () {
 
 Route::prefix('configurations')->group(function () {
     Route::post('/', [ConfigurationsController::class, 'getConfigurations']);
-    Route::delete('/', [ConTests\Feature\API\V1\Customer\Wallet\WalletTestfigurationsController::class, 'purgeConfigurations'])->middleware('auth');
+    Route::delete('/', [ConfigurationsController::class, 'purgeConfigurations'])->middleware('auth');
 });
 
 Route::prefix('files')->group(function () {

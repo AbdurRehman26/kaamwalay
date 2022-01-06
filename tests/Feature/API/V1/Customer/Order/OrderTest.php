@@ -4,16 +4,19 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Services\Admin\OrderStatusHistoryService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
+use Symfony\Component\HttpFoundation\Response;
 
 uses(WithFaker::class);
 
@@ -367,4 +370,166 @@ test('a customer cannot place order with item declared value greater than schema
 
     $response->assertStatus(400);
     $response->assertJsonStructure(['data' => 'error']);
+});
+
+test('a customer can not pay from wallet if wallet has insufficient balance', function () {
+    $this->actingAs($this->user);
+
+    $this->postJson('/api/v1/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+        'payment_by_wallet' => 10,
+    ])->assertStatus(Response::HTTP_BAD_REQUEST);
+});
+
+test('a customer can place order with partial amount from wallet', function () {
+    $this->actingAs($this->user);
+    Wallet::factory()->create([
+        'user_id' => $this->user->id,
+        'balance' => 50,
+    ]);
+    $walletPayment = (float) 10;
+    $this->postJson('/api/v1/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+        'payment_by_wallet' => $walletPayment,
+    ])
+        ->assertSuccessful()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'order_number',
+                'order_items',
+                'payment_plan',
+                'order_payment',
+                'billing_address',
+                'shipping_address',
+                'shipping_method',
+                'service_fee',
+                'shipping_fee',
+                'grand_total',
+            ],
+        ]);
+
+    $order = Order::first();
+
+    expect($order->lastOrderPayment->amount)->toBe($walletPayment);
 });

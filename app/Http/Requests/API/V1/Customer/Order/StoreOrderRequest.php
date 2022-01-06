@@ -11,6 +11,15 @@ class StoreOrderRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        if (! $this->has('payment_by_wallet')) {
+            $this->merge([
+                'payment_by_wallet' => 0,
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [
@@ -50,7 +59,7 @@ class StoreOrderRequest extends FormRequest
             'payment_provider_reference' => 'nullable|array',
             'payment_provider_reference.id' => 'nullable|string',
             'coupon.code' => 'sometimes|exists:coupons,code',
-            'payment_by_wallet' => 'sometimes|numeric',
+            'payment_by_wallet' => 'required|numeric',
         ];
     }
 }

@@ -13,10 +13,6 @@ class WalletService implements PaymentProviderServiceInterface
     {
         Wallet::validateWalletAmount($this->getAmount($order));
 
-        /*Todo
-        * Fire event to deduct from wallet
-        */
-
         $this->deductAmountFromWallet($order->user->wallet, $order);
 
         return $this->prepareResponseData($order);
@@ -36,7 +32,7 @@ class WalletService implements PaymentProviderServiceInterface
     {
     }
 
-    protected function getAmount(Order $order): int
+    protected function getAmount(Order $order): float
     {
         return $order->amount_paid_from_wallet;
     }

@@ -25,7 +25,7 @@ class OrderPaymentController extends Controller
             'message' => 'Coupon is either expired or invalid.',
         ]));
 
-//        throw_unless($order->isPayable(), OrderNotPayable::class);
+        throw_unless($order->isPayable(), OrderNotPayable::class);
 
         $response = $this->paymentService->charge($order);
 

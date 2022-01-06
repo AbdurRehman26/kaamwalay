@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands\Orders;
 
-use App\Jobs\Admin\Order\CreateOrderLabel;
+use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Services\Admin\Order\OrderLabelService;
 use Illuminate\Console\Command;
 
 class GenerateOrderLabels extends Command
@@ -14,14 +15,14 @@ class GenerateOrderLabels extends Command
      *
      * @var string
      */
-    protected $signature = 'orderLabels:generate {orderNumber? : RG000000001}';
+    protected $signature = 'orders:generate-label {orderNumber? : RG000000001}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate missing order labels for already graded orders';
+    protected $description = 'Generate order labels for already graded orders';
 
     /**
      * Create a new command instance.
@@ -33,31 +34,26 @@ class GenerateOrderLabels extends Command
         parent::__construct();
     }
 
-    public function handle(): int
+    public function handle(OrderLabelService $orderLabelService): int
     {
-        if (! $this->argument('orderNumber')) {
-            $orders = Order::where('order_status_id', '=', OrderStatus::GRADED)->get();
-            foreach ($orders as $order) {
-                if (! $order->orderLabel) {
-                    $this->info('Generating order label for order # ' . $order->order_number);
-                    CreateOrderLabel::dispatch($order);
-                    $this->info('Order label for order # ' . $order->order_number . ' is generated');
-                }
-            }
-        } else {
-            $order = Order::where('order_number', $this->argument('orderNumber'))->first();
+        $ordersQuery = Order::where('order_status_id', '>=', OrderStatus::GRADED);
+        $orderNumber = $this->argument('orderNumber');
 
-            if ($order->order_status_id != OrderStatus::GRADED) {
-                $this->info('Order is not graded yet');
-            } elseif (! $order->orderLabel) {
-                $this->info('Generating order label for order # ' . $order->order_number);
-                CreateOrderLabel::dispatch($order);
-                $this->info('Order label for order # ' . $order->order_number . ' is generated');
-            } else {
-                $this->info('Order Label already exist');
-            }
+        if ($orderNumber) {
+            $ordersQuery->where('order_number', $orderNumber);
+        } else {
+            $ordersQuery->doesntHave('orderLabel');
         }
-        
+
+        $orders = $ordersQuery->get();
+        $this->info("Total {$orders->count()} orders found");
+
+        $orders->each(/*** @throws AgsServiceIsDisabled */ function (Order $order) use ($orderLabelService) {
+            $this->info("Generating label for order # {$order->order_number} ...");
+            $orderLabelService->generateLabel($order);
+            $this->info('Label has been generated.');
+        });
+
         return 0;
     }
 }

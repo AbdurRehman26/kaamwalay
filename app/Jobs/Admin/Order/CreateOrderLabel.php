@@ -2,18 +2,14 @@
 
 namespace App\Jobs\Admin\Order;
 
-use App\Exports\Order\OrdersLabelExport;
+use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Models\Order;
-use App\Models\OrderLabel;
 use App\Services\Admin\Order\OrderLabelService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Maatwebsite\Excel\Facades\Excel;
 
 class CreateOrderLabel implements ShouldQueue
 {
@@ -31,27 +27,12 @@ class CreateOrderLabel implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param  OrderLabelService  $orderLabelService
      * @return void
+     * @throws AgsServiceIsDisabled
      */
-    public function handle(OrderLabelService $orderLabelService)
+    public function handle(OrderLabelService $orderLabelService): void
     {
-        $response = $orderLabelService->getCardLabelData($this->order);
-        $this->saveCardLabelToExcel($response);
-    }
-  
-    protected function saveCardLabelToExcel(array $response): void
-    {
-        $filePath = 'order-labels/' . $this->order->order_number . '_label_' . Str::uuid() . '.xlsx';
-        Excel::store(new OrdersLabelExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
-        $filePathUrl = Storage::disk('s3')->url($filePath);
-        $this->saveCardLabelData($filePathUrl);
-    }
-
-    protected function saveCardLabelData(string $filePathUrl): void
-    {
-        $orderLabel = new OrderLabel();
-        $orderLabel->order_id = $this->order->id;
-        $orderLabel->path = $filePathUrl;
-        $orderLabel->save();
+        $orderLabelService->generateLabel($this->order);
     }
 }

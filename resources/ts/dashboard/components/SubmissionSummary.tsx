@@ -548,9 +548,7 @@ function SubmissionSummary() {
                                     <NumberFormat
                                         value={(
                                             (Number(collectorCoinDiscountPercentage) / 100) *
-                                            (numberOfSelectedCards * serviceLevelPrice +
-                                                shippingFee -
-                                                Number(isCouponApplied ? discountedValue : 0))
+                                            (numberOfSelectedCards * serviceLevelPrice)
                                         ).toFixed(2)}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
@@ -599,17 +597,15 @@ function SubmissionSummary() {
                                     &nbsp;
                                     <NumberFormat
                                         value={
-                                            numberOfSelectedCards * serviceLevelPrice +
-                                            shippingFee -
-                                            Number(isCouponApplied ? discountedValue : 0) -
+                                            numberOfSelectedCards * serviceLevelPrice -
                                             Number(
                                                 paymentMethodID === 3
                                                     ? (Number(collectorCoinDiscountPercentage) / 100) *
-                                                          (numberOfSelectedCards * serviceLevelPrice +
-                                                              shippingFee -
-                                                              Number(isCouponApplied ? discountedValue : 0))
+                                                          (numberOfSelectedCards * serviceLevelPrice)
                                                     : 0,
-                                            )
+                                            ) +
+                                            shippingFee -
+                                            Number(isCouponApplied ? discountedValue : 0)
                                         }
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}

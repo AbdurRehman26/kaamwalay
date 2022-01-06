@@ -19,6 +19,7 @@ const useStyles = makeStyles(
         root: {},
         cards: {
             padding: theme.spacing(2, 0, 3),
+            marginBottom: theme.spacing(7),
         },
     }),
     { name: 'SubmissionsGradeCards' },

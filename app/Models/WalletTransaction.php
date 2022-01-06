@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\WalletTransactionReason;
 use App\Casts\WalletTransactionType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

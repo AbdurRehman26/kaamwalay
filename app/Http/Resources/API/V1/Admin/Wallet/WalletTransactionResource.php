@@ -19,23 +19,22 @@ class WalletTransactionResource extends BaseResource
      */
     public function toArray($request)
     {
+        dump($this->reason);
         return [
             'id' => $this->id,
-            'description' => $this->getTransactionDescription($this->user),
+            'description' => $this->getTransactionDescription($this->reason, $this->user),
             'amount' => $this->amount,
             'created_at' => $this->created_at->toISOString(),
         ];
     }
 
-    private function getTransactionDescription(User $user): string
+    private function getTransactionDescription(string $reason, User $user): string
     {
-        if (
-            $user->isAdmin()
-            && (! $user->isCustomer() || ! $user->is($user->wallet->user ?? null))
-        ) {
-            return $user->getFullName() . ' added to user\'s wallet';
-        }
-
-        return 'Customer added to wallet';
+        return match ($reason) {
+            WalletTransaction::REASON_REFUND => $user->getFullName() . ' refund to customer\'s wallet',
+            WalletTransaction::REASON_ORDER_PAYMENT => 'Customer used credit on a submission',
+            WalletTransaction::REASON_WALLET_CREDIT => $user->getFullName() . ' credit to customer\'s wallet',
+            default => 'Customer added to to wallet',
+        };
     }
 }

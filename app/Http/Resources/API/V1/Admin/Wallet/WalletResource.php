@@ -19,6 +19,7 @@ class WalletResource extends BaseResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'name' => $this->user->getFullName(),
             'balance' => $this->balance,
         ];

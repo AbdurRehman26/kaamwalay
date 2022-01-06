@@ -9,7 +9,7 @@ class WalletTransactionReason implements CastsAttributes
 {
     public function get($model, string $key, $value, array $attributes)
     {
-        return match ($value) {
+        return match ((int) $value) {
             1 => WalletTransaction::REASON_ORDER_PAYMENT,
             2 => WalletTransaction::REASON_REFUND,
             3 => WalletTransaction::REASON_WALLET_CREDIT,

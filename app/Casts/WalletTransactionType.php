@@ -8,7 +8,7 @@ class WalletTransactionType implements CastsAttributes
 {
     public function get($model, string $key, $value, array $attributes)
     {
-        return match ($value) {
+        return match ((int) $value) {
             1 => 'credit',
             default => 'debit',
         };

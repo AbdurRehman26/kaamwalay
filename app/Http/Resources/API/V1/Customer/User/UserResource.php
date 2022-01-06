@@ -27,7 +27,7 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'stripe_id' => $this->stripe_id,
             'roles' => new RoleCollection($this->roles),
-            'wallet' => new WalletResource($this->wallet)
+            'wallet' => new WalletResource($this->wallet),
         ];
     }
 }

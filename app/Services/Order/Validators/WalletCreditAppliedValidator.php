@@ -9,7 +9,7 @@ class WalletCreditAppliedValidator
 {
     public static function validate(array $data): void
     {
-        if (!empty($data['payment_by_wallet'])) {
+        if (! empty($data['payment_by_wallet'])) {
             throw_unless(
                 Wallet::validateWalletAmount(
                     $data['payment_by_wallet']

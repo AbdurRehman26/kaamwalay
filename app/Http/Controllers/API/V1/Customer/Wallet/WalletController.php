@@ -18,6 +18,7 @@ class WalletController extends Controller
     {
         /* @var User */
         $user = auth()->user();
+
         return new WalletResource($user->wallet);
     }
 

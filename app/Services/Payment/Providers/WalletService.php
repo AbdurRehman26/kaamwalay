@@ -5,6 +5,7 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\Wallet;
+use App\Models\WalletTransaction;
 
 class WalletService implements PaymentProviderServiceInterface
 {
@@ -16,15 +17,19 @@ class WalletService implements PaymentProviderServiceInterface
         * Fire event to deduct from wallet
         */
 
-        $this->deductAmountFromWallet($this->getAmount($order));
+        $this->deductAmountFromWallet($order->user->wallet, $order);
 
         return $this->prepareResponseData($order);
     }
 
-    protected function deductAmountFromWallet(float $balance): void
+    protected function deductAmountFromWallet(Wallet $wallet, Order $order): void
     {
-
-        dd($balance);
+        $wallet->makeTransaction(
+            $this->getAmount($order),
+            WalletTransaction::REASON_ORDER_PAYMENT,
+            $order->user_id,
+            $order
+        );
     }
 
     public function verify(Order $order, string $paymentIntentId): bool

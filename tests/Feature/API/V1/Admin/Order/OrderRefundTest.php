@@ -3,6 +3,7 @@
 namespace Tests\Feature\API\Admin\Order;
 
 use App\Events\API\Admin\Order\RefundSuccessful;
+use App\Events\Wallet\TransactionHappened;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -94,6 +95,8 @@ test('admin can refund partial amount to a wallet', function () {
     ])->dump()->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(RefundSuccessful::class);
+    Event::assertDispatched(TransactionHappened::class);
+
     expect($this->order->refunds()->count())->toEqual(1);
     expect($this->order->orderPayments()->count())->toEqual(2);
 });

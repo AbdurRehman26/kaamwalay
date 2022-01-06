@@ -880,6 +880,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod enabled()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod visible()
  * @method static \Database\Factories\PaymentMethodFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newQuery()

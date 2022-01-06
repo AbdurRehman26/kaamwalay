@@ -270,8 +270,13 @@ class OrderService
         return $this->agsService->createCertificates($data);
     }
 
-    public function processRefund(Order $order, User $user, array $data, array $refundResponse, bool $refundedInWallet): void
-    {
+    public function processRefund(
+        Order $order,
+        User $user,
+        array $data,
+        array $refundResponse,
+        bool $refundedInWallet = false
+    ): void {
         DB::transaction(function () use ($order, $user, $data, $refundResponse, $refundedInWallet) {
             $order->updateAfterRefund($data['amount']);
 

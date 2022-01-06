@@ -7,8 +7,9 @@
  * @apiUse Authorization
  *
  * @apiParam {Array} [filter[signed_up_between]] for searching customers list between a date range: created_at E.g. filter[signed_up_between]=2018-01-01,2022-12-31
- * @apiParam {Array} [filter[submissions]] For filtering records if orders created by user. E.g. filter[submissions]=3
+ * @apiParam {Array} [filter[submissions]] For filtering records by orders submissions by user. E.g. filter[submissions]=1,3
  * @apiParam {Array} [sort] For sorting records by email, customer_number, full_name, created_at . E.g. sort=-email, sort=email
+ * @apiParam {Array} [filter[search]] For searching records by email, customer_number, full_name . E.g. filter[search]=abdc
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK

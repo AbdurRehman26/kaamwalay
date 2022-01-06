@@ -11,7 +11,6 @@ use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
-use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\PaypalService;
@@ -50,21 +49,18 @@ class PaymentService
         }
 
         if (! empty($data['success'])) {
-            $this->calculateAndSaveFee($order);
 
             /* Partial Payments */
             if ($this->checkForPartialPayment()){
-
-                resolve($this->providers[
-                    'wallet'
-                ])->charge($this->order);
-
+                $this->updatePartialPayment();
             }
+
+            $this->calculateAndSaveFee($order);
 
             $this->updateOrderStatus();
         }
 
-        return $this->updateOrderPayment($data);
+        return $this->updateOrderPayment($this->order->firstOrderPayment, $data);
     }
 
     public function verify(Order $order, string $paymentIntentId): bool
@@ -84,10 +80,10 @@ class PaymentService
         return $data;
     }
 
-    public function updateOrderPayment(array $data): array
+    public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
     {
         /** @noinspection JsonEncodingApiUsageInspection */
-        $this->order->firstOrderPayment->update([
+        $orderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
@@ -197,7 +193,7 @@ class PaymentService
         return $refundResponse;
     }
 
-    protected function refundToWallet(Order $order, $request, User $user)
+    protected function refundToWallet(Order $order, array $request, User $user): array
     {
         $order->user->wallet->makeTransaction(
             $request['amount'],
@@ -220,5 +216,15 @@ class PaymentService
     protected function checkForPartialPayment(): bool
     {
         return !$this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet;
+    }
+
+    /**
+     * @return void
+     */
+    protected function updatePartialPayment(): void
+    {
+        $partialPaymentResponse = resolve($this->providers['wallet'])->charge($this->order);
+
+        $this->updateOrderPayment($this->order->lastOrderPayment, $partialPaymentResponse);
     }
 }

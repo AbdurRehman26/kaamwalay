@@ -15,10 +15,11 @@ class WalletTransaction extends Model
     const TYPE_CREDIT = 'credit';
     const REASON_REFUND = 'refund';
     const REASON_ORDER_PAYMENT = 'order_payment';
-    const REASON_WALLET_PAYMENT = 'wallet_payment';
+    const REASON_WALLET_CREDIT = 'wallet_credit'; // admin does the credit
+    const REASON_WALLET_PAYMENT = 'wallet_payment'; // user does the credit
     protected $fillable = [
         'wallet_id',
-        'user_id',
+        'initiated_by',
         'order_id',
         'wallet_payment_id',
         'type',

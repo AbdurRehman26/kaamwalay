@@ -26,14 +26,14 @@ class PaymentMethod extends Model
         'id' => 'integer',
     ];
 
-    public function scopeEnabled(Builder $query): Builder
+    public function scopeEnabled(Builder $query): void
     {
-        return $query->where('is_enabled', 1);
+        $query->where('is_enabled', 1);
     }
 
-    public function scopeVisible(Builder $query): Builder
+    public function scopeVisible(Builder $query): void
     {
-        return $query->where('is_visible', true);
+        $query->where('is_visible', true);
     }
 
     public static function getWalletPaymentMethod(): self

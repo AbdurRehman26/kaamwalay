@@ -9,15 +9,20 @@ use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
 class WalletProjector extends Projector
 {
+    protected array $handlesEvents = [
+        WalletCreated::class => 'onWalletCreated',
+        TransactionHappened::class => 'onTransactionHappened',
+    ];
+
     public function __construct(protected WalletService $service)
     {
     }
-    public function onWalletCreated(WalletCreated $event)
+    public function onWalletCreated(WalletCreated $event): void
     {
         $this->service->createWallet($event->attributes);
     }
 
-    public function onTransactionHappened(TransactionHappened $event)
+    public function onTransactionHappened(TransactionHappened $event): void
     {
         $this->service->processTransaction(
             $event->walletId,

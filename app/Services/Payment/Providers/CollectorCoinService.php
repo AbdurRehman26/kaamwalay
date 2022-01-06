@@ -95,7 +95,6 @@ class CollectorCoinService
         } catch (Exception $e) {
             return ['message' => 'Unable to handle your request at the moment.'];
         }
-
     }
 
     public function verify(Order $order): bool | array

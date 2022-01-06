@@ -17,7 +17,7 @@ class CardProductService
             ]
         ));
 
-        ProcessImage::dispatch($card, 'image_path', 'cards', 'jpg', 788, 788, 70)->delay(now()->addSeconds(10));
+        ProcessImage::dispatch($card, 'image_path', 'cards', 'jpg', 788, 788, 70);
 
         return $card;
     }

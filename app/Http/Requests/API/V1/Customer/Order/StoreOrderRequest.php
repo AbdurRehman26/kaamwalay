@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\V1\Customer\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreOrderRequest extends FormRequest
 {
@@ -54,9 +55,19 @@ class StoreOrderRequest extends FormRequest
             'billing_address.same_as_shipping' => 'required|boolean',
             'shipping_method' => 'required|array',
             'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
-            'payment_method' => 'required_unless:payment_by_wallet,null|array',
-            'payment_method.id' => 'required_without_all:payment_by_wallet|integer|exists:payment_methods,id',
-            'payment_by_wallet' => 'required_unless:payment_method,null|numeric',
+            'payment_method' => [
+                Rule::requiredIf(empty($this->payment_by_wallet)),
+                'array'
+            ],
+            'payment_method.id' => [
+                Rule::requiredIf(empty($this->payment_by_wallet)),
+                'integer',
+                'exists:payment_methods,id'
+            ],
+            'payment_by_wallet' => [
+                Rule::requiredIf(empty($this->payment_method)),
+                'numeric'
+            ],
             'payment_provider_reference' => 'nullable|array',
             'payment_provider_reference.id' => 'nullable|string',
             'coupon.code' => 'sometimes|exists:coupons,code',

@@ -7,12 +7,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WalletCreditGreaterThanOrderTotalException extends Exception
+class AmountLessThanWalletBalanceException extends Exception
 {
     /**
      * @var string
      */
-    protected $message = 'Entered amount must be equal or less than order amount.';
+    protected $message = 'You do not have the entered amount in your wallet.';
 
     /**
      * @var int

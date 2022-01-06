@@ -81,6 +81,7 @@ class Order extends Model
         'graded_at' => 'date',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
+        'amount_paid_from_wallet' => 'float',
     ];
 
     protected $appends = [

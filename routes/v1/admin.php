@@ -16,6 +16,8 @@ use App\Http\Controllers\API\V1\Admin\Order\OrderRefundController;
 use App\Http\Controllers\API\V1\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V1\Admin\OrderStatusHistoryController;
 use App\Http\Controllers\API\V1\Admin\Wallet\CustomerWalletCreditController;
+use App\Http\Controllers\API\V1\Admin\Wallet\CustomerWalletHistoryController;
+use App\Http\Controllers\API\V1\Admin\Wallet\GetCustomerWalletController;
 use App\Http\Controllers\API\V1\Auth\Admin\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -76,6 +78,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
   
     // wallet
-    Route::post('wallets/{wallet}/credit', CustomerWalletCreditController::class)
-        ->name('customer-wallet-credit');
+    Route::prefix('wallets')->group(function () {
+        Route::get('{wallet}', GetCustomerWalletController::class)
+            ->name('customer-wallet-show');
+        Route::post('{wallet}/credit', CustomerWalletCreditController::class)
+            ->name('customer-wallet-credit');
+        Route::get('{wallet}/history', CustomerWalletHistoryController::class)
+            ->name('customer-wallet-history');
+    });
 });

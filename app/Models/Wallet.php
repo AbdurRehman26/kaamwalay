@@ -40,7 +40,7 @@ class Wallet extends Model
 
     public function walletTransactions(): HasMany
     {
-        return $this->hasMany(WalletTransaction::class);
+        return $this->hasMany(WalletTransaction::class)->latest();
     }
 
     public function lastTransaction(): HasOne

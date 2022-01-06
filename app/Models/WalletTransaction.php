@@ -44,6 +44,20 @@ class WalletTransaction extends Model
         return $this->belongsTo(User::class, 'initiated_by');
     }
 
+    protected function type(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => (match ((int) $value) {
+                1 => 'credit',
+                default => 'debit',
+            }),
+            set: fn ($value) => (match ($value) {
+                'credit' => 1,
+                default => 2,
+            }),
+        );
+    }
+
     protected function reason(): Attribute
     {
         return new Attribute(

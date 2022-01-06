@@ -18,6 +18,5 @@ test('admin can get wallet details', function () {
 
     actingAs($adminUser);
     getJson(route('customer-wallet-show', ['wallet' => $customer->wallet]))
-        ->dump()
         ->assertOk();
 });

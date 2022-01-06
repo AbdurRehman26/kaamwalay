@@ -28,7 +28,7 @@ class WalletTransactionResource extends BaseResource
 
     private function getTransactionDescription(): string
     {
-        return match ($this->reason) {
+        return match ($this->getAttributeValue('reason')) {
             WalletTransaction::REASON_REFUND => $this->user->getFullName() . ' refund to customer\'s wallet',
             WalletTransaction::REASON_ORDER_PAYMENT => 'Customer used credit on a submission',
             WalletTransaction::REASON_WALLET_CREDIT => $this->user->getFullName() . ' credit to customer\'s wallet',

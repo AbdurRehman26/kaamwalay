@@ -43,9 +43,9 @@ class CreateOrderService
      */
     public function create(array $data): Order
     {
+        $data['payment_by_wallet'] = 34;
         unset($data['payment_method'], $data['payment_provider_reference']);
 
-        $data['payment_by_wallet'] = 34;
         $this->data = $data;
 
         try {
@@ -220,6 +220,8 @@ class CreateOrderService
             );
         }
 
+        OrderPayment::create($orderPaymentData);
+
         /* Amount is partially paid from wallet since the primary payment method is not wallet */
         if ($this->order->amount_paid_from_wallet && !$this->order->paymentMethod->isWallet()){
             OrderPayment::create([
@@ -228,8 +230,6 @@ class CreateOrderService
                 'amount' => $this->order->amount_paid_from_wallet
             ]);
         }
-
-        OrderPayment::create($orderPaymentData);
     }
 
     protected function storeCouponAndDiscount(array $couponData): void

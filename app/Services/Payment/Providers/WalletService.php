@@ -51,9 +51,9 @@ class WalletService implements PaymentProviderServiceInterface
     {
         return [
             'success' => true,
-            'request' => null,
-            'response' => null,
-            'payment_provider_reference_id' => null,
+            'request' => [],
+            'response' => ['success' => true],
+            'payment_provider_reference_id' => [],
             'amount' => $this->getAmount($order),
             'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             'notes' => "Payment for Order # {$order->order_number}",

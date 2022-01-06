@@ -123,7 +123,7 @@ class PaymentService
         ]);
 
         $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
-            $orderPayment->provider_fee = $providerInstance->calculateFee($orderPayment);
+            $orderPayment->provider_fee = $orderPayment->paymentMethod->isWallet() ? 0 : $providerInstance->calculateFee($orderPayment);
             $orderPayment->save();
 
             return $orderPayment;
@@ -215,7 +215,7 @@ class PaymentService
 
     protected function checkForPartialPayment(): bool
     {
-        return !$this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet;
+        return !$this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet > 0;
     }
 
     /**

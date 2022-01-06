@@ -85,7 +85,7 @@ class Order extends Model
 
     protected $appends = [
         'grand_total_cents',
-        'grand_total_to_be_paid'
+        'grand_total_to_be_paid',
     ];
 
     public static function getAllowedAdminIncludes(): array

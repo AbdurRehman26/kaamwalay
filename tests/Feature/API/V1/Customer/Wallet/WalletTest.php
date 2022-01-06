@@ -22,8 +22,8 @@ it('gets wallet information for logged in user', function () {
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
-                'balance'
-            ]
+                'balance',
+            ],
         ]);
 });
 
@@ -40,8 +40,8 @@ it('gets wallet payments for logged in user', function () {
             'data' => [
                 '*' => [
                     'date',
-                    'amount'
-                ]
-            ]
+                    'amount',
+                ],
+            ],
         ]);
 });

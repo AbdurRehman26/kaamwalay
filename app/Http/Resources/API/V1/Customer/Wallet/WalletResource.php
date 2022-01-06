@@ -15,7 +15,7 @@ class WalletResource extends BaseResource
     public function toArray($request): array
     {
         return [
-            'balance' => $this->balance
+            'balance' => $this->balance,
         ];
     }
 }

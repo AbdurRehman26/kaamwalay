@@ -220,11 +220,11 @@ class CreateOrderService
         OrderPayment::create($orderPaymentData);
 
         /* Amount is partially paid from wallet since the primary payment method is not wallet */
-        if ($this->order->amount_paid_from_wallet && !$this->order->paymentMethod->isWallet()){
+        if ($this->order->amount_paid_from_wallet && ! $this->order->paymentMethod->isWallet()) {
             OrderPayment::create([
                 'order_id' => $orderPaymentData['order_id'],
                 'payment_method_id' => PaymentMethod::getWalletPaymentMethod()->id,
-                'amount' => $this->order->amount_paid_from_wallet
+                'amount' => $this->order->amount_paid_from_wallet,
             ]);
         }
     }
@@ -240,7 +240,7 @@ class CreateOrderService
 
     protected function storeWalletPaymentAmount(float|null $amount): void
     {
-        if ( !empty($amount)) {
+        if (! empty($amount)) {
             WalletAmountGrandTotalValidator::validate($this->order, $amount);
             $this->order->amount_paid_from_wallet = $amount;
             $this->order->save();

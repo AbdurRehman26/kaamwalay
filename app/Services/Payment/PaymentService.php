@@ -51,7 +51,7 @@ class PaymentService
         if (! empty($data['success'])) {
 
             /* Partial Payments */
-            if ($this->checkForPartialPayment()){
+            if ($this->checkForPartialPayment()) {
                 $this->updatePartialPayment();
             }
 
@@ -215,7 +215,7 @@ class PaymentService
 
     protected function checkForPartialPayment(): bool
     {
-        return !$this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet > 0;
+        return ! $this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet > 0;
     }
 
     /**

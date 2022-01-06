@@ -16,7 +16,7 @@ class WalletPaymentResource extends BaseResource
     {
         return [
             'date' => $this->formatDate($this->created_at),
-            'amount' => $this->balance
+            'amount' => $this->balance,
         ];
     }
 }

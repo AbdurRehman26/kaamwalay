@@ -50,7 +50,7 @@ class StoreOrderRequest extends FormRequest
             'payment_provider_reference' => 'nullable|array',
             'payment_provider_reference.id' => 'nullable|string',
             'coupon.code' => 'sometimes|exists:coupons,code',
-            'payment_by_wallet' => 'sometimes|numeric'
+            'payment_by_wallet' => 'sometimes|numeric',
         ];
     }
 }

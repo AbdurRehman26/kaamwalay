@@ -22,18 +22,18 @@ class WalletTransactionResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'description' => $this->getTransactionDescription($this->reason, $this->user),
+            'description' => $this->getTransactionDescription(),
             'amount' => $this->amount,
             'created_at' => $this->created_at->toISOString(),
         ];
     }
 
-    private function getTransactionDescription(WalletTransactionReason $reason, User $user): string
+    private function getTransactionDescription(): string
     {
-        return match ($reason) {
-            WalletTransaction::REASON_REFUND => $user->getFullName() . ' refund to customer\'s wallet',
+        return match ($this->reason) {
+            WalletTransaction::REASON_REFUND => $this->user->getFullName() . ' refund to customer\'s wallet',
             WalletTransaction::REASON_ORDER_PAYMENT => 'Customer used credit on a submission',
-            WalletTransaction::REASON_WALLET_CREDIT => $user->getFullName() . ' credit to customer\'s wallet',
+            WalletTransaction::REASON_WALLET_CREDIT => $this->user->getFullName() . ' credit to customer\'s wallet',
             default => 'Customer added to to wallet',
         };
     }

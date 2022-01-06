@@ -15,7 +15,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableBody from '@mui/material/TableBody';
 import Paper from '@mui/material/Paper';
 import { shortenTxnHash } from '@dashboard/components/PayWithAGS/utils';
-import { Tooltip } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { RetryStrategy, useRetry } from '@shared/hooks/useRetry';
@@ -45,14 +45,14 @@ export function CollectorCoinConfirmationSubmission() {
                 );
             };
         },
-        [transactionHash],
+        [notifications],
     );
 
     useEffect(() => {
         if (isPaymentSuccessful) {
             navigate(`/submissions/${id}/confirmation`);
         }
-    }, [dispatch, isPaymentSuccessful, transactionHash]);
+    }, [dispatch, isPaymentSuccessful, transactionHash, id, navigate]);
 
     useRetry(
         async () => {

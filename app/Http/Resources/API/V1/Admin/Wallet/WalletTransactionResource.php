@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Admin\Wallet;
 
+use App\Casts\WalletTransactionReason;
 use App\Http\Resources\API\BaseResource;
 use App\Models\User;
 use App\Models\WalletTransaction;
@@ -19,8 +20,6 @@ class WalletTransactionResource extends BaseResource
      */
     public function toArray($request)
     {
-        dump($this->reason);
-
         return [
             'id' => $this->id,
             'description' => $this->getTransactionDescription($this->reason, $this->user),
@@ -29,7 +28,7 @@ class WalletTransactionResource extends BaseResource
         ];
     }
 
-    private function getTransactionDescription(string $reason, User $user): string
+    private function getTransactionDescription(WalletTransactionReason $reason, User $user): string
     {
         return match ($reason) {
             WalletTransaction::REASON_REFUND => $user->getFullName() . ' refund to customer\'s wallet',

@@ -4,6 +4,8 @@ namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
 use App\Models\OrderPayment;
+use App\Services\Payment\Providers\Interfaces\PaymentProviderServiceInterface;
+use App\Services\Payment\Providers\Interfaces\PaymentProviderVerificationInterface;
 use Illuminate\Support\Facades\Log;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
@@ -13,7 +15,7 @@ use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Payments\CapturesRefundRequest;
 use PayPalHttp\HttpException;
 
-class PaypalService implements PaymentProviderServiceInterface
+class PaypalService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
     protected SandboxEnvironment|ProductionEnvironment $environment;
     protected PayPalHttpClient $client;

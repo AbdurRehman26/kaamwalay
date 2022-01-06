@@ -7,7 +7,7 @@ use App\Models\Order;
 
 class WalletAmountGrandTotalValidator
 {
-    public static function validate(Order $order, float $amount)
+    public static function validate(Order $order, float $amount): void
     {
         if (
             $order->paymentMethod->isWallet() && $order->grand_total !== $amount

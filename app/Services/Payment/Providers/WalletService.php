@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
+use App\Services\Payment\Providers\Interfaces\PaymentProviderServiceInterface;
 
 class WalletService implements PaymentProviderServiceInterface
 {
@@ -13,7 +14,7 @@ class WalletService implements PaymentProviderServiceInterface
     {
         Wallet::validateWalletAmount($this->getAmount($order));
 
-        /*Todo
+        /*
         * Fire event to deduct from wallet
         */
 
@@ -32,11 +33,7 @@ class WalletService implements PaymentProviderServiceInterface
         );
     }
 
-    public function verify(Order $order, string $paymentIntentId): bool
-    {
-    }
-
-    protected function getAmount(Order $order): int
+    protected function getAmount(Order $order): float
     {
         return $order->amount_paid_from_wallet;
     }

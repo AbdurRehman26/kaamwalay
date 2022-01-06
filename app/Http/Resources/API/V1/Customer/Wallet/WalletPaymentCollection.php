@@ -7,6 +7,8 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class WalletPaymentCollection extends ResourceCollection
 {
+    public $collects = WalletPaymentResource::class;
+
     /**
      * Transform the resource collection into an array.
      *

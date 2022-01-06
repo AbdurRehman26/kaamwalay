@@ -13,7 +13,7 @@ beforeEach(function () {
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))->create();
     $this->wallet = Wallet::factory()->for($this->customer)->create();
 
-    WalletPayment::factory()->for($this->wallet)->count(10)->create();
+    WalletPayment::factory()->for($this->wallet)->count(20)->create();
 });
 
 it('gets wallet information for logged in user', function () {
@@ -40,6 +40,7 @@ it('gets wallet payments for logged in user', function () {
             'data' => [
                 '*' => [
                     'date',
+                    'reason',
                     'amount',
                 ],
             ],

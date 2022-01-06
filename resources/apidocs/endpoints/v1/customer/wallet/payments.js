@@ -1,5 +1,5 @@
 /**
- * @api {get} /v1/wallet/payments Users Payment Methods
+ * @api {get} /v1/wallet/payments Users wallet payments
  * @apiName List Wallet Payments
  * @apiGroup Wallet
  *
@@ -12,17 +12,45 @@
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *      {
- *          "data": [
- *              {
- *                  "id": "pm_1JLxgyJCai8r8pbfCVXFjZo5",
- *                  "object": "payment_method",
- *                  "created": 1628374113,
- *                  "customer": "cus_JznJFVaa5nnDfj",
- *                  "livemode": false,
- *                  "metadata": [],
- *                  "type": "card"
- *              }
- *          ]
- *      }
+ *        {
+ *            "data": [
+ *                {
+ *                      "date": '2022/01/05',
+ *                      "reason": '',
+ *                      "amount": '',
+ *                }
+ *            ],
+ *            "links": {
+ *                "first": "http://robograding.test/api/v1/customer/wallet/payments?page=1",
+ *                "last": "http://robograding.test/api/v1/customer/wallet/payments?page=1",
+ *                "prev": null,
+ *                "next": null
+ *            },
+ *            "meta": {
+ *                "current_page": 1,
+ *                "from": 1,
+ *                "last_page": 1,
+ *                "links": [
+ *                    {
+ *                        "url": null,
+ *                        "label": "&laquo; Previous",
+ *                        "active": false
+ *                    },
+ *                    {
+ *                        "url": "http://robograding.test/api/v1/customer/wallet/payments?page=1",
+ *                        "label": "1",
+ *                        "active": true
+ *                    },
+ *                    {
+ *                        "url": null,
+ *                        "label": "Next &raquo;",
+ *                        "active": false
+ *                    }
+ *                ],
+ *                "path": "http://robograding.test/api/v1/customer/wallet/payments",
+ *                "per_page": 15,
+ *                "to": 15,
+ *                "total": 15
+ *            }
+ *        }
  */

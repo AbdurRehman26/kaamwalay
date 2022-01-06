@@ -4,6 +4,7 @@ namespace App\Exceptions\API\Customer\Order;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class NotSupportedPaymentNetwork extends Exception

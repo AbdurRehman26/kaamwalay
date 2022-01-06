@@ -82,7 +82,7 @@ Route::prefix('customer')->group(function () {
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
 
         Route::prefix('wallet')->group(function () {
-            Route::get('payments', [WalletController::class, 'getPayments'])->name('wallet.payments');
+            Route::get('transactions', [WalletController::class, 'getTransactions'])->name('wallet.transactions');
             Route::get('/', [WalletController::class, 'getWallet'])->name('wallet.me');
         });
     });
@@ -90,7 +90,7 @@ Route::prefix('customer')->group(function () {
 
 Route::prefix('configurations')->group(function () {
     Route::post('/', [ConfigurationsController::class, 'getConfigurations']);
-    Route::delete('/', [ConfigurationsController::class, 'purgeConfigurations'])->middleware('auth');
+    Route::delete('/', [ConTests\Feature\API\V1\Customer\Wallet\WalletTestfigurationsController::class, 'purgeConfigurations'])->middleware('auth');
 });
 
 Route::prefix('files')->group(function () {

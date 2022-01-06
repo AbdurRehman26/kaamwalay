@@ -22,7 +22,7 @@ class WalletController extends Controller
         return new WalletResource($user->wallet);
     }
 
-    public function getPayments(): WalletPaymentCollection
+    public function getTransactions(): WalletPaymentCollection
     {
         return new WalletPaymentCollection($this->walletService->getWalletPayments());
     }

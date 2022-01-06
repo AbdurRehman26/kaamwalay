@@ -32,9 +32,9 @@ it('does not return wallet information for guest user', function () {
         ->assertUnauthorized();
 });
 
-it('gets wallet payments for logged in user', function () {
+it('gets wallet transactions for logged in user', function () {
     actingAs($this->customer);
-    getJson(route('wallet.payments'))
+    getJson(route('wallet.transactions'))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [

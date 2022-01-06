@@ -3,19 +3,13 @@
 namespace App\Jobs\Admin\Order;
 
 use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
-use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
-use App\Models\OrderLabel;
-use App\Services\Admin\OrderService;
-use App\Services\AGS\AgsService;
+use App\Services\Admin\Order\OrderLabelService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Maatwebsite\Excel\Facades\Excel;
 
 class CreateOrderLabel implements ShouldQueue
 {
@@ -33,41 +27,12 @@ class CreateOrderLabel implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param  OrderLabelService  $orderLabelService
      * @return void
+     * @throws AgsServiceIsDisabled
      */
-    public function handle(AgsService $agsService, OrderService $orderService)
+    public function handle(OrderLabelService $orderLabelService): void
     {
-        if (! $agsService->isEnabled()) {
-            logger('Skipping AgsService as it is disabled.');
-
-            $this->fail(new AgsServiceIsDisabled);
-        }
-        
-        $certList = $orderService->getOrderCertificates($this->order);
-
-        $response = $agsService->createCardLabel(
-            data: array_merge(
-                ['order_id' => $this->order->order_number],
-                ['certificate_list' => $certList]
-            )
-        );
-
-        $this->saveCardLabelToExcel($response);
-    }
-  
-    protected function saveCardLabelToExcel(array $response): void
-    {
-        $filePath = 'order-labels/' . $this->order->order_number . '_label_' . Str::uuid() . '.xlsx';
-        Excel::store(new OrdersLabelExport($response), $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
-        $filePathUrl = Storage::disk('s3')->url($filePath);
-        $this->saveCardLabelData($filePathUrl);
-    }
-
-    protected function saveCardLabelData(string $filePathUrl): void
-    {
-        $orderLabel = new OrderLabel();
-        $orderLabel->order_id = $this->order->id;
-        $orderLabel->path = $filePathUrl;
-        $orderLabel->save();
+        $orderLabelService->generateLabel($this->order);
     }
 }

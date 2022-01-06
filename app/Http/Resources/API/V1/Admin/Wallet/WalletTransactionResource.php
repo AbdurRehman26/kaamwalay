@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Admin\Wallet;
 
-use App\Casts\WalletTransactionReason;
 use App\Http\Resources\API\BaseResource;
-use App\Models\User;
 use App\Models\WalletTransaction;
 
 /**

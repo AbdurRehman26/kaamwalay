@@ -20,6 +20,7 @@ class WalletTransactionResource extends BaseResource
     public function toArray($request)
     {
         dump($this->reason);
+
         return [
             'id' => $this->id,
             'description' => $this->getTransactionDescription($this->reason, $this->user),

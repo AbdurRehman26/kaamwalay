@@ -31,6 +31,7 @@ import wepay from '../../assets/icons/payments/wepay.svg';
 import westernUnion from '../../assets/icons/payments/western-union.svg';
 import wirecard from '../../assets/icons/payments/wirecard.svg';
 import worldpay from '../../assets/icons/payments/worldpay.svg';
+import collectorCoin from '../../assets/icons/payments/collector-coin.svg';
 
 export const ICONS: Record<string, { title: string; icon: string }> = {};
 
@@ -116,5 +117,6 @@ registerIcon(wepay, 'We Pay', 'we pay');
 registerIcon(westernUnion, 'Western Union', 'western union');
 registerIcon(wirecard, 'Wire Card', 'wire card');
 registerIcon(worldpay, 'World Pay', 'world pay');
+registerIcon(collectorCoin, 'Collector Coin', 'collector coin');
 
 export default ICONS;

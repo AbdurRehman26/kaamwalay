@@ -44,6 +44,7 @@ const useStyles = makeStyles(() => {
         profilePicture: {
             width: '292px',
             height: '292px',
+            objectFit: 'cover',
             borderRadius: '146px', // 146px = 292px / 2
         },
         profilePicLabel: {

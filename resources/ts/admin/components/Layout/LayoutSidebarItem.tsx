@@ -54,7 +54,7 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, comingSoon } = props;
+    const { icon: Icon, title, href, exact, comingSoon } = props;
 
     const location = useLocation();
     const classes = useStyles();
@@ -67,7 +67,10 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
         [classes.root, classes.selected],
     );
 
-    const isActive = useMemo(() => !!matchPath(location.pathname, href), [location.pathname, href]);
+    const isActive = useMemo(
+        () => !!matchPath({ path: exact ? href : `${href}/*` }, location.pathname),
+        [location.pathname, exact, href],
+    );
 
     const rest = !comingSoon
         ? {

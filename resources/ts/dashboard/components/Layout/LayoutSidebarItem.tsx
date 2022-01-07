@@ -51,7 +51,7 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, disabled } = props;
+    const { icon: Icon, title, exact, href, disabled } = props;
 
     const location = useLocation();
     const classes = useStyles({ disabled });
@@ -64,7 +64,10 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
         [classes.root, classes.selected],
     );
 
-    const isActive = useMemo(() => !!matchPath(location.pathname, href), [location.pathname, href]);
+    const isActive = useMemo(
+        () => !!matchPath({ path: exact ? href : `${href}/*` }, location.pathname),
+        [location.pathname, exact, href],
+    );
 
     return (
         <ListItem selected={isActive} button component={Link} to={!disabled ? href : '#'} classes={itemClasses}>

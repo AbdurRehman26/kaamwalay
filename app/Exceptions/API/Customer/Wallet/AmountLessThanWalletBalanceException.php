@@ -12,13 +12,17 @@ class AmountLessThanWalletBalanceException extends Exception
     /**
      * @var string
      */
-    protected $message = 'You do not have the entered amount in your wallet.';
+    protected $message = 'Entered amount is less than your wallet balance.';
 
     /**
      * @var int
      */
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
+    /**
+     * @param  Request  $request
+     * @return JsonResponse
+     */
     public function render(Request $request): JsonResponse
     {
         return new JsonResponse(['error' => $this->message], $this->code);

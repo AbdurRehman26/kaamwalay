@@ -2,7 +2,7 @@
 
 namespace App\Services\Order\Validators;
 
-use App\Exceptions\API\Customer\Wallet\WalletBalanceGreaterThanOrderTotalException;
+use App\Exceptions\API\Customer\Wallet\WalletBalanceGreaterThanOrderException;
 use App\Models\Order;
 
 class WalletAmountGrandTotalValidator
@@ -13,7 +13,7 @@ class WalletAmountGrandTotalValidator
             ($order->paymentMethod->isWallet() && $order->grand_total !== $amount) ||
             (! $order->paymentMethod->isWallet() && $amount >= $order->grand_total)
         ) {
-            throw new WalletBalanceGreaterThanOrderTotalException;
+            throw new WalletBalanceGreaterThanOrderException;
         }
     }
 }

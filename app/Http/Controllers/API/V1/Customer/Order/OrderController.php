@@ -87,7 +87,7 @@ class OrderController extends Controller
         $this->authorize('calculateCollectorCoin', $order);
 
         try {
-            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $request->network ?? 1);
+            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $request->payment_blockchain_network ?? 1);
 
             return new JsonResponse(
                 [

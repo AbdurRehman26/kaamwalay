@@ -2,12 +2,13 @@
 
 namespace App\Console\Commands\Orders;
 
-use App\Exceptions\API\Customer\Order\NotSupportedPaymentNetwork;
+use App\Exceptions\API\Customer\Order\PaymentBlockchainNetworkNotSupported;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Payment\PaymentService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class VerifyUnpaidOrders extends Command
 {
@@ -16,24 +17,15 @@ class VerifyUnpaidOrders extends Command
      *
      * @var string
      */
-    protected $signature = 'orders:verify-unpaid-collector-coin {--email=}';
+    protected $signature = 'order-payments:process-payment-handshake {--email=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Verify transaction status for unpaid Collector Coin orders';
+    protected $description = 'Process payment handshake for pending order payments to get updated payment status';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -50,14 +42,15 @@ class VerifyUnpaidOrders extends Command
             return $query->where('code', 'collector_coin');
         })->get();
 
-        foreach ($unpaidOrders as $unpaidOrder) {
-            $this->info("Processing Order: $unpaidOrder->id");
-
+        $unpaidOrders->each(function (Order $order) use ($paymentService){
+            $this->info("Processing Order: $order->id");
+    
             try {
-                $paymentService->verifyCollectorCoin($unpaidOrder);
-            } catch (NotSupportedPaymentNetwork $nsn) {
+               $paymentService->verifyCollectorCoin($order);
+            } catch (PaymentBlockchainNetworkNotSupported $nsn) {
+                Log::error('Order ID: ' . $order->id . ' has a not supported payment network and can not be processed.');
             }
-        }
+        });
 
         return 0;
     }

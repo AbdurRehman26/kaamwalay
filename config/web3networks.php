@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     1 => [
@@ -57,4 +57,4 @@ return [
         'collector_coin_wallet' => env('TEST_WALLET'),
     ],
 
-];  
+];

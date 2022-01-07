@@ -7,10 +7,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IncorrectOrderPayment extends Exception
+class PaymentBlockchainNetworkNotSupported extends Exception
 {
     /** @var string */
-    protected $message = 'Order payment information is incorrect.';
+    protected $message = 'This payment blockchain network is not supported.';
 
     /** @var int */
     protected $code = Response::HTTP_BAD_REQUEST;

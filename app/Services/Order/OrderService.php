@@ -78,12 +78,12 @@ class OrderService
         return $data;
     }
 
-    public function calculateCollectorCoinPrice(Order $order, int $network): float
+    public function calculateCollectorCoinPrice(Order $order, int $paymentBlockchainNetwork): float
     {
-        $collectorCoinPrice = (new CollectorCoinService($network))->getCollectorCoinPriceFromUsd($order->grand_total);
+        $collectorCoinPrice = (new CollectorCoinService($paymentBlockchainNetwork))->getCollectorCoinPriceFromUsd($order->grand_total);
 
         $orderPayment = $order->firstOrderPayment;
-        $orderPayment->response = json_encode(['amount' => $collectorCoinPrice, 'network' => $network]);
+        $orderPayment->response = json_encode(['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork]);
         $orderPayment->update();
 
         return $collectorCoinPrice;

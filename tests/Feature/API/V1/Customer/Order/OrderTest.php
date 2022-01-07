@@ -372,7 +372,7 @@ test('a customer cannot place order with item declared value greater than schema
 
 it('can calculate collector coin price for an order', function () {
     config([
-        'configuration.keys.web3_configurations.supported_networks' => '97',
+        'configuration.keys.web3.supported_networks' => '97',
     ]);
 
     config([
@@ -399,7 +399,7 @@ it('can calculate collector coin price for an order', function () {
     OrderItem::factory()->for($order)->create();
     OrderPayment::factory()->for($order)->create();
 
-    $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/collector-coin?network=97');
+    $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/collector-coin?payment_blockchain_network=97');
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -409,13 +409,13 @@ it('can calculate collector coin price for an order', function () {
 
 it('throws error if using unsupported network', function () {
     config([
-        'configuration.keys.web3_configurations.supported_networks' => '97',
+        'configuration.keys.web3.supported_networks' => '97',
     ]);
 
     $this->actingAs($this->user);
     $order = Order::factory()->for($this->user)->create();
 
-    $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/collector-coin?network=1');
+    $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/collector-coin?payment_blockchain_network=1');
 
     $response->assertStatus(400);
     $response->assertJsonStructure([
@@ -423,7 +423,7 @@ it('throws error if using unsupported network', function () {
     ]);
 
     $response->assertJsonFragment([
-        'error' => 'This network is not supported.',
+        'error' => 'This payment blockchain network is not supported.',
         'value' => 0.0,
     ]);
 });

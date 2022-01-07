@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Exceptions\API\Customer\Order;
+namespace App\Exceptions\Services\Payment;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class NotSupportedPaymentNetwork extends Exception
+class OrderPaymentIsIncorrect extends Exception
 {
     /** @var string */
-    protected $message = 'This network is not supported.';
+    protected $message = 'Order payment information is incorrect.';
 
     /** @var int */
     protected $code = Response::HTTP_BAD_REQUEST;

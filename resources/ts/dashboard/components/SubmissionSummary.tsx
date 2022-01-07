@@ -237,9 +237,6 @@ function SubmissionSummary() {
             // Try to charge the customer
             await endpoint.post('', {
                 paymentMethodId: stripePaymentMethod,
-                network: 'bsc',
-                txn: '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                amount: 1,
             });
 
             setIsStripePaymentLoading(false);

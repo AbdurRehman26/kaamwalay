@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
-use App\Exceptions\API\Customer\Order\NotSupportedPaymentNetwork;
+use App\Exceptions\API\Customer\Order\PaymentBlockchainNetworkNotSupported;
 use App\Exceptions\API\Customer\Order\OrderNotPayable;
 use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
@@ -73,7 +73,7 @@ class OrderPaymentController extends Controller
             $result = $this->paymentService->verifyCollectorCoin($order);
 
             return new JsonResponse($result, Response::HTTP_OK);
-        } catch (NotSupportedPaymentNetwork $e) {
+        } catch (PaymentBlockchainNetworkNotSupported $e) {
             return new JsonResponse(
                 [
                     'message' => $e->getMessage(),

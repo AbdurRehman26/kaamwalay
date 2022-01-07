@@ -42,11 +42,11 @@ class VerifyUnpaidOrders extends Command
             return $query->where('code', 'collector_coin');
         })->get();
 
-        $unpaidOrders->each(function (Order $order) use ($paymentService){
+        $unpaidOrders->each(function (Order $order) use ($paymentService) {
             $this->info("Processing Order: $order->id");
     
             try {
-               $paymentService->verifyCollectorCoin($order);
+                $paymentService->verifyCollectorCoin($order);
             } catch (PaymentBlockchainNetworkNotSupported $nsn) {
                 Log::error('Order ID: ' . $order->id . ' has a not supported payment network and can not be processed.');
             }

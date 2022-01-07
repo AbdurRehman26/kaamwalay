@@ -230,7 +230,7 @@ class CreateOrderService
         $paymentMethod = PaymentMethod::find($paymentMethod['id']);
 
         if ($paymentMethod->code === 'collector_coin') {
-            $this->order->payment_method_discounted_amount = round($this->order->service_fee * config('configuration.keys.collector_coin_discount_percentage.value') / 100, 2);
+            $this->order->payment_method_discounted_amount = round($this->order->service_fee * config('robograding.collector_coin_discount_percentage.value') / 100, 2);
             $this->order->save();
         }
     }

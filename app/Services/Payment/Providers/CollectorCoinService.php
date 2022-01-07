@@ -27,7 +27,7 @@ class CollectorCoinService
         $this->paymentBlockChainNetworkId = $paymentBlockChainNetworkId;
 
         throw_unless(
-            in_array($paymentBlockChainNetworkId, explode(',', config('configuration.keys.web3.supported_networks'))),
+            in_array($paymentBlockChainNetworkId, explode(',', config('robograding.web3.supported_networks'))),
             PaymentBlockchainNetworkNotSupported::class
         );
 
@@ -114,7 +114,7 @@ class CollectorCoinService
         $networkData = config('web3networks.' . $this->paymentBlockChainNetworkId);
 
         if ($networkData['is_testnet']) {
-            $divider = config('configuration.keys.web3.testnet_token_value', 1);
+            $divider = config('robograding.web3.testnet_token_value', 1);
         }
 
         $web3BscToken = $networkData['collector_coin_token'];

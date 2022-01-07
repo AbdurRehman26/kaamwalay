@@ -12,7 +12,7 @@ beforeEach(function () {
 
 it('can verfy completion of collector coin paid order', function () {
     config([
-        'configuration.keys.web3.supported_networks' => '97',
+        'robograding.web3.supported_networks' => '97',
     ]);
 
     config([

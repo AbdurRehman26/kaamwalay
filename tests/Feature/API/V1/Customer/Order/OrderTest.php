@@ -372,7 +372,7 @@ test('a customer cannot place order with item declared value greater than schema
 
 it('can calculate collector coin price for an order', function () {
     config([
-        'configuration.keys.web3.supported_networks' => '97',
+        'robograding.web3.supported_networks' => '97',
     ]);
 
     config([
@@ -409,7 +409,7 @@ it('can calculate collector coin price for an order', function () {
 
 it('throws error if using unsupported network', function () {
     config([
-        'configuration.keys.web3.supported_networks' => '97',
+        'robograding.web3.supported_networks' => '97',
     ]);
 
     $this->actingAs($this->user);

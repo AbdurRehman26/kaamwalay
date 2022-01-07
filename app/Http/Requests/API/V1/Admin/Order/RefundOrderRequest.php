@@ -16,15 +16,6 @@ class RefundOrderRequest extends FormRequest
         return $this->user()->isAdmin();
     }
 
-    protected function prepareForValidation()
-    {
-        if (! $this->has('add_to_wallet')) {
-            $this->merge([
-                'add_to_wallet' => false,
-            ]);
-        }
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *

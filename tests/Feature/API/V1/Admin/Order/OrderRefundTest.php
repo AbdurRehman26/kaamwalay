@@ -64,6 +64,7 @@ test('admin can refund partial amount of a charge', function () {
     $this->postJson(route('payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '10.00',
+        'add_to_wallet' => false,
     ])->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(RefundSuccessful::class);

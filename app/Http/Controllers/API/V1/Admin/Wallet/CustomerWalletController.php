@@ -9,7 +9,6 @@ use App\Http\Resources\API\V1\Admin\Wallet\WalletTransactionCollection;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomerWalletController extends Controller

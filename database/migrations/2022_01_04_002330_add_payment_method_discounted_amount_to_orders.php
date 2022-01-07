@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPMDiscountedAmountToOrders extends Migration
+class AddPaymentMethodDiscountedAmountToOrders extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddPMDiscountedAmountToOrders extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('pm_discounted_amount', 10)->default(0)->after('discounted_amount')->nullable();
+            $table->decimal('payment_method_discounted_amount', 10)->default(0)->after('discounted_amount')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddPMDiscountedAmountToOrders extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('pm_discounted_amount');
+            $table->dropColumn('payment_method_discounted_amount');
         });
     }
 }

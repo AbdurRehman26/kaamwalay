@@ -189,7 +189,7 @@ class CreateOrderService
     protected function storeGrandTotal(): void
     {
         $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->pm_discounted_amount;
+        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->payment_method_discounted_amount;
 
         GrandTotalValidator::validate($this->order);
 
@@ -230,7 +230,7 @@ class CreateOrderService
         $paymentMethod = PaymentMethod::find($paymentMethod['id']);
 
         if ($paymentMethod->code === 'collector_coin') {
-            $this->order->pm_discounted_amount = round($this->order->service_fee * config('configuration.keys.collector_coin_discount_percentage.value') / 100, 2);
+            $this->order->payment_method_discounted_amount = round($this->order->service_fee * config('configuration.keys.collector_coin_discount_percentage.value') / 100, 2);
             $this->order->save();
         }
     }

@@ -379,13 +379,13 @@
                                     </td>
                                 </tr>
                             @endif
-                            @if(! empty($order->pm_discounted_amount))
+                            @if(! empty($order->payment_method_discounted_amount))
                                 <tr class="info-line">
                                     <td class="info-title">
                                         Payment Method Discount:
                                     </td>
                                     <td class="info-content">
-                                        -${{number_format($order->pm_discounted_amount, 2)}}
+                                        -${{number_format($order->payment_method_discounted_amount, 2)}}
                                     </td>
                                 </tr>
                             @endif

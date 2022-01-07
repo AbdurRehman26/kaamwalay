@@ -9,15 +9,14 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Stripe\Exception\ApiErrorException;
 use Web3\ValueObjects\Wei;
 use Web3\Web3;
 
 class CollectorCoinService
 {
     // Status Values
-    // 0: Fail
-    // 1: Completed
+    public const FAILED = '0';
+    public const COMPLETED = '1';
     
     protected Web3 $web3;
 
@@ -91,12 +90,18 @@ class CollectorCoinService
         }
     }
 
-    public function verify(Order $order): bool | array
+    public function verify(Order $order): array
     {
-        try {
-            return $this->validateOrderIsPaid($order);
-        } catch (ApiErrorException $e) {
-            return false;
+        $transactionHash = $order->firstOrderPayment->payment_provider_reference_id;
+
+        //TODO: Check if we also should support this for confirmed/graded orders
+        if ($order->order_status_id === OrderStatus::PLACED) {
+            return [
+                'transaction_hash' => $transactionHash,
+                'status' => 'success',
+            ];
+        } else {
+            return  $this->validateTransactionIsSuccessful($transactionHash);
         }
     }
 
@@ -133,32 +138,17 @@ class CollectorCoinService
         return 0.0;
     }
 
-    protected function validateOrderIsPaid(Order $order): array
-    {
-        $transactionHash = $order->firstOrderPayment->payment_provider_reference_id;
-
-        //TODO: Check if we also should support this for confirmed/graded orders
-        if ($order->order_status_id === OrderStatus::PLACED) {
-            return [
-                'transaction_hash' => $transactionHash,
-                'status' => 'success',
-            ];
-        } else {
-            return $this->validateTransactionIsSuccessful($transactionHash);
-        }
-    }
-
     protected function validateTransactionIsSuccessful(string $transactionHash): array
     {
         $transactionDetails = $this->getTransactionDetails($transactionHash);
 
         switch ($transactionDetails['status']) {
-            case '0':
+            case self::FAILED:
                 $status = 'fail';
 
                 break;
 
-            case '1':
+            case self::COMPLETED:
                 $status = 'success';
 
                 break;

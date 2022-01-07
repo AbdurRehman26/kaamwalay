@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\WalletTransactionType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +28,6 @@ class WalletTransaction extends Model
         'is_success',
     ];
     protected $casts = [
-        'type' => WalletTransactionType::class,
         'amount' => 'float',
         'is_success' => 'boolean',
     ];
@@ -42,6 +40,20 @@ class WalletTransaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'initiated_by');
+    }
+
+    protected function type(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => (match ((int) $value) {
+                1 => 'credit',
+                default => 'debit',
+            }),
+            set: fn ($value) => (match ($value) {
+                'credit' => 1,
+                default => 2,
+            }),
+        );
     }
 
     protected function reason(): Attribute

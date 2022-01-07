@@ -92,7 +92,7 @@ test('admin can refund partial amount to a wallet', function () {
         'notes' => $this->faker->sentence(),
         'amount' => '10.00',
         'add_to_wallet' => true,
-    ])->dump()->assertStatus(Response::HTTP_CREATED);
+    ])->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(RefundSuccessful::class);
     Event::assertDispatched(TransactionHappened::class);

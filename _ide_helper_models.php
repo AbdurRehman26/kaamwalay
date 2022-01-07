@@ -1532,12 +1532,6 @@ namespace App\Models{
 /**
  * App\Models\Wallet
  *
- * @property int $id
- * @property int $user_id
- * @property float $balance
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\WalletTransaction|null $lastTransaction
  * @property-read \App\Models\User $user
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WalletPayment[] $walletPayments
@@ -1548,12 +1542,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet query()
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereBalance($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereUserId($value)
  */
 	class Wallet extends \Eloquent {}
 }
@@ -1562,30 +1550,12 @@ namespace App\Models{
 /**
  * App\Models\WalletPayment
  *
- * @property int $id
- * @property int $payment_method_id
- * @property int $wallet_id
- * @property array|null $request
- * @property array|null $response
- * @property string|null $payment_provider_reference_id
- * @property float $amount
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\PaymentMethod $paymentMethod
  * @property-read \App\Models\Wallet $wallet
  * @method static \Database\Factories\WalletPaymentFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment query()
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment wherePaymentMethodId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment wherePaymentProviderReferenceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereRequest($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereResponse($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereWalletId($value)
  */
 	class WalletPayment extends \Eloquent {}
 }
@@ -1594,32 +1564,12 @@ namespace App\Models{
 /**
  * App\Models\WalletTransaction
  *
- * @property int $id
- * @property int $wallet_id
- * @property int $initiated_by
- * @property int|null $order_id order ID will be available when refund happened or user pay from wallet
- * @property int|null $wallet_payment_id wallet payment ID will be available when user adds amount to wallet
- * @property int $type 1 => credit, 2 => debit
- * @property int $reason 1 => order_payment, 2 => refund, 3 => wallet_addition
- * @property bool $is_success
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
  * @property-read \App\Models\Wallet $wallet
  * @method static \Database\Factories\WalletTransactionFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction query()
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereInitiatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereIsSuccess($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereWalletId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereWalletPaymentId($value)
  */
 	class WalletTransaction extends \Eloquent {}
 }

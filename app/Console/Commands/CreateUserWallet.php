@@ -24,27 +24,15 @@ class CreateUserWallet extends Command
     protected $description = 'This command will create the wallets for users';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
      */
     public function handle(): int
     {
-        User::get()
+        User::whereDoesntHave('wallet')->get()
             ->each(function (User $user) {
-                if (! $user->wallet()->exists()) {
-                    Wallet::createWallet($user);
-                }
+                Wallet::createWallet($user);
             });
         $this->info('wallets created');
 

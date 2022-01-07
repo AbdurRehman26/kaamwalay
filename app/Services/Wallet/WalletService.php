@@ -30,13 +30,13 @@ class WalletService
         };
     }
 
-    private function processRefund(Wallet $wallet, float $amount, int $userId, ?int $orderId): void
+    protected function processRefund(Wallet $wallet, float $amount, int $userId, ?int $orderId): void
     {
         $order = Order::find($orderId);
 
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
-            'initiated_by' => $userId,
+            'created_by' => $userId,
             'order_id' => $order->id,
             'amount' => $amount,
             'type' => WalletTransaction::TYPE_CREDIT,
@@ -47,13 +47,13 @@ class WalletService
         $wallet->increment('balance', $amount);
     }
 
-    private function processOrderPayment(Wallet $wallet, float $amount, ?int $orderId): void
+    protected function processOrderPayment(Wallet $wallet, float $amount, ?int $orderId): void
     {
         $order = Order::find($orderId);
 
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
-            'initiated_by' => $order->user_id,
+            'created_by' => $order->user_id,
             'order_id' => $order->id,
             'amount' => $amount,
             'type' => WalletTransaction::TYPE_DEBIT,
@@ -64,11 +64,11 @@ class WalletService
         $wallet->decrement('balance', $amount);
     }
 
-    private function processWalletPayment(Wallet $wallet, float $amount): void
+    protected function processWalletPayment(Wallet $wallet, float $amount): void
     {
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
-            'initiated_by' => $wallet->user_id,
+            'created_by' => $wallet->user_id,
             'wallet_payment_id' => $wallet->lastTransaction->id,
             'amount' => $amount,
             'type' => WalletTransaction::TYPE_CREDIT,
@@ -79,11 +79,11 @@ class WalletService
         $wallet->increment('balance', $amount);
     }
 
-    private function processCustomerWalletCredit(Wallet $wallet, float $amount, int $userId): void
+    protected function processCustomerWalletCredit(Wallet $wallet, float $amount, int $userId): void
     {
         WalletTransaction::create([
             'wallet_id' => $wallet->id,
-            'initiated_by' => $userId,
+            'created_by' => $userId,
             'amount' => $amount,
             'type' => WalletTransaction::TYPE_CREDIT,
             'is_success' => true,

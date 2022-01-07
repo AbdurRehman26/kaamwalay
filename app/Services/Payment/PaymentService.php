@@ -184,7 +184,7 @@ class PaymentService
         return $refundResponse;
     }
 
-    protected function refundToWallet(Order $order, $request, User $user)
+    protected function refundToWallet(Order $order, array $request, User $user): array
     {
         $order->user->wallet->makeTransaction(
             $request['amount'],

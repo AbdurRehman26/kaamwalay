@@ -37,7 +37,7 @@ class Wallet extends Model
 
     public function walletTransactions(): HasMany
     {
-        return $this->hasMany(WalletTransaction::class);
+        return $this->hasMany(WalletTransaction::class)->latest();
     }
 
     public function lastTransaction(): HasOne
@@ -45,7 +45,7 @@ class Wallet extends Model
         return $this->hasOne(WalletTransaction::class)->latestOfMany();
     }
 
-    public static function createWallet(User $user)
+    public static function createWallet(User $user): void
     {
         event(new WalletCreated([
             'user_id' => $user->id,
@@ -53,7 +53,7 @@ class Wallet extends Model
         ]));
     }
 
-    public function makeTransaction(float $amount, string $reason, int $userId, ?Order $order = null)
+    public function makeTransaction(float $amount, string $reason, int $userId, ?Order $order = null): void
     {
         event(new TransactionHappened(
             $this->id,

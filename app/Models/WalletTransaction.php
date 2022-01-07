@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Casts\WalletTransactionReason;
-use App\Casts\WalletTransactionType;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WalletTransaction extends Model
 {
@@ -15,19 +15,62 @@ class WalletTransaction extends Model
     const TYPE_CREDIT = 'credit';
     const REASON_REFUND = 'refund';
     const REASON_ORDER_PAYMENT = 'order_payment';
-    const REASON_WALLET_PAYMENT = 'wallet_payment';
+    const REASON_WALLET_CREDIT = 'wallet_credit'; // admin does the credit
+    const REASON_WALLET_PAYMENT = 'wallet_payment'; // user does the credit
     protected $fillable = [
         'wallet_id',
-        'user_id',
+        'initiated_by',
         'order_id',
         'wallet_payment_id',
+        'amount',
         'type',
         'reason',
         'is_success',
     ];
     protected $casts = [
-        'type' => WalletTransactionType::class,
-        'reason' => WalletTransactionReason::class,
+        'amount' => 'float',
         'is_success' => 'boolean',
     ];
+
+    public function wallet(): BelongsTo
+    {
+        return $this->belongsTo(Wallet::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'initiated_by');
+    }
+
+    protected function type(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => (match ((int) $value) {
+                1 => 'credit',
+                default => 'debit',
+            }),
+            set: fn ($value) => (match ($value) {
+                'credit' => 1,
+                default => 2,
+            }),
+        );
+    }
+
+    protected function reason(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => (match ((int) $value) {
+                1 => WalletTransaction::REASON_ORDER_PAYMENT,
+                2 => WalletTransaction::REASON_REFUND,
+                3 => WalletTransaction::REASON_WALLET_CREDIT,
+                default => 'wallet_payment',
+            }),
+            set: fn ($value) => (match ($value) {
+                WalletTransaction::REASON_ORDER_PAYMENT => 1,
+                WalletTransaction::REASON_REFUND => 2,
+                WalletTransaction::REASON_WALLET_CREDIT => 3,
+                default => 4,
+            }),
+        );
+    }
 }

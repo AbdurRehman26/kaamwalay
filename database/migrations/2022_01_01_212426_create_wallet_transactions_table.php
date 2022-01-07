@@ -39,6 +39,7 @@ class CreateWalletTransactionsTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->decimal('amount', 10, 2);
             $table->tinyInteger('type')
                 ->comment('1 => credit, 2 => debit');
             $table->tinyInteger('reason')

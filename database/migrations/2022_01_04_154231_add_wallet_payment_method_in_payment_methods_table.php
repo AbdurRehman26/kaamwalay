@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class AddWalletPaymentMethodInPaymentMethodsTable extends Migration
 {
@@ -13,10 +12,10 @@ class AddWalletPaymentMethodInPaymentMethodsTable extends Migration
      */
     public function up()
     {
-        \Illuminate\Support\Facades\DB::table('payment_methods')->insert([
+        DB::table('payment_methods')->insert([
             [
                 'code' => 'wallet',
-                'name' => 'Robograding Wallet',
+                'name' => 'Customer Wallet',
                 'is_visible' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -31,8 +30,8 @@ class AddWalletPaymentMethodInPaymentMethodsTable extends Migration
      */
     public function down()
     {
-        Schema::table('order_payments', function (Blueprint $table) {
-            //
-        });
+        DB::table('payment_methods')
+            ->where('code', 'wallet')
+            ->delete();
     }
 }

@@ -23,7 +23,7 @@ class CreateWalletTransactionsTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('initiated_by')
+            $table->foreignId('created_by')
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

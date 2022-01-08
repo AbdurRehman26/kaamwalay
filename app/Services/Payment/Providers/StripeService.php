@@ -262,6 +262,9 @@ class StripeService implements PaymentProviderServiceInterface, PaymentProviderV
     protected function getAmount(Order $order): int
     {
         // TODO Hacky hotfix for reducing price for specific admins, must be removed after coupon system is ready
+        if (in_array($order->user->email, Str::of(config('robograding.discounted_price_admins'))->explode(',')->toArray())) {
+            return 1000;
+        }
 
         return $order->grand_total_cents;
     }

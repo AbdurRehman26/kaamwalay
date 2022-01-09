@@ -8,7 +8,6 @@ return [
      */
     'auto_discover_projectors_and_reactors' => [
         app()->path('Projectors'),
-        app()->path('Reactors'),
     ],
 
     /*

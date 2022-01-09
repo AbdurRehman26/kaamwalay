@@ -14,12 +14,14 @@ class WalletTransaction extends Model
     const TYPE_DEBIT = 'debit';
     const TYPE_CREDIT = 'credit';
     const REASON_REFUND = 'refund';
+
     const REASON_ORDER_PAYMENT = 'order_payment';
-    const REASON_WALLET_CREDIT = 'wallet_credit'; // admin does the credit
-    const REASON_WALLET_PAYMENT = 'wallet_payment'; // user does the credit
+    const REASON_WALLET_CREDIT = 'wallet_credit_by_admin';
+    const REASON_WALLET_PAYMENT = 'wallet_credit_by_user';
+
     protected $fillable = [
         'wallet_id',
-        'initiated_by',
+        'created_by',
         'order_id',
         'wallet_payment_id',
         'amount',
@@ -27,6 +29,7 @@ class WalletTransaction extends Model
         'reason',
         'is_success',
     ];
+
     protected $casts = [
         'amount' => 'float',
         'is_success' => 'boolean',
@@ -39,7 +42,7 @@ class WalletTransaction extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'initiated_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     protected function type(): Attribute

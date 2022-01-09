@@ -15,9 +15,7 @@ use App\Http\Controllers\API\V1\Admin\Order\OrderPaymentController;
 use App\Http\Controllers\API\V1\Admin\Order\OrderRefundController;
 use App\Http\Controllers\API\V1\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V1\Admin\OrderStatusHistoryController;
-use App\Http\Controllers\API\V1\Admin\Wallet\CustomerWalletCreditController;
-use App\Http\Controllers\API\V1\Admin\Wallet\CustomerWalletHistoryController;
-use App\Http\Controllers\API\V1\Admin\Wallet\GetCustomerWalletController;
+use App\Http\Controllers\API\V1\Admin\Wallet\CustomerWalletController;
 use App\Http\Controllers\API\V1\Auth\Admin\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -79,11 +77,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   
     // wallet
     Route::prefix('wallets')->group(function () {
-        Route::get('{wallet}', GetCustomerWalletController::class)
-            ->name('customer-wallet-show');
-        Route::post('{wallet}/credit', CustomerWalletCreditController::class)
-            ->name('customer-wallet-credit');
-        Route::get('{wallet}/history', CustomerWalletHistoryController::class)
-            ->name('customer-wallet-history');
+        Route::get('{wallet}', [CustomerWalletController::class, 'show'])
+            ->name('customer.wallet.show');
+        Route::post('{wallet}/credit', [CustomerWalletController::class, 'creditToWallet'])
+            ->name('customer.wallet.credit');
+        Route::get('{wallet}/history', [CustomerWalletController::class, 'getTransactionsHistory'])
+            ->name('customer.wallet.history');
     });
 });

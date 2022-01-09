@@ -79,7 +79,6 @@ class AGSClient
         $response = Http::withToken($this->getAuthToken())
             ->patch($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/?certificate_id=' . $certificateId, $payload);
         if ($response->successful()) {
-
             return $response->json();
         }
 

@@ -30,6 +30,7 @@
         "spatie/dropbox-api": "^1.19",
         "spatie/image": "1.10.5",
         "spatie/laravel-activitylog": "^4.2",
+        "spatie/laravel-event-sourcing": "^6.0",
         "spatie/laravel-permission": "^4.2",
         "spatie/laravel-query-builder": "^3.5",
         "spatie/laravel-webhook-client": "^3.0",

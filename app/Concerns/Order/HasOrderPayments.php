@@ -44,13 +44,13 @@ trait HasOrderPayments
         $this->save();
     }
 
-    public function createOrderPayment(array $data, User $user): void
+    public function createOrderPayment(array $data, User $user, ?int $paymentMethodId = null): void
     {
         $this->orderPayments()->create(
             [
                 'request' => json_encode($data['request']),
                 'response' => json_encode($data['response']),
-                'payment_method_id' => $this->payment_method_id,
+                'payment_method_id' => $paymentMethodId ?? $this->payment_method_id,
                 'user_id' => $user->id,
             ] + $data
         );

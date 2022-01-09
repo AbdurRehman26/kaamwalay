@@ -76,11 +76,9 @@ class AGSClient
 
     public function updateHumanGrades(string $certificateId, array $payload)
     {
-        logger()->debug('payload to PATCH human grades', ['payload' => $payload, 'cert_id' => $certificateId]);
         $response = Http::withToken($this->getAuthToken())
             ->patch($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/?certificate_id=' . $certificateId, $payload);
         if ($response->successful()) {
-            logger()->debug('response from PATCH human grades', ['response' => $response->json(), 'cert_id' => $certificateId]);
 
             return $response->json();
         }

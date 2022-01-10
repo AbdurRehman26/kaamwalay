@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Web3\ValueObjects\Wei;
 use Web3\Web3;
 
-class CollectorCoinService
+class CollectorCoinService implements PaymentProviderServiceInterface
 {
     // Status Values
     public const FAILED = '0';
@@ -58,7 +58,7 @@ class CollectorCoinService
         return $this->web3->eth()->getTransactionReceipt($txn);
     }
 
-    public function charge(Order $order, array $data): array
+    public function charge(Order $order, array $data = []): array
     {
         try {
             $transactionData = $this->getTransaction($data['transaction_hash']);
@@ -90,18 +90,15 @@ class CollectorCoinService
         }
     }
 
-    public function verify(Order $order): array
+    public function verify(Order $order, string $paymentIntentId): bool
     {
         $transactionHash = $order->firstOrderPayment->payment_provider_reference_id;
 
         //TODO: Check if we also should support this for confirmed/graded orders
         if ($order->order_status_id === OrderStatus::PLACED) {
-            return [
-                'transaction_hash' => $transactionHash,
-                'status' => 'success',
-            ];
+            return true;
         } else {
-            return  $this->validateTransactionIsSuccessful($transactionHash);
+            return $this->validateTransactionIsSuccessful($transactionHash);
         }
     }
 
@@ -138,31 +135,11 @@ class CollectorCoinService
         return 0.0;
     }
 
-    protected function validateTransactionIsSuccessful(string $transactionHash): array
+    protected function validateTransactionIsSuccessful(string $transactionHash): bool
     {
         $transactionDetails = $this->getTransactionDetails($transactionHash);
 
-        switch ($transactionDetails['status']) {
-            case self::FAILED:
-                $status = 'fail';
-
-                break;
-
-            case self::COMPLETED:
-                $status = 'success';
-
-                break;
-
-            default:
-                $status = 'processing';
-
-                break;
-        }
-
-        return [
-            'transaction_hash' => $transactionHash,
-            'status' => $status,
-        ];
+        return $transactionDetails['status'] === self::COMPLETED;
     }
 
     protected function validateTransaction(array $data, array $transactionData): bool

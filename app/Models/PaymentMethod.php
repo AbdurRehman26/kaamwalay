@@ -30,4 +30,9 @@ class PaymentMethod extends Model
     {
         return $query->where('is_enabled', 1);
     }
+
+    public function isCollectorCoin(): bool
+    {
+        return $this->code === 'collector_coin';
+    }
 }

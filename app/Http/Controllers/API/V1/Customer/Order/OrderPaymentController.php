@@ -65,21 +65,4 @@ class OrderPaymentController extends Controller
         ], Response::HTTP_OK);
     }
 
-    public function verifyCollectorCoin(Order $order): JsonResponse
-    {
-        $this->authorize('view', $order);
-
-        try {
-            $result = $this->paymentService->verifyCollectorCoin($order);
-
-            return new JsonResponse($result, Response::HTTP_OK);
-        } catch (PaymentBlockchainNetworkNotSupported $e) {
-            return new JsonResponse(
-                [
-                    'message' => $e->getMessage(),
-                ],
-                Response::HTTP_PAYMENT_REQUIRED
-            );
-        }
-    }
 }

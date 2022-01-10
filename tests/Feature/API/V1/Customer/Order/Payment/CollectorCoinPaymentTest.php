@@ -55,10 +55,13 @@ it('can verfy completion of collector coin paid order', function () {
         'payment_method_id' => $paymentMethod->id,
     ]);
 
-    $response = $this->postJson('/api/v1/customer/orders/' . $order->id . '/payments/verify-collector-coin');
+    $response = $this->postJson('/api/v1/customer/orders/' . $order->id . '/payments/' . $bscTestTransactionHash);
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
-        'transaction_hash', 'status',
+        'message'
+    ]);
+    $response->assertJsonFragment([
+        'message' => 'Payment verified successfully'
     ]);
 });

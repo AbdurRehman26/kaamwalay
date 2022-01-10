@@ -15,7 +15,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     protected const ERROR_PARAMETER_CUSTOMER = 'customer';
     protected const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
-    public function charge(Order $order): array
+    public function charge(Order $order, array $data = []): array
     {
         $paymentData = [
             'customer_id' => Str::random(25),

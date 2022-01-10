@@ -87,11 +87,13 @@ class OrderController extends Controller
         $this->authorize('calculateCollectorCoin', $order);
 
         try {
-            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $request->payment_blockchain_network ?? 1);
+            $blockchainNetworkChainId = $request->payment_blockchain_network ?? 1;
+            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $blockchainNetworkChainId);
 
             return new JsonResponse(
                 [
                     'value' => $collectorCoinPrice,
+                    'wallet' => config('web3networks')[$blockchainNetworkChainId]['collector_coin_wallet'],
                 ],
                 200
             );
@@ -100,6 +102,7 @@ class OrderController extends Controller
                 [
                     'error' => $e->getMessage(),
                     'value' => 0.0,
+                    'wallet' => null,
                 ],
                 Response::HTTP_BAD_REQUEST
             );

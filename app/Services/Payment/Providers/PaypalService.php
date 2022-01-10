@@ -34,7 +34,7 @@ class PaypalService implements PaymentProviderServiceInterface
         $this->client = new PayPalHttpClient($this->environment);
     }
 
-    public function charge(Order $order): array
+    public function charge(Order $order, array $data = []): array
     {
         $orderRequest = new OrdersCreateRequest();
         $orderRequest->prefer('return=representation');

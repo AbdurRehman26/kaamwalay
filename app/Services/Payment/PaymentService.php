@@ -35,28 +35,24 @@ class PaymentService
     ) {
     }
 
-    public function charge(Order $order, array $data = []): array
+    public function charge(Order $order, array $optionalData = []): array
     {
         $this->hasProvider($order);
 
-        if ($this->order->paymentMethod->code === 'collector_coin') {
-            $data = resolve($this->providers[
-                $this->order->paymentMethod->code
-            ], [
-                'networkId' => json_decode($order->firstOrderPayment->response, true)['network'],
-            ])->charge($this->order, $data);
-        } else {
-            $data = resolve($this->providers[
-                $this->order->paymentMethod->code
-            ])->charge($this->order);
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
         }
+
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ], $params ?? [])->charge($this->order, $optionalData);
 
         if (! empty($data['message']) || ! empty($data['payment_intent'])) {
             return $data;
         }
 
         // This updates should only be done if the payment method is not Collector Coin
-        if (! empty($data['success']) && $this->order->paymentMethod->code !== 'collector_coin') {
+        if (! empty($data['success']) && !$this->order->paymentMethod->isCollectorCoin()) {
             $this->calculateAndSaveFee($order);
             $this->updateOrderStatus();
         }
@@ -68,9 +64,18 @@ class PaymentService
     {
         $this->hasProvider($order);
 
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
+
+            // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
+            if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $paymentIntentId) {
+                return false;
+            }
+        }
+
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ])->verify($this->order, $paymentIntentId);
+        ], $params ?? [])->verify($this->order, $paymentIntentId);
 
         if ($data) {
             $this->calculateAndSaveFee($order);
@@ -81,22 +86,22 @@ class PaymentService
         return $data;
     }
 
-    public function verifyCollectorCoin(Order $order): array
-    {
-        $this->hasProvider($order);
+    // public function verifyCollectorCoin(Order $order): array
+    // {
+    //     $this->hasProvider($order);
 
-        $collectorCoinService = new CollectorCoinService(
-            json_decode($order->firstOrderPayment->response, true)['network']
-        );
+    //     $collectorCoinService = new CollectorCoinService(
+    //         json_decode($order->firstOrderPayment->response, true)['network']
+    //     );
 
-        $data = $collectorCoinService->verify($this->order);
+    //     $data = $collectorCoinService->verify($this->order);
 
-        if ($data['status'] === 'success' && $this->order->orderStatus->id === OrderStatus::PAYMENT_PENDING) {
-            $this->updateOrderStatus();
-        }
+    //     if ($data['status'] === 'success' && $this->order->orderStatus->id === OrderStatus::PAYMENT_PENDING) {
+    //         $this->updateOrderStatus();
+    //     }
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
     public function updateOrderPayment(array $data): array
     {
@@ -136,9 +141,13 @@ class PaymentService
     {
         $this->hasProvider($order);
 
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
+        }
+
         $providerInstance = resolve($this->providers[
             $this->order->paymentMethod->code
-        ]);
+        ], $params ?? []);
 
         $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
             $orderPayment->provider_fee = $providerInstance->calculateFee($orderPayment);

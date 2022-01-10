@@ -53,7 +53,7 @@ class PaymentService
         }
 
         // This updates should only be done if the payment method is not Collector Coin
-        if (! empty($data['success']) && !$this->order->paymentMethod->isCollectorCoin()) {
+        if (! empty($data['success']) && ! $this->order->paymentMethod->isCollectorCoin()) {
             $this->calculateAndSaveFee($order);
             $this->updateOrderStatus();
         }

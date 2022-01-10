@@ -59,9 +59,9 @@ it('can verfy completion of collector coin paid order', function () {
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
-        'message'
+        'message',
     ]);
     $response->assertJsonFragment([
-        'message' => 'Payment verified successfully'
+        'message' => 'Payment verified successfully',
     ]);
 });

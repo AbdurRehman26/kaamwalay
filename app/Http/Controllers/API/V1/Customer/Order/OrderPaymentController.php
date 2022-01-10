@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Exceptions\API\Customer\Order\OrderNotPayable;
-use App\Exceptions\API\Customer\Order\PaymentBlockchainNetworkNotSupported;
 use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -64,5 +63,4 @@ class OrderPaymentController extends Controller
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);
     }
-
 }

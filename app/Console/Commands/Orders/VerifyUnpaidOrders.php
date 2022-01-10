@@ -46,7 +46,7 @@ class VerifyUnpaidOrders extends Command
             $this->info("Processing Order: $order->id");
     
             try {
-                $paymentService->verifyCollectorCoin($order);
+                $paymentService->verify($order, json_decode($order->firstOrderPayment->response, true)['txn_hash']);
             } catch (PaymentBlockchainNetworkNotSupported $nsn) {
                 Log::error('Order ID: ' . $order->id . ' has a not supported payment network and can not be processed.');
             }

@@ -90,10 +90,8 @@ class CollectorCoinService implements PaymentProviderServiceInterface
         }
     }
 
-    public function verify(Order $order, string $paymentIntentId): bool
+    public function verify(Order $order, string $transactionHash): bool
     {
-        $transactionHash = $order->firstOrderPayment->payment_provider_reference_id;
-
         //TODO: Check if we also should support this for confirmed/graded orders
         if ($order->order_status_id === OrderStatus::PLACED) {
             return true;

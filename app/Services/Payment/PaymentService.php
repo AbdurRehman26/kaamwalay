@@ -87,23 +87,6 @@ class PaymentService
         return $data;
     }
 
-    // public function verifyCollectorCoin(Order $order): array
-    // {
-    //     $this->hasProvider($order);
-
-    //     $collectorCoinService = new CollectorCoinService(
-    //         json_decode($order->firstOrderPayment->response, true)['network']
-    //     );
-
-    //     $data = $collectorCoinService->verify($this->order);
-
-    //     if ($data['status'] === 'success' && $this->order->orderStatus->id === OrderStatus::PAYMENT_PENDING) {
-    //         $this->updateOrderStatus();
-    //     }
-
-    //     return $data;
-    // }
-
     public function updateOrderPayment(array $data): array
     {
         /** @noinspection JsonEncodingApiUsageInspection */

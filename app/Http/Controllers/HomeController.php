@@ -8,6 +8,10 @@ class HomeController extends Controller
 {
     public function getView(): RedirectResponse
     {
-        return redirect()->route('dashboard.main', ['path' => '/']);
+        return redirect()->route('dashboard.main', [
+            'path' => '/',
+            'rfsn' => request()->query?->get('rfsn'),
+            'rf_test' => request()->query?->get('rf_test'),
+        ]);
     }
 }

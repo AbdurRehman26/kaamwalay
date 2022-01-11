@@ -16,6 +16,7 @@ use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\CollectorCoinService;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
+use App\Services\Payment\Providers\WalletService;
 use Throwable;
 
 class PaymentService
@@ -29,6 +30,7 @@ class PaymentService
         'stripe' => StripeService::class,
         'paypal' => PaypalService::class,
         'collector_coin' => CollectorCoinService::class,
+        'wallet' => WalletService::class,
     ];
 
     public function __construct(
@@ -54,11 +56,18 @@ class PaymentService
 
         // This updates should only be done if the payment method is not Collector Coin
         if (! empty($data['success']) && ! $this->order->paymentMethod->isCollectorCoin()) {
+
+            /* Partial Payments */
+            if ($this->checkForPartialPayment()) {
+                $this->updatePartialPayment();
+            }
+
             $this->calculateAndSaveFee($order);
+
             $this->updateOrderStatus();
         }
 
-        return $this->updateOrderPayment($data);
+        return $this->updateOrderPayment($this->order->firstOrderPayment, $data);
     }
 
     public function verify(Order $order, string $paymentIntentId): bool
@@ -79,6 +88,12 @@ class PaymentService
         ], $params ?? [])->verify($this->order, $paymentIntentId);
 
         if ($data) {
+
+            /* Partial Payments */
+            if ($this->checkForPartialPayment()) {
+                $this->updatePartialPayment();
+            }
+
             $this->calculateAndSaveFee($order);
 
             return $this->updateOrderStatus();
@@ -87,14 +102,14 @@ class PaymentService
         return $data;
     }
 
-    public function updateOrderPayment(array $data): array
+    public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
     {
         /** @noinspection JsonEncodingApiUsageInspection */
-        $this->order->firstOrderPayment->update([
+        $orderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
-            'amount' => $data['amount'] ?? $this->order->grand_total,
+            'amount' => $data['amount'] ?? $this->order->grand_total_to_be_paid,
             'type' => $data['type'],
             'notes' => $data['notes'] ?? '',
         ]);
@@ -134,7 +149,7 @@ class PaymentService
         ], $params ?? []);
 
         $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
-            $orderPayment->provider_fee = $providerInstance->calculateFee($orderPayment);
+            $orderPayment->provider_fee = $orderPayment->paymentMethod->isWallet() ? 0 : $providerInstance->calculateFee($orderPayment);
             $orderPayment->save();
 
             return $orderPayment;
@@ -222,5 +237,20 @@ class PaymentService
             'type' => OrderPayment::TYPE_REFUND,
             'notes' => $request['notes'],
         ];
+    }
+
+    protected function checkForPartialPayment(): bool
+    {
+        return ! $this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet > 0;
+    }
+
+    /**
+     * @return void
+     */
+    protected function updatePartialPayment(): void
+    {
+        $partialPaymentResponse = resolve($this->providers['wallet'])->charge($this->order);
+
+        $this->updateOrderPayment($this->order->lastOrderPayment, $partialPaymentResponse);
     }
 }

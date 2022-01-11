@@ -165,6 +165,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(UserDevice::class);
     }
 
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
     public function assignCustomerNumber(): self
     {
         if (! $this->customer_number) {
@@ -226,10 +231,5 @@ class User extends Authenticatable implements JWTSubject
             'token' => $token,
             'email' => $this->getEmailForPasswordReset(),
         ]);
-    }
-
-    public function wallet(): HasOne
-    {
-        return $this->hasOne(Wallet::class);
     }
 }

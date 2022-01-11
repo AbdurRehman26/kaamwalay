@@ -25,7 +25,7 @@ class OrderPaymentResource extends BaseResource
             return $this->collectorCoinData(json_decode($this->response, associative: true) ?? []);
         }
 
-        $hasCard = ! ($this->type === OrderPayment::TYPE_REFUND);
+        $hasCard = ! ($this->type === OrderPayment::TYPE_REFUND || $this->paymentMethod->isWallet());
 
         $card = null;
 

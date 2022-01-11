@@ -26,8 +26,9 @@ class OrderCreateResource extends JsonResource
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
-            'grand_total' => $this->grand_total,
             'payment_method_id' => $this->payment_method_id,
+            'grand_total' => $this->grand_total_to_be_paid,
+            'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
         ];
     }
 }

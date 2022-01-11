@@ -45,4 +45,9 @@ class PaymentMethod extends Model
     {
         return PaymentMethod::where('code', 'wallet')->first();
     }
+
+    public function isWallet(): bool
+    {
+        return $this->code === 'wallet';
+    }
 }

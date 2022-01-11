@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Admin\Wallet;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class WalletTransactionCollection extends ResourceCollection
@@ -9,8 +10,8 @@ class WalletTransactionCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param  Request  $request
+     * @return array
      */
     public function toArray($request)
     {

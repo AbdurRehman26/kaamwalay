@@ -4,8 +4,11 @@ namespace App\Services\Wallet;
 
 use App\Exceptions\API\Wallet\InvalidWalletTransactionException;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class WalletService
 {
@@ -91,5 +94,15 @@ class WalletService
         ]);
 
         $wallet->increment('balance', $amount);
+    }
+
+    public function getWalletTransactions(): LengthAwarePaginator
+    {
+        /* @var User $user */
+        $user = auth()->user();
+
+        return QueryBuilder::for(WalletTransaction::where('wallet_id', $user->wallet->id))
+            ->defaultSort('-created_at')
+            ->paginate(request('per_page', self::TRANSACTIONS_PER_PAGE));
     }
 }

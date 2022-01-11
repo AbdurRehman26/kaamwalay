@@ -4,6 +4,7 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Admin\OrderStatusHistoryService;
@@ -17,10 +18,14 @@ beforeEach(function () {
         'stripe_id' => Str::random(25),
     ]);
 
+    $this->paymentMethod = PaymentMethod::factory()->create([
+        'code' => 'wallet',
+    ]);
+
     $this->order = Order::factory()->make([
         'user_id' => $this->user->id,
         'coupon_id' => null,
-        'payment_method_id' => 3,
+        'payment_method_id' => $this->paymentMethod->id,
         'order_status_id' => OrderStatus::PAYMENT_PENDING,
     ]);
 
@@ -46,7 +51,7 @@ beforeEach(function () {
 test('user can be charged successfully from wallet', function () {
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
-        'payment_method_id' => 3,
+        'payment_method_id' => $this->paymentMethod->id,
     ]);
     postJson("/api/v1/customer/orders/{$this->order->id}/payments")
         ->dump()
@@ -74,7 +79,7 @@ test('user can be charged partially from wallet', function () {
     ]);
     OrderPayment::factory()->create([
         'order_id' => $newOrder->id,
-        'payment_method_id' => 3,
+        'payment_method_id' => $this->paymentMethod->id,
     ]);
 
     postJson("/api/v1/customer/orders/{$newOrder->id}/payments")

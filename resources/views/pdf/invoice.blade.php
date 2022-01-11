@@ -383,7 +383,7 @@
                                         -${{number_format($order->discounted_amount, 2)}}
                                     </td>
                                 </tr>
-                            @encdif
+                            @endif
                             @if(! empty($order->payment_method_discounted_amount))
                                 <tr class="info-line">
                                     <td class="info-title">

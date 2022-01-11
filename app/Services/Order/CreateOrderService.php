@@ -90,7 +90,7 @@ class CreateOrderService
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
-        $this->storePaymentMethodDiscount($this->data['payment_method']);
+        $this->storePaymentMethodDiscount($this->data['payment_method'] ?? []);
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->storeOrderPayment($this->data['payment_provider_reference']);
@@ -249,11 +249,11 @@ class CreateOrderService
     {
         $paymentMethod = PaymentMethod::find($paymentMethod['id']);
 
-        if ($paymentMethod->code === 'collector_coin') {
+        if ($paymentMethod->isCollectorCoin()) {
             $this->order->payment_method_discounted_amount = round($this->order->service_fee * config('robograding.collector_coin_discount_percentage.value') / 100, 2);
         }
     }
-    
+
     protected function storeWalletPaymentAmount(float|null $amount): void
     {
         if (! empty($amount)) {

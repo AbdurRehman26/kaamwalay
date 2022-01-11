@@ -7,12 +7,14 @@ use App\Exceptions\Services\Payment\OrderPaymentIsIncorrect;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
+use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Web3\ValueObjects\Wei;
 use Web3\Web3;
 
-class CollectorCoinService implements PaymentProviderServiceInterface
+class CollectorCoinService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
     // Status Values
     public const FAILED = '0';

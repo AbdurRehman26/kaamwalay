@@ -11,7 +11,7 @@ class WalletAmountGrandTotalValidator
     {
         throw_if(
             $order->paymentMethod->isWallet() && $order->grand_total !== $amount,
-            new InvalidCreditAppliedAmountException('Credit applied can not be equal to grand total.')
+            new InvalidCreditAppliedAmountException('Credit applied is not equal to grand total.')
         );
 
         throw_if(

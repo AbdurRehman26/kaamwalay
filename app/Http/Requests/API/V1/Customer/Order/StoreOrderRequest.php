@@ -48,6 +48,7 @@ class StoreOrderRequest extends FormRequest
             'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
             'payment_method' => [
                 Rule::requiredIf(empty($this->payment_by_wallet)),
+                'nullable',
                 'array',
             ],
             'payment_method.id' => [

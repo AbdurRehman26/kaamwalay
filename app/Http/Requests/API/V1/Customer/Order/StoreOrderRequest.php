@@ -12,15 +12,6 @@ class StoreOrderRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation()
-    {
-        if (! $this->has('payment_by_wallet')) {
-            $this->merge([
-                'payment_by_wallet' => 0,
-            ]);
-        }
-    }
-
     public function rules(): array
     {
         return [

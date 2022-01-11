@@ -236,7 +236,7 @@ class Order extends Model
 
     public function getGrandTotalCentsAttribute(): int
     {
-        return ($this->grand_total - $this->amount_paid_from_wallet) * 100;
+        return ($this->grand_total_to_be_paid) * 100;
     }
 
     public function getGrandTotalToBePaidAttribute(): int

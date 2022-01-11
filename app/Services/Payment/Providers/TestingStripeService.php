@@ -5,8 +5,8 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
-use App\Services\Payment\Providers\Interfaces\PaymentProviderServiceInterface;
-use App\Services\Payment\Providers\Interfaces\PaymentProviderVerificationInterface;
+use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
+use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
 use Illuminate\Support\Str;
 
 class TestingStripeService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface

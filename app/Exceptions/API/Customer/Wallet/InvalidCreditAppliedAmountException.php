@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WalletBalanceGreaterThanOrderException extends Exception
+class InvalidCreditAppliedAmountException extends Exception
 {
     /**
      * @var string

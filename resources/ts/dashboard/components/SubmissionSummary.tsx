@@ -19,6 +19,8 @@ import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissi
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
+import { useAuth } from '@shared/hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -171,6 +173,9 @@ function SubmissionSummary() {
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+    const orderSubmission = useAppSelector((state) => state.newSubmission);
+    const user$ = useAuth().user;
+
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -252,6 +257,7 @@ function SubmissionSummary() {
             });
             sendECommerceDataToGA();
             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+            pushDataToRefersion(orderSubmission, user$);
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {
@@ -291,6 +297,7 @@ function SubmissionSummary() {
                             currency: 'USD',
                         });
                         sendECommerceDataToGA();
+                        pushDataToRefersion(orderSubmission, user$);
                         history.push(`/submissions/${orderID}/confirmation`);
                     });
                 }

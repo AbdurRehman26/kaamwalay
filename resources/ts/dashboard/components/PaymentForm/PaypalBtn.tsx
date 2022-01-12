@@ -13,6 +13,8 @@ import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
+import { useAuth } from '@shared/hooks/useAuth';
 
 function PaypalBtn() {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -31,6 +33,9 @@ function PaypalBtn() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const numberOfSelectedCards = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
+    const orderSubmission = useAppSelector((state) => state.newSubmission);
+    const user$ = useAuth().user;
+
     const notifications = useNotifications();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -96,6 +101,7 @@ function PaypalBtn() {
                             });
                             sendECommerceDataToGA();
                             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+                            pushDataToRefersion(orderSubmission, user$);
                             history.push(`/submissions/${orderID}/confirmation`);
                         } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');

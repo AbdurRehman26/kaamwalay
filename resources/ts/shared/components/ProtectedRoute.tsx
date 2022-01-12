@@ -22,7 +22,6 @@ interface ProtectedRouteProps extends RouteProps {
  */
 export function ProtectedRoute({ redirectRoute, roles, ...rest }: ProtectedRouteProps) {
     const { user, authenticated, checking } = useAuth();
-
     const hasAtLeastOneRole = useMemo(() => {
         if (user && roles) {
             return castArray<RolesEnum>(roles).filter((role) => user.hasRole(role)).length > 0;
@@ -50,7 +49,13 @@ export function ProtectedRoute({ redirectRoute, roles, ...rest }: ProtectedRoute
         }
 
         const url = new URL(link);
+        const params: any = new URLSearchParams(rest.location?.search);
+
         url.searchParams.set('from', window.location.href);
+
+        if (params?.get('rfsn')) {
+            url.searchParams.set('rfsn', params?.get('rfsn'));
+        }
 
         return <NativeRedirect to={url.href} />;
     }

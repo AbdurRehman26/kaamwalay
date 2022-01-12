@@ -27,6 +27,12 @@
             /></noscript>
         <!-- End Facebook Pixel Code -->
         @endif
+    </x-slot>
 
+    <x-slot name="body">
+        @production
+            <script src="//www.refersion.com/tracker/v3/pub_3752401d5d34d7b7d522.js"></script>
+            <script>_refersion();</script>
+        @endproduction
     </x-slot>
 </x-layout>

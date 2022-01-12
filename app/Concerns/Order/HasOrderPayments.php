@@ -16,7 +16,9 @@ trait HasOrderPayments
 
     public function firstCollectorCoinOrderPayment(): HasOne
     {
-        return $this->hasOne(OrderPayment::class)->whereHas('paymentMethod', function($q) { return $q->where('code', 'collector_coin'); })->oldestOfMany();
+        return $this->hasOne(OrderPayment::class)->whereHas('paymentMethod', function ($q) {
+            return $q->where('code', 'collector_coin');
+        })->oldestOfMany();
     }
 
     public function lastOrderPayment(): HasOne

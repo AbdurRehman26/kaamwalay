@@ -82,10 +82,9 @@ class OrderService
     {
         $orderPayment = $order->firstCollectorCoinOrderPayment;
 
-        // Would be 0 if there is no collector coin payment for this order, for example, it has been fully paid with wallet 
+        // Would be 0 if there is no collector coin payment for this order, for example, it has been fully paid with wallet
 
-        if (!$orderPayment)
-        {
+        if (! $orderPayment) {
             return 0;
         }
         

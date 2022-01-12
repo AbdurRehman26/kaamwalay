@@ -91,7 +91,7 @@ test('collector coin discount is applied', function () {
     $shippingFee = ShippingFeeService::calculateForOrder(Order::first());
     $response->assertSuccessful();
     $response->assertJsonFragment([
-        'grand_total' => round($this->paymentPlan->price * (1 - ($discountPercentage/100)) + $shippingFee, 2)
+        'grand_total' => round($this->paymentPlan->price * (1 - ($discountPercentage / 100)) + $shippingFee, 2),
     ]);
 });
 

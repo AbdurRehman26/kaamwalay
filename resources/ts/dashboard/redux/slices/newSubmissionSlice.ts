@@ -395,9 +395,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             id: 1,
         },
         paymentMethod:
-            currentSubmission.appliedCredit === currentSubmission.previewTotal
-                ? null
-                : { id: currentSubmission.step04Data.paymentMethodId },
+            currentSubmission.previewTotal === 0 ? null : { id: currentSubmission.step04Data.paymentMethodId },
         paymentProviderReference: {
             id:
                 currentSubmission.step04Data.paymentMethodId === 1
@@ -410,6 +408,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                   id: currentSubmission?.couponState?.appliedCouponData.id,
               }
             : null,
+        paymentByWallet: currentSubmission.appliedCredit,
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
@@ -626,7 +625,9 @@ export const newSubmissionSlice = createSlice({
             state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress.flat;
             state.step04Data.selectedBillingAddress.id = action.payload.billingAddress.id;
             state.step04Data.selectedCreditCard.expMonth =
-                state.step04Data.paymentMethodId === 1 ? action.payload.orderPayment.card.expMonth : '';
+                state.step04Data.paymentMethodId === 1 && state.previewTotal !== 0
+                    ? action?.payload?.orderPayment?.card?.expMonth
+                    : '';
             state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress.phone;
             state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
                 (currentState: any) => currentState.code === action.payload.billingAddress.state,

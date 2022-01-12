@@ -280,7 +280,7 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
 
 export const getAvailableCredit = createAsyncThunk('newSubmission/getAvailableCredit', async () => {
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/wallet/');
+    const endpoint = apiService.createEndpoint('customer/wallet/me');
     const response = await endpoint.get('');
     return response.data.balance;
 });

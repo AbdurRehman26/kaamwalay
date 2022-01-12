@@ -4,6 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import React, { PropsWithChildren, useMemo } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { ConfirmationDialogProvider } from '../contexts/ConfirmationDialogContext';
 import { materialUiTheme } from '../styles/theme';
@@ -11,6 +12,7 @@ import AuthenticationCheck from './AuthenticationCheck';
 import { ConfigurationLoad } from './ConfigurationLoad';
 import { NotificationsContainer } from './NotificationsContainer';
 import { SplashScreen, SplashScreenProps } from './SplashScreen';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 declare module '@mui/styles/defaultTheme' {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -26,6 +28,9 @@ interface ApplicationProviderProps {
     noNotificationsContainer?: boolean;
     noCssBaseline?: boolean;
 }
+
+// Create a client
+const queryClient = new QueryClient();
 
 /**
  *
@@ -52,21 +57,24 @@ export function ApplicationProvider(props: PropsWithChildren<ApplicationProvider
     );
 
     return (
-        <LocalizationProvider dateAdapter={DateAdapter}>
-            <Provider store={store}>
-                <StyledEngineProvider injectFirst>
-                    <ThemeProvider theme={materialUiTheme}>
-                        <>
-                            {!noConfigurationLoad && <ConfigurationLoad />}
-                            {!noAuthenticationCheck && <AuthenticationCheck />}
-                            {!noNotificationsContainer && <NotificationsContainer />}
-                            {!noCssBaseline && <CssBaseline />}
-                            <ConfirmationDialogProvider>{content}</ConfirmationDialogProvider>
-                        </>
-                    </ThemeProvider>
-                </StyledEngineProvider>
-            </Provider>
-        </LocalizationProvider>
+        <QueryClientProvider client={queryClient}>
+            <LocalizationProvider dateAdapter={DateAdapter}>
+                <Provider store={store}>
+                    <StyledEngineProvider injectFirst>
+                        <ThemeProvider theme={materialUiTheme}>
+                            <>
+                                {!noConfigurationLoad && <ConfigurationLoad />}
+                                {!noAuthenticationCheck && <AuthenticationCheck />}
+                                {!noNotificationsContainer && <NotificationsContainer />}
+                                {!noCssBaseline && <CssBaseline />}
+                                <ConfirmationDialogProvider>{content}</ConfirmationDialogProvider>
+                            </>
+                        </ThemeProvider>
+                    </StyledEngineProvider>
+                </Provider>
+            </LocalizationProvider>
+            {process.env.NODE_ENV !== 'production' ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+        </QueryClientProvider>
     );
 }
 

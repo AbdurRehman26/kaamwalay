@@ -26,6 +26,7 @@ import { useAdminCustomersQuery } from '@shared/redux/hooks/useCustomersQuery';
 import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
+import { UserEntity } from '@shared/entities/UserEntity';
 
 type InitialValues = {
     minSubmissions: string;
@@ -64,7 +65,7 @@ enum RowOption {
  * @time: 21:39
  */
 export function CustomersListPage() {
-    const [customerId, setCustomerId] = useState<number>(0);
+    const [customer, setCustomer] = useState<UserEntity | null>(null);
 
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
@@ -80,7 +81,7 @@ export function CustomersListPage() {
         [query.minSubmissions, query.maxSubmissions, query.signedUpStart, query.signedUpEnd, query.search],
     );
 
-    const handleCreditDialogClose = useCallback(() => setCustomerId(0), []);
+    const handleCreditDialogClose = useCallback(() => setCustomer(null), []);
 
     const customers = useAdminCustomersQuery({
         params: {
@@ -154,7 +155,13 @@ export function CustomersListPage() {
     const handleOption = useCallback((action: RowOption, value?: any) => {
         switch (action) {
             case RowOption.CreditCustomer:
-                setCustomerId(value);
+                const [firstName, lastName] = value.fullName.split(' ');
+                const user = new UserEntity();
+                user.id = value.id;
+                user.firstName = firstName;
+                user.lastName = lastName;
+                user.wallet = value.wallet;
+                setCustomer(user);
                 break;
         }
     }, []);
@@ -300,11 +307,11 @@ export function CustomersListPage() {
                                     {customer.submissions ?? 0}
                                 </TableCell>
                                 <TableCell variant={'body'} align={'right'}>
-                                    {formatCurrency(customer.walletBalance ?? 0)}
+                                    {formatCurrency(customer.wallet?.balance ?? 0)}
                                 </TableCell>
                                 <TableCell variant={'body'} align={'right'}>
                                     <OptionsMenu onClick={handleOption}>
-                                        <OptionsMenuItem action={RowOption.CreditCustomer} value={customer.id}>
+                                        <OptionsMenuItem action={RowOption.CreditCustomer} value={customer}>
                                             Credit Customer
                                         </OptionsMenuItem>
                                     </OptionsMenu>
@@ -320,7 +327,12 @@ export function CustomersListPage() {
                 </Table>
             </TableContainer>
 
-            <CustomerCreditDialog customerId={customerId} open={!!customerId} onClose={handleCreditDialogClose} />
+            <CustomerCreditDialog
+                customer={customer}
+                wallet={customer?.wallet}
+                open={!!customer}
+                onClose={handleCreditDialogClose}
+            />
         </Grid>
     );
 }

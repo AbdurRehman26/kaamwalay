@@ -15,7 +15,8 @@ import Paper from '@mui/material/Paper';
 import { useCallback, useState } from 'react';
 import { useRepository } from '@shared/hooks/useRepository';
 import { WalletRepository } from '@shared/repositories/Admin/WalletRepository';
-import useSWR from 'swr';
+import { useQuery } from 'react-query';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface CustomerCreditHistoryProps {
     walletId?: number;
@@ -31,7 +32,7 @@ export function CustomerCreditHistory({ walletId }: CustomerCreditHistoryProps) 
     const walletRepository = useRepository(WalletRepository);
     const [collapseHistory, setCollapseHistory] = useState(true);
     const handleCollapseHistory = useCallback(() => setCollapseHistory((prev) => !prev), []);
-    const walletHistory = useSWR(
+    const walletHistory = useQuery(
         `walletHistory/${walletId ?? ''}`,
         () => {
             if (walletId) {
@@ -42,6 +43,14 @@ export function CustomerCreditHistory({ walletId }: CustomerCreditHistoryProps) 
         },
         {},
     );
+
+    if (walletHistory.isLoading) {
+        return (
+            <Grid container direction={'column'} alignItems={'center'} justifyContent={'center'} padding={5}>
+                <CircularProgress />
+            </Grid>
+        );
+    }
 
     if (!walletHistory.data?.length) {
         return (

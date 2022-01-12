@@ -24,6 +24,7 @@ class WalletTransactionResource extends BaseResource
             'description' => $this->getTransactionDescription(),
             'amount' => $this->amount,
             'created_at' => $this->created_at->toISOString(),
+            'updated_at' => $this->updated_at->toISOString(),
         ];
     }
 

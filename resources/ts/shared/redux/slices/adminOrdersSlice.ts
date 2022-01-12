@@ -23,8 +23,9 @@ import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntit
 import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { NotificationsService } from '../../services/NotificationsService';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
-import { ChangeOrderItemNotesDTO } from '@shared/dto/ChangeOrderItemNotesDTO';
-import { WalletRepository } from '@shared/repositories/Admin/WalletRepository';
+import { ChangeOrderItemNotesDTO } from '../../dto/ChangeOrderItemNotesDTO';
+import { WalletRepository } from '../../repositories/Admin/WalletRepository';
+import { WalletEntity } from '../../entities/WalletEntity';
 
 interface StateType extends APIState<OrderEntity> {}
 
@@ -248,7 +249,7 @@ export const updateOrderWalletById = createAsyncThunk('updateOrderWalletById', a
         // noinspection UnnecessaryLocalVariableJS
         const wallet = await walletRepository.show(walletId);
 
-        return wallet;
+        return instanceToPlain(wallet);
     } catch (e: any) {
         return thunkAPI.rejectWithValue(e);
     }
@@ -387,7 +388,7 @@ export const adminOrdersSlice = createSlice({
             const entities = { ...state.entities };
             Object.entries(entities).forEach(([key, value]) => {
                 if (value?.customer?.wallet?.id === payload.id) {
-                    entities[key as any].customer.wallet = payload;
+                    entities[key as any].customer.wallet = plainToInstance(WalletEntity, payload);
                 }
             });
 

@@ -17,15 +17,16 @@ import Button from '@mui/material/Button';
 import Icon from '@mui/material/Icon';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { UserEntity } from '@shared/entities/UserEntity';
 
 interface SubmissionViewHeaderProps {
     orderId: number;
     orderNumber: string;
-    orderCustomerId: number;
     orderStatus: OrderStatusEntity;
     orderStatusHistory: OrderStatusHistoryEntity[];
     orderShipment?: ShipmentEntity | null;
     orderLabel?: OrderLabelEntity | null;
+    customer: UserEntity | null;
 }
 
 const useStyles = makeStyles(
@@ -62,10 +63,10 @@ const useStyles = makeStyles(
 export function SubmissionsViewHeader({
     orderId,
     orderNumber,
-    orderCustomerId,
     orderStatus,
     orderStatusHistory,
     orderShipment,
+    customer,
     orderLabel,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
@@ -136,11 +137,7 @@ export function SubmissionsViewHeader({
                         trackingNumber={orderShipment?.trackingNumber}
                         shippingProvider={orderShipment?.shippingProvider}
                     />
-                    <SubmissionHeaderMoreButton
-                        orderId={orderId}
-                        orderStatus={orderStatus}
-                        orderCustomerId={orderCustomerId}
-                    />
+                    <SubmissionHeaderMoreButton orderId={orderId} orderStatus={orderStatus} customer={customer} />
                 </Grid>
             </Grid>
             <StatusProgressBar steps={history} />

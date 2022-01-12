@@ -24,6 +24,7 @@ import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { NotificationsService } from '../../services/NotificationsService';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 import { ChangeOrderItemNotesDTO } from '@shared/dto/ChangeOrderItemNotesDTO';
+import { WalletRepository } from '@shared/repositories/Admin/WalletRepository';
 
 interface StateType extends APIState<OrderEntity> {}
 
@@ -240,6 +241,19 @@ export const editTransactionNotes = createAsyncThunk(
     },
 );
 
+export const updateOrderWalletById = createAsyncThunk('updateOrderWalletById', async (walletId: number, thunkAPI) => {
+    const walletRepository = app(WalletRepository);
+
+    try {
+        // noinspection UnnecessaryLocalVariableJS
+        const wallet = await walletRepository.show(walletId);
+
+        return wallet;
+    } catch (e: any) {
+        return thunkAPI.rejectWithValue(e);
+    }
+});
+
 export const adminOrdersSlice = createSlice({
     name: adminOrdersThunk.name,
     initialState: {
@@ -367,6 +381,17 @@ export const adminOrdersSlice = createSlice({
                 order[transactionOrderProperty][existingTransactionIndex].notes = transaction.notes as any;
                 state.entities[payload.orderId] = instanceToPlain(order) as any;
             }
+        });
+
+        builder.addCase(updateOrderWalletById.fulfilled, (state, { payload }) => {
+            const entities = { ...state.entities };
+            Object.entries(entities).forEach(([key, value]) => {
+                if (value?.customer?.wallet?.id === payload.id) {
+                    entities[key as any].customer.wallet = payload;
+                }
+            });
+
+            state.entities = entities;
         });
     },
 });

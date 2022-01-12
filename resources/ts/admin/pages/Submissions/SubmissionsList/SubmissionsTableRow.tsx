@@ -165,7 +165,12 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     </Menu>
                 </TableCell>
             </TableRow>
-            <CustomerCreditDialog customerId={order.customerId} open={creditDialog} onClose={handleCreditDialogClose} />
+            <CustomerCreditDialog
+                customer={order.customer}
+                wallet={order.customer?.wallet}
+                open={creditDialog}
+                onClose={handleCreditDialogClose}
+            />
         </>
     );
 }

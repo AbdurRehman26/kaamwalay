@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\V1\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V1\Customer\Wallet\WalletResource;
 
 class OrderCustomerResource extends BaseResource
 {
@@ -21,6 +22,7 @@ class OrderCustomerResource extends BaseResource
             'last_name' => $this->last_name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'wallet' => $this->whenLoaded('wallet', WalletResource::class),
         ];
     }
 }

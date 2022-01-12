@@ -64,8 +64,11 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     {
         try {
             $transactionData = $this->getTransaction($data['transaction_hash']);
+
+            $orderPayment = $order->firstCollectorCoinOrderPayment;
+
             //Get Collector Coin amount from USD (Order grand total)
-            $response = json_decode($order->firstOrderPayment->response, true);
+            $response = json_decode($orderPayment->response, true);
             $data['amount'] = $response['amount'];
 
             $this->validateTransaction($data, $transactionData);
@@ -79,7 +82,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
                 'request' => $data,
                 'response' => $response,
                 'payment_provider_reference_id' => $data['transaction_hash'],
-                'amount' => $order->firstOrderPayment->amount,
+                'amount' => $orderPayment->amount,
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => null,
             ];

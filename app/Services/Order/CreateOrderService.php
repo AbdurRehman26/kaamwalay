@@ -214,12 +214,12 @@ class CreateOrderService
             'payment_method_id' => $this->order->paymentMethod->id,
         ];
         if ($this->order->paymentMethod->code === 'stripe') {
-            $response = $this->order->user->findPaymentMethod($data['payment_provider_reference']['id']);
+            $response = $this->order->user->findPaymentMethod($data['id']);
             $orderPaymentData = array_merge(
                 $orderPaymentData,
                 [
                     'response' => json_encode($response),
-                    'payment_provider_reference_id' => $data['payment_provider_reference']['id'],
+                    'payment_provider_reference_id' => $data['id'],
                 ]
             );
         }

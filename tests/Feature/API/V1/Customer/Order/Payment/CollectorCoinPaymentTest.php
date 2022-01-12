@@ -1,13 +1,96 @@
 <?php
 
+use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\PaymentMethod;
+use App\Models\PaymentPlan;
+use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Order\Shipping\ShippingFeeService;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
+    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000]);
+    $this->cardProduct = CardProduct::factory()->create();
+    $this->shippingMethod = ShippingMethod::factory()->create();
+    $this->paymentMethod = PaymentMethod::factory()->create([
+        'code' => 'collector_coin',
+    ]);
+    $this->orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+});
+
+
+test('collector coin discount is applied', function () {
+    $this->actingAs($this->user);
+    
+    $discountPercentage = 10;
+    config('robograding.collector_coin_discount_percentage.value', $discountPercentage);
+
+    $response = $this->postJson('/api/v1/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+    ]);
+    
+    $shippingFee = ShippingFeeService::calculateForOrder(Order::first());
+    $response->assertSuccessful();
+    $response->assertJsonFragment([
+        'grand_total' => round($this->paymentPlan->price * (1 - ($discountPercentage/100)) + $shippingFee, 2)
+    ]);
 });
 
 it('can verfy completion of collector coin paid order', function () {
@@ -36,11 +119,9 @@ it('can verfy completion of collector coin paid order', function () {
 
     $bscTestTransactionHash = '0x7ee79769e935f914ec5ff3ccc10d767bf5800bc506f2df8e0c274034a3d61a52';
     $this->actingAs($this->user);
-    $paymentMethod = PaymentMethod::factory()->create([
-        'code' => 'collector_coin',
-    ]);
+    
     $order = Order::factory()->for($this->user)->create([
-        'payment_method_id' => $paymentMethod->id,
+        'payment_method_id' => $this->paymentMethod->id,
     ]);
     OrderItem::factory()->for($order)->create();
     OrderPayment::factory()->for($order)->create([
@@ -52,7 +133,7 @@ it('can verfy completion of collector coin paid order', function () {
             ]
         ),
         'payment_provider_reference_id' => $bscTestTransactionHash,
-        'payment_method_id' => $paymentMethod->id,
+        'payment_method_id' => $this->paymentMethod->id,
     ]);
 
     $response = $this->postJson('/api/v1/customer/orders/' . $order->id . '/payments/' . $bscTestTransactionHash);

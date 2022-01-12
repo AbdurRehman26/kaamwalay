@@ -14,6 +14,11 @@ trait HasOrderPayments
         return $this->hasOne(OrderPayment::class)->oldestOfMany();
     }
 
+    public function firstCollectorCoinOrderPayment(): HasOne
+    {
+        return $this->hasOne(OrderPayment::class)->whereHas('paymentMethod', function($q) { return $q->where('code', 'collector_coin'); })->oldestOfMany();
+    }
+
     public function lastOrderPayment(): HasOne
     {
         return $this->hasOne(OrderPayment::class)->latestOfMany();

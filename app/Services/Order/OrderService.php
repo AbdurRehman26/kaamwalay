@@ -80,9 +80,16 @@ class OrderService
 
     public function calculateCollectorCoinPrice(Order $order, int $paymentBlockchainNetwork): float
     {
-        $collectorCoinPrice = (new CollectorCoinService($paymentBlockchainNetwork))->getCollectorCoinPriceFromUsd($order->grand_total);
+        $orderPayment = $order->firstCollectorCoinOrderPayment;
 
-        $orderPayment = $order->firstOrderPayment;
+        // Would be 0 if there is no collector coin payment for this order, for example, it has been fully paid with wallet 
+
+        if (!$orderPayment)
+        {
+            return 0;
+        }
+        
+        $collectorCoinPrice = (new CollectorCoinService($paymentBlockchainNetwork))->getCollectorCoinPriceFromUsd($order->grand_total_to_be_paid);
         $orderPayment->response = json_encode(['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork]);
         $orderPayment->update();
 

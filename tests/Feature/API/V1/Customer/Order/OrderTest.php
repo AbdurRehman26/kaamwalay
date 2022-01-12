@@ -397,8 +397,11 @@ it('can calculate collector coin price for an order', function () {
 
     $this->actingAs($this->user);
     $order = Order::factory()->for($this->user)->create();
+    $paymentMethod = PaymentMethod::factory()->create([
+        'code' => 'collector_coin'
+    ]);
     OrderItem::factory()->for($order)->create();
-    OrderPayment::factory()->for($order)->create();
+    OrderPayment::factory()->for($order)->for($paymentMethod)->create();
 
     $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/collector-coin?payment_blockchain_network=97');
 
@@ -415,7 +418,12 @@ it('throws error if using unsupported network', function () {
 
     $this->actingAs($this->user);
     $order = Order::factory()->for($this->user)->create();
-
+    $paymentMethod = PaymentMethod::factory()->create([
+        'code' => 'collector_coin'
+    ]);
+    OrderItem::factory()->for($order)->create();
+    OrderPayment::factory()->for($order)->for($paymentMethod)->create();
+    
     $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/collector-coin?payment_blockchain_network=1');
 
     $response->assertStatus(400);

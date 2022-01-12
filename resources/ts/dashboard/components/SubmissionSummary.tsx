@@ -19,6 +19,7 @@ import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissi
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
 import { useAuth } from '@shared/hooks/useAuth';
 import { isNotProduction } from '@shared/lib/utils/getEnvironment';
 
@@ -169,12 +170,11 @@ function SubmissionSummary() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
-    const orderNumber = useAppSelector((state) => state.newSubmission.orderNumber);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+    const orderSubmission = useAppSelector((state) => state.newSubmission);
     const user$ = useAuth().user;
 
     const numberOfSelectedCards =
@@ -235,33 +235,8 @@ function SubmissionSummary() {
         if (isNotProduction()) {
             return true;
         }
-        // @ts-ignore
-        window._refersion(function () {
-            // @ts-ignore
-            window._rfsn._addTrans({
-                order_id: orderNumber,
-                shipping: shippingFee,
-                discount: discountedValue,
-                discount_code: couponCode,
-                currency_code: 'USD',
-            });
 
-            // @ts-ignore
-            window._rfsn._addCustomer({
-                first_name: user$.firstName,
-                last_name: user$.lastName,
-                email: user$.email,
-            });
-
-            // @ts-ignore
-            window._rfsn._addItem({
-                sku: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
-                quantity: String(numberOfSelectedCards),
-                price: String(serviceLevelPrice),
-            });
-            // @ts-ignore
-            window._rfsn._sendConversion();
-        });
+        pushDataToRefersion(orderSubmission, user$);
     };
 
     const handleConfirmStripePayment = async () => {

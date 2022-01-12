@@ -166,15 +166,14 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     protected function validateTransactionHashIsNotDuplicate(Order $order, string $transactionHash): bool
     {
-        $duplicatePayments = OrderPayment::whereHas('paymentMethod', function($q) { 
-            return $q->where('code', 'collector_coin'); 
+        $duplicatePayments = OrderPayment::whereHas('paymentMethod', function ($q) {
+            return $q->where('code', 'collector_coin');
         })
         ->where('id', '<>', $order->firstCollectorCoinOrderPayment->id)
         ->where('payment_provider_reference_id', $transactionHash)
         ->count();
 
-        if ($duplicatePayments > 0)
-        {
+        if ($duplicatePayments > 0) {
             throw new TransactionHashIsAlreadyInUse;
         }
 

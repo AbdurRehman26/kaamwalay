@@ -4,6 +4,6 @@ import { WalletTransactionEntity } from '@shared/entities/WalletTransactionEntit
 
 @Injectable('WalletRepository')
 export class WalletRepository extends Repository<WalletTransactionEntity> {
-    readonly endpointPath: string = 'wallet/transactions';
+    readonly endpointPath: string = 'customer/wallet/transactions';
     readonly model = WalletTransactionEntity;
 }

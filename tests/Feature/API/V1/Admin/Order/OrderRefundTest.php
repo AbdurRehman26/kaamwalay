@@ -3,11 +3,13 @@
 namespace Tests\Feature\API\Admin\Order;
 
 use App\Events\API\Admin\Order\RefundSuccessful;
+use App\Events\Wallet\TransactionHappened;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
+use App\Models\Wallet;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardProductSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -36,6 +38,10 @@ beforeEach(function () {
         'payment_method_id' => 1,
     ]);
 
+    Wallet::factory()->create([
+        'user_id' => $this->order->user_id,
+    ]);
+
     $this->orderPayment = OrderPayment::factory()->create([
         'order_id' => $this->order->id,
         'payment_method_id' => 1,
@@ -58,6 +64,7 @@ test('admin can refund partial amount of a charge', function () {
     $this->postJson(route('payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '10.00',
+        'add_to_wallet' => false,
     ])->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(RefundSuccessful::class);
@@ -77,4 +84,20 @@ test('admin can not refund a transaction with type refund', function () {
         'notes' => $this->faker->sentence(),
         'amount' => $this->orderPayment->amount + 1,
     ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+});
+
+// TODO: add more tests
+test('admin can refund partial amount to a wallet', function () {
+    Event::fake();
+    $this->postJson(route('payments.refund', ['order' => $this->order]), [
+        'notes' => $this->faker->sentence(),
+        'amount' => '10.00',
+        'add_to_wallet' => true,
+    ])->assertStatus(Response::HTTP_CREATED);
+
+    Event::assertDispatched(RefundSuccessful::class);
+    Event::assertDispatched(TransactionHappened::class);
+
+    expect($this->order->refunds()->count())->toEqual(1);
+    expect($this->order->orderPayments()->count())->toEqual(2);
 });

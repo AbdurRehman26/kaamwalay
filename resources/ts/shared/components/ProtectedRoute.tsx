@@ -41,7 +41,6 @@ export function ProtectedRoute({ redirectRoute, roles, ...rest }: ProtectedRoute
             </Route>
         );
     }
-    console.log('inside protected routes');
 
     if (!authenticated || (roles && !hasAtLeastOneRole)) {
         let link = redirectRoute ?? AuthenticationEnum.SignInRoute;
@@ -56,7 +55,6 @@ export function ProtectedRoute({ redirectRoute, roles, ...rest }: ProtectedRoute
 
         if (params?.get('rfsn')) {
             url.searchParams.set('rfsn', params?.get('rfsn'));
-            url.searchParams.set('rf_test', params?.get('rf_test'));
         }
 
         return <NativeRedirect to={url.href} />;

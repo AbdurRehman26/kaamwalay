@@ -11,7 +11,6 @@ class HomeController extends Controller
         return redirect()->route('dashboard.main', [
             'path' => '/',
             'rfsn' => request()->query?->get('rfsn'),
-            'rf_test' => request()->query?->get('rf_test'),
         ]);
     }
 }

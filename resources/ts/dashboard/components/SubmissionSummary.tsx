@@ -19,6 +19,8 @@ import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissi
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { useAuth } from '@shared/hooks/useAuth';
+import { isNotProduction } from '@shared/lib/utils/getEnvironment';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -167,10 +169,14 @@ function SubmissionSummary() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
+    const orderNumber = useAppSelector((state) => state.newSubmission.orderNumber);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+    const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+    const user$ = useAuth().user;
+
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -225,6 +231,39 @@ function SubmissionSummary() {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
+    const sendOrderDataToRefersionAPI = () => {
+        if (isNotProduction()) {
+            return true;
+        }
+        // @ts-ignore
+        window._refersion(function () {
+            // @ts-ignore
+            window._rfsn._addTrans({
+                order_id: orderNumber,
+                shipping: shippingFee,
+                discount: discountedValue,
+                discount_code: couponCode,
+                currency_code: 'USD',
+            });
+
+            // @ts-ignore
+            window._rfsn._addCustomer({
+                first_name: user$.firstName,
+                last_name: user$.lastName,
+                email: user$.email,
+            });
+
+            // @ts-ignore
+            window._rfsn._addItem({
+                sku: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
+                quantity: String(numberOfSelectedCards),
+                price: String(serviceLevelPrice),
+            });
+            // @ts-ignore
+            window._rfsn._sendConversion();
+        });
+    };
+
     const handleConfirmStripePayment = async () => {
         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
         if (!stripe) {
@@ -252,6 +291,7 @@ function SubmissionSummary() {
             });
             sendECommerceDataToGA();
             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+            sendOrderDataToRefersionAPI();
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {
@@ -291,6 +331,7 @@ function SubmissionSummary() {
                             currency: 'USD',
                         });
                         sendECommerceDataToGA();
+                        sendOrderDataToRefersionAPI();
                         history.push(`/submissions/${orderID}/confirmation`);
                     });
                 }

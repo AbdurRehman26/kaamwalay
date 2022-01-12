@@ -19,11 +19,11 @@ import moment from 'moment/moment';
 import TableFooter from '@mui/material/TableFooter';
 import { TablePagination } from '@shared/components/TablePagination';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRepository } from '@shared/hooks/useRepository';
-import { UserRepository } from '@shared/repositories/UserRepository';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Theme } from '@mui/material/styles';
 import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { getAvailableCredit } from '@dashboard/redux/slices/newSubmissionSlice';
 
 const TOOLTIP_TEXT = `Your balance will never expire. We'll automatically apply your Wallet Balance to eligible orders when you checkout. If you would rather not use your balance. In can deselect it when creating an order. 
                      \n\n Limitations: Your Wallet Balance cannot be transferred to other accounts. `;
@@ -66,13 +66,12 @@ const useStyles = makeStyles(() => {
 });
 export function Wallet() {
     const classes = useStyles();
-    const [walletBalance, setWalletBalance] = useState(null);
+    const dispatch = useAppDispatch();
+    const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const [showInfo, setShowInfo] = useState(false);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    let mainElement;
-
-    const userRepository = useRepository(UserRepository);
     const walletTransactions = useListTransactionsQuery();
+    let mainElement;
 
     const toggleShowInfo = useCallback(() => {
         setShowInfo(true);
@@ -82,12 +81,7 @@ export function Wallet() {
     }, []);
 
     useEffect(() => {
-        async function getWalletBalance() {
-            const response = await userRepository.getWalletBalance();
-            setWalletBalance(response.data.walletBalance);
-        }
-        getWalletBalance();
-
+        dispatch(getAvailableCredit()).unwrap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -208,7 +202,7 @@ export function Wallet() {
                                 </Tooltip>
                             ) : null}
                         </Box>
-                        <Typography className={classes.balanceValue}>${walletBalance ?? '0.00'}</Typography>
+                        <Typography className={classes.balanceValue}>${availableCredit}</Typography>
                     </Paper>
                 </Grid>
             </Grid>

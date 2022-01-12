@@ -5,22 +5,11 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import TableRow from '@mui/material/TableRow';
 import { Moment } from 'moment';
 
-export enum CustomerHistoryAction {
-    Added,
-    Used,
-}
-
-interface Props {
+interface CustomerHistoryRowProps {
     date: Moment;
-    displayName: string;
-    action: CustomerHistoryAction;
+    description: string;
     amount: number;
 }
-
-const ACTIONS: Record<CustomerHistoryAction, string> = {
-    [CustomerHistoryAction.Added]: 'added to their wallet.',
-    [CustomerHistoryAction.Used]: 'used credit on a submission.',
-};
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -28,7 +17,7 @@ const ACTIONS: Record<CustomerHistoryAction, string> = {
  * @date: 23.12.2021
  * @time: 19:45
  */
-export function CustomerHistoryRow({ date, action, displayName, amount }: Props) {
+export function CustomerHistoryRow({ date, description, amount }: CustomerHistoryRowProps) {
     return (
         <TableRow>
             <TableCell>
@@ -40,7 +29,7 @@ export function CustomerHistoryRow({ date, action, displayName, amount }: Props)
                     color={'textSecondary'}
                     className={'CustomerCreditDialog-customerDescription'}
                 >
-                    <span>{displayName}</span> {ACTIONS[action] ?? ''}
+                    {description}
                 </Typography>
             </TableCell>
             <TableCell align={'right'}>

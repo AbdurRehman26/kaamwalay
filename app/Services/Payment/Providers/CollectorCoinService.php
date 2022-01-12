@@ -4,6 +4,7 @@ namespace App\Services\Payment\Providers;
 
 use App\Exceptions\API\Customer\Order\PaymentBlockchainNetworkNotSupported;
 use App\Exceptions\Services\Payment\OrderPaymentIsIncorrect;
+use App\Exceptions\Services\Payment\TransactionHashIsAlreadyInUse;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -63,6 +64,8 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     public function charge(Order $order, array $data = []): array
     {
         try {
+            $this->validateTransactionHashIsNotDuplicate($order, $data['transaction_hash']);
+
             $transactionData = $this->getTransaction($data['transaction_hash']);
 
             $orderPayment = $order->firstCollectorCoinOrderPayment;
@@ -87,6 +90,10 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
                 'notes' => null,
             ];
         } catch (OrderPaymentIsIncorrect $e) {
+            return [
+                'message' => $e->getMessage(),
+            ];
+        } catch (TransactionHashIsAlreadyInUse $e) {
             return [
                 'message' => $e->getMessage(),
             ];
@@ -152,6 +159,23 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         || $transactionData['token_amount'] < $data['amount'] * 0.98
         || $transactionData['token_amount'] > $data['amount'] * 1.02) {
             throw new OrderPaymentIsIncorrect;
+        }
+
+        return true;
+    }
+
+    protected function validateTransactionHashIsNotDuplicate(Order $order, string $transactionHash): bool
+    {
+        $duplicatePayments = OrderPayment::whereHas('paymentMethod', function($q) { 
+            return $q->where('code', 'collector_coin'); 
+        })
+        ->where('id', '<>', $order->firstCollectorCoinOrderPayment->id)
+        ->where('payment_provider_reference_id', $transactionHash)
+        ->count();
+
+        if ($duplicatePayments > 0)
+        {
+            throw new TransactionHashIsAlreadyInUse;
         }
 
         return true;

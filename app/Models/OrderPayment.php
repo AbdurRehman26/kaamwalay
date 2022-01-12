@@ -88,4 +88,9 @@ class OrderPayment extends Model
                 ->whereNotIn('orders.order_status_id', [OrderStatus::PAYMENT_PENDING]);
         });
     }
+
+    public function paymentMethod(): BelongsTo
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
 }

@@ -11,8 +11,7 @@ export function Dashboard() {
 
     let redirectSubmissionRoute = '/submissions';
     if (params?.get('rfsn')) {
-        redirectSubmissionRoute =
-            redirectSubmissionRoute + '?rfsn=' + params?.get('rfsn') + '&rf_test=' + params?.get('rf_test');
+        redirectSubmissionRoute = redirectSubmissionRoute + '?rfsn=' + params?.get('rfsn');
     }
     return (
         <Switch>

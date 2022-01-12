@@ -24,4 +24,10 @@ export class UserRepository extends Repository<UserEntity> {
         const { data } = await this.endpoint.post('auth/password/change', input);
         return data;
     }
+
+    public async getWalletBalance() {
+        const endpoint = this.apiService.createEndpoint('/wallet/me');
+        const data = endpoint.get('');
+        return data;
+    }
 }

@@ -8,3 +8,4 @@ export { configurationSlice as configuration } from './configurationSlice';
 export { manageCardDialogSlice as manageCardDialog } from './manageCardDialogSlice';
 export { adminNewPromoCodeSlice } from './adminNewPromoCodeSlice';
 export { userSlice } from './userSlice';
+export { walletSlice as transactions } from './walletSlice';

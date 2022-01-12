@@ -15,7 +15,7 @@ import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { clearSubmissionState, setCustomStep } from '../redux/slices/newSubmissionSlice';
+import { clearSubmissionState, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
@@ -179,6 +179,7 @@ function SubmissionSummary() {
               }, 0)
             : 0;
 
+    const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
     function onLevelEditPress() {
         dispatch(setCustomStep(0));
     }
@@ -297,6 +298,17 @@ function SubmissionSummary() {
             }
         }
     };
+
+    function getPreviewTotal() {
+        const previewTotal =
+            numberOfSelectedCards * serviceLevelPrice +
+            shippingFee -
+            Number(isCouponApplied ? discountedValue : 0) -
+            appliedCredit;
+        dispatch(setPreviewTotal(previewTotal));
+        return previewTotal;
+    }
+
     return (
         <Paper variant={'outlined'} square className={classes.container}>
             <div className={classes.titleContainer}>
@@ -362,6 +374,21 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
+
+                            {appliedCredit > 0 ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Credit: </Typography>
+                                    <NumberFormat
+                                        value={appliedCredit}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'-$'}
+                                    />
+                                </div>
+                            ) : null}
+
                             {isCouponApplied ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
@@ -521,6 +548,21 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
+
+                            {appliedCredit > 0 ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Credit: </Typography>
+                                    <NumberFormat
+                                        value={appliedCredit}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'-$'}
+                                    />
+                                </div>
+                            ) : null}
+
                             {isCouponApplied ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
@@ -559,11 +601,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
                                     <NumberFormat
-                                        value={
-                                            numberOfSelectedCards * serviceLevelPrice +
-                                            shippingFee -
-                                            Number(isCouponApplied ? discountedValue : 0)
-                                        }
+                                        value={getPreviewTotal()}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

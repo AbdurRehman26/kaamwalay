@@ -88,6 +88,9 @@ export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
     currentStep: number;
+    previewTotal: number;
+    availableCredit: number;
+    appliedCredit: number;
     step01Status: any;
     orderID: number;
     grandTotal: number;
@@ -113,6 +116,9 @@ export interface NewSubmissionSliceState {
 const initialState: NewSubmissionSliceState = {
     orderID: -1,
     grandTotal: 0,
+    availableCredit: 0,
+    previewTotal: 0,
+    appliedCredit: 0,
     orderNumber: '',
     isNextDisabled: false,
     isNextLoading: false,
@@ -272,6 +278,13 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
     }));
 });
 
+export const getAvailableCredit = createAsyncThunk('newSubmission/getAvailableCredit', async () => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint('customer/wallet/');
+    const response = await endpoint.get('');
+    return response.data.balance;
+});
+
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses/states');
@@ -381,9 +394,10 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
         shippingMethod: {
             id: 1,
         },
-        paymentMethod: {
-            id: currentSubmission.step04Data.paymentMethodId,
-        },
+        paymentMethod:
+            currentSubmission.appliedCredit === currentSubmission.previewTotal
+                ? null
+                : { id: currentSubmission.step04Data.paymentMethodId },
         paymentProviderReference: {
             id:
                 currentSubmission.step04Data.paymentMethodId === 1
@@ -548,6 +562,12 @@ export const newSubmissionSlice = createSlice({
         ) => {
             state.couponState.appliedCouponData = action.payload;
         },
+        setAppliedCredit: (state, action: PayloadAction<number>) => {
+            state.appliedCredit = action.payload;
+        },
+        setPreviewTotal: (state, action: PayloadAction<number>) => {
+            state.previewTotal = action.payload;
+        },
         clearSubmissionState: (state) => initialState,
         resetCouponState: (state) => {
             state.couponState = {
@@ -591,6 +611,9 @@ export const newSubmissionSlice = createSlice({
         },
         [getSavedAddresses.fulfilled as any]: (state, action) => {
             state.step03Data.existingAddresses = action.payload;
+        },
+        [getAvailableCredit.fulfilled as any]: (state, action) => {
+            state.availableCredit = action.payload;
         },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;
@@ -636,6 +659,7 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
                 ? action.payload.discountedAmount
                 : '';
+            state.appliedCredit = action.payload.amountPaidFromWallet;
         },
     },
 });
@@ -674,4 +698,6 @@ export const {
     setValidCouponId,
     setIsCouponApplied,
     setAppliedCouponData,
+    setAppliedCredit,
+    setPreviewTotal,
 } = newSubmissionSlice.actions;

@@ -27,6 +27,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import HomeIcon from '@mui/icons-material/HomeOutlined';
 import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
 import FeedIcon from '@mui/icons-material/FeedOutlined';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -168,6 +169,12 @@ export function DashboardNavigationDrawer() {
                         <StyleIcon />
                     </StyledListItemIcon>
                     <ListItemText primary={'Your Cards'} primaryTypographyProps={{ className: classes.listItemText }} />
+                </ListItem>
+                <ListItem selected={isItemActive('/wallet')} onClick={handleItemPress('/wallet')} button>
+                    <StyledListItemIcon>
+                        <AccountBalanceWalletIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary={'Wallet'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
                 <ListItem selected={isItemActive('/profile')} onClick={handleItemPress('/profile')} button>
                     <StyledListItemIcon>

@@ -1,5 +1,5 @@
 /**
- * @api {get} /v1/wallet/me Wallet Of User
+ * @api {get} /v1/customer/wallet Wallet Of User
  * @apiName Wallet Details of Logged In User
  * @apiGroup Wallet
  *

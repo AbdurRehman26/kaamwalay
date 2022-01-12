@@ -1,5 +1,5 @@
 /**
- * @api {get} /v1/wallet/transactions Users wallet payments
+ * @api {get} /v1/customer/wallet/transactions Users wallet payments
  * @apiName List Wallet Transactions
  * @apiGroup Wallet
  *

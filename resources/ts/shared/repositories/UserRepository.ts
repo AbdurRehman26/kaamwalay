@@ -26,7 +26,7 @@ export class UserRepository extends Repository<UserEntity> {
     }
 
     public async getWalletBalance() {
-        const endpoint = this.apiService.createEndpoint('customer/wallet/me');
+        const endpoint = this.apiService.createEndpoint('customer/wallet');
         const data = endpoint.get('');
         return data;
     }

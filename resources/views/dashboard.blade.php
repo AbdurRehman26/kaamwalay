@@ -35,5 +35,4 @@
             <script>_refersion();</script>
         @endproduction
     </x-slot>
-
 </x-layout>

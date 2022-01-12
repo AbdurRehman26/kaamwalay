@@ -1,6 +1,11 @@
 import { UserEntity } from '@shared/entities/UserEntity';
 
 export function pushDataToRefersion(order: any, user$: UserEntity) {
+    // @ts-ignore
+    if (!window._rfsn) {
+        return;
+    }
+
     const orderNumber = order.orderNumber;
     const shippingFee = order.step02Data.shippingFee;
     const discountedValue = order.couponState.appliedCouponData.discountedAmount;
@@ -19,10 +24,8 @@ export function pushDataToRefersion(order: any, user$: UserEntity) {
               }, 0)
             : 0;
 
-    console.log('push to refersion');
     // @ts-ignore
     window._refersion(function () {
-        console.log('push to refersion inside');
         // @ts-ignore
         window._rfsn._addTrans({
             // eslint-disable-next-line camelcase

@@ -21,7 +21,6 @@ import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEve
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
 import { useAuth } from '@shared/hooks/useAuth';
-import { isNotProduction } from '@shared/lib/utils/getEnvironment';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -231,14 +230,6 @@ function SubmissionSummary() {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
-    const sendOrderDataToRefersionAPI = () => {
-        if (isNotProduction()) {
-            return true;
-        }
-
-        pushDataToRefersion(orderSubmission, user$);
-    };
-
     const handleConfirmStripePayment = async () => {
         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
         if (!stripe) {
@@ -266,7 +257,7 @@ function SubmissionSummary() {
             });
             sendECommerceDataToGA();
             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
-            sendOrderDataToRefersionAPI();
+            pushDataToRefersion(orderSubmission, user$);
             history.push(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {
@@ -306,7 +297,7 @@ function SubmissionSummary() {
                             currency: 'USD',
                         });
                         sendECommerceDataToGA();
-                        sendOrderDataToRefersionAPI();
+                        pushDataToRefersion(orderSubmission, user$);
                         history.push(`/submissions/${orderID}/confirmation`);
                     });
                 }

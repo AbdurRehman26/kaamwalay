@@ -37,6 +37,7 @@ export class OrderEntity extends Entity {
     public notes!: string;
     public paymentMethodId!: number;
     public paymentMethodDiscountedAmount!: string;
+    public amountPaidFromWallet!: string;
 
     @Type(() => OrderCouponEntity)
     public coupon!: OrderCouponEntity;

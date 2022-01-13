@@ -68,6 +68,7 @@ export function ViewSubmission() {
             <Divider />
             <ViewSubmissionInformation
                 serviceLevel={`$${data?.paymentPlan?.price} / Card`}
+                amountPaidFromWallet={data?.amountPaidFromWallet}
                 numberOfCards={data?.numberOfCards}
                 discountedAmount={data?.discountedAmount}
                 paymentMethodDiscountedAmount={data?.paymentMethodDiscountedAmount}

@@ -105,6 +105,7 @@ class Order extends Model
             AllowedInclude::relationship('orderStatusHistory'),
             AllowedInclude::relationship('orderStatusHistory.orderStatus'),
             AllowedInclude::relationship('customer', 'user'),
+            AllowedInclude::relationship('customer.wallet', 'user.wallet'),
             AllowedInclude::relationship('orderShipment'),
             AllowedInclude::relationship('orderCustomerShipment'),
             AllowedInclude::relationship('extraCharges'),

@@ -1,5 +1,5 @@
 /**
- * @api {get} /v1/wallet/transactions Users wallet payments
+ * @api {get} /v1/customer/wallet/transactions Users wallet payments
  * @apiName List Wallet Transactions
  * @apiGroup Wallet
  *
@@ -15,7 +15,8 @@
  *        {
  *            "data": [
  *                {
- *                      "created_at": '2022/01/05',
+ *                      "id": 1,
+ *                      "created_at": '2022-01-06T21:20:15.000000Z',
  *                      "description": 'AGS credited $50 in your wallet.',
  *                      "amount": 50,
  *                }

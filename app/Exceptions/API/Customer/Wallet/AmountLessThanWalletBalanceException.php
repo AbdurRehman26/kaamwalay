@@ -12,7 +12,7 @@ class AmountLessThanWalletBalanceException extends Exception
     /**
      * @var string
      */
-    protected $message = 'Entered amount is less than your wallet balance.';
+    protected $message = 'You do not have sufficient balance in your wallet.';
 
     /**
      * @var int

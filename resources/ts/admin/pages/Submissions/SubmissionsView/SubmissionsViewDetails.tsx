@@ -34,6 +34,7 @@ interface SubmissionsViewDetailsProps {
     payment: OrderPaymentEntity;
     paymentMethodDiscountedAmount: string;
     discountedAmount: string;
+    amountPaidFromWallet: string;
     paymentMethodId: number;
     coupon: OrderCouponEntity;
 }
@@ -70,6 +71,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         paymentMethodDiscountedAmount,
         paymentMethodId,
         coupon,
+        amountPaidFromWallet,
     } = props;
 
     const classes = useStyles();
@@ -110,6 +112,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             ...(Number(paymentMethodDiscountedAmount) > 0 && {
                 'Collector Coin Discount:': `-${formatCurrency(paymentMethodDiscountedAmount)}`,
             }),
+            ...(Number(amountPaidFromWallet) > 0 && { 'Credit:': `-${formatCurrency(amountPaidFromWallet)}` }),
             ...(Number(discountedAmount) > 0 && { 'Promo Code Discount:': `-${formatCurrency(discountedAmount)}` }),
             'Insured Shipping:': formatCurrency(shippingFee),
             ...(Number(extraChargesTotal) > 0 && { 'Extra Charge:': formatCurrency(extraChargesTotal) }),
@@ -124,6 +127,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
             extraChargesTotal,
             paymentMethodDiscountedAmount,
             refundsTotal,
+            amountPaidFromWallet,
             grandTotal,
         ],
     );

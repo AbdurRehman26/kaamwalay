@@ -28,6 +28,7 @@ import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
+import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -170,6 +171,10 @@ const useStyles = makeStyles((theme) => ({
             width: '47%',
         },
     },
+    availableCreditLabel: {
+        color: 'rgba(0, 0, 0, 0.54);',
+        fontSize: '12px',
+    },
 }));
 
 const GreenCheckbox = withStyles({
@@ -223,6 +228,7 @@ export function SubmissionStep04Content() {
     const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
+    const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
 
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const finalShippingAddress =
@@ -343,6 +349,21 @@ export function SubmissionStep04Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
+                        {availableCredit > 0 ? (
+                            <div className={classes.shippingMethodContainer}>
+                                <Typography className={classes.sectionLabel} style={{ marginBottom: '3px' }}>
+                                    Apply Credit
+                                </Typography>
+                                <Typography variant={'caption'} className={classes.availableCreditLabel}>
+                                    You have <span style={{ fontWeight: 'bold' }}>${availableCredit}</span> in available
+                                    credit.
+                                </Typography>
+                                <div className={classes.shippingMethodItemContainer} style={{ marginTop: '20px' }}>
+                                    <ApplyCredit />
+                                </div>
+                            </div>
+                        ) : null}
+
                         <div className={classes.shippingMethodContainer}>
                             <Typography className={classes.sectionLabel}> Add a Promo Code </Typography>
                             <div className={classes.shippingMethodItemContainer}>

@@ -118,7 +118,7 @@ export const adminNewPromoCodeSlice = createSlice({
                 state.applicables[applicableIndex].couponables = action.payload.couponables;
             }
         },
-        clearNewPromoCodeState: (state) => initialState,
+        clearNewPromoCodeState: () => initialState,
     },
     extraReducers: {},
 });

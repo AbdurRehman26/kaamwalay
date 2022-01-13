@@ -7,8 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StatusChip } from '@shared/components/StatusChip';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderEntity } from '@shared/entities/OrderEntity';
@@ -19,7 +18,7 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { font } from '@shared/styles/utils';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
-import Box from '@mui/material/Box';
+import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -29,6 +28,7 @@ enum Options {
     Download,
     DownloadOrderLabel,
     ViewGrades,
+    CreditCustomer,
 }
 
 const useStyles = makeStyles(
@@ -50,11 +50,14 @@ const useStyles = makeStyles(
 export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
+    const [creditDialog, setCreditDialog] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const navigate = useNavigate();
     const [statusType, statusLabel] = useOrderStatus(order?.orderStatus);
+
+    const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
     const handleOption = useCallback(
         (option: Options) => async () => {
@@ -80,75 +83,95 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                 case Options.ViewGrades:
                     navigate(`/submissions/${order.id}/grade`);
                     break;
+                case Options.CreditCustomer:
+                    setCreditDialog(true);
+                    break;
             }
         },
         [handleCloseOptions, navigate, notifications, order.id, order.invoice, order.orderLabel, order.orderNumber],
     );
 
     return (
-        <TableRow>
-            <TableCell>
-                <MuiLink
-                    component={Link}
-                    color={'primary'}
-                    to={`/submissions/${order.id}/view`}
-                    className={font.fontWeightMedium}
-                >
-                    {order.orderNumber}
-                </MuiLink>
-            </TableCell>
-            <TableCell>{formatDate(order.createdAt, 'MM/DD/YYYY')}</TableCell>
-            <TableCell>{formatDate(order.arrivedAt, 'MM/DD/YYYY')}</TableCell>
-            <TableCell>
-                {order.customer?.id && order.customer?.customerNumber ? (
+        <>
+            <TableRow>
+                <TableCell>
                     <MuiLink
                         component={Link}
                         color={'primary'}
-                        to={`/customers/${order.customer?.id}/view`}
+                        to={`/submissions/${order.id}/view`}
                         className={font.fontWeightMedium}
                     >
-                        {order.customer?.customerNumber}
+                        {order.orderNumber}
                     </MuiLink>
-                ) : (
-                    '-'
-                )}
-            </TableCell>
-            <TableCell>{order.numberOfCards}</TableCell>
-            <TableCell>
-                <StatusChip label={statusLabel} color={statusType} />
-            </TableCell>
-            <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
-            <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
-            <TableCell align={'right'}>
-                <SubmissionActionButton
-                    orderId={order.id}
-                    orderStatus={order.orderStatus}
-                    size={'small'}
-                    buttonOnly
-                    trackingNumber={order.orderShipment?.trackingNumber}
-                    shippingProvider={order.orderShipment?.shippingProvider}
-                />
-            </TableCell>
-            <TableCell align={'right'} className={classes.optionsCell}>
-                <IconButton onClick={handleClickOptions} size="large">
-                    <MoreIcon />
-                </IconButton>
+                </TableCell>
+                <TableCell>{formatDate(order.createdAt, 'MM/DD/YYYY')}</TableCell>
+                <TableCell>{formatDate(order.arrivedAt, 'MM/DD/YYYY')}</TableCell>
+                <TableCell>
+                    {order.customer?.id && order.customer?.customerNumber ? (
+                        <MuiLink
+                            component={Link}
+                            color={'primary'}
+                            to={`/customers/${order.customer?.id}/view`}
+                            className={font.fontWeightMedium}
+                        >
+                            {order.customer?.customerNumber}
+                        </MuiLink>
+                    ) : (
+                        '-'
+                    )}
+                </TableCell>
+                <TableCell>{order.numberOfCards}</TableCell>
+                <TableCell>
+                    <StatusChip label={statusLabel} color={statusType} />
+                </TableCell>
+                <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
+                <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
+                <TableCell align={'right'}>
+                    <SubmissionActionButton
+                        orderId={order.id}
+                        orderStatus={order.orderStatus}
+                        size={'small'}
+                        buttonOnly
+                        trackingNumber={order.orderShipment?.trackingNumber}
+                        shippingProvider={order.orderShipment?.shippingProvider}
+                    />
+                </TableCell>
+                <TableCell align={'right'} className={classes.optionsCell}>
+                    <IconButton onClick={handleClickOptions} size="large">
+                        <MoreIcon />
+                    </IconButton>
 
-                <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                    <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
-                        {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                    </MenuItem>
-                    {order?.orderStatus.is(OrderStatusEnum.GRADED) || order?.orderStatus.is(OrderStatusEnum.SHIPPED) ? (
-                        <Box>
-                            <MenuItem onClick={handleOption(Options.ViewGrades)}>View Grades</MenuItem>
-                            <MenuItem onClick={handleOption(Options.DownloadOrderLabel)} disabled={!order.orderLabel}>
-                                Print Stickers
-                            </MenuItem>
-                        </Box>
-                    ) : null}
-                </Menu>
-            </TableCell>
-        </TableRow>
+                    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                        <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
+                            {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                        </MenuItem>
+
+                        <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
+
+                        {order?.orderStatus.is(OrderStatusEnum.GRADED) || order?.orderStatus.is(OrderStatusEnum.SHIPPED)
+                            ? [
+                                  <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>
+                                      View Grades
+                                  </MenuItem>,
+                                  <MenuItem
+                                      key={Options.DownloadOrderLabel}
+                                      onClick={handleOption(Options.DownloadOrderLabel)}
+                                      disabled={!order.orderLabel}
+                                  >
+                                      Print Stickers
+                                  </MenuItem>,
+                              ]
+                            : null}
+                    </Menu>
+                </TableCell>
+            </TableRow>
+            <CustomerCreditDialog
+                customer={order.customer}
+                wallet={order.customer?.wallet}
+                open={creditDialog}
+                onClose={handleCreditDialogClose}
+            />
+        </>
     );
 }
 

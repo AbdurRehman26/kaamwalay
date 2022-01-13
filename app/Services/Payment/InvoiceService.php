@@ -35,7 +35,7 @@ class InvoiceService
 
         $orderPayment = $order->firstOrderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
-        if ($paymentResponse && !$order->paymentMethod->isWallet()) {
+        if ($paymentResponse && ! $order->paymentMethod->isWallet()) {
             if ($order->paymentMethod->code === 'paypal') {
                 $orderPayment = json_decode(json_encode($this->paypalData(json_decode($orderPayment->response, associative: true) ?? [])));
             } else {

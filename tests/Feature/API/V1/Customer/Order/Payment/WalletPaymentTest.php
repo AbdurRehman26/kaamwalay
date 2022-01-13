@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderPayment;
@@ -39,6 +40,7 @@ beforeEach(function () {
     $orderStatusHistoryService->addStatusToOrder($this->order->order_status_id, $this->order->id);
 
     Event::fake([
+        OrderPaid::class,
         OrderStatusChangedEvent::class,
     ]);
 });
@@ -49,7 +51,6 @@ test('user can be charged successfully from wallet', function () {
         'payment_method_id' => 3,
     ]);
     postJson("/api/v1/customer/orders/{$this->order->id}/payments")
-        ->dump()
         ->assertOk();
 
     expect($this->user->wallet->balance)->toBe((float) 1);
@@ -78,7 +79,6 @@ test('user can be charged partially from wallet', function () {
     ]);
 
     postJson("/api/v1/customer/orders/{$newOrder->id}/payments")
-        ->dump()
         ->assertOk();
     
     expect($this->user->wallet->refresh()->balance)->toBe($oldWalletBalance - $walletAmount);

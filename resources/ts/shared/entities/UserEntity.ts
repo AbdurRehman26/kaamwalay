@@ -5,6 +5,7 @@ import { RolesEnum } from '../constants/RolesEnum';
 import { DateField } from '../decorators/DateField';
 import { Entity } from './Entity';
 import { RoleEntity } from './RoleEntity';
+import { WalletEntity } from '@shared/entities/WalletEntity';
 
 export class UserEntity extends Entity {
     public username!: string;
@@ -16,6 +17,8 @@ export class UserEntity extends Entity {
     public customerNumber!: string;
     public profileImage!: string;
     public emailSubscription!: number;
+
+    public wallet!: WalletEntity;
 
     @DateField()
     public emailVerifiedAt!: Moment;

@@ -16,6 +16,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
+use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Services\Admin\Order\OrderItemService;
@@ -269,12 +270,19 @@ class OrderService
         return $this->agsService->createCertificates($data);
     }
 
-    public function processRefund(Order $order, User $user, array $data, array $refundResponse): void
-    {
-        DB::transaction(function () use ($order, $user, $data, $refundResponse) {
+    public function processRefund(
+        Order $order,
+        User $user,
+        array $data,
+        array $refundResponse,
+        bool $refundedInWallet = false
+    ): void {
+        DB::transaction(function () use ($order, $user, $data, $refundResponse, $refundedInWallet) {
             $order->updateAfterRefund($data['amount']);
 
-            $order->createOrderPayment($refundResponse, $user);
+            $paymentMethodId = $refundedInWallet ? PaymentMethod::getWalletPaymentMethod()->id : null;
+
+            $order->createOrderPayment($refundResponse, $user, $paymentMethodId);
         });
 
         RefundSuccessful::dispatch($order, $data);

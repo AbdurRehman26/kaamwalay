@@ -61,6 +61,7 @@
  *              "code": "HvTGSYpak9",
  *              "id": 2
  *          },
+ *          "payment_by_wallet": 10.00,
  *      }
  *
  * @apiSuccess {Object} data Order object
@@ -178,7 +179,8 @@
  *            "discounted_amount" : 40.00,
  *            "service_fee": 2556,
  *            "shipping_fee": 43,
- *            "grand_total": 263
+ *            "grand_total": 263,
+ *            "amount_paid_from_wallet": 10.00
  *        }
  *    }
  */

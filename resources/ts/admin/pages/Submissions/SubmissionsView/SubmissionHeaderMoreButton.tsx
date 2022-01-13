@@ -10,6 +10,7 @@ import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
+import { UserEntity } from '@shared/entities/UserEntity';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -30,13 +31,13 @@ enum Options {
 interface SubmissionHeaderMoreButtonProps {
     orderId: number;
     orderStatus: OrderStatusEntity;
-    orderCustomerId: number | null;
+    customer: UserEntity | null;
 }
 
 export default function SubmissionHeaderMoreButton({
     orderId,
     orderStatus,
-    orderCustomerId,
+    customer,
 }: SubmissionHeaderMoreButtonProps) {
     const classes = useStyles();
     const [showPaymentActionsModal, setShowPaymentActionsModal] = useState<DialogStateEnum | null>(null);
@@ -99,9 +100,10 @@ export default function SubmissionHeaderMoreButton({
                 orderId={orderId}
                 setShowPaymentActionsModal={setShowPaymentActionsModal}
             />
-            {orderCustomerId ? (
+            {customer ? (
                 <CustomerCreditDialog
-                    customerId={orderCustomerId}
+                    customer={customer}
+                    wallet={customer.wallet}
                     open={creditDialog}
                     onClose={handleCreditDialogClose}
                 />

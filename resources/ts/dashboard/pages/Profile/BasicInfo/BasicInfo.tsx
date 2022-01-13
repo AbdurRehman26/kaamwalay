@@ -12,6 +12,10 @@ import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/user
 import { useAuth } from '@shared/hooks/useAuth';
 import { ChangeUserPictureDialog } from './ChangeUserPictureDialog';
 import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -129,6 +133,7 @@ export function BasicInfo() {
     const user$ = useAuth().user;
     const dispatch = useSharedDispatch();
 
+    const [showPasswordText, setShowPasswordText] = useState(false);
     const [showName, setShowName] = useState<boolean>(false);
     const [showUserName, setShowUserName] = useState<boolean>(false);
     const [showPhone, setShowPhone] = useState<boolean>(false);
@@ -166,6 +171,10 @@ export function BasicInfo() {
 
     const onToggleProfilePicDialog = useCallback(() => {
         setShowProfilePicDialog((prev) => !prev);
+    }, []);
+
+    const onToggleShowPasswordText = useCallback(() => {
+        setShowPasswordText((prev) => !prev);
     }, []);
 
     const onPhoneChange = useCallback(
@@ -459,16 +468,29 @@ export function BasicInfo() {
 
                         <CustomTextField
                             label="Enter Current Password"
-                            type="password"
+                            type={showPasswordText ? 'text' : 'password'}
                             value={currentPassword}
                             onChange={onCurrentPasswordChange}
                             rows={1}
                             className={classes.textField}
                             fullWidth
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={onToggleShowPasswordText}
+                                            edge="end"
+                                        >
+                                            {showPasswordText ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                         <CustomTextField
                             label="Enter New Password"
-                            type="password"
+                            type={showPasswordText ? 'text' : 'password'}
                             rows={10}
                             value={newPassword}
                             onChange={onNewPasswordChange}
@@ -477,7 +499,7 @@ export function BasicInfo() {
                         />
                         <CustomTextField
                             label="Confirm New Password"
-                            type="password"
+                            type={showPasswordText ? 'text' : 'password'}
                             rows={1}
                             value={confirmPassword}
                             onChange={onConfirmPasswordChange}

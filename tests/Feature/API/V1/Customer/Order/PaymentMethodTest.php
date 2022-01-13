@@ -35,7 +35,7 @@ test('a guest cannot get payment methods', function () {
 
 test('a customer can see only enabled payment methods', function () {
     $paypalPaymentMethod = tap(PaymentMethod::where('code', 'paypal')->first())->update(['is_enabled' => 0]);
-    $paymentMethodsCount = PaymentMethod::where('is_enabled', 1)->count();
+    $paymentMethodsCount = PaymentMethod::enabled()->visible()->count();
 
     $this->actingAs($this->user);
     $response = $this->getJson('/api/v1/customer/orders/payment-methods');

@@ -197,7 +197,7 @@ it('fails to charge order if transaction hash has already been used', function (
     $newOrder = Order::factory()->for($this->user)->create([
         'payment_method_id' => $this->paymentMethod->id,
         'coupon_id' => null,
-        'order_status_id' => OrderStatus::PAYMENT_PENDING
+        'order_status_id' => OrderStatus::PAYMENT_PENDING,
     ]);
     OrderItem::factory()->for($newOrder)->create();
     OrderPayment::factory()->for($newOrder)->create([
@@ -218,8 +218,8 @@ it('fails to charge order if transaction hash has already been used', function (
         'payment_provider_reference_id' => Str::random(25),
     ]);
 
-    $response = $this->postJson("/api/v1/customer/orders/{$newOrder->id}/payments",[
-        'transaction_hash' => $bscTestTransactionHash
+    $response = $this->postJson("/api/v1/customer/orders/{$newOrder->id}/payments", [
+        'transaction_hash' => $bscTestTransactionHash,
     ]);
 
     $response->assertStatus(Response::HTTP_PAYMENT_REQUIRED);

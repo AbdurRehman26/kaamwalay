@@ -38,7 +38,7 @@ type InitialValues = {
 
 const joinFilterValues = (values: any[], separator = ',') =>
     values
-        .map((value) => `${value || ''}`.trim())
+        .map((value) => `${value ?? ''}`.trim())
         .filter(Boolean)
         .join(separator);
 

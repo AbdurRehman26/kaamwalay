@@ -322,6 +322,7 @@
                             {{ucfirst($orderPayment->card->brand)}} ending in {{$orderPayment->card->last4}}
                             <br/>
                             Exp. {{$orderPayment->card->exp_month}}/{{$orderPayment->card->exp_year}}
+                            <br/>
                         @elseif(property_exists($orderPayment,'payer'))
                             {{$orderPayment->payer->email}}
                             <br/>
@@ -330,6 +331,10 @@
                             Collector Coin ({{$orderPayment->transaction->amount}} AGS)
                             <br/>
                             {{$orderPayment->transaction->hash}}
+                            <br/>
+                        @endif
+                        @if($order->amount_paid_from_wallet > 0)
+                            (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
                         @endif
                     @else
                         No payment found
@@ -369,7 +374,7 @@
                                     ${{number_format($order->service_fee, 2)}}
                                 </td>
                             </tr>
-                            @if(! empty($order->discounted_amount))
+                            @if($order->discounted_amount > 0)
                                 <tr class="info-line">
                                     <td class="info-title">
                                         Promo Code Discount:
@@ -379,13 +384,23 @@
                                     </td>
                                 </tr>
                             @endif
-                            @if(! empty($order->pm_discounted_amount))
+                            @if(! empty($order->payment_method_discounted_amount))
                                 <tr class="info-line">
                                     <td class="info-title">
                                         Payment Method Discount:
                                     </td>
                                     <td class="info-content">
-                                        -${{number_format($order->pm_discounted_amount, 2)}}
+                                        -${{number_format($order->payment_method_discounted_amount, 2)}}
+                                    </td>
+                                </tr>
+                            @endif
+                            @if($order->amount_paid_from_wallet > 0)
+                                <tr class="info-line">
+                                    <td class="info-title">
+                                        Credit Applied :
+                                    </td>
+                                    <td class="info-content">
+                                        -${{number_format($order->amount_paid_from_wallet, 2)}}
                                     </td>
                                 </tr>
                             @endif

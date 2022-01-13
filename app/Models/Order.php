@@ -51,7 +51,7 @@ class Order extends Model
         'auto_saved_at',
         'extra_charge_total',
         'refund_total',
-        'pm_discounted_amount',
+        'payment_method_discounted_amount',
     ];
 
     /**
@@ -82,10 +82,14 @@ class Order extends Model
         'graded_at' => 'date',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
-        'pm_discounted_amount' => 'float',
+        'payment_method_discounted_amount' => 'float',
+        'amount_paid_from_wallet' => 'float',
     ];
 
-    protected $appends = ['grand_total_cents'];
+    protected $appends = [
+        'grand_total_cents',
+        'grand_total_to_be_paid',
+    ];
 
     public static function getAllowedAdminIncludes(): array
     {
@@ -234,7 +238,12 @@ class Order extends Model
 
     public function getGrandTotalCentsAttribute(): int
     {
-        return $this->grand_total * 100;
+        return (int) (($this->grand_total_to_be_paid) * 100);
+    }
+
+    public function getGrandTotalToBePaidAttribute(): float
+    {
+        return $this->grand_total - $this->amount_paid_from_wallet;
     }
 
     public function getTotalGradedItems(): int

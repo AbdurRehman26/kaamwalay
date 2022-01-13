@@ -11,10 +11,12 @@ use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\CollectorCoinService;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
+use App\Services\Payment\Providers\WalletService;
 use Throwable;
 
 class PaymentService
@@ -28,6 +30,7 @@ class PaymentService
         'stripe' => StripeService::class,
         'paypal' => PaypalService::class,
         'collector_coin' => CollectorCoinService::class,
+        'wallet' => WalletService::class,
     ];
 
     public function __construct(
@@ -35,44 +38,62 @@ class PaymentService
     ) {
     }
 
-    public function charge(Order $order, array $data = []): array
+    public function charge(Order $order, array $optionalData = []): array
     {
         $this->hasProvider($order);
 
-        if ($this->order->paymentMethod->code === 'collector_coin') {
-            $data = resolve($this->providers[
-                $this->order->paymentMethod->code
-            ], [
-                'networkId' => json_decode($order->firstOrderPayment->response, true)['network'],
-            ])->charge($this->order, $data);
-        } else {
-            $data = resolve($this->providers[
-                $this->order->paymentMethod->code
-            ])->charge($this->order);
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
         }
+
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ], $params ?? [])->charge($this->order, $optionalData);
 
         if (! empty($data['message']) || ! empty($data['payment_intent'])) {
             return $data;
         }
 
         // This updates should only be done if the payment method is not Collector Coin
-        if (! empty($data['success']) && $this->order->paymentMethod->code !== 'collector_coin') {
+        if (! empty($data['success']) && ! $this->order->paymentMethod->isCollectorCoin()) {
+
+            /* Partial Payments */
+            if ($this->checkForPartialPayment()) {
+                $this->updatePartialPayment();
+            }
+
             $this->calculateAndSaveFee($order);
+
             $this->updateOrderStatus();
         }
 
-        return $this->updateOrderPayment($data);
+        return $this->updateOrderPayment($this->order->firstOrderPayment, $data);
     }
 
     public function verify(Order $order, string $paymentIntentId): bool
     {
         $this->hasProvider($order);
 
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
+
+            // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
+            if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $paymentIntentId) {
+                return false;
+            }
+        }
+
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ])->verify($this->order, $paymentIntentId);
+        ], $params ?? [])->verify($this->order, $paymentIntentId);
 
         if ($data) {
+
+            /* Partial Payments */
+            if ($this->checkForPartialPayment()) {
+                $this->updatePartialPayment();
+            }
+
             $this->calculateAndSaveFee($order);
 
             return $this->updateOrderStatus();
@@ -81,31 +102,14 @@ class PaymentService
         return $data;
     }
 
-    public function verifyCollectorCoin(Order $order): array
-    {
-        $this->hasProvider($order);
-
-        $collectorCoinService = new CollectorCoinService(
-            json_decode($order->firstOrderPayment->response, true)['network']
-        );
-
-        $data = $collectorCoinService->verify($this->order);
-
-        if ($data['status'] === 'success' && $this->order->orderStatus->id === OrderStatus::PAYMENT_PENDING) {
-            $this->updateOrderStatus();
-        }
-
-        return $data;
-    }
-
-    public function updateOrderPayment(array $data): array
+    public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
     {
         /** @noinspection JsonEncodingApiUsageInspection */
-        $this->order->firstOrderPayment->update([
+        $orderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
-            'amount' => $data['amount'] ?? $this->order->grand_total,
+            'amount' => $data['amount'] ?? $this->order->grand_total_to_be_paid,
             'type' => $data['type'],
             'notes' => $data['notes'] ?? '',
         ]);
@@ -136,12 +140,16 @@ class PaymentService
     {
         $this->hasProvider($order);
 
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
+        }
+
         $providerInstance = resolve($this->providers[
             $this->order->paymentMethod->code
-        ]);
+        ], $params ?? []);
 
         $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
-            $orderPayment->provider_fee = $providerInstance->calculateFee($orderPayment);
+            $orderPayment->provider_fee = $orderPayment->paymentMethod->isWallet() ? 0 : $providerInstance->calculateFee($orderPayment);
             $orderPayment->save();
 
             return $orderPayment;
@@ -192,8 +200,12 @@ class PaymentService
     /**
      * @throws FailedRefund
      */
-    public function refund(Order $order, array $request): array
+    public function refund(Order $order, array $request, User $user, bool $returnInWallet): array
     {
+        if ($returnInWallet) {
+            return $this->refundToWallet($order, $request, $user);
+        }
+
         $this->hasProvider($order);
 
         $refundResponse = resolve($this->providers[
@@ -205,5 +217,40 @@ class PaymentService
         }
 
         return $refundResponse;
+    }
+
+    protected function refundToWallet(Order $order, array $request, User $user): array
+    {
+        $order->user->wallet->makeTransaction(
+            $request['amount'],
+            'refund',
+            $user->id,
+            $order
+        );
+
+        return [
+            'success' => true,
+            'request' => [],
+            'response' => [],
+            'payment_provider_reference_id' => null,
+            'amount' => $request['amount'],
+            'type' => OrderPayment::TYPE_REFUND,
+            'notes' => $request['notes'],
+        ];
+    }
+
+    protected function checkForPartialPayment(): bool
+    {
+        return ! $this->order->paymentMethod->isWallet() && $this->order->amount_paid_from_wallet > 0;
+    }
+
+    /**
+     * @return void
+     */
+    protected function updatePartialPayment(): void
+    {
+        $partialPaymentResponse = resolve($this->providers['wallet'])->charge($this->order);
+
+        $this->updateOrderPayment($this->order->lastOrderPayment, $partialPaymentResponse);
     }
 }

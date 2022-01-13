@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
-use App\Exceptions\API\Customer\Order\NotSupportedPaymentNetwork;
 use App\Exceptions\API\Customer\Order\OrderNotPayable;
 use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
@@ -63,23 +62,5 @@ class OrderPaymentController extends Controller
         return new JsonResponse([
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);
-    }
-
-    public function verifyCollectorCoin(Order $order): JsonResponse
-    {
-        $this->authorize('view', $order);
-
-        try {
-            $result = $this->paymentService->verifyCollectorCoin($order);
-
-            return new JsonResponse($result, Response::HTTP_OK);
-        } catch (NotSupportedPaymentNetwork $e) {
-            return new JsonResponse(
-                [
-                    'message' => $e->getMessage(),
-                ],
-                Response::HTTP_PAYMENT_REQUIRED
-            );
-        }
     }
 }

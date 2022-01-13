@@ -16,5 +16,6 @@
  *     HTTP/1.1 200 OK
  *      {
             "value": 123.45,
+            "wallet": "0xABCDEF123456"
         }
  */

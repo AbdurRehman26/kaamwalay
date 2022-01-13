@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\Coupon\ActivateCoupons;
 use App\Console\Commands\Coupon\ExpireCoupons;
+use App\Console\Commands\Orders\VerifyUnpaidOrders;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
 use App\Console\Commands\SendScheduledEmails;
 use Carbon\Carbon;
@@ -35,7 +36,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(SendScheduledEmails::class)->everyFifteenMinutes();
         $schedule->command(ActivateCoupons::class)->everyThirtyMinutes();
         $schedule->command(ExpireCoupons::class)->everyThirtyMinutes();
-        $schedule->command('orders:verify-unpaid-collector-coin --email=platform@robograding.com')->everyMinute();
+        $schedule->command(VerifyUnpaidOrders::class, ['platform@robograding.com'])->everyMinute();
     }
 
     /**

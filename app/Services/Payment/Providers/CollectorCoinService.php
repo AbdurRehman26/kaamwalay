@@ -2,43 +2,39 @@
 
 namespace App\Services\Payment\Providers;
 
-use App\Exceptions\API\Customer\Order\IncorrectOrderPayment;
-use App\Exceptions\API\Customer\Order\NotSupportedPaymentNetwork;
+use App\Exceptions\API\Customer\Order\PaymentBlockchainNetworkNotSupported;
+use App\Exceptions\Services\Payment\OrderPaymentIsIncorrect;
+use App\Exceptions\Services\Payment\TransactionHashIsAlreadyInUse;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
+use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Stripe\Exception\ApiErrorException;
 use Web3\ValueObjects\Wei;
 use Web3\Web3;
 
-class CollectorCoinService
+class CollectorCoinService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
     // Status Values
-    // 0: Fail
-    // 1: Completed
+    public const FAILED = '0';
+    public const COMPLETED = '1';
     
-    /**
-     * @var Web3
-     */
-    protected $web3;
+    protected Web3 $web3;
 
-    /**
-     * @var int
-     */
-    protected $networkId;
+    protected int $paymentBlockChainNetworkId;
 
-    public function __construct(int $networkId)
+    public function __construct(int $paymentBlockChainNetworkId)
     {
-        $this->networkId = $networkId;
+        $this->paymentBlockChainNetworkId = $paymentBlockChainNetworkId;
 
         throw_unless(
-            in_array($networkId, explode(',', config('configuration.keys.web3_configurations.supported_networks'))),
-            NotSupportedPaymentNetwork::class
+            in_array($paymentBlockChainNetworkId, explode(',', config('robograding.web3.supported_networks'))),
+            PaymentBlockchainNetworkNotSupported::class
         );
 
-        $this->web3 = new Web3(config('web3networks.' . $this->networkId. '.rpc_urls')[0]);
+        $this->web3 = new Web3(config('web3networks.' . $this->paymentBlockChainNetworkId. '.rpc_urls')[0]);
     }
 
     public function getTransaction(string $txn): array
@@ -65,12 +61,17 @@ class CollectorCoinService
         return $this->web3->eth()->getTransactionReceipt($txn);
     }
 
-    public function charge(Order $order, array $data): array
+    public function charge(Order $order, array $data = []): array
     {
         try {
+            $this->validateTransactionHashIsNotDuplicate($order, $data['transaction_hash']);
+
             $transactionData = $this->getTransaction($data['transaction_hash']);
+
+            $orderPayment = $order->firstCollectorCoinOrderPayment;
+
             //Get Collector Coin amount from USD (Order grand total)
-            $response = json_decode($order->firstOrderPayment->response, true);
+            $response = json_decode($orderPayment->response, true);
             $data['amount'] = $response['amount'];
 
             $this->validateTransaction($data, $transactionData);
@@ -84,11 +85,15 @@ class CollectorCoinService
                 'request' => $data,
                 'response' => $response,
                 'payment_provider_reference_id' => $data['transaction_hash'],
-                'amount' => $order->firstOrderPayment->amount,
+                'amount' => $orderPayment->amount,
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => null,
             ];
-        } catch (IncorrectOrderPayment $e) {
+        } catch (OrderPaymentIsIncorrect $e) {
+            return [
+                'message' => $e->getMessage(),
+            ];
+        } catch (TransactionHashIsAlreadyInUse $e) {
             return [
                 'message' => $e->getMessage(),
             ];
@@ -97,12 +102,13 @@ class CollectorCoinService
         }
     }
 
-    public function verify(Order $order): bool | array
+    public function verify(Order $order, string $transactionHash): bool
     {
-        try {
-            return $this->validateOrderIsPaid($order);
-        } catch (ApiErrorException $e) {
-            return false;
+        //TODO: Check if we also should support this for confirmed/graded orders
+        if ($order->order_status_id === OrderStatus::PLACED) {
+            return true;
+        } else {
+            return $this->validateTransactionIsSuccessful($transactionHash);
         }
     }
 
@@ -112,18 +118,18 @@ class CollectorCoinService
         $divider = 1;
 
         $baseUrl = 'https://api.coingecko.com/api/v3/simple/token_price';
-        $networkData = config('web3networks.' . $this->networkId);
+        $networkData = config('web3networks.' . $this->paymentBlockChainNetworkId);
 
         if ($networkData['is_testnet']) {
-            $divider = config('configuration.keys.web3_configurations.testnet_token_value', 1);
+            $divider = config('robograding.web3.testnet_token_value', 1);
         }
 
         $web3BscToken = $networkData['collector_coin_token'];
-        if ($this->networkId === 56) { //Is BSC
+        if ($this->paymentBlockChainNetworkId === 56) { //Is BSC
             $response = Http::get($baseUrl . '/binance-smart-chain?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
 
             $divider = $response->json()[$web3BscToken]['usd'];
-        } elseif ($this->networkId === 1) { //Is ETH
+        } elseif ($this->paymentBlockChainNetworkId === 1) { //Is ETH
             $response = Http::get($baseUrl . '/ethereum?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
 
             $divider = $response->json()[$web3BscToken]['usd'];
@@ -139,55 +145,36 @@ class CollectorCoinService
         return 0.0;
     }
 
-    protected function validateOrderIsPaid(Order $order): array
-    {
-        $transactionHash = $order->firstOrderPayment->payment_provider_reference_id;
-
-        //TODO: Check if we also should support this for confirmed/graded orders
-        if ($order->order_status_id === OrderStatus::PLACED) {
-            return [
-                'transaction_hash' => $transactionHash,
-                'status' => 'success',
-            ];
-        } else {
-            return $this->validateTransactionIsSuccessful($transactionHash);
-        }
-    }
-
-    protected function validateTransactionIsSuccessful(string $transactionHash): array
+    protected function validateTransactionIsSuccessful(string $transactionHash): bool
     {
         $transactionDetails = $this->getTransactionDetails($transactionHash);
 
-        switch ($transactionDetails['status']) {
-            case '0':
-                $status = 'fail';
-
-                break;
-
-            case '1':
-                $status = 'success';
-
-                break;
-
-            default:
-                $status = 'processing';
-
-                break;
-        }
-
-        return [
-            'transaction_hash' => $transactionHash,
-            'status' => $status,
-        ];
+        return $transactionDetails['status'] === self::COMPLETED;
     }
 
     protected function validateTransaction(array $data, array $transactionData): bool
     {
         //Verify that transaction is going to correct destination and amount is between 2% tange
-        if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->networkId. '.collector_coin_wallet'))
+        if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->paymentBlockChainNetworkId. '.collector_coin_wallet'))
         || $transactionData['token_amount'] < $data['amount'] * 0.98
         || $transactionData['token_amount'] > $data['amount'] * 1.02) {
-            throw new IncorrectOrderPayment;
+            throw new OrderPaymentIsIncorrect;
+        }
+
+        return true;
+    }
+
+    protected function validateTransactionHashIsNotDuplicate(Order $order, string $transactionHash): bool
+    {
+        $duplicatePayments = OrderPayment::whereHas('paymentMethod', function ($q) {
+            return $q->where('code', 'collector_coin');
+        })
+        ->where('id', '<>', $order->firstCollectorCoinOrderPayment->id)
+        ->where('payment_provider_reference_id', $transactionHash)
+        ->count();
+
+        if ($duplicatePayments > 0) {
+            throw new TransactionHashIsAlreadyInUse;
         }
 
         return true;

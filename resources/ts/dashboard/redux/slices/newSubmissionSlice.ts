@@ -567,7 +567,7 @@ export const newSubmissionSlice = createSlice({
         setPreviewTotal: (state, action: PayloadAction<number>) => {
             state.previewTotal = action.payload;
         },
-        clearSubmissionState: (state) => initialState,
+        clearSubmissionState: () => initialState,
         resetCouponState: (state) => {
             state.couponState = {
                 isCouponValid: false,

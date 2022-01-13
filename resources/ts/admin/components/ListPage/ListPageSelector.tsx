@@ -1,11 +1,11 @@
-import Button from '@mui/material/Button';
-import Popover from '@mui/material/Popover';
-import { MouseEvent, PropsWithChildren, useCallback, useState } from 'react';
-import { styled } from '@mui/material/styles';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import classNames from 'classnames';
 import CancelIcon from '@mui/icons-material/Cancel';
+import Button from '@mui/material/Button';
+import Popover from '@mui/material/Popover';
+import { styled } from '@mui/material/styles';
+import classNames from 'classnames';
+import { MouseEvent, PropsWithChildren, useCallback, useState } from 'react';
 
 interface Props {
     label: string;
@@ -104,5 +104,3 @@ export function ListPageSelector({ label, active, value, onClear, children }: Pr
         </>
     );
 }
-
-export default ListPageSelector;

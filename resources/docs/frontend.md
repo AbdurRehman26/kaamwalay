@@ -112,7 +112,7 @@ export class MyRepository extends Repository<MyEntity> {
 ### Repositories and data fetching hooks
 
 We find how to define and use repositories in plain code, but still need to see how we can do it in components. For
-component data fetching we are using a library called [swr](https://swr.vercel.app) with it's hook `useSWR`.
+component data fetching we are using a library called [react-query](https://react-query.tanstack.com/quick-start) with it is hook `useQuery`.
 
 ```typescript
 // Plain usage for repositories under components.

@@ -614,7 +614,7 @@ test('a customer can place order with amount equal to his wallet balance.', func
         'payment_plan' => [
             'id' => PaymentPlan::factory()->create([
                 'price' => 300,
-                'max_protection_amount' => 1000000
+                'max_protection_amount' => 1000000,
             ])->toArray()['id'],
         ],
         'items' => [

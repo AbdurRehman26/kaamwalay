@@ -33,6 +33,7 @@ interface SubmissionsViewDetailsProps {
     refundsTotal: string;
     payment: OrderPaymentEntity;
     discountedAmount: string;
+    amountPaidFromWallet: string;
     coupon: OrderCouponEntity;
 }
 
@@ -66,6 +67,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         refundsTotal,
         discountedAmount,
         coupon,
+        amountPaidFromWallet,
     } = props;
 
     const classes = useStyles();
@@ -103,13 +105,23 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         () => ({
             'Total Declared Value:': formatCurrency(declaredValue),
             'Service Fee:': formatCurrency(serviceFee),
+            ...(Number(amountPaidFromWallet) > 0 && { 'Credit:': `-${formatCurrency(amountPaidFromWallet)}` }),
             ...(Number(discountedAmount) > 0 && { 'Promo Code Discount:': `-${formatCurrency(discountedAmount)}` }),
             'Insured Shipping:': formatCurrency(shippingFee),
             ...(Number(extraChargesTotal) > 0 && { 'Extra Charge:': formatCurrency(extraChargesTotal) }),
             ...(Number(refundsTotal) > 0 && { 'Refund:': formatCurrency(refundsTotal) }),
             'Total:': formatCurrency(grandTotal),
         }),
-        [declaredValue, serviceFee, discountedAmount, shippingFee, extraChargesTotal, refundsTotal, grandTotal],
+        [
+            declaredValue,
+            serviceFee,
+            discountedAmount,
+            shippingFee,
+            extraChargesTotal,
+            refundsTotal,
+            grandTotal,
+            amountPaidFromWallet,
+        ],
     );
 
     return (

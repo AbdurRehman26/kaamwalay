@@ -164,6 +164,26 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                     </Typography>
                                 </TableCell>
                             </TableRow>
+
+                            {Number(data?.amountPaidFromWallet) > 0 ? (
+                                <TableRow>
+                                    <TableCell>
+                                        <Typography variant={'body2'}>Credit:</Typography>
+                                    </TableCell>
+                                    <TableCell align={'right'}>
+                                        <Typography
+                                            component={'span'}
+                                            variant={'body2'}
+                                            align={'right'}
+                                            color={'textPrimary'}
+                                            className={font.fontWeightMedium}
+                                        >
+                                            -{formatCurrency(data?.amountPaidFromWallet)}
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ) : null}
+
                             {Number(data?.discountedAmount) > 0 ? (
                                 <TableRow>
                                     <TableCell>

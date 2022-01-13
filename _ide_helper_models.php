@@ -1015,6 +1015,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod visible()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereId($value)
@@ -1399,6 +1400,7 @@ namespace App\Models{
  * @property-read int|null $roles_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Cashier\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
+ * @property-read \App\Models\Wallet|null $wallet
  * @method static \Illuminate\Database\Eloquent\Builder|User admin()
  * @method static \Illuminate\Database\Eloquent\Builder|User customer()
  * @method static \Database\Factories\UserFactory factory(...$parameters)
@@ -1407,6 +1409,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User signedUpBetween(string $startDate, string $endDate)
+ * @method static \Illuminate\Database\Eloquent\Builder|User submissions(string $minSubmissionCount, string $maxSubmissionCount)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAgsAccessToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCustomerNumber($value)
@@ -1522,5 +1526,51 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserDevice whereUserId($value)
  */
 	class UserDevice extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Wallet
+ *
+ * @property-read \App\Models\WalletTransaction|null $lastTransaction
+ * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WalletPayment[] $walletPayments
+ * @property-read int|null $wallet_payments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WalletTransaction[] $walletTransactions
+ * @property-read int|null $wallet_transactions_count
+ * @method static \Database\Factories\WalletFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet query()
+ */
+	class Wallet extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\WalletPayment
+ *
+ * @property-read \App\Models\PaymentMethod $paymentMethod
+ * @property-read \App\Models\Wallet $wallet
+ * @method static \Database\Factories\WalletPaymentFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment query()
+ */
+	class WalletPayment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\WalletTransaction
+ *
+ * @property-read \App\Models\User $user
+ * @property-read \App\Models\Wallet $wallet
+ * @method static \Database\Factories\WalletTransactionFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction query()
+ */
+	class WalletTransaction extends \Eloquent {}
 }
 

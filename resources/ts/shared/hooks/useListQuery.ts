@@ -50,7 +50,7 @@ export function useListQuery<
                 },
             };
 
-            return dispatch(action(apiService.mergeConfig(baseConfig, config, actionArg)));
+            return dispatch(action(apiService.mergeConfig(baseConfig, actionArg, config)));
         },
         [currentPage, perPage, dispatch, action, apiService, actionArg],
     );

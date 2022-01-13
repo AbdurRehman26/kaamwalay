@@ -88,6 +88,9 @@ export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
     currentStep: number;
+    previewTotal: number;
+    availableCredit: number;
+    appliedCredit: number;
     step01Status: any;
     orderID: number;
     grandTotal: number;
@@ -113,6 +116,9 @@ export interface NewSubmissionSliceState {
 const initialState: NewSubmissionSliceState = {
     orderID: -1,
     grandTotal: 0,
+    availableCredit: 0,
+    previewTotal: 0,
+    appliedCredit: 0,
     orderNumber: '',
     isNextDisabled: false,
     isNextLoading: false,
@@ -272,6 +278,13 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
     }));
 });
 
+export const getAvailableCredit = createAsyncThunk('newSubmission/getAvailableCredit', async () => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint('customer/wallet');
+    const response = await endpoint.get('');
+    return response.data.balance;
+});
+
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses/states');
@@ -381,9 +394,8 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
         shippingMethod: {
             id: 1,
         },
-        paymentMethod: {
-            id: currentSubmission.step04Data.paymentMethodId,
-        },
+        paymentMethod:
+            currentSubmission.previewTotal === 0 ? null : { id: currentSubmission.step04Data.paymentMethodId },
         paymentProviderReference: {
             id:
                 currentSubmission.step04Data.paymentMethodId === 1
@@ -396,6 +408,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                   id: currentSubmission?.couponState?.appliedCouponData.id,
               }
             : null,
+        paymentByWallet: currentSubmission.appliedCredit,
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
@@ -548,7 +561,13 @@ export const newSubmissionSlice = createSlice({
         ) => {
             state.couponState.appliedCouponData = action.payload;
         },
-        clearSubmissionState: (state) => initialState,
+        setAppliedCredit: (state, action: PayloadAction<number>) => {
+            state.appliedCredit = action.payload;
+        },
+        setPreviewTotal: (state, action: PayloadAction<number>) => {
+            state.previewTotal = action.payload;
+        },
+        clearSubmissionState: () => initialState,
         resetCouponState: (state) => {
             state.couponState = {
                 isCouponValid: false,
@@ -592,6 +611,9 @@ export const newSubmissionSlice = createSlice({
         [getSavedAddresses.fulfilled as any]: (state, action) => {
             state.step03Data.existingAddresses = action.payload;
         },
+        [getAvailableCredit.fulfilled as any]: (state, action) => {
+            state.availableCredit = action.payload;
+        },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;
             state.orderNumber = action.payload.orderNumber;
@@ -603,7 +625,9 @@ export const newSubmissionSlice = createSlice({
             state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress.flat;
             state.step04Data.selectedBillingAddress.id = action.payload.billingAddress.id;
             state.step04Data.selectedCreditCard.expMonth =
-                state.step04Data.paymentMethodId === 1 ? action.payload.orderPayment.card.expMonth : '';
+                state.step04Data.paymentMethodId === 1 && state.previewTotal !== 0
+                    ? action?.payload?.orderPayment?.card?.expMonth
+                    : '';
             state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress.phone;
             state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
                 (currentState: any) => currentState.code === action.payload.billingAddress.state,
@@ -636,6 +660,7 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
                 ? action.payload.discountedAmount
                 : '';
+            state.appliedCredit = action.payload.amountPaidFromWallet;
         },
     },
 });
@@ -674,4 +699,6 @@ export const {
     setValidCouponId,
     setIsCouponApplied,
     setAppliedCouponData,
+    setAppliedCredit,
+    setPreviewTotal,
 } = newSubmissionSlice.actions;

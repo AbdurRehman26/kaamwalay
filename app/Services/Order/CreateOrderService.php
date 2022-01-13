@@ -247,7 +247,7 @@ class CreateOrderService
 
     protected function storePaymentMethodDiscount(array $paymentMethod): void
     {
-        if(!array_key_exists('id', $paymentMethod)){
+        if (! array_key_exists('id', $paymentMethod)) {
             return;
         }
 

@@ -71,6 +71,7 @@ class OrderPaymentResource extends BaseResource
             'transaction' => [
                 'amount' => $response['amount'],
                 'hash' => substr($response['txn_hash'], 0, 5) . '...' . substr($response['txn_hash'], -4),
+                'complete_hash' => $response['txn_hash'],
             ],
         ];
     }

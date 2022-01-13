@@ -12,6 +12,15 @@ import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
 
+const wallets = {
+    // Prod eth mainnet wallet
+    ethWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
+    // Prod binance smart chain wallet
+    bscWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
+    // Staging wallet
+    testWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
+};
+
 export function PayWithCollectorCoinButton() {
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
@@ -23,11 +32,6 @@ export function PayWithCollectorCoinButton() {
     const navigate = useNavigate();
 
     function getRecipientWalletFromNetwork(networkID: number) {
-        const wallets = {
-            ethWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
-            bscWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
-            testWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
-        };
         switch (networkID) {
             case 1:
                 return wallets.ethWallet;

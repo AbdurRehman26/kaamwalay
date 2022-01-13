@@ -60,7 +60,7 @@ class Wallet extends Model
 
     public static function validateWalletAmount(float $balance): bool
     {
-        return Wallet::forCurrentUser()->isActive()->where('balance', '>', $balance)->exists();
+        return Wallet::forCurrentUser()->isActive()->where('balance', '>=', $balance)->exists();
     }
 
     public static function createWallet(User $user): void

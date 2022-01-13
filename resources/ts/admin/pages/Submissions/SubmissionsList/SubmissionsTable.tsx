@@ -30,7 +30,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const orders$ = useListAdminOrdersQuery({
         params: {
-            include: ['orderStatus', 'customer', 'invoice', 'orderShipment', 'orderLabel'],
+            include: ['orderStatus', 'customer', 'customer.wallet', 'invoice', 'orderShipment', 'orderLabel'],
             filter: {
                 search,
                 status: all ? 'all' : tabFilter,

@@ -22,7 +22,9 @@ class CustomerResource extends BaseResource
             'email' => $this->email,
             'phone' => $this->phone,
             'submissions' => $this->orders()->placed()->count(),
+            'wallet' => $this->wallet,
             'created_at' => $this->formatDate($this->created_at),
+            'update_at' => $this->formatDate($this->update_at),
         ];
     }
 }

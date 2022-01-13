@@ -55,7 +55,7 @@ const Root = styled(Dialog)(({ theme }) => ({
         backgroundColor: '#f9f9f9',
         position: 'sticky',
         top: 0,
-        boxShadow: '0 1px 0 #ccc',
+        boxShadow: '0 1px 0 #eee',
         '.MuiTableCell-head': {
             paddingTop: 10,
             paddingBottom: 14,

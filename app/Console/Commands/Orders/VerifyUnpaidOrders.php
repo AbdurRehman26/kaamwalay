@@ -38,9 +38,7 @@ class VerifyUnpaidOrders extends Command
         $user = User::whereEmail($email)->first();
         auth()->login($user);
 
-        $unpaidOrders = Order::where('order_status_id', OrderStatus::PAYMENT_PENDING)->whereHas('paymentMethod', function ($query) {
-            return $query->where('code', 'collector_coin');
-        })->get();
+        $unpaidOrders = Order::where('order_status_id', OrderStatus::PAYMENT_PENDING)->whereRelation('paymentMethod', 'code', 'collector_coin')->get();
 
         $unpaidOrders->each(function (Order $order) use ($paymentService) {
             $this->info("Processing Order: $order->id");

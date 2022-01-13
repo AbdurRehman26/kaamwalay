@@ -42,13 +42,15 @@ class PaymentService
     {
         $this->hasProvider($order);
 
+        $params = [];
+
         if ($this->order->paymentMethod->isCollectorCoin()) {
             $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
         }
 
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params ?? [])->charge($this->order, $optionalData);
+        ], $params)->charge($this->order, $optionalData);
 
         if (! empty($data['message']) || ! empty($data['payment_intent'])) {
             return $data;
@@ -74,6 +76,7 @@ class PaymentService
     {
         $this->hasProvider($order);
 
+        $params = [];
         if ($this->order->paymentMethod->isCollectorCoin()) {
             $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
 
@@ -85,7 +88,7 @@ class PaymentService
 
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params ?? [])->verify($this->order, $paymentIntentId);
+        ], $params)->verify($this->order, $paymentIntentId);
 
         if ($data) {
 
@@ -140,13 +143,14 @@ class PaymentService
     {
         $this->hasProvider($order);
 
+        $params = [];
         if ($this->order->paymentMethod->isCollectorCoin()) {
             $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
         }
 
         $providerInstance = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params ?? []);
+        ], $params);
 
         $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
             $orderPayment->provider_fee = $orderPayment->paymentMethod->isWallet() ? 0 : $providerInstance->calculateFee($orderPayment);

@@ -154,10 +154,12 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     protected function validateTransaction(array $data, array $transactionData): bool
     {
+        $amountThresholdPercentage = (float) 2;
+
         //Verify that transaction is going to correct destination and amount is between 2% tange
         if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->paymentBlockChainNetworkId. '.collector_coin_wallet'))
-        || $transactionData['token_amount'] < $data['amount'] * 0.98
-        || $transactionData['token_amount'] > $data['amount'] * 1.02) {
+        || $transactionData['token_amount'] < $data['amount'] * (1 - ($amountThresholdPercentage/100))
+        || $transactionData['token_amount'] > $data['amount'] * (1 + ($amountThresholdPercentage/100))) {
             throw new OrderPaymentIsIncorrect;
         }
 
@@ -166,9 +168,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     protected function validateTransactionHashIsNotDuplicate(Order $order, string $transactionHash): bool
     {
-        $duplicatePayments = OrderPayment::whereHas('paymentMethod', function ($q) {
-            return $q->where('code', 'collector_coin');
-        })
+        $duplicatePayments = OrderPayment::whereRelation('paymentMethod', 'code', 'collector_coin')
         ->where('id', '<>', $order->firstCollectorCoinOrderPayment->id)
         ->where('payment_provider_reference_id', $transactionHash)
         ->count();

@@ -25,8 +25,8 @@ import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceW
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getAvailableCredit } from '@dashboard/redux/slices/newSubmissionSlice';
 
-const TOOLTIP_TEXT = `Your balance will never expire. We'll automatically apply your Wallet Balance to eligible orders when you checkout. If you would rather not use your balance. In can deselect it when creating an order. 
-                     \n\n Limitations: Your Wallet Balance cannot be transferred to other accounts. `;
+const TOOLTIP_TEXT = `Your balance will never expire. We'll automatically apply your Wallet Balance to eligible orders when you checkout. If you would rather not use your balance, you can deselect it when creating an order. 
+                    \n\nLimitations: Your Wallet Balance cannot be transferred to other accounts. `;
 
 const useStyles = makeStyles(() => {
     return {
@@ -171,7 +171,7 @@ export function Wallet() {
             </ListHeader>
 
             <Grid container direction={'row'} marginTop={'21px'} spacing={2}>
-                <Grid item xs={12} sm={8}>
+                <Grid item xs={12} sm={8} order={{ xs: 2, sm: 1 }}>
                     <Paper
                         variant={'outlined'}
                         sx={{ width: '100%', backgroundColor: '#F9F9F9', borderRadius: '10px' }}
@@ -179,7 +179,7 @@ export function Wallet() {
                         {mainElement}
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={4} order={{ xs: 1, sm: 2 }}>
                     {showInfo ? (
                         <Alert severity="info" sx={{ marginBottom: '12px' }}>
                             {TOOLTIP_TEXT}

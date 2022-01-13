@@ -93,7 +93,7 @@ class CreateOrderService
         $this->storePaymentMethodDiscount($this->data['payment_method'] ?? []);
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
-        $this->storeOrderPayment($this->data['payment_provider_reference']);
+        $this->storeOrderPayment($this->data);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
 
@@ -214,12 +214,12 @@ class CreateOrderService
             'payment_method_id' => $this->order->paymentMethod->id,
         ];
         if ($this->order->paymentMethod->code === 'stripe') {
-            $response = $this->order->user->findPaymentMethod($data['id']);
+            $response = $this->order->user->findPaymentMethod($data['payment_provider_reference']['id']);
             $orderPaymentData = array_merge(
                 $orderPaymentData,
                 [
                     'response' => json_encode($response),
-                    'payment_provider_reference_id' => $data['id'],
+                    'payment_provider_reference_id' => $data['payment_provider_reference']['id'],
                 ]
             );
         }
@@ -247,6 +247,10 @@ class CreateOrderService
 
     protected function storePaymentMethodDiscount(array $paymentMethod): void
     {
+        if(!array_key_exists('id', $paymentMethod)){
+            return;
+        }
+
         $paymentMethod = PaymentMethod::find($paymentMethod['id']);
 
         if ($paymentMethod->isCollectorCoin()) {

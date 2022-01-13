@@ -158,8 +158,8 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
         //Verify that transaction is going to correct destination and amount is between 2% tange
         if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->paymentBlockChainNetworkId. '.collector_coin_wallet'))
-        || $transactionData['token_amount'] < $data['amount'] * (1 - ($amountThresholdPercentage/100))
-        || $transactionData['token_amount'] > $data['amount'] * (1 + ($amountThresholdPercentage/100))) {
+        || $transactionData['token_amount'] < $data['amount'] * (1 - ($amountThresholdPercentage / 100))
+        || $transactionData['token_amount'] > $data['amount'] * (1 + ($amountThresholdPercentage / 100))) {
             throw new OrderPaymentIsIncorrect;
         }
 

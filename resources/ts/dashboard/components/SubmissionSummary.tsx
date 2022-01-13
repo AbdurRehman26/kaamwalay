@@ -175,7 +175,7 @@ function SubmissionSummary() {
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const pmDiscountedAmount = useAppSelector((state) => state.newSubmission.pmDiscountedAmount);
+    const paymentMethodDiscountedAmount = useAppSelector((state) => state.newSubmission.paymentMethodDiscountedAmount);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -368,11 +368,11 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
-                            {pmDiscountedAmount > 0 ? (
+                            {paymentMethodDiscountedAmount > 0 ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
                                     <NumberFormat
-                                        value={pmDiscountedAmount}
+                                        value={paymentMethodDiscountedAmount}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

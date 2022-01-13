@@ -60,7 +60,7 @@ export function SubmissionsView() {
                 paymentMethodId={data?.paymentMethodId}
                 numberOfCards={data?.numberOfCards}
                 discountedAmount={data?.discountedAmount}
-                pmDiscountedAmount={data?.pmDiscountedAmount}
+                paymentMethodDiscountedAmount={data?.paymentMethodDiscountedAmount}
                 coupon={data?.coupon}
                 placedAt={data?.createdAt}
                 declaredValue={data.totalDeclaredValue}

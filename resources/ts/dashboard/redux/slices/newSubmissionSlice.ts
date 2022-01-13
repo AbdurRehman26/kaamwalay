@@ -88,7 +88,7 @@ export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
     totalInAgs: number;
-    pmDiscountedAmount: number;
+    paymentMethodDiscountedAmount: number;
     orderTransactionHash: string;
     confirmedCollectorCoinPayment: boolean;
     currentStep: number;
@@ -121,7 +121,7 @@ const initialState: NewSubmissionSliceState = {
     orderTransactionHash: '',
     grandTotal: 0,
     orderNumber: '',
-    pmDiscountedAmount: 0,
+    paymentMethodDiscountedAmount: 0,
     isNextDisabled: false,
     isNextLoading: false,
     currentStep: 0,
@@ -285,7 +285,7 @@ export const getTotalInAGS = createAsyncThunk(
     async (input: { orderID: number; chainID: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
-            `customer/orders/${input.orderID}/collector-coin?network=${input?.chainID}`,
+            `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}`,
         );
         const response = await endpoint.get('');
         return response.data.value;
@@ -348,11 +348,15 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
 
 export const getCollectorCoinPaymentStatus = createAsyncThunk(
     'newSubmission/getCollectorCoinPaymentStatus',
-    async (input: { orderID: number }) => {
+    async (input: { orderID: number; txHash: string }) => {
         const apiService = app(APIService);
-        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/verify-collector-coin`);
+        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/${input.txHash}`);
         const response = await endpoint.post('');
-        return response.data;
+        const fulfilledReturn = {
+            message: response.data.message,
+            transactionHash: input.txHash,
+        };
+        return fulfilledReturn;
     },
 );
 
@@ -617,7 +621,7 @@ export const newSubmissionSlice = createSlice({
             state.step01Data.status = 'failed';
         },
         [getCollectorCoinPaymentStatus.fulfilled as any]: (state, action) => {
-            state.confirmedCollectorCoinPayment = action.payload.status === 'success';
+            state.confirmedCollectorCoinPayment = action.payload.message === 'Payment verified successfully';
             state.orderTransactionHash = action.payload.transactionHash;
         },
         [getStatesList.pending as any]: (state) => {
@@ -686,7 +690,7 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
                 ? action.payload.discountedAmount
                 : '';
-            state.pmDiscountedAmount = action.payload.pmDiscountedAmount;
+            state.paymentMethodDiscountedAmount = action.payload.paymentMethodDiscountedAmount;
             state.step04Data.paymentMethodId = action.payload.paymentMethodId;
         },
     },

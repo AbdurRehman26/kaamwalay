@@ -20,6 +20,7 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { RetryStrategy, useRetry } from '@shared/hooks/useRetry';
 import { getCollectorCoinPaymentStatus } from '@dashboard/redux/slices/newSubmissionSlice';
+import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 
 export function CollectorCoinConfirmationSubmission() {
     const { id } = useParams<{ id: string }>();
@@ -29,7 +30,10 @@ export function CollectorCoinConfirmationSubmission() {
     const navigate = useNavigate();
     const notifications = useNotifications();
     const isPaymentSuccessful = useAppSelector((state) => state.newSubmission.confirmedCollectorCoinPayment);
-    const transactionHash = useAppSelector((state) => state.newSubmission.orderTransactionHash);
+
+    const { isLoading, data } = useOrderQuery({
+        resourceId: Number(id),
+    });
 
     const handleTransactionHashClick = useCallback(
         (incomingTransactionHash: string) => {
@@ -52,11 +56,18 @@ export function CollectorCoinConfirmationSubmission() {
         if (isPaymentSuccessful) {
             navigate(`/submissions/${id}/confirmation`);
         }
-    }, [dispatch, isPaymentSuccessful, transactionHash, id, navigate]);
+    }, [dispatch, isPaymentSuccessful, id, navigate]);
 
     useRetry(
         async () => {
-            await dispatch(getCollectorCoinPaymentStatus({ orderID: Number(id) }));
+            if (!isLoading) {
+                await dispatch(
+                    getCollectorCoinPaymentStatus({
+                        orderID: Number(id),
+                        txHash: data?.orderPayment?.transaction?.completeHash ?? '',
+                    }),
+                );
+            }
         },
         () => !isPaymentSuccessful,
         { maxRetries: 520, strategy: RetryStrategy.ExecuteFirst },
@@ -86,11 +97,13 @@ export function CollectorCoinConfirmationSubmission() {
                                 <TableRow>
                                     <Tooltip title={'Copy Transaction Hash'}>
                                         <TableCell
-                                            onClick={handleTransactionHashClick(transactionHash)}
+                                            onClick={handleTransactionHashClick(
+                                                data?.orderPayment?.transaction?.completeHash ?? '',
+                                            )}
                                             sx={{ cursor: 'pointer' }}
                                             align="left"
                                         >
-                                            {shortenTxnHash(transactionHash)}
+                                            {shortenTxnHash(data?.orderPayment?.transaction?.completeHash ?? '')}
                                         </TableCell>
                                     </Tooltip>
                                     <TableCell align="right">{transactionStatus}</TableCell>

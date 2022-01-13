@@ -25,7 +25,7 @@ import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceW
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getAvailableCredit } from '@dashboard/redux/slices/newSubmissionSlice';
 
-const TOOLTIP_TEXT = `Your balance will never expire. We'll automatically apply your Wallet Balance to eligible orders when you checkout. If you would rather not use your balance. You can deselect it when creating an order. 
+const TOOLTIP_TEXT = `Your balance will never expire. We'll automatically apply your Wallet Balance to eligible orders when you checkout. If you would rather not use your balance, you can deselect it when creating an order. 
                     \n\nLimitations: Your Wallet Balance cannot be transferred to other accounts. `;
 
 const useStyles = makeStyles(() => {

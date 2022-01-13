@@ -118,7 +118,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         $divider = 1;
 
         $baseUrl = 'https://api.coingecko.com/api/v3/simple/token_price';
-        $networkData = config('web3networks.' . $this->paymentBlockChainNetworkId);
+        $networkData = config('web3networks.' . $this->paymentBlockChainNetworkId, 97); #Use Binance Smart Chain Testnet as default
 
         if ($networkData['is_testnet']) {
             $divider = config('robograding.web3.testnet_token_value', 1);

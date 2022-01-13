@@ -19,6 +19,7 @@ export function SubmissionsView() {
             params: {
                 include: [
                     'customer',
+                    'customer.wallet',
                     'billingAddress',
                     'shippingAddress',
                     'paymentPlan',
@@ -53,6 +54,7 @@ export function SubmissionsView() {
                 orderStatusHistory={data?.orderStatusHistory}
                 orderShipment={data?.orderShipment}
                 orderLabel={data?.orderLabel}
+                customer={data?.customer}
             />
             <Divider />
             <SubmissionsViewDetails

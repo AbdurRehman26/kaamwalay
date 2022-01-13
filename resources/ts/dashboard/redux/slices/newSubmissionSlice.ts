@@ -548,7 +548,7 @@ export const newSubmissionSlice = createSlice({
         ) => {
             state.couponState.appliedCouponData = action.payload;
         },
-        clearSubmissionState: (state) => initialState,
+        clearSubmissionState: () => initialState,
         resetCouponState: (state) => {
             state.couponState = {
                 isCouponValid: false,

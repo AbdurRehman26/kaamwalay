@@ -61,6 +61,7 @@ export function SubmissionsView() {
                 serviceLevelFee={data.paymentPlan?.price}
                 numberOfCards={data?.numberOfCards}
                 discountedAmount={data?.discountedAmount}
+                amountPaidFromWallet={data?.amountPaidFromWallet}
                 coupon={data?.coupon}
                 placedAt={data?.createdAt}
                 declaredValue={data.totalDeclaredValue}

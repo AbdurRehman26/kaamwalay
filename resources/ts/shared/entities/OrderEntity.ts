@@ -35,6 +35,7 @@ export class OrderEntity extends Entity {
     public reviewedAt!: string;
     public reviewedBy!: string;
     public notes!: string;
+    public amountPaidFromWallet!: string;
 
     @Type(() => OrderCouponEntity)
     public coupon!: OrderCouponEntity;

@@ -115,30 +115,34 @@ export function AGSPaymentDetailsContainers() {
     }, [updateAgsBalance]);
 
     if (metamaskStatus === metamaskStatuses.connected) {
-        detailsChildren = (
-            <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} padding={'16px'}>
-                <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
-                    <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
-                        Connected Wallet:{' '}
-                    </Typography>
-                    <Chip label={shortenWalletAddress(selectedAccount)}></Chip>
-                </Box>
+        if (!agsBalance) {
+            detailsChildren = <CircularProgress />;
+        } else {
+            detailsChildren = (
+                <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} padding={'16px'}>
+                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
+                        <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
+                            Connected Wallet:{' '}
+                        </Typography>
+                        <Chip label={shortenWalletAddress(selectedAccount)}></Chip>
+                    </Box>
 
-                <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
-                    <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
-                        AGS Balance:
-                    </Typography>
-                    <Chip label={agsBalance}></Chip>
-                </Box>
+                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
+                        <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
+                            AGS Balance:
+                        </Typography>
+                        <Chip label={agsBalance}></Chip>
+                    </Box>
 
-                <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
-                    <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
-                        Selected Blockchain:
-                    </Typography>
-                    <Chip label={networksMap[currentNetworkID]?.chainName}></Chip>
+                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
+                        <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
+                            Selected Blockchain:
+                        </Typography>
+                        <Chip label={networksMap[currentNetworkID]?.chainName}></Chip>
+                    </Box>
                 </Box>
-            </Box>
-        );
+            );
+        }
     }
 
     if (metamaskStatus === metamaskStatuses.notConnected) {
@@ -229,9 +233,7 @@ export function AGSPaymentDetailsContainers() {
                     </Alert>
                 ) : null}
             </Box>
-            <Box className={classes.detailsContainer}>
-                {currentNetworkID === 0 ? <CircularProgress /> : detailsChildren}
-            </Box>
+            <Box className={classes.detailsContainer}>{detailsChildren}</Box>
         </Paper>
     );
 }

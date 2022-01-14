@@ -22,6 +22,9 @@
             fbq('init', "{{ config('services.facebook.pixel_id') }}");
             fbq('track', 'PageView');
         </script>
+        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.34/dist/web3.min.js">
+
+        </script>
         <noscript><img height="1" width="1" style="display:none"
                        src="https://www.facebook.com/tr?id={{ config('services.facebook.pixel_id') }}&ev=PageView&noscript=1"
             /></noscript>

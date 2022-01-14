@@ -63,6 +63,8 @@ enum metamaskStatuses {
 const web3: any = new Web3(window?.web3?.currentProvider);
 
 function getCurrentContract(currentNetworkId: string, incomingSupportedNetworks: string[]) {
+    console.log(currentNetworkId, 'currentNetworkId');
+    console.log(incomingSupportedNetworks, 'incomingSupportedNetworks');
     if (incomingSupportedNetworks.includes(currentNetworkId)) {
         return {
             // ETH MainNet

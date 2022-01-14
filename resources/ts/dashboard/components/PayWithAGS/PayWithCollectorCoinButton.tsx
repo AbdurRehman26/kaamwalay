@@ -1,4 +1,5 @@
 import Button from '@mui/material/Button';
+import Web3 from 'web3';
 import contractAbi from '@shared/assets/bscContract.json';
 import { getCurrentContract, getEthereum } from '@dashboard/components/PayWithAGS/utils';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';

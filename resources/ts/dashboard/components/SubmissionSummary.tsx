@@ -331,7 +331,7 @@ function SubmissionSummary() {
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            {paymentMethodID === 1 ? (
+                            {paymentMethodID === 1 || paymentMethodID === 4 ? (
                                 <Button
                                     variant="contained"
                                     color="primary"

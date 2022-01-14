@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Jobs\Mailchimp\SendOrderPaidCustomersToMailchimp;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -13,6 +14,7 @@ use App\Services\Admin\OrderStatusHistoryService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 
 uses(WithFaker::class);
@@ -114,6 +116,75 @@ test('a customer can place order', function () {
             'grand_total',
         ],
     ]);
+});
+
+test('user first order dispatches job', function () {
+    $this->actingAs($this->user);
+
+    $this->postJson('/api/v1/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+    ]);
+    Bus::assertDispatched(SendOrderPaidCustomersToMailchimp::class);
 });
 
 test('an order needs data', function () {

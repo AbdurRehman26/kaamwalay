@@ -8,6 +8,7 @@ use App\Exceptions\API\Admin\Order\FailedRefund;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\FeatureNotAvailable;
 use App\Exceptions\Services\Payment\PaymentMethodNotSupported;
+use App\Jobs\Mailchimp\SendOrderPaidCustomersToMailchimp;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -97,8 +98,12 @@ class PaymentService
         // method can be called twice and can fire event twice
         if ($this->order->isPayable()) {
             $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
-
             OrderPaid::dispatch($this->order);
+
+            $user = auth()->user();
+            if (!$user->is_first_order){
+                SendOrderPaidCustomersToMailchimp::dispatch($user);
+            }
         }
 
         return true;

@@ -6,6 +6,7 @@ use App\Events\API\Auth\CustomerRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\RegisterRequest;
 use App\Jobs\Auth\CreateUserDeviceJob;
+use App\Jobs\Mailchimp\SendCustomersToMailchimp;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class RegisterController extends Controller
         $token = auth()->guard()->login($user);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
-
+        SendCustomersToMailchimp::dispatch(auth()->user());
         return new JsonResponse([
             'access_token' => $token,
             'type' => 'bearer',

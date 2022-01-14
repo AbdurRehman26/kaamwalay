@@ -38,6 +38,7 @@ return [
             'value' => env('APP_URL'),
         ],
         'collector_coin_discount_percentage' => [
+            'auth' => true,
             'value' => env('COLLECTOR_COIN_DISCOUNT_PERCENTAGE', 0),
         ],
         'stripe_key' => [

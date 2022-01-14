@@ -121,7 +121,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         $networkData = config('web3networks.' . $this->paymentBlockChainNetworkId, 97); #Use Binance Smart Chain Testnet as default
 
         if ($networkData['is_testnet']) {
-            $divider = config('robograding.web3.testnet_token_value', 1);
+            $divider = config('robograding.web3.testnet_token_value');
         }
 
         $web3BscToken = $networkData['collector_coin_token'];

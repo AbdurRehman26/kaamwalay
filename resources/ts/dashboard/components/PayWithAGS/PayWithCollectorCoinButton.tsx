@@ -30,6 +30,7 @@ export function PayWithCollectorCoinButton() {
     };
     const notifications = useNotifications();
     const navigate = useNavigate();
+    const supportedNetworks = configs?.web3SupportedNetworks.split(',');
 
     function getRecipientWalletFromNetwork(networkID: number) {
         switch (networkID) {
@@ -52,7 +53,7 @@ export function PayWithCollectorCoinButton() {
         // @ts-ignore
         const currentNetworkID = await web3.eth.net.getId();
         const currentAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });
-        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID));
+        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID, supportedNetworks));
         const balanceResult = await contract.methods.balanceOf(currentAccounts[0]).call();
         const balance = await web3.utils.fromWei(balanceResult, 'ether');
 
@@ -67,7 +68,7 @@ export function PayWithCollectorCoinButton() {
                 data: contract.methods
                     .transfer(getRecipientWalletFromNetwork(currentNetworkID), web3.utils.toWei(String(totalInAGS)))
                     .encodeABI(),
-                to: getCurrentContract(currentNetworkID),
+                to: getCurrentContract(currentNetworkID, supportedNetworks),
             };
 
             web3.eth.sendTransaction(tx, async (err: any, txHash: string) => {

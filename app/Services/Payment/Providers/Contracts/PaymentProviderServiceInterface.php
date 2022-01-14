@@ -7,7 +7,7 @@ use App\Models\OrderPayment;
 
 interface PaymentProviderServiceInterface
 {
-    public function charge(Order $order): array;
+    public function charge(Order $order, array $data = []): array;
 
     public function calculateFee(OrderPayment $orderPayment): float;
 }

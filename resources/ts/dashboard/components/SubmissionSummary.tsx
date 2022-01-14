@@ -19,6 +19,8 @@ import { clearSubmissionState, setCustomStep, setPreviewTotal } from '../redux/s
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -150,6 +152,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SubmissionSummary() {
     const classes = useStyles();
+    const { collectorCoinDiscountPercentage } = useConfiguration();
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
@@ -167,10 +170,13 @@ function SubmissionSummary() {
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
+    const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+    const paymentMethodDiscountedAmount = useAppSelector((state) => state.newSubmission.paymentMethodDiscountedAmount);
+
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -301,7 +307,12 @@ function SubmissionSummary() {
 
     function getPreviewTotal() {
         const previewTotal =
-            numberOfSelectedCards * serviceLevelPrice +
+            numberOfSelectedCards * serviceLevelPrice -
+            Number(
+                paymentMethodID === 3
+                    ? (Number(collectorCoinDiscountPercentage) / 100) * (numberOfSelectedCards * serviceLevelPrice)
+                    : 0,
+            ) +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             appliedCredit;
@@ -329,9 +340,9 @@ function SubmissionSummary() {
                                 >
                                     {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
                                 </Button>
-                            ) : (
-                                <PaypalBtn />
-                            )}
+                            ) : null}
+                            {paymentMethodID === 2 ? <PaypalBtn /> : null}
+                            {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
                         </>
 
                         <Typography className={classes.greyDescriptionText}>
@@ -374,6 +385,19 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
+                            {paymentMethodDiscountedAmount > 0 ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
+                                    <NumberFormat
+                                        value={paymentMethodDiscountedAmount}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'-$'}
+                                    />
+                                </div>
+                            ) : null}
 
                             {appliedCredit > 0 ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
@@ -426,6 +450,7 @@ function SubmissionSummary() {
                                 <Typography className={classes.rowLeftText}>Total:</Typography>
                                 <Typography className={classes.rowRightBoldText}>
                                     &nbsp;
+                                    {totalInAGS > 0 && paymentMethodID === 3 ? `(${totalInAGS} AGS) ` : null}
                                     <NumberFormat
                                         value={grandTotal}
                                         className={classes.rowRightBoldText}
@@ -549,6 +574,23 @@ function SubmissionSummary() {
                                 </Typography>
                             </div>
 
+                            {paymentMethodID === 3 ? (
+                                <div className={classes.row} style={{ marginTop: '16px' }}>
+                                    <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
+                                    <NumberFormat
+                                        value={(
+                                            (Number(collectorCoinDiscountPercentage) / 100) *
+                                            (numberOfSelectedCards * serviceLevelPrice)
+                                        ).toFixed(2)}
+                                        className={classes.rowRightBoldText}
+                                        displayType={'text'}
+                                        thousandSeparator
+                                        decimalSeparator={'.'}
+                                        prefix={'-$'}
+                                    />
+                                </div>
+                            ) : null}
+
                             {appliedCredit > 0 ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Credit: </Typography>
@@ -592,7 +634,6 @@ function SubmissionSummary() {
                         <Divider light />
                     </>
                 ) : null}
-
                 {currentStep === 2 || currentStep === 3 ? (
                     <>
                         <div className={classes.rowsContainer}>

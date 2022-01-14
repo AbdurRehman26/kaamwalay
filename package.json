@@ -40,6 +40,7 @@
         "@types/facebook-pixel": "0.0.24",
         "algoliasearch": "4.11.0",
         "axios": "0.24.0",
+        "buffer": "^5.7.1",
         "card-validator": "8.1.1",
         "chalk": "4.1.2",
         "class-transformer": "0.5.1",
@@ -48,6 +49,7 @@
         "debug": "4.3.3",
         "formik": "2.2.9",
         "hash.js": "1.1.7",
+        "https-browserify": "^1.0.0",
         "immutable": "4.0.0",
         "inversify": "6.0.1",
         "lint-staged": "12.1.4",
@@ -55,8 +57,10 @@
         "lodash": "4.17.21",
         "moment": "2.29.1",
         "object-hash": "2.2.0",
+        "os-browserify": "^0.3.0",
         "polished": "4.1.3",
         "qs": "6.10.2",
+        "process": "^0.11.10",
         "react": "17.0.2",
         "react-awesome-lightbox": "1.8.1",
         "react-dom": "17.0.2",
@@ -72,8 +76,12 @@
         "reflect-metadata": "0.1.13",
         "route-recognizer": "0.3.4",
         "slick-carousel": "1.8.1",
+        "stream-browserify": "^2.0.2",
+        "stream-http": "^2.8.3",
         "svgo": "2.8.0",
         "yargs": "17.3.1",
+        "url": "^0.11.0",
+        "web3": "^1.6.1",
         "yup": "0.32.11"
     },
     "devDependencies": {
@@ -134,6 +142,7 @@
         "url-loader": "4.1.1",
         "webpack": "5.65.0",
         "webpack-bundle-analyzer": "4.5.0",
-        "webpack-cli": "4.9.1"
+        "webpack-cli": "4.9.1",
+        "webpack-dev-server": "^4.7.1"
     }
 }

@@ -37,6 +37,9 @@ return [
         'app_url' => [
             'value' => env('APP_URL'),
         ],
+        'collector_coin_discount_percentage' => [
+            'value' => env('COLLECTOR_COIN_DISCOUNT_PERCENTAGE', 0),
+        ],
         'stripe_key' => [
             'auth' => true,
             'value' => env('STRIPE_KEY'),
@@ -56,5 +59,12 @@ return [
             'auth' => true,
             'value' => env('PAYPAL_CLIENT_ID'),
         ],
+        'web3' => [
+            'supported_networks' => env('WEB3_SUPPORTED_NETWORKS'),
+            'testnet_token_value' => env('WEB3_TESTNET_TOKEN_VALUE'),
+            'bsc_wallet' => env('BSC_WALLET'),
+            'eth_wallet' => env('ETH_WALLET'),
+            'test_wallet' => env('TEST_WALLET'),
+        ]
     ],
 ];

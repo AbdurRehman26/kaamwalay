@@ -13,6 +13,7 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Payment\Providers\CollectorCoinService;
 use App\Services\Payment\Providers\PaypalService;
 use App\Services\Payment\Providers\StripeService;
 use App\Services\Payment\Providers\WalletService;
@@ -28,6 +29,7 @@ class PaymentService
     protected array $providers = [
         'stripe' => StripeService::class,
         'paypal' => PaypalService::class,
+        'collector_coin' => CollectorCoinService::class,
         'wallet' => WalletService::class,
     ];
 
@@ -36,19 +38,26 @@ class PaymentService
     ) {
     }
 
-    public function charge(Order $order): array
+    public function charge(Order $order, array $optionalData = []): array
     {
         $this->hasProvider($order);
 
+        $params = [];
+
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
+        }
+
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ])->charge($this->order);
+        ], $params)->charge($this->order, $optionalData);
 
         if (! empty($data['message']) || ! empty($data['payment_intent'])) {
             return $data;
         }
 
-        if (! empty($data['success'])) {
+        // This updates should only be done if the payment method is not Collector Coin
+        if (! empty($data['success']) && ! $this->order->paymentMethod->isCollectorCoin()) {
 
             /* Partial Payments */
             if ($this->checkForPartialPayment()) {
@@ -67,9 +76,19 @@ class PaymentService
     {
         $this->hasProvider($order);
 
+        $params = [];
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
+
+            // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
+            if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $paymentIntentId) {
+                return false;
+            }
+        }
+
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ])->verify($this->order, $paymentIntentId);
+        ], $params)->verify($this->order, $paymentIntentId);
 
         if ($data) {
 
@@ -124,9 +143,14 @@ class PaymentService
     {
         $this->hasProvider($order);
 
+        $params = [];
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
+        }
+
         $providerInstance = resolve($this->providers[
             $this->order->paymentMethod->code
-        ]);
+        ], $params);
 
         $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
             $orderPayment->provider_fee = $orderPayment->paymentMethod->isWallet() ? 0 : $providerInstance->calculateFee($orderPayment);

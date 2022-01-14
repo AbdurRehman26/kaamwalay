@@ -16,6 +16,7 @@ use App\Services\Order\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -75,6 +76,33 @@ class OrderController extends Controller
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    }
+
+    public function calculateCollectorCoinPrice(Request $request, Order $order): JsonResponse
+    {
+        $this->authorize('calculateCollectorCoin', $order);
+
+        try {
+            $blockchainNetworkChainId = $request->payment_blockchain_network ?? 1;
+            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $blockchainNetworkChainId);
+
+            return new JsonResponse(
+                [
+                    'value' => $collectorCoinPrice,
+                    'wallet' => config('web3networks')[$blockchainNetworkChainId]['collector_coin_wallet'],
+                ],
+                200
+            );
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                    'value' => 0.0,
+                    'wallet' => null,
                 ],
                 Response::HTTP_BAD_REQUEST
             );

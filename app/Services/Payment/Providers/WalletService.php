@@ -10,7 +10,7 @@ use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
 
 class WalletService implements PaymentProviderServiceInterface
 {
-    public function charge(Order $order): array
+    public function charge(Order $order, array $data = []): array
     {
         Wallet::validateWalletAmount($this->getAmount($order));
 

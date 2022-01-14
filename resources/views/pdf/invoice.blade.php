@@ -195,10 +195,16 @@
         .info-box-content table{
             width: 100%;
         }
-        .info-line .info-title{
-            width: 83.5%;
+        .info-line {
+            font-size: 12px;
         }
-
+        .info-content {
+            font-size: 11px;
+            text-align: right;
+        }
+        .info-line .info-title{
+            width: 70%;
+        }
     </style>
 </head>
 <body>
@@ -321,6 +327,10 @@
                             {{$orderPayment->payer->email}}
                             <br/>
                             {{$orderPayment->payer->name}}
+                        @elseif(property_exists($orderPayment,'transaction'))
+                            Collector Coin ({{$orderPayment->transaction->amount}} AGS)
+                            <br/>
+                            {{$orderPayment->transaction->hash}}
                             <br/>
                         @endif
                         @if($order->amount_paid_from_wallet > 0)
@@ -371,6 +381,16 @@
                                     </td>
                                     <td class="info-content">
                                         -${{number_format($order->discounted_amount, 2)}}
+                                    </td>
+                                </tr>
+                            @endif
+                            @if(! empty($order->payment_method_discounted_amount))
+                                <tr class="info-line">
+                                    <td class="info-title">
+                                        Payment Method Discount:
+                                    </td>
+                                    <td class="info-content">
+                                        -${{number_format($order->payment_method_discounted_amount, 2)}}
                                     </td>
                                 </tr>
                             @endif

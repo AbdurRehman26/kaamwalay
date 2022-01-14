@@ -15,7 +15,7 @@ class WalletAmountGrandTotalValidator
         );
 
         throw_if(
-            ! $order->paymentMethod->isWallet() && $amount >= $order->grand_total,
+            ! $order->paymentMethod->isWallet() && $amount > $order->grand_total,
             new InvalidCreditAppliedAmountException()
         );
     }

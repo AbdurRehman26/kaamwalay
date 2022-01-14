@@ -182,7 +182,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
     {
-        return $query->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)]);
+        return $query->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()]);
     }
 
     public function scopeSubmissions(Builder $query, string $minSubmissionCount, string $maxSubmissionCount): Builder

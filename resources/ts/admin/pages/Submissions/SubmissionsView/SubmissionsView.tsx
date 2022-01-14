@@ -59,9 +59,11 @@ export function SubmissionsView() {
             <Divider />
             <SubmissionsViewDetails
                 serviceLevelFee={data.paymentPlan?.price}
+                paymentMethodId={data?.paymentMethodId}
                 numberOfCards={data?.numberOfCards}
                 discountedAmount={data?.discountedAmount}
                 amountPaidFromWallet={data?.amountPaidFromWallet}
+                paymentMethodDiscountedAmount={data?.paymentMethodDiscountedAmount}
                 coupon={data?.coupon}
                 placedAt={data?.createdAt}
                 declaredValue={data.totalDeclaredValue}

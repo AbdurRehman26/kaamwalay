@@ -56,7 +56,7 @@ class StripeService implements PaymentProviderServiceInterface, PaymentProviderV
         return [];
     }
 
-    public function charge(Order $order): array
+    public function charge(Order $order, array $data = []): array
     {
         /** @var User $user */
         $user = auth()->user();

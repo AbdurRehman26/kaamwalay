@@ -51,6 +51,7 @@ class Order extends Model
         'auto_saved_at',
         'extra_charge_total',
         'refund_total',
+        'payment_method_discounted_amount',
     ];
 
     /**
@@ -81,6 +82,7 @@ class Order extends Model
         'graded_at' => 'date',
         'extra_charge_total' => 'float',
         'refund_total' => 'float',
+        'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
     ];
 

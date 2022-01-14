@@ -89,7 +89,9 @@ class CreateOrderService
         $this->storeOrderItems($this->data['items']);
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
-        $this->storeServiceFeeAndGrandTotal();
+        $this->storeServiceFee();
+        $this->storePaymentMethodDiscount($this->data['payment_method'] ?? []);
+        $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->storeOrderPayment($this->data);
 
@@ -189,11 +191,16 @@ class CreateOrderService
         $this->order->save();
     }
 
-    protected function storeServiceFeeAndGrandTotal(): void
+    protected function storeServiceFee(): void
     {
         $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
+        $this->order->save();
+    }
+
+    protected function storeGrandTotal(): void
+    {
         $this->order->grand_total_before_discount = $this->order->service_fee + $this->order->shipping_fee;
-        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount;
+        $this->order->grand_total = $this->order->service_fee + $this->order->shipping_fee - $this->order->discounted_amount - $this->order->payment_method_discounted_amount;
 
         GrandTotalValidator::validate($this->order);
 
@@ -235,6 +242,19 @@ class CreateOrderService
             $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
             $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
             $this->order->save();
+        }
+    }
+
+    protected function storePaymentMethodDiscount(array $paymentMethod): void
+    {
+        if (! array_key_exists('id', $paymentMethod)) {
+            return;
+        }
+
+        $paymentMethod = PaymentMethod::find($paymentMethod['id']);
+
+        if ($paymentMethod->isCollectorCoin()) {
+            $this->order->payment_method_discounted_amount = round($this->order->service_fee * config('robograding.collector_coin_discount_percentage.value') / 100, 2);
         }
     }
 

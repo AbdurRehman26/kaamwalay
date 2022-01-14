@@ -45,6 +45,8 @@ class OrderResource extends BaseResource
             'refund_total' => $this->refund_total,
             'coupon' => $this->whenLoaded('coupon', CouponResource::class),
             'discounted_amount' => $this->discounted_amount,
+            'payment_method_discounted_amount' => $this->payment_method_discounted_amount,
+            'payment_method_id' => $this->payment_method_id,
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
         ];
     }

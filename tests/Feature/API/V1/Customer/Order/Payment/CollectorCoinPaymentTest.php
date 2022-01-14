@@ -29,7 +29,7 @@ test('collector coin discount is applied', function () {
     $this->actingAs($this->user);
 
     $discountPercentage = 10;
-    config(['robograding.collector_coin_discount_percentage'=> $discountPercentage]);
+    config(['robograding.collector_coin_discount_percentage' => $discountPercentage]);
 
     $response = $this->postJson('/api/v1/customer/orders', [
         'payment_plan' => [

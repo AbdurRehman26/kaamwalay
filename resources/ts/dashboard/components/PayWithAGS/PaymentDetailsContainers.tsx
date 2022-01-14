@@ -72,7 +72,7 @@ export function AGSPaymentDetailsContainers() {
     let detailsChildren;
     const supportedNetworks = configs.web3SupportedNetworks.split(',');
 
-    function getCurrentContract(currentNetworkId: number) {
+    function getCurrentContract(currentNetworkId: string) {
         if (supportedNetworks?.includes(currentNetworkId)) {
             return {
                 // ETH MainNet
@@ -218,7 +218,8 @@ export function AGSPaymentDetailsContainers() {
                 <Typography variant={'caption'}>
                     For information on Collector Coin and how to buy it visit collectorcoin.com
                 </Typography>
-                {!supportedNetworks?.includes(currentNetworkID) && metamaskStatus === metamaskStatuses.connected ? (
+                {!supportedNetworks?.includes(String(currentNetworkID)) &&
+                metamaskStatus === metamaskStatuses.connected ? (
                     <Alert severity="error" sx={{ width: '100%' }}>
                         Collector Coin is only available on Binance Smart Chain & Ethereum
                     </Alert>

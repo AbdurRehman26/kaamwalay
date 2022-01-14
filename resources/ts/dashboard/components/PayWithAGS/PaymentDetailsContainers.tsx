@@ -10,7 +10,8 @@ import Chip from '@mui/material/Chip';
 import contractAbi from '@shared/assets/bscContract.json';
 import Web3 from 'web3';
 import Alert from '@mui/material/Alert';
-import { networksMap, shortenWalletAddress, openMetaMaskExtensionLink, supportedNetworks, getEthereum } from './utils';
+import { networksMap, shortenWalletAddress, openMetaMaskExtensionLink, getEthereum } from './utils';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 const useStyles = makeStyles(
     () => {
@@ -60,23 +61,6 @@ enum metamaskStatuses {
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
 
-function getCurrentContract(currentNetworkId: number) {
-    if (supportedNetworks.includes(currentNetworkId)) {
-        return {
-            // ETH MainNet
-            1: '0x667fd83e24ca1d935d36717d305d54fa0cac991c',
-            // ETH TestNet Rinkeby
-            4: '0x23863db3e66d94dba2a2ae157de8082cf772b115',
-            // BSC MainNet
-            56: '0x73ffdf2d2afb3def5b10bf967da743f2306a51db',
-            // BSC TestNet
-            97: '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-        }[currentNetworkId];
-    } else {
-        return '';
-    }
-}
-
 export function AGSPaymentDetailsContainers() {
     const dispatch = useAppDispatch();
     const classes = useStyles();
@@ -84,16 +68,39 @@ export function AGSPaymentDetailsContainers() {
     const [currentNetworkID, setCurrentNetworkID] = useState<number>(0);
     const [selectedAccount, setSelectedAccount] = useState('');
     const [agsBalance, setAgsBalance] = useState(0);
+    const configs = useConfiguration();
     let detailsChildren;
+    const supportedNetworks = configs.web3SupportedNetworks.split(',');
 
-    const updateAgsBalance = useCallback(async (walletAddress: string) => {
-        const currentNetworkID = await web3.eth.net.getId();
-        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID));
-        const result = await contract.methods.balanceOf(walletAddress).call();
-        const balance = await web3.utils.fromWei(result, 'ether');
-        setAgsBalance(balance);
-        setCurrentNetworkID(currentNetworkID);
-    }, []);
+    function getCurrentContract(currentNetworkId: number) {
+        if (supportedNetworks?.includes(currentNetworkId)) {
+            return {
+                // ETH MainNet
+                1: '0x667fd83e24ca1d935d36717d305d54fa0cac991c',
+                // ETH TestNet Rinkeby
+                4: '0x23863db3e66d94dba2a2ae157de8082cf772b115',
+                // BSC MainNet
+                56: '0x73ffdf2d2afb3def5b10bf967da743f2306a51db',
+                // BSC TestNet
+                97: '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
+            }[currentNetworkId];
+        } else {
+            return '';
+        }
+    }
+
+    const updateAgsBalance = useCallback(
+        async (walletAddress: string) => {
+            const currentNetworkID = await web3.eth.net.getId();
+            const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID));
+            const result = await contract.methods.balanceOf(walletAddress).call();
+            const balance = await web3.utils.fromWei(result, 'ether');
+            setAgsBalance(balance);
+            setCurrentNetworkID(currentNetworkID);
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     const handleMetamaskConnect = useCallback(async () => {
         const metamaskAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });
@@ -211,7 +218,7 @@ export function AGSPaymentDetailsContainers() {
                 <Typography variant={'caption'}>
                     For information on Collector Coin and how to buy it visit collectorcoin.com
                 </Typography>
-                {!supportedNetworks.includes(currentNetworkID) && metamaskStatus === metamaskStatuses.connected ? (
+                {!supportedNetworks?.includes(currentNetworkID) && metamaskStatus === metamaskStatuses.connected ? (
                     <Alert severity="error" sx={{ width: '100%' }}>
                         Collector Coin is only available on Binance Smart Chain & Ethereum
                     </Alert>

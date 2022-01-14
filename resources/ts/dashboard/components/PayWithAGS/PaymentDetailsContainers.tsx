@@ -92,14 +92,14 @@ export function AGSPaymentDetailsContainers() {
     const updateAgsBalance = useCallback(
         async (walletAddress: string) => {
             const currentNetworkID = await web3.eth.net.getId();
-            const contract = new web3.eth.Contract(
-                contractAbi,
-                getCurrentContract(String(currentNetworkID), supportedNetworks),
-            );
-            const result = await contract.methods.balanceOf(walletAddress).call();
-            const balance = await web3.utils.fromWei(result, 'ether');
-            setAgsBalance(balance);
-            setCurrentNetworkID(currentNetworkID);
+            const destinationContract = getCurrentContract(String(currentNetworkID), supportedNetworks);
+            if (destinationContract) {
+                const contract = new web3.eth.Contract(contractAbi, destinationContract);
+                const result = await contract.methods.balanceOf(walletAddress).call();
+                const balance = await web3.utils.fromWei(result, 'ether');
+                setAgsBalance(balance);
+                setCurrentNetworkID(currentNetworkID);
+            }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],

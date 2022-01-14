@@ -47,6 +47,8 @@ export function PayWithCollectorCoinButton() {
     }
 
     async function handleClick() {
+        setIsLoading(true);
+
         // @ts-ignore
         const currentNetworkID = await web3.eth.net.getId();
         const currentAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });

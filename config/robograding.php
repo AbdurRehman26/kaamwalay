@@ -14,7 +14,7 @@ return [
 
     'discounted_price_admins' => env('DISCOUNTED_PRICE_ADMINS', []),
 
-    'collector_coin_discount_percentage' => env('COLLECTOR_COIN_DISCOUNT_PERCENTAGE', 10),
+    'collector_coin_discount_percentage' => env('COLLECTOR_COIN_DISCOUNT_PERCENTAGE', 0),
 
     'web3' => [
         'supported_networks' => env('WEB3_SUPPORTED_NETWORKS'),

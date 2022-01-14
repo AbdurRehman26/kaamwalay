@@ -164,6 +164,24 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                     </Typography>
                                 </TableCell>
                             </TableRow>
+                            {Number(data?.paymentMethodDiscountedAmount) > 0 ? (
+                                <TableRow>
+                                    <TableCell>
+                                        <Typography variant={'body2'}>Collector Coin Discount:</Typography>
+                                    </TableCell>
+                                    <TableCell align={'right'}>
+                                        <Typography
+                                            component={'span'}
+                                            variant={'body2'}
+                                            align={'right'}
+                                            color={'textPrimary'}
+                                            className={font.fontWeightMedium}
+                                        >
+                                            -{formatCurrency(data?.paymentMethodDiscountedAmount)}
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ) : null}
 
                             {Number(data?.amountPaidFromWallet) > 0 ? (
                                 <TableRow>

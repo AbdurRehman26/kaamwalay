@@ -87,6 +87,10 @@ export interface PaymentSubmissionState {
 export interface NewSubmissionSliceState {
     isNextDisabled: boolean;
     isNextLoading: boolean;
+    totalInAgs: number;
+    paymentMethodDiscountedAmount: number;
+    orderTransactionHash: string;
+    confirmedCollectorCoinPayment: boolean;
     currentStep: number;
     previewTotal: number;
     availableCredit: number;
@@ -115,11 +119,15 @@ export interface NewSubmissionSliceState {
 
 const initialState: NewSubmissionSliceState = {
     orderID: -1,
+    totalInAgs: 0,
+    confirmedCollectorCoinPayment: false,
+    orderTransactionHash: '',
     grandTotal: 0,
     availableCredit: 0,
     previewTotal: 0,
     appliedCredit: 0,
     orderNumber: '',
+    paymentMethodDiscountedAmount: 0,
     isNextDisabled: false,
     isNextLoading: false,
     currentStep: 0,
@@ -285,6 +293,18 @@ export const getAvailableCredit = createAsyncThunk('newSubmission/getAvailableCr
     return response.data.balance;
 });
 
+export const getTotalInAGS = createAsyncThunk(
+    'newSubmission/getTotalInAGS',
+    async (input: { orderID: number; chainID: number }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(
+            `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}`,
+        );
+        const response = await endpoint.get('');
+        return response.data.value;
+    },
+);
+
 export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses/states');
@@ -338,6 +358,30 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
     });
     return formattedAddresses;
 });
+
+export const getCollectorCoinPaymentStatus = createAsyncThunk(
+    'newSubmission/getCollectorCoinPaymentStatus',
+    async (input: { orderID: number; txHash: string }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/${input.txHash}`);
+        const response = await endpoint.post('');
+        const fulfilledReturn = {
+            message: response.data.message,
+            transactionHash: input.txHash,
+        };
+        return fulfilledReturn;
+    },
+);
+
+export const verifyOrderStatus = createAsyncThunk(
+    'newSubmission/verifyOrderStatus',
+    async (input: { orderID: number; txHash: string }) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments`);
+        const response = await endpoint.post('', { transactionHash: input.txHash });
+        return response.data;
+    },
+);
 
 export const createOrder = createAsyncThunk('newSubmission/createOrder', async (_, { getState }: any) => {
     const currentSubmission: any = getState().newSubmission;
@@ -595,6 +639,10 @@ export const newSubmissionSlice = createSlice({
         [getServiceLevels.rejected as any]: (state) => {
             state.step01Data.status = 'failed';
         },
+        [getCollectorCoinPaymentStatus.fulfilled as any]: (state, action) => {
+            state.confirmedCollectorCoinPayment = action.payload.message === 'Payment verified successfully';
+            state.orderTransactionHash = action.payload.transactionHash;
+        },
         [getStatesList.pending as any]: (state) => {
             state.step03Data.fetchingStatus = 'loading';
         },
@@ -613,6 +661,12 @@ export const newSubmissionSlice = createSlice({
         },
         [getAvailableCredit.fulfilled as any]: (state, action) => {
             state.availableCredit = action.payload;
+        },
+        [getTotalInAGS.fulfilled as any]: (state, action) => {
+            state.totalInAgs = action.payload;
+        },
+        [verifyOrderStatus.fulfilled as any]: (state, action) => {
+            // handle success
         },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;
@@ -660,6 +714,8 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
                 ? action.payload.discountedAmount
                 : '';
+            state.paymentMethodDiscountedAmount = action.payload.paymentMethodDiscountedAmount;
+            state.step04Data.paymentMethodId = action.payload.paymentMethodId;
             state.appliedCredit = action.payload.amountPaidFromWallet;
         },
     },

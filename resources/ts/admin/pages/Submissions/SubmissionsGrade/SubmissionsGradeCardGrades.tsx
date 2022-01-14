@@ -79,7 +79,7 @@ export function SubmissionsGradeCardGrades({
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const apiService = useInjectable(APIService);
-
+    const notifications = useNotifications();
     const frontCentering = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.center,
     );
@@ -125,7 +125,6 @@ export function SubmissionsGradeCardGrades({
         );
     }
 
-    const notifications = useNotifications();
     async function sendHumanGradesToBackend() {
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
         try {

@@ -17,7 +17,7 @@ export const loadConfigurationsAction = createAsyncThunk('configuration/load', a
     return instanceToPlain(data) as ConfigurationEntity;
 });
 
-interface ConfigSetter<K extends keyof ConfigurationEntity = keyof ConfigurationEntity> {
+interface ConfigSetter<K extends keyof ConfigurationEntity> {
     key: K;
     value: ConfigurationEntity[K];
 }
@@ -29,7 +29,7 @@ export const configurationSlice = createSlice({
         data: {},
     } as StateType,
     reducers: {
-        setConfig: (state, { payload }: PayloadAction<ConfigSetter>) => {
+        setConfig<K extends keyof ConfigurationEntity>(state: StateType, { payload }: PayloadAction<ConfigSetter<K>>) {
             state.data[payload.key] = payload.value;
         },
     },

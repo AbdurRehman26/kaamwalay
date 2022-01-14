@@ -212,7 +212,7 @@ export const refundOrderTransaction = createAsyncThunk<
     const ordersRepository = app(OrdersRepository);
 
     try {
-        const refundTransaction = Promise.all([await ordersRepository.refundOrderTransaction(input)]);
+        const refundTransaction = await ordersRepository.refundOrderTransaction(input);
         NotificationsService.success('Customer refunded successfully!');
         setTimeout(() => {
             window.location.reload();

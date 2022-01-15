@@ -12,7 +12,8 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ImageUploader from '@shared/components/ImageUploader';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import ReactGA from 'react-ga';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
@@ -24,6 +25,7 @@ import { APIService } from '@shared/services/APIService';
 import { useRepository } from '@shared/hooks/useRepository';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { useEndpoint } from '@shared/hooks/useEndpoint';
 
 interface CustomerAddCardDialogProps {
     showDialog: boolean | null;
@@ -35,14 +37,19 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
     const [uploadedImage, setUploadedImage] = useState<File | null>(null);
     const [cardName, setCardName] = useState('');
     const [cardDescription, setCardDescription] = useState('');
+    const [cardCategory, setCardCategory] = useState('');
+    const [cardCategories, setCardCategories] = useState<{ id: number; name: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
     const filesRepository = useRepository(FilesRepository);
     const apiService = useInjectable(APIService);
     const Notifications = useNotifications();
     const isAddCardButtonDisabled = useMemo(() => {
-        return !uploadedImage || !cardName || !cardDescription;
-    }, [uploadedImage, cardName, cardDescription]);
+        return !uploadedImage || !cardName || !cardDescription || !cardCategory;
+    }, [uploadedImage, cardName, cardDescription, cardCategory]);
+
+    const handleCardCategoryChange = useCallback((e) => setCardCategory(e.target.value), []);
+    const cardCategoriesService = useEndpoint('customer/cards/categories');
 
     const selectCard = useCallback(
         (item: SearchResultItemCardProps) => {
@@ -59,6 +66,7 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
         setUploadedImage(null);
         setCardName('');
         setCardDescription('');
+        setCardCategory('');
         onClose();
     }, [onClose]);
 
@@ -77,6 +85,7 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                 imagePath: publicImageUrl,
                 name: cardName,
                 description: cardDescription,
+                cardCategoryId: cardCategory,
             });
             selectCard({
                 id: response.data.id,
@@ -99,7 +108,22 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
         cardDescription,
         selectCard,
         Notifications,
+        cardCategory,
     ]);
+
+    useEffect(
+        () => {
+            async function fetchCardCategories() {
+                const response = await cardCategoriesService.get('');
+
+                setCardCategories(response.data);
+            }
+
+            fetchCardCategories();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     return (
         <Dialog fullScreen={isSm} maxWidth={'md'} fullWidth open={Boolean(showDialog)} onClose={onClose}>
@@ -131,6 +155,27 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                             marginTop={isSm ? '12px' : '0'}
                         >
                             <Typography variant={'subtitle2'} sx={{ fontWeight: 'bold', marginBottom: '-9px' }}>
+                                Card Category*
+                            </Typography>
+                            <Select
+                                native
+                                fullWidth
+                                value={cardCategory}
+                                onChange={handleCardCategoryChange}
+                                variant={'outlined'}
+                                style={{ marginTop: '1em', marginBottom: '1em' }}
+                            >
+                                <option value={''}>Select Card Category</option>
+                                {cardCategories.map((category) => {
+                                    return (
+                                        <option key={category.id} value={category.id}>
+                                            {category.name}
+                                        </option>
+                                    );
+                                })}
+                            </Select>
+
+                            <Typography variant={'subtitle2'} sx={{ fontWeight: 'bold', marginBottom: '-9px' }}>
                                 Card Name*
                             </Typography>
                             <TextField
@@ -156,7 +201,7 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                             <TextField
                                 placeholder="Enter card description"
                                 value={cardDescription}
-                                rows={5}
+                                rows={4}
                                 multiline
                                 onChange={(e: any) => setCardDescription(e.target.value)}
                                 fullWidth

@@ -25,6 +25,7 @@ class RefundOrderRequest extends FormRequest
     {
         return [
             'notes' => ['required'],
+            'add_to_wallet' => ['required', 'boolean'],
             'amount' => [
                 'required',
                 'numeric',

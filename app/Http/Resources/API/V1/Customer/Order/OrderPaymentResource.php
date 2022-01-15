@@ -21,9 +21,11 @@ class OrderPaymentResource extends BaseResource
 
         if ($this->order->paymentMethod->code === 'paypal') {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
+        } elseif ($this->order->paymentMethod->isCollectorCoin()) {
+            return $this->collectorCoinData(json_decode($this->response, associative: true) ?? []);
         }
 
-        $hasCard = ! ($this->type === OrderPayment::TYPE_REFUND);
+        $hasCard = ! ($this->type === OrderPayment::TYPE_REFUND || $this->paymentMethod->isWallet());
 
         $card = null;
 
@@ -33,6 +35,7 @@ class OrderPaymentResource extends BaseResource
             if (! empty($providerResponse->card)) {
                 $card = $providerResponse->card;
             } else {
+                //TODO ENABLE COLLECTOR COIN HERE
                 $card = $providerResponse->charges->data[0]->payment_method_details->card;
             }
         }
@@ -58,6 +61,17 @@ class OrderPaymentResource extends BaseResource
             'payer' => [
                 "email" => $response['payer']['email_address'] ?? "N/A",
                 "name" => $response['payer']['name']['given_name'] ?? "N/A",
+            ],
+        ];
+    }
+
+    protected function collectorCoinData(array $response): array
+    {
+        return [
+            'transaction' => [
+                'amount' => $response['amount'],
+                'hash' => substr($response['txn_hash'], 0, 5) . '...' . substr($response['txn_hash'], -4),
+                'complete_hash' => $response['txn_hash'],
             ],
         ];
     }

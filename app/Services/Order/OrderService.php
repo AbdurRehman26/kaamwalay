@@ -6,6 +6,7 @@ use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\User;
+use App\Services\Payment\Providers\CollectorCoinService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -75,6 +76,23 @@ class OrderService
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
+    }
+
+    public function calculateCollectorCoinPrice(Order $order, int $paymentBlockchainNetwork): float
+    {
+        $orderPayment = $order->firstCollectorCoinOrderPayment;
+
+        // Would be 0 if there is no collector coin payment for this order, for example, it has been fully paid with wallet
+
+        if (! $orderPayment) {
+            return 0;
+        }
+        
+        $collectorCoinPrice = (new CollectorCoinService($paymentBlockchainNetwork))->getCollectorCoinPriceFromUsd($order->grand_total_to_be_paid);
+        $orderPayment->response = json_encode(['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork]);
+        $orderPayment->update();
+
+        return $collectorCoinPrice;
     }
 
     protected function getCardFullName(CardProduct $card): string

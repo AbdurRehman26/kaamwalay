@@ -21,6 +21,7 @@ use App\Http\Controllers\API\V1\Customer\Order\ShippingMethodController;
 use App\Http\Controllers\API\V1\Customer\PaymentCardController;
 use App\Http\Controllers\API\V1\Customer\ProfileController;
 use App\Http\Controllers\API\V1\Customer\PushNotificationController;
+use App\Http\Controllers\API\V1\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V1\Files\UploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,8 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::apiResource('/', OrderController::class)->only(['index', 'store']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
+
+            Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
         });
 
         Route::prefix('coupons')->group(function () {
@@ -81,6 +84,11 @@ Route::prefix('customer')->group(function () {
         });
         Route::put('profile', [ProfileController::class, 'update']);
         Route::get('push-notifications/auth', [PushNotificationController::class, 'auth']);
+
+        Route::prefix('wallet')->group(function () {
+            Route::get('transactions', [WalletController::class, 'getTransactions'])->name('wallet.transactions');
+            Route::get('/', [WalletController::class, 'getWallet'])->name('wallet.me');
+        });
     });
 });
 

@@ -31,7 +31,24 @@ module.exports.createApp = function createApp(name) {
                 resourceRegExp: /^\.\/locale$/,
                 contextRegExp: /moment$/,
             }),
+            // Needed for web3js
+            new webpack.ProvidePlugin({
+                Buffer: ['buffer', 'Buffer'],
+                process: 'process/browser',
+            }),
         );
+
+        // Fixes to get web3js to work
+        webpackConfig.resolve.fallback = {
+            ...webpackConfig.resolve.fallback,
+            http: require.resolve('stream-http'),
+            https: require.resolve('https-browserify'),
+            crypto: require.resolve('crypto-browserify'),
+            stream: require.resolve('stream-browserify'),
+            os: require.resolve('os-browserify/browser'),
+            url: require.resolve('url'),
+            assert: require.resolve('assert'),
+        };
 
         if (process.env.ANALYZE_WEBPACK) {
             webpackConfig.plugins.push(new BundleAnalyzerPlugin());

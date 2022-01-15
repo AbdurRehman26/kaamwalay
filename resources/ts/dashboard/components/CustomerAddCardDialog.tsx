@@ -163,7 +163,7 @@ export default function CustomerAddCardDialog({ onClose, showDialog }: CustomerA
                                 value={cardCategory}
                                 onChange={handleCardCategoryChange}
                                 variant={'outlined'}
-                                style={{ marginTop: '1em', marginBottom: '1em' }}
+                                style={{ marginTop: '1em', marginBottom: '1em', height: '2.5em' }}
                             >
                                 <option value={''}>Select Card Category</option>
                                 {cardCategories.map((category) => {

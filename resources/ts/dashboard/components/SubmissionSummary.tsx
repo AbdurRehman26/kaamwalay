@@ -21,6 +21,8 @@ import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEve
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
+import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
+import { useAuth } from '@shared/hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -177,6 +179,9 @@ function SubmissionSummary() {
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const paymentMethodDiscountedAmount = useAppSelector((state) => state.newSubmission.paymentMethodDiscountedAmount);
 
+    const orderSubmission = useAppSelector((state) => state.newSubmission);
+    const user$ = useAuth().user;
+
     const numberOfSelectedCards =
         selectedCards.length !== 0
             ? selectedCards.reduce(function (prev: number, cur: any) {
@@ -259,6 +264,7 @@ function SubmissionSummary() {
             });
             sendECommerceDataToGA();
             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+            pushDataToRefersion(orderSubmission, user$);
             navigate(`/submissions/${orderID}/confirmation`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {
@@ -298,6 +304,7 @@ function SubmissionSummary() {
                             currency: 'USD',
                         });
                         sendECommerceDataToGA();
+                        pushDataToRefersion(orderSubmission, user$);
                         navigate(`/submissions/${orderID}/confirmation`);
                     });
                 }

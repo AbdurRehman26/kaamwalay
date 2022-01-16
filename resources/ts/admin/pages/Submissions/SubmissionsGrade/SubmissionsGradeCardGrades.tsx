@@ -8,8 +8,12 @@ import { OutlinedCard } from '@shared/components/OutlinedCard';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import { updateExistingCardData, updateHumanGradeValue } from '@admin/redux/slices/submissionGradeSlice';
-
+import {
+    updateExistingCardData,
+    updateHumanGradeValue,
+    getAllSubmissions,
+} from '@admin/redux/slices/submissionGradeSlice';
+import { useNotifications } from '@shared/hooks/useNotifications';
 interface SubmissionsGradeCardGradesProps {
     heading: string;
     disabled?: boolean;
@@ -75,7 +79,7 @@ export function SubmissionsGradeCardGrades({
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const apiService = useInjectable(APIService);
-
+    const notifications = useNotifications();
     const frontCentering = useAppSelector(
         (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.center,
     );
@@ -123,11 +127,16 @@ export function SubmissionsGradeCardGrades({
 
     async function sendHumanGradesToBackend() {
         const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
-        const response = await endpoint.put('', {
-            humanGradeValues: humanGrades,
-            gradeDelta: 0,
-        });
-        dispatch(updateExistingCardData({ id: itemID, data: response.data }));
+        try {
+            const response = await endpoint.put('', {
+                humanGradeValues: humanGrades,
+                gradeDelta: 0,
+            });
+            dispatch(updateExistingCardData({ id: itemID, data: response.data }));
+        } catch (error: any) {
+            dispatch(getAllSubmissions(orderID));
+            notifications.exception(error);
+        }
     }
 
     return (

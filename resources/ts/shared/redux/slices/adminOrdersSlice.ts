@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { classToPlain, plainToClass } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { AddCardToOrderDto } from '@shared/dto/AddCardToOrderDto';
 import { AddExtraChargeToOrderDTO } from '@shared/dto/AddExtraChargeToOrderDTO';
 import { ChangeOrderItemStatusDto } from '@shared/dto/ChangeOrderItemStatusDto';
@@ -23,7 +23,9 @@ import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntit
 import { ShipmentEntity } from '../../entities/ShipmentEntity';
 import { NotificationsService } from '../../services/NotificationsService';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
-import { ChangeOrderItemNotesDTO } from '@shared/dto/ChangeOrderItemNotesDTO';
+import { ChangeOrderItemNotesDTO } from '../../dto/ChangeOrderItemNotesDTO';
+import { WalletRepository } from '../../repositories/Admin/WalletRepository';
+import { WalletEntity } from '../../entities/WalletEntity';
 
 interface StateType extends APIState<OrderEntity> {}
 
@@ -46,7 +48,7 @@ export const changeOrderItemStatus = createAsyncThunk<
             orderId: input.orderId,
             orderItemId: input.orderItemId,
             certificateNumber: item.certificateNumber,
-            status: classToPlain(item.status) as OrderItemStatusHistoryEntity,
+            status: instanceToPlain(item.status) as OrderItemStatusHistoryEntity,
         };
     } catch (e: any) {
         NotificationsService.exception(e);
@@ -90,7 +92,7 @@ export const changeOrderItemsStatus = createAsyncThunk<
         return processedItems.map((item) => ({
             orderId: input.orderId,
             orderItemId: item.id,
-            item: classToPlain(item) as OrderItemEntity,
+            item: instanceToPlain(item) as OrderItemEntity,
         }));
     } catch (e: any) {
         NotificationsService.exception(e);
@@ -105,7 +107,7 @@ export const addOrderStatusHistory = createAsyncThunk(
 
         try {
             const orderStatusHistory = await ordersRepository.addOrderStatusHistory(input);
-            return classToPlain(orderStatusHistory);
+            return instanceToPlain(orderStatusHistory);
         } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
@@ -122,7 +124,7 @@ export const addCardToOrder = createAsyncThunk('addCardToOrder', async (input: A
             orderItem.orderId = input.orderId;
         }
 
-        return classToPlain(orderItem) as OrderItemEntity;
+        return instanceToPlain(orderItem) as OrderItemEntity;
     } catch (e: any) {
         NotificationsService.exception(e);
         return thunkAPI.rejectWithValue(e);
@@ -138,7 +140,7 @@ export const editCardOfOrder = createAsyncThunk('editCardOfOrder', async (input:
             orderItem.orderId = input.orderId;
         }
 
-        return classToPlain(orderItem);
+        return instanceToPlain(orderItem);
     } catch (e: any) {
         NotificationsService.exception(e);
         return thunkAPI.rejectWithValue(e);
@@ -164,9 +166,9 @@ export const setOrderShipment = createAsyncThunk<
         });
 
         return {
-            orderShipment: classToPlain(orderShipment) as ShipmentEntity,
-            orderStatus: classToPlain(order.orderStatus) as OrderStatusEntity,
-            orderStatusHistory: classToPlain(order.orderStatusHistory) as OrderStatusHistoryEntity[],
+            orderShipment: instanceToPlain(orderShipment) as ShipmentEntity,
+            orderStatus: instanceToPlain(order.orderStatus) as OrderStatusEntity,
+            orderStatusHistory: instanceToPlain(order.orderStatusHistory) as OrderStatusHistoryEntity[],
             orderId: input.orderId,
         };
     } catch (e: any) {
@@ -191,7 +193,7 @@ export const addExtraChargeToOrder = createAsyncThunk<
             window.location.reload();
         }, 500);
         return {
-            extraCharge: classToPlain(extraCharge) as OrderExtraChargeEntity,
+            extraCharge: instanceToPlain(extraCharge) as OrderExtraChargeEntity,
             orderId: input.orderId,
         };
     } catch (e: any) {
@@ -216,7 +218,7 @@ export const refundOrderTransaction = createAsyncThunk<
             window.location.reload();
         }, 500);
         return {
-            extraCharge: classToPlain(refundTransaction) as OrderRefundEntity,
+            extraCharge: instanceToPlain(refundTransaction) as OrderRefundEntity,
             orderId: input.orderId,
         };
     } catch (e: any) {
@@ -232,13 +234,26 @@ export const editTransactionNotes = createAsyncThunk(
 
         try {
             const transaction = await ordersRepository.editTransactionNotes(input);
-            return classToPlain({ ...transaction, transactionType: input.transactionType, orderId: input.orderId });
+            return instanceToPlain({ ...transaction, transactionType: input.transactionType, orderId: input.orderId });
         } catch (e: any) {
             NotificationsService.exception(e);
             return thunkAPI.rejectWithValue(e);
         }
     },
 );
+
+export const updateOrderWalletById = createAsyncThunk('updateOrderWalletById', async (walletId: number, thunkAPI) => {
+    const walletRepository = app(WalletRepository);
+
+    try {
+        // noinspection UnnecessaryLocalVariableJS
+        const wallet = await walletRepository.show(walletId);
+
+        return instanceToPlain(wallet);
+    } catch (e: any) {
+        return thunkAPI.rejectWithValue(e);
+    }
+});
 
 export const adminOrdersSlice = createSlice({
     name: adminOrdersThunk.name,
@@ -252,33 +267,33 @@ export const adminOrdersSlice = createSlice({
         adminOrdersThunk.buildReducers(builder);
 
         function manageOrderAndItem(state: StateType, payload: any) {
-            const orderItem = plainToClass(OrderItemEntity, payload);
-            const order = plainToClass(OrderEntity, state.entities[orderItem.orderId]);
+            const orderItem = plainToInstance(OrderItemEntity, payload);
+            const order = plainToInstance(OrderEntity, state.entities[orderItem.orderId]);
             if (order) {
                 order.addItem(orderItem);
-                state.entities[orderItem.orderId] = classToPlain(order) as any;
+                state.entities[orderItem.orderId] = instanceToPlain(order) as any;
             }
         }
 
         builder.addCase(changeOrderItemStatus.fulfilled, (state, { payload }) => {
             const { orderId, orderItemId, certificateNumber, status } = payload;
-            const order = plainToClass(OrderEntity, state.entities[orderId]);
+            const order = plainToInstance(OrderEntity, state.entities[orderId]);
 
             order.orderItems = (order.orderItems ?? []).map((item) => {
                 if (item.id === orderItemId) {
                     item.certificateNumber = certificateNumber;
-                    item.status = plainToClass(OrderItemStatusHistoryEntity, status);
+                    item.status = plainToInstance(OrderItemStatusHistoryEntity, status);
                 }
 
                 return item;
             });
 
-            state.entities[orderId] = classToPlain(order) as any;
+            state.entities[orderId] = instanceToPlain(order) as any;
         });
 
         builder.addCase(changeOrderItemNotes.fulfilled, (state, { payload }) => {
             const { orderId, orderItemId, notes } = payload;
-            const order = plainToClass(OrderEntity, state.entities[orderId]);
+            const order = plainToInstance(OrderEntity, state.entities[orderId]);
 
             order.orderItems = (order.orderItems ?? []).map((item) => {
                 if (item.id === orderItemId) {
@@ -287,13 +302,13 @@ export const adminOrdersSlice = createSlice({
                 return item;
             });
 
-            state.entities[orderId] = classToPlain(order) as any;
+            state.entities[orderId] = instanceToPlain(order) as any;
         });
 
         builder.addCase(changeOrderItemsStatus.fulfilled, (state, { payload }) => {
             payload.forEach(({ orderId, item, orderItemId }) => {
-                const orderItem = plainToClass(OrderItemEntity, item);
-                const order = plainToClass(OrderEntity, state.entities[orderId]);
+                const orderItem = plainToInstance(OrderItemEntity, item);
+                const order = plainToInstance(OrderEntity, state.entities[orderId]);
                 order.orderItems = (order.orderItems ?? []).map((item) => {
                     if (item.id === orderItemId) {
                         return orderItem;
@@ -302,19 +317,19 @@ export const adminOrdersSlice = createSlice({
                     return item;
                 });
 
-                state.entities[orderId] = classToPlain(order) as any;
+                state.entities[orderId] = instanceToPlain(order) as any;
             });
         });
 
         builder.addCase(addOrderStatusHistory.fulfilled, (state, { payload }) => {
-            const orderStatusHistory = plainToClass(OrderStatusHistoryEntity, payload);
-            const order = plainToClass(OrderEntity, state.entities[orderStatusHistory.orderId]);
+            const orderStatusHistory = plainToInstance(OrderStatusHistoryEntity, payload);
+            const order = plainToInstance(OrderEntity, state.entities[orderStatusHistory.orderId]);
 
             if (order) {
                 order.orderStatusHistory = [...order.orderStatusHistory, orderStatusHistory];
                 order.orderStatus = orderStatusHistory.orderStatus;
 
-                state.entities[orderStatusHistory.orderId] = classToPlain(order) as any;
+                state.entities[orderStatusHistory.orderId] = instanceToPlain(order) as any;
             }
         });
 
@@ -354,8 +369,8 @@ export const adminOrdersSlice = createSlice({
 
         builder.addCase(editTransactionNotes.fulfilled, (state, { payload }) => {
             const transactionType = payload.transactionType;
-            const order = plainToClass(OrderEntity, state.entities[payload.orderId]);
-            const transaction = plainToClass(
+            const order = plainToInstance(OrderEntity, state.entities[payload.orderId]);
+            const transaction = plainToInstance(
                 transactionType === 'refund' ? OrderRefundEntity : OrderExtraChargeEntity,
                 payload,
             );
@@ -365,8 +380,19 @@ export const adminOrdersSlice = createSlice({
                     (item) => item.id === transaction.id,
                 );
                 order[transactionOrderProperty][existingTransactionIndex].notes = transaction.notes as any;
-                state.entities[payload.orderId] = classToPlain(order) as any;
+                state.entities[payload.orderId] = instanceToPlain(order) as any;
             }
+        });
+
+        builder.addCase(updateOrderWalletById.fulfilled, (state, { payload }) => {
+            const entities = { ...state.entities };
+            Object.entries(entities).forEach(([key, value]) => {
+                if (value?.customer?.wallet?.id === payload.id) {
+                    entities[key as any].customer.wallet = plainToInstance(WalletEntity, payload);
+                }
+            });
+
+            state.entities = entities;
         });
     },
 });

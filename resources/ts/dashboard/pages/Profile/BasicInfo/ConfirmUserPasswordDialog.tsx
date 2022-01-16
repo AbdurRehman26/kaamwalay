@@ -37,14 +37,11 @@ export function ConfirmUserPasswordDialog(props: ConfirmUserPasswordDialogProps)
 
         afterSaveCallback();
         handleClose();
-    }, [onClose, password, afterSaveCallback]);
+    }, [dispatch, password, userEmail, afterSaveCallback, handleClose]);
 
-    const handlePasswordChange = useCallback(
-        (event: any) => {
-            setPassword(event.target.value);
-        },
-        [password],
-    );
+    const handlePasswordChange = useCallback((event: any) => {
+        setPassword(event.target.value);
+    }, []);
 
     useEffect(() => {
         if (password.length > 0) {

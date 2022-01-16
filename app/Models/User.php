@@ -3,17 +3,23 @@
 namespace App\Models;
 
 use App\Concerns\Coupons\CanHaveCoupons;
+use App\Http\Filters\AdminCustomerSearchFilter;
+use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
+use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -79,6 +85,26 @@ class User extends Authenticatable implements JWTSubject
         return $user;
     }
 
+    public static function getAllowedAdminFilters(): array
+    {
+        return [
+            AllowedFilter::custom('search', new AdminCustomerSearchFilter),
+            AllowedFilter::scope('signed_up_between'),
+            AllowedFilter::scope('submissions'),
+        ];
+    }
+
+    public static function getAllowedAdminSorts(): array
+    {
+        return [
+            AllowedSort::field('submissions', 'orders_count'),
+            AllowedSort::custom('full_name', new AdminCustomerFullNameSort),
+            'email',
+            'customer_number',
+            'created_at',
+        ];
+    }
+
     public function customerAddresses(): HasMany
     {
         return $this->hasMany(CustomerAddress::class, 'user_id');
@@ -139,6 +165,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(UserDevice::class);
     }
 
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
     public function assignCustomerNumber(): self
     {
         if (! $this->customer_number) {
@@ -147,6 +178,20 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $this;
+    }
+
+    public function scopeSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
+    {
+        return $query->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()]);
+    }
+
+    public function scopeSubmissions(Builder $query, string $minSubmissionCount, string $maxSubmissionCount): Builder
+    {
+        return $query->whereHas('orders', function ($subQuery) {
+            $subQuery->placed();
+        }, '>=', (int) $minSubmissionCount)->whereHas('orders', function ($subQuery) {
+            $subQuery->placed();
+        }, '<=', (int) $maxSubmissionCount);
     }
 
     public function scopeAdmin(Builder $query): Builder

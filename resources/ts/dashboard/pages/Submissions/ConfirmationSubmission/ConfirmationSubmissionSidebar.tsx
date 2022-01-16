@@ -11,7 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
@@ -35,7 +35,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
     const message = (error as Error)?.message || error;
 
     if (message === 'This action is unauthorized.') {
-        return <Redirect to={'/submissions'} />;
+        return <Navigate to={'/submissions'} replace />;
     }
 
     if (isLoading || isError) {
@@ -164,6 +164,44 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                     </Typography>
                                 </TableCell>
                             </TableRow>
+                            {Number(data?.paymentMethodDiscountedAmount) > 0 ? (
+                                <TableRow>
+                                    <TableCell>
+                                        <Typography variant={'body2'}>Collector Coin Discount:</Typography>
+                                    </TableCell>
+                                    <TableCell align={'right'}>
+                                        <Typography
+                                            component={'span'}
+                                            variant={'body2'}
+                                            align={'right'}
+                                            color={'textPrimary'}
+                                            className={font.fontWeightMedium}
+                                        >
+                                            -{formatCurrency(data?.paymentMethodDiscountedAmount)}
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ) : null}
+
+                            {Number(data?.amountPaidFromWallet) > 0 ? (
+                                <TableRow>
+                                    <TableCell>
+                                        <Typography variant={'body2'}>Credit:</Typography>
+                                    </TableCell>
+                                    <TableCell align={'right'}>
+                                        <Typography
+                                            component={'span'}
+                                            variant={'body2'}
+                                            align={'right'}
+                                            color={'textPrimary'}
+                                            className={font.fontWeightMedium}
+                                        >
+                                            -{formatCurrency(data?.amountPaidFromWallet)}
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ) : null}
+
                             {Number(data?.discountedAmount) > 0 ? (
                                 <TableRow>
                                     <TableCell>

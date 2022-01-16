@@ -113,9 +113,11 @@ export function BasicInfoRow(props: BasicInfoRowProps) {
                             </Typography>
                         </Grid>
                         <Grid container item xs={5} justifyContent={'flex-start'}>
-                            <Typography variant={'subtitle1'} className={classes.valueLabel}>
-                                {value}
-                            </Typography>
+                            <Box width={'100%'} sx={{ overflowWrap: 'break-word' }}>
+                                <Typography variant={'subtitle1'} className={classes.valueLabel}>
+                                    {value}
+                                </Typography>
+                            </Box>
                         </Grid>
                         <Grid container item xs={4} justifyContent={'flex-end'}>
                             {children ? (

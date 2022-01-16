@@ -21,9 +21,9 @@ import { ViewSubmissionStatus } from './ViewSubmissionStatus';
  * @constructor
  */
 export function ViewSubmission() {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<'id'>();
     const { isLoading, isError, data } = useOrderQuery({
-        resourceId: id,
+        resourceId: Number(id),
         config: {
             params: {
                 include: [
@@ -68,8 +68,10 @@ export function ViewSubmission() {
             <Divider />
             <ViewSubmissionInformation
                 serviceLevel={`$${data?.paymentPlan?.price} / Card`}
+                amountPaidFromWallet={data?.amountPaidFromWallet}
                 numberOfCards={data?.numberOfCards}
                 discountedAmount={data?.discountedAmount}
+                paymentMethodDiscountedAmount={data?.paymentMethodDiscountedAmount}
                 shippingMethod={data?.shippingMethod?.name}
                 createdAt={data?.createdAt}
                 declaredValue={data?.totalDeclaredValue}
@@ -90,13 +92,14 @@ export function ViewSubmission() {
                 billingAddress={data?.billingAddress}
                 coupon={data?.coupon}
                 payment={data?.orderPayment}
+                paymentMethodId={data?.paymentMethodId}
             />
             <Box marginTop={'24px'} />
             <Divider />
             <Box marginTop={'24px'} />
             <RefundsAndExtraCharges
                 mode={'customer'}
-                orderId={id}
+                orderId={Number(id)}
                 extraCharges={data?.extraCharges}
                 refunds={data?.refunds}
             />

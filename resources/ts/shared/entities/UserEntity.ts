@@ -1,9 +1,11 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { nameInitials } from '@shared/lib/strings/initials';
 import { RolesEnum } from '../constants/RolesEnum';
 import { DateField } from '../decorators/DateField';
 import { Entity } from './Entity';
 import { RoleEntity } from './RoleEntity';
+import { WalletEntity } from '@shared/entities/WalletEntity';
 
 export class UserEntity extends Entity {
     public username!: string;
@@ -15,6 +17,8 @@ export class UserEntity extends Entity {
     public customerNumber!: string;
     public profileImage!: string;
     public emailSubscription!: number;
+
+    public wallet!: WalletEntity;
 
     @DateField()
     public emailVerifiedAt!: Moment;
@@ -31,12 +35,6 @@ export class UserEntity extends Entity {
     }
 
     public getInitials() {
-        const name = this.getFullName();
-        let words = name.split(' ');
-        if (words.length > 1) {
-            words = words.map((word) => word.charAt(0));
-        }
-
-        return words.join('').substr(0, 2);
+        return nameInitials(this.getFullName());
     }
 }

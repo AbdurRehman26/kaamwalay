@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             UsersSeeder::class,
+            AddPlatformAdminUserSeeder::class,
             CardCategoriesSeeder::class,
             CardSeriesSeeder::class,
             CardSetsSeeder::class,

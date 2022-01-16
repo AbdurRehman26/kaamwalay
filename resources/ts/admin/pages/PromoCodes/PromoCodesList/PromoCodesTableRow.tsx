@@ -6,13 +6,11 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useNotifications } from '@shared/hooks/useNotifications';
 import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { ColoredStatusChip } from '@shared/components/ColoredStatusChip';
-import { useConfirm } from 'material-ui-confirm';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { changePromoCodeStatus, deletePromoCode } from '@shared/redux/slices/adminPromoCodesSlice';
+import { useConfirmation } from '@shared/hooks/useConfirmation';
 
 interface PromoCodesTableRowProps {
     promoCode: PromoCodeEntity;
@@ -36,14 +34,12 @@ const useStyles = makeStyles(
 );
 
 export function PromoCodesTableRow({ promoCode, reloadCallback }: PromoCodesTableRowProps) {
-    const notifications = useNotifications();
     const dispatch = useSharedDispatch();
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
-    const history = useHistory();
-    const confirm = useConfirm();
+    const confirm = useConfirmation();
 
     const getStatusChipDataMap = (statusCode: string) => {
         if (statusCode === 'active') {
@@ -87,46 +83,41 @@ export function PromoCodesTableRow({ promoCode, reloadCallback }: PromoCodesTabl
     const handleOption = useCallback(
         (option: Options) => async () => {
             handleCloseOptions();
+            let confirmation = false;
 
             switch (option) {
                 case Options.Deactivate:
-                    confirm({
+                    confirmation = await confirm({
                         title: 'Deactivate Promo Code',
-                        description: 'Are you sure you want to deactivate this promo code?',
-                        confirmationText: 'Deactivate',
-                        confirmationButtonProps: {
+                        message: 'Are you sure you want to deactivate this promo code?',
+                        confirmText: 'Deactivate',
+                        confirmButtonProps: {
                             variant: 'contained',
                         },
-                    })
-                        .then(async (r) => {
-                            dispatch(changePromoCodeStatus({ promoCodeID: promoCode?.id, newStatus: 3 }));
-                        })
-                        .catch((err) => {
-                            console.log('Rejected');
-                        });
+                    });
+                    if (confirmation) {
+                        dispatch(changePromoCodeStatus({ promoCodeID: promoCode?.id, newStatus: 3 }));
+                    }
                     break;
                 case Options.Reactivate:
                     dispatch(changePromoCodeStatus({ promoCodeID: promoCode?.id, newStatus: 2 }));
                     break;
                 case Options.Delete:
-                    confirm({
-                        title: 'Delete Promo Code',
-                        description: 'Are you sure you want to delete promo code?',
-                        confirmationText: 'Delete',
-                        confirmationButtonProps: {
+                    confirmation = await confirm({
+                        title: 'Are you sure you want to delete promo code?',
+                        message: 'Delete Promo Code',
+                        confirmText: 'Delete',
+                        confirmButtonProps: {
                             variant: 'contained',
                         },
-                    })
-                        .then(async (r) => {
-                            dispatch(deletePromoCode({ promoCodeID: promoCode?.id }));
-                        })
-                        .catch((err) => {
-                            console.log('Rejected');
-                        });
+                    });
+                    if (confirmation) {
+                        dispatch(deletePromoCode({ promoCodeID: promoCode?.id }));
+                    }
                     break;
             }
         },
-        [handleCloseOptions, history, notifications, promoCode?.id, promoCode?.status],
+        [confirm, dispatch, handleCloseOptions, promoCode?.id],
     );
     return (
         <TableRow>

@@ -1,4 +1,7 @@
-import { CircularProgress, Dialog, DialogActions, DialogContent } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
@@ -41,6 +44,7 @@ const useStyles = makeStyles(() => {
         profilePicture: {
             width: '292px',
             height: '292px',
+            objectFit: 'cover',
             borderRadius: '146px', // 146px = 292px / 2
         },
         profilePicLabel: {
@@ -96,7 +100,7 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
 
     const toggleAskForPasswordDialog = useCallback(() => {
         setShowAskForPasswordDialog((prev) => !prev);
-    }, [showAskForPasswordDialog]);
+    }, []);
 
     const handleClose = useCallback(() => {
         setViewMode(userProfileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
@@ -119,13 +123,10 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
         }
     };
 
-    const handleProfilePicUpload = useCallback(
-        (file: File | null) => {
-            setUploadedImage(file);
-            setViewMode(ViewModes.previewProfilePic);
-        },
-        [uploadedImage, viewMode],
-    );
+    const handleProfilePicUpload = useCallback((file: File | null) => {
+        setUploadedImage(file);
+        setViewMode(ViewModes.previewProfilePic);
+    }, []);
 
     const handleSaveProfilePic = useCallback(async () => {
         try {
@@ -157,7 +158,7 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
             notifications.exception(e);
             setIsUploading(false);
         }
-    }, [uploadedImage, viewMode, userProfileImage, showAskForPasswordDialog, passwordConfirmCallback]);
+    }, [filesRepository, uploadedImage, dispatch, notifications]);
 
     const handleDeleteProfilePic = useCallback(async () => {
         try {
@@ -170,15 +171,15 @@ export function ChangeUserPictureDialog(props: ChangeUserPictureDialogProps) {
         } catch (e: any) {
             notifications.exception(e);
         }
-    }, [viewMode, userProfileImage]);
+    }, [dispatch, notifications]);
 
     const handleEditProfilePic = useCallback(() => {
         setViewMode(ViewModes.uploadProfilePic);
-    }, [viewMode, userProfileImage]);
+    }, []);
 
     useEffect(() => {
         setViewMode(userProfileImage ? ViewModes.hasProfilePic : ViewModes.noProfilePic);
-    }, [dispatch]);
+    }, [dispatch, userProfileImage]);
 
     if (viewMode === ViewModes.hasProfilePic) {
         return (

@@ -1,4 +1,5 @@
-import { CircularProgress, useMediaQuery } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
@@ -27,6 +28,7 @@ import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
+import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -169,6 +171,10 @@ const useStyles = makeStyles((theme) => ({
             width: '47%',
         },
     },
+    availableCreditLabel: {
+        color: 'rgba(0, 0, 0, 0.54);',
+        fontSize: '12px',
+    },
 }));
 
 const GreenCheckbox = withStyles({
@@ -222,6 +228,7 @@ export function SubmissionStep04Content() {
     const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
+    const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
 
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const finalShippingAddress =
@@ -314,6 +321,10 @@ export function SubmissionStep04Content() {
         if (paymentMethodId === 2) {
             dispatch(setIsNextDisabled(false));
         }
+
+        if (paymentMethodId === 3) {
+            dispatch(setIsNextDisabled(false));
+        }
     }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
 
     useEffect(
@@ -338,6 +349,21 @@ export function SubmissionStep04Content() {
                 <Grid item xs={12} md={8}>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
+                        {availableCredit > 0 ? (
+                            <div className={classes.shippingMethodContainer}>
+                                <Typography className={classes.sectionLabel} style={{ marginBottom: '3px' }}>
+                                    Apply Credit
+                                </Typography>
+                                <Typography variant={'caption'} className={classes.availableCreditLabel}>
+                                    You have <span style={{ fontWeight: 'bold' }}>${availableCredit}</span> in available
+                                    credit.
+                                </Typography>
+                                <div className={classes.shippingMethodItemContainer} style={{ marginTop: '20px' }}>
+                                    <ApplyCredit />
+                                </div>
+                            </div>
+                        ) : null}
+
                         <div className={classes.shippingMethodContainer}>
                             <Typography className={classes.sectionLabel}> Add a Promo Code </Typography>
                             <div className={classes.shippingMethodItemContainer}>
@@ -631,14 +657,25 @@ export function SubmissionStep04Content() {
                                     )}
                                 </div>
                             </>
-                        ) : (
+                        ) : null}
+                        {paymentMethodId === 2 ? (
                             <div className={classes.sectionContainer}>
                                 <Typography className={classes.sectionLabel}>Paypal</Typography>
                                 <Typography variant={'subtitle2'}>
                                     You will be redirected to the PayPal site after reviewing your order.{' '}
                                 </Typography>
                             </div>
-                        )}
+                        ) : null}
+
+                        {paymentMethodId === 3 ? (
+                            <div className={classes.sectionContainer}>
+                                <Typography className={classes.sectionLabel}>Pay with Collector Coin</Typography>
+                                <Typography variant={'subtitle2'}>
+                                    Instructions for how to pay with Collector Coin will be provided in the next step.
+                                </Typography>
+                                <Typography variant={'subtitle2'}>All you need is a MetaMask crypto wallet</Typography>
+                            </div>
+                        ) : null}
                     </div>
                 </Grid>
                 <Grid item xs={12} md={4}>

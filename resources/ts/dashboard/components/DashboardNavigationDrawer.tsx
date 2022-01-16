@@ -1,6 +1,6 @@
 // TODO: Merge into a general component
 import CloseIcon from '@mui/icons-material/Close';
-import { ListItemSecondaryAction } from '@mui/material';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Drawer from '@mui/material/Drawer';
@@ -15,7 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
@@ -27,6 +27,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
 import HomeIcon from '@mui/icons-material/HomeOutlined';
 import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
 import FeedIcon from '@mui/icons-material/FeedOutlined';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -108,11 +109,12 @@ export function DashboardNavigationDrawer() {
     const isNavigationDrawerOpen = useAppSelector((state) => state.dashboardSlice.isNavigationDrawerOpen);
     const { logout, user } = useAuth();
     const dispatch = useAppDispatch();
-    const history = useHistory();
+    const location = useLocation();
+    const navigate = useNavigate();
     const user$ = useAuth().user;
 
     function isItemActive(itemPath: string) {
-        return history.location.pathname === itemPath;
+        return location.pathname === itemPath;
     }
 
     function handleClose() {
@@ -121,7 +123,7 @@ export function DashboardNavigationDrawer() {
 
     function handleItemPress(path: string) {
         return () => {
-            history.push(path);
+            navigate(path);
             dispatch(setNavigationDrawerOpen(false));
         };
     }
@@ -167,6 +169,12 @@ export function DashboardNavigationDrawer() {
                         <StyleIcon />
                     </StyledListItemIcon>
                     <ListItemText primary={'Your Cards'} primaryTypographyProps={{ className: classes.listItemText }} />
+                </ListItem>
+                <ListItem selected={isItemActive('/wallet')} onClick={handleItemPress('/wallet')} button>
+                    <StyledListItemIcon>
+                        <AccountBalanceWalletIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary={'Wallet'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>
                 <ListItem selected={isItemActive('/profile')} onClick={handleItemPress('/profile')} button>
                     <StyledListItemIcon>

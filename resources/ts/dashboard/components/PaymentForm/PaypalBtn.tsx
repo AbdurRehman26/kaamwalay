@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -37,7 +37,7 @@ function PaypalBtn() {
     const user$ = useAuth().user;
 
     const notifications = useNotifications();
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const sendECommerceDataToGA = () => {
@@ -102,7 +102,7 @@ function PaypalBtn() {
                             sendECommerceDataToGA();
                             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
                             pushDataToRefersion(orderSubmission, user$);
-                            history.push(`/submissions/${orderID}/confirmation`);
+                            navigate(`/submissions/${orderID}/confirmation`);
                         } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');
                         }

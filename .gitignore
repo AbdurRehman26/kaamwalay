@@ -31,3 +31,4 @@ resources/terraform/.terraform/providers
 /cypress/videos
 tsconfig.tsbuildinfo
 .tsbuildinfo
+package-lock.json

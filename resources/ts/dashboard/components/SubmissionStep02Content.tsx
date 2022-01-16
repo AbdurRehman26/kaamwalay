@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Alert from '@mui/material/Alert';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';

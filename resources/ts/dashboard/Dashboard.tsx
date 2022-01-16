@@ -1,9 +1,10 @@
 import React from 'react';
-import { Redirect, Switch, useLocation } from 'react-router-dom';
+import { Navigate, Routes, Route, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '@shared/components/ProtectedRoute';
 import { Cards } from './pages/Cards/Cards';
 import { Submissions } from './pages/Submissions';
 import { Profile } from './pages/Profile';
+import { Wallet } from '@dashboard/pages/Wallet';
 
 export function Dashboard() {
     const { search } = useLocation();
@@ -14,11 +15,12 @@ export function Dashboard() {
         redirectSubmissionRoute = redirectSubmissionRoute + '?rfsn=' + params?.get('rfsn');
     }
     return (
-        <Switch>
-            <Redirect exact from="/" push to={redirectSubmissionRoute} />
-            <ProtectedRoute path={'/submissions'} component={Submissions} />
-            <ProtectedRoute path={'/cards'} component={Cards} />
-            <ProtectedRoute path={'/profile'} component={Profile} />
-        </Switch>
+        <Routes>
+            <Route path={'/'} element={<Navigate to={redirectSubmissionRoute} replace />} />
+            <Route path={'/submissions/*'} element={ProtectedRoute(Submissions)} />
+            <Route path={'/cards/*'} element={ProtectedRoute(Cards)} />
+            <Route path={'/profile/*'} element={ProtectedRoute(Profile)} />
+            <Route path={'/wallet/*'} element={ProtectedRoute(Wallet)} />
+        </Routes>
     );
 }

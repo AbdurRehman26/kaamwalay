@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -72,17 +72,27 @@ function OrderReviewSection() {
                     <Typography className={classes.greyBodyText}>{`${turnaround} turnaround`}</Typography>
                 </OrderDetailItem>
                 {!isMobile ? <Spacer top={'32px'} /> : null}
-                <OrderDetailItem title={'Shipping Address'} editStep={2}>
-                    <Typography
-                        className={classes.darkBodyText}
-                    >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
-                    <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
-                        finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
-                    }`}</Typography>
-                    <Typography
-                        className={classes.darkBodyText}
-                    >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
-                </OrderDetailItem>
+                {paymentMethodId !== 3 ? (
+                    <OrderDetailItem title={'Shipping Address'} editStep={2}>
+                        <Typography
+                            className={classes.darkBodyText}
+                        >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
+                        <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
+                            finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
+                        }`}</Typography>
+                        <Typography
+                            className={classes.darkBodyText}
+                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                    </OrderDetailItem>
+                ) : isCouponApplied && paymentMethodId === 3 ? (
+                    <>
+                        {!isMobile ? <Spacer top={'48px'} /> : null}
+                        <OrderDetailItem title={'Promo Code'} editStep={3}>
+                            <Typography className={classes.darkBodyText}>{discountCode}</Typography>
+                            <Typography className={classes.greyBodyText}>{discountStatement}</Typography>
+                        </OrderDetailItem>
+                    </>
+                ) : null}
             </div>
 
             <div className={classes.orderItemsColumn}>
@@ -103,29 +113,50 @@ function OrderReviewSection() {
                                 </div>
                             </div>
                         </>
-                    ) : (
-                        <Typography className={classes.darkBodyText}>PayPal</Typography>
-                    )}
+                    ) : null}
+
+                    {paymentMethodId === 2 ? <Typography className={classes.darkBodyText}>PayPal</Typography> : null}
+
+                    {paymentMethodId === 3 ? (
+                        <Typography className={classes.darkBodyText}>Collector Coin (AGS)</Typography>
+                    ) : null}
                 </OrderDetailItem>
                 {!isMobile ? <Spacer top={'48px'} /> : null}
-                <OrderDetailItem title={'Return Shipping Method'} editStep={2} spaced>
-                    <Typography className={classes.darkBodyText}>{'Insured Shipping'}</Typography>
-                </OrderDetailItem>
+                {paymentMethodId !== 3 ? (
+                    <OrderDetailItem title={'Return Shipping Method'} editStep={2} spaced>
+                        <Typography className={classes.darkBodyText}>{'Insured Shipping'}</Typography>
+                    </OrderDetailItem>
+                ) : null}
             </div>
 
             <div className={classes.orderItemsColumn}>
-                <OrderDetailItem title={'Billing Address'} editStep={3}>
-                    <Typography
-                        className={classes.darkBodyText}
-                    >{`${billingAddress.firstName} ${billingAddress.lastName}`}</Typography>
-                    <Typography className={classes.darkBodyText}>{`${billingAddress.address} ${
-                        billingAddress?.flat ? `apt: ${billingAddress?.flat}` : ''
-                    }`}</Typography>
-                    <Typography
-                        className={classes.darkBodyText}
-                    >{`${billingAddress.city}, ${billingAddress.state.code} ${billingAddress.zipCode}, US`}</Typography>
-                </OrderDetailItem>
-                {isCouponApplied ? (
+                {paymentMethodId === 3 ? (
+                    <OrderDetailItem title={'Shipping Address'} editStep={2}>
+                        <Typography
+                            className={classes.darkBodyText}
+                        >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
+                        <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
+                            finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
+                        }`}</Typography>
+                        <Typography
+                            className={classes.darkBodyText}
+                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                    </OrderDetailItem>
+                ) : (
+                    <OrderDetailItem title={'Billing Address'} editStep={3}>
+                        <Typography
+                            className={classes.darkBodyText}
+                        >{`${billingAddress.firstName} ${billingAddress.lastName}`}</Typography>
+                        <Typography className={classes.darkBodyText}>{`${billingAddress.address} ${
+                            billingAddress?.flat ? `apt: ${billingAddress?.flat}` : ''
+                        }`}</Typography>
+                        <Typography
+                            className={classes.darkBodyText}
+                        >{`${billingAddress.city}, ${billingAddress.state.code} ${billingAddress.zipCode}, US`}</Typography>
+                    </OrderDetailItem>
+                )}
+
+                {isCouponApplied && paymentMethodId !== 3 ? (
                     <>
                         {!isMobile ? <Spacer top={'48px'} /> : null}
                         <OrderDetailItem title={'Promo Code'} editStep={3}>

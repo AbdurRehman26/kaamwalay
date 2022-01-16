@@ -55,7 +55,7 @@ foo.sayHi();
 // Usage inside component
 const confirm = useConfirmation();
 
-const result = await confirm('your message');
+const result = await confirm({ message: 'your message' });
 // returning a boolean depending on pressed button
 ```
 
@@ -98,10 +98,21 @@ const destroyData: MyEntity = await repository.destroy(1); // send `DELETE /api/
 const customData: MyEntity = await repository.getCustomData(); // send `GET /api/my/endpoint/only-names`
 ```
 
+##### Define endpoint version
+```typescript
+// shared/repositories/MyRepository.ts
+@Injectable('MyRepository')
+export class MyRepository extends Repository<MyEntity> {
+    readonly endpointPath: string = 'my/endpoint';
+    readonly endpointConfig = { version: 'v2' };
+    readonly model = MyEntity;
+}
+```
+
 ### Repositories and data fetching hooks
 
 We find how to define and use repositories in plain code, but still need to see how we can do it in components. For
-component data fetching we are using a library called [swr](https://swr.vercel.app) with it's hook `useSWR`.
+component data fetching we are using a library called [react-query](https://react-query.tanstack.com/quick-start) with it is hook `useQuery`.
 
 ```typescript
 // Plain usage for repositories under components.
@@ -266,6 +277,8 @@ page as it says, to only guest users (sign in page for example, if you are logge
 Usage:
 
 ```tsx
+// @DEPRECATED
+
 // Behind the sceene you will have same Route of react-router-dom package, but under the hood,
 // the component it's doing all the checks and wait for the auth, deciding what to do when it's completed.
 // In case of Loading, the page will show a circular progress

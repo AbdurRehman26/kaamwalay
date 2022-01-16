@@ -1,8 +1,11 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    purge: ['./resources/views/**/*.blade.php', './resources/ts/landings/**/*.ts', './resources/ts/landings/**/*.tsx'],
-    darkMode: false, // or 'media' or 'class'
+    content: [
+        './resources/views/**/*.blade.php',
+        './resources/ts/landings/**/*.ts',
+        './resources/ts/landings/**/*.tsx',
+    ],
     theme: {
         screens: {
             sm: '600px',

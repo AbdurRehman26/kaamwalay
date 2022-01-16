@@ -1,5 +1,7 @@
-import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Map } from 'immutable';
+import { DefaultAPIEndpointOptions } from '@shared/constants/DefaultAPIEndpointOptions';
+import { APIEndpointConfig } from '@shared/interfaces/APIEndpointConfig';
 import { Inject } from '../decorators/Inject';
 import { Injectable } from '../decorators/Injectable';
 import { buildUrl } from '../lib/api/buildUrl';
@@ -24,17 +26,23 @@ export class APIService {
      * const api = app(APIService);
      * const users$ = api.createEndpoint('users');
      * ...
-     * users$.get('').then(..);
+     * users$.get('').then(...);
      * ```
      * @param path
-     * @param config
+     * @param endpointConfig
      */
-    public createEndpoint(path: string, config?: AxiosRequestConfig) {
+    public createEndpoint(path: string, endpointConfig?: APIEndpointConfig): AxiosInstance {
+        const isExternal = path.startsWith('http');
+        const { version, ...config } = {
+            ...DefaultAPIEndpointOptions,
+            ...endpointConfig,
+        };
+
         const path$ = path.replace(/^\/?api/i, '').replace(/^\//g, '');
 
         return this.createAxios({
             ...config,
-            baseURL: `/api/${path$}`,
+            baseURL: isExternal ? path$ : `/api/${version}/${path$}`,
         });
     }
 
@@ -161,7 +169,15 @@ export class APIService {
         try {
             const url = cleanPath(`${response.config.baseURL}/${response.config.url}`);
             console.groupCollapsed(`HTTP Request: ${response.config.method?.toUpperCase()} ${url}`);
-            console.log(response);
+            console.log('params:', response.config.params);
+            console.log('headers:', response.config.headers);
+
+            if (response.data?.data && Array.isArray(response.data?.data)) {
+                console.table([response.data.meta]);
+                console.table(response.data.data);
+            } else {
+                console.log(response.data);
+            }
             console.groupEnd();
         } catch (e) {
             // pass

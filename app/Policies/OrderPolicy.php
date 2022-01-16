@@ -34,4 +34,13 @@ class OrderPolicy
     {
         return $user->isAdmin();
     }
+
+    /**
+     * @return bool
+     */
+    public function calculateCollectorCoin(User $user, Order $order)
+    {
+        return ($user->isAdmin() || $order->user()->is($user))
+        && $order->user->orders()->latest()->first()->is($order);
+    }
 }

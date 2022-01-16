@@ -2,6 +2,7 @@ import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import StyleIcon from '@mui/icons-material/Style';
 import Avatar from '@mui/material/Avatar';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -9,9 +10,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { MouseEvent, useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
+import { RolesEnum } from '@shared/constants/RolesEnum';
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -21,10 +23,11 @@ import { useAuth } from '@shared/hooks/useAuth';
  */
 export function UserDropdown() {
     const { logout } = useAuth();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
     const user$ = useAuth().user;
+    const isAdmin = user$.hasRole(RolesEnum.Admin);
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -39,11 +42,14 @@ export function UserDropdown() {
                 case '/logout':
                     logout();
                     break;
+                case '/admin':
+                    window.location.href = '/admin';
+                    break;
                 default:
-                    history.push(href);
+                    navigate(href);
             }
         },
-        [history, logout],
+        [navigate, logout],
     );
 
     return (
@@ -75,6 +81,14 @@ export function UserDropdown() {
                     </ListItemIcon>
                     Your Cards
                 </StyledMenuItem>
+                {isAdmin ? (
+                    <StyledMenuItem onClick={handleUserProfileClick('/admin')}>
+                        <ListItemIcon>
+                            <AccountCircleIcon />
+                        </ListItemIcon>
+                        Admin
+                    </StyledMenuItem>
+                ) : null}
                 <Divider />
                 <StyledMenuItem onClick={handleUserProfileClick('/logout')}>
                     <ListItemIcon>

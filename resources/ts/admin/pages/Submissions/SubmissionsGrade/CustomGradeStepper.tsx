@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { CircularProgress, Paper } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import makeStyles from '@mui/styles/makeStyles';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -70,16 +71,19 @@ function CustomGradeStepper(props: CustomGradeStepperProps) {
 
     const cardID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[props.itemIndex].id);
 
-    async function updateBackendDelta(newDelta: number) {
-        setIsLoading(true);
-        const endpoint = apiService.createEndpoint(`admin/orders/${props.orderID}/cards/${cardID}/grades`);
-        const response = await endpoint.put('', {
-            humanGradeValues: humanGrades,
-            gradeDelta: newDelta,
-        });
-        dispatch(updateExistingCardData({ id: cardID, data: response.data }));
-        setIsLoading(false);
-    }
+    const updateBackendDelta = useCallback(
+        async (newDelta: number) => {
+            setIsLoading(true);
+            const endpoint = apiService.createEndpoint(`admin/orders/${props.orderID}/cards/${cardID}/grades`);
+            const response = await endpoint.put('', {
+                humanGradeValues: humanGrades,
+                gradeDelta: newDelta,
+            });
+            dispatch(updateExistingCardData({ id: cardID, data: response.data }));
+            setIsLoading(false);
+        },
+        [apiService, cardID, dispatch, humanGrades, props.orderID],
+    );
 
     const handleGradeChange = useCallback(
         (operation: GradeOperations) => {
@@ -102,7 +106,7 @@ function CustomGradeStepper(props: CustomGradeStepperProps) {
                 }
             };
         },
-        [props.gradeDelta, props.currentGrade],
+        [props.currentGrade, props.gradeDelta, updateBackendDelta],
     );
 
     return (

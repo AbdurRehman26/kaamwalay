@@ -32,7 +32,10 @@ interface SubmissionsViewDetailsProps {
     extraChargesTotal: string;
     refundsTotal: string;
     payment: OrderPaymentEntity;
+    paymentMethodDiscountedAmount: string;
     discountedAmount: string;
+    amountPaidFromWallet: string;
+    paymentMethodId: number;
     coupon: OrderCouponEntity;
 }
 
@@ -65,7 +68,10 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         extraChargesTotal,
         refundsTotal,
         discountedAmount,
+        paymentMethodDiscountedAmount,
+        paymentMethodId,
         coupon,
+        amountPaidFromWallet,
     } = props;
 
     const classes = useStyles();
@@ -103,13 +109,27 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         () => ({
             'Total Declared Value:': formatCurrency(declaredValue),
             'Service Fee:': formatCurrency(serviceFee),
+            ...(Number(paymentMethodDiscountedAmount) > 0 && {
+                'Collector Coin Discount:': `-${formatCurrency(paymentMethodDiscountedAmount)}`,
+            }),
+            ...(Number(amountPaidFromWallet) > 0 && { 'Credit:': `-${formatCurrency(amountPaidFromWallet)}` }),
             ...(Number(discountedAmount) > 0 && { 'Promo Code Discount:': `-${formatCurrency(discountedAmount)}` }),
             'Insured Shipping:': formatCurrency(shippingFee),
             ...(Number(extraChargesTotal) > 0 && { 'Extra Charge:': formatCurrency(extraChargesTotal) }),
             ...(Number(refundsTotal) > 0 && { 'Refund:': formatCurrency(refundsTotal) }),
             'Total:': formatCurrency(grandTotal),
         }),
-        [declaredValue, grandTotal, serviceFee, shippingFee, extraChargesTotal, refundsTotal],
+        [
+            declaredValue,
+            serviceFee,
+            discountedAmount,
+            shippingFee,
+            extraChargesTotal,
+            paymentMethodDiscountedAmount,
+            refundsTotal,
+            amountPaidFromWallet,
+            grandTotal,
+        ],
     );
 
     return (
@@ -133,6 +153,7 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 shippingAddress={shippingAddress}
                 coupon={coupon}
                 payment={payment}
+                paymentMethodId={paymentMethodId}
             />
         </Grid>
     );

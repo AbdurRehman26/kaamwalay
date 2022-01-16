@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ReviewCardDialog, ReviewCardDialogProps } from '@shared/components/ReviewCardDialog';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
@@ -27,7 +27,7 @@ export function SubmissionReviewCardDialog(props: SubmissionReviewCardDialogProp
     const notification = useNotifications();
     const entities = useAppSelector((state) => state.adminOrders.entities);
     const [loading, setLoading] = useState('');
-    const order = useMemo(() => plainToClass(OrderEntity, entities[orderId]), [entities, orderId]);
+    const order = useMemo(() => plainToInstance(OrderEntity, entities[orderId]), [entities, orderId]);
     const pendingItems = useMemo(
         () =>
             order?.orderItems?.filter((item) => item.status?.orderItemStatus?.id === OrderItemStatusEnum.PENDING) ?? [],

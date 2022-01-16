@@ -1,5 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { CircularProgress } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect } from 'react';
@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     backStep,
     createOrder,
+    getAvailableCredit,
     getSavedAddresses,
     getShippingFee,
     getStatesList,
@@ -116,6 +117,7 @@ export function NewSubmission() {
             });
             dispatch(nextStep());
             dispatch(setIsNextLoading(false));
+            await dispatch(getAvailableCredit()).unwrap();
             window.scroll(0, 0);
             pushToDataLayer({ event: 'google-ads-shipping-info-submitted' });
             return;

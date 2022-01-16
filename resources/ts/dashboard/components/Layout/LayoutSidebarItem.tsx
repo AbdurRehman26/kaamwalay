@@ -1,4 +1,4 @@
-import { ListItemSecondaryAction } from '@mui/material';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Chip from '@mui/material/Chip';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -51,7 +51,7 @@ const useStyles = makeStyles(
 );
 
 function LayoutSidebarItem(props: SidebarMenuItemProps) {
-    const { icon: Icon, title, href, exact, disabled } = props;
+    const { icon: Icon, title, exact, href, disabled } = props;
 
     const location = useLocation();
     const classes = useStyles({ disabled });
@@ -65,12 +65,8 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
     );
 
     const isActive = useMemo(
-        () =>
-            !!matchPath(location.pathname, {
-                path: href,
-                exact,
-            }),
-        [location.pathname, href, exact],
+        () => !!matchPath({ path: exact ? href : `${href}/*` }, location.pathname),
+        [location.pathname, exact, href],
     );
 
     return (

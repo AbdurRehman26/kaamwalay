@@ -76,7 +76,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             
             // Ethereum Transactions are supposed to be up to 4 times slower than Binance Smart Chain
             // That's why we need to wait some extra time before looking for transaction data
-            if ($this->isEthereum($response['network'])){
+            if ($this->isEthereum($response['network'])) {
                 sleep(self::ETHEREUM_WAIT_SECONDS);
             }
 
@@ -193,7 +193,8 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         return true;
     }
 
-    protected function isEthereum(int $networkChainId): bool {
+    protected function isEthereum(int $networkChainId): bool
+    {
         return in_array($networkChainId, [1, 4]);
     }
 }

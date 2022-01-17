@@ -52,8 +52,7 @@ class VerifyUnpaidOrders extends Command
     
             try {
                 $orderPayment = $order->firstCollectorCoinOrderPayment;
-                if ($orderPayment)
-                {
+                if ($orderPayment) {
                     $paymentService->verify($order, json_decode($orderPayment->response, true)['txn_hash']);
                 }
             } catch (PaymentBlockchainNetworkNotSupported $nsn) {

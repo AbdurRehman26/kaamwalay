@@ -22,6 +22,7 @@ class RegisterController extends Controller
         $token = auth()->guard()->login($user);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
+        
         SendCustomersToMailchimp::dispatch(auth()->user());
         return new JsonResponse([
             'access_token' => $token,

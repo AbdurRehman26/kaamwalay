@@ -21,7 +21,7 @@ class SendCustomersToMailchimpServices {
         return $mailchimpClient;
     }
 
-    public function createListOnMailchimp($template){
+    public function createListOnMailchimp(string $template){
         $mailchimpClient = $this->getConfiguration();
         try {
                 $response = $mailchimpClient->lists->createList([
@@ -53,7 +53,7 @@ class SendCustomersToMailchimpServices {
         }
     }
 
-    public function getListId($template){
+    public function getListId(string $template) {
         return MailchimpUser::where('list_name', $template)->value('list_id'); 
     }
 
@@ -73,8 +73,7 @@ class SendCustomersToMailchimpServices {
         }
     }
 
-    public function addDataToList($template, $user, $mailchimpClient, $list_id){
-        // dd($list_id);
+    public function addDataToList(string $template, User $user, \MailchimpMarketing\ApiClient $mailchimpClient, string $list_id){
         try {    
             $hash = md5(strtolower($user->email));
             $response = $mailchimpClient->lists->setListMember($list_id, $hash, [
@@ -83,7 +82,6 @@ class SendCustomersToMailchimpServices {
             "skip_merge_validation" => true,
             "status" => "unsubscribed",
             "merge_fields" => [
-                // 'NAME' => $user->getFullName() ? $user->getFullName() : $user->first_name ." ". $user->last_name,
                 'FNAME' => $user->first_name ? $user->first_name : "",
                 'LNAME' => $user->last_name ? $user->last_name : "",
                 'PHONE' => $user->phone ? $user->phone : "",
@@ -100,7 +98,7 @@ class SendCustomersToMailchimpServices {
         }
     }
 
-    public function sendNewUsers($user, $template){
+    public function sendNewUsers(User $user, string $template){
         $mailchimpClient = $this->getConfiguration();
         $list_id = $this->getListId($template);
         if ($list_id){

@@ -98,6 +98,7 @@ class PaymentService
         // method can be called twice and can fire event twice
         if ($this->order->isPayable()) {
             $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
+
             OrderPaid::dispatch($this->order);
 
             $user = auth()->user();

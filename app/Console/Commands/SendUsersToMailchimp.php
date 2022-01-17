@@ -40,6 +40,4 @@ class SendUsersToMailchimp extends Command
     {
         $sendCustomersToMailchimpServices->createListOnMailchimp(SendCustomersToMailchimpServices::TEMPLATE_SIGN_UP_USERS);
     }
-
-
 }

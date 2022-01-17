@@ -20,6 +20,8 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     // Status Values
     public const FAILED = '0';
     public const COMPLETED = '1';
+
+    protected const ETHEREUM_WAIT_SECONDS = 7;
     
     protected Web3 $web3;
 
@@ -66,14 +68,20 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         try {
             $this->validateTransactionHashIsNotDuplicate($order, $data['transaction_hash']);
 
-            $transactionData = $this->getTransaction($data['transaction_hash']);
-
             $orderPayment = $order->firstCollectorCoinOrderPayment;
-
+            
             //Get Collector Coin amount from USD (Order grand total)
             $response = json_decode($orderPayment->response, true);
             $data['amount'] = $response['amount'];
+            
+            // Ethereum Transactions are supposed to be up to 4 times slower than Binance Smart Chain
+            // That's why we need to wait some extra time before looking for transaction data
+            if ($this->isEthereum($response['network'])){
+                sleep(self::ETHEREUM_WAIT_SECONDS);
+            }
 
+            $transactionData = $this->getTransaction($data['transaction_hash']);
+            
             $this->validateTransaction($data, $transactionData);
 
             // Include Transaction Hash and destination wallet in response in case validation goes through
@@ -104,6 +112,11 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     public function verify(Order $order, string $transactionHash): bool
     {
+        // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
+        if (json_decode($order->firstCollectorCoinOrderPayment->response, true)['txn_hash'] !== $transactionHash) {
+            return false;
+        }
+    
         //TODO: Check if we also should support this for confirmed/graded orders
         if ($order->order_status_id === OrderStatus::PLACED) {
             return true;
@@ -178,5 +191,9 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         }
 
         return true;
+    }
+
+    protected function isEthereum(int $networkChainId): bool {
+        return in_array($networkChainId, [1, 4]);
     }
 }

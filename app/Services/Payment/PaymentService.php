@@ -78,12 +78,7 @@ class PaymentService
 
         $params = [];
         if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
-
-            // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
-            if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $paymentIntentId) {
-                return false;
-            }
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstCollectorCoinOrderPayment->response, true)['network']];
         }
 
         $data = resolve($this->providers[

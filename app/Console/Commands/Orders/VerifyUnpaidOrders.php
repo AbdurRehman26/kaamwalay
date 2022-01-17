@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Payment\PaymentService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -38,15 +39,23 @@ class VerifyUnpaidOrders extends Command
         $user = User::whereEmail($email)->first();
         auth()->login($user);
 
-        $unpaidOrders = Order::where('order_status_id', OrderStatus::PAYMENT_PENDING)->whereHas('paymentMethod', function ($query) {
-            return $query->where('code', 'collector_coin');
-        })->get();
+        $unpaidOrders = Order::where('order_status_id', OrderStatus::PAYMENT_PENDING)
+            ->where('created_at', '>', Carbon::now()->subHours(2)->toDateTimeString())
+            ->whereHas('paymentMethod', function ($query) {
+                return $query->where('code', 'collector_coin');
+            })->whereHas('orderPayments', function ($query) {
+                return $query->whereNotNull('payment_provider_reference_id');
+            })->get();
 
         $unpaidOrders->each(function (Order $order) use ($paymentService) {
             $this->info("Processing Order: $order->id");
     
             try {
-                $paymentService->verify($order, json_decode($order->firstOrderPayment->response, true)['txn_hash']);
+                $orderPayment = $order->firstCollectorCoinOrderPayment;
+                if ($orderPayment)
+                {
+                    $paymentService->verify($order, json_decode($orderPayment->response, true)['txn_hash']);
+                }
             } catch (PaymentBlockchainNetworkNotSupported $nsn) {
                 Log::error('Order ID: ' . $order->id . ' has a not supported payment network and can not be processed.');
             }

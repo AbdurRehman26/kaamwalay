@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Bus;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\seed;
+use function PHPUnit\Framework\assertFalse;
 
 beforeEach(function () {
     seed([RolesSeeder::class]);
@@ -41,4 +42,19 @@ test('customers can not create cards manually without specifying card category',
         'description' => 'Lorem ipsum dolor sit amet.',
         'image_path' => 'http://www.google.com',
     ])->assertUnprocessable();
+});
+
+test('it does not store card category after customer add card manually', function () {
+    Bus::fake();
+
+    $cardCategory = CardCategory::factory()->create();
+
+    postJson('/api/v1/customer/cards', [
+        'name' => 'Lorem Ipsum',
+        'description' => 'Lorem ipsum dolor sit amet.',
+        'image_path' => 'http://www.google.com',
+        'card_category_id' => $cardCategory->id,
+    ])->assertCreated();
+
+    assertFalse(CardCategory::where('card_category_id', $cardCategory->id)->exists());
 });

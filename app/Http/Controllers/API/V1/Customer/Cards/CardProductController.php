@@ -8,6 +8,7 @@ use App\Http\Resources\API\V1\CardProduct\CardProductResource;
 use App\Services\Card\CardProductService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 
 class CardProductController extends Controller
@@ -19,7 +20,9 @@ class CardProductController extends Controller
     public function store(StoreCardProductRequest $request): CardProductResource | JsonResponse
     {
         try {
-            $card = $this->cardProductService->create($request->validated());
+            $card = $this->cardProductService->create(
+                Arr::except($request->validated(), 'card_category_id')
+            );
         } catch (Exception $e) {
             return new JsonResponse(
                 [

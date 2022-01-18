@@ -401,6 +401,56 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/PaymentPlanResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$customer_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$phone\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$profile_image\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$update_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:getFullName\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:orders\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$customer_number\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
@@ -652,6 +702,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
 
@@ -676,7 +731,22 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$payment_method_discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$payment_method_id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
 
@@ -1101,6 +1171,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$amount_paid_from_wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$billingAddress\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
@@ -1121,7 +1196,7 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$grand_total\\.$#"
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$grand_total_to_be_paid\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
@@ -1137,6 +1212,16 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$paymentPlan\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$payment_method_discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$payment_method_id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
@@ -1317,6 +1402,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
 
@@ -1334,6 +1424,11 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$billingAddress\\.$#"
@@ -1387,6 +1482,16 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$paymentPlan\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$payment_method_discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$payment_method_id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
 
@@ -1546,6 +1651,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardListResource\\:\\:\\$certificate_number\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardListResource.php
@@ -1589,6 +1699,16 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardResource\\:\\:\\$overall_values\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Wallet\\\\WalletResource\\:\\:\\$balance\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Wallet/WalletResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Wallet\\\\WalletResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Wallet/WalletResource.php
 
 		-
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Files\\\\PresignUploadResource\\:\\:getContentType\\(\\)\\.$#"
@@ -1644,16 +1764,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
 			count: 1
 			path: app/Listeners/API/Admin/Order/ExtraChargeSuccessfulListener.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$notes\\.$#"
-			count: 1
-			path: app/Listeners/API/Admin/Order/RefundSuccessfulListener.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$response\\.$#"
-			count: 1
-			path: app/Listeners/API/Admin/Order/RefundSuccessfulListener.php
 
 		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
@@ -2126,21 +2236,6 @@ parameters:
 			path: app/Services/Order/OrderService.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$amount\\.$#"
-			count: 2
-			path: app/Services/Order/RevenueStatsService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$provider_fee\\.$#"
-			count: 1
-			path: app/Services/Order/RevenueStatsService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$type\\.$#"
-			count: 1
-			path: app/Services/Order/RevenueStatsService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php
@@ -2186,24 +2281,9 @@ parameters:
 			path: app/Services/Order/Validators/ItemsDeclaredValueValidator.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$response\\.$#"
-			count: 2
-			path: app/Services/Payment/InvoiceService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\Payment\\\\InvoiceService\\:\\:createAndStoreInvoiceRecord\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Payment/InvoiceService.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\)\\: App\\\\Models\\\\OrderPayment, Closure\\(App\\\\Models\\\\OrderPayment\\)\\: App\\\\Models\\\\OrderPayment given\\.$#"
-			count: 1
-			path: app/Services/Payment/PaymentService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$response\\.$#"
-			count: 1
-			path: app/Services/Payment/Providers/PaypalService.php
 
 		-
 			message: "#^Cannot access property \\$id on array\\|object\\|string\\.$#"
@@ -2211,29 +2291,9 @@ parameters:
 			path: app/Services/Payment/Providers/PaypalService.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$payment_provider_reference_id\\.$#"
-			count: 3
-			path: app/Services/Payment/Providers/StripeService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$response\\.$#"
-			count: 1
-			path: app/Services/Payment/Providers/StripeService.php
-
-		-
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
 			count: 1
 			path: app/Services/Payment/Providers/StripeService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$payment_provider_reference_id\\.$#"
-			count: 3
-			path: app/Services/Payment/Providers/TestingStripeService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$response\\.$#"
-			count: 1
-			path: app/Services/Payment/Providers/TestingStripeService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:cleanColumnName\\(\\) has parameter \\$grade with no type specified\\.$#"

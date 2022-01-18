@@ -25,8 +25,6 @@ services:
             - mysql
             - redis
             - minio
-    #            - meilisearch
-    #            - selenium
     mysql:
         platform: linux/x86_64
         image: 'mysql:8.0'
@@ -58,18 +56,6 @@ services:
             test: ['CMD', 'redis-cli', 'ping']
             retries: 3
             timeout: 5s
-    #    meilisearch:
-    #        image: 'getmeili/meilisearch:latest'
-    #        ports:
-    #            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
-    #        volumes:
-    #            - 'sailmeilisearch:/data.ms'
-    #        networks:
-    #            - sail
-    #        healthcheck:
-    #          test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
-    #          retries: 3
-    #          timeout: 5s
     minio:
         image: 'minio/minio:latest'
         ports:
@@ -108,12 +94,6 @@ services:
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
-#    selenium:
-#       image: 'selenium/standalone-chrome'
-#       volumes:
-#            - '/dev/shm:/dev/shm'
-#       networks:
-#           - sail
 networks:
     sail:
         driver: bridge
@@ -124,5 +104,3 @@ volumes:
         driver: local
     sailminio:
         driver: local
-#    sailmeilisearch:
-#        driver: local

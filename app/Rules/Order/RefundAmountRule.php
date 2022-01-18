@@ -55,8 +55,11 @@ class RefundAmountRule implements Rule, DataAwareRule
         $order = request()->route('order');
 
         if ($this->data['add_to_wallet'] === true) {
+            // wallet refunds can be 100% of the order amount
             return $order->allPayments()->sum('amount') - $order->refunds()->sum('amount');
         }
+        // can only be refunded to the payment method used for first charge
+        // minus any refund issued to that payment method.
 
         $firstOrderPayment = $order->firstOrderPayment;
 

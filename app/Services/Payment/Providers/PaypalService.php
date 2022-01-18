@@ -91,7 +91,7 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
                 $paymentIntent['amount']['value'] == $order->grand_total_to_be_paid
                 && $captureStatus === 'COMPLETED'
             ) {
-                $order->lastOrderPayment->update([
+                $order->firstOrderPayment->update([
                     'payment_provider_reference_id' => $data['purchase_units'][0]['payments']['captures'][0]['id'],
                     'response' => json_encode($data),
                     'amount' => $order->grand_total_to_be_paid,

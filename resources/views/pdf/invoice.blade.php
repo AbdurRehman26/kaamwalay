@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <style>
         @page {
-            margin: 4.3cm 0.9525cm 3cm 0.9525cm;
+            margin: 4.3cm 0.9525cm 4.3cm 0.9525cm;
         }
 
         header {
@@ -19,7 +19,7 @@
         }
         footer {
             position: fixed;
-            bottom: 0;
+            bottom: -113px;
             left: 0;
             right: 0;
             text-align: start;
@@ -204,6 +204,9 @@
         }
         .info-line .info-title{
             width: 70%;
+        }
+        .total-line td{
+            border-top: 1px solid rgba(30, 30, 30, 0.2);
         }
     </style>
 </head>
@@ -412,7 +415,7 @@
                                     ${{number_format($order->shipping_fee, 2)}}
                                 </td>
                             </tr>
-                            <tr class="info-line">
+                            <tr class="info-line total-line">
                                 <td class="info-title">
                                     Total:
                                 </td>

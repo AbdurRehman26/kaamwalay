@@ -19,7 +19,6 @@ class RefundAmountRule implements Rule, DataAwareRule
      */
     public function passes($attribute, $value)
     {
-//        dd($value, $this->maxRefundableAmount());
         if ((float) $value > $this->maxRefundableAmount()) {
             return false;
         }

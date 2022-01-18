@@ -2,6 +2,7 @@
 
 use App\Jobs\ProcessImage;
 use App\Models\CardCategory;
+use App\Models\CardProduct;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Support\Facades\Bus;
@@ -56,5 +57,5 @@ test('it does not store card category after customer add card manually', functio
         'card_category_id' => $cardCategory->id,
     ])->assertCreated();
 
-    assertFalse(CardCategory::where('card_category_id', $cardCategory->id)->exists());
+    assertFalse(CardProduct::where('card_category_id', $cardCategory->id)->exists());
 });

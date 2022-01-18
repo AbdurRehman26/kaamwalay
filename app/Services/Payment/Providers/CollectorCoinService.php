@@ -4,24 +4,29 @@ namespace App\Services\Payment\Providers;
 
 use App\Exceptions\API\Customer\Order\PaymentBlockchainNetworkNotSupported;
 use App\Exceptions\Services\Payment\OrderPaymentIsIncorrect;
+use App\Exceptions\Services\Payment\TransactionDetailsCouldNotBeObtained;
 use App\Exceptions\Services\Payment\TransactionHashIsAlreadyInUse;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
 use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
+use App\Services\Payment\Providers\Contracts\PaymentProviderHandshakeInterface;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use TypeError;
 use Web3\ValueObjects\Wei;
 use Web3\Web3;
 
-class CollectorCoinService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
+class CollectorCoinService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface, PaymentProviderHandshakeInterface
 {
     // Status Values
     public const FAILED = '0';
     public const COMPLETED = '1';
 
-    protected const ETHEREUM_WAIT_SECONDS = 7;
+    protected const RETRY_WAIT_SECONDS = 3;
+    protected const MAX_RETRIES_NUMBER = 10;
     
     protected Web3 $web3;
 
@@ -39,21 +44,33 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         $this->web3 = new Web3(config('web3networks.' . $this->paymentBlockChainNetworkId. '.rpc_urls')[0]);
     }
 
-    public function getTransaction(string $txn): array
+    public function getTransaction(string $txn, int $retryCount = 0): array
     {
-        $transaction = $this->web3->eth()->getTransactionByHash($txn);
+        try {
+            $transaction = $this->web3->eth()->getTransactionByHash($txn);
 
-        // Extract information from 'input'
-        // 0xa9059cbb000000000000000000000000b2a7f8ba330ebe430521eb13f615bd8f15bf3c4d0000000000000000000000000000000000000000000000068155a43676e00000
-        // Where the first 34 bits represent text of the function signature (0xa9059cbb)
-        // The next 256 bit block represent the address where token is sent to (000000000000000000000000b2a7f8ba330ebe430521eb13f615bd8f15bf3c4d)
-        // And next block is the pa id amount (in hex) (0000000000000000000000000000000000000000000000068155a43676e00000)
+            // Extract information from 'input'
+            // 0xa9059cbb000000000000000000000000b2a7f8ba330ebe430521eb13f615bd8f15bf3c4d0000000000000000000000000000000000000000000000068155a43676e00000
+            // Where the first 34 bits represent text of the function signature (0xa9059cbb)
+            // The next 256 bit block represent the address where token is sent to (000000000000000000000000b2a7f8ba330ebe430521eb13f615bd8f15bf3c4d)
+            // And next block is the pa id amount (in hex) (0000000000000000000000000000000000000000000000068155a43676e00000)
 
-        // Get destination wallet from input's first 256 bit block
-        $transaction['destination_wallet'] = preg_replace('/^[0]+/', '0x', substr($transaction['input'], 10, 64));
-        
-        // Get correct token amount
-        $transaction['token_amount'] = Wei::fromHex(substr($transaction['input'], 74, 64))->toEth();
+            // Get destination wallet from input's first 256 bit block
+            $transaction['destination_wallet'] = preg_replace('/^[0]+/', '0x', substr($transaction['input'], 10, 64));
+            
+            // Get correct token amount
+            $transaction['token_amount'] = Wei::fromHex(substr($transaction['input'], 74, 64))->toEth();
+            
+        } catch (TypeError $te) {
+
+            if ($retryCount < self::MAX_RETRIES_NUMBER) {
+                sleep(self::RETRY_WAIT_SECONDS);
+                $transaction = $this->getTransaction($txn, $retryCount + 1);
+            } else {
+                throw new TransactionDetailsCouldNotBeObtained;
+            }
+
+        }
 
         return $transaction;
     }
@@ -74,12 +91,6 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             $response = json_decode($orderPayment->response, true);
             $data['amount'] = $response['amount'];
             
-            // Ethereum Transactions are supposed to be up to 4 times slower than Binance Smart Chain
-            // That's why we need to wait some extra time before looking for transaction data
-            if ($this->isEthereum($response['network'])) {
-                sleep(self::ETHEREUM_WAIT_SECONDS);
-            }
-
             $transactionData = $this->getTransaction($data['transaction_hash']);
             
             $this->validateTransaction($data, $transactionData);
@@ -97,11 +108,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => null,
             ];
-        } catch (OrderPaymentIsIncorrect $e) {
-            return [
-                'message' => $e->getMessage(),
-            ];
-        } catch (TransactionHashIsAlreadyInUse $e) {
+        } catch (OrderPaymentIsIncorrect | TransactionHashIsAlreadyInUse | TransactionDetailsCouldNotBeObtained $e) {
             return [
                 'message' => $e->getMessage(),
             ];
@@ -124,6 +131,22 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             return $this->validateTransactionIsSuccessful($transactionHash);
         }
     }
+
+    public function processHandshake(Order $order, string $transactionHash): bool
+    {
+        // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
+        if (json_decode($order->firstCollectorCoinOrderPayment->response, true)['txn_hash'] !== $transactionHash) {
+            return false;
+        }
+    
+        //TODO: Check if we also should support this for confirmed/graded orders
+        if ($order->order_status_id === OrderStatus::PLACED) {
+            return true;
+        } else {
+            return $this->validateTransactionIsSuccessful($transactionHash);
+        }
+    }
+
 
     public function getCollectorCoinPriceFromUsd(float $value): float
     {
@@ -193,8 +216,4 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         return true;
     }
 
-    protected function isEthereum(int $networkChainId): bool
-    {
-        return in_array($networkChainId, [1, 4]);
-    }
 }

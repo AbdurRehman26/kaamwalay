@@ -100,6 +100,34 @@ class PaymentService
         return $data;
     }
 
+    public function processHandshake(Order $order, string $paymentIntentId): bool
+    {
+        $this->hasProvider($order);
+
+        $params = [];
+        if ($this->order->paymentMethod->isCollectorCoin()) {
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstCollectorCoinOrderPayment->response, true)['network']];
+        }
+
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ], $params)->verify($this->order, $paymentIntentId);
+
+        if ($data) {
+
+            /* Partial Payments */
+            if ($this->checkForPartialPayment()) {
+                $this->updatePartialPayment();
+            }
+
+            $this->calculateAndSaveFee($order);
+
+            return $this->updateOrderStatus();
+        }
+
+        return $data;
+    }
+
     public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
     {
         /** @noinspection JsonEncodingApiUsageInspection */

@@ -1,5 +1,3 @@
-export const supportedNetworks = process.env.NODE_ENV !== 'production' ? [4, 97] : [1, 56];
-
 export const networksMap: any = {
     1: {
         chainId: '0x1',
@@ -40,12 +38,12 @@ export const networksMap: any = {
     },
 };
 
-export function getCurrentContract(currentNetworkId: number) {
-    if (supportedNetworks.includes(currentNetworkId)) {
+export function getCurrentContract(currentNetworkId: string, incomingSupportedNetworks: string[]) {
+    if (incomingSupportedNetworks.includes(currentNetworkId.toString())) {
         return {
             // ETH MainNet
             1: '0x667fd83e24ca1d935d36717d305d54fa0cac991c',
-            // ETH TestNet Rinkeby
+            // ETH TestNet Rinkebys
             4: '0x23863db3e66d94dba2a2ae157de8082cf772b115',
             // BSC MainNet
             56: '0x73ffdf2d2afb3def5b10bf967da743f2306a51db',

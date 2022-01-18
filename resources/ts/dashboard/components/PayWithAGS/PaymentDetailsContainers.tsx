@@ -10,7 +10,9 @@ import Chip from '@mui/material/Chip';
 import contractAbi from '@shared/assets/bscContract.json';
 import Web3 from 'web3';
 import Alert from '@mui/material/Alert';
-import { networksMap, shortenWalletAddress, openMetaMaskExtensionLink, supportedNetworks, getEthereum } from './utils';
+import { networksMap, shortenWalletAddress, openMetaMaskExtensionLink, getEthereum } from './utils';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const useStyles = makeStyles(
     () => {
@@ -60,8 +62,8 @@ enum metamaskStatuses {
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
 
-function getCurrentContract(currentNetworkId: number) {
-    if (supportedNetworks.includes(currentNetworkId)) {
+function getCurrentContract(currentNetworkId: string, incomingSupportedNetworks: string[]) {
+    if (incomingSupportedNetworks.includes(currentNetworkId)) {
         return {
             // ETH MainNet
             1: '0x667fd83e24ca1d935d36717d305d54fa0cac991c',
@@ -76,7 +78,6 @@ function getCurrentContract(currentNetworkId: number) {
         return '';
     }
 }
-
 export function AGSPaymentDetailsContainers() {
     const dispatch = useAppDispatch();
     const classes = useStyles();
@@ -84,16 +85,25 @@ export function AGSPaymentDetailsContainers() {
     const [currentNetworkID, setCurrentNetworkID] = useState<number>(0);
     const [selectedAccount, setSelectedAccount] = useState('');
     const [agsBalance, setAgsBalance] = useState(0);
+    const configs = useConfiguration();
     let detailsChildren;
+    const supportedNetworks = configs?.web3SupportedNetworks.split(',');
 
-    const updateAgsBalance = useCallback(async (walletAddress: string) => {
-        const currentNetworkID = await web3.eth.net.getId();
-        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID));
-        const result = await contract.methods.balanceOf(walletAddress).call();
-        const balance = await web3.utils.fromWei(result, 'ether');
-        setAgsBalance(balance);
-        setCurrentNetworkID(currentNetworkID);
-    }, []);
+    const updateAgsBalance = useCallback(
+        async (walletAddress: string) => {
+            const currentNetworkID = await web3.eth.net.getId();
+            const destinationContract = getCurrentContract(String(currentNetworkID), supportedNetworks);
+            if (destinationContract) {
+                const contract = new web3.eth.Contract(contractAbi, destinationContract);
+                const result = await contract.methods.balanceOf(walletAddress).call();
+                const balance = await web3.utils.fromWei(result, 'ether');
+                setAgsBalance(balance);
+                setCurrentNetworkID(currentNetworkID);
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
     const handleMetamaskConnect = useCallback(async () => {
         const metamaskAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });
@@ -105,30 +115,34 @@ export function AGSPaymentDetailsContainers() {
     }, [updateAgsBalance]);
 
     if (metamaskStatus === metamaskStatuses.connected) {
-        detailsChildren = (
-            <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} padding={'16px'}>
-                <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
-                    <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
-                        Connected Wallet:{' '}
-                    </Typography>
-                    <Chip label={shortenWalletAddress(selectedAccount)}></Chip>
-                </Box>
+        if (!agsBalance) {
+            detailsChildren = <CircularProgress />;
+        } else {
+            detailsChildren = (
+                <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} padding={'16px'}>
+                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
+                        <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
+                            Connected Wallet:{' '}
+                        </Typography>
+                        <Chip label={shortenWalletAddress(selectedAccount)}></Chip>
+                    </Box>
 
-                <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
-                    <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
-                        AGS Balance:
-                    </Typography>
-                    <Chip label={agsBalance}></Chip>
-                </Box>
+                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
+                        <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
+                            AGS Balance:
+                        </Typography>
+                        <Chip label={agsBalance}></Chip>
+                    </Box>
 
-                <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
-                    <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
-                        Selected Blockchain:
-                    </Typography>
-                    <Chip label={networksMap[currentNetworkID]?.chainName}></Chip>
+                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
+                        <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
+                            Selected Blockchain:
+                        </Typography>
+                        <Chip label={networksMap[currentNetworkID]?.chainName}></Chip>
+                    </Box>
                 </Box>
-            </Box>
-        );
+            );
+        }
     }
 
     if (metamaskStatus === metamaskStatuses.notConnected) {
@@ -211,7 +225,9 @@ export function AGSPaymentDetailsContainers() {
                 <Typography variant={'caption'}>
                     For information on Collector Coin and how to buy it visit collectorcoin.com
                 </Typography>
-                {!supportedNetworks.includes(currentNetworkID) && metamaskStatus === metamaskStatuses.connected ? (
+                {!supportedNetworks?.includes(String(currentNetworkID)) &&
+                metamaskStatus === metamaskStatuses.connected &&
+                currentNetworkID !== 0 ? (
                     <Alert severity="error" sx={{ width: '100%' }}>
                         Collector Coin is only available on Binance Smart Chain & Ethereum
                     </Alert>

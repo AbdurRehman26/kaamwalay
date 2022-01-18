@@ -8,28 +8,29 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { clearSubmissionState, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);
-
-const wallets = {
-    // Prod eth mainnet wallet
-    ethWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
-    // Prod binance smart chain wallet
-    bscWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
-    // Staging wallet
-    testWallet: '0xb2a7F8Ba330ebE430521Eb13F615Bd8F15bf3c4d',
-};
 
 export function PayWithCollectorCoinButton() {
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const [isLoading, setIsLoading] = useState(false);
+    const configs = useConfiguration();
     const dispatch = useAppDispatch();
-
+    const wallets = {
+        // Prod eth mainnet wallet
+        ethWallet: configs?.web3EthWallet,
+        // Prod binance smart chain wallet
+        bscWallet: configs?.web3BscWallet,
+        // Staging wallet
+        testWallet: configs?.web3TestWallet,
+    };
     const notifications = useNotifications();
     const navigate = useNavigate();
+    const supportedNetworks = configs?.web3SupportedNetworks.split(',');
 
     function getRecipientWalletFromNetwork(networkID: number) {
         switch (networkID) {
@@ -47,10 +48,12 @@ export function PayWithCollectorCoinButton() {
     }
 
     async function handleClick() {
+        setIsLoading(true);
+
         // @ts-ignore
         const currentNetworkID = await web3.eth.net.getId();
         const currentAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });
-        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID));
+        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID, supportedNetworks));
         const balanceResult = await contract.methods.balanceOf(currentAccounts[0]).call();
         const balance = await web3.utils.fromWei(balanceResult, 'ether');
 
@@ -65,7 +68,7 @@ export function PayWithCollectorCoinButton() {
                 data: contract.methods
                     .transfer(getRecipientWalletFromNetwork(currentNetworkID), web3.utils.toWei(String(totalInAGS)))
                     .encodeABI(),
-                to: getCurrentContract(currentNetworkID),
+                to: getCurrentContract(currentNetworkID, supportedNetworks),
             };
 
             web3.eth.sendTransaction(tx, async (err: any, txHash: string) => {

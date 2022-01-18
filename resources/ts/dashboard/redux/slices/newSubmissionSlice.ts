@@ -452,7 +452,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                   id: currentSubmission?.couponState?.appliedCouponData.id,
               }
             : null,
-        paymentByWallet: currentSubmission.appliedCredit,
+        paymentByWallet: currentSubmission.appliedCredit ?? 0,
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');

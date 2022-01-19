@@ -14,7 +14,6 @@ use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterfac
 use App\Services\Payment\Providers\Contracts\PaymentProviderHandshakeInterface;
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use TypeError;
 use Web3\ValueObjects\Wei;
 use Web3\Web3;
@@ -31,18 +30,6 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     protected Web3 $web3;
 
     protected int $paymentBlockChainNetworkId;
-
-    public function __construct(int $paymentBlockChainNetworkId)
-    {
-        $this->paymentBlockChainNetworkId = $paymentBlockChainNetworkId;
-
-        throw_unless(
-            in_array($paymentBlockChainNetworkId, explode(',', config('robograding.web3.supported_networks'))),
-            PaymentBlockchainNetworkNotSupported::class
-        );
-
-        $this->web3 = new Web3(config('web3networks.' . $this->paymentBlockChainNetworkId. '.rpc_urls')[0]);
-    }
 
     public function getTransaction(string $txn, int $retryCount = 0): array
     {
@@ -82,11 +69,14 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     public function charge(Order $order, array $data = []): array
     {
+        
         try {
             $this->validateTransactionHashIsNotDuplicate($order, $data['transaction_hash']);
-
+            
             $orderPayment = $order->firstOrderPayment;
             
+            $this->initializeWeb3FromOrderPayment($orderPayment);
+
             //Get Collector Coin amount from USD (Order grand total)
             $response = json_decode($orderPayment->response, true);
             $data['amount'] = $response['amount'];
@@ -119,8 +109,12 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     public function verify(Order $order, string $transactionHash): bool
     {
+        $orderPayment = $order->firstOrderPayment;
+            
+        $this->initializeWeb3FromOrderPayment($orderPayment);
+
         // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
-        if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $transactionHash) {
+        if (json_decode($orderPayment->response, true)['txn_hash'] !== $transactionHash) {
             return false;
         }
     
@@ -134,8 +128,12 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     public function processHandshake(Order $order, string $transactionHash): bool
     {
+        $orderPayment = $order->firstOrderPayment;
+            
+        $this->initializeWeb3FromOrderPayment($orderPayment);
+
         // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
-        if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $transactionHash) {
+        if (json_decode($orderPayment->response, true)['txn_hash'] !== $transactionHash) {
             return false;
         }
     
@@ -148,24 +146,23 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     }
 
 
-    public function getCollectorCoinPriceFromUsd(float $value): float
+    public function getCollectorCoinPriceFromUsd(int $paymentBlockChainNetworkId, float $value): float
     {
-        $collectorCoin = 0.0;
         $divider = 1;
 
         $baseUrl = 'https://api.coingecko.com/api/v3/simple/token_price';
-        $networkData = config('web3networks.' . $this->paymentBlockChainNetworkId, 97); #Use Binance Smart Chain Testnet as default
+        $networkData = config('web3networks.' . $paymentBlockChainNetworkId, 97); #Use Binance Smart Chain Testnet as default
 
         if ($networkData['is_testnet']) {
             $divider = config('robograding.web3.testnet_token_value');
         }
 
         $web3BscToken = $networkData['collector_coin_token'];
-        if ($this->paymentBlockChainNetworkId === 56) { //Is BSC
+        if ($paymentBlockChainNetworkId === 56) { //Is BSC
             $response = Http::get($baseUrl . '/binance-smart-chain?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
 
             $divider = $response->json()[$web3BscToken]['usd'];
-        } elseif ($this->paymentBlockChainNetworkId === 1) { //Is ETH
+        } elseif ($paymentBlockChainNetworkId === 1) { //Is ETH
             $response = Http::get($baseUrl . '/ethereum?contract_addresses='. $web3BscToken .'&vs_currencies=usd');
 
             $divider = $response->json()[$web3BscToken]['usd'];
@@ -179,6 +176,19 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     public function calculateFee(OrderPayment $orderPayment): float
     {
         return 0.0;
+    }
+
+    protected function initializeWeb3FromOrderPayment(OrderPayment $orderPayment): void {
+        // Initialize instance network id and Web3
+        $this->paymentBlockChainNetworkId = json_decode($orderPayment->response, true)['network'];
+
+        throw_unless(
+            in_array($this->paymentBlockChainNetworkId, explode(',', config('robograding.web3.supported_networks'))),
+            PaymentBlockchainNetworkNotSupported::class
+        );
+
+        $this->web3 = new Web3(config('web3networks.' . $this->paymentBlockChainNetworkId. '.rpc_urls')[0]);
+        
     }
 
     protected function validateTransactionIsSuccessful(string $transactionHash): bool

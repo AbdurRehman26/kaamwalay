@@ -426,14 +426,15 @@ it('throws error if using unsupported network', function () {
     
     $response = $this->getJson('/api/v1/customer/orders/' . $order->id . '/collector-coin?payment_blockchain_network=1');
 
-    $response->assertStatus(400);
+    $response->assertStatus(422);
     $response->assertJsonStructure([
-        'error', 'value',
+        'errors' => ['payment_blockchain_network']
     ]);
 
     $response->assertJsonFragment([
-        'error' => 'This payment blockchain network is not supported.',
-        'value' => 0.0,
+        'errors' => [
+            'payment_blockchain_network' => ['The selected payment blockchain network is invalid.']
+        ],
     ]);
 });
 

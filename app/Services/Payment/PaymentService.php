@@ -42,15 +42,9 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        $params = [];
-
-        if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
-        }
-
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params)->charge($this->order, $optionalData);
+        ])->charge($this->order, $optionalData);
 
         if (! empty($data['message']) || ! empty($data['payment_intent'])) {
             return $data;
@@ -76,14 +70,9 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        $params = [];
-        if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
-        }
-
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params)->verify($this->order, $paymentIntentId);
+        ])->verify($this->order, $paymentIntentId);
 
         if ($data) {
 
@@ -104,14 +93,9 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        $params = [];
-        if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
-        }
-
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params)->verify($this->order, $paymentIntentId);
+        ])->processHandshake($this->order, $paymentIntentId);
 
         if ($data) {
 

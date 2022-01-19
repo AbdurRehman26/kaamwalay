@@ -226,16 +226,6 @@ parameters:
 			path: app/Http/Filters/UserCardSearchFilter.php
 
 		-
-			message: "#^Cannot access property \\$firstOrderPayment on object\\|string\\.$#"
-			count: 1
-			path: app/Http/Requests/API/V1/Admin/Order/RefundOrderRequest.php
-
-		-
-			message: "#^Cannot access property \\$refund_total on object\\|string\\.$#"
-			count: 1
-			path: app/Http/Requests/API/V1/Admin/Order/RefundOrderRequest.php
-
-		-
 			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/Resources/API/BaseResource.php

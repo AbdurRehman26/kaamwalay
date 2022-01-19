@@ -80,7 +80,7 @@ class OrderService
 
     public function calculateCollectorCoinPrice(Order $order, int $paymentBlockchainNetwork): float
     {
-        $orderPayment = $order->firstCollectorCoinOrderPayment;
+        $orderPayment = $order->firstOrderPayment;
 
         // Would be 0 if there is no collector coin payment for this order, for example, it has been fully paid with wallet
 

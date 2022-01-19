@@ -42,7 +42,7 @@ class VerifyUnpaidOrders extends Command
         $unpaidOrders = Order::where('order_status_id', OrderStatus::PAYMENT_PENDING)
             ->where('created_at', '>', Carbon::now()->subHours(2)->toDateTimeString())
             ->whereHas('paymentMethod', function ($query) {
-                return $query->where('code', 'collector_coin');
+                return $query->where('handles_handshake', 1);
             })->whereHas('orderPayments', function ($query) {
                 return $query->whereNotNull('payment_provider_reference_id');
             })->get();
@@ -51,7 +51,7 @@ class VerifyUnpaidOrders extends Command
             $this->info("Processing Order: $order->id");
     
             try {
-                $orderPayment = $order->firstCollectorCoinOrderPayment;
+                $orderPayment = $order->firstOrderPayment;
                 if ($orderPayment) {
                     $paymentService->processHandshake($order, json_decode($orderPayment->response, true)['txn_hash']);
                 }

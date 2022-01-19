@@ -85,7 +85,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         try {
             $this->validateTransactionHashIsNotDuplicate($order, $data['transaction_hash']);
 
-            $orderPayment = $order->firstCollectorCoinOrderPayment;
+            $orderPayment = $order->firstOrderPayment;
             
             //Get Collector Coin amount from USD (Order grand total)
             $response = json_decode($orderPayment->response, true);
@@ -120,7 +120,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     public function verify(Order $order, string $transactionHash): bool
     {
         // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
-        if (json_decode($order->firstCollectorCoinOrderPayment->response, true)['txn_hash'] !== $transactionHash) {
+        if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $transactionHash) {
             return false;
         }
     
@@ -135,7 +135,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     public function processHandshake(Order $order, string $transactionHash): bool
     {
         // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
-        if (json_decode($order->firstCollectorCoinOrderPayment->response, true)['txn_hash'] !== $transactionHash) {
+        if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $transactionHash) {
             return false;
         }
     
@@ -205,7 +205,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     protected function validateTransactionHashIsNotDuplicate(Order $order, string $transactionHash): bool
     {
         $duplicatePayments = OrderPayment::whereRelation('paymentMethod', 'code', 'collector_coin')
-        ->where('id', '<>', $order->firstCollectorCoinOrderPayment->id)
+        ->where('id', '<>', $order->firstOrderPayment->id)
         ->where('payment_provider_reference_id', $transactionHash)
         ->count();
 

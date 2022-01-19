@@ -78,7 +78,7 @@ class PaymentService
 
         $params = [];
         if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstCollectorCoinOrderPayment->response, true)['network']];
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
         }
 
         $data = resolve($this->providers[
@@ -106,7 +106,7 @@ class PaymentService
 
         $params = [];
         if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstCollectorCoinOrderPayment->response, true)['network']];
+            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
         }
 
         $data = resolve($this->providers[

@@ -95,7 +95,7 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
                 /*  Here we are updating the first order payment because in every case of order creation
                  *  (i.e Single, Partial) Paypal will be the primary payment method
                  *  hence it will be the first OrderPayment object.
-                */
+                 */
 
                 $order->firstOrderPayment->update([
                     'payment_provider_reference_id' => $data['purchase_units'][0]['payments']['captures'][0]['id'],

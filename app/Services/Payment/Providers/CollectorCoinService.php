@@ -9,9 +9,9 @@ use App\Exceptions\Services\Payment\TransactionHashIsAlreadyInUse;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Services\Payment\Providers\Contracts\PaymentProviderHandshakeInterface;
 use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
 use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
-use App\Services\Payment\Providers\Contracts\PaymentProviderHandshakeInterface;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use TypeError;
@@ -47,16 +47,13 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             
             // Get correct token amount
             $transaction['token_amount'] = Wei::fromHex(substr($transaction['input'], 74, 64))->toEth();
-            
         } catch (TypeError $te) {
-
             if ($retryCount < self::MAX_RETRIES_NUMBER) {
                 sleep(self::RETRY_WAIT_SECONDS);
                 $transaction = $this->getTransaction($txn, $retryCount + 1);
             } else {
                 throw new TransactionDetailsCouldNotBeObtained;
             }
-
         }
 
         return $transaction;
@@ -69,7 +66,6 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     public function charge(Order $order, array $data = []): array
     {
-        
         try {
             $this->validateTransactionHashIsNotDuplicate($order, $data['transaction_hash']);
             
@@ -178,7 +174,8 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         return 0.0;
     }
 
-    protected function initializeWeb3FromOrderPayment(OrderPayment $orderPayment): void {
+    protected function initializeWeb3FromOrderPayment(OrderPayment $orderPayment): void
+    {
         // Initialize instance network id and Web3
         $this->paymentBlockChainNetworkId = json_decode($orderPayment->response, true)['network'];
 
@@ -188,7 +185,6 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         );
 
         $this->web3 = new Web3(config('web3networks.' . $this->paymentBlockChainNetworkId. '.rpc_urls')[0]);
-        
     }
 
     protected function validateTransactionIsSuccessful(string $transactionHash): bool
@@ -225,5 +221,4 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
         return true;
     }
-
 }

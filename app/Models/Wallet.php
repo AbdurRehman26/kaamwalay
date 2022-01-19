@@ -24,6 +24,7 @@ class Wallet extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'int',
         'balance' => 'float',
         'is_active' => 'boolean',
     ];

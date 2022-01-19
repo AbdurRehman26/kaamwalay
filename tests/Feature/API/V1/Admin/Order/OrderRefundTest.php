@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
+use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Wallet;
 use Database\Seeders\CardCategoriesSeeder;
@@ -129,7 +130,7 @@ test('admin can refund partial amount to a wallet when order has wallet payment'
     ]);
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
-        'payment_method_id' => 1,
+        'payment_method_id' => PaymentMethod::factory(),
         'response' => json_encode(['id' => Str::random(25)]),
         'payment_provider_reference_id' => Str::random(25),
         'amount' => 10.00,
@@ -156,7 +157,7 @@ test('admin can refund full amount to a wallet when order has wallet payment', f
 
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
-        'payment_method_id' => 1,
+        'payment_method_id' => PaymentMethod::factory(),
         'response' => json_encode(['id' => Str::random(25)]),
         'payment_provider_reference_id' => Str::random(25),
         'amount' => 10.00,
@@ -184,7 +185,7 @@ test('admin can not refund full amount to payment method when order has wallet p
 
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
-        'payment_method_id' => 1,
+        'payment_method_id' => PaymentMethod::factory(),
         'response' => json_encode(['id' => Str::random(25)]),
         'payment_provider_reference_id' => Str::random(25),
         'amount' => 10.00,
@@ -206,7 +207,7 @@ test('admin can refund full charged amount to payment method when order has wall
 
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
-        'payment_method_id' => 1,
+        'payment_method_id' => PaymentMethod::factory(),
         'response' => json_encode(['id' => Str::random(25)]),
         'payment_provider_reference_id' => Str::random(25),
         'amount' => 10.00,

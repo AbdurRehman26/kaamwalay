@@ -91,6 +91,12 @@ class PaypalService implements PaymentProviderServiceInterface, PaymentProviderV
                 $paymentIntent['amount']['value'] == $order->grand_total_to_be_paid
                 && $captureStatus === 'COMPLETED'
             ) {
+
+                /*  Here we are updating the first order payment because in every case of order creation
+                 *  (i.e Single, Partial) Paypal will be the primary payment method
+                 *  hence it will be the first OrderPayment object.
+                */
+
                 $order->firstOrderPayment->update([
                     'payment_provider_reference_id' => $data['purchase_units'][0]['payments']['captures'][0]['id'],
                     'response' => json_encode($data),

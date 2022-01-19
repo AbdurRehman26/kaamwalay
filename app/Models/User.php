@@ -7,6 +7,7 @@ use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
+use App\Services\Wallet\WalletService;
 use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
@@ -72,6 +73,8 @@ class User extends Authenticatable implements JWTSubject
 
         $user->assignCustomerRole();
         $user->assignCustomerNumber();
+
+        (new WalletService)->createWallet(['user_id' => $user->id, 'balance' => 0]);
 
         return $user;
     }

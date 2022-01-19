@@ -3,6 +3,7 @@
 use App\Events\API\Auth\CustomerRegistered;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
+use App\Models\Wallet;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Bus;
@@ -131,3 +132,22 @@ test('customer cannot register with invalid platform', function () {
         'platform' => 'The selected platform is invalid.',
     ]);
 });
+
+test('customer can register and have wallet assigned', function () {
+    $email = $this->faker->safeEmail();
+    $this->postJson('/api/v1/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'username' => $this->faker->userName(),
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+    ]);
+
+    $wallet = Wallet::first();
+    $user = User::first();
+    
+    expect($wallet->user_id)->tobe($user->id);
+    expect($wallet->balance)->toBe(0.0);
+})->group('auth');

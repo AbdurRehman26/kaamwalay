@@ -15,9 +15,8 @@ class RefundAmountRule implements Rule, DataAwareRule
      *
      * @param  string  $attribute
      * @param  mixed  $value
-     * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         if ((float) $value > $this->maxRefundableAmount()) {
             return false;
@@ -26,12 +25,7 @@ class RefundAmountRule implements Rule, DataAwareRule
         return true;
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
+    public function message(): string
     {
         return 'The amount is invalid. The maximum refundable amount is: ' . $this->maxRefundableAmount();
     }

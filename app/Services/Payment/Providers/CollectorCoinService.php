@@ -145,6 +145,10 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         }
     }
 
+    public function refund(Order $order, array $data): array
+    {
+        return [];
+    }
 
     public function getCollectorCoinPriceFromUsd(int $paymentBlockChainNetworkId, float $value): float
     {

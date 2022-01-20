@@ -50,7 +50,6 @@ class PaymentService
             return $data;
         }
 
-        // This updates should only be done if the payment method is not Collector Coin
         if (! empty($data['success'])) {
 
             /* Partial Payments */

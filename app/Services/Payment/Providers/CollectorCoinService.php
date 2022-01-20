@@ -86,7 +86,6 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             $response['destination_wallet'] = $transactionData['destination_wallet'];
 
             return [
-                'success' => true,
                 'request' => $data,
                 'response' => $response,
                 'payment_provider_reference_id' => $data['transaction_hash'],

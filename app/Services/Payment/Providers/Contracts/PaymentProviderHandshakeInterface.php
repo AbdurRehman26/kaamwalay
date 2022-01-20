@@ -6,5 +6,5 @@ use App\Models\Order;
 
 interface PaymentProviderHandshakeInterface
 {
-    public function processHandshake(Order $order, string $paymentIntentId): bool;
+    public function processHandshake(Order $order): bool;
 }

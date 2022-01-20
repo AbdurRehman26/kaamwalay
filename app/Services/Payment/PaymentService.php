@@ -74,7 +74,6 @@ class PaymentService
         ])->verify($this->order, $paymentIntentId);
 
         if ($data) {
-
             /* Partial Payments */
             if ($this->checkForPartialPayment()) {
                 $this->updatePartialPayment();
@@ -88,17 +87,15 @@ class PaymentService
         return $data;
     }
 
-    public function processHandshake(Order $order, string $paymentIntentId): bool
+    public function processHandshake(Order $order): bool
     {
         $this->hasProvider($order);
 
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ])->processHandshake($this->order, $paymentIntentId);
+        ])->processHandshake($this->order);
 
         if ($data) {
-
-            /* Partial Payments */
             if ($this->checkForPartialPayment()) {
                 $this->updatePartialPayment();
             }
@@ -113,7 +110,6 @@ class PaymentService
 
     public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
     {
-        /** @noinspection JsonEncodingApiUsageInspection */
         $orderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),

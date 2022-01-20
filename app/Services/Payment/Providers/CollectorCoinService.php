@@ -15,6 +15,8 @@ use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterfac
 use Exception;
 use Illuminate\Support\Facades\Http;
 use TypeError;
+use Web3\Exceptions\ErrorException;
+use Web3\Exceptions\TransporterException;
 use Web3\ValueObjects\Wei;
 use Web3\Web3;
 
@@ -31,6 +33,11 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
     protected int $paymentBlockChainNetworkId;
 
+    /**
+     * @throws ErrorException
+     * @throws TransactionDetailsCouldNotBeObtained
+     * @throws TransporterException
+     */
     public function getTransaction(string $txn, int $retryCount = 0): array
     {
         try {
@@ -44,21 +51,25 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
 
             // Get destination wallet from input's first 256 bit block
             $transaction['destination_wallet'] = preg_replace('/^[0]+/', '0x', substr($transaction['input'], 10, 64));
-            
+
             // Get correct token amount
             $transaction['token_amount'] = Wei::fromHex(substr($transaction['input'], 74, 64))->toEth();
-        } catch (TypeError $te) {
-            if ($retryCount < self::MAX_RETRIES_NUMBER) {
-                sleep(self::RETRY_WAIT_SECONDS);
-                $transaction = $this->getTransaction($txn, $retryCount + 1);
-            } else {
+        } catch (TypeError) {
+            if ($retryCount > self::MAX_RETRIES_NUMBER) {
                 throw new TransactionDetailsCouldNotBeObtained;
             }
+
+            sleep(self::RETRY_WAIT_SECONDS);
+            $transaction = $this->getTransaction($txn, $retryCount + 1);
         }
 
         return $transaction;
     }
 
+    /**
+     * @throws ErrorException
+     * @throws TransporterException
+     */
     public function getTransactionDetails(string $txn): array
     {
         return $this->web3->eth()->getTransactionReceipt($txn);
@@ -68,9 +79,9 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     {
         try {
             $this->validateTransactionHashIsNotDuplicate($order, $data['transaction_hash']);
-            
+
             $orderPayment = $order->firstOrderPayment;
-            
+
             $this->initializeWeb3FromOrderPayment($orderPayment);
 
             //Get Collector Coin amount from USD (Order grand total)
@@ -78,7 +89,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             $data['amount'] = $response['amount'];
             
             $transactionData = $this->getTransaction($data['transaction_hash']);
-            
+
             $this->validateTransaction($data, $transactionData);
 
             // Include Transaction Hash and destination wallet in response in case validation goes through
@@ -97,47 +108,27 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             return [
                 'message' => $e->getMessage(),
             ];
-        } catch (Exception $e) {
+        } catch (Exception) {
             return ['message' => 'Unable to handle your request at the moment.'];
         }
     }
 
-    public function verify(Order $order, string $transactionHash): bool
+    /**
+     * @throws ErrorException
+     * @throws TransporterException
+     */
+    public function verify(Order $order, string $paymentIntentId): bool
     {
-        $orderPayment = $order->firstOrderPayment;
-            
-        $this->initializeWeb3FromOrderPayment($orderPayment);
-
-        // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
-        if (json_decode($orderPayment->response, true)['txn_hash'] !== $transactionHash) {
-            return false;
-        }
-    
-        //TODO: Check if we also should support this for confirmed/graded orders
-        if ($order->order_status_id === OrderStatus::PLACED) {
-            return true;
-        } else {
-            return $this->validateTransactionIsSuccessful($transactionHash);
-        }
+        return $this->verifyTransaction($order);
     }
 
-    public function processHandshake(Order $order, string $transactionHash): bool
+    /**
+     * @throws ErrorException
+     * @throws TransporterException
+     */
+    public function processHandshake(Order $order): bool
     {
-        $orderPayment = $order->firstOrderPayment;
-            
-        $this->initializeWeb3FromOrderPayment($orderPayment);
-
-        // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
-        if (json_decode($orderPayment->response, true)['txn_hash'] !== $transactionHash) {
-            return false;
-        }
-    
-        //TODO: Check if we also should support this for confirmed/graded orders
-        if ($order->order_status_id === OrderStatus::PLACED) {
-            return true;
-        } else {
-            return $this->validateTransactionIsSuccessful($transactionHash);
-        }
+        return $this->verifyTransaction($order);
     }
 
     public function refund(Order $order, array $data): array
@@ -190,6 +181,27 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         $this->web3 = new Web3(config('web3networks.' . $this->paymentBlockChainNetworkId. '.rpc_urls')[0]);
     }
 
+    /**
+     * @throws ErrorException
+     * @throws TransporterException
+     */
+    protected function verifyTransaction(Order $order): bool
+    {
+        if ($order->order_status_id === OrderStatus::PLACED) {
+            return true;
+        }
+
+        $orderPayment = $order->firstOrderPayment;
+
+        $this->initializeWeb3FromOrderPayment($orderPayment);
+
+        return $this->validateTransactionIsSuccessful(json_decode($orderPayment->response, true)['txn_hash']);
+    }
+
+    /**
+     * @throws ErrorException
+     * @throws TransporterException
+     */
     protected function validateTransactionIsSuccessful(string $transactionHash): bool
     {
         $transactionDetails = $this->getTransactionDetails($transactionHash);
@@ -197,11 +209,14 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         return $transactionDetails['status'] === self::COMPLETED;
     }
 
+    /**
+     * @throws OrderPaymentIsIncorrect
+     */
     protected function validateTransaction(array $data, array $transactionData): bool
     {
-        $amountThresholdPercentage = (float) 2;
+        $amountThresholdPercentage = 2.0;
 
-        //Verify that transaction is going to correct destination and amount is between 2% tange
+        // Verify that transaction is going to correct destination and amount is between 2% range
         if (strtolower($transactionData['destination_wallet']) !== strtolower(config('web3networks.' . $this->paymentBlockChainNetworkId. '.collector_coin_wallet'))
         || $transactionData['token_amount'] < $data['amount'] * (1 - ($amountThresholdPercentage / 100))
         || $transactionData['token_amount'] > $data['amount'] * (1 + ($amountThresholdPercentage / 100))) {
@@ -211,6 +226,9 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         return true;
     }
 
+    /**
+     * @throws TransactionHashIsAlreadyInUse
+     */
     protected function validateTransactionHashIsNotDuplicate(Order $order, string $transactionHash): bool
     {
         $duplicatePayments = OrderPayment::whereRelation('paymentMethod', 'code', 'collector_coin')

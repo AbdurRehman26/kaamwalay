@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Exceptions\API\Admin\Order;
+namespace App\Exceptions\Services\Payment;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class FailedRefund extends Exception
+class TransactionDetailsCouldNotBeObtained extends Exception
 {
-    /**
-     * @var string
-     */
-    protected $message = 'Refund is Failed due to some error';
-    /**
-     * @var int
-     */
-    protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
+    /** @var string */
+    protected $message = 'Transaction details could not be obtained.';
+
+    /** @var int */
+    protected $code = Response::HTTP_BAD_REQUEST;
 
     /**
      * @param Request|array $request

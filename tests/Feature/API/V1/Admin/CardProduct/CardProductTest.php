@@ -71,7 +71,7 @@ test('admins can create cards manually', function () {
         'card_set_name' => "Admin Set",
         'card_series_name' => "Admin Series",
         'release_date' => "2021-11-06T00:00:00.000000Z",
-        'release_year' => "2021",
+        'release_year' => 2021,
         'card_number_order' => "001",
         'image_path' => "http://www.google.com",
         'language' => "English",

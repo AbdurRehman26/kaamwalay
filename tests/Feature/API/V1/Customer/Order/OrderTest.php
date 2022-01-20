@@ -428,12 +428,12 @@ it('throws error if using unsupported network', function () {
 
     $response->assertStatus(422);
     $response->assertJsonStructure([
-        'errors' => ['payment_blockchain_network']
+        'errors' => ['payment_blockchain_network'],
     ]);
 
     $response->assertJsonFragment([
         'errors' => [
-            'payment_blockchain_network' => ['The selected payment blockchain network is invalid.']
+            'payment_blockchain_network' => ['The selected payment blockchain network is invalid.'],
         ],
     ]);
 });

@@ -2,15 +2,9 @@
 
 namespace App\Console\Commands\Orders;
 
-use App\Exceptions\API\Customer\Order\PaymentBlockchainNetworkNotSupported;
-use App\Models\Order;
-use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Payment\PaymentHandshakeService;
-use App\Services\Payment\PaymentService;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class ProcessPaymentHandshake extends Command
 {

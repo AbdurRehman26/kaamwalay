@@ -41,6 +41,7 @@ use Illuminate\Http\Request;
  * @property mixed $order_status_id
  * @property mixed $extra_charge_total
  * @property mixed $refund_total
+ * @property mixed $user_id
  * @method orderItems()
  * @method orderStatusHistory()
  * @method getTotalGradedItems()
@@ -63,6 +64,7 @@ class OrderResource extends BaseResource
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
+            'customer_id' => $this->user_id,
             'created_at' => $this->formatDate($this->created_at),
             'reviewed_by' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $history?->user?->getFullName()),
             'reviewed_at' => $this->reviewedBy(fn (?OrderStatusHistory $history) => $this->formatDate($history?->updated_at)),
@@ -91,6 +93,9 @@ class OrderResource extends BaseResource
             'refund_total' => $this->refund_total,
             'coupon' => $this->whenLoaded('coupon', CouponResource::class),
             'discounted_amount' => $this->discounted_amount,
+            'payment_method_discounted_amount' => $this->payment_method_discounted_amount,
+            'payment_method_id' => $this->payment_method_id,
+            'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
         ];
     }
 

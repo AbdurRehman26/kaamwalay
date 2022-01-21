@@ -1,437 +1,2122 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateAdminShipments\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateAdminShipments\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
 
 		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateCustomerShipments\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateCustomerShipments\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\IncorrectOrderStatus\\:\\:\\$code has no typehint specified\\.$#"
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),array\\<string, mixed\\>\\>\\:\\:each\\(\\) expects callable\\(array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}, \\(int\\|string\\)\\)\\: bool\\|void, Closure\\(Illuminate\\\\Support\\\\Collection, string\\)\\: void given\\.$#"
+			count: 1
+			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: app/Console/Commands/RevenueStats/UpdateRevenueStats.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\IncorrectOrderStatus\\:\\:\\$code has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/IncorrectOrderStatus.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\IncorrectOrderStatus\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\IncorrectOrderStatus\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/IncorrectOrderStatus.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderCanNotBeMarkedAsGraded\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderCanNotBeMarkedAsGraded\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/Order/OrderCanNotBeMarkedAsGraded.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderFoldersOnDropboxNotCreated\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderFoldersOnDropboxNotCreated\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/Order/OrderFoldersOnDropboxNotCreated.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemDoesNotBelongToOrder\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemDoesNotBelongToOrder\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/Order/OrderItem/OrderItemDoesNotBelongToOrder.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemIsNotGraded\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemIsNotGraded\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/Order/OrderItem/OrderItemIsNotGraded.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\ShipmentNotUpdated\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\Order\\\\ShipmentNotUpdated\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/Order/ShipmentNotUpdated.php
 
 		-
-			message: "#^Method App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			message: "#^Method App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:render\\(\\) has parameter \\$request with no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/OrderCanNotBeMarkedAsReviewed.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:\\$code has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:\\$code has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/OrderCanNotBeMarkedAsReviewed.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderCanNotBeMarkedAsReviewed\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/OrderCanNotBeMarkedAsReviewed.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderStatusHistoryWasAlreadyAssigned\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Admin\\\\OrderStatusHistoryWasAlreadyAssigned\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Admin/OrderStatusHistoryWasAlreadyAssigned.php
 
 		-
-			message: "#^Method App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			message: "#^Method App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:render\\(\\) has parameter \\$request with no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Auth/AuthenticationException.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:\\$code has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:\\$code has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Auth/AuthenticationException.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Auth\\\\AuthenticationException\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Auth/AuthenticationException.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\CustomerShipmentNotUpdated\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\CustomerShipmentNotUpdated\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/CustomerShipmentNotUpdated.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ErrorInCustomerAddress\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ErrorInCustomerAddress\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/ErrorInCustomerAddress.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ErrorInDeclaredValue\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ErrorInDeclaredValue\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/ErrorInDeclaredValue.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\GrandTotalValueLimitReached\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\GrandTotalValueLimitReached\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/GrandTotalValueLimitReached.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ItemDeclaredValueLimitReached\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\ItemDeclaredValueLimitReached\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/ItemDeclaredValueLimitReached.php
 
 		-
-			message: "#^Method App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			message: "#^Method App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:render\\(\\) has parameter \\$request with no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/OrderNotPayable.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:\\$code has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:\\$code has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/OrderNotPayable.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPayable\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/OrderNotPayable.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPlaced\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\API\\\\Customer\\\\Order\\\\OrderNotPlaced\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/API/Customer/Order/OrderNotPlaced.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\InvoiceNotUploaded\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^PHPDoc type array of property App\\\\Exceptions\\\\Handler\\:\\:\\$dontFlash is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Foundation\\\\Exceptions\\\\Handler\\:\\:\\$dontFlash\\.$#"
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Exceptions\\\\Handler\\:\\:\\$dontReport is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Foundation\\\\Exceptions\\\\Handler\\:\\:\\$dontReport\\.$#"
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\InvoiceNotUploaded\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/Services/Payment/InvoiceNotUploaded.php
 
 		-
-			message: "#^Method App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			message: "#^Method App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:render\\(\\) has parameter \\$request with no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/Services/Payment/PaymentMethodNotSupported.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:\\$code has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:\\$code has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/Services/Payment/PaymentMethodNotSupported.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentMethodNotSupported\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/Services/Payment/PaymentMethodNotSupported.php
 
 		-
-			message: "#^Method App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:render\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			message: "#^Method App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:render\\(\\) has parameter \\$request with no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/Services/Payment/PaymentNotVerified.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:\\$code has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:\\$code has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/Services/Payment/PaymentNotVerified.php
 
 		-
-			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:\\$message has no typehint specified\\.$#"
+			message: "#^Property App\\\\Exceptions\\\\Services\\\\Payment\\\\PaymentNotVerified\\:\\:\\$message has no type specified\\.$#"
 			count: 1
 			path: app/Exceptions/Services/Payment/PaymentNotVerified.php
 
 		-
-			message: "#^Method App\\\\Http\\\\APIClients\\\\AGSClient\\:\\:createCertificates\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\APIClients\\\\AGSClient\\:\\:createCertificates\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/APIClients/AGSClient.php
 
 		-
-			message: "#^Method App\\\\Http\\\\APIClients\\\\AGSClient\\:\\:updateHumanGrades\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\APIClients\\\\AGSClient\\:\\:updateHumanGrades\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/APIClients/AGSClient.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Controllers\\\\AdminController\\:\\:getView\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Controllers\\\\AdminController\\:\\:getView\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/Controllers/AdminController.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Controllers\\\\AuthController\\:\\:getView\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Controllers\\\\AuthController\\:\\:getView\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/Controllers/AuthController.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Controllers\\\\DashboardController\\:\\:getView\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Controllers\\\\DashboardController\\:\\:getView\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/Controllers/DashboardController.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/Filters/AdminOrderSearchFilter.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Http/Filters/AdminOrderSearchFilter.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/Filters/UserCardSearchFilter.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Http/Filters/UserCardSearchFilter.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/Resources/API/BaseResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$default with no typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$default with no type specified\\.$#"
 			count: 1
 			path: app/Http/Resources/API/BaseResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$internal with no typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$internal with no type specified\\.$#"
 			count: 1
 			path: app/Http/Resources/API/BaseResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$relationship with no typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$relationship with no type specified\\.$#"
 			count: 1
 			path: app/Http/Resources/API/BaseResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$resource with no typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has parameter \\$resource with no type specified\\.$#"
 			count: 1
 			path: app/Http/Resources/API/BaseResource.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\Services\\\\AGS\\\\CardGradeResource\\:\\:ignoreParams\\(\\) has parameter \\$params with no typehint specified\\.$#"
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\Services\\\\AGS\\\\CardGradeResource\\:\\:ignoreParams\\(\\) has parameter \\$params with no type specified\\.$#"
 			count: 1
 			path: app/Http/Resources/API/Services/AGS/CardGradeResource.php
 
 		-
-			message: "#^Property App\\\\Jobs\\\\Admin\\\\Order\\\\CreateOrderFoldersOnDropbox\\:\\:\\$tries has no typehint specified\\.$#"
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableResource\\:\\:\\$is_active\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableResource\\:\\:\\$label\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponLogResource\\:\\:\\$order\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponLogResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponLogResource\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponLogResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$available_from\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$available_till\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$coupon_applicable_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$coupon_status_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$discount_value\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$type\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponStatResource\\:\\:\\$times_used\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponStatResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponStatResource\\:\\:\\$total_discount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponStatResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponStatResource\\:\\:\\$total_revenue\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponStatResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponStatusResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponStatusResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponStatusResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\CustomerResource\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\CustomerResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/CustomerResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\CustomerResource\\:\\:getFullName\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\PaymentPlanResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/PaymentPlanResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\PaymentPlanResource\\:\\:\\$price\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/PaymentPlanResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$customer_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$phone\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$profile_image\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$update_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:\\$wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:getFullName\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Customer\\\\CustomerResource\\:\\:orders\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Customer/CustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$customer_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$first_name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$last_name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerResource\\:\\:\\$phone\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$shipment_date\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$shipping_provider\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$tracking_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$shipment_date\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$shipping_provider\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$tracking_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$cardProduct\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$declared_value_per_unit\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$internal_notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_item_status_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$quantity\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:orderItemStatusHistory\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$shipment_date\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$shipping_provider\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$tracking_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemShipmentResource\\:\\:\\$tracking_url\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$orderItemStatus\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderLabel\\\\OrderLabelResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderLabel/OrderLabelResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderLabel\\\\OrderLabelResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderLabel/OrderLabelResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderLabel\\\\OrderLabelResource\\:\\:\\$order_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderLabel/OrderLabelResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderLabel\\\\OrderLabelResource\\:\\:\\$path\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderLabel/OrderLabelResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderLabel\\\\OrderLabelResource\\:\\:\\$updated_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderLabel/OrderLabelResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$arrived_at\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$grand_total\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$orderItems\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$order_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$response\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
+			count: 3
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$payment_method_discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$payment_method_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderShipmentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderShipmentResource\\:\\:\\$shipment_date\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderShipmentResource\\:\\:\\$shipping_provider\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderShipmentResource\\:\\:\\$tracking_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderShipmentResource\\:\\:\\$tracking_url\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusHistoryResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusHistoryResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusHistoryResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusHistoryResource\\:\\:\\$order_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusHistoryResource\\:\\:\\$order_status_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusHistoryResource\\:\\:\\$updated_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusResource\\:\\:\\$updated_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$ai_model_numbers\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$generated_images\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$grade_delta\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$grading_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$human_grade_values\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$orderItem\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$overall_grade_nickname\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$robo_grade_values\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$updated_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\UserCardResource\\:\\:getRoundedOverallValues\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$cardCategory\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$cardSet\\.$#"
+			count: 4
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$edition\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$image_path\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$language\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$surface\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:\\$variant\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getFormattedCardNumber\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getLongName\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:getShortName\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardProduct\\\\CardProductResource\\:\\:isCardInformationComplete\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSeries/CardSeriesResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesResource\\:\\:\\$image_path\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSeries/CardSeriesResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSeries/CardSeriesResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSet\\\\CardSetResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSet/CardSetResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSet\\\\CardSetResource\\:\\:\\$image_path\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSet/CardSetResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSet\\\\CardSetResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSet/CardSetResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSet\\\\CardSetResource\\:\\:\\$release_date\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSet/CardSetResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Country\\\\CountryResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Country/CountryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Country\\\\CountryResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Country/CountryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Country\\\\CountryResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Country/CountryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$address\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$city\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$country\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$first_name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$flat\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$last_name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$phone\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$state\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\CustomerAddressResource\\:\\:\\$zip\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/CustomerAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\State\\\\StateResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/State/StateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\State\\\\StateResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/State/StateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\State\\\\StateResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Address/State/StateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Coupon\\\\CouponResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Coupon\\\\CouponResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Coupon\\\\CouponResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\Invoice\\\\InvoiceResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/Invoice/InvoiceResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\Invoice\\\\InvoiceResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/Invoice/InvoiceResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\Invoice\\\\InvoiceResource\\:\\:\\$invoice_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/Invoice/InvoiceResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\Invoice\\\\InvoiceResource\\:\\:\\$path\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/Invoice/InvoiceResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\Invoice\\\\InvoiceResource\\:\\:\\$updated_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/Invoice/InvoiceResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$address\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$city\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$country\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$first_name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$flat\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$last_name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$phone\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$state\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderAddressResource\\:\\:\\$zip\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderAddressResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$amount_paid_from_wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$billingAddress\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$coupon\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$firstOrderPayment\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$grand_total_to_be_paid\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$paymentPlan\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$payment_method_discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$payment_method_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$service_fee\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$shippingAddress\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$shippingMethod\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$shipping_fee\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:getGroupedOrderItems\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$shipment_date\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$shipping_provider\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$tracking_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$shipment_date\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$shipping_provider\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemCustomerShipmentResource\\:\\:\\$tracking_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemCustomerShipmentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$cardProduct\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$declared_value_per_unit\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$orderItemStatus\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$quantity\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$userCard\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusHistoryResource\\:\\:\\$orderItemStatus\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusHistoryResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderItem\\\\OrderItemStatusResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderItem/OrderItemStatusResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:\\$arrived_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:\\$order_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderListResource\\:\\:orderItems\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$response\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$billingAddress\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$extra_charge_total\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$firstOrderPayment\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$grand_total\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$invoice\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$orderItems\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$order_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$paymentPlan\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$payment_method_discounted_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$payment_method_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$refund_total\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$service_fee\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$shippingAddress\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$shippingMethod\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$shipping_fee\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:orderItems\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentMethod\\\\PaymentMethodResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentMethod/PaymentMethodResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentMethod\\\\PaymentMethodResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentMethod/PaymentMethodResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentMethod\\\\PaymentMethodResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentMethod/PaymentMethodResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentPlan\\\\PaymentPlanResource\\:\\:\\$discount_percentage\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentPlan/PaymentPlanResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentPlan\\\\PaymentPlanResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentPlan/PaymentPlanResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentPlan\\\\PaymentPlanResource\\:\\:\\$max_protection_amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentPlan/PaymentPlanResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentPlan\\\\PaymentPlanResource\\:\\:\\$price\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentPlan/PaymentPlanResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentPlan\\\\PaymentPlanResource\\:\\:\\$price_before_discount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentPlan/PaymentPlanResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentPlan\\\\PaymentPlanResource\\:\\:\\$turnaround\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentPlan/PaymentPlanResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\ShippingMethod\\\\ShippingMethodResource\\:\\:\\$code\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/ShippingMethod/ShippingMethodResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\ShippingMethod\\\\ShippingMethodResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/ShippingMethod/ShippingMethodResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\ShippingMethod\\\\ShippingMethodResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/ShippingMethod/ShippingMethodResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Role\\\\RoleResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Role/RoleResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Role\\\\RoleResource\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Role/RoleResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$customer_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$first_name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$last_name\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$phone\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$profile_image\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$roles\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$stripe_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$username\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$wallet\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardListResource\\:\\:\\$certificate_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardListResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardListResource\\:\\:\\$orderItem\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardResource\\:\\:\\$certificate_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardResource\\:\\:\\$generated_images\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardResource\\:\\:\\$human_grade_values\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardResource\\:\\:\\$orderItem\\.$#"
+			count: 5
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardResource\\:\\:\\$overall_values\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Wallet\\\\WalletResource\\:\\:\\$balance\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Wallet/WalletResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Wallet\\\\WalletResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Wallet/WalletResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Files\\\\PresignUploadResource\\:\\:getContentType\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Files\\\\PresignUploadResource\\:\\:getFileName\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Files\\\\PresignUploadResource\\:\\:getKey\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Files\\\\PresignUploadResource\\:\\:getPublicUrl\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Files\\\\PresignUploadResource\\:\\:getSignedUrl\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Files\\\\PresignUploadResource\\:\\:getSize\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
+
+		-
+			message: "#^Property App\\\\Jobs\\\\Admin\\\\Order\\\\CreateOrderFoldersOnDropbox\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Jobs/Admin/Order/CreateOrderFoldersOnDropbox.php
 
 		-
-			message: "#^Property App\\\\Jobs\\\\Email\\\\SendEmail\\:\\:\\$tries has no typehint specified\\.$#"
+			message: "#^Property App\\\\Jobs\\\\Email\\\\SendEmail\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Jobs/Email/SendEmail.php
 
 		-
-			message: "#^Property App\\\\Jobs\\\\Email\\\\SendScheduledEmail\\:\\:\\$tries has no typehint specified\\.$#"
+			message: "#^Property App\\\\Jobs\\\\Email\\\\SendScheduledEmail\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Jobs/Email/SendScheduledEmail.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\Order\\\\UpdateAutoSaveAttribute\\:\\:handle\\(\\) has no return typehint specified\\.$#"
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
+			count: 1
+			path: app/Listeners/API/Admin/Order/ExtraChargeSuccessfulListener.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Listeners/API/Admin/Order/ExtraChargeSuccessfulListener.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: app/Listeners/API/Admin/Order/RefundSuccessfulListener.php
+
+		-
+			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\Order\\\\UpdateAutoSaveAttribute\\:\\:handle\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Admin/Order/UpdateAutoSaveAttribute.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:handleGraded\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:handleGraded\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:handleGraded\\(\\) has parameter \\$event with no typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:handleGraded\\(\\) has parameter \\$event with no type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:updatePopReports\\(\\) has parameter \\$event with no typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Admin\\\\OrderItem\\\\OrderItemStatusChangedListener\\:\\:updatePopReports\\(\\) has parameter \\$event with no type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleGraded\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleGraded\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handlePlaced\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handlePlaced\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleShipped\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleShipped\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:scheduleEmail\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:scheduleEmail\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendAdminEmail\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendAdminEmail\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Order/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Services/GenerateOrderInvoice.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has parameter \\$exception with no typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has parameter \\$exception with no type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Services/GenerateOrderInvoice.php
 
 		-
-			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:\\$tries has no typehint specified\\.$#"
+			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Services/GenerateOrderInvoice.php
 
 		-
-			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\SendOrderPaidNotificationToSlack\\:\\:\\$tries has no typehint specified\\.$#"
+			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\SendOrderPaidNotificationToSlack\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Services/SendOrderPaidNotificationToSlack.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\UpdateRevenueStats\\:\\:handle\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\UpdateRevenueStats\\:\\:handle\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Services/UpdateRevenueStats.php
 
 		-
-			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\UpdateRevenueStats\\:\\:\\$tries has no typehint specified\\.$#"
+			message: "#^Property App\\\\Listeners\\\\API\\\\Services\\\\UpdateRevenueStats\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Listeners/API/Services/UpdateRevenueStats.php
 
 		-
-			message: "#^Method App\\\\Models\\\\OrderItemStatus\\:\\:scopeForStatus\\(\\) has parameter \\$status with no typehint specified\\.$#"
+			message: "#^PHPDoc type array of property App\\\\Models\\\\CardProduct\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/CardProduct.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Country\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/Country.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\CustomerAddress\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/CustomerAddress.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Invoice\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/Invoice.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Order\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderAddress\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderAddress.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderCustomerShipment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderCustomerShipment.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderItem\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderItemCustomerShipment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderItemCustomerShipment.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderItemShipment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderItemShipment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItemStatus\\:\\:scopeForStatus\\(\\) has parameter \\$status with no type specified\\.$#"
 			count: 1
 			path: app/Models/OrderItemStatus.php
 
 		-
-			message: "#^Method App\\\\Models\\\\User\\:\\:setPasswordAttribute\\(\\) has no return typehint specified\\.$#"
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderItemStatus\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderItemStatus.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderItemStatusHistory\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderItemStatusHistory.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderLabel\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderLabel.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderPayment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderShipment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderShipment.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderState\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderState.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderStatus\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/OrderStatus.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\PaymentMethod\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/PaymentMethod.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\PaymentPlan\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/PaymentPlan.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\PopReportsCard\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/PopReportsCard.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\PopReportsSeries\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/PopReportsSeries.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\PopReportsSet\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/PopReportsSet.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\RevenueStatsDaily\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/RevenueStatsDaily.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\RevenueStatsMonthly\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/RevenueStatsMonthly.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\ScheduledEmail\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/ScheduledEmail.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\ShippingMethod\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/ShippingMethod.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\State\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/State.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:setPasswordAttribute\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Models/User.php
 
 		-
-			message: "#^Method App\\\\Models\\\\User\\:\\:setPasswordAttribute\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			message: "#^Method App\\\\Models\\\\User\\:\\:setPasswordAttribute\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Models/User.php
 
 		-
-			message: "#^Method App\\\\Models\\\\UserCard\\:\\:getRoundedOverallValues\\(\\) has no return typehint specified\\.$#"
+			message: "#^PHPDoc type array of property App\\\\Models\\\\User\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserCard\\:\\:getRoundedOverallValues\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Models/UserCard.php
 
 		-
-			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:toSlack\\(\\) has no return typehint specified\\.$#"
+			message: "#^PHPDoc type array of property App\\\\Models\\\\UserDevice\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/UserDevice.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
+			count: 2
+			path: app/Notifications/OrderPaymentProcessedNotification.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Notifications/OrderPaymentProcessedNotification.php
+
+		-
+			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:toSlack\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Notifications/OrdersExported.php
 
 		-
-			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:toSlack\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
+			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:toSlack\\(\\) has parameter \\$notifiable with no type specified\\.$#"
 			count: 1
 			path: app/Notifications/OrdersExported.php
 
 		-
-			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:via\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:via\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Notifications/OrdersExported.php
 
 		-
-			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:via\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
+			message: "#^Method App\\\\Notifications\\\\OrdersExported\\:\\:via\\(\\) has parameter \\$notifiable with no type specified\\.$#"
 			count: 1
 			path: app/Notifications/OrdersExported.php
 
 		-
-			message: "#^Method App\\\\Notifications\\\\RevenueStatsUpdated\\:\\:toSlack\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Notifications\\\\RevenueStatsUpdated\\:\\:toSlack\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Notifications/RevenueStatsUpdated.php
 
 		-
-			message: "#^Method App\\\\Notifications\\\\RevenueStatsUpdated\\:\\:toSlack\\(\\) has parameter \\$notifiable with no typehint specified\\.$#"
+			message: "#^Method App\\\\Notifications\\\\RevenueStatsUpdated\\:\\:toSlack\\(\\) has parameter \\$notifiable with no type specified\\.$#"
 			count: 1
 			path: app/Notifications/RevenueStatsUpdated.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\OrderItemPolicy\\:\\:review\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Policies\\\\OrderItemPolicy\\:\\:review\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Policies/OrderItemPolicy.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:create\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:create\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Policies/OrderPolicy.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:review\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:review\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Policies/OrderPolicy.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:update\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:update\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Policies/OrderPolicy.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:view\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:view\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Policies/OrderPolicy.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:viewAny\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Policies\\\\OrderPolicy\\:\\:viewAny\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Policies/OrderPolicy.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\UserCardPolicy\\:\\:view\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Policies\\\\UserCardPolicy\\:\\:view\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Policies/UserCardPolicy.php
 
 		-
-			message: "#^Method App\\\\Policies\\\\UserCardPolicy\\:\\:viewAny\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Policies\\\\UserCardPolicy\\:\\:viewAny\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Policies/UserCardPolicy.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\CardGradingService\\:\\:getAverage\\(\\) has parameter \\$values with no typehint specified\\.$#"
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 1
+			path: app/Providers/RouteServiceProvider.php
+
+		-
+			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+			count: 1
+			path: app/Providers/RouteServiceProvider.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 4
+			path: app/Services/AGS/AgsService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\CardGradingService\\:\\:getAverage\\(\\) has parameter \\$values with no type specified\\.$#"
 			count: 1
 			path: app/Services/Admin/CardGradingService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no typehint specified\\.$#"
+			message: "#^Variable \\$orderShipment in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: app/Services/Admin/Order/ShipmentService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no type specified\\.$#"
 			count: 1
 			path: app/Services/Admin/OrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:updateNotes\\(\\) has parameter \\$notes with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:updateNotes\\(\\) has parameter \\$notes with no type specified\\.$#"
 			count: 1
 			path: app/Services/Admin/OrderService.php
 
@@ -441,22 +2126,22 @@ parameters:
 			path: app/Services/Admin/OrderStatusHistoryService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderStatusHistoryService\\:\\:addStatusToOrder\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderStatusHistoryService\\:\\:addStatusToOrder\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Admin/OrderStatusHistoryService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:from\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:from\\(\\) has parameter \\$key with no type specified\\.$#"
 			count: 1
 			path: app/Services/ConfigurationService/ConfigurationValue.php
 
 		-
-			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:from\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:from\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Services/ConfigurationService/ConfigurationValue.php
 
 		-
-			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:keyName\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:keyName\\(\\) has parameter \\$key with no type specified\\.$#"
 			count: 1
 			path: app/Services/ConfigurationService/ConfigurationValue.php
 
@@ -466,67 +2151,67 @@ parameters:
 			path: app/Services/Helpers/helpers.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:process\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:process\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:saveOrder\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:saveOrder\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:startOrder\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:startOrder\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has parameter \\$customerAddress with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has parameter \\$customerAddress with no type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderAddresses\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderAddresses\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderItems\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderItems\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderPayment\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderPayment\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentMethod\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentMethod\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentPlan\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentPlan\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingFee\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingFee\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingMethod\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingMethod\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:validate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/CreateOrderService.php
 
@@ -536,59 +2221,64 @@ parameters:
 			path: app/Services/Order/OrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no type specified\\.$#"
 			count: 1
 			path: app/Services/Order/OrderService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$currentDate with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$currentDate with no type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$orderPayments with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$orderPayments with no type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$revenue with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has parameter \\$revenue with no type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:calculateStats\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:calculateStats\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:calculateStats\\(\\) has parameter \\$revenue with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:calculateStats\\(\\) has parameter \\$revenue with no type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\CustomerAddressValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\CustomerAddressValidator\\:\\:validate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/Validators/CustomerAddressValidator.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\GrandTotalValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\GrandTotalValidator\\:\\:validate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/Validators/GrandTotalValidator.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\ItemsDeclaredValueValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\ItemsDeclaredValueValidator\\:\\:validate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/Validators/ItemsDeclaredValueValidator.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Payment\\\\InvoiceService\\:\\:createAndStoreInvoiceRecord\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\Payment\\\\InvoiceService\\:\\:createAndStoreInvoiceRecord\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Payment/InvoiceService.php
+
+		-
+			message: "#^Cannot access property \\$id on array\\|object\\|string\\.$#"
+			count: 1
+			path: app/Services/Payment/Providers/PaypalService.php
 
 		-
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
@@ -596,37 +2286,37 @@ parameters:
 			path: app/Services/Payment/Providers/StripeService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:cleanColumnName\\(\\) has parameter \\$grade with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:cleanColumnName\\(\\) has parameter \\$grade with no type specified\\.$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:generateReportEmptyArray\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:generateReportEmptyArray\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateCardProductsReport\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateCardProductsReport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSeriesReport\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSeriesReport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSetsReport\\(\\) has no return typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSetsReport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumber\\:\\:toSql\\(\\) has parameter \\$column with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumber\\:\\:toSql\\(\\) has parameter \\$column with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumber.php
 
 		-
-			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumberService\\:\\:get\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumberService\\:\\:get\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumberService.php
 

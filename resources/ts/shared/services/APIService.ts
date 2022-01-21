@@ -1,5 +1,7 @@
 import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Map } from 'immutable';
+import { DefaultAPIEndpointOptions } from '@shared/constants/DefaultAPIEndpointOptions';
+import { APIEndpointConfig } from '@shared/interfaces/APIEndpointConfig';
 import { Inject } from '../decorators/Inject';
 import { Injectable } from '../decorators/Injectable';
 import { buildUrl } from '../lib/api/buildUrl';
@@ -7,8 +9,6 @@ import { cleanPath } from '../lib/strings/cleanPath';
 import { fromApiPropertiesObject } from '../lib/utils/fromApiPropertiesObject';
 import { toApiPropertiesObject } from '../lib/utils/toApiPropertiesObject';
 import { AuthenticationService } from './AuthenticationService';
-import { APIEndpointConfig } from '@shared/interfaces/APIEndpointConfig';
-import { DefaultAPIEndpointOptions } from '@shared/constants/DefaultAPIEndpointOptions';
 
 @Injectable('APIService')
 export class APIService {
@@ -169,7 +169,15 @@ export class APIService {
         try {
             const url = cleanPath(`${response.config.baseURL}/${response.config.url}`);
             console.groupCollapsed(`HTTP Request: ${response.config.method?.toUpperCase()} ${url}`);
-            console.log(response);
+            console.log('params:', response.config.params);
+            console.log('headers:', response.config.headers);
+
+            if (response.data?.data && Array.isArray(response.data?.data)) {
+                console.table([response.data.meta]);
+                console.table(response.data.data);
+            } else {
+                console.log(response.data);
+            }
             console.groupEnd();
         } catch (e) {
             // pass

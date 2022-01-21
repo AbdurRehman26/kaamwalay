@@ -96,7 +96,11 @@ export const useStyles = makeStyles(
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
         },
-        gradeColumn: {},
+        gradeColumn: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+        },
     }),
     { name: 'SubmissionViewCards' },
 );

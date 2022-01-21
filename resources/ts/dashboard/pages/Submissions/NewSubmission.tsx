@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     backStep,
     createOrder,
+    getAvailableCredit,
     getSavedAddresses,
     getShippingFee,
     getStatesList,
@@ -116,6 +117,7 @@ export function NewSubmission() {
             });
             dispatch(nextStep());
             dispatch(setIsNextLoading(false));
+            await dispatch(getAvailableCredit()).unwrap();
             window.scroll(0, 0);
             pushToDataLayer({ event: 'google-ads-shipping-info-submitted' });
             return;

@@ -39,5 +39,6 @@ class SendOrderPaidCustomersToMailchimp extends Command
     public function handle(SendCustomersToMailchimpServices $mailChimpService)
     {
         $mailChimpService->createListOnMailchimp(SendCustomersToMailchimpServices::TEMPLATE_ORDER_PAID_CUSTOMERS);
+        return 0;
     }
 }

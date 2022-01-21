@@ -21,7 +21,7 @@ class SendOrderPaidCustomersToMailchimp implements ShouldQueue
      */
     public function __construct(
         protected User $user
-    ){
+    ) {
     }
 
     /**

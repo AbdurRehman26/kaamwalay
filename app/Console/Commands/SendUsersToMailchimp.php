@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Services\Mailchimp\SendCustomersToMailchimpServices;
+use Illuminate\Console\Command;
 
 class SendUsersToMailchimp extends Command
 {

@@ -8,13 +8,12 @@ use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Payment\Providers\TestingStripeService;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
-
     $user = User::factory()->create([
         'stripe_id' => Str::random(25),
     ]);

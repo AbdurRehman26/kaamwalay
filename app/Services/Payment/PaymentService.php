@@ -139,7 +139,7 @@ class PaymentService
             OrderPaid::dispatch($this->order);
 
             $user = auth()->user();
-            if (!$user->is_first_order){
+            if (! $user->is_first_order) {
                 SendOrderPaidCustomersToMailchimp::dispatch($user);
             }
         }

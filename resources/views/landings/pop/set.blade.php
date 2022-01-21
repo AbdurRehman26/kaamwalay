@@ -3,9 +3,9 @@
         <div class="container pop-hero__container">
             <nav class="pop-hero__breadcrumbs">
                 <ol class="pop-hero__breadcrumbs__list">
-                    <li><a href="{{route('pop.report')}}" class="pop-hero__breadcrumbs__list__link">Population Report</a></li>
+                    <li><a href="{{route('pop.categories', ['cardCategory' => $cardCategory->id])}}" class="pop-hero__breadcrumbs__list__link">{{ $cardCategory->name }} POP Report</a></li>
                     <li><span class="mx-2">/</span></li>
-                    <li><a href="{{route('pop.series', ['cardSeries' => $cardSet->card_series_id])}}" class="pop-hero__breadcrumbs__list__link">{{$cardSet->cardSeries->name}}</a></li>
+                    <li><a href="{{route('pop.series', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSet->card_series_id])}}" class="pop-hero__breadcrumbs__list__link">{{$cardSet->cardSeries->name}}</a></li>
                     <li><span class="mx-2">/</span></li>
                     <li>{{$cardSet->name}}</li>
                 </ol>

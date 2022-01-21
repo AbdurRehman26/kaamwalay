@@ -3,7 +3,7 @@
         <div class="container pop-hero__container">
             <nav class="pop-hero__breadcrumbs">
                 <ol class="pop-hero__breadcrumbs__list">
-                    <li><a href="{{route('pop.report')}}" class="pop-hero__breadcrumbs__list__link">Population Report</a></li>
+                    <li><a href="{{route('pop.categories', ['cardCategory' => $cardCategory->id])}}" class="pop-hero__breadcrumbs__list__link">{{ $cardCategory->name }} POP Report</a></li>
                     <li><span class="mx-2">/</span></li>
                     <li>{{$cardSeries->name}}</li>
                 </ol>
@@ -38,7 +38,7 @@
                         @foreach($data as $i => $cardSetsReport)
                             <tr class="pop-list__table-row">
                                 <td class="pop-list__table-cell pop-list__table-cell--series">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}" class="pop-list__table__info">
+                                    <a href="{{ route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}" class="pop-list__table__info">
                                         <div class="pop-list__table__info-text">
                                             <p class="pop-list__table__info-heading">{{$cardSetsReport->name}}</p>
                                             <p class="pop-list__table__info-subheading">{{$cardSetsReport->release_date->format('m/d/Y')}}</p>
@@ -46,25 +46,25 @@
                                     </a>
                                 </td>
                                 <td class="pop-list__table-cell pop-list__table-cell--grade-title">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
+                                    <a href="{{ route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
                                     Grade
                                     <br/>
                                     +
                                     </a>
                                 </td>
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->pr, 'plusValue' => '-'])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => '-', 'plusValue' => $cardSetsReport->fr])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->good, 'plusValue' => $cardSetsReport->good_plus])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->vg, 'plusValue' => $cardSetsReport->vg_plus])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->vg_ex, 'plusValue' => $cardSetsReport->vg_ex_plus])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->ex, 'plusValue' => $cardSetsReport->ex_plus])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->ex_mt, 'plusValue' => $cardSetsReport->ex_mt_plus])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->nm, 'plusValue' => $cardSetsReport->nm_plus])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->nm_mt, 'plusValue' => $cardSetsReport->nm_mt_plus])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->mint, 'plusValue' => $cardSetsReport->mint_plus])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->gem_mt, 'plusValue' => '-'])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->pr, 'plusValue' => '-'])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => '-', 'plusValue' => $cardSetsReport->fr])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->good, 'plusValue' => $cardSetsReport->good_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->vg, 'plusValue' => $cardSetsReport->vg_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->vg_ex, 'plusValue' => $cardSetsReport->vg_ex_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->ex, 'plusValue' => $cardSetsReport->ex_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->ex_mt, 'plusValue' => $cardSetsReport->ex_mt_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->nm, 'plusValue' => $cardSetsReport->nm_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->nm_mt, 'plusValue' => $cardSetsReport->nm_mt_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->mint, 'plusValue' => $cardSetsReport->mint_plus])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]), 'zeroValue' => $cardSetsReport->gem_mt, 'plusValue' => '-'])
                                 <td class="pop-list__table-cell pop-list__table-cell--total">
-                                    <a href="{{ route('pop.set', ['cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
+                                    <a href="{{ route('pop.set', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSetsReport->card_series_id, 'cardSet' => $cardSetsReport->card_set_id]) }}">
                                         {{$cardSetsReport->total}}
                                         <br/>
                                         {{$cardSetsReport->total_plus}}

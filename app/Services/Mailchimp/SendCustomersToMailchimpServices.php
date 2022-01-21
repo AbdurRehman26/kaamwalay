@@ -12,7 +12,8 @@ class SendCustomersToMailchimpServices
     public const TEMPLATE_SIGN_UP_USERS = 'Robograding Signed Up Users';
     public const TEMPLATE_ORDER_PAID_CUSTOMERS = 'Robograding Orders Paid Customers';
 
-    public function getConfiguration(): \MailchimpMarketing\ApiClient {
+    public function getConfiguration(): \MailchimpMarketing\ApiClient
+    {
         $mailchimpClient = new \MailchimpMarketing\ApiClient();
         $mailchimpClient->setConfig([
             'apiKey' => config('services.mailchimp.apiKey'),
@@ -22,7 +23,8 @@ class SendCustomersToMailchimpServices
         return $mailchimpClient;
     }
 
-    public function createListOnMailchimp(string $template): void {
+    public function createListOnMailchimp(string $template): void
+    {
         $mailchimpClient = $this->getConfiguration();
 
         try {
@@ -50,19 +52,21 @@ class SendCustomersToMailchimpServices
                     'list_id' => $response->id,
                 ]);
             $this->sendExistingUsersToMailchimp($template, $mailchimpClient);
-        } catch(RequestException $ex){
+        } catch (RequestException $ex) {
             Log::debug($ex->getResponse()->getBody());
         }
     }
 
-    public function getListId(string $template): string {
-        return MailchimpUser::where('list_name', $template)->value('list_id'); 
+    public function getListId(string $template): string
+    {
+        return MailchimpUser::where('list_name', $template)->value('list_id');
     }
 
-    public function sendExistingUsersToMailchimp(string $template, \MailchimpMarketing\ApiClient $mailchimpClient): void {
+    public function sendExistingUsersToMailchimp(string $template, \MailchimpMarketing\ApiClient $mailchimpClient): void
+    {
         $list_id = $this->getListId($template);
         
-        if($template === self::TEMPLATE_SIGN_UP_USERS){
+        if ($template === self::TEMPLATE_SIGN_UP_USERS) {
             $users = $users = User::all();
         } else {
             $users = User::with('orders')->whereHas('orders', function ($query) {
@@ -75,8 +79,9 @@ class SendCustomersToMailchimpServices
         }
     }
 
-    public function addDataToList(string $template, User $user, \MailchimpMarketing\ApiClient $mailchimpClient, string $list_id): void{
-        try {    
+    public function addDataToList(string $template, User $user, \MailchimpMarketing\ApiClient $mailchimpClient, string $list_id): void
+    {
+        try {
             $hash = md5(strtolower($user->email));
             $response = $mailchimpClient->lists->setListMember($list_id, $hash, [
             "email_address" => $user->email,
@@ -100,7 +105,8 @@ class SendCustomersToMailchimpServices
         }
     }
 
-    public function sendNewUsers(User $user, string $template): void{
+    public function sendNewUsers(User $user, string $template): void
+    {
         $mailchimpClient = $this->getConfiguration();
         $list_id = $this->getListId($template);
         if ($list_id) {

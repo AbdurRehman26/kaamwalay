@@ -26,6 +26,7 @@ class SendCustomersToMailchimpServices
         $mailchimpClient = $this->getConfiguration();
 
         try {
+            // @phpstan-ignore-next-line
             $response = $mailchimpClient->lists->createList([
                 "name" => $template,
                 "permission_reminder" => "You created account on Robograding",
@@ -78,6 +79,7 @@ class SendCustomersToMailchimpServices
     public function addDataToList(string $template, User $user, \MailchimpMarketing\ApiClient $mailchimpClient, string $list_id): void{
         try {    
             $hash = md5(strtolower($user->email));
+            // @phpstan-ignore-next-line
             $response = $mailchimpClient->lists->setListMember($list_id, $hash, [
             "email_address" => $user->email,
             "status_if_new" => "unsubscribed",

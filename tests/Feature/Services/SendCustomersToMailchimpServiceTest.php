@@ -4,14 +4,14 @@ namespace Tests\Feature\Services;
 
 use App\Models\MailchimpUser;
 use App\Models\User;
-use App\Services\Mailchimp\SendCustomersToMailchimpServices;
+use App\Services\Mailchimp\SendCustomersToMailchimpService;
 use Mockery;
 
 use function Pest\Laravel\assertDatabaseCount;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
-    $this->mockService = Mockery::mock(SendCustomersToMailchimpServices::class);
+    $this->mockService = Mockery::mock(SendCustomersToMailchimpService::class);
 });
 
 it('sends new user to mailchimp', function () {

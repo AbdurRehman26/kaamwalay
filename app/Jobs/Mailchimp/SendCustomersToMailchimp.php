@@ -3,7 +3,7 @@
 namespace App\Jobs\Mailchimp;
 
 use App\Models\User;
-use App\Services\Mailchimp\SendCustomersToMailchimpServices;
+use App\Services\Mailchimp\SendCustomersToMailchimpService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -29,8 +29,8 @@ class SendCustomersToMailchimp implements ShouldQueue
      *
      * @return void
      */
-    public function handle(SendCustomersToMailchimpServices $mailChimpService)
+    public function handle(SendCustomersToMailchimpService $mailChimpService)
     {
-        $mailChimpService->sendNewUsers($this->user, SendCustomersToMailchimpServices::TEMPLATE_SIGN_UP_USERS);
+        $mailChimpService->sendNewUsers($this->user, SendCustomersToMailchimpService::TEMPLATE_SIGN_UP_USERS);
     }
 }

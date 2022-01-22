@@ -7,7 +7,7 @@ use App\Models\User;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 
-class SendCustomersToMailchimpServices
+class SendCustomersToMailchimpService
 {
     public const TEMPLATE_SIGN_UP_USERS = 'Robograding Signed Up Users';
     public const TEMPLATE_ORDER_PAID_CUSTOMERS = 'Robograding Orders Paid Customers';
@@ -58,7 +58,7 @@ class SendCustomersToMailchimpServices
         }
     }
 
-    public function getListId(string $template): string
+    public function getListId(string $template): string|null
     {
         return MailchimpUser::where('list_name', $template)->value('list_id');
     }

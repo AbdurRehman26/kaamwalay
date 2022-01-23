@@ -1,7 +1,8 @@
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { useAdminOrderItemGradeData } from '@admin/pages/Submissions/SubmissionsGrade/useAdminOrderItemGradeData';
-import { useSubmissionsGradeCardStyles } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardStyles';
+import { useAdminOrderItemGradeData } from './useAdminOrderItemGradeData';
+import { useSubmissionsGradeCardStyles } from './SubmissionsGradeCardStyles';
+import { useMemo } from 'react';
 
 interface Props {
     itemIndex: number;
@@ -15,46 +16,56 @@ export function CardActionButtons({ itemIndex, orderID, gradeData, notes, intern
     const orderItemGradeData = useAdminOrderItemGradeData(itemIndex, orderID, gradeData, notes, internalNotes);
     const classes = useSubmissionsGradeCardStyles();
 
-    return (
-        <Grid container className={classes.actions}>
-            {orderItemGradeData.cardStatus.toLowerCase() === 'confirmed' ||
+    const showGeneralActionButtons = useMemo(() => {
+        return (
+            orderItemGradeData.cardStatus.toLowerCase() === 'confirmed' ||
             ['not_accepted_pending_notes', 'missing_pending_notes', 'graded_revise_mode'].includes(
                 orderItemGradeData.currentViewMode,
-            ) ? (
-                <>
-                    <Grid item xs>
-                        <Button
-                            variant={'contained'}
-                            color={'inherit'}
-                            onClick={orderItemGradeData.handleNotAccepted}
-                            className={classes.button}
-                        >
-                            Not Accepted
-                        </Button>
-                        <Button
-                            variant={'contained'}
-                            color={'inherit'}
-                            onClick={orderItemGradeData.handleMissing}
-                            className={classes.button}
-                        >
-                            Missing
-                        </Button>
-                        <Button
-                            variant={'contained'}
-                            color={'inherit'}
-                            onClick={orderItemGradeData.handleEdit}
-                            className={classes.button}
-                        >
-                            Edit Card
-                        </Button>
-                    </Grid>
-                </>
-            ) : null}
+            )
+        );
+    }, [orderItemGradeData.cardStatus, orderItemGradeData.currentViewMode]);
 
-            {orderItemGradeData.cardStatus.toLowerCase() !== 'confirmed' &&
+    const showReviseButton = useMemo(() => {
+        return (
+            orderItemGradeData.cardStatus.toLowerCase() !== 'confirmed' &&
             !['not_accepted_pending_notes', 'missing_pending_notes', 'graded_revise_mode'].includes(
                 orderItemGradeData.currentViewMode,
-            ) ? (
+            )
+        );
+    }, [orderItemGradeData.cardStatus, orderItemGradeData.currentViewMode]);
+
+    return (
+        <Grid container className={classes.actions}>
+            {showGeneralActionButtons ? (
+                <Grid item xs>
+                    <Button
+                        variant={'contained'}
+                        color={'inherit'}
+                        onClick={orderItemGradeData.handleNotAccepted}
+                        className={classes.button}
+                    >
+                        Not Accepted
+                    </Button>
+                    <Button
+                        variant={'contained'}
+                        color={'inherit'}
+                        onClick={orderItemGradeData.handleMissing}
+                        className={classes.button}
+                    >
+                        Missing
+                    </Button>
+                    <Button
+                        variant={'contained'}
+                        color={'inherit'}
+                        onClick={orderItemGradeData.handleEdit}
+                        className={classes.button}
+                    >
+                        Edit Card
+                    </Button>
+                </Grid>
+            ) : null}
+
+            {showReviseButton ? (
                 <Grid item xs>
                     <Button
                         variant={'contained'}

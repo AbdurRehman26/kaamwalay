@@ -4,8 +4,9 @@ import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import EditIcon from '@mui/icons-material/Edit';
 import CustomGradeStepper from '@admin/pages/Submissions/SubmissionsGrade/CustomGradeStepper';
-import { useAdminOrderItemGradeData } from '@admin/pages/Submissions/SubmissionsGrade/useAdminOrderItemGradeData';
-import { useSubmissionsGradeCardStyles } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardStyles';
+import { useAdminOrderItemGradeData } from './useAdminOrderItemGradeData';
+import { useSubmissionsGradeCardStyles } from './SubmissionsGradeCardStyles';
+import { useMemo } from 'react';
 
 interface Props {
     itemIndex: number;
@@ -19,10 +20,16 @@ export function OverallGradeBanner({ itemIndex, orderID, gradeData, notes, inter
     const orderItemGradeData = useAdminOrderItemGradeData(itemIndex, orderID, gradeData, notes, internalNotes);
     const classes = useSubmissionsGradeCardStyles();
 
+    const isCardConfirmedOrGraded = useMemo(() => {
+        return (
+            orderItemGradeData.cardStatus.toLowerCase() === 'confirmed' ||
+            orderItemGradeData.cardStatus.toLowerCase() === 'graded'
+        );
+    }, [orderItemGradeData.cardStatus]);
+
     return (
         <>
-            {orderItemGradeData.cardStatus.toLowerCase() === 'confirmed' ||
-            orderItemGradeData.cardStatus.toLowerCase() === 'graded' ? (
+            {isCardConfirmedOrGraded ? (
                 <>
                     {orderItemGradeData.currentViewMode === 'not_accepted_pending_notes' ||
                     orderItemGradeData.currentViewMode === 'missing_pending_notes' ? null : (

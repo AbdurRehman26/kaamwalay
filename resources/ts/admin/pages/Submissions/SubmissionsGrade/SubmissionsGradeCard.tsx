@@ -17,10 +17,10 @@ import { SubmissionsGradeCardRoboGrades } from '@admin/pages/Submissions/Submiss
 import { SubmissionsGradeCardGrades } from './SubmissionsGradeCardGrades';
 import { useLocation } from 'react-router-dom';
 import { useSubmissionsGradeCardStyles } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardStyles';
-import { useAdminOrderItemGradeData } from '@admin/pages/Submissions/SubmissionsGrade/useAdminOrderItemGradeData';
-import { OverallGradeBanner } from '@admin/pages/Submissions/SubmissionsGrade/OverallGradeBanner';
-import { CardActionButtons } from '@admin/pages/Submissions/SubmissionsGrade/CardActionButtons';
-import { StatusPendingNotesBox } from '@admin/pages/Submissions/SubmissionsGrade/StatusPendingNotesBox';
+import { useAdminOrderItemGradeData } from './useAdminOrderItemGradeData';
+import { OverallGradeBanner } from './OverallGradeBanner';
+import { CardActionButtons } from './CardActionButtons';
+import { StatusPendingNotesBox } from './StatusPendingNotesBox';
 
 interface SubmissionsGradeCardProps {
     itemId: any;

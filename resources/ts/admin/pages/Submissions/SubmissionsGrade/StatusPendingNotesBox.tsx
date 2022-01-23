@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useSubmissionsGradeCardStyles } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardStyles';
 import { useAdminOrderItemGradeData } from '@admin/pages/Submissions/SubmissionsGrade/useAdminOrderItemGradeData';
+import { useMemo } from 'react';
 
 interface Props {
     itemIndex: number;
@@ -16,10 +17,15 @@ export function StatusPendingNotesBox({ itemIndex, orderID, gradeData, notes, in
     const classes = useSubmissionsGradeCardStyles();
     const orderItemGradeData = useAdminOrderItemGradeData(itemIndex, orderID, gradeData, notes, internalNotes);
 
+    const showNotAcceptedOrPendingNotes = useMemo(() => {
+        return (
+            orderItemGradeData.currentViewMode === 'not_accepted_pending_notes' ||
+            orderItemGradeData.currentViewMode === 'missing_pending_notes'
+        );
+    }, [orderItemGradeData.currentViewMode]);
     return (
         <>
-            {orderItemGradeData.currentViewMode === 'not_accepted_pending_notes' ||
-            orderItemGradeData.currentViewMode === 'missing_pending_notes' ? (
+            {showNotAcceptedOrPendingNotes ? (
                 <>
                     <OutlinedCard
                         heading={orderItemGradeData.viewModes[itemIndex]?.sectionTitle}

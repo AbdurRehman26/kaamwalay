@@ -35,15 +35,15 @@ class SendCustomersToMailchimpService
         // @phpstan-ignore-next-line
         $createdLists = $mailchimpClient->lists->getAllLists();
 
-        foreach($createdLists->lists as $createdList){
+        foreach ($createdLists->lists as $createdList) {
             $lists[] = $createdList->name;
         }
 
         try {
-                foreach($newList as $listName){
-                    if(!in_array($listName, $lists)){
-                        // @phpstan-ignore-next-line
-                            $response = $mailchimpClient->lists->createList([
+            foreach ($newList as $listName) {
+                if (! in_array($listName, $lists)) {
+                    // @phpstan-ignore-next-line
+                    $response = $mailchimpClient->lists->createList([
                             'name' => $listName,
                             'permission_reminder' => 'You created account on Robograding',
                             'email_type_option' => true,
@@ -62,14 +62,13 @@ class SendCustomersToMailchimpService
                                 'language' => 'EN',
                             ],
                         ]);
-                        MailchimpUser::create([
+                    MailchimpUser::create([
                             'list_name' => $listName,
                             'list_id' => $response->id,
                         ]);
-                        Log::info(json_encode($response->id));   
-                    }
+                    Log::info(json_encode($response->id));
                 }
-
+            }
         } catch (RequestException $ex) {
             Log::error($ex->getResponse()->getBody());
         }
@@ -102,6 +101,7 @@ class SendCustomersToMailchimpService
         }
         
         $mailchimpClient = $this->getConfiguration();
+
         try {
             $hash = md5(strtolower($user->email));
             // @phpstan-ignore-next-line

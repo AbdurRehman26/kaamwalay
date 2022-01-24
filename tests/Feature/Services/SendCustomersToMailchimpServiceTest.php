@@ -31,7 +31,6 @@ it('sends new user to mailchimp', function () {
       ],
     ];
 
-    $template = "Test Name";
     $hash = md5(strtolower($this->user->email));
     $this->mockService->shouldReceive('setListMember')->with("89998", $hash, [
   "email_address" => $this->user->email,
@@ -44,11 +43,6 @@ it('sends new user to mailchimp', function () {
       'PHONE' => $this->user->phone ? $this->user->phone : "",
   ],
 ])->andReturn($expectedResponse);
-
-    if ($template === "Test Name") {
-        $this->user->is_first_order = true;
-        $this->user->save();
-    }
 });
 
 it('create list on mailchimp', function () {

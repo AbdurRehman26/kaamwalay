@@ -33,7 +33,6 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'ags_access_token' => Str::random(10),
             'customer_number' => Str::random(10),
-            'is_first_order' => false,
         ];
     }
 

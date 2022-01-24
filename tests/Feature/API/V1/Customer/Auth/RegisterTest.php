@@ -2,7 +2,6 @@
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Jobs\Auth\CreateUserDeviceJob;
-use App\Jobs\Mailchimp\SendCustomersToMailchimp;
 use App\Models\User;
 use App\Models\Wallet;
 use Database\Seeders\RolesSeeder;
@@ -85,7 +84,6 @@ test('user registration dispatches events and jobs', function () {
 
     Event::assertDispatched(CustomerRegistered::class);
     Bus::assertDispatched(CreateUserDeviceJob::class);
-    Bus::assertDispatched(SendCustomersToMailchimp::class);
 })->group('auth');
 
 test('a logged in customer cannot register', function () {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Mailchimp;
 
 use App\Services\Mailchimp\SendCustomersToMailchimpService;
 use Illuminate\Console\Command;
@@ -12,7 +12,7 @@ class SendUsersToMailchimp extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:users';
+    protected $signature = 'users:sync-to-mailchimp';
 
     /**
      * The console command description.
@@ -36,9 +36,9 @@ class SendUsersToMailchimp extends Command
      *
      * @return int
      */
-    public function handle(SendCustomersToMailchimpService $sendCustomersToMailchimpService)
+    public function handle(SendCustomersToMailchimpService $mailChimpService)
     {
-        $sendCustomersToMailchimpService->createListOnMailchimp(SendCustomersToMailchimpService::TEMPLATE_SIGN_UP_USERS);
+        $mailChimpService->sendExistingUsersToMailchimp(SendCustomersToMailchimpService::LIST_NAME_SIGN_UP_USERS);
 
         return 0;
     }

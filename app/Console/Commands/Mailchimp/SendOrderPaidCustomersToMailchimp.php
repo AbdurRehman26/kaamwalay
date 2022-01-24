@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Mailchimp;
 
 use App\Services\Mailchimp\SendCustomersToMailchimpService;
 use Illuminate\Console\Command;
@@ -12,7 +12,7 @@ class SendOrderPaidCustomersToMailchimp extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:order-paid-customers';
+    protected $signature = 'users:sync-order-paid-customers-to-mailchimp';
 
     /**
      * The console command description.
@@ -38,7 +38,7 @@ class SendOrderPaidCustomersToMailchimp extends Command
      */
     public function handle(SendCustomersToMailchimpService $mailChimpService)
     {
-        $mailChimpService->createListOnMailchimp(SendCustomersToMailchimpService::TEMPLATE_ORDER_PAID_CUSTOMERS);
+        $mailChimpService->sendExistingUsersToMailchimp(SendCustomersToMailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
 
         return 0;
     }

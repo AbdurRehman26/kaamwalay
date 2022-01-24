@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Log;
 
 class SendCustomersToMailchimpService
 {
-    public const TEMPLATE_SIGN_UP_USERS = 'Robograding Signed Up Users';
-    public const TEMPLATE_ORDER_PAID_CUSTOMERS = 'Robograding Orders Paid Customers';
+    public const LIST_NAME_SIGN_UP_USERS = 'Robograding Signed Up Users';
+    public const LIST_NAME_ORDER_PAID_CUSTOMERS = 'Robograding Orders Paid Customers';
 
     public function getConfiguration(): \MailchimpMarketing\ApiClient
     {
@@ -23,38 +23,50 @@ class SendCustomersToMailchimpService
         return $mailchimpClient;
     }
 
-    public function createListOnMailchimp(string $template): void
+    public function createListOnMailchimp(array $newList): void
     {
         $mailchimpClient = $this->getConfiguration();
 
+        $lists = [];
+        $createdLists = $mailchimpClient->lists->getAllLists();
+
+        foreach($createdLists->lists as $createdList){
+            $lists[] = $createdList->name;
+        }
+
         try {
-            // @phpstan-ignore-next-line
-            $response = $mailchimpClient->lists->createList([
-                "name" => $template,
-                "permission_reminder" => "You created account on Robograding",
-                "email_type_option" => true,
-                "contact" => [
-                    "company" => "AGS Inc.",
-                    "address1" => "AGS Inc 727 Page Ave",
-                    "city" => "Staten Island",
-                    "country" => "USA",
-                    "zip" => "10307",
-                    "state" => "NY",
-                ],
-                "campaign_defaults" => [
-                    "from_name" => "Robograding",
-                    "from_email" => "no-reply@robograding.com",
-                    "subject" => "Welcome To Robograding",
-                    "language" => "EN",
-                ],
-            ]);
-            MailchimpUser::create([
-                    'list_name' => $template,
-                    'list_id' => $response->id,
-                ]);
-            $this->sendExistingUsersToMailchimp($template, $mailchimpClient);
+                foreach($newList as $listName){
+                    if(!in_array($listName, $lists)){
+                        // @phpstan-ignore-next-line
+                            $response = $mailchimpClient->lists->createList([
+                            'name' => $listName,
+                            'permission_reminder' => 'You created account on Robograding',
+                            'email_type_option' => true,
+                            'contact' => [
+                                'company' => 'AGS Inc.',
+                                'address1' => 'AGS Inc 727 Page Ave',
+                                'city' => 'Staten Island',
+                                'country' => 'USA',
+                                'zip' => '10307',
+                                'state' => 'NY',
+                            ],
+                            'campaign_defaults' => [
+                                'from_name' => 'Robograding',
+                                'from_email' => 'no-reply@robograding.com',
+                                'subject' => 'Welcome To Robograding',
+                                'language' => 'EN',
+                            ],
+                        ]);
+                        MailchimpUser::create([
+                            'list_name' => $listName,
+                            'list_id' => $response->id,
+                        ]);
+                        Log::info(json_encode($response->id));   
+                    }
+                }
+
         } catch (RequestException $ex) {
-            Log::debug($ex->getResponse()->getBody());
+            Log::error($ex->getResponse()->getBody());
         }
     }
 
@@ -63,56 +75,50 @@ class SendCustomersToMailchimpService
         return MailchimpUser::where('list_name', $template)->value('list_id');
     }
 
-    public function sendExistingUsersToMailchimp(string $template, \MailchimpMarketing\ApiClient $mailchimpClient): void
+    public function sendExistingUsersToMailchimp(string $template): void
     {
         $list_id = $this->getListId($template);
         
-        if ($template === self::TEMPLATE_SIGN_UP_USERS) {
-            $users = $users = User::all();
-        } else {
-            $users = User::with('orders')->whereHas('orders', function ($query) {
-                $query->where('is_first_order', '=', false);
-            })->get();
+        $users = User::all();
+
+        if ($template === self::LIST_NAME_ORDER_PAID_CUSTOMERS) {
+            $users = User::with('orders')->has('orders')->get();
         }
-        
+
         foreach ($users as $user) {
-            $this->addDataToList($template, $user, $mailchimpClient, $list_id);
+            $this->addDataToList($user, $list_id);
         }
     }
 
-    public function addDataToList(string $template, User $user, \MailchimpMarketing\ApiClient $mailchimpClient, string $list_id): void
+    public function addDataToList(User $user, string $list_id): void
     {
+        $mailchimpClient = $this->getConfiguration();
         try {
             $hash = md5(strtolower($user->email));
             // @phpstan-ignore-next-line
             $response = $mailchimpClient->lists->setListMember($list_id, $hash, [
-            "email_address" => $user->email,
-            "status_if_new" => "unsubscribed",
-            "skip_merge_validation" => true,
-            "status" => "unsubscribed",
-            "merge_fields" => [
-                'FNAME' => $user->first_name ? $user->first_name : "",
-                'LNAME' => $user->last_name ? $user->last_name : "",
-                'PHONE' => $user->phone ? $user->phone : "",
+            'email_address' => $user->email,
+            'status_if_new' => 'unsubscribed',
+            'skip_merge_validation' => true,
+            'status' => 'unsubscribed',
+            'merge_fields' => [
+                'FNAME' => $user->first_name ? $user->first_name : '',
+                'LNAME' => $user->last_name ? $user->last_name : '',
+                'PHONE' => $user->phone ? $user->phone : '',
             ],
         ]);
-            if ($template === self::TEMPLATE_ORDER_PAID_CUSTOMERS) {
-                $user->is_first_order = true;
-                $user->save();
-            }
 
             Log::info(json_encode($response->id));
         } catch (RequestException $ex) {
-            Log::debug($ex->getResponse()->getBody());
+            Log::error($ex->getResponse()->getBody());
         }
     }
 
     public function sendNewUsers(User $user, string $template): void
     {
-        $mailchimpClient = $this->getConfiguration();
         $list_id = $this->getListId($template);
         if ($list_id) {
-            $this->addDataToList($template, $user, $mailchimpClient, $list_id);
+            $this->addDataToList($user, $list_id);
         }
     }
 }

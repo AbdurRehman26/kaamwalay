@@ -22,6 +22,8 @@ const useStyles = makeStyles(
         root: {
             background: 'linear-gradient(106.54deg, #140078 -4.67%, #6C31BC 112.32%)',
             marginBottom: 28,
+            height: '72px',
+            justifyContent: 'center',
         },
         brand: {
             display: 'block',

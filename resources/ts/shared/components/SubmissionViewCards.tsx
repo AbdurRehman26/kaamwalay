@@ -111,6 +111,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
     // TODO: replace with a dedicated hook `useUser`
     const { user } = useAuth();
     const GradeRoot = isMobile ? 'a' : Box;
+    // const isGraded = orderStatusID < OrderStatusEnum.GRADED;
 
     return (
         <Box px={3} className={classes.containerBox}>
@@ -255,17 +256,22 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                             flexDirection={'column'}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            <div>
-                                                <Typography
-                                                    variant={'body2'}
-                                                    className={cx(
-                                                        font.fontWeightBold,
-                                                        isMobile ? classes.gradeBadge : null,
-                                                    )}
-                                                >
-                                                    {item?.userCard?.overallGrade}
-                                                </Typography>
-                                            </div>
+                                            {orderStatusID >= OrderStatusEnum.SHIPPED ? (
+                                                <div>
+                                                    <Typography
+                                                        variant={'body2'}
+                                                        className={cx(
+                                                            font.fontWeightBold,
+                                                            isMobile ? classes.gradeBadge : null,
+                                                        )}
+                                                    >
+                                                        {item?.userCard?.overallGrade}
+                                                    </Typography>
+                                                </div>
+                                            ) : (
+                                                '-'
+                                            )}
+
                                             {isMobile ? null : (
                                                 <div className={classes.gradeColumn}>
                                                     {user.hasRole(RolesEnum.Admin) && (
@@ -280,16 +286,18 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                         </MuiLink>
                                                     )}
 
-                                                    <MuiLink
-                                                        target={'_blank'}
-                                                        href={`/feed/${item.certificateNumber}/view`}
-                                                        rel={'noreferrer'}
-                                                        underline={'hover'}
-                                                        variant={'body2'}
-                                                        className={classes.viewGradeText}
-                                                    >
-                                                        View Grade
-                                                    </MuiLink>
+                                                    {orderStatusID >= OrderStatusEnum.SHIPPED ? (
+                                                        <MuiLink
+                                                            target={'_blank'}
+                                                            href={`/feed/${item.certificateNumber}/view`}
+                                                            rel={'noreferrer'}
+                                                            underline={'hover'}
+                                                            variant={'body2'}
+                                                            className={classes.viewGradeText}
+                                                        >
+                                                            View Grade
+                                                        </MuiLink>
+                                                    ) : null}
                                                 </div>
                                             )}
                                         </GradeRoot>

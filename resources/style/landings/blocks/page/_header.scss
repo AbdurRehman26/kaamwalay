@@ -1,16 +1,16 @@
 @use '../../../shared/theme';
 @use '../../../shared/utils';
 @use '../../../shared/breakpoints';
-
 .page__header {
     position: relative;
     z-index: 3;
+    height: 72px;
     padding: 0 24px;
     color: #fff;
     background: linear-gradient(106.54deg, #140078 -4.67%, #6c31bc 112.32%);
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
     justify-content: space-between;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
     @include breakpoints.down(xs) {
@@ -30,19 +30,18 @@
         }
         &-image {
             width: auto;
-            height: 64px;
+            height: 54px;
             @include breakpoints.down(1059px) {
-                height: 48px;
+                height: 42px;
             }
             @include breakpoints.down(sm) {
-                height: 44px;
+                height: 34px;
             }
             @include breakpoints.down(xs) {
                 height: 34px;
             }
         }
     }
-
     &__nav {
         $paddingSize: 18px;
         &,
@@ -64,7 +63,6 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-
             &:after {
                 content: '';
                 display: block;
@@ -79,26 +77,22 @@
                 opacity: 0.5;
                 transition: utils.transition(('transform', 'opacity', 'background-color'));
             }
-
             &--active:after,
             &:hover:after {
                 transform: translate3d(0, 0, 0) scale(1, 1);
             }
-
             &--active {
                 color: theme.$primaryColor;
                 &:after {
                     opacity: 1;
                 }
             }
-
             &:hover:after {
                 background-color: #fff;
                 opacity: 0.8;
             }
         }
     }
-
     &__auth {
         display: flex;
         flex-direction: row;
@@ -106,7 +100,6 @@
         justify-content: flex-end;
         min-width: 160px;
     }
-
     &__drawer {
         display: none;
         color: #fff;

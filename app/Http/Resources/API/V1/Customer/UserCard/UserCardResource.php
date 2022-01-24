@@ -14,8 +14,11 @@ class UserCardResource extends BaseResource
      * @param  Request  $request
      * @return array
      */
+
     public function toArray($request)
     {
+        $isGraded =  $this->orderItem->order->orderStatus->id >= 4;
+
         return [
             'id' => $this->id,
             'card_product' => new CardProductResource($this->orderItem->cardProduct),
@@ -25,7 +28,9 @@ class UserCardResource extends BaseResource
             'overall_values' => $this->overall_values,
             'human_grade_values' => $this->human_grade_values,
             'generated_images' => $this->generated_images,
-            'overall_grade' => $this->resource->overall_grade,
+            // 'overall_grade' => $this->resource->overall_grade,
+            'order_status' => $this->when($isGraded === true, $this->resource->overall_grade),
+            
             'overall_grade_nickname' => $this->resource->overall_grade_nickname,
             'notes' => $this->orderItem->notes,
             'submitted_at' => $this->formatDate($this->orderItem->order->created_at),

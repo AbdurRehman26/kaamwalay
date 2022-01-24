@@ -33,7 +33,8 @@ export function UserDropdown() {
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
         [],
     );
-
+    console.log('ppp  ', user$);
+    console.log('ASAS ', isAdmin);
     const handleUserProfileClose = useCallback(() => setAnchorEl(null), []);
 
     const handleUserProfileClick = useCallback(

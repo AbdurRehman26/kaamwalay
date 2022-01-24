@@ -19,7 +19,7 @@ class SendRegisteredUserToMailchimp implements ShouldQueue, ShouldBeEncrypted
         //
     }
 
-    public function handle(CustomerRegistered $event)
+    public function handle(CustomerRegistered $event): void
     {
         $this->service->sendNewUsers($event->user, SendCustomersToMailchimpService::LIST_NAME_SIGN_UP_USERS);
     }

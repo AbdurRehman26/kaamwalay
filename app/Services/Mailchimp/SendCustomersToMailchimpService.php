@@ -25,9 +25,14 @@ class SendCustomersToMailchimpService
 
     public function createListOnMailchimp(array $newList): void
     {
+        if (app()->environment('local')) {
+            return;
+        }
+
         $mailchimpClient = $this->getConfiguration();
 
         $lists = [];
+        // @phpstan-ignore-next-line
         $createdLists = $mailchimpClient->lists->getAllLists();
 
         foreach($createdLists->lists as $createdList){
@@ -92,6 +97,10 @@ class SendCustomersToMailchimpService
 
     public function addDataToList(User $user, string $list_id): void
     {
+        if (app()->environment('local')) {
+            return;
+        }
+        
         $mailchimpClient = $this->getConfiguration();
         try {
             $hash = md5(strtolower($user->email));

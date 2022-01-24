@@ -19,7 +19,7 @@ class SendOrderPaidUserToMailchimp implements ShouldQueue, ShouldBeEncrypted
         //
     }
 
-    public function handle(OrderPaid $event)
+    public function handle(OrderPaid $event): void
     {
         $this->service->sendNewUsers($event->order->user, SendCustomersToMailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
     }

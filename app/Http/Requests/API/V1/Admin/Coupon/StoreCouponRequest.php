@@ -75,7 +75,7 @@ class StoreCouponRequest extends FormRequest
             'usage_allowed_per_user' => [
                 'present',
                 Rule::in([null, 1]),
-            ]
+            ],
         ];
     }
 }

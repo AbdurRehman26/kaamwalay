@@ -107,7 +107,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
 
                         <TableBody>{items$}</TableBody>
 
-                        {footer$}
+                        {items$.length > 0 ? footer$ : null}
                     </Table>
                 </TableContainer>
             )}

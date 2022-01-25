@@ -46,7 +46,7 @@ class SendCustomersToMailchimpService
                     if (!in_array($name, $lists)) {
                         // @phpstan-ignore-next-line
                             $response = $mailchimpClient->lists->createList([
-                            'name' => $listName,
+                            'name' => $name,
                             'permission_reminder' => 'You created account on Robograding',
                             'email_type_option' => true,
                             'contact' => [
@@ -65,7 +65,7 @@ class SendCustomersToMailchimpService
                             ],
                         ]);
                         MailchimpUser::create([
-                            'list_name' => $listName,
+                            'list_name' => $name,
                             'list_id' => $response->id,
                         ]);
                         Log::info(json_encode($response->id));   

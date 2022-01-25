@@ -38,7 +38,7 @@ class SendOrderPaidCustomersToMailchimp extends Command
      */
     public function handle(SendCustomersToMailchimpService $mailChimpService)
     {
-        $mailChimpService->sendExistingUsersToMailchimp(SendCustomersToMailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
+        $mailChimpService->sendExistingOrderPaidCustomersToMailchimp(SendCustomersToMailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
 
         return 0;
     }

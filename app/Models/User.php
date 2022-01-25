@@ -7,6 +7,7 @@ use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
+use App\Services\Wallet\WalletService;
 use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
@@ -72,6 +73,8 @@ class User extends Authenticatable implements JWTSubject
 
         $user->assignCustomerRole();
         $user->assignCustomerNumber();
+
+        (new WalletService)->createWallet(['user_id' => $user->id, 'balance' => 0]);
 
         return $user;
     }
@@ -165,6 +168,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(UserDevice::class);
     }
 
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
     public function assignCustomerNumber(): self
     {
         if (! $this->customer_number) {
@@ -177,7 +185,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder
     {
-        return $query->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)]);
+        return $query->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()]);
     }
 
     public function scopeSubmissions(Builder $query, string $minSubmissionCount, string $maxSubmissionCount): Builder
@@ -226,10 +234,5 @@ class User extends Authenticatable implements JWTSubject
             'token' => $token,
             'email' => $this->getEmailForPasswordReset(),
         ]);
-    }
-
-    public function wallet(): HasOne
-    {
-        return $this->hasOne(Wallet::class);
     }
 }

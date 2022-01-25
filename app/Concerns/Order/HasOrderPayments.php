@@ -65,4 +65,10 @@ trait HasOrderPayments
 
         $this->save();
     }
+
+    public function allPayments(): HasMany
+    {
+        return $this->hasMany(OrderPayment::class)
+            ->whereIn('type', [OrderPayment::TYPE_ORDER_PAYMENT, OrderPayment::TYPE_EXTRA_CHARGE]);
+    }
 }

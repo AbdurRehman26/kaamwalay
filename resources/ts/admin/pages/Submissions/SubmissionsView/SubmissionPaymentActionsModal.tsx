@@ -14,6 +14,8 @@ import { NumberFormatInput } from '@shared/components/NumberFormat';
 import { addExtraChargeToOrder, refundOrderTransaction } from '@shared/redux/slices/adminOrdersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { DialogStateMap, DialogStateEnum } from './SubmissionTransactionDialogEnum';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 interface SubmissionPaymentActionsModalProps {
     openState: DialogStateEnum | null;
@@ -28,6 +30,7 @@ export default function SubmissionPaymentActionsModal({
 }: SubmissionPaymentActionsModalProps) {
     const [amount, setAmount] = useState('');
     const [notes, setNotes] = useState('');
+    const [addToWallet, setAddToWallet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
 
@@ -60,7 +63,7 @@ export default function SubmissionPaymentActionsModal({
         }
 
         if (openState === 'show-issue-refund') {
-            dispatch(refundOrderTransaction({ amount, notes, orderId: orderId! }))
+            dispatch(refundOrderTransaction({ amount, notes, orderId: orderId!, addToWallet }))
                 .unwrap()
                 .then(() => {
                     setIsLoading(false);
@@ -71,8 +74,9 @@ export default function SubmissionPaymentActionsModal({
                     handleClose();
                 });
         }
-    }, [dispatch, amount, notes, orderId, openState, handleClose]);
+    }, [addToWallet, dispatch, amount, notes, orderId, openState, handleClose]);
 
+    const handleRefundCredit = useCallback(() => setAddToWallet((prev) => !prev), []);
     const dialogState = useMemo(() => (openState ? DialogStateMap[openState] : null), [openState]);
     const isSaveDisabled = useMemo(() => amount.length === 0 || notes.length === 0, [amount, notes]);
 
@@ -111,6 +115,15 @@ export default function SubmissionPaymentActionsModal({
                         placeholder={'Enter notes'}
                     />
                 </FormControl>
+
+                {openState === 'show-issue-refund' ? (
+                    <FormControl fullWidth>
+                        <FormControlLabel
+                            control={<Checkbox checked={addToWallet} onChange={handleRefundCredit} color="primary" />}
+                            label="Refund to Customer Wallet"
+                        />
+                    </FormControl>
+                ) : null}
             </DialogContent>
             <DialogActions sx={{ padding: '24px' }}>
                 <Button color={'inherit'} onClick={handleClose}>

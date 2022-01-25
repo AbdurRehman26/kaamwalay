@@ -4,6 +4,8 @@ namespace App\Services\Payment\Providers;
 
 use App\Models\Order;
 use App\Models\OrderPayment;
+use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
+use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
 use Illuminate\Support\Facades\Log;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
@@ -13,7 +15,7 @@ use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Payments\CapturesRefundRequest;
 use PayPalHttp\HttpException;
 
-class PaypalService implements PaymentProviderServiceInterface
+class PaypalService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
     protected SandboxEnvironment|ProductionEnvironment $environment;
     protected PayPalHttpClient $client;
@@ -34,7 +36,7 @@ class PaypalService implements PaymentProviderServiceInterface
         $this->client = new PayPalHttpClient($this->environment);
     }
 
-    public function charge(Order $order): array
+    public function charge(Order $order, array $data = []): array
     {
         $orderRequest = new OrdersCreateRequest();
         $orderRequest->prefer('return=representation');
@@ -43,7 +45,7 @@ class PaypalService implements PaymentProviderServiceInterface
             "purchase_units" => [[
                 "reference_id" => $order->order_number,
                 "amount" => [
-                    "value" => $order->grand_total,
+                    "value" => $order->grand_total_to_be_paid,
                     "currency_code" => "USD",
                 ],
             ]],
@@ -86,13 +88,19 @@ class PaypalService implements PaymentProviderServiceInterface
             $captureStatus = $data['status'];
 
             if (
-                $paymentIntent['amount']['value'] == $order->grand_total
+                $paymentIntent['amount']['value'] == $order->grand_total_to_be_paid
                 && $captureStatus === 'COMPLETED'
             ) {
-                $order->lastOrderPayment->update([
+
+                /*  Here we are updating the first order payment because in every case of order creation
+                 *  (i.e Single, Partial) Paypal will be the primary payment method
+                 *  hence it will be the first OrderPayment object.
+                 */
+
+                $order->firstOrderPayment->update([
                     'payment_provider_reference_id' => $data['purchase_units'][0]['payments']['captures'][0]['id'],
                     'response' => json_encode($data),
-                    'amount' => $order->grand_total,
+                    'amount' => $order->grand_total_to_be_paid,
                     'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                     'notes' => 'Paypal Payment for ' . $order->order_number,
                 ]);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\Wallet\TransactionHappened;
 use App\Events\Wallet\WalletCreated;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,6 +15,8 @@ class Wallet extends Model
 {
     use HasFactory;
 
+    const ACTIVE = 1;
+
     protected $fillable = [
         'user_id',
         'balance',
@@ -21,6 +24,7 @@ class Wallet extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'int',
         'balance' => 'float',
         'is_active' => 'boolean',
     ];
@@ -43,6 +47,21 @@ class Wallet extends Model
     public function lastTransaction(): HasOne
     {
         return $this->hasOne(WalletTransaction::class)->latestOfMany();
+    }
+
+    public function scopeForCurrentUser(Builder $query): Builder
+    {
+        return $query->whereUserId(auth()->user()->id);
+    }
+
+    public function scopeIsActive(Builder $query): Builder
+    {
+        return $query->whereIsActive(self::ACTIVE);
+    }
+
+    public static function validateWalletAmount(float $balance): bool
+    {
+        return Wallet::forCurrentUser()->isActive()->where('balance', '>=', $balance)->exists();
     }
 
     public static function createWallet(User $user): void

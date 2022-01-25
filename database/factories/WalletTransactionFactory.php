@@ -28,6 +28,7 @@ class WalletTransactionFactory extends Factory
         return [
             'wallet_id' => Wallet::factory(),
             'created_by' => User::factory(),
+            'amount' => random_int(100, 1500),
             'type' => $this->faker->randomElement(['credit', 'debit']),
             'reason' => $reason,
             $resourceKey => $resource,

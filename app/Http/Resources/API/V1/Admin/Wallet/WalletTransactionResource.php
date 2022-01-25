@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\V1\Admin\Wallet;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\WalletTransaction;
+use Illuminate\Http\Request;
 
 /**
  * @mixin WalletTransaction
@@ -13,7 +14,7 @@ class WalletTransactionResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
@@ -23,6 +24,7 @@ class WalletTransactionResource extends BaseResource
             'description' => $this->getTransactionDescription(),
             'amount' => $this->amount,
             'created_at' => $this->created_at->toISOString(),
+            'updated_at' => $this->updated_at->toISOString(),
         ];
     }
 

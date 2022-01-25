@@ -15,6 +15,7 @@ interface SubmissionViewBillingProps {
     billingAddress?: AddressEntity;
     payment?: OrderPaymentEntity;
     coupon?: OrderCouponEntity;
+    paymentMethodId?: number;
 }
 
 export const useStyles = makeStyles(
@@ -44,48 +45,71 @@ export function SubmissionViewBilling({
     billingAddress,
     payment,
     coupon,
+    paymentMethodId,
 }: SubmissionViewBillingProps) {
     const classes = useStyles();
     const { card, payer } = payment ?? {};
-    const hasPayment = !!card || !!payer;
-    const isPaypal = !card && !!payer;
+    const hasPayment = [1, 2, 3].includes(Number(paymentMethodId)); // Checking if one of our supported payment methods is on the order
 
     const { cardIcon, cardBrand } = useMemo(() => {
-        if (isPaypal) {
+        if (paymentMethodId === 1) {
+            return {
+                cardIcon: card?.brand ? getPaymentIcon(card.brand) : null,
+                cardBrand: (card?.brand ? getPaymentTitle(card.brand) : null) ?? card?.brand,
+            };
+        }
+
+        if (paymentMethodId === 2) {
             return {
                 cardIcon: getPaymentIcon('paypal'),
                 cardBrand: getPaymentTitle('paypal'),
             };
         }
 
+        if (paymentMethodId === 3) {
+            return {
+                cardIcon: getPaymentIcon('collectorCoin'),
+                cardBrand: getPaymentTitle('collectorCoin'),
+            };
+        }
+
         return {
-            cardIcon: card?.brand ? getPaymentIcon(card.brand) : null,
-            cardBrand: (card?.brand ? getPaymentTitle(card.brand) : null) ?? card?.brand,
+            cardIcon: '',
+            cardBrand: '',
         };
-    }, [card?.brand, isPaypal]);
+    }, [card?.brand, paymentMethodId]);
 
     const paymentHeading = useMemo(() => {
-        if (isPaypal) {
+        if (paymentMethodId === 1) {
+            return `${cardBrand} ending in ${card?.last4}`;
+        }
+
+        if (paymentMethodId === 2) {
             return payer?.name;
         }
 
-        if (cardBrand && card?.last4) {
-            return `${cardBrand} ending in ${card?.last4}`;
+        if (paymentMethodId === 3) {
+            return `Collector Coin`;
         }
+
         return 'Unknown card';
-    }, [card?.last4, cardBrand, isPaypal, payer?.name]);
+    }, [card?.last4, cardBrand, paymentMethodId, payer?.name]);
 
     const paymentSubheading = useMemo(() => {
-        if (isPaypal) {
-            return payer?.email;
-        }
-
-        if (cardBrand && card?.last4) {
+        if (paymentMethodId === 1) {
             return `Expires ${card?.expMonth}/${card?.expYear}`;
         }
 
+        if (paymentMethodId === 2) {
+            return payer?.email;
+        }
+
+        if (paymentMethodId === 3) {
+            return payment?.transaction?.hash;
+        }
+
         return null;
-    }, [card?.expMonth, card?.expYear, card?.last4, cardBrand, isPaypal, payer?.email]);
+    }, [card?.expMonth, card?.expYear, paymentMethodId, payer?.email, payment?.transaction?.hash]);
 
     const columnWidth = coupon?.code ? 3 : 4;
     return (

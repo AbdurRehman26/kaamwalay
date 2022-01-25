@@ -1,10 +1,10 @@
-import { AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { ClassConstructor } from 'class-transformer';
 import objectHash from 'object-hash';
 import { useCallback, useMemo } from 'react';
-import useSWR, { SWRResponse } from 'swr';
 import { Repository } from '../repositories/Repository';
 import { useRepository } from './useRepository';
+import { useQuery, UseQueryResult } from 'react-query';
 
 export type RepositoryKeys<T extends Repository<any>> = keyof Omit<
     T,
@@ -24,7 +24,7 @@ export function useRepositoryMethod<
     options?: {
         args?: F extends (...args: infer P) => any ? P : never;
     },
-): SWRResponse<PromiseValue<R>, AxiosResponse> {
+): UseQueryResult<PromiseValue<R>, AxiosError> {
     const repository = useRepository(classDefinition);
     const key = useMemo(() => {
         const argsHash = options?.args ? objectHash.sha1(options.args) : '';
@@ -36,5 +36,5 @@ export function useRepositoryMethod<
         [method, options?.args, repository],
     );
 
-    return useSWR(key, fetcher);
+    return useQuery(key, fetcher);
 }

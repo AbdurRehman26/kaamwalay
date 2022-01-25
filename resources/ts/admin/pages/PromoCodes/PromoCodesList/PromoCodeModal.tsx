@@ -367,6 +367,8 @@ export function PromoCodeModal() {
                                 ) : null}
                             </Box>
                         </Paper>
+                    </Box>
+                    <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} sx={{ width: '100%' }}>
                         <Paper
                             variant={'outlined'}
                             className={classes.discountOption}

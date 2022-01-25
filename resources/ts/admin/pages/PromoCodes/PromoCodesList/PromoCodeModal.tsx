@@ -23,6 +23,7 @@ import {
     setDiscountStartDate,
     setDiscountType,
     setDiscountValue,
+    setUsageAllowedType,
     setPromoCodeTextValue,
     setShowNewPromoCodeDialog,
     toggleSelectedServiceLevel,
@@ -78,6 +79,7 @@ export function PromoCodeModal() {
     const discountValue = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountValue);
     const discountApplicationType = useSharedSelector((state) => state.adminNewPromoCodeSlice.discountApplicationType);
     const isPermanent = useSharedSelector((state) => state.adminNewPromoCodeSlice.isPermanent);
+    const usageAllowed = useSharedSelector((state) => state.adminNewPromoCodeSlice.usageAllowed);
     const discountStartDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.availableFrom);
     const discountEndDate = useSharedSelector((state) => state.adminNewPromoCodeSlice.availableTill);
     const showModal = useSharedSelector((state) => state.adminNewPromoCodeSlice.showNewPromoCodeDialog);
@@ -168,6 +170,16 @@ export function PromoCodeModal() {
         [dispatch],
     );
 
+    const handleUsageAllowedTypeRadioPress = useCallback(
+        (incomingDateType: null | number) => {
+            console.log(incomingDateType);
+            return () => {
+                dispatch(setUsageAllowedType(incomingDateType));
+            };
+        },
+        [dispatch],
+    );
+
     const onServiceLevelPress = (serviceLevelId: number) => {
         return () => {
             dispatch(toggleSelectedServiceLevel(serviceLevelId));
@@ -223,6 +235,7 @@ export function PromoCodeModal() {
                 isPermanent: isPermanent!,
                 couponables: selectedDiscountApplicationServiceLevels.filter((serviceLevel) => serviceLevel !== -2)!,
                 discountValue: discountValue!,
+                usageAllowedPerUser: usageAllowed,
                 description: description,
             }),
         );
@@ -495,6 +508,43 @@ export function PromoCodeModal() {
                                     </LocalizationProvider>
                                 </Box>
                             ) : null}
+                        </Paper>
+                    </Box>
+                </Box>
+
+                <Box className={classes.inputWithLabelContainer} marginTop={'32px'}>
+                    <Typography variant={'subtitle1'} className={classes.label}>
+                        Usage Allowance
+                    </Typography>
+                    <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} minWidth={'100%'}>
+                        <Paper variant={'outlined'} sx={{ width: '99.5%', marginRight: '10px', padding: '8px' }}>
+                            <Radio checked={!!usageAllowed} onChange={handleUsageAllowedTypeRadioPress(1)} value={1} />
+                            <Typography
+                                variant={'caption'}
+                                className={classes.secondaryLabel}
+                                sx={{
+                                    fontWeight: isPermanent ? 'bold' : 'normal',
+                                }}
+                            >
+                                Only Once
+                            </Typography>
+                        </Paper>
+
+                        <Paper variant={'outlined'} sx={{ width: '100%', padding: '8px' }}>
+                            <Radio
+                                checked={!usageAllowed}
+                                onChange={handleUsageAllowedTypeRadioPress(null)}
+                                value={null}
+                            />
+                            <Typography
+                                variant={'caption'}
+                                className={classes.secondaryLabel}
+                                sx={{
+                                    fontWeight: !usageAllowed ? 'bold' : 'normal',
+                                }}
+                            >
+                                Unlimited
+                            </Typography>
                         </Paper>
                     </Box>
                 </Box>

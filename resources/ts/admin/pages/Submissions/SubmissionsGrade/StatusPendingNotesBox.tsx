@@ -1,8 +1,8 @@
 import OutlinedCard from '@shared/components/OutlinedCard';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useSubmissionsGradeCardStyles } from '@admin/pages/Submissions/SubmissionsGrade/SubmissionsGradeCardStyles';
-import { useAdminOrderItemGradeData } from '@admin/pages/Submissions/SubmissionsGrade/useAdminOrderItemGradeData';
+import { useSubmissionsGradeCardStyles } from './SubmissionsGradeCardStyles';
+import { useAdminOrderItemGradeData } from './useAdminOrderItemGradeData';
 import { useMemo } from 'react';
 
 interface Props {
@@ -23,6 +23,7 @@ export function StatusPendingNotesBox({ itemIndex, orderID, gradeData, notes, in
             orderItemGradeData.currentViewMode === 'missing_pending_notes'
         );
     }, [orderItemGradeData.currentViewMode]);
+
     return (
         <>
             {showNotAcceptedOrPendingNotes ? (

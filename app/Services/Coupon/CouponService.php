@@ -19,7 +19,7 @@ class CouponService
 
     public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon
     {
-        $coupon = Coupon::whereCode($couponCode)->isActive()->validOnCouponable($couponParams)->first();
+        $coupon = Coupon::whereCode($couponCode)->isActive()->validForUserLimit()->validOnCouponable($couponParams)->select('coupons.*')->first();
 
         throw_if(! $coupon, CouponExpiredOrInvalid::class);
 

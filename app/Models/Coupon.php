@@ -126,6 +126,14 @@ class Coupon extends Model
         })->orDoesntHave('couponAble');
     }
 
+    public function scopeValidForUserLimit(Builder $query):  Builder
+    {
+        return $query->leftJoin('coupon_logs', 'coupon_logs.coupon_id', '=', 'coupons.id')
+                ->whereNull('usage_allowed_per_user')
+                ->orWhereNull('coupon_logs.id')
+                ->orWhere('coupon_logs.user_id', '!=', auth()->user()->id);
+    }
+
     public function scopeStatus(Builder $query, string|int $status): Builder
     {
         return $query->whereHas(

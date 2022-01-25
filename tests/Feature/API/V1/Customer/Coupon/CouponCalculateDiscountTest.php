@@ -147,7 +147,6 @@ it('calculates coupon discount of limited usage coupon', function () {
 });
 
 it('can not calculate coupon discount if usage limit is reached', function () {
-
     $this->order = Order::factory()->for($this->user)->for($this->limitedUsageCoupon)->create();
     CouponLog::factory()->for($this->order)->for($this->user)->for($this->limitedUsageCoupon)->create();
 

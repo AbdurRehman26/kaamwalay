@@ -76,7 +76,7 @@ class StoreCouponRequest extends FormRequest
                 'required',
                 'nullable',
                 Rule::in([null, 1]),
-            ]
+            ],
         ];
     }
 }

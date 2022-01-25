@@ -22,8 +22,7 @@ class OrderItemResource extends BaseResource
             'card_product' => new CardProductResource($this->cardProduct),
             'status' => new OrderItemStatusHistoryResource($this->orderItemStatusHistory()->latest()->first()),
             
-            // TODO: move certificate number inside the right relationship.
-            'certificate_number' => $this->userCard?->certificate_number,
+            'certificate_number' => $this->userCard?->userCardCertificate?->number,
             'user_card' => $this->whenLoaded('userCard', UserCardResource::class),
             'graded_by' => $this->when($isGraded, fn () => $this->getGradedStatusHistory()?->user?->getFullName()),
             'graded_at' => $this->when($isGraded, fn () => $this->formatDate($this->getGradedStatusHistory()?->updated_at)),

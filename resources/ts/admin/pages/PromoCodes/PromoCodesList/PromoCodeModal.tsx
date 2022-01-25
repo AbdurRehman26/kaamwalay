@@ -367,6 +367,41 @@ export function PromoCodeModal() {
                                 ) : null}
                             </Box>
                         </Paper>
+                        <Paper
+                            variant={'outlined'}
+                            className={classes.discountOption}
+                            onClick={handleDiscountTypeRadioPress(DiscountTypeEnums.flat)}
+                        >
+                            <Radio
+                                checked={discountType === DiscountTypeEnums.flat}
+                                onChange={handleDiscountTypeRadioPress(DiscountTypeEnums.flat)}
+                                value={DiscountTypeEnums.flat}
+                            />
+                            <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+                                <Typography
+                                    variant={'caption'}
+                                    className={classes.secondaryLabel}
+                                    sx={{
+                                        fontWeight: discountType === DiscountTypeEnums.flat ? 'bold' : 'normal',
+                                    }}
+                                >
+                                    Total Flat
+                                </Typography>
+                                {discountType === DiscountTypeEnums.flat ? (
+                                    <TextField
+                                        placeholder={'0.00'}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                        }}
+                                        size={'small'}
+                                        sx={{ maxWidth: '120px', marginLeft: '3px' }}
+                                        variant="outlined"
+                                        value={discountValue}
+                                        onChange={handleDiscountValueChange}
+                                    />
+                                ) : null}
+                            </Box>
+                        </Paper>
                     </Box>
                     <Box className={classes.inputWithLabelContainer} marginTop={'32px'}>
                         <Typography variant={'subtitle1'} className={classes.label}>

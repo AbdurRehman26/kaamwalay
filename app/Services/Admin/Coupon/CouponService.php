@@ -190,6 +190,14 @@ class CouponService
 
             return;
         }
+        else if ($data['type'] === array_search(Coupon::TYPE_FLAT, Coupon::COUPON_TYPE_MAPPING))
+        {
+            $this->validateFlatDiscountValue(
+                $data['coupon_applicable_id'],
+                $data['discount_value'],
+                $data['couponables'] ?? []
+            );
+        }
         $this->validateFixedDiscountValue(
             $data['coupon_applicable_id'],
             $data['discount_value'],
@@ -207,6 +215,24 @@ class CouponService
     }
 
     protected function validateFixedDiscountValue(
+        int $couponApplicableId,
+        int|float $discountValue,
+        array $couponables
+    ): void {
+        if ($couponApplicableId === CouponApplicable::FOR_PAYMENT_PLANS) {
+            $invalidCouponables = collect($couponables)->contains(function (int $couponable) use ($discountValue) {
+                $couponable = PaymentPlan::find($couponable);
+
+                return $discountValue > $couponable->price;
+            });
+            if ($invalidCouponables) {
+                throw ValidationException::withMessages([
+                    'discount_value' => 'Discount value can not be more than selected price level.',
+                ]);
+            }
+        }
+    }
+    protected function validateFlatDiscountValue(
         int $couponApplicableId,
         int|float $discountValue,
         array $couponables

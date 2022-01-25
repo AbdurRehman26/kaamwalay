@@ -15,8 +15,7 @@ class OrderItemResource extends BaseResource
             'quantity' => $this->quantity,
             'order_id' => $this->order_id,
             'declared_value_per_unit' => $this->declared_value_per_unit,
-            // TODO: move certificate number inside the right relationship.
-            'certificate_number' => $this->userCard?->certificate_number,
+            'certificate_number' => $this->userCard?->userCardCertificate?->number,
             'card_product' => new CardProductResource($this->cardProduct),
             'status' => new OrderItemStatusResource($this->orderItemStatus),
             'user_card' => $this->whenLoaded('userCard', UserCardResource::class),

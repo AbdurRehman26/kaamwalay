@@ -12,7 +12,6 @@ import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useState } from 'react';
-import * as yup from 'yup';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
@@ -28,6 +27,7 @@ import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
+import { schema } from './schema';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -181,20 +181,6 @@ const GreenCheckbox = withStyles({
     },
     checked: {},
 })((props: any) => <Checkbox color="default" {...props} />);
-
-const schema = yup.object().shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    address: yup.string().required(),
-    apt: yup.string().optional(),
-    city: yup.string().required(),
-    state: yup.object().shape({
-        name: yup.string().required(),
-        id: yup.number().required(),
-    }),
-    zipCode: yup.string().required(),
-    phoneNumber: yup.string().required(),
-});
 
 export function SubmissionStep04Content() {
     const classes = useStyles();

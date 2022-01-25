@@ -36,16 +36,16 @@ class SendCustomersToMailchimpService
         // @phpstan-ignore-next-line
         $createdLists = $mailchimpClient->lists->getAllLists();
 
-        foreach($createdLists->lists as $createdList){
+        foreach ($createdLists->lists as $createdList) {
             $lists[] = $createdList->name;
         }
 
         try {
-                foreach($newList as $listName){
-                    $name = $this->checkEnvironment($listName);
-                    if (!in_array($name, $lists)) {
-                        // @phpstan-ignore-next-line
-                            $response = $mailchimpClient->lists->createList([
+            foreach ($newList as $listName) {
+                $name = $this->checkEnvironment($listName);
+                if (! in_array($name, $lists)) {
+                    // @phpstan-ignore-next-line
+                    $response = $mailchimpClient->lists->createList([
                             'name' => $name,
                             'permission_reminder' => 'You created account on Robograding',
                             'email_type_option' => true,
@@ -64,24 +64,26 @@ class SendCustomersToMailchimpService
                                 'language' => 'EN',
                             ],
                         ]);
-                        MailchimpUser::create([
+                    MailchimpUser::create([
                             'list_name' => $name,
                             'list_id' => $response->id,
                         ]);
-                        Log::info(json_encode($response->id));   
-                    }
+                    Log::info(json_encode($response->id));
                 }
+            }
         } catch (RequestException $ex) {
             Log::error($ex->getResponse()->getBody());
         }
     }
 
-    public function checkEnvironment(string $listName): string {
+    public function checkEnvironment(string $listName): string
+    {
         if (app()->environment('production')) {
             $listName = 'Production_' . $listName;
         } else {
             $listName = 'Staging_' . $listName;
         }
+
         return $listName;
     }
 
@@ -91,14 +93,13 @@ class SendCustomersToMailchimpService
     }
 
     public function sendExistingUsersToMailchimp(string $template): void
-    {    
+    {
         $templateName = $this->checkEnvironment($template);
         // @phpstan-ignore-next-line
         $this->list_id = $this->getListId($templateName);
 
-        User::chunkById(500, function($users){
-    
-            $members = $users->map(function ($user){
+        User::chunkById(500, function ($users) {
+            $members = $users->map(function ($user) {
                 return [
                     'email_address' => $user->email,
                     'status_if_new' => 'subscribed',
@@ -108,26 +109,24 @@ class SendCustomersToMailchimpService
                     'FNAME' => $user->first_name ? $user->first_name : '',
                     'LNAME' => $user->last_name ? $user->last_name : '',
                     'PHONE' => $user->phone ? $user->phone : '',
-                ]
+                ],
                 ];
             })->toArray();
             // @phpstan-ignore-next-line
             $this->addBatchUsers($members, $this->list_id);
         });
-    
     }
 
-    public function sendExistingOrderPaidCustomersToMailchimp(string $template): void 
+    public function sendExistingOrderPaidCustomersToMailchimp(string $template): void
     {
         $templateName = $this->checkEnvironment($template);
         // @phpstan-ignore-next-line
         $this->list_id = $this->getListId($templateName);
 
         User::with('orders')->whereHas('orders', function ($query) {
-            $query->where('order_status_id', '>=' ,OrderStatus::PLACED);
-        })->chunkById(500, function($users){
-            
-            $members = $users->map(function ($user){
+            $query->where('order_status_id', '>=', OrderStatus::PLACED);
+        })->chunkById(500, function ($users) {
+            $members = $users->map(function ($user) {
                 return [
                     'email_address' => $user->email,
                     'status_if_new' => 'subscribed',
@@ -137,7 +136,7 @@ class SendCustomersToMailchimpService
                     'FNAME' => $user->first_name ? $user->first_name : '',
                     'LNAME' => $user->last_name ? $user->last_name : '',
                     'PHONE' => $user->phone ? $user->phone : '',
-                ]
+                ],
                 ];
             })->toArray();
             // @phpstan-ignore-next-line
@@ -167,6 +166,7 @@ class SendCustomersToMailchimpService
         }
         
         $mailchimpClient = $this->getConfiguration();
+
         try {
             $hash = md5(strtolower($user->email));
             // @phpstan-ignore-next-line

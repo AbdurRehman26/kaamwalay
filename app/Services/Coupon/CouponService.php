@@ -3,6 +3,7 @@
 namespace App\Services\Coupon;
 
 use App\Exceptions\API\Customer\Coupon\CouponExpiredOrInvalid;
+use App\Exceptions\API\Customer\Coupon\CouponUsageLimitReachedException;
 use App\Models\Coupon;
 use App\Models\CouponLog;
 use App\Models\CouponStat;
@@ -19,11 +20,12 @@ class CouponService
 
     public static function returnCouponIfValid(string $couponCode, array $couponParams = []): Coupon
     {
-        $coupon = Coupon::whereCode($couponCode)->isActive()->validForUserLimit()->validOnCouponable($couponParams)->select('coupons.*')->first();
+        $coupon = Coupon::whereCode($couponCode)->isActive()->validOnCouponable($couponParams)->select('coupons.*');
 
-        throw_if(! $coupon, CouponExpiredOrInvalid::class);
+        throw_if($coupon->doesntExist(), CouponExpiredOrInvalid::class);
+        throw_if($coupon->validForUserLimit()->doesntExist(), CouponUsageLimitReachedException::class);
 
-        return $coupon;
+        return $coupon->first();
     }
 
     public function calculateDiscount(Coupon $coupon, array|Order $order): float

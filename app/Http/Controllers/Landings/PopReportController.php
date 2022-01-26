@@ -15,6 +15,13 @@ class PopReportController extends Controller
     {
     }
 
+    public function index(): View
+    {
+        $categories = CardCategory::limit(4)->get();
+
+        return view('landings.pop.index', compact('categories'));
+    }
+
     public function getSeriesReport(CardCategory $cardCategory): View
     {
         $data = $this->popReportService->getSeriesReport($cardCategory);
@@ -39,6 +46,6 @@ class PopReportController extends Controller
 
         $totalPopulation = $this->popReportService->getCardProductsTotalPopulation($cardSet);
 
-        return view('landings.pop.set', compact('data', 'totalPopulation', 'cardCategory', 'cardSet'));
+        return view('landings.pop.set', compact('data', 'totalPopulation', 'cardCategory', 'cardSeries', 'cardSet'));
     }
 }

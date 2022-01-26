@@ -75,7 +75,7 @@
                     </tbody>
                 </table>
             </div>
-            <x-tables.pagination :totals="$data->total()" :itemsPerPage="$data->perPage()" :currentPage="$data->currentPage()" :offset="($data->currentPage() - 1) * $data->perPage()" :basePath="route('pop.report')" />
+            <x-tables.pagination :totals="$data->total()" :itemsPerPage="$data->perPage()" :currentPage="$data->currentPage()" :offset="($data->currentPage() - 1) * $data->perPage()" :basePath="route('pop.set', ['cardCategory' => $cardCategory, 'cardSeries' => $cardSeries, 'cardSet' => $cardSet])" />
         </div>
     </section>
 </x-layout>

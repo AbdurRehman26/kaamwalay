@@ -1,0 +1,67 @@
+@use '../../../shared/breakpoints';
+
+.pop-index-hero {
+    height: 507px;
+
+    &__container {
+        background-image: url('/assets/images/pop-hero.jpg');
+        height: 507px;
+        overflow: hidden;
+        text-align: center;
+        color: #ffffff;
+
+        background-size: 100%, cover;
+    }
+
+    &__mask {
+        display: flex;
+        background-color: rgba(0, 0, 0, 0.6);
+        height: 507px;
+
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__title {
+        margin-top: -118px;
+
+        font-family: Roboto, sans-serif;
+        font-weight: 900;
+        font-size: 3.75rem;
+        line-height: 4.5rem;
+
+        letter-spacing: 0.2px;
+        @include breakpoints.down(sm) {
+            font-size: 34px;
+            line-height: 46px;
+        }
+        @include breakpoints.down(500) {
+            margin-top: -85px;
+        }
+        @include breakpoints.down(391) {
+            margin-top: -64px;
+        }
+        @include breakpoints.down(340) {
+            font-size: 28px;
+            line-height: 38px;
+        }
+    }
+
+    &__subhead {
+        font-family: Roboto, sans-serif;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        text-align: center;
+        letter-spacing: 0.2px;
+
+        @include breakpoints.down(sm) {
+            font-size: 16px;
+            line-height: 24px;
+        }
+        @include breakpoints.down(340) {
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+}

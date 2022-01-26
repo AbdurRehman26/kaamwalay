@@ -7,6 +7,7 @@ use App\Models\CouponApplicable;
 use App\Models\CouponStatus;
 use App\Models\PaymentPlan;
 use App\Models\User;
+use App\Models\Order;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\postJson;
 
@@ -30,6 +31,15 @@ beforeEach(function () {
             [
                 'coupon_applicable_id' => $couponApplicable->id,
                 'coupon_status_id' => 2,
+            ]
+        );
+
+    $this->flatCoupon = Coupon::factory()
+        ->create(
+            [
+                'coupon_applicable_id' => $couponApplicable->id,
+                'coupon_status_id' => 2,
+                'type' => 'flat',
             ]
         );
 
@@ -91,4 +101,44 @@ it('calculates coupon discount', function () {
             'discounted_amount',
         ],
     ]);
+});
+
+it('calculates flat coupon discount ', function () {
+  
+    postJson(
+        route('coupon.discount'),
+        [
+            'coupon' => [
+                'id' => $this->flatCoupon->id,
+                'code' => $this->flatCoupon->code,
+            ],
+            'couponables_type' => $this->couponable->code,
+
+            'payment_plan' => [
+                'id' => $this->paymentPlan->id,
+            ],
+            'items' => [
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 1,
+                    'declared_value_per_unit' => 500,
+                ],
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 1,
+                    'declared_value_per_unit' => 500,
+                ],
+            ],
+        ]
+    )->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ]);
 });

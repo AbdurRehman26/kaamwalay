@@ -16,14 +16,36 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionTableRow } from './SubmissionTableRow';
 import { Table } from './styles';
+import { makeStyles } from '@mui/styles';
 
 interface SubmissionsTableProps {
     search?: string;
 }
 
+const useStyles = makeStyles(
+    (theme) => ({
+        paginationFooter: {
+            background: 'white',
+            position: 'fixed',
+            left: '72%',
+            bottom: '0',
+            [theme.breakpoints.down('sm')]: {
+                width: '100%',
+                left: '50%',
+            },
+        },
+        tableMargin: {
+            marginBottom: theme.spacing(7),
+        },
+    }),
+    {
+        name: 'SubmissionsTable',
+    },
+);
+
 export function SubmissionsTable({ search }: SubmissionsTableProps) {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-
+    const classes = useStyles();
     const orders$ = useListOrdersQuery({
         params: {
             filter: { orderNumber: search },
@@ -56,7 +78,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
     }
 
     const footer$ = (
-        <TableFooter>
+        <TableFooter className={classes.paginationFooter}>
             <TableRow>
                 <TablePagination {...orders$.paginationProps} />
             </TableRow>
@@ -86,12 +108,12 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
             {isSm ? (
                 <>
                     {items$}
-                    <TableContainer>
+                    <TableContainer className={classes.tableMargin}>
                         <Table>{footer$}</Table>
                     </TableContainer>
                 </>
             ) : (
-                <TableContainer>
+                <TableContainer className={classes.tableMargin}>
                     <Table>
                         <TableHead>
                             <TableRow>

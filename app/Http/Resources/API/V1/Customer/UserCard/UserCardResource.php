@@ -4,6 +4,7 @@ namespace App\Http\Resources\API\V1\Customer\UserCard;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\CardProduct\CardProductResource;
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 
 class UserCardResource extends BaseResource
@@ -17,7 +18,7 @@ class UserCardResource extends BaseResource
 
     public function toArray($request)
     {
-        $isGraded =  $this->orderItem->order->orderStatus->id >= 4;
+        $isGraded =  $this->orderItem->order->orderStatus->id >= OrderStatus::GRADED;
 
         return [
             'id' => $this->id,
@@ -28,9 +29,7 @@ class UserCardResource extends BaseResource
             'overall_values' => $this->overall_values,
             'human_grade_values' => $this->human_grade_values,
             'generated_images' => $this->generated_images,
-            // 'overall_grade' => $this->resource->overall_grade,
-            'order_status' => $this->when($isGraded === true, $this->resource->overall_grade),
-            
+            'overall_grade' => $this->when($isGraded, $this->resource->overall_grade),
             'overall_grade_nickname' => $this->resource->overall_grade_nickname,
             'notes' => $this->orderItem->notes,
             'submitted_at' => $this->formatDate($this->orderItem->order->created_at),

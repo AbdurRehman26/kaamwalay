@@ -111,7 +111,6 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
     // TODO: replace with a dedicated hook `useUser`
     const { user } = useAuth();
     const GradeRoot = isMobile ? 'a' : Box;
-    // const isGraded = orderStatusID < OrderStatusEnum.GRADED;
 
     return (
         <Box px={3} className={classes.containerBox}>
@@ -256,7 +255,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                             flexDirection={'column'}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            {orderStatusID >= OrderStatusEnum.SHIPPED ? (
+                                            {item?.userCard?.overallGrade ? (
                                                 <div>
                                                     <Typography
                                                         variant={'body2'}
@@ -286,7 +285,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                         </MuiLink>
                                                     )}
 
-                                                    {orderStatusID >= OrderStatusEnum.SHIPPED ? (
+                                                    {item?.userCard?.overallGrade ? (
                                                         <MuiLink
                                                             target={'_blank'}
                                                             href={`/feed/${item.certificateNumber}/view`}

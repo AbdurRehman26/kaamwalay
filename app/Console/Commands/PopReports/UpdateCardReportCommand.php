@@ -29,7 +29,7 @@ class UpdateCardReportCommand extends Command
      */
     public function handle(PopReportService $popReportService): int
     {
-        $cardProducts = CardProduct::all();
+        $cardProducts = CardProduct::whereNotNull('card_set_id')->get();
         foreach ($cardProducts as $cardProduct) {
             $this->info('Updating reports for card product ' . $cardProduct->id);
 

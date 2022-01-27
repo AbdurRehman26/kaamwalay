@@ -2,7 +2,9 @@
 
 namespace App\Listeners\API\Order;
 
+use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
 use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Notifications\Order\OrderStatusChangedNotification;
@@ -96,6 +98,10 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleGraded(OrderStatusChangedEvent $event)
     {
+        $event->order->orderItems->each(function (OrderItem $orderItem) {
+            OrderItemStatusChangedEvent::dispatch($orderItem);
+        });
+
         $this->sendEmail(
             $event,
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,

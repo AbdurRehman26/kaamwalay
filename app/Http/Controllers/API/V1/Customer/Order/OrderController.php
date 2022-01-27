@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
 use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\V1\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Resources\API\V1\Customer\Order\OrderCollection;
@@ -75,6 +76,33 @@ class OrderController extends Controller
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    }
+
+    public function calculateCollectorCoinPrice(CalculateOrderCollectorCoinPriceRequest $request, Order $order): JsonResponse
+    {
+        $this->authorize('calculateCollectorCoin', $order);
+
+        try {
+            $blockchainNetworkChainId = $request->payment_blockchain_network ?? 1;
+            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $blockchainNetworkChainId);
+
+            return new JsonResponse(
+                [
+                    'value' => $collectorCoinPrice,
+                    'wallet' => config('web3networks')[$blockchainNetworkChainId]['collector_coin_wallet'],
+                ],
+                200
+            );
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                    'value' => 0.0,
+                    'wallet' => null,
                 ],
                 Response::HTTP_BAD_REQUEST
             );

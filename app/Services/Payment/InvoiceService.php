@@ -35,9 +35,16 @@ class InvoiceService
 
         $orderPayment = $order->firstOrderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;
-        if ($paymentResponse) {
+        if ($paymentResponse && ! $order->paymentMethod->isWallet()) {
             if ($order->paymentMethod->code === 'paypal') {
                 $orderPayment = json_decode(json_encode($this->paypalData(json_decode($orderPayment->response, associative: true) ?? [])));
+            } elseif ($order->paymentMethod->isCollectorCoin()) {
+                $orderPayment = json_decode(json_encode([
+                    'transaction' => [
+                        'amount' => $paymentResponse->amount,
+                        'hash' => substr($orderPayment->payment_provider_reference_id, 0, 5) . '...' . substr($orderPayment->payment_provider_reference_id, -4),
+                    ],
+                ]));
             } else {
                 if (property_exists($paymentResponse, 'card')) {
                     $card = $paymentResponse->card;

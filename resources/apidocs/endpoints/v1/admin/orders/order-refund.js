@@ -12,6 +12,7 @@
  *
  * @apiParam {String} notes notes for the extra charge.
  * @apiParam {Float} amount amount that needs to be charged.
+ * @apiParam {Boolean} add_to_wallet whether it should returned to wallet.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK

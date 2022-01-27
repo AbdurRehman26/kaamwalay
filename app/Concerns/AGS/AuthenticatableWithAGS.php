@@ -7,6 +7,7 @@ use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Models\User;
 use App\Services\AGS\AgsService;
 use App\Services\Payment\Providers\StripeService;
+use App\Services\Wallet\WalletService;
 use Illuminate\Support\Arr;
 
 trait AuthenticatableWithAGS
@@ -43,6 +44,8 @@ trait AuthenticatableWithAGS
         $user->assignCustomerNumber();
 
         resolve(StripeService::class)->createCustomerIfNull($user);
+
+        (new WalletService)->createWallet(['user_id' => $user->id, 'balance' => 0]);
 
         return $user;
     }

@@ -6,6 +6,7 @@ import { AuthenticationEnum } from '../constants/AuthenticationEnum';
 import { RolesEnum } from '../constants/RolesEnum';
 import { useAuth } from '../hooks/useAuth';
 import { NativeRedirect } from './NativeRedirect';
+import { useLocation } from 'react-router-dom';
 
 interface ProtectedRouteProps {
     redirectRoute?: string;
@@ -22,6 +23,7 @@ interface ProtectedRouteProps {
 export function ProtectedRoute(Component: ElementType, { redirectRoute, roles }: ProtectedRouteProps = {}) {
     function Wrapper() {
         const { user, authenticated, checking } = useAuth();
+        const { search } = useLocation();
 
         const hasAtLeastOneRole = useMemo(() => {
             if (user && roles) {
@@ -46,7 +48,13 @@ export function ProtectedRoute(Component: ElementType, { redirectRoute, roles }:
             }
 
             const url = new URL(link);
+            const params: any = new URLSearchParams(search);
+
             url.searchParams.set('from', window.location.href);
+
+            if (params?.get('rfsn')) {
+                url.searchParams.set('rfsn', params?.get('rfsn'));
+            }
 
             return <NativeRedirect to={url.href} />;
         }

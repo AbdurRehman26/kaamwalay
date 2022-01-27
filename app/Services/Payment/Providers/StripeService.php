@@ -5,6 +5,8 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
+use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
+use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -16,7 +18,7 @@ use Stripe\Exception\InvalidRequestException;
 use Stripe\PaymentIntent;
 use Stripe\SetupIntent;
 
-class StripeService implements PaymentProviderServiceInterface
+class StripeService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
     // stripe charges 2.9% x (amount) + 30cents
     public const STRIPE_FEE_PERCENTAGE = 0.029;
@@ -54,7 +56,7 @@ class StripeService implements PaymentProviderServiceInterface
         return [];
     }
 
-    public function charge(Order $order): array
+    public function charge(Order $order, array $data = []): array
     {
         /** @var User $user */
         $user = auth()->user();
@@ -84,7 +86,7 @@ class StripeService implements PaymentProviderServiceInterface
                 'request' => $paymentData,
                 'response' => $response->toArray(),
                 'payment_provider_reference_id' => $order->firstOrderPayment->payment_provider_reference_id,
-                'amount' => $order->grand_total,
+                'amount' => $order->grand_total_to_be_paid,
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
                 'notes' => $paymentData['additional_data']['description'],
             ];
@@ -129,7 +131,7 @@ class StripeService implements PaymentProviderServiceInterface
             $order->lastOrderPayment->update([
                 'response' => json_encode($paymentIntent->toArray()),
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
-                'amount' => $order->grand_total,
+                'amount' => $order->grand_total_to_be_paid,
                 'notes' => "Payment for Order # {$order->order_number}",
             ]);
 

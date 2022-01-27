@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <style>
         @page {
-            margin: 4.3cm 0.9525cm 3cm 0.9525cm;
+            margin: 4.3cm 0.9525cm 4.3cm 0.9525cm;
         }
 
         header {
@@ -19,7 +19,7 @@
         }
         footer {
             position: fixed;
-            bottom: 0;
+            bottom: -113px;
             left: 0;
             right: 0;
             text-align: start;
@@ -195,10 +195,19 @@
         .info-box-content table{
             width: 100%;
         }
-        .info-line .info-title{
-            width: 83.5%;
+        .info-line {
+            font-size: 12px;
         }
-
+        .info-content {
+            font-size: 11px;
+            text-align: right;
+        }
+        .info-line .info-title{
+            width: 70%;
+        }
+        .total-line td{
+            border-top: 1px solid rgba(30, 30, 30, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -316,10 +325,19 @@
                             {{ucfirst($orderPayment->card->brand)}} ending in {{$orderPayment->card->last4}}
                             <br/>
                             Exp. {{$orderPayment->card->exp_month}}/{{$orderPayment->card->exp_year}}
+                            <br/>
                         @elseif(property_exists($orderPayment,'payer'))
                             {{$orderPayment->payer->email}}
                             <br/>
                             {{$orderPayment->payer->name}}
+                        @elseif(property_exists($orderPayment,'transaction'))
+                            Collector Coin ({{$orderPayment->transaction->amount}} AGS)
+                            <br/>
+                            {{$orderPayment->transaction->hash}}
+                            <br/>
+                        @endif
+                        @if($order->amount_paid_from_wallet > 0)
+                            (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
                         @endif
                     @else
                         No payment found
@@ -359,13 +377,33 @@
                                     ${{number_format($order->service_fee, 2)}}
                                 </td>
                             </tr>
-                            @if(! empty($order->discounted_amount))
+                            @if($order->discounted_amount > 0)
                                 <tr class="info-line">
                                     <td class="info-title">
                                         Promo Code Discount:
                                     </td>
                                     <td class="info-content">
                                         -${{number_format($order->discounted_amount, 2)}}
+                                    </td>
+                                </tr>
+                            @endif
+                            @if(! empty($order->payment_method_discounted_amount))
+                                <tr class="info-line">
+                                    <td class="info-title">
+                                        Payment Method Discount:
+                                    </td>
+                                    <td class="info-content">
+                                        -${{number_format($order->payment_method_discounted_amount, 2)}}
+                                    </td>
+                                </tr>
+                            @endif
+                            @if($order->amount_paid_from_wallet > 0)
+                                <tr class="info-line">
+                                    <td class="info-title">
+                                        Credit Applied :
+                                    </td>
+                                    <td class="info-content">
+                                        -${{number_format($order->amount_paid_from_wallet, 2)}}
                                     </td>
                                 </tr>
                             @endif
@@ -377,7 +415,7 @@
                                     ${{number_format($order->shipping_fee, 2)}}
                                 </td>
                             </tr>
-                            <tr class="info-line">
+                            <tr class="info-line total-line">
                                 <td class="info-title">
                                     Total:
                                 </td>

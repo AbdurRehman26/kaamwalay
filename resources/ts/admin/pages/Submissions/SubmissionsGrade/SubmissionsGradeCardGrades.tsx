@@ -1,19 +1,12 @@
 import Alert from '@mui/material/Alert';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { OutlinedCard } from '@shared/components/OutlinedCard';
-import { useInjectable } from '@shared/hooks/useInjectable';
-import { APIService } from '@shared/services/APIService';
-import { useAppDispatch, useAppSelector } from '@admin/redux/hooks';
-import {
-    updateExistingCardData,
-    updateHumanGradeValue,
-    getAllSubmissions,
-} from '@admin/redux/slices/submissionGradeSlice';
-import { useNotifications } from '@shared/hooks/useNotifications';
+import { useAdminOrderItemGradeData } from './useAdminOrderItemGradeData';
+import { GradeInput } from './GradeInput';
+
 interface SubmissionsGradeCardGradesProps {
     heading: string;
     disabled?: boolean;
@@ -77,68 +70,20 @@ export function SubmissionsGradeCardGrades({
     icon,
 }: SubmissionsGradeCardGradesProps) {
     const classes = useStyles();
-    const dispatch = useAppDispatch();
-    const apiService = useInjectable(APIService);
-
-    const frontCentering = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.center,
-    );
-    const frontEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.edge,
-    );
-    const frontCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.corner,
-    );
-    const frontSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.front.surface,
-    );
-    const backSurface = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.surface,
-    );
-    const backEdge = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.edge,
-    );
-    const backCorner = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.corner,
-    );
-    const backCenter = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues.back.center,
-    );
-    const itemID = useAppSelector((state) => state.submissionGradesSlice.allSubmissions[itemIndex].id);
-    const humanGrades = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].humanGradeValues,
-    );
-
-    const cardStatus = useAppSelector(
-        (state) => state.submissionGradesSlice.allSubmissions[itemIndex].orderItem.status?.orderItemStatus?.name,
-    );
-    const currentViewMode = useAppSelector((state) => state.submissionGradesSlice.viewModes[itemIndex]?.name);
-
-    function updateHumanGrade(side: string, part: string, gradeValue: string) {
-        dispatch(
-            updateHumanGradeValue({
-                itemIndex,
-                side,
-                part,
-                gradeValue,
-            }),
-        );
-    }
-
-    const notifications = useNotifications();
-    async function sendHumanGradesToBackend() {
-        const endpoint = apiService.createEndpoint(`admin/orders/${orderID}/cards/${itemID}/grades`);
-        try {
-            const response = await endpoint.put('', {
-                humanGradeValues: humanGrades,
-                gradeDelta: 0,
-            });
-            dispatch(updateExistingCardData({ id: itemID, data: response.data }));
-        } catch (error: any) {
-            dispatch(getAllSubmissions(orderID));
-            notifications.exception(error);
-        }
-    }
+    const {
+        frontCentering,
+        frontEdge,
+        frontCorner,
+        frontSurface,
+        backSurface,
+        backEdge,
+        backCorner,
+        backCenter,
+        cardStatus,
+        currentViewMode,
+        updateHumanGrade,
+        sendHumanGradesToBackend,
+    } = useAdminOrderItemGradeData(itemIndex, orderID);
 
     return (
         <OutlinedCard heading={heading} icon={icon} className={classes.root}>
@@ -154,76 +99,48 @@ export function SubmissionsGradeCardGrades({
                         <Typography className={classes.heading}>Front of Card</Typography>
                     </Grid>
                     <Grid item xs={3}>
-                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
-                            <TextField
-                                size={'medium'}
-                                variant={'outlined'}
-                                value={frontCentering}
-                                disabled={disabled}
-                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('front', 'center', e.target.value)}
-                                label={`Centering`}
-                            />
-                        ) : (
-                            <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Centering</div>
-                                <div className={classes.gradeReadValue}>{frontCentering}</div>
-                            </div>
-                        )}
+                        <GradeInput
+                            mainLabel={'Centering'}
+                            cardStatus={cardStatus}
+                            currentViewMode={currentViewMode}
+                            value={frontCentering}
+                            disabled={disabled}
+                            onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                            onChange={(e: any) => updateHumanGrade('front', 'center', e.target.value)}
+                        />
                     </Grid>
                     <Grid item xs={3}>
-                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
-                            <TextField
-                                size={'medium'}
-                                variant={'outlined'}
-                                value={frontSurface}
-                                disabled={disabled}
-                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('front', 'surface', e.target.value)}
-                                label={`Surface`}
-                            />
-                        ) : (
-                            <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Surface</div>
-                                <div className={classes.gradeReadValue}>{frontSurface}</div>
-                            </div>
-                        )}
+                        <GradeInput
+                            mainLabel={'Surface'}
+                            cardStatus={cardStatus}
+                            currentViewMode={currentViewMode}
+                            value={frontSurface}
+                            disabled={disabled}
+                            onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                            onChange={(e: any) => updateHumanGrade('front', 'surface', e.target.value)}
+                        />
                     </Grid>
                     <Grid item xs={3}>
-                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
-                            <TextField
-                                size={'medium'}
-                                variant={'outlined'}
-                                value={frontEdge}
-                                disabled={disabled}
-                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('front', 'edge', e.target.value)}
-                                label={`Edges`}
-                            />
-                        ) : (
-                            <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Edges</div>
-                                <div className={classes.gradeReadValue}>{frontEdge}</div>
-                            </div>
-                        )}
+                        <GradeInput
+                            mainLabel={'Edges'}
+                            cardStatus={cardStatus}
+                            currentViewMode={currentViewMode}
+                            value={frontEdge}
+                            disabled={disabled}
+                            onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                            onChange={(e: any) => updateHumanGrade('front', 'edge', e.target.value)}
+                        />
                     </Grid>
                     <Grid item xs={3}>
-                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
-                            <TextField
-                                size={'medium'}
-                                variant={'outlined'}
-                                value={frontCorner}
-                                disabled={disabled}
-                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('front', 'corner', e.target.value)}
-                                label={`Corners`}
-                            />
-                        ) : (
-                            <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Corners</div>
-                                <div className={classes.gradeReadValue}>{frontCorner}</div>
-                            </div>
-                        )}
+                        <GradeInput
+                            mainLabel={'Corners'}
+                            cardStatus={cardStatus}
+                            currentViewMode={currentViewMode}
+                            value={frontCorner}
+                            disabled={disabled}
+                            onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                            onChange={(e: any) => updateHumanGrade('front', 'corner', e.target.value)}
+                        />
                     </Grid>
                 </Grid>
                 <Divider className={classes.divider} />
@@ -232,76 +149,48 @@ export function SubmissionsGradeCardGrades({
                         <Typography className={classes.heading}>Back Of Card</Typography>
                     </Grid>
                     <Grid item xs={3}>
-                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
-                            <TextField
-                                size={'medium'}
-                                variant={'outlined'}
-                                value={backCenter}
-                                disabled={disabled}
-                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('back', 'center', e.target.value)}
-                                label={`Centering`}
-                            />
-                        ) : (
-                            <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Centering</div>
-                                <div className={classes.gradeReadValue}>{backCenter}</div>
-                            </div>
-                        )}
+                        <GradeInput
+                            mainLabel={'Centering'}
+                            cardStatus={cardStatus}
+                            currentViewMode={currentViewMode}
+                            value={backCenter}
+                            disabled={disabled}
+                            onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                            onChange={(e: any) => updateHumanGrade('back', 'center', e.target.value)}
+                        />
                     </Grid>
                     <Grid item xs={3}>
-                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
-                            <TextField
-                                size={'medium'}
-                                variant={'outlined'}
-                                value={backSurface}
-                                disabled={disabled}
-                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('back', 'surface', e.target.value)}
-                                label={`Surface`}
-                            />
-                        ) : (
-                            <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Surface</div>
-                                <div className={classes.gradeReadValue}>{backSurface}</div>
-                            </div>
-                        )}
+                        <GradeInput
+                            mainLabel={'Surface'}
+                            cardStatus={cardStatus}
+                            currentViewMode={currentViewMode}
+                            value={backSurface}
+                            disabled={disabled}
+                            onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                            onChange={(e: any) => updateHumanGrade('back', 'surface', e.target.value)}
+                        />
                     </Grid>
                     <Grid item xs={3}>
-                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
-                            <TextField
-                                size={'medium'}
-                                variant={'outlined'}
-                                value={backEdge}
-                                disabled={disabled}
-                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('back', 'edge', e.target.value)}
-                                label={`Edges`}
-                            />
-                        ) : (
-                            <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Edges</div>
-                                <div className={classes.gradeReadValue}>{backEdge}</div>
-                            </div>
-                        )}
+                        <GradeInput
+                            mainLabel={'Edges'}
+                            cardStatus={cardStatus}
+                            currentViewMode={currentViewMode}
+                            value={backEdge}
+                            disabled={disabled}
+                            onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                            onChange={(e: any) => updateHumanGrade('back', 'edge', e.target.value)}
+                        />
                     </Grid>
                     <Grid item xs={3}>
-                        {cardStatus === 'Confirmed' || currentViewMode === 'graded_revise_mode' ? (
-                            <TextField
-                                size={'medium'}
-                                variant={'outlined'}
-                                value={backCorner}
-                                disabled={disabled}
-                                onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
-                                onChange={(e) => updateHumanGrade('back', 'corner', e.target.value)}
-                                label={`Corners`}
-                            />
-                        ) : (
-                            <div className={classes.gradeReadContainer}>
-                                <div className={classes.gradeReadLabel}>Corners</div>
-                                <div className={classes.gradeReadValue}>{backCorner}</div>
-                            </div>
-                        )}
+                        <GradeInput
+                            mainLabel={'Corners'}
+                            cardStatus={cardStatus}
+                            currentViewMode={currentViewMode}
+                            value={backCorner}
+                            disabled={disabled}
+                            onBlur={currentViewMode === 'graded_revise_mode' ? () => '' : sendHumanGradesToBackend}
+                            onChange={(e: any) => updateHumanGrade('back', 'corner', e.target.value)}
+                        />
                     </Grid>
                 </Grid>
             </div>

@@ -5,9 +5,11 @@ namespace App\Services\Payment\Providers;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
+use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
+use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
 use Illuminate\Support\Str;
 
-class TestingStripeService implements PaymentProviderServiceInterface
+class TestingStripeService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface
 {
     // stripe charges 2.9% x (amount) + 30cents
     public const STRIPE_FEE_PERCENTAGE = 0.029;
@@ -15,7 +17,7 @@ class TestingStripeService implements PaymentProviderServiceInterface
     protected const ERROR_PARAMETER_CUSTOMER = 'customer';
     protected const ERROR_PARAMETER_PAYMENT_METHOD = 'payment_method';
 
-    public function charge(Order $order): array
+    public function charge(Order $order, array $data = []): array
     {
         $paymentData = [
             'customer_id' => Str::random(25),

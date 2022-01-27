@@ -59,10 +59,9 @@ export class OrdersRepository extends Repository<OrderEntity> {
     }
 
     async refundOrderTransaction(input: RefundOrderTransactionDTO) {
-        const { notes, amount, orderId } = input;
-        const body = toApiPropertiesObject({ notes, amount });
+        const { notes, amount, addToWallet, orderId } = input;
+        const body = toApiPropertiesObject({ notes, amount, addToWallet });
         const { data } = await this.endpoint.post(`${orderId}/payments/refund`, body);
-
         return plainToInstance(OrderRefundEntity, data);
     }
 

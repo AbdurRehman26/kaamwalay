@@ -25,8 +25,8 @@ class OrderItemController extends Controller
         return new JsonResponse([
             'data' => [
                'order_item' => new OrderItemCollection(
-                    OrderItem::forOrder($order)->get()
-                ),
+                   OrderItem::forOrder($order)->get()
+               ),
                 'order' => [
                     'id' => $order->id,
                     'order_number' => $order->order_number,

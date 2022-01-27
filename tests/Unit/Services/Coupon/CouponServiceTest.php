@@ -91,7 +91,6 @@ it('calculates discount for service fee order', function () {
 });
 
 it('calculates flat discount for order', function () {
-
     $this->coupon->update(
         ['type' => 'flat']
     );

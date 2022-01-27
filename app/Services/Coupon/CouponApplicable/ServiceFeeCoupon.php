@@ -2,9 +2,9 @@
 
 namespace App\Services\Coupon\CouponApplicable;
 
-use App\Services\Order\Shipping\ShippingFeeService;
 use App\Models\Coupon;
 use App\Models\Order;
+use App\Services\Order\Shipping\ShippingFeeService;
 
 class ServiceFeeCoupon implements CouponApplicableInterface
 {

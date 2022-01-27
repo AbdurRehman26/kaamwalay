@@ -9,7 +9,6 @@ use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
 use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;

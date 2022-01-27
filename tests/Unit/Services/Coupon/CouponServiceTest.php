@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Coupon\CouponService;
+use App\Services\Order\Shipping\ShippingFeeService;
 
 beforeEach(function () {
     $this->couponService = resolve(CouponService::class);
@@ -87,6 +88,25 @@ it('calculates discount for service fee order', function () {
     }
 
     expect($discount)->toBe($couponDiscount);
+});
+
+it('calculates flat discount for order', function () {
+
+    $this->coupon->update(
+        ['type' => 'flat']
+    );
+
+    $flatDiscount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+
+    $totalDeclaredValue = array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit'));
+    $totalNumberOfItems = array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+
+    $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+    $insuredShipping = ShippingFeeService::calculate($totalDeclaredValue, $totalNumberOfItems);
+
+    $flatCouponDiscount = $serviceFee + $insuredShipping - $this->order->coupon->discount_value;
+
+    expect($flatDiscount)->toBe($flatCouponDiscount);
 });
 
 it('calculates stats for coupon', function () {

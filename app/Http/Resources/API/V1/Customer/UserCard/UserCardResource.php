@@ -18,7 +18,7 @@ class UserCardResource extends BaseResource
 
     public function toArray($request)
     {
-        $isGraded =  $this->orderItem->order->orderStatus->id >= OrderStatus::GRADED;
+        $isGraded = $this->orderItem->order->orderStatus->id >= OrderStatus::GRADED;
 
         return [
             'id' => $this->id,

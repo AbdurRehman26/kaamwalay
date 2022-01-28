@@ -31,9 +31,6 @@ const useStyles = makeStyles(
         brand: {
             display: 'block',
         },
-        padding: {
-            padding: '0 16px 0 14px',
-        },
         brandImage: {
             display: 'block',
             height: 54,
@@ -42,7 +39,7 @@ const useStyles = makeStyles(
             },
         },
         toggleButton: {
-            marginRight: theme.spacing(1),
+            marginRight: 6,
             marginLeft: -6,
             [theme.breakpoints.up('md')]: {
                 display: 'none',

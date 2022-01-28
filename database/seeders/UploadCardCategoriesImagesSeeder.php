@@ -8,7 +8,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
-class UploadCardCategoriesImages extends Seeder
+class UploadCardCategoriesImagesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -20,21 +20,17 @@ class UploadCardCategoriesImages extends Seeder
     public function run()
     {
         $categories = [
-            ['name' => 'Pokemon', 'fileName' => 'Pokemon.png',],
-            ['name' => 'MetaZoo', 'fileName' => 'Metazoo.png',],
-            ['name' => 'Dragon Ball Super', 'fileName' => 'DragonBall.png',],
-            ['name' => 'Yu-Gi-Oh!', 'fileName' => 'Yugioh.png',],
+            ['name' => 'Pokemon', 'url' => 'https://robograding-live.s3.us-west-2.amazonaws.com/platform/categories/Pokemon.png',],
+            ['name' => 'MetaZoo', 'url' => 'https://robograding-live.s3.us-west-2.amazonaws.com/platform/categories/Metazoo.png',],
+            ['name' => 'Dragon Ball Super', 'url' => 'https://robograding-live.s3.us-west-2.amazonaws.com/platform/categories/DragonBall.png',],
+            ['name' => 'Yu-Gi-Oh!', 'url' => 'https://robograding-live.s3.us-west-2.amazonaws.com/platform/categories/Yugioh.png',],
         ];
 
         foreach ($categories as $category) {
             $this->command->info('Processing ' . $category['name']);
 
-            Storage::disk('s3')->writeStream('platform/categories/' . $category['fileName'], Storage::readStream('public/' . $category['fileName']));
-            $url = Storage::disk('s3')->url('platform/categories/' . $category['fileName']);
-            $this->command->info('Image uploaded to: ' . $url);
-
             CardCategory::where('name', 'like', '%' . $category['name'] . '%')->update([
-                'image_url' => $url,
+                'image_url' => $category['url'],
             ]);
         }
     }

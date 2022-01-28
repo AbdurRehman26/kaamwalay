@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             OrderItemCustomerShipmentSeeder::class,
             StateSeeder::class,
             CouponableSeeder::class,
+            UploadCardCategoriesImagesSeeder::class,
         ]);
 
         CardProduct::enableSearchSyncing();

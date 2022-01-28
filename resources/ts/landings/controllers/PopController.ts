@@ -8,7 +8,9 @@ class PopController extends Controller implements CanSetup<PopController> {
         await mountAtom(LayoutAtom);
     }
 
-    public popReport() {
+    public popIndex() {}
+
+    public categoriesReport() {
         this.scrollToTotal();
         this.enablePaginationLimit();
     }

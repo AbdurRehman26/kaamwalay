@@ -3,7 +3,7 @@ import { PaginationLinks } from './PaginationLinks';
 import { PaginationMeta } from './PaginationMeta';
 
 export class PaginatedData<T> {
-    static LimitSet = [48];
+    static LimitSet = [24, 48, 72, 96, 120];
 
     public data!: T[];
 

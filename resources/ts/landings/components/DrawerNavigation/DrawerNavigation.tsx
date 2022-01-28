@@ -28,8 +28,8 @@ const useStyles = makeStyles(
     (theme) => ({
         toggleButton: {
             position: 'absolute',
-            top: 7,
-            left: 8,
+            top: 10,
+            left: 10,
         },
         button: {
             margin: theme.spacing(1.5, 2, 0),

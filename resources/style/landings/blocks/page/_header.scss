@@ -14,15 +14,15 @@
     justify-content: space-between;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
     @include breakpoints.down(xs) {
-        padding: 0 14px 0 8px;
-        height: 64px;
+        padding: 0 16px 0 16px;
+        height: 60px;
         align-items: center;
     }
     &__brand {
         display: block;
         padding: 14px 24px 14px 0;
         @include breakpoints.down(md) {
-            padding: 10px 24px 10px 44px;
+            padding: 10px 24px 10px 40px;
             display: flex;
         }
         &-holder {
@@ -100,7 +100,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-end;
-        min-width: 140px;
+        min-width: 130px;
     }
     &__drawer {
         display: none;

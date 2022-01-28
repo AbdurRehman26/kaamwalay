@@ -1,6 +1,4 @@
 import Button from '@mui/material/Button';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
@@ -26,7 +24,6 @@ export function ListSubmissions() {
     const classes = useStyles();
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     function handleOnClick() {
         ReactGA.event({
@@ -39,17 +36,15 @@ export function ListSubmissions() {
 
     return (
         <>
-            <ListHeader headline={'Submissions'} noMargin isSubmission onSearch={setSearch}>
-                {!isMobile ? (
-                    <Button
-                        onClick={handleOnClick}
-                        variant={'contained'}
-                        color={'primary'}
-                        className={classes.newSubmissionBtn}
-                    >
-                        New Submission
-                    </Button>
-                ) : null}
+            <ListHeader headline={'Submissions'} noMargin onSearch={setSearch}>
+                <Button
+                    onClick={handleOnClick}
+                    variant={'contained'}
+                    color={'primary'}
+                    className={classes.newSubmissionBtn}
+                >
+                    New Submission
+                </Button>
             </ListHeader>
             <SubmissionsTable search={search} />
         </>

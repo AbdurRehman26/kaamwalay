@@ -31,6 +31,9 @@ const useStyles = makeStyles(
         brand: {
             display: 'block',
         },
+        padding: {
+            padding: '0 16px 0 14px',
+        },
         brandImage: {
             display: 'block',
             height: 54,

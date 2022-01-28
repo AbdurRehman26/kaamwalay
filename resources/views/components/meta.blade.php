@@ -36,3 +36,4 @@
 <meta name="twitter:image" content="{{ $image ?? $defaultImage }}" />
 <meta itemProp="thumbnailUrl" content="{{ $image ?? $defaultImage }}" />
 <link rel="image_src" href="{{ $image ?? $defaultImage }}" />
+<meta name="facebook-domain-verification" content="uxboktpuwlihin5kg88zu08xebnh1f" />

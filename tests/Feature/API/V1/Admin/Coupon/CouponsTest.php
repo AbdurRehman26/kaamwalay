@@ -240,3 +240,16 @@ test('admin can not create coupon with past start date', function () {
     ])
         ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });
+
+test('admin can create coupon with flat discount', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'flat',
+        'discount_value' => 200,
+        'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
+        'is_permanent' => true,
+    ])
+        ->assertCreated();
+});

@@ -170,7 +170,6 @@ class AGSClient
 
     protected function handleErrorResponse(Response $response, string $route, array $payload = []): array
     {
-
         unset($payload['password'], $payload['password1'], $payload['password2']);
 
         try {

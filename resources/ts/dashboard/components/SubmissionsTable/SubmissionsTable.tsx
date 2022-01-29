@@ -9,13 +9,30 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useEffect } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionTableRow } from './SubmissionTableRow';
+import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import { Table } from './styles';
+import Grid from '@mui/material/Grid';
+
+const useStyles = makeStyles(
+    {
+        submissions: {
+            width: '100%',
+            backgroundColor: '#F9F9F9',
+            border: '1px solid #E0E0E0',
+            borderRadius: '8px',
+        },
+    },
+    {
+        name: 'SubmissionsStyles',
+    },
+);
 
 interface SubmissionsTableProps {
     search?: string;
@@ -23,6 +40,7 @@ interface SubmissionsTableProps {
 
 export function SubmissionsTable({ search }: SubmissionsTableProps) {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const classes = useStyles();
 
     const orders$ = useListOrdersQuery({
         params: {
@@ -80,6 +98,28 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
             orderCustomerShipment={data?.orderCustomerShipment}
         />
     ));
+
+    if (items$.length === 0) {
+        return (
+            <Box className={classes.submissions} padding={4} mt={1}>
+                <Grid container alignItems={'center'} justifyContent={'center'} rowSpacing={1}>
+                    <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
+                        <Inventory2Icon />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant={'subtitle1'} fontWeight={500} textAlign={'center'} fontSize={16}>
+                            No Submissions
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
+                            You have no submission's yet.<br></br>Click NEW SUBMISSION to get started.
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </Box>
+        );
+    }
 
     return (
         <>

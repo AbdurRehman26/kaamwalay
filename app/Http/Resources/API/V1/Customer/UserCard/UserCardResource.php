@@ -18,6 +18,7 @@ class UserCardResource extends BaseResource
 
     public function toArray($request)
     {
+        // @phpstan-ignore-next-line
         $isGraded =  $this->orderItem->order->orderStatus->id >= OrderStatus::GRADED;
 
         return [

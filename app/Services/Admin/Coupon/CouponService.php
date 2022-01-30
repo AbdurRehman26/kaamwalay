@@ -189,7 +189,7 @@ class CouponService
             $this->validatePercentageDiscountValue($data['discount_value']);
 
             return;
-        } 
+        }
         if ($data['type'] === array_search(Coupon::TYPE_FLAT, Coupon::COUPON_TYPE_MAPPING)) {
             $this->validateFlatDiscountValue(
                 $data['coupon_applicable_id'],

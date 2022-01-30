@@ -99,7 +99,7 @@ it('calculates flat discount for order', function () {
 
     $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
     $insuredShipping = ShippingFeeService::calculate(
-        array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit')), 
+        array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit')),
         array_sum(array_column($this->order->orderItems->toArray(), 'quantity'))
     );
 

@@ -17,10 +17,10 @@ class ServiceLevelCoupon implements CouponApplicableInterface
 
     public function getFlatDiscount(Coupon $coupon, Order|array $order): float
     {
-        $totalDeclaredValue = array_sum(array_column($this->getOrderItems($order), 'declared_value_per_unit'));
-        $totalNumberOfItems = array_sum(array_column($this->getOrderItems($order), 'quantity'));
-
-        $insuredShipping = ShippingFeeService::calculate($totalDeclaredValue, $totalNumberOfItems);
+        $insuredShipping = ShippingFeeService::calculate(
+            array_sum(array_column($this->getOrderItems($order), 'declared_value_per_unit')), 
+            array_sum(array_column($this->getOrderItems($order), 'quantity'))
+        );
         $serviceFee = $this->getPaymentPlan($order)->price * array_sum(array_column($this->getOrderItems($order), 'quantity'));
         
         return $serviceFee + $insuredShipping - $coupon->discount_value;

@@ -51,6 +51,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
         params: {
             filter: { orderNumber: search },
             include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
+            perPage: 48,
         },
         ...bracketParams(),
     });
@@ -81,7 +82,10 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
     const footer$ = (
         <TableFooter className={classes.paginationFooter}>
             <TableRow>
-                <TablePagination {...orders$.paginationProps} />
+                <TablePagination
+                    {...(orders$.paginationProps.rowsPerPageOptions = [48])}
+                    {...orders$.paginationProps}
+                />
             </TableRow>
         </TableFooter>
     );

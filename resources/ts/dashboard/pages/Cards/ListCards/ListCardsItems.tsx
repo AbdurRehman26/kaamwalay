@@ -67,6 +67,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
             filter: {
                 search,
             },
+            perPage: 48,
         },
         ...bracketParams(),
     });
@@ -158,7 +159,11 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
             <Grid container spacing={1} className={classes.tableMargin}>
                 {items$}
                 <Divider className={classes.divider} />
-                <TablePagination className={classes.paginationFooter} {...userCards$.paginationProps} />
+                <TablePagination
+                    className={classes.paginationFooter}
+                    {...(userCards$.paginationProps.rowsPerPageOptions = [48])}
+                    {...userCards$.paginationProps}
+                />
             </Grid>
         </>
     );

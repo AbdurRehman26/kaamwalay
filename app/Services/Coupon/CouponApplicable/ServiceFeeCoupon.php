@@ -4,6 +4,7 @@ namespace App\Services\Coupon\CouponApplicable;
 
 use App\Models\Coupon;
 use App\Models\Order;
+use App\Exceptions\API\Customer\Coupon\CouponCodeNotApplicable;
 use App\Services\Order\Shipping\ShippingFeeService;
 
 class ServiceFeeCoupon implements CouponApplicableInterface
@@ -23,6 +24,8 @@ class ServiceFeeCoupon implements CouponApplicableInterface
         );
         $serviceFee = $this->getPaymentPlan($order)->price * array_sum(array_column($this->getOrderItems($order), 'quantity'));
         
+        throw_if($coupon->discount_value > ($serviceFee + $insuredShipping), CouponCodeNotApplicable::class);
+
         return $serviceFee + $insuredShipping - $coupon->discount_value;
     }
 

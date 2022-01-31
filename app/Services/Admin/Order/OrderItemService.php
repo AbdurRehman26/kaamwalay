@@ -74,8 +74,6 @@ class OrderItemService
             $this->userCardService->createItemUserCard($item);
         }
 
-        OrderItemStatusChangedEvent::dispatch($item);
-
         return $item->fresh();
     }
 

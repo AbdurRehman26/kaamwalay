@@ -11,6 +11,7 @@ use App\Notifications\Order\OrderStatusChangedNotification;
 use App\Services\Admin\OrderService as AdminOrderService;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
+use App\Services\PopReport\PopReportService;
 use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -27,7 +28,8 @@ class OrderStatusChangedListener implements ShouldQueue
     public function __construct(
         protected EmailService $emailService,
         protected OrderService $orderService,
-        protected AdminOrderService $adminOrderService
+        protected AdminOrderService $adminOrderService,
+        protected PopReportService $popReportService
     ) {
     }
 
@@ -98,9 +100,7 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleGraded(OrderStatusChangedEvent $event)
     {
-        $event->order->orderItems->each(function (OrderItem $orderItem) {
-            OrderItemStatusChangedEvent::dispatch($orderItem);
-        });
+        $this->popReportService->updatePopReportsForOrder($event->order);
 
         $this->sendEmail(
             $event,

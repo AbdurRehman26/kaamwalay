@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1\Admin\Order;
 
 use App\Events\API\Admin\Order\OrderUpdated;
 use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
+use App\Events\API\Admin\UserCard\UserCardGradeRevisedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Order\Grades\UserCardGradeRequest;
 use App\Http\Resources\API\V1\Admin\Order\UserCardResource;
@@ -50,7 +51,7 @@ class UserCardController extends Controller
 
         if ($card->orderItem->order_item_status_id === OrderItemStatus::GRADED
         && in_array($card->orderItem->order->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED])) {
-            OrderItemStatusChangedEvent::dispatch($card->orderItem);
+            UserCardGradeRevisedEvent::dispatch($card);
         }
 
         return new UserCardResource($card);

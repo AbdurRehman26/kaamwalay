@@ -5,6 +5,7 @@ namespace App\Services\PopReport;
 use App\Models\CardProduct;
 use App\Models\CardSeries;
 use App\Models\CardSet;
+use App\Models\Order;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
 use App\Models\PopReportsCard;
@@ -89,6 +90,53 @@ class PopReportService
         $reportsTableArray = $this->accumulateReportRow($userCards);
 
         $popCardReportModel->where($whereCondition)->update($reportsTableArray);
+    }
+
+    public function updateMultipleSeriesReports(Collection $cardSeries): void
+    {
+        $cardSeries->each(function (CardSeries $series) {
+            $this->updateSeriesReport($series);
+        });
+    }
+
+    public function updateMultipleSetsReports(Collection $cardSets): void
+    {
+        $cardSets->each(function (CardSet $cardSet) {
+            $this->updateSetsReport($cardSet);
+        });
+    }
+
+    public function updateMultipleCardProductsReports(Collection $cardProducts): void
+    {
+        $cardProducts->each(function (CardProduct $cardProduct) {
+            $this->updateCardProductsReport($cardProduct);
+        });
+    }
+
+    public function updatePopReportsForOrder(Order $order): void
+    {
+        $orderCards = CardProduct::join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->where('order_items.order_id', $order->id)
+            ->select('card_products.*')
+            ->get();
+
+        $orderSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
+            ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->where('order_items.order_id', $order->id)
+            ->select('card_sets.*')
+            ->groupBy('card_sets.id')->get();
+
+        $orderSeries = CardSeries::join('card_sets', 'card_sets.card_series_id', '=', 'card_series.id')
+            ->join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
+            ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->where('order_items.order_id', $order->id)
+            ->select('card_series.*')
+            ->groupBy('card_series.id')
+            ->get();
+
+        $this->updateMultipleCardProductsReports($orderCards);
+        $this->updateMultipleSetsReports($orderSets);
+        $this->updateMultipleSeriesReports($orderSeries);
     }
 
     public function getSeriesReport(): LengthAwarePaginator

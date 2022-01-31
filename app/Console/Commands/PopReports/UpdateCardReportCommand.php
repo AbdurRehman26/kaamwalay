@@ -29,14 +29,15 @@ class UpdateCardReportCommand extends Command
      */
     public function handle(PopReportService $popReportService): int
     {
-        $cardProducts = CardProduct::whereNotNull('card_set_id')->get();
-        foreach ($cardProducts as $cardProduct) {
-            $this->info('Updating reports for card product ' . $cardProduct->id);
+        $cardProducts = CardProduct::join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->join('user_cards', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->groupBy('card_products.id')
+            ->select('card_products.*')
+            ->get();
 
-            $popReportService->updateCardProductsReport($cardProduct);
+        $this->info('Total cards to be processed: ' . count($cardProducts) );
 
-            $this->info('Updating reports for card product ' . $cardProduct->id . ' completed');
-        }
+        $popReportService->updateMultipleCardProductsReports($cardProducts);
 
         return 0;
     }

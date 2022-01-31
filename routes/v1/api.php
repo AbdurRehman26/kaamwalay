@@ -69,6 +69,7 @@ Route::prefix('customer')->group(function () {
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
         });
+//        Route::apiResource('orders.orderItems', );
 
         Route::prefix('coupons')->group(function () {
             Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');

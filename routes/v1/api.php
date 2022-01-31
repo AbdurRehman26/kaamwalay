@@ -13,6 +13,7 @@ use App\Http\Controllers\API\V1\Customer\Cards\CardProductController;
 use App\Http\Controllers\API\V1\Customer\Cards\UserCardController;
 use App\Http\Controllers\API\V1\Customer\CouponController;
 use App\Http\Controllers\API\V1\Customer\Order\OrderController;
+use App\Http\Controllers\API\V1\Customer\Order\OrderItemController;
 use App\Http\Controllers\API\V1\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\V1\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\V1\Customer\Order\PaymentPlanController;
@@ -69,7 +70,7 @@ Route::prefix('customer')->group(function () {
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
         });
-//        Route::apiResource('orders.orderItems', );
+        Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');
 
         Route::prefix('coupons')->group(function () {
             Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');

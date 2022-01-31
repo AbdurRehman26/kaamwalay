@@ -2,9 +2,9 @@
 
 namespace App\Services\Coupon\CouponApplicable;
 
+use App\Exceptions\API\Customer\Coupon\CouponCodeNotApplicable;
 use App\Models\Coupon;
 use App\Models\Order;
-use App\Exceptions\API\Customer\Coupon\CouponCodeNotApplicable;
 use App\Services\Order\Shipping\ShippingFeeService;
 
 class ServiceLevelCoupon implements CouponApplicableInterface

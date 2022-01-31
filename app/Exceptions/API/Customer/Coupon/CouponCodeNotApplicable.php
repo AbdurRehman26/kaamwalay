@@ -12,7 +12,7 @@ class CouponCodeNotApplicable extends Exception
     /**
      * @var string
      */
-    protected $message = 'Coupon code not applicable.';
+    protected $message = 'Coupon applied value is greater than your order. Please choose another coupon.';
 
     /**
      * @var int

@@ -29,12 +29,26 @@ const StyledSelect = styled(Select)(
 );
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
+        paginationFooter: {
+            background: 'white',
+            position: 'fixed',
+            width: '50%',
+            left: '32%',
+            bottom: '0',
+            [theme.breakpoints.down('sm')]: {
+                left: '50%',
+                width: '50%',
+            },
+        },
+        tableMargin: {
+            marginBottom: theme.spacing(7),
+        },
         divider: {
             marginTop: '16px',
             width: '100%',
         },
-    },
+    }),
     {
         name: 'ListCardsItemsStyles',
     },
@@ -141,10 +155,10 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                     </StyledSelect>
                 </Grid>
             </Box>
-            <Grid container spacing={1}>
+            <Grid container spacing={1} className={classes.tableMargin}>
                 {items$}
                 <Divider className={classes.divider} />
-                <TablePagination {...userCards$.paginationProps} />
+                <TablePagination className={classes.paginationFooter} {...userCards$.paginationProps} />
             </Grid>
         </>
     );

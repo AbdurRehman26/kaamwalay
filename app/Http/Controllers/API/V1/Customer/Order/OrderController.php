@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
+use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
 use App\Http\Requests\API\V1\Customer\Order\CompleteOrderRequest;
@@ -14,6 +15,7 @@ use App\Http\Resources\API\V1\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderResource;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Services\Order\CompleteOrderService;
 use App\Services\Order\CreateOrderService;
 use App\Services\Order\OrderService;
@@ -23,6 +25,7 @@ use App\Services\Order\UpdateAddressOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class OrderController extends Controller
 {
@@ -163,5 +166,17 @@ class OrderController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function destroy(Order $order): JsonResponse
+    {
+        throw_if($order->order_status_id !== OrderStatus::PAYMENT_PENDING, OrderCanNotCanceled::class);
+
+        $this->orderService->cancelOrder($order, auth()->user());
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 }

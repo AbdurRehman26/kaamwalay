@@ -65,7 +65,6 @@ Route::prefix('customer')->group(function () {
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
-            Route::apiResource('/', OrderController::class)->only(['index', 'store']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
             Route::post('create', [OrderController::class, 'createOrder']);
             Route::post('{order}/addresses', [OrderController::class, 'storeOrderAddresses']);
@@ -73,6 +72,8 @@ Route::prefix('customer')->group(function () {
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
         });
+
+        Route::apiResource('orders', OrderController::class, ['as' => 'customer'])->only(['index', 'store', 'destroy']);
         Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');
 
         Route::prefix('coupons')->group(function () {

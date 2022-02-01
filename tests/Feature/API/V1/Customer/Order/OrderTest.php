@@ -750,3 +750,58 @@ test('a customer can place order with amount equal to his wallet balance.', func
         ],
     ]);
 });
+
+test('a customer can see incomplete orders', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class,
+    ]);
+
+    $orders = Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->count(10)
+        ->create();
+
+    $this->actingAs($this->user);
+    $orders->each(function ($order) {
+        $status = rand(0, 1) ? OrderStatus::PAYMENT_PENDING : OrderStatus::PLACED;
+        $this->orderStatusHistoryService->addStatusToOrder($status, $order->id, $order->user_id);
+    });
+
+    $this->getJson(route('index'))
+        ->assertOk()
+        ->assertJsonCount(10, ['data']);
+});
+
+test('a customer can cancel order', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class,
+    ]);
+
+    $order = Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->create();
+
+    $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PAYMENT_PENDING, $order->id, $order->user_id);
+
+    $this->actingAs($order->user);
+
+    $this->deleteJson(route('customer.orders.destroy', ['order' => $order]))
+        ->assertNoContent();
+});
+
+test('a customer can not cancel paid order', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class,
+    ]);
+
+    $order = Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->create();
+
+    $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order->id, $order->user_id);
+
+    $this->actingAs($order->user);
+
+    $this->deleteJson(route('customer.orders.destroy', ['order' => $order]))
+        ->assertForbidden();
+});

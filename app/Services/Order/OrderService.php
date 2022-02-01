@@ -2,9 +2,14 @@
 
 namespace App\Services\Order;
 
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
+use App\Models\OrderPayment;
+use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
+use App\Models\User;
 use App\Services\Payment\Providers\CollectorCoinService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +24,7 @@ class OrderService
         $itemsPerPage = request('per_page');
 
         return QueryBuilder::for(Order::class)
-            ->placed()
+            ->onlyValid()
             ->forUser($user)
             ->allowedIncludes(Order::getAllowedIncludes())
             ->allowedFilters(Order::getAllowedFilters())
@@ -121,5 +126,19 @@ class OrderService
         }
 
         return '';
+    }
+
+    public function cancelOrder(Order $order, User $user): void
+    {
+        $order->order_status_id = OrderStatus::CANCELLED;
+        $order->save();
+
+        OrderStatusHistory::create([
+            'order_id' => $order->id,
+            'order_status_id' => OrderStatus::CANCELLED,
+            'user_id' => $user->id,
+        ]);
+
+        OrderStatusChangedEvent::dispatch($order, OrderStatus::find(OrderStatus::CANCELLED));
     }
 }

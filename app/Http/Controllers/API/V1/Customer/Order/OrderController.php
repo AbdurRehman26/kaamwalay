@@ -18,6 +18,7 @@ use App\Services\Order\CompleteOrderService;
 use App\Services\Order\CreateOrderService;
 use App\Services\Order\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
+use App\Services\Order\StoreOrderService;
 use App\Services\Order\UpdateAddressOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -28,6 +29,7 @@ class OrderController extends Controller
     public function __construct(
         private OrderService $orderService,
         private CreateOrderService $createOrderService,
+        private StoreOrderService $storeOrderService,
         private UpdateAddressOrderService $updateAddressOrderService,
         private CompleteOrderService $completeOrderService
     ) {
@@ -45,6 +47,22 @@ class OrderController extends Controller
     {
         try {
             $order = $this->createOrderService->create($request->validated());
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return new OrderCreateResource($order);
+    }
+
+    public function create(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    {
+        try {
+            $order = $this->storeOrderService->create($request->validated());
         } catch (Exception $e) {
             return new JsonResponse(
                 [
@@ -75,9 +93,8 @@ class OrderController extends Controller
 
     public function completeOrder(CompleteOrderRequest $request, Order $order): OrderCreateResource | JsonResponse
     {
-        $order = $this->completeOrderService->save($order, $request->validated());
-
         try {
+            $order = $this->completeOrderService->save($order, $request->validated());
         } catch (Exception $e) {
             return new JsonResponse(
                 [

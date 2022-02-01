@@ -41,7 +41,7 @@ class UpdateAddressOrderService
     /**
      * @throws Exception
      */
-    protected function validate()
+    protected function validate(): void
     {
         CustomerAddressValidator::validate($this->data);
     }
@@ -50,7 +50,7 @@ class UpdateAddressOrderService
      * @throws Throwable
      * @throws OrderStatusHistoryWasAlreadyAssigned
      */
-    protected function process()
+    protected function process(): void
     {
         DB::beginTransaction();
 
@@ -63,12 +63,12 @@ class UpdateAddressOrderService
         DB::commit();
     }
 
-    protected function storeShippingMethod(array $shippingMethod)
+    protected function storeShippingMethod(array $shippingMethod): void
     {
         $this->order->shipping_method_id = $shippingMethod['id'];
     }
 
-    protected function storeOrderAddresses(array $shippingAddress, array $customerAddress)
+    protected function storeOrderAddresses(array $shippingAddress, array $customerAddress): void
     {
         if (! empty($customerAddress['id'])) {
             $shippingAddress = OrderAddress::create(CustomerAddress::find($customerAddress['id'])->toArray());
@@ -79,7 +79,7 @@ class UpdateAddressOrderService
         $this->order->shippingAddress()->associate($shippingAddress);
     }
 
-    protected function storeCustomerAddress(array $shippingAddress, $customerAddress)
+    protected function storeCustomerAddress(array $shippingAddress, array $customerAddress): void
     {
         if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
             CustomerAddress::create(array_merge(

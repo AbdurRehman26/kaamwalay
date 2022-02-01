@@ -52,7 +52,7 @@ class CompleteOrderService
     /**
      * @throws Exception
      */
-    protected function validate()
+    protected function validate(): void
     {
         CouponAppliedValidator::validate($this->data);
         WalletCreditAppliedValidator::validate($this->data);
@@ -62,7 +62,7 @@ class CompleteOrderService
      * @throws Throwable
      * @throws OrderStatusHistoryWasAlreadyAssigned
      */
-    protected function process()
+    protected function process(): void
     {
         DB::beginTransaction();
 
@@ -87,12 +87,12 @@ class CompleteOrderService
         return ! empty($data['payment_method']) ? $data['payment_method'] : PaymentMethod::getWalletPaymentMethod()->toArray();
     }
 
-    protected function storePaymentMethod(array $paymentMethod)
+    protected function storePaymentMethod(array $paymentMethod): void
     {
         $this->order->payment_method_id = $paymentMethod['id'];
     }
 
-    protected function storeBillingAddress(array $billingAddress, array $customerAddress)
+    protected function storeBillingAddress(array $billingAddress, array $customerAddress): void
     {
         $shippingAddress = CustomerAddress::find($customerAddress['id']);
 
@@ -104,7 +104,7 @@ class CompleteOrderService
         }
     }
 
-    protected function storeShippingFee()
+    protected function storeShippingFee(): void
     {
         $shippingFee = ShippingFeeService::calculateForOrder($this->order);
 
@@ -128,7 +128,7 @@ class CompleteOrderService
         $this->order->save();
     }
 
-    protected function storeOrderPayment(array $data)
+    protected function storeOrderPayment(array $data): void
     {
         $orderPaymentData = [
             'order_id' => $this->order->id,

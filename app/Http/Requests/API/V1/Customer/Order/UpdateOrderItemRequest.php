@@ -11,6 +11,7 @@ class UpdateOrderItemRequest extends FormRequest
     {
         /** @var Order $order */
         $order = $this->route('order');
+
         return $order->isPayable();
     }
 

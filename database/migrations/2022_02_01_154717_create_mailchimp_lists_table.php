@@ -4,16 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMailchimpUsersTable extends Migration
+class CreateMailchimpListsTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
+
     public function up()
     {
-        Schema::create('mailchimp_users', function (Blueprint $table) {
+        Schema::create('mailchimp_lists', function (Blueprint $table) {
             $table->id();
             $table->string('list_name');
             $table->string('list_id');
@@ -28,6 +29,6 @@ class CreateMailchimpUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mailchimp_users');
+        Schema::dropIfExists('mailchimp_lists');
     }
 }

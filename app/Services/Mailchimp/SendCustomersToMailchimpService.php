@@ -2,7 +2,7 @@
 
 namespace App\Services\Mailchimp;
 
-use App\Models\MailchimpUser;
+use App\Models\MailchimpList;
 use App\Models\OrderStatus;
 use App\Models\User;
 use GuzzleHttp\Exception\RequestException;
@@ -64,7 +64,7 @@ class SendCustomersToMailchimpService
                                 'language' => 'EN',
                             ],
                         ]);
-                    MailchimpUser::create([
+                    MailchimpList::create([
                             'list_name' => $name,
                             'list_id' => $response->id,
                         ]);
@@ -89,7 +89,7 @@ class SendCustomersToMailchimpService
 
     public function getListId(string $template): string|null
     {
-        return MailchimpUser::where('list_name', $template)->value('list_id');
+        return MailchimpList::where('list_name', $template)->value('list_id');
     }
 
     public function sendExistingUsersToMailchimp(string $template): void

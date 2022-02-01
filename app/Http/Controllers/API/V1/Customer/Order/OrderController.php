@@ -6,6 +6,7 @@ use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
 use App\Http\Requests\API\V1\Customer\Order\CompleteOrderRequest;
+use App\Http\Requests\API\V1\Customer\Order\CreateOrderRequest;
 use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\V1\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Requests\API\V1\Customer\Order\UpdateOrderAddressesRequest;
@@ -43,7 +44,7 @@ class OrderController extends Controller
         );
     }
 
-    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    public function create(StoreOrderRequest $request): OrderCreateResource | JsonResponse
     {
         try {
             $order = $this->createOrderService->create($request->validated());
@@ -59,7 +60,7 @@ class OrderController extends Controller
         return new OrderCreateResource($order);
     }
 
-    public function create(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    public function store(CreateOrderRequest $request): OrderCreateResource | JsonResponse
     {
         try {
             $order = $this->storeOrderService->create($request->validated());

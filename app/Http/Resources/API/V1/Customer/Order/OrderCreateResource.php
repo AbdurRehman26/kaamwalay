@@ -29,6 +29,7 @@ class OrderCreateResource extends JsonResource
             'payment_method_id' => $this->payment_method_id,
             'grand_total' => $this->grand_total_to_be_paid,
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
+            'order_step' => $this->order_step,
         ];
     }
 }

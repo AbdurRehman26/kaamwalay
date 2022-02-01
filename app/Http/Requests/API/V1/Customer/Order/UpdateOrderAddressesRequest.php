@@ -32,7 +32,7 @@ class UpdateOrderAddressesRequest extends FormRequest
             'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
             'items' => 'required|array',
             'items.*.card_product' => 'required|array',
-            'items.*.card_product.id' => 'required|integer',
+            'items.*.card_product.id' => 'required|integer|exists:card_products,id',
             'items.*.quantity' => 'required|integer',
             'items.*.declared_value_per_unit' => 'required|integer',
         ];

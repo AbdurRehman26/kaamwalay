@@ -66,7 +66,10 @@ class CompleteOrderService
     {
         DB::beginTransaction();
 
-        $this->storeBillingAddress($this->data['billing_address'], $this->data['billing_address']);
+        $this->storeBillingAddress($this->data['billing_address'], $this->data['customer_address']);
+        $this->storePaymentMethod(
+            $this->getPaymentMethod($this->data)
+        );
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
@@ -77,6 +80,16 @@ class CompleteOrderService
         $this->saveOrder();
 
         DB::commit();
+    }
+
+    protected function getPaymentMethod(array $data): array
+    {
+        return ! empty($data['payment_method']) ? $data['payment_method'] : PaymentMethod::getWalletPaymentMethod()->toArray();
+    }
+
+    protected function storePaymentMethod(array $paymentMethod)
+    {
+        $this->order->payment_method_id = $paymentMethod['id'];
     }
 
     protected function storeBillingAddress(array $billingAddress, array $customerAddress)

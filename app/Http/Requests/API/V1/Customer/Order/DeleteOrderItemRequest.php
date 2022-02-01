@@ -4,7 +4,7 @@ namespace App\Http\Requests\API\V1\Customer\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOrderItemRequest extends FormRequest
+class DeleteOrderItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class StoreOrderItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'card_product_id' => ['required', 'integer', 'exists:card_products,id'],
-            'quantity' => ['required', 'integer'],
-            'declared_value_per_unit' => ['required', 'integer'],
+            //
         ];
     }
 }

@@ -77,7 +77,6 @@ class UpdateAddressOrderService
         }
 
         $this->order->shippingAddress()->associate($shippingAddress);
-
     }
 
     protected function storeCustomerAddress(array $shippingAddress, $customerAddress)

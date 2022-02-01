@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1\Customer\Order;
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
+use App\Http\Requests\API\V1\Customer\Order\CompleteOrderRequest;
 use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\V1\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Requests\API\V1\Customer\Order\UpdateOrderAddressesRequest;
@@ -18,7 +19,6 @@ use App\Services\Order\CreateOrderService;
 use App\Services\Order\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use App\Services\Order\UpdateAddressOrderService;
-use App\Services\Order\UpdateOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,7 +60,7 @@ class OrderController extends Controller
     public function storeOrderAddresses(UpdateOrderAddressesRequest $request, Order $order): OrderCreateResource | JsonResponse
     {
         try {
-            $order = $this->updateAddressOrderService->update($order, $request->validated());
+            $order = $this->updateAddressOrderService->save($order, $request->validated());
         } catch (Exception $e) {
             return new JsonResponse(
                 [
@@ -73,7 +73,7 @@ class OrderController extends Controller
         return new OrderCreateResource($order);
     }
 
-    public function completeOrder(UpdateOrderAddressesRequest $request, Order $order): OrderCreateResource | JsonResponse
+    public function completeOrder(CompleteOrderRequest $request, Order $order): OrderCreateResource | JsonResponse
     {
         try {
             $order = $this->completeOrderService->save($order, $request->validated());

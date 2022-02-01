@@ -55,8 +55,9 @@ class UpdateAddressOrderService
         DB::beginTransaction();
 
         $this->storeShippingMethod($this->data['shipping_method']);
-        $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address'], $this->data['customer_address']);
+        $this->storeOrderAddresses($this->data['shipping_address'], $this->data['customer_address']);
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
+        $this->saveOrder();
         $this->order->save();
 
         DB::commit();
@@ -67,7 +68,7 @@ class UpdateAddressOrderService
         $this->order->shipping_method_id = $shippingMethod['id'];
     }
 
-    protected function storeOrderAddresses(array $shippingAddress, array $billingAddress, array $customerAddress)
+    protected function storeOrderAddresses(array $shippingAddress, array $customerAddress)
     {
         if (! empty($customerAddress['id'])) {
             $shippingAddress = OrderAddress::create(CustomerAddress::find($customerAddress['id'])->toArray());
@@ -77,12 +78,6 @@ class UpdateAddressOrderService
 
         $this->order->shippingAddress()->associate($shippingAddress);
 
-        if ($billingAddress['same_as_shipping']) {
-            $this->order->billingAddress()->associate($shippingAddress);
-        } else {
-            $billingAddress = OrderAddress::create($billingAddress);
-            $this->order->billingAddress()->associate($billingAddress);
-        }
     }
 
     protected function storeCustomerAddress(array $shippingAddress, $customerAddress)
@@ -95,5 +90,11 @@ class UpdateAddressOrderService
                 ]
             ));
         }
+    }
+
+    protected function saveOrder(): void
+    {
+        $this->order->order_step = 'second_step';
+        $this->order->save();
     }
 }

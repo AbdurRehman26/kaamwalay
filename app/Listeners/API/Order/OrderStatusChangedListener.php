@@ -2,9 +2,7 @@
 
 namespace App\Listeners\API\Order;
 
-use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
 use App\Events\API\Order\OrderStatusChangedEvent;
-use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Notifications\Order\OrderStatusChangedNotification;

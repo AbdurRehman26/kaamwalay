@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V1\Customer\Order;
 
+use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOrderItemRequest extends FormRequest
@@ -13,7 +14,9 @@ class UpdateOrderItemRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->route('order')->isPayable();
+        /** @var Order $order */
+        $order = $this->route('order');
+        return $order->isPayable();
     }
 
     /**

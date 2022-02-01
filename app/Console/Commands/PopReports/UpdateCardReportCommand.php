@@ -35,7 +35,7 @@ class UpdateCardReportCommand extends Command
             ->select('card_products.*')
             ->get();
 
-        $this->info('Total cards to be processed: ' . count($cardProducts) );
+        $this->info('Total cards to be processed: ' . count($cardProducts));
 
         $popReportService->updateMultipleCardProductsReports($cardProducts);
 

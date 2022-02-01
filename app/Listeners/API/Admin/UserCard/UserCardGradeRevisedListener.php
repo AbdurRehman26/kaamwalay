@@ -2,9 +2,7 @@
 
 namespace App\Listeners\API\Admin\UserCard;
 
-use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
 use App\Events\API\Admin\UserCard\UserCardGradeRevisedEvent;
-use App\Models\OrderItemStatus;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

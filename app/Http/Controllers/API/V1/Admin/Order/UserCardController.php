@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\V1\Admin\Order;
 
 use App\Events\API\Admin\Order\OrderUpdated;
-use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
 use App\Events\API\Admin\UserCard\UserCardGradeRevisedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Order\Grades\UserCardGradeRequest;

@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin\Order;
 
-use App\Events\API\Admin\OrderItem\OrderItemStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemIsNotGraded;
 use App\Models\Order;

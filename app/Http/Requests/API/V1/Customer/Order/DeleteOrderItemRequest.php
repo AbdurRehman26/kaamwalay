@@ -16,6 +16,7 @@ class DeleteOrderItemRequest extends FormRequest
     {
         /** @var Order $order */
         $order = $this->route('order');
+
         return $order->isPayable();
     }
 

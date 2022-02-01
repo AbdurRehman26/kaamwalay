@@ -137,4 +137,3 @@ test('customer can not delete item in order when its paid', function () {
         route('orders.orderItems.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
     )->assertForbidden();
 });
-

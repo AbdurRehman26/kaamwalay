@@ -67,6 +67,8 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::apiResource('/', OrderController::class)->only(['index', 'store']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
+            Route::post('{order}/addresses', [OrderController::class, 'storeOrderAddresses']);
+            Route::post('{order}/complete', [OrderController::class, 'completeOrder']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
         });

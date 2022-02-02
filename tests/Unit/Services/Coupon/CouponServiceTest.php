@@ -12,6 +12,7 @@ use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\Shipping\ShippingFeeService;
+use App\Exceptions\API\Customer\Coupon\CouponFlatValueDiscountGreaterThanOrder;
 
 beforeEach(function () {
     $this->couponService = resolve(CouponService::class);
@@ -107,6 +108,21 @@ it('calculates flat discount for order', function () {
 
     expect($flatDiscount)->toBe($flatCouponDiscount);
 });
+
+it('gives exception when flat coupon value is greater than order', function () {
+
+    $discountValue = $this->order->coupon->discount_value * 100000;
+    $this->order->coupon->update(
+        [
+            'discount_value' => $discountValue,
+            'type' => 'flat'
+        ]
+    );
+    
+    $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+
+})->throws(CouponFlatValueDiscountGreaterThanOrder::class, 'Coupon applied value is greater than your order. Please choose another coupon.');
+
 
 it('calculates stats for coupon', function () {
     $this->order->discounted_amount = (float)$this->couponService->calculateDiscount($this->order->coupon, $this->order);

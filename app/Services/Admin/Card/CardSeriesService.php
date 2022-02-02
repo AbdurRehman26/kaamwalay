@@ -18,4 +18,14 @@ class CardSeriesService
 
         return QueryBuilder::for($query)->get();
     }
+
+    public function create(array $data): CardSeries
+    {
+        return CardSeries::create([
+            'name' => $data['name'],
+            'image_path' => $data['image_url'],
+            'image_bucket_path' => $data['image_url'],
+            'card_category_id' => $data['card_category_id'],
+        ]);
+    }
 }

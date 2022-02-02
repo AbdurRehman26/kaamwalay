@@ -59,7 +59,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::prefix('cards')->group(function () {
         Route::get('sets', [CardSetController::class, 'index']);
+        Route::post('/sets', [CardSetController::class, 'store']);
+
         Route::get('series', [CardSeriesController::class, 'index']);
+        Route::post('/series', [CardSeriesController::class, 'store']);
+
         Route::post('/', [CardProductController::class, 'store']);
         Route::get('options', [CardProductController::class, 'getOptionsValues']);
     });

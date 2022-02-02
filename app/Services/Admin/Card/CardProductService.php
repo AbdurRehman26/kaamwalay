@@ -210,8 +210,8 @@ class CardProductService
             'edition' => CardProductService::CARD_EDITIONS,
             'surface' => CardProductService::CARD_SURFACES,
             'language' => CardProductService::CARD_LANGUAGES,
-            'series' => CardSeries::with('cardSets:id,card_series_id,name,image_path,release_date')
-                        ->select('id', 'name', 'image_path')->get(),
+/*            'series' => CardSeries::with('cardSets:id,card_series_id,name,image_path,release_date')
+                        ->select('id', 'name', 'image_path')->get(),*/
         ];
     }
 }

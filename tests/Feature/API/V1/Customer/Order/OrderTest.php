@@ -193,30 +193,6 @@ test('a customer only see own orders', function () {
     $response->assertJsonCount(2, ['data']);
 });
 
-test('a customer does not see payment pending orders', function () {
-    Event::fake([
-        OrderStatusChangedEvent::class,
-    ]);
-    $orders = Order::factory()->for($this->user)
-        ->has(OrderItem::factory())
-        ->count(2)
-        ->state(new Sequence(
-            ['order_status_id' => OrderStatus::PLACED],
-            ['order_status_id' => OrderStatus::PAYMENT_PENDING],
-        ))
-        ->create();
-
-    $orders->each(function ($order) {
-        $this->orderStatusHistoryService->addStatusToOrder($order->order_status_id, $order->id, $order->user_id);
-    });
-
-    $this->actingAs($this->user);
-    $response = $this->getJson('/api/v1/customer/orders');
-
-    $response->assertOk();
-    $response->assertJsonCount(1, ['data']);
-});
-
 test('a customer cannot see order by another customer', function () {
     $someOtherCustomer = User::factory()->create();
     $order = Order::factory()->for($someOtherCustomer)->create();
@@ -767,7 +743,7 @@ test('a customer can see incomplete orders', function () {
         $this->orderStatusHistoryService->addStatusToOrder($status, $order->id, $order->user_id);
     });
 
-    $this->getJson(route('index'))
+    $this->getJson(route('customer.orders.index'))
         ->assertOk()
         ->assertJsonCount(10, ['data']);
 });

@@ -2,12 +2,13 @@
 
 namespace App\Http\Requests\API\V1\Customer\Order;
 
+use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class CompleteOrderRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         /** @var Order $order */
         $order = $this->route('order');

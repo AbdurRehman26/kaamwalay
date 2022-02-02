@@ -6,9 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOrderAddressesRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize()
     {
-        return true;
+        /** @var Order $order */
+        $order = $this->route('order');
+
+        return $order->isPayable();
     }
 
     public function rules(): array

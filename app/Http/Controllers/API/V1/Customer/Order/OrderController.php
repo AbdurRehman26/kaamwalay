@@ -98,6 +98,7 @@ class OrderController extends Controller
     public function completeOrder(CompleteOrderRequest $request, Order $order): OrderCreateResource | JsonResponse
     {
         $order = $this->completeOrderService->save($order, $request->validated());
+
         try {
         } catch (Exception $e) {
             return new JsonResponse(

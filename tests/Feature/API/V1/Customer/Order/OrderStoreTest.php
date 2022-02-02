@@ -1,22 +1,16 @@
 <?php
 
-use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\OrderPayment;
-use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Admin\OrderStatusHistoryService;
-use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Event;
-use Symfony\Component\HttpFoundation\Response;
 
 uses(WithFaker::class);
 
@@ -58,7 +52,7 @@ test('an order needs payment plan to be created', function () {
     $response = $this->postJson('/api/v1/customer/orders/create');
 
     $response->assertJsonValidationErrors([
-        'payment_plan' => 'The payment plan field is required.'
+        'payment_plan' => 'The payment plan field is required.',
     ]);
 });
 
@@ -74,12 +68,12 @@ test('a customer can update order addresses', function () {
 
     $orderItem = OrderItem::factory()->state(new Sequence(
         [
-            'order_id' => $response['data']['id']
+            'order_id' => $response['data']['id'],
         ]
     ))->create();
 
     $response = $this->postJson(route('order.update-addresses', [
-        'order' => $response['data']['id']
+        'order' => $response['data']['id'],
     ]), [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
@@ -91,7 +85,7 @@ test('a customer can update order addresses', function () {
                 ],
                 'quantity' => $orderItem['quantity'],
                 'declared_value_per_unit' => (int) $orderItem['declared_value_per_unit'],
-            ]
+            ],
         ],
         'shipping_address' => [
             'first_name' => 'First',
@@ -129,7 +123,7 @@ test('a customer can update order addresses', function () {
             'shipping_address',
             'order_items',
             'payment_plan',
-            'order_step'
+            'order_step',
         ],
     ]);
 });
@@ -144,7 +138,7 @@ test('a customer can not update order addresses without addresses', function () 
     ]);
 
     $response = $this->postJson(route('order.update-addresses', [
-        'order' => $response['data']['id']
+        'order' => $response['data']['id'],
     ]), [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
@@ -154,7 +148,7 @@ test('a customer can not update order addresses without addresses', function () 
         'customer_address' => 'The customer address field is required.',
         'shipping_address' => 'The shipping address field is required.',
         'shipping_method' => 'The shipping method field is required.',
-        'items' => 'The items field is required.'
+        'items' => 'The items field is required.',
     ]);
 });
 
@@ -175,12 +169,12 @@ test('a customer can complete his order including wallet payment', function () {
 
     $orderItem = OrderItem::factory()->state(new Sequence(
         [
-            'order_id' => $response['data']['id']
+            'order_id' => $response['data']['id'],
         ]
     ))->create();
 
     $response = $this->postJson(route('order.update-addresses', [
-        'order' => $response['data']['id']
+        'order' => $response['data']['id'],
     ]), [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
@@ -192,7 +186,7 @@ test('a customer can complete his order including wallet payment', function () {
                 ],
                 'quantity' => $orderItem['quantity'],
                 'declared_value_per_unit' => (int) $orderItem['declared_value_per_unit'],
-            ]
+            ],
         ],
         'shipping_address' => [
             'first_name' => 'First',
@@ -222,7 +216,7 @@ test('a customer can complete his order including wallet payment', function () {
     ]);
 
     $this->postJson(route('order.complete', [
-        'order' => $response['data']['id']
+        'order' => $response['data']['id'],
     ]), [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
@@ -234,7 +228,7 @@ test('a customer can complete his order including wallet payment', function () {
                 ],
                 'quantity' => $orderItem['quantity'],
                 'declared_value_per_unit' => (int) $orderItem['declared_value_per_unit'],
-            ]
+            ],
         ],
         'shipping_address' => [
             'first_name' => 'First',
@@ -259,7 +253,7 @@ test('a customer can complete his order including wallet payment', function () {
             'same_as_shipping' => true,
         ],
         'customer_address' => [
-            'id' => 1
+            'id' => 1,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,

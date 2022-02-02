@@ -2225,8 +2225,8 @@ parameters:
 			count: 1
 			path: app/Services/Order/OrderService.php
 
-        -
-            message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:valid\\(\\)\\.$#"
+		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:valid\\(\\)\\.$#"
             count: 1
             path: app/Services/Order/OrderService.php
 

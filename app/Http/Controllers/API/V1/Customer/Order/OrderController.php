@@ -47,7 +47,7 @@ class OrderController extends Controller
         );
     }
 
-    public function create(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
     {
         try {
             $order = $this->createOrderService->create($request->validated());
@@ -63,7 +63,7 @@ class OrderController extends Controller
         return new OrderCreateResource($order);
     }
 
-    public function store(CreateOrderRequest $request): OrderCreateResource | JsonResponse
+    public function create(CreateOrderRequest $request): OrderCreateResource | JsonResponse
     {
         try {
             $order = $this->storeOrderService->create($request->validated());

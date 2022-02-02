@@ -2225,6 +2225,11 @@ parameters:
 			count: 1
 			path: app/Services/Order/OrderService.php
 
+        -
+            message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:valid\\(\\)\\.$#"
+            count: 1
+            path: app/Services/Order/OrderService.php
+
 		-
 			message: "#^Method App\\\\Services\\\\Order\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no type specified\\.$#"
 			count: 1

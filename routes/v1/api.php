@@ -66,9 +66,9 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
-            Route::post('create', [OrderController::class, 'createOrder']);
-            Route::post('{order}/addresses', [OrderController::class, 'storeOrderAddresses']);
-            Route::post('{order}/complete', [OrderController::class, 'completeOrder']);
+            Route::post('create', [OrderController::class, 'create'])->name('order.store');
+            Route::post('{order}/addresses', [OrderController::class, 'storeOrderAddresses'])->name('order.update-addresses');
+            Route::post('{order}/complete', [OrderController::class, 'completeOrder'])->name('order.complete');
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
         });

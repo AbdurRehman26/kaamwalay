@@ -51,6 +51,9 @@
  *              "flat": "43",
  *              "same_as_shipping": false
  *          },
+ *          "customer_address": {
+ *              "id": 1
+ *          },
  *          "shipping_method": {
  *              "id": 1
  *          },

@@ -15,7 +15,7 @@ import { OrderEntity } from '@shared/entities/OrderEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionTableRow } from './SubmissionTableRow';
-import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
+import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import { Table } from './styles';
 import Grid from '@mui/material/Grid';
 
@@ -100,7 +100,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
             <StyledBox>
                 <Grid container alignItems={'center'} justifyContent={'center'} rowSpacing={1}>
                     <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
-                        <Inventory2Icon />
+                        <Inventory2TwoToneIcon />
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant={'subtitle1'} fontWeight={500} textAlign={'center'} fontSize={16}>

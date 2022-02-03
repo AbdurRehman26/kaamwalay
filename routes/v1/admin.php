@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V1\Admin\Cards\CardCategoryController;
 use App\Http\Controllers\API\V1\Admin\Cards\CardProductController;
 use App\Http\Controllers\API\V1\Admin\Cards\CardSeriesController;
 use App\Http\Controllers\API\V1\Admin\Cards\CardSetController;
@@ -64,8 +65,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('series', [CardSeriesController::class, 'index']);
         Route::post('/series', [CardSeriesController::class, 'store']);
 
+        Route::get('categories', [CardCategoryController::class, 'index']);
+
         Route::post('/', [CardProductController::class, 'store']);
-        Route::get('options', [CardProductController::class, 'getOptionsValues']);
+        Route::get('options/{cardCategory}', [CardProductController::class, 'getOptionsValues']);
     });
 
     // Coupons

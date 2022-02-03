@@ -4,11 +4,18 @@ namespace App\Services\Admin\Card;
 
 use App\Models\CardSeries;
 use App\Models\CardSet;
+use App\Services\AGS\AgsService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CardSetService
 {
+
+    public function __construct(protected AgsService $agsService)
+    {
+    }
+
     public function search(): Collection
     {
         $query = CardSet::select('id', 'name', 'card_series_id', 'release_date', 'image_path');
@@ -22,14 +29,43 @@ class CardSetService
 
     public function create(array $data): CardSet
     {
+        $this->getOrCreateSetFromAgs($data['card_series_id'], $data['name'], $data['image_url']);
+
         return CardSet::create([
             'name' => $data['name'],
+            'description' => $data['description'] ?? '',
             'image_path' => $data['image_url'],
             'image_bucket_path' => $data['image_url'],
             'card_category_id' => CardSeries::find($data['card_series_id'])->card_category_id,
             'card_series_id' => $data['card_series_id'],
             'release_date' => $data['release_date'],
-            'description' => $data['description'] ?? '',
+            'release_year' => (new Carbon($data['release_date']))->format('Y'),
         ]);
+    }
+
+    protected function getOrCreateSetFromAgs(int $seriesId, string $setName, string $setImage, array $data): int | null
+    {
+        //Store in AGS
+        $setResponse = $this->agsService->getCardSet([
+            'name' => $setName,
+            'serie' => $seriesId,
+        ]);
+
+        if ($setResponse['count'] > 0) {
+            return $setResponse['results'][0]['id'];
+        } elseif ($setName && $seriesId && $data['release_date'] && $setImage) {
+            $createSetResponse = $this->agsService->createCardSet([
+                'name' => $setName,
+                'image_path' => $setImage,
+                'release_date' => $data['release_date'],
+                'serie_id' => $seriesId,
+            ]);
+
+            if (array_key_exists('id', $createSetResponse)) {
+                return $createSetResponse['id'];
+            }
+        }
+
+        return null;
     }
 }

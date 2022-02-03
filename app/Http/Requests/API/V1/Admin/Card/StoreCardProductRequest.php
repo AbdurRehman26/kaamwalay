@@ -20,26 +20,8 @@ class StoreCardProductRequest extends FormRequest
             'name' => ['required', 'string'],
             'category' => ['required','exists:card_categories,id'],
             'release_date' => ['required', 'date'],
-            'series_id' => ['sometimes', 'nullable', 'numeric'],
-            'series_name' => [
-                'required_without:series_id',
-                'nullable',
-                'string',
-                Rule::unique('card_series', 'name')->where(function ($query) {
-                    return $query->where('card_category_id', $this->category);
-                }),
-            ],
-            'series_image' => ['required_without:series_id', 'nullable', 'string'],
-            'set_id' => ['sometimes', 'nullable', 'numeric'],
-            'set_name' => [
-                'required_without:set_id',
-                'nullable',
-                'string',
-                Rule::unique('card_sets', 'name')->where(function ($query) {
-                    return $query->where('card_series_id', $this->series_id);
-                }),
-            ],
-            'set_image' => ['required_without:set_id', 'nullable', 'string'],
+            'series_id' => ['required', 'integer', 'exists:card_series,id'],
+            'set_id' => ['required', 'integer', 'exists:card_sets,id'],
             'card_number' => [
                 'required',
                 'string',

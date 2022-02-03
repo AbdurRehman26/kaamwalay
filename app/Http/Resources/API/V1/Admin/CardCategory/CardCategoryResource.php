@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Resources\API\V1\Customer\CardCategory;
+namespace App\Http\Resources\API\V1\Admin\CardCategory;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\CardCategory;
+use Illuminate\Http\Request;
 
 /**
  * @mixin CardCategory
@@ -13,7 +14,7 @@ class CardCategoryResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)

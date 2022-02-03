@@ -49,7 +49,12 @@ export function ListSubmissions() {
 
     return (
         <>
-            <ListHeader headline={'Submissions'} noMargin onSearch={setSearch} isSubmission action={$newSubmission}>
+            <ListHeader
+                headline={'Submissions'}
+                noMargin
+                onSearch={setSearch}
+                actions={isMobile ? $newSubmission : null}
+            >
                 {!isMobile ? $newSubmission : null}
             </ListHeader>
             <SubmissionsTable search={search} />

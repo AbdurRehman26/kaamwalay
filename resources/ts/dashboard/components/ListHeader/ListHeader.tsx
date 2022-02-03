@@ -1,6 +1,4 @@
 import SearchIcon from '@mui/icons-material/Search';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
@@ -16,8 +14,7 @@ interface ListHeaderProps {
     noSearch?: boolean;
     noMargin?: boolean;
     onSearch?: (value: string) => void;
-    isSubmission?: boolean;
-    action?: ReactNode;
+    actions?: ReactNode;
 }
 
 const useStyles = makeStyles(
@@ -78,12 +75,10 @@ export function ListHeader({
     noSearch,
     noMargin,
     onSearch,
-    isSubmission,
-    action,
+    actions,
 }: PropsWithChildren<ListHeaderProps>) {
     const styleProps = useMemo(() => ({ noMargin }), [noMargin]);
     const classes = useStyles(styleProps);
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const handleSearch = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +97,7 @@ export function ListHeader({
                 <Typography component={'h2'} variant={'h5'} className={font.fontWeightMedium}>
                     {headline}
                 </Typography>
-                {isMobile && isSubmission ? action : null}
+                {actions}
                 <Box flexGrow={1} className={classes.searchBarHolder}>
                     {!noSearch && (
                         <InputBase

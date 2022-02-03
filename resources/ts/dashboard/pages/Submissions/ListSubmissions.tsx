@@ -46,7 +46,12 @@ export function ListSubmissions() {
 
     return (
         <>
-            <ListHeader headline={'Submissions'} noMargin onSearch={setSearch} noSearch={orders$.data.length === 0}>
+            <ListHeader
+                headline={'Submissions'}
+                noMargin
+                onSearch={setSearch}
+                noSearch={orders$.data.length === 0 && search === ''}
+            >
                 <Button
                     onClick={handleOnClick}
                     variant={'contained'}

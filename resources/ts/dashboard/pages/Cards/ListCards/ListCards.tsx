@@ -19,7 +19,11 @@ export function ListCards() {
 
     return (
         <>
-            <ListHeader headline={'Your Cards'} onSearch={setSearch} noSearch={userCards$.data.length === 0} />
+            <ListHeader
+                headline={'Your Cards'}
+                onSearch={setSearch}
+                noSearch={userCards$.data.length === 0 && search === ''}
+            />
             <ListCardItems search={search} />
         </>
     );

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Services;
 
-use App\Models\MailchimpUser;
+use App\Models\MailchimpList;
 use App\Models\User;
 use App\Services\Mailchimp\SendCustomersToMailchimpService;
 use Mockery;
@@ -103,10 +103,10 @@ it('create list on mailchimp', function () {
     ],
   ])->andReturn($expectedResponse);
 
-    MailchimpUser::create([
+    MailchimpList::create([
     'list_name' => $template,
     'list_id' => '89008',
   ]);
 
-    assertDatabaseCount('mailchimp_users', 1);
+    assertDatabaseCount('mailchimp_lists', 1);
 });

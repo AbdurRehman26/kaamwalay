@@ -3,24 +3,27 @@
 namespace App\Listeners\API\Mailchimp;
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Services\Mailchimp\SendCustomersToMailchimpService;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use App\Services\MailchimpService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendOrderPaidUserToMailchimp implements ShouldQueue, ShouldBeEncrypted
+class SendOrderPaidUserToMailchimp implements ShouldQueue
 {
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct(protected SendCustomersToMailchimpService $service)
+    public function __construct(protected MailchimpService $mailchimpService)
     {
         //
     }
 
     public function handle(OrderPaid $event): void
     {
-        $this->service->sendNewUsers($event->order->user, SendCustomersToMailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
+        if (app()->environment('local')) {
+            return;
+        }
+
+        $this->mailchimpService->addUserToList($event->order->user, MailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
     }
 }

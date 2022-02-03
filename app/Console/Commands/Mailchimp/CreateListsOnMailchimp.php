@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Mailchimp;
 
-use App\Services\Mailchimp\SendCustomersToMailchimpService;
+use App\Services\MailchimpService;
 use Illuminate\Console\Command;
 
 class CreateListsOnMailchimp extends Command
@@ -26,14 +26,14 @@ class CreateListsOnMailchimp extends Command
      *
      * @return int
      */
-    public function handle(SendCustomersToMailchimpService $mailChimpService)
+    public function handle(MailchimpService $mailChimpService)
     {
         $lists = [
-          SendCustomersToMailchimpService::LIST_NAME_SIGN_UP_USERS,
-          SendCustomersToMailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS,
+            MailchimpService::LIST_NAME_SIGN_UP_USERS,
+            MailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS,
         ];
 
-        $mailChimpService->createListOnMailchimp($lists);
+        $mailChimpService->createListsOnMailchimp($lists);
 
         return 0;
     }

@@ -3,24 +3,27 @@
 namespace App\Listeners\API\Mailchimp;
 
 use App\Events\API\Auth\CustomerRegistered;
-use App\Services\Mailchimp\SendCustomersToMailchimpService;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use App\Services\MailchimpService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendRegisteredUserToMailchimp implements ShouldQueue, ShouldBeEncrypted
+class SendRegisteredUserToMailchimp implements ShouldQueue
 {
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct(protected SendCustomersToMailchimpService $service)
+    public function __construct(protected MailchimpService $service)
     {
         //
     }
 
     public function handle(CustomerRegistered $event): void
     {
-        $this->service->sendNewUsers($event->user, SendCustomersToMailchimpService::LIST_NAME_SIGN_UP_USERS);
+        if (app()->environment('local')) {
+            return;
+        }
+
+        $this->service->addUserToList($event->user, MailchimpService::LIST_NAME_SIGN_UP_USERS);
     }
 }

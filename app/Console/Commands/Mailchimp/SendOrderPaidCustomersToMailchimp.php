@@ -12,7 +12,7 @@ class SendOrderPaidCustomersToMailchimp extends Command
      *
      * @var string
      */
-    protected $signature = 'users:sync-order-paid-customers-to-mailchimp';
+    protected $signature = 'mailchimp:sync-order-paid-customers';
 
     /**
      * The console command description.
@@ -20,16 +20,6 @@ class SendOrderPaidCustomersToMailchimp extends Command
      * @var string
      */
     protected $description = 'Sync Order Paid Customers to Mailchimp';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.

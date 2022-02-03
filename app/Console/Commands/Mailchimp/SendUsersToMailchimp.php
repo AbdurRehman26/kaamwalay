@@ -12,7 +12,7 @@ class SendUsersToMailchimp extends Command
      *
      * @var string
      */
-    protected $signature = 'users:sync-to-mailchimp';
+    protected $signature = 'mailchimp:sync-users';
 
     /**
      * The console command description.
@@ -20,16 +20,6 @@ class SendUsersToMailchimp extends Command
      * @var string
      */
     protected $description = 'Sync Users to Mailchimp';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.

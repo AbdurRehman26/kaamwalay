@@ -12,7 +12,7 @@ class CreateListsOnMailchimp extends Command
      *
      * @var string
      */
-    protected $signature = 'users:create-list-on-mailchimp';
+    protected $signature = 'mailchimp:create-lists';
 
     /**
      * The console command description.
@@ -22,27 +22,18 @@ class CreateListsOnMailchimp extends Command
     protected $description = 'Create list on mailchimp';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
      */
     public function handle(SendCustomersToMailchimpService $mailChimpService)
     {
-        $list = [
+        $lists = [
           SendCustomersToMailchimpService::LIST_NAME_SIGN_UP_USERS,
           SendCustomersToMailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS,
         ];
-        $mailChimpService->createListOnMailchimp($list);
+
+        $mailChimpService->createListOnMailchimp($lists);
 
         return 0;
     }

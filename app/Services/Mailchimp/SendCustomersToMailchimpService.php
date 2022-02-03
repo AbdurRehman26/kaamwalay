@@ -7,15 +7,16 @@ use App\Models\OrderStatus;
 use App\Models\User;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
+use MailchimpMarketing\ApiClient;
 
 class SendCustomersToMailchimpService
 {
     public const LIST_NAME_SIGN_UP_USERS = 'Robograding Signed Up Users';
     public const LIST_NAME_ORDER_PAID_CUSTOMERS = 'Robograding Orders Paid Customers';
 
-    public function getConfiguration(): \MailchimpMarketing\ApiClient
+    public function getClient(): ApiClient
     {
-        $mailchimpClient = new \MailchimpMarketing\ApiClient();
+        $mailchimpClient = new ApiClient();
         $mailchimpClient->setConfig([
             'apiKey' => config('services.mailchimp.apiKey'),
             'server' => config('services.mailchimp.server'),
@@ -30,7 +31,7 @@ class SendCustomersToMailchimpService
             return;
         }
 
-        $mailchimpClient = $this->getConfiguration();
+        $mailchimpClient = $this->getClient();
 
         $lists = [];
         // @phpstan-ignore-next-line
@@ -42,7 +43,7 @@ class SendCustomersToMailchimpService
 
         try {
             foreach ($newList as $listName) {
-                $name = $this->checkEnvironment($listName);
+                $name = $this->buildListName($listName);
                 if (! in_array($name, $lists)) {
                     // @phpstan-ignore-next-line
                     $response = $mailchimpClient->lists->createList([
@@ -64,11 +65,11 @@ class SendCustomersToMailchimpService
                                 'language' => 'EN',
                             ],
                         ]);
+
                     MailchimpUser::create([
-                            'list_name' => $name,
-                            'list_id' => $response->id,
-                        ]);
-                    Log::info(json_encode($response->id));
+                        'list_name' => $name,
+                        'list_id' => $response->id,
+                    ]);
                 }
             }
         } catch (RequestException $ex) {
@@ -151,7 +152,7 @@ class SendCustomersToMailchimpService
         }
         
         try {
-            $mailchimpClient = $this->getConfiguration();
+            $mailchimpClient = $this->getClient();
             // @phpstan-ignore-next-line
             $mailchimpClient->lists->batchListMembers($list_id, ["members" => $members]);
         } catch (RequestException $ex) {
@@ -164,8 +165,8 @@ class SendCustomersToMailchimpService
         if (app()->environment('local')) {
             return;
         }
-        
-        $mailchimpClient = $this->getConfiguration();
+
+        $mailchimpClient = $this->getClient();
 
         try {
             $hash = md5(strtolower($user->email));
@@ -195,5 +196,10 @@ class SendCustomersToMailchimpService
         if ($list_id) {
             $this->addDataToList($user, $list_id);
         }
+    }
+
+    protected function buildListName(string $listName): string
+    {
+        return app()->environment() . '-' . $listName;
     }
 }

@@ -11,12 +11,16 @@ import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 const useStyles = makeStyles(
-    {
+    (theme) => ({
         newSubmissionBtn: {
             borderRadius: 24,
             padding: '12px 24px',
+            [theme.breakpoints.down('sm')]: {
+                marginLeft: 'auto',
+                padding: '9px 16px',
+            },
         },
-    },
+    }),
     {
         name: 'ListSubmissionsPage',
     },
@@ -37,19 +41,16 @@ export function ListSubmissions() {
         navigate('/submissions/new');
     }
 
+    const $newSubmission = (
+        <Button onClick={handleOnClick} variant={'contained'} color={'primary'} className={classes.newSubmissionBtn}>
+            New Submission
+        </Button>
+    );
+
     return (
         <>
-            <ListHeader headline={'Submissions'} noMargin isSubmission onSearch={setSearch}>
-                {!isMobile ? (
-                    <Button
-                        onClick={handleOnClick}
-                        variant={'contained'}
-                        color={'primary'}
-                        className={classes.newSubmissionBtn}
-                    >
-                        New Submission
-                    </Button>
-                ) : null}
+            <ListHeader headline={'Submissions'} noMargin onSearch={setSearch} isSubmission action={$newSubmission}>
+                {!isMobile ? $newSubmission : null}
             </ListHeader>
             <SubmissionsTable search={search} />
         </>

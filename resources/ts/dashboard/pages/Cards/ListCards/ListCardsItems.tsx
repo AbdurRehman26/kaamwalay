@@ -161,8 +161,10 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                 <Divider className={classes.divider} />
                 <TablePagination
                     className={classes.paginationFooter}
-                    {...(userCards$.paginationProps.rowsPerPageOptions = [48])}
-                    {...userCards$.paginationProps}
+                    {...{
+                        ...userCards$.paginationProps,
+                        rowsPerPageOptions: [48],
+                    }}
                 />
             </Grid>
         </>

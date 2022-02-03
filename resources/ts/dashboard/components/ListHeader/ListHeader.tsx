@@ -1,26 +1,23 @@
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Theme } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { debounce } from 'lodash';
-import React, { ChangeEvent, PropsWithChildren, useCallback, useMemo } from 'react';
+import React, { ChangeEvent, PropsWithChildren, ReactNode, useCallback, useMemo } from 'react';
 import { font } from '@shared/styles/utils';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import ReactGA from 'react-ga';
+
 interface ListHeaderProps {
     headline: string;
     noSearch?: boolean;
     noMargin?: boolean;
-    isSubmission?: boolean;
     onSearch?: (value: string) => void;
+    isSubmission?: boolean;
+    action?: ReactNode;
 }
 
 const useStyles = makeStyles(
@@ -60,11 +57,6 @@ const useStyles = makeStyles(
                 width: '100%',
             },
         },
-        newSubmissionBtn: {
-            borderRadius: 24,
-            padding: '8px 14px',
-            marginLeft: 'auto',
-        },
     }),
     {
         name: 'ListHeader',
@@ -85,13 +77,13 @@ export function ListHeader({
     headline,
     noSearch,
     noMargin,
-    isSubmission,
     onSearch,
+    isSubmission,
+    action,
 }: PropsWithChildren<ListHeaderProps>) {
     const styleProps = useMemo(() => ({ noMargin }), [noMargin]);
     const classes = useStyles(styleProps);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const navigate = useNavigate();
 
     const handleSearch = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -104,32 +96,13 @@ export function ListHeader({
         [onSearch],
     );
 
-    function handleOnClick() {
-        ReactGA.event({
-            category: EventCategories.Submissions,
-            action: SubmissionEvents.initiated,
-        });
-        pushToDataLayer({ event: 'google-ads-started-submission-process' });
-        navigate('/submissions/new');
-    }
-
     return (
         <>
             <Grid component={'header'} container direction={'row'} alignItems={'center'} className={classes.root}>
                 <Typography component={'h2'} variant={'h5'} className={font.fontWeightMedium}>
                     {headline}
                 </Typography>
-                {isMobile && isSubmission ? (
-                    <Button
-                        onClick={handleOnClick}
-                        variant={'contained'}
-                        color={'primary'}
-                        className={classes.newSubmissionBtn}
-                    >
-                        New Submission
-                    </Button>
-                ) : null}
-
+                {isMobile && isSubmission ? action : null}
                 <Box flexGrow={1} className={classes.searchBarHolder}>
                     {!noSearch && (
                         <InputBase

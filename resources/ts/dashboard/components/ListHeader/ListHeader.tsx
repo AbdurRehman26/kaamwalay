@@ -12,8 +12,6 @@ import { font } from '@shared/styles/utils';
 interface ListHeaderProps {
     headline: string;
     noSearch?: boolean;
-    itemsLength?: number;
-    ordersLength?: number;
     noMargin?: boolean;
     onSearch?: (value: string) => void;
 }
@@ -70,15 +68,7 @@ const debouncedFunc = debounce((func: () => void) => func(), 300);
  * @date: 10.08.2021
  * @time: 01:43
  */
-export function ListHeader({
-    children,
-    headline,
-    noSearch,
-    noMargin,
-    itemsLength,
-    ordersLength,
-    onSearch,
-}: PropsWithChildren<ListHeaderProps>) {
+export function ListHeader({ children, headline, noSearch, noMargin, onSearch }: PropsWithChildren<ListHeaderProps>) {
     const styleProps = useMemo(() => ({ noMargin }), [noMargin]);
     const classes = useStyles(styleProps);
 
@@ -93,28 +83,22 @@ export function ListHeader({
         [onSearch],
     );
 
-    const searchBar = (
-        <Box flexGrow={1} className={classes.searchBarHolder}>
-            {!noSearch && (
-                <InputBase
-                    placeholder="Search…"
-                    className={classes.searchBar}
-                    startAdornment={<SearchIcon className={classes.searchBarIcon} />}
-                    onChange={handleSearch}
-                />
-            )}
-        </Box>
-    );
-
     return (
         <>
             <Grid component={'header'} container direction={'row'} alignItems={'center'} className={classes.root}>
                 <Typography component={'h2'} variant={'h5'} className={font.fontWeightMedium}>
                     {headline}
                 </Typography>
-                {ordersLength !== 0 && headline === 'Submissions' ? searchBar : null}
-
-                {itemsLength !== 0 && headline === 'Your Cards' ? searchBar : null}
+                <Box flexGrow={1} className={classes.searchBarHolder}>
+                    {!noSearch && (
+                        <InputBase
+                            placeholder="Search…"
+                            className={classes.searchBar}
+                            startAdornment={<SearchIcon className={classes.searchBarIcon} />}
+                            onChange={handleSearch}
+                        />
+                    )}
+                </Box>
                 <Box
                     display={'flex'}
                     flex={'1 1 auto'}

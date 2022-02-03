@@ -34,17 +34,22 @@ const StyledSelect = styled(Select)(
     { name: 'StyledSelect' },
 );
 
+const StyledBox = styled(Box)(
+    {
+        width: '100%',
+        backgroundColor: '#F9F9F9',
+        border: '1px solid #E0E0E0',
+        borderRadius: '8px',
+        padding: '40px 20px',
+    },
+    { name: 'StyledBox' },
+);
+
 const useStyles = makeStyles(
     {
         divider: {
             marginTop: '16px',
             width: '100%',
-        },
-        yourCards: {
-            width: '100%',
-            backgroundColor: '#F9F9F9',
-            border: '1px solid #E0E0E0',
-            borderRadius: '8px',
         },
         newSubmissionBtn: {
             borderRadius: 24,
@@ -137,7 +142,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
     // If we have no cards and the search is empty it means the user doesn't have any graded cards
     if (items$.length === 0 && search === '') {
         return (
-            <Box className={classes.yourCards} padding={4}>
+            <StyledBox>
                 <Grid container alignItems={'center'} justifyContent={'center'} rowSpacing={1}>
                     <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
                         <StyleIcon />
@@ -164,7 +169,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                         </Button>
                     </Grid>
                 </Grid>
-            </Box>
+            </StyledBox>
         );
     }
 

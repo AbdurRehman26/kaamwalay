@@ -5,8 +5,6 @@ import ReactGA from 'react-ga';
 import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
-import { bracketParams } from '@shared/lib/api/bracketParams';
-import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
@@ -26,14 +24,7 @@ export function ListSubmissions() {
     const classes = useStyles();
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
-
-    const orders$ = useListOrdersQuery({
-        params: {
-            filter: { orderNumber: search },
-            include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
-        },
-        ...bracketParams(),
-    });
+    console.log(search);
 
     function handleOnClick() {
         ReactGA.event({
@@ -46,7 +37,7 @@ export function ListSubmissions() {
 
     return (
         <>
-            <ListHeader headline={'Submissions'} noMargin onSearch={setSearch} ordersLength={orders$.data.length}>
+            <ListHeader headline={'Submissions'} noMargin onSearch={setSearch}>
                 <Button
                     onClick={handleOnClick}
                     variant={'contained'}

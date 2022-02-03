@@ -8,8 +8,7 @@ import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import { styled, Theme } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { OrderEntity } from '@shared/entities/OrderEntity';
@@ -20,18 +19,16 @@ import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import { Table } from './styles';
 import Grid from '@mui/material/Grid';
 
-const useStyles = makeStyles(
+const StyledBox = styled(Box)(
     {
-        submissions: {
-            width: '100%',
-            backgroundColor: '#F9F9F9',
-            border: '1px solid #E0E0E0',
-            borderRadius: '8px',
-        },
+        width: '100%',
+        backgroundColor: '#F9F9F9',
+        border: '1px solid #E0E0E0',
+        borderRadius: '8px',
+        padding: '40px 20px',
+        marginTop: '15px',
     },
-    {
-        name: 'SubmissionsStyles',
-    },
+    { name: 'StyledBox' },
 );
 
 interface SubmissionsTableProps {
@@ -40,7 +37,6 @@ interface SubmissionsTableProps {
 
 export function SubmissionsTable({ search }: SubmissionsTableProps) {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const classes = useStyles();
 
     const orders$ = useListOrdersQuery({
         params: {
@@ -99,9 +95,9 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
         />
     ));
 
-    if (items$.length === 0) {
+    if (items$.length === 0 && search === '') {
         return (
-            <Box className={classes.submissions} padding={4} mt={1}>
+            <StyledBox>
                 <Grid container alignItems={'center'} justifyContent={'center'} rowSpacing={1}>
                     <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
                         <Inventory2Icon />
@@ -117,7 +113,15 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
                         </Typography>
                     </Grid>
                 </Grid>
-            </Box>
+            </StyledBox>
+        );
+    }
+
+    if (items$.length === 0 && search !== '') {
+        return (
+            <Typography variant={'subtitle2'} marginTop={'10px'}>
+                We didn't find anything for "{search}". Try searching for something else
+            </Typography>
         );
     }
 

@@ -99,6 +99,7 @@ export function ListHeader({ children, headline, noSearch, noMargin, onSearch }:
                         />
                     )}
                 </Box>
+
                 <Box
                     display={'flex'}
                     flex={'1 1 auto'}

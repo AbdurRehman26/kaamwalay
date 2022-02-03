@@ -45,6 +45,7 @@ const PaginationFooter = styled(TableRow)(({ theme }) => ({
 const TableMargin = styled(TableContainer)(({ theme }) => ({
     marginBottom: theme.spacing(7),
 }));
+
 interface SubmissionsTableProps {
     search?: string;
 }

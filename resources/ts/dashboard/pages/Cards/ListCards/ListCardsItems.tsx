@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { font } from '@shared/styles/utils';
 import { CardPreview } from '../../../components/CardPreview/CardPreview';
 import Button from '@mui/material/Button';
-import StyleIcon from '@mui/icons-material/Style';
+import StyleTwoToneIcon from '@mui/icons-material/StyleTwoTone';
 
 const StyledSelect = styled(Select)(
     {
@@ -145,7 +145,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
             <StyledBox>
                 <Grid container alignItems={'center'} justifyContent={'center'} rowSpacing={1}>
                     <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
-                        <StyleIcon />
+                        <StyleTwoToneIcon />
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant={'subtitle1'} fontWeight={500} textAlign={'center'} fontSize={16}>

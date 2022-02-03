@@ -7,6 +7,8 @@ import ReactGA from 'react-ga';
 import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
+import { bracketParams } from '@shared/lib/api/bracketParams';
+import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
@@ -32,6 +34,14 @@ export function ListSubmissions() {
     const [search, setSearch] = useState('');
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
+    const orders$ = useListOrdersQuery({
+        params: {
+            filter: { orderNumber: search },
+            include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
+        },
+        ...bracketParams(),
+    });
+
     function handleOnClick() {
         ReactGA.event({
             category: EventCategories.Submissions,
@@ -54,6 +64,7 @@ export function ListSubmissions() {
                 noMargin
                 onSearch={setSearch}
                 actions={isMobile ? $newSubmission : null}
+                noSearch={orders$.data.length === 0 && search === ''}
             >
                 {!isMobile ? $newSubmission : null}
             </ListHeader>

@@ -86,7 +86,7 @@ class MailchimpService
             $members = $users->map(function (User $user) {
                 return $this->prepareUserDataForList($user);
             })->toArray();
-            // @phpstan-ignore-next-line
+
             $this->addBatchUsers($members, $this->getListId($templateName));
         });
     }
@@ -101,7 +101,7 @@ class MailchimpService
             $members = $users->map(function (User $user) {
                 return $this->prepareUserDataForList($user);
             })->toArray();
-            // @phpstan-ignore-next-line
+
             $this->addBatchUsers($members, $this->getListId($templateName));
         });
     }

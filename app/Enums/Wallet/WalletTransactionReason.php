@@ -15,7 +15,7 @@ enum WalletTransactionReason: int
             self::REFUND => 'refund',
             self::ORDER_PAYMENT => 'order_payment',
             self::WALLET_CREDIT => 'wallet_credit_by_admin',
-            default => 'wallet_credit_by_user',
+            self::WALLET_PAYMENT => 'wallet_credit_by_user',
         };
     }
 }

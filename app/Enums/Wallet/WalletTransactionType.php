@@ -10,8 +10,8 @@ enum WalletTransactionType: int
     public function toString(): string
     {
         return match ($this) {
+            self::CREDIT => 'credit',
             self::DEBIT => 'debit',
-            default => 'credit',
         };
     }
 }

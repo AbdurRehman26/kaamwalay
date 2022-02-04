@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Admin\Wallet;
 
+use App\Enums\Wallet\WalletTransactionReason;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Wallet\CustomerWalletCreditRequest;
 use App\Http\Resources\API\V1\Admin\Wallet\WalletResource;
@@ -27,7 +28,7 @@ class CustomerWalletController extends Controller
     {
         $wallet->makeTransaction(
             amount: $request->input('amount'),
-            reason: WalletTransaction::REASON_WALLET_CREDIT,
+            reason: WalletTransactionReason::WALLET_CREDIT->value,
             userId: auth()->user()->id
         );
 

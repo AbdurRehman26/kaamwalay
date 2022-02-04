@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Admin\Wallet;
 
+use App\Enums\Wallet\WalletTransactionReason;
 use App\Http\Resources\API\BaseResource;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
@@ -31,9 +32,9 @@ class WalletTransactionResource extends BaseResource
     protected function getTransactionDescription(): string
     {
         return match ($this->getAttributeValue('reason')) {
-            WalletTransaction::REASON_REFUND => $this->user->getFullName() . ' refund to customer\'s wallet',
-            WalletTransaction::REASON_ORDER_PAYMENT => 'Customer used credit on a submission',
-            WalletTransaction::REASON_WALLET_CREDIT => $this->user->getFullName() . ' credit to customer\'s wallet',
+            WalletTransactionReason::REFUND->value => $this->user->getFullName() . ' refund to customer\'s wallet',
+            WalletTransactionReason::ORDER_PAYMENT->value => 'Customer used credit on a submission',
+            WalletTransactionReason::WALLET_CREDIT->value => $this->user->getFullName() . ' credit to customer\'s wallet',
             default => 'Customer added to to wallet',
         };
     }

@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Enums\Wallet\WalletTransactionReason;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\WalletPayment;
-use App\Models\WalletTransaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class WalletTransactionFactory extends Factory
@@ -19,12 +19,13 @@ class WalletTransactionFactory extends Factory
     public function definition()
     {
         $reason = $this->faker->randomElement([
-            WalletTransaction::REASON_WALLET_CREDIT,
-            WalletTransaction::REASON_ORDER_PAYMENT,
-            WalletTransaction::REASON_REFUND,
+            WalletTransactionReason::WALLET_CREDIT->value,
+            WalletTransactionReason::ORDER_PAYMENT->value,
+            WalletTransactionReason::REFUND->value,
         ]);
-        $resource = $reason === WalletTransaction::REASON_WALLET_CREDIT ? WalletPayment::factory() : Order::factory();
-        $resourceKey = $reason === WalletTransaction::REASON_WALLET_CREDIT ? 'wallet_payment_id' : 'order_id';
+        $resource = $reason === WalletTransactionReason::WALLET_CREDIT->value ? WalletPayment::factory() : Order::factory();
+        $resourceKey = $reason === WalletTransactionReason::WALLET_CREDIT->value ? 'wallet_payment_id' : 'order_id';
+
         return [
             'wallet_id' => Wallet::factory(),
             'created_by' => User::factory(),

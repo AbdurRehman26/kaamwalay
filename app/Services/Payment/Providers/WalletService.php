@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment\Providers;
 
+use App\Enums\Wallet\WalletTransactionReason;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\Wallet;
@@ -27,7 +28,7 @@ class WalletService implements PaymentProviderServiceInterface
     {
         $wallet->makeTransaction(
             $this->getAmount($order),
-            WalletTransaction::REASON_ORDER_PAYMENT,
+            WalletTransactionReason::ORDER_PAYMENT->value,
             $order->user_id,
             $order
         );

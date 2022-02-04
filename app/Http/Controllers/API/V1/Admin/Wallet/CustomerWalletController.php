@@ -8,7 +8,6 @@ use App\Http\Requests\API\V1\Admin\Wallet\CustomerWalletCreditRequest;
 use App\Http\Resources\API\V1\Admin\Wallet\WalletResource;
 use App\Http\Resources\API\V1\Admin\Wallet\WalletTransactionCollection;
 use App\Models\Wallet;
-use App\Models\WalletTransaction;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

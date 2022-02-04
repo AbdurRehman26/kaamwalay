@@ -4,7 +4,6 @@ namespace App\Services\Wallet;
 
 use App\Enums\Wallet\WalletTransactionReason;
 use App\Enums\Wallet\WalletTransactionType;
-use App\Exceptions\API\Wallet\InvalidWalletTransactionException;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Wallet;

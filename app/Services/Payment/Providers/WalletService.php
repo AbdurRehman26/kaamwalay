@@ -28,7 +28,7 @@ class WalletService implements PaymentProviderServiceInterface
     {
         $wallet->makeTransaction(
             $this->getAmount($order),
-            WalletTransactionReason::ORDER_PAYMENT->value,
+            WalletTransactionReason::ORDER_PAYMENT,
             $order->user_id,
             $order
         );

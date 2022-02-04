@@ -43,25 +43,13 @@ class WalletTransaction extends Model
     {
         return new Attribute(
             get: fn ($value) => (WalletTransactionType::from($value)->toString()),
-            set: fn (WalletTransactionType $type) => ($type->value),
         );
     }
 
     protected function reason(): Attribute
     {
         return new Attribute(
-            get: fn ($value) => (match ((int) $value) {
-                1 => WalletTransactionReason::ORDER_PAYMENT->value,
-                2 => WalletTransactionReason::REFUND->value,
-                3 => WalletTransactionReason::WALLET_CREDIT->value,
-                default => WalletTransactionReason::WALLET_PAYMENT->value,
-            }),
-            set: fn ($value) => (match ($value) {
-                WalletTransactionReason::ORDER_PAYMENT->value => 1,
-                WalletTransactionReason::REFUND->value => 2,
-                WalletTransactionReason::WALLET_CREDIT->value => 3,
-                default => 4,
-            }),
+            get: fn ($value) => (WalletTransactionReason::from($value)->toString()),
         );
     }
 }

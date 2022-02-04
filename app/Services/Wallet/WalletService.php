@@ -22,16 +22,20 @@ class WalletService
         $wallet->save();
     }
 
-    public function processTransaction(int $walletId, float $amount, string $reason, int $userId, ?int $orderId): void
-    {
+    public function processTransaction(
+        int $walletId,
+        float $amount,
+        WalletTransactionReason $reason,
+        int $userId,
+        ?int $orderId
+    ): void {
         $wallet = Wallet::find($walletId);
 
         match ($reason) {
-            WalletTransactionReason::REFUND->value => $this->processRefund($wallet, $amount, $userId, $orderId),
-            WalletTransactionReason::ORDER_PAYMENT->value => $this->processOrderPayment($wallet, $amount, $orderId),
-            WalletTransactionReason::WALLET_CREDIT->value => $this->processCustomerWalletCredit($wallet, $amount, $userId),
-            WalletTransactionReason::WALLET_PAYMENT->value => $this->processWalletPayment($wallet, $amount),
-            default => new InvalidWalletTransactionException,
+            WalletTransactionReason::REFUND => $this->processRefund($wallet, $amount, $userId, $orderId),
+            WalletTransactionReason::ORDER_PAYMENT => $this->processOrderPayment($wallet, $amount, $orderId),
+            WalletTransactionReason::WALLET_CREDIT => $this->processCustomerWalletCredit($wallet, $amount, $userId),
+            WalletTransactionReason::WALLET_PAYMENT => $this->processWalletPayment($wallet, $amount),
         };
     }
 
@@ -44,7 +48,7 @@ class WalletService
             'created_by' => $userId,
             'order_id' => $order->id,
             'amount' => $amount,
-            'type' => WalletTransactionType::CREDIT->ma,
+            'type' => WalletTransactionType::CREDIT->value,
             'is_success' => true,
             'reason' => WalletTransactionReason::REFUND->value,
         ]);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Wallet\WalletTransactionReason;
 use App\Events\Wallet\TransactionHappened;
 use App\Events\Wallet\WalletCreated;
 use Illuminate\Database\Eloquent\Builder;
@@ -72,8 +73,12 @@ class Wallet extends Model
         ]));
     }
 
-    public function makeTransaction(float $amount, string $reason, int $userId, ?Order $order = null): void
-    {
+    public function makeTransaction(
+        float $amount,
+        WalletTransactionReason $reason,
+        int $userId,
+        ?Order $order = null
+    ): void {
         event(new TransactionHappened(
             $this->id,
             $amount,

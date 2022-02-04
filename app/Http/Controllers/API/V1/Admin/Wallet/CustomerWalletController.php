@@ -28,7 +28,7 @@ class CustomerWalletController extends Controller
     {
         $wallet->makeTransaction(
             amount: $request->input('amount'),
-            reason: WalletTransactionReason::WALLET_CREDIT->value,
+            reason: WalletTransactionReason::WALLET_CREDIT,
             userId: auth()->user()->id
         );
 

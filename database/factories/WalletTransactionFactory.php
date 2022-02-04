@@ -30,7 +30,7 @@ class WalletTransactionFactory extends Factory
             'wallet_id' => Wallet::factory(),
             'created_by' => User::factory(),
             'amount' => random_int(100, 1500),
-            'type' => $this->faker->randomElement(['credit', 'debit']),
+            'type' => $this->faker->randomElement([1, 2]),
             'reason' => $reason,
             $resourceKey => $resource,
             'is_success' => $this->faker->boolean(),

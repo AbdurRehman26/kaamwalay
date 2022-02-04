@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Enums\Wallet\WalletTransactionReason;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\FailedRefund;
@@ -224,7 +225,7 @@ class PaymentService
     {
         $order->user->wallet->makeTransaction(
             $request['amount'],
-            'refund',
+            WalletTransactionReason::REFUND,
             $user->id,
             $order
         );

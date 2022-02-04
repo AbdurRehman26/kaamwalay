@@ -26,9 +26,9 @@ class SyncOrderPaidCustomersToMailchimp extends Command
      *
      * @return int
      */
-    public function handle(MailchimpService $mailChimpService)
+    public function handle(MailchimpService $mailchimpService)
     {
-        $mailChimpService->sendExistingOrderPaidCustomersToMailchimp(MailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
+        $mailchimpService->sendExistingOrderPaidCustomersToMailchimp(MailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
 
         return 0;
     }

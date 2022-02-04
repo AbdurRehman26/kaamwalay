@@ -50,6 +50,11 @@ return [
         'key' => env('MANDRILL_KEY'),
     ],
 
+    'mailchimp' => [
+        'apiKey' => env('MAILCHIMP_API_KEY'),
+        'server' => env('MAILCHIMP_SERVER')
+    ],
+
     'dropbox' => [
         'token' => env('AGS_DROPBOX_TOKEN'),
         'root_path' => env('AGS_DROPBOX_ROOT_PATH'),

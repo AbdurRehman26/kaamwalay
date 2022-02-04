@@ -496,6 +496,17 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\MailchimpList
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList query()
+ */
+	class MailchimpList extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Order
  *
  * @property int $id

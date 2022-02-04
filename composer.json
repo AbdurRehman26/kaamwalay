@@ -35,6 +35,7 @@
         "spatie/laravel-query-builder": "^3.5",
         "spatie/laravel-webhook-client": "^3.0",
         "tymon/jwt-auth": "^1.0",
+        "mailchimp/marketing": "*",
         "web3-php/web3": "dev-master"
     },
     "require-dev": {

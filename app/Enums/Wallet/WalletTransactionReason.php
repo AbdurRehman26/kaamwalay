@@ -11,7 +11,7 @@ enum WalletTransactionReason: int
 
     public function toString(): string
     {
-        return match($this) {
+        return match ($this) {
             self::REFUND => 'refund',
             self::ORDER_PAYMENT => 'order_payment',
             self::WALLET_CREDIT => 'wallet_credit_by_admin',

@@ -31,11 +31,11 @@ class WalletTransactionResource extends BaseResource
 
     protected function getTransactionDescription(): string
     {
-        return match ($this->getAttributeValue('reason')) {
-            WalletTransactionReason::REFUND->value => $this->user->getFullName() . ' refund to customer\'s wallet',
-            WalletTransactionReason::ORDER_PAYMENT->value => 'Customer used credit on a submission',
-            WalletTransactionReason::WALLET_CREDIT->value => $this->user->getFullName() . ' credit to customer\'s wallet',
-            default => 'Customer added to to wallet',
+        return match (WalletTransactionReason::from($this->reason)) {
+            WalletTransactionReason::REFUND => $this->user->getFullName() . ' refund to customer\'s wallet',
+            WalletTransactionReason::ORDER_PAYMENT => 'Customer used credit on a submission',
+            WalletTransactionReason::WALLET_CREDIT => $this->user->getFullName() . ' credit to customer\'s wallet',
+            WalletTransactionReason::WALLET_PAYMENT => 'Customer added to to wallet',
         };
     }
 }

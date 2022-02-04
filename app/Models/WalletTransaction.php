@@ -38,18 +38,4 @@ class WalletTransaction extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
-    protected function type(): Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => (WalletTransactionType::from($value)->toString()),
-        );
-    }
-
-    protected function reason(): Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => (WalletTransactionReason::from($value)->toString()),
-        );
-    }
 }

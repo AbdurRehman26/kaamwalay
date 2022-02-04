@@ -21,7 +21,7 @@ class RegisterController extends Controller
         $token = auth()->guard()->login($user);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
-        
+
         return new JsonResponse([
             'access_token' => $token,
             'type' => 'bearer',

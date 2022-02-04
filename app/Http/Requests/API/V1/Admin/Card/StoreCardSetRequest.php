@@ -23,7 +23,7 @@ class StoreCardSetRequest extends FormRequest
                     return $query->where('card_series_id', $this->card_series_id);
                 }),
             ],
-            'image_url' => ['required', 'string'],
+            'image_path' => ['required', 'string'],
             'release_date' => ['required', 'date'],
         ];
     }

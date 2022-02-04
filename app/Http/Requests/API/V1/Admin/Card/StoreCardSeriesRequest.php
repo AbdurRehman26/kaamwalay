@@ -23,7 +23,7 @@ class StoreCardSeriesRequest extends FormRequest
                     return $query->where('card_category_id', $this->card_category_id);
                 }),
             ],
-            'image_url' => ['required', 'string'],
+            'image_path' => ['required', 'string'],
         ];
     }
 

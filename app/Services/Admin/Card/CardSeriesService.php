@@ -27,12 +27,12 @@ class CardSeriesService
 
     public function create(array $data): CardSeries
     {
-        $this->getOrCreateSeriesFromAgs($data['name'], $data['image_url']);
+        $this->getOrCreateSeriesFromAgs($data['name'], $data['image_path']);
 
         return CardSeries::create([
             'name' => $data['name'],
-            'image_path' => $data['image_url'],
-            'image_bucket_path' => $data['image_url'],
+            'image_path' => $data['image_path'],
+            'image_bucket_path' => $data['image_path'],
             'card_category_id' => $data['card_category_id'],
         ]);
     }

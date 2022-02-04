@@ -34,8 +34,8 @@ class CardSetService
         return CardSet::create([
             'name' => $data['name'],
             'description' => $data['description'] ?? '',
-            'image_path' => $data['image_url'],
-            'image_bucket_path' => $data['image_url'],
+            'image_path' => $data['image_path'],
+            'image_bucket_path' => $data['image_path'],
             'card_category_id' => CardSeries::find($data['card_series_id'])->card_category_id,
             'card_series_id' => $data['card_series_id'],
             'release_date' => $data['release_date'],

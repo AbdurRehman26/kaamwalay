@@ -31,6 +31,7 @@ class WalletTransactionResource extends BaseResource
 
     protected function getTransactionDescription(): string
     {
+        /** @var WalletTransactionReason */
         $reason = $this->reason;
 
         return match ($reason) {

@@ -22,9 +22,9 @@ test('admin can get a wallet transaction history', function () {
     ]);
 
     WalletTransaction::factory()->count(3)->state(new Sequence(
-        ['wallet_id' => $wallet->id, 'amount' => 100, 'reason' => WalletTransactionReason::ORDER_PAYMENT->value, 'created_by' => $customer->id, 'order_id' => Order::factory()->create()->id, 'wallet_payment_id' => null],
-        ['wallet_id' => $wallet->id, 'amount' => 10, 'reason' => WalletTransactionReason::REFUND->value, 'created_by' => $adminUser->id, 'order_id' => Order::factory()->create()->id, 'wallet_payment_id' => null],
-        ['wallet_id' => $wallet->id, 'amount' => 15, 'reason' => WalletTransactionReason::WALLET_CREDIT->value, 'created_by' => $adminUser->id, 'order_id' => Order::factory()->create()->id, 'wallet_payment_id' => null],
+        ['wallet_id' => $wallet->id, 'amount' => 100, 'reason' => WalletTransactionReason::ORDER_PAYMENT, 'created_by' => $customer->id, 'order_id' => Order::factory()->create()->id, 'wallet_payment_id' => null],
+        ['wallet_id' => $wallet->id, 'amount' => 10, 'reason' => WalletTransactionReason::REFUND, 'created_by' => $adminUser->id, 'order_id' => Order::factory()->create()->id, 'wallet_payment_id' => null],
+        ['wallet_id' => $wallet->id, 'amount' => 15, 'reason' => WalletTransactionReason::WALLET_CREDIT, 'created_by' => $adminUser->id, 'order_id' => Order::factory()->create()->id, 'wallet_payment_id' => null],
     ))->create();
 
     actingAs($adminUser);

@@ -48,9 +48,9 @@ class WalletService
             'created_by' => $userId,
             'order_id' => $order->id,
             'amount' => $amount,
-            'type' => WalletTransactionType::CREDIT->value,
+            'type' => WalletTransactionType::CREDIT,
             'is_success' => true,
-            'reason' => WalletTransactionReason::REFUND->value,
+            'reason' => WalletTransactionReason::REFUND,
         ]);
 
         $wallet->increment('balance', $amount);
@@ -65,9 +65,9 @@ class WalletService
             'created_by' => $order->user_id,
             'order_id' => $order->id,
             'amount' => $amount,
-            'type' => WalletTransactionType::DEBIT->value,
+            'type' => WalletTransactionType::DEBIT,
             'is_success' => true,
-            'reason' => WalletTransactionReason::ORDER_PAYMENT->value,
+            'reason' => WalletTransactionReason::ORDER_PAYMENT,
         ]);
 
         $wallet->decrement('balance', $amount);
@@ -80,9 +80,9 @@ class WalletService
             'created_by' => $wallet->user_id,
             'wallet_payment_id' => $wallet->lastTransaction->id,
             'amount' => $amount,
-            'type' => WalletTransactionType::CREDIT->value,
+            'type' => WalletTransactionType::CREDIT,
             'is_success' => true,
-            'reason' => WalletTransactionReason::WALLET_PAYMENT->value,
+            'reason' => WalletTransactionReason::WALLET_PAYMENT,
         ]);
 
         $wallet->increment('balance', $amount);
@@ -94,9 +94,9 @@ class WalletService
             'wallet_id' => $wallet->id,
             'created_by' => $userId,
             'amount' => $amount,
-            'type' => WalletTransactionType::CREDIT->value,
+            'type' => WalletTransactionType::CREDIT,
             'is_success' => true,
-            'reason' => WalletTransactionReason::WALLET_CREDIT->value,
+            'reason' => WalletTransactionReason::WALLET_CREDIT,
         ]);
 
         $wallet->increment('balance', $amount);

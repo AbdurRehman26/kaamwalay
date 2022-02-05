@@ -19,12 +19,12 @@ class WalletTransactionFactory extends Factory
     public function definition()
     {
         $reason = $this->faker->randomElement([
-            WalletTransactionReason::WALLET_CREDIT->value,
-            WalletTransactionReason::ORDER_PAYMENT->value,
-            WalletTransactionReason::REFUND->value,
+            WalletTransactionReason::WALLET_CREDIT,
+            WalletTransactionReason::ORDER_PAYMENT,
+            WalletTransactionReason::REFUND,
         ]);
-        $resource = $reason === WalletTransactionReason::WALLET_CREDIT->value ? WalletPayment::factory() : Order::factory();
-        $resourceKey = $reason === WalletTransactionReason::WALLET_CREDIT->value ? 'wallet_payment_id' : 'order_id';
+        $resource = $reason === WalletTransactionReason::WALLET_CREDIT ? WalletPayment::factory() : Order::factory();
+        $resourceKey = $reason === WalletTransactionReason::WALLET_CREDIT ? 'wallet_payment_id' : 'order_id';
 
         return [
             'wallet_id' => Wallet::factory(),

@@ -27,6 +27,8 @@ class WalletTransaction extends Model
     protected $casts = [
         'amount' => 'float',
         'is_success' => 'boolean',
+        'type' => WalletTransactionType::class,
+        'reason' => WalletTransactionReason::class,
     ];
 
     public function wallet(): BelongsTo

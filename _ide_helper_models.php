@@ -1605,7 +1605,11 @@ namespace App\Models{
 }
 
 namespace App\Models{
-/**
+
+    use App\Enums\Wallet\WalletTransactionReason;
+    use App\Enums\Wallet\WalletTransactionType;
+
+    /**
  * App\Models\WalletTransaction
  *
  * @property int $id
@@ -1614,8 +1618,8 @@ namespace App\Models{
  * @property int|null $order_id order ID will be available when refund happened or user pay from wallet
  * @property int|null $wallet_payment_id wallet payment ID will be available when user adds amount to wallet
  * @property float $amount
- * @property int $type 1 => credit, 2 => debit
- * @property int $reason 1 => refund, 2 => order_payment, 3 => wallet_payment
+ * @property WalletTransactionType $type
+ * @property WalletTransactionReason $reason
  * @property bool $is_success
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

@@ -6,7 +6,6 @@ use App\Enums\Wallet\WalletTransactionReason;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\Wallet;
-use App\Models\WalletTransaction;
 use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
 
 class WalletService implements PaymentProviderServiceInterface

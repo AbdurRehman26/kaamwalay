@@ -172,7 +172,6 @@ export function PromoCodeModal() {
 
     const handleUsageAllowedTypeRadioPress = useCallback(
         (incomingDateType: null | number) => {
-            console.log(incomingDateType);
             return () => {
                 dispatch(setUsageAllowedType(incomingDateType));
             };
@@ -513,8 +512,8 @@ export function PromoCodeModal() {
                 </Box>
 
                 <Box className={classes.inputWithLabelContainer} marginTop={'32px'}>
-                    <Typography variant={'subtitle1'} className={classes.label}>
-                        Usage Allowance
+                    <Typography variant={'subtitle1'}>
+                        <span className={classes.label}>Usage Allowance</span> (Per Account)
                     </Typography>
                     <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} minWidth={'100%'}>
                         <Paper variant={'outlined'} sx={{ width: '99.5%', marginRight: '10px', padding: '8px' }}>

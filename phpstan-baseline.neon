@@ -1,21 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateAdminShipments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
-
-		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateCustomerShipments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),array\\<string, mixed\\>\\>\\:\\:each\\(\\) expects callable\\(array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}, \\(int\\|string\\)\\)\\: bool\\|void, Closure\\(Illuminate\\\\Support\\\\Collection, string\\)\\: void given\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 1
 			path: app/Console/Commands/RevenueStats/UpdateRevenueStats.php

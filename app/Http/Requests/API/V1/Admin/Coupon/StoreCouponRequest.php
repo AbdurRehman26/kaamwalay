@@ -72,6 +72,10 @@ class StoreCouponRequest extends FormRequest
                     Rule::exists(CouponApplicable::ENTITIES_MAPPING[$this->input('coupon_applicable_id')] ?? null, 'id')
                 ),
             ],
+            'usage_allowed_per_user' => [
+                'present',
+                Rule::in([null, 1]),
+            ],
         ];
     }
 }

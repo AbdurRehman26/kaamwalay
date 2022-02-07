@@ -71,6 +71,7 @@ class CouponService
         $coupon->code = $this->getCouponCode($data['code']);
         $coupon->coupon_status_id = $this->getNewCouponStatus($coupon);
         $coupon->created_by = $user->id;
+        $coupon->usage_allowed_per_user = $data['usage_allowed_per_user'];
 
         $coupon->save();
 

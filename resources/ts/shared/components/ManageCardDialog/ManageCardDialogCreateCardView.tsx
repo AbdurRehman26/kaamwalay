@@ -82,7 +82,8 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const [isLoading, setIsLoading] = useState(false);
         const [cardCategory, setCardCategory] = useState<number | null>(null);
         const [availableCategories, setAvailableCategories] = useState<{ id: number; name: string }[]>([]);
-        const [availableSeriesWithSets, setAvailableSeriesWithSets] = useState<CardSeries[]>([]);
+        const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
+        const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
         const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | undefined>(null);
         const [selectedSet, setSelectedSet] = useState<CardSets | null>(null);
         const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null>(null);
@@ -118,48 +119,95 @@ export const ManageCardDialogCreateCardView = forwardRef(
             dispatch(manageCardDialogActions.setOpen(false));
         }, [dispatch]);
 
+        const fetchSeries = useCallback(
+            async (categoryId: Number) => {
+                const endpoint = apiService.createEndpoint(`admin/cards/series?category_id=` + categoryId);
+                const response = await endpoint.get('');
+                setAvailableSeries(
+                    response.data.map((item: CardSeries) => {
+                        // TODO: This is a workaround to add 'label' alongside name on these objects. I'm sure there's a better way to do this but it's 4AM and I can't think of it.
+                        return {
+                            id: item.id,
+                            label: item.name,
+                            name: item.name,
+                            imagePath: item.imagePath,
+                        };
+                    }),
+                );
+            },
+            [apiService],
+        );
+
+        const fetchSets = useCallback(
+            async (seriesId: Number) => {
+                const endpoint = apiService.createEndpoint(`admin/cards/sets?series_id=` + seriesId);
+                const response = await endpoint.get('');
+                setAvailableSets(
+                    response.data.map((item: CardSets) => {
+                        // TODO: This is a workaround to add 'label' alongside name on these objects. I'm sure there's a better way to do this but it's 4AM and I can't think of it.
+                        return {
+                            id: item.id,
+                            cardSeriesId: item.cardSeriesId,
+                            label: item.name,
+                            name: item.name,
+                            imagePath: item.imagePath,
+                            releaseDate: item.releaseDate,
+                        };
+                    }),
+                );
+            },
+            [apiService],
+        );
+
+        const fetchDropdownsData = useCallback(
+            async (categoryId: Number) => {
+                const endpoint = apiService.createEndpoint(`admin/cards/options/` + categoryId);
+                const response = await endpoint.get('');
+                setAvailableRarities(response.data.rarity);
+                setAvailableSurfaces(response.data.surface);
+                setAvailableLanguages(response.data.language);
+                setAvailableEditions(response.data.edition);
+            },
+            [apiService],
+        );
+
         useEffect(
             () => {
-                async function fetchDropdownsData() {
-                    const endpoint = apiService.createEndpoint(`admin/cards/options`);
+                async function fetchCategories() {
+                    const endpoint = apiService.createEndpoint(`admin/cards/categories`);
                     const response = await endpoint.get('');
-                    setAvailableCategories(response.data.category);
-                    setCardCategory(response.data.category[0].id);
-                    setAvailableSeriesWithSets(
-                        response.data.series.map((item: CardSeries) => {
-                            // TODO: This is a workaround to add 'label' alongside name on these objects. I'm sure there's a better way to do this but it's 4AM and I can't think of it.
-                            return {
-                                id: item.id,
-                                label: item.name,
-                                name: item.name,
-                                imagePath: item.imagePath,
-                                cardSets: item.cardSets.map((set) => ({
-                                    id: set.id,
-                                    cardSeriesId: set.cardSeriesId,
-                                    label: set.name,
-                                    name: set.name,
-                                    imagePath: set.imagePath,
-                                    releaseDate: set.releaseDate,
-                                })),
-                            };
-                        }),
-                    );
-                    setAvailableRarities(response.data.rarity);
-                    setAvailableSurfaces(response.data.surface);
-                    setAvailableLanguages(response.data.language);
-                    setAvailableEditions(response.data.edition);
+                    setAvailableCategories(response.data);
+                    setCardCategory(response.data[0].id);
+                    fetchSeries(response.data[0].id);
+                    fetchDropdownsData(response.data[0].id);
                 }
 
-                fetchDropdownsData();
+                fetchCategories();
             },
             // eslint-disable-next-line react-hooks/exhaustive-deps
             [],
         );
 
-        const handleSeriesChange = useCallback((e, newValue) => {
-            setSelectedSeries(newValue);
-            setSelectedSet(null);
-        }, []);
+        const handleCardCategoryChange = useCallback(
+            (e) => {
+                setCardCategory(e.target.value);
+                setSelectedSeries(null);
+                setSelectedSet(null);
+
+                fetchSeries(e.target.value);
+                fetchDropdownsData(e.target.value);
+            },
+            [fetchSeries, fetchDropdownsData],
+        );
+
+        const handleSeriesChange = useCallback(
+            (e, newValue) => {
+                setSelectedSeries(newValue);
+                setSelectedSet(null);
+                fetchSets(newValue.id);
+            },
+            [fetchSets],
+        );
 
         const handleSetChange = useCallback((e, newValue) => {
             setSelectedSet(newValue);
@@ -203,7 +251,6 @@ export const ManageCardDialogCreateCardView = forwardRef(
             setShowNewSetBox(!showNewSetBox);
         }, [showNewSetBox]);
 
-        const handleCardCategoryChange = useCallback((e) => setCardCategory(e.target.value), []);
         const handleRarityChange = useCallback((e) => setSelectedRarity(e.target.value), []);
         const handleSurfaceChange = useCallback((e) => setSelectedSurface(e.target.value), []);
         const handleLanguageChange = useCallback((e) => setSelectedLanguage(e.target.value), []);
@@ -488,7 +535,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                 <Autocomplete
                                     value={selectedSeries}
                                     onChange={handleSeriesChange}
-                                    options={availableSeriesWithSets}
+                                    options={availableSeries}
                                     fullWidth
                                     renderInput={(params) => <TextField {...params} placeholder={'Enter series'} />}
                                 />
@@ -618,7 +665,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                 <Autocomplete
                                     value={selectedSet}
                                     onChange={handleSetChange}
-                                    options={selectedSeries.cardSets}
+                                    options={availableSets}
                                     fullWidth
                                     renderInput={(params) => <TextField {...params} placeholder={'Enter set'} />}
                                 />

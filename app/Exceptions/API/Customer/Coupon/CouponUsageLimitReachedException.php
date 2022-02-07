@@ -12,7 +12,7 @@ class CouponUsageLimitReachedException extends Exception
     /**
      * @var string
      */
-    protected $message = 'This coupon can be used just once by a user.';
+    protected $message = 'Usage limit exceeded. Please try a different code.';
 
     /**
      * @var int

@@ -102,7 +102,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
 
         const Notifications = useNotifications();
         // New series section
-        const [showNewSeries, setShowNewSeries] = useState(false);
+        const showNewSeries = false;
         const [newSeriesLogo, setNewSeriesLogo] = useState<File | null>(null);
         const [newSeriesName, setNewSeriesName] = useState('');
 
@@ -178,6 +178,8 @@ export const ManageCardDialogCreateCardView = forwardRef(
                     const response = await endpoint.get('');
                     setAvailableCategories(response.data);
                     setCardCategory(response.data[0].id);
+                    dispatch(manageCardDialogActions.setSelectedCategoryId(response.data[0].id));
+
                     fetchSeries(response.data[0].id);
                     fetchDropdownsData(response.data[0].id);
                 }
@@ -191,13 +193,15 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const handleCardCategoryChange = useCallback(
             (e) => {
                 setCardCategory(e.target.value);
+                dispatch(manageCardDialogActions.setSelectedCategoryId(e.target.value));
+
                 setSelectedSeries(null);
                 setSelectedSet(null);
 
                 fetchSeries(e.target.value);
                 fetchDropdownsData(e.target.value);
             },
-            [fetchSeries, fetchDropdownsData],
+            [fetchSeries, fetchDropdownsData, dispatch],
         );
 
         const handleSeriesChange = useCallback(
@@ -241,8 +245,11 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const toggleNewSeries = useCallback(() => {
             setNewSeriesLogo(null);
             setNewSeriesName('');
-            setShowNewSeries(!showNewSeries);
-        }, [showNewSeries]);
+
+            batch(() => {
+                dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.CreateSeries));
+            });
+        }, [dispatch]);
 
         const toggleNewSet = useCallback(() => {
             setNewSetLogo(null);

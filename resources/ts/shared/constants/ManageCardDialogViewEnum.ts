@@ -3,4 +3,5 @@ export enum ManageCardDialogViewEnum {
     View,
     Edit,
     Create,
+    CreateSeries,
 }

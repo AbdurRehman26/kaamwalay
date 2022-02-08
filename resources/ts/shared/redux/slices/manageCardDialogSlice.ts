@@ -10,6 +10,7 @@ interface ManageCardDialogState {
     view: ManageCardDialogViewEnum;
     lastView: ManageCardDialogViewEnum | null;
     selectedCard: CardProductEntity | null;
+    selectedCategoryId?: number | null;
 
     backup: Omit<ManageCardDialogState, 'view' | 'open' | 'backup' | 'lastView'> | null;
 }
@@ -19,6 +20,7 @@ export const manageCardDialogSlice = createSlice({
     initialState: {
         open: false,
         selectedCard: null,
+        selectedCategoryId: null,
         declaredValue: 0,
         view: ManageCardDialogViewEnum.List,
         lastView: null,
@@ -32,6 +34,7 @@ export const manageCardDialogSlice = createSlice({
                 state.view = 1;
                 state.lastView = null;
                 state.selectedCard = null;
+                state.selectedCategoryId = null;
                 state.declaredValue = 0;
                 state.orderItemId = null;
             }
@@ -39,6 +42,9 @@ export const manageCardDialogSlice = createSlice({
         setView(state, { payload }: PayloadAction<ManageCardDialogViewEnum>) {
             state.lastView = state.view;
             state.view = payload;
+        },
+        setSelectedCategoryId(state, { payload }: PayloadAction<ManageCardDialogViewEnum>) {
+            state.selectedCategoryId = payload;
         },
         setSelectedCard(state, { payload }: PayloadAction<CardProductEntity | null>) {
             state.selectedCard = instanceToPlain(payload) as any;
@@ -50,6 +56,7 @@ export const manageCardDialogSlice = createSlice({
             if (!state.backup) {
                 state.backup = {
                     selectedCard: state.selectedCard,
+                    selectedCategoryId: state.selectedCategoryId,
                     declaredValue: state.declaredValue,
                     orderItemId: state.orderItemId,
                 };
@@ -58,6 +65,7 @@ export const manageCardDialogSlice = createSlice({
         restore(state) {
             if (state.backup) {
                 state.selectedCard = state.backup.selectedCard;
+                state.selectedCategoryId = state.backup.selectedCategoryId;
                 state.declaredValue = state.backup.declaredValue;
                 state.orderItemId = state.backup.orderItemId;
                 state.backup = null;

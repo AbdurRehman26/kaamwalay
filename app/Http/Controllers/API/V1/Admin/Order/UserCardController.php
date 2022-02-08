@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\API\V1\Admin\Order;
 
 use App\Events\API\Admin\Order\OrderUpdated;
+use App\Events\API\Admin\UserCard\UserCardGradeRevisedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Order\Grades\UserCardGradeRequest;
 use App\Http\Resources\API\V1\Admin\Order\UserCardResource;
 use App\Models\Order;
+use App\Models\OrderItemStatus;
+use App\Models\OrderStatus;
 use App\Models\UserCard;
 use App\Services\Admin\CardGradingService;
 use App\Services\AGS\AgsService;
@@ -43,6 +46,13 @@ class UserCardController extends Controller
                 $card->only('human_grade_values', 'overall_values', 'overall_grade', 'overall_grade_nickname')
             );
             $card->updateFromAgsResponse($response);
+        }
+
+        if (
+            $card->orderItem->order_item_status_id === OrderItemStatus::GRADED &&
+            in_array($card->orderItem->order->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED])
+        ) {
+            UserCardGradeRevisedEvent::dispatch($card);
         }
 
         return new UserCardResource($card);

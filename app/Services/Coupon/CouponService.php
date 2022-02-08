@@ -23,7 +23,7 @@ class CouponService
         $coupon = Coupon::whereCode($couponCode)->isActive()->validOnCouponable($couponParams)->select('coupons.*');
 
         throw_if($coupon->doesntExist(), CouponExpiredOrInvalid::class);
-        throw_if($coupon->validForUserLimit()->doesntExist(), CouponUsageLimitReachedException::class);
+        throw_if($coupon->validForUserLimit($couponCode)->doesntExist(), CouponUsageLimitReachedException::class);
 
         return $coupon->first();
     }

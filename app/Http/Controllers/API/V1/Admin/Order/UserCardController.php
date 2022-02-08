@@ -48,8 +48,10 @@ class UserCardController extends Controller
             $card->updateFromAgsResponse($response);
         }
 
-        if ($card->orderItem->order_item_status_id === OrderItemStatus::GRADED
-        && in_array($card->orderItem->order->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED])) {
+        if (
+            $card->orderItem->order_item_status_id === OrderItemStatus::GRADED &&
+            in_array($card->orderItem->order->order_status_id, [OrderStatus::GRADED, OrderStatus::SHIPPED])
+        ) {
             UserCardGradeRevisedEvent::dispatch($card);
         }
 

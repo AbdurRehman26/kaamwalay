@@ -129,7 +129,7 @@ class Coupon extends Model
     public function scopeValidForUserLimit(Builder $query, string $couponCode):  Builder
     {
         return $query->whereNull('coupons.usage_allowed_per_user')
-                ->orWhereNotExists(function($subQuery) use ($couponCode) {
+                ->orWhereNotExists(function ($subQuery) use ($couponCode) {
                     $subQuery->from('coupons')
                         ->leftJoin('coupon_logs', 'coupon_logs.coupon_id', '=', 'coupons.id')
                         ->where('coupon_logs.user_id', '=', auth()->user()->id)

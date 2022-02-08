@@ -272,6 +272,7 @@ test('admin can create coupon with flat discount', function () {
         'discount_value' => 200,
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
         'is_permanent' => true,
+        'usage_allowed_per_user' => null,
     ])
         ->assertCreated();
 });

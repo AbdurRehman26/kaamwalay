@@ -12,6 +12,7 @@ import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
+import * as yup from 'yup';
 import ExistingAddress from '@dashboard/components/ExistingAddress';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -26,7 +27,6 @@ import {
 } from '../redux/slices/newSubmissionSlice';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
-import { schema } from './schema';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -145,6 +145,21 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }));
+
+// TODO: Fix duplication
+const schema = yup.object().shape({
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    address: yup.string().required(),
+    flat: yup.string().optional(),
+    city: yup.string().required(),
+    state: yup.object().shape({
+        name: yup.string().required(),
+        id: yup.number().required(),
+    }),
+    zipCode: yup.string().required(),
+    phoneNumber: yup.string().required(),
+});
 
 export function SubmissionStep03Content() {
     const disableAllInputs = useAppSelector((state) => state.newSubmission.step03Data.disableAllShippingInputs);

@@ -191,6 +191,7 @@ class CouponService
 
             return;
         }
+
         if ($data['type'] === array_search(Coupon::TYPE_FLAT, Coupon::COUPON_TYPE_MAPPING)) {
             $this->validateFlatDiscountValue(
                 $data['coupon_applicable_id'],
@@ -198,6 +199,7 @@ class CouponService
                 $data['couponables'] ?? []
             );
         }
+
         if ($data['type'] === array_search(Coupon::TYPE_FIXED, Coupon::COUPON_TYPE_MAPPING)) {
             $this->validateFixedDiscountValue(
                 $data['coupon_applicable_id'],
@@ -234,6 +236,7 @@ class CouponService
             }
         }
     }
+
     protected function validateFlatDiscountValue(
         int $couponApplicableId,
         int|float $discountValue,

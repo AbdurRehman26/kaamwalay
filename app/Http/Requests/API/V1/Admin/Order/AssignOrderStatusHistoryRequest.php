@@ -16,8 +16,7 @@ class AssignOrderStatusHistoryRequest extends FormRequest
      */
     public function authorize()
     {
-        // TODO: replace with a real authorization
-        return true;
+        return $this->user()->isAdmin();
     }
 
     /**

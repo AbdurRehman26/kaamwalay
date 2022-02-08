@@ -316,6 +316,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$usage_allowed_per_user\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$description\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
@@ -1407,7 +1412,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
-			count: 2
+			count: 3
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
 
 		-

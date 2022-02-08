@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\API\Customer\Coupon\CouponFlatValueDiscountGreaterThanOrder;
 use App\Models\CardProduct;
 use App\Models\Coupon;
 use App\Models\Couponable;
@@ -11,6 +12,7 @@ use App\Models\OrderItem;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Coupon\CouponService;
+use App\Services\Order\Shipping\ShippingFeeService;
 
 beforeEach(function () {
     $this->couponService = resolve(CouponService::class);
@@ -88,6 +90,37 @@ it('calculates discount for service fee order', function () {
 
     expect($discount)->toBe($couponDiscount);
 });
+
+it('calculates flat discount for order', function () {
+    $this->coupon->update(
+        ['type' => 'flat']
+    );
+
+    $flatDiscount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+
+    $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+    $insuredShipping = ShippingFeeService::calculate(
+        array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit')),
+        array_sum(array_column($this->order->orderItems->toArray(), 'quantity'))
+    );
+
+    $flatCouponDiscount = $serviceFee + $insuredShipping - $this->order->coupon->discount_value;
+
+    expect($flatDiscount)->toBe($flatCouponDiscount);
+});
+
+it('gives exception when flat coupon value is greater than order', function () {
+    $discountValue = $this->order->coupon->discount_value * 100000;
+    $this->order->coupon->update(
+        [
+            'discount_value' => $discountValue,
+            'type' => 'flat',
+        ]
+    );
+    
+    $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+})->throws(CouponFlatValueDiscountGreaterThanOrder::class, 'Coupon applied value is greater than your order. Please choose another coupon.');
+
 
 it('calculates stats for coupon', function () {
     $this->order->discounted_amount = (float)$this->couponService->calculateDiscount($this->order->coupon, $this->order);

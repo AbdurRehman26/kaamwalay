@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\API\Customer\Coupon\CouponFlatValueDiscountGreaterThanOrder;
 use App\Models\CardProduct;
 use App\Models\Coupon;
 use App\Models\Couponable;
@@ -107,6 +108,19 @@ it('calculates flat discount for order', function () {
 
     expect($flatDiscount)->toBe($flatCouponDiscount);
 });
+
+it('gives exception when flat coupon value is greater than order', function () {
+    $discountValue = $this->order->coupon->discount_value * 100000;
+    $this->order->coupon->update(
+        [
+            'discount_value' => $discountValue,
+            'type' => 'flat',
+        ]
+    );
+    
+    $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+})->throws(CouponFlatValueDiscountGreaterThanOrder::class, 'Coupon applied value is greater than your order. Please choose another coupon.');
+
 
 it('calculates stats for coupon', function () {
     $this->order->discounted_amount = (float)$this->couponService->calculateDiscount($this->order->coupon, $this->order);

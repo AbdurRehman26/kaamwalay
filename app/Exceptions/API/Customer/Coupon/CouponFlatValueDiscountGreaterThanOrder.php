@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CouponCodeNotApplicable extends Exception
+class CouponFlatValueDiscountGreaterThanOrder extends Exception
 {
     /**
      * @var string

@@ -43,7 +43,7 @@ class PopReportService
             ->select('user_cards.overall_grade', 'card_sets.card_series_id as card_series_id')
             ->get();
 
-        $whereCondition = [ 'card_series_id' => $cardSeries->id ];
+        $whereCondition = ['card_series_id' => $cardSeries->id];
         $popSeriesReportModel = PopReportsSeries::firstOrCreate($whereCondition);
 
         $reportsTableArray = $this->accumulateReportRow($userCards);
@@ -63,7 +63,7 @@ class PopReportService
             ->select('user_cards.overall_grade')
             ->get();
 
-        $whereCondition = [  'card_set_id' => $cardSet->id , 'card_series_id' => $cardSet->card_series_id ];
+        $whereCondition = ['card_set_id' => $cardSet->id , 'card_series_id' => $cardSet->card_series_id];
 
         $popSetReportModel = PopReportsSet::firstOrCreate($whereCondition);
 
@@ -84,7 +84,7 @@ class PopReportService
             ->select('user_cards.overall_grade', 'card_products.card_set_id as card_set_id')
             ->get();
 
-        $whereCondition = [ 'card_product_id' => $cardProduct->id , 'card_set_id' => $cardProduct->card_set_id ];
+        $whereCondition = ['card_product_id' => $cardProduct->id , 'card_set_id' => $cardProduct->card_set_id];
         $popCardReportModel = PopReportsCard::firstOrCreate($whereCondition);
 
         $reportsTableArray = $this->accumulateReportRow($userCards);
@@ -124,7 +124,8 @@ class PopReportService
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
             ->where('order_items.order_id', $order->id)
             ->select('card_sets.*')
-            ->groupBy('card_sets.id')->get();
+            ->groupBy('card_sets.id')
+            ->get();
 
         $orderSeries = CardSeries::join('card_sets', 'card_sets.card_series_id', '=', 'card_series.id')
             ->join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')

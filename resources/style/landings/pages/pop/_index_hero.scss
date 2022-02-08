@@ -2,6 +2,9 @@
 
 .pop-index-hero {
     height: 507px;
+    @include breakpoints.down(sm) {
+        height: 331px;
+    }
 
     &__container {
         background-image: url('/assets/images/pop-hero.jpg');
@@ -10,7 +13,11 @@
         text-align: center;
         color: #ffffff;
 
-        background-size: 100%, cover;
+        background-size: cover;
+
+        @include breakpoints.down(sm) {
+            height: 331px;
+        }
     }
 
     &__mask {
@@ -21,6 +28,10 @@
         text-align: center;
         align-items: center;
         justify-content: center;
+
+        @include breakpoints.down(sm) {
+            height: 331px;
+        }
     }
 
     &__title {

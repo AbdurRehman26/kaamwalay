@@ -27,6 +27,7 @@ class CouponResource extends BaseResource
             'available_from' => $this->available_from->toDateString(),
             'available_till' => $this->available_till?->toDateString(),
             'is_permanent' => is_null($this->available_till),
+            'usage_allowed_per_user' => $this->usage_allowed_per_user,
             'coupon_applicable' => $this->whenLoaded('couponApplicable', CouponApplicableResource::class),
             'coupon_status' => $this->whenLoaded('couponStatus', CouponStatusResource::class),
             'coupon_stats' => $this->whenLoaded('couponStats', CouponStatResource::class),

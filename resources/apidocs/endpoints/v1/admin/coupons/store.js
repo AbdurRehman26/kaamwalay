@@ -9,7 +9,7 @@
  * @apiUse Authorization
  *
  * @apiParam {String} code coupon code for new coupon. Example: AGS-2021
- * @apiParam {String} type amount that needs to be charged, only 2 values are allowed: fixed, percentage. Example: fixed
+ * @apiParam {String} type amount that needs to be charged, only 3 values are allowed: fixed, percentage, flat. Example: fixed
  * @apiParam {Float} discount_value value of the discount. Example: 10
  * @apiParam {Number} coupon_applicable_id resource ID of the coupon applicable. Example: 1
  * @apiParam {String} available_from datetime value representing the start of availability of the coupon, accepted format is: Y-m-d H:i:s.
@@ -31,6 +31,7 @@
  *                "available_from": "2021-12-30T10:18:01.000000Z",
  *                "available_till": "2021-12-21T10:17:01.000000Z",
  *                "is_permanent": false,
+ *                "usage_allowed_per_user": null,
  *                "coupon_status": {
  *                    "id": 4,
  *                    "code": "expired",

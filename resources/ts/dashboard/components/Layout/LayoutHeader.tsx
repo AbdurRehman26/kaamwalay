@@ -22,6 +22,11 @@ const useStyles = makeStyles(
         root: {
             background: 'linear-gradient(106.54deg, #140078 -4.67%, #6C31BC 112.32%)',
             marginBottom: 28,
+            height: 72,
+            justifyContent: 'center',
+            [theme.breakpoints.down('sm')]: {
+                height: 60,
+            },
         },
         brand: {
             display: 'block',
@@ -30,11 +35,12 @@ const useStyles = makeStyles(
             display: 'block',
             height: 54,
             [theme.breakpoints.down('sm')]: {
-                height: 34,
+                height: 36,
             },
         },
         toggleButton: {
-            marginRight: theme.spacing(1.5),
+            marginRight: 6,
+            marginLeft: -6,
             [theme.breakpoints.up('md')]: {
                 display: 'none',
             },

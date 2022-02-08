@@ -2,8 +2,8 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OutlinedCard from '@shared/components/OutlinedCard';
-import { useInjectable } from '@shared/hooks/useInjectable';
-import { APIService } from '@shared/services/APIService';
+import { useAppDispatch } from '@admin/redux/hooks';
+import { updateGeneralOrderNotes } from '@admin/redux/slices/submissionGradeSlice';
 
 interface SubmissionsGradeNotesProps {
     notes?: string;
@@ -17,16 +17,17 @@ interface SubmissionsGradeNotesProps {
  */
 export function SubmissionsGradeNotes(props: SubmissionsGradeNotesProps) {
     const { id } = useParams<{ id: string }>();
-    const apiService = useInjectable(APIService);
     const [notesValue, setNotesValue] = useState(props.notes);
+    const dispatch = useAppDispatch();
 
     const handleNotesChange = (e: any) => setNotesValue(e.target.value);
-
     const handleSaveNotes = async () => {
-        const endpoint = apiService.createEndpoint(`admin/orders/${id}/notes`);
-        await endpoint.put('', {
-            notes: notesValue,
-        });
+        await dispatch(
+            updateGeneralOrderNotes({
+                orderID: Number(id),
+                notes: notesValue,
+            }),
+        ).unwrap();
     };
 
     useEffect(() => {

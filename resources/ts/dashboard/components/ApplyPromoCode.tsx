@@ -15,6 +15,7 @@ import {
     setIsCouponApplied,
     setIsCouponValid,
     setValidCouponId,
+    SetCouponInvalidMessage,
 } from '@dashboard/redux/slices/newSubmissionSlice';
 import InputAdornment from '@mui/material/InputAdornment';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -46,6 +47,7 @@ export function ApplyPromoCode() {
     const isCouponValid = useAppSelector((state) => state.newSubmission.couponState.isCouponValid);
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+    const couponInvalidMessage = useAppSelector((state) => state.newSubmission.couponState.couponInvalidMessage);
     const discountStatement = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountStatement,
     );
@@ -71,6 +73,7 @@ export function ApplyPromoCode() {
                     setShowInvalidState(false);
                 }
             } catch (error: any) {
+                dispatch(SetCouponInvalidMessage(error.message));
                 dispatch(setIsCouponValid(false));
                 dispatch(setValidCouponId(-1));
             }
@@ -180,7 +183,7 @@ export function ApplyPromoCode() {
                 fullWidth
                 sx={{ width: '100%' }}
                 onBlur={handleOnBlur}
-                helperText={showInvalidState ? 'Invalid promo code. Please try again.' : null}
+                helperText={showInvalidState ? couponInvalidMessage : null}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">

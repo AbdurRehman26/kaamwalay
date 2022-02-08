@@ -20,9 +20,11 @@ class Coupon extends Model
 
     const TYPE_FIXED = 1;
     const TYPE_PERCENTAGE = 2;
+    const TYPE_FLAT = 3;
     const COUPON_TYPE_MAPPING = [
         'fixed' => self::TYPE_FIXED,
         'percentage' => self::TYPE_PERCENTAGE,
+        'flat' => self::TYPE_FLAT,
     ];
 
     protected $fillable = [
@@ -124,6 +126,17 @@ class Coupon extends Model
         return $query->whereHas('couponAble', function ($subQuery) use ($couponParams) {
             $subQuery->where('couponables_id', '=', $couponParams['couponables_id']);
         })->orDoesntHave('couponAble');
+    }
+
+    public function scopeValidForUserLimit(Builder $query, string $couponCode, User $user):  Builder
+    {
+        return $query->whereNull('coupons.usage_allowed_per_user')
+                ->orWhereNotExists(function ($subQuery) use ($couponCode, $user) {
+                    $subQuery->from('coupons')
+                        ->leftJoin('coupon_logs', 'coupon_logs.coupon_id', '=', 'coupons.id')
+                        ->where('coupon_logs.user_id', '=', $user->id)
+                        ->where('coupons.code', '=', $couponCode);
+                });
     }
 
     public function scopeStatus(Builder $query, string|int $status): Builder

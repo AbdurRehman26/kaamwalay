@@ -23,6 +23,7 @@ export class PromoCodeEntity extends Entity {
     public discountApplicationType!: DiscountApplicationEnums;
     public discountDateType!: DiscountDateTypeEnum;
     public isPermanent!: boolean;
+    public usageAllowedPerUser!: number | null;
 
     @Type(() => PromoServiceLevelEntity)
     public selectedDiscountServiceLevels!: PromoServiceLevelEntity[];

@@ -10,4 +10,5 @@ export class StoreCouponDTO {
     isPermanent!: boolean;
     couponables!: number[];
     description!: string;
+    usageAllowedPerUser!: number | null;
 }

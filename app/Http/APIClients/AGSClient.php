@@ -76,12 +76,9 @@ class AGSClient
 
     public function updateHumanGrades(string $certificateId, array $payload)
     {
-        logger()->debug('payload to PATCH human grades', ['payload' => $payload, 'cert_id' => $certificateId]);
         $response = Http::withToken($this->getAuthToken())
             ->patch($this->getBaseUrl() . self::API_VERSION_2 . '/robograding/certificates/?certificate_id=' . $certificateId, $payload);
         if ($response->successful()) {
-            logger()->debug('response from PATCH human grades', ['response' => $response->json(), 'cert_id' => $certificateId]);
-
             return $response->json();
         }
 
@@ -173,6 +170,8 @@ class AGSClient
 
     protected function handleErrorResponse(Response $response, string $route, array $payload = []): array
     {
+        unset($payload['password'], $payload['password1'], $payload['password2']);
+
         try {
             $response->throw();
         } catch (RequestException $exception) {

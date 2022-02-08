@@ -6,6 +6,7 @@ use App\Exceptions\API\Admin\CardDataIsMissing;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
+use App\Models\CardRarity;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;
@@ -166,7 +167,7 @@ class CardProductService
     public function getOptionsValues(CardCategory $cardCategory): array
     {
         return [
-            'rarity' => $cardCategory->name === 'YU-GI-OH!' ? CardProductService::YUGIOH_CARD_RARITIES : CardProductService::CARD_RARITIES,
+            'rarity' => CardRarity::where('card_category_id', $cardCategory->id)->select('name')->pluck('name')->toArray(),
             'edition' => CardProductService::CARD_EDITIONS,
             'surface' => CardProductService::CARD_SURFACES,
             'language' => CardProductService::CARD_LANGUAGES,

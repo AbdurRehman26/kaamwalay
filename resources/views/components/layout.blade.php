@@ -16,15 +16,25 @@
             <noscript>You need to enable JavaScript to run this app.</noscript>
             <div id="root"></div>
         @else
-            <x-layout.header>
-                {{ $header ?? '' }}
-            </x-layout.header>
+            {{ $beforeHeader ?? '' }}
+            @if(isset($header) && $header)
+                {{ $header  }}
+            @else
+                <x-layout.header/>
+            @endif
+            {{ $afterHeader ?? '' }}
+
             <x-layout.content>
                 {{ $slot }}
             </x-layout.content>
-            <x-layout.footer>
-                {{ $footer ?? '' }}
-            </x-layout.footer>
+
+            {{ $beforeFooter ?? '' }}
+            @if(isset($footer) && $footer)
+                {{ $footer  }}
+            @else
+                <x-layout.footer/>
+            @endif
+            {{ $afterFooter ?? '' }}
         @endif
 
         <x-layout.js :appName="$appName"/>

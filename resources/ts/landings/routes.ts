@@ -1,10 +1,13 @@
 import { route } from './utils/route';
 
+const HomeController = () => import('./controllers/HomeController');
 const FeedController = () => import('./controllers/FeedController');
 const PopController = () => import('./controllers/PopController');
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
+    route('/', [HomeController, 'getHome']).name('home');
+
     route('/feed')
         .name('feed')
         .group((route) => {

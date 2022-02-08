@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use App\Models\CardCategory;
 
 class UpdateCardCategoriesLogos extends Migration
 {
@@ -21,7 +20,7 @@ class UpdateCardCategoriesLogos extends Migration
 
         foreach ($categories as $category) {
 
-            CardCategory::where('name', 'like', '%' . $category['name'] . '%')->update([
+            DB::table('card_categories')->where('name', 'like', '%' . $category['name'] . '%')->update([
                 'image_url' => $category['url'],
             ]);
         }

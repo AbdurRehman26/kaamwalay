@@ -13,6 +13,56 @@ export const getAllSubmissions = createAsyncThunk(
     },
 );
 
+export const rejectCard = createAsyncThunk(
+    'submissionGrades/rejectCard',
+    async (DTO: { status: string; notes: string; orderID: number; orderItemID: number }, thunkAPI) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(
+            `admin/orders/${DTO.orderID}/items/${DTO.orderItemID}/change-status`,
+        );
+        const response = await endpoint.post('', { status: DTO.status, notes: DTO.notes });
+        return response;
+    },
+);
+
+export const updateRemoteHumanGrades = createAsyncThunk(
+    'submissionGrades/rejectCard',
+    async (DTO: { orderID: number; topLevelID: number; humanGradeValues: any; gradeDelta: number }, thunkAPI) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.orderID}/cards/${DTO.topLevelID}/grades`);
+        const response = await endpoint.put('', {
+            humanGradeValues: DTO.humanGradeValues,
+            gradeDelta: DTO.gradeDelta,
+        });
+        return response;
+    },
+);
+
+export const markRemoteCardAsGraded = createAsyncThunk(
+    'submissionGrades/markRemoteCardAsGraded',
+    async (DTO: { status: string; orderID: number; orderItemID: number }, thunkAPI) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(
+            `admin/orders/${DTO.orderID}/items/${DTO.orderItemID}/change-status`,
+        );
+        const response = await endpoint.post('', {
+            status: DTO.status,
+        });
+        return response;
+    },
+);
+
+export const updateGeneralOrderNotes = createAsyncThunk(
+    'submissionGrades/rejectCard',
+    async (DTO: { orderID?: number; notes?: string }, thunkAPI) => {
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`admin/orders/${DTO.orderID}/notes`);
+        await endpoint.put('', {
+            notes: DTO.notes,
+        });
+    },
+);
+
 export interface SubmissionsGrades {
     allSubmissions: any;
     viewModes: {

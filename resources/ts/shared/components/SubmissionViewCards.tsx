@@ -255,17 +255,22 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                             flexDirection={'column'}
                                             style={{ textDecoration: 'none' }}
                                         >
-                                            <div>
-                                                <Typography
-                                                    variant={'body2'}
-                                                    className={cx(
-                                                        font.fontWeightBold,
-                                                        isMobile ? classes.gradeBadge : null,
-                                                    )}
-                                                >
-                                                    {item?.userCard?.overallGrade}
-                                                </Typography>
-                                            </div>
+                                            {item?.userCard?.overallGrade ? (
+                                                <div>
+                                                    <Typography
+                                                        variant={'body2'}
+                                                        className={cx(
+                                                            font.fontWeightBold,
+                                                            isMobile ? classes.gradeBadge : null,
+                                                        )}
+                                                    >
+                                                        {item?.userCard?.overallGrade}
+                                                    </Typography>
+                                                </div>
+                                            ) : (
+                                                '-'
+                                            )}
+
                                             {isMobile ? null : (
                                                 <div className={classes.gradeColumn}>
                                                     {user.hasRole(RolesEnum.Admin) && (
@@ -280,16 +285,18 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                         </MuiLink>
                                                     )}
 
-                                                    <MuiLink
-                                                        target={'_blank'}
-                                                        href={`/feed/${item.certificateNumber}/view`}
-                                                        rel={'noreferrer'}
-                                                        underline={'hover'}
-                                                        variant={'body2'}
-                                                        className={classes.viewGradeText}
-                                                    >
-                                                        View Grade
-                                                    </MuiLink>
+                                                    {item?.userCard?.overallGrade ? (
+                                                        <MuiLink
+                                                            target={'_blank'}
+                                                            href={`/feed/${item.certificateNumber}/view`}
+                                                            rel={'noreferrer'}
+                                                            underline={'hover'}
+                                                            variant={'body2'}
+                                                            className={classes.viewGradeText}
+                                                        >
+                                                            View Grade
+                                                        </MuiLink>
+                                                    ) : null}
                                                 </div>
                                             )}
                                         </GradeRoot>

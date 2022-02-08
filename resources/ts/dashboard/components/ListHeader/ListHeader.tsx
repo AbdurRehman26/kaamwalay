@@ -6,7 +6,7 @@ import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
-import React, { ChangeEvent, PropsWithChildren, useCallback, useMemo } from 'react';
+import React, { ChangeEvent, PropsWithChildren, ReactNode, useCallback, useMemo } from 'react';
 import { font } from '@shared/styles/utils';
 
 interface ListHeaderProps {
@@ -14,6 +14,7 @@ interface ListHeaderProps {
     noSearch?: boolean;
     noMargin?: boolean;
     onSearch?: (value: string) => void;
+    actions?: ReactNode;
 }
 
 const useStyles = makeStyles(
@@ -68,7 +69,14 @@ const debouncedFunc = debounce((func: () => void) => func(), 300);
  * @date: 10.08.2021
  * @time: 01:43
  */
-export function ListHeader({ children, headline, noSearch, noMargin, onSearch }: PropsWithChildren<ListHeaderProps>) {
+export function ListHeader({
+    children,
+    headline,
+    noSearch,
+    noMargin,
+    onSearch,
+    actions,
+}: PropsWithChildren<ListHeaderProps>) {
     const styleProps = useMemo(() => ({ noMargin }), [noMargin]);
     const classes = useStyles(styleProps);
 
@@ -89,6 +97,7 @@ export function ListHeader({ children, headline, noSearch, noMargin, onSearch }:
                 <Typography component={'h2'} variant={'h5'} className={font.fontWeightMedium}>
                     {headline}
                 </Typography>
+                {actions}
                 <Box flexGrow={1} className={classes.searchBarHolder}>
                     {!noSearch && (
                         <InputBase

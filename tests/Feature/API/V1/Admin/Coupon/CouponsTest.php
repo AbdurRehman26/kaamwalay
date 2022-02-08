@@ -32,7 +32,7 @@ test('admin can get a list of coupons', function () {
         ->assertOk();
 });
 
-test('admin can create coupon', function () {
+test('admin can create a coupon with unlimited usage limit', function () {
     actingAs($this->user);
     postJson(route('coupons.store'), [
         'code' => $this->faker->word(),
@@ -42,6 +42,22 @@ test('admin can create coupon', function () {
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
         'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => true,
+        'usage_allowed_per_user' => null,
+    ])
+        ->assertCreated();
+});
+
+test('admin can create a coupon that can be used just once by a user', function () {
+    actingAs($this->user);
+    postJson(route('coupons.store'), [
+        'code' => $this->faker->word(),
+        'description' => $this->faker->sentence(),
+        'type' => 'fixed',
+        'discount_value' => random_int(10, 50),
+        'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
+        'available_from' => now()->addDays(2)->toDateString(),
+        'is_permanent' => true,
+        'usage_allowed_per_user' => 1,
     ])
         ->assertCreated();
 });
@@ -64,6 +80,7 @@ test('admin can create coupon for specific users', function () {
         'coupon_applicable_id' => CouponApplicable::FOR_USERS,
         'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => true,
+        'usage_allowed_per_user' => null,
         'couponables' => $users,
     ])
         ->assertCreated();
@@ -83,6 +100,7 @@ test('admin can create coupon for specific payment plan', function () {
         'discount_value' => random_int(10, 50),
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
         'available_from' => now()->addDays(2)->toDateString(),
+        'usage_allowed_per_user' => null,
         'is_permanent' => true,
         'couponables' => $paymentPlans,
     ])
@@ -157,7 +175,9 @@ test('admin can create coupon 100% discount', function () {
         'type' => 'percentage',
         'discount_value' => 100,
         'coupon_applicable_id' => CouponApplicable::factory()->create()->id,
+        'usage_allowed_per_user' => null,
         'is_permanent' => true,
+
     ])
         ->assertCreated();
 });
@@ -203,6 +223,7 @@ test('admin can create coupon with same start and end date date of coupon availa
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
         'available_from' => now()->addDays(2)->toDateString(),
         'is_permanent' => false,
+        'usage_allowed_per_user' => null,
         'available_till' => now()->addDays(2)->toDateString(),
         'couponables' => [1,2,3],
     ])
@@ -219,6 +240,7 @@ test('admin can create coupon with today start date', function () {
         'coupon_applicable_id' => CouponApplicable::FOR_PAYMENT_PLANS,
         'available_from' => now()->toDateString(),
         'is_permanent' => false,
+        'usage_allowed_per_user' => null,
         'available_till' => now()->addDays(2)->toDateString(),
         'couponables' => [1,2,3],
     ])

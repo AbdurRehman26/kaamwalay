@@ -31,6 +31,7 @@
  *                "available_from": "2021-12-30T10:18:01.000000Z",
  *                "available_till": "2021-12-21T10:17:01.000000Z",
  *                "is_permanent": false,
+ *                "usage_allowed_per_user": null,
  *                "coupon_status": {
  *                    "id": 4,
  *                    "code": "expired",

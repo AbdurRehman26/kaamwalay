@@ -21,6 +21,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
+import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
 
 export interface ManageCardDialogCreateSeriesViewProps {
     isSwappable?: boolean;
@@ -83,19 +84,20 @@ export const ManageCardDialogCreateSeriesView = forwardRef(
         }, [newSeriesLogo, newSeriesName]);
 
         const handleAddCard = async () => {
-            const endpoint = apiService.createEndpoint('/admin/series');
+            const endpoint = apiService.createEndpoint('/admin/cards/series');
             setIsLoading(true);
             try {
                 const seriesLogoPublicImage = await filesRepository.uploadFile(newSeriesLogo!);
 
                 const DTO = {
-                    seriesName: newSeriesName,
-                    seriesImage: seriesLogoPublicImage,
+                    cardCategoryId: dialogState.selectedCategoryId,
+                    name: newSeriesName,
+                    imagePath: seriesLogoPublicImage,
                 };
                 const responseItem = await endpoint.post('', DTO);
                 batch(() => {
-                    dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
-                    dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
+                    dispatch(manageCardDialogActions.setSelectedCardSeries(responseItem.data as CardSeriesEntity));
+                    dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Create));
                 });
             } catch (e: any) {
                 Notifications.exception(e);

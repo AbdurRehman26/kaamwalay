@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import { ManageCardDialogViewEnum } from '../../constants/ManageCardDialogViewEnum';
 import { CardProductEntity } from '../../entities/CardProductEntity';
+import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
 
 interface ManageCardDialogState {
     open: boolean;
@@ -10,6 +11,7 @@ interface ManageCardDialogState {
     view: ManageCardDialogViewEnum;
     lastView: ManageCardDialogViewEnum | null;
     selectedCard: CardProductEntity | null;
+    selectedCardSeries: CardSeriesEntity | null;
     selectedCategoryId?: number | null;
 
     backup: Omit<ManageCardDialogState, 'view' | 'open' | 'backup' | 'lastView'> | null;
@@ -20,6 +22,7 @@ export const manageCardDialogSlice = createSlice({
     initialState: {
         open: false,
         selectedCard: null,
+        selectedCardSeries: null,
         selectedCategoryId: null,
         declaredValue: 0,
         view: ManageCardDialogViewEnum.List,
@@ -34,6 +37,7 @@ export const manageCardDialogSlice = createSlice({
                 state.view = 1;
                 state.lastView = null;
                 state.selectedCard = null;
+                state.selectedCardSeries = null;
                 state.selectedCategoryId = null;
                 state.declaredValue = 0;
                 state.orderItemId = null;
@@ -49,6 +53,9 @@ export const manageCardDialogSlice = createSlice({
         setSelectedCard(state, { payload }: PayloadAction<CardProductEntity | null>) {
             state.selectedCard = instanceToPlain(payload) as any;
         },
+        setSelectedCardSeries(state, { payload }: PayloadAction<CardSeriesEntity | null>) {
+            state.selectedCardSeries = instanceToPlain(payload) as any;
+        },
         navigateToPreviousView(state) {
             state.view = state.lastView || ManageCardDialogViewEnum.View;
         },
@@ -56,6 +63,7 @@ export const manageCardDialogSlice = createSlice({
             if (!state.backup) {
                 state.backup = {
                     selectedCard: state.selectedCard,
+                    selectedCardSeries: state.selectedCardSeries,
                     selectedCategoryId: state.selectedCategoryId,
                     declaredValue: state.declaredValue,
                     orderItemId: state.orderItemId,
@@ -65,6 +73,7 @@ export const manageCardDialogSlice = createSlice({
         restore(state) {
             if (state.backup) {
                 state.selectedCard = state.backup.selectedCard;
+                state.selectedCardSeries = state.backup.selectedCardSeries;
                 state.selectedCategoryId = state.backup.selectedCategoryId;
                 state.declaredValue = state.backup.declaredValue;
                 state.orderItemId = state.backup.orderItemId;

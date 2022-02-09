@@ -67,7 +67,6 @@ interface CardSeries {
     label: string;
     name: string;
     imagePath: string;
-    cardSets: CardSets[];
 }
 
 interface CardRarity {

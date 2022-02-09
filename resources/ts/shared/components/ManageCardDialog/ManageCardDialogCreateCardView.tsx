@@ -70,6 +70,10 @@ interface CardSeries {
     cardSets: CardSets[];
 }
 
+interface CardRarity {
+    label: string;
+    name: string;
+}
 export const ManageCardDialogCreateCardView = forwardRef(
     (
         { onAdd, isSwappable, declaredValue = 0 }: ManageCardDialogCreateCardViewProps,
@@ -87,8 +91,8 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | undefined>(null);
         const [selectedSet, setSelectedSet] = useState<CardSets | null>(null);
         const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null>(null);
-        const [availableRarities, setAvailableRarities] = useState<string[] | null>(null);
-        const [selectedRarity, setSelectedRarity] = useState<string>('none');
+        const [availableRarities, setAvailableRarities] = useState<CardRarity[]>([]);
+        const [selectedRarity, setSelectedRarity] = useState<CardRarity | null>(null);
         const [availableSurfaces, setAvailableSurfaces] = useState<string[] | null>(null);
         const [selectedSurface, setSelectedSurface] = useState<string>('none');
         const [releaseDate, setReleaseDate] = useState<Date | null>(null);
@@ -163,12 +167,22 @@ export const ManageCardDialogCreateCardView = forwardRef(
             async (categoryId: Number) => {
                 const endpoint = apiService.createEndpoint(`admin/cards/options/` + categoryId);
                 const response = await endpoint.get('');
-                setAvailableRarities(response.data.rarity);
+                setAvailableRarities(
+                    response.data.rarity.map((item: string) => {
+                        return {
+                            label: item,
+                            name: item,
+                        };
+                    }),
+                );
                 setAvailableSurfaces(response.data.surface);
                 setAvailableLanguages(response.data.language);
                 setAvailableEditions(response.data.edition);
+
+                console.log(availableSeries);
+                console.log(availableRarities);
             },
-            [apiService],
+            [apiService, availableSeries, availableRarities],
         );
 
         useEffect(
@@ -197,6 +211,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
 
                 setSelectedSeries(null);
                 setSelectedSet(null);
+                setSelectedRarity(null);
 
                 fetchSeries(e.target.value);
                 fetchDropdownsData(e.target.value);
@@ -258,7 +273,9 @@ export const ManageCardDialogCreateCardView = forwardRef(
             setShowNewSetBox(!showNewSetBox);
         }, [showNewSetBox]);
 
-        const handleRarityChange = useCallback((e) => setSelectedRarity(e.target.value), []);
+        const handleRarityChange = useCallback((e, newValue) => {
+            setSelectedRarity(newValue);
+        }, []);
         const handleSurfaceChange = useCallback((e) => setSelectedSurface(e.target.value), []);
         const handleLanguageChange = useCallback((e) => setSelectedLanguage(e.target.value), []);
         const handleEditionChange = useCallback((e) => setSelectedEdition(e.target.value), []);
@@ -786,18 +803,15 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                         >
                                             Rarity
                                         </FormHelperText>
-                                        <Select value={selectedRarity || 'none'} onChange={handleRarityChange}>
-                                            <MenuItem value="none" disabled>
-                                                <em>Select Rarity</em>
-                                            </MenuItem>
-                                            {availableRarities?.map((item) => {
-                                                return (
-                                                    <MenuItem key={item} value={item}>
-                                                        {item}
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </Select>
+                                        <Autocomplete
+                                            value={selectedRarity}
+                                            onChange={handleRarityChange}
+                                            options={availableRarities}
+                                            fullWidth
+                                            renderInput={(params) => (
+                                                <TextField {...params} placeholder={'Select Rarity'} />
+                                            )}
+                                        />
                                     </FormControl>
 
                                     <FormControl fullWidth sx={{ marginTop: '12px' }}>

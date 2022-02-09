@@ -8,6 +8,7 @@ use App\Http\Controllers\API\V1\Auth\ResetPasswordController;
 use App\Http\Controllers\API\V1\ConfigurationsController;
 use App\Http\Controllers\API\V1\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\V1\Customer\Address\StateController;
+use App\Http\Controllers\API\V1\Customer\Cards\CardCategoryController;
 use App\Http\Controllers\API\V1\Customer\Cards\CardProductController;
 use App\Http\Controllers\API\V1\Customer\Cards\UserCardController;
 use App\Http\Controllers\API\V1\Customer\CouponController;
@@ -76,6 +77,7 @@ Route::prefix('customer')->group(function () {
 
         Route::prefix('cards')->group(function () {
             Route::get('/', [UserCardController::class, 'index']);
+            Route::get('categories', CardCategoryController::class)->name('cards.categories');
             Route::get('/{userCard}', [UserCardController::class, 'show']);
 
             Route::post('/', [CardProductController::class, 'store']);

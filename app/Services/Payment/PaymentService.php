@@ -42,22 +42,15 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        $params = [];
-
-        if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
-        }
-
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params)->charge($this->order, $optionalData);
+        ])->charge($this->order, $optionalData);
 
         if (! empty($data['message']) || ! empty($data['payment_intent'])) {
             return $data;
         }
 
-        // This updates should only be done if the payment method is not Collector Coin
-        if (! empty($data['success']) && ! $this->order->paymentMethod->isCollectorCoin()) {
+        if (! empty($data['success'])) {
 
             /* Partial Payments */
             if ($this->checkForPartialPayment()) {
@@ -76,23 +69,33 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        $params = [];
-        if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
+        $data = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ])->verify($this->order, $paymentIntentId);
 
-            // With this, we make sure that transaction coming from request matches the one in DB before marking anything as paid
-            if (json_decode($order->firstOrderPayment->response, true)['txn_hash'] !== $paymentIntentId) {
-                return false;
+        if ($data) {
+            /* Partial Payments */
+            if ($this->checkForPartialPayment()) {
+                $this->updatePartialPayment();
             }
+
+            $this->calculateAndSaveFee($order);
+
+            return $this->updateOrderStatus();
         }
+
+        return $data;
+    }
+
+    public function processHandshake(Order $order): bool
+    {
+        $this->hasProvider($order);
 
         $data = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params)->verify($this->order, $paymentIntentId);
+        ])->processHandshake($this->order);
 
         if ($data) {
-
-            /* Partial Payments */
             if ($this->checkForPartialPayment()) {
                 $this->updatePartialPayment();
             }
@@ -107,7 +110,6 @@ class PaymentService
 
     public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
     {
-        /** @noinspection JsonEncodingApiUsageInspection */
         $orderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
@@ -143,14 +145,9 @@ class PaymentService
     {
         $this->hasProvider($order);
 
-        $params = [];
-        if ($this->order->paymentMethod->isCollectorCoin()) {
-            $params = ['paymentBlockChainNetworkId' => json_decode($order->firstOrderPayment->response, true)['network']];
-        }
-
         $providerInstance = resolve($this->providers[
             $this->order->paymentMethod->code
-        ], $params);
+        ]);
 
         $this->order->orderPayments->map(function (OrderPayment $orderPayment) use ($providerInstance) {
             $orderPayment->provider_fee = $orderPayment->paymentMethod->isWallet() ? 0 : $providerInstance->calculateFee($orderPayment);

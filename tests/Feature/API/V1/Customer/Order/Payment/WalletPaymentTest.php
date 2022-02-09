@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderPayment;
@@ -44,6 +45,7 @@ beforeEach(function () {
     $orderStatusHistoryService->addStatusToOrder($this->order->order_status_id, $this->order->id);
 
     Event::fake([
+        OrderPaid::class,
         OrderStatusChangedEvent::class,
     ]);
 });

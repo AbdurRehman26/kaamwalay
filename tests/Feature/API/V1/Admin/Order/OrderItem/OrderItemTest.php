@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
 use App\Models\CardProduct;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatusHistory;
@@ -110,6 +111,7 @@ test('a new order item needs data', function () {
 });
 
 test('an admin can update order item', function () {
+    Event::fake();
     Http::fake(['*' => Http::response(json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_create_certificates_response_200.json'
     ), associative: true))]);
@@ -133,6 +135,7 @@ test('an admin can update order item', function () {
         ],
     ]);
     $this->assertEquals($response['data']['card_product']['id'], $newCard->id);
+    Event::assertDispatched(OrderItemCardChangedEvent::class);
 });
 
 test('a customer can not update order item', function () {

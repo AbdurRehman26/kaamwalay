@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V1\Admin\Order;
 
+use App\Rules\Order\RefundAmountRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RefundOrderRequest extends FormRequest
@@ -29,16 +30,7 @@ class RefundOrderRequest extends FormRequest
             'amount' => [
                 'required',
                 'numeric',
-                function ($attribute, $value, $fail) {
-                    $order = $this->route('order');
-                    $orderPayment = $order?->firstOrderPayment;
-                    $refundableAmount = $orderPayment?->amount - $order->refund_total;
-                    if (
-                        $value > $refundableAmount
-                    ) {
-                        $fail("The $attribute is invalid. The maximum refundable amount is: \$$refundableAmount");
-                    }
-                },
+                new RefundAmountRule,
             ],
         ];
     }

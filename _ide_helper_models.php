@@ -450,6 +450,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Country $country
  * @property-read \App\Models\User $user
+ * @method static \Database\Factories\CustomerAddressFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CustomerAddress newQuery()
@@ -495,6 +496,17 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\MailchimpList
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList query()
+ */
+	class MailchimpList extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Order
  *
  * @property int $id
@@ -502,8 +514,10 @@ namespace App\Models{
  * @property float|null $service_fee
  * @property float|null $shipping_fee
  * @property float|null $grand_total
+ * @property float|null $amount_paid_from_wallet
  * @property string|null $grand_total_before_discount
  * @property string|null $discounted_amount
+ * @property float|null $payment_method_discounted_amount
  * @property float $extra_charge_total This will hold the cumulative value of all the extra charges per order
  * @property float $refund_total This will hold the cumulative value of all the refunds per order
  * @property int $user_id
@@ -528,12 +542,15 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $graded_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $allPayments
+ * @property-read int|null $all_payments_count
  * @property-read \App\Models\OrderAddress $billingAddress
  * @property-read \App\Models\Coupon|null $coupon
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $extraCharges
  * @property-read int|null $extra_charges_count
  * @property-read \App\Models\OrderPayment|null $firstOrderPayment
  * @property-read int $grand_total_cents
+ * @property-read float $grand_total_to_be_paid
  * @property-read \App\Models\User|null $gradedBy
  * @property-read \App\Models\Invoice|null $invoice
  * @property-read \App\Models\OrderPayment|null $lastOrderPayment
@@ -564,6 +581,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order placed()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder|Order status(string|int $status)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereAmountPaidFromWallet($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereArrivedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAutoSavedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereBillingOrderAddressId($value)
@@ -582,6 +600,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderShipmentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodDiscountedAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentPlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundTotal($value)
@@ -614,6 +633,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Country $country
+ * @method static \Database\Factories\OrderAddressFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderAddress query()
@@ -863,6 +883,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\Order $order
+ * @property-read \App\Models\PaymentMethod $paymentMethod
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\OrderPaymentFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forDate(string $date)
@@ -1008,6 +1029,7 @@ namespace App\Models{
  * @property string $name
  * @property string $code
  * @property int $is_enabled
+ * @property int $is_visible
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod enabled()
@@ -1020,6 +1042,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereIsEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereIsVisible($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereUpdatedAt($value)
  */
@@ -1532,6 +1555,12 @@ namespace App\Models{
 /**
  * App\Models\Wallet
  *
+ * @property int $id
+ * @property int $user_id
+ * @property float $balance
+ * @property bool $is_active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\WalletTransaction|null $lastTransaction
  * @property-read \App\Models\User $user
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WalletPayment[] $walletPayments
@@ -1539,9 +1568,17 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WalletTransaction[] $walletTransactions
  * @property-read int|null $wallet_transactions_count
  * @method static \Database\Factories\WalletFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet forCurrentUser()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet isActive()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallet query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereUserId($value)
  */
 	class Wallet extends \Eloquent {}
 }
@@ -1550,12 +1587,30 @@ namespace App\Models{
 /**
  * App\Models\WalletPayment
  *
+ * @property int $id
+ * @property int $payment_method_id
+ * @property int $wallet_id
+ * @property array|null $request
+ * @property array|null $response
+ * @property string|null $payment_provider_reference_id
+ * @property float $amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\PaymentMethod $paymentMethod
  * @property-read \App\Models\Wallet $wallet
  * @method static \Database\Factories\WalletPaymentFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment wherePaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment wherePaymentProviderReferenceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereRequest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereResponse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletPayment whereWalletId($value)
  */
 	class WalletPayment extends \Eloquent {}
 }
@@ -1564,12 +1619,34 @@ namespace App\Models{
 /**
  * App\Models\WalletTransaction
  *
+ * @property int $id
+ * @property int $wallet_id
+ * @property int $created_by
+ * @property int|null $order_id order ID will be available when refund happened or user pay from wallet
+ * @property int|null $wallet_payment_id wallet payment ID will be available when user adds amount to wallet
+ * @property float $amount
+ * @property int $type 1 => credit, 2 => debit
+ * @property int $reason 1 => refund, 2 => order_payment, 3 => wallet_payment
+ * @property bool $is_success
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
  * @property-read \App\Models\Wallet $wallet
  * @method static \Database\Factories\WalletTransactionFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction query()
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereIsSuccess($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereWalletId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WalletTransaction whereWalletPaymentId($value)
  */
 	class WalletTransaction extends \Eloquent {}
 }

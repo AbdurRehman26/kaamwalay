@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Landings;
 
 use App\Http\Controllers\Controller;
+use App\Models\CardCategory;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\PopReport\PopReportService;
@@ -14,30 +15,37 @@ class PopReportController extends Controller
     {
     }
 
-    public function getSeriesReport(): View
+    public function index(): View
     {
-        $data = $this->popReportService->getSeriesReport();
+        $categories = CardCategory::all();
 
-        $totalPopulation = $this->popReportService->getSeriesTotalPopulation();
-
-        return view('landings.pop.report', compact('data', 'totalPopulation'));
+        return view('landings.pop.index', compact('categories'));
     }
 
-    public function getSetsReport(CardSeries $cardSeries): View
+    public function getSeriesReport(CardCategory $cardCategory): View
+    {
+        $data = $this->popReportService->getSeriesReport($cardCategory);
+
+        $totalPopulation = $this->popReportService->getSeriesTotalPopulation($cardCategory);
+
+        return view('landings.pop.report', compact('data', 'totalPopulation', 'cardCategory'));
+    }
+
+    public function getSetsReport(CardCategory $cardCategory, CardSeries $cardSeries): View
     {
         $data = $this->popReportService->getSetsReport($cardSeries);
 
         $totalPopulation = $this->popReportService->getSetsTotalPopulation($cardSeries);
 
-        return view('landings.pop.series', compact('data', 'totalPopulation', 'cardSeries'));
+        return view('landings.pop.series', compact('data', 'totalPopulation', 'cardCategory', 'cardSeries'));
     }
 
-    public function getCardsReport(CardSeries $cardSeries, CardSet $cardSet): View
+    public function getCardsReport(CardCategory $cardCategory, CardSeries $cardSeries, CardSet $cardSet): View
     {
         $data = $this->popReportService->getCardsReport($cardSet);
 
         $totalPopulation = $this->popReportService->getCardProductsTotalPopulation($cardSet);
 
-        return view('landings.pop.set', compact('data', 'totalPopulation', 'cardSet'));
+        return view('landings.pop.set', compact('data', 'totalPopulation', 'cardCategory', 'cardSeries', 'cardSet'));
     }
 }

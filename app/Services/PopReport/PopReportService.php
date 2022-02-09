@@ -2,6 +2,7 @@
 
 namespace App\Services\PopReport;
 
+use App\Models\CardCategory;
 use App\Models\CardProduct;
 use App\Models\CardSeries;
 use App\Models\CardSet;
@@ -140,11 +141,12 @@ class PopReportService
         $this->updateMultipleSeriesReports($orderSeries);
     }
 
-    public function getSeriesReport(): LengthAwarePaginator
+    public function getSeriesReport(CardCategory $cardCategory): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page') ?: self::PER_PAGE;
 
-        $query = PopReportsSeries::join('card_series', 'pop_reports_series.card_series_id', 'card_series.id');
+        $query = PopReportsSeries::join('card_series', 'pop_reports_series.card_series_id', 'card_series.id')
+        ->where('card_series.card_category_id', $cardCategory->id);
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_series_id'])
@@ -175,9 +177,11 @@ class PopReportService
             ->paginate($itemsPerPage);
     }
 
-    public function getSeriesTotalPopulation(): mixed
+    public function getSeriesTotalPopulation(CardCategory $cardCategory): mixed
     {
-        return $this->getTotalPopulation(PopReportsSeries::query());
+        return $this->getTotalPopulation(PopReportsSeries::whereHas('cardSeries', function ($query) use ($cardCategory) {
+            return $query->where('card_category_id', $cardCategory->id);
+        }));
     }
 
     public function getSetsTotalPopulation(CardSeries $cardSeries): mixed

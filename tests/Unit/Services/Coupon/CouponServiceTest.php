@@ -65,6 +65,14 @@ it('calculates discount for service level order', function () {
 
     if ($this->coupon->type === 'fixed') {
         $couponDiscount = (float) ($this->coupon->discount_value) * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+    } elseif ($this->coupon->type === 'flat') {
+        $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+        $insuredShipping = ShippingFeeService::calculate(
+            array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit')),
+            array_sum(array_column($this->order->orderItems->toArray(), 'quantity'))
+        );
+
+        $couponDiscount = $serviceFee + $insuredShipping - $this->order->coupon->discount_value;
     } else {
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $couponDiscount = (float) (($this->coupon->discount_value * $serviceFee) / 100);
@@ -83,6 +91,14 @@ it('calculates discount for service fee order', function () {
 
     if ($this->coupon->type === 'fixed') {
         $couponDiscount = (float) $this->coupon->discount_value;
+    } elseif ($this->coupon->type === 'flat') {
+        $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+        $insuredShipping = ShippingFeeService::calculate(
+            array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit')),
+            array_sum(array_column($this->order->orderItems->toArray(), 'quantity'))
+        );
+
+        $couponDiscount = $serviceFee + $insuredShipping - $this->order->coupon->discount_value;
     } else {
         $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $couponDiscount = (float) (($this->coupon->discount_value * $serviceFee) / 100);

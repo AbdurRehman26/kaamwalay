@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-class AddInitialOrderItemStatuses extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -62,4 +62,4 @@ class AddInitialOrderItemStatuses extends Migration
     {
         DB::table('order_item_statuses')->truncate();
     }
-}
+};

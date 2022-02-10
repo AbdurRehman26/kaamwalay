@@ -47,7 +47,7 @@ jobs:
       - name: Create database
         run: |
           sudo /etc/init.d/mysql start
-          mysql -u root -p root -e 'CREATE DATABASE IF NOT EXISTS robograding;'
+          mysql -h 127.0.0.1 -u root -p root -e 'CREATE DATABASE IF NOT EXISTS robograding;'
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs

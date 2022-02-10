@@ -44,6 +44,11 @@ jobs:
             iconv, imagick
           coverage: none
 
+      - name: Create database
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -u root -proot -e 'CREATE DATABASE IF NOT EXISTS robograding;'
+
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs
 
@@ -52,3 +57,8 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/pest
+        env:
+          DB_CONNECTION: mysql
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          DB_DATABASE: robograding
+          DB_PASSWORD: root

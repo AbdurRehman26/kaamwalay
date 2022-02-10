@@ -21819,7 +21819,3 @@ namespace  {
             class JWTFactory extends \Tymon\JWTAuth\Facades\JWTFactory {}
      
 }
-
-
-
-

@@ -17,7 +17,7 @@ class ListCustomerRequest extends FormRequest
     {
         return [
             'filter.submissions' => ['sometimes', new OrderSubmissionsRule],
-            'filter.signed_up_between' => ['sometimes', new CreatedAtBetweenRule]
+            'filter.signed_up_between' => ['sometimes', new CreatedAtBetweenRule],
         ];
     }
 }

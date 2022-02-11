@@ -29,7 +29,7 @@ class CardSetService
 
     public function create(array $data): CardSet
     {
-        $this->getOrCreateSetFromAgs($data['card_series_id'], $data['name'], $data['image_url']);
+        $this->getOrCreateSetFromAgs($data['card_series_id'], $data['name'], $data['image_path'], $data);
 
         return CardSet::create([
             'name' => $data['name'],
@@ -43,12 +43,19 @@ class CardSetService
         ]);
     }
 
+    protected function getSeriesFromAgs(string $seriesName): int | null
+    {
+        return $this->agsService->getCardSeries(['name' => $seriesName])['results'][0]['id'];
+    }
+
     protected function getOrCreateSetFromAgs(int $seriesId, string $setName, string $setImage, array $data): int | null
     {
+        $agsSeriesId = $this->getSeriesFromAgs(CardSeries::find($seriesId)->name);
+
         //Store in AGS
         $setResponse = $this->agsService->getCardSet([
             'name' => $setName,
-            'serie' => $seriesId,
+            'serie' => $agsSeriesId,
         ]);
 
         if ($setResponse['count'] > 0) {
@@ -58,7 +65,7 @@ class CardSetService
                 'name' => $setName,
                 'image_path' => $setImage,
                 'release_date' => $data['release_date'],
-                'serie_id' => $seriesId,
+                'serie_id' => $agsSeriesId,
             ]);
 
             if (array_key_exists('id', $createSetResponse)) {

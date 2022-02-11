@@ -3,6 +3,8 @@ import { instanceToPlain } from 'class-transformer';
 import { ManageCardDialogViewEnum } from '../../constants/ManageCardDialogViewEnum';
 import { CardProductEntity } from '../../entities/CardProductEntity';
 import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
+import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
+import { CardSetEntity } from '@shared/entities/CardSetEntity';
 
 interface ManageCardDialogState {
     open: boolean;
@@ -12,7 +14,8 @@ interface ManageCardDialogState {
     lastView: ManageCardDialogViewEnum | null;
     selectedCard: CardProductEntity | null;
     selectedCardSeries: CardSeriesEntity | null;
-    selectedCategoryId?: number | null;
+    selectedCardSet: CardSetEntity | null;
+    selectedCategory?: CardCategoryEntity | null;
 
     backup: Omit<ManageCardDialogState, 'view' | 'open' | 'backup' | 'lastView'> | null;
 }
@@ -23,7 +26,8 @@ export const manageCardDialogSlice = createSlice({
         open: false,
         selectedCard: null,
         selectedCardSeries: null,
-        selectedCategoryId: null,
+        selectedCardSet: null,
+        selectedCategory: null,
         declaredValue: 0,
         view: ManageCardDialogViewEnum.List,
         lastView: null,
@@ -38,7 +42,8 @@ export const manageCardDialogSlice = createSlice({
                 state.lastView = null;
                 state.selectedCard = null;
                 state.selectedCardSeries = null;
-                state.selectedCategoryId = null;
+                state.selectedCardSet = null;
+                state.selectedCategory = null;
                 state.declaredValue = 0;
                 state.orderItemId = null;
             }
@@ -47,14 +52,17 @@ export const manageCardDialogSlice = createSlice({
             state.lastView = state.view;
             state.view = payload;
         },
-        setSelectedCategoryId(state, { payload }: PayloadAction<ManageCardDialogViewEnum>) {
-            state.selectedCategoryId = payload;
+        setSelectedCategory(state, { payload }: PayloadAction<CardCategoryEntity>) {
+            state.selectedCategory = instanceToPlain(payload) as any;
         },
         setSelectedCard(state, { payload }: PayloadAction<CardProductEntity | null>) {
             state.selectedCard = instanceToPlain(payload) as any;
         },
         setSelectedCardSeries(state, { payload }: PayloadAction<CardSeriesEntity | null>) {
             state.selectedCardSeries = instanceToPlain(payload) as any;
+        },
+        setSelectedCardSet(state, { payload }: PayloadAction<CardSetEntity | null>) {
+            state.selectedCardSet = instanceToPlain(payload) as any;
         },
         navigateToPreviousView(state) {
             state.view = state.lastView || ManageCardDialogViewEnum.View;
@@ -64,7 +72,8 @@ export const manageCardDialogSlice = createSlice({
                 state.backup = {
                     selectedCard: state.selectedCard,
                     selectedCardSeries: state.selectedCardSeries,
-                    selectedCategoryId: state.selectedCategoryId,
+                    selectedCardSet: state.selectedCardSet,
+                    selectedCategory: state.selectedCategory,
                     declaredValue: state.declaredValue,
                     orderItemId: state.orderItemId,
                 };
@@ -74,7 +83,8 @@ export const manageCardDialogSlice = createSlice({
             if (state.backup) {
                 state.selectedCard = state.backup.selectedCard;
                 state.selectedCardSeries = state.backup.selectedCardSeries;
-                state.selectedCategoryId = state.backup.selectedCategoryId;
+                state.selectedCardSet = state.backup.selectedCardSet;
+                state.selectedCategory = state.backup.selectedCategory;
                 state.declaredValue = state.backup.declaredValue;
                 state.orderItemId = state.backup.orderItemId;
                 state.backup = null;

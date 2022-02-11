@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ForwardedRef, forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
@@ -16,8 +15,6 @@ import { APIService } from '@shared/services/APIService';
 import AddIcon from '@mui/icons-material/Add';
 import ImageUploader from '@shared/components/ImageUploader';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import IconButton from '@mui/material/IconButton';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useRepository } from '@shared/hooks/useRepository';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -31,6 +28,8 @@ import Select from '@mui/material/Select';
 
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
+import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
 
 export interface ManageCardDialogCreateCardViewProps {
     isSwappable?: boolean;
@@ -79,12 +78,13 @@ export const ManageCardDialogCreateCardView = forwardRef(
         ref: ForwardedRef<HTMLDivElement>,
     ) => {
         const classes = useStyles();
+        const dialogState = useManageCardDialogState();
 
         const filesRepository = useRepository(FilesRepository);
 
         const [isLoading, setIsLoading] = useState(false);
-        const [cardCategory, setCardCategory] = useState<number | null>(null);
-        const [availableCategories, setAvailableCategories] = useState<{ id: number; name: string }[]>([]);
+        const [cardCategory, setCardCategory] = useState<number | null>(dialogState.selectedCategory?.id ?? null);
+        const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
         const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
         const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
         const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | undefined>(null);
@@ -104,16 +104,6 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const [cardNumber, setCardNumber] = useState('');
 
         const Notifications = useNotifications();
-        // New series section
-        const showNewSeries = false;
-        const [newSeriesLogo, setNewSeriesLogo] = useState<File | null>(null);
-        const [newSeriesName, setNewSeriesName] = useState('');
-
-        // New set section
-        const [showNewSetBox, setShowNewSetBox] = useState(false);
-        const [newSetName, setNewSetName] = useState('');
-        const [newSetLogo, setNewSetLogo] = useState<File | null>(null);
-        const [newSetReleaseDate, setNewSetReleaseDate] = useState<Date | null>(null);
 
         const apiService = useInjectable(APIService);
 
@@ -177,24 +167,56 @@ export const ManageCardDialogCreateCardView = forwardRef(
                 setAvailableSurfaces(response.data.surface);
                 setAvailableLanguages(response.data.language);
                 setAvailableEditions(response.data.edition);
-
-                console.log(availableSeries);
-                console.log(availableRarities);
             },
-            [apiService, availableSeries, availableRarities],
+            [apiService],
         );
+
+        const setSelectedSeriesFromState = useCallback(() => {
+            if (dialogState.selectedCardSeries) {
+                const filteredSeries = availableSeries.filter((series) => {
+                    return series.id === dialogState?.selectedCardSeries?.id;
+                })[0];
+
+                if (filteredSeries) {
+                    setSelectedSeries(filteredSeries);
+
+                    fetchSets(filteredSeries?.id);
+                }
+            }
+        }, [availableSeries, dialogState.selectedCardSeries, fetchSets]);
+
+        const setSelectedSetFromState = useCallback(() => {
+            if (dialogState.selectedCardSet) {
+                const filteredSet = availableSets.filter((set) => {
+                    return set.id === dialogState?.selectedCardSet?.id;
+                })[0];
+
+                if (filteredSet) {
+                    setSelectedSet(filteredSet);
+
+                    setReleaseDate(new Date(filteredSet?.releaseDate));
+                }
+            }
+        }, [availableSets, dialogState.selectedCardSet]);
 
         useEffect(
             () => {
                 async function fetchCategories() {
                     const endpoint = apiService.createEndpoint(`admin/cards/categories`);
                     const response = await endpoint.get('');
+                    const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
                     setAvailableCategories(response.data);
-                    setCardCategory(response.data[0].id);
-                    dispatch(manageCardDialogActions.setSelectedCategoryId(response.data[0].id));
+                    setCardCategory(categoryId);
 
-                    fetchSeries(response.data[0].id);
-                    fetchDropdownsData(response.data[0].id);
+                    dispatch(
+                        manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]),
+                    );
+
+                    await fetchSeries(categoryId);
+
+                    setSelectedSeriesFromState();
+
+                    fetchDropdownsData(categoryId);
                 }
 
                 fetchCategories();
@@ -203,10 +225,24 @@ export const ManageCardDialogCreateCardView = forwardRef(
             [],
         );
 
+        useEffect(() => {
+            setSelectedSeriesFromState();
+        }, [setSelectedSeriesFromState]);
+
+        useEffect(() => {
+            setSelectedSetFromState();
+        }, [setSelectedSetFromState]);
+
         const handleCardCategoryChange = useCallback(
             (e) => {
                 setCardCategory(e.target.value);
-                dispatch(manageCardDialogActions.setSelectedCategoryId(e.target.value));
+
+                const category = availableCategories.filter((cat) => {
+                    return cat.id === e.target.value;
+                })[0];
+
+                dispatch(manageCardDialogActions.setSelectedCategory(category));
+                dispatch(manageCardDialogActions.setSelectedCardSeries(null));
 
                 setSelectedSeries(null);
                 setSelectedSet(null);
@@ -215,33 +251,32 @@ export const ManageCardDialogCreateCardView = forwardRef(
                 fetchSeries(e.target.value);
                 fetchDropdownsData(e.target.value);
             },
-            [fetchSeries, fetchDropdownsData, dispatch],
+            [fetchSeries, fetchDropdownsData, dispatch, availableCategories],
         );
 
         const handleSeriesChange = useCallback(
             (e, newValue) => {
                 setSelectedSeries(newValue);
                 setSelectedSet(null);
+                dispatch(manageCardDialogActions.setSelectedCardSeries(newValue));
+
                 fetchSets(newValue.id);
             },
-            [fetchSets],
+            [fetchSets, dispatch],
         );
 
-        const handleSetChange = useCallback((e, newValue) => {
-            setSelectedSet(newValue);
-            setReleaseDate(new Date(newValue?.releaseDate));
-        }, []);
+        const handleSetChange = useCallback(
+            (e, newValue) => {
+                setSelectedSet(newValue);
+                dispatch(manageCardDialogActions.setSelectedCardSet(newValue));
+
+                setReleaseDate(new Date(newValue?.releaseDate));
+            },
+            [setReleaseDate, dispatch],
+        );
 
         const handleCardPhotoChange = useCallback((cardImage: File | null) => {
             setSelectedCardPhoto(cardImage);
-        }, []);
-
-        const handleNewSeriesLogoChange = useCallback(
-            (newSeriesLogo: File | null) => setNewSeriesLogo(newSeriesLogo),
-            [],
-        );
-        const handleNewSetLogoChange = useCallback((newSetLogo: File | null) => {
-            setNewSetLogo(newSetLogo);
         }, []);
 
         const handleCardNameChange = useCallback((e) => {
@@ -252,25 +287,13 @@ export const ManageCardDialogCreateCardView = forwardRef(
             setReleaseDate(newReleaseDate);
         }, []);
 
-        const handleNewSetReleaseDateChange = useCallback((newReleaseDate: Date | null) => {
-            setNewSetReleaseDate(newReleaseDate);
-        }, []);
-
         const toggleNewSeries = useCallback(() => {
-            setNewSeriesLogo(null);
-            setNewSeriesName('');
-
-            batch(() => {
-                dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.CreateSeries));
-            });
+            dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.CreateSeries));
         }, [dispatch]);
 
         const toggleNewSet = useCallback(() => {
-            setNewSetLogo(null);
-            setNewSetName('');
-            setNewSetReleaseDate(null);
-            setShowNewSetBox(!showNewSetBox);
-        }, [showNewSetBox]);
+            dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.CreateSet));
+        }, [dispatch]);
 
         const handleRarityChange = useCallback((e, newValue) => {
             setSelectedRarity(newValue);
@@ -279,173 +302,52 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const handleLanguageChange = useCallback((e) => setSelectedLanguage(e.target.value), []);
         const handleEditionChange = useCallback((e) => setSelectedEdition(e.target.value), []);
         const handleProductVariantChange = useCallback((e) => setProductVariant(e.target.value), []);
-        const handleNewSeriesNameChange = useCallback((e) => setNewSeriesName(e.target.value), []);
-        const handleNewSetNameChange = useCallback((e) => setNewSetName(e.target.value), []);
         const handleCardNumberChange = useCallback((e) => setCardNumber(e.target.value), []);
         const showSaveButton = useMemo(() => {
-            if (showNewSetBox && !showNewSeries) {
-                return !!(
-                    newSetLogo &&
-                    newSetName &&
-                    newSetReleaseDate &&
-                    selectedCardPhoto &&
-                    cardName &&
-                    cardNumber &&
-                    selectedRarity !== 'none' &&
-                    selectedLanguage !== 'none'
-                );
-            }
-
-            if (!showNewSeries && !showNewSetBox) {
-                return !!(
-                    selectedSeries &&
-                    selectedSet &&
-                    selectedCardPhoto &&
-                    cardName &&
-                    cardNumber &&
-                    selectedRarity !== 'none' &&
-                    selectedLanguage !== 'none'
-                );
-            }
-
-            if (showNewSeries) {
-                return !!(
-                    newSeriesLogo &&
-                    newSeriesName &&
-                    newSetLogo &&
-                    newSetName &&
-                    newSetReleaseDate &&
-                    selectedCardPhoto &&
-                    cardName &&
-                    cardNumber &&
-                    selectedRarity !== 'none' &&
-                    selectedLanguage !== 'none'
-                );
-            }
-        }, [
-            selectedSeries,
-            showNewSeries,
-            newSeriesLogo,
-            newSeriesName,
-            showNewSetBox,
-            newSetLogo,
-            newSetName,
-            newSetReleaseDate,
-            selectedSet,
-            selectedCardPhoto,
-            cardName,
-            selectedLanguage,
-            selectedRarity,
-            cardNumber,
-        ]);
+            return !!(
+                selectedSeries &&
+                selectedSet &&
+                selectedCardPhoto &&
+                cardName &&
+                cardNumber &&
+                selectedRarity &&
+                selectedLanguage !== 'none'
+            );
+        }, [selectedSeries, selectedSet, selectedCardPhoto, cardName, selectedLanguage, selectedRarity, cardNumber]);
 
         const handleAddCard = async () => {
             const endpoint = apiService.createEndpoint('/admin/cards');
-            // Saving card with existing series but new set
-            if (showNewSetBox && !showNewSeries) {
-                setIsLoading(true);
-                try {
-                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
-                    const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
-                    const DTO = {
-                        imagePath: cardPublicImage,
-                        name: cardName,
-                        category: cardCategory,
-                        releaseDate: newSetReleaseDate,
-                        seriesId: selectedSeries?.id,
-                        seriesName: null,
-                        seriesImage: null,
-                        setId: null,
-                        setName: newSetName,
-                        setImage: setLogoPublicImage,
-                        cardNumber: cardNumber,
-                        language: selectedLanguage,
-                        rarity: selectedRarity,
-                        edition: selectedEdition !== 'none' ? selectedEdition : null,
-                        surface: selectedSurface !== 'none' ? selectedSurface : null,
-                        variant: productVariant,
-                    };
-                    const responseItem = await endpoint.post('', DTO);
 
-                    batch(() => {
-                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
-                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
-                    });
-                } catch (e: any) {
-                    Notifications.exception(e);
-                }
-                setIsLoading(false);
+            setIsLoading(true);
+            try {
+                const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
+                const DTO = {
+                    imagePath: cardPublicImage,
+                    name: cardName,
+                    category: cardCategory,
+                    releaseDate: releaseDate,
+                    seriesId: selectedSeries?.id,
+                    seriesName: null,
+                    seriesImage: null,
+                    setId: selectedSet?.id,
+                    setName: null,
+                    setImage: null,
+                    cardNumber: cardNumber,
+                    language: selectedLanguage,
+                    rarity: selectedRarity?.name,
+                    edition: selectedEdition !== 'none' ? selectedEdition : null,
+                    surface: selectedSurface !== 'none' ? selectedSurface : null,
+                    variant: productVariant,
+                };
+                const responseItem = await endpoint.post('', DTO);
+                batch(() => {
+                    dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
+                    dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
+                });
+            } catch (e: any) {
+                Notifications.exception(e);
             }
-
-            // Saving card with existing set & series
-            if (!showNewSeries && !showNewSetBox) {
-                setIsLoading(true);
-                try {
-                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
-                    const DTO = {
-                        imagePath: cardPublicImage,
-                        name: cardName,
-                        category: cardCategory,
-                        releaseDate: releaseDate,
-                        seriesId: selectedSeries?.id,
-                        seriesName: null,
-                        seriesImage: null,
-                        setId: selectedSet?.id,
-                        setName: null,
-                        setImage: null,
-                        cardNumber: cardNumber,
-                        language: selectedLanguage,
-                        rarity: selectedRarity,
-                        edition: selectedEdition !== 'none' ? selectedEdition : null,
-                        surface: selectedSurface !== 'none' ? selectedSurface : null,
-                        variant: productVariant,
-                    };
-                    const responseItem = await endpoint.post('', DTO);
-                    batch(() => {
-                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
-                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
-                    });
-                } catch (e: any) {
-                    Notifications.exception(e);
-                }
-                setIsLoading(false);
-            }
-
-            if (showNewSeries) {
-                setIsLoading(true);
-                try {
-                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
-                    const seriesLogoPublicImage = await filesRepository.uploadFile(newSeriesLogo!);
-                    const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
-
-                    const DTO = {
-                        imagePath: cardPublicImage,
-                        name: cardName,
-                        category: cardCategory,
-                        releaseDate: newSetReleaseDate,
-                        seriesId: null,
-                        seriesName: newSeriesName,
-                        seriesImage: seriesLogoPublicImage,
-                        setId: null,
-                        setName: newSetName,
-                        setImage: setLogoPublicImage,
-                        cardNumber: cardNumber,
-                        language: selectedLanguage,
-                        rarity: selectedRarity,
-                        edition: selectedEdition !== 'none' ? selectedEdition : null,
-                        surface: selectedSurface !== 'none' ? selectedSurface : null,
-                        variant: productVariant,
-                    };
-                    const responseItem = await endpoint.post('', DTO);
-                    batch(() => {
-                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
-                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
-                    });
-                } catch (e: any) {
-                    Notifications.exception(e);
-                }
-                setIsLoading(false);
-            }
+            setIsLoading(false);
         };
 
         return (
@@ -467,210 +369,42 @@ export const ManageCardDialogCreateCardView = forwardRef(
                             })}
                         </Select>
                     </FormControl>
+                    {'Length: ' + availableSeries.length}
 
-                    {showNewSeries ? (
-                        <Box padding={'12px'}>
-                            <Box
-                                display={'flex'}
-                                flexDirection={'column'}
-                                sx={{
-                                    border: '1px solid #CCCCCC',
-                                    width: '100%',
-                                }}
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                        alignItems={'flex-end'}
+                        padding={'6px'}
+                        marginTop={'12px'}
+                    >
+                        <FormControl sx={{ minWidth: '70%' }}>
+                            <FormHelperText
+                                sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
                             >
-                                <Box
-                                    display={'flex'}
-                                    flexDirection={'row'}
-                                    justifyContent={'space-between'}
-                                    padding={'12px'}
-                                    alignItems={'center'}
-                                    sx={{
-                                        backgroundColor: '#F9F9F9',
-                                        borderBottomColor: '#CCCCCC',
-                                        borderBottomStyle: 'solid',
-                                        borderBottomWidth: '1px',
-                                    }}
-                                >
-                                    <Typography variant={'subtitle2'}>New Series</Typography>
-                                    <IconButton onClick={toggleNewSeries}>
-                                        <DeleteOutlineOutlinedIcon />
-                                    </IconButton>
-                                </Box>
-
-                                <Grid container padding={'12px'} spacing={24}>
-                                    <Grid item md={4}>
-                                        <FormControl>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Series Logo
-                                            </FormHelperText>
-                                            <ImageUploader onChange={handleNewSeriesLogoChange} />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item md={8}>
-                                        <FormControl>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Series Name
-                                            </FormHelperText>
-                                            <TextField
-                                                variant="outlined"
-                                                value={newSeriesName}
-                                                onChange={handleNewSeriesNameChange}
-                                                placeholder={'Enter series name'}
-                                                fullWidth
-                                                sx={{ minWidth: '231px' }}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Box>
-                    ) : null}
-
-                    {!showNewSeries ? (
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            justifyContent={'space-between'}
-                            alignItems={'flex-end'}
-                            padding={'6px'}
-                            marginTop={'12px'}
+                                Series
+                            </FormHelperText>
+                            <Autocomplete
+                                value={selectedSeries}
+                                onChange={handleSeriesChange}
+                                options={availableSeries}
+                                fullWidth
+                                renderInput={(params) => <TextField {...params} placeholder={'Enter series'} />}
+                            />
+                        </FormControl>
+                        <Button
+                            variant={'outlined'}
+                            color={'primary'}
+                            sx={{ minHeight: '56px', width: '145px' }}
+                            startIcon={<AddIcon />}
+                            onClick={toggleNewSeries}
                         >
-                            <FormControl sx={{ minWidth: '70%' }}>
-                                <FormHelperText
-                                    sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
-                                >
-                                    Series
-                                </FormHelperText>
-                                <Autocomplete
-                                    value={selectedSeries}
-                                    onChange={handleSeriesChange}
-                                    options={availableSeries}
-                                    fullWidth
-                                    renderInput={(params) => <TextField {...params} placeholder={'Enter series'} />}
-                                />
-                            </FormControl>
-                            <Button
-                                variant={'outlined'}
-                                color={'primary'}
-                                sx={{ minHeight: '56px', width: '145px' }}
-                                startIcon={<AddIcon />}
-                                onClick={toggleNewSeries}
-                            >
-                                New series
-                            </Button>
-                        </Box>
-                    ) : null}
+                            New series
+                        </Button>
+                    </Box>
 
-                    {showNewSeries || showNewSetBox ? (
-                        <Box padding={'12px'}>
-                            <Box
-                                display={'flex'}
-                                flexDirection={'column'}
-                                sx={{
-                                    border: '1px solid #CCCCCC',
-                                    width: '100%',
-                                }}
-                            >
-                                <Box
-                                    display={'flex'}
-                                    flexDirection={'row'}
-                                    justifyContent={'space-between'}
-                                    padding={'12px'}
-                                    alignItems={'center'}
-                                    sx={{
-                                        backgroundColor: '#F9F9F9',
-                                        borderBottomColor: '#CCCCCC',
-                                        borderBottomStyle: 'solid',
-                                        borderBottomWidth: '1px',
-                                    }}
-                                >
-                                    <Typography variant={'subtitle2'}>Set</Typography>
-                                    {!showNewSeries ? (
-                                        <IconButton onClick={toggleNewSet}>
-                                            <DeleteOutlineOutlinedIcon />
-                                        </IconButton>
-                                    ) : null}
-                                </Box>
-
-                                <Grid container padding={'12px'} spacing={24}>
-                                    <Grid item md={4}>
-                                        <FormControl>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Set Logo
-                                            </FormHelperText>
-                                            <ImageUploader onChange={handleNewSetLogoChange} />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item md={8}>
-                                        <FormControl>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Set Name
-                                            </FormHelperText>
-                                            <TextField
-                                                variant="outlined"
-                                                value={newSetName}
-                                                onChange={handleNewSetNameChange}
-                                                placeholder={'Enter set name'}
-                                                fullWidth
-                                                sx={{ minWidth: '231px' }}
-                                            />
-                                        </FormControl>
-
-                                        <FormControl sx={{ marginTop: '12px' }}>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Release Date
-                                            </FormHelperText>
-                                            <LocalizationProvider dateAdapter={DateAdapter}>
-                                                <DesktopDatePicker
-                                                    inputFormat="MM/DD/yyyy"
-                                                    value={newSetReleaseDate}
-                                                    onChange={handleNewSetReleaseDateChange}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                        </FormControl>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Box>
-                    ) : null}
-
-                    {selectedSeries && !showNewSetBox && !showNewSeries ? (
+                    {selectedSeries ? (
                         <Box
                             display={'flex'}
                             flexDirection={'row'}
@@ -704,7 +438,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                             </Button>
                         </Box>
                     ) : null}
-                    {selectedSet || showNewSetBox || showNewSeries ? (
+                    {selectedSet ? (
                         <>
                             <Divider className={classes.topDivider} />
                             <Grid container direction={'row'} sx={{ marginTop: '12px' }} padding={'12px'}>

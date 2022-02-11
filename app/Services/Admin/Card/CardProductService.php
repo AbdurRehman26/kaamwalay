@@ -115,6 +115,7 @@ class CardProductService
 
             return $this->agsService->createCard($createData);
         } catch (Exception $e) {
+            report($e);
             return [];
         }
     }

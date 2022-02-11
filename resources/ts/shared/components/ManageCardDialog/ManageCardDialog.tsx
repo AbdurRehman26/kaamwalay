@@ -8,6 +8,7 @@ import ManageCardDialogList from './ManageCardDialogList';
 import ManageCardDialogView, { ManageCardDialogViewProps } from './ManageCardDialogView';
 import ManageCardDialogCreateCard from '@shared/components/ManageCardDialog/ManageCardDialogCreateCard';
 import ManageCardDialogCreateSeries from '@shared/components/ManageCardDialog/ManageCardDialogCreateSeries';
+import ManageCardDialogCreateSet from '@shared/components/ManageCardDialog/ManageCardDialogCreateSet';
 
 export interface ManageCardDialogProps extends Omit<DialogProps, 'open'> {
     onAdd: ManageCardDialogViewProps['onAdd'];
@@ -75,6 +76,14 @@ export function ManageCardDialog({ onAdd, ...rest }: ManageCardDialogProps) {
                 exit={false}
             >
                 <ManageCardDialogCreateSeries onAdd={onAdd} declaredValue={dialogState.declaredValue} />
+            </Slide>
+            <Slide
+                in={dialogState.view === ManageCardDialogViewEnum.CreateSet}
+                direction={'left'}
+                unmountOnExit
+                exit={false}
+            >
+                <ManageCardDialogCreateSet onAdd={onAdd} declaredValue={dialogState.declaredValue} />
             </Slide>
         </Dialog>
     );

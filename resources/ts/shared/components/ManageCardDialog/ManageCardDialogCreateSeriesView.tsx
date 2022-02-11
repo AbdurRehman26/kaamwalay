@@ -16,7 +16,6 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { batch } from 'react-redux';
-import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -83,21 +82,21 @@ export const ManageCardDialogCreateSeriesView = forwardRef(
             return !!(newSeriesLogo && newSeriesName);
         }, [newSeriesLogo, newSeriesName]);
 
-        const handleAddCard = async () => {
+        const handleAddSeries = async () => {
             const endpoint = apiService.createEndpoint('/admin/cards/series');
             setIsLoading(true);
             try {
                 const seriesLogoPublicImage = await filesRepository.uploadFile(newSeriesLogo!);
 
                 const DTO = {
-                    cardCategoryId: dialogState.selectedCategoryId,
+                    cardCategoryId: dialogState.selectedCategory?.id,
                     name: newSeriesName,
                     imagePath: seriesLogoPublicImage,
                 };
                 const responseItem = await endpoint.post('', DTO);
                 batch(() => {
                     dispatch(manageCardDialogActions.setSelectedCardSeries(responseItem.data as CardSeriesEntity));
-                    dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Create));
+                    dispatch(manageCardDialogActions.navigateToPreviousView());
                 });
             } catch (e: any) {
                 Notifications.exception(e);
@@ -110,7 +109,7 @@ export const ManageCardDialogCreateSeriesView = forwardRef(
                 <ManageCardDialogHeader back={true} label={'Create a New Series'} />
                 <Divider className={classes.topDivider} />
                 <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
-                    Category: {dialogState.selectedCategoryId}
+                    Category: {dialogState.selectedCategory?.id}
                     <Box padding={'12px'}>
                         <Grid container padding={'12px'} spacing={24}>
                             <Grid item md={4}>
@@ -167,7 +166,7 @@ export const ManageCardDialogCreateSeriesView = forwardRef(
                             <Button
                                 variant="contained"
                                 color={'primary'}
-                                onClick={handleAddCard}
+                                onClick={handleAddSeries}
                                 disabled={!showSaveButton || isLoading}
                             >
                                 {isLoading ? <CircularProgress color={'primary'} /> : 'Save'}

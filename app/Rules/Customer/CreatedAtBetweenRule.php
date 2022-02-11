@@ -34,7 +34,7 @@ class CreatedAtBetweenRule implements Rule
         return 'Both start date and end date must be valid dates.';
     }
 
-    protected function validDates(array $dates)
+    protected function validDates(array $dates): bool
     {
         foreach ($dates as $date){
             try {

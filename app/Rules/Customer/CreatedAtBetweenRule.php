@@ -36,7 +36,7 @@ class CreatedAtBetweenRule implements Rule
 
     protected function validDates(array $dates): bool
     {
-        foreach ($dates as $date){
+        foreach ($dates as $date) {
             try {
                 Carbon::parse($date);
             } catch (\Exception $e) {

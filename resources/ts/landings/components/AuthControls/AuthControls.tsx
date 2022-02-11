@@ -8,6 +8,8 @@ import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
+import { AuthDialog } from '../../../auth/pages/Auth/AuthDialog';
+import { useState } from 'react';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -47,7 +49,16 @@ const useStyles = makeStyles(
 
 export function AuthControls() {
     const { checking, authenticated } = useAuth();
+    const [close, setClose] = useState(false);
     const classes = useStyles();
+
+    const showDialog = () => {
+        setClose(true);
+    };
+
+    const handleAuthDialogClose = () => {
+        setClose(false);
+    };
 
     if (checking) {
         return null;
@@ -70,7 +81,8 @@ export function AuthControls() {
                 </ButtonBase>
             ) : (
                 <Button
-                    href={'/auth/sign-in'}
+                    onClick={showDialog}
+                    // href={'/login'}
                     color={'primary'}
                     className={cx(classes.button)}
                     startIcon={<PersonIcon />}
@@ -78,6 +90,7 @@ export function AuthControls() {
                     Log in
                 </Button>
             )}
+            <AuthDialog open={close} onClose={handleAuthDialogClose} subTitle="to Access Robograding" />
         </>
     );
 }

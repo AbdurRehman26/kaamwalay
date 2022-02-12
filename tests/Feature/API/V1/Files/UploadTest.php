@@ -21,7 +21,11 @@ it("should not presign correctly due to the missing details", function () {
     $this->actingAs($this->user);
     $response = postJson('/api/v1/files/presign');
     $response->assertUnprocessable();
-    $response->assertJsonPath('message', 'The given data was invalid.');
+    $response->assertJsonValidationErrors([
+        'file_name' => 'The file name field is required.',
+        'content_type' => 'The content type field is required.',
+        'size' => 'The size field is required.',
+    ]);
 });
 
 it("should presign correctly", function () {

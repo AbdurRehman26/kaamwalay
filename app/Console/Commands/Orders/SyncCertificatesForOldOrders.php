@@ -26,19 +26,10 @@ class SyncCertificatesForOldOrders extends Command
     protected $description = 'It syncs certificates for old orders which were created prior to Admin panel launch, but AGS graded those cards directly.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function handle(): int
     {

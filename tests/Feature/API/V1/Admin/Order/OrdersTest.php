@@ -126,7 +126,7 @@ it('filters orders by id', function () {
 });
 
 it('returns only placed orders', function () {
-    $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[status]=placed')
+    $this->getJson('/api/v1/admin/orders?include=orderStatusHistory&filter[status]=placed')
         ->assertOk()
         ->assertJsonFragment([
             'order_status_id' => OrderStatus::PLACED,
@@ -134,7 +134,7 @@ it('returns only placed orders', function () {
 });
 
 it('returns only reviewed orders', function () {
-    $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[status]=reviewed')
+    $this->getJson('/api/v1/admin/orders?include=orderStatusHistory&filter[status]=reviewed')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -143,7 +143,7 @@ it('returns only reviewed orders', function () {
 });
 
 it('returns only graded orders', function () {
-    $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[status]=graded')
+    $this->getJson('/api/v1/admin/orders?include=orderStatusHistory&filter[status]=graded')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -152,7 +152,7 @@ it('returns only graded orders', function () {
 });
 
 it('returns only shipped orders', function () {
-    $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[status]=shipped')
+    $this->getJson('/api/v1/admin/orders?include=orderStatusHistory&filter[status]=shipped')
         ->assertOk()
         ->assertJsonCount(1, ['data'])
         ->assertJsonFragment([
@@ -241,7 +241,7 @@ it('can not get order grades if order is not reviewed', function () {
 it(
     'returns orders filtered after searching the order with order number, customer number and user Name',
     function (string $value) {
-        $this->getJson('/api/v1/admin/orders?include=order_status_history&filter[search]=' . $value)
+        $this->getJson('/api/v1/admin/orders?include=orderStatusHistory&filter[search]=' . $value)
             ->assertOk()
             ->assertJsonFragment([
                 'id' => $this->orders[0]->id,

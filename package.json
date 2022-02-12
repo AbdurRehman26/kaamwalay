@@ -39,7 +39,7 @@
         "@stripe/stripe-js": "1.22.0",
         "@types/facebook-pixel": "0.0.24",
         "algoliasearch": "4.11.0",
-        "axios": "0.24.0",
+        "axios": "^0.25",
         "buffer": "^5.7.1",
         "card-validator": "8.1.1",
         "chalk": "4.1.2",

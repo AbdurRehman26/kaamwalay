@@ -4,7 +4,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class AddStatesInStatesTable extends Migration
+return new class extends Migration
 {
     protected const STATES_LIST = [
         "AL" => "Alabama",
@@ -96,4 +96,4 @@ class AddStatesInStatesTable extends Migration
     {
         DB::table('states')->truncate();
     }
-}
+};

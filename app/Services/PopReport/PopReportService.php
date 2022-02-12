@@ -204,7 +204,7 @@ class PopReportService
             try {
                 $reportsTableArray[$columnName] += 1;
 
-                if (str_contains($columnName, "plus")) {
+                if (str_contains($columnName, "plus") || $columnName === 'fr') {
                     $reportsTableArray['total_plus'] += 1;
                 } else {
                     $reportsTableArray['total'] += 1;

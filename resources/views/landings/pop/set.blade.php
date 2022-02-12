@@ -54,8 +54,7 @@
                                     <br/>
                                     +
                                 </td>
-                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->pr, 'plusValue' => '-'])
-                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => '-', 'plusValue' => $cardsReport->fr])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->pr, 'plusValue' => $cardsReport->fr])
                                 @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->good, 'plusValue' => $cardsReport->good_plus])
                                 @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->vg, 'plusValue' => $cardsReport->vg_plus])
                                 @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->vg_ex, 'plusValue' => $cardsReport->vg_ex_plus])

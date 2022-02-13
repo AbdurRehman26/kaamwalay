@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class SeedInitialCouponStatusesData extends Migration
+return new class extends Migration
 {
     protected const TABLE = 'coupon_statuses';
     /**
@@ -55,4 +55,4 @@ class SeedInitialCouponStatusesData extends Migration
     {
         DB::table(self::TABLE)->truncate();
     }
-}
+};

@@ -80,15 +80,7 @@ test('a customer can place order', function () {
             'same_as_shipping' => true,
         ],
         'customer_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
@@ -533,15 +525,7 @@ test('a customer can place order with partial amount from wallet', function () {
             'same_as_shipping' => true,
         ],
         'customer_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
@@ -653,7 +637,7 @@ test('a customer can place order with amount equal to his wallet balance.', func
         'balance' => 314.0,
     ]);
 
-    $walletPayment = (float) 314.0;
+    $walletPayment = 314.0;
     $this->postJson('/api/v1/customer/orders', [
         'payment_plan' => [
             'id' => PaymentPlan::factory()->create([
@@ -693,15 +677,7 @@ test('a customer can place order with amount equal to his wallet balance.', func
             'same_as_shipping' => true,
         ],
         'customer_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,

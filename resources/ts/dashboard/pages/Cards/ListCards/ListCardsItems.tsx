@@ -10,11 +10,17 @@ import Typography from '@mui/material/Typography';
 import { styled, Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
+import ReactGA from 'react-ga';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { TablePagination } from '@shared/components/TablePagination';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useListUserCardsQuery } from '@shared/redux/hooks/useUserCardsQuery';
+import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { useNavigate } from 'react-router-dom';
 import { font } from '@shared/styles/utils';
 import { CardPreview } from '../../../components/CardPreview/CardPreview';
+import Button from '@mui/material/Button';
+import StyleTwoToneIcon from '@mui/icons-material/StyleTwoTone';
 
 const StyledSelect = styled(Select)(
     {
@@ -28,13 +34,42 @@ const StyledSelect = styled(Select)(
     { name: 'StyledSelect' },
 );
 
-const useStyles = makeStyles(
+const StyledBox = styled(Box)(
     {
+        width: '100%',
+        backgroundColor: '#F9F9F9',
+        border: '1px solid #E0E0E0',
+        borderRadius: '8px',
+        padding: '40px 20px',
+    },
+    { name: 'StyledBox' },
+);
+
+const useStyles = makeStyles(
+    (theme) => ({
+        paginationFooter: {
+            background: 'white',
+            position: 'fixed',
+            width: '50%',
+            left: '32%',
+            bottom: '0',
+            [theme.breakpoints.down('sm')]: {
+                left: '50%',
+                width: '50%',
+            },
+        },
+        tableMargin: {
+            marginBottom: theme.spacing(7),
+        },
         divider: {
             marginTop: '16px',
             width: '100%',
         },
-    },
+        newSubmissionBtn: {
+            borderRadius: 24,
+            padding: '12px 24px',
+        },
+    }),
     {
         name: 'ListCardsItemsStyles',
     },
@@ -46,6 +81,7 @@ interface ListCardsItemsProps {
 export function ListCardItems({ search }: ListCardsItemsProps) {
     const [sortFilter, setSortFilter] = useState('date');
     const classes = useStyles();
+    const navigate = useNavigate();
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const userCards$ = useListUserCardsQuery({
         params: {
@@ -53,6 +89,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
             filter: {
                 search,
             },
+            perPage: 48,
         },
         ...bracketParams(),
     });
@@ -81,6 +118,15 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [search],
     );
+
+    function handleOnClick() {
+        ReactGA.event({
+            category: EventCategories.Submissions,
+            action: SubmissionEvents.initiated,
+        });
+        pushToDataLayer({ event: 'google-ads-started-submission-process' });
+        navigate('/submissions/new');
+    }
 
     if (userCards$.isLoading || userCards$.isError) {
         return (
@@ -111,9 +157,34 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
     // If we have no cards and the search is empty it means the user doesn't have any graded cards
     if (items$.length === 0 && search === '') {
         return (
-            <Typography variant={'subtitle2'}>
-                You don't seem to have any graded cards yet. They'll be shown here as soon as we grade them!
-            </Typography>
+            <StyledBox>
+                <Grid container alignItems={'center'} justifyContent={'center'} rowSpacing={1}>
+                    <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
+                        <StyleTwoToneIcon />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant={'subtitle1'} fontWeight={500} textAlign={'center'} fontSize={16}>
+                            No Cards
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
+                            You haven't submitted any cards for grading yet.<br></br>Click the button below to get
+                            started.
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
+                        <Button
+                            onClick={handleOnClick}
+                            variant={'contained'}
+                            color={'primary'}
+                            className={classes.newSubmissionBtn}
+                        >
+                            New Submission
+                        </Button>
+                    </Grid>
+                </Grid>
+            </StyledBox>
         );
     }
 
@@ -141,10 +212,16 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                     </StyledSelect>
                 </Grid>
             </Box>
-            <Grid container spacing={1}>
+            <Grid container spacing={1} className={classes.tableMargin}>
                 {items$}
                 <Divider className={classes.divider} />
-                <TablePagination {...userCards$.paginationProps} />
+                <TablePagination
+                    className={classes.paginationFooter}
+                    {...{
+                        ...userCards$.paginationProps,
+                        rowsPerPageOptions: [48],
+                    }}
+                />
             </Grid>
         </>
     );

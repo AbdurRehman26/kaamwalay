@@ -327,6 +327,10 @@ class Order extends Model
         return $this->belongsTo(Coupon::class);
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
     public function scopeValid(Builder $query): Builder
     {
         return $query->where('order_status_id', '!=', OrderStatus::CANCELLED);

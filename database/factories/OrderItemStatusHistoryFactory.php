@@ -11,13 +11,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class OrderItemStatusHistoryFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = OrderItemStatusHistory::class;
-
-    /**
      * Define the model's default state.
      *
      * @return array

@@ -10,7 +10,7 @@ class Couponable extends Model
     use HasFactory;
 
     const COUPONABLE_TYPES = [
-        'service_level' => 'App\Models\PaymentPlan',
+        'service_level' => \App\Models\PaymentPlan::class,
     ];
 
     protected $fillable = [

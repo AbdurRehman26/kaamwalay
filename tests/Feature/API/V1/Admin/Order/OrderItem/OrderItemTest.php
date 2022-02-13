@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\API\Admin\OrderItem\OrderItemCardChangedEvent;
 use App\Models\CardProduct;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatusHistory;
@@ -18,10 +19,10 @@ beforeEach(function () {
     $this->seed(RolesSeeder::class);
 
     $this->user = User::createAdmin([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 });
@@ -40,10 +41,10 @@ test('a customer can not get order items information', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 
@@ -79,10 +80,10 @@ test('a customer can not add order item to order', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 
@@ -110,6 +111,7 @@ test('a new order item needs data', function () {
 });
 
 test('an admin can update order item', function () {
+    Event::fake();
     Http::fake(['*' => Http::response(json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_create_certificates_response_200.json'
     ), associative: true))]);
@@ -133,16 +135,17 @@ test('an admin can update order item', function () {
         ],
     ]);
     $this->assertEquals($response['data']['card_product']['id'], $newCard->id);
+    Event::assertDispatched(OrderItemCardChangedEvent::class);
 });
 
 test('a customer can not update order item', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 
@@ -189,10 +192,10 @@ test('a customer can not update an order item status', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 
@@ -260,10 +263,10 @@ test('a customer can not mark multiple order items as pending', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 

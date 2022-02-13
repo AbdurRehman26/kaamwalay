@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Coupon;
 
-class CreateCouponStatusHistoriesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -39,4 +39,4 @@ class CreateCouponStatusHistoriesTable extends Migration
     {
         Schema::dropIfExists('coupon_status_histories');
     }
-}
+};

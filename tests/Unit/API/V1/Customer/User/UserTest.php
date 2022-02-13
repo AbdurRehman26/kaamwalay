@@ -13,10 +13,10 @@ beforeEach(function () {
 
 test('customer can be created with role', function () {
     $user = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
     expect($user->hasRole(config('permission.roles.customer')))->toBeTrue();
@@ -24,10 +24,10 @@ test('customer can be created with role', function () {
 
 test('customer should have customer_number on create', function () {
     $user = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 

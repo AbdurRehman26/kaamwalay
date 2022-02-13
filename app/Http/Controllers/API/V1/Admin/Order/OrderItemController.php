@@ -22,18 +22,17 @@ class OrderItemController extends Controller
 {
     public function getOrderCards(Request $request, Order $order): JsonResponse
     {
-        // TODO Fix the structure of response. It is not following the usual response pattern
-        return new JsonResponse(
-            [
-                'data' => new OrderItemCollection(
-                    OrderItem::forOrder($order)->get()
-                ),
+        return new JsonResponse([
+            'data' => [
+               'order_item' => new OrderItemCollection(
+                   OrderItem::forOrder($order)->get()
+               ),
                 'order' => [
                     'id' => $order->id,
                     'order_number' => $order->order_number,
                 ],
-            ]
-        );
+            ],
+        ]);
     }
 
     public function store(AddExtraCardRequest $request, Order $order, OrderService $orderService): OrderItemResource

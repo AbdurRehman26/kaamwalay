@@ -104,6 +104,7 @@ export interface NewSubmissionSliceState {
         couponCode: string;
         validCouponId: number;
         isCouponApplied: boolean;
+        couponInvalidMessage: string;
         appliedCouponData: {
             id: number;
             discountStatement: string;
@@ -136,6 +137,7 @@ const initialState: NewSubmissionSliceState = {
         couponCode: '',
         validCouponId: -1,
         isCouponApplied: false,
+        couponInvalidMessage: '',
         appliedCouponData: {
             id: -1,
             discountStatement: '',
@@ -591,6 +593,9 @@ export const newSubmissionSlice = createSlice({
         setCouponCode: (state, action: PayloadAction<string>) => {
             state.couponState.couponCode = action.payload;
         },
+        SetCouponInvalidMessage: (state, action: PayloadAction<string>) => {
+            state.couponState.couponInvalidMessage = action.payload;
+        },
         setIsCouponApplied: (state, action: PayloadAction<boolean>) => {
             state.couponState.isCouponApplied = action.payload;
         },
@@ -618,6 +623,7 @@ export const newSubmissionSlice = createSlice({
                 couponCode: '',
                 validCouponId: -1,
                 isCouponApplied: false,
+                couponInvalidMessage: '',
                 appliedCouponData: {
                     id: -1,
                     discountStatement: '',
@@ -757,4 +763,5 @@ export const {
     setAppliedCouponData,
     setAppliedCredit,
     setPreviewTotal,
+    SetCouponInvalidMessage,
 } = newSubmissionSlice.actions;

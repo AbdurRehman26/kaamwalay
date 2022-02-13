@@ -247,6 +247,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Coupon onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon query()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon status(string|int $status)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon validForUserLimit(string $couponCode, \App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon validOnCouponable(array $couponParams)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon validOnCurrentDate()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereAvailableFrom($value)
@@ -315,6 +316,7 @@ namespace App\Models{
  * @property-read \App\Models\Coupon $coupon
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\User $user
+ * @method static \Database\Factories\CouponLogFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog query()
@@ -492,6 +494,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereUpdatedAt($value)
  */
 	class Invoice extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\MailchimpList
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList query()
+ */
+	class MailchimpList extends \Eloquent {}
 }
 
 namespace App\Models{

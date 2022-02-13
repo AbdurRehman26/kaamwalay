@@ -4,7 +4,9 @@ use App\Models\CardProduct;
 use App\Models\Coupon;
 use App\Models\Couponable;
 use App\Models\CouponApplicable;
+use App\Models\CouponLog;
 use App\Models\CouponStatus;
+use App\Models\Order;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use function Pest\Laravel\actingAs;
@@ -33,6 +35,15 @@ beforeEach(function () {
             ]
         );
 
+    $this->limitedUsageCoupon = Coupon::factory()
+        ->create(
+            [
+                'coupon_applicable_id' => $couponApplicable->id,
+                'coupon_status_id' => 2,
+                'usage_allowed_per_user' => 1,
+            ]
+        );
+
     $this->couponable = Couponable::factory()
         ->create(
             [
@@ -46,6 +57,7 @@ beforeEach(function () {
     $this->user = User::factory()
         ->withRole(config('permission.roles.customer'))
         ->create();
+
 
     $this->actingAs($this->user);
 });
@@ -91,4 +103,81 @@ it('calculates coupon discount', function () {
             'discounted_amount',
         ],
     ]);
+});
+
+it('calculates coupon discount of limited usage coupon', function () {
+    actingAs($this->user);
+
+    postJson(
+        route('coupon.discount'),
+        [
+            'coupon' => [
+                'id' => $this->limitedUsageCoupon->id,
+                'code' => $this->limitedUsageCoupon->code,
+            ],
+            'couponables_type' => $this->couponable->code,
+
+            'payment_plan' => [
+                'id' => $this->paymentPlan->id,
+            ],
+            'items' => [
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 1,
+                    'declared_value_per_unit' => 500,
+                ],
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 1,
+                    'declared_value_per_unit' => 500,
+                ],
+            ],
+        ]
+    )->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'coupon',
+                'discounted_amount',
+            ],
+        ]);
+});
+
+it('can not calculate coupon discount if usage limit is reached', function () {
+    $this->order = Order::factory()->for($this->user)->for($this->limitedUsageCoupon)->create();
+    CouponLog::factory()->for($this->order)->for($this->user)->for($this->limitedUsageCoupon)->create();
+
+    postJson(
+        route('coupon.discount'),
+        [
+            'coupon' => [
+                'id' => $this->limitedUsageCoupon->id,
+                'code' => $this->limitedUsageCoupon->code,
+            ],
+            'couponables_type' => $this->couponable->code,
+
+            'payment_plan' => [
+                'id' => $this->paymentPlan->id,
+            ],
+            'items' => [
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 1,
+                    'declared_value_per_unit' => 500,
+                ],
+                [
+                    'card_product' => [
+                        'id' => $this->cardProduct->id,
+                    ],
+                    'quantity' => 1,
+                    'declared_value_per_unit' => 500,
+                ],
+            ],
+        ]
+    )->assertStatus(422);
 });

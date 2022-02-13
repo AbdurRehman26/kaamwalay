@@ -44,7 +44,7 @@ class StoreCouponRequest extends FormRequest
         return [
             'code' => ['required'],
             'description' => ['required', 'max:250'],
-            'type' => ['required', 'in:fixed,percentage'],
+            'type' => ['required', 'in:fixed,percentage,flat'],
             'discount_value' => ['required', 'numeric'],
             'coupon_applicable_id' => ['required', 'exists:coupon_applicables,id'],
             'available_from' => [
@@ -71,6 +71,10 @@ class StoreCouponRequest extends FormRequest
                     ),
                     Rule::exists(CouponApplicable::ENTITIES_MAPPING[$this->input('coupon_applicable_id')] ?? null, 'id')
                 ),
+            ],
+            'usage_allowed_per_user' => [
+                'present',
+                Rule::in([null, 1]),
             ],
         ];
     }

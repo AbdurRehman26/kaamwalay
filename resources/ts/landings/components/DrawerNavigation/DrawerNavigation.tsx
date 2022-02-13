@@ -181,7 +181,7 @@ export function DrawerNavigation() {
 
                         {!authenticated ? (
                             <Button
-                                href={'/auth/sign-in'}
+                                href={'/auth/login'}
                                 variant={'text'}
                                 color={'inherit'}
                                 className={classes.button}

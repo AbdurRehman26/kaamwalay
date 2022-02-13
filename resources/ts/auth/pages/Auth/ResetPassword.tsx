@@ -51,7 +51,7 @@ export function ResetPassword() {
                 notifications.success(payload?.message);
             }
 
-            navigate('/sign-in');
+            navigate('/login');
         },
         [navigate, notifications, resetPassword],
     );
@@ -89,7 +89,7 @@ export function ResetPassword() {
                     <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={2}>
                         <MuiLink
                             component={Link}
-                            to={'/sign-in'}
+                            to={'/login'}
                             align={'center'}
                             color={'primary'}
                             underline={'hover'}
@@ -100,7 +100,7 @@ export function ResetPassword() {
                         </MuiLink>
                         <MuiLink
                             component={Link}
-                            to={'/sign-up'}
+                            to={'/signup'}
                             align={'center'}
                             color={'textSecondary'}
                             underline={'hover'}

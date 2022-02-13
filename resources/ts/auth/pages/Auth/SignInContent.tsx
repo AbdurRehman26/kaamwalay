@@ -11,15 +11,17 @@ import { SignInValidationRules } from './validation';
 import { FormInput } from './FormInput';
 import { SubmitButton } from './SubmitButton';
 import { ActionContent, FormRoot } from './style';
+import { useAppDispatch } from '../../../landings/redux/hooks';
+import { dialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
 
 interface Props {
-    handleChange: (abc: boolean) => void;
-    handleClose: (abc: boolean) => void;
+    handleContentChange: (isLogin: boolean) => void;
 }
 
 export function SignInContent(props: Props) {
-    const { handleChange, handleClose } = props;
+    const { handleContentChange } = props;
     const { login } = useAuth();
+    const dispatch = useAppDispatch();
     const initialState = useMemo<LoginRequestDto>(
         () => ({
             email: '',
@@ -31,8 +33,9 @@ export function SignInContent(props: Props) {
     const handleSubmit = useCallback(
         async ({ email, password }) => {
             await login(email, password);
+            dispatch(dialogVisibility(false));
         },
-        [login],
+        [login, dispatch],
     );
 
     return (
@@ -53,13 +56,14 @@ export function SignInContent(props: Props) {
                     </FormRoot>
 
                     <FormRoot>
-                        <SubmitButton handleClose={handleClose} isModal>
-                            Log in
-                        </SubmitButton>
+                        <SubmitButton isModal>Log in</SubmitButton>
                     </FormRoot>
 
                     <Box display={'flex'} width={'100%'} justifyContent={'center'}>
                         <MuiLink
+                            onClick={() => {
+                                window.location.href = '/password/forgot';
+                            }}
                             variant={'caption'}
                             color={'textPrimary'}
                             align={'center'}
@@ -70,13 +74,13 @@ export function SignInContent(props: Props) {
                         </MuiLink>
                     </Box>
                 </Grid>
-                <Divider variant={'fullWidth'} />
+                <Divider />
                 <ActionContent>
                     <Typography variant={'caption'} marginRight={2}>
                         New to AGS?
                     </Typography>
                     <MuiLink
-                        onClick={() => handleChange(false)}
+                        onClick={() => handleContentChange(false)}
                         fontWeight={500}
                         align={'center'}
                         color={'primary'}

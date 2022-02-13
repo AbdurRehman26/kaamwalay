@@ -10,15 +10,17 @@ import { FormInput } from './FormInput';
 import { SubmitButton } from './SubmitButton';
 import { PopupSignUpValidationRules } from './validation';
 import { ActionContent, FormRoot } from './style';
+import { useAppDispatch } from '../../../landings/redux/hooks';
+import { dialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
 
 interface Props {
-    handleChange: (abc: boolean) => void;
-    handleClose: (abc: boolean) => void;
+    handleContentChange: (isLogin: boolean) => void;
 }
 
 export function SignUpContent(props: Props) {
-    const { handleChange, handleClose } = props;
+    const { handleContentChange } = props;
     const { register } = useAuth();
+    const dispatch = useAppDispatch();
     const initialState = useMemo<SignUpRequestDto>(
         () => ({
             fullName: '',
@@ -34,8 +36,9 @@ export function SignUpContent(props: Props) {
         async (values) => {
             values = { ...values, passwordConfirmation: values.password };
             await register(values);
+            dispatch(dialogVisibility(false));
         },
-        [register],
+        [register, dispatch],
     );
 
     return (
@@ -64,9 +67,7 @@ export function SignUpContent(props: Props) {
                     </FormRoot>
 
                     <FormRoot>
-                        <SubmitButton handleClose={handleClose} isModal>
-                            Sign up
-                        </SubmitButton>
+                        <SubmitButton isModal>Sign up</SubmitButton>
                     </FormRoot>
                 </Grid>
                 <Divider />
@@ -75,7 +76,7 @@ export function SignUpContent(props: Props) {
                         Already have an account?
                     </Typography>
                     <MuiLink
-                        onClick={() => handleChange(true)}
+                        onClick={() => handleContentChange(true)}
                         fontWeight={500}
                         align={'center'}
                         color={'primary'}

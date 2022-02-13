@@ -72,7 +72,7 @@ export function SignUp() {
                     <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={2}>
                         <MuiLink
                             component={Link}
-                            to={'/sign-in'}
+                            to={'/login'}
                             align={'center'}
                             color={'primary'}
                             underline={'hover'}

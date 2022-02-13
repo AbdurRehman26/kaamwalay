@@ -14,6 +14,7 @@ const useStyles = makeStyles(
             height: 56,
             borderRadius: 28,
             marginBottom: 28,
+            background: '#20BFB8',
         },
     },
     { name: 'SubmitButton' },

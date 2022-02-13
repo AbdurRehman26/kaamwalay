@@ -43,16 +43,14 @@ export function AuthDialog({ subTitle, onClose, ...rest }: Props) {
     const handleClose = useCallback(
         (event: {}) => {
             if (onClose) {
-                console.log('A A A ', onclose);
-                console.log('Event ', event);
                 onClose(event, 'escapeKeyDown');
             }
         },
         [onClose],
     );
 
-    const handleChange = (data: boolean) => {
-        setSignIn(data);
+    const handleChange = (payload: boolean) => {
+        setSignIn(payload);
     };
 
     return (
@@ -80,9 +78,9 @@ export function AuthDialog({ subTitle, onClose, ...rest }: Props) {
 
             <DialogContent>
                 {isSignIn ? (
-                    <SignInContent handleChange={handleChange} handleClose={handleClose} />
+                    <SignInContent handleContentChange={handleChange} />
                 ) : (
-                    <SignUpContent handleChange={handleChange} handleClose={handleClose} />
+                    <SignUpContent handleContentChange={handleChange} />
                 )}
             </DialogContent>
         </Root>

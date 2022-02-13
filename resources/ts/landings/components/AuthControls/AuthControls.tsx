@@ -9,7 +9,8 @@ import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
 import { AuthDialog } from '../../../auth/pages/Auth/AuthDialog';
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../landings/redux/hooks';
+import { dialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -49,15 +50,13 @@ const useStyles = makeStyles(
 
 export function AuthControls() {
     const { checking, authenticated } = useAuth();
-    const [close, setClose] = useState(false);
     const classes = useStyles();
-
-    const showDialog = () => {
-        setClose(true);
-    };
+    const isAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.dialogOpened);
+    const dispatch = useAppDispatch();
+    console.log(useAppSelector((state) => state));
 
     const handleAuthDialogClose = () => {
-        setClose(false);
+        dispatch(dialogVisibility(false));
     };
 
     if (checking) {
@@ -81,8 +80,9 @@ export function AuthControls() {
                 </ButtonBase>
             ) : (
                 <Button
-                    onClick={showDialog}
-                    // href={'/login'}
+                    onClick={() => {
+                        dispatch(dialogVisibility(true));
+                    }}
                     color={'primary'}
                     className={cx(classes.button)}
                     startIcon={<PersonIcon />}
@@ -90,7 +90,7 @@ export function AuthControls() {
                     Log in
                 </Button>
             )}
-            <AuthDialog open={close} onClose={handleAuthDialogClose} subTitle="to Access Robograding" />
+            <AuthDialog open={isAuthDialogOpen} onClose={handleAuthDialogClose} subTitle="to Access Robograding" />
         </>
     );
 }

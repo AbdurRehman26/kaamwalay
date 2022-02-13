@@ -93,7 +93,7 @@ export function ForgotPassword() {
                     <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={2}>
                         <MuiLink
                             component={Link}
-                            to={'/sign-in'}
+                            to={'/login'}
                             align={'center'}
                             color={'primary'}
                             underline={'hover'}
@@ -104,7 +104,7 @@ export function ForgotPassword() {
                         </MuiLink>
                         <MuiLink
                             component={Link}
-                            to={'/sign-up'}
+                            to={'/signup'}
                             align={'center'}
                             color={'textSecondary'}
                             underline={'hover'}

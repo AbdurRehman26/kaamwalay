@@ -30,6 +30,6 @@ class CardSeries extends Model
 
     public function getReleaseDateAttribute(): string
     {
-        return $this->hasOne(CardSet::class)->oldest('release_date')->first()->release_date;
+        return $this->hasOne(CardSet::class)->oldest('release_date')->first()?->release_date ?? '';
     }
 }

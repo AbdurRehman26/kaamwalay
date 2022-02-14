@@ -13,6 +13,7 @@ use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\Shipping\ShippingFeeService;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 beforeEach(function () {
     $this->couponService = resolve(CouponService::class);
@@ -139,9 +140,12 @@ it('gives exception when flat coupon value is greater than order', function () {
 
 
 it('calculates stats for coupon', function () {
-    $this->order->discounted_amount = (float)$this->couponService->calculateDiscount($this->order->coupon, $this->order);
-    $discountedAmount = $this->order->grand_total - $this->order->discounted_amount;
-    $this->order->grand_total = max($discountedAmount, 0);
+
+    $this->order->coupon()->update(['type' => Coupon::TYPE_FIXED]);
+    $this->coupon->couponApplicable()->update(['code' => 'service_fee']);
+
+    $this->order->discounted_amount = (float) $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+    $this->order->grand_total = $this->order->grand_total - $this->order->discounted_amount;
     $this->order->save();
 
     $this->couponService->updateCouponLogs($this->order);

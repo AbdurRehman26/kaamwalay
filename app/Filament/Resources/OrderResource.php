@@ -9,6 +9,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 
 class OrderResource extends Resource
 {
@@ -22,50 +23,39 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
+                TextInput::make('id')->disabled(),
+                TextInput::make('user_id')
                     ->required(),
-                Forms\Components\HasManyRepeater::make('order_items')
-                    ->relationship('orderItems')
-                    ->schema([
-                        Forms\Components\TextInput::make('id')
-                            ->required(),
-                        Forms\Components\TextInput::make('declared_value_per_unit')
-                            ->required(),
-                        Forms\Components\TextInput::make('declared_value_total')
-                            ->required(),
-                        Forms\Components\TextInput::make('card_product_id')
-                            ->required(),
-                    ]),
-                Forms\Components\TextInput::make('payment_plan_id')
+                TextInput::make('payment_plan_id')
                     ->required(),
-                Forms\Components\TextInput::make('order_status_id'),
-                Forms\Components\TextInput::make('shipping_order_address_id')
+                TextInput::make('order_status_id'),
+                TextInput::make('shipping_order_address_id')
                     ->required(),
-                Forms\Components\TextInput::make('billing_order_address_id')
+                TextInput::make('billing_order_address_id')
                     ->required(),
-                Forms\Components\TextInput::make('payment_method_id')
+                TextInput::make('payment_method_id')
                     ->required(),
-                Forms\Components\TextInput::make('shipping_method_id')
+                TextInput::make('shipping_method_id')
                     ->required(),
-                Forms\Components\TextInput::make('coupon_id'),
-                Forms\Components\TextInput::make('order_shipment_id'),
-                Forms\Components\TextInput::make('order_customer_shipment_id'),
-                Forms\Components\TextInput::make('reviewed_by_id'),
-                Forms\Components\TextInput::make('graded_by_id'),
-                Forms\Components\TextInput::make('order_number')
+                TextInput::make('coupon_id'),
+                TextInput::make('order_shipment_id'),
+                TextInput::make('order_customer_shipment_id'),
+                TextInput::make('reviewed_by_id'),
+                TextInput::make('graded_by_id'),
+                TextInput::make('order_number')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('service_fee'),
-                Forms\Components\TextInput::make('shipping_fee'),
-                Forms\Components\TextInput::make('grand_total'),
-                Forms\Components\TextInput::make('amount_paid_from_wallet'),
-                Forms\Components\TextInput::make('grand_total_before_discount'),
-                Forms\Components\TextInput::make('discounted_amount'),
-                Forms\Components\TextInput::make('payment_method_discounted_amount'),
-                Forms\Components\TextInput::make('extra_charge_total')
+                TextInput::make('service_fee'),
+                TextInput::make('shipping_fee'),
+                TextInput::make('grand_total'),
+                TextInput::make('amount_paid_from_wallet'),
+                TextInput::make('grand_total_before_discount'),
+                TextInput::make('discounted_amount'),
+                TextInput::make('payment_method_discounted_amount'),
+                TextInput::make('extra_charge_total')
                     ->required(),
-                Forms\Components\TextInput::make('refund_total')
+                TextInput::make('refund_total')
                     ->required(),
-                Forms\Components\TextInput::make('invoice_id'),
+                TextInput::make('invoice_id'),
                 Forms\Components\Textarea::make('notes')
                     ->maxLength(65535),
             ]);
@@ -75,6 +65,7 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')->sortable(),
                 TextColumn::make('order_number')->label('Submission #')->searchable(),
                 TextColumn::make('created_at')->date('M j, Y')->label('Placed')->sortable(),
                 TextColumn::make('user.customer_number')->label('Customer'),
@@ -91,7 +82,7 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            OrderResource\RelationManagers\OrderItemsRelationManager::class,
         ];
     }
 

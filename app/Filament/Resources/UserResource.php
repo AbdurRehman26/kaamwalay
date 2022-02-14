@@ -8,8 +8,9 @@ use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 
 class UserResource extends Resource
 {
@@ -22,11 +23,12 @@ class UserResource extends Resource
         return ['email', 'customer_number'];
     }
 
-    public static function getGlobalSearchResultDetails(Model $user): array
+    public static function getGlobalSearchResultDetails(Model $record): array
     {
+        /** @var User $record */
         return [
-            'Email' => $user->email,
-            'Customer Number' => $user->customer_number,
+            'Email' => $record->email,
+            'Customer Number' => $record->customer_number,
         ];
     }
 
@@ -34,29 +36,30 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('first_name')
+                TextInput::make('id')->disabled(),
+                TextInput::make('first_name')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('last_name')
+                TextInput::make('last_name')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
+                TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('customer_number')
+                TextInput::make('customer_number')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('username')
+                TextInput::make('username')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
+                TextInput::make('phone')
                     ->tel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('profile_image')
+                TextInput::make('profile_image')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('stripe_id')
+                TextInput::make('stripe_id')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('pm_type')
+                TextInput::make('pm_type')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('pm_last_four')
+                TextInput::make('pm_last_four')
                     ->maxLength(4),
                 Forms\Components\BelongsToManyMultiSelect::make('role')
                     ->relationship('roles', 'name'),
@@ -67,23 +70,24 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('first_name'),
-                Tables\Columns\TextColumn::make('last_name'),
-                Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('customer_number')->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('first_name'),
+                TextColumn::make('last_name'),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('customer_number')->searchable(),
+                TextColumn::make('email_verified_at')
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('username'),
-                Tables\Columns\TextColumn::make('phone'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('username'),
+                TextColumn::make('phone'),
+                TextColumn::make('created_at')
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('stripe_id'),
-                Tables\Columns\TextColumn::make('pm_type'),
-                Tables\Columns\TextColumn::make('pm_last_four'),
+                TextColumn::make('stripe_id'),
+                TextColumn::make('pm_type'),
+                TextColumn::make('pm_last_four'),
             ])
             ->filters([
                 //

@@ -99,15 +99,7 @@ test('a customer can update order addresses', function () {
             'save_for_later' => true,
         ],
         'customer_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'id' => null
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
@@ -200,15 +192,7 @@ test('a customer can complete his order including wallet payment', function () {
             'save_for_later' => true,
         ],
         'customer_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,

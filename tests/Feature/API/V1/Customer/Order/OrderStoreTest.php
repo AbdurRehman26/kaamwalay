@@ -99,7 +99,7 @@ test('a customer can update order addresses', function () {
             'save_for_later' => true,
         ],
         'customer_address' => [
-            'id' => null
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,

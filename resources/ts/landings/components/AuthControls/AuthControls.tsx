@@ -53,7 +53,6 @@ export function AuthControls() {
     const classes = useStyles();
     const isAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.dialogOpened);
     const dispatch = useAppDispatch();
-    console.log(useAppSelector((state) => state));
 
     const handleAuthDialogClose = () => {
         dispatch(dialogVisibility(false));

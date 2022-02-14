@@ -3,13 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 
 class OrderResource extends Resource
 {
@@ -18,6 +19,8 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
     protected static ?string $recordTitleAttribute = 'order_number';
+
+    protected static ?string $navigationGroup = 'Order Management';
 
     public static function form(Form $form): Form
     {
@@ -82,7 +85,7 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            OrderResource\RelationManagers\OrderItemsRelationManager::class,
+            RelationManagers\OrderItemsRelationManager::class,
         ];
     }
 

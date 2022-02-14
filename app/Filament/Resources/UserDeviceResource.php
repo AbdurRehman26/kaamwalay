@@ -15,6 +15,8 @@ class UserDeviceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-device-mobile';
 
+    protected static ?string $navigationGroup = 'User Management';
+
     public static function form(Form $form): Form
     {
         return $form

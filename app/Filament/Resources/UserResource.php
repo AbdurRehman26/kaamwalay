@@ -18,6 +18,10 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    protected static ?string $recordTitleAttribute = 'customer_number';
+
+    protected static ?string $navigationGroup = 'User Management';
+
     public static function getGloballySearchableAttributes(): array
     {
         return ['email', 'customer_number'];
@@ -71,27 +75,30 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
+                TextColumn::make('customer_number')->searchable(),
                 TextColumn::make('first_name'),
                 TextColumn::make('last_name'),
                 TextColumn::make('email')->searchable(),
-                TextColumn::make('customer_number')->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime(),
                 TextColumn::make('username'),
                 TextColumn::make('phone'),
-                TextColumn::make('created_at')
-                    ->dateTime(),
-                TextColumn::make('updated_at')
-                    ->dateTime(),
-                TextColumn::make('deleted_at')
+                TextColumn::make('email_verified_at')
                     ->dateTime(),
                 TextColumn::make('stripe_id'),
                 TextColumn::make('pm_type'),
                 TextColumn::make('pm_last_four'),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('deleted_at')
+                    ->dateTime(),
             ])
             ->filters([
                 //
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

@@ -5,12 +5,12 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CardProductResource\Pages;
 use App\Models\CardProduct;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 
 class CardProductResource extends Resource
 {
@@ -19,6 +19,8 @@ class CardProductResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $navigationGroup = 'Card Management';
 
     public static function form(Form $form): Form
     {
@@ -77,6 +79,7 @@ class CardProductResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')->sortable(),
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('card_reference_id')->searchable(),
                 TextColumn::make('cardCategory.name')->label('Category')->sortable(),
@@ -96,9 +99,11 @@ class CardProductResource extends Resource
                 TextColumn::make('variant_name'),
                 TextColumn::make('holo_type'),
                 TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->sortable(),
                 TextColumn::make('updated_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->sortable(),
                 TextColumn::make('description'),
                 Tables\Columns\BooleanColumn::make('added_manually'),
                 TextColumn::make('added_by'),

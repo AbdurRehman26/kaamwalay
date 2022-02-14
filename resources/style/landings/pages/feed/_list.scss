@@ -2,10 +2,11 @@
 @use '../../../shared/theme';
 
 .feed-list {
-    padding: 48px 0;
-    background: linear-gradient(103.29deg, #140078 -18.4%, #6c31bc 112.42%);
+    padding: 20px 0;
     flex: 1 1 auto;
-    color: #fff;
+    color: #000000de;
+    background-color: #ffffff;
+    display: none;
 
     @include breakpoints.down(sm) {
         padding-top: 24px;
@@ -29,7 +30,7 @@
         }
 
         &-row {
-            border-bottom: 1px solid transparentize(#fff, 0.7);
+            border-bottom: 1px solid #e0e0e0;
         }
 
         &-cell {

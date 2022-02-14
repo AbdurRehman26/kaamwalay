@@ -1,0 +1,102 @@
+.feed-list-grid {
+    background: #ffffff;
+    display: block;
+
+    &__top-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
+    &__text {
+        padding: 10px 10px;
+    }
+
+    &__grade-nickname {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 12px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__overall-grade {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 900;
+        font-size: 24px;
+        line-height: 24px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__grade {
+        padding: 5px 5px;
+        margin: 10px 10px;
+        width: 100px;
+        height: 60px;
+        background: #20bfb8;
+        border-radius: 4px;
+    }
+
+    &__card-name {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0.2px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    &__card-long-name {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.2px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    &__grid-view {
+        width: 300px;
+        height: 411px;
+        left: 80px;
+        top: 442px;
+        background: #ffffff;
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        flex: 1 1 auto;
+        display: inline-flex;
+        flex-direction: column;
+        margin: 10px 4px;
+        align-items: center;
+    }
+
+    &__image-section {
+        padding: 10px 10px;
+    }
+
+    &__image {
+        width: 170.66px;
+        height: 237.78px;
+        left: 147.17px;
+        top: 542.35px;
+    }
+
+    &__bottom-section {
+        width: 100%;
+        padding: 10px 10px;
+    }
+
+    &__graded-date,
+    &__certificate,
+    &__owner-name {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.2px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+}

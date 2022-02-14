@@ -5,13 +5,22 @@
     background-color: #160056;
 
     &__container {
-        display: flex;
-        justify-content: space-between;
-        align-items: stretch;
+        margin: auto;
+        width: 100%;
+        padding: 10px;
+    }
+
+    &__input {
+        width: 640px;
+        height: 48px;
+        left: 400px;
+        top: 234px;
+        background: #ffffff;
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2);
+        border-radius: 24px;
     }
 
     &__text {
-        @apply w-8/12 flex justify-center items-start flex-col;
         padding: 24px 0;
         @include breakpoints.down(xs) {
             @apply items-center w-full;
@@ -24,6 +33,7 @@
         }
 
         &-heading {
+            text-align: center;
             color: $color;
             font-weight: 700;
             font-size: 48px;
@@ -36,6 +46,7 @@
         }
 
         &-subheading {
+            text-align: center;
             font-size: 16px;
             @include breakpoints.down(sm) {
                 font-size: 14px;

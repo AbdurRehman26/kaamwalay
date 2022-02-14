@@ -140,7 +140,8 @@ it('gives exception when flat coupon value is greater than order', function () {
 
 it('calculates stats for coupon', function () {
     $this->order->discounted_amount = (float)$this->couponService->calculateDiscount($this->order->coupon, $this->order);
-    $this->order->grand_total = $this->order->grand_total - $this->order->discounted_amount;
+    $discountedAmount = $this->order->grand_total - $this->order->discounted_amount;
+    $this->order->grand_total = max($discountedAmount, 0);
     $this->order->save();
 
     $this->couponService->updateCouponLogs($this->order);

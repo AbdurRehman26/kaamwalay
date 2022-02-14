@@ -241,12 +241,16 @@ export const ManageCardDialogCreateCardView = forwardRef(
                     return cat.id === e.target.value;
                 })[0];
 
-                dispatch(manageCardDialogActions.setSelectedCategory(category));
-                dispatch(manageCardDialogActions.setSelectedCardSeries(null));
+                batch(() => {
+                    dispatch(manageCardDialogActions.setSelectedCategory(category));
+                    dispatch(manageCardDialogActions.setSelectedCardSeries(null));
+                    dispatch(manageCardDialogActions.setSelectedCardSet(null));
+                });
 
                 setSelectedSeries(null);
                 setSelectedSet(null);
                 setSelectedRarity(null);
+                setReleaseDate(null);
 
                 fetchSeries(e.target.value);
                 fetchDropdownsData(e.target.value);
@@ -258,7 +262,10 @@ export const ManageCardDialogCreateCardView = forwardRef(
             (e, newValue) => {
                 setSelectedSeries(newValue);
                 setSelectedSet(null);
-                dispatch(manageCardDialogActions.setSelectedCardSeries(newValue));
+                batch(() => {
+                    dispatch(manageCardDialogActions.setSelectedCardSeries(newValue));
+                    dispatch(manageCardDialogActions.setSelectedCardSet(null));
+                });
 
                 fetchSets(newValue.id);
             },
@@ -369,7 +376,6 @@ export const ManageCardDialogCreateCardView = forwardRef(
                             })}
                         </Select>
                     </FormControl>
-                    {'Length: ' + availableSeries.length}
 
                     <Box
                         display={'flex'}

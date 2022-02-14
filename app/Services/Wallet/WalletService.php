@@ -2,7 +2,8 @@
 
 namespace App\Services\Wallet;
 
-use App\Exceptions\API\Wallet\InvalidWalletTransactionException;
+use App\Enums\Wallet\WalletTransactionReason;
+use App\Enums\Wallet\WalletTransactionType;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Wallet;
@@ -20,16 +21,20 @@ class WalletService
         $wallet->save();
     }
 
-    public function processTransaction(int $walletId, float $amount, string $reason, int $userId, ?int $orderId): void
-    {
+    public function processTransaction(
+        int $walletId,
+        float $amount,
+        WalletTransactionReason $reason,
+        int $userId,
+        ?int $orderId
+    ): void {
         $wallet = Wallet::find($walletId);
 
         match ($reason) {
-            WalletTransaction::REASON_REFUND => $this->processRefund($wallet, $amount, $userId, $orderId),
-            WalletTransaction::REASON_ORDER_PAYMENT => $this->processOrderPayment($wallet, $amount, $orderId),
-            WalletTransaction::REASON_WALLET_CREDIT => $this->processCustomerWalletCredit($wallet, $amount, $userId),
-            WalletTransaction::REASON_WALLET_PAYMENT => $this->processWalletPayment($wallet, $amount),
-            default => new InvalidWalletTransactionException,
+            WalletTransactionReason::REFUND => $this->processRefund($wallet, $amount, $userId, $orderId),
+            WalletTransactionReason::ORDER_PAYMENT => $this->processOrderPayment($wallet, $amount, $orderId),
+            WalletTransactionReason::WALLET_CREDIT => $this->processCustomerWalletCredit($wallet, $amount, $userId),
+            WalletTransactionReason::WALLET_PAYMENT => $this->processWalletPayment($wallet, $amount),
         };
     }
 
@@ -42,9 +47,9 @@ class WalletService
             'created_by' => $userId,
             'order_id' => $order->id,
             'amount' => $amount,
-            'type' => WalletTransaction::TYPE_CREDIT,
+            'type' => WalletTransactionType::CREDIT,
             'is_success' => true,
-            'reason' => WalletTransaction::REASON_REFUND,
+            'reason' => WalletTransactionReason::REFUND,
         ]);
 
         $wallet->increment('balance', $amount);
@@ -59,9 +64,9 @@ class WalletService
             'created_by' => $order->user_id,
             'order_id' => $order->id,
             'amount' => $amount,
-            'type' => WalletTransaction::TYPE_DEBIT,
+            'type' => WalletTransactionType::DEBIT,
             'is_success' => true,
-            'reason' => WalletTransaction::REASON_ORDER_PAYMENT,
+            'reason' => WalletTransactionReason::ORDER_PAYMENT,
         ]);
 
         $wallet->decrement('balance', $amount);
@@ -74,9 +79,9 @@ class WalletService
             'created_by' => $wallet->user_id,
             'wallet_payment_id' => $wallet->lastTransaction->id,
             'amount' => $amount,
-            'type' => WalletTransaction::TYPE_CREDIT,
+            'type' => WalletTransactionType::CREDIT,
             'is_success' => true,
-            'reason' => WalletTransaction::REASON_WALLET_PAYMENT,
+            'reason' => WalletTransactionReason::WALLET_PAYMENT,
         ]);
 
         $wallet->increment('balance', $amount);
@@ -88,9 +93,9 @@ class WalletService
             'wallet_id' => $wallet->id,
             'created_by' => $userId,
             'amount' => $amount,
-            'type' => WalletTransaction::TYPE_CREDIT,
+            'type' => WalletTransactionType::CREDIT,
             'is_success' => true,
-            'reason' => WalletTransaction::REASON_WALLET_CREDIT,
+            'reason' => WalletTransactionReason::WALLET_CREDIT,
         ]);
 
         $wallet->increment('balance', $amount);

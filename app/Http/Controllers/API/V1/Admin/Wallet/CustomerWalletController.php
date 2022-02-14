@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\API\V1\Admin\Wallet;
 
+use App\Enums\Wallet\WalletTransactionReason;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Wallet\CustomerWalletCreditRequest;
 use App\Http\Resources\API\V1\Admin\Wallet\WalletResource;
 use App\Http\Resources\API\V1\Admin\Wallet\WalletTransactionCollection;
 use App\Models\Wallet;
-use App\Models\WalletTransaction;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,7 +27,7 @@ class CustomerWalletController extends Controller
     {
         $wallet->makeTransaction(
             amount: $request->input('amount'),
-            reason: WalletTransaction::REASON_WALLET_CREDIT,
+            reason: WalletTransactionReason::WALLET_CREDIT,
             userId: auth()->user()->id
         );
 

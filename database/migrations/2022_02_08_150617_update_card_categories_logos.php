@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateCardCategoriesLogos extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -35,4 +35,4 @@ class UpdateCardCategoriesLogos extends Migration
     {
         //
     }
-}
+};

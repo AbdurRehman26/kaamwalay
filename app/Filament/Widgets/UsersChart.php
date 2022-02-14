@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Order;
 use App\Models\User;
 use Filament\Widgets\LineChartWidget;
 use Flowframe\Trend\Trend;

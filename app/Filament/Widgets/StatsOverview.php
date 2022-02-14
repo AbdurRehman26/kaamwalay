@@ -5,8 +5,8 @@ namespace App\Filament\Widgets;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\User;
-use Filament\Widgets\StatsOverviewWidget\Card;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Filament\Widgets\StatsOverviewWidget\Card;
 
 class StatsOverview extends BaseWidget
 {

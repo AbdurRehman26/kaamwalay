@@ -36,7 +36,7 @@ class PaidOrdersChart extends LineChartWidget
         $data = Trend::query(
             Order::query()
                 ->placed()
-            )
+        )
             ->between(
                 start: $start,
                 end: now()->endOfDay(),

@@ -19,7 +19,7 @@ class DateBetweenRule implements Rule
             is_null($value) ||
             (
                 str_contains($value, ',') &&
-                count(explode(',', $value)) > 1 &&
+                count(explode(',', $value)) === 2 &&
                 $this->validDates(explode(',', $value))
             )
         ) {

@@ -34,6 +34,7 @@ class ListCustomerRequest extends FormRequest
             )) {
             return true;
         }
+
         return false;
     }
 }

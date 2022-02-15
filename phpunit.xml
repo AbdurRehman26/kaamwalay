@@ -18,24 +18,24 @@
         </include>
     </coverage>
     <php>
-        <server name="APP_ENV" value="testing"/>
-        <server name="APP_KEY" value="base64:b5Aphwl3JpIuetTrM8dGLOe5yv7LGb2dXZeTmHzCfC5="/>
-        <server name="BCRYPT_ROUNDS" value="4"/>
-        <server name="CACHE_DRIVER" value="array"/>
-        <server name="DB_CONNECTION" value="sqlite"/>
-        <server name="DB_DATABASE" value=":memory:"/>
-        <server name="MAIL_MAILER" value="array"/>
-        <server name="QUEUE_CONNECTION" value="sync"/>
-        <server name="SESSION_DRIVER" value="array"/>
-        <server name="TELESCOPE_ENABLED" value="false"/>
-        <server name="JWT_SECRET" value="test_jwt_secret"/>
-        <server name="SCOUT_DRIVER" value="null"/>
-        <server name="AGS_BASE_URL" value="https://ags.api"/>
-        <server name="AGS_AUTHORIZATION_TOKEN" value="12345"/>
-        <server name="MANDRILL_KEY" value="12345"/>
-        <server name="AWS_BUCKET" value="robograding"/>
-        <server name="AWS_DEFAULT_REGION" value="us-west-2"/>
-        <server name="PUSHER_BEAMS_INSTANCE_ID" value="adhj123"/>
-        <server name="PUSHER_BEAMS_SECRET_KEY" value="BCA3C2F"/>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_KEY" value="base64:b5Aphwl3JpIuetTrM8dGLOe5yv7LGb2dXZeTmHzCfC5="/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="JWT_SECRET" value="test_jwt_secret"/>
+        <env name="SCOUT_DRIVER" value="null"/>
+        <env name="AGS_BASE_URL" value="https://ags.api"/>
+        <env name="AGS_AUTHORIZATION_TOKEN" value="12345"/>
+        <env name="MANDRILL_KEY" value="12345"/>
+        <env name="AWS_BUCKET" value="robograding"/>
+        <env name="AWS_DEFAULT_REGION" value="us-west-2"/>
+        <env name="PUSHER_BEAMS_INSTANCE_ID" value="adhj123"/>
+        <env name="PUSHER_BEAMS_SECRET_KEY" value="BCA3C2F"/>
     </php>
 </phpunit>

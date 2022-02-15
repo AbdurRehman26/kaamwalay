@@ -31,6 +31,21 @@ const StyledBox = styled(Box)(
     { name: 'StyledBox' },
 );
 
+const PaginationFooter = styled(TableRow)(({ theme }) => ({
+    background: 'white',
+    position: 'fixed',
+    left: '72%',
+    bottom: '0',
+    [theme.breakpoints.down('sm')]: {
+        width: '100%',
+        left: '50%',
+    },
+}));
+
+const TableMargin = styled(TableContainer)(({ theme }) => ({
+    marginBottom: theme.spacing(7),
+}));
+
 interface SubmissionsTableProps {
     search?: string;
 }
@@ -42,6 +57,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
         params: {
             filter: { orderNumber: search },
             include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
+            perPage: 48,
         },
         ...bracketParams(),
     });
@@ -71,9 +87,16 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
 
     const footer$ = (
         <TableFooter>
-            <TableRow>
-                <TablePagination {...orders$.paginationProps} />
-            </TableRow>
+            <PaginationFooter>
+                <TableRow>
+                    <TablePagination
+                        {...{
+                            ...orders$.paginationProps,
+                            rowsPerPageOptions: [48],
+                        }}
+                    />
+                </TableRow>
+            </PaginationFooter>
         </TableFooter>
     );
 
@@ -130,30 +153,34 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
             {isSm ? (
                 <>
                     {items$}
-                    <TableContainer>
-                        <Table>{footer$}</Table>
-                    </TableContainer>
+                    <TableMargin>
+                        <TableContainer>
+                            <Table>{footer$}</Table>
+                        </TableContainer>
+                    </TableMargin>
                 </>
             ) : (
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell variant={'head'}>Submission #</TableCell>
-                                <TableCell variant={'head'}>Date Placed</TableCell>
-                                <TableCell variant={'head'}>Date Confirmed</TableCell>
-                                <TableCell variant={'head'}>Service Level</TableCell>
-                                <TableCell variant={'head'}># Cards</TableCell>
-                                <TableCell variant={'head'}>Status</TableCell>
-                                <TableCell variant={'head'} />
-                            </TableRow>
-                        </TableHead>
+                <TableMargin>
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell variant={'head'}>Submission #</TableCell>
+                                    <TableCell variant={'head'}>Date Placed</TableCell>
+                                    <TableCell variant={'head'}>Date Confirmed</TableCell>
+                                    <TableCell variant={'head'}>Service Level</TableCell>
+                                    <TableCell variant={'head'}># Cards</TableCell>
+                                    <TableCell variant={'head'}>Status</TableCell>
+                                    <TableCell variant={'head'} />
+                                </TableRow>
+                            </TableHead>
 
-                        <TableBody>{items$}</TableBody>
+                            <TableBody>{items$}</TableBody>
 
-                        {footer$}
-                    </Table>
-                </TableContainer>
+                            {items$.length > 0 ? footer$ : null}
+                        </Table>
+                    </TableContainer>
+                </TableMargin>
             )}
         </>
     );

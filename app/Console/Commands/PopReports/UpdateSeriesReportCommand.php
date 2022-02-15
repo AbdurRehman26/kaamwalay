@@ -21,6 +21,7 @@ class UpdateSeriesReportCommand extends Command
      * @var string
      */
     protected $description = 'Update Series Reports';
+
     /**
      * Execute the console command.
      *
@@ -37,7 +38,7 @@ class UpdateSeriesReportCommand extends Command
 
             $this->info('Updating reports for card series ' . $cardSeries->id . ' completed');
         }
-        
+
         return 0;
     }
 }

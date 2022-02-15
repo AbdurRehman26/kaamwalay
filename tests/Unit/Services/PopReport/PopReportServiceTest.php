@@ -28,7 +28,7 @@ beforeEach(function () {
 test('get series report list', function () {
     $cardSeriesId = $this->userCard->orderItem->cardProduct->cardSet->card_series_id;
     $this->service->updateSeriesReport(CardSeries::find($cardSeriesId));
-    $response = $this->service->getSeriesReport();
+    $response = $this->service->getSeriesReport($this->userCard->orderItem->cardProduct->cardSet->cardSeries->cardCategory);
     expect(1)->toBe(count($response->items()));
 });
 

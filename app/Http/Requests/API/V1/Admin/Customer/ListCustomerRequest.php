@@ -17,8 +17,9 @@ class ListCustomerRequest extends FormRequest
         return [
             'filter.signed_up_between' => ['sometimes', new DateBetweenRule],
             'filter.submissions' => ['sometimes', function ($attribute, $value, $fail) {
-                    return $this->validateSubmissionFilter($value) ??
+                    if(!$this->validateSubmissionFilter($value)){
                         $fail('Both Min. and Max. fields of submission are required.');
+                    }
                 },
             ],
         ];

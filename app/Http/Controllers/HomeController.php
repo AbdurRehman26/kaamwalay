@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function getView(): RedirectResponse
+    public function getView(): View
     {
-        return redirect()->route('dashboard.main', [
-            'path' => '/',
-            'rfsn' => request()->query->get('rfsn'),
-        ]);
+        return view('landings.home.view');
     }
 }

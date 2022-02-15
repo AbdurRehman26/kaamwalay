@@ -5,7 +5,7 @@ namespace App\Rules\Customer;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
 
-class CreatedAtBetweenRule implements Rule
+class DateBetweenRule implements Rule
 {
     /**
      * Determine if the validation rule passes.

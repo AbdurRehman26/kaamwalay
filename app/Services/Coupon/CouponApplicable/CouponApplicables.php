@@ -13,6 +13,8 @@ trait CouponApplicables
         switch ($coupon->type) {
             case 'percentage':
                 return $this->getPercentageDiscount($coupon, $order);
+            case 'flat':
+                return $this->getFlatDiscount($coupon, $order);
             default:
                 return $this->getFixedDiscount($coupon, $order);
         }

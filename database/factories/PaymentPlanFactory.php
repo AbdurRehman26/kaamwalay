@@ -9,13 +9,6 @@ use App\Models\PaymentPlan;
 class PaymentPlanFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = PaymentPlan::class;
-
-    /**
      * Define the model's default state.
      *
      * @return array

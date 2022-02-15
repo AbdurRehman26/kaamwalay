@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class AddInitialOrderStates extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -49,4 +49,4 @@ class AddInitialOrderStates extends Migration
     {
         DB::table('order_states')->truncate();
     }
-}
+};

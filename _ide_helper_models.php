@@ -247,6 +247,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Coupon onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon query()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon status(string|int $status)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon validForUserLimit(string $couponCode, \App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon validOnCouponable(array $couponParams)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon validOnCurrentDate()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereAvailableFrom($value)
@@ -315,6 +316,7 @@ namespace App\Models{
  * @property-read \App\Models\Coupon $coupon
  * @property-read \App\Models\Order $order
  * @property-read \App\Models\User $user
+ * @method static \Database\Factories\CouponLogFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CouponLog query()
@@ -1616,7 +1618,11 @@ namespace App\Models{
 }
 
 namespace App\Models{
-/**
+
+    use App\Enums\Wallet\WalletTransactionReason;
+    use App\Enums\Wallet\WalletTransactionType;
+
+    /**
  * App\Models\WalletTransaction
  *
  * @property int $id
@@ -1625,8 +1631,8 @@ namespace App\Models{
  * @property int|null $order_id order ID will be available when refund happened or user pay from wallet
  * @property int|null $wallet_payment_id wallet payment ID will be available when user adds amount to wallet
  * @property float $amount
- * @property int $type 1 => credit, 2 => debit
- * @property int $reason 1 => refund, 2 => order_payment, 3 => wallet_payment
+ * @property WalletTransactionType $type
+ * @property WalletTransactionReason $reason
  * @property bool $is_success
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

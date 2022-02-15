@@ -1,9 +1,16 @@
 <?php
 
 use App\Models\CustomerAddress;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 beforeEach(function () {
-    $addresses = CustomerAddress::factory()->count(2)->create();
+    $addresses = CustomerAddress::factory()
+        ->count(2)
+        ->state(new Sequence(
+            ['id' => 1],
+            ['id' => 2]
+        ))
+        ->create();
     $this->user = $addresses->first()->user;
     $this->actingAs($this->user);
 });

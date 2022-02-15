@@ -1,6 +1,9 @@
-.feed-list-grid {
-    background: #ffffff;
-    display: block;
+@use '../../../shared/breakpoints';
+
+.feed-grid {
+    @include breakpoints.down(768) {
+        display: none !important;
+    }
 
     &__top-section {
         display: flex;

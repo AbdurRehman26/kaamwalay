@@ -1,8 +1,6 @@
 @use '../../../shared/breakpoints';
 
 .feed-list-categories {
-    background: #ffffff;
-
     &__container {
         display: flex;
         justify-content: space-between;
@@ -98,6 +96,29 @@
     }
 }
 .feed-stats {
+    &__text-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    &__heading {
+        padding: 20px 20px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0.5px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    &__close-button {
+        width: 20%;
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 30px;
+    }
+
     &__container {
         display: flex;
         justify-content: space-between;
@@ -111,7 +132,6 @@
     &__sort-and-filter {
         width: 140px;
         height: 40px;
-        background: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.18);
         box-sizing: border-box;
         border-radius: 24px;
@@ -121,6 +141,10 @@
         line-height: 20px;
         letter-spacing: 0.2px;
         color: rgba(0, 0, 0, 0.54);
+        display: none;
+        @include breakpoints.down(768) {
+            display: block;
+        }
     }
 
     &__text {
@@ -136,8 +160,18 @@
         font-style: normal;
         font-weight: 500;
         font-size: 12px;
-        line-height: 16px;
         letter-spacing: 0.4px;
         color: rgba(0, 0, 0, 0.54);
+    }
+
+    &__sort-and-filter-mobile {
+        height: 100%;
+        width: 0%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: white;
+        overflow-x: hidden;
     }
 }

@@ -2,8 +2,11 @@
     <x-slot name="head">
         <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js" integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js" integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
     </x-slot>
     <x-slot name="body">
+        <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
         <script>
             const searchClient = algoliasearch(
                 '{{ config("scout.algolia.id") }}', 
@@ -222,32 +225,32 @@
             const { hits, widgetParams } = renderOptions;
 
             widgetParams.container.innerHTML = 
-                `<div class="container feed-list-grid__container">
+                `<div class="container feed-grid__container">
                         ${hits
                             .map(
                             item =>
-                            `<div class="feed-list-grid__grid-view">
-                                    <div class="feed-list-grid__top-section">
-                                        <aside class = "feed-list-grid__text">
-                                            <h1 class="feed-list-grid__card-name">${item.card_name}</h1>
-                                            <p class="feed-list-grid__card-long-name">${item.searchable_name}</p>
+                            `<div class="feed-grid__grid-view">
+                                    <div class="feed-grid__top-section">
+                                        <aside class = "feed-grid__text">
+                                            <h1 class="feed-grid__card-name">${item.card_name}</h1>
+                                            <p class="feed-grid__card-long-name">${item.searchable_name}</p>
                                         </aside>
-                                        <aside class = "feed-list-grid__grade">
-                                            <p class = "feed-list-grid__grade-nickname">${item.grade_nickname}</p>
-                                            <p class = "feed-list-grid__overall-grade">${item.overall_grade}</p>
+                                        <aside class = "feed-grid__grade">
+                                            <p class = "feed-grid__grade-nickname">${item.grade_nickname}</p>
+                                            <p class = "feed-grid__overall-grade">${item.overall_grade}</p>
                                         </aside>
                                     </div>
-                                    <div class="feed-list-grid__image-section">
+                                    <div class="feed-grid__image-section">
                                         <img 
-                                            class="feed-list-grid__image" 
+                                            class="feed-grid__image" 
                                             src="${item.card_image}" 
                                             alt="${item.card_name}"
                                         >
                                     </div>
-                                    <div class="feed-list-grid__bottom-section">
-                                        <p class="feed-list-grid__graded-date">Date Graded: 08/24/2021 at 11:24 AM</p>
-                                        <p class="feed-list-grid__certificate">Certificate #: ${item.certificate_number}</p>
-                                        <p class="feed-list-grid__owner-name">Owner: ${item.owner_name}</p>
+                                    <div class="feed-grid__bottom-section">
+                                        <p class="feed-grid__graded-date">Date Graded: 08/24/2021 at 11:24 AM</p>
+                                        <p class="feed-grid__certificate">Certificate #: ${item.certificate_number}</p>
+                                        <p class="feed-grid__owner-name">Owner: ${item.owner_name}</p>
                                     </div>
                             </div>`
                             )
@@ -450,20 +453,29 @@
 
             search.start();
 
-            var grid = document.getElementById("gridView");
-            var list = document.getElementById("listView");
+            var grid = document.getElementsByClassName("feed-grid");
+            var list = document.getElementsByClassName("feed-list");
+            var mobile_display = document.getElementsByClassName("feed-stats__sort-and-filter-mobile");
+            list[0].style.display = "none";
 
             function listView() {
-                if (list.style.display === "none") {
-                    list.style.display = "block";
-                    grid.style.display = "none";
+                if (list[0].style.display === "none") {
+                    list[0].style.display = "block";
+                    grid[0].style.display = "none";
                 }
             }
             function gridView() {
-                if (grid.style.display === "none") {
-                    grid.style.display = "block";
-                    list.style.display = "none";
+                if (grid[0].style.display === "none") {
+                    grid[0].style.display = "block";
+                    list[0].style.display = "none";
                 }
+            }
+            function openFilterSort() {
+                mobile_display[0].style.width = "100%";
+            }
+
+            function closeFilterSort() {
+                mobile_display[0].style.width = "0%";
             }
         </script>
     </x-slot>
@@ -495,14 +507,147 @@
     <section class="feed-stats">
         <div class="container feed-stats__container">
             <div class=" feed-stats__text"></div>
-            <button class="feed-stats__sort-and-filter">
-                <span class="material-icons">filter_alt </span>Sort & Filter
+            <button class="feed-stats__sort-and-filter" onclick="openFilterSort()">
+                <span class="material-icons">filter_alt
+                </span>
+                Sort & Filter
             </button>
         </div>
+        <div class="feed-stats__sort-and-filter-mobile">
+           <div class="feed-stats__text-mobile">
+               <h1 class="feed-stats__heading">Sort & Filter</h1>
+               <button class="feed-stats__close-button" onclick="closeFilterSort()">&times;</button>
+           </div>
+           <div class="feed-stats__sort">
+                <div class="accordion" id="sortAccordion">
+                    <div class="accordion-item bg-white border border-gray-200">
+                        <h2 class="accordion-header mb-0" id="sortHeading">
+                            <button
+                                class="
+                                accordion-button
+                                collapsed
+                                relative
+                                flex
+                                items-center
+                                w-full
+                                py-4
+                                px-5
+                                text-base text-gray-800 text-left
+                                bg-white
+                                border-0
+                                rounded-none
+                                transition
+                                focus:outline-none
+                                "
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#sort"
+                                aria-expanded="false"
+                                aria-controls="sort"
+                            >
+                            Most Relevant
+                            </button>
+                        </h2>
+                        <div
+                        id="sort"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="sortHeading"
+                        data-bs-parent="#sortAccordion"
+                        >
+                            <div class="accordion-body py-4 px-5">
+                                test
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion" id="categoryAccordion">
+                    <div class="accordion-item bg-white border border-gray-200">
+                        <h2 class="accordion-header mb-0" id="categoryHeading">
+                            <button
+                                class="
+                                accordion-button
+                                collapsed
+                                relative
+                                flex
+                                items-center
+                                w-full
+                                py-4
+                                px-5
+                                text-base text-gray-800 text-left
+                                bg-white
+                                border-0
+                                rounded-none
+                                transition
+                                focus:outline-none
+                                "
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#category"
+                                aria-expanded="false"
+                                aria-controls="category"
+                            >
+                            Category
+                            </button>
+                        </h2>
+                        <div
+                        id="category"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="categoryHeading"
+                        data-bs-parent="#categoryAccordion"
+                        >
+                            <div class="accordion-body py-4 px-5 ">
+                                test
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion" id="gradeAccordion">
+                    <div class="accordion-item bg-white border border-gray-200">
+                        <h2 class="accordion-header mb-0" id="gradeHeading">
+                            <button
+                                class="
+                                accordion-button
+                                collapsed
+                                relative
+                                flex
+                                items-center
+                                w-full
+                                py-4
+                                px-5
+                                text-base text-gray-800 text-left
+                                bg-white
+                                border-0
+                                rounded-none
+                                transition
+                                focus:outline-none
+                                "
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#grade"
+                                aria-expanded="false"
+                                aria-controls="grade"
+                            >
+                            Grade
+                            </button>
+                        </h2>
+                        <div
+                        id="grade"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="gradeHeading"
+                        data-bs-parent="#gradeAccordion"
+                        >
+                            <div class="accordion-body py-4 px-5">
+                                test
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+        </div>
     </section>
-    <section class="hits feed-list-grid" style="display: block;" id="gridView">
+    <section class="hits feed-grid">
     </section>
-    <section class="feed-list" style="display:none" id="listView">
+    <section class="feed-list">
         <div class="container feed-list__container">
             <div class="feed-list__table-holder">
                 <table class="feed-list__table">

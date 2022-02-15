@@ -6,11 +6,11 @@
     flex: 1 1 auto;
     color: #000000de;
     background-color: #ffffff;
-    display: none;
 
-    @include breakpoints.down(sm) {
+    @include breakpoints.down(768) {
         padding-top: 24px;
         padding-bottom: 0;
+        display: block !important;
     }
 
     &__table {

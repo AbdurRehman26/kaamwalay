@@ -58,9 +58,11 @@ class PopReportService
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
             ->where('card_products.card_set_id', $cardSet->id)
+            ->whereNull('card_products.added_manually')
             ->where('user_cards.overall_grade', '>', 0)
             ->where('order_items.order_item_status_id', [OrderItemStatus::GRADED])
             ->whereIn('orders.order_status_id', [OrderStatus::GRADED, OrderStatus::SHIPPED])
+            ->whereNull('card_products.added_manually')
             ->select('user_cards.overall_grade')
             ->get();
 
@@ -78,6 +80,7 @@ class PopReportService
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
+            ->whereNull('card_products.added_manually')
             ->where('card_products.id', $cardProduct->id)
             ->where('user_cards.overall_grade', '>', 0)
             ->where('order_items.order_item_status_id', [OrderItemStatus::GRADED])
@@ -118,11 +121,13 @@ class PopReportService
     {
         $orderCards = CardProduct::join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
             ->where('order_items.order_id', $order->id)
+            ->whereNull('card_products.added_manually')
             ->select('card_products.*')
             ->get();
 
         $orderSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->whereNull('card_products.added_manually')
             ->where('order_items.order_id', $order->id)
             ->select('card_sets.*')
             ->groupBy('card_sets.id')
@@ -131,6 +136,7 @@ class PopReportService
         $orderSeries = CardSeries::join('card_sets', 'card_sets.card_series_id', '=', 'card_series.id')
             ->join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->whereNull('card_products.added_manually')
             ->where('order_items.order_id', $order->id)
             ->select('card_series.*')
             ->groupBy('card_series.id')

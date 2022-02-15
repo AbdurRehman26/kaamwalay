@@ -33,6 +33,7 @@ class UpdateCardReportCommand extends Command
             ->join('user_cards', 'user_cards.order_item_id', '=', 'order_items.id')
             ->groupBy('card_products.id')
             ->select('card_products.*')
+            ->whereNull('card_products.added_manually')
             ->get();
 
         $this->info('Total cards to be processed: ' . count($cardProducts));

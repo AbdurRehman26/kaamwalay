@@ -16,7 +16,7 @@ class CardProductResource extends Resource
 {
     protected static ?string $model = CardProduct::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     protected static ?string $recordTitleAttribute = 'name';
 

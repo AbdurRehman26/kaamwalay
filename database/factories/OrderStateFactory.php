@@ -9,13 +9,6 @@ use App\Models\OrderState;
 class OrderStateFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = OrderState::class;
-
-    /**
      * Define the model's default state.
      *
      * @return array

@@ -14,13 +14,6 @@ use App\Models\OrderItemCustomerShipment;
 class OrderItemFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = OrderItem::class;
-
-    /**
      * Define the model's default state.
      *
      * @return array
@@ -34,7 +27,7 @@ class OrderItemFactory extends Factory
             'order_item_customer_shipment_id' => OrderItemCustomerShipment::factory(),
             'order_item_status_id' => OrderItemStatus::factory(),
             'quantity' => $this->faker->numberBetween(1, 50),
-            'name' => $this->faker->name,
+            'name' => $this->faker->name(),
             'description' => $this->faker->text(),
             'declared_value_per_unit' => $this->faker->randomFloat(2, 1, 99999999.99),
             'declared_value_total' => $this->faker->randomFloat(2, 1, 99999999.99),

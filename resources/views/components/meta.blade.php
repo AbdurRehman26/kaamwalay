@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://d2eli1wrotxo1h.cloudfront.net" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Material+Icons&display=swap" rel="stylesheet">
 
 <title>{{ $title ?? $defaultTitle }}</title>
 <meta charset="UTF-8">
@@ -36,3 +35,4 @@
 <meta name="twitter:image" content="{{ $image ?? $defaultImage }}" />
 <meta itemProp="thumbnailUrl" content="{{ $image ?? $defaultImage }}" />
 <link rel="image_src" href="{{ $image ?? $defaultImage }}" />
+<meta name="facebook-domain-verification" content="uxboktpuwlihin5kg88zu08xebnh1f" />

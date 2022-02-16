@@ -3,9 +3,9 @@
         <div class="container pop-hero__container">
             <nav class="pop-hero__breadcrumbs">
                 <ol class="pop-hero__breadcrumbs__list">
-                    <li><a href="{{route('pop.report')}}" class="pop-hero__breadcrumbs__list__link">Population Report</a></li>
+                    <li><a href="{{route('pop.categories', ['cardCategory' => $cardCategory->id])}}" class="pop-hero__breadcrumbs__list__link">{{ $cardCategory->name }} POP Report</a></li>
                     <li><span class="mx-2">/</span></li>
-                    <li><a href="{{route('pop.series', ['cardSeries' => $cardSet->card_series_id])}}" class="pop-hero__breadcrumbs__list__link">{{$cardSet->cardSeries->name}}</a></li>
+                    <li><a href="{{route('pop.series', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSet->card_series_id])}}" class="pop-hero__breadcrumbs__list__link">{{$cardSet->cardSeries->name}}</a></li>
                     <li><span class="mx-2">/</span></li>
                     <li>{{$cardSet->name}}</li>
                 </ol>
@@ -54,8 +54,7 @@
                                     <br/>
                                     +
                                 </td>
-                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->pr, 'plusValue' => '-'])
-                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => '-', 'plusValue' => $cardsReport->fr])
+                                @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->pr, 'plusValue' => $cardsReport->fr])
                                 @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->good, 'plusValue' => $cardsReport->good_plus])
                                 @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->vg, 'plusValue' => $cardsReport->vg_plus])
                                 @include('landings.pop.partials.value-cell',['href' => null, 'zeroValue' => $cardsReport->vg_ex, 'plusValue' => $cardsReport->vg_ex_plus])
@@ -75,7 +74,7 @@
                     </tbody>
                 </table>
             </div>
-            <x-tables.pagination :totals="$data->total()" :itemsPerPage="$data->perPage()" :currentPage="$data->currentPage()" :offset="($data->currentPage() - 1) * $data->perPage()" :basePath="route('pop.report')" />
+            <x-tables.pagination :totals="$data->total()" :itemsPerPage="$data->perPage()" :currentPage="$data->currentPage()" :offset="($data->currentPage() - 1) * $data->perPage()" :basePath="route('pop.set', ['cardCategory' => $cardCategory, 'cardSeries' => $cardSeries, 'cardSet' => $cardSet])" />
         </div>
     </section>
 </x-layout>

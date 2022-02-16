@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\CouponApplicable;
 
-class CreateCouponsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -58,4 +58,4 @@ class CreateCouponsTable extends Migration
     {
         Schema::dropIfExists('coupons');
     }
-}
+};

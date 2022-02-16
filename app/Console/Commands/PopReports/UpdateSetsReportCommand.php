@@ -29,7 +29,15 @@ class UpdateSetsReportCommand extends Command
      */
     public function handle(PopReportService $popReportService)
     {
-        $cardSets = CardSet::all();
+        $cardSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
+            ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->join('user_cards', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->groupBy('card_sets.id')
+            ->select('card_sets.*')
+            ->get();
+
+        $this->info('Total sets to be processed: ' . count($cardSets));
+
         foreach ($cardSets as $cardSet) {
             $this->info('Updating reports for card sets ' . $cardSet->id);
 

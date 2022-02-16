@@ -74,7 +74,7 @@ class InitializePopReports extends Command
         if ($selectedOption == "All" || $selectedOption == "Cards") {
             $this->info("Initializing Values for Cards");
 
-            $cardProducts = CardProduct::whereNull('added_manually')->get();
+            $cardProducts = CardProduct::where('added_manually', '!=', 1)->get();
 
             foreach ($cardProducts as $cardProduct) {
                 PopReportsCard::firstOrCreate([

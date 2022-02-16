@@ -108,7 +108,7 @@ it('can verify completion of collector coin paid order', function () {
                 'block_explorer_urls' => ['https://testnet.bscscan.com'],
                 'is_testnet' => true,
                 'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                'collector_coin_wallet' => env('TEST_WALLET'),
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
             ],
         ],
     ]);
@@ -196,7 +196,7 @@ it('fails to charge order if transaction hash has already been used', function (
                 'block_explorer_urls' => ['https://testnet.bscscan.com'],
                 'is_testnet' => true,
                 'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                'collector_coin_wallet' => env('TEST_WALLET'),
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
             ],
         ],
     ]);

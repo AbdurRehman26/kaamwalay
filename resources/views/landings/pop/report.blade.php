@@ -38,8 +38,7 @@
                                     +
                                     </a>
                                 </td>
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.series', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSeriesReport->card_series_id]), 'zeroValue' => $cardSeriesReport->pr, 'plusValue' => '-'])
-                                @include('landings.pop.partials.value-cell',['href' => route('pop.series', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSeriesReport->card_series_id]), 'zeroValue' => '-', 'plusValue' => $cardSeriesReport->fr])
+                                @include('landings.pop.partials.value-cell',['href' => route('pop.series', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSeriesReport->card_series_id]), 'zeroValue' => $cardSeriesReport->pr, 'plusValue' => $cardSeriesReport->fr])
                                 @include('landings.pop.partials.value-cell',['href' => route('pop.series', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSeriesReport->card_series_id]), 'zeroValue' => $cardSeriesReport->good, 'plusValue' => $cardSeriesReport->good_plus])
                                 @include('landings.pop.partials.value-cell',['href' => route('pop.series', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSeriesReport->card_series_id]), 'zeroValue' => $cardSeriesReport->vg, 'plusValue' => $cardSeriesReport->vg_plus])
                                 @include('landings.pop.partials.value-cell',['href' => route('pop.series', ['cardCategory' => $cardCategory->id, 'cardSeries' => $cardSeriesReport->card_series_id]), 'zeroValue' => $cardSeriesReport->vg_ex, 'plusValue' => $cardSeriesReport->vg_ex_plus])

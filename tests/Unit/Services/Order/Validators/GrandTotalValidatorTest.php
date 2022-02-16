@@ -7,7 +7,7 @@ use App\Services\Order\Validators\GrandTotalValidator;
 const MAX_VALUE = 99999999.99;
 
 it('throws exception when order grand total is greater than schema limit', function () {
-    $order = Order::factory()->create([
+    $order = Order::factory()->make([
         'grand_total' => MAX_VALUE + 1,
     ]);
 

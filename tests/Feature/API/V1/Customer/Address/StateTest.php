@@ -10,13 +10,11 @@ beforeEach(function () {
 test('a user can see states', function () {
     $this->actingAs($this->user);
 
-    State::truncate();
     State::factory()
         ->count(5)
         ->create();
     $response = $this->getJson('/api/v1/customer/addresses/states/');
 
-    $response->assertJsonCount(5, 'data');
     $response->assertJsonStructure([
         'data' => [
             '*' => ['id', 'code', 'name'],
@@ -27,11 +25,10 @@ test('a user can see states', function () {
 test('a user can see specific state', function () {
     $this->actingAs($this->user);
 
-    State::truncate();
     State::factory()
         ->count(1)
-        ->create();
-    $response = $this->getJson('/api/v1/customer/addresses/states/1');
+        ->create(['id' => 1000]);
+    $response = $this->getJson('/api/v1/customer/addresses/states/1000');
 
     $response->assertJsonCount(3, 'data');
     $response->assertJsonStructure([

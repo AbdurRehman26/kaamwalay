@@ -4,6 +4,7 @@ use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Models\User;
 use Database\Seeders\RolesSeeder;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 
 uses(WithFaker::class);
@@ -13,7 +14,17 @@ beforeEach(function () {
         RolesSeeder::class,
     ]);
 
-    $this->series = CardSeries::factory()->count(2)->create();
+    $this->series = CardSeries::factory()
+        ->count(2)
+        ->state(new Sequence(
+            [
+                'id' => 1,
+            ],
+            [
+                'id' => 2,
+            ]
+        ))
+        ->create();
 
     CardSet::factory()->count(2)->create([
         'card_series_id' => 1,

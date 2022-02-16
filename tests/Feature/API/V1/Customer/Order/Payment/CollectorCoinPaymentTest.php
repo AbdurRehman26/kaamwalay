@@ -89,7 +89,7 @@ test('collector coin discount is applied', function () {
     ]);
 });
 
-it('can verfy completion of collector coin paid order', function () {
+it('can verify completion of collector coin paid order', function () {
     config([
         'robograding.web3.supported_networks' => '97',
     ]);

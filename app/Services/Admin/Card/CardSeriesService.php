@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
+use App\Events\API\Admin\CardSeries\CardSeriesCreatedEvent;
 use App\Models\CardSeries;
 use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Collection;
@@ -29,12 +30,16 @@ class CardSeriesService
     {
         $this->getOrCreateSeriesFromAgs($data['name'], $data['image_path']);
 
-        return CardSeries::create([
+        $series = CardSeries::create([
             'name' => $data['name'],
             'image_path' => $data['image_path'],
             'image_bucket_path' => $data['image_path'],
             'card_category_id' => $data['card_category_id'],
         ]);
+
+        CardSeriesCreatedEvent::dispatch($series);
+
+        return $series;
     }
 
     protected function getOrCreateSeriesFromAgs(string $seriesName, string $seriesImage): int | null

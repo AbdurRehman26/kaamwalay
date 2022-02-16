@@ -2,6 +2,8 @@
 
 namespace App\Services\Admin\Card;
 
+use App\Events\API\Admin\CardSet\CardSetCreatedEvent;
+use App\Listeners\API\Admin\CardSet\CardSetCreatedListener;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;
@@ -31,7 +33,7 @@ class CardSetService
     {
         $this->getOrCreateSetFromAgs($data['card_series_id'], $data['name'], $data['image_path'], $data);
 
-        return CardSet::create([
+        $set = CardSet::create([
             'name' => $data['name'],
             'description' => $data['description'] ?? '',
             'image_path' => $data['image_path'],
@@ -41,6 +43,10 @@ class CardSetService
             'release_date' => $data['release_date'],
             'release_year' => (new Carbon($data['release_date']))->format('Y'),
         ]);
+
+        CardSetCreatedEvent::dispatch($set);
+
+        return $set;
     }
 
     protected function getSeriesFromAgs(string $seriesName): int | null

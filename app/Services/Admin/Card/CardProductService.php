@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
+use App\Events\API\Admin\CardProduct\CardProductCreatedEvent;
 use App\Exceptions\API\Admin\CardDataIsMissing;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Models\CardCategory;
@@ -11,7 +12,6 @@ use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;
 use Exception;
-use Stripe\Card;
 
 class CardProductService
 {
@@ -19,34 +19,6 @@ class CardProductService
         'Common',
         'Uncommon',
         'Rare',
-    ];
-
-    public const YUGIOH_CARD_RARITIES = [
-        'Common',
-        'Rare',
-        'Super Rare',
-        'Ultra Rare',
-        'Secret Rare',
-        'Ultimate Rare',
-        'Ghost Rare',
-        'Prismatic Secret Rare',
-        'Starlight Rare',
-        'Gold Rare',
-        'Platinum Rare',
-        'Parallel Rare',
-        'Super Parallel Rare',
-        'Ultra Parallel Rare',
-        'Secret Parallel Rare',
-        'Duel Terminal',
-        'Starfoil Rare',
-        'Mosaic Rare',
-        'Shatterfoil Rare',
-        'Gold Secret Rare',
-        'Platinum Secret Rare',
-        'Pharaoh Ultra Rare',
-        'Pharaoh Secret Rare',
-        'Collector\'s Rare',
-        'Premium Gold Rare',
     ];
 
     public const CARD_EDITIONS = [
@@ -116,6 +88,7 @@ class CardProductService
             return $this->agsService->createCard($createData);
         } catch (Exception $e) {
             report($e);
+
             return [];
         }
     }
@@ -157,10 +130,11 @@ class CardProductService
             'language' => $data['language'],
             'added_manually' => true,
             'added_by' => auth()->user()->id,
-            'card_reference_id' => '',
-//            'card_reference_id' => $agsResponse['card_reference_id'],
+            'card_reference_id' => $agsResponse['card_reference_id'],
         ]);
         $card->save();
+
+        CardProductCreatedEvent::dispatch($card);
 
         return $card;
     }

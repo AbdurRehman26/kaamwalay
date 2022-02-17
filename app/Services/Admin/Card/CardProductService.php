@@ -10,6 +10,7 @@ use App\Models\CardProduct;
 use App\Models\CardRarity;
 use App\Models\CardSeries;
 use App\Models\CardSet;
+use App\Models\CardSurface;
 use App\Services\AGS\AgsService;
 use Exception;
 
@@ -144,7 +145,7 @@ class CardProductService
         return [
             'rarity' => CardRarity::where('card_category_id', $cardCategory->id)->select('name')->pluck('name')->toArray(),
             'edition' => CardProductService::CARD_EDITIONS,
-            'surface' => CardProductService::CARD_SURFACES,
+            'surface' => CardSurface::where('card_category_id', $cardCategory->id)->select('name')->pluck('name')->toArray(),
             'language' => CardProductService::CARD_LANGUAGES,
         ];
     }

@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class ImportCardsRarities extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -11,65 +13,39 @@ class ImportCardsRarities extends Migration
      */
     public function up()
     {
-
         //Pokemon
         $pokemonCategory = DB::table('card_categories')->where('name', 'Pokemon')->first();
         if ($pokemonCategory) {
-            DB::table('card_rarities')->insert([
-                ['name' => 'Uncommon', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Holo', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Common', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Holo ex', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Holo ☆', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Holo LV.X', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'LEGEND', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'C', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'R', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'U', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'UR', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'SR', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'RR', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'HR', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'TR', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'PR', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'RRR', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'S', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'SSR', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Amazing Rare', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Shining', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Secret Rare', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Super Secret Rare', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Ultra Rare', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Prism Star', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Promo', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Holo V', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Ultra', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Holo VMAX', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Rainbow', 'card_category_id' => $pokemonCategory->id],
-                ['name' => 'Rare Secret', 'card_category_id' => $pokemonCategory->id],
+            DB::table('card_surfaces')->insert([
+                ['name' => 'Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Cracked Ice Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Cosmos Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Reverse Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Reverse Foil', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Tinsel Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Mirror Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Speckle Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Sparkle Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Crosshatch Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Sheen Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Cracked Ice Reverse Holo', 'card_category_id' => $pokemonCategory->id],
+                ['name' => 'Water Web Holo', 'card_category_id' => $pokemonCategory->id],
             ]);
         }
 
         //MetaZoo
         $metazooCategory = DB::table('card_categories')->where('name', 'MetaZoo')->first();
         if ($metazooCategory) {
-            DB::table('card_rarities')->insert([
-                ['name' => 'Promo', 'card_category_id' => $metazooCategory->id],
-                ['name' => 'Secret Rare', 'card_category_id' => $metazooCategory->id],
-                ['name' => 'Holiday', 'card_category_id' => $metazooCategory->id],
-                ['name' => 'Bronze', 'card_category_id' => $metazooCategory->id],
-                ['name' => 'Gold', 'card_category_id' => $metazooCategory->id],
-                ['name' => 'Silver', 'card_category_id' => $metazooCategory->id],
-                ['name' => 'Cryptid', 'card_category_id' => $metazooCategory->id],
-                ['name' => 'Reverse', 'card_category_id' => $metazooCategory->id],
+            DB::table('card_surfaces')->insert([
+                ['name' => 'Holo', 'card_category_id' => $metazooCategory->id],
+                ['name' => 'Reverse Holo', 'card_category_id' => $metazooCategory->id],
             ]);
         }
 
         //Dragon Ball Super
         $dragonBallSuperCategory = DB::table('card_categories')->where('name', 'Dragon Ball Super')->first();
         if ($dragonBallSuperCategory) {
-            DB::table('card_rarities')->insert([
+            DB::table('card_surfaces')->insert([
                 ['name' => 'Uncommon', 'card_category_id' => $dragonBallSuperCategory->id],
                 ['name' => 'Foil', 'card_category_id' => $dragonBallSuperCategory->id],
                 ['name' => 'Super Rare', 'card_category_id' => $dragonBallSuperCategory->id],
@@ -92,7 +68,7 @@ class ImportCardsRarities extends Migration
         //YU-GI-OH!
         $yugiohCategory = DB::table('card_categories')->where('name', 'YU-GI-OH!')->first();
         if ($yugiohCategory) {
-            DB::table('card_rarities')->insert(
+            DB::table('card_surfaces')->insert(
                 [
                     ['name' => 'Common', 'card_category_id' => $yugiohCategory->id],
                     ['name' => 'Rare', 'card_category_id' => $yugiohCategory->id],
@@ -126,7 +102,7 @@ class ImportCardsRarities extends Migration
         //Basketball
         $basketballCategory = DB::table('card_categories')->where('name', 'Basketball')->first();
         if ($basketballCategory) {
-            DB::table('card_rarities')->insert([
+            DB::table('card_surfaces')->insert([
                 ['name' => 'BASE', 'card_category_id' => $basketballCategory->id],
                 ['name' => 'BLACK GOLD PRIZM', 'card_category_id' => $basketballCategory->id],
                 ['name' => 'BLACK PRIZM', 'card_category_id' => $basketballCategory->id],
@@ -229,16 +205,15 @@ class ImportCardsRarities extends Migration
                 ['name' => 'Widescreen Prizms Silver', 'card_category_id' => $basketballCategory->id],
             ]);
         }
-
     }
 
     /**
      * Reverse the migrations.
      *
-         * @return void
-         */
+     * @return void
+     */
     public function down()
     {
         //
     }
-}
+};

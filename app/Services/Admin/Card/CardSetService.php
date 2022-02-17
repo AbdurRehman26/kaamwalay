@@ -3,7 +3,6 @@
 namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\CardSet\CardSetCreatedEvent;
-use App\Listeners\API\Admin\CardSet\CardSetCreatedListener;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;

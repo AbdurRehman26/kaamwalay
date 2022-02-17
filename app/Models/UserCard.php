@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Concerns\ActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\OrderItemStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Scout\Searchable;
@@ -41,11 +40,11 @@ class UserCard extends Model
         'grade_delta' => 'float',
     ];
 
-/**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
+    /**
+         * Get the indexable data array for the model.
+         *
+         * @return array
+         */
     public function toSearchableArray()
     {
         $array = [
@@ -101,7 +100,7 @@ class UserCard extends Model
     
     public function isCardInformationComplete(): bool
     {
-        return $this->orderItem->cardProduct->card_category_id && 
+        return $this->orderItem->cardProduct->card_category_id &&
         $this->orderItem->cardProduct->card_set_id && ! is_null($this->orderItem->cardProduct->card_number_order);
     }
 
@@ -128,11 +127,11 @@ class UserCard extends Model
     public function getLongName(): string
     {
         if ($this->isCardInformationComplete()) {
-            $series =  $this->orderItem->cardProduct->cardSet->cardSeries->name ==  $this->orderItem->cardProduct->cardSet->name ? '' 
+            $series = $this->orderItem->cardProduct->cardSet->cardSeries->name == $this->orderItem->cardProduct->cardSet->name ? ''
             :   $this->orderItem->cardProduct->cardSet->cardSeries->name . ' ';
 
-            return  $this->orderItem->cardProduct->cardSet->release_year . ' ' 
-            .  $this->orderItem->cardProduct->cardCategory->name . ' ' . $series . 
+            return  $this->orderItem->cardProduct->cardSet->release_year . ' '
+            .  $this->orderItem->cardProduct->cardCategory->name . ' ' . $series .
             $this->orderItem->cardProduct->cardSet->name . ' ' .  $this->orderItem->cardProduct->card_number_order;
         }
 

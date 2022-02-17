@@ -33,20 +33,30 @@
 
     &__clear-refinements-button {
         margin-top: 20px;
-        padding: 10px 20px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.2px;
+        color: #20bfb8;
+        width: 160px;
+        height: 40px;
+        margin-left: 10px;
+        padding: 10px 10px;
         display: inline;
         background: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.18);
         box-sizing: border-box;
         border-radius: 24px;
-        text-align: center;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 20px;
-        letter-spacing: 0.2px;
-        color: rgba(0, 0, 0, 0.54);
     }
+
+    &__clear-refinements-icon {
+        position: absolute;
+        left: 70px;
+        top: 226px;
+        color: #20bfb8;
+    }
+
     &__clear-refinements {
         @include breakpoints.down(768) {
             display: none;

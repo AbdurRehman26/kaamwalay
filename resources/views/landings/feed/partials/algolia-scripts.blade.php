@@ -288,8 +288,8 @@
                                         </div>
                                         <div class="feed-grid__bottom-section">
                                             <p class="feed-grid__graded-date">
-                                                Date Graded:  ${ item.graded_at.getFullYear()+'-'+(item.graded_at.getMonth()+1)+'-'+item.graded_at.getDate()}
-                                                at ${item.graded_at.toLocaleString('en-US', { hour: 'numeric', hour12: true })}
+                                                Date Graded:  
+                                                at 
                                             </p>
                                             <p class="feed-grid__certificate">Certificate #: ${item.certificate_number}</p>
                                             <p class="feed-grid__owner-name">Owner: ${item.owner_name}</p>
@@ -330,9 +330,9 @@
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--date">
                                     <a href="/feed/${item.certificate_number}/view">
-                                    ${ item.graded_at.getFullYear()+'-'+(item.graded_at.getMonth()+1)+'-'+item.graded_at.getDate()}
+                                        
                                     <br/>
-                                    ${item.graded_at.toLocaleString('en-US', { hour: 'numeric', hour12: true })}
+                                       
                                     </a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--certificate">
@@ -461,10 +461,15 @@
                 button.textContent = 'All Categories';
                 button.className = "feed-categories__clear-refinements-button";
 
+                const span = document.createElement('span');
+                span.textContent = 'done_icon';
+                span.className = " feed-categories__clear-refinements-icon material-icons";
+
                 button.addEventListener('click', () => {
-                refine();
+                    refine();
                 });
 
+                widgetParams.container.appendChild(span);
                 widgetParams.container.appendChild(button);
             }
 

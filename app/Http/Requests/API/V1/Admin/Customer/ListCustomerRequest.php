@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\API\V1\Admin\Customer;
 
-use App\Rules\Customer\DateBetweenRule;
+use App\Rules\Admin\DateBetweenRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ListCustomerRequest extends FormRequest

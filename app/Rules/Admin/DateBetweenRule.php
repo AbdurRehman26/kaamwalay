@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules\Customer;
+namespace App\Rules\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
@@ -39,7 +39,7 @@ class DateBetweenRule implements Rule
         foreach ($dates as $date) {
             try {
                 Carbon::parse($date);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 return false;
             }
         }

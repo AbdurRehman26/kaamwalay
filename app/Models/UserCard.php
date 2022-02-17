@@ -52,7 +52,7 @@ class UserCard extends Model
             'card_name' => $this->orderItem->cardProduct->name,
             'card_image' => $this->orderItem->cardProduct->image_path,
             'searchable_name' => $this->getSearchableName(),
-            'graded_at' => $this->graded_at,
+            'graded_at' => $this->created_at,
             'certificate_number' => $this->certificate_number,
             'owner_name' => $this->user->getFullName(),
             'grade_nickname' => $this->overall_grade_nickname,
@@ -66,7 +66,7 @@ class UserCard extends Model
 
     public function shouldBeSearchable():bool
     {
-        return $this->orderItem->orderItemStatus->code === OrderItemStatus::GRADED;
+        return $this->orderItem->orderItemStatus->code == OrderItemStatus::GRADED;
     }
 
     public function user(): BelongsTo
@@ -107,9 +107,9 @@ class UserCard extends Model
     public function getShortName(): string
     {
         if ($this->isCardInformationComplete()) {
-            $language = $this->orderItem->cardProduct->language !== 'English' ? $this->language . ' - ' : '';
-            $edition = $this->orderItem->cardProduct->edition !== 'Unlimited' ? $this->edition . ' - ' : '';
-            $surface = $this->orderItem->cardProduct->surface ? $this->surface . ' - ' : '';
+            $language = $this->orderItem->cardProduct->language !== 'English' ? $this->orderItem->cardProduct->language . ' - ' : '';
+            $edition = $this->orderItem->cardProduct->edition !== 'Unlimited' ? $this->orderItem->cardProduct->edition . ' - ' : '';
+            $surface = $this->orderItem->cardProduct->surface ? $this->orderItem->cardProduct->surface . ' - ' : '';
             $variant = $this->orderItem->cardProduct->variant ?: '';
 
             $shortName = $language . $edition . $surface . $variant;

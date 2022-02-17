@@ -53,6 +53,7 @@
     &__clear-refinements-icon {
         position: absolute;
         left: 70px;
+        width: 10px;
         top: 226px;
         color: #20bfb8;
     }
@@ -111,10 +112,6 @@
     }
 
     &__grade-option {
-        width: 146px;
-        height: 257px;
-        left: 753px;
-        top: 386px;
         background: #ffffff;
         box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12), 0px 3px 5px rgba(0, 0, 0, 0.2);
         border-radius: 8px;

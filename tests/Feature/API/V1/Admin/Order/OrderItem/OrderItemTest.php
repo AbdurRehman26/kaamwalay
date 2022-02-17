@@ -7,7 +7,7 @@ use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
-use App\Services\Admin\OrderService;
+use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;

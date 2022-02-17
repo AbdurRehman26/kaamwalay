@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Admin;
+namespace App\Services\Admin\V1;
 
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\OrderUpdated;

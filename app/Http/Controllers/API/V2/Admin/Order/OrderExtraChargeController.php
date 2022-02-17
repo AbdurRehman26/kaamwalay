@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\Order\AddExtraChargeRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
-use App\Services\Admin\OrderService;
+use App\Services\Admin\V2\OrderService;
 use App\Services\Payment\V2\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

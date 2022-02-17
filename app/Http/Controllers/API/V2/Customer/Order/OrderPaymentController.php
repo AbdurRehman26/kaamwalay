@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V2\Customer\Order;
 use App\Exceptions\API\Customer\Order\OrderNotPayable;
 use App\Http\Controllers\API\V1\Customer\Order\OrderPaymentController as V1OrderPaymentController;
 use App\Models\Order;
+use App\Services\Payment\V2\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -12,6 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderPaymentController extends V1OrderPaymentController
 {
+    public function __construct(protected PaymentService $paymentService)
+    {
+    }
+
     public function charge(Request $request, Order $order): JsonResponse
     {
         $this->authorize('view', $order);

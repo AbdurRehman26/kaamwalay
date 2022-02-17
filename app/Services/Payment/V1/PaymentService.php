@@ -22,7 +22,7 @@ use Throwable;
 
 class PaymentService
 {
-    private Order $order;
+    protected Order $order;
 
     /**
      * Payment Providers available for the application

@@ -64,7 +64,7 @@ test('an admin can add order item to order', function () {
 
     $response = $this->postJson('/api/v1/admin/orders/' . $orderItem->order_id . '/items', [
         'card_id' => $newCard->id,
-        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = null),
+        'value' => $this->faker->randomFloat(2, 1, 99999999.99),
     ]);
     $response->assertStatus(200);
     $response->assertJsonStructure([

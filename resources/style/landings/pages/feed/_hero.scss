@@ -37,12 +37,22 @@
         top: 130px;
         right: 370px;
         position: absolute;
+        @include breakpoints.down(sm) {
+            top: 115px;
+            right: 24px;
+            position: absolute;
+        }
     }
 
     &__search-icon {
         position: absolute;
         top: 131px;
         left: 370px;
+        @include breakpoints.down(sm) {
+            position: absolute;
+            top: 116px;
+            left: 20px;
+        }
     }
 
     &__text {

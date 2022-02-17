@@ -150,7 +150,7 @@
             customHitsPerPage({
                 container: document.querySelector('.hits-per-page'),
                 items: [
-                    { label: '24', value: 4, default: true },
+                    { label: '24', value: 24, default: true },
                     { label: '48', value: 48 },
                     { label: '72', value: 72 },
                     { label: '96', value: 96 },
@@ -200,7 +200,7 @@
             search.addWidgets([
             customMenuSelect({
                 container: document.querySelector('.feed-categories__menu-select'),
-                attribute: 'grade_nickname',
+                attribute: 'grade',
             })
             ]);
 
@@ -266,30 +266,37 @@
                         ${hits
                             .map(
                             item =>
-                            `<div class="feed-grid__grid-view">
-                                    <div class="feed-grid__top-section">
-                                        <aside class = "feed-grid__text">
-                                            <h1 class="feed-grid__card-name">${item.card_name}</h1>
-                                            <p class="feed-grid__card-long-name">${item.searchable_name}</p>
-                                        </aside>
-                                        <aside class = "feed-grid__grade">
-                                            <p class = "feed-grid__grade-nickname">${item.grade_nickname}</p>
-                                            <p class = "feed-grid__overall-grade">${item.overall_grade}</p>
-                                        </aside>
-                                    </div>
-                                    <div class="feed-grid__image-section">
-                                        <img 
-                                            class="feed-grid__image" 
-                                            src="${item.card_image}" 
-                                            alt="${item.card_name}"
-                                        >
-                                    </div>
-                                    <div class="feed-grid__bottom-section">
-                                        <p class="feed-grid__graded-date">Date Graded: 08/24/2021 at 11:24 AM</p>
-                                        <p class="feed-grid__certificate">Certificate #: ${item.certificate_number}</p>
-                                        <p class="feed-grid__owner-name">Owner: ${item.owner_name}</p>
-                                    </div>
-                            </div>`
+                            `
+                            <a href="/feed/${item.certificate_number}/view">
+                                <div class="feed-grid__grid-view">
+                                        <div class="feed-grid__top-section">
+                                            <aside class = "feed-grid__text">
+                                                <h1 class="feed-grid__card-name">${item.card_name}</h1>
+                                                <p class="feed-grid__card-long-name">${item.searchable_name}</p>
+                                            </aside>
+                                            <aside class = "feed-grid__grade">
+                                                <p class = "feed-grid__grade-nickname">${item.grade_nickname}</p>
+                                                <p class = "feed-grid__overall-grade">${item.overall_grade}</p>
+                                            </aside>
+                                        </div>
+                                        <div class="feed-grid__image-section">
+                                            <img 
+                                                class="feed-grid__image" 
+                                                src="${item.card_image}" 
+                                                alt="${item.card_name}"
+                                            >
+                                        </div>
+                                        <div class="feed-grid__bottom-section">
+                                            <p class="feed-grid__graded-date">
+                                                Date Graded:  ${ item.graded_at.getFullYear()+'-'+(item.graded_at.getMonth()+1)+'-'+item.graded_at.getDate()}
+                                                at ${item.graded_at.toLocaleString('en-US', { hour: 'numeric', hour12: true })}
+                                            </p>
+                                            <p class="feed-grid__certificate">Certificate #: ${item.certificate_number}</p>
+                                            <p class="feed-grid__owner-name">Owner: ${item.owner_name}</p>
+                                        </div>
+                                </div>
+                            </a>
+                            `
                             )
                             .join('')}
                 </div>`;
@@ -313,30 +320,29 @@
                             item =>
                             `<tr class="feed-list__table-row">
                                 <td class="feed-list__table-cell feed-list__table-cell--card">
-                                    <a href="" class="feed-list__table__info">
+                                    <a href="/feed/${item.certificate_number}/view" class="feed-list__table__info">
                                         <img class="feed-list__table__info-image" src="${item.card_image}" alt="${item.card_name}" width="52" />
                                         <div class="feed-list__table__info-text">
                                             <p class="feed-list__table__info-heading">${item.card_name}</p>
                                             <p class="feed-list__table__info-subheading">${item.searchable_name}</p>
-                                            <p class="feed-list__table__info-date">${item.graded_at}</p>
                                         </div>
                                     </a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--date">
-                                    <a href="">
-                                    ${item.graded_at}
+                                    <a href="/feed/${item.certificate_number}/view">
+                                    ${ item.graded_at.getFullYear()+'-'+(item.graded_at.getMonth()+1)+'-'+item.graded_at.getDate()}
                                     <br/>
-                                    ${item.graded_at}
+                                    ${item.graded_at.toLocaleString('en-US', { hour: 'numeric', hour12: true })}
                                     </a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--certificate">
-                                    <a href="">${item.certificate_number}</a>
+                                    <a href="/feed/${item.certificate_number}/view">${item.certificate_number}</a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--owner">
-                                    <a href="">${item.owner_name}</a>
+                                    <a href="/feed/${item.certificate_number}/view">${item.owner_name}</a>
                                 </td>
                                 <td class="feed-list__table-cell feed-list__table-cell--grade">
-                                    <a href="" class="feed-list__grade">
+                                    <a href="/feed/${item.certificate_number}/view" class="feed-list__grade">
                                         <p class="feed-list__grade__label">${item.grade_nickname}</p>
                                         <p class="feed-list__grade__value">${item.overall_grade}</p>
                                     </a>
@@ -490,7 +496,7 @@
             ${items
                 .map(
                 item => `
-                    <li class="">
+                    <li >
                         <a
                             class="${item.isRefined ? '' 
                             : ''}"
@@ -529,46 +535,54 @@
             ]);
 
             const renderMenuSelectMobile = (renderOptions, isFirstRender) => {
-            const { items, canRefine, refine, widgetParams } = renderOptions;
+            const 
+            { items, 
+            canRefine, refine, widgetParams, createURL}
+             = renderOptions;
 
             if (isFirstRender) {
-                const select = document.createElement('select');
-                select.className = "feed-categories__grade";
-
-                select.addEventListener('change', event => {
-                refine(event.target.value);
-                });
-
-                widgetParams.container.appendChild(select);
+                const ul = document.createElement('ul');
+                widgetParams.container.appendChild(ul);
             }
 
-            const select = widgetParams.container.querySelector('select');
+            const select = widgetParams.container.querySelector('div');
 
-            select.disabled = !canRefine;
-
-            select.innerHTML = `
-                <option value="" class="feed-categories__grade-option">Grade</option>
-                ${items
+            widgetParams.container.querySelector('ul').innerHTML =`
+            ${items
                 .map(
-                    item =>
-                    `<option
-                        class="feed-categories__grade-option"
-                        value="${item.value}"
-                        ${item.isRefined ? 'selected' : ''}
-                    >
-                        ${item.label}
-                    </option>`
+                item => `
+                    <li >
+                        <a
+                            class="${item.isRefined ? '' 
+                            : ''}"
+                            href="${createURL(item.value)}"
+                            data-value="${item.value}"
+                        >
+                        <input class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" 
+                        type="radio" name="category_button" id="${item.value}">
+                        <label class="form-check-label inline-block text-gray-800" for="${item.value}">
+                            ${item.label}
+                        </label>
+                            
+                        </a>
+                    </li>
+                `
                 )
-                .join('')}
-            `;
-            };
+                .join('')}`;
 
+                [...widgetParams.container.querySelectorAll('a')].forEach(element => {
+                element.addEventListener('click', event => {
+                event.preventDefault();
+                refine(event.currentTarget.dataset.value);
+                });
+            });
+            }
             const customMenuSelectMobile = instantsearch.connectors.connectMenu(renderMenuSelectMobile);
 
             search.addWidgets([
             customMenuSelectMobile({
                 container: document.querySelector('.feed-categories__menu-select-mobile'),
-                attribute: 'grade_nickname',
+                attribute: 'grade',
             })
             ]);
 
@@ -629,6 +643,63 @@
                 container: document.querySelector('.feed-stats__current-refinements'),
             })
             ]);
+
+            // Create the render function
+            const renderSortByMobile = (renderOptions, isFirstRender) => {
+            const {
+                options,
+                currentRefinement,
+                hasNoResults,
+                refine,
+                widgetParams,
+            } = renderOptions;
+
+            if (isFirstRender) {
+                const select = document.createElement('select');
+                select.className = "feed-categories__sort-by-select";
+
+                select.addEventListener('change', event => {
+                refine(event.target.value);
+                });
+
+                widgetParams.container.appendChild(select);
+            }
+
+            const select = widgetParams.container.querySelector('select');
+
+            select.disabled = hasNoResults;
+
+            select.innerHTML = `
+                ${options
+                .map(
+                    option => `
+                    <option
+                        class="feed-categories__sort-by-options"
+                        value="${option.value}"
+                        ${option.value === currentRefinement ? 'selected' : ''}
+                    >
+                        ${option.label}
+                    </option>
+                    `
+                )
+                .join('')}
+            `;
+            };
+
+            // Create the custom widget
+            const customSortByMobile = instantsearch.connectors.connectSortBy(renderSortByMobile);
+
+            // Instantiate the custom widget
+            search.addWidgets([
+            customSortByMobile({
+                container: document.querySelector('#sort-by-mobile'),
+                items: [
+                    { label: 'Most Recent', value: search.indexName},
+                    { label: 'Oldest', value: 'local_user_cards_Ascending' },
+                ],
+            })
+            ]);
+
             search.start();
 
             var grid = document.getElementsByClassName("feed-grid");

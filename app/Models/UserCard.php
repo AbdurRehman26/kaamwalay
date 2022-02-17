@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\ActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OrderItemStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Scout\Searchable;
@@ -58,9 +59,15 @@ class UserCard extends Model
             'grade_nickname' => $this->overall_grade_nickname,
             'overall_grade' => $this->overall_grade,
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
+            'grade' => $this->overall_grade_nickname .' '. $this->overall_grade,
         ];
 
         return $array;
+    }
+
+    public function shouldBeSearchable():bool
+    {
+        return $this->orderItem->orderItemStatus->code === OrderItemStatus::GRADED;
     }
 
     public function user(): BelongsTo

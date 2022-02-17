@@ -72,6 +72,11 @@ interface CardRarity {
     label: string;
     name: string;
 }
+
+interface CardSurface {
+    label: string;
+    name: string;
+}
 export const ManageCardDialogCreateCardView = forwardRef(
     (
         { onAdd, isSwappable, declaredValue = 0 }: ManageCardDialogCreateCardViewProps,
@@ -92,8 +97,8 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null>(null);
         const [availableRarities, setAvailableRarities] = useState<CardRarity[]>([]);
         const [selectedRarity, setSelectedRarity] = useState<CardRarity | null>(null);
-        const [availableSurfaces, setAvailableSurfaces] = useState<string[] | null>(null);
-        const [selectedSurface, setSelectedSurface] = useState<string>('none');
+        const [availableSurfaces, setAvailableSurfaces] = useState<CardSurface[]>([]);
+        const [selectedSurface, setSelectedSurface] = useState<CardSurface | null>(null);
         const [releaseDate, setReleaseDate] = useState<Date | null>(null);
         const [availableLanguages, setAvailableLanguages] = useState<string[] | null>(null);
         const [selectedLanguage, setSelectedLanguage] = useState<string>('none');
@@ -164,7 +169,14 @@ export const ManageCardDialogCreateCardView = forwardRef(
                         };
                     }),
                 );
-                setAvailableSurfaces(response.data.surface);
+                setAvailableSurfaces(
+                    response.data.surface.map((item: string) => {
+                        return {
+                            label: item,
+                            name: item,
+                        };
+                    }),
+                );
                 setAvailableLanguages(response.data.language);
                 setAvailableEditions(response.data.edition);
             },
@@ -305,7 +317,9 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const handleRarityChange = useCallback((e, newValue) => {
             setSelectedRarity(newValue);
         }, []);
-        const handleSurfaceChange = useCallback((e) => setSelectedSurface(e.target.value), []);
+        const handleSurfaceChange = useCallback((e, newValue) => {
+            setSelectedSurface(newValue);
+        }, []);
         const handleLanguageChange = useCallback((e) => setSelectedLanguage(e.target.value), []);
         const handleEditionChange = useCallback((e) => setSelectedEdition(e.target.value), []);
         const handleProductVariantChange = useCallback((e) => setProductVariant(e.target.value), []);
@@ -343,7 +357,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                     language: selectedLanguage,
                     rarity: selectedRarity?.name,
                     edition: selectedEdition !== 'none' ? selectedEdition : null,
-                    surface: selectedSurface !== 'none' ? selectedSurface : null,
+                    surface: selectedSurface?.name ?? null,
                     variant: productVariant,
                 };
                 const responseItem = await endpoint.post('', DTO);
@@ -564,18 +578,15 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                         >
                                             Surface (optional)
                                         </FormHelperText>
-                                        <Select value={selectedSurface || 'none'} onChange={handleSurfaceChange}>
-                                            <MenuItem value="none">
-                                                <em>Select Surface</em>
-                                            </MenuItem>
-                                            {availableSurfaces?.map((item) => {
-                                                return (
-                                                    <MenuItem key={item} value={item}>
-                                                        {item}
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </Select>
+                                        <Autocomplete
+                                            value={selectedSurface}
+                                            onChange={handleSurfaceChange}
+                                            options={availableSurfaces}
+                                            fullWidth
+                                            renderInput={(params) => (
+                                                <TextField {...params} placeholder={'Select Surface'} />
+                                            )}
+                                        />
                                     </FormControl>
                                 </Grid>
 

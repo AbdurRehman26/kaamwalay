@@ -84,6 +84,7 @@ class Order extends Model
         'refund_total' => 'float',
         'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
+        'paid_at' => 'datetime',
     ];
 
     protected $appends = [
@@ -225,9 +226,15 @@ class Order extends Model
         return $query->where('orders.user_id', $user->id);
     }
 
-    public function isPayable(): bool
+    public function isPayable(string $version = 'v1'): bool
     {
-        return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
+        if ($version === 'v1') {
+            return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
+        }
+
+        return $this->order_status_id > OrderStatus::PAYMENT_PENDING
+            && ! $this->isCancelled()
+            && $this->payment_status === 0;
     }
 
     public function scopePlaced(Builder $query): Builder
@@ -325,5 +332,10 @@ class Order extends Model
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->order_status_id === OrderStatus::CANCELLED;
     }
 }

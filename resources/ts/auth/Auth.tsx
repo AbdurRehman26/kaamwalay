@@ -28,9 +28,9 @@ export function Auth() {
             </Grid>
             <Grid container item xs>
                 <Routes>
-                    <Route path={'/'} element={<Navigate to={'/login'} replace />} />
-                    <Route path={'/login'} element={GuestOnlyRoute(SignIn)} />
-                    <Route path={'/signup'} element={GuestOnlyRoute(SignUp)} />
+                    <Route path={'/'} element={<Navigate to={'/sign-in'} replace />} />
+                    <Route path={'/sign-in'} element={GuestOnlyRoute(SignIn)} />
+                    <Route path={'/sign-up'} element={GuestOnlyRoute(SignUp)} />
                     <Route path={'/password/forgot'} element={GuestOnlyRoute(ForgotPassword)} />
                     <Route path={'/password/reset'} element={GuestOnlyRoute(ResetPassword)} />
                 </Routes>

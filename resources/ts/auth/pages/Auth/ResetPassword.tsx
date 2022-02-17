@@ -89,7 +89,7 @@ export function ResetPassword() {
                     <Box display={'flex'} flexDirection={'column'} alignItems={'center'} marginTop={2}>
                         <MuiLink
                             component={Link}
-                            to={'/login'}
+                            to={'/sign-in'}
                             align={'center'}
                             color={'primary'}
                             underline={'hover'}
@@ -100,7 +100,7 @@ export function ResetPassword() {
                         </MuiLink>
                         <MuiLink
                             component={Link}
-                            to={'/signup'}
+                            to={'/sign-up'}
                             align={'center'}
                             color={'textSecondary'}
                             underline={'hover'}

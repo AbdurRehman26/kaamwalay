@@ -27,7 +27,7 @@ test('admin can get a wallet transaction history', function () {
     ))->create();
 
     actingAs($adminUser);
-    getJson(route('customer.wallet.history', ['wallet' => $customer->wallet]))
+    getJson(route('v1.customer.wallet.history', ['wallet' => $customer->wallet]))
         ->assertOk()
         ->assertJsonCount(3, 'data');
 });

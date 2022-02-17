@@ -65,7 +65,7 @@ beforeEach(function () {
 
 test('admin can refund partial amount of a charge', function () {
     Event::fake();
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '10.00',
         'add_to_wallet' => false,
@@ -77,7 +77,7 @@ test('admin can refund partial amount of a charge', function () {
 });
 
 test('admin can not refund more than the charged amount', function () {
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->orderPayment->amount + 1,
         'add_to_wallet' => false,
@@ -85,7 +85,7 @@ test('admin can not refund more than the charged amount', function () {
 });
 
 test('admin can not refund a transaction with type refund', function () {
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->orderPayment->amount + 1,
         'add_to_wallet' => false,
@@ -95,7 +95,7 @@ test('admin can not refund a transaction with type refund', function () {
 // TODO: add more tests
 test('admin can refund partial amount to a wallet', function () {
     Event::fake();
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '10.00',
         'add_to_wallet' => true,
@@ -110,7 +110,7 @@ test('admin can refund partial amount to a wallet', function () {
 
 test('admin can refund full amount to a wallet', function () {
     Event::fake();
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->order->grand_total,
         'add_to_wallet' => true,
@@ -136,7 +136,7 @@ test('admin can refund partial amount to a wallet when order has wallet payment'
         'amount' => 10.00,
         'type' => OrderPayment::TYPE_ORDER_PAYMENT,
     ]);
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => 10.00,
         'add_to_wallet' => true,
@@ -164,7 +164,7 @@ test('admin can refund full amount to a wallet when order has wallet payment', f
         'type' => OrderPayment::TYPE_ORDER_PAYMENT,
     ]);
 
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->order->grand_total,
         'add_to_wallet' => true,
@@ -192,7 +192,7 @@ test('admin can not refund full amount to payment method when order has wallet p
         'type' => OrderPayment::TYPE_ORDER_PAYMENT,
     ]);
 
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->order->grand_total,
         'add_to_wallet' => false,
@@ -214,7 +214,7 @@ test('admin can refund full charged amount to payment method when order has wall
         'type' => OrderPayment::TYPE_ORDER_PAYMENT,
     ]);
 
-    postJson(route('payments.refund', ['order' => $this->order]), [
+    postJson(route('v1.payments.refund', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => $this->order->grand_total - 10,
         'add_to_wallet' => false,

@@ -356,7 +356,7 @@ test('admin can update order item notes', function () {
     $notes = $this->faker->sentence();
 
     $this->putJson(
-        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        route('v1.update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
         ['notes' => $notes]
     )
         ->assertOk();
@@ -371,7 +371,7 @@ test('admin can remove notes from order item', function () {
     $this->actingAs($this->user);
 
     $this->putJson(
-        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        route('v1.update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
         ['notes' => '']
     )
         ->assertOk();
@@ -388,7 +388,7 @@ test('admin can update order item internal notes', function () {
     $internalNotes = $this->faker->sentence();
 
     $this->putJson(
-        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        route('v1.update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
         ['internal_notes' => $internalNotes]
     )
         ->assertOk();
@@ -403,7 +403,7 @@ test('admin can remove order item internal notes', function () {
     $this->actingAs($this->user);
 
     $this->putJson(
-        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        route('v1.update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
         ['internal_notes' => '']
     )
         ->assertOk();

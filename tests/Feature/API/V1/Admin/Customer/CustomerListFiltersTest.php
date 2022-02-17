@@ -50,7 +50,7 @@ beforeEach(function () {
 });
 
 it('filters customers by submissions', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[submissions]' => [1, $this->customer->orders()->placed()->count()],
     ]))
         ->assertOk()
@@ -61,7 +61,7 @@ it('filters customers by submissions', function () {
 });
 
 it('returns customers that do not have submissions', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[submissions]' => [0, 0],
     ]))
         ->assertOk()
@@ -82,7 +82,7 @@ it('returns customers that do not have submissions', function () {
 });
 
 it('filters customers by signup date', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[signed_up_between]' => [now()->subDays(15)->toDateString(), now()->subDays(5)->toDateString()],
     ]))
         ->assertOk()
@@ -93,7 +93,7 @@ it('filters customers by signup date', function () {
 });
 
 it('returns customers that do not lie between signed up date', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[signed_up_between]' => [now()->subDays(1)->toDateString(), now()->addDays(5)->toDateString()],
     ]))
         ->assertOk()
@@ -114,7 +114,7 @@ it('returns customers that do not lie between signed up date', function () {
 });
 
 it('filters customers by name', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[search]' => $this->customer->first_name,
     ]))
         ->assertOk()
@@ -125,7 +125,7 @@ it('filters customers by name', function () {
 });
 
 it('does not filter customers by incorrect name', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[search]' => $this->customer->first_name . 'Testing',
     ]))
         ->assertOk()
@@ -133,7 +133,7 @@ it('does not filter customers by incorrect name', function () {
 });
 
 it('filters customers by email', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[search]' => $this->customer->email,
     ]))
         ->assertOk()
@@ -144,7 +144,7 @@ it('filters customers by email', function () {
 });
 
 it('does not filter customers by incorrect email', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[search]' => $this->customer->email . 'Testing',
     ]))
         ->assertOk()
@@ -152,7 +152,7 @@ it('does not filter customers by incorrect email', function () {
 });
 
 it('filters customers by customer number', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[search]' => $this->customer->customer_number,
     ]))
         ->assertOk()
@@ -163,7 +163,7 @@ it('filters customers by customer number', function () {
 });
 
 it('does not filter customers by incorrect customer number', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[search]' => $this->customer->customer_number . 'Testing',
     ]))
         ->assertOk()

@@ -18,7 +18,7 @@ beforeEach(function () {
 
 it('gets wallet information for logged in user', function () {
     actingAs($this->customer);
-    getJson(route('wallet.me'))
+    getJson(route('v1.wallet.me'))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -28,13 +28,13 @@ it('gets wallet information for logged in user', function () {
 });
 
 it('does not return wallet information for guest user', function () {
-    getJson(route('wallet.me'))
+    getJson(route('v1.wallet.me'))
         ->assertUnauthorized();
 });
 
 it('gets wallet transactions for logged in user', function () {
     actingAs($this->customer);
-    getJson(route('wallet.transactions'))
+    getJson(route('v1.wallet.transactions'))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [

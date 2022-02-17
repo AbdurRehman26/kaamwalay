@@ -21,7 +21,11 @@ beforeEach(function () {
         CardSetsSeeder::class,
     ]);
 
-    $this->card = CardProduct::factory()->create();
+    $this->card = CardProduct::factory()->create([
+        'language' => 'English',
+        'rarity' => 'Common',
+        'surface' => '',
+    ]);
 
     $this->user = User::factory()
         ->admin()
@@ -96,7 +100,7 @@ test('admins can create cards manually', function () {
     ]);
 });
 
-it('fails on repeated card number', function () {
+it('fails on repeated card number and params', function () {
     Http::fake([
         '*/series/*' => Http::response($this->sampleGetSeriesResponse, 200, []),
         '*/sets/*' => Http::response($this->sampleGetSetResponse, 200, []),
@@ -112,10 +116,10 @@ it('fails on repeated card number', function () {
         'series_id' => $this->card->cardSet->card_series_id,
         'set_id' => $this->card->card_set_id,
         'card_number' => strval($this->card->card_number_order),
-        'language' => 'English',
-        'rarity' => 'Rare Holo',
-        'edition' => '1st Edition',
-        'surface' => 'Holo',
+        'language' => $this->card->language,
+        'rarity' => $this->card->rarity,
+        'edition' => $this->card->edition,
+        'surface' => $this->card->surface,
         'variant' => 'Lorem',
     ]);
 

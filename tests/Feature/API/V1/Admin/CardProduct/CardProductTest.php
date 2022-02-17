@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\CardProduct;
+use App\Models\CardRarity;
+use App\Models\CardSurface;
 use App\Models\User;
 use Database\Seeders\CardCategoriesSeeder;
 use Database\Seeders\CardSeriesSeeder;
@@ -25,6 +27,16 @@ beforeEach(function () {
         ->admin()
         ->withRole(config('permission.roles.admin'))
         ->create();
+
+    CardRarity::create([
+        'card_category_id' => 1,
+        'name' => 'Rare Holo',
+    ]);
+
+    CardSurface::create([
+        'card_category_id' => 1,
+        'name' => 'Holo',
+    ]);
 
     $this->sampleGetSeriesResponse = json_decode(file_get_contents(
         base_path() . '/tests/stubs/AGS_get_series_response_200.json'
@@ -58,7 +70,7 @@ test('admins can create cards manually', function () {
         'set_id' => 1,
         'card_number' => '001',
         'language' => 'English',
-        'rarity' => 'Common',
+        'rarity' => 'Rare Holo',
         'edition' => '1st Edition',
         'surface' => 'Holo',
         'variant' => 'Lorem',
@@ -101,7 +113,7 @@ it('fails on repeated card number', function () {
         'set_id' => $this->card->card_set_id,
         'card_number' => strval($this->card->card_number_order),
         'language' => 'English',
-        'rarity' => 'Common',
+        'rarity' => 'Rare Holo',
         'edition' => '1st Edition',
         'surface' => 'Holo',
         'variant' => 'Lorem',

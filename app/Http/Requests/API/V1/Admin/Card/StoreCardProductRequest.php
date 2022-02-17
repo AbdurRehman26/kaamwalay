@@ -30,9 +30,13 @@ class StoreCardProductRequest extends FormRequest
                 }),
             ],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],
-            'rarity' => ['required', 'string', Rule::in(CardProductService::CARD_RARITIES)],
+            'rarity' => ['required', 'string', Rule::exists('card_rarities', 'name')->where(function ($query) {
+                return $query->where('card_category_id', $this->category);
+            })],
             'edition' => ['sometimes', 'nullable', 'string', Rule::in(CardProductService::CARD_EDITIONS)],
-            'surface' => ['sometimes', 'nullable', 'string', Rule::in(CardProductService::CARD_SURFACES)],
+            'surface' => ['sometimes', 'nullable', 'string', Rule::exists('card_surfaces', 'name')->where(function ($query) {
+                return $query->where('card_category_id', $this->category);
+            })],
             'variant' => ['sometimes', 'nullable', 'string'],
         ];
     }

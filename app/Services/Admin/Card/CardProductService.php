@@ -16,24 +16,10 @@ use Exception;
 
 class CardProductService
 {
-    public const CARD_RARITIES = [
-        'Common',
-        'Uncommon',
-        'Rare',
-    ];
-
     public const CARD_EDITIONS = [
         '1st Edition',
         'Shadowless',
         'Unlimited',
-    ];
-
-    public const CARD_SURFACES = [
-        'Holo',
-        'Cracked Ice Holo',
-        'Cosmos Holo',
-        'Reverse Holo',
-        'Reverse Foil',
     ];
 
     public const CARD_LANGUAGES = [

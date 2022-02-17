@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\Order\V1;
 
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
@@ -14,6 +14,7 @@ use App\Models\PaymentMethod;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Coupon\CouponService;
+use App\Services\Order\OrderNumberGeneratorService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\CustomerAddressValidator;
@@ -32,9 +33,9 @@ class CreateOrderService
     protected array $data;
 
     public function __construct(
-        private OrderStatusHistoryService $orderStatusHistoryService,
-        private OrderItemService $orderItemService,
-        private CouponService $couponService
+        protected OrderStatusHistoryService $orderStatusHistoryService,
+        protected OrderItemService $orderItemService,
+        protected CouponService $couponService
     ) {
     }
 

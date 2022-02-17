@@ -23,6 +23,7 @@ return [
         'grade_nickname',
         'overall_grade',
         'card_category',
+        'grade',
     ],
 
     /*
@@ -162,4 +163,16 @@ return [
     | configuration, just use the command `scout:sync` to get remote settings in this file.
     |
     */
+    'ranking' => [
+        'asc(id)',
+        'typo',
+        'geo',
+        'words',
+        'filters',
+        'proximity',
+        'attribute',
+        'exact',
+        'custom',
+    ],
+    'replicas' => ['local_user_cards_Ascending', 'local_user_cards_Descending'],
 ];

@@ -343,4 +343,9 @@ class Order extends Model
     {
         return $this->order_status_id === OrderStatus::CANCELLED;
     }
+
+    public function isPaid(): bool
+    {
+        return $this->payment_status === 1;
+    }
 }

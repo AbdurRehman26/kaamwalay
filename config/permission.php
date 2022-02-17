@@ -136,6 +136,7 @@ return [
     ],
 
     'roles' => [
+        'super-admin' => 'super-admin',
         'admin' => 'admin',
         'customer' => 'customer',
     ],

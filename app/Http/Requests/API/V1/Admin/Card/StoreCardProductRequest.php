@@ -26,7 +26,11 @@ class StoreCardProductRequest extends FormRequest
                 'required',
                 'string',
                 Rule::unique('card_products', 'card_number_order')->where(function ($query) {
-                    return $query->where('card_set_id', $this->set_id);
+                    return $query->where('card_set_id', $this->set_id)
+                        ->where('language', $this->language)
+                        ->where('rarity', $this->rarity)
+                        ->where('edition', $this->edition ?? 'Unlimited')
+                        ->where('surface', $this->surface ?? '');
                 }),
             ],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],

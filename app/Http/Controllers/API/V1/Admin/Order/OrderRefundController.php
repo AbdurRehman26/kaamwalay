@@ -8,7 +8,7 @@ use App\Http\Requests\API\V1\Admin\Order\RefundOrderRequest;
 use App\Http\Resources\API\V1\Admin\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Services\Admin\OrderService;
-use App\Services\Payment\PaymentService;
+use App\Services\Payment\V1\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

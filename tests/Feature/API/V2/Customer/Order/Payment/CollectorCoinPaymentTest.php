@@ -171,6 +171,7 @@ it('fails to charge order if transaction hash has already been used', function (
     // Make a previous order
     $order = Order::factory()->for($this->user)->create([
         'payment_method_id' => $this->paymentMethod->id,
+        'order_status_id' => OrderStatus::PLACED,
     ]);
     OrderItem::factory()->for($order)->create();
     OrderPayment::factory()->for($order)->create([
@@ -189,7 +190,7 @@ it('fails to charge order if transaction hash has already been used', function (
     $newOrder = Order::factory()->for($this->user)->create([
         'payment_method_id' => $this->paymentMethod->id,
         'coupon_id' => null,
-        'order_status_id' => OrderStatus::PAYMENT_PENDING,
+        'order_status_id' => OrderStatus::PLACED,
     ]);
     OrderItem::factory()->for($newOrder)->create();
     OrderPayment::factory()->for($newOrder)->create([

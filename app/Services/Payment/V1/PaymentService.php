@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\Payment\V1;
 
 use App\Enums\Wallet\WalletTransactionReason;
 use App\Events\API\Customer\Order\OrderPaid;
@@ -14,10 +14,10 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
-use App\Services\Payment\Providers\CollectorCoinService;
-use App\Services\Payment\Providers\PaypalService;
-use App\Services\Payment\Providers\StripeService;
-use App\Services\Payment\Providers\WalletService;
+use App\Services\Payment\V1\Providers\CollectorCoinService;
+use App\Services\Payment\V1\Providers\PaypalService;
+use App\Services\Payment\V1\Providers\StripeService;
+use App\Services\Payment\V1\Providers\WalletService;
 use Throwable;
 
 class PaymentService

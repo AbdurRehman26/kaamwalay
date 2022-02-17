@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Payment\Providers;
+namespace App\Services\Payment\V1\Providers;
 
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
-use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
-use App\Services\Payment\Providers\Contracts\PaymentProviderVerificationInterface;
+use App\Services\Payment\V1\Providers\Contracts\PaymentProviderServiceInterface;
+use App\Services\Payment\V1\Providers\Contracts\PaymentProviderVerificationInterface;
 use Illuminate\Support\Str;
 
 class TestingStripeService implements PaymentProviderServiceInterface, PaymentProviderVerificationInterface

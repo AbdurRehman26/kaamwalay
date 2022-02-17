@@ -15,7 +15,7 @@ class OrderPaymentResource extends BaseResource
      */
     public function toArray($request)
     {
-        if (! $this->response) {
+        if (! ($this->response ?? false)) {
             return [];
         }
 

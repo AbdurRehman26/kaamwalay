@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Payment\Providers;
+namespace App\Services\Payment\V1\Providers;
 
 use App\Enums\Wallet\WalletTransactionReason;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\Wallet;
-use App\Services\Payment\Providers\Contracts\PaymentProviderServiceInterface;
+use App\Services\Payment\V1\Providers\Contracts\PaymentProviderServiceInterface;
 
 class WalletService implements PaymentProviderServiceInterface
 {

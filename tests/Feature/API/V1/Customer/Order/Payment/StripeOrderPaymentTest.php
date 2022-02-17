@@ -6,7 +6,7 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
-use App\Services\Payment\Providers\TestingStripeService;
+use App\Services\Payment\V1\Providers\TestingStripeService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;

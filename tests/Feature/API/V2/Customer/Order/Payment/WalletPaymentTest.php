@@ -27,7 +27,7 @@ beforeEach(function () {
         'user_id' => $this->user->id,
         'coupon_id' => null,
         'payment_method_id' => $this->paymentMethod->id,
-        'order_status_id' => OrderStatus::PAYMENT_PENDING,
+        'order_status_id' => OrderStatus::PLACED,
     ]);
 
     $this->order->amount_paid_from_wallet = $this->order->grand_total;
@@ -44,10 +44,8 @@ beforeEach(function () {
     $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
     $orderStatusHistoryService->addStatusToOrder($this->order->order_status_id, $this->order->id);
 
-    Event::fake([
-        OrderPaid::class,
-        OrderStatusChangedEvent::class,
-    ]);
+    Event::fake();
+    \Illuminate\Support\Facades\Bus::fake();
 });
 
 test('user can be charged successfully from wallet', function () {
@@ -68,7 +66,7 @@ test('user can be charged partially from wallet', function () {
         'user_id' => $this->user->id,
         'coupon_id' => null,
         'payment_method_id' => 1,
-        'order_status_id' => OrderStatus::PAYMENT_PENDING,
+        'order_status_id' => OrderStatus::PLACED,
     ]);
     $walletAmount = (float) 10;
     $newOrder->amount_paid_from_wallet = $walletAmount;

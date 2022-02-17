@@ -3,7 +3,7 @@
 namespace App\Listeners\API\Auth;
 
 use App\Events\API\Auth\CustomerRegistered;
-use App\Services\Payment\Providers\StripeService;
+use App\Services\Payment\V1\Providers\StripeService;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

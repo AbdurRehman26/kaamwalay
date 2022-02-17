@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\Payment\Providers\StripeService;
+use App\Services\Payment\V1\Providers\StripeService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

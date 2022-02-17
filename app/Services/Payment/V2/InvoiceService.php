@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\Payment\V2;
 
 use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Models\Invoice;

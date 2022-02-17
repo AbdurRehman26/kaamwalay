@@ -5,7 +5,7 @@ namespace App\Services\Order;
 use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
-use App\Services\Payment\Providers\CollectorCoinService;
+use App\Services\Payment\V1\Providers\CollectorCoinService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;

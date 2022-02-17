@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
-use App\Services\Payment\PaymentService;
+use App\Services\Payment\V1\PaymentService;
 use Illuminate\Console\Command;
 
 class UpdatePaymentProviderFee extends Command

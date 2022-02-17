@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\Payment\V2;
 
 use App\Models\Order;
 use App\Models\OrderStatus;

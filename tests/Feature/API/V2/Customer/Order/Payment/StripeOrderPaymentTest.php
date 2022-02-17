@@ -6,7 +6,7 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
-use App\Services\Payment\Providers\TestingStripeService;
+use App\Services\Payment\V2\Providers\TestingStripeService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ beforeEach(function () {
         'user_id' => $user->id,
         'coupon_id' => null,
         'payment_method_id' => 1,
-        'order_status_id' => OrderStatus::PAYMENT_PENDING,
+        'order_status_id' => OrderStatus::PLACED,
     ]);
 
     $this->actingAs($user);
@@ -29,6 +29,7 @@ beforeEach(function () {
     $orderStatusHistoryService->addStatusToOrder($this->order->order_status_id, $this->order->id);
     
     Event::fake();
+    \Illuminate\Support\Facades\Bus::fake();
 });
 
 test('user can be charged successfully', function () {

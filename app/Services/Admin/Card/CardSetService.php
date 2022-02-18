@@ -12,7 +12,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CardSetService
 {
-
     public function __construct(protected AgsService $agsService)
     {
     }

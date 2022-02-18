@@ -10,7 +10,6 @@ use App\Services\Admin\Card\CardSeriesService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class CardSeriesController extends Controller
 {
     public function __construct(protected CardSeriesService $cardSeriesService)

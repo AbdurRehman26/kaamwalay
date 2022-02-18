@@ -57,7 +57,7 @@ test('admin can create extra charge for order', function () {
     $this->postJson(route('v2.payments.extra-charge', ['order' => $this->order]), [
         'notes' => $this->faker->sentence(),
         'amount' => '20.00',
-    ])->dump()
+    ])
         ->assertStatus(Response::HTTP_CREATED)
         ->assertJsonStructure(['data' => ['amount', 'user' => ['id', 'first_name', 'email']]])
         ->assertJsonFragment(['type' => 'extra_charge']);

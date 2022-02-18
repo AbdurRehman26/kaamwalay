@@ -50,8 +50,9 @@ beforeEach(function () {
 });
 
 it('filters customers by submissions', function () {
+    $count = $this->customer->orders()->placed()->count();
     getJson(route('v2.customers.index', [
-        'filter[submissions]' => [1, $this->customer->orders()->placed()->count()],
+        'filter[submissions]' => "1, $count",
     ]))
         ->assertOk()
         ->assertJsonCount(1, ['data'])
@@ -62,7 +63,7 @@ it('filters customers by submissions', function () {
 
 it('returns customers that do not have submissions', function () {
     getJson(route('v2.customers.index', [
-        'filter[submissions]' => [0, 0],
+        'filter[submissions]' => '0, 0',
     ]))
         ->assertOk()
         ->assertJsonCount(10, ['data'])
@@ -83,7 +84,7 @@ it('returns customers that do not have submissions', function () {
 
 it('filters customers by signup date', function () {
     getJson(route('v2.customers.index', [
-        'filter[signed_up_between]' => [now()->subDays(15)->toDateString(), now()->subDays(5)->toDateString()],
+        'filter[signed_up_between]' => now()->subDays(15)->toDateString() . ', ' . now()->subDays(5)->toDateString(),
     ]))
         ->assertOk()
         ->assertJsonCount(1, ['data'])
@@ -94,7 +95,7 @@ it('filters customers by signup date', function () {
 
 it('returns customers that do not lie between signed up date', function () {
     getJson(route('v2.customers.index', [
-        'filter[signed_up_between]' => [now()->subDays(1)->toDateString(), now()->addDays(5)->toDateString()],
+        'filter[signed_up_between]' => now()->subDays(1)->toDateString() . ', ' . now()->addDays(5)->toDateString(),
     ]))
         ->assertOk()
         ->assertJsonCount(10, ['data'])

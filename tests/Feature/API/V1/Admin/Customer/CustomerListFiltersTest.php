@@ -52,7 +52,7 @@ beforeEach(function () {
 it('filters customers by submissions', function () {
     $count = $this->customer->orders()->placed()->count();
     getJson(route('v1.customers.index', [
-        'filter[submissions]' => [1, $this->customer->orders()->placed()->count()],
+        'filter[submissions]' => "1, $count",
     ]))
         ->assertOk()
         ->assertJsonCount(1, ['data'])
@@ -62,7 +62,7 @@ it('filters customers by submissions', function () {
 });
 
 it('returns customers that do not have submissions', function () {
-    getJson(route('customers.index', [
+    getJson(route('v1.customers.index', [
         'filter[submissions]' => '0, 0',
     ]))
         ->assertOk()

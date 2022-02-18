@@ -16,6 +16,9 @@ class CardRarity extends Model
         'name',
     ];
 
+    /**
+     * @return BelongsTo <CardCategory,CardRarity>
+     */
     public function cardCategory(): BelongsTo
     {
         return $this->belongsTo(CardCategory::class);

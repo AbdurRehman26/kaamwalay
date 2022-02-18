@@ -29,8 +29,19 @@ class CardCategory extends Model
         return $this->hasMany(CardProduct::class);
     }
 
+    /**
+     * @return HasMany <CardRarity>
+     */
     public function cardRarities(): HasMany
     {
         return $this->hasMany(CardRarity::class);
+    }
+
+    /**
+     * @return HasMany <CardSurface>
+     */
+    public function cardSurfaces(): HasMany
+    {
+        return $this->hasMany(CardSurface::class);
     }
 }

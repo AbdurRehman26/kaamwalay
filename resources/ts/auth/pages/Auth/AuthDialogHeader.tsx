@@ -8,8 +8,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import AuthHeaderLogo from '@shared/assets/authModalIcon.svg';
-import { SignUpContent } from './SignUpContent';
-import { SignInContent } from './SignInContent';
+import { SignUpContentHeader } from './SignUpContentHeader';
+import { SignInContentHeader } from './SignInContentHeader';
 
 interface Props extends DialogProps {
     title?: string;
@@ -27,7 +27,7 @@ const HeaderLogo = styled('div')({
     top: 110,
 });
 
-const Root = styled(Dialog)({
+const RootElement = styled(Dialog)({
     '.MuiDialog-paper': {
         width: 440,
         borderRadius: 8,
@@ -37,7 +37,7 @@ const Root = styled(Dialog)({
     },
 });
 
-export function AuthDialog({ subTitle, onClose, ...rest }: Props) {
+export function AuthDialogHeader({ subTitle, onClose, ...rest }: Props) {
     const [isSignIn, setSignIn] = useState(true);
 
     const handleClose = useCallback(
@@ -54,7 +54,7 @@ export function AuthDialog({ subTitle, onClose, ...rest }: Props) {
     };
 
     return (
-        <Root onClose={handleClose} {...rest}>
+        <RootElement onClose={handleClose} {...rest}>
             <Header>
                 <Box width={'100%'} display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
                     <IconButton sx={{ color: 'white' }} onClick={handleClose}>
@@ -78,11 +78,11 @@ export function AuthDialog({ subTitle, onClose, ...rest }: Props) {
 
             <DialogContent>
                 {isSignIn ? (
-                    <SignInContent handleContentChange={handleChange} />
+                    <SignInContentHeader handleContentChange={handleChange} />
                 ) : (
-                    <SignUpContent handleContentChange={handleChange} />
+                    <SignUpContentHeader handleContentChange={handleChange} />
                 )}
             </DialogContent>
-        </Root>
+        </RootElement>
     );
 }

@@ -8,9 +8,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
-import { AuthDialog } from '../../../auth/pages/Auth/AuthDialog';
+import { AuthDialogHeader } from '../../../auth/pages/Auth/AuthDialogHeader';
 import { useAppDispatch, useAppSelector } from '../../../landings/redux/hooks';
-import { dialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
+import { headerDialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -51,11 +51,11 @@ const useStyles = makeStyles(
 export function AuthControls() {
     const { checking, authenticated } = useAuth();
     const classes = useStyles();
-    const isAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.dialogOpened);
+    const isHeaderAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.headerDialogOpened);
     const dispatch = useAppDispatch();
 
     const handleAuthDialogClose = () => {
-        dispatch(dialogVisibility(false));
+        dispatch(headerDialogVisibility(false));
     };
 
     if (checking) {
@@ -80,7 +80,7 @@ export function AuthControls() {
             ) : (
                 <Button
                     onClick={() => {
-                        dispatch(dialogVisibility(true));
+                        dispatch(headerDialogVisibility(true));
                     }}
                     color={'primary'}
                     className={cx(classes.button)}
@@ -89,7 +89,11 @@ export function AuthControls() {
                     Log in
                 </Button>
             )}
-            <AuthDialog open={isAuthDialogOpen} onClose={handleAuthDialogClose} subTitle="to Access Robograding" />
+            <AuthDialogHeader
+                open={isHeaderAuthDialogOpen}
+                onClose={handleAuthDialogClose}
+                subTitle="to Access Robograding"
+            />
         </>
     );
 }

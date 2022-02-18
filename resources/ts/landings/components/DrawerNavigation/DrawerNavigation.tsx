@@ -23,9 +23,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useState } from 'react';
 import logo from '@shared/assets/logo.svg';
-import { AuthDialog } from '../../../auth/pages/Auth/AuthDialog';
+import { AuthDialogHeader } from '../../../auth/pages/Auth/AuthDialogHeader';
 import { useAppDispatch, useAppSelector } from '../../../landings/redux/hooks';
-import { dialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
+import { headerDialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -70,11 +70,11 @@ export function DrawerNavigation() {
     const classes = useStyles();
     const { authenticated, logout } = useAuth();
     const [isOpen, setOpen] = useState(false);
-    const isAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.dialogOpened);
+    const isHeaderAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.headerDialogOpened);
     const dispatch = useAppDispatch();
 
     const handleAuthDialogClose = () => {
-        dispatch(dialogVisibility(false));
+        dispatch(headerDialogVisibility(false));
     };
 
     const handleOpen = useCallback(() => setOpen(true), [setOpen]);
@@ -191,7 +191,7 @@ export function DrawerNavigation() {
                         {!authenticated ? (
                             <Button
                                 onClick={() => {
-                                    dispatch(dialogVisibility(true));
+                                    dispatch(headerDialogVisibility(true));
                                 }}
                                 variant={'text'}
                                 color={'inherit'}
@@ -216,7 +216,11 @@ export function DrawerNavigation() {
                     </Grid>
                 </List>
             </Drawer>
-            <AuthDialog open={isAuthDialogOpen} onClose={handleAuthDialogClose} subTitle="to Access Robograding" />
+            <AuthDialogHeader
+                open={isHeaderAuthDialogOpen}
+                onClose={handleAuthDialogClose}
+                subTitle="to Access Robograding"
+            />
         </>
     );
 }

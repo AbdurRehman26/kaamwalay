@@ -12,13 +12,13 @@ import { FormInput } from './FormInput';
 import { SubmitButton } from './SubmitButton';
 import { ActionContent, FormRoot } from './style';
 import { useAppDispatch } from '../../../landings/redux/hooks';
-import { dialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
+import { headerDialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
 
 interface Props {
     handleContentChange: (isLogin: boolean) => void;
 }
 
-export function SignInContent(props: Props) {
+export function SignInContentHeader(props: Props) {
     const { handleContentChange } = props;
     const { login } = useAuth();
     const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ export function SignInContent(props: Props) {
     const handleSubmit = useCallback(
         async ({ email, password }) => {
             await login(email, password);
-            dispatch(dialogVisibility(false));
+            dispatch(headerDialogVisibility(false));
         },
         [login, dispatch],
     );

@@ -11,13 +11,13 @@ import { SubmitButton } from './SubmitButton';
 import { PopupSignUpValidationRules } from './validation';
 import { ActionContent, FormRoot } from './style';
 import { useAppDispatch } from '../../../landings/redux/hooks';
-import { dialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
+import { headerDialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
 
 interface Props {
     handleContentChange: (isLogin: boolean) => void;
 }
 
-export function SignUpContent(props: Props) {
+export function SignUpContentHeader(props: Props) {
     const { handleContentChange } = props;
     const { register } = useAuth();
     const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ export function SignUpContent(props: Props) {
         async (values) => {
             values = { ...values, passwordConfirmation: values.password };
             await register(values);
-            dispatch(dialogVisibility(false));
+            dispatch(headerDialogVisibility(false));
         },
         [register, dispatch],
     );

@@ -51,7 +51,7 @@ export function ResetPassword() {
                 notifications.success(payload?.message);
             }
 
-            navigate('/login');
+            navigate('/sign-in');
         },
         [navigate, notifications, resetPassword],
     );

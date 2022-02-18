@@ -3,24 +3,49 @@
 @use '../../../shared/breakpoints';
 
 .page__header {
-    position: relative;
-    z-index: 3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
     height: 72px;
     padding: 0 24px;
     color: #fff;
-    background: linear-gradient(106.54deg, #140078 -4.67%, #6c31bc 112.32%);
     display: flex;
     flex-direction: row;
     align-items: stretch;
     justify-content: space-between;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
 
-    &--transparent {
-        background: transparent;
+    &:before {
+        content: '';
+        background: linear-gradient(106.54deg, #140078 -4.67%, #6c31bc 112.32%);
+        transition: opacity 250ms ease-in-out;
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 1;
+    }
+
+    &--transparent:not(&--scrolled) {
+        &:before {
+            opacity: 0;
+        }
     }
 
     &--no-shadow {
         box-shadow: none;
+    }
+
+    &--scrolled {
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
     }
 
     @include breakpoints.down(xs) {
@@ -30,7 +55,7 @@
     }
     &__brand {
         display: block;
-        padding: 14px 24px 14px 0;
+        padding: 9px 24px 9px 0;
         @include breakpoints.down(md) {
             padding: 10px 24px 10px 40px;
             display: flex;

@@ -16,6 +16,9 @@ class CardSurface extends Model
         'name',
     ];
 
+    /**
+     * @return BelongsTo <CardCategory,CardSurface>
+     */
     public function cardCategory(): BelongsTo
     {
         return $this->belongsTo(CardCategory::class);

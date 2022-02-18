@@ -10,7 +10,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CardSeriesService
 {
-
     public function __construct(protected AgsService $agsService)
     {
     }

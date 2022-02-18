@@ -26,5 +26,4 @@ class StoreCardSeriesRequest extends FormRequest
             'image_path' => ['required', 'string'],
         ];
     }
-
 }

@@ -27,5 +27,4 @@ class StoreCardSetRequest extends FormRequest
             'release_date' => ['required', 'date'],
         ];
     }
-
 }

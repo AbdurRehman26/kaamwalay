@@ -18,5 +18,4 @@ class CardCategoryController extends Controller
             $this->cardCategoryService->search()
         );
     }
-
 }

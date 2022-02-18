@@ -177,7 +177,7 @@ export class Atom {
             .reduce(
                 (acc, name) => ({
                     ...acc,
-                    [camelCase(name)]: mountPoint.getAttribute(name),
+                    [camelCase(name.replace(/^data-/g, ''))]: mountPoint.getAttribute(name),
                 }),
                 {} as Record<string, any>,
             );

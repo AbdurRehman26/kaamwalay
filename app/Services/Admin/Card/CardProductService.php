@@ -92,10 +92,6 @@ class CardProductService
         $setName = $set->name;
         $setImage = $set->image_path;
 
-        if (! isset($seriesName) || ! isset($setName) || ! isset($seriesImage) || ! isset($setImage)) {
-            throw new CardDataIsMissing;
-        }
-
         //store in AGS
         $agsResponse = $this->processAgsCreate($category->id, $seriesName, $seriesImage, $setName, $setImage, $data);
 

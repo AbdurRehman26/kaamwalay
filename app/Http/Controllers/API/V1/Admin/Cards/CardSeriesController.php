@@ -9,7 +9,7 @@ use App\Http\Resources\API\V1\CardSeries\CardSeriesResource;
 use App\Services\Admin\Card\CardSeriesService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-
+use Exception;
 
 class CardSeriesController extends Controller
 {
@@ -28,7 +28,7 @@ class CardSeriesController extends Controller
     {
         try {
             $series = $this->cardSeriesService->create($request->validated());
-        } catch (E $e) {
+        } catch (Exception $e) {
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

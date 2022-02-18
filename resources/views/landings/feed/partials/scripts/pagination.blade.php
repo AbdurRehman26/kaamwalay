@@ -21,25 +21,26 @@
                         <a
                             href="${createURL(currentRefinement - 1)}"
                             data-value="${currentRefinement - 1}"
-                        >  <
+                        > 
+                        <span style="margin:0px 20px" class="material-icons">chevron_left</span>
                         </a>
                         </p>
                         `
-                    : '<p>  < </p>'
+                    : '<span style="margin:0px 20px" class="material-icons">chevron_left</span>'
                 }
                     ${
                     !isLastPage
                         ? `
-                        <p class="ml-4">
+                        <p>
                             <a
                             href="${createURL(currentRefinement + 1)}"
                             data-value="${currentRefinement + 1}"
                             >
-                            >
+                            <span style="margin:0px 20px" class="material-icons">chevron_right</span>
                             </a>
                         </p>
                         `
-                        : '<p class="ml-4"> > </p>'
+                        : '<span style="margin:0px 20px" class="material-icons">chevron_right</span>'
                     }
             `;
 

@@ -6,5 +6,4 @@ use App\Http\Controllers\API\V1\Admin\Cards\CardProductController as V1CardProdu
 
 class CardProductController extends V1CardProductController
 {
-
 }

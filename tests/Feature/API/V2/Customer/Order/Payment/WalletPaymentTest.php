@@ -1,7 +1,5 @@
 <?php
 
-use App\Events\API\Customer\Order\OrderPaid;
-use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;

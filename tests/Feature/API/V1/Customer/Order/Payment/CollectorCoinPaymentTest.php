@@ -11,6 +11,8 @@ use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Services\Admin\OrderStatusHistoryService;
 use App\Services\Order\Shipping\ShippingFeeService;
+use App\Services\Payment\Providers\CollectorCoinService;
+use Mockery\MockInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
@@ -87,7 +89,7 @@ test('collector coin discount is applied', function () {
     ]);
 });
 
-it('can verfy completion of collector coin paid order', function () {
+it('can verify completion of collector coin paid order', function () {
     config([
         'robograding.web3.supported_networks' => '97',
     ]);
@@ -106,13 +108,47 @@ it('can verfy completion of collector coin paid order', function () {
                 'block_explorer_urls' => ['https://testnet.bscscan.com'],
                 'is_testnet' => true,
                 'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                'collector_coin_wallet' => env('TEST_WALLET'),
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
             ],
         ],
     ]);
 
     $bscTestTransactionHash = '0x7ee79769e935f914ec5ff3ccc10d767bf5800bc506f2df8e0c274034a3d61a52';
     $this->actingAs($this->user);
+
+    $this->partialMock(CollectorCoinService::class, function (MockInterface $mock) use ($bscTestTransactionHash) {
+        $mock->shouldReceive('getTransactionDetails')->withArgs([$bscTestTransactionHash])->andReturn([
+            "blockHash" => "0x5d13e02cfc5f16323bc3e39ba8e407cc3d4ee7c0002abdb1aaf849dfb745c9cb",
+            "blockNumber" => "15541205",
+            "contractAddress" => null,
+            "cumulativeGasUsed" => "1744572",
+            "from" => "0x7ffcff7c927e268c2d7af93e07f37f2449eafe56",
+            "gasUsed" => "36870",
+            "logs" => [
+                [
+                    "address" => "0xb1f5a876724dcfd6408b7647e41fd739f74ec039",
+                    "topics" => [
+                        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                        "0x0000000000000000000000007ffcff7c927e268c2d7af93e07f37f2449eafe56",
+                        "0x000000000000000000000000b2a7f8ba330ebe430521eb13f615bd8f15bf3c4d",
+                    ],
+                    "data" => "0x0000000000000000000000000000000000000000000000068155a43676e00000",
+                    "blockNumber" => "15541205",
+                    "transactionHash" => "0x7ee79769e935f914ec5ff3ccc10d767bf5800bc506f2df8e0c274034a3d61a52",
+                    "transactionIndex" => "7",
+                    "blockHash" => "0x5d13e02cfc5f16323bc3e39ba8e407cc3d4ee7c0002abdb1aaf849dfb745c9cb",
+                    "logIndex" => "31",
+                    "removed" => false,
+                ],
+            ],
+            "logsBloom" => "0x00000000000000000000000000000000000000000000000000000000004000000000000000000000000000000400000000000000020000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000210000000000000000000000000000000200000000000000000000000080000000000000000000000000000000000004000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000",
+            "status" => "1",
+            "to" => "0xb1f5a876724dcfd6408b7647e41fd739f74ec039",
+            "transactionHash" => "0x7ee79769e935f914ec5ff3ccc10d767bf5800bc506f2df8e0c274034a3d61a52",
+            "transactionIndex" => "7",
+            "type" => "0x0",
+        ]);
+    });
 
     $order = Order::factory()->for($this->user)->create([
         'payment_method_id' => $this->paymentMethod->id,
@@ -160,7 +196,7 @@ it('fails to charge order if transaction hash has already been used', function (
                 'block_explorer_urls' => ['https://testnet.bscscan.com'],
                 'is_testnet' => true,
                 'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                'collector_coin_wallet' => env('TEST_WALLET'),
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
             ],
         ],
     ]);

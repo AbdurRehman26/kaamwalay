@@ -5,12 +5,12 @@ namespace App\Services\Payment\V2;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\FailedRefund;
-use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\FeatureNotAvailable;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\V1\PaymentService as V1PaymentService;
+use Throwable;
 
 class PaymentService extends V1PaymentService
 {
@@ -30,7 +30,6 @@ class PaymentService extends V1PaymentService
 
     /**
      * @throws Throwable
-     * @throws OrderStatusHistoryWasAlreadyAssigned
      */
     public function updateOrderStatus(): bool
     {
@@ -67,6 +66,7 @@ class PaymentService extends V1PaymentService
 
             return $response;
         }
+
         return [
             'success' => true,
             'request' => [],

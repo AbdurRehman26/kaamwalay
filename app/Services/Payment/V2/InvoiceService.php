@@ -76,7 +76,7 @@ class InvoiceService
         ];
     }
 
-    protected function createAndStoreInvoiceRecord(Order $order, string $url)
+    protected function createAndStoreInvoiceRecord(Order $order, string $url): void
     {
         $invoice = new Invoice();
         $invoice->invoice_number = $order->order_number;

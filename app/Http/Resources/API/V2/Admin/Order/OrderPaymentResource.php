@@ -6,6 +6,7 @@ use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
 use App\Models\OrderPayment;
 
+/** @mixin OrderPayment */
 class OrderPaymentResource extends BaseResource
 {
     /**
@@ -81,7 +82,7 @@ class OrderPaymentResource extends BaseResource
         ];
     }
 
-    protected function getUnpaidOrderPaymentResponse()
+    protected function getUnpaidOrderPaymentResponse(): array
     {
         return [
             'id' => $this->id,

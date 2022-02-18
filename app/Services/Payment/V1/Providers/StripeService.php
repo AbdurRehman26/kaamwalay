@@ -40,6 +40,9 @@ class StripeService implements PaymentProviderServiceInterface, PaymentProviderV
         return [];
     }
 
+    /**
+     * @return array | Collection <int, \Laravel\Cashier\PaymentMethod>
+     */
     public function getUserPaymentMethods(User $user): array | Collection
     {
         try {

@@ -3006,31 +3006,6 @@ parameters:
 			path: app/Services/Admin/Order/ShipmentService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getCertificatesDataQuery\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getGrades\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:updateLocalGrades\\(\\) has parameter \\$cards with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:updateNotes\\(\\) has parameter \\$notes with no type specified\\.$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"
 			count: 2
 			path: app/Services/Admin/OrderStatusHistoryService.php
@@ -3076,77 +3051,7 @@ parameters:
 			path: app/Services/ImageService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:process\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:saveOrder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:startOrder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has parameter \\$customerAddress with no type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderAddresses\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderItems\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderPayment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentPlan\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingFee\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:validate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:placed\\(\\)\\.$#"
-			count: 1
-			path: app/Services/Order/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no type specified\\.$#"
 			count: 1
 			path: app/Services/Order/OrderService.php
 
@@ -3206,24 +3111,14 @@ parameters:
 			path: app/Services/Order/Validators/ItemsDeclaredValueValidator.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Payment\\\\InvoiceService\\:\\:createAndStoreInvoiceRecord\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Payment/InvoiceService.php
-
-		-
 			message: "#^Cannot access property \\$id on array\\|object\\|string\\.$#"
 			count: 1
-			path: app/Services/Payment/Providers/PaypalService.php
+			path: app/Services/Payment/V1/Providers/PaypalService.php
 
 		-
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
 			count: 1
-			path: app/Services/Payment/Providers/StripeService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Payment\\\\Providers\\\\StripeService\\:\\:getUserPaymentMethods\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: app/Services/Payment/Providers/StripeService.php
+			path: app/Services/Payment/V1/Providers/StripeService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:accumulateReportRow\\(\\) has parameter \\$userCards with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"

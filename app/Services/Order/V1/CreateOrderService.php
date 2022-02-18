@@ -62,7 +62,7 @@ class CreateOrderService
     /**
      * @throws Exception
      */
-    protected function validate()
+    protected function validate(): void
     {
         ItemsDeclaredValueValidator::validate($this->data);
         CustomerAddressValidator::validate($this->data);
@@ -74,7 +74,7 @@ class CreateOrderService
      * @throws Throwable
      * @throws OrderStatusHistoryWasAlreadyAssigned
      */
-    protected function process()
+    protected function process(): void
     {
         DB::beginTransaction();
 
@@ -101,17 +101,17 @@ class CreateOrderService
         DB::commit();
     }
 
-    protected function startOrder()
+    protected function startOrder(): void
     {
         $this->order = new Order();
     }
 
-    protected function storePaymentPlan(array $paymentPlan)
+    protected function storePaymentPlan(array $paymentPlan): void
     {
         $this->order->payment_plan_id = $paymentPlan['id'];
     }
 
-    protected function storeShippingMethod(array $shippingMethod)
+    protected function storeShippingMethod(array $shippingMethod): void
     {
         $this->order->shipping_method_id = $shippingMethod['id'];
     }
@@ -121,12 +121,12 @@ class CreateOrderService
         return ! empty($data['payment_method']) ? $data['payment_method'] : PaymentMethod::getWalletPaymentMethod()->toArray();
     }
 
-    protected function storePaymentMethod(array $paymentMethod)
+    protected function storePaymentMethod(array $paymentMethod): void
     {
         $this->order->payment_method_id = $paymentMethod['id'];
     }
 
-    protected function storeOrderAddresses(array $shippingAddress, array $billingAddress, array $customerAddress)
+    protected function storeOrderAddresses(array $shippingAddress, array $billingAddress, array $customerAddress): void
     {
         if (! empty($customerAddress['id'])) {
             $shippingAddress = OrderAddress::create(CustomerAddress::find($customerAddress['id'])->toArray());
@@ -144,7 +144,7 @@ class CreateOrderService
         }
     }
 
-    protected function storeCustomerAddress(array $shippingAddress, $customerAddress)
+    protected function storeCustomerAddress(array $shippingAddress, array $customerAddress): void
     {
         if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
             CustomerAddress::create(array_merge(
@@ -156,7 +156,7 @@ class CreateOrderService
         }
     }
 
-    protected function saveOrder()
+    protected function saveOrder(): void
     {
         $this->order->user()->associate(auth()->user());
         $this->order->save();
@@ -167,7 +167,7 @@ class CreateOrderService
     /**
      * @throws OrderItemDoesNotBelongToOrder
      */
-    protected function storeOrderItems(array $items)
+    protected function storeOrderItems(array $items): void
     {
         foreach ($items as $item) {
             for ($i = 0; $i < $item['quantity']; $i++) {
@@ -184,7 +184,7 @@ class CreateOrderService
         }
     }
 
-    protected function storeShippingFee()
+    protected function storeShippingFee(): void
     {
         $shippingFee = ShippingFeeService::calculateForOrder($this->order);
 
@@ -208,7 +208,7 @@ class CreateOrderService
         $this->order->save();
     }
 
-    protected function storeOrderPayment(array $data)
+    protected function storeOrderPayment(array $data): void
     {
         $orderPaymentData = [
             'order_id' => $this->order->id,

@@ -13,6 +13,7 @@ use App\Http\Resources\API\Services\AGS\CardGradeResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
+use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderItemStatus;
 use App\Models\OrderStatus;
@@ -65,6 +66,9 @@ class OrderService
         return $certificates->pluck('certificate_number')->flatten()->all();
     }
 
+    /**
+     * @return Builder<UserCard>
+    */
     protected function getCertificatesDataQuery(): Builder
     {
         return UserCard::select([
@@ -131,7 +135,7 @@ class OrderService
         return $orderItem->fresh();
     }
 
-    public function updateNotes(Order $order, $notes): Order
+    public function updateNotes(Order $order, string $notes): Order
     {
         $order->notes = $notes;
         $order->save();
@@ -142,6 +146,7 @@ class OrderService
     }
 
     /**
+     * @return Collection <int, UserCard>
      * @throws IncorrectOrderStatus
      */
     public function getGrades(Order $order): Collection
@@ -159,6 +164,10 @@ class OrderService
         return $cards;
     }
 
+    /**
+     * @param  array  $grades
+     * @param  Collection <int, UserCard>  $cards
+     */
     protected function updateLocalGrades(array $grades, Collection $cards): void
     {
         foreach ($grades as $result) {
@@ -224,7 +233,7 @@ class OrderService
         return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name . ' (Added Manually)';
     }
 
-    protected function getAddressData($address): array
+    protected function getAddressData(OrderAddress $address): array
     {
         return [
             "ID" => $address->id,

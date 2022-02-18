@@ -12,7 +12,7 @@ class UnpaidOrderRefundListener
         //
     }
 
-    public function handle(UnpaidOrderRefund $event)
+    public function handle(UnpaidOrderRefund $event): void
     {
         //
     }

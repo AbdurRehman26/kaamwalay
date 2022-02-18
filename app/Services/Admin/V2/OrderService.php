@@ -12,6 +12,7 @@ use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Services\Admin\V1\OrderService as V1OrderService;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class OrderService extends V1OrderService
 {

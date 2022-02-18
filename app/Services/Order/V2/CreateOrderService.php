@@ -16,7 +16,7 @@ class CreateOrderService extends V1CreateOrderService
     /**
      * @throws Exception
      */
-    protected function validate()
+    protected function validate(): void
     {
         ItemsDeclaredValueValidator::validate($this->data);
         CustomerAddressValidator::validate($this->data);
@@ -26,7 +26,7 @@ class CreateOrderService extends V1CreateOrderService
      * @throws OrderStatusHistoryWasAlreadyAssigned
      * @throws Throwable
      */
-    protected function process()
+    protected function process(): void
     {
         DB::beginTransaction();
 

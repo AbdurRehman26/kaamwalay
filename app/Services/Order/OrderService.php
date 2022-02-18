@@ -5,6 +5,7 @@ namespace App\Services\Order;
 use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
+use App\Models\OrderAddress;
 use App\Services\Payment\V1\Providers\CollectorCoinService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -98,7 +99,7 @@ class OrderService
         return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name . ' (Added Manually)';
     }
 
-    protected function getAddressData($address): array
+    protected function getAddressData(OrderAddress $address): array
     {
         return [
             "ID" => $address->id,

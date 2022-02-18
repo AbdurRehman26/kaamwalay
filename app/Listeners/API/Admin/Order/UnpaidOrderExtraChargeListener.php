@@ -12,7 +12,7 @@ class UnpaidOrderExtraChargeListener
         //
     }
 
-    public function handle(UnpaidOrderExtraCharge $event)
+    public function handle(UnpaidOrderExtraCharge $event): void
     {
         //
     }

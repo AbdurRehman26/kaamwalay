@@ -7,7 +7,62 @@
     </x-slot>
     <x-slot name="body">
         <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
-            @include('landings.feed.partials.algolia-scripts')
+        <script>
+            const searchClient = algoliasearch(
+                '{{ config("scout.algolia.id") }}',
+                '085cc30e0d991ab2aa990615163f86c5'
+                );
+
+            const search = instantsearch({
+                indexName: 'local_user_cards',
+                searchClient,
+            });
+
+            var grid = document.getElementsByClassName("feed-grid");
+            var list = document.getElementsByClassName("feed-list");
+            var grid_icon = document.getElementsByClassName("feed-categories__grid-view-icon");
+            var list_icon = document.getElementsByClassName("feed-categories__list-view-icon");
+            var mobile_display = document.getElementsByClassName("feed-stats__sort-and-filter-mobile");
+            list[0].style.display = "none";
+
+            function listView() {
+                if (list[0].style.display === "none") {
+                    grid_icon[0].style.backgroundColor = "" ;
+                    list_icon[0].style.backgroundColor =  "#DCDCDC";
+                    list[0].style.display = "block";
+                    grid[0].style.display = "none";
+                }
+            }
+
+            function gridView() {
+                if (grid[0].style.display === "none") {
+                    grid_icon[0].style.backgroundColor =  "#DCDCDC";
+                    list_icon[0].style.backgroundColor =  "";
+                    grid[0].style.display = "block";
+                    list[0].style.display = "none";
+                }
+            }
+
+            function openFilterSort() {
+                mobile_display[0].style.width = "100%";
+            }
+
+            function closeFilterSort() {
+                mobile_display[0].style.width = "0%";
+            }
+
+        </script>
+            @include('landings.feed.partials.scripts.search')
+            @include('landings.feed.partials.scripts.categories')
+            @include('landings.feed.partials.scripts.grade')
+            @include('landings.feed.partials.scripts.sort')
+            @include('landings.feed.partials.scripts.cards-grid-view')
+            @include('landings.feed.partials.scripts.cards-list-view')
+            @include('landings.feed.partials.scripts.pagination')
+            @include('landings.feed.partials.scripts.stats')
+            @include('landings.feed.partials.scripts.items-per-page')
+            @include('landings.feed.partials.scripts.current-refinement')
+            @include('landings.feed.partials.scripts.mobile-view')
     </x-slot>
     <section class="feed-hero">
         <div class="container feed-hero__container">

@@ -90,7 +90,7 @@
                 @apply hidden;
 
                 @include breakpoints.down(sm) {
-                    @apply block pt-2 text-xs text-white text-opacity-70;
+                    @apply block pt-2 text-xs;
                 }
             }
         }

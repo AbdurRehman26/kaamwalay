@@ -42,7 +42,7 @@
                 </div>
                 <div class="accordion" id="categoryAccordion">
                     <div class="accordion-item bg-white border border-gray-200">
-                        <h2 class="accordion-header mb-0" id="categoryHeading">
+                        <h2 class="category-accordion accordion-header mb-0" id="categoryHeading">
                             <button
                                 class="
                                 accordion-button

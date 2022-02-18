@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Notifications\Order\OrderStatusChangedNotification;
 use App\Services\Admin\V1\OrderService as AdminOrderService;
 use App\Services\EmailService;
-use App\Services\Order\V1\OrderService;
+use App\Services\Order\OrderService;
 use App\Services\PopReport\PopReportService;
 use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;

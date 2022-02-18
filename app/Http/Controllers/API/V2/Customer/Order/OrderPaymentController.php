@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\API\V2\Customer\Order;
 
 use App\Exceptions\API\Customer\Order\OrderNotPayable;
-use App\Http\Controllers\API\V1\Customer\Order\OrderPaymentController as V1OrderPaymentController;
+use App\Exceptions\Services\Payment\PaymentNotVerified;
+use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\Payment\V2\PaymentService;
 use Illuminate\Http\JsonResponse;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrderPaymentController extends V1OrderPaymentController
+class OrderPaymentController extends Controller
 {
     public function __construct(protected PaymentService $paymentService)
     {
@@ -46,5 +47,19 @@ class OrderPaymentController extends V1OrderPaymentController
             $response,
             Response::HTTP_PAYMENT_REQUIRED
         );
+    }
+
+    public function verify(Order $order, string $paymentIntentId): JsonResponse
+    {
+        $this->authorize('view', $order);
+
+        throw_unless(
+            $this->paymentService->verify($order, $paymentIntentId),
+            PaymentNotVerified::class
+        );
+
+        return new JsonResponse([
+            'message' => 'Payment verified successfully',
+        ], Response::HTTP_OK);
     }
 }

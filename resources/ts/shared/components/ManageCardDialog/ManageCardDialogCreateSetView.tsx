@@ -116,7 +116,6 @@ export const ManageCardDialogCreateSetView = forwardRef(
             <div ref={ref}>
                 <ManageCardDialogHeader back={true} label={'Create a New Set'} />
                 <Divider className={classes.topDivider} />
-                Series: {dialogState.selectedCardSeries?.id}
                 <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
                     <Grid container padding={'12px'} spacing={24}>
                         <Grid item md={4}>

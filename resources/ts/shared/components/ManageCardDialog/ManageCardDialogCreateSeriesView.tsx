@@ -109,7 +109,6 @@ export const ManageCardDialogCreateSeriesView = forwardRef(
                 <ManageCardDialogHeader back={true} label={'Create a New Series'} />
                 <Divider className={classes.topDivider} />
                 <Box display={'flex'} flexDirection={'column'} padding={'12px'}>
-                    Category: {dialogState.selectedCategory?.id}
                     <Box padding={'12px'}>
                         <Grid container padding={'12px'} spacing={24}>
                             <Grid item md={4}>

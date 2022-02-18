@@ -3,10 +3,8 @@
 @use '../../../shared/breakpoints';
 
 .page__header {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
     width: 100%;
     z-index: 100;
     height: 72px;

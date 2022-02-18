@@ -6,5 +6,4 @@ use App\Http\Controllers\API\V1\Admin\Cards\CardSetController as V1CardSetContro
 
 class CardSetController extends V1CardSetController
 {
-
 }

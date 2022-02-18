@@ -67,6 +67,7 @@ class PaymentService extends V1PaymentService
 
             return $response;
         }
+
         return [
             'success' => true,
             'request' => [],

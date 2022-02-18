@@ -6,5 +6,4 @@ use App\Http\Controllers\API\V1\Admin\Cards\CardSeriesController as V1CardSeries
 
 class CardSeriesController extends V1CardSeriesController
 {
-
 }

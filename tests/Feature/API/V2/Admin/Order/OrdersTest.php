@@ -58,7 +58,7 @@ beforeEach(function () {
 
     UserCard::factory()->state(new Sequence(
         [
-            'order_item_id' => 1,
+            'order_item_id' => OrderItem::first()->id,
             'certificate_number' => '000000100',
         ]
     ))->create();

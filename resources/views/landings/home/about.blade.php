@@ -22,7 +22,7 @@
             <p class="Home-sectionContentText">Other grading companies are inaccurate, expensive and extremely slow
                 because humans are doing the grading. With our technology, are able to grade cards 10x faster, and
                 more accurately than the other guys.</p>
-            <div class="Home-buttonCta atoms--submit-buttonqwqw">
+            <div class="atoms--submit-button">
                 {{-- JS runtime actions --}}
             </div>
         </div>

@@ -4,10 +4,18 @@ import poweredByAgs from '@shared/assets/poweredByAGS.svg';
 import { CanSetup } from '../interfaces/CanSetup';
 import { mountAtom } from '../utils/mountAtom';
 import { LayoutAtom } from '../atoms/LayoutAtom';
+import { SubmissionButtonAtom } from '../atoms/SubmissionButtonAtom';
 
 export class HomeController extends Controller implements CanSetup<HomeController> {
     public async setup() {
         await mountAtom(LayoutAtom);
+        await mountAtom(
+            SubmissionButtonAtom.clone({
+                props: {
+                    className: 'Home-buttonCta',
+                },
+            }),
+        );
     }
 
     public getHome() {

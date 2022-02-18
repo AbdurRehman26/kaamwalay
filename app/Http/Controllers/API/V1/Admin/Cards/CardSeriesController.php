@@ -7,9 +7,9 @@ use App\Http\Requests\API\V1\Admin\Card\StoreCardSeriesRequest;
 use App\Http\Resources\API\V1\CardSeries\CardSeriesCollection;
 use App\Http\Resources\API\V1\CardSeries\CardSeriesResource;
 use App\Services\Admin\Card\CardSeriesService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Exception;
 
 class CardSeriesController extends Controller
 {

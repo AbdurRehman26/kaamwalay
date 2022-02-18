@@ -3,7 +3,6 @@
 namespace App\Services\Admin\Card;
 
 use App\Events\API\Admin\CardProduct\CardProductCreatedEvent;
-use App\Exceptions\API\Admin\CardDataIsMissing;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Models\CardCategory;
 use App\Models\CardProduct;

@@ -16,11 +16,11 @@ beforeEach(function () {
     $this->series = CardSeries::factory()->count(2)->create();
 
     CardSet::factory()->count(2)->create([
-        'card_series_id' => 1,
+        'card_series_id' => $this->series[0]->id,
     ]);
 
     CardSet::factory()->count(3)->create([
-        'card_series_id' => 2,
+        'card_series_id' => $this->series[1]->id,
     ]);
 
     $this->user = User::factory()

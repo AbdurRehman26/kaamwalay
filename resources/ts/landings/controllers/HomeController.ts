@@ -14,6 +14,9 @@ export class HomeController extends Controller implements CanSetup<HomeControlle
                 props: {
                     className: 'Home-buttonCta',
                 },
+                options: {
+                    replaceParent: true,
+                },
             }),
         );
     }

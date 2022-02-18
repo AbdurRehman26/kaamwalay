@@ -6,10 +6,17 @@ import { store } from '../redux/store';
 import { mountAtom } from '../utils/mountAtom';
 import { camelCase } from 'lodash';
 
+type ToType = string | HTMLElement[] | null;
+type LoaderType = ElementType | ReactElement | null;
+type PropsType = Record<string, any>;
+
+interface AtomOptions {}
+
 interface CloneOptions {
-    to?: string | HTMLElement[] | null;
-    loader?: ElementType | ReactElement | null;
-    props?: Record<string, any>;
+    to?: ToType;
+    loader?: LoaderType;
+    props?: PropsType;
+    options?: AtomOptions;
 }
 
 /**
@@ -27,9 +34,10 @@ interface CloneOptions {
  */
 export class Atom {
     private _from!: ElementType | Atom[];
-    private _to!: string | HTMLElement[] | null;
-    private _loader: ElementType | ReactElement | null = null;
-    private _props: Record<string, any> = {};
+    private _to!: ToType;
+    private _loader: LoaderType = null;
+    private _props: PropsType = {};
+    private _options: AtomOptions = {};
 
     private static noConfigurationLoad = false;
     private static noAuthenticationCheck = false;
@@ -58,18 +66,17 @@ export class Atom {
      * atom.to('#my-element', { prop:'value' });  // Will be rendered to '#my-element' and pass `prop` prop to the component
      * ```
      * @param to
-     * @param props
      */
-    public to(to: string | HTMLElement | HTMLElement[], props?: Record<string, any>): this {
+    public to(to: string | HTMLElement | HTMLElement[]): this {
         this._to = typeof to === 'string' || Array.isArray(to) ? to : [to];
-        return this.props(props || {});
+        return this;
     }
 
     /**
      * Define the default props to use when the atom is mounted.
      * @param props
      */
-    public props(props: Record<string, any>): this {
+    public props(props: PropsType): this {
         this._props = {
             ...this._props,
             ...props,
@@ -79,10 +86,23 @@ export class Atom {
     }
 
     /**
+     * Define the options of the atom.
+     * @param options
+     */
+    public options(options: AtomOptions): this {
+        this._options = {
+            ...this._options,
+            ...options,
+        };
+
+        return this;
+    }
+
+    /**
      * Define loader you want to show while the atom it's loading.
      * @param loader
      */
-    public loader(loader: ElementType | ReactElement | null): this {
+    public loader(loader: LoaderType): this {
         this._loader = loader;
         return this;
     }
@@ -134,6 +154,9 @@ export class Atom {
                     <Suspense fallback={<Fragment />}>{renderElementType(from, this.getPropsOf(mountPoint))}</Suspense>
                 </ApplicationProvider>,
                 mountPoint,
+                () => {
+                    mountPoint.removeAttribute('data-atom');
+                },
             );
 
             Atom.noConfigurationLoad = true;
@@ -152,7 +175,7 @@ export class Atom {
         if (typeof this._to === 'string') {
             let to = this._to;
             if (!/^[.#]/.test(to)) {
-                to = '.atoms--' + to;
+                to = `.atoms--${to},[data-atom="${to}"]`;
             }
 
             this._to = Array.from(document.querySelectorAll<HTMLElement>(to));
@@ -161,7 +184,7 @@ export class Atom {
         return this._to;
     }
 
-    private getPropsOf(mountPoint: HTMLElement): Record<string, any> {
+    private getPropsOf(mountPoint: HTMLElement): PropsType {
         const dataset = this.getDatasetOf(mountPoint);
         return { ...(this._props || {}), ...(dataset ?? {}) };
     }
@@ -173,13 +196,13 @@ export class Atom {
 
         return mountPoint
             .getAttributeNames()
-            .filter((name) => name.startsWith('data-'))
+            .filter((name) => name.startsWith('data-') || name === 'data-atom')
             .reduce(
                 (acc, name) => ({
                     ...acc,
                     [camelCase(name.replace(/^data-/g, ''))]: mountPoint.getAttribute(name),
                 }),
-                {} as Record<string, any>,
+                {} as PropsType,
             );
     }
 
@@ -188,6 +211,7 @@ export class Atom {
             .from(this._from)
             .to(param?.to || this._to!)
             .props(param?.props || this._props)
+            .options(param?.options || this._options)
             .loader(param?.loader || this._loader);
     }
 }

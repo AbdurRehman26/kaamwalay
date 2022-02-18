@@ -65,8 +65,6 @@
                 widgetParams.container.appendChild(ul);
             }
 
-            const select = widgetParams.container.querySelector('div');
-
             widgetParams.container.querySelector('ul').innerHTML =`
             ${items
                 .map(
@@ -160,5 +158,32 @@
             })
             ]);
 
+            const renderStatsMobile = (renderOptions, isFirstRender) => {
+            const {
+                nbHits,
+                areHitsSorted,
+                nbSortedHits,
+                processingTimeMS,
+                query,
+                widgetParams,
+            } = renderOptions;
+
+            if (isFirstRender) {
+                return;
+            }
+
+            widgetParams.container.innerHTML = `
+                <button class="feed-stats__stats-button" onclick="closeFilterSort()">
+                   See ${nbHits} Results
+                </button>`;
+            };
+
+            const customStatsMobile = instantsearch.connectors.connectStats(renderStatsMobile);
+
+            search.addWidgets([
+            customStatsMobile({
+                container: document.querySelector('.feed-stats__mobile-stats'),
+            })
+            ]);
             search.start();
 </script>

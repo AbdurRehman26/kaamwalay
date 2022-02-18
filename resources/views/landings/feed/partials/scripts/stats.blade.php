@@ -1,5 +1,5 @@
 <script>
-                const renderStats = (renderOptions, isFirstRender) => {
+            const renderStats = (renderOptions, isFirstRender) => {
             const {
                 nbHits,
                 areHitsSorted,

@@ -5,7 +5,7 @@
 
             const buttonClear = document.createElement('button');
             buttonClear.textContent = 'All Categories';
-            buttonClear.className = "feed-categories__clear-refinements-button";
+            buttonClear.className = "feed-categories__clear-refinements-selected";
             
             const renderRefinementList = (renderOptions, isFirstRender) => {
             const {
@@ -33,7 +33,7 @@
                         href="${createURL(item.value)}"
                         data-value="${item.value}"
                     >
-                    ${item.isRefined ?  '<span class="material-icons ">check</span>'
+                    ${item.isRefined ?  '<span class="feed-categories__icon material-icons ">check</span>'
                         : ''}
                         ${item.label}
                     </a>
@@ -44,6 +44,7 @@
 
             [...widgetParams.container.querySelectorAll('a')].forEach(element => {
                 element.addEventListener('click', event => {
+                    buttonClear.className = "feed-categories__clear-refinements-not-selected"
                     clearSpan.remove();
                     event.preventDefault();
                     refine(event.currentTarget.dataset.value);
@@ -67,6 +68,7 @@
 
             if (isFirstRender) {
                 buttonClear.addEventListener('click', () => {
+                    buttonClear.className = "feed-categories__clear-refinements-selected"
                     clearSpan.textContent = 'done_icon';
                     clearSpan.className = " feed-categories__clear-refinements-icon material-icons";
                     widgetParams.container.appendChild(clearSpan);

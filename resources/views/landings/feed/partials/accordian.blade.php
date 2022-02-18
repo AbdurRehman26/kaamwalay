@@ -121,4 +121,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
+</div>
+<div class="feed-stats__mobile-stats">
+</div>

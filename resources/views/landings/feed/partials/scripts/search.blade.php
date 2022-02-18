@@ -21,10 +21,10 @@
                 button.addEventListener('click', () => {
                     clear();
                 });
-
+                
+                widgetParams.container.appendChild(span);
                 widgetParams.container.appendChild(input);
                 widgetParams.container.appendChild(button);
-                widgetParams.container.appendChild(span);
             }
 
             widgetParams.container.querySelector('input').value = query;

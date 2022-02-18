@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
+    Event::fake();
     $user = User::factory()->create([
         'stripe_id' => Str::random(25),
     ]);
@@ -27,8 +28,6 @@ beforeEach(function () {
     
     $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
     $orderStatusHistoryService->addStatusToOrder($this->order->order_status_id, $this->order->id);
-    
-    Event::fake();
     \Illuminate\Support\Facades\Bus::fake();
 });
 

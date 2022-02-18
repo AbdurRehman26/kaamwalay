@@ -10,10 +10,24 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
 use App\Services\Payment\V1\PaymentService as V1PaymentService;
+use App\Services\Payment\V2\Providers\CollectorCoinService;
+use App\Services\Payment\V2\Providers\PaypalService;
+use App\Services\Payment\V2\Providers\StripeService;
+use App\Services\Payment\V2\Providers\WalletService;
 use Throwable;
 
 class PaymentService extends V1PaymentService
 {
+    /**
+     * Payment Providers available for the application
+     **/
+    protected array $providers = [
+        'stripe' => StripeService::class,
+        'paypal' => PaypalService::class,
+        'collector_coin' => CollectorCoinService::class,
+        'wallet' => WalletService::class,
+    ];
+
     public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
     {
         $this->order->allPayments->each->update([

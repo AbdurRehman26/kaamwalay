@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\API\Customer\Order\OrderPaid;
+use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -12,6 +14,10 @@ use function Pest\Laravel\postJson;
 
 beforeEach(function () {
     Storage::fake('s3');
+    Event::fake([
+        OrderPaid::class,
+        OrderStatusChangedEvent::class,
+    ]);
 
     $this->user = User::factory()->create([
         'stripe_id' => Str::random(25),
@@ -41,9 +47,6 @@ beforeEach(function () {
 
     $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
     $orderStatusHistoryService->addStatusToOrder($this->order->order_status_id, $this->order->id);
-
-    Event::fake();
-    \Illuminate\Support\Facades\Bus::fake();
 });
 
 test('user can be charged successfully from wallet', function () {

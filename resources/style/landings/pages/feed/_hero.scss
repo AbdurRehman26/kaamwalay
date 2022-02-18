@@ -40,8 +40,6 @@
         color: rgba(0, 0, 0, 0.54);
 
         @include breakpoints.down(sm) {
-            top: 115px;
-            right: 24px;
             position: absolute;
         }
     }
@@ -50,12 +48,11 @@
         position: absolute;
         margin-left: 10px;
         margin-top: 12px;
+        width: 10px;
         color: rgba(0, 0, 0, 0.54);
 
         @include breakpoints.down(sm) {
             position: absolute;
-            top: 116px;
-            left: 20px;
         }
     }
 

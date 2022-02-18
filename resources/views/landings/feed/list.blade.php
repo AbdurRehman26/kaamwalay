@@ -81,13 +81,18 @@
                 <div class="feed-categories__menu-select"></div>
             </div>
             <div class="feed-categories__views">
-                <button class="feed-categories__list-view-button" onclick="listView()">
-                    <span class="feed-categories__list-view-icon material-icons">density_small</span>
-                </button>
-                <button class="feed-categories__grid-view-button" onclick="gridView()">
-                    <span class="feed-categories__grid-view-icon material-icons">grid_view</span>
-                </button>
-                <span class="feed-categories__sort-by"></span>
+                <div>
+                    <button class="feed-categories__list-view-button" onclick="listView()">
+                        <span class="feed-categories__list-view-icon material-icons">density_small</span>
+                    </button>
+                    <button class="feed-categories__grid-view-button" onclick="gridView()">
+                        <span class="feed-categories__grid-view-icon material-icons">grid_view</span>
+                    </button>
+                </div>
+                <div class="feed-categories__sort-by-container">
+                    <p style="margin-left: 10px;">sort</p>
+                    <span class="feed-categories__sort-by"></span>
+                </div>
             </div>
         </div>
     </section>
@@ -95,7 +100,7 @@
         <div class="container feed-stats__container">
             <div class="feed-stats__text"></div>
             <button class="feed-stats__sort-and-filter" onclick="openFilterSort()">
-                <span class="material-icons">filter_alt</span>
+                <span class="feed-stats__icon material-icons">filter_alt</span>
                 Sort & Filter
             </button>
         </div>

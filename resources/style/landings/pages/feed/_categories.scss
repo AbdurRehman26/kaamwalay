@@ -14,9 +14,14 @@
         }
     }
 
+    &__sort-by-container {
+        margin-top: -10px;
+        margin-left: 10px;
+    }
+
     &__sort-by-select {
         background-color: #f4f4fb;
-        margin: 10px 10px;
+        margin: 0px 10px;
     }
 
     &__category-list {
@@ -144,6 +149,7 @@
     }
 
     &__views {
+        display: flex;
         margin-top: 32px;
         @include breakpoints.down(768) {
             display: none;
@@ -228,8 +234,6 @@
     }
 
     &__sort-and-filter {
-        width: 140px;
-        height: 40px;
         border: 1px solid rgba(0, 0, 0, 0.18);
         box-sizing: border-box;
         border-radius: 24px;
@@ -241,8 +245,15 @@
         color: rgba(0, 0, 0, 0.54);
         display: none;
         @include breakpoints.down(768) {
+            width: 50%;
             display: block;
         }
+    }
+
+    &__icon {
+        margin-left: -30px;
+        margin-top: -3px;
+        position: absolute;
     }
 
     &__text {

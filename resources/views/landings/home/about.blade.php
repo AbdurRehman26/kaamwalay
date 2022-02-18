@@ -9,7 +9,7 @@
     <div class="container Home-sectionContainer">
         <div class="Home-sectionColumn Home-sectionColumn--half">
             <a
-                href="https://viola-antelope-e3t9.squarespace.com/s/Testimonial-2.mp4"
+                href="https://www.youtube.com/watch?v=Yz_u_F6n4SU"
                 data-type="video"
                 data-effect="zoom"
                 class="Home-sectionImageHolder glightbox" data-aos="fade-right" data-aos-easing="ease-in-out">

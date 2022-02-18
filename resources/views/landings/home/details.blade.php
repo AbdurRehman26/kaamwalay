@@ -17,7 +17,8 @@
             <a href="/dashboard/submissions/new" class="Home-buttonCta Home-buttonCta--light">Start a submission</a>
         </div>
         <div class="Home-sectionColumn Home-sectionColumn--half">
-            <a href="#" class="Home-sectionImageHolder" data-aos="fade-left" data-aos-easing="ease-in-out">
+            <a href="{{ asset('assets/images/landings/home/detailsPoster.jpg') }}" data-type="image" data-gallery="details" data-effect="zoom"
+               class="Home-sectionImageHolder glightbox" data-aos="fade-left" data-aos-easing="ease-in-out">
                 <img src="{{ asset('assets/images/landings/home/detailsPoster.jpg') }}" alt="Detail"
                      class="Home-sectionImage" />
             </a>

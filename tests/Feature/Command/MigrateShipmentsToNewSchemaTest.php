@@ -7,7 +7,7 @@ use App\Models\OrderItemCustomerShipment;
 use App\Models\OrderItemShipment;
 use App\Models\OrderStatus;
 use App\Models\User;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Support\Facades\Event;
 
 use function Pest\Laravel\assertDatabaseCount;

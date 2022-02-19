@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment\V2;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\FailedRefund;
@@ -50,10 +51,7 @@ class PaymentService extends V1PaymentService
         // only update order if its still payable
         // method can be called twice and can fire event twice
         if ($this->order->isPayable()) {
-            $this->order->update([
-                'payment_status' => 1,
-                'paid_at' => now(),
-            ]);
+            $this->order->markAsPaid();
 
             OrderPaid::dispatch($this->order);
         }

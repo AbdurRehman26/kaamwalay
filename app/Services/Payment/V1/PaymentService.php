@@ -13,7 +13,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V1\OrderStatusHistoryService;
 use App\Services\Payment\V1\Providers\CollectorCoinService;
 use App\Services\Payment\V1\Providers\PaypalService;
 use App\Services\Payment\V1\Providers\StripeService;
@@ -135,6 +135,8 @@ class PaymentService
         // method can be called twice and can fire event twice
         if ($this->order->isPayable()) {
             $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
+
+            $this->order->markAsPaid();
 
             OrderPaid::dispatch($this->order);
         }

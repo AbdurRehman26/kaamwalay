@@ -8,7 +8,7 @@ use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Wallet;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 
 use function Pest\Laravel\postJson;
 

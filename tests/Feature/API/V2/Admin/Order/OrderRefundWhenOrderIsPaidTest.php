@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\API\Admin\Order;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Events\Wallet\TransactionHappened;
 use App\Models\Order;
@@ -40,7 +41,7 @@ beforeEach(function () {
     $this->order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,
         'payment_method_id' => 1,
-        'payment_status' => 1,
+        'payment_status' => OrderPaymentStatusEnum::PAID,
     ]);
 
     Wallet::factory()->create([

@@ -12,7 +12,7 @@ use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Services\Admin\Order\OrderItemService;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V1\OrderStatusHistoryService;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\OrderNumberGeneratorService;
 use App\Services\Order\Shipping\ShippingFeeService;

@@ -355,3 +355,22 @@ it('dispatches job for creating files for order labels when order is marked as g
 
     Bus::assertDispatchedTimes(CreateOrderLabel::class);
 });
+
+test('order can not be shipped if its not paid', function () {
+    /** @var Order $order */
+    $order = Order::factory()->create();
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::SHIPPED,
+    ])->assertUnprocessable();
+});
+
+test('order can be shipped if its not paid', function () {
+    /** @var Order $order */
+    Event::fake();
+    $order = Order::factory()->create(['payment_status' => 1]);
+    $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
+        'order_status_id' => OrderStatus::SHIPPED,
+    ])->assertOk();
+
+    Event::assertDispatched(OrderStatusChangedEvent::class);
+});

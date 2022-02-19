@@ -9,7 +9,7 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use Symfony\Component\HttpFoundation\Response;
 

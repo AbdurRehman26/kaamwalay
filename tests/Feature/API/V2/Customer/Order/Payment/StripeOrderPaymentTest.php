@@ -5,7 +5,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Payment\V2\Providers\TestingStripeService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;

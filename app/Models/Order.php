@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -85,6 +86,7 @@ class Order extends Model
         'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
         'paid_at' => 'datetime',
+        'payment_status' => OrderPaymentStatusEnum::class,
     ];
 
     protected $appends = [
@@ -232,14 +234,9 @@ class Order extends Model
             return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
         }
 
-        ////        return true;
-//        dd($this->order_status_id > OrderStatus::PAYMENT_PENDING, $this->order_status_id
-//            , ! $this->isCancelled()
-//            , $this->payment_status == 0);
-
         return $this->order_status_id > OrderStatus::PAYMENT_PENDING
             && ! $this->isCancelled()
-            && $this->payment_status == 0;
+            && $this->payment_status === OrderPaymentStatusEnum::PENDING;
     }
 
     public function scopePlaced(Builder $query): Builder
@@ -346,6 +343,13 @@ class Order extends Model
 
     public function isPaid(): bool
     {
-        return $this->payment_status === 1;
+        return $this->payment_status === OrderPaymentStatusEnum::PAID;
+    }
+
+    public function markAsPaid()
+    {
+        $this->payment_status = OrderPaymentStatusEnum::PAID;
+        $this->paid_at = now();
+        $this->save();
     }
 }

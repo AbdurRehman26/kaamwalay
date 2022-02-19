@@ -31,12 +31,51 @@ class PopReportService
         $this->generateReportEmptyArray();
     }
 
+    public function initializePopReportsForAll()
+    {
+        $this->initializePopReportsForCardSeries();
+        $this->initializePopReportsForCardSets();
+        $this->initializePopReportsForCards();
+    }
+
+    public function initializePopReportsForCardSeries()
+    {
+        $cardSeriesIds = CardSeries::pluck('id');
+
+        foreach ($cardSeriesIds as $cardSeriesId) {
+            PopReportsSeries::firstOrCreate([ 'card_series_id' => $cardSeriesId ]);
+        }
+    }
+
+    public function initializePopReportsForCardSets()
+    {
+        $cardSets = CardSet::all();
+
+        foreach ($cardSets as $cardSet) {
+            PopReportsSet::firstOrCreate([
+                'card_set_id' => $cardSet->id, 'card_series_id' => $cardSet->card_series_id,
+            ]);
+        }
+    }
+
+    public function initializePopReportsForCards()
+    {
+        $cardProducts = CardProduct::canBeInitializedInPopReport()->cardInformationIsComplete()->get();
+
+        foreach ($cardProducts as $cardProduct) {
+            PopReportsCard::firstOrCreate([
+                'card_product_id' => $cardProduct->id, 'card_set_id' => $cardProduct->card_set_id,
+            ]);
+        }
+    }
+
     public function updateSeriesReport(CardSeries $cardSeries)
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
+            ->cardInformationIsComplete()
             ->where('card_sets.card_series_id', $cardSeries->id)
             ->where('user_cards.overall_grade', '>', 0)
             ->where('order_items.order_item_status_id', [OrderItemStatus::GRADED])
@@ -58,11 +97,10 @@ class PopReportService
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
             ->where('card_products.card_set_id', $cardSet->id)
-            ->where('card_products.added_manually', '!=', 1)
+            ->cardInformationIsComplete()
             ->where('user_cards.overall_grade', '>', 0)
             ->where('order_items.order_item_status_id', [OrderItemStatus::GRADED])
             ->whereIn('orders.order_status_id', [OrderStatus::GRADED, OrderStatus::SHIPPED])
-            ->where('card_products.added_manually', '!=', 1)
             ->select('user_cards.overall_grade')
             ->get();
 
@@ -80,7 +118,7 @@ class PopReportService
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
-            ->where('card_products.added_manually', '!=', 1)
+            ->cardInformationIsComplete()
             ->where('card_products.id', $cardProduct->id)
             ->where('user_cards.overall_grade', '>', 0)
             ->where('order_items.order_item_status_id', [OrderItemStatus::GRADED])
@@ -121,13 +159,13 @@ class PopReportService
     {
         $orderCards = CardProduct::join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
             ->where('order_items.order_id', $order->id)
-            ->where('card_products.added_manually', '!=', 1)
+            ->cardInformationIsComplete()
             ->select('card_products.*')
             ->get();
 
         $orderSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
-            ->where('card_products.added_manually', '!=', 1)
+            ->cardInformationIsComplete()
             ->where('order_items.order_id', $order->id)
             ->select('card_sets.*')
             ->groupBy('card_sets.id')
@@ -136,7 +174,7 @@ class PopReportService
         $orderSeries = CardSeries::join('card_sets', 'card_sets.card_series_id', '=', 'card_series.id')
             ->join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
-            ->where('card_products.added_manually', '!=', 1)
+            ->cardInformationIsComplete()
             ->where('order_items.order_id', $order->id)
             ->select('card_series.*')
             ->groupBy('card_series.id')

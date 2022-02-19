@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -78,12 +79,20 @@ class CardProduct extends Model
         return $array;
     }
 
-    /**
-     * Determine if the model should be searchable.
-     *
-     * @return bool
-     */
-    public function shouldBeSearchable()
+    public function scopeCanBeInitializedInPopReport(Builder $query): Builder
+    {
+        return $query->leftJoin('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
+            ->whereNull('pop_reports_cards.id');
+    }
+
+    public function scopeCardInformationIsComplete(Builder $query): Builder
+    {
+        return $query->whereNotNull('card_products.card_category_id')
+            ->whereNotNull('card_products.card_set_id')
+            ->whereNotNull('card_products.card_number_order');
+    }
+
+    public function shouldBeSearchable(): bool
     {
         return ! $this->added_manually || $this->isCardInformationComplete();
     }

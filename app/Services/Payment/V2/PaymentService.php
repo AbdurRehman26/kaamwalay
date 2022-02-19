@@ -2,7 +2,6 @@
 
 namespace App\Services\Payment\V2;
 
-use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Customer\Order\OrderPaid;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Exceptions\API\Admin\Order\FailedRefund;

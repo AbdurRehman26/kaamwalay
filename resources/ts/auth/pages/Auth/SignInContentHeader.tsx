@@ -62,7 +62,7 @@ export function SignInContentHeader(props: Props) {
                     <Box display={'flex'} width={'100%'} justifyContent={'center'}>
                         <MuiLink
                             onClick={() => {
-                                window.location.href = '/password/forgot';
+                                window.location.href = '/auth/password/forgot';
                             }}
                             variant={'caption'}
                             color={'textPrimary'}

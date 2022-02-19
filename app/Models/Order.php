@@ -346,7 +346,7 @@ class Order extends Model
         return $this->payment_status === OrderPaymentStatusEnum::PAID;
     }
 
-    public function markAsPaid()
+    public function markAsPaid(): void
     {
         $this->payment_status = OrderPaymentStatusEnum::PAID;
         $this->paid_at = now();

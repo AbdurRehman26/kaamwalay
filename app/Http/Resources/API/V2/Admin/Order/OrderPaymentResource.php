@@ -3,7 +3,7 @@
 namespace App\Http\Resources\API\V2\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V1\Customer\User\UserResource;
+use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\OrderPayment;
 
 /** @mixin OrderPayment */

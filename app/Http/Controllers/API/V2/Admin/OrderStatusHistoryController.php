@@ -9,6 +9,7 @@ use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryResource;
 use App\Models\Order;
 use App\Services\Admin\V2\OrderStatusHistoryService;
+use Throwable;
 
 class OrderStatusHistoryController extends Controller
 {

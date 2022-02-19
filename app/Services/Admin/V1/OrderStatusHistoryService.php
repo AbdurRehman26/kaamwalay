@@ -4,7 +4,6 @@ namespace App\Services\Admin\V1;
 
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
-use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\CreateOrderLabel;
@@ -12,10 +11,10 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
-use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
@@ -27,6 +26,9 @@ class OrderStatusHistoryService
     ) {
     }
 
+    /**
+     * @return Collection <int, OrderStatusHistory>
+     */
     public function getAllByOrderId(Order|int $orderId): Collection
     {
         return QueryBuilder::for(OrderStatusHistory::class)
@@ -38,8 +40,12 @@ class OrderStatusHistoryService
     /**
      * @throws OrderCanNotBeMarkedAsGraded|Throwable
      */
-    public function addStatusToOrder(OrderStatus|int $orderStatus, Order|int $order, User|int $user = null, ?string $notes = null)
-    {
+    public function addStatusToOrder(
+        OrderStatus|int $orderStatus,
+        Order|int $order,
+        User|int $user = null,
+        ?string $notes = null
+    ): OrderStatusHistory|Model {
         if (! $user) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $user = auth()->user();

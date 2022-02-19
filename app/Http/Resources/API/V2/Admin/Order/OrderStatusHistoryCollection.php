@@ -13,7 +13,7 @@ class OrderStatusHistoryCollection extends ResourceCollection
      * Transform the resource collection into an array.
      *
      * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
+     * @return array|Arrayable<string, mixed>|JsonSerializable
      */
     public function toArray($request): array|JsonSerializable|Arrayable
     {

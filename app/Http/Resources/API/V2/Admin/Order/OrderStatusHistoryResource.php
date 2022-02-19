@@ -3,9 +3,13 @@
 namespace App\Http\Resources\API\V2\Admin\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V1\Customer\User\UserResource;
+use App\Http\Resources\API\V2\Customer\User\UserResource;
+use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 
+/**
+ * @mixin OrderStatusHistory
+ */
 class OrderStatusHistoryResource extends BaseResource
 {
     /**

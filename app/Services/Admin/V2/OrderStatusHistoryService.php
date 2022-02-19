@@ -16,6 +16,7 @@ use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
@@ -27,6 +28,9 @@ class OrderStatusHistoryService
     ) {
     }
 
+    /**
+     * @return Collection <int, OrderStatusHistory>
+     */
     public function getAllByOrderId(Order|int $orderId): Collection
     {
         return QueryBuilder::for(OrderStatusHistory::class)
@@ -38,8 +42,12 @@ class OrderStatusHistoryService
     /**
      * @throws OrderCanNotBeMarkedAsGraded|Throwable
      */
-    public function addStatusToOrder(OrderStatus|int $orderStatus, Order|int $order, User|int $user = null, ?string $notes = null)
-    {
+    public function addStatusToOrder(
+        OrderStatus|int $orderStatus,
+        Order|int $order,
+        User|int $user = null,
+        ?string $notes = null
+    ): OrderStatusHistory|Model {
         if (! $user) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $user = auth()->user();

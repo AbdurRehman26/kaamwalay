@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\API\Admin\Order;
 
-use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\UnpaidOrderExtraCharge;
 use App\Models\Order;
 use App\Models\OrderPayment;

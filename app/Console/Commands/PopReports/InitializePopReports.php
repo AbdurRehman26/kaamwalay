@@ -2,12 +2,6 @@
 
 namespace App\Console\Commands\PopReports;
 
-use App\Models\CardProduct;
-use App\Models\CardSeries;
-use App\Models\CardSet;
-use App\Models\PopReportsCard;
-use App\Models\PopReportsSeries;
-use App\Models\PopReportsSet;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 
@@ -27,22 +21,14 @@ class InitializePopReports extends Command
      */
     protected $description = 'Initialize Pop Reports For Series, Sets and Cards.';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
     public function handle(PopReportService $popReportService): int
     {
-        $selectedOption = 'Cards';
-//        $this->choice(
-//            'Initialize Report Values for :',
-//            ['All', 'Series', 'Sets', 'Cards'],
-//            '0'
-//        );
+        $selectedOption = $this->choice(
+            'Initialize Report Values for :',
+            ['All', 'Series', 'Sets', 'Cards'],
+            '0'
+        );
 
-        $popReportService->updatePopReportsForOrder(\App\Models\Order::find(1));
-    dd(1);
         if($selectedOption === "All" ){
             $popReportService->initializePopReportsForAll();
         }

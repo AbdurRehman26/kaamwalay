@@ -75,4 +75,3 @@ it('does not perform extra charge when service is disabled', function () {
         'amount' => '20.00',
     ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });
-

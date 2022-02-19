@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\API\Admin\Order;
 
-use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -14,8 +13,6 @@ use Database\Seeders\CardSeriesSeeder;
 use Database\Seeders\CardSetsSeeder;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 

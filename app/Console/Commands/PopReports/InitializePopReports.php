@@ -2,12 +2,6 @@
 
 namespace App\Console\Commands\PopReports;
 
-use App\Models\CardProduct;
-use App\Models\CardSeries;
-use App\Models\CardSet;
-use App\Models\PopReportsCard;
-use App\Models\PopReportsSeries;
-use App\Models\PopReportsSet;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 
@@ -42,8 +36,8 @@ class InitializePopReports extends Command
 //        );
 
         $popReportService->updatePopReportsForOrder(\App\Models\Order::find(1));
-    dd(1);
-        if($selectedOption === "All" ){
+        dd(1);
+        if ($selectedOption === "All") {
             $popReportService->initializePopReportsForAll();
         }
 

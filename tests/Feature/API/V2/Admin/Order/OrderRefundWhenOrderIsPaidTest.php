@@ -40,6 +40,7 @@ beforeEach(function () {
     $this->order = Order::factory()->create([
         'order_status_id' => OrderStatus::PLACED,
         'payment_method_id' => 1,
+        'payment_status' => 1,
     ]);
 
     Wallet::factory()->create([
@@ -69,7 +70,7 @@ test('admin can refund partial amount of a charge', function () {
         'notes' => $this->faker->sentence(),
         'amount' => '10.00',
         'add_to_wallet' => false,
-    ])->assertStatus(Response::HTTP_CREATED);
+    ])->dump()->assertStatus(Response::HTTP_CREATED);
 
     Event::assertDispatched(RefundSuccessful::class);
     expect($this->order->refunds()->count())->toEqual(1);

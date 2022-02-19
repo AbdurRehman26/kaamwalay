@@ -3,6 +3,7 @@
 namespace Tests\Feature\API\Admin\Order;
 
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
+use App\Events\API\Admin\Order\UnpaidOrderExtraCharge;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -51,16 +52,19 @@ beforeEach(function () {
     $this->actingAs($user);
 });
 
-test('admin can update order payment notes', function () {
-    $orderPayment = OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-    ]);
-    $notes = $this->faker->sentence();
-    $this->putJson(
-        route('v2.order-payments.update', ['order' => $this->order, 'order_payment' => $orderPayment]),
-        ['notes' => $notes]
-    )
-        ->assertStatus(Response::HTTP_OK);
-    $orderPayment->refresh();
-    expect($orderPayment->notes)->toEqual($notes);
+test('admin can create extra charge for order', function () {
+    Config::set('robograding.feature_order_extra_charge_enabled', true);
+    Event::fake();
+    $this->postJson(route('v2.payments.extra-charge', ['order' => $this->order]), [
+        'notes' => $this->faker->sentence(),
+        'amount' => '20.00',
+    ])
+        ->assertStatus(Response::HTTP_CREATED)
+        ->assertJsonStructure(['data' => ['amount', 'user' => ['id', 'first_name', 'email']]])
+        ->assertJsonFragment(['type' => 'extra_charge']);
+
+    Event::assertDispatched(UnpaidOrderExtraCharge::class);
+    expect($this->order->extraCharges()->count())->toEqual(1);
+    expect($this->order->orderPayments()->count())->toEqual(2);
 });
+

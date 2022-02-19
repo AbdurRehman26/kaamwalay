@@ -29,7 +29,7 @@ class InitializePopReports extends Command
             '0'
         );
 
-        if($selectedOption === "All" ){
+        if ($selectedOption === "All") {
             $popReportService->initializePopReportsForAll();
         }
 

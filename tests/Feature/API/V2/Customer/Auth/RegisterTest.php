@@ -3,7 +3,6 @@
 use App\Events\API\Auth\CustomerRegistered;
 use App\Jobs\Auth\CreateUserDeviceJob;
 use App\Models\User;
-use App\Models\Wallet;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Bus;

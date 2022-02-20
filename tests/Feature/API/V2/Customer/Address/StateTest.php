@@ -10,7 +10,7 @@ beforeEach(function () {
 test('a user can see states', function () {
     $this->actingAs($this->user);
 
-    State::truncate();
+    State::delete();
     State::factory()
         ->count(5)
         ->create();
@@ -27,7 +27,7 @@ test('a user can see states', function () {
 test('a user can see specific state', function () {
     $this->actingAs($this->user);
 
-    State::truncate();
+    State::delete();
     State::factory()->create();
     $response = $this->getJson('/api/v2/customer/addresses/states/1');
 

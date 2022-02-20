@@ -87,7 +87,7 @@ test('ags user can login', function () {
         'email' => $testEmail,
         'password' => 'Asdasd1',
     ]);
-    $user = User::first();
+    $user = User::whereEmail($testEmail)->first();
     $response->assertStatus(200);
     $response->assertJsonStructure(['access_token', 'type', 'expiry']);
     expect($user->email)->toBe($testEmail);
@@ -171,7 +171,7 @@ test('ags user can login and have wallet created', function () {
         'email' => $testEmail,
         'password' => 'Asdasd1',
     ]);
-    $user = User::first();
+    $user = User::whereEmail($testEmail)->first();
     $response->assertStatus(200);
     $response->assertJsonStructure(['access_token', 'type', 'expiry']);
     expect($user->email)->toBe($testEmail);

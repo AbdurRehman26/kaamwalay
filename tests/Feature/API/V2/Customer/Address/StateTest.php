@@ -29,7 +29,7 @@ test('a user can see specific state', function () {
 
     State::query()->delete();
     State::factory()->create();
-    $response = $this->getJson('/api/v2/customer/addresses/states/1');
+    $response = $this->getJson('/api/v2/customer/addresses/states/' . State::first()->id);
 
     $response->assertJsonCount(3, 'data');
     $response->assertJsonStructure([

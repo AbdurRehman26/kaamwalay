@@ -169,5 +169,4 @@ class OrderPaymentService
     {
         $this->order->payment_method_id = $paymentMethod['id'];
     }
-
 }

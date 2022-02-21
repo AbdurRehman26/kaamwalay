@@ -1,6 +1,6 @@
 <section class="Home-section Home-availableCards">
     <div class="container Home-sectionContainer Home-sectionContainer--center-center">
-        <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn--center-center">
+        <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn--center-center" data-aos="fade" data-aos-easing="ease-in-out">
             <h4 class="Home-sectionContentCaption text-center">Currently accepting:</h4>
             <h3 class="Home-sectionContentHeadline text-center">Pokemon, MetaZoo, Dragon Ball Super & Yu-Gi-Oh!</h3>
             <p class="Home-sectionContentText text-center">You can include any card from these four categories in
@@ -10,22 +10,11 @@
 
     <div class="container Home-sectionContainer">
         <div class="Home-availableCardsImages">
-            <div class="Home-availableCardsColumn">
-                <img src="{{ asset('assets/images/landings/home/availableCards01.jpg') }}" alt=""
-                     class="Home-availableCardsImage" />
-            </div>
-            <div class="Home-availableCardsColumn">
-                <img src="{{ asset('assets/images/landings/home/availableCards02.jpg') }}" alt=""
-                     class="Home-availableCardsImage" />
-            </div>
-            <div class="Home-availableCardsColumn">
-                <img src="{{ asset('assets/images/landings/home/availableCards03.jpg') }}" alt=""
-                     class="Home-availableCardsImage" />
-            </div>
-            <div class="Home-availableCardsColumn">
-                <img src="{{ asset('assets/images/landings/home/availableCards04.jpg') }}" alt=""
-                     class="Home-availableCardsImage" />
-            </div>
+            @foreach($categories as $category)
+                <div class="Home-availableCardsColumn" data-aos="fade" data-aos-easing="ease-in-out" data-aos-delay="100">
+                    <img src="{{ $category->image_url }}" alt="{{ $category->name }}" class="Home-availableCardsImage" />
+                </div>
+            @endforeach
         </div>
     </div>
 </section>

@@ -14,7 +14,7 @@ class PaymentPlanController extends Controller
     {
         $paymentPlans = Cache::remember(
             'payment_plans',
-            now()->addWeek(),
+            now()->addMonth(),
             fn () => PaymentPlan::orderBy('display_position')->get()
         );
 

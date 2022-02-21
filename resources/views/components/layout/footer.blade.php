@@ -12,8 +12,8 @@
 
         <div class="Footer-column">
             <h5 class="Footer-columnHeadline">Links</h5>
-            <a href="{{ route('feed.list')  }}}" class="Footer-columnLink">Live Feed</a>
-            <a href="{{ route('pop.report')  }}}" class="Footer-columnLink">POP Report</a>
+            <a href="{{ route('feed.list') }}" class="Footer-columnLink">Live Feed</a>
+            <a href="{{ route('pop.report') }}" class="Footer-columnLink">POP Report</a>
         </div>
 
         <div class="Footer-column">

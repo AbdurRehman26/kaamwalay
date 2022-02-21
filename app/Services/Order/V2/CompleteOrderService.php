@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\Order\V2;
 
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\CustomerAddress;

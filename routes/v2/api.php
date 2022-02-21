@@ -13,6 +13,7 @@ use App\Http\Controllers\API\V2\Customer\Cards\CardProductController;
 use App\Http\Controllers\API\V2\Customer\Cards\UserCardController;
 use App\Http\Controllers\API\V2\Customer\CouponController;
 use App\Http\Controllers\API\V2\Customer\Order\OrderController;
+use App\Http\Controllers\API\V2\Customer\Order\OrderItemController;
 use App\Http\Controllers\API\V2\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\V2\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\V2\Customer\Order\PaymentPlanController;
@@ -68,6 +69,9 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
+
+            Route::post('{order}/addresses', [OrderController::class, 'storeOrderAddresses'])->name('customer.orders.update-addresses');
+            Route::post('{order}/complete', [OrderController::class, 'completeOrder'])->name('customer.orders.complete');
         });
 
         Route::apiResource('orders', OrderController::class, ['as' => 'customer'])->only(['index', 'store', 'destroy']);

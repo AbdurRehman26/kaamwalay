@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\Order\V2;
 
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V2\OrderStatusHistoryService;
+use App\Services\Order\OrderNumberGeneratorService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+
+use function auth;
 
 class StoreOrderService
 {

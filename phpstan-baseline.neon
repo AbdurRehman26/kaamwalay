@@ -1276,6 +1276,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_step\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$billingAddress\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
@@ -3046,7 +3051,7 @@ parameters:
 			path: app/Services/ImageService.php
 
 		-
-			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:placed\\(\\)\\.$#"
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:valid\\(\\)\\.$#"
 			count: 1
 			path: app/Services/Order/OrderService.php
 

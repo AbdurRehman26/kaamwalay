@@ -21,6 +21,12 @@ class Order extends Model
 {
     use HasFactory, ActivityLog, HasOrderPayments;
 
+    const ORDER_STEPS = [
+        'CARDS_STEP' => 'cards',
+        'SHIPPING_STEP' => 'shipping',
+        'PAYMENT_STEP' => 'payment'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -53,6 +59,7 @@ class Order extends Model
         'extra_charge_total',
         'refund_total',
         'payment_method_discounted_amount',
+        'order_step',
     ];
 
     /**

@@ -18,11 +18,14 @@ class UpdateOrderAddressesRequest extends FormRequest
 
     public function withValidator(Validator $validator): void
     {
-        $validator->after(function ($validator) {
-            if (! $this->route('order')->paymentPlan) {
+        /** @var Order $order */
+        $order = $this->route('order');
+
+        $validator->after(function ($validator) use ($order) {
+            if (! $order->paymentPlan) {
                 $validator->errors()->add('payment_plan', 'Please select a valid payment plan.');
             }
-            if (! $this->route('order')->orderItems()->count()) {
+            if (! $order->orderItems()->count()) {
                 $validator->errors()->add('items', 'Please select at least one card to proceed.');
             }
         });

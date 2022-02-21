@@ -189,7 +189,7 @@ class CompleteOrderService
 
     protected function saveOrder(): void
     {
-        $this->order->order_step = 'third_step';
+        $this->order->order_step = Order::ORDER_STEPS['PAYMENT_STEP'];
         $this->order->save();
     }
 }

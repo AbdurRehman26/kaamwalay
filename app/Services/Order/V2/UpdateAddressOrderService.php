@@ -93,7 +93,7 @@ class UpdateAddressOrderService
 
     protected function saveOrder(): void
     {
-        $this->order->order_step = 'second_step';
+        $this->order->order_step = Order::ORDER_STEPS['SHIPPING_STEP'];
         $this->order->save();
     }
 }

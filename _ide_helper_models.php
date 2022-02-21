@@ -533,6 +533,7 @@ namespace App\Models{
  * @property int|null $invoice_id
  * @property int|null $order_shipment_id
  * @property int|null $order_customer_shipment_id
+ * @property string|null $order_step
  * @property string|null $auto_saved_at
  * @property \Illuminate\Support\Carbon|null $arrived_at
  * @property \Illuminate\Support\Carbon|null $created_at

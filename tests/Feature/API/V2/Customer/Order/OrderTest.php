@@ -141,7 +141,7 @@ test('a customer can not update order addresses without addresses', function () 
         'customer_address' => 'The customer address field is required.',
         'shipping_address' => 'The shipping address field is required.',
         'shipping_method' => 'The shipping method field is required.',
-        'items' => 'The items field is required.',
+        'items' => 'Please select at least one card to proceed.',
     ]);
 });
 

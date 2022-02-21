@@ -4,6 +4,7 @@ namespace App\Http\Requests\API\V1\Customer\Order;
 
 use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class UpdateOrderAddressesRequest extends FormRequest
 {
@@ -15,11 +16,21 @@ class UpdateOrderAddressesRequest extends FormRequest
         return $order->isPayable();
     }
 
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            if (!$this->route('order')->paymentPlan) {
+                $validator->errors()->add('payment_plan', 'Please select a valid payment plan.');
+            }
+            if (!$this->route('order')->orderItems()->count()) {
+                $validator->errors()->add('items', 'Please select at least one card to proceed.');
+            }
+        });
+    }
+
     public function rules(): array
     {
         return [
-            'payment_plan' => 'required|array',
-            'payment_plan.id' => 'required|integer|exists:payment_plans,id',
             'customer_address' => 'required|array',
             'customer_address.id' => 'nullable|integer|exists:customer_addresses,id',
             'shipping_address' => 'required|array',
@@ -34,11 +45,6 @@ class UpdateOrderAddressesRequest extends FormRequest
             'shipping_address.save_for_later' => 'required|boolean',
             'shipping_method' => 'required|array',
             'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
-            'items' => 'required|array',
-            'items.*.card_product' => 'required|array',
-            'items.*.card_product.id' => 'required|integer|exists:card_products,id',
-            'items.*.quantity' => 'required|integer',
-            'items.*.declared_value_per_unit' => 'required|integer',
         ];
     }
 }

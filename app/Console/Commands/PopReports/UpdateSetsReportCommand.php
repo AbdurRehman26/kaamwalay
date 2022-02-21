@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\PopReports;
 
-use App\Models\CardSet;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 
@@ -30,6 +29,7 @@ class UpdateSetsReportCommand extends Command
     public function handle(PopReportService $popReportService)
     {
         $popReportService->updateAllSetsReport();
+
         return 0;
     }
 }

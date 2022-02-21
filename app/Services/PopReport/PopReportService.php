@@ -19,8 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
-
-use function Clue\StreamFilter\fun;
+use Illuminate\Database\Eloquent\Model;
 
 class PopReportService
 {
@@ -33,14 +32,14 @@ class PopReportService
         $this->generateReportEmptyArray();
     }
 
-    public function initializePopReportsForAll()
+    public function initializePopReportsForAll(): void
     {
         $this->initializePopReportsForCardSeries();
         $this->initializePopReportsForCardSets();
         $this->initializePopReportsForCards();
     }
 
-    public function initializePopReportsForCardSeries()
+    public function initializePopReportsForCardSeries(): void
     {
         $cardSeriesIds = CardSeries::pluck('id');
 
@@ -49,7 +48,7 @@ class PopReportService
         }
     }
 
-    public function initializePopReportsForCardSets()
+    public function initializePopReportsForCardSets(): void
     {
         $cardSets = CardSet::all();
 
@@ -60,9 +59,12 @@ class PopReportService
         }
     }
 
-    public function initializePopReportsForCards()
+    public function initializePopReportsForCards(): void
     {
-        $cardProducts = CardProduct::canBeInitializedInPopReport()->select('card_products.*')->get();
+        $cardProducts = CardProduct::canBeInitializedInPopReport()->where(function($query){
+            $this->isCardInformationComplete($query);
+        })->select('card_products.*')->get();
+
         foreach ($cardProducts as $cardProduct) {
             PopReportsCard::firstOrCreate([
                 'card_product_id' => $cardProduct->id, 'card_set_id' => $cardProduct->card_set_id,
@@ -83,7 +85,7 @@ class PopReportService
         }
     }
 
-    public function updateSeriesReport(CardSeries $cardSeries)
+    public function updateSeriesReport(CardSeries $cardSeries): void
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
@@ -107,7 +109,7 @@ class PopReportService
         $popSeriesReportModel->where($whereCondition)->update($reportsTableArray);
     }
 
-    public function updateAllSetsReport()
+    public function updateAllSetsReport(): void
     {
         $cardSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
@@ -130,7 +132,7 @@ class PopReportService
         }
     }
 
-    public function updateSetsReport(CardSet $cardSet)
+    public function updateSetsReport(CardSet $cardSet): void
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
@@ -350,6 +352,10 @@ class PopReportService
         return str_replace('+', '_plus', str_replace('-', '_', strtolower(array_search($grade, CardGradingService::GRADE_CRITERIA))));
     }
 
+    /**
+     * @param  Builder <Model> $query
+     * @return Builder <Model>
+     */
     protected function isCardInformationComplete(Builder $query): Builder
     {
         return $query->whereNotNull('card_products.card_category_id')

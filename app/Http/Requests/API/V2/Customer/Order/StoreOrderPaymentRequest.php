@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V2\Customer\Order;
 
+use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -14,7 +15,9 @@ class StoreOrderPaymentRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->route('order')->user->is($this->user());
+        /** @var Order $order */
+        $order = $this->route('order');
+        return $order->user->is($this->user());
     }
 
     /**

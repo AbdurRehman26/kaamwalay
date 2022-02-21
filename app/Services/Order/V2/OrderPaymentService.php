@@ -6,6 +6,7 @@ use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\PaymentMethod;
+use App\Services\Coupon\CouponService;
 use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
@@ -19,11 +20,16 @@ class OrderPaymentService
     protected Order $order;
     protected array $data;
 
+    public function __construct(
+        protected CouponService $couponService
+    ) {
+    }
+
     /**
      * @throws Throwable
      * @throws OrderStatusHistoryWasAlreadyAssigned
      */
-    public function createPayments(Order $order, array $request)
+    public function createPayments(Order $order, array $request): void
     {
         $this->setOrder($order)
             ->setData($request)

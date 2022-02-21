@@ -7,12 +7,12 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Order\OrderNumberGeneratorService;
+use function auth;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Throwable;
 
-use function auth;
+use Throwable;
 
 class StoreOrderService
 {

@@ -26,14 +26,14 @@ class OrderController extends V1OrderController
         protected StoreOrderService $storeOrderService,
         protected UpdateAddressOrderService $updateAddressOrderService,
         protected CompleteOrderService $completeOrderService
-    )
-    {
+    ) {
         parent::__construct($orderService, $createOrderService);
     }
 
     public function store(Request $request): OrderCreateResource | JsonResponse
     {
         $request = resolve(StoreOrderRequest::class);
+
         try {
             $order = $this->storeOrderService->create($request->validated());
         } catch (Exception $e) {
@@ -79,5 +79,4 @@ class OrderController extends V1OrderController
 
         return new OrderCreateResource($order);
     }
-
 }

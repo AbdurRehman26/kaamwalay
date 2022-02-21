@@ -235,7 +235,7 @@ class Order extends Model
         }
 
         return $this->order_status_id > OrderStatus::PAYMENT_PENDING
-            && !$this->isCancelled()
+            && ! $this->isCancelled()
             && $this->payment_status === OrderPaymentStatusEnum::PENDING;
     }
 
@@ -267,7 +267,7 @@ class Order extends Model
             'orderStatus',
             function (Builder $query) use ($status) {
                 $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
-                if (!$status || $status === 'all') {
+                if (! $status || $status === 'all') {
                     return $query;
                 }
 
@@ -282,14 +282,17 @@ class Order extends Model
     {
         return $query->whereHas(
             'user',
-            fn($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere('last_name', 'like',
-                "%$customerName%")
+            fn ($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere(
+                'last_name',
+                'like',
+                "%$customerName%"
+            )
         );
     }
 
     public function scopeCustomerId(Builder $query, string $customerId): Builder
     {
-        return $query->whereHas('user', fn($query) => $query->where('id', $customerId));
+        return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
     }
 
     public function missingItemsCount(): int
@@ -310,8 +313,8 @@ class Order extends Model
     public function isEligibleToMarkAsGraded(): bool
     {
         return $this->orderItems()->count() === (
-                $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
-            );
+            $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
+        );
     }
 
     public function orderShipment(): BelongsTo
@@ -326,10 +329,15 @@ class Order extends Model
 
     public function getGroupedOrderItems(): Collection
     {
-        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'),
+        return OrderItem::select(
+            DB::raw('min(id) as id'),
+            'card_product_id',
+            DB::raw('min(order_id) as order_id'),
             DB::raw('min(order_item_status_id) as order_item_status_id'),
             DB::raw('sum(declared_value_per_unit) as declared_value_total'),
-            DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
+            DB::raw('min(declared_value_per_unit) as declared_value_per_unit'),
+            DB::raw('sum(quantity) as quantity')
+        )
             ->where('order_id', $this->id)
             ->groupBy(['card_product_id'])
             ->get();

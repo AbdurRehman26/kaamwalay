@@ -9,13 +9,6 @@ use App\Models\OrderItemCustomerShipment;
 class OrderItemCustomerShipmentFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = OrderItemCustomerShipment::class;
-
-    /**
      * Define the model's default state.
      *
      * @return array

@@ -1,21 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateAdminShipments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
-
-		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateCustomerShipments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),array\\<string, mixed\\>\\>\\:\\:each\\(\\) expects callable\\(array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}, \\(int\\|string\\)\\)\\: bool\\|void, Closure\\(Illuminate\\\\Support\\\\Collection, string\\)\\: void given\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 1
 			path: app/Console/Commands/RevenueStats/UpdateRevenueStats.php
@@ -181,6 +166,16 @@ parameters:
 			path: app/Exceptions/Services/Payment/PaymentNotVerified.php
 
 		-
+			message: "#^Method App\\\\Exports\\\\Order\\\\OrdersExport\\:\\:collection\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Exports/Order/OrdersExport.php
+
+		-
+			message: "#^Method App\\\\Exports\\\\UsersExport\\:\\:collection\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Exports/UsersExport.php
+
+		-
 			message: "#^Method App\\\\Http\\\\APIClients\\\\AGSClient\\:\\:createCertificates\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Http/APIClients/AGSClient.php
@@ -206,7 +201,22 @@ parameters:
 			path: app/Http/Controllers/DashboardController.php
 
 		-
+			message: "#^Method App\\\\Http\\\\Filters\\\\AdminCouponSearchFilter\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminCouponSearchFilter.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Filters\\\\AdminCustomerSearchFilter\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Filters/AdminCustomerSearchFilter.php
+
+		-
 			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Filters/AdminOrderSearchFilter.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/AdminOrderSearchFilter.php
 
@@ -217,6 +227,11 @@ parameters:
 
 		-
 			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Filters/UserCardSearchFilter.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Http/Filters/UserCardSearchFilter.php
 
@@ -256,6 +271,11 @@ parameters:
 			path: app/Http/Resources/API/Services/AGS/CardGradeResource.php
 
 		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableCollection.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableResource\\:\\:\\$code\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableResource.php
@@ -279,6 +299,16 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponApplicableResource\\:\\:\\$label\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponApplicableResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponCollection.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponLogCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponLogCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponLogResource\\:\\:\\$order\\.$#"
@@ -316,11 +346,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$usage_allowed_per_user\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$description\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
@@ -337,6 +362,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$type\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\CouponResource\\:\\:\\$usage_allowed_per_user\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponResource.php
 
@@ -371,6 +401,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Coupon/CouponStatusResource.php
 
 		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\CustomerCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/CustomerCollection.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\CustomerResource\\:\\:\\$email\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/CustomerResource.php
@@ -384,6 +419,11 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\CustomerResource\\:\\:getFullName\\(\\)\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/CustomerResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\PaymentPlanCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Coupon/Couponable/PaymentPlanCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Coupon\\\\Couponable\\\\PaymentPlanResource\\:\\:\\$id\\.$#"
@@ -676,6 +716,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
 
 		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentCollection.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentResource.php
@@ -769,6 +814,11 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderShipmentResource\\:\\:\\$tracking_url\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderShipmentResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusHistoryCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderStatusHistoryCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderStatusHistoryResource\\:\\:\\$created_at\\.$#"
@@ -956,6 +1006,11 @@ parameters:
 			path: app/Http/Resources/API/V1/CardProduct/CardProductResource.php
 
 		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSeries/CardSeriesCollection.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesResource\\:\\:\\$id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/CardSeries/CardSeriesResource.php
@@ -969,6 +1024,11 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSeries\\\\CardSeriesResource\\:\\:\\$name\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/CardSeries/CardSeriesResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSet\\\\CardSetCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/CardSet/CardSetCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\CardSet\\\\CardSetResource\\:\\:\\$id\\.$#"
@@ -1074,6 +1134,11 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Address\\\\State\\\\StateResource\\:\\:\\$name\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Address/State/StateResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\CardCategory\\\\CardCategoryCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/CardCategory/CardCategoryCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Coupon\\\\CouponResource\\:\\:\\$code\\.$#"
@@ -1376,6 +1441,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderListResource.php
 
 		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentCollection.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
@@ -1526,6 +1596,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
 
 		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentMethod\\\\PaymentMethodCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/PaymentMethod/PaymentMethodCollection.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentMethod\\\\PaymentMethodResource\\:\\:\\$code\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/PaymentMethod/PaymentMethodResource.php
@@ -1569,6 +1644,11 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\PaymentPlan\\\\PaymentPlanResource\\:\\:\\$turnaround\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/PaymentPlan/PaymentPlanResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\ShippingMethod\\\\ShippingMethodCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/Order/ShippingMethod/ShippingMethodCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\ShippingMethod\\\\ShippingMethodResource\\:\\:\\$code\\.$#"
@@ -1649,6 +1729,16 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\User\\\\UserResource\\:\\:\\$wallet\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/User/UserResource.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardCollection.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardListCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Customer/UserCard/UserCardListCollection.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\UserCard\\\\UserCardListResource\\:\\:\\$certificate_number\\.$#"
@@ -1736,6 +1826,16 @@ parameters:
 			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
 
 		-
+			message: "#^Method App\\\\Http\\\\Sorts\\\\AdminCustomerFullNameSort\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Http/Sorts/AdminCustomerFullNameSort.php
+
+		-
+			message: "#^Method App\\\\Imports\\\\CardProductAttributesUpdate\\:\\:collection\\(\\) has parameter \\$rows with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Imports/CardProductAttributesUpdate.php
+
+		-
 			message: "#^Property App\\\\Jobs\\\\Admin\\\\Order\\\\CreateOrderFoldersOnDropbox\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Jobs/Admin/Order/CreateOrderFoldersOnDropbox.php
@@ -1749,6 +1849,11 @@ parameters:
 			message: "#^Property App\\\\Jobs\\\\Email\\\\SendScheduledEmail\\:\\:\\$tries has no type specified\\.$#"
 			count: 1
 			path: app/Jobs/Email/SendScheduledEmail.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Illuminate\\\\Contracts\\\\Filesystem\\\\FileExistsException\\|Illuminate\\\\Contracts\\\\Filesystem\\\\FileNotFoundException\\|Spatie\\\\Image\\\\Exceptions\\\\InvalidManipulation is not subtype of Throwable$#"
+			count: 1
+			path: app/Jobs/ProcessImage.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
@@ -1846,14 +1951,239 @@ parameters:
 			path: app/Listeners/API/Services/UpdateRevenueStats.php
 
 		-
+			message: "#^Method App\\\\Models\\\\CardCategory\\:\\:cardProducts\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/CardCategory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardCategory\\:\\:cardSeries\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/CardCategory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardCategory\\:\\:cardSets\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/CardCategory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardProduct\\:\\:addedBy\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CardProduct.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardProduct\\:\\:cardCategory\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CardProduct.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardProduct\\:\\:cardSet\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CardProduct.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\CardProduct\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/CardProduct.php
 
 		-
+			message: "#^Method App\\\\Models\\\\CardSeries\\:\\:cardCategory\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CardSeries.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardSeries\\:\\:cardSets\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/CardSeries.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardSet\\:\\:cardCategory\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CardSet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardSet\\:\\:cardProducts\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/CardSet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CardSet\\:\\:cardSeries\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CardSet.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\Country\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/Country.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:couponAble\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:couponApplicable\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:couponLogs\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:couponStats\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:couponStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:couponStatusHistories\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:paymentPlans\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphToMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeIsActive\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeIsActive\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeStatus\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeValidForUserLimit\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeValidForUserLimit\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeValidOnCouponable\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeValidOnCouponable\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeValidOnCurrentDate\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:scopeValidOnCurrentDate\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Coupon\\:\\:users\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphToMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Coupon.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponApplicable\\:\\:coupons\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/CouponApplicable.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponApplicable\\:\\:scopeOnlyActive\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/CouponApplicable.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponApplicable\\:\\:scopeOnlyActive\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/CouponApplicable.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponLog\\:\\:coupon\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CouponLog.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponLog\\:\\:order\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CouponLog.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponLog\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CouponLog.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponStat\\:\\:coupon\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CouponStat.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponStatus\\:\\:couponStatusHistories\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/CouponStatus.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponStatus\\:\\:scopeForStatus\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/CouponStatus.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponStatus\\:\\:scopeForStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/CouponStatus.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponStatusHistory\\:\\:coupon\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CouponStatusHistory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CouponStatusHistory\\:\\:couponStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CouponStatusHistory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CustomerAddress\\:\\:country\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CustomerAddress.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CustomerAddress\\:\\:scopeForUser\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/CustomerAddress.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CustomerAddress\\:\\:scopeForUser\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/CustomerAddress.php
+
+		-
+			message: "#^Method App\\\\Models\\\\CustomerAddress\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/CustomerAddress.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\CustomerAddress\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
@@ -1866,9 +2196,149 @@ parameters:
 			path: app/Models/Invoice.php
 
 		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:billingAddress\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:coupon\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:getGroupedOrderItems\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:gradedBy\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:invoice\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:orderCustomerShipment\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:orderItems\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:orderLabel\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:orderShipment\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:orderStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:orderStatusHistory\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:paymentMethod\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:paymentPlan\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:reviewedBy\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopeCustomerId\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopeCustomerId\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopeCustomerName\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopeCustomerName\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopeForUser\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopeForUser\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopePlaced\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopePlaced\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopeStatus\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:scopeStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:shippingAddress\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:shippingMethod\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Order\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Order.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\Order\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/Order.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderAddress\\:\\:country\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderAddress.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderAddress\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
@@ -1876,9 +2346,59 @@ parameters:
 			path: app/Models/OrderAddress.php
 
 		-
+			message: "#^Method App\\\\Models\\\\OrderCustomerShipment\\:\\:order\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/OrderCustomerShipment.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderCustomerShipment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/OrderCustomerShipment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:cardProduct\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:order\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:orderItemCustomerShipment\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:orderItemShipment\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:orderItemStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:orderItemStatusHistory\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:scopeForOrder\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:scopeForOrder\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItem\\:\\:userCard\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/OrderItem.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderItem\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
@@ -1891,12 +2411,27 @@ parameters:
 			path: app/Models/OrderItemCustomerShipment.php
 
 		-
+			message: "#^Method App\\\\Models\\\\OrderItemShipment\\:\\:shippingMethod\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItemShipment.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderItemShipment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/OrderItemShipment.php
 
 		-
+			message: "#^Method App\\\\Models\\\\OrderItemStatus\\:\\:scopeForStatus\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderItemStatus.php
+
+		-
 			message: "#^Method App\\\\Models\\\\OrderItemStatus\\:\\:scopeForStatus\\(\\) has parameter \\$status with no type specified\\.$#"
+			count: 1
+			path: app/Models/OrderItemStatus.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItemStatus\\:\\:scopeForStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Models/OrderItemStatus.php
 
@@ -1906,9 +2441,29 @@ parameters:
 			path: app/Models/OrderItemStatus.php
 
 		-
+			message: "#^Method App\\\\Models\\\\OrderItemStatusHistory\\:\\:orderItem\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItemStatusHistory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItemStatusHistory\\:\\:orderItemStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItemStatusHistory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderItemStatusHistory\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderItemStatusHistory.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderItemStatusHistory\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/OrderItemStatusHistory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderLabel\\:\\:order\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderLabel.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderLabel\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
@@ -1916,9 +2471,64 @@ parameters:
 			path: app/Models/OrderLabel.php
 
 		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:order\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:paymentMethod\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForDate\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForDate\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForMonth\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForMonth\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForValidPaidOrders\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:scopeForValidPaidOrders\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderPayment\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderPayment.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderPayment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/OrderPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderShipment\\:\\:order\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/OrderShipment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderShipment\\:\\:shippingMethod\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderShipment.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderShipment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
@@ -1931,9 +2541,49 @@ parameters:
 			path: app/Models/OrderState.php
 
 		-
+			message: "#^Method App\\\\Models\\\\OrderStatus\\:\\:orderState\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderStatus.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\OrderStatus\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/OrderStatus.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderStatusHistory\\:\\:order\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderStatusHistory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderStatusHistory\\:\\:orderStatus\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderStatusHistory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\OrderStatusHistory\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/OrderStatusHistory.php
+
+		-
+			message: "#^Method App\\\\Models\\\\PaymentMethod\\:\\:scopeEnabled\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/PaymentMethod.php
+
+		-
+			message: "#^Method App\\\\Models\\\\PaymentMethod\\:\\:scopeEnabled\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/PaymentMethod.php
+
+		-
+			message: "#^Method App\\\\Models\\\\PaymentMethod\\:\\:scopeVisible\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/PaymentMethod.php
+
+		-
+			message: "#^Method App\\\\Models\\\\PaymentMethod\\:\\:scopeVisible\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/PaymentMethod.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\PaymentMethod\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
@@ -1946,9 +2596,19 @@ parameters:
 			path: app/Models/PaymentPlan.php
 
 		-
+			message: "#^Method App\\\\Models\\\\PopReportsCard\\:\\:cardProduct\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/PopReportsCard.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\PopReportsCard\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/PopReportsCard.php
+
+		-
+			message: "#^Method App\\\\Models\\\\PopReportsSeries\\:\\:cardSeries\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/PopReportsSeries.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\PopReportsSeries\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
@@ -1986,12 +2646,72 @@ parameters:
 			path: app/Models/State.php
 
 		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:customerAddresses\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:devices\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:orders\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:scopeAdmin\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:scopeAdmin\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:scopeCustomer\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:scopeCustomer\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:scopeSignedUpBetween\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:scopeSignedUpBetween\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:scopeSubmissions\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:scopeSubmissions\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
 			message: "#^Method App\\\\Models\\\\User\\:\\:setPasswordAttribute\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Models/User.php
 
 		-
 			message: "#^Method App\\\\Models\\\\User\\:\\:setPasswordAttribute\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Method App\\\\Models\\\\User\\:\\:wallet\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
 			count: 1
 			path: app/Models/User.php
 
@@ -2006,9 +2726,94 @@ parameters:
 			path: app/Models/UserCard.php
 
 		-
+			message: "#^Method App\\\\Models\\\\UserCard\\:\\:orderItem\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/UserCard.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserCard\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/UserCard.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserCard\\:\\:userCardCertificate\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/UserCard.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserCardCertificate\\:\\:userCard\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/UserCardCertificate.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserDevice\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/UserDevice.php
+
+		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\UserDevice\\:\\:\\$fillable is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/UserDevice.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Wallet\\:\\:lastTransaction\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Wallet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Wallet\\:\\:scopeForCurrentUser\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Wallet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Wallet\\:\\:scopeForCurrentUser\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Wallet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Wallet\\:\\:scopeIsActive\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Wallet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Wallet\\:\\:scopeIsActive\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Models/Wallet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Wallet\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/Wallet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Wallet\\:\\:walletPayments\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Wallet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Wallet\\:\\:walletTransactions\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany does not specify its types\\: TRelatedModel$#"
+			count: 1
+			path: app/Models/Wallet.php
+
+		-
+			message: "#^Method App\\\\Models\\\\WalletPayment\\:\\:paymentMethod\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/WalletPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\WalletPayment\\:\\:wallet\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/WalletPayment.php
+
+		-
+			message: "#^Method App\\\\Models\\\\WalletTransaction\\:\\:user\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/WalletTransaction.php
+
+		-
+			message: "#^Method App\\\\Models\\\\WalletTransaction\\:\\:wallet\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo does not specify its types\\: TRelatedModel, TChildModel$#"
+			count: 1
+			path: app/Models/WalletTransaction.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
@@ -2091,24 +2896,69 @@ parameters:
 			path: app/Policies/UserCardPolicy.php
 
 		-
-			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
-			count: 1
-			path: app/Providers/RouteServiceProvider.php
-
-		-
-			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
-			count: 1
-			path: app/Providers/RouteServiceProvider.php
-
-		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 4
 			path: app/Services/AGS/AgsService.php
 
 		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\Card\\\\CardSeriesService\\:\\:search\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection does not specify its types\\: TKey, TModel$#"
+			count: 1
+			path: app/Services/Admin/Card/CardSeriesService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\Card\\\\CardSetService\\:\\:search\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection does not specify its types\\: TKey, TModel$#"
+			count: 1
+			path: app/Services/Admin/Card/CardSetService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\CardGradingService\\:\\:getAverage\\(\\) has parameter \\$values with no type specified\\.$#"
 			count: 1
 			path: app/Services/Admin/CardGradingService.php
+
+		-
+			message: "#^Unable to resolve the template type TKey in call to function collect$#"
+			count: 1
+			path: app/Services/Admin/CardGradingService.php
+
+		-
+			message: "#^Unable to resolve the template type TValue in call to function collect$#"
+			count: 1
+			path: app/Services/Admin/CardGradingService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponService\\:\\:activateCoupons\\(\\) has parameter \\$coupons with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection but does not specify its types\\: TKey, TModel$#"
+			count: 1
+			path: app/Services/Admin/Coupon/CouponService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponService\\:\\:expireCoupons\\(\\) has parameter \\$coupons with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection but does not specify its types\\: TKey, TModel$#"
+			count: 1
+			path: app/Services/Admin/Coupon/CouponService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponService\\:\\:getCouponsNearingExpiry\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection does not specify its types\\: TKey, TModel$#"
+			count: 1
+			path: app/Services/Admin/Coupon/CouponService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponService\\:\\:getQueuedCouponsNearingActivation\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection does not specify its types\\: TKey, TModel$#"
+			count: 1
+			path: app/Services/Admin/Coupon/CouponService.php
+
+		-
+			message: "#^Parameter \\#1 \\$coupon of method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponService\\:\\:changeStatus\\(\\) expects App\\\\Models\\\\Coupon, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 2
+			path: app/Services/Admin/Coupon/CouponService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponStatusService\\:\\:changeStatus\\(\\) has parameter \\$newCouponStatus with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Services/Admin/Coupon/CouponStatusService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\Order\\\\OrderItemService\\:\\:markItemsAsPending\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Services/Admin/Order/OrderItemService.php
 
 		-
 			message: "#^Variable \\$orderShipment in empty\\(\\) always exists and is not falsy\\.$#"
@@ -2117,6 +2967,21 @@ parameters:
 
 		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no type specified\\.$#"
+			count: 1
+			path: app/Services/Admin/OrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getCertificatesDataQuery\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Services/Admin/OrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getGrades\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Services/Admin/OrderService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:updateLocalGrades\\(\\) has parameter \\$cards with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Services/Admin/OrderService.php
 
@@ -2132,6 +2997,11 @@ parameters:
 
 		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\OrderStatusHistoryService\\:\\:addStatusToOrder\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Services/Admin/OrderStatusHistoryService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Admin\\\\OrderStatusHistoryService\\:\\:getAllByOrderId\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection does not specify its types\\: TKey, TModel$#"
 			count: 1
 			path: app/Services/Admin/OrderStatusHistoryService.php
 
@@ -2154,6 +3024,16 @@ parameters:
 			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
 			count: 1
 			path: app/Services/Helpers/helpers.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Illuminate\\\\Contracts\\\\Filesystem\\\\FileExistsException\\|Illuminate\\\\Contracts\\\\Filesystem\\\\FileNotFoundException is not subtype of Throwable$#"
+			count: 1
+			path: app/Services/ImageService.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Illuminate\\\\Contracts\\\\Filesystem\\\\FileExistsException\\|Illuminate\\\\Contracts\\\\Filesystem\\\\FileNotFoundException\\|Spatie\\\\Image\\\\Exceptions\\\\InvalidManipulation is not subtype of Throwable$#"
+			count: 1
+			path: app/Services/ImageService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:process\\(\\) has no return type specified\\.$#"
@@ -2261,6 +3141,16 @@ parameters:
 			path: app/Services/Order/RevenueStatsService.php
 
 		-
+			message: "#^Method App\\\\Services\\\\Order\\\\Shipping\\\\Calculators\\\\InsuredShippingFeeCalculator\\:\\:calculateTotalDeclaredValue\\(\\) has parameter \\$orderItems with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection but does not specify its types\\: TKey, TModel$#"
+			count: 1
+			path: app/Services/Order/Shipping/Calculators/InsuredShippingFeeCalculator.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Order\\\\Shipping\\\\Calculators\\\\InsuredShippingFeeCalculator\\:\\:calculateTotalNumberOfItems\\(\\) has parameter \\$orderItems with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection but does not specify its types\\: TKey, TModel$#"
+			count: 1
+			path: app/Services/Order/Shipping/Calculators/InsuredShippingFeeCalculator.php
+
+		-
 			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\CustomerAddressValidator\\:\\:validate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/Validators/CustomerAddressValidator.php
@@ -2291,6 +3181,16 @@ parameters:
 			path: app/Services/Payment/Providers/StripeService.php
 
 		-
+			message: "#^Method App\\\\Services\\\\Payment\\\\Providers\\\\StripeService\\:\\:getUserPaymentMethods\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Services/Payment/Providers/StripeService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:accumulateReportRow\\(\\) has parameter \\$userCards with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Services/PopReport/PopReportService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:cleanColumnName\\(\\) has parameter \\$grade with no type specified\\.$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
@@ -2301,17 +3201,27 @@ parameters:
 			path: app/Services/PopReport/PopReportService.php
 
 		-
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:getTotalPopulation\\(\\) has parameter \\$model with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			count: 1
+			path: app/Services/PopReport/PopReportService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateCardProductsReport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSeriesReport\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateMultipleCardProductsReports\\(\\) has parameter \\$cardProducts with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSetsReport\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateMultipleSeriesReports\\(\\) has parameter \\$cardSeries with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Services/PopReport/PopReportService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateMultipleSetsReports\\(\\) has parameter \\$cardSets with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 

@@ -80,15 +80,7 @@ test('a customer can place order', function () {
             'same_as_shipping' => true,
         ],
         'customer_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
@@ -390,10 +382,10 @@ it('can calculate collector coin price for an order', function () {
                 'block_explorer_urls' => ['https://testnet.bscscan.com'],
                 'is_testnet' => true,
                 'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                'collector_coin_wallet' => env('TEST_WALLET'),
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
             ],
         ],
-        ]);
+    ]);
 
     $this->actingAs($this->user);
     $order = Order::factory()->for($this->user)->create();
@@ -557,15 +549,7 @@ test('a customer can place order with partial amount from wallet', function () {
             'same_as_shipping' => true,
         ],
         'customer_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
@@ -677,7 +661,7 @@ test('a customer can place order with amount equal to his wallet balance.', func
         'balance' => 314.0,
     ]);
 
-    $walletPayment = (float) 314.0;
+    $walletPayment = 314.0;
     $this->postJson('/api/v1/customer/orders', [
         'payment_plan' => [
             'id' => PaymentPlan::factory()->create([
@@ -717,15 +701,7 @@ test('a customer can place order with amount equal to his wallet balance.', func
             'same_as_shipping' => true,
         ],
         'customer_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,

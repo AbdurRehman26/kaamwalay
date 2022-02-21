@@ -31,12 +31,68 @@ class PopReportService
         $this->generateReportEmptyArray();
     }
 
-    public function updateSeriesReport(CardSeries $cardSeries)
+    public function initializePopReportsForAll(): void
+    {
+        $this->initializePopReportsForCardSeries();
+        $this->initializePopReportsForCardSets();
+        $this->initializePopReportsForCards();
+    }
+
+    public function initializePopReportsForCardSeries(): void
+    {
+        $cardSeriesIds = CardSeries::pluck('id');
+
+        foreach ($cardSeriesIds as $cardSeriesId) {
+            PopReportsSeries::firstOrCreate([ 'card_series_id' => $cardSeriesId ]);
+        }
+    }
+
+    public function initializePopReportsForCardSets(): void
+    {
+        $cardSets = CardSet::all();
+
+        foreach ($cardSets as $cardSet) {
+            PopReportsSet::firstOrCreate([
+                'card_set_id' => $cardSet->id, 'card_series_id' => $cardSet->card_series_id,
+            ]);
+        }
+    }
+
+    public function initializePopReportsForCards(): void
+    {
+        $cardProducts = CardProduct::canBeInitializedInPopReport()->where(function ($query) {
+            $this->isCardInformationComplete($query);
+        })->select('card_products.*')->get();
+
+        foreach ($cardProducts as $cardProduct) {
+            PopReportsCard::firstOrCreate([
+                'card_product_id' => $cardProduct->id, 'card_set_id' => $cardProduct->card_set_id,
+            ]);
+        }
+    }
+
+    public function updateAllSeriesReport(): void
+    {
+        $allCardSeries = CardSeries::all();
+
+        foreach ($allCardSeries as $cardSeries) {
+            $this->info('Updating reports for card series ' . $cardSeries->id);
+
+            $this->updateSeriesReport($cardSeries);
+
+            $this->info('Updating reports for card series ' . $cardSeries->id . ' completed');
+        }
+    }
+
+    public function updateSeriesReport(CardSeries $cardSeries): void
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
+            ->where(function ($query) {
+                $this->isCardInformationComplete($query);
+            })
             ->where('card_sets.card_series_id', $cardSeries->id)
             ->where('user_cards.overall_grade', '>', 0)
             ->where('order_items.order_item_status_id', [OrderItemStatus::GRADED])
@@ -52,12 +108,38 @@ class PopReportService
         $popSeriesReportModel->where($whereCondition)->update($reportsTableArray);
     }
 
-    public function updateSetsReport(CardSet $cardSet)
+    public function updateAllSetsReport(): void
+    {
+        $cardSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
+            ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->join('user_cards', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->where(function ($query) {
+                $this->isCardInformationComplete($query);
+            })
+            ->groupBy('card_sets.id')
+            ->select('card_sets.*')
+            ->get();
+
+        $this->info('Total sets to be processed: ' . count($cardSets));
+
+        foreach ($cardSets as $cardSet) {
+            $this->info('Updating reports for card sets ' . $cardSet->id);
+
+            $this->updateSetsReport($cardSet);
+
+            $this->info('Updating reports for card sets ' . $cardSet->id . ' completed');
+        }
+    }
+
+    public function updateSetsReport(CardSet $cardSet): void
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
             ->where('card_products.card_set_id', $cardSet->id)
+            ->where(function ($query) {
+                $this->isCardInformationComplete($query);
+            })
             ->where('user_cards.overall_grade', '>', 0)
             ->where('order_items.order_item_status_id', [OrderItemStatus::GRADED])
             ->whereIn('orders.order_status_id', [OrderStatus::GRADED, OrderStatus::SHIPPED])
@@ -73,11 +155,30 @@ class PopReportService
         $popSetReportModel->where($whereCondition)->update($reportsTableArray);
     }
 
+    public function updateAllCardProductsReport(): void
+    {
+        $cardProducts = CardProduct::join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->join('user_cards', 'user_cards.order_item_id', '=', 'order_items.id')
+            ->groupBy('card_products.id')
+            ->select('card_products.*')
+            ->where(function ($query) {
+                $this->isCardInformationComplete($query);
+            })
+            ->get();
+
+        $this->info('Total cards to be processed: ' . count($cardProducts));
+
+        $this->updateMultipleCardProductsReports($cardProducts);
+    }
+
     public function updateCardProductsReport(CardProduct $cardProduct)
     {
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
+            ->where(function ($query) {
+                $this->isCardInformationComplete($query);
+            })
             ->where('card_products.id', $cardProduct->id)
             ->where('user_cards.overall_grade', '>', 0)
             ->where('order_items.order_item_status_id', [OrderItemStatus::GRADED])
@@ -118,11 +219,17 @@ class PopReportService
     {
         $orderCards = CardProduct::join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
             ->where('order_items.order_id', $order->id)
+            ->where(function ($query) {
+                $this->isCardInformationComplete($query);
+            })
             ->select('card_products.*')
             ->get();
 
         $orderSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->where(function ($query) {
+                $this->isCardInformationComplete($query);
+            })
             ->where('order_items.order_id', $order->id)
             ->select('card_sets.*')
             ->groupBy('card_sets.id')
@@ -131,6 +238,9 @@ class PopReportService
         $orderSeries = CardSeries::join('card_sets', 'card_sets.card_series_id', '=', 'card_series.id')
             ->join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
+            ->where(function ($query) {
+                $this->isCardInformationComplete($query);
+            })
             ->where('order_items.order_id', $order->id)
             ->select('card_series.*')
             ->groupBy('card_series.id')
@@ -204,7 +314,7 @@ class PopReportService
             try {
                 $reportsTableArray[$columnName] += 1;
 
-                if (str_contains($columnName, "plus")) {
+                if (str_contains($columnName, 'plus') || $columnName === 'fr') {
                     $reportsTableArray['total_plus'] += 1;
                 } else {
                     $reportsTableArray['total'] += 1;
@@ -239,5 +349,22 @@ class PopReportService
     protected function cleanColumnName($grade): string
     {
         return str_replace('+', '_plus', str_replace('-', '_', strtolower(array_search($grade, CardGradingService::GRADE_CRITERIA))));
+    }
+
+    /**
+     * @param  Builder <CardProduct> $query
+     * @return Builder <CardProduct>
+     */
+    protected function isCardInformationComplete(Builder $query): Builder
+    {
+        return $query->whereNotNull('card_products.card_category_id')
+            ->whereNotNull('card_products.card_set_id')
+            ->whereNotNull('card_products.card_number_order');
+    }
+
+    protected function info(string $string): void
+    {
+        echo $string;
+        Log::info($string);
     }
 }

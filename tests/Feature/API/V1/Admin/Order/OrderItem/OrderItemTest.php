@@ -19,10 +19,10 @@ beforeEach(function () {
     $this->seed(RolesSeeder::class);
 
     $this->user = User::createAdmin([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 });
@@ -41,10 +41,10 @@ test('a customer can not get order items information', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 
@@ -64,7 +64,7 @@ test('an admin can add order item to order', function () {
 
     $response = $this->postJson('/api/v1/admin/orders/' . $orderItem->order_id . '/items', [
         'card_id' => $newCard->id,
-        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = null),
+        'value' => $this->faker->randomFloat(2, 1, 99999999.99),
     ]);
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -80,10 +80,10 @@ test('a customer can not add order item to order', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 
@@ -142,10 +142,10 @@ test('a customer can not update order item', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 
@@ -192,10 +192,10 @@ test('a customer can not update an order item status', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 
@@ -263,10 +263,10 @@ test('a customer can not mark multiple order items as pending', function () {
     $orderItem = OrderItem::factory()->create();
 
     $customerUser = User::createCustomer([
-        'first_name' => $this->faker->firstName,
-        'last_name' => $this->faker->lastName,
-        'email' => $this->faker->safeEmail,
-        'username' => $this->faker->userName,
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $this->faker->safeEmail(),
+        'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
     ]);
 

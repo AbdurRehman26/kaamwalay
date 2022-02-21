@@ -1,0 +1,39 @@
+.Home-availableCards {
+    background-color: #f4f4fb;
+    padding-top: 95px;
+    padding-bottom: 110px;
+    .Home-sectionContentText {
+        margin-bottom: 0;
+    }
+
+    .Home-sectionContentHeadline {
+        font-size: 24px;
+    }
+}
+
+.Home-availableCardsColumn {
+    width: 25%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    @media screen and (max-width: 768px) {
+        width: 50%;
+    }
+}
+
+.Home-availableCardsImages {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 94px;
+    flex-wrap: wrap;
+    @media screen and (max-width: 768px) {
+        margin-top: 54px;
+    }
+}
+
+.Home-availableCardsImage {
+    max-width: 80%;
+}

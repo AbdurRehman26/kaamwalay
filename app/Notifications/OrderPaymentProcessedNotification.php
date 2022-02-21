@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
 
 class OrderPaymentProcessedNotification extends Notification
 {
@@ -51,7 +52,7 @@ class OrderPaymentProcessedNotification extends Notification
 
     protected function getMessageForOrderPaid(string $paymentCode): string
     {
-        $totalCards = $this->order->orderItems->sum('quantity');
+        $totalCards = $this->getCardsBreakdown();
         $customerFullName = $this->order->user->getFullName();
 
         if (empty($customerFullName)) {
@@ -80,5 +81,19 @@ class OrderPaymentProcessedNotification extends Notification
         }
 
         return ':robot_face:';
+    }
+
+    protected function getCardsBreakdown(): string
+    {
+        return $this->order->orderItems()
+            ->join('card_products', 'order_items.card_product_id', 'card_products.id')
+            ->join('card_categories', 'card_products.card_category_id', 'card_categories.id')
+            ->groupBy('card_categories.id')
+            ->select(DB::raw('SUM(order_items.quantity) as quantity'), 'card_categories.name')
+            ->get()
+            ->map(function ($values) {
+                return $values['quantity'] . ' ' . $values['name'];
+            })
+            ->join(' ');
     }
 }

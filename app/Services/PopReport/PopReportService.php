@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
-use Illuminate\Database\Eloquent\Model;
 
 class PopReportService
 {
@@ -91,7 +90,7 @@ class PopReportService
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('card_sets', 'card_products.card_set_id', 'card_sets.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
-            ->where(function($query){
+            ->where(function ($query) {
                 $this->isCardInformationComplete($query);
             })
             ->where('card_sets.card_series_id', $cardSeries->id)
@@ -114,7 +113,7 @@ class PopReportService
         $cardSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
             ->join('user_cards', 'user_cards.order_item_id', '=', 'order_items.id')
-            ->where(function($query){
+            ->where(function ($query) {
                 $this->isCardInformationComplete($query);
             })
             ->groupBy('card_sets.id')
@@ -138,7 +137,7 @@ class PopReportService
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
             ->where('card_products.card_set_id', $cardSet->id)
-            ->where(function($query){
+            ->where(function ($query) {
                 $this->isCardInformationComplete($query);
             })
             ->where('user_cards.overall_grade', '>', 0)
@@ -162,7 +161,7 @@ class PopReportService
             ->join('user_cards', 'user_cards.order_item_id', '=', 'order_items.id')
             ->groupBy('card_products.id')
             ->select('card_products.*')
-            ->where(function($query){
+            ->where(function ($query) {
                 $this->isCardInformationComplete($query);
             })
             ->get();
@@ -177,7 +176,7 @@ class PopReportService
         $userCards = UserCard::join('order_items', 'user_cards.order_item_id', 'order_items.id')
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
             ->join('orders', 'order_items.order_id', 'orders.id')
-            ->where(function($query){
+            ->where(function ($query) {
                 $this->isCardInformationComplete($query);
             })
             ->where('card_products.id', $cardProduct->id)
@@ -220,7 +219,7 @@ class PopReportService
     {
         $orderCards = CardProduct::join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
             ->where('order_items.order_id', $order->id)
-            ->where(function($query){
+            ->where(function ($query) {
                 $this->isCardInformationComplete($query);
             })
             ->select('card_products.*')
@@ -228,7 +227,7 @@ class PopReportService
 
         $orderSets = CardSet::join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
-            ->where(function($query){
+            ->where(function ($query) {
                 $this->isCardInformationComplete($query);
             })
             ->where('order_items.order_id', $order->id)
@@ -239,7 +238,7 @@ class PopReportService
         $orderSeries = CardSeries::join('card_sets', 'card_sets.card_series_id', '=', 'card_series.id')
             ->join('card_products', 'card_products.card_set_id', '=', 'card_sets.id')
             ->join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
-            ->where(function($query){
+            ->where(function ($query) {
                 $this->isCardInformationComplete($query);
             })
             ->where('order_items.order_id', $order->id)

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\PopReports;
 
-use App\Models\CardProduct;
 use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 

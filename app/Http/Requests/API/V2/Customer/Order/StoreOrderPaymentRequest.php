@@ -17,6 +17,7 @@ class StoreOrderPaymentRequest extends FormRequest
     {
         /** @var Order $order */
         $order = $this->route('order');
+
         return $order->user->is($this->user());
     }
 

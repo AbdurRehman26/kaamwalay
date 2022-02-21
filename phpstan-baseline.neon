@@ -3226,16 +3226,6 @@ parameters:
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSeriesReport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/PopReport/PopReportService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSetsReport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/PopReport/PopReportService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumber\\:\\:toSql\\(\\) has parameter \\$column with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumber.php

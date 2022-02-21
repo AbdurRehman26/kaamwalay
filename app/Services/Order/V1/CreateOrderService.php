@@ -86,7 +86,6 @@ class CreateOrderService
         );
         $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address'], $this->data['customer_address']);
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
-        $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);

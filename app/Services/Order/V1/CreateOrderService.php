@@ -209,7 +209,7 @@ class CreateOrderService
         $this->order->save();
     }
 
-    protected function storeOrderPayment(array $data)
+    protected function storeOrderPayment(array $data): void
     {
         $orderPaymentData = [
             'order_id' => $this->order->id,

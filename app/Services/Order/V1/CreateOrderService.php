@@ -20,7 +20,6 @@ use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
-use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -88,13 +87,9 @@ class CreateOrderService
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
-        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
-        $this->storePaymentMethodDiscount($this->data['payment_method'] ?? []);
         $this->storeGrandTotal();
-        $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
-        $this->storeOrderPayment($this->data);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
 
@@ -206,65 +201,5 @@ class CreateOrderService
         GrandTotalValidator::validate($this->order);
 
         $this->order->save();
-    }
-
-    protected function storeOrderPayment(array $data): void
-    {
-        $orderPaymentData = [
-            'order_id' => $this->order->id,
-            'payment_method_id' => $this->order->paymentMethod->id,
-        ];
-        if ($this->order->paymentMethod->code === 'stripe') {
-            $response = $this->order->user->findPaymentMethod($data['payment_provider_reference']['id']);
-            $orderPaymentData = array_merge(
-                $orderPaymentData,
-                [
-                    'response' => json_encode($response),
-                    'payment_provider_reference_id' => $data['payment_provider_reference']['id'],
-                ]
-            );
-        }
-
-        OrderPayment::create($orderPaymentData);
-
-        /* Amount is partially paid from wallet since the primary payment method is not wallet */
-        if ($this->order->amount_paid_from_wallet && ! $this->order->paymentMethod->isWallet()) {
-            OrderPayment::create([
-                'order_id' => $orderPaymentData['order_id'],
-                'payment_method_id' => PaymentMethod::getWalletPaymentMethod()->id,
-                'amount' => $this->order->amount_paid_from_wallet,
-            ]);
-        }
-    }
-
-    protected function storeCouponAndDiscount(array $couponData): void
-    {
-        if (! empty($couponData['code'])) {
-            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
-            $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
-            $this->order->save();
-        }
-    }
-
-    protected function storePaymentMethodDiscount(array $paymentMethod): void
-    {
-        if (! array_key_exists('id', $paymentMethod)) {
-            return;
-        }
-
-        $paymentMethod = PaymentMethod::find($paymentMethod['id']);
-
-        if ($paymentMethod->isCollectorCoin()) {
-            $this->order->payment_method_discounted_amount = round($this->order->service_fee * config('robograding.collector_coin_discount_percentage') / 100, 2);
-        }
-    }
-
-    protected function storeWalletPaymentAmount(float|null $amount): void
-    {
-        if (! empty($amount)) {
-            WalletAmountGrandTotalValidator::validate($this->order, $amount);
-            $this->order->amount_paid_from_wallet = $amount;
-            $this->order->save();
-        }
     }
 }

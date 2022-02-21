@@ -60,7 +60,7 @@ class PopReportService
 
     public function initializePopReportsForCards(): void
     {
-        $cardProducts = CardProduct::canBeInitializedInPopReport()->where(function($query){
+        $cardProducts = CardProduct::canBeInitializedInPopReport()->where(function ($query) {
             $this->isCardInformationComplete($query);
         })->select('card_products.*')->get();
 

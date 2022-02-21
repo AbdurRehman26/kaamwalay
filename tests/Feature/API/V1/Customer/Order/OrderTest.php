@@ -11,7 +11,7 @@ use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\Wallet;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V1\OrderStatusHistoryService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -358,10 +358,10 @@ it('can calculate collector coin price for an order', function () {
                 'block_explorer_urls' => ['https://testnet.bscscan.com'],
                 'is_testnet' => true,
                 'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                'collector_coin_wallet' => env('TEST_WALLET'),
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
             ],
         ],
-        ]);
+    ]);
 
     $this->actingAs($this->user);
     $order = Order::factory()->for($this->user)->create();
@@ -719,7 +719,7 @@ test('a customer can see incomplete orders', function () {
         $this->orderStatusHistoryService->addStatusToOrder($status, $order->id, $order->user_id);
     });
 
-    $this->getJson(route('customer.orders.index'))
+    $this->getJson(route('v1.customer.orders.index'))
         ->assertOk()
         ->assertJsonCount(10, ['data']);
 });
@@ -737,7 +737,7 @@ test('a customer can cancel order', function () {
 
     $this->actingAs($order->user);
 
-    $this->deleteJson(route('customer.orders.destroy', ['order' => $order]))
+    $this->deleteJson(route('v1.customer.orders.destroy', ['order' => $order]))
         ->assertNoContent();
 });
 
@@ -754,6 +754,6 @@ test('a customer can not cancel paid order', function () {
 
     $this->actingAs($order->user);
 
-    $this->deleteJson(route('customer.orders.destroy', ['order' => $order]))
+    $this->deleteJson(route('v1.customer.orders.destroy', ['order' => $order]))
         ->assertForbidden();
 });

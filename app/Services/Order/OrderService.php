@@ -9,7 +9,8 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
-use App\Services\Payment\Providers\CollectorCoinService;
+use App\Models\OrderAddress;
+use App\Services\Payment\V1\Providers\CollectorCoinService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -102,7 +103,7 @@ class OrderService
         return $card->isCardInformationComplete() ? $card->getSearchableName() : $card->name . ' (Added Manually)';
     }
 
-    protected function getAddressData($address): array
+    protected function getAddressData(OrderAddress $address): array
     {
         return [
             "ID" => $address->id,

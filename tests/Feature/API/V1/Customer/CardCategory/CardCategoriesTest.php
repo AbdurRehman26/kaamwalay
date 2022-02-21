@@ -12,7 +12,7 @@ test('customer can receive card categories', function () {
     actingAs(User::factory()->withRole(config('permission.roles.customer'))->create());
     CardCategory::factory()->count(5)->create();
 
-    getJson(route('cards.categories'))
+    getJson(route('v1.cards.categories'))
         ->assertOk()
         ->assertJsonCount(5, 'data')
         ->assertJsonStructure(['data' => [['id', 'name']]]);

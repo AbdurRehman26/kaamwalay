@@ -8,7 +8,7 @@ use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\Wallet;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -60,7 +60,7 @@ test('an order needs payment plan to be created', function () {
 test('a customer can update order addresses', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson(route('order.store'), [
+    $response = $this->postJson(route('v2.order.store'), [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
         ],
@@ -72,7 +72,7 @@ test('a customer can update order addresses', function () {
         ]
     ))->create();
 
-    $response = $this->postJson(route('order.update-addresses', [
+    $response = $this->postJson(route('v2.order.update-addresses', [
         'order' => $response['data']['id'],
     ]), [
         'payment_plan' => [
@@ -123,13 +123,13 @@ test('a customer can update order addresses', function () {
 test('a customer can not update order addresses without addresses', function () {
     $this->actingAs($this->user);
 
-    $response = $this->postJson(route('order.store'), [
+    $response = $this->postJson(route('v2.order.store'), [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
         ],
     ]);
 
-    $response = $this->postJson(route('order.update-addresses', [
+    $response = $this->postJson(route('v2.order.update-addresses', [
         'order' => $response['data']['id'],
     ]), [
         'payment_plan' => [
@@ -153,7 +153,7 @@ test('a customer can complete his order including wallet payment', function () {
     ]);
     $walletPayment = (float) 10;
 
-    $response = $this->postJson(route('order.store'), [
+    $response = $this->postJson(route('v2.order.store'), [
         'payment_plan' => [
             'id' => $this->paymentPlan->id,
         ],
@@ -165,7 +165,7 @@ test('a customer can complete his order including wallet payment', function () {
         ]
     ))->create();
 
-    $response = $this->postJson(route('order.update-addresses', [
+    $response = $this->postJson(route('v2.order.update-addresses', [
         'order' => $response['data']['id'],
     ]), [
         'payment_plan' => [

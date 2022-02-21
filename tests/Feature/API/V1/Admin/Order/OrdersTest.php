@@ -30,11 +30,11 @@ beforeEach(function () {
     $user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->orders = Order::factory()->count(5)->state(new Sequence(
-        ['order_status_id' => OrderStatus::PLACED],
-        ['order_status_id' => OrderStatus::CONFIRMED],
-        ['order_status_id' => OrderStatus::GRADED],
-        ['order_status_id' => OrderStatus::SHIPPED],
-        ['order_status_id' => OrderStatus::REVIEWED]
+        ['id' => 1, 'order_status_id' => OrderStatus::PLACED],
+        ['id' => 2, 'order_status_id' => OrderStatus::CONFIRMED],
+        ['id' => 3, 'order_status_id' => OrderStatus::GRADED],
+        ['id' => 4, 'order_status_id' => OrderStatus::SHIPPED],
+        ['id' => 5, 'order_status_id' => OrderStatus::REVIEWED]
     ))->create();
 
     \App\Models\OrderStatusHistory::factory()->count(5)->sequence(
@@ -48,9 +48,11 @@ beforeEach(function () {
     OrderItem::factory()->count(2)
         ->state(new Sequence(
             [
+                'id' => 1,
                 'order_id' => $this->orders[0]->id,
             ],
             [
+                'id' => 2,
                 'order_id' => $this->orders[1]->id,
             ]
         ))

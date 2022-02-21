@@ -24,7 +24,7 @@ test('admin can change coupon status', function (string $status) {
 
     $coupon = Coupon::factory()->create();
 
-    putJson(route('coupons.change-status', ['coupon' => $coupon]), [
+    putJson(route('v1.coupons.change-status', ['coupon' => $coupon]), [
         'status' => $status,
     ])->assertOk();
 

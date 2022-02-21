@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -84,6 +85,8 @@ class Order extends Model
         'refund_total' => 'float',
         'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
+        'paid_at' => 'datetime',
+        'payment_status' => OrderPaymentStatusEnum::class,
     ];
 
     protected $appends = [
@@ -225,9 +228,15 @@ class Order extends Model
         return $query->where('orders.user_id', $user->id);
     }
 
-    public function isPayable(): bool
+    public function isPayable(string $version = 'v1'): bool
     {
-        return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
+        if ($version === 'v1') {
+            return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
+        }
+
+        return $this->order_status_id > OrderStatus::PAYMENT_PENDING
+            && !$this->isCancelled()
+            && $this->payment_status === OrderPaymentStatusEnum::PENDING;
     }
 
     public function scopePlaced(Builder $query): Builder
@@ -258,7 +267,7 @@ class Order extends Model
             'orderStatus',
             function (Builder $query) use ($status) {
                 $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
-                if (! $status || $status === 'all') {
+                if (!$status || $status === 'all') {
                     return $query;
                 }
 
@@ -273,13 +282,14 @@ class Order extends Model
     {
         return $query->whereHas(
             'user',
-            fn ($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere('last_name', 'like', "%$customerName%")
+            fn($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere('last_name', 'like',
+                "%$customerName%")
         );
     }
 
     public function scopeCustomerId(Builder $query, string $customerId): Builder
     {
-        return $query->whereHas('user', fn ($query) => $query->where('id', $customerId));
+        return $query->whereHas('user', fn($query) => $query->where('id', $customerId));
     }
 
     public function missingItemsCount(): int
@@ -300,8 +310,8 @@ class Order extends Model
     public function isEligibleToMarkAsGraded(): bool
     {
         return $this->orderItems()->count() === (
-            $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
-        );
+                $this->missingItemsCount() + $this->notAcceptedItemsCount() + $this->gradedItemsCount()
+            );
     }
 
     public function orderShipment(): BelongsTo
@@ -316,10 +326,13 @@ class Order extends Model
 
     public function getGroupedOrderItems(): Collection
     {
-        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('sum(declared_value_per_unit) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
-        ->where('order_id', $this->id)
-        ->groupBy(['card_product_id'])
-        ->get();
+        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'),
+            DB::raw('min(order_item_status_id) as order_item_status_id'),
+            DB::raw('sum(declared_value_per_unit) as declared_value_total'),
+            DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
+            ->where('order_id', $this->id)
+            ->groupBy(['card_product_id'])
+            ->get();
     }
 
     public function coupon(): BelongsTo
@@ -334,5 +347,22 @@ class Order extends Model
     public function scopeValid(Builder $query): Builder
     {
         return $query->where('order_status_id', '!=', OrderStatus::CANCELLED);
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->order_status_id === OrderStatus::CANCELLED;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->payment_status === OrderPaymentStatusEnum::PAID;
+    }
+
+    public function markAsPaid(): void
+    {
+        $this->payment_status = OrderPaymentStatusEnum::PAID;
+        $this->paid_at = now();
+        $this->save();
     }
 }

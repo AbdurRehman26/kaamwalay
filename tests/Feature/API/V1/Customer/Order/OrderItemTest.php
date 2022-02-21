@@ -34,14 +34,14 @@ test('customer can get list of order items', function () {
         'declared_value_per_unit' => 10,
         'declared_value_total' => 10,
     ]);
-    getJson(route('orders.orderItems.index', ['order' => $this->order]))
+    getJson(route('v2.orders.orderItems.index', ['order' => $this->order]))
         ->assertOk()
         ->assertJsonCount(1, 'data');
 });
 
 test('customer can add items in order', function () {
     postJson(
-        route('orders.orderItems.store', ['order' => $this->order]),
+        route('v2.orders.orderItems.store', ['order' => $this->order]),
         [
             'card_product_id' => $this->cardProduct->id,
             'quantity' => 1,
@@ -61,7 +61,7 @@ test('customer can update item in order', function () {
         'declared_value_total' => 10,
     ]);
     putJson(
-        route('orders.orderItems.update', ['order' => $this->order, 'orderItem' => $orderItem]),
+        route('v2.orders.orderItems.update', ['order' => $this->order, 'orderItem' => $orderItem]),
         [
             'card_product_id' => $this->cardProduct->id,
             'quantity' => 2,
@@ -84,7 +84,7 @@ test('customer can delete item in order', function () {
         'declared_value_total' => 10,
     ]);
     deleteJson(
-        route('orders.orderItems.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
+        route('v2.orders.orderItems.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
     )
         ->assertOk()
         ->assertJsonCount(0, 'data');
@@ -94,7 +94,7 @@ test('customer can not add items to orders other than incomplete', function () {
     $this->order->update(['order_status_id' => OrderStatus::PLACED]);
 
     postJson(
-        route('orders.orderItems.store', ['order' => $this->order]),
+        route('v2.orders.orderItems.store', ['order' => $this->order]),
         [
             'card_product_id' => $this->cardProduct->id,
             'quantity' => 1,
@@ -114,7 +114,7 @@ test('customer can not update item to orders other than incomplete', function ()
         'declared_value_total' => 10,
     ]);
     putJson(
-        route('orders.orderItems.update', ['order' => $this->order, 'orderItem' => $orderItem]),
+        route('v2.orders.orderItems.update', ['order' => $this->order, 'orderItem' => $orderItem]),
         [
             'card_product_id' => $this->cardProduct->id,
             'quantity' => 2,
@@ -134,6 +134,6 @@ test('customer can not delete item in order when its paid', function () {
         'declared_value_total' => 10,
     ]);
     deleteJson(
-        route('orders.orderItems.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
+        route('v2.orders.orderItems.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
     )->assertForbidden();
 });

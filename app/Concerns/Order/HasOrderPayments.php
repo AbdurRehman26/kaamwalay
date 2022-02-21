@@ -73,12 +73,10 @@ trait HasOrderPayments
 
     public function updateAfterRefund(float $amount): void
     {
-        $this->fill([
+        $this->update([
             'refund_total' => round($this->refund_total + $amount, 2),
             'grand_total' => round($this->grand_total - $amount, 2),
         ]);
-
-        $this->save();
     }
 
     /**

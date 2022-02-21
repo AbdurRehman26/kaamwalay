@@ -50,7 +50,7 @@ beforeEach(function () {
 test('customer checks for valid coupon', function () {
     actingAs($this->user);
 
-    getJson(route('coupon.verify', [
+    getJson(route('v1.coupon.verify', [
             $this->coupon->code,
             'couponables_type' => 'service_level',
             'couponables_id' => $this->paymentPlan->id,
@@ -68,14 +68,14 @@ test('customer checks for valid coupon', function () {
 test('customer checks for invalid coupon code', function () {
     actingAs($this->user);
 
-    getJson(route('coupon.verify', $this->coupon->code . 'test'))
+    getJson(route('v1.coupon.verify', $this->coupon->code . 'test'))
         ->assertStatus(422);
 });
 
 test('customer checks for valid coupon code on wrong service level', function () {
     actingAs($this->user);
 
-    getJson(route('coupon.verify', [
+    getJson(route('v1.coupon.verify', [
         $this->coupon->code,
         'couponables_type' => 'service_level',
         'couponables_id' => 100,

@@ -3,7 +3,7 @@
 namespace App\Listeners\API\Services;
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Services\Payment\InvoiceService;
+use App\Services\Payment\V1\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;

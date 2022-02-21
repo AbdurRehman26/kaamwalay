@@ -3,9 +3,6 @@
     PR<br/>1
 </th>
 <th class="pop-list__table-cell pop-list__table-cell--value">
-    FR<br/>1.5
-</th>
-<th class="pop-list__table-cell pop-list__table-cell--value">
     GOOD<br/>2
 </th>
 <th class="pop-list__table-cell pop-list__table-cell--value">

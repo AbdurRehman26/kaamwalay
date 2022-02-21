@@ -7,7 +7,7 @@ use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
-use App\Services\Admin\OrderService;
+use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
 use Database\Seeders\RolesSeeder;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -64,7 +64,7 @@ test('an admin can add order item to order', function () {
 
     $response = $this->postJson('/api/v1/admin/orders/' . $orderItem->order_id . '/items', [
         'card_id' => $newCard->id,
-        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = null),
+        'value' => $this->faker->randomFloat(2, 1, 99999999.99),
     ]);
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -356,7 +356,7 @@ test('admin can update order item notes', function () {
     $notes = $this->faker->sentence();
 
     $this->putJson(
-        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        route('v1.update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
         ['notes' => $notes]
     )
         ->assertOk();
@@ -371,7 +371,7 @@ test('admin can remove notes from order item', function () {
     $this->actingAs($this->user);
 
     $this->putJson(
-        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        route('v1.update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
         ['notes' => '']
     )
         ->assertOk();
@@ -388,7 +388,7 @@ test('admin can update order item internal notes', function () {
     $internalNotes = $this->faker->sentence();
 
     $this->putJson(
-        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        route('v1.update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
         ['internal_notes' => $internalNotes]
     )
         ->assertOk();
@@ -403,7 +403,7 @@ test('admin can remove order item internal notes', function () {
     $this->actingAs($this->user);
 
     $this->putJson(
-        route('update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
+        route('v1.update.orderItem.notes', ['order' => $orderItem->order, 'orderItem' => $orderItem]),
         ['internal_notes' => '']
     )
         ->assertOk();

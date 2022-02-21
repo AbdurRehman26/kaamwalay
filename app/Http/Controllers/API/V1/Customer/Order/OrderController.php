@@ -6,36 +6,28 @@ use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
-use App\Http\Requests\API\V1\Customer\Order\CompleteOrderRequest;
-use App\Http\Requests\API\V1\Customer\Order\CreateOrderRequest;
 use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\V1\Customer\Order\UpdateCustomerShipmentRequest;
-use App\Http\Requests\API\V1\Customer\Order\UpdateOrderAddressesRequest;
 use App\Http\Resources\API\V1\Customer\Order\OrderCollection;
 use App\Http\Resources\API\V1\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Services\Order\CompleteOrderService;
-use App\Services\Order\CreateOrderService;
-use App\Services\Order\OrderService;
+use App\Services\Order\V1\CreateOrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
-use App\Services\Order\StoreOrderService;
-use App\Services\Order\UpdateAddressOrderService;
+use App\Services\Order\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class OrderController extends Controller
 {
     public function __construct(
-        private OrderService $orderService,
-        private CreateOrderService $createOrderService,
-        private StoreOrderService $storeOrderService,
-        private UpdateAddressOrderService $updateAddressOrderService,
-        private CompleteOrderService $completeOrderService
+        protected OrderService $orderService,
+        protected CreateOrderService $createOrderService
     ) {
 //        $this->authorizeResource(Order::class, 'order');
     }
@@ -47,58 +39,12 @@ class OrderController extends Controller
         );
     }
 
-    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    public function store(Request $request): OrderCreateResource | JsonResponse
     {
+        $request = resolve(StoreOrderRequest::class);
+
         try {
             $order = $this->createOrderService->create($request->validated());
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        return new OrderCreateResource($order);
-    }
-
-    public function create(CreateOrderRequest $request): OrderCreateResource | JsonResponse
-    {
-        try {
-            $order = $this->storeOrderService->create($request->validated());
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        return new OrderCreateResource($order);
-    }
-
-    public function storeOrderAddresses(UpdateOrderAddressesRequest $request, Order $order): OrderCreateResource | JsonResponse
-    {
-        try {
-            $order = $this->updateAddressOrderService->save($order, $request->validated());
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        return new OrderCreateResource($order);
-    }
-
-    public function completeOrder(CompleteOrderRequest $request, Order $order): OrderCreateResource | JsonResponse
-    {
-        try {
-            $order = $this->completeOrderService->save($order, $request->validated());
         } catch (Exception $e) {
             return new JsonResponse(
                 [

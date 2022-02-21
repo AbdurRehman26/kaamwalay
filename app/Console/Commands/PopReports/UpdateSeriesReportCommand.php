@@ -22,22 +22,9 @@ class UpdateSeriesReportCommand extends Command
      */
     protected $description = 'Update Series Reports';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle(PopReportService $popReportService)
+    public function handle(PopReportService $popReportService): int
     {
-        $allCardSeries = CardSeries::all();
-
-        foreach ($allCardSeries as $cardSeries) {
-            $this->info('Updating reports for card series ' . $cardSeries->id);
-
-            $popReportService->updateSeriesReport($cardSeries);
-
-            $this->info('Updating reports for card series ' . $cardSeries->id . ' completed');
-        }
+        $popReportService->updateAllSeriesReport();
 
         return 0;
     }

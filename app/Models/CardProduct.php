@@ -82,7 +82,10 @@ class CardProduct extends Model
     public function scopeCanBeInitializedInPopReport(Builder $query): Builder
     {
         return $query->leftJoin('pop_reports_cards', 'pop_reports_cards.card_product_id', '=', 'card_products.id')
-            ->whereNull('pop_reports_cards.id');
+            ->whereNull('pop_reports_cards.id')
+            ->whereNotNull('card_products.card_category_id')
+            ->whereNotNull('card_products.card_set_id')
+            ->whereNotNull('card_products.card_number_order');
     }
 
     public function scopeCardInformationIsComplete(Builder $query): Builder

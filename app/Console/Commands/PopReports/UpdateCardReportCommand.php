@@ -22,23 +22,9 @@ class UpdateCardReportCommand extends Command
      */
     protected $description = 'Update Card Products Reports';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
     public function handle(PopReportService $popReportService): int
     {
-        $cardProducts = CardProduct::join('order_items', 'order_items.card_product_id', '=', 'card_products.id')
-            ->join('user_cards', 'user_cards.order_item_id', '=', 'order_items.id')
-            ->groupBy('card_products.id')
-            ->select('card_products.*')
-            ->cardInformationIsComplete()
-            ->get();
-
-        $this->info('Total cards to be processed: ' . count($cardProducts));
-
-        $popReportService->updateMultipleCardProductsReports($cardProducts);
+        $popReportService->updateAllCardProductsReport();
 
         return 0;
     }

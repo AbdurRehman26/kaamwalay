@@ -24,7 +24,7 @@ class Order extends Model
     const ORDER_STEPS = [
         'CARDS_STEP' => 'cards',
         'SHIPPING_STEP' => 'shipping',
-        'PAYMENT_STEP' => 'payment'
+        'PAYMENT_STEP' => 'payment',
     ];
 
     /**

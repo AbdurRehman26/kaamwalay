@@ -23,19 +23,17 @@ class CompleteOrderRequest extends FormRequest
         $order = $this->route('order');
 
         $validator->after(function ($validator) use ($order) {
-
-            if (!$order->paymentPlan) {
+            if (! $order->paymentPlan) {
                 $validator->errors()->add('payment_plan', 'Please select a valid payment plan.');
             }
 
-            if (!$order->orderItems()->count()) {
+            if (! $order->orderItems()->count()) {
                 $validator->errors()->add('items', 'Please select at least one card to proceed.');
             }
 
-            if (!$order->shippingAddress) {
+            if (! $order->shippingAddress) {
                 $validator->errors()->add('shipping_address', 'Please enter a shipping address.');
             }
-
         });
     }
 

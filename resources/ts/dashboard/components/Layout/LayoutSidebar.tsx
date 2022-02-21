@@ -64,7 +64,7 @@ const useStyles = makeStyles(
     },
 );
 
-export function LayoutSidebar() {
+function LayoutSidebar() {
     const classes = useStyles();
     const { logout, user } = useAuth();
 

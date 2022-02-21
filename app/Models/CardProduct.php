@@ -89,17 +89,6 @@ class CardProduct extends Model
             ->whereNull('pop_reports_cards.id');
     }
 
-    /**
-     * @param  Builder <Model> $query
-     * @return Builder <Model>
-     */
-    public function scopeCardInformationIsComplete(Builder $query): Builder
-    {
-        return $query->whereNotNull('card_products.card_category_id')
-            ->whereNotNull('card_products.card_set_id')
-            ->whereNotNull('card_products.card_number_order');
-    }
-
     public function shouldBeSearchable(): bool
     {
         return ! $this->added_manually || $this->isCardInformationComplete();

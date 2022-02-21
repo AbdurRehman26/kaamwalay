@@ -20,19 +20,17 @@ class CompleteOrderRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-
-            if (!$this->route('order')->paymentPlan) {
+            if (! $this->route('order')->paymentPlan) {
                 $validator->errors()->add('payment_plan', 'Please select a valid payment plan.');
             }
 
-            if (!$this->route('order')->orderItems()->count()) {
+            if (! $this->route('order')->orderItems()->count()) {
                 $validator->errors()->add('items', 'Please select at least one card to proceed.');
             }
 
-            if (!$this->route('order')->shippingAddress) {
+            if (! $this->route('order')->shippingAddress) {
                 $validator->errors()->add('shipping_address', 'Please enter a shipping address.');
             }
-
         });
     }
 

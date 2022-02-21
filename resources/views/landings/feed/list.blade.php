@@ -102,6 +102,7 @@
             <button class="feed-stats__sort-and-filter" onclick="openFilterSort()">
                 <span class="feed-stats__icon material-icons">filter_alt</span>
                 Sort & Filter
+                <span class="feed-stats__sort-count"></span>
             </button>
         </div>
         <div class="feed-stats__current-refinements"></div>

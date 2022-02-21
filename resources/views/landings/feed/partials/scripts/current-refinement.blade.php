@@ -4,10 +4,8 @@
             Object.keys(refinement)
                 .map(key => `data-${key}="${refinement[key]}"`)
                 .join(' ');
-
+                
             const renderListItem = item => `
-            <li>
-                <ul>
                 ${item.refinements
                     .map(
                     refinement =>
@@ -17,8 +15,6 @@
                         </li>`
                     )
                     .join('')}
-                </ul>
-            </li>
             `;
 
             const renderCurrentRefinements = (renderOptions, isFirstRender) => {
@@ -32,6 +28,8 @@
 
             [...widgetParams.container.querySelectorAll('button')].forEach(element => {
                 element.addEventListener('click', event => {
+                    count--;
+                    document.getElementsByClassName('feed-stats__sort-count')[0].innerHTML = count;
                 const item = Object.keys(event.currentTarget.dataset).reduce(
                     (acc, key) => ({
                     ...acc,

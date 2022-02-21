@@ -5,6 +5,7 @@
             if (isFirstRender) {
                 const input = document.createElement('input');
                 input.className = "feed-hero__input";
+                input.placeholder = "Search...";
 
                 const button = document.createElement('button');
                 button.textContent = 'X';
@@ -37,7 +38,6 @@
             search.addWidgets([
             customSearchBox({
                 container: document.querySelector('.feed-hero__search-box'),
-                placeholder: 'Search...',
             })
             ]);
 </script>

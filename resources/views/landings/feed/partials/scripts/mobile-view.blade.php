@@ -1,6 +1,8 @@
 <script>
-            const renderRefinementListMobile = (renderOptions, isFirstRender) => {
-            const {
+    let count = 0;
+    
+    const renderRefinementListMobile = (renderOptions, isFirstRender) => {
+    const {
                 items,
                 refine,
                 createURL,
@@ -37,6 +39,14 @@
 
             [...widgetParams.container.querySelectorAll('a')].forEach(element => {
                 element.addEventListener('click', event => {
+                    if (count >= 2)
+                    {
+                        count--;
+                    }
+                    else {
+                        count++;
+                    }
+                document.getElementsByClassName('feed-stats__sort-count')[0].innerHTML = count;
                 event.preventDefault();
                 refine(event.currentTarget.dataset.value);
                 });
@@ -91,6 +101,14 @@
 
                 [...widgetParams.container.querySelectorAll('a')].forEach(element => {
                 element.addEventListener('click', event => {
+                    if (count >= 2 )
+                    {
+                        count--;
+                    }
+                    else {
+                        count++;
+                    }
+                    document.getElementsByClassName('feed-stats__sort-count')[0].innerHTML = count;
                 event.preventDefault();
                 refine(event.currentTarget.dataset.value);
                 });
@@ -112,38 +130,44 @@
                 hasNoResults,
                 refine,
                 widgetParams,
+                createURL,
             } = renderOptions;
 
             if (isFirstRender) {
-                const select = document.createElement('select');
-                select.className = "feed-categories__sort-by-select";
-
-                select.addEventListener('change', event => {
-                refine(event.target.value);
-                });
-
-                widgetParams.container.appendChild(select);
+                const ul = document.createElement('ul');
+                widgetParams.container.appendChild(ul);
             }
 
-            const select = widgetParams.container.querySelector('select');
-
-            select.disabled = hasNoResults;
-
-            select.innerHTML = `
-                ${options
+            widgetParams.container.querySelector('ul').innerHTML =`
+            ${options
                 .map(
-                    option => `
-                    <option
-                        class="feed-categories__sort-by-options"
-                        value="${option.value}"
-                        ${option.value === currentRefinement ? 'selected' : ''}
-                    >
-                        ${option.label}
-                    </option>
-                    `
+                item => `
+                    <li>
+                        <label>
+                            <a
+                                href="#"
+                                data-value="${item.value}"
+                            >
+                                <input
+                                    type="radio"
+                                    name="${widgetParams.attribute}"
+                                    value="${item.value}"
+                                    ${item.isRefined ? 'checked' : ''}
+                                    />
+                                    ${item.label}
+                            </a>
+                        </label>
+                    </li>
+                `
                 )
-                .join('')}
-            `;
+                .join('')}`;
+
+                [...widgetParams.container.querySelectorAll('a')].forEach(element => {
+                element.addEventListener('click', event => {
+                event.preventDefault();
+                refine(event.currentTarget.dataset.value);
+                });
+            });
             };
 
             const customSortByMobile = instantsearch.connectors.connectSortBy(renderSortByMobile);

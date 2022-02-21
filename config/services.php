@@ -55,6 +55,10 @@ return [
         'server' => env('MAILCHIMP_SERVER')
     ],
 
+    'hubspot' => [
+        'apiKey' => env('HUBSPOT_API_KEY'),
+    ],
+
     'dropbox' => [
         'token' => env('AGS_DROPBOX_TOKEN'),
         'root_path' => env('AGS_DROPBOX_ROOT_PATH'),

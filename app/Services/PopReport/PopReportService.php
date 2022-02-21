@@ -352,8 +352,8 @@ class PopReportService
     }
 
     /**
-     * @param  Builder <Model> $query
-     * @return Builder <Model>
+     * @param  Builder <CardProduct> $query
+     * @return Builder <CardProduct>
      */
     protected function isCardInformationComplete(Builder $query): Builder
     {

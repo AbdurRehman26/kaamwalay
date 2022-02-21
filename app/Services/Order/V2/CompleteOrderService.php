@@ -65,7 +65,6 @@ class CompleteOrderService
     protected function process(): void
     {
         DB::beginTransaction();
-
         $this->storeBillingAddress($this->data['billing_address'], $this->data['customer_address']);
         $this->storePaymentMethod(
             $this->getPaymentMethod($this->data)

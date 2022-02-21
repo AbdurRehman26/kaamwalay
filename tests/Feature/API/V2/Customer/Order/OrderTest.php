@@ -160,26 +160,15 @@ test('a customer can complete his order including wallet payment', function () {
         ],
     ]);
 
-    $orderItem = OrderItem::factory()->state(new Sequence(
+    OrderItem::factory()->state(new Sequence(
         [
             'order_id' => $response['data']['id'],
         ]
     ))->create();
+
     $response = $this->postJson(route('v2.customer.orders.update-addresses', [
         'order' => $response['data']['id'],
     ]), [
-        'payment_plan' => [
-            'id' => $this->paymentPlan->id,
-        ],
-        'items' => [
-            [
-                'card_product' => [
-                    'id' => $orderItem['card_product_id'],
-                ],
-                'quantity' => $orderItem['quantity'],
-                'declared_value_per_unit' => (int) $orderItem['declared_value_per_unit'],
-            ],
-        ],
         'shipping_address' => [
             'first_name' => 'First',
             'last_name' => 'Last',
@@ -202,29 +191,6 @@ test('a customer can complete his order including wallet payment', function () {
     $this->postJson(route('v2.customer.orders.complete', [
         'order' => $response['data']['id'],
     ]), [
-        'payment_plan' => [
-            'id' => $this->paymentPlan->id,
-        ],
-        'items' => [
-            [
-                'card_product' => [
-                    'id' => $orderItem['card_product_id'],
-                ],
-                'quantity' => $orderItem['quantity'],
-                'declared_value_per_unit' => (int) $orderItem['declared_value_per_unit'],
-            ],
-        ],
-        'shipping_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'save_for_later' => true,
-        ],
         'billing_address' => [
             'first_name' => 'First',
             'last_name' => 'Last',
@@ -237,7 +203,7 @@ test('a customer can complete his order including wallet payment', function () {
             'same_as_shipping' => true,
         ],
         'customer_address' => [
-            'id' => 1,
+            'id' => null,
         ],
         'shipping_method' => [
             'id' => $this->shippingMethod->id,

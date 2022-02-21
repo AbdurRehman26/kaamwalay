@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\API\V2\Customer\Order;
 
 use App\Http\Controllers\API\V1\Customer\Order\OrderController as V1OrderController;
-use App\Http\Requests\API\V1\Customer\Order\UpdateOrderAddressesRequest;
 use App\Http\Requests\API\V2\Customer\Order\CompleteOrderRequest;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderRequest;
+use App\Http\Requests\API\V2\Customer\Order\UpdateOrderAddressesRequest;
 use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
 use App\Models\Order;
 use App\Services\Order\OrderService;

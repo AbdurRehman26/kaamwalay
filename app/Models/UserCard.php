@@ -42,9 +42,9 @@ class UserCard extends Model
     ];
 
     /**
-     * Determine if the model should be searchable.
+     * Get the indexable data array for the model.
      *
-     * @return bool
+     * @return array
      */
     public function toSearchableArray()
     {

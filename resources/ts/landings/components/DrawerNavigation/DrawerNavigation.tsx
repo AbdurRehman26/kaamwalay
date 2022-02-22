@@ -74,9 +74,9 @@ export function DrawerNavigation() {
     const dispatch = useSharedDispatch();
     const isHeaderAuthDialogOpen = useSharedSelector((state) => state.authentication.headerDialogOpened);
 
-    const handleAuthDialogClose = () => {
+    const handleAuthDialogClose = useCallback(() => {
         dispatch(headerDialogVisibility(false));
-    };
+    }, [dispatch]);
 
     const handleOpen = useCallback(() => setOpen(true), [setOpen]);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
@@ -92,9 +92,9 @@ export function DrawerNavigation() {
         [],
     );
 
-    const handleChange = () => {
+    const handleChange = useCallback(() => {
         dispatch(headerDialogVisibility(true));
-    };
+    }, [dispatch]);
 
     return (
         <>

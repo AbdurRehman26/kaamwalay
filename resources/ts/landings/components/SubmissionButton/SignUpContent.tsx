@@ -4,10 +4,10 @@ import MuiLink from '@mui/material/Link';
 import { Form, Formik } from 'formik';
 import Typography from '@mui/material/Typography';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
-import { useMemo } from 'react';
-import { FormInput } from './FormInput';
+import { useMemo, useCallback } from 'react';
+import { FormInput } from '@shared/components/Auth/FormInput';
 import { SubmitButton } from '@shared/components/Auth/SubmitButton';
-import { PopupSignUpValidationRules } from './validation';
+import { PopupSignUpValidationRules } from '@shared/components/Auth/validation';
 import { ActionContent, FormRoot } from '@shared/components/Auth/styles';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { dialogVisibility } from '@shared/redux/slices/authenticationSlice';
@@ -42,26 +42,29 @@ export function SignUpContent(props: Props) {
         [],
     );
 
-    const handleChange = () => {
+    const handleChange = useCallback(() => {
         onContentChange(true);
-    };
+    }, [onContentChange]);
 
-    const handleSubmit = async (values: SignUpRequestDto) => {
-        values = { ...values, passwordConfirmation: values.password };
-        try {
-            const authenticatedUser = await authenticationRepository.postRegister(values);
-            NotificationsService.success('Register successfully!');
-            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
-            pushToDataLayer({ event: 'google-ads-authenticated' });
-            await authenticationService.setAccessToken(authenticatedUser.accessToken);
-            trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
-            dispatch(authenticateCheckAction());
-            window.location.href = '/dashboard/submissions/new';
-        } catch (e: any) {
-            NotificationsService.exception(e);
-            dispatch(dialogVisibility(false));
-        }
-    };
+    const handleSubmit = useCallback(
+        async (values: SignUpRequestDto) => {
+            values = { ...values, passwordConfirmation: values.password };
+            try {
+                const authenticatedUser = await authenticationRepository.postRegister(values);
+                NotificationsService.success('Register successfully!');
+                ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
+                pushToDataLayer({ event: 'google-ads-authenticated' });
+                await authenticationService.setAccessToken(authenticatedUser.accessToken);
+                trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
+                dispatch(authenticateCheckAction());
+                window.location.href = '/dashboard/submissions/new';
+            } catch (e: any) {
+                NotificationsService.exception(e);
+                dispatch(dialogVisibility(false));
+            }
+        },
+        [authenticationService, authenticationRepository, dispatch],
+    );
 
     return (
         <Formik

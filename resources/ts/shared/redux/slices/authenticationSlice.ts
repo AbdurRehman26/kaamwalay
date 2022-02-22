@@ -134,9 +134,7 @@ export const authenticationSlice = createSlice({
             state.user = action.payload;
         },
         dialogVisibility: (state, action: PayloadAction<boolean>) => {
-            console.log('SSS ', state.dialogOpened);
             state.dialogOpened = action.payload;
-            console.log('SSS 2', state.dialogOpened);
         },
         headerDialogVisibility: (state, action: PayloadAction<boolean>) => {
             state.headerDialogOpened = action.payload;

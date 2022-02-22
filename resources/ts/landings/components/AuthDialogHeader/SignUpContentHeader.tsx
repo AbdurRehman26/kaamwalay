@@ -41,9 +41,9 @@ export function SignUpContentHeader(props: Props) {
         [register, dispatch],
     );
 
-    const handleChange = () => {
+    const handleChange = useCallback(() => {
         onContentChange(true);
-    };
+    }, [onContentChange]);
 
     return (
         <Formik

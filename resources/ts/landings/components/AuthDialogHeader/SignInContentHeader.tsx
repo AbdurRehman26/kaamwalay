@@ -38,9 +38,9 @@ export function SignInContentHeader(props: Props) {
         [login, dispatch],
     );
 
-    const handleChange = () => {
+    const handleChange = useCallback(() => {
         onContentChange(false);
-    };
+    }, [onContentChange]);
 
     return (
         <Formik

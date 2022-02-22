@@ -5,9 +5,9 @@ import MuiLink from '@mui/material/Link';
 import { Form, Formik } from 'formik';
 import Typography from '@mui/material/Typography';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
-import { useMemo } from 'react';
-import { SignInValidationRules } from './validation';
-import { FormInput } from './FormInput';
+import { useCallback, useMemo } from 'react';
+import { SignInValidationRules } from '@shared/components/Auth/validation';
+import { FormInput } from '@shared/components/Auth/FormInput';
 import { SubmitButton } from '@shared/components/Auth/SubmitButton';
 import { ActionContent, FormRoot } from '@shared/components/Auth/styles';
 import { NotificationsService } from '@shared/services/NotificationsService';
@@ -36,31 +36,34 @@ export function SignInContent(props: Props) {
         [],
     );
 
-    const handleChange = () => {
+    const handleChange = useCallback(() => {
         onContentChange(false);
-    };
+    }, [onContentChange]);
 
-    const handleSubmit = async (values: LoginRequestDto) => {
-        try {
-            const authenticatedUser = await authenticationRepository.postLogin({
-                email: values.email,
-                password: values.password,
-            });
-            NotificationsService.success('Login successfully!');
-            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
-            pushToDataLayer({ event: 'google-ads-authenticated' });
-            await authenticationService.setAccessToken(authenticatedUser.accessToken);
-            window.location.href = '/dashboard/submissions/new';
-        } catch (e: any) {
-            if (isAxiosError(e) || isException(e)) {
-                ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
-                NotificationsService.exception(e);
-            } else {
-                ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
-                NotificationsService.error('Unable to login.');
+    const handleSubmit = useCallback(
+        async (values: LoginRequestDto) => {
+            try {
+                const authenticatedUser = await authenticationRepository.postLogin({
+                    email: values.email,
+                    password: values.password,
+                });
+                NotificationsService.success('Login successfully!');
+                ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
+                pushToDataLayer({ event: 'google-ads-authenticated' });
+                await authenticationService.setAccessToken(authenticatedUser.accessToken);
+                window.location.href = '/dashboard/submissions/new';
+            } catch (e: any) {
+                if (isAxiosError(e) || isException(e)) {
+                    ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
+                    NotificationsService.exception(e);
+                } else {
+                    ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
+                    NotificationsService.error('Unable to login.');
+                }
             }
-        }
-    };
+        },
+        [authenticationService, authenticationRepository],
+    );
 
     return (
         <Formik

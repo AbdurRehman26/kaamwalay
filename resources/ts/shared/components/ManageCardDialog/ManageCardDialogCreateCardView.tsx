@@ -262,6 +262,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                 setSelectedSeries(null);
                 setSelectedSet(null);
                 setSelectedRarity(null);
+                setSelectedSurface(null);
                 setReleaseDate(null);
 
                 fetchSeries(e.target.value);

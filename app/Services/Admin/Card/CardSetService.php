@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
-use App\Events\API\Admin\CardSet\CardSetCreatedEvent;
+use App\Events\API\Admin\CardSetCreatedEvent;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;

@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
-use App\Events\API\Admin\CardProduct\CardProductCreatedEvent;
+use App\Events\API\Admin\CardProductCreatedEvent;
 use App\Exceptions\API\Admin\CardProductCanNotBeCreated;
 use App\Models\CardCategory;
 use App\Models\CardProduct;
@@ -12,6 +12,7 @@ use App\Models\CardSet;
 use App\Models\CardSurface;
 use App\Services\AGS\AgsService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class CardProductService
 {
@@ -40,12 +41,12 @@ class CardProductService
     {
     }
 
-    protected function getSeriesFromAgs(string $seriesName, string $seriesImage, array $data): int | null
+    protected function getSeriesFromAgs(string $seriesName): int | null
     {
         return $this->agsService->getCardSeries(['name' => $seriesName])['results'][0]['id'];
     }
 
-    protected function getSetFromAgs(int $seriesId, string $setName, string $setImage, array $data): int | null
+    protected function getSetFromAgs(int $seriesId, string $setName): int | null
     {
         return $this->agsService->getCardSet([
             'name' => $setName,
@@ -53,11 +54,11 @@ class CardProductService
         ])['results'][0]['id'];
     }
 
-    protected function processAgsCreate(int $categoryId, string $seriesName, string $seriesImage, string $setName, string $setImage, array $data): array
+    protected function processAgsCreate(int $categoryId, string $seriesName, string $setName, array $data): array
     {
         try {
-            $createData['series_id'] = $this->getSeriesFromAgs($seriesName, $seriesImage, $data);
-            $createData['set_id'] = $this->getSetFromAgs($createData['series_id'], $setName, $setImage, $data);
+            $createData['series_id'] = $this->getSeriesFromAgs($seriesName);
+            $createData['set_id'] = $this->getSetFromAgs($createData['series_id'], $setName);
 
             $createData = array_merge($createData, [
                 'name' => $data['name'],
@@ -85,14 +86,12 @@ class CardProductService
 
         $series = CardSeries::find($data['series_id']);
         $seriesName = $series->name;
-        $seriesImage = $series->image_path;
 
         $set = CardSet::find($data['set_id']);
         $setName = $set->name;
-        $setImage = $set->image_path;
 
         //store in AGS
-        $agsResponse = $this->processAgsCreate($category->id, $seriesName, $seriesImage, $setName, $setImage, $data);
+        $agsResponse = $this->processAgsCreate($category->id, $seriesName, $setName, $data);
 
         if (! $agsResponse || ! array_key_exists('id', $agsResponse)) {
             throw new CardProductCanNotBeCreated;

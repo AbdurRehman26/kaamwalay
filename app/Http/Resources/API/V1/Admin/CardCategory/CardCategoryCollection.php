@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Admin\CardCategory;
 
+use App\Models\CardCategory;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class CardCategoryCollection extends ResourceCollection
      * Transform the resource collection into an array.
      *
      * @param  Request  $request
-     * @return array|Arrayable<int, Model>|JsonSerializable
+     * @return array|Arrayable<int, CardCategory>|JsonSerializable
      */
     public function toArray($request)
     {

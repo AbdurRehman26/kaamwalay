@@ -2,9 +2,10 @@
 
 namespace App\Listeners\API\Admin\CardProduct;
 
-use App\Events\API\Admin\CardProduct\CardProductCreatedEvent;
+use App\Events\API\Admin\CardProductCreatedEvent;
 use App\Models\CardProduct;
 use App\Models\PopReportsCard;
+use App\Services\PopReport\PopReportService;
 
 class CardProductCreatedListener
 {
@@ -13,7 +14,7 @@ class CardProductCreatedListener
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(protected PopReportService $popReportService)
     {
     }
 
@@ -30,9 +31,6 @@ class CardProductCreatedListener
 
     protected function initializePopReport(CardProduct $cardProduct): PopReportsCard
     {
-        return PopReportsCard::create([
-            'card_product_id' => $cardProduct->id,
-            'card_set_id' => $cardProduct->card_set_id,
-        ]);
+        return $this->popReportService->initializeCardPopReport($cardProduct);
     }
 }

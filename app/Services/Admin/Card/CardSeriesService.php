@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
-use App\Events\API\Admin\CardSeries\CardSeriesCreatedEvent;
+use App\Events\API\Admin\CardSeriesCreatedEvent;
 use App\Models\CardSeries;
 use App\Services\AGS\AgsService;
 use Illuminate\Database\Eloquent\Collection;

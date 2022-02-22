@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\API\Admin\CardSet;
+namespace App\Events\API\Admin;
 
 use App\Models\CardSet;
 use Illuminate\Broadcasting\InteractsWithSockets;

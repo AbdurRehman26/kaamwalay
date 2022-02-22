@@ -71,6 +71,29 @@ class PopReportService
         }
     }
 
+    public function initializeCardPopReport(CardProduct $cardProduct): PopReportsCard
+    {
+        return PopReportsCard::create([
+            'card_product_id' => $cardProduct->id,
+            'card_set_id' => $cardProduct->card_set_id,
+        ]);
+    }
+
+    public function initializeSeriesPopReport(CardSeries $cardSeries): PopReportsSeries
+    {
+        return PopReportsSeries::create([
+            'card_series_id' => $cardSeries->id,
+        ]);
+    }
+
+    public function initializeSetPopReport(CardSet $cardSet): PopReportsSet
+    {
+        return PopReportsSet::create([
+            'card_set_id' => $cardSet->id,
+            'card_series_id' => $cardSet->card_series_id,
+        ]);
+    }
+
     public function updateAllSeriesReport(): void
     {
         $allCardSeries = CardSeries::all();

@@ -2,9 +2,10 @@
 
 namespace App\Listeners\API\Admin\CardSeries;
 
-use App\Events\API\Admin\CardSeries\CardSeriesCreatedEvent;
+use App\Events\API\Admin\CardSeriesCreatedEvent;
 use App\Models\CardSeries;
 use App\Models\PopReportsSeries;
+use App\Services\PopReport\PopReportService;
 
 class CardSeriesCreatedListener
 {
@@ -13,7 +14,7 @@ class CardSeriesCreatedListener
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(protected PopReportService $popReportService)
     {
     }
 
@@ -30,8 +31,6 @@ class CardSeriesCreatedListener
 
     protected function initializePopReport(CardSeries $cardSeries): PopReportsSeries
     {
-        return PopReportsSeries::create([
-            'card_series_id' => $cardSeries->id,
-        ]);
+        return $this->popReportService->initializeSeriesPopReport($cardSeries);
     }
 }

@@ -40,7 +40,7 @@ class CustomerAddressResource extends Resource
                 Forms\Components\TextInput::make('city')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('state')->options(State::all()->pluck('code'))
+                Forms\Components\Select::make('state')->options(State::pluck('code'))
                     ->required()
                     ->searchable()
                     ->disablePlaceholderSelection(),

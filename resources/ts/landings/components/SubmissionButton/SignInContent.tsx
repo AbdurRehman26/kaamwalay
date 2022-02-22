@@ -8,8 +8,8 @@ import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { useMemo } from 'react';
 import { SignInValidationRules } from './validation';
 import { FormInput } from './FormInput';
-import { SubmitButton } from './SubmitButton';
-import { ActionContent, FormRoot } from './styles';
+import { SubmitButton } from '@shared/components/Auth/SubmitButton';
+import { ActionContent, FormRoot } from '@shared/components/Auth/styles';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
@@ -21,11 +21,11 @@ import { isAxiosError } from '@shared/lib/api/isAxiosError';
 import { isException } from '@shared/lib/errors/isException';
 
 interface Props {
-    handleContentChange: (isLogin: boolean) => void;
+    onContentChange: (isLogin: boolean) => void;
 }
 
 export function SignInContent(props: Props) {
-    const { handleContentChange } = props;
+    const { onContentChange } = props;
     const authenticationService = app(AuthenticationService);
     const authenticationRepository = app(AuthenticationRepository);
     const initialState = useMemo<LoginRequestDto>(
@@ -35,6 +35,10 @@ export function SignInContent(props: Props) {
         }),
         [],
     );
+
+    const handleChange = () => {
+        onContentChange(false);
+    };
 
     const handleSubmit = async (values: LoginRequestDto) => {
         try {
@@ -81,9 +85,7 @@ export function SignInContent(props: Props) {
 
                     <Box display={'flex'} width={'100%'} justifyContent={'center'}>
                         <MuiLink
-                            onClick={() => {
-                                window.location.href = '/auth/password/forgot';
-                            }}
+                            href={'/auth/password/forgot'}
                             variant={'caption'}
                             color={'textPrimary'}
                             align={'center'}
@@ -100,7 +102,7 @@ export function SignInContent(props: Props) {
                         New to AGS?
                     </Typography>
                     <MuiLink
-                        onClick={() => handleContentChange(false)}
+                        onClick={handleChange}
                         fontWeight={500}
                         align={'center'}
                         color={'primary'}

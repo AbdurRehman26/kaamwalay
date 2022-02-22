@@ -6,21 +6,21 @@ import Typography from '@mui/material/Typography';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useMemo } from 'react';
-import { FormInput } from './FormInput';
-import { SubmitButton } from './SubmitButton';
-import { PopupSignUpValidationRules } from './validation';
-import { ActionContent, FormRoot } from './style';
-import { useAppDispatch } from '../../../landings/redux/hooks';
-import { headerDialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
+import { FormInput } from '@shared/components/Auth/FormInput';
+import { SubmitButton } from '@shared/components/Auth/SubmitButton';
+import { PopupSignUpValidationRules } from '@shared/components/Auth/validation';
+import { ActionContent, FormRoot } from '@shared/components/Auth/styles';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
 
 interface Props {
-    handleContentChange: (isLogin: boolean) => void;
+    onContentChange: (isLogin: boolean) => void;
 }
 
 export function SignUpContentHeader(props: Props) {
-    const { handleContentChange } = props;
+    const { onContentChange } = props;
     const { register } = useAuth();
-    const dispatch = useAppDispatch();
+    const dispatch = useSharedDispatch();
     const initialState = useMemo<SignUpRequestDto>(
         () => ({
             fullName: '',
@@ -40,6 +40,10 @@ export function SignUpContentHeader(props: Props) {
         },
         [register, dispatch],
     );
+
+    const handleChange = () => {
+        onContentChange(true);
+    };
 
     return (
         <Formik
@@ -76,7 +80,7 @@ export function SignUpContentHeader(props: Props) {
                         Already have an account?
                     </Typography>
                     <MuiLink
-                        onClick={() => handleContentChange(true)}
+                        onClick={handleChange}
                         fontWeight={500}
                         align={'center'}
                         color={'primary'}

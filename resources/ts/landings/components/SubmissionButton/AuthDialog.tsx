@@ -16,17 +16,6 @@ interface Props extends DialogProps {
     subTitle: string;
 }
 
-const Header = styled('div')({
-    background: 'linear-gradient(to right bottom, #140078, #6c31bc)',
-    padding: '8px 8px 34px 8px',
-});
-
-const HeaderLogo = styled('div')({
-    position: 'absolute',
-    left: '45%',
-    top: 110,
-});
-
 const Root = styled(Dialog)({
     '.MuiDialog-paper': {
         width: 440,
@@ -34,6 +23,15 @@ const Root = styled(Dialog)({
     },
     '.MuiDialogContent-root': {
         padding: 0,
+    },
+    '.AuthDialogHeader-header': {
+        background: 'linear-gradient(to right bottom, #140078, #6c31bc)',
+        padding: '8px 8px 34px 8px',
+    },
+    '.AuthDialogHeader-headerLogo': {
+        position: 'absolute',
+        left: '45%',
+        top: 110,
     },
 });
 
@@ -55,7 +53,7 @@ export function AuthDialog({ subTitle, onClose, ...rest }: Props) {
     return (
         <>
             <Root onClose={handleClose} {...rest}>
-                <Header>
+                <div className={'AuthDialogHeader-header'}>
                     <Box width={'100%'} display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
                         <IconButton sx={{ color: 'white' }} onClick={handleClose}>
                             <CloseIcon />
@@ -77,15 +75,15 @@ export function AuthDialog({ subTitle, onClose, ...rest }: Props) {
                             {subTitle}
                         </Typography>
                     </Grid>
-                </Header>
-                <HeaderLogo>
+                </div>
+                <div className="AuthDialogHeader-headerLogo">
                     <img src={AuthHeaderLogo} alt="Robograding" />
-                </HeaderLogo>
+                </div>
                 <DialogContent>
                     {isSignIn ? (
-                        <SignInContent handleContentChange={handleChange} />
+                        <SignInContent onContentChange={handleChange} />
                     ) : (
-                        <SignUpContent handleContentChange={handleChange} />
+                        <SignUpContent onContentChange={handleChange} />
                     )}
                 </DialogContent>
             </Root>

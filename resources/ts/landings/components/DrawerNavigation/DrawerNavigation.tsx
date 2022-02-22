@@ -23,9 +23,10 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useState } from 'react';
 import logo from '@shared/assets/logo.svg';
-import { AuthDialogHeader } from '../../../auth/pages/Auth/AuthDialogHeader';
-import { useAppDispatch, useAppSelector } from '../../../landings/redux/hooks';
-import { headerDialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
+import { AuthDialogHeader } from '../AuthDialogHeader/AuthDialogHeader';
+import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -70,8 +71,8 @@ export function DrawerNavigation() {
     const classes = useStyles();
     const { authenticated, logout } = useAuth();
     const [isOpen, setOpen] = useState(false);
-    const isHeaderAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.headerDialogOpened);
-    const dispatch = useAppDispatch();
+    const dispatch = useSharedDispatch();
+    const isHeaderAuthDialogOpen = useSharedSelector((state) => state.authentication.headerDialogOpened);
 
     const handleAuthDialogClose = () => {
         dispatch(headerDialogVisibility(false));
@@ -90,6 +91,10 @@ export function DrawerNavigation() {
         },
         [],
     );
+
+    const handleChange = () => {
+        dispatch(headerDialogVisibility(true));
+    };
 
     return (
         <>
@@ -190,9 +195,7 @@ export function DrawerNavigation() {
 
                         {!authenticated ? (
                             <Button
-                                onClick={() => {
-                                    dispatch(headerDialogVisibility(true));
-                                }}
+                                onClick={handleChange}
                                 variant={'text'}
                                 color={'inherit'}
                                 className={classes.button}

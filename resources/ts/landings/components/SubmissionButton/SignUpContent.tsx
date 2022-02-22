@@ -6,11 +6,11 @@ import Typography from '@mui/material/Typography';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { useMemo } from 'react';
 import { FormInput } from './FormInput';
-import { SubmitButton } from './SubmitButton';
+import { SubmitButton } from '@shared/components/Auth/SubmitButton';
 import { PopupSignUpValidationRules } from './validation';
-import { ActionContent, FormRoot } from './styles';
-import { useAppDispatch } from '../../redux/hooks';
-import { dialogVisibility } from '../../redux/slices/authDialogSlice';
+import { ActionContent, FormRoot } from '@shared/components/Auth/styles';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { dialogVisibility } from '@shared/redux/slices/authenticationSlice';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
@@ -23,15 +23,14 @@ import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEve
 import { authenticateCheckAction } from '@shared/redux/slices/authenticationSlice';
 
 interface Props {
-    handleContentChange: (isLogin: boolean) => void;
+    onContentChange: (isLogin: boolean) => void;
 }
 
 export function SignUpContent(props: Props) {
-    const { handleContentChange } = props;
-    const dispatch = useAppDispatch();
+    const { onContentChange } = props;
     const authenticationService = app(AuthenticationService);
     const authenticationRepository = app(AuthenticationRepository);
-
+    const dispatch = useSharedDispatch();
     const initialState = useMemo<SignUpRequestDto>(
         () => ({
             fullName: '',
@@ -42,6 +41,10 @@ export function SignUpContent(props: Props) {
         }),
         [],
     );
+
+    const handleChange = () => {
+        onContentChange(true);
+    };
 
     const handleSubmit = async (values: SignUpRequestDto) => {
         values = { ...values, passwordConfirmation: values.password };
@@ -95,7 +98,7 @@ export function SignUpContent(props: Props) {
                         Already have an account?
                     </Typography>
                     <MuiLink
-                        onClick={() => handleContentChange(true)}
+                        onClick={handleChange}
                         fontWeight={500}
                         align={'center'}
                         color={'primary'}

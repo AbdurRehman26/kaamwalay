@@ -1,6 +1,7 @@
 import Button, { ButtonProps } from '@mui/material/Button';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { dialogVisibility } from '../../redux/slices/authDialogSlice';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { useSharedSelector } from '@shared/hooks/useSharedSelector';
+import { dialogVisibility } from '@shared/redux/slices/authenticationSlice';
 import { AuthDialog } from './AuthDialog';
 import { useAuth } from '@shared/hooks/useAuth';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -13,13 +14,14 @@ interface Props extends ButtonProps {
 }
 
 export function SubmissionButton({ textColor, buttonContent, margin, ...rest }: Props) {
-    const isAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.dialogOpened);
-    const dispatch = useAppDispatch();
+    const isAuthDialogOpen = useSharedSelector((state) => state.authentication.dialogOpened);
     const { authenticated } = useAuth();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const dispatch = useSharedDispatch();
     const handleAuthDialogClose = () => {
         dispatch(dialogVisibility(false));
     };
+
     const handleOpenDialog = () => {
         if (!authenticated) {
             dispatch(dialogVisibility(true));

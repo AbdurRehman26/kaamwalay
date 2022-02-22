@@ -7,21 +7,21 @@ import Typography from '@mui/material/Typography';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useMemo } from 'react';
-import { SignInValidationRules } from './validation';
-import { FormInput } from './FormInput';
-import { SubmitButton } from './SubmitButton';
-import { ActionContent, FormRoot } from './style';
-import { useAppDispatch } from '../../../landings/redux/hooks';
-import { headerDialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
+import { SignInValidationRules } from '@shared/components/Auth/validation';
+import { FormInput } from '@shared/components/Auth/FormInput';
+import { SubmitButton } from '@shared/components/Auth/SubmitButton';
+import { ActionContent, FormRoot } from '@shared/components/Auth/styles';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
 
 interface Props {
-    handleContentChange: (isLogin: boolean) => void;
+    onContentChange: (isLogin: boolean) => void;
 }
 
 export function SignInContentHeader(props: Props) {
-    const { handleContentChange } = props;
+    const { onContentChange } = props;
     const { login } = useAuth();
-    const dispatch = useAppDispatch();
+    const dispatch = useSharedDispatch();
     const initialState = useMemo<LoginRequestDto>(
         () => ({
             email: '',
@@ -37,6 +37,10 @@ export function SignInContentHeader(props: Props) {
         },
         [login, dispatch],
     );
+
+    const handleChange = () => {
+        onContentChange(false);
+    };
 
     return (
         <Formik
@@ -61,9 +65,7 @@ export function SignInContentHeader(props: Props) {
 
                     <Box display={'flex'} width={'100%'} justifyContent={'center'}>
                         <MuiLink
-                            onClick={() => {
-                                window.location.href = '/auth/password/forgot';
-                            }}
+                            href={'/auth/password/forgot'}
                             variant={'caption'}
                             color={'textPrimary'}
                             align={'center'}
@@ -80,7 +82,7 @@ export function SignInContentHeader(props: Props) {
                         New to AGS?
                     </Typography>
                     <MuiLink
-                        onClick={() => handleContentChange(false)}
+                        onClick={handleChange}
                         fontWeight={500}
                         align={'center'}
                         color={'primary'}

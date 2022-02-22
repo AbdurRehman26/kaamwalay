@@ -8,9 +8,10 @@ import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
-import { AuthDialogHeader } from '../../../auth/pages/Auth/AuthDialogHeader';
-import { useAppDispatch, useAppSelector } from '../../../landings/redux/hooks';
-import { headerDialogVisibility } from '../../../landings/redux/slices/authDialogSlice';
+import { AuthDialogHeader } from '../AuthDialogHeader/AuthDialogHeader';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { useSharedSelector } from '@shared/hooks/useSharedSelector';
+import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -51,11 +52,19 @@ const useStyles = makeStyles(
 export function AuthControls() {
     const { checking, authenticated } = useAuth();
     const classes = useStyles();
-    const isHeaderAuthDialogOpen = useAppSelector((state) => state.authDialogSlice.headerDialogOpened);
-    const dispatch = useAppDispatch();
+    const dispatch = useSharedDispatch();
+    const isHeaderAuthDialogOpen = useSharedSelector((state) => state.authentication.headerDialogOpened);
 
     const handleAuthDialogClose = () => {
         dispatch(headerDialogVisibility(false));
+    };
+
+    const handleChange = () => {
+        if (!authenticated) {
+            dispatch(headerDialogVisibility(true));
+        } else {
+            window.location.href = '/dashboard/submissions/new';
+        }
     };
 
     if (checking) {
@@ -65,7 +74,7 @@ export function AuthControls() {
     return (
         <>
             <Button
-                href={'/dashboard/submissions/new'}
+                onClick={handleChange}
                 color={'primary'}
                 variant={'outlined'}
                 className={cx(classes.button, classes.buttonHighlighted, classes.space)}
@@ -79,9 +88,7 @@ export function AuthControls() {
                 </ButtonBase>
             ) : (
                 <Button
-                    onClick={() => {
-                        dispatch(headerDialogVisibility(true));
-                    }}
+                    onClick={handleChange}
                     color={'primary'}
                     className={cx(classes.button)}
                     startIcon={<PersonIcon />}

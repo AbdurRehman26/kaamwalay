@@ -12,7 +12,6 @@ use App\Models\CardSet;
 use App\Models\CardSurface;
 use App\Services\AGS\AgsService;
 use Exception;
-use Illuminate\Support\Facades\Log;
 
 class CardProductService
 {

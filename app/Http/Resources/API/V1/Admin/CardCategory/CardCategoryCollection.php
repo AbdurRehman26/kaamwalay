@@ -4,7 +4,6 @@ namespace App\Http\Resources\API\V1\Admin\CardCategory;
 
 use App\Models\CardCategory;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use JsonSerializable;

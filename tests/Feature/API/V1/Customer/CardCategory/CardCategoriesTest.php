@@ -9,7 +9,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\seed;
 
-test('customer cannot receive enabled card categories', function () {
+test('customer can receive enabled card categories', function () {
     seed([RolesSeeder::class]);
     actingAs(User::factory()->withRole(config('permission.roles.customer'))->create());
 

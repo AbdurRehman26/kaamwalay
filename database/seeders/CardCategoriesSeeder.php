@@ -24,6 +24,5 @@ class CardCategoriesSeeder extends Seeder
             ],
         ]);
         
-        
     }
 }

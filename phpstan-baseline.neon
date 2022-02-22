@@ -1,46 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateAdminShipments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
-
-		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateCustomerShipments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
-
-		-
-			message: "#^Anonymous function should return Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), mixed\\>\\> but returns Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}\\>\\>\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:each\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, \\(int\\|string\\)\\)\\: mixed, Closure\\(App\\\\Models\\\\UserCard, mixed\\)\\: void given\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), array\\<string, mixed\\>\\>\\>\\:\\:transform\\(\\) expects callable\\(Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}\\>, \\(int\\|string\\)\\)\\: Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}\\>, Closure\\(Illuminate\\\\Support\\\\Collection\\)\\: Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), mixed\\>\\> given\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),array\\<string, mixed\\>\\>\\:\\:each\\(\\) expects callable\\(array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}, \\(int\\|string\\)\\)\\: mixed, Closure\\(Illuminate\\\\Support\\\\Collection, string\\)\\: void given\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Unable to resolve the template type TKey in call to function collect$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Unable to resolve the template type TValue in call to function collect$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 1
 			path: app/Console/Commands/RevenueStats/UpdateRevenueStats.php
@@ -3152,16 +3112,6 @@ parameters:
 
 		-
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateMultipleSetsReports\\(\\) has parameter \\$cardSets with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: app/Services/PopReport/PopReportService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSeriesReport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/PopReport/PopReportService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSetsReport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php
 

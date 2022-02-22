@@ -8,7 +8,11 @@
     </div>
     <div class="container Home-sectionContainer">
         <div class="Home-sectionColumn Home-sectionColumn--half">
-            <a href="#" class="Home-sectionImageHolder">
+            <a
+                href="https://www.youtube.com/watch?v=Yz_u_F6n4SU"
+                data-type="video"
+                data-effect="zoom"
+                class="Home-sectionImageHolder glightbox" data-aos="fade-right" data-aos-easing="ease-in-out">
                 <img src="{{ asset('assets/images/landings/home/videoPoster.jpg') }}" alt="Video"
                      class="Home-sectionImage" />
                 <div class="Home-sectionImagePlay">
@@ -17,12 +21,12 @@
             </a>
         </div>
         <div class="Home-sectionColumn Home-sectionColumn--half">
-            <h4 class="Home-sectionContentCaption">Meet Robograding</h4>
-            <h3 class="Home-sectionContentHeadline">The world's first & only, fully A.I. card grading platform.</h3>
-            <p class="Home-sectionContentText">Other grading companies are inaccurate, expensive and extremely slow
+            <h4 class="Home-sectionContentCaption" data-aos="fade-left" data-aos-easing="ease-in-out">Meet Robograding</h4>
+            <h3 class="Home-sectionContentHeadline" data-aos="fade-left" data-aos-easing="ease-in-out">The world's first & only, fully A.I. card grading platform.</h3>
+            <p class="Home-sectionContentText" data-aos="fade-left" data-aos-easing="ease-in-out" data-aos-delay="100">Other grading companies are inaccurate, expensive and extremely slow
                 because humans are doing the grading. With our technology, are able to grade cards 10x faster, and
                 more accurately than the other guys.</p>
-            <a href="#" class="Home-buttonCta Home-buttonCta--light">Start a submission</a>
+            <a href="/dashboard/submissions/new" class="Home-buttonCta Home-buttonCta--light" data-aos="fade-left" data-aos-easing="ease-in-out" data-aos-delay="200">Start a submission</a>
         </div>
     </div>
 </section>

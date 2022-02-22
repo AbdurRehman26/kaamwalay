@@ -14,7 +14,7 @@ class HomeController extends Controller
         $categories = Cache::remember(
             'homepage:card_categories',
             now()->addMonth(),
-            fn () => CardCategory::latest()->limit(8)->get()
+            fn () => CardCategory::enabled()->limit(8)->get()
         );
 
         $services = Cache::remember(

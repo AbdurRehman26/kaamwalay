@@ -46,8 +46,8 @@
             customSortBy({
                 container: document.querySelector('.feed-categories__sort-by'),
                 items: [
-                    { label: 'Most Recent', value: search.indexName},
-                    { label: 'Oldest', value: 'local_user_cards_Ascending' },
+                    { label: 'Most Recent', value: '{{ config("scout.prefix") }}user_cards_Descending'},
+                    { label: 'Oldest', value: '{{ config("scout.prefix") }}user_cards_Ascending' },
                 ],
             })
             ]);

@@ -164,5 +164,5 @@ return [
     |
     */
     'ranking' => ['custom'],
-    'replicas' => ['local_user_cards_Ascending', 'local_user_cards_Descending'],
+    'replicas' => ['production_user_cards_Ascending', 'production_user_cards_Descending'],
 ];

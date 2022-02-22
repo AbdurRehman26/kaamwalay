@@ -10,11 +10,11 @@
         <script>
             const searchClient = algoliasearch(
                 '{{ config("scout.algolia.id") }}',
-                '085cc30e0d991ab2aa990615163f86c5'
-                );
+                '{{ config("scout.algolia.public") }}'
+            );
 
             const search = instantsearch({
-                indexName: 'local_user_cards',
+                indexName: '{{ config("scout.prefix") }}user_cards',
                 searchClient,
             });
 
@@ -25,10 +25,13 @@
             var mobile_display = document.getElementsByClassName("feed-stats__sort-and-filter-mobile");
             list[0].style.display = "none";
 
+            
             function listView() {
                 if (list[0].style.display === "none") {
                     grid_icon[0].style.backgroundColor = "" ;
                     list_icon[0].style.backgroundColor =  "#DCDCDC";
+                    list_icon[0].style.borderRadius =  "20px";
+                    list_icon[0].style.padding =  "7px";
                     list[0].style.display = "block";
                     grid[0].style.display = "none";
                 }
@@ -37,6 +40,8 @@
             function gridView() {
                 if (grid[0].style.display === "none") {
                     grid_icon[0].style.backgroundColor =  "#DCDCDC";
+                    grid_icon[0].style.borderRadius =  "20px";
+                    grid_icon[0].style.padding =  "7px";
                     list_icon[0].style.backgroundColor =  "";
                     grid[0].style.display = "block";
                     list[0].style.display = "none";

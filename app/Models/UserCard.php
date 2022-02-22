@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App;
 use App\Concerns\ActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,17 +42,17 @@ class UserCard extends Model
     ];
 
     /**
-         * Get the indexable data array for the model.
-         *
-         * @return array
-         */
+     * Determine if the model should be searchable.
+     *
+     * @return bool
+     */
     public function toSearchableArray()
     {
         $array = [
             'id' => $this->order_item_id,
             'card_name' => $this->orderItem->cardProduct->name,
             'card_image' => $this->orderItem->cardProduct->image_path,
-            'searchable_name' => $this->getSearchableName(),
+            'searchable_name' => $this->orderItem->cardProduct->getSearchableName(),
             'graded_at' => $this->created_at,
             'certificate_number' => $this->certificate_number,
             'owner_name' => $this->user->getFullName(),
@@ -66,7 +67,11 @@ class UserCard extends Model
 
     public function shouldBeSearchable():bool
     {
-        return $this->orderItem->orderItemStatus->code == OrderItemStatus::GRADED;
+        return ( 
+            $this->orderItem->order_item_status_id == OrderItemStatus::GRADED
+            && $this->orderItem->order->order_status_id == [OrderStatus::GRADED,OrderStatus::SHIPPED]
+            && OrderItemStatusHistory::where('order_item_status_id', [OrderItemStatus::GRADED])->exists()
+        );
     }
 
     public function user(): BelongsTo
@@ -102,44 +107,5 @@ class UserCard extends Model
     {
         return $this->orderItem->cardProduct->card_category_id &&
         $this->orderItem->cardProduct->card_set_id && ! is_null($this->orderItem->cardProduct->card_number_order);
-    }
-
-    public function getShortName(): string
-    {
-        if ($this->isCardInformationComplete()) {
-            $language = $this->orderItem->cardProduct->language !== 'English' ? $this->orderItem->cardProduct->language . ' - ' : '';
-            $edition = $this->orderItem->cardProduct->edition !== 'Unlimited' ? $this->orderItem->cardProduct->edition . ' - ' : '';
-            $surface = $this->orderItem->cardProduct->surface ? $this->orderItem->cardProduct->surface . ' - ' : '';
-            $variant = $this->orderItem->cardProduct->variant ?: '';
-
-            $shortName = $language . $edition . $surface . $variant;
-
-            if (str_ends_with($shortName, ' - ')) {
-                $shortName = substr_replace($shortName, '', -3);
-            }
-
-            return $shortName;
-        }
-
-        return 'Added Manually';
-    }
-
-    public function getLongName(): string
-    {
-        if ($this->isCardInformationComplete()) {
-            $series = $this->orderItem->cardProduct->cardSet->cardSeries->name == $this->orderItem->cardProduct->cardSet->name ? ''
-            :   $this->orderItem->cardProduct->cardSet->cardSeries->name . ' ';
-
-            return  $this->orderItem->cardProduct->cardSet->release_year . ' '
-            .  $this->orderItem->cardProduct->cardCategory->name . ' ' . $series .
-            $this->orderItem->cardProduct->cardSet->name . ' ' .  $this->orderItem->cardProduct->card_number_order;
-        }
-
-        return  $this->orderItem->cardProduct->description;
-    }
-
-    public function getSearchableName(): string
-    {
-        return $this->getLongName() . ' ' . $this->getShortName() . ' ' .  $this->orderItem->cardProduct->name;
     }
 }

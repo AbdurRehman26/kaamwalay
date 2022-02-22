@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App;
 use App\Concerns\ActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -67,7 +66,7 @@ class UserCard extends Model
 
     public function shouldBeSearchable():bool
     {
-        return ( 
+        return (
             $this->orderItem->order_item_status_id == OrderItemStatus::GRADED
             && $this->orderItem->order->order_status_id == [OrderStatus::GRADED,OrderStatus::SHIPPED]
             && OrderItemStatusHistory::where('order_item_status_id', [OrderItemStatus::GRADED])->exists()

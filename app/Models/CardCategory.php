@@ -11,7 +11,7 @@ class CardCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'name', 'image_url',
     ];
 
     public function cardSeries(): HasMany

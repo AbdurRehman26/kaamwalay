@@ -19,15 +19,23 @@ import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { isAxiosError } from '@shared/lib/api/isAxiosError';
 import { isException } from '@shared/lib/errors/isException';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import {
+    dialogVisibility,
+    headerDialogVisibility,
+    authenticateCheckAction,
+} from '@shared/redux/slices/authenticationSlice';
 
 interface Props {
     onContentChange: (isLogin: boolean) => void;
+    subTitle: string;
 }
 
 export function SignInContent(props: Props) {
-    const { onContentChange } = props;
+    const { onContentChange, subTitle } = props;
     const authenticationService = app(AuthenticationService);
     const authenticationRepository = app(AuthenticationRepository);
+    const dispatch = useSharedDispatch();
     const initialState = useMemo<LoginRequestDto>(
         () => ({
             email: '',
@@ -51,18 +59,26 @@ export function SignInContent(props: Props) {
                 ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
                 pushToDataLayer({ event: 'google-ads-authenticated' });
                 await authenticationService.setAccessToken(authenticatedUser.accessToken);
-                window.location.href = '/dashboard/submissions/new';
+                dispatch(authenticateCheckAction());
+                if (subTitle === 'to start a Robograding submission') {
+                    window.location.href = '/dashboard/submissions/new';
+                }
+                dispatch(headerDialogVisibility(false));
             } catch (e: any) {
                 if (isAxiosError(e) || isException(e)) {
                     ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
                     NotificationsService.exception(e);
+                    dispatch(dialogVisibility(false));
+                    dispatch(headerDialogVisibility(false));
                 } else {
                     ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
                     NotificationsService.error('Unable to login.');
+                    dispatch(dialogVisibility(false));
+                    dispatch(headerDialogVisibility(false));
                 }
             }
         },
-        [authenticationService, authenticationRepository],
+        [authenticationService, authenticationRepository, subTitle, dispatch],
     );
 
     return (

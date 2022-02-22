@@ -23,7 +23,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useState } from 'react';
 import logo from '@shared/assets/logo.svg';
-import { AuthDialogHeader } from '../AuthDialogHeader/AuthDialogHeader';
+import { AuthDialog } from '@shared/components/Auth/AuthDialog';
 import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
@@ -219,7 +219,7 @@ export function DrawerNavigation() {
                     </Grid>
                 </List>
             </Drawer>
-            <AuthDialogHeader
+            <AuthDialog
                 open={isHeaderAuthDialogOpen}
                 onClose={handleAuthDialogClose}
                 subTitle="to Access Robograding"

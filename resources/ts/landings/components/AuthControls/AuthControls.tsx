@@ -8,10 +8,11 @@ import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
-import { AuthDialogHeader } from '../AuthDialogHeader/AuthDialogHeader';
+import { AuthDialog } from '@shared/components/Auth/AuthDialog';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
+import { useCallback } from 'react';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -55,9 +56,9 @@ export function AuthControls() {
     const dispatch = useSharedDispatch();
     const isHeaderAuthDialogOpen = useSharedSelector((state) => state.authentication.headerDialogOpened);
 
-    const handleAuthDialogClose = () => {
+    const handleAuthDialogClose = useCallback(() => {
         dispatch(headerDialogVisibility(false));
-    };
+    }, [dispatch]);
 
     const handleChange = () => {
         if (!authenticated) {
@@ -96,7 +97,7 @@ export function AuthControls() {
                     Log in
                 </Button>
             )}
-            <AuthDialogHeader
+            <AuthDialog
                 open={isHeaderAuthDialogOpen}
                 onClose={handleAuthDialogClose}
                 subTitle="to Access Robograding"

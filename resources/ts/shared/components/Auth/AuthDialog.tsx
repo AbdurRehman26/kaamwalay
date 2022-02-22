@@ -2,9 +2,9 @@ import DialogContent from '@mui/material/DialogContent';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import { useState, useCallback } from 'react';
 import { styled } from '@mui/material/styles';
-import { SignUpContentHeader } from './SignUpContentHeader';
-import { SignInContentHeader } from './SignInContentHeader';
-import { DialogHeader } from '@shared/components/Auth/DialogHeader';
+import { SignUpContent } from './SignUpContent';
+import { SignInContent } from './SignInContent';
+import { DialogHeader } from './DialogHeader';
 
 interface Props extends DialogProps {
     title?: string;
@@ -21,7 +21,7 @@ const RootElement = styled(Dialog)({
     },
 });
 
-export function AuthDialogHeader({ subTitle, onClose, ...rest }: Props) {
+export function AuthDialog({ subTitle, onClose, ...rest }: Props) {
     const [isSignIn, setSignIn] = useState(true);
 
     const handleClose = useCallback(
@@ -42,9 +42,9 @@ export function AuthDialogHeader({ subTitle, onClose, ...rest }: Props) {
             <DialogHeader subTitle={subTitle} isSignIn={isSignIn} onClose={handleClose} />
             <DialogContent>
                 {isSignIn ? (
-                    <SignInContentHeader onContentChange={handleChange} />
+                    <SignInContent subTitle={subTitle} onContentChange={handleChange} />
                 ) : (
-                    <SignUpContentHeader onContentChange={handleChange} />
+                    <SignUpContent subTitle={subTitle} onContentChange={handleChange} />
                 )}
             </DialogContent>
         </RootElement>

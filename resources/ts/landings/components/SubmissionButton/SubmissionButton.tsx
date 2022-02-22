@@ -2,7 +2,7 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import { dialogVisibility } from '@shared/redux/slices/authenticationSlice';
-import { AuthDialog } from './AuthDialog';
+import { AuthDialog } from '@shared/components/Auth/AuthDialog';
 import { useAuth } from '@shared/hooks/useAuth';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Theme } from '@mui/material/styles';

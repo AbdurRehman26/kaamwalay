@@ -32,6 +32,23 @@ export class HomeController extends Controller implements CanSetup<HomeControlle
             poweredBy.classList.add('Home-poweredBy');
             videoElement.appendChild(poweredBy);
         }
+
+        this.setupHeader();
+    }
+
+    private setupHeader() {
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector<HTMLDivElement>('.page__header');
+            if (header) {
+                if (window.scrollY > 50) {
+                    header.classList.add('page__header--scrolled');
+                } else {
+                    header.classList.remove('page__header--scrolled');
+                }
+            }
+        });
+
+        window.dispatchEvent(new Event('scroll'));
     }
 }
 

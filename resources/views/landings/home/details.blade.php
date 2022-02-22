@@ -7,17 +7,18 @@
              height="420">
     </div>
     <div class="container Home-sectionContainer">
-        <div class="Home-sectionColumn Home-sectionColumn--half">
+        <div class="Home-sectionColumn Home-sectionColumn--half" data-aos="fade" data-aos-easing="ease-in-out">
             <h4 class="Home-sectionContentCaption">Transparent grading</h4>
             <h3 class="Home-sectionContentHeadline">Get a detailed grade breakdown.</h3>
             <p class="Home-sectionContentText">When you grade your card with us, you will also get a breakdown of
                 your grade. This will help you understand your grade way better than traditional grading. You'll
                 know the exact score your card received for centering, surface, corners & edges for the front and
                 back of your card.</p>
-            <a href="#" class="Home-buttonCta Home-buttonCta--light">Start a submission</a>
+            <a href="/dashboard/submissions/new" class="Home-buttonCta Home-buttonCta--light">Start a submission</a>
         </div>
         <div class="Home-sectionColumn Home-sectionColumn--half">
-            <a href="#" class="Home-sectionImageHolder">
+            <a href="{{ asset('assets/images/landings/home/detailsPoster.jpg') }}" data-type="image" data-gallery="details" data-effect="zoom"
+               class="Home-sectionImageHolder glightbox" data-aos="fade-left" data-aos-easing="ease-in-out">
                 <img src="{{ asset('assets/images/landings/home/detailsPoster.jpg') }}" alt="Detail"
                      class="Home-sectionImage" />
             </a>

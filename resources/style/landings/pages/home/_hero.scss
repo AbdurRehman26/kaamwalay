@@ -4,6 +4,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .Home-heroContent {
@@ -96,4 +97,10 @@
     @media screen and (max-width: 767px) {
         display: none;
     }
+}
+
+.page--home .page__header {
+    position: fixed;
+    left: 0;
+    right: 0;
 }

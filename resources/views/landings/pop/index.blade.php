@@ -16,11 +16,9 @@
         <div class="container">
             <div class="row">
                 @foreach($categories as $category)
-                    <div class="category-box">
-                        <a href="{{route('pop.categories', ['cardCategory' => $category])}}" class="w-100">
-                            <img src="{{$category->image_url}}" alt="{{$category->name}}" class="category-logo"/>
-                        </a>
-                    </div>
+                    <a href="{{route('pop.categories', ['cardCategory' => $category])}}" class="category-box">
+                        <img src="{{$category->image_url}}" alt="{{$category->name}}" class="category-logo"/>
+                    </a>
                 @endforeach
                 @if(count($categories) % 4)
                     <div class="category-box category-box-fade display-lg">

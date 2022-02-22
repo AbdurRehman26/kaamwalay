@@ -7,7 +7,6 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Models\Wallet;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -53,6 +52,38 @@ test('an order needs payment plan to be created', function () {
 
     $response->assertJsonValidationErrors([
         'payment_plan' => 'The payment plan field is required.',
+    ]);
+});
+
+test('a guest cannot place order', function () {
+    $response = $this->postJson('/api/v2/customer/orders/');
+
+    $response->assertUnauthorized();
+});
+
+test('a guest cannot see order', function () {
+    Order::factory()->for($this->user)->create();
+
+    $response = $this->getJson('/api/v2/customer/orders/1');
+
+    $response->assertUnauthorized();
+});
+
+test('a customer can see his order', function () {
+    $this->actingAs($this->user);
+    $order = Order::factory()->for($this->user)->create();
+    OrderItem::factory()->for($order)->create();
+
+    $response = $this->getJson('/api/v2/customer/orders/' . $order->id);
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'data' => ['id', 'order_number', 'shipping_method'],
+    ]);
+
+    $response->assertJsonFragment([
+        'refund_total' => 0,
+        'extra_charge_total' => 0,
     ]);
 });
 

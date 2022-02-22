@@ -14,7 +14,7 @@ trait HasOrderPayments
      */
     public function firstOrderPayment(): HasOne
     {
-        return $this->hasOne(OrderPayment::class)->oldestOfMany();
+        return $this->hasOne(OrderPayment::class)->oldestOfMany('created_at');
     }
 
     /**
@@ -22,7 +22,7 @@ trait HasOrderPayments
      */
     public function lastOrderPayment(): HasOne
     {
-        return $this->hasOne(OrderPayment::class)->latestOfMany();
+        return $this->hasOne(OrderPayment::class)->latestOfMany('created_at');
     }
 
     /**
@@ -73,10 +73,12 @@ trait HasOrderPayments
 
     public function updateAfterRefund(float $amount): void
     {
-        $this->update([
+        $this->fill([
             'refund_total' => round($this->refund_total + $amount, 2),
             'grand_total' => round($this->grand_total - $amount, 2),
         ]);
+
+        $this->save();
     }
 
     /**

@@ -14,7 +14,7 @@ trait HasOrderPayments
      */
     public function firstOrderPayment(): HasOne
     {
-        return $this->hasOne(OrderPayment::class)->oldestOfMany();
+        return $this->hasOne(OrderPayment::class)->oldestOfMany('created_at');
     }
 
     /**
@@ -22,7 +22,7 @@ trait HasOrderPayments
      */
     public function lastOrderPayment(): HasOne
     {
-        return $this->hasOne(OrderPayment::class)->latestOfMany();
+        return $this->hasOne(OrderPayment::class)->latestOfMany('created_at');
     }
 
     /**

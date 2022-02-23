@@ -1,20 +1,13 @@
 <script>
     const renderSortBy = (renderOptions, isFirstRender) => {
-            const {
-                options,
-                currentRefinement,
-                hasNoResults,
-                refine,
-                widgetParams,
-            } = renderOptions;
+    const {options, currentRefinement, hasNoResults, refine, widgetParams} = renderOptions;
 
             if (isFirstRender) {
                 const select = document.createElement('select');
                 select.className = "feed-categories__sort-by-select";
 
                 select.addEventListener('change', event => {
-                    console.log(refine(event.target.value));
-                refine(event.target.value);
+                    refine(event.target.value);
                 });
 
                 widgetParams.container.appendChild(select);

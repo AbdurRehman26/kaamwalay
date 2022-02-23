@@ -13,9 +13,6 @@ class CardProductSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('order_items')->delete();
-        \DB::table('card_products')->delete();
-
         \DB::table('card_products')->insert([
             [
                 'card_number' => '1/163',

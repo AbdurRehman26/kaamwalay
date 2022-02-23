@@ -7,6 +7,7 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;

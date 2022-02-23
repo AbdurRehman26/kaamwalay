@@ -10,7 +10,7 @@ class CardCategoryController extends Controller
 {
     public function __invoke(): CardCategoryCollection
     {
-        $cardCategories = CardCategory::get();
+        $cardCategories = CardCategory::enabled()->get();
 
         return new CardCategoryCollection($cardCategories);
     }

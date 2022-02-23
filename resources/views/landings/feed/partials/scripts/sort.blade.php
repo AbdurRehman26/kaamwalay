@@ -13,6 +13,7 @@
                 select.className = "feed-categories__sort-by-select";
 
                 select.addEventListener('change', event => {
+                    console.log(refine(event.target.value));
                 refine(event.target.value);
                 });
 

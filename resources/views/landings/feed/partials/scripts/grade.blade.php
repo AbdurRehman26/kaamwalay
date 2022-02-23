@@ -1,37 +1,39 @@
 <script>
-                const renderMenuSelect = (renderOptions, isFirstRender) => {
-            const { items, canRefine, refine, widgetParams } = renderOptions;
+            const renderMenuSelect = (renderOptions, isFirstRender) => {
+            const { items, canRefine, refine, widgetParams, createURL } = renderOptions;
 
-            if (isFirstRender) {
-                const select = document.createElement('select');
-                select.className = "feed-categories__grade";
-
-                select.addEventListener('change', event => {
-                refine(event.target.value);
-                });
-
-                widgetParams.container.appendChild(select);
-            }
-
-            const select = widgetParams.container.querySelector('select');
-
-            select.disabled = !canRefine;
-
-            select.innerHTML = `
-                <option value="" class="feed-categories__grade-option">Grade</option>
-                ${items
-                .map(
-                    item =>
-                    `<option
-                        class="feed-categories__grade-option"
-                        value="${item.value}"
-                        ${item.isRefined ? 'selected' : ''}
+            widgetParams.container.innerHTML =`
+                    <button class="feed-categories__grade dropdown-toggle"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
                     >
-                        ${item.label}
-                    </option>`
+                        Grade 
+                        <span class="material-icons feed-categories__dropdown-icon" >arrow_drop_down</span>
+                    </button>
+                    <ul class="feed-categories__dropdown dropdown-menu hidden">
+            ${items
+                .map(
+                item => `
+                        <li class="feed-categories__dropdown-li">
+                            <a
+                                class="feed-categories__dropdown-items"
+                                href="${createURL(item.value)}"
+                                data-value="${item.value}"
+                            >
+                                ${item.value}
+                            </a>
+                        </li>
+                `
                 )
                 .join('')}
-            `;
+                </ul>`;
+
+                [...widgetParams.container.querySelectorAll('a')].forEach(element => {
+                element.addEventListener('click', event => {
+                    event.preventDefault();
+                    refine(event.currentTarget.dataset.value);
+                });
+            });
             };
 
             const customMenuSelect = instantsearch.connectors.connectMenu(renderMenuSelect);

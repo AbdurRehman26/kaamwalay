@@ -42,13 +42,18 @@ beforeEach(function () {
 });
 
 it('initializes POP Reports For Series, Sets and Cards.', function () {
+    $cardProductCount = CardProduct::canBeInitializedInPopReport()->where(function ($query) {
+        $query->whereNotNull('card_products.card_category_id')
+            ->whereNotNull('card_products.card_set_id');
+    })->select('card_products.*')->count();
+
     $this->artisan('pop-reports:initialize')
         ->expectsQuestion('Initialize Report Values for :', "All")
         ->assertExitCode(0);
 
     $this->assertDatabaseCount('pop_reports_series', CardSeries::count());
     $this->assertDatabaseCount('pop_reports_sets', CardSet::count());
-    $this->assertDatabaseCount('pop_reports_cards', CardProduct::count());
+    $this->assertDatabaseCount('pop_reports_cards', $cardProductCount);
 });
 
 it('Updates series reports values', function () {

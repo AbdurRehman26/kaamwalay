@@ -95,7 +95,7 @@ function LayoutHeader() {
     }, [dispatch, isNavigationDrawerOpen]);
 
     return (
-        <AppBar position="static" className={classes.root} elevation={0}>
+        <AppBar position="sticky" className={classes.root} elevation={0}>
             <DashboardNavigationDrawer />
             <Toolbar>
                 <IconButton

@@ -2,8 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class ImportCardsRarities extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -229,7 +228,6 @@ class ImportCardsRarities extends Migration
                 ['name' => 'Widescreen Prizms Silver', 'card_category_id' => $basketballCategory->id],
             ]);
         }
-
     }
 
     /**
@@ -241,4 +239,4 @@ class ImportCardsRarities extends Migration
     {
         //
     }
-}
+};

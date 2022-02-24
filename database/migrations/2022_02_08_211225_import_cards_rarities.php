@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         //Pokemon
         $pokemonCategory = DB::table('card_categories')->where('name', 'Pokemon')->first();
-        if ($pokemonCategory?->exists()) {
+        if ($pokemonCategory) {
             DB::table('card_rarities')->insert([
                 ['name' => 'Uncommon', 'card_category_id' => $pokemonCategory->id],
                 ['name' => 'Rare Holo', 'card_category_id' => $pokemonCategory->id],
@@ -51,7 +51,7 @@ return new class extends Migration {
 
         //MetaZoo
         $metazooCategory = DB::table('card_categories')->where('name', 'MetaZoo')->first();
-        if ($metazooCategory?->exists()) {
+        if ($metazooCategory) {
             DB::table('card_rarities')->insert([
                 ['name' => 'Promo', 'card_category_id' => $metazooCategory->id],
                 ['name' => 'Secret Rare', 'card_category_id' => $metazooCategory->id],
@@ -66,7 +66,7 @@ return new class extends Migration {
 
         //Dragon Ball Super
         $dragonBallSuperCategory = DB::table('card_categories')->where('name', 'Dragon Ball Super')->first();
-        if ($dragonBallSuperCategory?->exists()) {
+        if ($dragonBallSuperCategory) {
             DB::table('card_rarities')->insert([
                 ['name' => 'Uncommon', 'card_category_id' => $dragonBallSuperCategory->id],
                 ['name' => 'Foil', 'card_category_id' => $dragonBallSuperCategory->id],
@@ -89,7 +89,7 @@ return new class extends Migration {
 
         //YU-GI-OH!
         $yugiohCategory = DB::table('card_categories')->where('name', 'YU-GI-OH!')->first();
-        if ($yugiohCategory?->exists()) {
+        if ($yugiohCategory) {
             DB::table('card_rarities')->insert(
                 [
                     ['name' => 'Common', 'card_category_id' => $yugiohCategory->id],
@@ -123,7 +123,7 @@ return new class extends Migration {
 
         //Basketball
         $basketballCategory = DB::table('card_categories')->where('name', 'Basketball')->first();
-        if ($basketballCategory?->exists()) {
+        if ($basketballCategory) {
             DB::table('card_rarities')->insert([
                 ['name' => 'BASE', 'card_category_id' => $basketballCategory->id],
                 ['name' => 'BLACK GOLD PRIZM', 'card_category_id' => $basketballCategory->id],

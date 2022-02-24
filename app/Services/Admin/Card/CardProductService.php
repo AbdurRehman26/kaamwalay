@@ -126,5 +126,4 @@ class CardProductService
             'serie' => $seriesId,
         ])['results'][0]['id'];
     }
-
 }

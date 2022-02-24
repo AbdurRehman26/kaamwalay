@@ -17,7 +17,7 @@ const useStyles = makeStyles(
             padding: theme.spacing(1.25, 2.5),
             fontWeight: 500,
             fontSize: 14,
-            [theme.breakpoints.down('md')]: {
+            [theme.breakpoints.down('sm')]: {
                 minWidth: 40,
                 width: 40,
                 height: 40,

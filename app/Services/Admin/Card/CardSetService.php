@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Card;
 
-use App\Events\API\Admin\CardSetCreatedEvent;
+use App\Events\API\Admin\Card\CardSetCreatedEvent;
 use App\Models\CardSeries;
 use App\Models\CardSet;
 use App\Services\AGS\AgsService;
@@ -18,7 +18,7 @@ class CardSetService
 
     public function search(): Collection
     {
-        $query = CardSet::select('id', 'name', 'card_series_id', 'release_date', 'image_path');
+        $query = CardSet::query();
 
         if (request('series_id')) {
             $query->where('card_series_id', request('series_id'));
@@ -29,7 +29,7 @@ class CardSetService
 
     public function create(array $data): CardSet
     {
-        $this->getOrCreateSetFromAgs($data['card_series_id'], $data['name'], $data['image_path'], $data);
+        $this->createSetOnAgs($data['card_series_id'], $data['name'], $data['image_path'], $data);
 
         $set = CardSet::create([
             'name' => $data['name'],
@@ -52,31 +52,24 @@ class CardSetService
         return $this->agsService->getCardSeries(['name' => $seriesName])['results'][0]['id'];
     }
 
-    protected function getOrCreateSetFromAgs(int $seriesId, string $setName, string $setImage, array $data): int | null
+    protected function createSetOnAgs(int $seriesId, string $setName, string $setImage, array $data): void
     {
         $agsSeriesId = $this->getSeriesFromAgs(CardSeries::find($seriesId)->name);
 
-        //Store in AGS
+        //Check if set already exists in AGS DB
         $setResponse = $this->agsService->getCardSet([
             'name' => $setName,
             'serie' => $agsSeriesId,
         ]);
 
-        if ($setResponse['count'] > 0) {
-            return $setResponse['results'][0]['id'];
-        } elseif ($setName && $seriesId && $data['release_date'] && $setImage) {
-            $createSetResponse = $this->agsService->createCardSet([
+        //If it doesn't exist, and we have required parameters, create it in AGS side
+        if ($setResponse['count'] < 1 && $setName && $seriesId && $data['release_date'] && $setImage) {
+            $this->agsService->createCardSet([
                 'name' => $setName,
                 'image_path' => $setImage,
                 'release_date' => $data['release_date'],
                 'serie_id' => $agsSeriesId,
             ]);
-
-            if (array_key_exists('id', $createSetResponse)) {
-                return $createSetResponse['id'];
-            }
         }
-
-        return null;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Listeners\API\Admin\CardSeries;
+namespace App\Listeners\API\Admin\Card;
 
-use App\Events\API\Admin\CardSeriesCreatedEvent;
+use App\Events\API\Admin\Card\CardSeriesCreatedEvent;
 use App\Models\CardSeries;
 use App\Models\PopReportsSeries;
 use App\Services\PopReport\PopReportService;

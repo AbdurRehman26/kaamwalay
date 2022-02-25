@@ -73,10 +73,12 @@ Route::prefix('customer')->group(function () {
 
             Route::post('{order}/addresses', [OrderController::class, 'storeOrderAddresses'])->name('customer.orders.update-addresses');
             Route::post('{order}/complete', [OrderController::class, 'completeOrder'])->name('customer.orders.complete');
+
+            Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');
         });
 
         Route::apiResource('orders', OrderController::class, ['as' => 'customer'])->only(['index', 'store', 'destroy']);
-        Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');
+
 
         Route::prefix('coupons')->group(function () {
             Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');

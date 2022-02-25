@@ -69,10 +69,12 @@ Route::prefix('customer')->group(function () {
             Route::post('create', [OrderController::class, 'create'])->name('order.store');
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
+
+            Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');
+
         });
 
         Route::apiResource('orders', OrderController::class, ['as' => 'customer'])->only(['index', 'store', 'destroy']);
-        Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');
 
         Route::prefix('coupons')->group(function () {
             Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');

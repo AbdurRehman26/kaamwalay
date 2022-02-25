@@ -57,6 +57,8 @@ return [
 
     'hubspot' => [
         'apiKey' => env('HUBSPOT_API_KEY'),
+        'base_url' => env('HUBSPOT_BASE_URL'),
+        'deal_id' => env('HUBSPOT_DEAL_ID'),
     ],
 
     'dropbox' => [

@@ -17,7 +17,6 @@
         "flowframe/laravel-trend": "^0.1.0",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.3",
-        "hubspot/api-client": "^5.1",
         "laravel-notification-channels/pusher-push-notifications": "^3.0",
         "laravel/cashier": "^13.8",
         "laravel/framework": "^9.0",

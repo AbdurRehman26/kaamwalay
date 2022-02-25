@@ -1,4 +1,6 @@
 <script>
+            let gradeName = "Grade";
+            let gradeIcon = "arrow_drop_down";
             const renderMenuSelect = (renderOptions, isFirstRender) => {
             const { items, canRefine, refine, widgetParams, createURL } = renderOptions;
 
@@ -7,22 +9,22 @@
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
-                        Grade 
-                        <span class="material-icons feed-categories__dropdown-icon" >arrow_drop_down</span>
+                        ${gradeName}
+                        <span class="material-icons feed-categories__dropdown-icon" >${gradeIcon}</span>
                     </button>
                     <ul class="feed-categories__dropdown dropdown-menu hidden">
             ${items
                 .map(
                 item => `
-                        <li class="feed-categories__dropdown-li">
-                            <a
-                                class="feed-categories__dropdown-items"
-                                href="${createURL(item.value)}"
-                                data-value="${item.value}"
-                            >
+                        <a
+                            class="feed-categories__dropdown-li"
+                            href="${createURL(item.value)}"
+                            data-value="${item.value}"
+                        >
+                            <li class="feed-categories__dropdown-items">
                                 ${item.value}
-                            </a>
-                        </li>
+                            </li>
+                        </a>
                 `
                 )
                 .join('')}
@@ -30,6 +32,15 @@
 
                 [...widgetParams.container.querySelectorAll('a')].forEach(element => {
                 element.addEventListener('click', event => {
+                    if (gradeName === event.currentTarget.dataset.value)
+                    {
+                        gradeName = "Grade";
+                        gradeIcon = "arrow_drop_down";
+                    }
+                    else {
+                        gradeName = event.currentTarget.dataset.value;
+                        gradeIcon = "close";
+                    }
                     event.preventDefault();
                     refine(event.currentTarget.dataset.value);
                 });

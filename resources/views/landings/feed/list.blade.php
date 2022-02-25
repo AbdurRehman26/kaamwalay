@@ -23,6 +23,9 @@
             var grid_icon = document.getElementsByClassName("feed-categories__grid-view-icon");
             var list_icon = document.getElementsByClassName("feed-categories__list-view-icon");
             var mobile_display = document.getElementsByClassName("feed-stats__sort-and-filter-mobile");
+            grid_icon[0].style.backgroundColor =  "#DCDCDC";
+            grid_icon[0].style.borderRadius =  "20px";
+            grid_icon[0].style.padding =  "7px";
             list[0].style.display = "none";
 
             

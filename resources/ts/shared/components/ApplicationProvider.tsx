@@ -27,6 +27,7 @@ interface ApplicationProviderProps {
     noAuthenticationCheck?: boolean;
     noNotificationsContainer?: boolean;
     noCssBaseline?: boolean;
+    noReactQueryDevTools?: boolean;
 }
 
 // Create a client
@@ -49,6 +50,7 @@ export function ApplicationProvider(props: PropsWithChildren<ApplicationProvider
         noAuthenticationCheck,
         noNotificationsContainer,
         noCssBaseline,
+        noReactQueryDevTools,
     } = props;
 
     const content = useMemo(
@@ -73,7 +75,9 @@ export function ApplicationProvider(props: PropsWithChildren<ApplicationProvider
                     </StyledEngineProvider>
                 </Provider>
             </LocalizationProvider>
-            {process.env.NODE_ENV !== 'production' ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+            {process.env.NODE_ENV !== 'production' && !noReactQueryDevTools ? (
+                <ReactQueryDevtools initialIsOpen={false} />
+            ) : null}
         </QueryClientProvider>
     );
 }

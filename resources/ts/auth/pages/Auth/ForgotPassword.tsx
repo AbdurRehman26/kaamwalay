@@ -9,10 +9,10 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { font } from '@shared/styles/utils';
-import { FormInput } from './FormInput';
-import { SubmitButton } from './SubmitButton';
-import { useStyles } from './style';
-import { ForgotPasswordValidationRules } from './validation';
+import { FormInput } from '@shared/components/Auth/FormInput';
+import { SubmitButton } from '@shared/components/Auth/SubmitButton';
+import { useStyles } from '@shared/components/Auth/styles';
+import { ForgotPasswordValidationRules } from '@shared/components/Auth/validation';
 
 /**
  *

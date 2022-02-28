@@ -66,7 +66,7 @@ test('a customer can not pay from wallet if wallet has insufficient balance', fu
 });
 
 
-test('a customer can not place order with partial amount from wallet without payment method', function () {
+test('a customer can place order with partial amount from wallet without payment method', function () {
     Wallet::factory()->create([
         'user_id' => $this->user->id,
         'balance' => 50,
@@ -77,7 +77,7 @@ test('a customer can not place order with partial amount from wallet without pay
     postJson('/api/v2/customer/orders/' . $order->id . '/order-payments', [
         'payment_method' => null,
         'payment_by_wallet' => $walletPayment,
-    ])->assertUnprocessable();
+    ])->assertCreated();
 });
 
 test('a customer can place order with amount equal to his wallet balance.', function () {

@@ -240,12 +240,6 @@ test('a customer can complete his order including wallet payment', function () {
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-        'payment_method' => [
-            'id' => $this->paymentMethod->id,
-        ],
-        'payment_provider_reference' => [
-            'id' => '12345678',
-        ],
         'payment_by_wallet' => $walletPayment,
     ])
         ->assertSuccessful()
@@ -267,5 +261,5 @@ test('a customer can complete his order including wallet payment', function () {
 
     $order = Order::first();
 
-    expect($order->lastOrderPayment->amount)->toBe($walletPayment);
+    expect($order->amount_paid_from_wallet)->toBe($walletPayment);
 });

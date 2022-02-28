@@ -62,7 +62,6 @@ Route::prefix('customer')->group(function () {
             Route::post('shipping-fee', ShippingFeeController::class);
             Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
             Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
-            Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/order-payments', [OrderPaymentController::class, 'store']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
@@ -74,10 +73,17 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/addresses', [OrderController::class, 'storeOrderAddresses'])->name('customer.orders.update-addresses');
             Route::post('{order}/complete', [OrderController::class, 'completeOrder'])->name('customer.orders.complete');
 
+            Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
+            Route::get('{orderId}', [OrderController::class, 'show']);
+            Route::apiResource('', OrderController::class)
+                ->only(['index', 'store'])
+                ->names([
+                    'index' => 'customer.orders.index',
+                    'store' => 'customer.orders.store',
+                ]);
+
             Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');
         });
-
-        Route::apiResource('orders', OrderController::class, ['as' => 'customer'])->only(['index', 'store', 'destroy']);
 
 
         Route::prefix('coupons')->group(function () {

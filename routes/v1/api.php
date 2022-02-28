@@ -62,7 +62,6 @@ Route::prefix('customer')->group(function () {
             Route::post('shipping-fee', ShippingFeeController::class);
             Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
             Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
-            Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
@@ -70,12 +69,13 @@ Route::prefix('customer')->group(function () {
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
 
+            Route::get('{orderId}', [OrderController::class, 'show']);
+            Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::apiResource('', OrderController::class)
-                ->only(['index', 'store', 'destroy'])
+                ->only(['index', 'store'])
                 ->names([
                     'index' => 'customer.orders.index',
                     'store' => 'customer.orders.store',
-                    'destroy' => 'customer.orders.destroy',
                 ]);
 
             Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');

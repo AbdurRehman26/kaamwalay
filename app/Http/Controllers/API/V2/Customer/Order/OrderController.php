@@ -10,8 +10,8 @@ use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
 use App\Models\Order;
 use App\Services\Order\OrderService;
 use App\Services\Order\V1\CreateOrderService;
+use App\Services\Order\V2\CreateOrderService as V2CreateOrderService;
 use App\Services\Order\V2\CompleteOrderService;
-use App\Services\Order\V2\StoreOrderService;
 use App\Services\Order\V2\UpdateAddressOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -22,8 +22,8 @@ class OrderController extends V1OrderController
 {
     public function __construct(
         protected OrderService $orderService,
+        protected V2CreateOrderService $v2createOrderService,
         protected CreateOrderService $createOrderService,
-        protected StoreOrderService $storeOrderService,
         protected UpdateAddressOrderService $updateAddressOrderService,
         protected CompleteOrderService $completeOrderService
     ) {
@@ -35,7 +35,7 @@ class OrderController extends V1OrderController
         $request = resolve(StoreOrderRequest::class);
 
         try {
-            $order = $this->storeOrderService->create($request->validated());
+            $order = $this->v2createOrderService->create($request->validated());
         } catch (Exception $e) {
             return new JsonResponse(
                 [

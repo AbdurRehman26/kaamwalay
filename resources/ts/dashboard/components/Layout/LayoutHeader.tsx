@@ -14,8 +14,14 @@ import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setNavigationDrawerOpen } from '@dashboard/redux/slices/dashboardSlice';
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
 import Button from '@mui/material/Button';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { alpha } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
+import React from 'react';
+
+interface Props {
+    children: React.ReactElement;
+}
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -85,6 +91,18 @@ const useStyles = makeStyles(
     },
 );
 
+function ElevationScroll(props: Props) {
+    const { children } = props;
+    const trigger = useScrollTrigger({
+        disableHysteresis: true,
+        threshold: 0,
+    });
+
+    return React.cloneElement(children, {
+        elevation: trigger ? 4 : 0,
+    });
+}
+
 function LayoutHeader() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -95,46 +113,53 @@ function LayoutHeader() {
     }, [dispatch, isNavigationDrawerOpen]);
 
     return (
-        <AppBar position="sticky" className={classes.root} elevation={0}>
-            <DashboardNavigationDrawer />
-            <Toolbar>
-                <IconButton
-                    color={'inherit'}
-                    size={'medium'}
-                    className={classes.toggleButton}
-                    onClick={handleMenuIconClick}
-                >
-                    <MenuIcon color={'inherit'} />
-                </IconButton>
+        <ElevationScroll>
+            <AppBar position="sticky" className={classes.root}>
+                <DashboardNavigationDrawer />
+                <Toolbar>
+                    <IconButton
+                        color={'inherit'}
+                        size={'medium'}
+                        className={classes.toggleButton}
+                        onClick={handleMenuIconClick}
+                    >
+                        <MenuIcon color={'inherit'} />
+                    </IconButton>
 
-                <Link to={'/'} className={classes.brand}>
-                    <img src={Logo} alt={'Robograding'} className={classes.brandImage} />
-                </Link>
-                <Grid container alignItems={'center'} justifyContent={'center'} flexGrow={1}>
-                    <Grid container alignItems={'center'} justifyContent={'center'} className={classes.hiddenOnMobile}>
-                        <MuiLink className={classes.navLink} href={'/feed'}>
-                            Live Feed
-                        </MuiLink>
-                        <MuiLink className={classes.navLink} href={'/pop'}>
-                            POP Report
-                        </MuiLink>
+                    <Link to={'/'} className={classes.brand}>
+                        <img src={Logo} alt={'Robograding'} className={classes.brandImage} />
+                    </Link>
+                    <Grid container alignItems={'center'} justifyContent={'center'} flexGrow={1}>
+                        <Grid
+                            container
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            className={classes.hiddenOnMobile}
+                        >
+                            <MuiLink className={classes.navLink} href={'/feed'}>
+                                Live Feed
+                            </MuiLink>
+                            <MuiLink className={classes.navLink} href={'/pop'}>
+                                POP Report
+                            </MuiLink>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Button
-                    component={Link}
-                    to={'/submissions/new'}
-                    color={'primary'}
-                    variant={'outlined'}
-                    className={classes.submitButton}
-                    startIcon={<UploadIcon />}
-                >
-                    Submit
-                </Button>
-                <Box className={classes.hiddenOnMobile}>
-                    <UserDropdown />
-                </Box>
-            </Toolbar>
-        </AppBar>
+                    <Button
+                        component={Link}
+                        to={'/submissions/new'}
+                        color={'primary'}
+                        variant={'outlined'}
+                        className={classes.submitButton}
+                        startIcon={<UploadIcon />}
+                    >
+                        Submit
+                    </Button>
+                    <Box className={classes.hiddenOnMobile}>
+                        <UserDropdown />
+                    </Box>
+                </Toolbar>
+            </AppBar>
+        </ElevationScroll>
     );
 }
 

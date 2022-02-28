@@ -23,6 +23,7 @@
             var grid_icon = document.getElementsByClassName("feed-categories__grid-view-icon");
             var list_icon = document.getElementsByClassName("feed-categories__list-view-icon");
             var mobile_display = document.getElementsByClassName("feed-stats__sort-and-filter-mobile");
+            document.getElementsByClassName('feed-stats__count')[0].style.background = "transparent";
             grid_icon[0].style.backgroundColor =  "#DCDCDC";
             grid_icon[0].style.borderRadius =  "20px";
             grid_icon[0].style.padding =  "7px";
@@ -37,6 +38,7 @@
                     list_icon[0].style.padding =  "7px";
                     list[0].style.display = "block";
                     grid[0].style.display = "none";
+                    document.getElementsByClassName("page__content")[0].style.background = "#ffffff";
                 }
             }
 
@@ -48,6 +50,7 @@
                     list_icon[0].style.backgroundColor =  "";
                     grid[0].style.display = "block";
                     list[0].style.display = "none";
+                    document.getElementsByClassName("page__content")[0].style.background = "";
                 }
             }
 
@@ -98,7 +101,7 @@
                     </button>
                 </div>
                 <div class="feed-categories__sort-by-container">
-                    <p style="margin-left: 10px;">sort</p>
+                    <p class="feed-categories__sort-by-text">sort</p>
                     <span class="feed-categories__sort-by"></span>
                 </div>
             </div>
@@ -109,8 +112,8 @@
             <div class="feed-stats__text"></div>
             <button class="feed-stats__sort-and-filter" onclick="openFilterSort()">
                 <span class="feed-stats__icon material-icons">filter_alt</span>
-                Sort & Filter
-                <span class="feed-stats__sort-count"></span>
+                <span class="feed-stats__count "></span>
+                <span class="feed-stats__sort-text">Sort & Filter</span>
             </button>
         </div>
         <div class="feed-stats__current-refinements"></div>

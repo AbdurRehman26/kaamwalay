@@ -25,7 +25,8 @@
                 item => `
                     <li 
                         class="feed-categories__category-list"
-                        style="border: ${item.isRefined ? '1px solid #20BFB8' : ''}"
+                        style="border: ${item.isRefined ? '1px solid #20BFB8' : ''};
+                               background: ${item.isRefined ? 'rgba(32, 191, 184, 0.08)' : ''}"
                     >
                     <a
                         class="${item.isRefined ? 'feed-categories__category-name-selected' 

@@ -17,11 +17,12 @@
     &__sort-by-container {
         margin-top: -10px;
         margin-left: 10px;
+        height: 50px;
+        border-left: 1px solid rgba(224, 224, 224, 1);
     }
 
-    &__sort-by-select {
-        background-color: #f4f4fb;
-        margin: 0px 10px;
+    &__sort-by-text {
+        margin-left: 10px;
     }
 
     &__category-list {
@@ -49,8 +50,8 @@
         margin-left: 10px;
         padding: 10px 10px;
         display: inline;
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.18);
+        background: #e3f0f6;
+        border: 1px solid #20bfb8;
         box-sizing: border-box;
         border-radius: 24px;
     }
@@ -148,7 +149,7 @@
     &__grade {
         margin-left: 10px;
         padding: 10px 20px;
-        width: 110px;
+        width: 130px;
         background: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.18);
         box-sizing: border-box;
@@ -159,6 +160,31 @@
         font-size: 14px;
         letter-spacing: 0.2px;
         color: rgba(0, 0, 0, 0.54);
+    }
+
+    &__grade-selected {
+        background: #e3f0f6;
+        border: 1px solid #20bfb8;
+        box-sizing: border-box;
+        border-radius: 24px;
+        margin-left: 10px;
+        padding: 10px 20px;
+        width: 140px;
+        text-align: center;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        color: rgba(32, 191, 184, 1);
+    }
+
+    &__close-icon {
+        position: absolute;
+        margin-left: 10px;
+        margin-top: -1px;
+        color: #ffffff;
+        background: rgba(32, 191, 184, 1);
+        border-radius: 10px;
     }
 
     &__grade:focus {
@@ -172,7 +198,7 @@
         border-radius: 8px;
     }
 
-    &__dropdown-li {
+    &__dropdown-items {
         height: 40px;
         font-style: normal;
         font-weight: normal;
@@ -181,13 +207,8 @@
         letter-spacing: 0.25px;
         color: rgba(0, 0, 0, 0.87);
     }
-    &__dropdown-li:hover {
+    &__dropdown-items:hover {
         background-color: #e3f0f6;
-    }
-
-    &__dropdown-items {
-        margin-top: 10px;
-        padding: 10px 10px;
     }
 
     &__views {
@@ -247,6 +268,10 @@
     }
 
     &__current-refinements-button {
+        background: rgba(32, 191, 184, 1);
+        border-radius: 20px;
+        padding: 2px 8px;
+        color: white;
         margin-left: 10px;
     }
 
@@ -290,6 +315,14 @@
             width: 50%;
             display: block;
         }
+    }
+
+    &__count {
+        background: rgba(154, 154, 154, 1);
+        color: #ffffff;
+        border-radius: 20px;
+        padding: 5px 10px;
+        margin-left: -10px;
     }
 
     &__icon {

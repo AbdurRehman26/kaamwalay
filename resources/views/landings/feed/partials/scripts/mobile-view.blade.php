@@ -46,7 +46,9 @@
                     else {
                         count++;
                     }
-                document.getElementsByClassName('feed-stats__sort-count')[0].innerHTML = count;
+                document.getElementsByClassName('feed-stats__count')[0].style.background = "rgba(154, 154, 154, 1)";
+                document.getElementsByClassName('feed-stats__count')[0].innerHTML = count;
+                document.getElementsByClassName('feed-stats__icon')[0].innerHTML = "";
                 event.preventDefault();
                 refine(event.currentTarget.dataset.value);
                 });
@@ -65,10 +67,7 @@
             ]);
 
             const renderMenuSelectMobile = (renderOptions, isFirstRender) => {
-            const 
-            { items, 
-            canRefine, refine, widgetParams, createURL}
-             = renderOptions;
+            const{ items, canRefine, refine, widgetParams, createURL}= renderOptions;
 
             if (isFirstRender) {
                 const ul = document.createElement('ul');
@@ -108,9 +107,11 @@
                     else {
                         count++;
                     }
-                    document.getElementsByClassName('feed-stats__sort-count')[0].innerHTML = count;
-                event.preventDefault();
-                refine(event.currentTarget.dataset.value);
+                    document.getElementsByClassName('feed-stats__count')[0].style.background = "rgba(154, 154, 154, 1)";
+                    document.getElementsByClassName('feed-stats__count')[0].innerHTML = count;
+                    document.getElementsByClassName('feed-stats__icon')[0].innerHTML = "";
+                    event.preventDefault();
+                    refine(event.currentTarget.dataset.value);
                 });
             });
             }
@@ -124,14 +125,7 @@
             ]);
 
             const renderSortByMobile = (renderOptions, isFirstRender) => {
-            const {
-                options,
-                currentRefinement,
-                hasNoResults,
-                refine,
-                widgetParams,
-                createURL,
-            } = renderOptions;
+            const{ options, canRefine, currentRefinement, refine, widgetParams, createURL}= renderOptions;
 
             if (isFirstRender) {
                 const ul = document.createElement('ul');
@@ -152,7 +146,7 @@
                                     type="radio"
                                     name="${widgetParams.attribute}"
                                     value="${item.value}"
-                                    ${item.isRefined ? 'checked' : ''}
+                                    ${item.value === currentRefinement ? 'checked' : ''}
                                     />
                                     ${item.label}
                             </a>
@@ -176,8 +170,8 @@
             customSortByMobile({
                 container: document.querySelector('#sort-by-mobile'),
                 items: [
-                    { label: 'Most Recent', value: search.indexName},
-                    { label: 'Oldest', value: 'local_user_cards_Ascending' },
+                    { label: 'Most Recent', value: '{{ config("scout.prefix") }}user_cards_Descending'},
+                    { label: 'Oldest', value: '{{ config("scout.prefix") }}user_cards_Ascending' },
                 ],
             })
             ]);

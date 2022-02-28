@@ -40,8 +40,7 @@ const renderHitsPerPage = (renderOptions, isFirstRender) => {
             customHitsPerPage({
                 container: document.querySelector('.hits-per-page'),
                 items: [
-                    { label: '24', value: 24, default: true },
-                    { label: '48', value: 48 },
+                    { label: '50', value: 50, default: true },
                     { label: '72', value: 72 },
                     { label: '96', value: 96 },
                     { label: '100', value: 100 },

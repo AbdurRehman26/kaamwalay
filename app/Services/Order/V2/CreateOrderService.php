@@ -35,10 +35,13 @@ class CreateOrderService extends V1CreateOrderService
         $this->storeShippingMethod($this->data['shipping_method']);
         $this->storeOrderAddresses($this->data['shipping_address'], $this->data['billing_address'], $this->data['customer_address']);
         $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
+        $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->saveOrder();
         $this->storeOrderItems($this->data['items']);
         $this->storeShippingFee();
         $this->storeServiceFee();
+        $this->storeGrandTotal();
+        $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->storeGrandTotal();
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);

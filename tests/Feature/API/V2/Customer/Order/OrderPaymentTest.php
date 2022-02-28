@@ -27,30 +27,6 @@ beforeEach(function () {
     actingAs($this->user);
 });
 
-test('a customer can create order payments for order', function () {
-    $order = Order::factory()->for($this->user)->create();
-    postJson('/api/v2/customer/orders/' . $order->id . '/order-payments', [
-        'payment_method' => [
-            'id' => $this->paymentMethod->id,
-        ],
-        'payment_provider_reference' => [
-            'id' => '12345678',
-        ],
-    ])->assertCreated();
-});
-
-test('a customer can not create order payments for other user\'s order', function () {
-    $order = Order::factory()->create();
-    postJson('/api/v2/customer/orders/' . $order->id . '/order-payments', [
-        'payment_method' => [
-            'id' => $this->paymentMethod->id,
-        ],
-        'payment_provider_reference' => [
-            'id' => '12345678',
-        ],
-    ])->assertForbidden();
-});
-
 test('a customer can not pay from wallet if wallet has insufficient balance', function () {
     $order = Order::factory()->for($this->user)->create();
 

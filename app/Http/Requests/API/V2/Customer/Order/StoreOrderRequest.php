@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\V2\Customer\Order;
 
 use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest as V1StoreOrderRequest;
+use Illuminate\Validation\Rule;
 
 class StoreOrderRequest extends V1StoreOrderRequest
 {
@@ -40,6 +41,11 @@ class StoreOrderRequest extends V1StoreOrderRequest
             'billing_address.same_as_shipping' => ['required', 'boolean'],
             'shipping_method' => ['required', 'array'],
             'shipping_method.id' => ['required', 'integer', 'exists:shipping_methods,id'],
+            'coupon.code' => ['sometimes', 'exists:coupons,code'],
+            'payment_by_wallet' => [
+                Rule::requiredIf(empty($this->payment_method)),
+                'numeric',
+            ],
         ];
     }
 }

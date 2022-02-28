@@ -17,7 +17,7 @@ class PopReportController extends Controller
 
     public function index(): View
     {
-        $categories = CardCategory::all();
+        $categories = CardCategory::enabled()->get();
 
         return view('landings.pop.index', compact('categories'));
     }

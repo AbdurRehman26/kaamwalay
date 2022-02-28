@@ -30,6 +30,8 @@ class CardCategoryResource extends Resource
                 Forms\Components\TextInput::make('image_url')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Checkbox::make('is_enabled')
+                    ->label('Enabled'),
             ]);
     }
 
@@ -39,6 +41,7 @@ class CardCategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('name')->searchable(),
+                Tables\Columns\BooleanColumn::make('is_enabled')->label('Enabled'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),

@@ -2,12 +2,7 @@
 
 namespace App\Console\Commands\PopReports;
 
-use App\Models\CardProduct;
-use App\Models\CardSeries;
-use App\Models\CardSet;
-use App\Models\PopReportsCard;
-use App\Models\PopReportsSeries;
-use App\Models\PopReportsSet;
+use App\Services\PopReport\PopReportService;
 use Illuminate\Console\Command;
 
 class InitializePopReports extends Command
@@ -26,12 +21,7 @@ class InitializePopReports extends Command
      */
     protected $description = 'Initialize Pop Reports For Series, Sets and Cards.';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle(): int
+    public function handle(PopReportService $popReportService): int
     {
         $selectedOption = $this->choice(
             'Initialize Report Values for :',
@@ -39,31 +29,25 @@ class InitializePopReports extends Command
             '0'
         );
 
+        if ($selectedOption === "All") {
+            $popReportService->initializePopReportsForAll();
+        }
+
         /* For Series */
-        if ($selectedOption == "All" || $selectedOption == "Series") {
+        if ($selectedOption === "Series") {
             $this->info("Initializing Values for Series");
 
-            $cardSeriesIds = CardSeries::pluck('id');
-
-            foreach ($cardSeriesIds as $cardSeriesId) {
-                PopReportsSeries::firstOrCreate([ 'card_series_id' => $cardSeriesId ]);
-            }
+            $popReportService->initializePopReportsForCardSeries();
 
             $this->info("Initializing Values for Series Completed");
         }
 
         /* For Sets */
 
-        if ($selectedOption == "All" || $selectedOption == "Sets") {
+        if ($selectedOption === "Sets") {
             $this->info("Initializing Values for Sets");
 
-            $cardSets = CardSet::all();
-
-            foreach ($cardSets as $cardSet) {
-                PopReportsSet::firstOrCreate([
-                    'card_set_id' => $cardSet->id, 'card_series_id' => $cardSet->card_series_id,
-                ]);
-            }
+            $popReportService->initializePopReportsForCardSets();
 
             $this->info("Initializing Values for Sets Completed");
         }
@@ -71,16 +55,10 @@ class InitializePopReports extends Command
 
         /* For Cards */
 
-        if ($selectedOption == "All" || $selectedOption == "Cards") {
+        if ($selectedOption === "Cards") {
             $this->info("Initializing Values for Cards");
 
-            $cardProducts = CardProduct::all();
-
-            foreach ($cardProducts as $cardProduct) {
-                PopReportsCard::firstOrCreate([
-                    'card_product_id' => $cardProduct->id, 'card_set_id' => $cardProduct->card_set_id,
-                ]);
-            }
+            $popReportService->initializePopReportsForCards();
 
             $this->info("Initializing Values for Cards Completed");
         }

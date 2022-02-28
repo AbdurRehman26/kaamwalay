@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
+import CircularProgress from '@mui/material/CircularProgress';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ManageCardDialog from '@shared/components/ManageCardDialog/ManageCardDialog';
@@ -98,24 +99,32 @@ export function SubmissionsGradeCards() {
 
     return (
         <Grid container direction={'column'} className={classes.root}>
-            <Typography variant={'body1'}>
-                <span className={font.fontWeightMedium}>Cards</span>&nbsp;({allCards.length})
-            </Typography>
-            <Grid container direction={'column'} className={classes.cards}>
-                {allCards.map((item: any, index: number) => (
-                    <div id={'card-id-' + item.orderItem.id} key={item.orderItem.id}>
-                        <SubmissionsGradeCard
-                            key={item.orderItem.id}
-                            orderID={Number(id)}
-                            itemIndex={index}
-                            notes={item.orderItem.notes}
-                            internalNotes={item.orderItem.internalNotes}
-                            itemId={item.orderItem.id}
-                            gradeData={item}
-                        />
-                    </div>
-                ))}
-            </Grid>
+            {allCards.length === 0 ? (
+                <Box paddingY={3} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <>
+                    <Typography variant={'body1'}>
+                        <span className={font.fontWeightMedium}>Cards</span>&nbsp;({allCards.length})
+                    </Typography>
+                    <Grid container direction={'column'} className={classes.cards}>
+                        {allCards.map((item: any, index: number) => (
+                            <div id={'card-id-' + item.orderItem.id} key={item.orderItem.id}>
+                                <SubmissionsGradeCard
+                                    key={item.orderItem.id}
+                                    orderID={Number(id)}
+                                    itemIndex={index}
+                                    notes={item.orderItem.notes}
+                                    internalNotes={item.orderItem.internalNotes}
+                                    itemId={item.orderItem.id}
+                                    gradeData={item}
+                                />
+                            </div>
+                        ))}
+                    </Grid>
+                </>
+            )}
             {isCompleteGradingBtnEnabled() ? (
                 <Box
                     position={'fixed'}

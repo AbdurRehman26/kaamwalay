@@ -21,6 +21,7 @@ class CardCategoryResource extends BaseResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'is_enabled' => $this->is_enabled,
         ];
     }
 }

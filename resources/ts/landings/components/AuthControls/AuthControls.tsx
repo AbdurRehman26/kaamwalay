@@ -11,7 +11,7 @@ import { cx } from '@shared/lib/utils/cx';
 import { AuthDialog } from '@shared/components/Auth/AuthDialog';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
-import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
+import { headerDialogVisibility, updateSubtitle } from '@shared/redux/slices/authenticationSlice';
 import { useCallback } from 'react';
 
 const useStyles = makeStyles(
@@ -55,14 +55,22 @@ export function AuthControls() {
     const classes = useStyles();
     const dispatch = useSharedDispatch();
     const isHeaderAuthDialogOpen = useSharedSelector((state) => state.authentication.headerDialogOpened);
+    const subTitle = useSharedSelector((state) => state.authentication.subTitle);
 
     const handleAuthDialogClose = useCallback(() => {
+        dispatch(updateSubtitle('to start a Robograding submission'));
         dispatch(headerDialogVisibility(false));
     }, [dispatch]);
 
-    const handleChange = () => {
+    const handleChange = (payload: boolean) => {
         if (!authenticated) {
-            dispatch(headerDialogVisibility(true));
+            if (payload) {
+                dispatch(updateSubtitle('to start a Robograding submission'));
+                dispatch(headerDialogVisibility(true));
+            } else {
+                dispatch(updateSubtitle('to Access Robograding'));
+                dispatch(headerDialogVisibility(true));
+            }
         } else {
             window.location.href = '/dashboard/submissions/new';
         }
@@ -75,7 +83,7 @@ export function AuthControls() {
     return (
         <>
             <Button
-                onClick={handleChange}
+                onClick={() => handleChange(true)}
                 color={'primary'}
                 variant={'outlined'}
                 className={cx(classes.button, classes.buttonHighlighted, classes.space)}
@@ -89,7 +97,7 @@ export function AuthControls() {
                 </ButtonBase>
             ) : (
                 <Button
-                    onClick={handleChange}
+                    onClick={() => handleChange(false)}
                     color={'primary'}
                     className={cx(classes.button)}
                     startIcon={<PersonIcon />}
@@ -97,11 +105,7 @@ export function AuthControls() {
                     Log in
                 </Button>
             )}
-            <AuthDialog
-                open={isHeaderAuthDialogOpen}
-                onClose={handleAuthDialogClose}
-                subTitle="to Access Robograding"
-            />
+            <AuthDialog open={isHeaderAuthDialogOpen} onClose={handleAuthDialogClose} subTitle={subTitle} />
         </>
     );
 }

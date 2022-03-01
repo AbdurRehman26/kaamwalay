@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
+use App\Contracts\Exportable;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 
-class Order extends Model
+class Order extends Model implements Exportable
 {
     use HasFactory, ActivityLog, HasOrderPayments;
 
@@ -325,5 +326,20 @@ class Order extends Model
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    public static function exportCollection(): Collection
+    {
+        return Order::all();
+    }
+
+    public static function exportHeadings(): array
+    {
+        return ['id', 'order_number'];
+    }
+
+    public static function exportFilters(): array
+    {
+        return self::getAllowedAdminFilters();
     }
 }

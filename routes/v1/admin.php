@@ -9,6 +9,7 @@ use App\Http\Controllers\API\V1\Admin\Coupon\CouponApplicableController;
 use App\Http\Controllers\API\V1\Admin\Coupon\CouponController;
 use App\Http\Controllers\API\V1\Admin\Coupon\CouponStatusController;
 use App\Http\Controllers\API\V1\Admin\CustomerController;
+use App\Http\Controllers\API\V1\Admin\DataExportController;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController;
 use App\Http\Controllers\API\V1\Admin\Order\OrderExtraChargeController;
 use App\Http\Controllers\API\V1\Admin\Order\OrderItemController;
@@ -89,4 +90,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('{wallet}/history', [CustomerWalletController::class, 'getTransactionsHistory'])
             ->name('customer.wallet.history');
     });
+
+    Route::post('export-data', DataExportController::class)->name('export-data');
 });

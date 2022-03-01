@@ -3,6 +3,7 @@
 namespace App\Http\APIClients;
 
 use App\Models\HubspotDeal;
+use App\Models\User;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -24,11 +25,11 @@ class HubspotClient {
         $dealData = array (
             'properties' => array(
                 array (
-                  'value' => 'AGS',
+                  'value' => 'AGS Deal',
                   'name' => 'dealname',
                 ),
                 array (
-                  'value' => 'AGS',
+                  'value' => 'Sales Pipeline',
                   'name' => 'pipeline',
                 ),
                 // array (
@@ -52,7 +53,7 @@ class HubspotClient {
         ]);
     }
 
-    public function makeApiCall($data, $url) {
+    public function makeApiCall(array $data, string $url): object  {
         try {
 
         $post_json = json_encode($data);
@@ -65,8 +66,10 @@ class HubspotClient {
         @curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         @curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = @curl_exec($ch);
-        // echo "\nResponse: " . $response;
-        gettype(json_decode($response));
+        echo "\nResponse: " . $response;
+        $test = gettype(json_decode($response));
+        
+        echo "\Type : " . $test;
         return json_decode($response);
         } catch (RequestException $exception) {
             Log::error($exception);
@@ -76,7 +79,7 @@ class HubspotClient {
         // @curl_close($ch);
     }
 
-    public function addUserAndAssignDeal($user) {
+    public function addUserAndAssignDeal(User $user) {
         $data = array(
             'properties' => array(
                 array(
@@ -104,8 +107,9 @@ class HubspotClient {
         
         // if($status_code === 200) {
             try {
-                $dealId = HubspotDeal::where('deal_name', 'AGS')->first()->list_id;
+                $dealId = HubspotDeal::where('deal_name', 'AGS Deal')->first()->deal_id;
                 $response = Http::put( $this->getBaseUrl() . '/deals/v1/deal/' . $dealId . '/associations/CONTACT?id=' . $response->vid . '&hapikey=' . $this->getConfiguration());
+                Log::info('Adding id . ' . $dealId );
             } catch (RequestException $exception) {
                 Log::error($exception);
             }

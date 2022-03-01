@@ -10,11 +10,11 @@ class HubspotService {
     {
     }
 
-    public function createDeal() {
+    public function createDeal(): void {
         $this->hubspotclient->createDeal();
     }
 
-    public function addUserAndAssignDeal(User $user) { 
+    public function addUserAndAssignDeal(User $user): void { 
         $this->hubspotclient->addUserAndAssignDeal($user);
     }
 

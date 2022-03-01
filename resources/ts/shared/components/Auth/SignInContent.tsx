@@ -126,7 +126,7 @@ export function SignInContent(props: Props) {
                         align={'center'}
                         color={'primary'}
                         underline={'none'}
-                        sx={{ ':hover': { cursor: 'pointer' } }}
+                        sx={{ cursor: 'pointer' }}
                     >
                         SIGN UP
                     </MuiLink>

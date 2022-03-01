@@ -11,8 +11,8 @@ import { cx } from '@shared/lib/utils/cx';
 import { AuthDialog } from '@shared/components/Auth/AuthDialog';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
-import { headerDialogVisibility, updateSubtitle } from '@shared/redux/slices/authenticationSlice';
-import { useCallback } from 'react';
+import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
+import { useCallback, useState } from 'react';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -52,24 +52,23 @@ const useStyles = makeStyles(
 
 export function AuthControls() {
     const { checking, authenticated } = useAuth();
+    const [subTitle, setSubtitle] = useState('to start a Robograding submission');
     const classes = useStyles();
     const dispatch = useSharedDispatch();
     const isHeaderAuthDialogOpen = useSharedSelector((state) => state.authentication.headerDialogOpened);
-    const subTitle = useSharedSelector((state) => state.authentication.subTitle);
 
     const handleAuthDialogClose = useCallback(() => {
-        dispatch(updateSubtitle('to start a Robograding submission'));
+        setSubtitle('to start a Robograding submission');
         dispatch(headerDialogVisibility(false));
     }, [dispatch]);
 
-    const handleChange = (payload: boolean) => {
+    const handleChange = (isSubmit: boolean) => () => {
         if (!authenticated) {
-            if (payload) {
-                dispatch(updateSubtitle('to start a Robograding submission'));
-                dispatch(headerDialogVisibility(true));
+            dispatch(headerDialogVisibility(true));
+            if (isSubmit) {
+                setSubtitle('to start a Robograding submission');
             } else {
-                dispatch(updateSubtitle('to Access Robograding'));
-                dispatch(headerDialogVisibility(true));
+                setSubtitle('to Access Robograding');
             }
         } else {
             window.location.href = '/dashboard/submissions/new';
@@ -83,7 +82,7 @@ export function AuthControls() {
     return (
         <>
             <Button
-                onClick={() => handleChange(true)}
+                onClick={handleChange(true)}
                 color={'primary'}
                 variant={'outlined'}
                 className={cx(classes.button, classes.buttonHighlighted, classes.space)}
@@ -97,7 +96,7 @@ export function AuthControls() {
                 </ButtonBase>
             ) : (
                 <Button
-                    onClick={() => handleChange(false)}
+                    onClick={handleChange(false)}
                     color={'primary'}
                     className={cx(classes.button)}
                     startIcon={<PersonIcon />}

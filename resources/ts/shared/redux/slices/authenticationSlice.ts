@@ -24,7 +24,6 @@ interface StateType {
     user: UserEntity | null;
     dialogOpened: boolean;
     headerDialogOpened: boolean;
-    subTitle: string;
 }
 
 type AuthenticatePayload = PayloadAction<AuthenticatedUserEntity, string, any, Error>;
@@ -129,7 +128,6 @@ export const authenticationSlice = createSlice({
         user: null,
         dialogOpened: false,
         headerDialogOpened: false,
-        subTitle: 'to start a Robograding submission',
     } as StateType,
     reducers: {
         updateUserProfileData: (state, action: PayloadAction<UserEntity>) => {
@@ -140,9 +138,6 @@ export const authenticationSlice = createSlice({
         },
         headerDialogVisibility: (state, action: PayloadAction<boolean>) => {
             state.headerDialogOpened = action.payload;
-        },
-        updateSubtitle: (state, action: PayloadAction<string>) => {
-            state.subTitle = action.payload;
         },
     },
     extraReducers: {
@@ -189,5 +184,4 @@ export const authenticationSlice = createSlice({
     },
 });
 
-export const { updateUserProfileData, dialogVisibility, headerDialogVisibility, updateSubtitle } =
-    authenticationSlice.actions;
+export const { updateUserProfileData, dialogVisibility, headerDialogVisibility } = authenticationSlice.actions;

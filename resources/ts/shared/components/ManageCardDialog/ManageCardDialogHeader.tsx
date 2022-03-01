@@ -7,7 +7,7 @@ import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback } from 'react';
 import { batch } from 'react-redux';
-import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
+// import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { font } from '@shared/styles/utils';
@@ -45,7 +45,8 @@ export function ManageCardDialogHeader({ back, label }: ManageCardDialogHeaderPr
 
     const handleBack = useCallback(() => {
         batch(() => {
-            dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.List));
+            dispatch(manageCardDialogActions.navigateToPreviousView());
+            // dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.List));
             dispatch(manageCardDialogActions.setSelectedCard(null));
         });
     }, [dispatch]);

@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { ForwardedRef, forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
@@ -16,8 +15,6 @@ import { APIService } from '@shared/services/APIService';
 import AddIcon from '@mui/icons-material/Add';
 import ImageUploader from '@shared/components/ImageUploader';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import IconButton from '@mui/material/IconButton';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useRepository } from '@shared/hooks/useRepository';
 import { FilesRepository } from '@shared/repositories/FilesRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
@@ -31,6 +28,8 @@ import Select from '@mui/material/Select';
 
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
+import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
 
 export interface ManageCardDialogCreateCardViewProps {
     isSwappable?: boolean;
@@ -67,29 +66,39 @@ interface CardSeries {
     label: string;
     name: string;
     imagePath: string;
-    cardSets: CardSets[];
 }
 
+interface CardRarity {
+    label: string;
+    name: string;
+}
+
+interface CardSurface {
+    label: string;
+    name: string;
+}
 export const ManageCardDialogCreateCardView = forwardRef(
     (
         { onAdd, isSwappable, declaredValue = 0 }: ManageCardDialogCreateCardViewProps,
         ref: ForwardedRef<HTMLDivElement>,
     ) => {
         const classes = useStyles();
+        const dialogState = useManageCardDialogState();
 
         const filesRepository = useRepository(FilesRepository);
 
         const [isLoading, setIsLoading] = useState(false);
-        const [cardCategory, setCardCategory] = useState<number | null>(null);
-        const [availableCategories, setAvailableCategories] = useState<{ id: number; name: string }[]>([]);
-        const [availableSeriesWithSets, setAvailableSeriesWithSets] = useState<CardSeries[]>([]);
+        const [cardCategory, setCardCategory] = useState<number | null>(dialogState.selectedCategory?.id ?? null);
+        const [availableCategories, setAvailableCategories] = useState<CardCategoryEntity[]>([]);
+        const [availableSeries, setAvailableSeries] = useState<CardSeries[]>([]);
+        const [availableSets, setAvailableSets] = useState<CardSets[]>([]);
         const [selectedSeries, setSelectedSeries] = useState<CardSeries | null | undefined>(null);
         const [selectedSet, setSelectedSet] = useState<CardSets | null>(null);
         const [selectedCardPhoto, setSelectedCardPhoto] = useState<File | null>(null);
-        const [availableRarities, setAvailableRarities] = useState<string[] | null>(null);
-        const [selectedRarity, setSelectedRarity] = useState<string>('none');
-        const [availableSurfaces, setAvailableSurfaces] = useState<string[] | null>(null);
-        const [selectedSurface, setSelectedSurface] = useState<string>('none');
+        const [availableRarities, setAvailableRarities] = useState<CardRarity[]>([]);
+        const [selectedRarity, setSelectedRarity] = useState<CardRarity | null>(null);
+        const [availableSurfaces, setAvailableSurfaces] = useState<CardSurface[]>([]);
+        const [selectedSurface, setSelectedSurface] = useState<CardSurface | null>(null);
         const [releaseDate, setReleaseDate] = useState<Date | null>(null);
         const [availableLanguages, setAvailableLanguages] = useState<string[] | null>(null);
         const [selectedLanguage, setSelectedLanguage] = useState<string>('none');
@@ -100,16 +109,6 @@ export const ManageCardDialogCreateCardView = forwardRef(
         const [cardNumber, setCardNumber] = useState('');
 
         const Notifications = useNotifications();
-        // New series section
-        const [showNewSeries, setShowNewSeries] = useState(false);
-        const [newSeriesLogo, setNewSeriesLogo] = useState<File | null>(null);
-        const [newSeriesName, setNewSeriesName] = useState('');
-
-        // New set section
-        const [showNewSetBox, setShowNewSetBox] = useState(false);
-        const [newSetName, setNewSetName] = useState('');
-        const [newSetLogo, setNewSetLogo] = useState<File | null>(null);
-        const [newSetReleaseDate, setNewSetReleaseDate] = useState<Date | null>(null);
 
         const apiService = useInjectable(APIService);
 
@@ -118,64 +117,186 @@ export const ManageCardDialogCreateCardView = forwardRef(
             dispatch(manageCardDialogActions.setOpen(false));
         }, [dispatch]);
 
+        const fetchSeries = useCallback(
+            async (categoryId: Number) => {
+                const endpoint = apiService.createEndpoint(`admin/cards/series?category_id=` + categoryId);
+                const response = await endpoint.get('');
+                setAvailableSeries(
+                    response.data.map((item: CardSeries) => {
+                        // TODO: This is a workaround to add 'label' alongside name on these objects. I'm sure there's a better way to do this but it's 4AM and I can't think of it.
+                        return {
+                            id: item.id,
+                            label: item.name,
+                            name: item.name,
+                            imagePath: item.imagePath,
+                        };
+                    }),
+                );
+            },
+            [apiService],
+        );
+
+        const fetchSets = useCallback(
+            async (seriesId: Number) => {
+                const endpoint = apiService.createEndpoint(`admin/cards/sets?series_id=` + seriesId);
+                const response = await endpoint.get('');
+                setAvailableSets(
+                    response.data.map((item: CardSets) => {
+                        // TODO: This is a workaround to add 'label' alongside name on these objects. I'm sure there's a better way to do this but it's 4AM and I can't think of it.
+                        return {
+                            id: item.id,
+                            cardSeriesId: item.cardSeriesId,
+                            label: item.name,
+                            name: item.name,
+                            imagePath: item.imagePath,
+                            releaseDate: item.releaseDate,
+                        };
+                    }),
+                );
+            },
+            [apiService],
+        );
+
+        const fetchDropdownsData = useCallback(
+            async (categoryId: Number) => {
+                const endpoint = apiService.createEndpoint(`admin/cards/options/` + categoryId);
+                const response = await endpoint.get('');
+                setAvailableRarities(
+                    response.data.rarity.map((item: string) => {
+                        return {
+                            label: item,
+                            name: item,
+                        };
+                    }),
+                );
+                setAvailableSurfaces(
+                    response.data.surface.map((item: string) => {
+                        return {
+                            label: item,
+                            name: item,
+                        };
+                    }),
+                );
+                setAvailableLanguages(response.data.language);
+                setAvailableEditions(response.data.edition);
+            },
+            [apiService],
+        );
+
+        const setSelectedSeriesFromState = useCallback(() => {
+            if (dialogState.selectedCardSeries) {
+                const filteredSeries = availableSeries.filter((series) => {
+                    return series.id === dialogState?.selectedCardSeries?.id;
+                })[0];
+
+                if (filteredSeries) {
+                    setSelectedSeries(filteredSeries);
+
+                    fetchSets(filteredSeries?.id);
+                }
+            }
+        }, [availableSeries, dialogState.selectedCardSeries, fetchSets]);
+
+        const setSelectedSetFromState = useCallback(() => {
+            if (dialogState.selectedCardSet) {
+                const filteredSet = availableSets.filter((set) => {
+                    return set.id === dialogState?.selectedCardSet?.id;
+                })[0];
+
+                if (filteredSet) {
+                    setSelectedSet(filteredSet);
+
+                    setReleaseDate(new Date(filteredSet?.releaseDate));
+                }
+            }
+        }, [availableSets, dialogState.selectedCardSet]);
+
         useEffect(
             () => {
-                async function fetchDropdownsData() {
-                    const endpoint = apiService.createEndpoint(`admin/cards/options`);
+                async function fetchCategories() {
+                    const endpoint = apiService.createEndpoint(`admin/cards/categories`);
                     const response = await endpoint.get('');
-                    setAvailableCategories(response.data.category);
-                    setCardCategory(response.data.category[0].id);
-                    setAvailableSeriesWithSets(
-                        response.data.series.map((item: CardSeries) => {
-                            // TODO: This is a workaround to add 'label' alongside name on these objects. I'm sure there's a better way to do this but it's 4AM and I can't think of it.
-                            return {
-                                id: item.id,
-                                label: item.name,
-                                name: item.name,
-                                imagePath: item.imagePath,
-                                cardSets: item.cardSets.map((set) => ({
-                                    id: set.id,
-                                    cardSeriesId: set.cardSeriesId,
-                                    label: set.name,
-                                    name: set.name,
-                                    imagePath: set.imagePath,
-                                    releaseDate: set.releaseDate,
-                                })),
-                            };
-                        }),
+                    const categoryId = dialogState.selectedCategory?.id ?? response.data[0].id;
+                    setAvailableCategories(response.data);
+                    setCardCategory(categoryId);
+
+                    dispatch(
+                        manageCardDialogActions.setSelectedCategory(dialogState.selectedCategory ?? response.data[0]),
                     );
-                    setAvailableRarities(response.data.rarity);
-                    setAvailableSurfaces(response.data.surface);
-                    setAvailableLanguages(response.data.language);
-                    setAvailableEditions(response.data.edition);
+
+                    await fetchSeries(categoryId);
+
+                    setSelectedSeriesFromState();
+
+                    fetchDropdownsData(categoryId);
                 }
 
-                fetchDropdownsData();
+                fetchCategories();
             },
             // eslint-disable-next-line react-hooks/exhaustive-deps
             [],
         );
 
-        const handleSeriesChange = useCallback((e, newValue) => {
-            setSelectedSeries(newValue);
-            setSelectedSet(null);
-        }, []);
+        useEffect(() => {
+            setSelectedSeriesFromState();
+        }, [setSelectedSeriesFromState]);
 
-        const handleSetChange = useCallback((e, newValue) => {
-            setSelectedSet(newValue);
-            setReleaseDate(new Date(newValue?.releaseDate));
-        }, []);
+        useEffect(() => {
+            setSelectedSetFromState();
+        }, [setSelectedSetFromState]);
+
+        const handleCardCategoryChange = useCallback(
+            (e) => {
+                setCardCategory(e.target.value);
+
+                const category = availableCategories.filter((cat) => {
+                    return cat.id === e.target.value;
+                })[0];
+
+                batch(() => {
+                    dispatch(manageCardDialogActions.setSelectedCategory(category));
+                    dispatch(manageCardDialogActions.setSelectedCardSeries(null));
+                    dispatch(manageCardDialogActions.setSelectedCardSet(null));
+                });
+
+                setSelectedSeries(null);
+                setSelectedSet(null);
+                setSelectedRarity(null);
+                setSelectedSurface(null);
+                setReleaseDate(null);
+
+                fetchSeries(e.target.value);
+                fetchDropdownsData(e.target.value);
+            },
+            [fetchSeries, fetchDropdownsData, dispatch, availableCategories],
+        );
+
+        const handleSeriesChange = useCallback(
+            (e, newValue) => {
+                setSelectedSeries(newValue);
+                setSelectedSet(null);
+                batch(() => {
+                    dispatch(manageCardDialogActions.setSelectedCardSeries(newValue));
+                    dispatch(manageCardDialogActions.setSelectedCardSet(null));
+                });
+
+                fetchSets(newValue.id);
+            },
+            [fetchSets, dispatch],
+        );
+
+        const handleSetChange = useCallback(
+            (e, newValue) => {
+                setSelectedSet(newValue);
+                dispatch(manageCardDialogActions.setSelectedCardSet(newValue));
+
+                setReleaseDate(new Date(newValue?.releaseDate));
+            },
+            [setReleaseDate, dispatch],
+        );
 
         const handleCardPhotoChange = useCallback((cardImage: File | null) => {
             setSelectedCardPhoto(cardImage);
-        }, []);
-
-        const handleNewSeriesLogoChange = useCallback(
-            (newSeriesLogo: File | null) => setNewSeriesLogo(newSeriesLogo),
-            [],
-        );
-        const handleNewSetLogoChange = useCallback((newSetLogo: File | null) => {
-            setNewSetLogo(newSetLogo);
         }, []);
 
         const handleCardNameChange = useCallback((e) => {
@@ -186,196 +307,69 @@ export const ManageCardDialogCreateCardView = forwardRef(
             setReleaseDate(newReleaseDate);
         }, []);
 
-        const handleNewSetReleaseDateChange = useCallback((newReleaseDate: Date | null) => {
-            setNewSetReleaseDate(newReleaseDate);
-        }, []);
-
         const toggleNewSeries = useCallback(() => {
-            setNewSeriesLogo(null);
-            setNewSeriesName('');
-            setShowNewSeries(!showNewSeries);
-        }, [showNewSeries]);
+            dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.CreateSeries));
+        }, [dispatch]);
 
         const toggleNewSet = useCallback(() => {
-            setNewSetLogo(null);
-            setNewSetName('');
-            setNewSetReleaseDate(null);
-            setShowNewSetBox(!showNewSetBox);
-        }, [showNewSetBox]);
+            dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.CreateSet));
+        }, [dispatch]);
 
-        const handleCardCategoryChange = useCallback((e) => setCardCategory(e.target.value), []);
-        const handleRarityChange = useCallback((e) => setSelectedRarity(e.target.value), []);
-        const handleSurfaceChange = useCallback((e) => setSelectedSurface(e.target.value), []);
+        const handleRarityChange = useCallback((e, newValue) => {
+            setSelectedRarity(newValue);
+        }, []);
+        const handleSurfaceChange = useCallback((e, newValue) => {
+            setSelectedSurface(newValue);
+        }, []);
         const handleLanguageChange = useCallback((e) => setSelectedLanguage(e.target.value), []);
         const handleEditionChange = useCallback((e) => setSelectedEdition(e.target.value), []);
         const handleProductVariantChange = useCallback((e) => setProductVariant(e.target.value), []);
-        const handleNewSeriesNameChange = useCallback((e) => setNewSeriesName(e.target.value), []);
-        const handleNewSetNameChange = useCallback((e) => setNewSetName(e.target.value), []);
         const handleCardNumberChange = useCallback((e) => setCardNumber(e.target.value), []);
         const showSaveButton = useMemo(() => {
-            if (showNewSetBox && !showNewSeries) {
-                return !!(
-                    newSetLogo &&
-                    newSetName &&
-                    newSetReleaseDate &&
-                    selectedCardPhoto &&
-                    cardName &&
-                    cardNumber &&
-                    selectedRarity !== 'none' &&
-                    selectedLanguage !== 'none'
-                );
-            }
-
-            if (!showNewSeries && !showNewSetBox) {
-                return !!(
-                    selectedSeries &&
-                    selectedSet &&
-                    selectedCardPhoto &&
-                    cardName &&
-                    cardNumber &&
-                    selectedRarity !== 'none' &&
-                    selectedLanguage !== 'none'
-                );
-            }
-
-            if (showNewSeries) {
-                return !!(
-                    newSeriesLogo &&
-                    newSeriesName &&
-                    newSetLogo &&
-                    newSetName &&
-                    newSetReleaseDate &&
-                    selectedCardPhoto &&
-                    cardName &&
-                    cardNumber &&
-                    selectedRarity !== 'none' &&
-                    selectedLanguage !== 'none'
-                );
-            }
-        }, [
-            selectedSeries,
-            showNewSeries,
-            newSeriesLogo,
-            newSeriesName,
-            showNewSetBox,
-            newSetLogo,
-            newSetName,
-            newSetReleaseDate,
-            selectedSet,
-            selectedCardPhoto,
-            cardName,
-            selectedLanguage,
-            selectedRarity,
-            cardNumber,
-        ]);
+            return !!(
+                selectedSeries &&
+                selectedSet &&
+                selectedCardPhoto &&
+                cardName &&
+                cardNumber &&
+                selectedRarity &&
+                selectedLanguage !== 'none'
+            );
+        }, [selectedSeries, selectedSet, selectedCardPhoto, cardName, selectedLanguage, selectedRarity, cardNumber]);
 
         const handleAddCard = async () => {
             const endpoint = apiService.createEndpoint('/admin/cards');
-            // Saving card with existing series but new set
-            if (showNewSetBox && !showNewSeries) {
-                setIsLoading(true);
-                try {
-                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
-                    const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
-                    const DTO = {
-                        imagePath: cardPublicImage,
-                        name: cardName,
-                        category: cardCategory,
-                        releaseDate: newSetReleaseDate,
-                        seriesId: selectedSeries?.id,
-                        seriesName: null,
-                        seriesImage: null,
-                        setId: null,
-                        setName: newSetName,
-                        setImage: setLogoPublicImage,
-                        cardNumber: cardNumber,
-                        language: selectedLanguage,
-                        rarity: selectedRarity,
-                        edition: selectedEdition !== 'none' ? selectedEdition : null,
-                        surface: selectedSurface !== 'none' ? selectedSurface : null,
-                        variant: productVariant,
-                    };
-                    const responseItem = await endpoint.post('', DTO);
 
-                    batch(() => {
-                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
-                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
-                    });
-                } catch (e: any) {
-                    Notifications.exception(e);
-                }
-                setIsLoading(false);
+            setIsLoading(true);
+            try {
+                const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
+                const DTO = {
+                    imagePath: cardPublicImage,
+                    name: cardName,
+                    category: cardCategory,
+                    releaseDate: releaseDate,
+                    seriesId: selectedSeries?.id,
+                    seriesName: null,
+                    seriesImage: null,
+                    setId: selectedSet?.id,
+                    setName: null,
+                    setImage: null,
+                    cardNumber: cardNumber,
+                    language: selectedLanguage,
+                    rarity: selectedRarity?.name,
+                    edition: selectedEdition !== 'none' ? selectedEdition : null,
+                    surface: selectedSurface?.name ?? null,
+                    variant: productVariant,
+                };
+                const responseItem = await endpoint.post('', DTO);
+                batch(() => {
+                    dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
+                    dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
+                });
+            } catch (e: any) {
+                Notifications.exception(e);
             }
-
-            // Saving card with existing set & series
-            if (!showNewSeries && !showNewSetBox) {
-                setIsLoading(true);
-                try {
-                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
-                    const DTO = {
-                        imagePath: cardPublicImage,
-                        name: cardName,
-                        category: cardCategory,
-                        releaseDate: releaseDate,
-                        seriesId: selectedSeries?.id,
-                        seriesName: null,
-                        seriesImage: null,
-                        setId: selectedSet?.id,
-                        setName: null,
-                        setImage: null,
-                        cardNumber: cardNumber,
-                        language: selectedLanguage,
-                        rarity: selectedRarity,
-                        edition: selectedEdition !== 'none' ? selectedEdition : null,
-                        surface: selectedSurface !== 'none' ? selectedSurface : null,
-                        variant: productVariant,
-                    };
-                    const responseItem = await endpoint.post('', DTO);
-                    batch(() => {
-                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
-                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
-                    });
-                } catch (e: any) {
-                    Notifications.exception(e);
-                }
-                setIsLoading(false);
-            }
-
-            if (showNewSeries) {
-                setIsLoading(true);
-                try {
-                    const cardPublicImage = await filesRepository.uploadFile(selectedCardPhoto!);
-                    const seriesLogoPublicImage = await filesRepository.uploadFile(newSeriesLogo!);
-                    const setLogoPublicImage = await filesRepository.uploadFile(newSetLogo!);
-
-                    const DTO = {
-                        imagePath: cardPublicImage,
-                        name: cardName,
-                        category: cardCategory,
-                        releaseDate: newSetReleaseDate,
-                        seriesId: null,
-                        seriesName: newSeriesName,
-                        seriesImage: seriesLogoPublicImage,
-                        setId: null,
-                        setName: newSetName,
-                        setImage: setLogoPublicImage,
-                        cardNumber: cardNumber,
-                        language: selectedLanguage,
-                        rarity: selectedRarity,
-                        edition: selectedEdition !== 'none' ? selectedEdition : null,
-                        surface: selectedSurface !== 'none' ? selectedSurface : null,
-                        variant: productVariant,
-                    };
-                    const responseItem = await endpoint.post('', DTO);
-                    batch(() => {
-                        dispatch(manageCardDialogActions.setSelectedCard(responseItem.data as CardProductEntity));
-                        dispatch(manageCardDialogActions.setView(ManageCardDialogViewEnum.Edit));
-                    });
-                } catch (e: any) {
-                    Notifications.exception(e);
-                }
-                setIsLoading(false);
-            }
+            setIsLoading(false);
         };
 
         return (
@@ -398,209 +392,40 @@ export const ManageCardDialogCreateCardView = forwardRef(
                         </Select>
                     </FormControl>
 
-                    {showNewSeries ? (
-                        <Box padding={'12px'}>
-                            <Box
-                                display={'flex'}
-                                flexDirection={'column'}
-                                sx={{
-                                    border: '1px solid #CCCCCC',
-                                    width: '100%',
-                                }}
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-between'}
+                        alignItems={'flex-end'}
+                        padding={'6px'}
+                        marginTop={'12px'}
+                    >
+                        <FormControl sx={{ minWidth: '70%' }}>
+                            <FormHelperText
+                                sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
                             >
-                                <Box
-                                    display={'flex'}
-                                    flexDirection={'row'}
-                                    justifyContent={'space-between'}
-                                    padding={'12px'}
-                                    alignItems={'center'}
-                                    sx={{
-                                        backgroundColor: '#F9F9F9',
-                                        borderBottomColor: '#CCCCCC',
-                                        borderBottomStyle: 'solid',
-                                        borderBottomWidth: '1px',
-                                    }}
-                                >
-                                    <Typography variant={'subtitle2'}>New Series</Typography>
-                                    <IconButton onClick={toggleNewSeries}>
-                                        <DeleteOutlineOutlinedIcon />
-                                    </IconButton>
-                                </Box>
-
-                                <Grid container padding={'12px'} spacing={24}>
-                                    <Grid item md={4}>
-                                        <FormControl>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Series Logo
-                                            </FormHelperText>
-                                            <ImageUploader onChange={handleNewSeriesLogoChange} />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item md={8}>
-                                        <FormControl>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Series Name
-                                            </FormHelperText>
-                                            <TextField
-                                                variant="outlined"
-                                                value={newSeriesName}
-                                                onChange={handleNewSeriesNameChange}
-                                                placeholder={'Enter series name'}
-                                                fullWidth
-                                                sx={{ minWidth: '231px' }}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Box>
-                    ) : null}
-
-                    {!showNewSeries ? (
-                        <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            justifyContent={'space-between'}
-                            alignItems={'flex-end'}
-                            padding={'6px'}
-                            marginTop={'12px'}
+                                Series
+                            </FormHelperText>
+                            <Autocomplete
+                                value={selectedSeries}
+                                onChange={handleSeriesChange}
+                                options={availableSeries}
+                                fullWidth
+                                renderInput={(params) => <TextField {...params} placeholder={'Enter series'} />}
+                            />
+                        </FormControl>
+                        <Button
+                            variant={'outlined'}
+                            color={'primary'}
+                            sx={{ minHeight: '56px', width: '145px' }}
+                            startIcon={<AddIcon />}
+                            onClick={toggleNewSeries}
                         >
-                            <FormControl sx={{ minWidth: '70%' }}>
-                                <FormHelperText
-                                    sx={{ fontWeight: 'bold', color: '#000', marginLeft: 0, marginBottom: '12px' }}
-                                >
-                                    Series
-                                </FormHelperText>
-                                <Autocomplete
-                                    value={selectedSeries}
-                                    onChange={handleSeriesChange}
-                                    options={availableSeriesWithSets}
-                                    fullWidth
-                                    renderInput={(params) => <TextField {...params} placeholder={'Enter series'} />}
-                                />
-                            </FormControl>
-                            <Button
-                                variant={'outlined'}
-                                color={'primary'}
-                                sx={{ minHeight: '56px', width: '145px' }}
-                                startIcon={<AddIcon />}
-                                onClick={toggleNewSeries}
-                            >
-                                New series
-                            </Button>
-                        </Box>
-                    ) : null}
+                            New series
+                        </Button>
+                    </Box>
 
-                    {showNewSeries || showNewSetBox ? (
-                        <Box padding={'12px'}>
-                            <Box
-                                display={'flex'}
-                                flexDirection={'column'}
-                                sx={{
-                                    border: '1px solid #CCCCCC',
-                                    width: '100%',
-                                }}
-                            >
-                                <Box
-                                    display={'flex'}
-                                    flexDirection={'row'}
-                                    justifyContent={'space-between'}
-                                    padding={'12px'}
-                                    alignItems={'center'}
-                                    sx={{
-                                        backgroundColor: '#F9F9F9',
-                                        borderBottomColor: '#CCCCCC',
-                                        borderBottomStyle: 'solid',
-                                        borderBottomWidth: '1px',
-                                    }}
-                                >
-                                    <Typography variant={'subtitle2'}>Set</Typography>
-                                    {!showNewSeries ? (
-                                        <IconButton onClick={toggleNewSet}>
-                                            <DeleteOutlineOutlinedIcon />
-                                        </IconButton>
-                                    ) : null}
-                                </Box>
-
-                                <Grid container padding={'12px'} spacing={24}>
-                                    <Grid item md={4}>
-                                        <FormControl>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Set Logo
-                                            </FormHelperText>
-                                            <ImageUploader onChange={handleNewSetLogoChange} />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item md={8}>
-                                        <FormControl>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Set Name
-                                            </FormHelperText>
-                                            <TextField
-                                                variant="outlined"
-                                                value={newSetName}
-                                                onChange={handleNewSetNameChange}
-                                                placeholder={'Enter set name'}
-                                                fullWidth
-                                                sx={{ minWidth: '231px' }}
-                                            />
-                                        </FormControl>
-
-                                        <FormControl sx={{ marginTop: '12px' }}>
-                                            <FormHelperText
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: '#000',
-                                                    marginLeft: 0,
-                                                    marginBottom: '12px',
-                                                }}
-                                            >
-                                                Release Date
-                                            </FormHelperText>
-                                            <LocalizationProvider dateAdapter={DateAdapter}>
-                                                <DesktopDatePicker
-                                                    inputFormat="MM/DD/yyyy"
-                                                    value={newSetReleaseDate}
-                                                    onChange={handleNewSetReleaseDateChange}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                        </FormControl>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Box>
-                    ) : null}
-
-                    {selectedSeries && !showNewSetBox && !showNewSeries ? (
+                    {selectedSeries ? (
                         <Box
                             display={'flex'}
                             flexDirection={'row'}
@@ -618,7 +443,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                 <Autocomplete
                                     value={selectedSet}
                                     onChange={handleSetChange}
-                                    options={selectedSeries.cardSets}
+                                    options={availableSets}
                                     fullWidth
                                     renderInput={(params) => <TextField {...params} placeholder={'Enter set'} />}
                                 />
@@ -634,7 +459,7 @@ export const ManageCardDialogCreateCardView = forwardRef(
                             </Button>
                         </Box>
                     ) : null}
-                    {selectedSet || showNewSetBox || showNewSeries ? (
+                    {selectedSet ? (
                         <>
                             <Divider className={classes.topDivider} />
                             <Grid container direction={'row'} sx={{ marginTop: '12px' }} padding={'12px'}>
@@ -732,18 +557,15 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                         >
                                             Rarity
                                         </FormHelperText>
-                                        <Select value={selectedRarity || 'none'} onChange={handleRarityChange}>
-                                            <MenuItem value="none" disabled>
-                                                <em>Select Rarity</em>
-                                            </MenuItem>
-                                            {availableRarities?.map((item) => {
-                                                return (
-                                                    <MenuItem key={item} value={item}>
-                                                        {item}
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </Select>
+                                        <Autocomplete
+                                            value={selectedRarity}
+                                            onChange={handleRarityChange}
+                                            options={availableRarities}
+                                            fullWidth
+                                            renderInput={(params) => (
+                                                <TextField {...params} placeholder={'Select Rarity'} />
+                                            )}
+                                        />
                                     </FormControl>
 
                                     <FormControl fullWidth sx={{ marginTop: '12px' }}>
@@ -757,18 +579,15 @@ export const ManageCardDialogCreateCardView = forwardRef(
                                         >
                                             Surface (optional)
                                         </FormHelperText>
-                                        <Select value={selectedSurface || 'none'} onChange={handleSurfaceChange}>
-                                            <MenuItem value="none">
-                                                <em>Select Surface</em>
-                                            </MenuItem>
-                                            {availableSurfaces?.map((item) => {
-                                                return (
-                                                    <MenuItem key={item} value={item}>
-                                                        {item}
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </Select>
+                                        <Autocomplete
+                                            value={selectedSurface}
+                                            onChange={handleSurfaceChange}
+                                            options={availableSurfaces}
+                                            fullWidth
+                                            renderInput={(params) => (
+                                                <TextField {...params} placeholder={'Select Surface'} />
+                                            )}
+                                        />
                                     </FormControl>
                                 </Grid>
 

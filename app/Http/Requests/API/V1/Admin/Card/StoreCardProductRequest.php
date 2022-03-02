@@ -20,37 +20,27 @@ class StoreCardProductRequest extends FormRequest
             'name' => ['required', 'string'],
             'category' => ['required','exists:card_categories,id'],
             'release_date' => ['required', 'date'],
-            'series_id' => ['sometimes', 'nullable', 'numeric'],
-            'series_name' => [
-                'required_without:series_id',
-                'nullable',
-                'string',
-                Rule::unique('card_series', 'name')->where(function ($query) {
-                    return $query->where('card_category_id', $this->category);
-                }),
-            ],
-            'series_image' => ['required_without:series_id', 'nullable', 'string'],
-            'set_id' => ['sometimes', 'nullable', 'numeric'],
-            'set_name' => [
-                'required_without:set_id',
-                'nullable',
-                'string',
-                Rule::unique('card_sets', 'name')->where(function ($query) {
-                    return $query->where('card_series_id', $this->series_id);
-                }),
-            ],
-            'set_image' => ['required_without:set_id', 'nullable', 'string'],
+            'series_id' => ['required', 'integer', 'exists:card_series,id'],
+            'set_id' => ['required', 'integer', 'exists:card_sets,id'],
             'card_number' => [
                 'required',
                 'string',
                 Rule::unique('card_products', 'card_number_order')->where(function ($query) {
-                    return $query->where('card_set_id', $this->set_id);
+                    return $query->where('card_set_id', $this->set_id)
+                        ->where('language', $this->language)
+                        ->where('rarity', $this->rarity)
+                        ->where('edition', $this->edition ?? 'Unlimited')
+                        ->where('surface', $this->surface ?? '');
                 }),
             ],
             'language' => ['required', 'string', Rule::in(CardProductService::CARD_LANGUAGES)],
-            'rarity' => ['required', 'string', Rule::in(CardProductService::CARD_RARITIES)],
+            'rarity' => ['required', 'string', Rule::exists('card_rarities', 'name')->where(function ($query) {
+                return $query->where('card_category_id', $this->category);
+            })],
             'edition' => ['sometimes', 'nullable', 'string', Rule::in(CardProductService::CARD_EDITIONS)],
-            'surface' => ['sometimes', 'nullable', 'string', Rule::in(CardProductService::CARD_SURFACES)],
+            'surface' => ['sometimes', 'nullable', 'string', Rule::exists('card_surfaces', 'name')->where(function ($query) {
+                return $query->where('card_category_id', $this->category);
+            })],
             'variant' => ['sometimes', 'nullable', 'string'],
         ];
     }

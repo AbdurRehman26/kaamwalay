@@ -4,6 +4,7 @@ use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
+use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Payment\V2\Providers\TestingStripeService;
@@ -24,6 +25,10 @@ beforeEach(function () {
         'order_status_id' => OrderStatus::PLACED,
     ]);
 
+    $this->paymentMethod = PaymentMethod::factory()->create([
+        'code' => 'stripe',
+    ]);
+
     $this->actingAs($user);
     
     $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
@@ -32,16 +37,17 @@ beforeEach(function () {
 });
 
 test('user can be charged successfully', function () {
-    OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-        'payment_method_id' => 1,
-        'payment_provider_reference_id' => Str::random(25),
-    ]);
-    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments");
-
-    $response->assertOk();
-    $response->assertJsonStructure(['data' => ['id', 'charges']]);
-    $response->assertJsonPath('data.amount', $this->order->grand_total_cents);
+    $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
+        'payment_method' => [
+            'id' => 1,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+    ])
+        ->assertOk()
+        ->assertJsonStructure(['data' => ['id', 'charges']])
+        ->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
 })->group('payment');
 
 test('user receives incomplete payment response', function () {
@@ -50,7 +56,14 @@ test('user receives incomplete payment response', function () {
         'payment_method_id' => 1,
         'payment_provider_reference_id' => 'incomplete',
     ]);
-    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments");
+    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+    ]);
 
     $response->assertStatus(Response::HTTP_PAYMENT_REQUIRED);
     $response->assertJsonStructure(['payment_intent' => ['id']]);
@@ -84,23 +97,24 @@ test('user cannot verify a failed payment', function () {
 })->group('payment');
 
 test('provider fee is set after a successful payment', function () {
-    OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-        'payment_method_id' => 1,
-        'payment_provider_reference_id' => Str::random(25),
-        'amount' => $this->order->grand_total,
+    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
     ]);
-    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments");
 
     $response->assertOk();
-    $response->assertJsonPath('data.amount', $this->order->grand_total_cents);
-    $this->order->refresh();
+    $response->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
+    
     $totalAmount = $this->order->grand_total_cents;
     $actualFee = round((float) (
         (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
     ) / 100, 2);
 
-    expect($actualFee)->toBe($this->order->lastOrderPayment->provider_fee);
+    expect($actualFee)->toBe($this->order->firstOrderPayment->provider_fee);
 })->group('payment');
 
 test('test payment', function () {
@@ -121,30 +135,27 @@ test('test payment', function () {
         'created_at' => now()->addSeconds(10),
     ]);
 
-    OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-        'payment_method_id' => 1,
-        'payment_provider_reference_id' => Str::random(25),
-        'amount' => $this->order->grand_total,
-        'type' => OrderPayment::TYPE_ORDER_PAYMENT,
-    ]);
     $this->order->update([
         'refund_total' => 10,
         'extra_charge_total' => 40,
         'grand_total' => $this->order->grand_total + 30,
     ]);
 
-    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments");
+    $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+    ]);
 
     $response->assertOk();
-    $response->assertJsonPath('data.amount', $this->order->grand_total_cents);
-    dump($this->order->firstOrderPayment->toArray());
-    dump($this->order->orderPayments->toArray());
-//    $this->order->refresh();
-//    $totalAmount = $this->order->grand_total_cents;
-//    $actualFee = round((float) (
-//            (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
-//        ) / 100, 2);
-//
-//    expect($actualFee)->toBe($this->order->lastOrderPayment->provider_fee);
+    $response->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
+    $totalAmount = $this->order->grand_total_cents;
+    $actualFee = round((float) (
+        (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
+    ) / 100, 2);
+
+    expect($actualFee)->toBe($this->order->firstOrderPayment->provider_fee);
 })->group('payment');

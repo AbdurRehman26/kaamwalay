@@ -23,9 +23,7 @@ beforeEach(function () {
         'stripe_id' => Str::random(25),
     ]);
 
-    $this->paymentMethod = PaymentMethod::factory()->create([
-        'code' => 'wallet',
-    ]);
+    $this->paymentMethod = PaymentMethod::factory()->wallet()->create();
 
     $this->order = Order::factory()->make([
         'user_id' => $this->user->id,
@@ -54,7 +52,14 @@ test('user can be charged successfully from wallet', function () {
         'order_id' => $this->order->id,
         'payment_method_id' => $this->paymentMethod->id,
     ]);
-    postJson("/api/v2/customer/orders/{$this->order->id}/payments")
+    postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+    ])
         ->assertOk();
 
     expect($this->user->wallet->balance)->toBe((float) 1);
@@ -82,7 +87,15 @@ test('user can be charged partially from wallet', function () {
         'payment_method_id' => $this->paymentMethod->id,
     ]);
 
-    postJson("/api/v2/customer/orders/{$newOrder->id}/payments")
+    postJson("/api/v2/customer/orders/{$newOrder->id}/payments", [
+        'payment_method' => [
+            'id' => 1,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
+        'payment_by_wallet' => 10.00,
+    ])
         ->assertOk();
     
     expect($this->user->wallet->refresh()->balance)->toBe($oldWalletBalance - $walletAmount);

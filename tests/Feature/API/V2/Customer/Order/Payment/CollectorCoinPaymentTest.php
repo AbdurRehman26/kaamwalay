@@ -213,6 +213,12 @@ it('fails to charge order if transaction hash has already been used', function (
 
     $response = $this->postJson("/api/v2/customer/orders/{$newOrder->id}/payments", [
         'transaction_hash' => $bscTestTransactionHash,
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '12345678',
+        ],
     ]);
 
     $response->assertStatus(Response::HTTP_PAYMENT_REQUIRED);

@@ -51,17 +51,12 @@ test('user can be charged successfully', function () {
 })->group('payment');
 
 test('user receives incomplete payment response', function () {
-    OrderPayment::factory()->create([
-        'order_id' => $this->order->id,
-        'payment_method_id' => 1,
-        'payment_provider_reference_id' => 'incomplete',
-    ]);
     $response = $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
         'payment_method' => [
             'id' => $this->paymentMethod->id,
         ],
         'payment_provider_reference' => [
-            'id' => '12345678',
+            'id' => 'incomplete',
         ],
     ]);
 

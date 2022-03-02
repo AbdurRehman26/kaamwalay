@@ -23,7 +23,7 @@ beforeEach(function () {
 
 test('an admin cannot export data of nonexistent model', function () {
     $response = postJson(route('v1.admin.export-data'), [
-        'model' => 'IAmANonExistentModel'
+        'model' => 'IAmANonExistentModel',
     ]);
 
     $response->assertUnprocessable();

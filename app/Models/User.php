@@ -282,7 +282,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
             $row->phone,
             $row->created_at,
             $row->orders()->placed()->count(),
-            $this->wallet?->balance
+            $this->wallet?->balance,
         ];
     }
 

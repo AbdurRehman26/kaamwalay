@@ -9,6 +9,7 @@ use SevenShores\Hubspot\Http\Client;
 use SevenShores\Hubspot\Resources\Deals;
 use SevenShores\Hubspot\Resources\Contacts;
 use SevenShores\Hubspot\Resources\CrmAssociations;
+use SevenShores\Hubspot\Resources\Owners;
 class HubspotService {
     
     public function getClient(): Client
@@ -20,6 +21,10 @@ class HubspotService {
     public function addUserAndAssignDeal(User $user): void {
       try {
           $hubspotClient = $this->getClient();
+          $owner = new Owners($hubspotClient);
+
+          $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
+  
           $createDeal = [
                   [
                     'value' => $user->getFullName() ?: '',
@@ -34,7 +39,7 @@ class HubspotService {
                     'name' => 'dealstage',
                   ],
                   [
-                    'value' => config('services.hubspot.hubspot_owner_id'),
+                    'value' => $ownerResponse[0]['ownerId'],
                     'name' => 'hubspot_owner_id',
                   ],
                 ];
@@ -61,7 +66,9 @@ class HubspotService {
 
           $associateContact = new CrmAssociations($hubspotClient);
           $associateContact->create([
+            // @phpstan-ignore-next-line
             "fromObjectId" => $contactResponse->vid,
+            // @phpstan-ignore-next-line
             "toObjectId" => $response->dealId,
             "category" => "HUBSPOT_DEFINED",
             "definitionId" => 4,

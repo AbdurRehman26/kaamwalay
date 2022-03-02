@@ -12,10 +12,8 @@ beforeEach(function () {
 });
 
 test('sends new user to hubspot', function () {
-
     $this->mock->shouldReceive('addUserAndAssignDeal')->with($this->user)->andReturn([
         "reasonPhrase" => "No Content",
-        "statusCode" => 204
+        "statusCode" => 204,
     ]);
-
 });

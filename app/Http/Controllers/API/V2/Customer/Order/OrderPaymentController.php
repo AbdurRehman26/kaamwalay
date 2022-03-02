@@ -60,7 +60,6 @@ class OrderPaymentController extends Controller
             $response,
             Response::HTTP_PAYMENT_REQUIRED
         );
-
     }
 
     public function verify(Order $order, string $paymentIntentId): JsonResponse

@@ -26,9 +26,9 @@ class SendRegisteredUserToHubspot implements ShouldQueue
      */
     public function handle(CustomerRegistered $event): void
     {
-        if (app()->environment('local')) {
-            return;
-        }
+        // if (app()->environment('local')) {
+        //     return;
+        // }
 
         $this->hubspotService->addUserAndAssignDeal($event->user);
     }

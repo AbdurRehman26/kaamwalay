@@ -2,20 +2,72 @@
 
 namespace App\Services;
 
-use App\Http\APIClients\HubspotClient;
 use App\Models\User;
+use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Log;
+use SevenShores\Hubspot\Http\Client;
+use SevenShores\Hubspot\Resources\Deals;
+use SevenShores\Hubspot\Resources\Contacts;
+use SevenShores\Hubspot\Resources\CrmAssociations;
 class HubspotService {
     
-    public function __construct(protected HubspotClient $hubspotclient)
+    public function getClient(): Client
     {
+        $hubspotClient = new Client(['key' => config('services.hubspot.apiKey')]);
+        return $hubspotClient;
     }
 
-    public function createDeal(): void {
-        $this->hubspotclient->createDeal();
-    }
+    public function addUserAndAssignDeal(User $user): void {
+      try {
+          $hubspotClient = $this->getClient();
+          $createDeal = [
+                  [
+                    'value' => $user->getFullName() ?: '',
+                    'name' => 'dealname',
+                  ],
+                  [
+                    'value' => config('services.hubspot.pipeline_id'),
+                    'name' => 'pipeline',
+                  ],
+                  [
+                    'value' => config('services.hubspot.pipline_stage_id'),
+                    'name' => 'dealstage',
+                  ],
+                  [
+                    'value' => config('services.hubspot.hubspot_owner_id'),
+                    'name' => 'hubspot_owner_id',
+                  ],
+                ];
 
-    public function addUserAndAssignDeal(User $user): void { 
-        $this->hubspotclient->addUserAndAssignDeal($user);
-    }
+          $deal = new Deals($hubspotClient);
+          $response = $deal->create($createDeal);
+        
+          $contact = new Contacts($hubspotClient);
+          $createContact = [
+                [
+                    'property' => 'email',
+                    'value' => $user->email ?: '',
+                ],
+                [
+                    'property' => 'firstname',
+                    'value' => $user->first_name ?: '',
+                ],
+                [
+                    'property' => 'lastname',
+                    'value' => $user->last_name ?: '',
+                ],
+            ];
+          $contactResponse = $contact->create($createContact);
 
+          $associateContact = new CrmAssociations($hubspotClient);
+          $associateContact->create([
+            "fromObjectId" => $contactResponse->vid,
+            "toObjectId" => $response->dealId,
+            "category" => "HUBSPOT_DEFINED",
+            "definitionId" => 4,
+          ]);
+      } catch (RequestException $exception) {
+        Log::error($exception);
+      }
+    }
 }

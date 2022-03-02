@@ -25,6 +25,13 @@ export const SignUpValidationRules = yup.object().shape({
     password,
 });
 
+export const PopupSignUpValidationRules = yup.object().shape({
+    email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
+    fullName: yup.string().trim().required(RequiredMessage),
+    username: yup.string().trim().required(RequiredMessage),
+    password,
+});
+
 export const ForgotPasswordValidationRules = yup.object().shape({
     email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
 });

@@ -1,4 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
 
 export const useStyles = makeStyles(
     {
@@ -34,3 +35,17 @@ export const useStyles = makeStyles(
     },
     { name: 'SignIn' },
 );
+
+export const ActionContent = styled('div')({
+    width: '100%',
+    justifyContent: 'center',
+    display: 'flex',
+    marginTop: '25px',
+    alignItems: 'center',
+    padding: '0px 0px 24px 0px',
+});
+
+export const FormRoot = styled('div')({
+    width: '100%',
+    justifyContent: 'center',
+});

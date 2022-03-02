@@ -14,7 +14,9 @@
                 your grade. This will help you understand your grade way better than traditional grading. You'll
                 know the exact score your card received for centering, surface, corners & edges for the front and
                 back of your card.</p>
-            <a href="/dashboard/submissions/new" class="Home-buttonCta Home-buttonCta--light">Start a submission</a>
+            <div data-atom="submit-button" data-text-color="white" data-button-content="Start a submission">
+                    {{-- JS runtime actions --}}
+            </div>
         </div>
         <div class="Home-sectionColumn Home-sectionColumn--half">
             <a href="{{ asset('assets/images/landings/home/detailsPoster.jpg') }}" data-type="image" data-gallery="details" data-effect="zoom"

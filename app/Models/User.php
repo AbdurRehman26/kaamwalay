@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\Coupons\CanHaveCoupons;
+use App\Contracts\Exportable;
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Services\EmailService;
@@ -14,6 +15,7 @@ use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,7 +27,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject, FilamentUser, HasAvatar
+class User extends Authenticatable implements JWTSubject, Exportable, FilamentUser, HasAvatar
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons;
 
@@ -251,5 +253,45 @@ class User extends Authenticatable implements JWTSubject, FilamentUser, HasAvata
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->profile_image;
+    }
+
+    /**
+     * @return Builder <Order>
+     */
+    public function exportQuery(): Builder
+    {
+        return self::query();
+    }
+
+    public function exportHeadings(): array
+    {
+        return ['Name', 'ID', 'Email', 'Phone', 'Signed Up', 'Submissions', 'Wallet Balance'];
+    }
+
+    public function exportFilters(): array
+    {
+        return self::getAllowedAdminFilters();
+    }
+
+    public function exportIncludes(): array
+    {
+        return [];
+    }
+
+    /**
+     * @param  User  $row
+     * @return array
+     */
+    public function exportMap(Model $row): array
+    {
+        return [
+            $row->name,
+            $row->customer_number,
+            $row->email,
+            $row->phone,
+            $row->created_at,
+            $row->orders()->placed()->count(),
+            $this->wallet?->balance
+        ];
     }
 }

@@ -24,7 +24,15 @@ class ExportDataRequest extends FormRequest
     public function rules()
     {
         return [
-            'model' => ['required', 'string'],
+            'model' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (! class_exists('\\App\\Models\\' . ucfirst($value))) {
+                        $fail('The ' . $attribute . ' is invalid.');
+                    }
+                },
+            ],
             'filters' => ['sometimes', 'array'],
         ];
     }

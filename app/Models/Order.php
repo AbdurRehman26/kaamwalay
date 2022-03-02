@@ -328,18 +328,44 @@ class Order extends Model implements Exportable
         return $this->belongsTo(Coupon::class);
     }
 
-    public static function exportCollection(): Collection
+    /**
+     * @return Builder <Order>
+     */
+    public function exportQuery(): Builder
     {
-        return Order::all();
+        return self::query();
     }
 
-    public static function exportHeadings(): array
+    public function exportHeadings(): array
     {
-        return ['id', 'order_number'];
+        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Status', 'Declared Value', 'Amount Paid'];
     }
 
-    public static function exportFilters(): array
+    public function exportFilters(): array
     {
         return self::getAllowedAdminFilters();
+    }
+
+    public function exportIncludes(): array
+    {
+        return self::getAllowedAdminIncludes();
+    }
+
+    /**
+     * @param  Order  $row
+     * @return array
+     */
+    public function exportMap($row): array
+    {
+        return [
+            $row->order_number,
+            $row->created_at,
+            $row->arrived_at,
+            $row->user->customer_number,
+            $row->orderItems->sum('quantity'),
+            $row->orderStatus->name,
+            $row->orderItems->sum('declared_value_total'),
+            $row->grand_total,
+        ];
     }
 }

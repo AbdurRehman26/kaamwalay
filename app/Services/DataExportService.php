@@ -2,27 +2,35 @@
 
 namespace App\Services;
 
-use App\Models\Order;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use App\Contracts\Exportable;
+use App\Exceptions\Services\Admin\ModelNotExportableException;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class DataExportService implements FromQuery, WithHeadings
+class DataExportService implements FromQuery, WithHeadings, WithMapping
 {
     const DIRECTORY = 'exports';
 
     protected Model $model;
 
+    /**
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws ModelNotExportableException
+     */
     public function process(string $model): string
     {
         $this->model = $this->getModelInstance($model);
+
+        if (! $this->model instanceof Exportable) {
+            throw new ModelNotExportableException();
+        }
 
         $filePath = $this->generateFilePath($model);
         Excel::store($this, $filePath, 's3', \Maatwebsite\Excel\Excel::CSV);
@@ -30,15 +38,25 @@ class DataExportService implements FromQuery, WithHeadings
         return Storage::disk('s3')->url($filePath);
     }
 
-    public function query(): Relation|EloquentBuilder|Builder
+    /**
+     * @return QueryBuilder
+     * @phpstan-ignore-next-line
+     */
+    public function query(): QueryBuilder
     {
-        return QueryBuilder::for(get_class($this->model))
-            ->allowedFilters($this->model::exportFilters());
+        return QueryBuilder::for($this->model->exportQuery())
+            ->allowedFilters($this->model->exportFilters())
+            ->allowedIncludes($this->model->exportIncludes());
     }
 
     public function headings(): array
     {
-        return $this->model::exportHeadings();
+        return $this->model->exportHeadings();
+    }
+
+    public function map($row): array
+    {
+        return $this->model->exportMap($row);
     }
 
     protected function generateFilePath(string $model): string
@@ -48,10 +66,8 @@ class DataExportService implements FromQuery, WithHeadings
 
     protected function getModelInstance(string $model): ?Model
     {
-        if ($model == 'order') {
-            return new Order;
-        }
+        $class = '\\App\\Models\\' . ucfirst($model);
 
-        return null;
+        return new $class;
     }
 }

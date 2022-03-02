@@ -2,11 +2,17 @@
 
 namespace App\Contracts;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 interface Exportable
 {
-    public static function exportCollection(): Collection;
-    public static function exportHeadings(): array;
-    public static function exportFilters(): array;
+    /**
+     * @return Builder <Model>
+     */
+    public function exportQuery(): Builder;
+    public function exportHeadings(): array;
+    public function exportFilters(): array;
+    public function exportIncludes(): array;
+    public function exportMap(Model $row): array;
 }

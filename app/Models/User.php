@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\Coupons\CanHaveCoupons;
 use App\Contracts\Exportable;
+use App\Contracts\ExportableWithSort;
 use App\Http\Filters\AdminCustomerSearchFilter;
 use App\Http\Sorts\AdminCustomerFullNameSort;
 use App\Services\EmailService;
@@ -27,7 +28,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject, Exportable, FilamentUser, HasAvatar
+class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons;
 
@@ -283,6 +284,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, FilamentUs
             $row->orders()->placed()->count(),
             $this->wallet?->balance
         ];
+    }
+
+    public function exportSort(): array
+    {
+        return self::getAllowedAdminSorts();
     }
 
     public function canAccessFilament(): bool

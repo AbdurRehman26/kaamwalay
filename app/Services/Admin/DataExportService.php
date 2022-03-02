@@ -28,7 +28,7 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
         $this->model = $this->getModelInstance($model);
 
         $filePath = $this->generateFilePath($model);
-        Excel::store($this, $filePath, 's3', \Maatwebsite\Excel\Excel::CSV);
+        Excel::store($this, $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
 
         return Storage::disk('s3')->url($filePath);
     }
@@ -39,9 +39,16 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
      */
     public function query(): QueryBuilder
     {
-        return QueryBuilder::for($this->model->exportQuery())
+        $query = QueryBuilder::for($this->model->exportQuery())
             ->allowedFilters($this->model->exportFilters())
-            ->allowedIncludes($this->model->exportIncludes());
+            ->allowedIncludes($this->model->exportIncludes())
+            ->defaultSort('-created_at');
+
+        if (method_exists($this->model, 'exportSort')) {
+            $query->allowedSorts($this->model->exportSort());
+        };
+
+        return $query;
     }
 
     public function headings(): array
@@ -56,7 +63,7 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
 
     protected function generateFilePath(string $model): string
     {
-        return self::DIRECTORY . '/' . $model . '-' . now()->toDateString() . '-' . Str::uuid() . '.csv';
+        return self::DIRECTORY . '/' . $model . '-' . now()->toDateString() . '-' . Str::uuid() . '.xlsx';
     }
 
     /**

@@ -27,6 +27,10 @@ import { ListPageHeader, ListPageSelector } from '../../../components/ListPage';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
 import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { UserEntity } from '@shared/entities/UserEntity';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 
 type InitialValues = {
     minSubmissions: string;
@@ -69,6 +73,9 @@ export function CustomersListPage() {
 
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
+
+    const notifications = useNotifications();
+    const apiService = useInjectable(APIService);
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -166,6 +173,24 @@ export function CustomersListPage() {
         }
     }, []);
 
+    const handleExportData = useCallback(async () => {
+        const exportDataEndpoint = apiService.createEndpoint('/admin/export-data');
+
+        try {
+            const exportDataResponse = await exportDataEndpoint.post('', {
+                model: 'user',
+                filter: getFilters({
+                    ...formikRef.current!.values,
+                }),
+            });
+            const exportData = await exportDataResponse.data;
+
+            await downloadFromUrl(exportData.file_url, `robograding-customers.xlsx`);
+        } catch (e: any) {
+            notifications.exception(e);
+        }
+    }, [apiService, notifications]);
+
     return (
         <Grid container>
             <ListPageHeader searchField title={'Customers'} value={initialValues.search} onSearch={handleSearch} />
@@ -262,7 +287,12 @@ export function CustomersListPage() {
                     </Formik>
                 </Grid>
                 <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
-                    <Button variant={'outlined'} color={'primary'} sx={{ borderRadius: 20, padding: '7px 24px' }}>
+                    <Button
+                        variant={'outlined'}
+                        color={'primary'}
+                        sx={{ borderRadius: 20, padding: '7px 24px' }}
+                        onClick={handleExportData}
+                    >
                         Export List
                     </Button>
                 </Grid>

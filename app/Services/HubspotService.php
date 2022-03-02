@@ -27,7 +27,8 @@ class HubspotService
             $hubspotClient = $this->getClient();
             // @phpstan-ignore-next-line
             $owner = new Owners($hubspotClient);
-
+            
+            // @phpstan-ignore-next-line
             $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
   
             $createDeal = [

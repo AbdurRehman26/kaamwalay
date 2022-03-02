@@ -29,7 +29,7 @@ class OrderPaymentController extends Controller
         StoreOrderPaymentRequest $request,
         Order $order,
         OrderPaymentService $orderPaymentService
-    ) {
+    ): JsonResponse {
         throw_if(! empty($order->coupon) && ! $order->coupon->isActive(), ValidationException::withMessages([
             'message' => 'Coupon is either expired or invalid.',
         ]));

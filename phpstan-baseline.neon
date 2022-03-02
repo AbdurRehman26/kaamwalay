@@ -3076,6 +3076,11 @@ parameters:
 			path: app/Services/Payment/V1/Providers/StripeService.php
 
 		-
+			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
+			count: 1
+			path: app/Services/Payment/V2/Providers/StripeService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:accumulateReportRow\\(\\) has parameter \\$userCards with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Services/PopReport/PopReportService.php

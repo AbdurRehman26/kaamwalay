@@ -1,5 +1,5 @@
 import { APIEndpointConfig } from '../interfaces/APIEndpointConfig';
 
 export const DefaultAPIEndpointOptions: APIEndpointConfig = {
-    version: 'v1',
+    version: 'v2',
 };

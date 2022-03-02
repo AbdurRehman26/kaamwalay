@@ -26,6 +26,7 @@ import {
     setIsNextLoading,
 } from '../../redux/slices/newSubmissionSlice';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles({
     pageContentContainer: {
@@ -65,6 +66,14 @@ export function NewSubmission() {
     );
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const notifications = useNotifications();
+
+    const { search } = useLocation();
+    const params: any = new URLSearchParams(search);
+    const orderId = params?.get('order_id');
+
+    useEffect(() => {
+        // dispatch(getOrder(orderId));
+    }, [orderId]);
 
     const getStepContent = useCallback(() => {
         switch (currentStep) {

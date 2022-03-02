@@ -81,6 +81,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
                 category: EventCategories.Cards,
                 action: CardsSelectionEvents.added,
             });
+            dispatch(generateMarkCardDto(item));
             dispatch(markCardAsSelected(generateMarkCardDto(item)));
         },
         [dispatch],

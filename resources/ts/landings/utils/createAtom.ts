@@ -1,6 +1,10 @@
 import { ElementType } from 'react';
 import { Atom } from '../classes/Atom';
 
+interface AtomOptions {
+    props?: Record<string, any>;
+}
+
 /**
  * Short handler for creating atoms quick and easy
  * @example
@@ -16,9 +20,10 @@ import { Atom } from '../classes/Atom';
  * ```
  * @param from
  * @param to
+ * @param options
  */
-export function createAtom(from: ElementType | Atom[], to?: string | HTMLElement) {
-    const atom = new Atom().from(from);
+export function createAtom(from: ElementType | Atom[], to?: string | HTMLElement, options?: AtomOptions) {
+    const atom = new Atom().from(from).props(options?.props || {});
 
     if (to) {
         return atom.to(to);

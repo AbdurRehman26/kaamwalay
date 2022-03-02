@@ -22,6 +22,8 @@ interface StateType {
     authenticated: boolean;
     accessToken: string | null;
     user: UserEntity | null;
+    dialogOpened: boolean;
+    headerDialogOpened: boolean;
 }
 
 type AuthenticatePayload = PayloadAction<AuthenticatedUserEntity, string, any, Error>;
@@ -124,10 +126,18 @@ export const authenticationSlice = createSlice({
         authenticated: false,
         accessToken: null,
         user: null,
+        dialogOpened: false,
+        headerDialogOpened: false,
     } as StateType,
     reducers: {
         updateUserProfileData: (state, action: PayloadAction<UserEntity>) => {
             state.user = action.payload;
+        },
+        dialogVisibility: (state, action: PayloadAction<boolean>) => {
+            state.dialogOpened = action.payload;
+        },
+        headerDialogVisibility: (state, action: PayloadAction<boolean>) => {
+            state.headerDialogOpened = action.payload;
         },
     },
     extraReducers: {
@@ -174,4 +184,4 @@ export const authenticationSlice = createSlice({
     },
 });
 
-export const { updateUserProfileData } = authenticationSlice.actions;
+export const { updateUserProfileData, dialogVisibility, headerDialogVisibility } = authenticationSlice.actions;

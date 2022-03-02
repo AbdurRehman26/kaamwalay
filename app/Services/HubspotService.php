@@ -15,6 +15,7 @@ class HubspotService
 {
     public function getClient(): Client
     {
+        // @phpstan-ignore-next-line
         $hubspotClient = new Client(['key' => config('services.hubspot.apiKey')]);
 
         return $hubspotClient;
@@ -24,6 +25,7 @@ class HubspotService
     {
         try {
             $hubspotClient = $this->getClient();
+            // @phpstan-ignore-next-line
             $owner = new Owners($hubspotClient);
 
             $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
@@ -46,10 +48,11 @@ class HubspotService
                     'name' => 'hubspot_owner_id',
                   ],
                 ];
-
+            // @phpstan-ignore-next-line    
             $deal = new Deals($hubspotClient);
+            // @phpstan-ignore-next-line    
             $response = $deal->create($createDeal);
-        
+            // @phpstan-ignore-next-line    
             $contact = new Contacts($hubspotClient);
             $createContact = [
                 [
@@ -65,9 +68,11 @@ class HubspotService
                     'value' => $user->last_name ?: '',
                 ],
             ];
+            // @phpstan-ignore-next-line
             $contactResponse = $contact->create($createContact);
-
+            // @phpstan-ignore-next-line
             $associateContact = new CrmAssociations($hubspotClient);
+            // @phpstan-ignore-next-line
             $associateContact->create([
             // @phpstan-ignore-next-line
             "fromObjectId" => $contactResponse->vid,

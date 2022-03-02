@@ -91,5 +91,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->name('customer.wallet.history');
     });
 
-    Route::post('export-data', DataExportController::class)->name('export-data');
+    Route::post('export-data', DataExportController::class)->name('v1.admin.export-data');
 });

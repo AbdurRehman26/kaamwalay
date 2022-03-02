@@ -33,7 +33,6 @@ class ExportDataRequest extends FormRequest
                     }
                 },
             ],
-            'filters' => ['sometimes', 'array'],
         ];
     }
 }

@@ -245,18 +245,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, FilamentUs
         ]);
     }
 
-    public function canAccessFilament(): bool
-    {
-        return $this->isSuperAdmin();
-    }
-
-    public function getFilamentAvatarUrl(): ?string
-    {
-        return $this->profile_image;
-    }
-
     /**
-     * @return Builder <Order>
+     * @return Builder <User>
      */
     public function exportQuery(): Builder
     {
@@ -293,5 +283,15 @@ class User extends Authenticatable implements JWTSubject, Exportable, FilamentUs
             $row->orders()->placed()->count(),
             $this->wallet?->balance
         ];
+    }
+
+    public function canAccessFilament(): bool
+    {
+        return $this->isSuperAdmin();
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->profile_image;
     }
 }

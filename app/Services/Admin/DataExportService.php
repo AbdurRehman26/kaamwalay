@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admin;
 
 use App\Contracts\Exportable;
 use App\Exceptions\Services\Admin\ModelNotExportableException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -17,7 +16,7 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
 {
     const DIRECTORY = 'exports';
 
-    protected Model $model;
+    protected Exportable $model;
 
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
@@ -27,10 +26,6 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
     public function process(string $model): string
     {
         $this->model = $this->getModelInstance($model);
-
-        if (! $this->model instanceof Exportable) {
-            throw new ModelNotExportableException();
-        }
 
         $filePath = $this->generateFilePath($model);
         Excel::store($this, $filePath, 's3', \Maatwebsite\Excel\Excel::CSV);
@@ -64,10 +59,18 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
         return self::DIRECTORY . '/' . $model . '-' . now()->toDateString() . '-' . Str::uuid() . '.csv';
     }
 
-    protected function getModelInstance(string $model): ?Model
+    /**
+     * @throws ModelNotExportableException
+     */
+    protected function getModelInstance(string $model): Exportable
     {
         $class = '\\App\\Models\\' . ucfirst($model);
+        $instance = new $class;
 
-        return new $class;
+        if (! $instance instanceof Exportable) {
+            throw new ModelNotExportableException();
+        }
+
+        return $instance;
     }
 }

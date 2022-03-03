@@ -9,9 +9,9 @@ import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
 import { getPaymentIcon, getPaymentTitle } from '../lib/payments';
 import font from '../styles/font.module.css';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
-import PaymentPendingChip from '@dashboard/pages/Submissions/PaymentPendingChip';
 import { Link, useParams } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
+import PaymentPendingChip from '@dashboard/pages/Submissions/PaymentPendingChip';
 
 interface SubmissionViewBillingProps {
     shippingAddress?: AddressEntity;
@@ -134,7 +134,7 @@ export function SubmissionViewBilling({
             </Grid>
 
             <Grid item xs={12} sm={columnWidth}>
-                {isPaid ? (
+                {!isPaid ? (
                     <>
                         <Typography variant={'body1'} className={font.fontWeightMedium}>
                             Payment Status

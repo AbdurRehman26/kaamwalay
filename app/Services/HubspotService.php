@@ -49,11 +49,11 @@ class HubspotService
                     'name' => 'hubspot_owner_id',
                   ],
                 ];
-            // @phpstan-ignore-next-line    
+            // @phpstan-ignore-next-line
             $deal = new Deals($hubspotClient);
-            // @phpstan-ignore-next-line    
+            // @phpstan-ignore-next-line
             $response = $deal->create($createDeal);
-            // @phpstan-ignore-next-line    
+            // @phpstan-ignore-next-line
             $contact = new Contacts($hubspotClient);
             $createContact = [
                 [

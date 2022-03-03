@@ -10,7 +10,7 @@ test('APIService create versioned endpoint [default]', async () => {
     mock.onGet(/.*/).reply(200, data);
 
     const result = await endpoint.get('');
-    expect(endpoint.defaults.baseURL?.endsWith('/api/v1/users')).toBeTruthy();
+    expect(endpoint.defaults.baseURL?.endsWith('/api/v2/users')).toBeTruthy();
     expect(mock.history.get.length).toBe(1);
     expect(mock.history.get[0].baseURL).toBe(endpoint.defaults.baseURL);
     expect(result.data).toMatchObject(data);

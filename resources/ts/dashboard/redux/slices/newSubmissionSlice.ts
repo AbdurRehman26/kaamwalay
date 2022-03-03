@@ -233,7 +233,7 @@ const initialState: NewSubmissionSliceState = {
         useCustomShippingAddress: false,
     },
     step04Data: {
-        paymentMethodId: 1,
+        paymentMethodId: 0,
         existingCreditCards: [],
         availableStatesList: [],
         selectedCreditCard: {
@@ -439,14 +439,6 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
         },
         shippingMethod: {
             id: 1,
-        },
-        paymentMethod:
-            currentSubmission.previewTotal === 0 ? null : { id: currentSubmission.step04Data.paymentMethodId },
-        paymentProviderReference: {
-            id:
-                currentSubmission.step04Data.paymentMethodId === 1
-                    ? currentSubmission.step04Data.selectedCreditCard.id
-                    : null,
         },
         coupon: currentSubmission.couponState.isCouponApplied
             ? {

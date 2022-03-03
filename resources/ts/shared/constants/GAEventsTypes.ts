@@ -30,6 +30,7 @@ export enum ShippingAddressEvents {
 export enum SubmissionEvents {
     initiated = 'New Submission Initiated',
     paid = 'Submission Paid',
+    placed = 'Submission Placed',
 }
 
 export enum AuthenticationEvents {

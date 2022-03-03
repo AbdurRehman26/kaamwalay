@@ -12,7 +12,8 @@ use SevenShores\Hubspot\Resources\Deals;
 use SevenShores\Hubspot\Resources\Owners;
 
 class HubspotService
-{
+{   
+      // @phpstan-ignore-next-line
     public function getClient(): Client
     {
         // @phpstan-ignore-next-line

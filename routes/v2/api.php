@@ -82,8 +82,11 @@ Route::prefix('customer')->group(function () {
                     'store' => 'customer.orders.store',
                 ]);
 
-            Route::apiResource('orders.orderItems', OrderItemController::class)->except('show');
+            Route::post('{order}/order-items', [OrderItemController::class, 'store'])->name('customer.orders.order-items.store');
+            Route::delete('{order}/order-items/{orderItem}', [OrderItemController::class, 'destroy'])->name('customer.orders.order-items.destroy');
+            Route::put('{order}/order-items/{orderItem}', [OrderItemController::class, 'update'])->name('customer.orders.order-items.update');
         });
+
 
 
         Route::prefix('coupons')->group(function () {

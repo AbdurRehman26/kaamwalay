@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 import { OrderStepsMap } from '@shared/constants/OrderStepsEnum';
+import { CardProductEntity } from '@shared/entities/CardProductEntity';
 
 export interface SubmissionService {
     id: number;
@@ -26,6 +27,7 @@ export type SearchResultItemCardProps = {
     shortName: string;
     addedMode?: boolean;
     id: number;
+    orderItemId?: number;
     qty?: number;
     value?: number;
 };
@@ -333,6 +335,7 @@ export const getShippingFee = createAsyncThunk(
 
 export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
     const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
+    console.log(availableStatesList, 11123);
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses');
     const customerAddresses = await endpoint.get('');
@@ -392,13 +395,6 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
         paymentPlan: {
             id: currentSubmission.step01Data.selectedServiceLevel.id,
         },
-        items: currentSubmission.step02Data.selectedCards.map((selectedCard: any) => ({
-            cardProduct: {
-                id: selectedCard.id,
-            },
-            quantity: selectedCard.qty,
-            declaredValuePerUnit: selectedCard.value,
-        })),
     };
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/orders');
@@ -413,19 +409,93 @@ export const getOrder = createAsyncThunk('newSubmission/getOrder', async (orderI
     return newOrder.data;
 });
 
-export const setOrderItem = createAsyncThunk('newSubmission/setOrderItem', async () => {
+export const setOrderItem = createAsyncThunk(
+    'newSubmission/setOrderItem',
+    async (item: CardProductEntity, { getState }: any) => {
+        const apiService = app(APIService);
+        const orderId = getState().newSubmission.orderID;
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderId}/order-items`);
+        const orderItemDto = {
+            cardProductId: item.id,
+            quantity: 1,
+            declaredValuePerUnit: 1,
+        };
+        const newOrderItem = await endpoint.post('', orderItemDto);
+        return newOrderItem.data;
+    },
+);
+
+export const deleteOrderItem = createAsyncThunk(
+    'newSubmission/deletetOrderItem',
+    async (cardProductId: number, { getState }: any) => {
+        const cardProduct = getState().newSubmission.step02Data.selectedCards.filter(
+            (orderItem: any) => orderItem.id === cardProductId,
+        );
+        const apiService = app(APIService);
+        const orderId = getState().newSubmission.orderID;
+        const endpoint = apiService.createEndpoint(
+            `customer/orders/${orderId}/order-items/${cardProduct[0].orderItemId}`,
+        );
+        await endpoint.delete('');
+    },
+);
+
+export const updateOrderItem = createAsyncThunk(
+    'newSubmission/updateOrderItem',
+    async (input: { card: SearchResultItemCardProps; qty?: number; declaredValue?: number }, { getState }: any) => {
+        const apiService = app(APIService);
+        const orderId = getState().newSubmission.orderID;
+        const orderItemId = input.card.orderItemId;
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderId}/order-items/${orderItemId}`);
+        await endpoint.put('', {
+            quantity: input.qty,
+            cardProductId: input.card.id,
+            declaredValuePerUnit: input.declaredValue,
+        });
+    },
+);
+
+export const updateOrderAddresses = createAsyncThunk('newSubmission/updateOrderItem', async (_, { getState }: any) => {
+    const currentSubmission = getState().newSubmission;
+    const orderId = currentSubmission.orderID;
+    const finalShippingAddress =
+        currentSubmission.step03Data.existingAddresses.length !== 0 &&
+        !currentSubmission.step03Data.useCustomShippingAddress &&
+        currentSubmission.step03Data.selectedExistingAddress.id !== 0
+            ? currentSubmission.step03Data.selectedExistingAddress
+            : currentSubmission.step03Data.selectedAddress;
+    console.log(finalShippingAddress, currentSubmission.step03Data);
+    return;
+    const orderDTO = {
+        shippingAddress: {
+            firstName: finalShippingAddress.firstName,
+            lastName: finalShippingAddress.lastName,
+            address: finalShippingAddress.address,
+            city: finalShippingAddress.city,
+            state: finalShippingAddress.state.code,
+            zip: finalShippingAddress.zipCode,
+            phone: finalShippingAddress.phoneNumber,
+            flat: finalShippingAddress.flat,
+            saveForLater:
+                currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                    ? false
+                    : currentSubmission.step03Data.saveForLater,
+        },
+        customerAddress: {
+            id:
+                currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                    ? currentSubmission.step03Data.selectedExistingAddress.id
+                    : null,
+        },
+        shippingMethod: {
+            id: 1,
+        },
+    };
+
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/orders/payment-plans/');
-    const serviceLevels = await endpoint.get('');
-    return serviceLevels.data.map((serviceLevel: any) => ({
-        id: serviceLevel.id,
-        type: 'card',
-        maxProtectionAmount: serviceLevel.maxProtectionAmount,
-        turnaround: serviceLevel.turnaround,
-        price: serviceLevel.price,
-        priceBeforeDiscount: serviceLevel.priceBeforeDiscount,
-        discountPercentage: serviceLevel.discountPercentage,
-    }));
+    const endpoint = apiService.createEndpoint(`customer/orders/${orderId}/addresses`);
+    const newOrder = await endpoint.post('', orderDTO);
+    return newOrder.data;
 });
 
 export const newSubmissionSlice = createSlice({
@@ -600,6 +670,10 @@ export const newSubmissionSlice = createSlice({
         },
     },
     extraReducers: {
+        [setOrderItem.fulfilled as any]: (state, action: any) => {
+            console.log(state, action);
+        },
+
         [getServiceLevels.pending as any]: (state) => {
             state.step01Data.status = 'loading';
         },
@@ -660,28 +734,29 @@ export const newSubmissionSlice = createSlice({
             state.grandTotal = action.payload.grandTotal;
             state.orderNumber = action.payload.orderNumber;
             state.orderID = action.payload.id;
-            state.step04Data.selectedBillingAddress.address = action.payload.billingAddress.address;
-            state.step04Data.selectedBillingAddress.country = action.payload.billingAddress.country;
-            state.step04Data.selectedBillingAddress.firstName = action.payload.billingAddress.firstName;
-            state.step04Data.selectedBillingAddress.lastName = action.payload.billingAddress.lastName;
-            state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress.flat;
-            state.step04Data.selectedBillingAddress.id = action.payload.billingAddress.id;
+            state.step04Data.selectedBillingAddress.address = action.payload.billingAddress?.address;
+            state.step04Data.selectedBillingAddress.country = action.payload.billingAddress?.country;
+            state.step04Data.selectedBillingAddress.firstName = action.payload.billingAddress?.firstName;
+            state.step04Data.selectedBillingAddress.lastName = action.payload.billingAddress?.lastName;
+            state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress?.flat;
+            state.step04Data.selectedBillingAddress.id = action.payload.billingAddress?.id;
             state.step04Data.selectedCreditCard.expMonth =
                 state.step04Data.paymentMethodId === 1 && state.previewTotal !== 0
                     ? action?.payload?.orderPayment?.card?.expMonth
                     : '';
-            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress.phone;
+            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress?.phone;
             state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
-                (currentState: any) => currentState.code === action.payload.billingAddress.state,
+                (currentState: any) => currentState.code === action.payload.billingAddress?.state,
             ) as any;
-            state.step04Data.selectedBillingAddress.zipCode = action.payload.billingAddress.zip;
-            state.step04Data.selectedBillingAddress.city = action.payload.billingAddress.city;
+            state.step04Data.selectedBillingAddress.zipCode = action.payload.billingAddress?.zip;
+            state.step04Data.selectedBillingAddress.city = action.payload.billingAddress?.city;
             state.step02Data.selectedCards = action.payload.orderItems.map((orderItem: any) => ({
-                image: orderItem.cardProduct.imagePath,
-                name: orderItem.cardProduct.name,
-                longName: orderItem.cardProduct.longName,
-                shortName: orderItem.cardProduct.shortName,
-                id: orderItem.cardProduct.id,
+                orderItemId: orderItem.id,
+                image: orderItem.cardProduct?.imagePath,
+                name: orderItem.cardProduct?.name,
+                longName: orderItem.cardProduct?.longName,
+                shortName: orderItem.cardProduct?.shortName,
+                id: orderItem.cardProduct?.id,
                 qty: orderItem.quantity,
                 value: orderItem.declaredValuePerUnit,
             }));

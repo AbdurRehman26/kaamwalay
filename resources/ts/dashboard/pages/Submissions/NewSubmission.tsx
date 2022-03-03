@@ -18,12 +18,14 @@ import {
     backStep,
     createOrder,
     getAvailableCredit,
+    getOrder,
     getSavedAddresses,
     getShippingFee,
     getStatesList,
     nextStep,
     setIsNextDisabled,
     setIsNextLoading,
+    updateOrderAddresses,
 } from '../../redux/slices/newSubmissionSlice';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { useLocation } from 'react-router-dom';
@@ -72,8 +74,8 @@ export function NewSubmission() {
     const orderId = params?.get('order_id');
 
     useEffect(() => {
-        // dispatch(getOrder(orderId));
-    }, [orderId]);
+        dispatch(getOrder(orderId));
+    }, [dispatch, orderId]);
 
     const getStepContent = useCallback(() => {
         switch (currentStep) {
@@ -94,7 +96,6 @@ export function NewSubmission() {
 
     const handleNext = async () => {
         // Executing different stuff before next step loads
-
         if (currentStep === 0) {
             dispatch(setIsNextLoading(true));
             dispatch(nextStep());
@@ -106,8 +107,6 @@ export function NewSubmission() {
         if (currentStep === 1) {
             dispatch(setIsNextLoading(true));
             await dispatch(getShippingFee(selectedCards));
-            await dispatch(getStatesList());
-            await dispatch(getSavedAddresses());
             dispatch(nextStep());
             dispatch(setIsNextLoading(false));
             window.scroll(0, 0);
@@ -124,6 +123,7 @@ export function NewSubmission() {
                         ? ShippingAddressEvents.continuedWithNewAddress
                         : ShippingAddressEvents.continuedWithExisting,
             });
+            await dispatch(updateOrderAddresses()).unwrap();
             dispatch(nextStep());
             dispatch(setIsNextLoading(false));
             await dispatch(getAvailableCredit()).unwrap();

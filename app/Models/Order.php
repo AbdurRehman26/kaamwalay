@@ -22,9 +22,9 @@ class Order extends Model
     use HasFactory, ActivityLog, HasOrderPayments;
 
     const ORDER_STEPS = [
-        'CARDS_STEP' => 'add_cards',
-        'SHIPPING_STEP' => 'add_shipping',
-        'PROMO_DISCOUNT_STEP' => 'add_promo_discount',
+        'CARDS_STEP' => 'addCards',
+        'SHIPPING_STEP' => 'addShipping',
+        'PROMO_DISCOUNT_STEP' => 'addPromoDiscount',
     ];
 
     /**

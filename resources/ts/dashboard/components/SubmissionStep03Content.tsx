@@ -170,16 +170,18 @@ export function SubmissionStep03Content() {
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
-    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
-    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
-    const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
-    const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
-    const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
-    const flat = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.flat);
-    const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
-    const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
-    const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
-    const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
+    const useCustomShippingAddress = useAppSelector(
+        (state) => state.newSubmission.step03Data?.useCustomShippingAddress,
+    );
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data?.existingAddresses);
+    const firstName = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.firstName);
+    const lastName = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.lastName);
+    const address = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.address);
+    const flat = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.flat);
+    const city = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.city);
+    const state = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.state);
+    const zipCode = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.zipCode);
+    const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
@@ -238,7 +240,6 @@ export function SubmissionStep03Content() {
             existingAddresses,
         ],
     );
-
     function onSaveForLater() {
         dispatch(setSaveShippingAddress(!saveForLater));
     }
@@ -332,7 +333,7 @@ export function SubmissionStep03Content() {
                                             address={address.address}
                                             flat={address.flat ?? ''}
                                             city={address.city}
-                                            state={address.state.code}
+                                            state={address.state?.code ? address.state.code : address.state}
                                             id={address.id}
                                             zip={address.zipCode}
                                         />

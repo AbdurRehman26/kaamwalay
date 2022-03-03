@@ -66,7 +66,7 @@ class CreateOrderService extends V1CreateOrderService
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->storeGrandTotal();
 
-        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
 
         DB::commit();
     }

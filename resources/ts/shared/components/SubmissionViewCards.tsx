@@ -136,18 +136,18 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                 <TableCell>
                                     <Box display={'flex'} alignItems={'center'}>
                                         <img
-                                            src={item.cardProduct.imagePath}
+                                            src={item.cardProduct?.imagePath}
                                             className={classes.cardImage}
-                                            alt={item.cardProduct.imagePath}
+                                            alt={item.cardProduct?.imagePath}
                                         />
                                         <Box display={'flex'} flexDirection={'column'} paddingLeft={1}>
-                                            <Typography variant={'body2'}>{item.cardProduct.getName()}</Typography>
-                                            <div title={item.cardProduct.getShortName()}>
+                                            <Typography variant={'body2'}>{item.cardProduct?.getName()}</Typography>
+                                            <div title={item.cardProduct?.getShortName()}>
                                                 <Typography variant={'subtitle2'} className={classes.shortName}>
-                                                    {getStringTruncated(item.cardProduct.getShortName(), 65)}
+                                                    {getStringTruncated(item.cardProduct?.getShortName() || '', 65)}
                                                 </Typography>
                                             </div>
-                                            <Typography variant={'body2'}>{item.cardProduct.getLongName()}</Typography>
+                                            <Typography variant={'body2'}>{item.cardProduct?.getLongName()}</Typography>
 
                                             {!isMobile ? (
                                                 <Box>
@@ -156,7 +156,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                         color={'textSecondary'}
                                                         className={classes.gutterRight}
                                                     >
-                                                        Card #: {item.cardProduct.cardNumberOrder}
+                                                        Card #: {item.cardProduct?.cardNumberOrder}
                                                     </Typography>
                                                     <Typography
                                                         variant={'caption'}

@@ -83,13 +83,7 @@ test('a customer can place order', function () {
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-        'payment_method' => [
-            'id' => $this->paymentMethod->id,
-        ],
-        'payment_provider_reference' => [
-            'id' => '12345678',
-        ],
-    ]);
+    ])->dump();
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

@@ -43,7 +43,7 @@ class StoreOrderRequest extends V1StoreOrderRequest
             'shipping_method.id' => ['required', 'integer', 'exists:shipping_methods,id'],
             'coupon.code' => ['sometimes', 'exists:coupons,code'],
             'payment_by_wallet' => [
-                Rule::requiredIf(empty($this->payment_method)),
+                'nullable',
                 'numeric',
             ],
         ];

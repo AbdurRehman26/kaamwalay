@@ -49,19 +49,7 @@ class OrderResource extends BaseResource
             'payment_method_discounted_amount' => $this->payment_method_discounted_amount,
             'payment_method_id' => $this->payment_method_id,
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
-            'payment_status' => $this->getPaymentStatus($this->payment_status, $this->orderStatus->id),
+            'payment_status' => $this->payment_status->toString(),
         ];
-    }
-
-    protected function getPaymentStatus(int $paymentStatus, int $orderStatus): string
-    {
-        if ($paymentStatus === 0 && $orderStatus < OrderStatus::GRADED) {
-            return 'pending';
-        }
-        if ($paymentStatus === 0 && $orderStatus >= OrderStatus::GRADED) {
-            return 'due';
-        }
-
-        return 'paid';
     }
 }

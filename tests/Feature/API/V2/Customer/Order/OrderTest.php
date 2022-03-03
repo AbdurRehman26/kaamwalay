@@ -33,6 +33,7 @@ beforeEach(function () {
 });
 
 test('a customer can place order', function () {
+    Event::fake();
     $this->actingAs($this->user);
 
     $response = $this->postJson('/api/v2/customer/orders', [
@@ -83,7 +84,7 @@ test('a customer can place order', function () {
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-    ])->dump();
+    ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

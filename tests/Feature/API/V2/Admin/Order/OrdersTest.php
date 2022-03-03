@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
@@ -367,7 +368,7 @@ test('order can not be shipped if its not paid', function () {
 test('order can be shipped if its not paid', function () {
     /** @var Order $order */
     Event::fake();
-    $order = Order::factory()->create(['payment_status' => 1]);
+    $order = Order::factory()->create(['payment_status' => OrderPaymentStatusEnum::PAID]);
     $this->postJson('/api/v2/admin/orders/' . $order->id . '/status-history', [
         'order_status_id' => OrderStatus::SHIPPED,
     ])->assertOk();

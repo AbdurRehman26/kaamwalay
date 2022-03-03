@@ -25,19 +25,7 @@ class OrderListResource extends BaseResource
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'created_at' => $this->formatDate($this->created_at),
             'arrived_at' => $this->formatDate($this->arrived_at),
-            'payment_status' => $this->getPaymentStatus($this->payment_status, $this->orderStatus->id),
+            'payment_status' => $this->payment_status->toString(),
         ];
-    }
-
-    protected function getPaymentStatus(int $paymentStatus, int $orderStatus): string
-    {
-        if ($paymentStatus === 0 && $orderStatus < OrderStatus::GRADED) {
-            return 'pending';
-        }
-        if ($paymentStatus === 0 && $orderStatus >= OrderStatus::GRADED) {
-            return 'due';
-        }
-
-        return 'paid';
     }
 }

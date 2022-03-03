@@ -75,12 +75,12 @@ class HubspotService
             $associateContact = new CrmAssociations($hubspotClient);
             // @phpstan-ignore-next-line
             $associateContact->create([
-            // @phpstan-ignore-next-line
-            "fromObjectId" => $contactResponse->vid,
-            // @phpstan-ignore-next-line
-            "toObjectId" => $response->dealId,
-            "category" => "HUBSPOT_DEFINED",
-            "definitionId" => 4,
+              // @phpstan-ignore-next-line
+              'fromObjectId' => $contactResponse->vid,
+              // @phpstan-ignore-next-line
+            'toObjectId' => $response->dealId,
+            'category' => 'HUBSPOT_DEFINED',
+            'definitionId' => 4,
           ]);
         } catch (RequestException $exception) {
             Log::error($exception);

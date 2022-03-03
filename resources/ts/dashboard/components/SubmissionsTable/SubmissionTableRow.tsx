@@ -19,6 +19,7 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch } from '@dashboard/redux/hooks';
 import PaymentPendingNotice from '@dashboard/pages/Submissions/PaymentPendingNotice';
+import PaymentPendingChip from '@dashboard/pages/Submissions/PaymentPendingChip';
 
 interface SubmissionTableRowProps {
     id: number;
@@ -193,7 +194,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
                             </Link>
                         </TableCell>
-                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>{paymentStatus}</TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <PaymentPendingChip />
+                        </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
                             <Link to={submissionViewUrl} className={classes.linkText}>
                                 {`${formatCurrency(serviceLevel)} / Card`}
@@ -225,7 +228,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Menu>
                         </TableCell>
                     </TableRow>
-                    {isPaid ? (
+                    {!isPaid ? (
                         <TableRow>
                             <TableCell colSpan={8}>
                                 <PaymentPendingNotice id={id} status={status} paymentStatus={paymentStatus} />

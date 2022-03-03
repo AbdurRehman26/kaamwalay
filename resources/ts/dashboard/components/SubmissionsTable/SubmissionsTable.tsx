@@ -115,6 +115,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
             invoice={data?.invoice?.path}
             invoiceNumber={data?.invoice?.invoiceNumber}
             orderCustomerShipment={data?.orderCustomerShipment}
+            paymentStatus={data.paymentStatus}
         />
     ));
 
@@ -167,7 +168,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
                                 <TableRow>
                                     <TableCell variant={'head'}>Submission #</TableCell>
                                     <TableCell variant={'head'}>Date Placed</TableCell>
-                                    <TableCell variant={'head'}>Date Confirmed</TableCell>
+                                    <TableCell variant={'head'}>Payment Status</TableCell>
                                     <TableCell variant={'head'}>Service Level</TableCell>
                                     <TableCell variant={'head'}># Cards</TableCell>
                                     <TableCell variant={'head'}>Status</TableCell>

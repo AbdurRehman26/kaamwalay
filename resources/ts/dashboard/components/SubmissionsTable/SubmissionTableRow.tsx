@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Moment } from 'moment';
-import { MouseEventHandler, useCallback, useState } from 'react';
+import React, { MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
@@ -18,6 +18,7 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch } from '@dashboard/redux/hooks';
+import PaymentPendingNotice from '@dashboard/pages/Submissions/PaymentPendingNotice';
 
 interface SubmissionTableRowProps {
     id: number;
@@ -32,6 +33,7 @@ interface SubmissionTableRowProps {
     orderCustomerShipment: null | ShipmentEntity;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
+    paymentStatus: string;
 }
 
 enum Options {
@@ -96,6 +98,9 @@ const useStyles = makeStyles(
             textDecoration: 'none',
             color: '#000',
         },
+        unpaidOrderTableCell: {
+            border: 'none',
+        },
     },
     { name: 'SubmissionTableRow' },
 );
@@ -112,6 +117,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         status,
         orderCustomerShipment,
         isSm,
+        paymentStatus,
     } = props;
 
     const submissionViewUrl = `/submissions/${id}/view`;
@@ -155,6 +161,8 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [handleCloseOptions, navigate, id, showShipmentTrackingModal, confirm, invoice, invoiceNumber],
     );
 
+    const isPaid = useMemo(() => paymentStatus === 'paid', [paymentStatus]);
+
     const handleShipmentSubmit = useCallback(
         async ({ trackingNumber, shippingProvider }: Record<any, string>) => {
             await dispatch(setOrderCustomerShipment({ trackingNumber, shippingProvider, orderId: id }));
@@ -173,53 +181,58 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             />
 
             {!isSm ? (
-                <TableRow>
-                    <TableCell>
-                        <MuiLink component={Link} to={submissionViewUrl}>
-                            {orderNumber}
-                        </MuiLink>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {`${formatCurrency(serviceLevel)} / Card`}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {cardsNumber}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {status}
-                        </Link>
-                    </TableCell>
-                    <TableCell align={'right'}>
-                        <IconButton onClick={handleClickOptions} size="large">
-                            <MoreIcon />
-                        </IconButton>
+                <>
+                    <TableRow className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <MuiLink component={Link} to={submissionViewUrl}>
+                                {orderNumber}
+                            </MuiLink>
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <Link to={submissionViewUrl} className={classes.linkText}>
+                                {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
+                            </Link>
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>{paymentStatus}</TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <Link to={submissionViewUrl} className={classes.linkText}>
+                                {`${formatCurrency(serviceLevel)} / Card`}
+                            </Link>
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <Link to={submissionViewUrl} className={classes.linkText}>
+                                {cardsNumber}
+                            </Link>
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <Link to={submissionViewUrl} className={classes.linkText}>
+                                {status}
+                            </Link>
+                        </TableCell>
+                        <TableCell align={'right'} className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <IconButton onClick={handleClickOptions} size="large">
+                                <MoreIcon />
+                            </IconButton>
 
-                        <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                            <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
-                                {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                            </MenuItem>
-                            <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
-                            <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
-                            </MenuItem>
-                        </Menu>
-                    </TableCell>
-                </TableRow>
+                            <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                                <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
+                                    {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                </MenuItem>
+                                <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
+                                <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                    {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                </MenuItem>
+                            </Menu>
+                        </TableCell>
+                    </TableRow>
+                    {isPaid ? (
+                        <TableRow>
+                            <TableCell colSpan={8}>
+                                <PaymentPendingNotice id={id} status={status} paymentStatus={paymentStatus} />
+                            </TableCell>
+                        </TableRow>
+                    ) : null}
+                </>
             ) : (
                 <div className={classes.submissionHolder}>
                     <div className={classes.submissionLeftSide}>

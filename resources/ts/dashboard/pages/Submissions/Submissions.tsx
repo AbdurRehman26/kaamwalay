@@ -13,6 +13,7 @@ export function Submissions() {
             <Route path={'/new'} element={<NewSubmission />} />
             <Route path={'/:id/view'} element={<ViewSubmission />} />
             <Route path={'/:id/confirmation'} element={<ConfirmationSubmission />} />
+            <Route path={'/:id/pay'} element={<ConfirmationSubmission />} />
             <Route path={'/:id/collector-coin/confirmation'} element={<CollectorCoinConfirmationSubmission />} />
         </Routes>
     );

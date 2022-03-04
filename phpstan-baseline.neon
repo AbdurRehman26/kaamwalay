@@ -1491,6 +1491,51 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$response\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
+			count: 3
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php

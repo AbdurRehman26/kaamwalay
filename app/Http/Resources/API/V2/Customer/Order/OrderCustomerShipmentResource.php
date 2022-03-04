@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources\API\V2\Customer\Order;
 
+use App\Models\OrderCustomerShipment;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin OrderCustomerShipment */
 class OrderCustomerShipmentResource extends JsonResource
 {
     public function toArray($request): array

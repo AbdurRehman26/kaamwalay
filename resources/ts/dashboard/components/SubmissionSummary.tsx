@@ -396,7 +396,7 @@ function SubmissionSummary() {
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
                                     <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
                                     <NumberFormat
-                                        value={paymentMethodDiscountedAmount}
+                                        value={sail}
                                         className={classes.rowRightBoldText}
                                         displayType={'text'}
                                         thousandSeparator

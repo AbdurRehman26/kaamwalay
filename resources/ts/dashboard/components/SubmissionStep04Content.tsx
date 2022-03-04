@@ -5,18 +5,24 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
+import {
+    setIsNextDisabled,
+    setUseShippingAddressAsBilling,
+    setBillingAddress,
+} from '../redux/slices/newSubmissionSlice';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
 import { ApplyCredit } from '@dashboard/components/ApplyCredit';
+import { styled } from '@mui/material/styles';
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
         maxWidth: '425px',
     },
     leftSideContainer: {
-        marginTop: '12px',
+        marginTop: 9,
     },
     divider: {
         marginTop: '64px',
@@ -156,6 +162,19 @@ const useStyles = makeStyles((theme) => ({
         color: 'rgba(0, 0, 0, 0.54);',
         fontSize: '12px',
     },
+    paymentNoteContainer: {
+        border: '1px solid',
+        padding: 10,
+        borderRadius: 6,
+        borderColor: '#20BFB8',
+        backgroundColor: '#EDFAF9',
+    },
+    paymentNoteHeading: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'start',
+        alignItems: 'center',
+    },
 }));
 
 export function SubmissionStep04Content() {
@@ -163,11 +182,14 @@ export function SubmissionStep04Content() {
     const dispatch = useAppDispatch();
 
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
+    const finalShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
 
     useEffect(() => {
         // no need to add any validation logic in this step
         dispatch(setIsNextDisabled(false));
-    }, [dispatch]);
+        dispatch(setUseShippingAddressAsBilling(true));
+        dispatch(setBillingAddress(finalShippingAddress));
+    }, [dispatch, finalShippingAddress]);
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
@@ -176,6 +198,20 @@ export function SubmissionStep04Content() {
 
             <Grid container spacing={4}>
                 <Grid item xs={12} md={8}>
+                    <div className={classes.leftSideContainer}>
+                        <div className={classes.paymentNoteContainer}>
+                            <Typography variant={'h6'} className={classes.paymentNoteHeading}>
+                                <StyledMoneyIcon />
+                                Great news! You don't have to pay, today.
+                            </Typography>
+                            <Typography variant={'body1'} mt={1} mb={1}>
+                                If you have any promo codes or credit you can apply them to see what your order total
+                                will be, but you can complete this submission and ship us your cards without paying a
+                                thing. We'll ask you later on to enter payment details, before we ship your graded and
+                                slabbed cards back to you.
+                            </Typography>
+                        </div>
+                    </div>
                     <Divider light />
                     <div className={classes.leftSideContainer}>
                         {availableCredit > 0 ? (
@@ -213,3 +249,10 @@ export function SubmissionStep04Content() {
 }
 
 export default SubmissionStep04Content;
+
+const StyledMoneyIcon = styled(MonetizationOnOutlinedIcon)({
+    minWidth: 32,
+    height: 32,
+    color: '#20BFB8',
+    marginRight: 8,
+});

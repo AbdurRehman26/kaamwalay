@@ -110,7 +110,6 @@
         width: 146px;
         height: 257px;
         margin-top: 4px !important;
-        padding: 5px 5px;
         margin-left: 9px !important;
         background: #ffffff;
         box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12), 0px 3px 5px rgba(0, 0, 0, 0.2);
@@ -199,6 +198,7 @@
     }
 
     &__dropdown-items {
+        padding: 5px 5px;
         height: 40px;
         font-style: normal;
         font-weight: normal;

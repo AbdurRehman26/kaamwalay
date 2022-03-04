@@ -13,27 +13,28 @@
             const container = document.querySelector('.feed-pagintion-section__pagination');
 
             container.innerHTML = `
+                <p class="feed-pagintion-section__navigation-pages">1 - ${nbPages} of ${currentRefinement+1}</p>
                 ${
                     !isFirstPage
                     ? `
                         <p>
                             <a href="${createURL(currentRefinement - 1)}" data-value="${currentRefinement - 1}"> 
-                                <span style="margin:0px 20px" class="material-icons">chevron_left</span>
+                                <span class="feed-pagintion-section__navigation-button material-icons">chevron_left</span>
                             </a>
                         </p>
                         `
-                    : '<span style="margin:0px 20px" class="material-icons">chevron_left</span>'
+                    : '<span class="feed-pagintion-section__navigation-button material-icons">chevron_left</span>'
                 }
                     ${
                     !isLastPage
                         ? `
                         <p>
                             <a href="${createURL(currentRefinement + 1)}" data-value="${currentRefinement + 1}">
-                                <span style="margin:0px 20px" class="material-icons">chevron_right</span>
+                                <span class="feed-pagintion-section__navigation-button material-icons">chevron_right</span>
                             </a>
                         </p>
                         `
-                        : '<span style="margin:0px 20px" class="material-icons">chevron_right</span>'
+                        : '<span class="feed-pagintion-section__navigation-button material-icons">chevron_right</span>'
                     }
             `;
 

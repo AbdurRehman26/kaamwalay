@@ -8,8 +8,9 @@ use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
-use App\Models\OrderStatus;
+use App\Models\Order;
 
+/** @mixin Order */
 class OrderListResource extends BaseResource
 {
     public function toArray($request): array

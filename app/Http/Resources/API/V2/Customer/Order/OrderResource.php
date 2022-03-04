@@ -12,8 +12,9 @@ use App\Http\Resources\API\V2\Customer\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
-use App\Models\OrderStatus;
+use App\Models\Order;
 
+/** @mixin Order */
 class OrderResource extends BaseResource
 {
     public function toArray($request): array

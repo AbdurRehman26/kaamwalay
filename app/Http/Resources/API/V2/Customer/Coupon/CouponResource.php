@@ -3,8 +3,10 @@
 namespace App\Http\Resources\API\V2\Customer\Coupon;
 
 use App\Http\Resources\API\BaseResource;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 
+/** @mixin Coupon */
 class CouponResource extends BaseResource
 {
     /**

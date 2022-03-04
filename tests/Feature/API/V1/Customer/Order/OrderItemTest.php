@@ -3,6 +3,7 @@
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\PaymentPlan;
 use App\Models\User;
@@ -83,6 +84,7 @@ test('customer can delete item in order', function () {
         'declared_value_per_unit' => 10,
         'declared_value_total' => 10,
     ]);
+    OrderItemStatusHistory::factory()->count(2)->create(['order_item_id' => $orderItem->id]);
     deleteJson(
         route('v2.orders.orderItems.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
     )

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API\V2\Customer\Order;
 
 use App\Http\Controllers\API\V1\Customer\Order\OrderController as V1OrderController;
-use App\Http\Requests\API\V2\Customer\Order\CompleteOrderRequest;
+use App\Http\Requests\API\V2\Customer\Order\CreditAndDiscountRequest;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\V2\Customer\Order\UpdateOrderAddressesRequest;
+use App\Http\Requests\API\V2\Customer\Order\UpdateOrderStepRequest;
 use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
 use App\Models\Order;
 use App\Services\Order\OrderService;
@@ -28,6 +29,22 @@ class OrderController extends V1OrderController
         protected CompleteOrderService $completeOrderService
     ) {
         parent::__construct($orderService, $createOrderService);
+    }
+
+    public function updateOrderStep(UpdateOrderStepRequest $request, Order $order): JsonResponse
+    {
+        try {
+            $order->order_step = $request->order_step;
+            $order->save();
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 
     public function store(Request $request): OrderCreateResource | JsonResponse
@@ -64,7 +81,7 @@ class OrderController extends V1OrderController
         return new OrderCreateResource($order);
     }
 
-    public function completeOrder(CompleteOrderRequest $request, Order $order): OrderCreateResource | JsonResponse
+    public function storeCreditAndDiscount(CreditAndDiscountRequest $request, Order $order): OrderCreateResource | JsonResponse
     {
         try {
             $order = $this->completeOrderService->save($order, $request->validated());

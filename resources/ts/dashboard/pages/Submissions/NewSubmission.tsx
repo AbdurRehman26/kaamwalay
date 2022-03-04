@@ -16,7 +16,6 @@ import SubmissionStep05Content from '../../components/SubmissionStep05Content';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     backStep,
-    createOrder,
     getAvailableCredit,
     getOrder,
     getSavedAddresses,
@@ -25,7 +24,9 @@ import {
     nextStep,
     setIsNextDisabled,
     setIsNextLoading,
+    updateCreditAndPromoCode,
     updateOrderAddresses,
+    updateOrderStep,
 } from '../../redux/slices/newSubmissionSlice';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { useLocation } from 'react-router-dom';
@@ -77,6 +78,32 @@ export function NewSubmission() {
         dispatch(getOrder(orderId));
     }, [dispatch, orderId]);
 
+    const stepIsPromoDiscount = async () => {
+        await dispatch(getStatesList());
+        dispatch(getAvailableCredit()).unwrap();
+        dispatch(getSavedAddresses()).unwrap();
+    };
+
+    const stepIsShipping = async () => {
+        await dispatch(getStatesList());
+        dispatch(setIsNextLoading(true));
+        await dispatch(getShippingFee(selectedCards));
+        await dispatch(setIsNextLoading(false));
+        await dispatch(getSavedAddresses());
+        window.scroll(0, 0);
+        pushToDataLayer({ event: 'google-ads-cards-selected' });
+    };
+
+    useEffect(() => {
+        if (currentStep === 2) {
+            stepIsShipping();
+        }
+
+        if (currentStep === 3) {
+            stepIsPromoDiscount();
+        }
+    });
+
     const getStepContent = useCallback(() => {
         switch (currentStep) {
             case 0:
@@ -105,12 +132,9 @@ export function NewSubmission() {
         }
 
         if (currentStep === 1) {
-            dispatch(setIsNextLoading(true));
-            await dispatch(getShippingFee(selectedCards));
-            dispatch(nextStep());
-            dispatch(setIsNextLoading(false));
-            window.scroll(0, 0);
-            pushToDataLayer({ event: 'google-ads-cards-selected' });
+            await dispatch(updateOrderStep(currentStep));
+            await dispatch(nextStep());
+            await stepIsShipping();
             return;
         }
 
@@ -134,7 +158,7 @@ export function NewSubmission() {
         if (currentStep === 3) {
             try {
                 dispatch(setIsNextLoading(true));
-                await dispatch(createOrder()).unwrap();
+                await dispatch(updateCreditAndPromoCode()).unwrap();
                 ReactGA.event({
                     category: EventCategories.Submissions,
                     action:
@@ -157,6 +181,7 @@ export function NewSubmission() {
 
     const handleBack = async () => {
         window.scroll(0, 0);
+        await dispatch(updateOrderStep(currentStep - 2));
         if (currentStep === 3) {
             await dispatch(getShippingFee(selectedCards));
             await dispatch(getStatesList());

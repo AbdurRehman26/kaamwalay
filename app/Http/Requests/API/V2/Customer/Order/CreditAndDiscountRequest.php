@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
-class CompleteOrderRequest extends FormRequest
+class CreditAndDiscountRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -42,8 +42,6 @@ class CompleteOrderRequest extends FormRequest
         return [
             'customer_address' => 'required|array',
             'customer_address.id' => 'nullable|integer|exists:customer_addresses,id',
-            'shipping_method' => 'required|array',
-            'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
             'billing_address' => 'required|array',
             'billing_address.first_name' => 'required|string',
             'billing_address.last_name' => 'required|string',
@@ -54,22 +52,10 @@ class CompleteOrderRequest extends FormRequest
             'billing_address.phone' => 'required|string',
             'billing_address.flat' => 'nullable|string',
             'billing_address.same_as_shipping' => 'required|boolean',
-            'payment_method' => [
-                Rule::requiredIf(empty($this->payment_by_wallet)),
-                'nullable',
-                'array',
-            ],
-            'payment_method.id' => [
-                Rule::requiredIf(empty($this->payment_by_wallet)),
-                'integer',
-                'exists:payment_methods,id',
-            ],
             'payment_by_wallet' => [
                 Rule::requiredIf(empty($this->payment_method)),
                 'numeric',
             ],
-            'payment_provider_reference' => 'nullable|array',
-            'payment_provider_reference.id' => 'nullable|string',
             'coupon.code' => 'sometimes|exists:coupons,code',
         ];
     }

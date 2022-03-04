@@ -14,13 +14,7 @@ import { fromApiPropertiesObject } from '@shared/lib/utils/fromApiPropertiesObje
 import { font } from '@shared/styles/utils';
 import CustomPagination from '@dashboard/components/CustomPagination';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import {
-    createOrder,
-    deleteOrderItem,
-    markCardAsSelected,
-    markCardAsUnselected,
-    setOrderItem,
-} from '@dashboard/redux/slices/newSubmissionSlice';
+import { createOrder, deleteOrderItem, setOrderItem } from '@dashboard/redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 import Box from '@mui/material/Box';
@@ -68,23 +62,12 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     const shortname = result.shortName.value;
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const [searchParams, setSearchParams] = useSearchParams();
-
-    const orderId = searchParams?.get('order_id');
+    const orderId = searchParams?.get('orderId');
 
     const isCardSelected = useMemo(
         () => !!selectedCards.find((card: Record<string, any>) => card.id === item.id),
         [item.id, selectedCards],
     );
-
-    function generateMarkCardDto(item: CardProductEntity) {
-        return {
-            image: item.imagePath,
-            name: item.getName(),
-            shortName: item.getShortName(),
-            id: item.id,
-            longName: item.getLongName(),
-        };
-    }
 
     const selectCard = useCallback(
         async (item: CardProductEntity) => {
@@ -93,7 +76,6 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
                 action: CardsSelectionEvents.added,
             });
             await dispatch(setOrderItem(item));
-            dispatch(markCardAsSelected(generateMarkCardDto(item)));
         },
         [dispatch],
     );
@@ -104,8 +86,8 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
                 category: EventCategories.Cards,
                 action: CardsSelectionEvents.removed,
             });
-
-            dispatch(markCardAsUnselected(generateMarkCardDto(item)));
+            console.log(item, 1321);
+            // dispatch(markCardAsUnselected(generateMarkCardDto(item)));
             dispatch(deleteOrderItem(item.id));
         },
         [dispatch],
@@ -117,7 +99,7 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
     const handleSelectCard = useCallback(async () => {
         if (!orderId) {
             const order = await dispatch(createOrder()).unwrap();
-            setSearchParams({ 'order_id': order.id });
+            setSearchParams({ orderId: order.id });
         }
         const isSelected = !!selectedCards.find((card: Record<string, any>) => card.id === item.id);
         if (!isSelected) {

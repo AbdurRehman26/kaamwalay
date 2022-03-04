@@ -73,7 +73,7 @@ class CreateOrderService
     protected function saveOrder(): void
     {
         $this->order->user()->associate(auth()->user());
-        $this->order->order_step = Order::ORDER_STEPS['CARDS_STEP'];
+        $this->order->order_step = Order::ORDER_STEPS['CARDS_SELECTION_STEP'];
         $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();

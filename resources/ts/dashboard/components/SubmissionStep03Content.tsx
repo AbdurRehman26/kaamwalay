@@ -184,6 +184,7 @@ export function SubmissionStep03Content() {
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const shippingAddress = useAppSelector((state) => state.newSubmission.shippingAddress);
 
     useEffect(
         () => {
@@ -323,10 +324,11 @@ export function SubmissionStep03Content() {
                         {existingAddresses.length > 0 ? (
                             <>
                                 <Typography className={classes.sectionLabel}>Existing Addresses</Typography>
-                                <Box marginBottom={'16px'} />
-                                <div className={classes.existingAddressesContainer}>
+                                <Box marginTop={'10px'} />
+                                <div style={{ marginTop: '10px' }} className={classes.existingAddressesContainer}>
                                     {existingAddresses?.map((address: any) => (
                                         <ExistingAddress
+                                            hideRadioButton={true}
                                             key={address.id}
                                             firstName={address.firstName}
                                             lastName={address.lastName}
@@ -338,6 +340,31 @@ export function SubmissionStep03Content() {
                                             zip={address.zipCode}
                                         />
                                     ))}
+                                </div>
+                                <Divider light />
+                            </>
+                        ) : null}
+
+                        {shippingAddress?.id ? (
+                            <>
+                                <Box marginBottom={'16px'} />
+                                <Typography className={classes.sectionLabel}>Selected Shipping Addresses</Typography>
+                                <div className={classes.existingAddressesContainer}>
+                                    <ExistingAddress
+                                        key={shippingAddress.id}
+                                        firstName={shippingAddress.firstName}
+                                        lastName={shippingAddress.lastName}
+                                        address={shippingAddress.address}
+                                        flat={shippingAddress.flat ?? ''}
+                                        city={shippingAddress.city}
+                                        state={
+                                            shippingAddress.state?.code
+                                                ? shippingAddress.state.code
+                                                : shippingAddress.state
+                                        }
+                                        id={shippingAddress.id}
+                                        zip={shippingAddress.zip}
+                                    />
                                 </div>
                                 <Divider light />
                             </>

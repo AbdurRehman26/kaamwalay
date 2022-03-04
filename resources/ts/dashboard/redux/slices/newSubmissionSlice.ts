@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
-import { OrderStepsMap } from '@shared/constants/OrderStepsEnum';
+import { OrderStepsMap, OrderUpdateStepsMap } from '@shared/constants/OrderStepsEnum';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 
 export interface SubmissionService {
@@ -119,6 +119,7 @@ export interface NewSubmissionSliceState {
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
     step04Data: PaymentSubmissionState;
+    shippingAddress: any;
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -274,6 +275,7 @@ const initialState: NewSubmissionSliceState = {
         existingBillingAddresses: [],
         fetchingStatus: null,
     },
+    shippingAddress: [],
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -335,7 +337,6 @@ export const getShippingFee = createAsyncThunk(
 
 export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
     const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
-    console.log(availableStatesList, 11123);
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses');
     const customerAddresses = await endpoint.get('');
@@ -464,8 +465,7 @@ export const updateOrderAddresses = createAsyncThunk('newSubmission/updateOrderI
         currentSubmission.step03Data.selectedExistingAddress.id !== 0
             ? currentSubmission.step03Data.selectedExistingAddress
             : currentSubmission.step03Data.selectedAddress;
-    console.log(finalShippingAddress, currentSubmission.step03Data);
-    return;
+
     const orderDTO = {
         shippingAddress: {
             firstName: finalShippingAddress.firstName,
@@ -497,6 +497,84 @@ export const updateOrderAddresses = createAsyncThunk('newSubmission/updateOrderI
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
 });
+
+export const updateCreditAndPromoCode = createAsyncThunk(
+    'newSubmission/updateCreditAndPromoCode',
+    async (_, { getState }: any) => {
+        const currentSubmission = getState().newSubmission;
+        const orderId = currentSubmission.orderID;
+        const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
+
+        const finalShippingAddress =
+            currentSubmission.step03Data.existingAddresses.length !== 0 &&
+            !currentSubmission.step03Data.useCustomShippingAddress &&
+            currentSubmission.step03Data.selectedExistingAddress.id !== 0
+                ? currentSubmission.step03Data.selectedExistingAddress
+                : currentSubmission.step03Data.selectedAddress;
+
+        const orderDTO = {
+            shippingAddress: {
+                firstName: finalShippingAddress.firstName,
+                lastName: finalShippingAddress.lastName,
+                address: finalShippingAddress.address,
+                city: finalShippingAddress.city,
+                state: finalShippingAddress.state.code,
+                zip: finalShippingAddress.zipCode,
+                phone: finalShippingAddress.phoneNumber,
+                flat: finalShippingAddress.flat,
+                saveForLater:
+                    currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                        ? false
+                        : currentSubmission.step03Data.saveForLater,
+            },
+            billingAddress: {
+                firstName: billingAddress.firstName,
+                lastName: billingAddress.lastName,
+                address: billingAddress.address,
+                city: billingAddress.city,
+                state: billingAddress.state.code,
+                zip: billingAddress.zipCode,
+                phone: finalShippingAddress.phoneNumber,
+                flat: billingAddress.flat,
+                sameAsShipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
+            },
+            customerAddress: {
+                id:
+                    currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                        ? currentSubmission.step03Data.selectedExistingAddress.id
+                        : null,
+            },
+            coupon: currentSubmission.couponState.isCouponApplied
+                ? {
+                      code: currentSubmission?.couponState?.couponCode,
+                      id: currentSubmission?.couponState?.appliedCouponData.id,
+                  }
+                : null,
+            paymentByWallet: currentSubmission.appliedCredit ?? 0,
+        };
+
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderId}/update-credit-discount`);
+        const newOrder = await endpoint.post('', orderDTO);
+        return newOrder.data;
+    },
+);
+
+export const updateOrderStep = createAsyncThunk(
+    'newSubmission/updateOrderStep',
+    async (orderStep: number, { getState }: any) => {
+        const currentSubmission = getState().newSubmission;
+        const orderId = currentSubmission.orderID;
+        const orderDTO = {
+            orderStep: OrderUpdateStepsMap[orderStep],
+        };
+
+        const apiService = app(APIService);
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderId}/update-step`);
+        const newOrder = await endpoint.post('', orderDTO);
+        return newOrder.data;
+    },
+);
 
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
@@ -671,9 +749,17 @@ export const newSubmissionSlice = createSlice({
     },
     extraReducers: {
         [setOrderItem.fulfilled as any]: (state, action: any) => {
-            console.log(state, action);
+            state.step02Data.selectedCards = action.payload.map((orderItem: any) => ({
+                orderItemId: orderItem.id,
+                image: orderItem.cardProduct?.imagePath,
+                name: orderItem.cardProduct?.name,
+                longName: orderItem.cardProduct?.longName,
+                shortName: orderItem.cardProduct?.shortName,
+                id: orderItem.cardProduct?.id,
+                qty: orderItem.quantity,
+                value: orderItem.declaredValuePerUnit,
+            }));
         },
-
         [getServiceLevels.pending as any]: (state) => {
             state.step01Data.status = 'loading';
         },
@@ -717,15 +803,7 @@ export const newSubmissionSlice = createSlice({
         [createOrder.fulfilled as any]: (state, action) => {
             state.orderNumber = action.payload.orderNumber;
             state.orderID = action.payload.id;
-            state.step02Data.selectedCards = action.payload.orderItems.map((orderItem: any) => ({
-                image: orderItem.cardProduct.imagePath,
-                name: orderItem.cardProduct.name,
-                longName: orderItem.cardProduct.longName,
-                shortName: orderItem.cardProduct.shortName,
-                id: orderItem.cardProduct.id,
-                qty: orderItem.quantity,
-                value: orderItem.declaredValuePerUnit,
-            }));
+            state.step02Data.selectedCards = action.payload.orderItems;
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
                 (plan) => plan.id === action.payload.paymentPlan.id,
             ) as any;
@@ -765,21 +843,25 @@ export const newSubmissionSlice = createSlice({
             ) as any;
             state.couponState.isCouponValid = Boolean(action.payload.discountedAmount);
             state.couponState.validCouponId = action.payload.discountedAmount ? action.payload.coupon?.id : -1;
-            state.couponState.isCouponApplied = Boolean(action.payload.discountedAmount);
-            state.couponState.couponCode = action.payload.discountedAmount ? action.payload.coupon?.code : '';
-            state.couponState.appliedCouponData.id = action.payload.discountedAmount ? action.payload.coupon?.id : -1;
-            state.couponState.appliedCouponData.discountStatement = action.payload.discountedAmount
+            state.couponState.isCouponApplied = Boolean(parseInt(action.payload.discountedAmount));
+            state.couponState.couponCode = parseInt(action.payload.discountedAmount) ? action.payload.coupon?.code : '';
+            state.couponState.appliedCouponData.id = parseInt(action.payload.discountedAmount)
+                ? action.payload.coupon?.id
+                : -1;
+            state.couponState.appliedCouponData.discountStatement = parseInt(action.payload.discountedAmount)
                 ? action.payload.coupon?.discountStatement
                 : '';
-            state.couponState.appliedCouponData.discountValue = action.payload.discountedAmount
+            state.couponState.appliedCouponData.discountValue = parseInt(action.payload.discountedAmount)
                 ? action.payload.coupon?.discountValue
                 : '';
-            state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
+            state.couponState.appliedCouponData.discountedAmount = parseInt(action.payload.discountedAmount)
                 ? action.payload.discountedAmount
                 : '';
             state.paymentMethodDiscountedAmount = action.payload.paymentMethodDiscountedAmount;
             state.step04Data.paymentMethodId = action.payload.paymentMethodId;
             state.appliedCredit = action.payload.amountPaidFromWallet;
+            state.shippingAddress = action.payload.shippingAddress;
+            console.log(state.step03Data.availableStatesList, 111111);
             state.currentStep = (OrderStepsMap as Record<string, any>)[action.payload.orderStep];
         },
     },

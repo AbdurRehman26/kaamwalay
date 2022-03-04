@@ -71,7 +71,8 @@ Route::prefix('customer')->group(function () {
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
 
             Route::post('{order}/addresses', [OrderController::class, 'storeOrderAddresses'])->name('customer.orders.update-addresses');
-            Route::post('{order}/complete', [OrderController::class, 'completeOrder'])->name('customer.orders.complete');
+            Route::post('{order}/update-credit-discount', [OrderController::class, 'storeCreditAndDiscount'])->name('customer.orders.credit-discount');
+            Route::post('{order}/update-step', [OrderController::class, 'updateOrderStep'])->name('customer.orders.update-step');
 
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);

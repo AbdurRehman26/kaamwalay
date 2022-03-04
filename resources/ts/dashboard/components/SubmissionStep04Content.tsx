@@ -1,4 +1,3 @@
-import CircularProgress from '@mui/material/CircularProgress';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
@@ -13,18 +12,12 @@ import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
-import { useInjectable } from '@shared/hooks/useInjectable';
-import { APIService } from '@shared/services/APIService';
-import { PaymentForm } from '@dashboard/components/PaymentForm';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     setBillingAddress,
-    setIsNextDisabled,
     setUseShippingAddressAsBilling,
     updateBillingAddressField,
-    updatePaymentMethodId,
 } from '../redux/slices/newSubmissionSlice';
-import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
@@ -204,20 +197,13 @@ const schema = yup.object().shape({
 export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const apiService = useInjectable(APIService);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-
-    const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
-    const [arePaymentMethodsLoading, setArePaymentMethodsLoading] = useState(false);
-    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
-    const currentSelectedStripeCardId = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
-
     const useBillingAddressSameAsShipping = useAppSelector(
         (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
     );
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
-    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.shippingAddress);
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const firstName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.firstName);
     const lastName = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.lastName);
@@ -235,7 +221,7 @@ export function SubmissionStep04Content() {
         existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
             ? selectedExistingAddress
             : shippingAddress;
-
+    console.log(isAddressDataValid);
     useEffect(() => {
         schema
             .isValid({
@@ -295,38 +281,6 @@ export function SubmissionStep04Content() {
         [availableStates, dispatch],
     );
 
-    async function getPaymentMethods() {
-        setArePaymentMethodsLoading(true);
-        const endpoint = apiService.createEndpoint('customer/orders/payment-methods');
-        const response = await endpoint.get('');
-        dispatch(updatePaymentMethodId(response.data[0].id));
-        setAvailablePaymentMethods(response.data);
-        setArePaymentMethodsLoading(false);
-    }
-
-    useEffect(
-        () => {
-            getPaymentMethods();
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
-    );
-
-    useEffect(() => {
-        dispatch(setIsNextDisabled(true));
-        if (paymentMethodId === 1) {
-            dispatch(setIsNextDisabled(currentSelectedStripeCardId.length === 0 || !isAddressDataValid));
-        }
-
-        if (paymentMethodId === 2) {
-            dispatch(setIsNextDisabled(false));
-        }
-
-        if (paymentMethodId === 3) {
-            dispatch(setIsNextDisabled(false));
-        }
-    }, [dispatch, isAddressDataValid, paymentMethodId, useBillingAddressSameAsShipping, currentSelectedStripeCardId]);
-
     useEffect(
         () => {
             if (useBillingAddressSameAsShipping) {
@@ -339,10 +293,7 @@ export function SubmissionStep04Content() {
     return (
         <Container>
             <div className={classes.stepDescriptionContainer}>
-                <StepDescription
-                    title={`Enter Payment Details`}
-                    description={'Select your payment method and enter details.'}
-                />
+                <StepDescription title={`Enter Promo Code`} description={''} />
             </div>
 
             <Grid container spacing={4}>
@@ -370,312 +321,250 @@ export function SubmissionStep04Content() {
                                 <ApplyPromoCode />
                             </div>
                         </div>
-                        <Divider light sx={{ marginBottom: '6px' }} />
-                        <div className={classes.shippingMethodContainer}>
-                            <Typography className={classes.sectionLabel}> Select Payment Method </Typography>
-
-                            <div className={classes.shippingMethodItemContainer}>
-                                {arePaymentMethodsLoading ? (
-                                    <div className={classes.loaderContainer}>
-                                        <CircularProgress color={'secondary'} />
-                                    </div>
-                                ) : null}
-                                {availablePaymentMethods.map((item) => (
-                                    <PaymentMethodItem
-                                        isSelected={paymentMethodId === item['id']}
-                                        methodName={item['name']}
-                                        methodId={item['id']}
-                                    />
-                                ))}
-                            </div>
-                        </div>
                         <Divider light />
-                        {paymentMethodId === 1 ? (
-                            <>
-                                <div className={classes.sectionContainer}>
-                                    <PaymentForm />
-                                </div>
-                                <div className={classes.billingAddressAsShippingContainer}>
-                                    <FormControlLabel
-                                        control={
-                                            <GreenCheckbox
-                                                checked={useBillingAddressSameAsShipping}
-                                                onChange={onUseShippingAddressAsBilling}
-                                            />
-                                        }
-                                        label="Billing address same as shipping"
-                                    />
-                                    {useBillingAddressSameAsShipping ? (
-                                        <>
-                                            <Typography className={classes.billingAddressTitle}>
-                                                Billing Address
-                                            </Typography>
-                                            <Typography
-                                                className={classes.billingAddressItem}
-                                            >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
-                                            <Typography className={classes.billingAddressItem}>{`${
-                                                finalShippingAddress.address
-                                            } ${
-                                                finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
-                                            }`}</Typography>
-                                            <Typography
-                                                className={classes.billingAddressItem}
-                                            >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Divider light />
-                                            <div className={classes.sectionContainer}>
-                                                <div className={classes.shippingAddressSectionHeader}>
-                                                    <Typography className={classes.sectionLabel}>
-                                                        Billing Address
+                        <>
+                            <div className={classes.billingAddressAsShippingContainer}>
+                                <FormControlLabel
+                                    control={
+                                        <GreenCheckbox
+                                            checked={useBillingAddressSameAsShipping}
+                                            onChange={onUseShippingAddressAsBilling}
+                                        />
+                                    }
+                                    label="Billing address same as shipping"
+                                />
+                                {useBillingAddressSameAsShipping ? (
+                                    <>
+                                        <Typography className={classes.billingAddressTitle}>Billing Address</Typography>
+                                        <Typography
+                                            className={classes.billingAddressItem}
+                                        >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
+                                        <Typography className={classes.billingAddressItem}>{`${
+                                            finalShippingAddress.address
+                                        } ${
+                                            finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
+                                        }`}</Typography>
+                                        <Typography
+                                            className={classes.billingAddressItem}
+                                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state?.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Divider light />
+                                        <div className={classes.sectionContainer}>
+                                            <div className={classes.shippingAddressSectionHeader}>
+                                                <Typography className={classes.sectionLabel}>
+                                                    Billing Address
+                                                </Typography>
+                                            </div>
+
+                                            <div className={classes.inputsRow01}>
+                                                <div className={classes.fieldContainer} style={{ width: '47%' }}>
+                                                    <Typography className={classes.methodDescription}>
+                                                        First Name
                                                     </Typography>
+                                                    <TextField
+                                                        style={{ margin: 8, marginLeft: 0 }}
+                                                        placeholder="Enter First Name"
+                                                        value={firstName}
+                                                        onChange={(e: any) => updateField('firstName', e.target.value)}
+                                                        fullWidth
+                                                        size={'small'}
+                                                        variant={'outlined'}
+                                                        margin="normal"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                    />
                                                 </div>
-
-                                                <div className={classes.inputsRow01}>
-                                                    <div className={classes.fieldContainer} style={{ width: '47%' }}>
-                                                        <Typography className={classes.methodDescription}>
-                                                            First Name
-                                                        </Typography>
-                                                        <TextField
-                                                            style={{ margin: 8, marginLeft: 0 }}
-                                                            placeholder="Enter First Name"
-                                                            value={firstName}
-                                                            onChange={(e: any) =>
-                                                                updateField('firstName', e.target.value)
-                                                            }
-                                                            fullWidth
-                                                            size={'small'}
-                                                            variant={'outlined'}
-                                                            margin="normal"
-                                                            InputLabelProps={{
-                                                                shrink: true,
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div className={classes.fieldContainer} style={{ width: '47%' }}>
-                                                        <Typography className={classes.methodDescription}>
-                                                            Last Name
-                                                        </Typography>
-                                                        <TextField
-                                                            style={{ margin: 8, marginLeft: 0 }}
-                                                            placeholder="Enter Last Name"
-                                                            value={lastName}
-                                                            onChange={(e: any) =>
-                                                                updateField('lastName', e.target.value)
-                                                            }
-                                                            fullWidth
-                                                            size={'small'}
-                                                            variant={'outlined'}
-                                                            margin="normal"
-                                                            InputLabelProps={{
-                                                                shrink: true,
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className={classes.inputsRow02}>
-                                                    <div
-                                                        className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}
-                                                    >
-                                                        <Typography className={classes.methodDescription}>
-                                                            Address
-                                                        </Typography>
-                                                        <TextField
-                                                            style={{ margin: 8, marginLeft: 0 }}
-                                                            placeholder="Enter Street Address"
-                                                            fullWidth
-                                                            value={address}
-                                                            onChange={(e: any) =>
-                                                                updateField('address', e.target.value)
-                                                            }
-                                                            size={'small'}
-                                                            variant={'outlined'}
-                                                            margin="normal"
-                                                            InputLabelProps={{
-                                                                shrink: true,
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    {!isMobile ? (
-                                                        <div
-                                                            className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}
-                                                        >
-                                                            <Typography className={classes.methodDescription}>
-                                                                Apt # (optional)
-                                                            </Typography>
-                                                            <TextField
-                                                                style={{ margin: 8, marginLeft: 0 }}
-                                                                placeholder="Apt #"
-                                                                fullWidth
-                                                                value={apt}
-                                                                onChange={(e: any) =>
-                                                                    updateField('flat', e.target.value)
-                                                                }
-                                                                size={'small'}
-                                                                variant={'outlined'}
-                                                                margin="normal"
-                                                                InputLabelProps={{
-                                                                    shrink: true,
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    ) : null}
-                                                </div>
-
-                                                {isMobile ? (
-                                                    <div className={classes.inputsRow02}>
-                                                        <div
-                                                            className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}
-                                                        >
-                                                            <Typography className={classes.methodDescription}>
-                                                                Apt # (optional)
-                                                            </Typography>
-                                                            <TextField
-                                                                style={{ margin: 8, marginLeft: 0 }}
-                                                                placeholder="Apt #"
-                                                                fullWidth
-                                                                value={apt}
-                                                                onChange={(e: any) =>
-                                                                    updateField('flat', e.target.value)
-                                                                }
-                                                                size={'small'}
-                                                                variant={'outlined'}
-                                                                margin="normal"
-                                                                InputLabelProps={{
-                                                                    shrink: true,
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                ) : null}
-
-                                                {isMobile ? (
-                                                    <div className={classes.inputsRow03}>
-                                                        <div
-                                                            className={`${classes.fieldContainer} ${classes.cityFieldContainer} `}
-                                                        >
-                                                            <Typography className={classes.methodDescription}>
-                                                                City
-                                                            </Typography>
-                                                            <TextField
-                                                                style={{ margin: 8, marginLeft: 0 }}
-                                                                value={city}
-                                                                onChange={(e: any) =>
-                                                                    updateField('city', e.target.value)
-                                                                }
-                                                                placeholder="Enter City"
-                                                                fullWidth
-                                                                size={'small'}
-                                                                variant={'outlined'}
-                                                                margin="normal"
-                                                                InputLabelProps={{
-                                                                    shrink: true,
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                ) : null}
-
-                                                <div className={classes.inputsRow03}>
-                                                    {!isMobile ? (
-                                                        <div
-                                                            className={`${classes.fieldContainer} ${classes.cityFieldContainer}`}
-                                                        >
-                                                            <Typography className={classes.methodDescription}>
-                                                                City
-                                                            </Typography>
-                                                            <TextField
-                                                                style={{ margin: 8, marginLeft: 0 }}
-                                                                value={city}
-                                                                onChange={(e: any) =>
-                                                                    updateField('city', e.target.value)
-                                                                }
-                                                                placeholder="Enter City"
-                                                                fullWidth
-                                                                size={'small'}
-                                                                variant={'outlined'}
-                                                                margin="normal"
-                                                                InputLabelProps={{
-                                                                    shrink: true,
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    ) : null}
-
-                                                    <div
-                                                        className={`${classes.fieldContainer} ${classes.stateFieldContainer}`}
-                                                    >
-                                                        <Typography className={classes.methodDescription}>
-                                                            State
-                                                        </Typography>
-                                                        <Select
-                                                            fullWidth
-                                                            native
-                                                            value={state.id || 'none'}
-                                                            onChange={(e: any) =>
-                                                                updateBillingState(e.nativeEvent.target.value)
-                                                            }
-                                                            placeholder={'Select State'}
-                                                            variant={'outlined'}
-                                                            style={{ height: '43px' }}
-                                                        >
-                                                            <option value="none">Select a state</option>
-                                                            {availableStates.map((item: any) => (
-                                                                <option key={item.id} value={item.id}>
-                                                                    {item.code}
-                                                                </option>
-                                                            ))}
-                                                        </Select>
-                                                    </div>
-                                                    <div
-                                                        className={`${classes.fieldContainer} ${classes.zipFieldContainer}`}
-                                                    >
-                                                        <Typography className={classes.methodDescription}>
-                                                            Zip Code
-                                                        </Typography>
-                                                        <TextField
-                                                            style={{ margin: 8, marginLeft: 0 }}
-                                                            placeholder="Enter Zip Code"
-                                                            fullWidth
-                                                            value={zipCode}
-                                                            onChange={(e: any) =>
-                                                                updateField('zipCode', e.target.value)
-                                                            }
-                                                            size={'small'}
-                                                            variant={'outlined'}
-                                                            margin="normal"
-                                                            InputLabelProps={{
-                                                                shrink: true,
-                                                            }}
-                                                        />
-                                                    </div>
+                                                <div className={classes.fieldContainer} style={{ width: '47%' }}>
+                                                    <Typography className={classes.methodDescription}>
+                                                        Last Name
+                                                    </Typography>
+                                                    <TextField
+                                                        style={{ margin: 8, marginLeft: 0 }}
+                                                        placeholder="Enter Last Name"
+                                                        value={lastName}
+                                                        onChange={(e: any) => updateField('lastName', e.target.value)}
+                                                        fullWidth
+                                                        size={'small'}
+                                                        variant={'outlined'}
+                                                        margin="normal"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                    />
                                                 </div>
                                             </div>
-                                        </>
-                                    )}
-                                </div>
-                            </>
-                        ) : null}
-                        {paymentMethodId === 2 ? (
-                            <div className={classes.sectionContainer}>
-                                <Typography className={classes.sectionLabel}>Paypal</Typography>
-                                <Typography variant={'subtitle2'}>
-                                    You will be redirected to the PayPal site after reviewing your order.{' '}
-                                </Typography>
-                            </div>
-                        ) : null}
 
-                        {paymentMethodId === 3 ? (
-                            <div className={classes.sectionContainer}>
-                                <Typography className={classes.sectionLabel}>Pay with Collector Coin</Typography>
-                                <Typography variant={'subtitle2'}>
-                                    Instructions for how to pay with Collector Coin will be provided in the next step.
-                                </Typography>
-                                <Typography variant={'subtitle2'}>All you need is a MetaMask crypto wallet</Typography>
+                                            <div className={classes.inputsRow02}>
+                                                <div
+                                                    className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}
+                                                >
+                                                    <Typography className={classes.methodDescription}>
+                                                        Address
+                                                    </Typography>
+                                                    <TextField
+                                                        style={{ margin: 8, marginLeft: 0 }}
+                                                        placeholder="Enter Street Address"
+                                                        fullWidth
+                                                        value={address}
+                                                        onChange={(e: any) => updateField('address', e.target.value)}
+                                                        size={'small'}
+                                                        variant={'outlined'}
+                                                        margin="normal"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                    />
+                                                </div>
+                                                {!isMobile ? (
+                                                    <div
+                                                        className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}
+                                                    >
+                                                        <Typography className={classes.methodDescription}>
+                                                            Apt # (optional)
+                                                        </Typography>
+                                                        <TextField
+                                                            style={{ margin: 8, marginLeft: 0 }}
+                                                            placeholder="Apt #"
+                                                            fullWidth
+                                                            value={apt}
+                                                            onChange={(e: any) => updateField('flat', e.target.value)}
+                                                            size={'small'}
+                                                            variant={'outlined'}
+                                                            margin="normal"
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ) : null}
+                                            </div>
+
+                                            {isMobile ? (
+                                                <div className={classes.inputsRow02}>
+                                                    <div
+                                                        className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}
+                                                    >
+                                                        <Typography className={classes.methodDescription}>
+                                                            Apt # (optional)
+                                                        </Typography>
+                                                        <TextField
+                                                            style={{ margin: 8, marginLeft: 0 }}
+                                                            placeholder="Apt #"
+                                                            fullWidth
+                                                            value={apt}
+                                                            onChange={(e: any) => updateField('flat', e.target.value)}
+                                                            size={'small'}
+                                                            variant={'outlined'}
+                                                            margin="normal"
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : null}
+
+                                            {isMobile ? (
+                                                <div className={classes.inputsRow03}>
+                                                    <div
+                                                        className={`${classes.fieldContainer} ${classes.cityFieldContainer} `}
+                                                    >
+                                                        <Typography className={classes.methodDescription}>
+                                                            City
+                                                        </Typography>
+                                                        <TextField
+                                                            style={{ margin: 8, marginLeft: 0 }}
+                                                            value={city}
+                                                            onChange={(e: any) => updateField('city', e.target.value)}
+                                                            placeholder="Enter City"
+                                                            fullWidth
+                                                            size={'small'}
+                                                            variant={'outlined'}
+                                                            margin="normal"
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : null}
+
+                                            <div className={classes.inputsRow03}>
+                                                {!isMobile ? (
+                                                    <div
+                                                        className={`${classes.fieldContainer} ${classes.cityFieldContainer}`}
+                                                    >
+                                                        <Typography className={classes.methodDescription}>
+                                                            City
+                                                        </Typography>
+                                                        <TextField
+                                                            style={{ margin: 8, marginLeft: 0 }}
+                                                            value={city}
+                                                            onChange={(e: any) => updateField('city', e.target.value)}
+                                                            placeholder="Enter City"
+                                                            fullWidth
+                                                            size={'small'}
+                                                            variant={'outlined'}
+                                                            margin="normal"
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ) : null}
+
+                                                <div
+                                                    className={`${classes.fieldContainer} ${classes.stateFieldContainer}`}
+                                                >
+                                                    <Typography className={classes.methodDescription}>State</Typography>
+                                                    <Select
+                                                        fullWidth
+                                                        native
+                                                        value={state.id || 'none'}
+                                                        onChange={(e: any) =>
+                                                            updateBillingState(e.nativeEvent.target.value)
+                                                        }
+                                                        placeholder={'Select State'}
+                                                        variant={'outlined'}
+                                                        style={{ height: '43px' }}
+                                                    >
+                                                        <option value="none">Select a state</option>
+                                                        {availableStates.map((item: any) => (
+                                                            <option key={item.id} value={item.id}>
+                                                                {item.code}
+                                                            </option>
+                                                        ))}
+                                                    </Select>
+                                                </div>
+                                                <div
+                                                    className={`${classes.fieldContainer} ${classes.zipFieldContainer}`}
+                                                >
+                                                    <Typography className={classes.methodDescription}>
+                                                        Zip Code
+                                                    </Typography>
+                                                    <TextField
+                                                        style={{ margin: 8, marginLeft: 0 }}
+                                                        placeholder="Enter Zip Code"
+                                                        fullWidth
+                                                        value={zipCode}
+                                                        onChange={(e: any) => updateField('zipCode', e.target.value)}
+                                                        size={'small'}
+                                                        variant={'outlined'}
+                                                        margin="normal"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                        ) : null}
+                        </>
                     </div>
                 </Grid>
                 <Grid item xs={12} md={4}>

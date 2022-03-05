@@ -12,7 +12,7 @@ enum OrderPaymentStatusEnum: int
     {
         return match ($this) {
             self::PENDING => 'PENDING',
-            self::DUE => 'PAYMENT DUE',
+            self::DUE => 'DUE',
             self::PAID => 'PAID',
         };
     }

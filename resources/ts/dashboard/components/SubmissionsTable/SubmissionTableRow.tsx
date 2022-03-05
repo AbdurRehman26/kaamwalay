@@ -18,8 +18,9 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch } from '@dashboard/redux/hooks';
-import PaymentPendingNotice from '@dashboard/pages/Submissions/PaymentPendingNotice';
-import PaymentPendingChip from '@dashboard/pages/Submissions/PaymentPendingChip';
+import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
+import PaymentStatusChip from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 
 interface SubmissionTableRowProps {
     id: number;
@@ -162,7 +163,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [handleCloseOptions, navigate, id, showShipmentTrackingModal, confirm, invoice, invoiceNumber],
     );
 
-    const isPaid = useMemo(() => paymentStatus === 'paid', [paymentStatus]);
+    const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
 
     const handleShipmentSubmit = useCallback(
         async ({ trackingNumber, shippingProvider }: Record<any, string>) => {
@@ -195,7 +196,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Link>
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
-                            <PaymentPendingChip />
+                            <PaymentStatusChip paymentStatus={paymentStatus} />
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
                             <Link to={submissionViewUrl} className={classes.linkText}>
@@ -231,7 +232,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     {!isPaid ? (
                         <TableRow>
                             <TableCell colSpan={8}>
-                                <PaymentPendingNotice id={id} status={status} paymentStatus={paymentStatus} />
+                                <PaymentStatusNotice id={id} paymentStatus={paymentStatus} />
                             </TableCell>
                         </TableRow>
                     ) : null}

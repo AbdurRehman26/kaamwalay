@@ -11,9 +11,9 @@ enum OrderPaymentStatusEnum: int
     public function toString(): string
     {
         return match ($this) {
-            self::PENDING => 'pending',
-            self::DUE => 'due',
-            self::PAID => 'paid',
+            self::PENDING => 'PENDING',
+            self::DUE => 'PAYMENT DUE',
+            self::PAID => 'PAID',
         };
     }
 }

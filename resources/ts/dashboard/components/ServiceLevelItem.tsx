@@ -1,8 +1,6 @@
 import ButtonBase from '@mui/material/ButtonBase';
-import Radio, { RadioProps } from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
 import React, { useCallback } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
@@ -27,9 +25,11 @@ const useStyles = makeStyles(
             '&:hover': {
                 cursor: 'pointer',
             },
+            background: ({ currentSelectedLevelId, id }: any) =>
+                currentSelectedLevelId === id ? '#F2FBFA' : '#FFFFFF',
             borderColor: ({ currentSelectedLevelId, id }: any) =>
                 currentSelectedLevelId === id ? '#20BFB8' : '#DDDDDD',
-            borderWidth: ({ currentSelectedLevelId, id }: any) => (currentSelectedLevelId?.id === id ? '2px' : '1px'),
+            borderWidth: ({ currentSelectedLevelId, id }: any) => (currentSelectedLevelId === id ? '2px' : '1px'),
         },
         leftSide: {
             display: 'flex',
@@ -37,6 +37,7 @@ const useStyles = makeStyles(
             alignItems: 'center',
             justifyContent: 'space-between',
             maxWidth: '30%',
+            marginLeft: '10px',
         },
         rightSide: {
             display: 'flex',
@@ -46,7 +47,6 @@ const useStyles = makeStyles(
                 minWidth: '106px',
             },
         },
-        radioBtnContainer: {},
         maxValueContainer: {
             display: 'flex',
             flexDirection: 'column',
@@ -115,15 +115,6 @@ const useStyles = makeStyles(
     { name: 'ServiceLevelItemStyle' },
 );
 
-const GreenRadio = withStyles({
-    root: {
-        '&$checked': {
-            color: '#20BFB8',
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-
 function ServiceLevelItem(props: SubmissionService & { key: any }) {
     const currentSelectedLevel = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel);
     const classes = useStyles({ id: props.id, currentSelectedLevelId: currentSelectedLevel?.id });
@@ -143,9 +134,6 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
     return (
         <ButtonBase onClick={handleSetServiceLevel} className={classes.root}>
             <div className={classes.leftSide}>
-                <div className={classes.radioBtnContainer}>
-                    <GreenRadio checked={currentSelectedLevel?.id === id} />
-                </div>
                 <div className={classes.rightSide}>
                     <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
                         {priceBeforeDiscount ? (

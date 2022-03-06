@@ -11,8 +11,8 @@ use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
 use App\Models\Order;
 use App\Services\Order\OrderService;
 use App\Services\Order\V1\CreateOrderService;
-use App\Services\Order\V2\CompleteOrderService;
 use App\Services\Order\V2\CreateOrderService as V2CreateOrderService;
+use App\Services\Order\V2\CreditAndDiscountOrderService;
 use App\Services\Order\V2\UpdateAddressOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -26,7 +26,7 @@ class OrderController extends V1OrderController
         protected V2CreateOrderService $v2createOrderService,
         protected CreateOrderService $createOrderService,
         protected UpdateAddressOrderService $updateAddressOrderService,
-        protected CompleteOrderService $completeOrderService
+        protected CreditAndDiscountOrderService $creditAndDiscountOrderService
     ) {
         parent::__construct($orderService, $createOrderService);
     }
@@ -84,7 +84,7 @@ class OrderController extends V1OrderController
     public function storeCreditAndDiscount(CreditAndDiscountRequest $request, Order $order): OrderCreateResource | JsonResponse
     {
         try {
-            $order = $this->completeOrderService->save($order, $request->validated());
+            $order = $this->creditAndDiscountOrderService->save($order, $request->validated());
         } catch (Exception $e) {
             return new JsonResponse(
                 [

@@ -72,37 +72,29 @@ export function NewSubmission() {
 
     const { search } = useLocation();
     const params: any = new URLSearchParams(search);
-    const orderId = params?.get('order_id');
+    const orderId = params?.get('orderId');
 
     useEffect(() => {
         dispatch(getOrder(orderId));
     }, [dispatch, orderId]);
 
-    const stepIsPromoDiscount = async () => {
-        await dispatch(getStatesList());
-        dispatch(getAvailableCredit()).unwrap();
-        dispatch(getSavedAddresses()).unwrap();
-    };
-
-    const stepIsShipping = async () => {
-        await dispatch(getStatesList());
-        dispatch(setIsNextLoading(true));
-        await dispatch(getShippingFee(selectedCards));
-        await dispatch(setIsNextLoading(false));
-        await dispatch(getSavedAddresses());
-        window.scroll(0, 0);
-        pushToDataLayer({ event: 'google-ads-cards-selected' });
-    };
-
     useEffect(() => {
         if (currentStep === 2) {
-            stepIsShipping();
+            dispatch(getStatesList());
+            dispatch(setIsNextLoading(true));
+            dispatch(getShippingFee(selectedCards));
+            dispatch(setIsNextLoading(false));
+            dispatch(getSavedAddresses());
+            window.scroll(0, 0);
+            pushToDataLayer({ event: 'google-ads-cards-selected' });
         }
 
         if (currentStep === 3) {
-            stepIsPromoDiscount();
+            dispatch(getStatesList());
+            dispatch(getAvailableCredit()).unwrap();
+            dispatch(getSavedAddresses()).unwrap();
         }
-    });
+    }, [currentStep, dispatch, selectedCards]);
 
     const getStepContent = useCallback(() => {
         switch (currentStep) {

@@ -16,6 +16,8 @@ export function ApplyCredit() {
     const [invalidStateType, setInvalidStateType] = useState<InvalidStateTypes | null>(null);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
+    const newSubmission = useAppSelector((state) => state.newSubmission);
+    console.log(newSubmission, 111111);
     const [localAppliedCredit, setLocalAppliedCredit] = useState(appliedCredit);
     const previewTotal = useAppSelector((state) => state.newSubmission.previewTotal);
 
@@ -41,17 +43,14 @@ export function ApplyCredit() {
     }, [invalidStateType]);
 
     useEffect(() => {
-        if (availableCredit >= previewTotal) {
-            dispatch(setAppliedCredit(previewTotal));
-            setLocalAppliedCredit(previewTotal);
-            return;
-        }
         if (availableCredit < previewTotal) {
+            console.log(2);
             dispatch(setAppliedCredit(availableCredit));
             setLocalAppliedCredit(availableCredit);
             return;
         }
         if (appliedCredit <= 0) {
+            console.log(3);
             setLocalAppliedCredit(0);
             return;
         }
@@ -61,12 +60,15 @@ export function ApplyCredit() {
     useEffect(() => {
         if (localAppliedCredit > availableCredit) {
             setInvalidStateType(InvalidStateTypes.exceedsAvailableCredit);
+            console.log(21);
             dispatch(setAppliedCredit(0));
             return;
         }
 
         if (appliedCredit > previewTotal) {
+            console.log(22);
             setInvalidStateType(InvalidStateTypes.exceedsOrderTotal);
+            console.log(appliedCredit, previewTotal, 111543);
             dispatch(setAppliedCredit(0));
             return;
         }

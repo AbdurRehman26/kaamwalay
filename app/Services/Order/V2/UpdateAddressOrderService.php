@@ -55,8 +55,14 @@ class UpdateAddressOrderService
         DB::beginTransaction();
 
         $this->storeShippingMethod($this->data['shipping_method']);
-        $this->storeOrderAddresses($this->data['shipping_address'], $this->data['customer_address']);
-        $this->storeCustomerAddress($this->data['shipping_address'], $this->data['customer_address']);
+        $this->storeOrderAddresses(
+            $this->data['customer_address'],
+            !empty($this->data['shipping_address']) ? $this->data['shipping_address'] : []
+        );
+        $this->storeCustomerAddress(
+            $this->data['customer_address'],
+            !empty($this->data['shipping_address']) ? $this->data['shipping_address'] : []
+        );
         $this->saveOrder();
         $this->order->save();
 
@@ -68,8 +74,12 @@ class UpdateAddressOrderService
         $this->order->shipping_method_id = $shippingMethod['id'];
     }
 
-    protected function storeOrderAddresses(array $shippingAddress, array $customerAddress): void
+    protected function storeOrderAddresses(array $customerAddress, array $shippingAddress = []): void
     {
+        if(!empty($shippingAddress['id'])){
+            return;
+        }
+
         if (! empty($customerAddress['id'])) {
             $shippingAddress = OrderAddress::create(CustomerAddress::find($customerAddress['id'])->toArray());
         } else {
@@ -79,9 +89,9 @@ class UpdateAddressOrderService
         $this->order->shippingAddress()->associate($shippingAddress);
     }
 
-    protected function storeCustomerAddress(array $shippingAddress, array $customerAddress): void
+    protected function storeCustomerAddress(array $customerAddress, array $shippingAddress = []): void
     {
-        if ($shippingAddress['save_for_later'] && empty($customerAddress['id'])) {
+        if (!empty($shippingAddress['save_for_later']) && empty($customerAddress['id'])) {
             CustomerAddress::create(array_merge(
                 $shippingAddress,
                 [

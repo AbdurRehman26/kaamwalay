@@ -120,6 +120,7 @@ export interface NewSubmissionSliceState {
     step03Data: ShippingSubmissionState;
     step04Data: PaymentSubmissionState;
     shippingAddress: any;
+    billingAddress: any;
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -233,7 +234,7 @@ const initialState: NewSubmissionSliceState = {
         ],
         fetchingStatus: null,
         saveForLater: true,
-        disableAllShippingInputs: false,
+        disableAllShippingInputs: true,
         useCustomShippingAddress: false,
     },
     step04Data: {
@@ -276,6 +277,7 @@ const initialState: NewSubmissionSliceState = {
         fetchingStatus: null,
     },
     shippingAddress: [],
+    billingAddress: [],
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -459,15 +461,33 @@ export const updateOrderItem = createAsyncThunk(
 export const updateOrderAddresses = createAsyncThunk('newSubmission/updateOrderItem', async (_, { getState }: any) => {
     const currentSubmission = getState().newSubmission;
     const orderId = currentSubmission.orderID;
+
     const finalShippingAddress =
-        currentSubmission.step03Data.existingAddresses.length !== 0 &&
+        currentSubmission.step03Data.selectedExistingAddress.length !== 0 &&
         !currentSubmission.step03Data.useCustomShippingAddress &&
         currentSubmission.step03Data.selectedExistingAddress.id !== 0
             ? currentSubmission.step03Data.selectedExistingAddress
             : currentSubmission.step03Data.selectedAddress;
 
-    const orderDTO = {
-        shippingAddress: {
+    const customerAddressId = currentSubmission.step03Data.selectedExistingAddress?.id;
+
+    const orderDTO: any = {
+        shippingMethod: {
+            id: 1,
+        },
+        customerAddress: {
+            id: null,
+        },
+    };
+
+    if (customerAddressId && customerAddressId > 0) {
+        orderDTO.customerAddress = {
+            id: customerAddressId,
+        };
+    }
+
+    if (currentSubmission.step03Data.useCustomShippingAddress) {
+        orderDTO.shippingAddress = {
             firstName: finalShippingAddress.firstName,
             lastName: finalShippingAddress.lastName,
             address: finalShippingAddress.address,
@@ -477,20 +497,17 @@ export const updateOrderAddresses = createAsyncThunk('newSubmission/updateOrderI
             phone: finalShippingAddress.phoneNumber,
             flat: finalShippingAddress.flat,
             saveForLater:
-                currentSubmission.step03Data.selectedExistingAddress.id !== -1
+                currentSubmission.step03Data.selectedExistingAddress.id !== -1 && !currentSubmission.shippingAddress
                     ? false
                     : currentSubmission.step03Data.saveForLater,
-        },
-        customerAddress: {
-            id:
-                currentSubmission.step03Data.selectedExistingAddress.id !== -1
-                    ? currentSubmission.step03Data.selectedExistingAddress.id
-                    : null,
-        },
-        shippingMethod: {
-            id: 1,
-        },
-    };
+        };
+    }
+
+    if (currentSubmission.shippingAddress?.id && !orderDTO.customerAddress?.id) {
+        orderDTO.shippingAddress = {
+            id: currentSubmission.shippingAddress?.id,
+        };
+    }
 
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint(`customer/orders/${orderId}/addresses`);
@@ -505,28 +522,7 @@ export const updateCreditAndPromoCode = createAsyncThunk(
         const orderId = currentSubmission.orderID;
         const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
 
-        const finalShippingAddress =
-            currentSubmission.step03Data.existingAddresses.length !== 0 &&
-            !currentSubmission.step03Data.useCustomShippingAddress &&
-            currentSubmission.step03Data.selectedExistingAddress.id !== 0
-                ? currentSubmission.step03Data.selectedExistingAddress
-                : currentSubmission.step03Data.selectedAddress;
-
         const orderDTO = {
-            shippingAddress: {
-                firstName: finalShippingAddress.firstName,
-                lastName: finalShippingAddress.lastName,
-                address: finalShippingAddress.address,
-                city: finalShippingAddress.city,
-                state: finalShippingAddress.state.code,
-                zip: finalShippingAddress.zipCode,
-                phone: finalShippingAddress.phoneNumber,
-                flat: finalShippingAddress.flat,
-                saveForLater:
-                    currentSubmission.step03Data.selectedExistingAddress.id !== -1
-                        ? false
-                        : currentSubmission.step03Data.saveForLater,
-            },
             billingAddress: {
                 firstName: billingAddress.firstName,
                 lastName: billingAddress.lastName,
@@ -534,15 +530,9 @@ export const updateCreditAndPromoCode = createAsyncThunk(
                 city: billingAddress.city,
                 state: billingAddress.state.code,
                 zip: billingAddress.zipCode,
-                phone: finalShippingAddress.phoneNumber,
+                phone: billingAddress.phoneNumber,
                 flat: billingAddress.flat,
                 sameAsShipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
-            },
-            customerAddress: {
-                id:
-                    currentSubmission.step03Data.selectedExistingAddress.id !== -1
-                        ? currentSubmission.step03Data.selectedExistingAddress.id
-                        : null,
             },
             coupon: currentSubmission.couponState.isCouponApplied
                 ? {
@@ -686,6 +676,10 @@ export const newSubmissionSlice = createSlice({
             const lookup = state.step03Data?.existingAddresses?.find((address) => address.id === action.payload);
             if (lookup) {
                 state.step03Data.selectedExistingAddress = lookup;
+                state.shippingAddress.id = -1;
+            } else {
+                state.step03Data.selectedExistingAddress.id = -1;
+                state.shippingAddress.id = action.payload;
             }
         },
         resetSelectedExistingAddress: (state) => {
@@ -725,6 +719,7 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData = action.payload;
         },
         setAppliedCredit: (state, action: PayloadAction<number>) => {
+            console.log(11643);
             state.appliedCredit = action.payload;
         },
         setPreviewTotal: (state, action: PayloadAction<number>) => {
@@ -818,6 +813,7 @@ export const newSubmissionSlice = createSlice({
             state.step04Data.selectedBillingAddress.lastName = action.payload.billingAddress?.lastName;
             state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress?.flat;
             state.step04Data.selectedBillingAddress.id = action.payload.billingAddress?.id;
+            state.previewTotal = action.payload.grandTotal;
             state.step04Data.selectedCreditCard.expMonth =
                 state.step04Data.paymentMethodId === 1 && state.previewTotal !== 0
                     ? action?.payload?.orderPayment?.card?.expMonth
@@ -838,6 +834,7 @@ export const newSubmissionSlice = createSlice({
                 qty: orderItem.quantity,
                 value: orderItem.declaredValuePerUnit,
             }));
+            state.step02Data.shippingFee = action.payload.shippingFee;
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
                 (plan) => plan.id === action.payload.paymentPlan.id,
             ) as any;
@@ -861,7 +858,7 @@ export const newSubmissionSlice = createSlice({
             state.step04Data.paymentMethodId = action.payload.paymentMethodId;
             state.appliedCredit = action.payload.amountPaidFromWallet;
             state.shippingAddress = action.payload.shippingAddress;
-            console.log(state.step03Data.availableStatesList, 111111);
+            state.billingAddress = action.payload.billingAddress;
             state.currentStep = (OrderStepsMap as Record<string, any>)[action.payload.orderStep];
         },
     },

@@ -1,11 +1,9 @@
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import React from 'react';
 import NumberFormat from 'react-number-format';
-import { getPaymentIcon, getPaymentTitle } from '@shared/lib/payments';
 import OrderDetailItem from '@dashboard/components/SubmissionOrderReview/OrderDetailItem';
 import Spacer from '@dashboard/components/SubmissionOrderReview/Spacer';
 import useStyles from '@dashboard/components/SubmissionOrderReview/style';
@@ -26,24 +24,16 @@ function OrderReviewSection() {
 
     // Payment method data
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
-    const paymentCardBrandName = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.brand);
-    const paymentExpMonth = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expMonth);
-    const paymentExpYear = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.expYear);
-    const paymentLast4 = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.last4);
-    const billingAddress = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress);
-    const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
-    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
-    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
-    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const billingAddress = useAppSelector((state) => state.newSubmission.billingAddress);
+    const shippingAddress = useAppSelector((state) => state.newSubmission.shippingAddress);
     const discountCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
     const discountStatement = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountStatement,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const finalShippingAddress =
-        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
-            ? selectedExistingAddress
-            : shippingAddress;
+    const finalShippingAddress = shippingAddress;
+
+    console.log(finalShippingAddress, 222);
 
     return (
         <Paper variant={'outlined'} className={classes.orderReviewSection}>
@@ -82,7 +72,7 @@ function OrderReviewSection() {
                         }`}</Typography>
                         <Typography
                             className={classes.darkBodyText}
-                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state} ${finalShippingAddress.zip}, US`}</Typography>
                     </OrderDetailItem>
                 ) : isCouponApplied && paymentMethodId === 3 ? (
                     <>
@@ -96,32 +86,6 @@ function OrderReviewSection() {
             </div>
 
             <div className={classes.orderItemsColumn}>
-                <OrderDetailItem title={'Payment Method'} editStep={3} spaced>
-                    {paymentMethodId === 1 ? (
-                        <>
-                            <div className={classes.cardDetailsContainer}>
-                                <div className={classes.cardIconContainer}>
-                                    <Avatar src={getPaymentIcon(paymentCardBrandName)!} />
-                                </div>
-                                <div className={classes.cardTextDetails}>
-                                    <Typography className={classes.darkBodyText}>{`${getPaymentTitle(
-                                        paymentCardBrandName,
-                                    )} Ending in ${paymentLast4}`}</Typography>
-                                    <Typography
-                                        className={classes.greyBodyText}
-                                    >{`Expires ${paymentExpMonth}/${paymentExpYear}`}</Typography>
-                                </div>
-                            </div>
-                        </>
-                    ) : null}
-
-                    {paymentMethodId === 2 ? <Typography className={classes.darkBodyText}>PayPal</Typography> : null}
-
-                    {paymentMethodId === 3 ? (
-                        <Typography className={classes.darkBodyText}>Collector Coin (AGS)</Typography>
-                    ) : null}
-                </OrderDetailItem>
-                {!isMobile ? <Spacer top={'48px'} /> : null}
                 {paymentMethodId !== 3 ? (
                     <OrderDetailItem title={'Return Shipping Method'} editStep={2} spaced>
                         <Typography className={classes.darkBodyText}>{'Insured Shipping'}</Typography>
@@ -140,7 +104,7 @@ function OrderReviewSection() {
                         }`}</Typography>
                         <Typography
                             className={classes.darkBodyText}
-                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state} ${finalShippingAddress.zip}, US`}</Typography>
                     </OrderDetailItem>
                 ) : (
                     <OrderDetailItem title={'Billing Address'} editStep={3}>
@@ -152,7 +116,7 @@ function OrderReviewSection() {
                         }`}</Typography>
                         <Typography
                             className={classes.darkBodyText}
-                        >{`${billingAddress.city}, ${billingAddress.state.code} ${billingAddress.zipCode}, US`}</Typography>
+                        >{`${billingAddress.city}, ${billingAddress.state} ${billingAddress.zip}, US`}</Typography>
                     </OrderDetailItem>
                 )}
 

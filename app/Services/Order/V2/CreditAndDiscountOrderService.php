@@ -3,10 +3,8 @@
 namespace App\Services\Order\V2;
 
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
-use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
-use App\Models\OrderPayment;
 use App\Models\PaymentMethod;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\Shipping\ShippingFeeService;
@@ -19,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class CompleteOrderService
+class CreditAndDiscountOrderService
 {
     protected Order $order;
     protected array $data;
@@ -65,7 +63,7 @@ class CompleteOrderService
     protected function process(): void
     {
         DB::beginTransaction();
-        $this->storeBillingAddress($this->data['billing_address'], $this->data['customer_address']);
+        $this->storeBillingAddress($this->data['billing_address']);
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
@@ -86,12 +84,10 @@ class CompleteOrderService
         $this->order->payment_method_id = $paymentMethod['id'];
     }
 
-    protected function storeBillingAddress(array $billingAddress, array $customerAddress): void
+    protected function storeBillingAddress(array $billingAddress): void
     {
-        $shippingAddress = CustomerAddress::find($customerAddress['id']);
-
         if ($billingAddress['same_as_shipping']) {
-            $this->order->billingAddress()->associate($shippingAddress);
+            $this->order->billingAddress()->associate(OrderAddress::find($this->order->shipping_order_address_id));
         } else {
             $billingAddress = OrderAddress::create($billingAddress);
             $this->order->billingAddress()->associate($billingAddress);

@@ -218,7 +218,10 @@ export function SubmissionStep04Content() {
 
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const finalShippingAddress =
-        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+        existingAddresses.length !== 0 &&
+        !useCustomShippingAddress &&
+        selectedExistingAddress &&
+        selectedExistingAddress.id !== 0
             ? selectedExistingAddress
             : shippingAddress;
     console.log(isAddressDataValid);
@@ -344,9 +347,17 @@ export function SubmissionStep04Content() {
                                         } ${
                                             finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
                                         }`}</Typography>
-                                        <Typography
-                                            className={classes.billingAddressItem}
-                                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state?.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                                        <Typography className={classes.billingAddressItem}>{`${
+                                            finalShippingAddress.city
+                                        }, ${
+                                            finalShippingAddress.state?.code
+                                                ? finalShippingAddress.state?.code
+                                                : finalShippingAddress.state
+                                        } ${
+                                            finalShippingAddress.zipCode
+                                                ? finalShippingAddress.zipCode
+                                                : finalShippingAddress.zip
+                                        }, US`}</Typography>
                                     </>
                                 ) : (
                                     <>

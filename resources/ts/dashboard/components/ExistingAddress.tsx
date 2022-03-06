@@ -15,7 +15,7 @@ type ExistingAddressProps = {
     city: string;
     state: string;
     id: number;
-    hideRadioButton?: boolean;
+    isChecked?: boolean;
 };
 
 const useStyles = makeStyles(
@@ -67,8 +67,8 @@ function ExistingAddress(props: ExistingAddressProps) {
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
     const dispatch = useAppDispatch();
-    const { firstName, lastName, address, flat, zip, city, state, id, hideRadioButton } = props;
-    const classes = useStyles({ isSelected: selectedExistingAddressID === id });
+    const { firstName, lastName, address, flat, zip, city, state, id, isChecked } = props;
+    const classes = useStyles({ isSelected: selectedExistingAddressID === id || isChecked });
 
     function handleRadioPress() {
         dispatch(setSelectedExistingAddress(id));
@@ -82,11 +82,13 @@ function ExistingAddress(props: ExistingAddressProps) {
 
     return (
         <Paper variant={'outlined'} className={classes.container} onClick={handleRadioPress}>
-            {hideRadioButton && (
-                <div className={classes.radioBtnContainer}>
-                    <Radio color={'primary'} onClick={handleRadioPress} checked={selectedExistingAddressID === id} />
-                </div>
-            )}
+            <div className={classes.radioBtnContainer}>
+                <Radio
+                    color={'primary'}
+                    onClick={handleRadioPress}
+                    checked={selectedExistingAddressID === id || isChecked}
+                />
+            </div>
 
             <Typography className={classes.addressLineText}>{`${firstName} ${lastName}`}</Typography>
             <Typography className={classes.addressLineText}>{`${address} ${flat ? `Apt: ${flat}` : ''}`}</Typography>

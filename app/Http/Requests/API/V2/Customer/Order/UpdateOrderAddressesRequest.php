@@ -4,6 +4,7 @@ namespace App\Http\Requests\API\V2\Customer\Order;
 
 use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
 class UpdateOrderAddressesRequest extends FormRequest
@@ -33,19 +34,26 @@ class UpdateOrderAddressesRequest extends FormRequest
 
     public function rules(): array
     {
+        $customerAddressExists = !empty($this->{'customer_address.id'});
+        $shippingAddressIdExists = !empty($this->{'shipping_address.id'});
+
+        $shippingAddressIsRequired = !$customerAddressExists && !$shippingAddressIdExists;
+        $isNullableOrString = $shippingAddressIsRequired ? 'string' : 'nullable';
+
         return [
-            'customer_address' => 'required|array',
-            'customer_address.id' => 'nullable|integer|exists:customer_addresses,id',
-            'shipping_address' => 'required|array',
-            'shipping_address.first_name' => 'required|string',
-            'shipping_address.last_name' => 'required|string',
-            'shipping_address.address' => 'required|string',
-            'shipping_address.city' => 'required|string',
-            'shipping_address.state' => 'required|string|max:2',
-            'shipping_address.zip' => 'required|string',
-            'shipping_address.phone' => 'required|string',
-            'shipping_address.flat' => 'nullable|string',
-            'shipping_address.save_for_later' => 'required|boolean',
+            'customer_address' => ['required', 'array'],
+            'customer_address.id' => ['nullable', 'integer', 'exists:customer_addresses,id'],
+            'shipping_address' => [Rule::requiredIf($shippingAddressIsRequired || $shippingAddressIdExists), 'array'],
+            'shipping_address.first_name' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString],
+            'shipping_address.last_name' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString],
+            'shipping_address.address' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString],
+            'shipping_address.city' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString],
+            'shipping_address.state' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString, 'max:2'],
+            'shipping_address.zip' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString],
+            'shipping_address.phone' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString],
+            'shipping_address.flat' => [Rule::requiredIf($shippingAddressIsRequired), 'nullable', 'string'],
+            'shipping_address.save_for_later' => [Rule::requiredIf($shippingAddressIsRequired), 'boolean'],
+            'shipping_address.id' => [Rule::requiredIf($shippingAddressIdExists), 'integer', 'exists:orders,shipping_order_address_id'],
             'shipping_method' => 'required|array',
             'shipping_method.id' => 'required|integer|exists:shipping_methods,id',
         ];

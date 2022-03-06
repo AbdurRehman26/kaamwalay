@@ -17,7 +17,6 @@ import ExistingAddress from '@dashboard/components/ExistingAddress';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     getStatesList,
-    resetSelectedExistingAddress,
     setDisableAllShippingInputs,
     setIsNextDisabled,
     setSaveShippingAddress,
@@ -276,32 +275,17 @@ export function SubmissionStep03Content() {
             dispatch(getStatesList());
             // If the user has existing addresses but none of them is selected and he didn't pick a custom address either
             // we'll check the first address in the list
-            if (existingAddresses.length !== 0 && selectedExistingAddressId === -1 && !useCustomShippingAddress) {
+            if (
+                existingAddresses.length !== 0 &&
+                selectedExistingAddressId === -1 &&
+                !useCustomShippingAddress &&
+                !shippingAddress?.id
+            ) {
                 dispatch(setSelectedExistingAddress(existingAddresses[0].id));
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [dispatch],
-    );
-
-    useEffect(
-        () => {
-            // Did the user check the 'Use custom address" checkbox?
-            // If he did select it, we'll enable all the text fields and clear everything about the existing selected address
-            // If he didn't check the checkbox and he has multiple saved addresses we'll disable all the inputs until he presses on the checkbox
-            // We only disable the inputs if the user has existing addresses so we don't stop him from adding an address as a first time user, when he has nothing.
-
-            if (useCustomShippingAddress) {
-                dispatch(setDisableAllShippingInputs(false));
-                dispatch(resetSelectedExistingAddress());
-            } else {
-                if (existingAddresses.length !== 0) {
-                    dispatch(setDisableAllShippingInputs(true));
-                }
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [disableAllInputs, useCustomShippingAddress, selectedExistingAddressId],
     );
 
     return (
@@ -328,7 +312,7 @@ export function SubmissionStep03Content() {
                                 <div style={{ marginTop: '10px' }} className={classes.existingAddressesContainer}>
                                     {existingAddresses?.map((address: any) => (
                                         <ExistingAddress
-                                            hideRadioButton={true}
+                                            isChecked={false}
                                             key={address.id}
                                             firstName={address.firstName}
                                             lastName={address.lastName}
@@ -348,9 +332,10 @@ export function SubmissionStep03Content() {
                         {shippingAddress?.id ? (
                             <>
                                 <Box marginBottom={'16px'} />
-                                <Typography className={classes.sectionLabel}>Selected Shipping Addresses</Typography>
+                                <Typography className={classes.sectionLabel}>Selected Shipping Address</Typography>
                                 <div className={classes.existingAddressesContainer}>
                                     <ExistingAddress
+                                        isChecked={shippingAddress?.id > 0}
                                         key={shippingAddress.id}
                                         firstName={shippingAddress.firstName}
                                         lastName={shippingAddress.lastName}

@@ -86,8 +86,6 @@ function ResultWrapper({ hit }: ResultsWrapperProps) {
                 category: EventCategories.Cards,
                 action: CardsSelectionEvents.removed,
             });
-            console.log(item, 1321);
-            // dispatch(markCardAsUnselected(generateMarkCardDto(item)));
             dispatch(deleteOrderItem(item.id));
         },
         [dispatch],

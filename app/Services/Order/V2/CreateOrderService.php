@@ -56,7 +56,6 @@ class CreateOrderService
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PAYMENT_PENDING, $this->order);
 
         DB::commit();
-
     }
 
     protected function startOrder(): void

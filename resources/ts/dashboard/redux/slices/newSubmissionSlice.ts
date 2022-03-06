@@ -718,7 +718,6 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData = action.payload;
         },
         setAppliedCredit: (state, action: PayloadAction<number>) => {
-            console.log(11643);
             state.appliedCredit = action.payload;
         },
         setPreviewTotal: (state, action: PayloadAction<number>) => {
@@ -859,6 +858,12 @@ export const newSubmissionSlice = createSlice({
             state.shippingAddress = action.payload.shippingAddress;
             state.billingAddress = action.payload.billingAddress;
             state.currentStep = (OrderStepsMap as Record<string, any>)[action.payload.orderStep];
+        },
+        [updateOrderAddresses.fulfilled as any]: (state, action) => {
+            state.shippingAddress = action.payload.shippingAddress;
+        },
+        [updateCreditAndPromoCode.fulfilled as any]: (state, action) => {
+            state.billingAddress = action.payload.billingAddress;
         },
     },
 });

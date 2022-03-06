@@ -75,7 +75,9 @@ export function NewSubmission() {
     const orderId = params?.get('orderId');
 
     useEffect(() => {
-        dispatch(getOrder(orderId));
+        if (orderId) {
+            dispatch(getOrder(orderId));
+        }
     }, [dispatch, orderId]);
 
     useEffect(() => {
@@ -109,7 +111,8 @@ export function NewSubmission() {
             case 4:
                 return <SubmissionStep05Content />;
             default:
-                return <h2>yo</h2>;
+                window.location.href = '/submissions/new';
+                return;
         }
     }, [currentStep]);
 
@@ -141,11 +144,12 @@ export function NewSubmission() {
                         ? ShippingAddressEvents.continuedWithNewAddress
                         : ShippingAddressEvents.continuedWithExisting,
             });
-            await dispatch(updateOrderAddresses()).unwrap();
-            dispatch(nextStep());
-            dispatch(setIsNextLoading(false));
-            await dispatch(getAvailableCredit()).unwrap();
-            window.scroll(0, 0);
+            await dispatch(updateOrderAddresses()).then(() => {
+                dispatch(getAvailableCredit()).unwrap();
+                dispatch(setIsNextLoading(false));
+                dispatch(nextStep());
+                window.scroll(0, 0);
+            });
             pushToDataLayer({ event: 'google-ads-shipping-info-submitted' });
             return;
         }

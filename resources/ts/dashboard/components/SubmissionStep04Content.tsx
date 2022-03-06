@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -215,8 +215,6 @@ export function SubmissionStep04Content() {
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
-
-    const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const finalShippingAddress =
         existingAddresses.length !== 0 &&
         !useCustomShippingAddress &&
@@ -224,22 +222,18 @@ export function SubmissionStep04Content() {
         selectedExistingAddress.id !== 0
             ? selectedExistingAddress
             : shippingAddress;
-    console.log(isAddressDataValid);
+
     useEffect(() => {
-        schema
-            .isValid({
-                firstName,
-                lastName,
-                address,
-                apt,
-                city,
-                state,
-                zipCode,
-                phoneNumber,
-            })
-            .then((valid) => {
-                setIsAddressDataValid(valid);
-            });
+        schema.isValid({
+            firstName,
+            lastName,
+            address,
+            apt,
+            city,
+            state,
+            zipCode,
+            phoneNumber,
+        });
     }, [
         firstName,
         lastName,

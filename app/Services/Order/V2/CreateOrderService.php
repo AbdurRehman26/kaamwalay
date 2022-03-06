@@ -28,11 +28,11 @@ class CreateOrderService
     public function create(array $data): Order
     {
         $this->data = $data;
+        $this->process();
+
+        return $this->order;
 
         try {
-            $this->process();
-
-            return $this->order;
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
@@ -53,7 +53,7 @@ class CreateOrderService
         $this->storePaymentPlan($this->data['payment_plan']);
         $this->saveOrder();
 
-        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PAYMENT_PENDING, $this->order);
 
         DB::commit();
 

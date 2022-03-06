@@ -8,7 +8,7 @@ use App\Http\Requests\API\V2\Customer\Order\UpdateOrderAddressesRequest;
 use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
 use App\Models\Order;
 use App\Services\Order\OrderService;
-use App\Services\Order\V1\CreateOrderService;
+use App\Services\Order\V2\CreateOrderService;
 use App\Services\Order\V2\CompleteOrderService;
 use App\Services\Order\V2\UpdateAddressOrderService;
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;

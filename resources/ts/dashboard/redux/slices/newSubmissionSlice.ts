@@ -676,7 +676,6 @@ export const newSubmissionSlice = createSlice({
             const lookup = state.step03Data?.existingAddresses?.find((address) => address.id === action.payload);
             if (lookup) {
                 state.step03Data.selectedExistingAddress = lookup;
-                state.shippingAddress.id = -1;
             } else {
                 state.step03Data.selectedExistingAddress.id = -1;
                 state.shippingAddress.id = action.payload;

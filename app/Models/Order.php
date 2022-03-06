@@ -25,7 +25,8 @@ class Order extends Model
         'CARDS_SELECTION_STEP' => 'cardsSelectionStep',
         'SHIPPING_DETAILS_STEP' => 'shippingDetailsStep',
         'PROMO_DISCOUNT_STEP' => 'promoDiscountStep',
-        'ORDER_REVIEW_STEP' => 'orderReviewStep'
+        'ORDER_REVIEW_STEP' => 'orderReviewStep',
+        'ORDER_SUBMITTED_STEP' => 'orderSubmittedStep'
     ];
 
     /**

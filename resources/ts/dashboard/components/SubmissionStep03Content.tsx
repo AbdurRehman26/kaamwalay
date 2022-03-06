@@ -224,6 +224,10 @@ export function SubmissionStep03Content() {
             if (existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddressId !== -1) {
                 dispatch(setIsNextDisabled(false));
             }
+
+            if (shippingAddress && shippingAddress.id !== -1) {
+                dispatch(setIsNextDisabled(false));
+            }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [
@@ -312,6 +316,7 @@ export function SubmissionStep03Content() {
                                 <div style={{ marginTop: '10px' }} className={classes.existingAddressesContainer}>
                                     {existingAddresses?.map((address: any) => (
                                         <ExistingAddress
+                                            isShippingAddress={false}
                                             isChecked={false}
                                             key={address.id}
                                             firstName={address.firstName}
@@ -335,7 +340,8 @@ export function SubmissionStep03Content() {
                                 <Typography className={classes.sectionLabel}>Selected Shipping Address</Typography>
                                 <div className={classes.existingAddressesContainer}>
                                     <ExistingAddress
-                                        isChecked={shippingAddress?.id > 0}
+                                        isShippingAddress={true}
+                                        isChecked={shippingAddress?.id > 0 && selectedExistingAddressId < 0}
                                         key={shippingAddress.id}
                                         firstName={shippingAddress.firstName}
                                         lastName={shippingAddress.lastName}

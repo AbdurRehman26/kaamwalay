@@ -33,8 +33,6 @@ function OrderReviewSection() {
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const finalShippingAddress = shippingAddress;
 
-    console.log(finalShippingAddress, 222);
-
     return (
         <Paper variant={'outlined'} className={classes.orderReviewSection}>
             <div className={classes.orderItemsColumn}>

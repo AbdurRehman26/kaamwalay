@@ -16,6 +16,7 @@ type ExistingAddressProps = {
     state: string;
     id: number;
     isChecked?: boolean;
+    isShippingAddress?: boolean;
 };
 
 const useStyles = makeStyles(

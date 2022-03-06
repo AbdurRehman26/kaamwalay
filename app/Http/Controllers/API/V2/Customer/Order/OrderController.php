@@ -14,6 +14,7 @@ use App\Services\Order\V1\CreateOrderService;
 use App\Services\Order\V2\CreateOrderService as V2CreateOrderService;
 use App\Services\Order\V2\CreditAndDiscountOrderService;
 use App\Services\Order\V2\UpdateAddressOrderService;
+use App\Services\Order\V2\CompleteOrderSubmissionService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,8 @@ class OrderController extends V1OrderController
         protected V2CreateOrderService $v2createOrderService,
         protected CreateOrderService $createOrderService,
         protected UpdateAddressOrderService $updateAddressOrderService,
-        protected CreditAndDiscountOrderService $creditAndDiscountOrderService
+        protected CreditAndDiscountOrderService $creditAndDiscountOrderService,
+        protected CompleteOrderSubmissionService $completeOrderSubmissionService
     ) {
         parent::__construct($orderService, $createOrderService);
     }
@@ -65,7 +67,7 @@ class OrderController extends V1OrderController
         return new OrderCreateResource($order);
     }
 
-    public function storeOrderAddresses(UpdateOrderAddressesRequest $request, Order $order): OrderCreateResource | JsonResponse
+    public function storeAddresses(UpdateOrderAddressesRequest $request, Order $order): OrderCreateResource | JsonResponse
     {
         try {
             $order = $this->updateAddressOrderService->save($order, $request->validated());
@@ -95,5 +97,21 @@ class OrderController extends V1OrderController
         }
 
         return new OrderCreateResource($order);
+    }
+
+    public function completeSubmission(Order $order): JsonResponse
+    {
+        try {
+            $this->completeOrderSubmissionService->complete($order);
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 }

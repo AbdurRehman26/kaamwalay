@@ -126,7 +126,9 @@ export function NewSubmission() {
         if (currentStep === 1) {
             await dispatch(updateOrderStep(currentStep));
             await dispatch(nextStep());
-            await stepIsShipping();
+            dispatch(getStatesList());
+            dispatch(getAvailableCredit()).unwrap();
+            dispatch(getSavedAddresses()).unwrap();
             return;
         }
 

@@ -9,7 +9,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\seed;
 
-test('customer can receive card categories', function () {
+test('customer can receive enabled card categories', function () {
     seed([RolesSeeder::class]);
     actingAs(User::factory()->withRole(config('permission.roles.customer'))->create());
 
@@ -22,8 +22,8 @@ test('customer can receive card categories', function () {
         ))
         ->create();
 
-    getJson(route('v2.cards.categories'))
+    getJson(route('v1.cards.categories'))
         ->assertOk()
-        ->assertJsonCount(CardCategory::enabled()->count(), 'data')
-        ->assertJsonStructure(['data' => [['id', 'name']]]);
+        ->assertJsonCount(2, 'data')
+        ->assertJsonStructure(['data' => [['id', 'name', 'is_enabled']]]);
 });

@@ -11,7 +11,6 @@ use function auth;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
 use Throwable;
 
 class CreateOrderService
@@ -23,7 +22,6 @@ class CreateOrderService
         private OrderStatusHistoryService $orderStatusHistoryService,
     ) {
     }
-
     /**
      * @throws Exception
      */
@@ -55,9 +53,10 @@ class CreateOrderService
         $this->storePaymentPlan($this->data['payment_plan']);
         $this->saveOrder();
 
-        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
 
         DB::commit();
+
     }
 
     protected function startOrder(): void
@@ -74,7 +73,6 @@ class CreateOrderService
     {
         $this->order->user()->associate(auth()->user());
         $this->order->order_step = Order::ORDER_STEPS['CARDS_STEP'];
-        $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();
     }

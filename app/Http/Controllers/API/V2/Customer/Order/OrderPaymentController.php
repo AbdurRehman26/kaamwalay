@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V2\Customer\Order;
 
-use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Exceptions\API\Customer\Order\OrderNotPayable;
 use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
@@ -12,7 +11,7 @@ use App\Services\Order\V2\OrderPaymentService;
 use App\Services\Payment\V2\PaymentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -23,23 +22,32 @@ class OrderPaymentController extends Controller
     {
     }
 
-    public function charge(Request $request, Order $order): JsonResponse
-    {
-        $this->authorize('view', $order);
+    /**
+     * @throws Throwable
+     */
+    public function process(
+        StoreOrderPaymentRequest $request,
+        Order $order,
+        OrderPaymentService $orderPaymentService
+    ): JsonResponse {
+        throw_if(! empty($order->coupon) && ! $order->coupon->isActive(), ValidationException::withMessages([
+            'message' => 'Coupon is either expired or invalid.',
+        ]));
+
+        throw_unless($order->isPayable('v2'), OrderNotPayable::class);
 
         try {
-            throw_if(! empty($order->coupon) && ! $order->coupon->isActive(), ValidationException::withMessages([
-                'message' => 'Coupon is either expired or invalid.',
-            ]));
+            DB::beginTransaction();
 
-            throw_unless($order->isPayable('v2'), OrderNotPayable::class);
+            $orderPaymentService->createPayments($order, $request->validated());
 
             $response = $this->paymentService->charge($order, $request->all());
-
             if (! empty($response['data'])) {
                 return new JsonResponse($response);
             }
         } catch (Exception $e) {
+            DB::rollBack();
+
             return new JsonResponse(
                 [
                     'message' => $e->getMessage(),
@@ -66,21 +74,5 @@ class OrderPaymentController extends Controller
         return new JsonResponse([
             'message' => 'Payment verified successfully',
         ], Response::HTTP_OK);
-    }
-
-    /**
-     * @throws Throwable
-     * @throws OrderStatusHistoryWasAlreadyAssigned
-     */
-    public function store(
-        StoreOrderPaymentRequest $request,
-        Order $order,
-        OrderPaymentService $orderPaymentService
-    ): JsonResponse {
-        $orderPaymentService->createPayments($order, $request->validated());
-
-        return new JsonResponse([
-            'success' => true,
-        ], Response::HTTP_CREATED);
     }
 }

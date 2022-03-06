@@ -88,6 +88,7 @@ class OrderPaymentService
         $orderPaymentData = [
             'order_id' => $this->order->id,
             'payment_method_id' => $this->order->paymentMethod->id,
+            'amount' => $this->order->grand_total,
         ];
         if ($this->order->paymentMethod->code === 'stripe') {
             $response = $this->order->user->findPaymentMethod($data['payment_provider_reference']['id']);
@@ -112,8 +113,8 @@ class OrderPaymentService
         }
 
         // The next step from here would be to charge the user in the application flow. To make the flow consistent
-        // the first order payments can only be either order payment from payment or wallet and second order
-        // payment can be other payments.
+        // the first order payments can only be either order payment from payment method or wallet and second
+        // order payment can be other payments.
         if ($this->order->extraCharges()->count() > 0) {
             $this->order->extraCharges()->update(['created_at' => now()->addSecond()]);
             $this->order->refunds()->update(['created_at' => now()->addSecond()]);

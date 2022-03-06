@@ -5,13 +5,15 @@ namespace App\Enums\Order;
 enum OrderPaymentStatusEnum: int
 {
     case PENDING = 0;
-    case PAID = 1;
+    case DUE = 1;
+    case PAID = 2;
 
     public function toString(): string
     {
         return match ($this) {
-            self::PENDING => 'pending',
-            self::PAID => 'paid',
+            self::PENDING => 'PENDING',
+            self::DUE => 'DUE',
+            self::PAID => 'PAID',
         };
     }
 }

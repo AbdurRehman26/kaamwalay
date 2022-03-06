@@ -1496,6 +1496,51 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$response\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
+			count: 3
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
@@ -3079,6 +3124,11 @@ parameters:
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
 			count: 1
 			path: app/Services/Payment/V1/Providers/StripeService.php
+
+		-
+			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
+			count: 1
+			path: app/Services/Payment/V2/Providers/StripeService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:accumulateReportRow\\(\\) has parameter \\$userCards with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"

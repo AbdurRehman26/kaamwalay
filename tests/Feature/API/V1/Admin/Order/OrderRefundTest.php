@@ -207,7 +207,7 @@ test('admin can refund full charged amount to payment method when order has wall
 
     OrderPayment::factory()->create([
         'order_id' => $this->order->id,
-        'payment_method_id' => PaymentMethod::getWalletPaymentMethod()->id,
+        'payment_method_id' => PaymentMethod::factory()->wallet(),
         'response' => json_encode(['id' => Str::random(25)]),
         'payment_provider_reference_id' => Str::random(25),
         'amount' => 10.00,

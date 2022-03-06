@@ -49,7 +49,7 @@ class EmailService
         string $templateName,
         array $templateContent = []
     ): void {
-        if (app()->environment('local', 'testing')) {
+        if (app()->environment('local')) {
             return;
         }
 

@@ -11,10 +11,10 @@ use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
 use App\Models\Order;
 use App\Services\Order\OrderService;
 use App\Services\Order\V1\CreateOrderService;
+use App\Services\Order\V2\CompleteOrderSubmissionService;
 use App\Services\Order\V2\CreateOrderService as V2CreateOrderService;
 use App\Services\Order\V2\CreditAndDiscountOrderService;
 use App\Services\Order\V2\UpdateAddressOrderService;
-use App\Services\Order\V2\CompleteOrderSubmissionService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -46,6 +46,7 @@ class OrderController extends V1OrderController
                 Response::HTTP_BAD_REQUEST
             );
         }
+
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 

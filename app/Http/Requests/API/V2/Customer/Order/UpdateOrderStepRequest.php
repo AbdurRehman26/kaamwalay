@@ -25,6 +25,6 @@ class UpdateOrderStepRequest extends FormRequest
 
     protected function getOrderSteps(): array
     {
-       return array_values(Order::ORDER_STEPS);
+        return array_values(Order::ORDER_STEPS);
     }
 }

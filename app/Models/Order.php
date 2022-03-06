@@ -26,7 +26,7 @@ class Order extends Model
         'SHIPPING_DETAILS_STEP' => 'shippingDetailsStep',
         'PROMO_DISCOUNT_STEP' => 'promoDiscountStep',
         'ORDER_REVIEW_STEP' => 'orderReviewStep',
-        'ORDER_SUBMITTED_STEP' => 'orderSubmittedStep'
+        'ORDER_SUBMITTED_STEP' => 'orderSubmittedStep',
     ];
 
     /**

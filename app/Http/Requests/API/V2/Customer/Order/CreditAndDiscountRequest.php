@@ -5,7 +5,6 @@ namespace App\Http\Requests\API\V2\Customer\Order;
 use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Validator;
 
 class CreditAndDiscountRequest extends FormRequest
 {

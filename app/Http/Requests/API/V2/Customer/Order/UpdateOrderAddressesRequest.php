@@ -34,10 +34,10 @@ class UpdateOrderAddressesRequest extends FormRequest
 
     public function rules(): array
     {
-        $customerAddressExists = !empty($this->{'customer_address.id'});
-        $shippingAddressIdExists = !empty($this->{'shipping_address.id'});
+        $customerAddressExists = ! empty($this->{'customer_address.id'});
+        $shippingAddressIdExists = ! empty($this->{'shipping_address.id'});
 
-        $shippingAddressIsRequired = !$customerAddressExists && !$shippingAddressIdExists;
+        $shippingAddressIsRequired = ! $customerAddressExists && ! $shippingAddressIdExists;
         $isNullableOrString = $shippingAddressIsRequired ? 'string' : 'nullable';
 
         return [

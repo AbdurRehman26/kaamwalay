@@ -28,11 +28,11 @@ class CreateOrderService
     public function create(array $data): Order
     {
         $this->data = $data;
-        $this->process();
-
-        return $this->order;
 
         try {
+            $this->process();
+
+            return $this->order;
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());

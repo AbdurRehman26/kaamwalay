@@ -225,9 +225,9 @@ test('a customer can create his order including wallet payment', function () {
         'order' => $response['data']['id'],
     ]), [
         'billing_address' => [
-            'same_as_shipping' => true
+            'same_as_shipping' => true,
         ],
-        'payment_by_wallet' => $walletPayment
+        'payment_by_wallet' => $walletPayment,
     ]);
 
     $this->postJson(route('v2.customer.orders.complete-submission', [

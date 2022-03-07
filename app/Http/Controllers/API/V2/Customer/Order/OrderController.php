@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API\V2\Customer\Order;
 
-use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
-use App\Http\Requests\API\V2\Customer\Order\CreditAndDiscountRequest;
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
+use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
+use App\Http\Requests\API\V2\Customer\Order\CreditAndDiscountRequest;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\V2\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Requests\API\V2\Customer\Order\UpdateOrderAddressesRequest;
@@ -18,10 +18,10 @@ use App\Http\Resources\API\V2\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Order\OrderService;
-use App\Services\Order\V2\CreateOrderService;
-use App\Services\Order\V2\CompleteOrderSubmissionService;
-use App\Services\Order\V2\CreditAndDiscountOrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
+use App\Services\Order\V2\CompleteOrderSubmissionService;
+use App\Services\Order\V2\CreateOrderService;
+use App\Services\Order\V2\CreditAndDiscountOrderService;
 use App\Services\Order\V2\UpdateAddressOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;

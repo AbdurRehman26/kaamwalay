@@ -101,9 +101,9 @@ class OrderPaymentService
             );
         }
 
-        $orderPayment = OrderPayment::firstOrCreate(collect($orderPaymentData)->except('response')->all());
+        $orderPayment = OrderPayment::firstOrCreate(collect($orderPaymentData)->except(['response'])->all());
 
-        $orderPayment->response = $response ?? null;
+        $orderPayment->response = json_encode($response ?? []);
 
         $orderPayment->save();
 

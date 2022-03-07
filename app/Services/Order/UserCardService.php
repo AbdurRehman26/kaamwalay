@@ -61,12 +61,13 @@ class UserCardService
         ->join('orders', 'orders.id', '=', 'order_items.order_id')
         ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
         ->whereIn('order_item_status_histories.order_item_status_id', [OrderItemStatus::GRADED])
-        ->whereIn('orders.order_status_id', [OrderStatus::GRADED,OrderStatus::SHIPPED])
+        ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
         ->whereIn('order_items.order_item_status_id', [OrderItemStatus::GRADED])
         ->select(['user_cards.*','order_item_status_histories.created_at as graded_at'])
         ->orderBy('graded_at', 'desc')
         ->paginate($itemsPerPage);
     }
+
     public function getCustomerCards(User $user): LengthAwarePaginator
     {
         $itemsPerPage = request('per_page');
@@ -78,7 +79,7 @@ class UserCardService
         ->join('order_item_status_histories', 'order_item_status_histories.order_item_id', '=', 'order_items.id')
         ->where('user_cards.user_id', $user->id)
         ->where('order_item_status_histories.order_item_status_id', OrderItemStatus::GRADED)
-        ->whereIn('orders.order_status_id', [OrderStatus::GRADED,OrderStatus::SHIPPED])
+        ->whereIn('orders.order_status_id', [OrderStatus::SHIPPED])
         ->where('order_items.order_item_status_id', OrderItemStatus::GRADED)
         ->select(['user_cards.*']);
 

@@ -101,15 +101,22 @@ class OrderPaymentService
             );
         }
 
-        OrderPayment::create($orderPaymentData);
+        $orderPayment = OrderPayment::firstOrCreate(collect($orderPaymentData)->except('response')->all());
+
+        $orderPayment->response = $response ?? null;
+
+        $orderPayment->save();
+
 
         /* Amount is partially paid from wallet since the primary payment method is not wallet */
         if ($this->order->amount_paid_from_wallet && ! $this->order->paymentMethod->isWallet()) {
-            OrderPayment::create([
+            $partialPayment = OrderPayment::firstOrNew([
                 'order_id' => $orderPaymentData['order_id'],
                 'payment_method_id' => PaymentMethod::getWalletPaymentMethod()->id,
-                'amount' => $this->order->amount_paid_from_wallet,
+                'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             ]);
+            $partialPayment->amount = $this->order->amount_paid_from_wallet;
+            $orderPayment->save();
         }
 
         // The next step from here would be to charge the user in the application flow. To make the flow consistent

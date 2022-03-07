@@ -9,6 +9,8 @@ use App\Services\EmailService;
 use App\Services\SerialNumberService\SerialNumberService;
 use App\Services\Wallet\WalletService;
 use Carbon\Carbon;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +25,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, FilamentUser, HasAvatar
 {
     use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons;
 
@@ -138,6 +140,11 @@ class User extends Authenticatable implements JWTSubject
         return trim($this->first_name . ' ' . $this->last_name);
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole(config('permission.roles.super-admin'));
+    }
+
     public function isAdmin(): bool
     {
         return $this->hasRole(config('permission.roles.admin'));
@@ -234,5 +241,15 @@ class User extends Authenticatable implements JWTSubject
             'token' => $token,
             'email' => $this->getEmailForPasswordReset(),
         ]);
+    }
+
+    public function canAccessFilament(): bool
+    {
+        return $this->isSuperAdmin();
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->profile_image;
     }
 }

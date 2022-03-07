@@ -23,6 +23,10 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useState } from 'react';
 import logo from '@shared/assets/logo.svg';
+import { AuthDialog } from '@shared/components/Auth/AuthDialog';
+import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -67,6 +71,12 @@ export function DrawerNavigation() {
     const classes = useStyles();
     const { authenticated, logout } = useAuth();
     const [isOpen, setOpen] = useState(false);
+    const dispatch = useSharedDispatch();
+    const isHeaderAuthDialogOpen = useSharedSelector((state) => state.authentication.headerDialogOpened);
+
+    const handleAuthDialogClose = useCallback(() => {
+        dispatch(headerDialogVisibility(false));
+    }, [dispatch]);
 
     const handleOpen = useCallback(() => setOpen(true), [setOpen]);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
@@ -81,6 +91,10 @@ export function DrawerNavigation() {
         },
         [],
     );
+
+    const handleChange = useCallback(() => {
+        dispatch(headerDialogVisibility(true));
+    }, [dispatch]);
 
     return (
         <>
@@ -181,7 +195,7 @@ export function DrawerNavigation() {
 
                         {!authenticated ? (
                             <Button
-                                href={'/auth/sign-in'}
+                                onClick={handleChange}
                                 variant={'text'}
                                 color={'inherit'}
                                 className={classes.button}
@@ -205,6 +219,11 @@ export function DrawerNavigation() {
                     </Grid>
                 </List>
             </Drawer>
+            <AuthDialog
+                open={isHeaderAuthDialogOpen}
+                onClose={handleAuthDialogClose}
+                subTitle="to Access Robograding"
+            />
         </>
     );
 }

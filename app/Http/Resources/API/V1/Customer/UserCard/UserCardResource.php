@@ -19,7 +19,7 @@ class UserCardResource extends BaseResource
     public function toArray($request)
     {
         // @phpstan-ignore-next-line
-        $isGraded = $this->orderItem->order->orderStatus->id >= OrderStatus::GRADED;
+        $isShipped = $this->orderItem->order->orderStatus->id >= OrderStatus::SHIPPED;
 
         return [
             'id' => $this->id,
@@ -30,7 +30,7 @@ class UserCardResource extends BaseResource
             'overall_values' => $this->overall_values,
             'human_grade_values' => $this->human_grade_values,
             'generated_images' => $this->generated_images,
-            'overall_grade' => $this->when($isGraded, $this->resource->overall_grade),
+            'overall_grade' => $this->when($isShipped, $this->resource->overall_grade),
             'overall_grade_nickname' => $this->resource->overall_grade_nickname,
             'notes' => $this->orderItem->notes,
             'submitted_at' => $this->formatDate($this->orderItem->order->created_at),

@@ -3,4 +3,5 @@ export enum AuthenticationEnum {
     AccessTokenName = 'access_token',
     SignInRoute = '/auth/sign-in',
     DashboardRoute = '/dashboard',
+    HomeRoute = '/',
 }

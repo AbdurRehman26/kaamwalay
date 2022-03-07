@@ -19,7 +19,7 @@ module.exports.createApp = function createApp(name) {
 
     function extendWebpack(webpackConfig) {
         webpackConfig.module.rules[1].use[0].options.publicPath = `/apps/${name}`;
-        webpackConfig.module.rules[1].test = /\.(png|jpe?g|gif|webp)$/;
+        webpackConfig.module.rules[1].test = /\.(png|jpe?g|gif|webp|mp4)$/;
         webpackConfig.module.rules.push({
             test: /\.svg$/,
             use: ['@svgr/webpack', 'url-loader'],

@@ -27,6 +27,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
+ * @property string|null $image_url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardProduct[] $cardProducts
@@ -35,12 +36,14 @@ namespace App\Models{
  * @property-read int|null $card_series_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSet[] $cardSets
  * @property-read int|null $card_sets_count
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory enabled()
  * @method static \Database\Factories\CardCategoryFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory query()
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereImageUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereUpdatedAt($value)
  */
@@ -77,6 +80,7 @@ namespace App\Models{
  * @property-read \App\Models\User|null $addedBy
  * @property-read \App\Models\CardCategory|null $cardCategory
  * @property-read \App\Models\CardSet|null $cardSet
+ * @method static \Illuminate\Database\Eloquent\Builder|CardProduct canBeInitializedInPopReport()
  * @method static \Database\Factories\CardProductFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct newQuery()
@@ -500,9 +504,19 @@ namespace App\Models{
 /**
  * App\Models\MailchimpList
  *
+ * @property int $id
+ * @property string $list_name
+ * @property string $list_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList whereListId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList whereListName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailchimpList whereUpdatedAt($value)
  */
 	class MailchimpList extends \Eloquent {}
 }
@@ -1034,6 +1048,7 @@ namespace App\Models{
  * @property int $is_visible
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $handles_handshake
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod enabled()
  * @method static \Database\Factories\PaymentMethodFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod newModelQuery()
@@ -1042,6 +1057,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod visible()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereHandlesHandshake($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereIsEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentMethod whereIsVisible($value)
@@ -1618,11 +1634,7 @@ namespace App\Models{
 }
 
 namespace App\Models{
-
-    use App\Enums\Wallet\WalletTransactionReason;
-    use App\Enums\Wallet\WalletTransactionType;
-
-    /**
+/**
  * App\Models\WalletTransaction
  *
  * @property int $id
@@ -1631,8 +1643,8 @@ namespace App\Models{
  * @property int|null $order_id order ID will be available when refund happened or user pay from wallet
  * @property int|null $wallet_payment_id wallet payment ID will be available when user adds amount to wallet
  * @property float $amount
- * @property WalletTransactionType $type
- * @property WalletTransactionReason $reason
+ * @property \App\Enums\Wallet\WalletTransactionType $type 1 => credit, 2 => debit
+ * @property \App\Enums\Wallet\WalletTransactionReason $reason 1 => refund, 2 => order_payment, 3 => wallet_payment
  * @property bool $is_success
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

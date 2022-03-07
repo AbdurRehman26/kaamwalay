@@ -1,0 +1,106 @@
+.Home-testimonial {
+    display: flex;
+    padding: 0;
+    background-color: #251f33;
+    overflow: hidden;
+    .Home-sectionColumn {
+        padding: 0;
+        position: relative;
+    }
+    @media screen and (max-width: 1199px) {
+        flex-direction: column-reverse;
+        .Home-sectionColumn {
+            width: 100% !important;
+            padding-bottom: 64%;
+        }
+    }
+}
+
+.Home-testimonialContent {
+    max-width: 620px;
+    position: relative;
+}
+
+.Home-testimonialContentHolder.Home-testimonialContentHolder {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 140px 124px;
+    width: 60%;
+    @media screen and (max-width: 1199px) {
+        align-items: center;
+    }
+    @media screen and (max-width: 767px) {
+        padding: 80px;
+    }
+    @media screen and (max-width: 600px) {
+        padding: 80px 32px;
+    }
+}
+
+.Home-testimonialImage {
+    position: relative;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
+    z-index: 3;
+    @media screen and (max-width: 1919px) {
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        object-fit: cover;
+    }
+}
+
+.Home-testimonialQuotes {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0.4;
+    transform: translate(-43%, -75%);
+    z-index: -1;
+}
+
+.Home-testimonialHeadline {
+    font-weight: 900;
+    font-size: 48px;
+    line-height: 56px;
+    color: #dcc2ff;
+    margin-bottom: 24px;
+}
+
+.Home-testimonialText {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 42px;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+.Home-testimonialProfile {
+    display: flex;
+    align-items: center;
+}
+
+.Home-testimonialProfileImage {
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 42px;
+    margin-right: 14px;
+}
+
+.Home-testimonialProfileNameHeadline {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: #fff;
+}
+
+.Home-testimonialProfileNameText {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 28px;
+    color: rgba(255, 255, 255, 0.7);
+}

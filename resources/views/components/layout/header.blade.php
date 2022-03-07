@@ -1,5 +1,9 @@
-<header class="page__header">
-    <div class="page__header__drawer atoms--drawer-navigation">
+<header @class([
+    'page__header',
+    'page__header--transparent' => $transparent ?? false,
+    'page__header--no-shadow' => $noShadow ?? false,
+])>
+    <div class="page__header__drawer" data-atom="drawer-navigation">
         {{-- JS runtime actions --}}
     </div>
 
@@ -20,7 +24,7 @@
         </nav>
     </div>
 
-    <div class="page__header__auth atoms--auth-controls">
+    <div class="page__header__auth" data-atom="auth-controls">
         {{-- JS runtime actions --}}
     </div>
 </header>

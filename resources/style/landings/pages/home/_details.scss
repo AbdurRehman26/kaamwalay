@@ -1,0 +1,27 @@
+.Home-details {
+    @media screen and (max-width: 1199px) {
+        padding-top: 72px;
+        padding-bottom: 92px;
+    }
+
+    .Home-sectionImageHolder {
+        @media screen and (max-width: 1199px) {
+            margin-top: 56px;
+            margin-bottom: 0;
+            padding-bottom: 0;
+
+            .Home-sectionImage {
+                position: relative;
+                width: 100%;
+                object-fit: cover;
+                object-position: center top;
+            }
+        }
+    }
+
+    @media screen and (max-width: 959px) {
+        .Home-sectionLayers {
+            display: none;
+        }
+    }
+}

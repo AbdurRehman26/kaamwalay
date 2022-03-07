@@ -1,0 +1,106 @@
+.Home-hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.Home-heroContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    flex: 1 1 auto;
+    position: relative;
+    z-index: 3;
+
+    @media screen and (max-width: 767px) {
+        justify-content: flex-end;
+        align-items: flex-start;
+        padding: 0 24px 64px;
+        .container {
+            padding: 0;
+        }
+        .Home-buttonCta {
+            width: 100%;
+        }
+    }
+}
+
+.Home-heroTitle,
+.Home-heroSubtitle {
+    color: #fff;
+}
+
+.Home-heroTitle,
+.Home-heroSubtitle,
+.Home-heroCta {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+}
+
+.Home-heroTitle {
+    font-weight: 900;
+    font-size: 62px;
+    line-height: 68px;
+    letter-spacing: -0.5px;
+    max-width: 800px;
+    margin-bottom: 24px;
+    @media screen and (max-width: 767px) {
+        font-weight: 900;
+        font-size: 40px;
+        line-height: 47px;
+    }
+}
+
+.Home-heroSubtitle {
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: 0.15px;
+    margin-bottom: 46px;
+    @media screen and (max-width: 767px) {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+.Home-videoHolder,
+.Home-videoOverlay,
+.Home-video {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.Home-video {
+    object-fit: cover;
+    object-position: center center;
+}
+
+.Home-videoOverlay {
+    background-color: transparentize(#000, 0.5);
+    z-index: 3;
+}
+
+.Home-poweredBy {
+    position: absolute;
+    z-index: 3;
+    bottom: 24px;
+    right: 24px;
+    @media screen and (max-width: 767px) {
+        display: none;
+    }
+}
+
+.page--home .page__header {
+    position: fixed;
+    left: 0;
+    right: 0;
+}

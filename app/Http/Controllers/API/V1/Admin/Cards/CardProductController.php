@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1\Admin\Cards;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Card\StoreCardProductRequest;
 use App\Http\Resources\API\V1\CardProduct\CardProductResource;
+use App\Models\CardCategory;
 use App\Services\Admin\Card\CardProductService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -32,8 +33,8 @@ class CardProductController extends Controller
         return new CardProductResource($card);
     }
 
-    public function getOptionsValues(): JsonResponse
+    public function getOptionsValues(CardCategory $cardCategory): JsonResponse
     {
-        return new JsonResponse($this->cardProductService->getOptionsValues());
+        return new JsonResponse($this->cardProductService->getOptionsValues($cardCategory));
     }
 }

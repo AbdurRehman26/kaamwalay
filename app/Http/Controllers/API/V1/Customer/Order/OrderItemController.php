@@ -68,6 +68,8 @@ class OrderItemController extends Controller
         OrderItem $orderItem,
         DeleteOrderItemRequest $request
     ): OrderItemCollection {
+        $orderItem->orderItemStatusHistory()->delete();
+
         $orderItem->deleteOrFail();
 
         return new OrderItemCollection($order->orderItems);

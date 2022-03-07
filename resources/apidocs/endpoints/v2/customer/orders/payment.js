@@ -8,6 +8,18 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
+ *  @apiParamExample {json} Request-Example:
+ *      {
+ *          "payment_method": {
+ *              "id": 1
+ *          },
+ *          "coupon": {
+ *              "code": "HvTGSYpak9",
+ *              "id": 2
+ *          },
+ *          "payment_by_wallet": 10.00,
+ *      }
+ *
  * @apiSuccess {Object} data Payment Object
  *
  * @apiSuccessExample Success-Response:

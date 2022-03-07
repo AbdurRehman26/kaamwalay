@@ -64,6 +64,8 @@ Route::prefix('customer')->group(function () {
             Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
             Route::post('{order}/order-payments', [OrderPaymentController::class, 'store']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
+            Route::get('{orderId}', [OrderController::class, 'show']);
+            Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
 
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
@@ -84,6 +86,7 @@ Route::prefix('customer')->group(function () {
                     'store' => 'customer.orders.store',
                 ]);
 
+            Route::get('{order}/order-items', [OrderItemController::class, 'index'])->name('customer.orders.order-items.index');
             Route::post('{order}/order-items', [OrderItemController::class, 'store'])->name('customer.orders.order-items.store');
             Route::delete('{order}/order-items/{orderItem}', [OrderItemController::class, 'destroy'])->name('customer.orders.order-items.destroy');
             Route::put('{order}/order-items/{orderItem}', [OrderItemController::class, 'update'])->name('customer.orders.order-items.update');

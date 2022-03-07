@@ -21,7 +21,7 @@ beforeEach(function () {
     ]);
 
     $this->user = User::factory()->create();
-    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000]);
+    $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
     $this->cardProduct = CardProduct::factory()->create();
     $this->shippingMethod = ShippingMethod::factory()->create();
     $this->paymentMethod = PaymentMethod::factory()->create();
@@ -177,7 +177,8 @@ test('a customer can not update order addresses without addresses', function () 
     ]);
 });
 
-test('a customer can complete his order including wallet payment', function () {
+test('a customer can create his order including wallet payment', function () {
+    Event::fake();
     $this->actingAs($this->user);
 
     Wallet::factory()->create([
@@ -220,28 +221,18 @@ test('a customer can complete his order including wallet payment', function () {
         ],
     ]);
 
-    $this->postJson(route('v2.customer.orders.complete', [
+    $response = $this->postJson(route('v2.customer.orders.credit-discount', [
         'order' => $response['data']['id'],
     ]), [
         'billing_address' => [
-            'first_name' => 'First',
-            'last_name' => 'Last',
-            'address' => 'Test address',
-            'city' => 'Test',
-            'state' => 'AB',
-            'zip' => '12345',
-            'phone' => '1234567890',
-            'flat' => '43',
-            'same_as_shipping' => true,
+            'same_as_shipping' => true
         ],
-        'customer_address' => [
-            'id' => null,
-        ],
-        'shipping_method' => [
-            'id' => $this->shippingMethod->id,
-        ],
-        'payment_by_wallet' => $walletPayment,
-    ])
+        'payment_by_wallet' => $walletPayment
+    ]);
+
+    $this->postJson(route('v2.customer.orders.complete-submission', [
+        'order' => $response['data']['id'],
+    ]))
         ->assertSuccessful()
         ->assertJsonStructure([
             'data' => [
@@ -262,4 +253,78 @@ test('a customer can complete his order including wallet payment', function () {
     $order = Order::first();
 
     expect($order->amount_paid_from_wallet)->toBe($walletPayment);
+});
+
+test('a customer can place order and pay from wallet totally', function () {
+    Event::fake();
+    $this->actingAs($this->user);
+
+    $this->user->wallet()->save(new \App\Models\Wallet(['amount' => 10000]));
+
+    $response = $this->postJson('/api/v2/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 1,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+        'payment_by_wallet' => 34.00,
+    ]);
+    $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'order_number',
+            'order_items',
+            'payment_plan',
+            'order_payment',
+            'billing_address',
+            'shipping_address',
+            'shipping_method',
+            'service_fee',
+            'shipping_fee',
+            'grand_total',
+        ],
+    ]);
 });

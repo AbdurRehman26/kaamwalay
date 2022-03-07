@@ -3,6 +3,7 @@
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\PaymentPlan;
 use App\Models\User;
@@ -34,14 +35,14 @@ test('customer can get list of order items', function () {
         'declared_value_per_unit' => 10,
         'declared_value_total' => 10,
     ]);
-    getJson(route('v2.orders.orderItems.index', ['order' => $this->order]))
+    getJson(route('v2.customer.orders.order-items.index', ['order' => $this->order]))
         ->assertOk()
         ->assertJsonCount(1, 'data');
 });
 
 test('customer can add items in order', function () {
     postJson(
-        route('v2.orders.orderItems.store', ['order' => $this->order]),
+        route('v2.customer.orders.order-items.store', ['order' => $this->order]),
         [
             'card_product_id' => $this->cardProduct->id,
             'quantity' => 1,
@@ -61,7 +62,7 @@ test('customer can update item in order', function () {
         'declared_value_total' => 10,
     ]);
     putJson(
-        route('v2.orders.orderItems.update', ['order' => $this->order, 'orderItem' => $orderItem]),
+        route('v2.customer.orders.order-items.update', ['order' => $this->order, 'orderItem' => $orderItem]),
         [
             'card_product_id' => $this->cardProduct->id,
             'quantity' => 2,
@@ -83,8 +84,9 @@ test('customer can delete item in order', function () {
         'declared_value_per_unit' => 10,
         'declared_value_total' => 10,
     ]);
+    OrderItemStatusHistory::factory()->count(2)->create(['order_item_id' => $orderItem->id]);
     deleteJson(
-        route('v2.orders.orderItems.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
+        route('v2.customer.orders.order-items.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
     )
         ->assertOk()
         ->assertJsonCount(0, 'data');
@@ -94,7 +96,7 @@ test('customer can not add items to orders other than incomplete', function () {
     $this->order->update(['order_status_id' => OrderStatus::PLACED]);
 
     postJson(
-        route('v2.orders.orderItems.store', ['order' => $this->order]),
+        route('v2.customer.orders.order-items.store', ['order' => $this->order]),
         [
             'card_product_id' => $this->cardProduct->id,
             'quantity' => 1,
@@ -114,7 +116,7 @@ test('customer can not update item to orders other than incomplete', function ()
         'declared_value_total' => 10,
     ]);
     putJson(
-        route('v2.orders.orderItems.update', ['order' => $this->order, 'orderItem' => $orderItem]),
+        route('v2.customer.orders.order-items.update', ['order' => $this->order, 'orderItem' => $orderItem]),
         [
             'card_product_id' => $this->cardProduct->id,
             'quantity' => 2,
@@ -134,6 +136,6 @@ test('customer can not delete item in order when its paid', function () {
         'declared_value_total' => 10,
     ]);
     deleteJson(
-        route('v2.orders.orderItems.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
+        route('v2.customer.orders.order-items.destroy', ['order' => $this->order, 'orderItem' => $orderItem])
     )->assertForbidden();
 });

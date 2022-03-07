@@ -53,6 +53,7 @@ class Order extends Model
         'extra_charge_total',
         'refund_total',
         'payment_method_discounted_amount',
+        'payment_status',
     ];
 
     /**
@@ -248,7 +249,7 @@ class Order extends Model
 
     public function getGrandTotalCentsAttribute(): int
     {
-        return (int) (($this->grand_total_to_be_paid) * 100);
+        return (int) bcmul((string) $this->grand_total_to_be_paid, (string) 100);
     }
 
     public function getGrandTotalToBePaidAttribute(): float

@@ -12,12 +12,12 @@ import { MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
-import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
+import { deleteOrder, setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch } from '@dashboard/redux/hooks';
+import OrderDeleteDialog from '@dashboard/components/OrderDeleteDialog';
 
 interface SubmissionTableRowProps {
     id: number;
@@ -41,6 +41,7 @@ enum Options {
     Delete,
     ViewInstructions,
     ToggleShipmentTrackingModal,
+    ContinueSubmission,
 }
 
 const useStyles = makeStyles(
@@ -116,9 +117,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
 
     const submissionViewUrl = `/submissions/${id}/view`;
     const navigate = useNavigate();
-    const confirm = useConfirmation();
     const classes = useStyles();
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
@@ -127,7 +128,6 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const handleOption = useCallback(
         (option: Options) => async () => {
             handleCloseOptions();
-
             switch (option) {
                 case Options.View:
                     navigate(`/submissions/${id}/view`);
@@ -141,18 +141,18 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 case Options.ToggleShipmentTrackingModal:
                     setShowShipmentTrackingModal(!showShipmentTrackingModal);
                     break;
-                case Options.Delete:
-                    const result = await confirm();
-                    if (result) {
-                        console.log('Delete submission');
-                    }
-                    break;
                 case Options.Download:
                     downloadFromUrl(invoice!, `robograding-${invoiceNumber}.pdf`);
                     break;
+                case Options.Delete:
+                    setShowDeleteModal(!showDeleteModal);
+                    break;
+                case Options.ContinueSubmission:
+                    navigate(`/submissions/new?orderId=${id}`);
+                    break;
             }
         },
-        [handleCloseOptions, navigate, id, showShipmentTrackingModal, confirm, invoice, invoiceNumber],
+        [handleCloseOptions, navigate, id, showDeleteModal, showShipmentTrackingModal, invoice, invoiceNumber],
     );
 
     const handleShipmentSubmit = useCallback(
@@ -162,8 +162,24 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [dispatch, id],
     );
 
+    const handleOrderDeleteSubmit = useCallback(
+        async ({ orderId }: Record<any, number>) => {
+            await dispatch(deleteOrder(orderId));
+            window.location.href = '/dashboard/submissions';
+        },
+        [dispatch],
+    );
+
     return (
         <>
+            <OrderDeleteDialog
+                open={showDeleteModal}
+                onClose={handleOption(Options.Delete)}
+                orderNumber={orderNumber}
+                orderId={id}
+                onSubmit={handleOrderDeleteSubmit}
+            />
+
             <ShipmentDialog
                 open={showShipmentTrackingModal}
                 onClose={handleOption(Options.ToggleShipmentTrackingModal)}
@@ -208,15 +224,28 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                         <IconButton onClick={handleClickOptions} size="large">
                             <MoreIcon />
                         </IconButton>
-
                         <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                            <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
-                                {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                            </MenuItem>
-                            <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
-                            <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
-                            </MenuItem>
+                            {status === 'Placed' && (
+                                <>
+                                    <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
+                                        {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                    </MenuItem>
+                                    <MenuItem onClick={handleOption(Options.ViewInstructions)}>
+                                        View Instructions
+                                    </MenuItem>
+                                    <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                        {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                    </MenuItem>
+                                </>
+                            )}
+                            {status === 'Pending Payment' && (
+                                <>
+                                    <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
+                                        Continue Submission
+                                    </MenuItem>
+                                    <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
+                                </>
+                            )}
                         </Menu>
                     </TableCell>
                 </TableRow>
@@ -265,13 +294,27 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </IconButton>
 
                             <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                                <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
-                                    {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                                </MenuItem>
-                                <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
-                                <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                    {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
-                                </MenuItem>
+                                {status === 'Placed' && (
+                                    <>
+                                        <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
+                                            {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.ViewInstructions)}>
+                                            View Instructions
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                            {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                        </MenuItem>
+                                    </>
+                                )}
+                                {status === 'Payment Pending' && (
+                                    <>
+                                        <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
+                                            Continue Submission
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
+                                    </>
+                                )}
                             </Menu>
                         </div>
                     </div>

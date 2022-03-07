@@ -34,6 +34,17 @@ export const setOrderCustomerShipment = createAsyncThunk<
     }
 });
 
+export const deleteOrder = createAsyncThunk('deleteOrder', async (orderId: number, thunkAPI) => {
+    const ordersRepository = app(OrdersRepository);
+    try {
+        await ordersRepository.deleteOrder(orderId);
+        return {};
+    } catch (e: any) {
+        NotificationsService.exception(e);
+        return thunkAPI.rejectWithValue(e as Error);
+    }
+});
+
 export const ordersSlice = createSlice({
     name: ordersThunk.name,
     initialState: {

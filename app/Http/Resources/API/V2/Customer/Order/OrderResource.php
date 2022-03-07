@@ -50,7 +50,8 @@ class OrderResource extends BaseResource
             'payment_method_discounted_amount' => $this->payment_method_discounted_amount,
             'payment_method_id' => $this->payment_method_id,
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
-            'payment_status' => $this->payment_status->toString(),
+            'payment_status' => $this->payment_status?->toString(),
+            'order_step' => $this->order_step,
         ];
     }
 }

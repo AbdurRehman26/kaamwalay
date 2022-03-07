@@ -53,6 +53,7 @@ class Order extends Model
         'extra_charge_total',
         'refund_total',
         'payment_method_discounted_amount',
+        'payment_status',
     ];
 
     /**

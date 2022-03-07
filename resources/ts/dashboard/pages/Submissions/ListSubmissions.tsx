@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactGA from 'react-ga';
 import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
@@ -11,6 +11,9 @@ import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import OrderIncompleteSubmissionsDialog from '@dashboard/components/OrderIncompleteSubmissionsDialog';
+import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
+import { useAppDispatch } from '../../redux/hooks';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -33,6 +36,8 @@ export function ListSubmissions() {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const [showIncompleteSubmissions, setShowIncompleteSubmissions] = useState(false);
+    const dispatch = useAppDispatch();
 
     const orders$ = useListOrdersQuery({
         params: {
@@ -42,13 +47,31 @@ export function ListSubmissions() {
         ...bracketParams(),
     });
 
-    function handleOnClick() {
+    const incompleteOrders$ = useListOrdersQuery({
+        params: {
+            filter: { orderStatusId: 1 },
+            include: ['orderStatus'],
+        },
+        ...bracketParams(),
+    });
+
+    const redirectToNewSubmission = useCallback(() => {
         ReactGA.event({
             category: EventCategories.Submissions,
             action: SubmissionEvents.initiated,
         });
         pushToDataLayer({ event: 'google-ads-started-submission-process' });
+
         navigate('/submissions/new');
+    }, [navigate]);
+
+    function handleOnClick() {
+        dispatch(clearSubmissionState());
+        if (incompleteOrders$?.data?.length) {
+            setShowIncompleteSubmissions(!showIncompleteSubmissions);
+            return;
+        }
+        redirectToNewSubmission();
     }
 
     const $newSubmission = (
@@ -59,6 +82,13 @@ export function ListSubmissions() {
 
     return (
         <>
+            <OrderIncompleteSubmissionsDialog
+                open={showIncompleteSubmissions}
+                onClose={() => setShowIncompleteSubmissions(false)}
+                orders={incompleteOrders$?.data}
+                onSubmit={redirectToNewSubmission}
+            />
+
             <ListHeader
                 headline={'Submissions'}
                 noMargin

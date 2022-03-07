@@ -164,6 +164,7 @@ class Order extends Model
     {
         return [
             AllowedFilter::partial('order_number'),
+            AllowedFilter::partial('order_status_id'),
         ];
     }
 

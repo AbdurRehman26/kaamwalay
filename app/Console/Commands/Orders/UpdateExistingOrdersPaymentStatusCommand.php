@@ -43,5 +43,7 @@ class UpdateExistingOrdersPaymentStatusCommand extends Command
             ]);
 
         $this->info('Updated!');
+
+        return self::SUCCESS;
     }
 }

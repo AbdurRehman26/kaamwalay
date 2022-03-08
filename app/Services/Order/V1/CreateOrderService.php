@@ -228,11 +228,20 @@ class CreateOrderService
 
         /* Amount is partially paid from wallet since the primary payment method is not wallet */
         if ($this->order->amount_paid_from_wallet && ! $this->order->paymentMethod->isWallet()) {
-            OrderPayment::create([
+            $walletPayment = new OrderPayment([
                 'order_id' => $orderPaymentData['order_id'],
                 'payment_method_id' => PaymentMethod::getWalletPaymentMethod()->id,
                 'amount' => $this->order->amount_paid_from_wallet,
+                // oldestOfMany and latestOfMany are using created_at field to fetch the record, during the flow
+                // if there are order payments, then they are created at the same time which is causing error.
+                // The primary payment method (firstOrderPayment) will always be other than wallet in the case of
+                // partial payment.
+                'created_at' => now()->addMinute(),
+                'updated_at' => now()->addMinute(),
             ]);
+            $walletPayment->timestamps = false;
+
+            $walletPayment->save();
         }
     }
 

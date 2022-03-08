@@ -3,7 +3,8 @@
 namespace App\Listeners\API\Services;
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Services\Payment\InvoiceService;
+use App\Events\API\Customer\Order\OrderPlaced;
+use App\Services\Payment\V1\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,7 @@ class GenerateOrderInvoice implements ShouldQueue
         //
     }
 
-    public function handle(OrderPaid $event): void
+    public function handle(OrderPaid|OrderPlaced $event): void
     {
         $this->invoiceService->saveInvoicePDF($event->order);
     }

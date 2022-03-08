@@ -17,7 +17,7 @@ beforeEach(function () {
 
 it('returns customers list order by asc email', function () {
     actingAs($this->user);
-    $response = getJson(route('customers.index',  [
+    $response = getJson(route('v1.customers.index',  [
         'sort' => 'email',
     ]));
 
@@ -28,7 +28,7 @@ it('returns customers list order by asc email', function () {
 });
 
 it('returns customers list order by desc email', function () {
-    $response = getJson(route('customers.index', [
+    $response = getJson(route('v1.customers.index', [
         'sort' => '-email',
     ]))
         ->assertOk();
@@ -40,7 +40,7 @@ it('returns customers list order by desc email', function () {
 });
 
 it('returns customers list order by asc customer number', function () {
-    $response = $this->getJson(route('customers.index', [
+    $response = $this->getJson(route('v1.customers.index', [
         'sort' => 'customer_number',
     ]))
         ->assertOk();
@@ -52,7 +52,7 @@ it('returns customers list order by asc customer number', function () {
 });
 
 it('returns customers list order by desc customer_number', function () {
-    $response = $this->getJson(route('customers.index', [
+    $response = $this->getJson(route('v1.customers.index', [
         'sort' => '-customer_number',
     ]))
         ->assertOk();
@@ -64,7 +64,7 @@ it('returns customers list order by desc customer_number', function () {
 });
 
 it('returns customers list order by asc full name', function () {
-    $response = $this->getJson(route('customers.index', [
+    $response = $this->getJson(route('v1.customers.index', [
         'sort' => 'full_name',
     ]))->assertOk();
 
@@ -75,7 +75,7 @@ it('returns customers list order by asc full name', function () {
 });
 
 it('returns customers list order by desc full name', function () {
-    $response = $this->getJson(route('customers.index', [
+    $response = $this->getJson(route('v1.customers.index', [
         'sort' => '-full_name',
     ]))->assertOk();
 
@@ -86,7 +86,7 @@ it('returns customers list order by desc full name', function () {
 });
 
 it('returns customers list order by asc signed up date', function () {
-    $response = $this->getJson(route('customers.index', [
+    $response = $this->getJson(route('v1.customers.index', [
         'sort' => 'created_at',
     ]))->assertOk();
 
@@ -97,7 +97,7 @@ it('returns customers list order by asc signed up date', function () {
 });
 
 it('returns customers list order by desc signed up date', function () {
-    $response = $this->getJson(route('customers.index', [
+    $response = $this->getJson(route('v1.customers.index', [
         'sort' => '-created_at',
     ]))->assertOk();
 

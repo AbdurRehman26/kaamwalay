@@ -8,12 +8,12 @@ use App\Http\Requests\API\V1\Admin\Order\AssignOrderStatusHistoryRequest;
 use App\Http\Resources\API\V1\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V1\Admin\Order\OrderStatusHistoryResource;
 use App\Models\Order;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V1\OrderStatusHistoryService;
 use Throwable;
 
 class OrderStatusHistoryController extends Controller
 {
-    public function __construct(private OrderStatusHistoryService $orderStatusHistoryService)
+    public function __construct(protected OrderStatusHistoryService $orderStatusHistoryService)
     {
     }
 

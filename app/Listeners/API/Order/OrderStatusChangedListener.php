@@ -6,7 +6,7 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Notifications\Order\OrderStatusChangedNotification;
-use App\Services\Admin\OrderService as AdminOrderService;
+use App\Services\Admin\V1\OrderService as AdminOrderService;
 use App\Services\EmailService;
 use App\Services\Order\OrderService;
 use App\Services\PopReport\PopReportService;

@@ -1236,11 +1236,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_step\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$billingAddress\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
@@ -1602,11 +1597,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$payment_method_discounted_amount\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$order_step\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
 

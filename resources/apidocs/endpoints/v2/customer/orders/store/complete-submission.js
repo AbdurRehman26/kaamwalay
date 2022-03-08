@@ -8,8 +8,6 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- *  @apiParamExample {json} Request-Example:
- *
  * @apiSuccess {Object} data Order object
  *
  * @apiSuccessExample Success-Response:

@@ -520,20 +520,8 @@ export const updateCreditAndPromoCode = createAsyncThunk(
     async (_, { getState }: any) => {
         const currentSubmission = getState().newSubmission;
         const orderId = currentSubmission.orderID;
-        const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
 
         const orderDTO = {
-            billingAddress: {
-                firstName: billingAddress.firstName,
-                lastName: billingAddress.lastName,
-                address: billingAddress.address,
-                city: billingAddress.city,
-                state: billingAddress.state.code,
-                zip: billingAddress.zipCode,
-                phone: billingAddress.phoneNumber,
-                flat: billingAddress.flat,
-                sameAsShipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
-            },
             coupon: currentSubmission.couponState.isCouponApplied
                 ? {
                       code: currentSubmission?.couponState?.couponCode,
@@ -836,6 +824,7 @@ export const newSubmissionSlice = createSlice({
             state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
                 (plan) => plan.id === action.payload.paymentPlan.id,
             ) as any;
+
             state.couponState.isCouponValid = Boolean(action.payload.discountedAmount);
             state.couponState.validCouponId = action.payload.discountedAmount ? action.payload.coupon?.id : -1;
             state.couponState.isCouponApplied = Boolean(parseInt(action.payload.discountedAmount));

@@ -63,7 +63,6 @@ class CreditAndDiscountOrderService
     protected function process(): void
     {
         DB::beginTransaction();
-        $this->storeBillingAddress($this->data['billing_address']);
         $this->storeCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->storeShippingFee();
         $this->storeServiceFee();
@@ -82,16 +81,6 @@ class CreditAndDiscountOrderService
     protected function storePaymentMethod(array $paymentMethod): void
     {
         $this->order->payment_method_id = $paymentMethod['id'];
-    }
-
-    protected function storeBillingAddress(array $billingAddress): void
-    {
-        if ($billingAddress['same_as_shipping']) {
-            $this->order->billingAddress()->associate(OrderAddress::find($this->order->shipping_order_address_id));
-        } else {
-            $billingAddress = OrderAddress::create($billingAddress);
-            $this->order->billingAddress()->associate($billingAddress);
-        }
     }
 
     protected function storeShippingFee(): void

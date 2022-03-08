@@ -24,9 +24,9 @@ function OrderReviewSection() {
 
     // Payment method data
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
-    const billingAddress = useAppSelector((state) => state.newSubmission.billingAddress);
     const shippingAddress = useAppSelector((state) => state.newSubmission.shippingAddress);
     const discountCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+
     const discountStatement = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountStatement,
     );
@@ -104,23 +104,11 @@ function OrderReviewSection() {
                             className={classes.darkBodyText}
                         >{`${finalShippingAddress.city}, ${finalShippingAddress.state} ${finalShippingAddress.zip}, US`}</Typography>
                     </OrderDetailItem>
-                ) : (
-                    <OrderDetailItem title={'Billing Address'} editStep={3}>
-                        <Typography
-                            className={classes.darkBodyText}
-                        >{`${billingAddress.firstName} ${billingAddress.lastName}`}</Typography>
-                        <Typography className={classes.darkBodyText}>{`${billingAddress.address} ${
-                            billingAddress?.flat ? `apt: ${billingAddress?.flat}` : ''
-                        }`}</Typography>
-                        <Typography
-                            className={classes.darkBodyText}
-                        >{`${billingAddress.city}, ${billingAddress.state} ${billingAddress.zip}, US`}</Typography>
-                    </OrderDetailItem>
-                )}
+                ) : null}
 
                 {isCouponApplied && paymentMethodId !== 3 ? (
                     <>
-                        {!isMobile ? <Spacer top={'48px'} /> : null}
+                        {!isMobile ? <Spacer top={'0px'} /> : null}
                         <OrderDetailItem title={'Promo Code'} editStep={3}>
                             <Typography className={classes.darkBodyText}>{discountCode}</Typography>
                             <Typography className={classes.greyBodyText}>{discountStatement}</Typography>

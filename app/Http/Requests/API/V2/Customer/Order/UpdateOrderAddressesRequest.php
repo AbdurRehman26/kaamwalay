@@ -23,9 +23,6 @@ class UpdateOrderAddressesRequest extends FormRequest
         $order = $this->route('order');
 
         $validator->after(function ($validator) use ($order) {
-            if (! $order->paymentPlan) {
-                $validator->errors()->add('payment_plan', 'Please select a valid payment plan.');
-            }
             if (! $order->orderItems()->count()) {
                 $validator->errors()->add('items', 'Please select at least one card to proceed.');
             }

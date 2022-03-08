@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
-use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
 use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest;
-use App\Http\Requests\API\V2\Customer\Order\UpdateCustomerShipmentRequest;
+use App\Http\Requests\API\V1\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Resources\API\V1\Customer\Order\OrderCollection;
 use App\Http\Resources\API\V1\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderResource;
 use App\Models\Order;
-use App\Models\OrderStatus;
 use App\Services\Order\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use App\Services\Order\V1\CreateOrderService;
@@ -21,7 +19,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 class OrderController extends Controller
 {

@@ -13,7 +13,7 @@ import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
 import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
 import { useAuth } from '@shared/hooks/useAuth';
-import {useAppSelector} from "@dashboard/redux/hooks";
+import { useAppSelector } from '@dashboard/redux/hooks';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -154,7 +154,7 @@ function PaymentSummary() {
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const discountedValue = useAppSelector(
-            (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
+        (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const paymentMethodDiscountedAmount = useAppSelector((state) => state.newSubmission.paymentMethodDiscountedAmount);
@@ -162,23 +162,23 @@ function PaymentSummary() {
     const user$ = useAuth().user;
 
     const numberOfSelectedCards =
-            selectedCards.length !== 0
-                    ? selectedCards.reduce(function (prev: number, cur: any) {
-                        // @ts-ignore
-                        return prev + cur?.qty;
-                    }, 0)
-                    : 0;
+        selectedCards.length !== 0
+            ? selectedCards.reduce(function (prev: number, cur: any) {
+                  // @ts-ignore
+                  return prev + cur?.qty;
+              }, 0)
+            : 0;
 
     const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
 
     const currentSelectedTurnaround = useAppSelector(
-            (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
     );
     const currentSelectedMaxProtection = useAppSelector(
-            (state) => state.newSubmission.step01Data.selectedServiceLevel.maxProtectionAmount,
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.maxProtectionAmount,
     );
     const currentSelectedLevelPrice = useAppSelector(
-            (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
+        (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
     );
 
     const sendECommerceDataToGA = () => {
@@ -219,123 +219,123 @@ function PaymentSummary() {
     };
 
     return (
-            <Paper variant={'outlined'} square className={classes.container}>
-                <div className={classes.bodyContainer}>
-                    <div className={classes.paymentActionsContainer}>
-                        <>
-                            <Button variant="contained" color="primary" onClick={handleConfirmStripePayment}>
-                                Submit Payment
-                            </Button>
-                            {paymentMethodID === 2 ? <PaypalBtn /> : null}
-                            {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
-                        </>
+        <Paper variant={'outlined'} square className={classes.container}>
+            <div className={classes.bodyContainer}>
+                <div className={classes.paymentActionsContainer}>
+                    <>
+                        <Button variant="contained" color="primary" onClick={handleConfirmStripePayment}>
+                            Submit Payment
+                        </Button>
+                        {paymentMethodID === 2 ? <PaypalBtn /> : null}
+                        {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
+                    </>
+                </div>
+
+                <Divider light />
+                <div className={classes.rowsContainer}>
+                    <div className={classes.row}>
+                        <Typography className={classes.boldDarkText}>Price Summary</Typography>
                     </div>
+                    <div className={classes.row}>
+                        <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
 
-                    <Divider light />
-                    <div className={classes.rowsContainer}>
-                        <div className={classes.row}>
-                            <Typography className={classes.boldDarkText}>Price Summary</Typography>
-                        </div>
-                        <div className={classes.row}>
-                            <Typography className={classes.rowLeftText}>Service Level Fee:</Typography>
-
-                            <Typography className={classes.rowRightBoldText}>
-                        <span style={{ fontWeight: 400, color: '#757575' }}>
-                            (
-                            <NumberFormat
+                        <Typography className={classes.rowRightBoldText}>
+                            <span style={{ fontWeight: 400, color: '#757575' }}>
+                                (
+                                <NumberFormat
                                     value={serviceLevelPrice}
                                     displayType={'text'}
                                     thousandSeparator
                                     decimalSeparator={'.'}
                                     prefix={'$'}
-                            />
-                            &nbsp; x {numberOfSelectedCards}) =&nbsp;
-                        </span>
-                                <NumberFormat
-                                        value={numberOfSelectedCards * serviceLevelPrice}
-                                        displayType={'text'}
-                                        thousandSeparator
-                                        decimalSeparator={'.'}
-                                        prefix={'$'}
                                 />
-                            </Typography>
-                        </div>
-                        {paymentMethodDiscountedAmount > 0 ? (
-                                <div className={classes.row} style={{ marginTop: '16px' }}>
-                                    <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
-                                    <NumberFormat
-                                            value={paymentMethodDiscountedAmount}
-                                            className={classes.rowRightBoldText}
-                                            displayType={'text'}
-                                            thousandSeparator
-                                            decimalSeparator={'.'}
-                                            prefix={'-$'}
-                                    />
-                                </div>
-                        ) : null}
-
-                        {appliedCredit > 0 ? (
-                                <div className={classes.row} style={{ marginTop: '16px' }}>
-                                    <Typography className={classes.rowLeftText}>Credit: </Typography>
-                                    <NumberFormat
-                                            value={appliedCredit}
-                                            className={classes.rowRightBoldText}
-                                            displayType={'text'}
-                                            thousandSeparator
-                                            decimalSeparator={'.'}
-                                            prefix={'-$'}
-                                    />
-                                </div>
-                        ) : null}
-
-                        {isCouponApplied ? (
-                                <div className={classes.row} style={{ marginTop: '16px' }}>
-                                    <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
-                                    <NumberFormat
-                                            value={discountedValue}
-                                            className={classes.rowRightBoldText}
-                                            displayType={'text'}
-                                            thousandSeparator
-                                            decimalSeparator={'.'}
-                                            prefix={'-$'}
-                                    />
-                                </div>
-                        ) : null}
-
-                        <div className={classes.row} style={{ marginTop: '16px' }}>
-                            <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                &nbsp; x {numberOfSelectedCards}) =&nbsp;
+                            </span>
                             <NumberFormat
-                                    value={shippingFee}
-                                    className={classes.rowRightBoldText}
-                                    displayType={'text'}
-                                    thousandSeparator
-                                    decimalSeparator={'.'}
-                                    prefix={'$'}
+                                value={numberOfSelectedCards * serviceLevelPrice}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                        </Typography>
+                    </div>
+                    {paymentMethodDiscountedAmount > 0 ? (
+                        <div className={classes.row} style={{ marginTop: '16px' }}>
+                            <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
+                            <NumberFormat
+                                value={paymentMethodDiscountedAmount}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'-$'}
                             />
                         </div>
-                    </div>
-                    <Divider light />
+                    ) : null}
 
-                    <div className={classes.rowsContainer}>
-                        <div className={classes.row}>
-                            <Typography className={classes.rowLeftText}>Total:</Typography>
-                            <Typography className={classes.rowRightBoldText}>
-                                &nbsp;
-                                {totalInAGS > 0 && paymentMethodID === 3 ? `(${totalInAGS} AGS) ` : null}
-                                <NumberFormat
-                                        value={grandTotal}
-                                        className={classes.rowRightBoldText}
-                                        displayType={'text'}
-                                        thousandSeparator
-                                        decimalSeparator={'.'}
-                                        prefix={'$'}
-                                />
-                            </Typography>
+                    {appliedCredit > 0 ? (
+                        <div className={classes.row} style={{ marginTop: '16px' }}>
+                            <Typography className={classes.rowLeftText}>Credit: </Typography>
+                            <NumberFormat
+                                value={appliedCredit}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'-$'}
+                            />
                         </div>
+                    ) : null}
+
+                    {isCouponApplied ? (
+                        <div className={classes.row} style={{ marginTop: '16px' }}>
+                            <Typography className={classes.rowLeftText}>Promo Code Discount: </Typography>
+                            <NumberFormat
+                                value={discountedValue}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'-$'}
+                            />
+                        </div>
+                    ) : null}
+
+                    <div className={classes.row} style={{ marginTop: '16px' }}>
+                        <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                        <NumberFormat
+                            value={shippingFee}
+                            className={classes.rowRightBoldText}
+                            displayType={'text'}
+                            thousandSeparator
+                            decimalSeparator={'.'}
+                            prefix={'$'}
+                        />
                     </div>
-                    <Divider light />
                 </div>
-            </Paper>
+                <Divider light />
+
+                <div className={classes.rowsContainer}>
+                    <div className={classes.row}>
+                        <Typography className={classes.rowLeftText}>Total:</Typography>
+                        <Typography className={classes.rowRightBoldText}>
+                            &nbsp;
+                            {totalInAGS > 0 && paymentMethodID === 3 ? `(${totalInAGS} AGS) ` : null}
+                            <NumberFormat
+                                value={grandTotal}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                        </Typography>
+                    </div>
+                </div>
+                <Divider light />
+            </div>
+        </Paper>
     );
 }
 

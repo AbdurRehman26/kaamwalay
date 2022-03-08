@@ -5,7 +5,7 @@ import { ListSubmissions } from './ListSubmissions';
 import { NewSubmission } from './NewSubmission';
 import { ViewSubmission } from './ViewSubmission';
 import { CollectorCoinConfirmationSubmission } from './CollectorCoinConfirmationSubmission';
-import Payment from "@dashboard/pages/Submissions/Payment/Payment";
+import Payment from '@dashboard/pages/Submissions/Payment/Payment';
 
 export function Submissions() {
     return (

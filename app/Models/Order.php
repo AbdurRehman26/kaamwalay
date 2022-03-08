@@ -62,6 +62,7 @@ class Order extends Model
         'refund_total',
         'payment_method_discounted_amount',
         'order_step',
+        'payment_status',
     ];
 
     /**

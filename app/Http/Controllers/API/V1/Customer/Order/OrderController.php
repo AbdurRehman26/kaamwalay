@@ -114,16 +114,4 @@ class OrderController extends Controller
             );
         }
     }
-
-    /**
-     * @throws Throwable
-     */
-    public function destroy(Order $order): JsonResponse
-    {
-        throw_if($order->order_status_id !== OrderStatus::PAYMENT_PENDING, OrderCanNotCanceled::class);
-
-        $this->orderService->cancelOrder($order, auth()->user());
-
-        return new JsonResponse([], Response::HTTP_NO_CONTENT);
-    }
 }

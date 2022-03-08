@@ -4,7 +4,6 @@ namespace App\Services\Order\V2;
 
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
-use App\Models\OrderAddress;
 use App\Models\PaymentMethod;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\Shipping\ShippingFeeService;

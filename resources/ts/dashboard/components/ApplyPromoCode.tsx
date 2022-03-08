@@ -97,7 +97,6 @@ export function ApplyPromoCode() {
     );
 
     useEffect(() => {
-        console.log(couponCode, 111);
         if (couponCode) {
             handleChange({ target: { value: couponCode } });
         }

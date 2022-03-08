@@ -14,7 +14,7 @@ class AlterTableOrdersAddColumnStep extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('order_step')->default('add_cards');
+            $table->string('order_step')->after('order_number')->default('add_cards');
         });
     }
 
@@ -26,7 +26,7 @@ class AlterTableOrdersAddColumnStep extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('order_step');
+            $table->dropColumn('order_step');
         });
     }
 }

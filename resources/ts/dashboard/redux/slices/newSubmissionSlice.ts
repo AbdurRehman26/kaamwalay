@@ -485,6 +485,12 @@ export const updateOrderAddresses = createAsyncThunk('newSubmission/updateOrderI
         };
     }
 
+    if (currentSubmission.shippingAddress?.id && !orderDTO.customerAddress?.id) {
+        orderDTO.shippingAddress = {
+            id: currentSubmission.shippingAddress?.id,
+        };
+    }
+
     if (currentSubmission.step03Data.useCustomShippingAddress) {
         orderDTO.shippingAddress = {
             firstName: finalShippingAddress.firstName,
@@ -499,12 +505,6 @@ export const updateOrderAddresses = createAsyncThunk('newSubmission/updateOrderI
                 currentSubmission.step03Data.selectedExistingAddress.id !== -1 && !currentSubmission.shippingAddress
                     ? false
                     : currentSubmission.step03Data.saveForLater,
-        };
-    }
-
-    if (currentSubmission.shippingAddress?.id && !orderDTO.customerAddress?.id) {
-        orderDTO.shippingAddress = {
-            id: currentSubmission.shippingAddress?.id,
         };
     }
 
@@ -840,6 +840,8 @@ export const newSubmissionSlice = createSlice({
         },
         [updateOrderAddresses.fulfilled as any]: (state, action) => {
             state.shippingAddress = action.payload.shippingAddress;
+            state.step03Data.selectedExistingAddress.id = -1;
+            state.step03Data.useCustomShippingAddress = false;
         },
         [updateCreditAndPromoCode.fulfilled as any]: (state, action) => {
             state.billingAddress = action.payload.billingAddress;

@@ -1,60 +1,14 @@
 /**
- * @api {post} /v2/customer/orders Create order
- * @apiName Create Order
+ * @api {post} /v1/customer/orders/{id}/complete-submission Complete Submission Of Order
+ * @apiName Complete Order
  * @apiGroup Customer-Orders
  *
- * @apiVersion 2.0.0
+ * @apiVersion 1.0.0
  *
  * @apiUse header_main
  * @apiUse Authorization
  *
  *  @apiParamExample {json} Request-Example:
- *      {
- *          "payment_plan": {
- *              "id": 1
- *          },
- *          "items": [
- *              {
- *                  "card_product": {
- *                      "id": 1
- *                  },
- *                  "quantity": 1,
- *                  "declared_value_per_unit": 500
- *              },
- *              {
- *                  "card_product": {
- *                      "id": 2
- *                  },
- *                  "quantity": 10,
- *                  "declared_value_per_unit": 500
- *              }
- *          ],
- *          "shipping_address": {
- *              "first_name": "Test",
- *              "last_name": "Test",
- *              "address": "Test address",
- *              "city": "Test",
- *              "state": "AB",
- *              "zip": "123A",
- *              "phone": "1312310913",
- *              "flat": "43",
- *              "save_for_later": true
- *          },
- *          "billing_address": {
- *              "first_name": "Test",
- *              "last_name": "Test",
- *              "address": "Test address",
- *              "city": "Test",
- *              "state": "AB",
- *              "zip": "123A",
- *              "phone": "1312310913",
- *              "flat": "43",
- *              "same_as_shipping": false
- *          },
- *          "shipping_method": {
- *              "id": 1
- *          }
- *      }
  *
  * @apiSuccess {Object} data Order object
  *

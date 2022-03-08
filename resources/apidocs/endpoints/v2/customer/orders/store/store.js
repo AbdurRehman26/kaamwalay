@@ -1,5 +1,5 @@
 /**
- * @api {post} /v1/customer/orders/create Store order
+ * @api {post} /v1/customer/orders Store order
  * @apiName Store Order
  * @apiGroup Customer-Orders
  *

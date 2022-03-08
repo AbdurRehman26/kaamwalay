@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useListOrdersQuery, usePendingListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import OrderIncompleteSubmissionsDialog from '@dashboard/components/OrderIncompleteSubmissionsDialog';
@@ -47,7 +47,7 @@ export function ListSubmissions() {
         ...bracketParams(),
     });
 
-    const incompleteOrders$ = useListOrdersQuery({
+    const incompleteOrders$ = usePendingListOrdersQuery({
         params: {
             filter: { orderStatusId: 1 },
             include: ['orderStatus'],

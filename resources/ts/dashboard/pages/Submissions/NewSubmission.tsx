@@ -111,10 +111,10 @@ export function NewSubmission() {
             case 4:
                 return <SubmissionStep05Content />;
             default:
-                window.location.href = '/submissions/new';
+                window.location.href = `/dashboard/submissions/${orderId}/view`;
                 return;
         }
-    }, [currentStep]);
+    }, [currentStep, orderId]);
 
     const handleNext = async () => {
         // Executing different stuff before next step loads

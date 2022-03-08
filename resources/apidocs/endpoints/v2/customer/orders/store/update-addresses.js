@@ -10,25 +10,9 @@
  *
  *  @apiParamExample {json} Request-Example:
  *      {
- *          "payment_plan": {
- *              "id": 1
+ *          "customer_address": {
+ *              "id": null
  *          },
- *          "items": [
- *              {
- *                  "card_product": {
- *                      "id": 1
- *                  },
- *                  "quantity": 1,
- *                  "declared_value_per_unit": 500
- *              },
- *              {
- *                  "card_product": {
- *                      "id": 2
- *                  },
- *                  "quantity": 10,
- *                  "declared_value_per_unit": 500
- *              }
- *          ],
  *          "shipping_address": {
  *              "first_name": "Test",
  *              "last_name": "Test",

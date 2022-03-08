@@ -56,6 +56,7 @@ class CreateOrderService
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PAYMENT_PENDING, $this->order);
 
         DB::commit();
+
     }
 
     protected function startOrder(): void
@@ -72,6 +73,7 @@ class CreateOrderService
     {
         $this->order->user()->associate(auth()->user());
         $this->order->order_step = Order::ORDER_STEPS['CARDS_SELECTION_STEP'];
+        $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();
     }

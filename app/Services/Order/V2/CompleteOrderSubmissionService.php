@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V2;
 
+use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderStatus;
@@ -50,6 +51,7 @@ class CompleteOrderSubmissionService
 
         $this->saveOrder();
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
+        OrderPlaced::dispatch($this->order);
 
         DB::commit();
     }

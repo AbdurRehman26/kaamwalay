@@ -770,6 +770,10 @@ export const newSubmissionSlice = createSlice({
         },
         [getSavedAddresses.fulfilled as any]: (state, action) => {
             state.step03Data.existingAddresses = action.payload;
+            if (!action.payload.length) {
+                state.step03Data.disableAllShippingInputs = false;
+                state.step03Data.useCustomShippingAddress = true;
+            }
         },
         [getAvailableCredit.fulfilled as any]: (state, action) => {
             state.availableCredit = action.payload;

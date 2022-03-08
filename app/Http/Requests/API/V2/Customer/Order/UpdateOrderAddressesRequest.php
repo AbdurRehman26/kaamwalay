@@ -48,7 +48,7 @@ class UpdateOrderAddressesRequest extends FormRequest
             'shipping_address.state' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString, 'max:2'],
             'shipping_address.zip' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString],
             'shipping_address.phone' => [Rule::requiredIf($shippingAddressIsRequired), $isNullableOrString],
-            'shipping_address.flat' => [Rule::requiredIf($shippingAddressIsRequired), 'nullable', 'string'],
+            'shipping_address.flat' => ['nullable', 'string'],
             'shipping_address.save_for_later' => [Rule::requiredIf($shippingAddressIsRequired), 'boolean'],
             'shipping_address.id' => [Rule::requiredIf($shippingAddressIdExists), 'integer', 'exists:orders,shipping_order_address_id'],
             'shipping_method' => 'required|array',

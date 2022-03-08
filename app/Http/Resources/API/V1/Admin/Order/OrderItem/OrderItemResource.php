@@ -3,8 +3,8 @@
 namespace App\Http\Resources\API\V1\Admin\Order\OrderItem;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V1\CardProduct\CardProductResource;
 use App\Http\Resources\API\V1\Admin\UserCard\UserCardResource;
+use App\Http\Resources\API\V1\CardProduct\CardProductResource;
 use App\Models\OrderItemStatus;
 use App\Models\OrderItemStatusHistory;
 

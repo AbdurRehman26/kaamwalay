@@ -13,7 +13,6 @@ use App\Http\Controllers\API\V1\Customer\Cards\CardProductController;
 use App\Http\Controllers\API\V1\Customer\Cards\UserCardController;
 use App\Http\Controllers\API\V1\Customer\CouponController;
 use App\Http\Controllers\API\V1\Customer\Order\OrderController;
-use App\Http\Controllers\API\V1\Customer\Order\OrderItemController;
 use App\Http\Controllers\API\V1\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\V1\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\V1\Customer\Order\PaymentPlanController;
@@ -77,12 +76,6 @@ Route::prefix('customer')->group(function () {
                     'index' => 'customer.orders.index',
                     'store' => 'customer.orders.store',
                 ]);
-
-            Route::get('{order}/order-items', [OrderItemController::class, 'index'])->name('customer.orders.order-items.index');
-            Route::post('{order}/order-items', [OrderItemController::class, 'store'])->name('customer.orders.order-items.store');
-            Route::delete('{order}/order-items/{orderItem}', [OrderItemController::class, 'destroy'])->name('customer.orders.order-items.destroy');
-            Route::put('{order}/order-items/{orderItem}', [OrderItemController::class, 'update'])->name('customer.orders.order-items.update');
-
         });
 
 

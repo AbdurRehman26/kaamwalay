@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Customer\Order;
+namespace App\Http\Requests\API\V2\Customer\Order;
 
 use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteOrderItemRequest extends FormRequest
+class StoreOrderItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,9 @@ class DeleteOrderItemRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'card_product_id' => ['required', 'integer', 'exists:card_products,id'],
+            'quantity' => ['required', 'integer'],
+            'declared_value_per_unit' => ['required', 'integer'],
         ];
     }
 }

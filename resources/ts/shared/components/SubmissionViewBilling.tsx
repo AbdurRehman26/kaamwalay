@@ -12,6 +12,7 @@ import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { Link, useParams } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import PaymentStatusChip from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 
 interface SubmissionViewBillingProps {
     shippingAddress?: AddressEntity;
@@ -57,7 +58,7 @@ export function SubmissionViewBilling({
     const classes = useStyles();
     const { card, payer } = payment ?? {};
     const hasPayment = [1, 2, 3].includes(Number(paymentMethodId)); // Checking if one of our supported payment methods is on the order
-    const isPaid = useMemo(() => paymentStatus === 'paid', [paymentStatus]);
+    const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
     const { id } = useParams<'id'>();
 
     const { cardIcon, cardBrand } = useMemo(() => {

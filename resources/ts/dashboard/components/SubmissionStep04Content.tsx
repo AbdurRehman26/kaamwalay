@@ -16,19 +16,17 @@ import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
 import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 import { styled } from '@mui/material/styles';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import Box from '@mui/material/Box';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
         maxWidth: '425px',
     },
     leftSideContainer: {
-        marginTop: 9,
+        marginTop: 12,
     },
     divider: {
         marginTop: '64px',
-    },
-    valueAlert: {
-        marginTop: '16px',
     },
     shippingMethodContainer: {
         marginBottom: '24px',
@@ -42,19 +40,6 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: '24px',
         letterSpacing: '0.1px',
     },
-    methodDescription: {
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: '12px',
-        lineHeight: '16px',
-        letterSpacing: '0.1px',
-        marginBottom: '4px',
-        color: 'rgba(0, 0, 0, 0.87)',
-    },
-    sectionContainer: {
-        marginTop: '32px',
-    },
     shippingMethodItemContainer: {
         display: 'flex',
         flexDirection: 'row',
@@ -63,99 +48,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
             justifyContent: 'flex-start',
-        },
-    },
-    shippingAddressSectionHeader: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    fieldContainer: {
-        display: 'flex',
-        alignItems: 'start',
-        flexDirection: 'column',
-    },
-    inputsRow01: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    inputsRow02: {
-        marginTop: '6px',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    inputsRow03: {
-        marginTop: '6px',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    inputsRow04: {
-        marginTop: '6px',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    billingAddressAsShippingContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: '12px',
-    },
-    billingAddressTitle: {
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: '14px',
-        lineHeight: '20px',
-        letterSpacing: '0.1px',
-        color: 'rgba(0, 0, 0, 0.87)',
-    },
-    billingAddressItem: {
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: '14px',
-        lineHeight: '20px',
-        letterSpacing: '0.1px',
-        color: 'rgba(0, 0, 0, 0.54)',
-    },
-    loaderContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'center',
-    },
-    addressFieldContainer: {
-        width: '80%',
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-    },
-    aptFieldContainer: {
-        width: '18%',
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-    },
-    cityFieldContainer: {
-        width: '30%',
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-    },
-    stateFieldContainer: {
-        width: '32%',
-        marginTop: '6px',
-        [theme.breakpoints.down('sm')]: {
-            width: '47%',
-        },
-    },
-    zipFieldContainer: {
-        width: '32%',
-        [theme.breakpoints.down('sm')]: {
-            width: '47%',
         },
     },
     availableCreditLabel: {
@@ -212,6 +104,7 @@ export function SubmissionStep04Content() {
                             </Typography>
                         </div>
                     </div>
+                    <Box marginTop={5} />
                     <Divider light />
                     <div className={classes.leftSideContainer}>
                         {availableCredit > 0 ? (
@@ -235,7 +128,6 @@ export function SubmissionStep04Content() {
                                 <ApplyPromoCode />
                             </div>
                         </div>
-                        <Divider light sx={{ marginBottom: '6px' }} />
                     </div>
                 </Grid>
                 <Grid item xs={12} md={4}>
@@ -251,8 +143,8 @@ export function SubmissionStep04Content() {
 export default SubmissionStep04Content;
 
 const StyledMoneyIcon = styled(MonetizationOnOutlinedIcon)({
-    minWidth: 32,
-    height: 32,
+    minWidth: 24,
+    height: 24,
     color: '#20BFB8',
-    marginRight: 8,
+    marginRight: 10,
 });

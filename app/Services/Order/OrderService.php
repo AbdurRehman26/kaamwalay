@@ -75,7 +75,7 @@ class OrderService
         $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
         $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
-        $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
+        $data["BILLING_ADDRESS"] = $order->billingAddress ? $this->getAddressData($order->billingAddress) : [];
 
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 

@@ -338,7 +338,6 @@ export const getShippingFee = createAsyncThunk(
 );
 
 export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddresses', async (_, { getState }: any) => {
-    const availableStatesList: any = getState().newSubmission.step03Data.availableStatesList;
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/addresses');
     const customerAddresses = await endpoint.get('');
@@ -357,7 +356,7 @@ export const getSavedAddresses = createAsyncThunk('newSubmission/getSavedAddress
             isDefaultBilling: address.isDefaultSilling,
             // Doing this because the back-end can't give me this full object for the state
             // so I'll just search for the complete object inside the existing states
-            state: availableStatesList.find((item: any) => item.code === address.state),
+            state: address.state,
             country: {
                 id: address.country.id,
                 code: address.country.code,
@@ -793,23 +792,11 @@ export const newSubmissionSlice = createSlice({
             state.grandTotal = action.payload.grandTotal;
             state.orderNumber = action.payload.orderNumber;
             state.orderID = action.payload.id;
-            state.step04Data.selectedBillingAddress.address = action.payload.billingAddress?.address;
-            state.step04Data.selectedBillingAddress.country = action.payload.billingAddress?.country;
-            state.step04Data.selectedBillingAddress.firstName = action.payload.billingAddress?.firstName;
-            state.step04Data.selectedBillingAddress.lastName = action.payload.billingAddress?.lastName;
-            state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress?.flat;
-            state.step04Data.selectedBillingAddress.id = action.payload.billingAddress?.id;
             state.previewTotal = action.payload.grandTotal;
             state.step04Data.selectedCreditCard.expMonth =
                 state.step04Data.paymentMethodId === 1 && state.previewTotal !== 0
                     ? action?.payload?.orderPayment?.card?.expMonth
                     : '';
-            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress?.phone;
-            state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
-                (currentState: any) => currentState.code === action.payload.billingAddress?.state,
-            ) as any;
-            state.step04Data.selectedBillingAddress.zipCode = action.payload.billingAddress?.zip;
-            state.step04Data.selectedBillingAddress.city = action.payload.billingAddress?.city;
             state.step02Data.selectedCards = action.payload.orderItems.map((orderItem: any) => ({
                 orderItemId: orderItem.id,
                 image: orderItem.cardProduct?.imagePath,
@@ -845,7 +832,6 @@ export const newSubmissionSlice = createSlice({
             state.step04Data.paymentMethodId = action.payload.paymentMethodId;
             state.appliedCredit = action.payload.amountPaidFromWallet;
             state.shippingAddress = action.payload.shippingAddress;
-            state.billingAddress = action.payload.billingAddress;
             state.currentStep = (OrderStepsMap as Record<string, any>)[action.payload.orderStep];
         },
         [updateOrderAddresses.fulfilled as any]: (state, action) => {

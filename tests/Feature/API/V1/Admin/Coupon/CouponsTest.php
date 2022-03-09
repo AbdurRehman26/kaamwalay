@@ -28,13 +28,13 @@ beforeEach(function () {
 
 test('admin can get a list of coupons', function () {
     actingAs($this->user);
-    getJson(route('coupons.index'))
+    getJson(route('v1.coupons.index'))
         ->assertOk();
 });
 
 test('admin can create a coupon with unlimited usage limit', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'fixed',
@@ -49,7 +49,7 @@ test('admin can create a coupon with unlimited usage limit', function () {
 
 test('admin can create a coupon that can be used just once by a user', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'fixed',
@@ -65,14 +65,14 @@ test('admin can create a coupon that can be used just once by a user', function 
 test('admin can get a single coupon', function () {
     $coupon = Coupon::factory()->create();
     actingAs($this->user);
-    getJson(route('coupons.show', ['coupon' => $coupon->id]))
+    getJson(route('v1.coupons.show', ['coupon' => $coupon->id]))
         ->assertOk();
 });
 
 test('admin can create coupon for specific users', function () {
     actingAs($this->user);
     $users = User::factory(5)->create()->pluck('id');
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'fixed',
@@ -93,7 +93,7 @@ test('admin can create coupon for specific payment plan', function () {
 
     $paymentPlans = PaymentPlan::factory(5)->create()->pluck('id');
     
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'fixed',
@@ -112,7 +112,7 @@ test('admin can create coupon for specific payment plan', function () {
 test('admin can request related models for coupon list', function (string $relationShip) {
     actingAs($this->user);
 
-    getJson(route('coupons.index', ['include[]' => $relationShip]))
+    getJson(route('v1.coupons.index', ['include[]' => $relationShip]))
         ->assertOk()
         ->assertJsonStructure(['data' => [[Str::snake($relationShip)]]]);
 })->with([
@@ -127,7 +127,7 @@ test('admin can request related models for coupon list', function (string $relat
 test('admin can search for specific coupon with coupon code from the coupon list', function (array $data) {
     actingAs($this->user);
 
-    getJson(route('coupons.index', ['filters[search]' => $data['code']]))
+    getJson(route('v1.coupons.index', ['filters[search]' => $data['code']]))
         ->assertOk()
         ->assertJsonFragment(['id' => $data['id']]);
 })->with([
@@ -142,7 +142,7 @@ test('admin can search for specific coupon with coupon code from the coupon list
 test('admin can search for specific coupon with coupon status from the coupon list', function (array $data) {
     actingAs($this->user);
 
-    getJson(route('coupons.index', ['filters[search]' => $data['status']]))
+    getJson(route('v1.coupons.index', ['filters[search]' => $data['status']]))
         ->assertOk()
         ->assertJsonFragment(['id' => $data['id']]);
 })->with([
@@ -155,7 +155,7 @@ test('admin can search for specific coupon with coupon status from the coupon li
 
 test('admin can not create coupon with more than 100% discount', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'percentage',
@@ -169,7 +169,7 @@ test('admin can not create coupon with more than 100% discount', function () {
 
 test('admin can create coupon 100% discount', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'percentage',
@@ -184,7 +184,7 @@ test('admin can create coupon 100% discount', function () {
 
 test('admin can not create coupon with fixed value more than service level', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'percentage',
@@ -199,7 +199,7 @@ test('admin can not create coupon with fixed value more than service level', fun
 
 test('admin can not create coupon with end date less than the start date of coupon availability', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'percentage',
@@ -215,7 +215,7 @@ test('admin can not create coupon with end date less than the start date of coup
 
 test('admin can create coupon with same start and end date date of coupon availability', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'percentage',
@@ -232,7 +232,7 @@ test('admin can create coupon with same start and end date date of coupon availa
 
 test('admin can create coupon with today start date', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'percentage',
@@ -249,7 +249,7 @@ test('admin can create coupon with today start date', function () {
 
 test('admin can not create coupon with past start date', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'percentage',
@@ -265,7 +265,7 @@ test('admin can not create coupon with past start date', function () {
 
 test('admin can create coupon with flat discount', function () {
     actingAs($this->user);
-    postJson(route('coupons.store'), [
+    postJson(route('v1.coupons.store'), [
         'code' => $this->faker->word(),
         'description' => $this->faker->sentence(),
         'type' => 'flat',

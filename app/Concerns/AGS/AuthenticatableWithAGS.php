@@ -6,7 +6,7 @@ use App\Exceptions\API\Auth\AuthenticationException;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Models\User;
 use App\Services\AGS\AgsService;
-use App\Services\Payment\Providers\StripeService;
+use App\Services\Payment\V1\Providers\StripeService;
 use App\Services\Wallet\WalletService;
 use Illuminate\Support\Arr;
 

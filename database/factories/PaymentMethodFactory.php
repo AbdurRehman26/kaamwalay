@@ -20,4 +20,14 @@ class PaymentMethodFactory extends Factory
         ];
     }
 
+    public function wallet(): self
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'name' => 'Wallet',
+                'code' => 'wallet',
+            ];
+        });
+    }
+
 }

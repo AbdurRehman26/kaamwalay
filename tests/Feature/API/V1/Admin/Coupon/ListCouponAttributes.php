@@ -20,6 +20,6 @@ beforeEach(function () {
 test('admin can get coupon applicables', function () {
     actingAs($this->user);
 
-    getJson(route('coupon.applicables'))
+    getJson(route('v1.coupon.applicables'))
         ->assertOk();
 });

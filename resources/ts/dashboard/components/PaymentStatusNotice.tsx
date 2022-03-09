@@ -81,7 +81,7 @@ export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
                 {PaymentNoticeTextEnum[props.paymentStatus as keyof typeof PaymentNoticeTextEnum]}
             </Typography>
             <Button
-                onClick={() => navigate(`${id}/pay`)}
+                onClick={() => navigate(`/submissions/${id}/pay`)}
                 variant={'contained'}
                 color={'primary'}
                 sx={styles.payNowButton}

@@ -10,6 +10,7 @@ class OrderCreateResource extends V1OrderCreateResource
     {
         $array = parent::toArray($request);
         $array['order_step'] = $this->order_step;
+
         return $array;
     }
 }

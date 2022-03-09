@@ -30,9 +30,7 @@ class MarkOldOrdersAsCancelled extends Command
 
     public function handle(): int
     {
-
-        try{
-
+        try {
             $date = Carbon::parse($this->argument('date'))->toDateString();
 
             $orderIds = Order::where('order_status_id', '=', OrderStatus::PAYMENT_PENDING)
@@ -45,20 +43,16 @@ class MarkOldOrdersAsCancelled extends Command
 
             OrderStatusHistory::whereIn('order_id', $orderIds)
                 ->update([
-                    'order_status_id', OrderStatus::CANCELLED
+                    'order_status_id', OrderStatus::CANCELLED,
                 ]);
 
             OrderItemStatusHistory::whereOrderItemId($orderItemIds)
                 ->updateOrCreate([
-                    'order_item_status_id', OrderItemStatus::CANCELLED
+                    'order_item_status_id', OrderItemStatus::CANCELLED,
                 ]);
-
-
-        }catch (Exception $e){
-
+        } catch (Exception $e) {
             $this->info('Error while deleting orders');
             $this->info($e->getMessage());
-
         }
 
         return 0;

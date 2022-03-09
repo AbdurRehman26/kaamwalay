@@ -109,7 +109,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
             orderNumber={data?.orderNumber}
             serviceLevel={data?.paymentPlan?.price}
             cardsNumber={data?.numberOfCards}
-            status={data?.orderStatus?.name}
+            status={data?.orderStatus?.id}
             datePlaced={data?.createdAt}
             dateArrived={data?.arrivedAt}
             invoice={data?.invoice?.path}

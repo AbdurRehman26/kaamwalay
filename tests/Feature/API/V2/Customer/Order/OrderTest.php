@@ -137,6 +137,7 @@ test('a customer can update order addresses', function () {
             'id' => $this->shippingMethod->id,
         ],
     ]);
+
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

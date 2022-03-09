@@ -22,7 +22,7 @@ beforeEach(function () {
 });
 
 test('an admin cannot export data of nonexistent model', function () {
-    $response = postJson(route('v1.admin.export-data'), [
+    $response = postJson(route('v2.admin.export-data'), [
         'model' => 'IAmANonExistentModel',
     ]);
 
@@ -31,7 +31,7 @@ test('an admin cannot export data of nonexistent model', function () {
 });
 
 test('an admin export data needs model name', function () {
-    $response = postJson(route('v1.admin.export-data'));
+    $response = postJson(route('v2.admin.export-data'));
 
     $response->assertUnprocessable();
     $response->assertJsonValidationErrors(['model' => 'The model field is required.']);
@@ -41,7 +41,7 @@ test('an admin can export data of order model', function () {
     Storage::fake('s3');
     Order::factory()->count(2)->create();
 
-    $response = postJson(route('v1.admin.export-data'), [
+    $response = postJson(route('v2.admin.export-data'), [
         'model' => 'order',
     ]);
 
@@ -53,7 +53,7 @@ test('an admin can export data of user model', function () {
     Storage::fake('s3');
     Order::factory()->count(2)->create();
 
-    $response = postJson(route('v1.admin.export-data'), [
+    $response = postJson(route('v2.admin.export-data'), [
         'model' => 'user',
     ]);
 
@@ -68,7 +68,7 @@ test('a customer cannot export data of a model', function () {
 
     actingAs($this->user);
 
-    $response = postJson(route('v1.admin.export-data'));
+    $response = postJson(route('v2.admin.export-data'));
 
     $response->assertForbidden();
 });

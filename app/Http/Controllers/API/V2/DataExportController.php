@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\Admin;
+namespace App\Http\Controllers\API\V2;
 
 use App\Exceptions\Services\Admin\ModelNotExportableException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Admin\ExportDataRequest;
+use App\Http\Requests\API\V2\Admin\ExportDataRequest;
 use App\Services\Admin\DataExportService;
 use Illuminate\Http\JsonResponse;
 

@@ -17,6 +17,7 @@ use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V2\Admin\OrderStatusHistoryController;
 use App\Http\Controllers\API\V2\Admin\Wallet\CustomerWalletController;
 use App\Http\Controllers\API\V2\Auth\Admin\LoginController;
+use App\Http\Controllers\API\V2\DataExportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -84,4 +85,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('{wallet}/history', [CustomerWalletController::class, 'getTransactionsHistory'])
             ->name('customer.wallet.history');
     });
+
+    Route::post('export-data', DataExportController::class)->name('admin.export-data');
 });

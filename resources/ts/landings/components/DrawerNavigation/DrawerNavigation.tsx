@@ -23,6 +23,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useState } from 'react';
 import logo from '@shared/assets/logo.svg';
+import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { cx } from '@shared/lib/utils/cx';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -36,6 +39,9 @@ const useStyles = makeStyles(
             borderRadius: 20,
             minWidth: 120,
             width: `calc(100% - ${theme.spacing(4)})`,
+        },
+        buttonBackground: {
+            backgroundColor: theme.palette.primary.main,
         },
         divider: {
             margin: theme.spacing(1, 0),
@@ -67,7 +73,7 @@ export function DrawerNavigation() {
     const classes = useStyles();
     const { authenticated, logout } = useAuth();
     const [isOpen, setOpen] = useState(false);
-
+    const dispatch = useSharedDispatch();
     const handleOpen = useCallback(() => setOpen(true), [setOpen]);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
     const handleLogout = useCallback(async () => {
@@ -81,6 +87,14 @@ export function DrawerNavigation() {
         },
         [],
     );
+
+    const handleChange = useCallback(() => {
+        if (!authenticated) {
+            dispatch(headerDialogVisibility(true));
+        } else {
+            window.location.href = '/dashboard/submissions/new';
+        }
+    }, [dispatch, authenticated]);
 
     return (
         <>
@@ -168,10 +182,10 @@ export function DrawerNavigation() {
 
                     <Grid container direction={'column'} alignItems={'center'} justifyContent={'center'}>
                         <Button
-                            href={'/dashboard/submissions/new'}
+                            onClick={handleChange}
                             variant={'contained'}
                             color={'primary'}
-                            className={classes.button}
+                            className={cx(classes.button, classes.buttonBackground)}
                             startIcon={<UploadIcon />}
                             fullWidth
                             disableElevation
@@ -181,7 +195,7 @@ export function DrawerNavigation() {
 
                         {!authenticated ? (
                             <Button
-                                href={'/auth/sign-in'}
+                                onClick={handleChange}
                                 variant={'text'}
                                 color={'inherit'}
                                 className={classes.button}

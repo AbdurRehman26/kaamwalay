@@ -9,9 +9,9 @@ use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Services\Admin\OrderStatusHistoryService;
+use App\Services\Admin\V1\OrderStatusHistoryService;
 use App\Services\Order\Shipping\ShippingFeeService;
-use App\Services\Payment\Providers\CollectorCoinService;
+use App\Services\Payment\V1\Providers\CollectorCoinService;
 use Mockery\MockInterface;
 use Symfony\Component\HttpFoundation\Response;
 

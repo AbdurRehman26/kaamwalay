@@ -4,7 +4,7 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Order\RevenueStatsService;
-use App\Services\Payment\PaymentService;
+use App\Services\Payment\V1\PaymentService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;

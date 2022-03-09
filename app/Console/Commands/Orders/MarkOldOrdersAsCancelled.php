@@ -3,11 +3,9 @@
 namespace App\Console\Commands\Orders;
 
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\OrderItemStatus;
-use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
-use App\Models\OrderStatusHistory;
+use App\Models\User;
+use App\Services\Order\V2\OrderService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Console\Command;
@@ -28,28 +26,19 @@ class MarkOldOrdersAsCancelled extends Command
      */
     protected $description = 'Mark all the orders as cancelled before given date. i.e Format (d-m-Y, d/m/Y)';
 
-    public function handle(): int
+    public function handle(OrderService $orderService): int
     {
         try {
             $date = Carbon::parse($this->argument('date'))->toDateString();
 
-            $orderIds = Order::where('order_status_id', '=', OrderStatus::PAYMENT_PENDING)
+            $orders = Order::where('order_status_id', '=', OrderStatus::PAYMENT_PENDING)
                 ->whereDate('created_at', '<', $date)
-                ->pluck('id');
+                ->get();
 
-            $orderItemIds = OrderItem::whereIn('order_id', $orderIds)
-                ->pluck('id');
+            foreach ($orders as $order){
+                $orderService->cancelOrder($order, User::admin()->first());
+            }
 
-
-            OrderStatusHistory::whereIn('order_id', $orderIds)
-                ->update([
-                    'order_status_id', OrderStatus::CANCELLED,
-                ]);
-
-            OrderItemStatusHistory::whereOrderItemId($orderItemIds)
-                ->updateOrCreate([
-                    'order_item_status_id', OrderItemStatus::CANCELLED,
-                ]);
         } catch (Exception $e) {
             $this->info('Error while deleting orders');
             $this->info($e->getMessage());

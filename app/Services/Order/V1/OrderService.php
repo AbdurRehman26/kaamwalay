@@ -150,7 +150,7 @@ class OrderService
     protected function cancelOrderItems(Order $order)
     {
         $order->orderItems->each(function (OrderItem $orderItem) use ($order) {
-            OrderItemStatusHistory::create([
+            OrderItemStatusHistory::updateOrCreate([
                 'order_item_id' => $orderItem->id,
                 'order_item_status_id' => OrderItemStatus::CANCELLED,
                 'user_id' => $order->user_id,

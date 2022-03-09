@@ -35,10 +35,9 @@ class MarkOldOrdersAsCancelled extends Command
                 ->whereDate('created_at', '<', $date)
                 ->get();
 
-            foreach ($orders as $order){
+            foreach ($orders as $order) {
                 $orderService->cancelOrder($order, User::admin()->first());
             }
-
         } catch (Exception $e) {
             $this->info('Error while deleting orders');
             $this->info($e->getMessage());

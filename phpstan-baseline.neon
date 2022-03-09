@@ -1941,34 +1941,34 @@ parameters:
 			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleGraded\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:handleGraded\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handlePlaced\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:handlePlaced\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleShipped\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:handleShipped\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:scheduleEmail\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:scheduleEmail\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendAdminEmail\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:sendAdminEmail\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
 			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has no return type specified\\.$#"
@@ -3058,7 +3058,7 @@ parameters:
 		-
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:valid\\(\\)\\.$#"
 			count: 1
-			path: app/Services/Order/OrderService.php
+			path: app/Services/Order/V1/OrderService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has no return type specified\\.$#"

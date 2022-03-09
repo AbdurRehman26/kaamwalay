@@ -147,7 +147,7 @@ class OrderService
         OrderStatusChangedEvent::dispatch($order, OrderStatus::find(OrderStatus::CANCELLED));
     }
 
-    protected function cancelOrderItems(Order $order)
+    protected function cancelOrderItems(Order $order): void
     {
         $order->orderItems->each(function (OrderItem $orderItem) use ($order) {
             OrderItemStatusHistory::updateOrCreate([

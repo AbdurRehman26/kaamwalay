@@ -7,6 +7,9 @@ use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
+use App\Models\OrderItemStatusHistory;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
@@ -130,6 +133,8 @@ class OrderService
 
     public function cancelOrder(Order $order, User $user): void
     {
+        $this->cancelOrderItems($order);
+
         $order->order_status_id = OrderStatus::CANCELLED;
         $order->save();
 
@@ -140,5 +145,20 @@ class OrderService
         ]);
 
         OrderStatusChangedEvent::dispatch($order, OrderStatus::find(OrderStatus::CANCELLED));
+    }
+
+    protected function cancelOrderItems(Order $order)
+    {
+        $order->orderItems->each(function (OrderItem $orderItem) use ($order) {
+            OrderItemStatusHistory::create([
+                'order_item_id' => $orderItem->id,
+                'order_item_status_id' => OrderItemStatus::CANCELLED,
+                'user_id' => $order->user_id,
+                'notes' => 'User cancelled the order.',
+            ]);
+
+            $orderItem->order_item_status_id = OrderItemStatus::CANCELLED;
+            $orderItem->save();
+        });
     }
 }

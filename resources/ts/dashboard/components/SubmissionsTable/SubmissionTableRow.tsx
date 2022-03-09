@@ -17,7 +17,7 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { deleteOrder, setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch } from '@dashboard/redux/hooks';
-import OrderDeleteDialog from '@dashboard/components/OrderDeleteDialog';
+import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 
 interface SubmissionTableRowProps {
     id: number;

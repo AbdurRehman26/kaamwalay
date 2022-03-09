@@ -277,9 +277,8 @@ class Order extends Model
         return $query->whereHas(
             'orderStatus',
             function (Builder $query) use ($status) {
-                $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
                 if (! $status || $status === 'all') {
-                    return $query;
+                    return $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
                 }
 
                 return $query

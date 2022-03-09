@@ -49,7 +49,7 @@ class PaymentService extends V1PaymentService
     {
         // only update order if its still payable
         // method can be called twice and can fire event twice
-        if ($this->order->isPayable()) {
+        if ($this->order->isPayable('v2')) {
             $this->order->markAsPaid();
 
             OrderPaid::dispatch($this->order);

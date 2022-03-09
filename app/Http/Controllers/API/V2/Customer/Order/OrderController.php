@@ -17,7 +17,7 @@ use App\Http\Resources\API\V2\Customer\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Services\Order\OrderService;
+use App\Services\Order\V2\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use App\Services\Order\V2\CompleteOrderSubmissionService;
 use App\Services\Order\V2\CreateOrderService;

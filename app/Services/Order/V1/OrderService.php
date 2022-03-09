@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\Order\V1;
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
@@ -78,7 +78,7 @@ class OrderService
         $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
         $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
-        $data["BILLING_ADDRESS"] = $order->billingAddress ? $this->getAddressData($order->billingAddress) : [];
+        $data["BILLING_ADDRESS"] = $this->getAddressData($order->billingAddress);
 
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 

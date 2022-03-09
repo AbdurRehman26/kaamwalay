@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Order\RevenueStatsService;

@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Listeners\API\Order;
+namespace App\Listeners\API\Order\V2;
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Notifications\Order\OrderStatusChangedNotification;
-use App\Services\Admin\V1\OrderService as AdminOrderService;
+use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Services\EmailService;
-use App\Services\Order\OrderService;
+use App\Services\Order\V2\OrderService;
 use App\Services\PopReport\PopReportService;
 use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+
+use function now;
 
 class OrderStatusChangedListener implements ShouldQueue
 {
@@ -72,7 +74,7 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
         );
-        
+
         $this->sendAdminEmail(
             EmailService::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED,
             $this->adminOrderService->getDataForAdminSubmissionConfirmationEmail($event->order)

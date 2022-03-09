@@ -3,7 +3,7 @@
 namespace App\Services\Admin\V2;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;

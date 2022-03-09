@@ -49,8 +49,8 @@ class MarkOldOrdersAsCancelled extends Command
                 ]);
 
             OrderItemStatusHistory::whereOrderItemId($orderItemIds)
-                ->update([
-                    'order_item_status_id', -1
+                ->updateOrCreate([
+                    'order_item_status_id', OrderItemStatus::CANCELLED
                 ]);
 
 

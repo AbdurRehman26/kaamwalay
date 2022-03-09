@@ -3,7 +3,7 @@
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
-use App\Services\Payment\Providers\TestingStripeService;
+use App\Services\Payment\V1\Providers\TestingStripeService;
 use Illuminate\Support\Str;
 
 beforeEach(function () {

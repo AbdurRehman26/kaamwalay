@@ -13,7 +13,7 @@ use App\Http\Resources\API\V1\Admin\Order\OrderItem\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\Admin\Order\OrderItemService;
-use App\Services\Admin\OrderService;
+use App\Services\Admin\V1\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,6 +54,7 @@ class Order extends Model implements Exportable
         'extra_charge_total',
         'refund_total',
         'payment_method_discounted_amount',
+        'payment_status',
     ];
 
     /**
@@ -85,6 +87,8 @@ class Order extends Model implements Exportable
         'refund_total' => 'float',
         'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
+        'paid_at' => 'datetime',
+        'payment_status' => OrderPaymentStatusEnum::class,
     ];
 
     protected $appends = [
@@ -226,9 +230,15 @@ class Order extends Model implements Exportable
         return $query->where('orders.user_id', $user->id);
     }
 
-    public function isPayable(): bool
+    public function isPayable(string $version = 'v1'): bool
     {
-        return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
+        if ($version === 'v1') {
+            return $this->order_status_id === OrderStatus::PAYMENT_PENDING;
+        }
+
+        return $this->order_status_id > OrderStatus::PAYMENT_PENDING
+            && ! $this->isCancelled()
+            && $this->payment_status === OrderPaymentStatusEnum::PENDING;
     }
 
     public function scopePlaced(Builder $query): Builder
@@ -240,7 +250,7 @@ class Order extends Model implements Exportable
 
     public function getGrandTotalCentsAttribute(): int
     {
-        return (int) (($this->grand_total_to_be_paid) * 100);
+        return (int) bcmul((string) $this->grand_total_to_be_paid, (string) 100);
     }
 
     public function getGrandTotalToBePaidAttribute(): float
@@ -367,5 +377,22 @@ class Order extends Model implements Exportable
             $row->orderItems->sum('declared_value_total'),
             $row->grand_total,
         ];
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->order_status_id === OrderStatus::CANCELLED;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->payment_status === OrderPaymentStatusEnum::PAID;
+    }
+
+    public function markAsPaid(): void
+    {
+        $this->payment_status = OrderPaymentStatusEnum::PAID;
+        $this->paid_at = now();
+        $this->save();
     }
 }

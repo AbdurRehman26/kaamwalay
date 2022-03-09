@@ -20,7 +20,7 @@ beforeEach(function () {
 
 it('returns customers list for admin', function () {
     actingAs($this->user);
-    getJson(route('customers.index'))
+    getJson(route('v1.customers.index'))
         ->assertOk()
         ->assertJsonStructure([
             'data' => [
@@ -38,13 +38,13 @@ it('returns customers list for admin', function () {
 });
 
 test('a guest can not get customers list', function () {
-    getJson(route('customers.index'))
+    getJson(route('v1.customers.index'))
         ->assertStatus(401);
 });
 
 test('a customer can not get customers list', function () {
     $user = User::factory()->withRole(config('permission.roles.customer'))->create();
     actingAs($user);
-    getJson(route('customers.index'))
+    getJson(route('v1.customers.index'))
         ->assertStatus(403);
 });

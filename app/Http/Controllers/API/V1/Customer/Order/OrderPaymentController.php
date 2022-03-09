@@ -6,7 +6,7 @@ use App\Exceptions\API\Customer\Order\OrderNotPayable;
 use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Services\Payment\PaymentService;
+use App\Services\Payment\V1\PaymentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

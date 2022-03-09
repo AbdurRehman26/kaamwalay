@@ -6,7 +6,7 @@ use App\Exceptions\Services\AGS\AgsServiceIsDisabled;
 use App\Exports\Order\OrdersLabelExport;
 use App\Models\Order;
 use App\Models\OrderLabel;
-use App\Services\Admin\OrderService;
+use App\Services\Admin\V1\OrderService;
 use App\Services\AGS\AgsService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

@@ -23,7 +23,7 @@ beforeEach(function () {
 test('admin can get couponable entities', function (string $couponApplicableId) {
     actingAs($this->user);
 
-    getJson(route('couponable.entities', ['coupon_applicable_id' => $couponApplicableId]))
+    getJson(route('v1.couponable.entities', ['coupon_applicable_id' => $couponApplicableId]))
         ->assertOk();
 })->with([
     fn () => CouponApplicable::FOR_PAYMENT_PLANS,
@@ -33,7 +33,7 @@ test('admin can get couponable entities', function (string $couponApplicableId) 
 test('admin can get error with invalid coupon applicable', function (string $couponApplicableId) {
     actingAs($this->user);
 
-    getJson(route('couponable.entities', ['coupon_applicable_id' => $couponApplicableId]))
+    getJson(route('v1.couponable.entities', ['coupon_applicable_id' => $couponApplicableId]))
         ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 })->with([
     fn () => 1,

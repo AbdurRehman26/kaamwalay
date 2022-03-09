@@ -1311,6 +1311,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_step\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderCreateResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php

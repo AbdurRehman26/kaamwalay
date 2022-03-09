@@ -125,7 +125,7 @@ test('an admin can update order item', function () {
     $response = $this->putJson('/api/v1/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id, [
         'card_id' => $newCard->id,
         'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = null),
-    ]);
+    ])->dump();
     $response->assertStatus(200);
     $response->assertJsonStructure([
         'data' => [

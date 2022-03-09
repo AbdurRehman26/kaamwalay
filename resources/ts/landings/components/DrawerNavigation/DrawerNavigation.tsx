@@ -23,10 +23,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useState } from 'react';
 import logo from '@shared/assets/logo.svg';
-import { AuthDialog } from '@shared/components/Auth/AuthDialog';
 import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import { useSharedSelector } from '@shared/hooks/useSharedSelector';
+import { cx } from '@shared/lib/utils/cx';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -40,6 +39,9 @@ const useStyles = makeStyles(
             borderRadius: 20,
             minWidth: 120,
             width: `calc(100% - ${theme.spacing(4)})`,
+        },
+        buttonBackground: {
+            backgroundColor: theme.palette.primary.main,
         },
         divider: {
             margin: theme.spacing(1, 0),
@@ -72,12 +74,6 @@ export function DrawerNavigation() {
     const { authenticated, logout } = useAuth();
     const [isOpen, setOpen] = useState(false);
     const dispatch = useSharedDispatch();
-    const isHeaderAuthDialogOpen = useSharedSelector((state) => state.authentication.headerDialogOpened);
-
-    const handleAuthDialogClose = useCallback(() => {
-        dispatch(headerDialogVisibility(false));
-    }, [dispatch]);
-
     const handleOpen = useCallback(() => setOpen(true), [setOpen]);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
     const handleLogout = useCallback(async () => {
@@ -93,8 +89,12 @@ export function DrawerNavigation() {
     );
 
     const handleChange = useCallback(() => {
-        dispatch(headerDialogVisibility(true));
-    }, [dispatch]);
+        if (!authenticated) {
+            dispatch(headerDialogVisibility(true));
+        } else {
+            window.location.href = '/dashboard/submissions/new';
+        }
+    }, [dispatch, authenticated]);
 
     return (
         <>
@@ -182,10 +182,10 @@ export function DrawerNavigation() {
 
                     <Grid container direction={'column'} alignItems={'center'} justifyContent={'center'}>
                         <Button
-                            href={'/dashboard/submissions/new'}
+                            onClick={handleChange}
                             variant={'contained'}
                             color={'primary'}
-                            className={classes.button}
+                            className={cx(classes.button, classes.buttonBackground)}
                             startIcon={<UploadIcon />}
                             fullWidth
                             disableElevation
@@ -219,11 +219,6 @@ export function DrawerNavigation() {
                     </Grid>
                 </List>
             </Drawer>
-            <AuthDialog
-                open={isHeaderAuthDialogOpen}
-                onClose={handleAuthDialogClose}
-                subTitle="to Access Robograding"
-            />
         </>
     );
 }

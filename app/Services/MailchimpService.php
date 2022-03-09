@@ -115,6 +115,15 @@ class MailchimpService
         }
     }
 
+    public function deleteUserFromList(User $user, string $template): void
+    {
+        $templateName = $this->buildListName($template);
+        $listId = $this->getListId($templateName);
+        if ($listId) {
+            $this->removeDataFromList($user, $listId);
+        }
+    }
+
     protected function addBatchUsers(array $members, string $listId): void
     {
         try {
@@ -139,6 +148,44 @@ class MailchimpService
         }
     }
 
+    public function cleanDuplicateUsersBetweenLists(string $usersListToKeep, string $usersListToClean): void
+    {
+        $keepTemplateName = $this->buildListName($usersListToKeep);
+        $cleanTemplateName = $this->buildListName($usersListToClean);
+
+        $keepListId = $this->getListId($keepTemplateName);
+        $cleanListId = $this->getListId($cleanTemplateName);
+
+        if ($keepListId && $cleanListId) {
+            $this->cleanDuplicateUsersBetweenListIds($keepListId, $cleanListId);
+        }
+    }
+
+    protected function removeDataFromList(User $user, string $listId): void
+    {
+        $mailchimpClient = $this->getClient();
+
+        try {
+            $hash = md5(strtolower($user->email));
+            // @phpstan-ignore-next-line
+            $mailchimpClient->lists->deleteListMember($listId, $hash);
+        } catch (RequestException $ex) {
+            Log::error($ex->getResponse()->getBody());
+        }
+    }
+
+    protected function removeDataFromListByHash(string $hash, string $listId): void
+    {
+        $mailchimpClient = $this->getClient();
+
+        try {
+            // @phpstan-ignore-next-line
+            $mailchimpClient->lists->deleteListMember($listId, $hash);
+        } catch (RequestException $ex) {
+            Log::error($ex->getResponse()->getBody());
+        }
+    }
+
     protected function buildListName(string $listName): string
     {
         return 'Robograding ' . ucfirst(app()->environment()) . ' - ' . $listName;
@@ -157,5 +204,54 @@ class MailchimpService
                 'PHONE' => $user->phone ?: '',
             ],
         ];
+    }
+
+    protected function cleanDuplicateUsersBetweenListIds(string $keepListId, string $cleanListId): void
+    {
+        $keepListMembersInfo = $this->getFullListMembers($keepListId);
+        $cleanListMembersInfo = $this->getFullListMembers($cleanListId);
+
+        foreach ($keepListMembersInfo as $keepMember) {
+            $result = array_values($this->filterMembersListById($cleanListMembersInfo, $keepMember->id));
+
+            if (count($result) > 0) {
+                \Log::debug("Match found: $keepMember->id");
+                $this->removeDataFromListByHash($keepMember->id, $cleanListId);
+            }
+        }
+    }
+
+    protected function getFullListMembers(string $listId): array
+    {
+        $mailchimpClient = $this->getClient();
+        $fields = 'members.id,members.email_address,total_items';
+
+        $members = [];
+        $total_items = 999;
+        $i = 0;
+
+        while (count($members) < $total_items) {
+            try {
+                // @phpstan-ignore-next-line
+                $result = $mailchimpClient->lists->getListMembersInfo($listId, $fields, null, 1000, 2 * $i);
+
+                $total_items = $result->total_items;
+                $members = array_merge($members, $result->members);
+
+                $i += 1;
+            } catch (RequestException $ex) {
+                Log::error($ex->getResponse()->getBody());
+                break;
+            }
+        }
+
+        return $members;
+    }
+
+    protected function filterMembersListById(array $membersList, string $searchId): array
+    {
+        return array_filter($membersList, function ($member) use ($searchId) {
+            return $member->id === $searchId;
+        });
     }
 }

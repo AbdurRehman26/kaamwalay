@@ -241,6 +241,7 @@ class MailchimpService
                 $i += 1;
             } catch (RequestException $ex) {
                 Log::error($ex->getResponse()->getBody());
+
                 break;
             }
         }

@@ -124,5 +124,4 @@ it('can get list members on mailchimp', function () {
 
     $this->mockService->shouldReceive('getListMembersInfo')->with("89998", $fields, null, 1000, 0)
         ->andReturn($expectedResponse);
-
 });

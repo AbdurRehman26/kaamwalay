@@ -110,3 +110,19 @@ it('create list on mailchimp', function () {
 
     assertDatabaseCount('mailchimp_lists', 1);
 });
+
+it('can get list members on mailchimp', function () {
+    $hash = md5(strtolower($this->user->email));
+    $fields = 'members.id,members.email_address,total_items';
+
+    $expectedResponse = (object) [
+        "members" => [
+            ["id" => $hash, "email_address" => $this->user->email],
+        ],
+        "total_items" => 1,
+    ];
+
+    $this->mockService->shouldReceive('getListMembersInfo')->with("89998", $fields, null, 1000, 0)
+        ->andReturn($expectedResponse);
+
+});

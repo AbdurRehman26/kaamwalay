@@ -36,10 +36,19 @@ import Box from '@mui/material/Box';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { PaymentSummary } from './PaymentSummary';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { PaymentStatusChip } from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 
 const useStyles = makeStyles((theme) => ({
+    paymentPageContainer: {
+        padding: 0,
+    },
     stepDescriptionContainer: {
         maxWidth: '425px',
+        display: 'flex',
+        minWidth: '100%',
+        justifyContent: 'space-between',
+        marginBottom: 20,
     },
     leftSideContainer: {
         marginTop: '12px',
@@ -292,6 +301,7 @@ export function Payment() {
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
+    const paymentStatus = useAppSelector((state) => state.newSubmission.paymentStatus);
     const navigate = useNavigate();
 
     const order = useOrderQuery({
@@ -443,19 +453,22 @@ export function Payment() {
 
     return (
         <StripeContainer>
-            <Container>
+            <Container className={classes.paymentPageContainer}>
                 <div className={classes.stepDescriptionContainer}>
-                    <Typography variant={'h2'} className={classes.title}>
-                        <ArrowBackIcon className={classes.backIcon} onClick={() => navigate(-1)} />
-                        Enter Payment Details
-                    </Typography>
-                    <Typography variant={'h3'} className={classes.description}>
-                        Select your payment method and enter details.
-                    </Typography>
+                    <div>
+                        <Typography variant={'h2'} className={classes.title}>
+                            <ArrowBackIcon className={classes.backIcon} onClick={() => navigate(-1)} />
+                            Enter Payment Details
+                        </Typography>
+                    </div>
+
+                    <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} />
                 </div>
 
-                <Grid container spacing={4}>
-                    <Grid item xs={12} md={8}>
+                <Divider light />
+
+                <Grid container spacing={1}>
+                    <Grid item xs={12} md={7}>
                         <Divider light />
                         <div className={classes.leftSideContainer}>
                             {availableCredit > 0 ? (

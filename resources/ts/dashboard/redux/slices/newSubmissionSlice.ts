@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 import { OrderEntity } from '@shared/entities/OrderEntity';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 
 export interface SubmissionService {
     id: number;
@@ -117,6 +118,7 @@ export interface NewSubmissionSliceState {
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
     step04Data: PaymentSubmissionState;
+    paymentStatus: PaymentStatusEnum;
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -272,6 +274,7 @@ const initialState: NewSubmissionSliceState = {
         existingBillingAddresses: [],
         fetchingStatus: null,
     },
+    paymentStatus: PaymentStatusEnum.PENDING,
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -654,6 +657,7 @@ export const newSubmissionSlice = createSlice({
                 paymentMethodId: action.payload.paymentMethodId || 1,
             };
             state.appliedCredit = +action.payload.amountPaidFromWallet;
+            state.paymentStatus = action.payload.paymentStatus;
         },
     },
     extraReducers: {

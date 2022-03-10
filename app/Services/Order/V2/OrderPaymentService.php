@@ -12,7 +12,6 @@ use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class OrderPaymentService

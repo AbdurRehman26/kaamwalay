@@ -629,6 +629,7 @@ export const newSubmissionSlice = createSlice({
         orderToNewSubmission(state: NewSubmissionSliceState, action: PayloadAction<OrderEntity>) {
             state.orderID = action.payload.id;
             state.grandTotal = action.payload.grandTotal;
+            state.previewTotal = action.payload.grandTotal;
             state.step02Data = {
                 shippingFee: action.payload.shippingFee,
                 isMobileSearchModalOpen: false,
@@ -652,6 +653,7 @@ export const newSubmissionSlice = createSlice({
                 ...state.step04Data,
                 paymentMethodId: action.payload.paymentMethodId || 1,
             };
+            state.appliedCredit = +action.payload.amountPaidFromWallet;
         },
     },
     extraReducers: {

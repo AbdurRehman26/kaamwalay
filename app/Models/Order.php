@@ -237,7 +237,7 @@ class Order extends Model
 
         return $this->order_status_id > OrderStatus::PAYMENT_PENDING
             && ! $this->isCancelled()
-            && $this->payment_status === OrderPaymentStatusEnum::PENDING;
+            && ! $this->payment_status->isPaid();
     }
 
     public function scopePlaced(Builder $query): Builder
@@ -344,7 +344,7 @@ class Order extends Model
 
     public function isPaid(): bool
     {
-        return $this->payment_status === OrderPaymentStatusEnum::PAID;
+        return $this->payment_status->isPaid();
     }
 
     public function markAsPaid(): void

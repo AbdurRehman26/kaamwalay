@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V2\Customer\Order;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;
@@ -27,7 +28,7 @@ class OrderResource extends BaseResource
             'status' => $this->orderStatus->name ?? null,
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
-            'grand_total' => $this->grand_total,
+            'grand_total' => $this->payment_status === OrderPaymentStatusEnum::PAID ? $this->grand_total : $this->grand_total_to_be_paid,
             'created_at' => $this->formatDate($this->created_at),
             'customer' => new UserResource($this->user),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),

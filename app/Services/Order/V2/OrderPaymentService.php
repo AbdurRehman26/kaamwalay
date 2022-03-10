@@ -54,8 +54,6 @@ class OrderPaymentService
      */
     protected function process(): void
     {
-        DB::beginTransaction();
-
         $this->storePaymentMethod(
             $this->getPaymentMethod($this->data)
         );
@@ -65,8 +63,6 @@ class OrderPaymentService
         $this->updateGrandTotal();
         $this->updateWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->storeOrderPayment($this->data);
-
-        DB::commit();
     }
 
     public function setOrder(Order $order): self
@@ -101,7 +97,7 @@ class OrderPaymentService
             );
         }
 
-        $orderPayment = OrderPayment::firstOrCreate(collect($orderPaymentData)->except(['response'])->all());
+        $orderPayment = OrderPayment::firstOrNew(collect($orderPaymentData)->except(['response'])->all());
 
         $orderPayment->response = json_encode($response ?? []);
 
@@ -115,8 +111,12 @@ class OrderPaymentService
                 'payment_method_id' => PaymentMethod::getWalletPaymentMethod()->id,
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             ]);
+
+            $partialPayment->created_at = now()->addMinute();
+            $partialPayment->updated_at = now()->addMinute();
             $partialPayment->amount = $this->order->amount_paid_from_wallet;
-            $orderPayment->save();
+            $partialPayment->timestamps = false;
+            $partialPayment->save();
         }
 
         // The next step from here would be to charge the user in the application flow. To make the flow consistent

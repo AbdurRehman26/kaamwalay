@@ -30,7 +30,7 @@ export function PayWithCollectorCoinButton() {
     };
     const notifications = useNotifications();
     const navigate = useNavigate();
-    const supportedNetworks = configs?.web3SupportedNetworks.split(',');
+    const supportedNetworks = configs?.web3SupportedNetworks?.split(',') ?? [];
 
     function getRecipientWalletFromNetwork(networkID: number) {
         switch (networkID) {

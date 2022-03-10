@@ -3,7 +3,7 @@ import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,15 @@ import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
 import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
 import { useAuth } from '@shared/hooks/useAuth';
-import { useAppSelector } from '@dashboard/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { useStripe } from '@stripe/react-stripe-js';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
+import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
+import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -143,12 +151,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function PaymentSummary() {
+export function PaymentSummary() {
     const classes = useStyles();
+    const navigate = useNavigate();
+    const notifications = useNotifications();
+    const stripe = useStripe();
+    const apiService = useInjectable(APIService);
+    const dispatch = useAppDispatch();
+
+    const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
-    const navigate = useNavigate();
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
@@ -159,6 +173,7 @@ function PaymentSummary() {
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const paymentMethodDiscountedAmount = useAppSelector((state) => state.newSubmission.paymentMethodDiscountedAmount);
     const orderSubmission = useAppSelector((state) => state.newSubmission);
+    const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const user$ = useAuth().user;
 
     const numberOfSelectedCards =
@@ -206,16 +221,85 @@ function PaymentSummary() {
         ReactGA.plugin.execute('ecommerce', 'clear', null);
     };
 
-    let totalDeclaredValue = 0;
-    selectedCards.forEach((selectedCard: any) => {
-        totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
-    });
-
     const handleConfirmStripePayment = async () => {
-        sendECommerceDataToGA();
-        pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
-        pushDataToRefersion(orderSubmission, user$);
-        navigate(`/submissions/${orderID}/confirmation`);
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
+        if (!stripe) {
+            // Stripe.js is not loaded yet so we don't allow the btn to be clicked yet
+            return;
+        }
+        try {
+            setIsStripePaymentLoading(true);
+
+            // Try to charge the customer
+            await endpoint.post('', {
+                paymentByWallet: appliedCredit,
+                paymentProviderReference: {
+                    id: stripePaymentMethod,
+                },
+                paymentMethod: {
+                    id: paymentMethodID,
+                },
+            });
+
+            setIsStripePaymentLoading(false);
+            dispatch(clearSubmissionState());
+            dispatch(invalidateOrders());
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action: SubmissionEvents.paid,
+            });
+            trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
+                value: grandTotal,
+                currency: 'USD',
+            });
+            sendECommerceDataToGA();
+            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+            pushDataToRefersion(orderSubmission, user$);
+            navigate(`/submissions/${orderID}/confirmation`);
+        } catch (err: any) {
+            if ('message' in err?.response?.data) {
+                setIsStripePaymentLoading(false);
+                notifications.exception(err, 'Payment Failed');
+            }
+            // Charge was failed by back-end so we try to charge him on the front-end
+            // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
+            const intent = err.response.data.paymentIntent;
+            // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
+            const chargeResult = await stripe.confirmCardPayment(intent.clientSecret, {
+                // eslint-disable-next-line camelcase
+                payment_method: intent.paymentMethod,
+            });
+
+            // Checking if something else failed.
+            // Eg: Insufficient funds, 3d auth failed by user, etc
+            if (chargeResult.error) {
+                notifications.error(chargeResult?.error?.message!, 'Error');
+                setIsStripePaymentLoading(false);
+            } else {
+                // We're all good!
+                if (chargeResult.paymentIntent.status === 'succeeded') {
+                    const verifyOrderEndpoint = apiService.createEndpoint(
+                        `customer/orders/${orderID}/payments/${chargeResult.paymentIntent.id}`,
+                    );
+                    verifyOrderEndpoint.post('').then(() => {
+                        setIsStripePaymentLoading(false);
+                        dispatch(clearSubmissionState());
+                        dispatch(invalidateOrders());
+                        ReactGA.event({
+                            category: EventCategories.Submissions,
+                            action: SubmissionEvents.paid,
+                        });
+                        trackFacebookPixelEvent(FacebookPixelEvents.Purchase, {
+                            value: grandTotal,
+                            currency: 'USD',
+                        });
+                        sendECommerceDataToGA();
+                        pushDataToRefersion(orderSubmission, user$);
+                        navigate(`/submissions/${orderID}/confirmation`);
+                    });
+                }
+            }
+        }
     };
 
     return (
@@ -223,9 +307,16 @@ function PaymentSummary() {
             <div className={classes.bodyContainer}>
                 <div className={classes.paymentActionsContainer}>
                     <>
-                        <Button variant="contained" color="primary" onClick={handleConfirmStripePayment}>
-                            Submit Payment
-                        </Button>
+                        {paymentMethodID === 1 || paymentMethodID === 4 ? (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={isStripePaymentLoading}
+                                onClick={handleConfirmStripePayment}
+                            >
+                                {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
+                            </Button>
+                        ) : null}
                         {paymentMethodID === 2 ? <PaypalBtn /> : null}
                         {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
                     </>
@@ -338,5 +429,3 @@ function PaymentSummary() {
         </Paper>
     );
 }
-
-export default PaymentSummary;

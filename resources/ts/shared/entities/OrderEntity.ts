@@ -19,6 +19,7 @@ import { ShipmentEntity } from './ShipmentEntity';
 import { ShippingMethodEntity } from './ShippingMethodEntity';
 import { UserEntity } from './UserEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 
 export class OrderEntity extends Entity {
     public orderNumber!: string;
@@ -38,7 +39,7 @@ export class OrderEntity extends Entity {
     public paymentMethodId!: number;
     public paymentMethodDiscountedAmount!: string;
     public amountPaidFromWallet!: string;
-    public paymentStatus!: string;
+    public paymentStatus!: PaymentStatusEnum;
 
     @Type(() => OrderCouponEntity)
     public coupon!: OrderCouponEntity;

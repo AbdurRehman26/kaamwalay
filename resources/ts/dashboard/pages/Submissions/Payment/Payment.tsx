@@ -11,13 +11,14 @@ import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
 import {
     getAvailableCredit,
+    orderToNewSubmission,
     setBillingAddress,
     setIsNextDisabled,
     setUseShippingAddressAsBilling,
@@ -33,7 +34,8 @@ import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import { useParams } from 'react-router-dom';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import Box from '@mui/material/Box';
-import PaymentSummary from '@dashboard/pages/Submissions/Payment/PaymentSummary';
+import { AddressEntity } from '@shared/entities/AddressEntity';
+import { PaymentSummary } from './PaymentSummary';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -50,13 +52,14 @@ const useStyles = makeStyles((theme) => ({
     },
     shippingMethodContainer: {
         marginBottom: '24px',
+        marginTop: '24px',
     },
     sectionLabel: {
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: 500,
         fontSize: '16px',
-        marginBottom: '20px',
+        marginBottom: '8px',
         lineHeight: '24px',
         letterSpacing: '0.1px',
     },
@@ -206,6 +209,29 @@ const schema = yup.object().shape({
     phoneNumber: yup.string().required(),
 });
 
+function addressFromEntity(address: AddressEntity) {
+    return {
+        id: address.id,
+        firstName: address.firstName,
+        lastName: address.lastName,
+        address: address.address,
+        city: address.city,
+        zipCode: address.zip,
+        phoneNumber: address.phone,
+        flat: address.flat,
+        country: {
+            id: address.country?.id,
+            name: address.country?.name,
+            code: address.country?.code,
+        },
+        state: {
+            id: 0,
+            name: address.state,
+            code: address.state,
+        },
+    };
+}
+
 export function Payment() {
     const { id } = useParams<'id'>();
     const classes = useStyles();
@@ -221,7 +247,7 @@ export function Payment() {
     const useBillingAddressSameAsShipping = useAppSelector(
         (state) => state.newSubmission.step04Data.useShippingAddressAsBillingAddress,
     );
-    const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
+
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
@@ -236,12 +262,8 @@ export function Payment() {
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
-    const finalShippingAddress =
-        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
-            ? selectedExistingAddress
-            : shippingAddress;
 
-    const { isLoading, isError } = useOrderQuery({
+    const order = useOrderQuery({
         resourceId: Number(id),
         config: {
             params: {
@@ -261,6 +283,8 @@ export function Payment() {
             },
         },
     });
+
+    const shippingAddress = useMemo(() => order.data?.shippingAddress || ({} as any), [order.data?.shippingAddress]);
 
     useEffect(() => {
         schema
@@ -295,9 +319,9 @@ export function Payment() {
     const onUseShippingAddressAsBilling = useCallback(() => {
         dispatch(setUseShippingAddressAsBilling(!useBillingAddressSameAsShipping));
         if (!useBillingAddressSameAsShipping) {
-            dispatch(setBillingAddress(finalShippingAddress));
+            dispatch(setBillingAddress(addressFromEntity(shippingAddress)));
         }
-    }, [dispatch, finalShippingAddress, useBillingAddressSameAsShipping]);
+    }, [dispatch, shippingAddress, useBillingAddressSameAsShipping]);
 
     const updateField = useCallback(
         (fieldName: any, newValue: any) => {
@@ -357,17 +381,31 @@ export function Payment() {
     useEffect(
         () => {
             if (useBillingAddressSameAsShipping) {
-                dispatch(setBillingAddress(finalShippingAddress));
+                dispatch(setBillingAddress(addressFromEntity(shippingAddress)));
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [dispatch],
     );
 
-    if (isLoading || isError) {
+    useEffect(
+        () => {
+            if (order.data) {
+                dispatch(orderToNewSubmission(order.data));
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [order.data],
+    );
+
+    if (order.isLoading || order.isError) {
         return (
             <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
-                {isLoading ? <CircularProgress /> : <Typography color={'error'}>Error loading submission</Typography>}
+                {order.isLoading ? (
+                    <CircularProgress />
+                ) : (
+                    <Typography color={'error'}>Error loading submission</Typography>
+                )}
             </Box>
         );
     }
@@ -417,11 +455,12 @@ export function Payment() {
                                             <CircularProgress color={'secondary'} />
                                         </div>
                                     ) : null}
-                                    {availablePaymentMethods.map((item) => (
+                                    {availablePaymentMethods.map((item: any) => (
                                         <PaymentMethodItem
-                                            isSelected={paymentMethodId === item['id']}
-                                            methodName={item['name']}
-                                            methodId={item['id']}
+                                            key={item.id}
+                                            isSelected={paymentMethodId === item.id}
+                                            methodName={item.name}
+                                            methodId={item.id}
                                         />
                                     ))}
                                 </div>
@@ -449,17 +488,17 @@ export function Payment() {
                                                 </Typography>
                                                 <Typography
                                                     className={classes.billingAddressItem}
-                                                >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
+                                                >{`${shippingAddress.firstName} ${shippingAddress.lastName}`}</Typography>
                                                 <Typography className={classes.billingAddressItem}>{`${
-                                                    finalShippingAddress.address
+                                                    shippingAddress.address
                                                 } ${
-                                                    finalShippingAddress?.flat
-                                                        ? `apt: ${finalShippingAddress.flat}`
-                                                        : ''
+                                                    shippingAddress?.flat ? `apt: ${shippingAddress.flat}` : ''
                                                 }`}</Typography>
-                                                <Typography
-                                                    className={classes.billingAddressItem}
-                                                >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                                                <Typography className={classes.billingAddressItem}>{`${
+                                                    shippingAddress.city
+                                                }, ${shippingAddress.state} ${shippingAddress.zip}, ${
+                                                    shippingAddress.country?.code ?? ''
+                                                }`}</Typography>
                                             </>
                                         ) : (
                                             <>

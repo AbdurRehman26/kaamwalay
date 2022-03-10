@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
+import { OrderEntity } from '@shared/entities/OrderEntity';
 
 export interface SubmissionService {
     id: number;
@@ -367,11 +368,11 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/${input.txHash}`);
         const response = await endpoint.post('');
-        const fulfilledReturn = {
+
+        return {
             message: response.data.message,
             transactionHash: input.txHash,
         };
-        return fulfilledReturn;
     },
 );
 
@@ -385,15 +386,16 @@ export const verifyOrderStatus = createAsyncThunk(
     },
 );
 
-export const createOrder = createAsyncThunk('newSubmission/createOrder', async (_, { getState }: any) => {
-    const currentSubmission: any = getState().newSubmission;
+export const createOrder = createAsyncThunk('newSubmission/createOrder', async (_, thunk) => {
+    const currentSubmission = (thunk.getState() as any).newSubmission;
     const finalShippingAddress =
         currentSubmission.step03Data.existingAddresses.length !== 0 &&
         !currentSubmission.step03Data.useCustomShippingAddress &&
         currentSubmission.step03Data.selectedExistingAddress.id !== 0
             ? currentSubmission.step03Data.selectedExistingAddress
             : currentSubmission.step03Data.selectedAddress;
-    const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
+
+    const billingAddress = finalShippingAddress;
 
     const orderDTO = {
         paymentPlan: {
@@ -624,6 +626,33 @@ export const newSubmissionSlice = createSlice({
                 },
             };
         },
+        orderToNewSubmission(state: NewSubmissionSliceState, action: PayloadAction<OrderEntity>) {
+            state.orderID = action.payload.id;
+            state.grandTotal = action.payload.grandTotal;
+            state.step02Data = {
+                shippingFee: action.payload.shippingFee,
+                isMobileSearchModalOpen: false,
+                searchResults: [],
+                searchValue: '',
+                selectedCards: (action.payload?.orderItems ?? []).map(
+                    (item) =>
+                        ({
+                            id: item.cardProduct.id,
+                            qty: item.quantity,
+                            value: item.declaredValuePerUnit,
+                            name: item.cardProduct?.name ?? '',
+                            longName: item.cardProduct?.longName ?? '',
+                            shortName: item.cardProduct?.shortName ?? '',
+                            image: item.cardProduct?.imagePath ?? '',
+                        } as SearchResultItemCardProps),
+                ),
+            };
+
+            state.step04Data = {
+                ...state.step04Data,
+                paymentMethodId: action.payload.paymentMethodId || 1,
+            };
+        },
     },
     extraReducers: {
         [getServiceLevels.pending as any]: (state) => {
@@ -756,4 +785,5 @@ export const {
     setAppliedCredit,
     setPreviewTotal,
     SetCouponInvalidMessage,
+    orderToNewSubmission,
 } = newSubmissionSlice.actions;

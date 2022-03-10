@@ -37,7 +37,7 @@ interface SubmissionTableRowProps {
     orderCustomerShipment: null | ShipmentEntity;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
-    paymentStatus: PaymentStatusEnum;
+    paymentStatus?: PaymentStatusEnum;
 }
 
 enum Options {
@@ -198,7 +198,10 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Link>
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
-                            <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} />
+                            <PaymentStatusChip
+                                color={paymentStatus || PaymentStatusEnum.PENDING}
+                                label={PaymentStatusMap[paymentStatus || PaymentStatusEnum.PENDING]}
+                            />
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
                             <Link to={submissionViewUrl} className={classes.linkText}>
@@ -234,7 +237,10 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     {!isPaid ? (
                         <TableRow>
                             <TableCell colSpan={8}>
-                                <PaymentStatusNotice id={id} paymentStatus={paymentStatus} />
+                                <PaymentStatusNotice
+                                    id={id}
+                                    paymentStatus={paymentStatus || PaymentStatusEnum.PENDING}
+                                />
                             </TableCell>
                         </TableRow>
                     ) : null}

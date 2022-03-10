@@ -115,7 +115,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
             invoice={data?.invoice?.path}
             invoiceNumber={data?.invoice?.invoiceNumber}
             orderCustomerShipment={data?.orderCustomerShipment}
-            paymentStatus={data.paymentStatus}
+            paymentStatus={data?.paymentStatus}
         />
     ));
 
@@ -133,7 +133,9 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
-                            You have no submission's yet.<br></br>Click NEW SUBMISSION to get started.
+                            You have no submission's yet.
+                            <br />
+                            Click NEW SUBMISSION to get started.
                         </Typography>
                     </Grid>
                 </Grid>

@@ -21,6 +21,8 @@ function PaypalBtn() {
     const apiService = useInjectable(APIService);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
+    const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
+    const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const currentSelectedTurnaround = useAppSelector(
         (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
     );
@@ -71,7 +73,15 @@ function PaypalBtn() {
                 .Buttons({
                     createOrder: async function () {
                         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
-                        const response = await endpoint.post('');
+                        const response = await endpoint.post('', {
+                            paymentByWallet: appliedCredit,
+                            // paymentProviderReference: {
+                            //     id: stripePaymentMethod,
+                            // },
+                            paymentMethod: {
+                                id: paymentMethodID,
+                            },
+                        });
                         return response.data.id;
                     },
                     onApprove: async function (data: any, actions: any) {
@@ -80,6 +90,7 @@ function PaypalBtn() {
                                 `customer/orders/${orderID}/payments/${data.orderID}`,
                             );
                             const orderData = await endpoint.post('');
+
                             const errorDetail =
                                 Array.isArray(orderData.data.details ?? '') && orderData.data.details[0];
                             if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {

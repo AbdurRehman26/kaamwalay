@@ -5,11 +5,12 @@ import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlin
 import { useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
-import { PaymentNoticeHeadingEnum } from '@shared/constants/PaymentNoticeHeadingEnum';
-import { PaymentNoticeTextEnum } from '@shared/constants/PaymentNoticeTextEnum';
-import { PaymentStatusPrimaryColorCodesEnum } from '@shared/constants/PaymentStatusPrimaryColorCodesEnum';
-import { PaymentStatusSecondaryColorCodesEnum } from '@shared/constants/PaymentStatusSecondaryColorCodesEnum';
+import {
+    PaymentNoticeHeadingMap,
+    PaymentNoticeTextMap,
+    PaymentStatusColorsMap,
+    PaymentStatusEnum,
+} from '@shared/constants/PaymentStatusEnum';
 
 const styles = {
     paymentNoteContainer: {
@@ -35,7 +36,7 @@ const styles = {
 
 interface PaymentPendingNoticeProps {
     id: number;
-    paymentStatus: string;
+    paymentStatus: PaymentStatusEnum;
 }
 
 export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
@@ -47,15 +48,8 @@ export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
         <Paper
             sx={{
                 ...styles.paymentNoteContainer,
-                backgroundColor:
-                    PaymentStatusSecondaryColorCodesEnum[
-                        props.paymentStatus as keyof typeof PaymentStatusSecondaryColorCodesEnum
-                    ],
-                border:
-                    '1px solid ' +
-                    PaymentStatusPrimaryColorCodesEnum[
-                        props.paymentStatus as keyof typeof PaymentStatusPrimaryColorCodesEnum
-                    ],
+                backgroundColor: PaymentStatusColorsMap[props.paymentStatus].secondary,
+                border: '1px solid ' + PaymentStatusColorsMap[props.paymentStatus].primary,
             }}
         >
             <Typography variant={'h6'} sx={styles.paymentNoteHeading}>
@@ -63,7 +57,7 @@ export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
                     <MonetizationOnOutlinedIcon
                         sx={{
                             ...styles.paymentNoteIcon,
-                            color: PaymentStatusPrimaryColorCodesEnum.PENDING,
+                            color: PaymentStatusColorsMap[props.paymentStatus].primary,
                         }}
                     />
                 ) : null}
@@ -71,14 +65,14 @@ export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
                     <ErrorOutlineIcon
                         sx={{
                             ...styles.paymentNoteIcon,
-                            color: PaymentStatusPrimaryColorCodesEnum.DUE,
+                            color: PaymentStatusColorsMap[props.paymentStatus].primary,
                         }}
                     />
                 ) : null}
-                {PaymentNoticeHeadingEnum[props.paymentStatus as keyof typeof PaymentNoticeHeadingEnum]}
+                {PaymentNoticeHeadingMap[props.paymentStatus]}
             </Typography>
             <Typography variant={'body2'} mt={1} mb={1}>
-                {PaymentNoticeTextEnum[props.paymentStatus as keyof typeof PaymentNoticeTextEnum]}
+                {PaymentNoticeTextMap[props.paymentStatus]}
             </Typography>
             <Button
                 onClick={() => navigate(`/submissions/${id}/pay`)}

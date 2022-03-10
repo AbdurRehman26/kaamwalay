@@ -26,7 +26,7 @@ class OrderListResource extends BaseResource
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),
             'created_at' => $this->formatDate($this->created_at),
             'arrived_at' => $this->formatDate($this->arrived_at),
-            'payment_status' => $this->payment_status->toString(),
+            'payment_status' => $this->payment_status,
         ];
     }
 }

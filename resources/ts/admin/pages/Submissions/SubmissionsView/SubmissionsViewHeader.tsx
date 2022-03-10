@@ -85,7 +85,7 @@ export function SubmissionsViewHeader({
     const history = useMemo(
         () =>
             [
-                OrderStatusEnum.PAYMENT_PENDING,
+                OrderStatusEnum.INCOMPLETE,
                 OrderStatusEnum.CONFIRMED,
                 OrderStatusEnum.GRADED,
                 OrderStatusEnum.SHIPPED,

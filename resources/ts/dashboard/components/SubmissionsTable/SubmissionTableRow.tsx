@@ -19,15 +19,17 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch } from '@dashboard/redux/hooks';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
-import PaymentStatusChip from '@dashboard/components/PaymentStatusChip';
-import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { PaymentStatusChip } from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { SubmissionStatusChip } from '@dashboard/components/SubmissionStatusChip';
 
 interface SubmissionTableRowProps {
     id: number;
     orderNumber: string;
     serviceLevel: number;
     cardsNumber: number;
-    status: string;
+    status: OrderStatusEnum;
     invoice?: string;
     invoiceNumber?: string;
     disabled?: boolean;
@@ -35,7 +37,7 @@ interface SubmissionTableRowProps {
     orderCustomerShipment: null | ShipmentEntity;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
-    paymentStatus: string;
+    paymentStatus: PaymentStatusEnum;
 }
 
 enum Options {
@@ -196,7 +198,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Link>
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
-                            <PaymentStatusChip paymentStatus={paymentStatus} />
+                            <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} />
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
                             <Link to={submissionViewUrl} className={classes.linkText}>
@@ -210,7 +212,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
                             <Link to={submissionViewUrl} className={classes.linkText}>
-                                {status}
+                                <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
                             </Link>
                         </TableCell>
                         <TableCell align={'right'} className={isPaid ? '' : classes.unpaidOrderTableCell}>

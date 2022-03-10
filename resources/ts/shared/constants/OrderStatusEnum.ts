@@ -1,5 +1,5 @@
 export enum OrderStatusEnum {
-    PAYMENT_PENDING = 1,
+    INCOMPLETE = 1,
     PLACED = 2,
     CONFIRMED = 3,
     GRADED = 4,
@@ -9,7 +9,7 @@ export enum OrderStatusEnum {
 }
 
 export const OrderStatusMap = {
-    [OrderStatusEnum.PAYMENT_PENDING]: { label: 'Pending', value: 'pending_payment' },
+    [OrderStatusEnum.INCOMPLETE]: { label: 'Pending', value: 'pending_payment' },
     [OrderStatusEnum.PLACED]: { label: 'Placed', value: 'placed' },
     [OrderStatusEnum.CONFIRMED]: { label: 'Reviewed', value: 'confirmed' },
     [OrderStatusEnum.GRADED]: { label: 'Graded', value: 'graded' },

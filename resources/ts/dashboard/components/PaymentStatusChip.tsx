@@ -1,30 +1,23 @@
-import Chip from '@mui/material/Chip';
-import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
-import { PaymentStatusPrimaryColorCodesEnum } from '@shared/constants/PaymentStatusPrimaryColorCodesEnum';
-import { PaymentStatusSecondaryColorCodesEnum } from '@shared/constants/PaymentStatusSecondaryColorCodesEnum';
+import { PaymentStatusColorsMap, PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import Chip, { ChipProps } from '@mui/material/Chip';
+import { styled } from '@mui/material/styles';
 
-interface PaymentPendingChipProps {
-    paymentStatus: String;
-}
+export type SubmissionStatusChipColor = keyof typeof PaymentStatusColorsMap;
 
-export default function PaymentStatusChip(props: PaymentPendingChipProps) {
-    return (
-        <Chip
-            label={PaymentStatusEnum[props.paymentStatus as keyof typeof PaymentStatusEnum]}
-            variant={'outlined'}
-            sx={{
-                color: PaymentStatusPrimaryColorCodesEnum[
-                    props.paymentStatus as keyof typeof PaymentStatusPrimaryColorCodesEnum
-                ],
-                borderColor: 'transparent',
-                backgroundColor:
-                    PaymentStatusSecondaryColorCodesEnum[
-                        props.paymentStatus as keyof typeof PaymentStatusSecondaryColorCodesEnum
-                    ],
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                fontWeight: 500,
-            }}
-        />
-    );
-}
+type PaymentStatusChipProps = Omit<ChipProps, 'color'> & { color: PaymentStatusEnum };
+
+export const PaymentStatusChip = styled(({ color, ...rest }: PaymentStatusChipProps) => <Chip {...rest} />)(
+    ({ theme, color = PaymentStatusEnum.DUE }) => {
+        return {
+            backgroundColor: PaymentStatusColorsMap[color].secondary,
+            color: PaymentStatusColorsMap[color].primary,
+            padding: theme.spacing(1.25, 0.25),
+            textTransform: 'uppercase',
+            letterSpacing: '0.093em',
+            fontWeight: 500,
+        };
+    },
+    {
+        name: 'PaymentStatusChip',
+    },
+);

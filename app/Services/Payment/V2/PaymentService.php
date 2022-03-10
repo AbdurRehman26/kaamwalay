@@ -30,7 +30,7 @@ class PaymentService extends V1PaymentService
 
     public function updateOrderPayment(OrderPayment $orderPayment, array $data): array
     {
-        $this->order->allPayments->each->update([
+        $orderPayment->update([
             'request' => json_encode($data['request']),
             'response' => json_encode($data['response']),
             'payment_provider_reference_id' => $data['payment_provider_reference_id'],
@@ -49,7 +49,7 @@ class PaymentService extends V1PaymentService
     {
         // only update order if its still payable
         // method can be called twice and can fire event twice
-        if ($this->order->isPayable()) {
+        if ($this->order->isPayable('v2')) {
             $this->order->markAsPaid();
 
             OrderPaid::dispatch($this->order);

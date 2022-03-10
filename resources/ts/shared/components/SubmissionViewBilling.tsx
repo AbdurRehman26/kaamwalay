@@ -11,8 +11,8 @@ import font from '../styles/font.module.css';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { Link, useParams } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
-import PaymentStatusChip from '@dashboard/components/PaymentStatusChip';
-import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { PaymentStatusChip } from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 
 interface SubmissionViewBillingProps {
     shippingAddress?: AddressEntity;
@@ -20,7 +20,7 @@ interface SubmissionViewBillingProps {
     payment?: OrderPaymentEntity;
     coupon?: OrderCouponEntity;
     paymentMethodId?: number;
-    paymentStatus: string;
+    paymentStatus: PaymentStatusEnum;
     walletPayment: string;
 }
 
@@ -140,7 +140,7 @@ export function SubmissionViewBilling({
                         <Typography variant={'body1'} className={font.fontWeightMedium}>
                             Payment Status
                         </Typography>
-                        <PaymentStatusChip paymentStatus={paymentStatus} />
+                        <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} />
                         <Box marginTop={2} />
                         <Typography variant={'body1'} className={font.fontWeightMedium}>
                             Payment Method

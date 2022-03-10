@@ -25,7 +25,7 @@ interface SubmissionsTableProps {
 }
 
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
-    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PAYMENT_PENDING], [tabFilter]);
+    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.INCOMPLETE], [tabFilter]);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
 
     const orders$ = useListAdminOrdersQuery({

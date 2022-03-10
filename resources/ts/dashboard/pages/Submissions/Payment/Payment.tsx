@@ -26,16 +26,16 @@ import {
     updatePaymentMethodId,
 } from '@dashboard/redux/slices/newSubmissionSlice';
 import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';
-import StepDescription from '@dashboard/components/StepDescription';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
 import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import Box from '@mui/material/Box';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { PaymentSummary } from './PaymentSummary';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -183,6 +183,36 @@ const useStyles = makeStyles((theme) => ({
         color: 'rgba(0, 0, 0, 0.54);',
         fontSize: '12px',
     },
+    title: {
+        fontFamily: 'Roboto',
+        fontSize: '24px',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: '36px',
+        letterSpacing: '0px',
+        textAlign: 'left',
+        marginBottom: '6px',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '20px',
+        },
+    },
+    description: {
+        fontFamily: 'Roboto',
+        color: '#212121',
+        fontSize: '14px',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: '20px',
+        letterSpacing: '0.2px',
+        textAlign: 'left',
+        marginBottom: '32px',
+    },
+    backIcon: {
+        width: 20,
+        height: 24,
+        marginRight: 22,
+        cursor: 'pointer',
+    },
 }));
 
 const GreenCheckbox = withStyles({
@@ -262,6 +292,7 @@ export function Payment() {
     const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
+    const navigate = useNavigate();
 
     const order = useOrderQuery({
         resourceId: Number(id),
@@ -414,10 +445,13 @@ export function Payment() {
         <StripeContainer>
             <Container>
                 <div className={classes.stepDescriptionContainer}>
-                    <StepDescription
-                        title={`Enter Payment Details`}
-                        description={'Select your payment method and enter details.'}
-                    />
+                    <Typography variant={'h2'} className={classes.title}>
+                        <ArrowBackIcon className={classes.backIcon} onClick={() => navigate(-1)} />
+                        Enter Payment Details
+                    </Typography>
+                    <Typography variant={'h3'} className={classes.description}>
+                        Select your payment method and enter details.
+                    </Typography>
                 </div>
 
                 <Grid container spacing={4}>

@@ -255,7 +255,7 @@ export function PaymentSummary() {
             sendECommerceDataToGA();
             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
             pushDataToRefersion(orderSubmission, user$);
-            navigate(`/submissions/${orderID}/confirmation`);
+            navigate(`/submissions`);
         } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
@@ -295,7 +295,7 @@ export function PaymentSummary() {
                         });
                         sendECommerceDataToGA();
                         pushDataToRefersion(orderSubmission, user$);
-                        navigate(`/submissions/${orderID}/confirmation`);
+                        navigate(`/submissions`);
                     });
                 }
             }

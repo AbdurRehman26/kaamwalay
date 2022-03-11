@@ -5,17 +5,18 @@ import { getCurrentContract, getEthereum } from '@dashboard/components/PayWithAG
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { clearSubmissionState, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
+import { useEffect, useState } from 'react';
+import { clearSubmissionState, getTotalInAGS, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 // @ts-ignore
-const web3: any = new Web3(window?.web3?.currentProvider);
+const web3: any = new Web3(window?.ethereum);
 
 export function PayWithCollectorCoinButton() {
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
+    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const [isLoading, setIsLoading] = useState(false);
     const configs = useConfiguration();
@@ -49,16 +50,17 @@ export function PayWithCollectorCoinButton() {
 
     async function handleClick() {
         setIsLoading(true);
-
         // @ts-ignore
-        const currentNetworkID = await web3.eth.net.getId();
+        const currentChainId = await web3.eth.net.getId();
         const currentAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });
-        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID, supportedNetworks));
+        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentChainId, supportedNetworks));
         const balanceResult = await contract.methods.balanceOf(currentAccounts[0]).call();
         const balance = await web3.utils.fromWei(balanceResult, 'ether');
 
         if (balance <= grandTotal) {
             notifications.error("You don't have enough AGS to finish the payment");
+            setIsLoading(false);
+
             return;
         }
 
@@ -66,9 +68,9 @@ export function PayWithCollectorCoinButton() {
             const tx = {
                 from: currentAccounts[0],
                 data: contract.methods
-                    .transfer(getRecipientWalletFromNetwork(currentNetworkID), web3.utils.toWei(String(totalInAGS)))
+                    .transfer(getRecipientWalletFromNetwork(currentChainId), web3.utils.toWei(String(totalInAGS)))
                     .encodeABI(),
-                to: getCurrentContract(currentNetworkID, supportedNetworks),
+                to: getCurrentContract(currentChainId, supportedNetworks),
             };
 
             web3.eth.sendTransaction(tx, async (err: any, txHash: string) => {
@@ -79,7 +81,17 @@ export function PayWithCollectorCoinButton() {
                 setIsLoading(true);
                 setTimeout(async () => {
                     try {
-                        await dispatch(verifyOrderStatus({ orderID, txHash: txHash })).unwrap();
+                        await dispatch(
+                            verifyOrderStatus({
+                                orderID,
+                                txHash: txHash,
+                                paymentByWallet: 0,
+                                paymentBlockchainNetwork: currentChainId,
+                                paymentMethod: {
+                                    id: paymentMethodId,
+                                },
+                            }),
+                        ).unwrap();
                         dispatch(clearSubmissionState());
                         dispatch(invalidateOrders());
                         setIsLoading(false);
@@ -94,6 +106,20 @@ export function PayWithCollectorCoinButton() {
             setIsLoading(false);
         }
     }
+
+    useEffect(() => {
+        async function fetchTotalInAGS() {
+            const currentChainId = await web3.eth.net.getId();
+            if (currentChainId) {
+                dispatch(getTotalInAGS({ orderID, chainID: currentChainId }));
+                return;
+            }
+
+            dispatch(getTotalInAGS({ orderID, chainID: 1 }));
+        }
+
+        fetchTotalInAGS();
+    }, [dispatch, orderID]);
 
     return (
         <Button variant={'contained'} disabled={isLoading} onClick={handleClick}>

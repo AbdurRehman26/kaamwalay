@@ -108,7 +108,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             return [
                 'message' => $e->getMessage(),
             ];
-        } catch (Exception) {
+        } catch (Exception $exception) {
             return ['message' => 'Unable to handle your request at the moment.'];
         }
     }

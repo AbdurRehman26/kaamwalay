@@ -381,10 +381,24 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
 
 export const verifyOrderStatus = createAsyncThunk(
     'newSubmission/verifyOrderStatus',
-    async (input: { orderID: number; txHash: string }) => {
+    async (input: {
+        orderID: number;
+        txHash: string;
+        paymentByWallet: number;
+        paymentMethod: any;
+        paymentBlockchainNetwork: any;
+    }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments`);
-        const response = await endpoint.post('', { transactionHash: input.txHash });
+        const response = await endpoint.post('', {
+            transactionHash: input.txHash,
+            paymentProviderReference: {
+                id: input.txHash,
+            },
+            paymentBlockchainNetwork: input.paymentBlockchainNetwork,
+            paymentByWallet: input.paymentByWallet,
+            paymentMethod: input.paymentMethod,
+        });
         return response.data;
     },
 );

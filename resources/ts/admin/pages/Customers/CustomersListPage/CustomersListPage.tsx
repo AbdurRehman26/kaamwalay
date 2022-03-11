@@ -29,8 +29,8 @@ import { OptionsMenu, OptionsMenuItem } from '@shared/components/OptionsMenu';
 import { UserEntity } from '@shared/entities/UserEntity';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { useInjectable } from '@shared/hooks/useInjectable';
-import { APIService } from '@shared/services/APIService';
+import { useRepository } from '@shared/hooks/useRepository';
+import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 
 type InitialValues = {
     minSubmissions: string;
@@ -74,8 +74,8 @@ export function CustomersListPage() {
     const formikRef = useRef<FormikProps<InitialValues> | null>(null);
     const [query, { setQuery, delQuery, addQuery }] = useLocationQuery<InitialValues>();
 
+    const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
-    const apiService = useInjectable(APIService);
 
     const initialValues = useMemo<InitialValues>(
         () => ({
@@ -174,22 +174,19 @@ export function CustomersListPage() {
     }, []);
 
     const handleExportData = useCallback(async () => {
-        const exportDataEndpoint = apiService.createEndpoint('/admin/export-data');
-
         try {
-            const exportDataResponse = await exportDataEndpoint.post('', {
+            const exportData = await dataExportRepository.export({
                 model: 'user',
                 filter: getFilters({
                     ...formikRef.current!.values,
                 }),
             });
-            const exportData = await exportDataResponse.data;
 
-            await downloadFromUrl(exportData.file_url, `robograding-customers.xlsx`);
+            await downloadFromUrl(exportData.fileUrl, `robograding-customers.xlsx`);
         } catch (e: any) {
             notifications.exception(e);
         }
-    }, [apiService, notifications]);
+    }, [dataExportRepository, notifications]);
 
     return (
         <Grid container>

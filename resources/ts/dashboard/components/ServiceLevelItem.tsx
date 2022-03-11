@@ -131,6 +131,12 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
         });
     }, [dispatch, id, maxProtectionAmount, price, turnaround, type]);
 
+    function getMaxProtectionAmount() {
+        return maxProtectionAmount >= 1000000
+            ? Intl.NumberFormat('en-GB', { notation: 'compact', compactDisplay: 'short' }).format(maxProtectionAmount)
+            : maxProtectionAmount;
+    }
+
     return (
         <ButtonBase onClick={handleSetServiceLevel} className={classes.root}>
             <div className={classes.leftSide}>
@@ -169,7 +175,8 @@ function ServiceLevelItem(props: SubmissionService & { key: any }) {
                         Protection up to&nbsp;
                         <span>
                             <NumberFormat
-                                value={maxProtectionAmount}
+                                value={getMaxProtectionAmount()}
+                                isNumericString
                                 displayType={'text'}
                                 thousandSeparator
                                 decimalSeparator={'.'}

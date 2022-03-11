@@ -1,9 +1,9 @@
 /**
- * @api {post} /v1/admin/export-data Export Data of a Model
+ * @api {post} /v2/admin/export-data Export Data of a Model
  * @apiName Export Data
  * @apiGroup Admin Export Data
  *
- * @apiVersion 1.0.0
+ * @apiVersion 2.0.0
  *
  * @apiUse header_main
  * @apiUse Authorization

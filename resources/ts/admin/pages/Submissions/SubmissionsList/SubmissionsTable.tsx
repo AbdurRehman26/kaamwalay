@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { upperFirst } from 'lodash';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { bracketParams } from '@shared/lib/api/bracketParams';
@@ -32,6 +32,9 @@ interface SubmissionsTableProps {
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PAYMENT_PENDING], [tabFilter]);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
+
+    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+
     const dataExportRepository = useRepository(DataExportRepository);
     const notifications = useNotifications();
 
@@ -66,14 +69,18 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     useEffect(
         () => {
-            if (!orders$.isLoading) {
+            if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 orders$.search(toApiPropertiesObject({ search }));
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [search],
+        [search, isSearchEnabled],
     );
+
+    useEffect(() => {
+        setIsSearchEnabled(true);
+    }, []);
 
     if (orders$.isLoading) {
         return (

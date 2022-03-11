@@ -111,6 +111,9 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
             transform: 'translate(0, 64px)',
             overflow: 'hidden',
+            [theme.breakpoints.down('sm')]: {
+                marginTop: '-30px',
+            },
         },
         instructions: {
             marginTop: theme.spacing(1),

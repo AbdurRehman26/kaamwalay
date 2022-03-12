@@ -273,7 +273,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      * @param  User  $row
      * @return array
      */
-    public function exportMap(Model $row): array
+    public function exportRowMap(Model $row): array
     {
         return [
             $row->name,

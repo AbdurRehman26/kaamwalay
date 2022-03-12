@@ -30,6 +30,15 @@ test('an admin cannot export data of nonexistent model', function () {
     $response->assertJsonValidationErrors(['model' => 'The model is invalid.']);
 });
 
+test('an admin cannot export data of non-exportable model', function () {
+    $response = postJson(route('v2.admin.export-data'), [
+        'model' => 'country',
+    ]);
+
+    $response->assertUnprocessable();
+    $response->assertJsonFragment(['error' => 'Model is not exportable. Implement Exportable interface on model.']);
+});
+
 test('an admin export data needs model name', function () {
     $response = postJson(route('v2.admin.export-data'));
 

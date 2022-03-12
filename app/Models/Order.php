@@ -365,7 +365,7 @@ class Order extends Model implements Exportable
      * @param  Order  $row
      * @return array
      */
-    public function exportMap($row): array
+    public function exportRowMap($row): array
     {
         return [
             $row->order_number,

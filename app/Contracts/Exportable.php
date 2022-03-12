@@ -12,5 +12,5 @@ interface Exportable
     public function exportHeadings(): array;
     public function exportFilters(): array;
     public function exportIncludes(): array;
-    public function exportMap(Model $row): array;
+    public function exportRowMap(Model $row): array;
 }

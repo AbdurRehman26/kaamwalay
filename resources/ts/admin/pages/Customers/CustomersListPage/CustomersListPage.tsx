@@ -31,6 +31,7 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useRepository } from '@shared/hooks/useRepository';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 
 type InitialValues = {
     minSubmissions: string;
@@ -176,7 +177,7 @@ export function CustomersListPage() {
     const handleExportData = useCallback(async () => {
         try {
             const exportData = await dataExportRepository.export({
-                model: 'user',
+                model: ExportableModelsEnum.User,
                 filter: getFilters({
                     ...formikRef.current!.values,
                 }),

@@ -1,4 +1,4 @@
 export class ExportDataDTO {
-    model?: string;
-    filter?: {};
+    model!: string;
+    filter?: Record<string, any>;
 }

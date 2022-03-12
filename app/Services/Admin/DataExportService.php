@@ -21,13 +21,12 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     * @throws ModelNotExportableException
      */
-    public function process(string $model): string
+    public function process(Exportable $model): string
     {
-        $this->model = $this->getModelInstance($model);
+        $this->model = $model;
 
-        $filePath = $this->generateFilePath($model);
+        $filePath = $this->generateFilePath();
         Excel::store($this, $filePath, 's3', \Maatwebsite\Excel\Excel::XLSX);
 
         return Storage::disk('s3')->url($filePath);
@@ -58,26 +57,11 @@ class DataExportService implements FromQuery, WithHeadings, WithMapping
 
     public function map($row): array
     {
-        return $this->model->exportMap($row);
+        return $this->model->exportRowMap($row);
     }
 
-    protected function generateFilePath(string $model): string
+    protected function generateFilePath(): string
     {
-        return self::DIRECTORY . '/' . $model . '-' . now()->toDateString() . '-' . Str::uuid() . '.xlsx';
-    }
-
-    /**
-     * @throws ModelNotExportableException
-     */
-    protected function getModelInstance(string $model): Exportable
-    {
-        $class = '\\App\\Models\\' . ucfirst($model);
-        $instance = new $class;
-
-        if (! $instance instanceof Exportable) {
-            throw new ModelNotExportableException();
-        }
-
-        return $instance;
+        return self::DIRECTORY . '/' . Str::lower(class_basename($this->model)) . '-' . now()->toDateString() . '-' . Str::uuid() . '.xlsx';
     }
 }

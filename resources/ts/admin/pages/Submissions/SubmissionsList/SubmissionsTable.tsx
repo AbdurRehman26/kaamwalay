@@ -22,6 +22,7 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { useRepository } from '@shared/hooks/useRepository';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -54,7 +55,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
     const handleExportData = useCallback(async () => {
         try {
             const exportData = await dataExportRepository.export({
-                model: 'order',
+                model: ExportableModelsEnum.Order,
                 filter: {
                     search,
                     status: all ? 'all' : tabFilter,

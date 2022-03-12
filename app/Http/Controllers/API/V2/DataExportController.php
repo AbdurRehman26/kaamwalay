@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V2;
 
+use App\Contracts\Exportable;
 use App\Exceptions\Services\Admin\ModelNotExportableException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Admin\ExportDataRequest;
@@ -23,8 +24,25 @@ class DataExportController extends Controller
      */
     public function __invoke(ExportDataRequest $request)
     {
-        $url = $this->dataExportService->process($request->validated('model'));
+        $url = $this->dataExportService->process(
+            $this->getModelInstance($request->validated('model'))
+        );
 
         return new JsonResponse(['data' => ['file_url' => $url]]);
+    }
+
+    /**
+     * @throws ModelNotExportableException
+     */
+    protected function getModelInstance(string $model): Exportable
+    {
+        $class = '\\App\\Models\\' . ucfirst($model);
+        $instance = new $class;
+
+        if (! $instance instanceof Exportable) {
+            throw new ModelNotExportableException();
+        }
+
+        return $instance;
     }
 }

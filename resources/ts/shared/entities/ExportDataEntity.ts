@@ -1,5 +1,3 @@
-import { Entity } from './Entity';
-
-export class ExportDataEntity extends Entity {
+export class ExportDataEntity {
     public fileUrl!: string;
 }

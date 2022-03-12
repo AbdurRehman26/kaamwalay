@@ -46,10 +46,11 @@ export function useListQuery<
             const baseConfig = {
                 params: {
                     page: currentPage,
-                    perPage: perPage,
+                    perPage,
                 },
             };
 
+            console.log({ baseConfig, actionArg, config });
             return dispatch(action(apiService.mergeConfig(baseConfig, actionArg, config)));
         },
         [currentPage, perPage, dispatch, action, apiService, actionArg],

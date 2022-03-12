@@ -64,7 +64,7 @@ const useStyles = makeStyles(
     },
 );
 
-function LayoutSidebar() {
+export function LayoutSidebar() {
     const classes = useStyles();
     const { logout, user } = useAuth();
 
@@ -111,5 +111,3 @@ function LayoutSidebar() {
         </Paper>
     );
 }
-
-export default LayoutSidebar;

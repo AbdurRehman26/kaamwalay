@@ -55,7 +55,7 @@
         display: block;
         padding: 9px 24px 9px 0;
         @include breakpoints.down(md) {
-            padding: 10px 24px 10px 40px;
+            padding: 12px 24px 12px 40px;
             display: flex;
         }
         &-holder {
@@ -69,11 +69,26 @@
             @include breakpoints.down(1059px) {
                 height: 44px;
             }
-            @include breakpoints.down(sm) {
-                height: 40px;
+            @include breakpoints.down(md) {
+                display: none;
             }
-            @include breakpoints.down(xs) {
-                height: 36px;
+        }
+        &-image {
+            width: auto;
+            height: 54px;
+            @include breakpoints.down(1059px) {
+                height: 44px;
+            }
+            @include breakpoints.down(md) {
+                display: none;
+            }
+            &-mobile {
+                display: none;
+                @include breakpoints.down(md) {
+                    display: block;
+                    width: auto;
+                    height: 44px;
+                }
             }
         }
     }

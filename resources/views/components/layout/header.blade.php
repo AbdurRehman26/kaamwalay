@@ -10,6 +10,7 @@
     <div class="page__header__brand-holder">
         <a href="{{ url('/') }}" class="page__header__brand">
             <img class="page__header__brand-image" src="{{ asset('assets/images/robogradingLogo.svg') }}" alt="Robograding"/>
+            <img class="page__header__brand-image-mobile" src="{{ asset('assets/images/robogradingMobileLogo.svg') }}" alt="Robograding"/>
         </a>
     </div>
 

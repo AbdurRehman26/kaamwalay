@@ -3,7 +3,6 @@
 namespace App\Services\Admin;
 
 use App\Contracts\Exportable;
-use App\Exceptions\Services\Admin\ModelNotExportableException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\FromQuery;

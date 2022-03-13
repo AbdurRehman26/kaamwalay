@@ -10,7 +10,7 @@ export class DataExportRepository extends Repository<ExportDataEntity> {
     readonly model = ExportDataEntity;
 
     public async export(input?: ExportDataDTO, config?: AxiosRequestConfig): Promise<ExportDataEntity> {
-        const { data } = await this.endpoint.post('', input, this.apiService.mergeConfig(config));
+        const { data } = await this.endpoint.post('', input, config);
         return this.toEntity(data);
     }
 }

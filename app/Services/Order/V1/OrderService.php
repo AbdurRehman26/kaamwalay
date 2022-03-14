@@ -27,7 +27,7 @@ class OrderService
         $itemsPerPage = request('per_page');
 
         return QueryBuilder::for(Order::class)
-            ->valid()
+            ->excludeCancelled()
             ->forUser($user)
             ->allowedIncludes(Order::getAllowedIncludes())
             ->allowedFilters(Order::getAllowedFilters())

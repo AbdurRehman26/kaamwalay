@@ -357,7 +357,7 @@ class Order extends Model implements Exportable
      * @param  Builder <Order> $query
      * @return Builder <Order>
      */
-    public function scopeValid(Builder $query): Builder
+    public function scopeExcludeCancelled(Builder $query): Builder
     {
         return $query->where('order_status_id', '!=', OrderStatus::CANCELLED);
     }

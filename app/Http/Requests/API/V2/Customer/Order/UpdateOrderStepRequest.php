@@ -31,7 +31,7 @@ class UpdateOrderStepRequest extends FormRequest
             OrderStepEnum::SHIPPING_DETAILS_STEP,
             OrderStepEnum::PROMO_DISCOUNT_STEP,
             OrderStepEnum::ORDER_REVIEW_STEP,
-            OrderStepEnum::ORDER_SUBMITTED_STEP
+            OrderStepEnum::ORDER_SUBMITTED_STEP,
         ]);
     }
 }

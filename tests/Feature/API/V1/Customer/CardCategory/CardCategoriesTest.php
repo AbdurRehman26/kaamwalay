@@ -25,5 +25,5 @@ test('customer can receive enabled card categories', function () {
     getJson(route('v1.cards.categories'))
         ->assertOk()
         ->assertJsonCount(CardCategory::enabled()->count(), 'data')
-        ->assertJsonStructure(['data' => [['id', 'name']]]);
+        ->assertJsonStructure(['data' => [['id', 'name', 'is_enabled']]]);
 });

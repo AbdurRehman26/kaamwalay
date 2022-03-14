@@ -2,7 +2,7 @@
 
 namespace App\Enums\Order;
 
-enum OrderStatusEnum: string
+enum OrderStepEnum: string
 {
     case CARDS_SELECTION_STEP = 'cardsSelectionStep';
     case SHIPPING_DETAILS_STEP = 'shippingDetailsStep';

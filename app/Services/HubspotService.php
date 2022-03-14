@@ -20,13 +20,15 @@ class HubspotService
         return $hubspotClient;
     }
 
+    /**
+     * @throws \SevenShores\Hubspot\Exceptions\BadRequest
+     */
     public function addUserAndAssignDeal(User $user): void
     {
         try {
             $hubspotClient = $this->getClient();
 
             $owner = new Owners($hubspotClient);
-            
 
             $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
   

@@ -13,6 +13,9 @@ class SendRegisteredUserToHubspot implements ShouldQueue
         //
     }
 
+    /**
+     * @throws \SevenShores\Hubspot\Exceptions\BadRequest
+     */
     public function handle(CustomerRegistered $event): void
     {
         if (app()->environment('local')) {

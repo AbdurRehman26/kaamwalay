@@ -2,7 +2,7 @@
 
 namespace App\Services\Order\V2;
 
-use App\Enums\Order\OrderStatusEnum;
+use App\Enums\Order\OrderStepEnum;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\PaymentMethod;
@@ -127,7 +127,7 @@ class CreditAndDiscountOrderService
 
     protected function saveOrder(): void
     {
-        $this->order->order_step = OrderStatusEnum::ORDER_REVIEW_STEP;
+        $this->order->order_step = OrderStepEnum::ORDER_REVIEW_STEP;
         $this->order->save();
     }
 }

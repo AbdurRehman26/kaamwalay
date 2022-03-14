@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Order\OrderStatusEnum;
+use App\Enums\Order\OrderStepEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +15,7 @@ class AlterTableOrdersAddColumnStep extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('order_step')->after('order_number')->default(OrderStatusEnum::CARDS_SELECTION_STEP->value);
+            $table->string('order_step')->after('order_number')->default(OrderStepEnum::CARDS_SELECTION_STEP->value);
         });
     }
 

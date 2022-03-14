@@ -6,7 +6,7 @@ use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
-use App\Enums\Order\OrderStatusEnum;
+use App\Enums\Order\OrderStepEnum;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -90,7 +90,7 @@ class Order extends Model implements Exportable
         'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
         'paid_at' => 'datetime',
-        'order_step' => OrderStatusEnum::class,
+        'order_step' => OrderStepEnum::class,
         'payment_status' => OrderPaymentStatusEnum::class,
     ];
 

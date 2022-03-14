@@ -50,7 +50,6 @@ export function useListQuery<
                 },
             };
 
-            console.log({ baseConfig, actionArg, config });
             return dispatch(action(apiService.mergeConfig(baseConfig, actionArg, config)));
         },
         [currentPage, perPage, dispatch, action, apiService, actionArg],

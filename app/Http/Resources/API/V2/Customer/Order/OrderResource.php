@@ -45,12 +45,12 @@ class OrderResource extends BaseResource
             'refunds' => $this->whenLoaded('refunds', OrderPaymentCollection::class),
             'extra_charge_total' => $this->extra_charge_total,
             'refund_total' => $this->refund_total,
-            'coupon' => new CouponResource($this->coupon),
+            'coupon' => $this->whenLoaded('coupon', CouponResource::class),
             'discounted_amount' => $this->discounted_amount,
             'payment_method_discounted_amount' => $this->payment_method_discounted_amount,
             'payment_method_id' => $this->payment_method_id,
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
-            'payment_status' => ! empty($this->payment_status) ? $this->payment_status->toString() : null,
+            'payment_status' => $this->payment_status->toString(),
             'order_step' => $this->order_step,
         ];
     }

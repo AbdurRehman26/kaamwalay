@@ -20,7 +20,7 @@ use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
-use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
+use App\Services\Order\Validators\V1\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;

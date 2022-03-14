@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V2;
 
+use App\Enums\Order\OrderStatusEnum;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
@@ -58,7 +59,7 @@ class CompleteOrderSubmissionService
 
     protected function saveOrder(): void
     {
-        $this->order->order_step = Order::ORDER_STEPS['ORDER_SUBMITTED_STEP'];
+        $this->order->order_step = OrderStatusEnum::ORDER_SUBMITTED_STEP;
         $this->order->order_status_id = OrderStatus::PLACED;
         $this->order->save();
     }

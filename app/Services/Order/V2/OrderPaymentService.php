@@ -9,7 +9,7 @@ use App\Models\PaymentMethod;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
-use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
+use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;

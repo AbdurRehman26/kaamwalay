@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V2;
 
+use App\Enums\Order\OrderStatusEnum;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\PaymentMethod;
@@ -9,7 +10,7 @@ use App\Services\Coupon\CouponService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
-use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
+use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -126,7 +127,7 @@ class CreditAndDiscountOrderService
 
     protected function saveOrder(): void
     {
-        $this->order->order_step = Order::ORDER_STEPS['ORDER_REVIEW_STEP'];
+        $this->order->order_step = OrderStatusEnum::ORDER_REVIEW_STEP;
         $this->order->save();
     }
 }

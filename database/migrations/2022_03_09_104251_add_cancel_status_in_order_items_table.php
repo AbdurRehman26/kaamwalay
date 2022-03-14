@@ -17,7 +17,7 @@ return new class extends Migration
             [
                 'code' => 'cancelled',
                 'name' => 'Cancelled',
-                'description' => 'Item is cancelled byt the user',
+                'description' => 'Item is cancelled by the user',
                 'created_at' => new Datetime(),
                 'updated_at' => new Datetime(),
             ],

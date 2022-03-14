@@ -2,12 +2,12 @@
 
 namespace App\Services\Order\V2;
 
+use App\Enums\Order\OrderStatusEnum;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Order\OrderNumberGeneratorService;
-use function auth;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -71,7 +71,7 @@ class CreateOrderService
     protected function saveOrder(): void
     {
         $this->order->user()->associate(auth()->user());
-        $this->order->order_step = Order::ORDER_STEPS['CARDS_SELECTION_STEP'];
+        $this->order->order_step = OrderStatusEnum::CARDS_SELECTION_STEP;
         $this->order->save();
         $this->order->order_number = OrderNumberGeneratorService::generate($this->order);
         $this->order->save();

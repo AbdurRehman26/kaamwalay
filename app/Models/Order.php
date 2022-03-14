@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Enums\Order\OrderStatusEnum;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,14 +21,6 @@ use Spatie\QueryBuilder\AllowedInclude;
 class Order extends Model
 {
     use HasFactory, ActivityLog, HasOrderPayments;
-
-    const ORDER_STEPS = [
-        'CARDS_SELECTION_STEP' => 'cardsSelectionStep',
-        'SHIPPING_DETAILS_STEP' => 'shippingDetailsStep',
-        'PROMO_DISCOUNT_STEP' => 'promoDiscountStep',
-        'ORDER_REVIEW_STEP' => 'orderReviewStep',
-        'ORDER_SUBMITTED_STEP' => 'orderSubmittedStep',
-    ];
 
     /**
      * The attributes that are mass assignable.
@@ -96,6 +89,7 @@ class Order extends Model
         'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
         'paid_at' => 'datetime',
+        'order_step' => OrderStatusEnum::class,
         'payment_status' => OrderPaymentStatusEnum::class,
     ];
 
@@ -165,7 +159,7 @@ class Order extends Model
     {
         return [
             AllowedFilter::partial('order_number'),
-            AllowedFilter::partial('order_status_id'),
+            AllowedFilter::exact('order_status_id'),
         ];
     }
 

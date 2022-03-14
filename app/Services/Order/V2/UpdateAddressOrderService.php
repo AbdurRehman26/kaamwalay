@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V2;
 
+use App\Enums\Order\OrderStatusEnum;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\CustomerAddress;
 use App\Models\Order;
@@ -103,7 +104,7 @@ class UpdateAddressOrderService
 
     protected function saveOrder(): void
     {
-        $this->order->order_step = Order::ORDER_STEPS['PROMO_DISCOUNT_STEP'];
+        $this->order->order_step = OrderStatusEnum::PROMO_DISCOUNT_STEP;
         $this->order->save();
     }
 }

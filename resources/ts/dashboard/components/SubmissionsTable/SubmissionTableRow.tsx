@@ -238,7 +238,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                     </MenuItem>
                                 </>
                             )}
-                            {status === 'Pending Payment' && (
+                            {status === 'Incomplete' && (
                                 <>
                                     <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
                                         Continue Submission
@@ -307,7 +307,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                         </MenuItem>
                                     </>
                                 )}
-                                {status === 'Payment Pending' && (
+                                {status === 'Incomplete' && (
                                     <>
                                         <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
                                             Continue Submission

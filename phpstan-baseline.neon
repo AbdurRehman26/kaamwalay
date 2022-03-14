@@ -3056,7 +3056,7 @@ parameters:
 			path: app/Services/ImageService.php
 
 		-
-			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:valid\\(\\)\\.$#"
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
 			count: 1
 			path: app/Services/Order/V1/OrderService.php
 

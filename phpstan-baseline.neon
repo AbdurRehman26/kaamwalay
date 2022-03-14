@@ -1,46 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateAdminShipments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
-
-		-
-			message: "#^Method App\\\\Console\\\\Commands\\\\Orders\\\\MigrateShipmentsToNewSchema\\:\\:migrateCustomerShipments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/MigrateShipmentsToNewSchema.php
-
-		-
-			message: "#^Anonymous function should return Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), mixed\\>\\> but returns Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}\\>\\>\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:each\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, \\(int\\|string\\)\\)\\: mixed, Closure\\(App\\\\Models\\\\UserCard, mixed\\)\\: void given\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), array\\<string, mixed\\>\\>\\>\\:\\:transform\\(\\) expects callable\\(Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}\\>, \\(int\\|string\\)\\)\\: Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}\\>, Closure\\(Illuminate\\\\Support\\\\Collection\\)\\: Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), mixed\\>\\> given\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),array\\<string, mixed\\>\\>\\:\\:each\\(\\) expects callable\\(array\\{order_number\\: mixed, card_number\\: mixed, card_set_name\\: mixed, certificate_number\\: mixed\\}, \\(int\\|string\\)\\)\\: mixed, Closure\\(Illuminate\\\\Support\\\\Collection, string\\)\\: void given\\.$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Unable to resolve the template type TKey in call to function collect$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
-			message: "#^Unable to resolve the template type TValue in call to function collect$#"
-			count: 1
-			path: app/Console/Commands/Orders/SyncCertificatesForOldOrders.php
-
-		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 1
 			path: app/Console/Commands/RevenueStats/UpdateRevenueStats.php
@@ -1531,6 +1491,51 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$response\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
+			count: 3
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderResource.php
@@ -3006,44 +3011,14 @@ parameters:
 			path: app/Services/Admin/Order/ShipmentService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getCertificatesDataQuery\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:getGrades\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:updateLocalGrades\\(\\) has parameter \\$cards with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderService\\:\\:updateNotes\\(\\) has parameter \\$notes with no type specified\\.$#"
-			count: 1
-			path: app/Services/Admin/OrderService.php
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"
+			count: 2
+			path: app/Services/Admin/V1/OrderStatusHistoryService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"
 			count: 2
-			path: app/Services/Admin/OrderStatusHistoryService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderStatusHistoryService\\:\\:addStatusToOrder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Admin/OrderStatusHistoryService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Admin\\\\OrderStatusHistoryService\\:\\:getAllByOrderId\\(\\) return type with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection does not specify its types\\: TKey, TModel$#"
-			count: 1
-			path: app/Services/Admin/OrderStatusHistoryService.php
+			path: app/Services/Admin/V2/OrderStatusHistoryService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\ConfigurationService\\\\ConfigurationValue\\:\\:from\\(\\) has parameter \\$key with no type specified\\.$#"
@@ -3076,77 +3051,7 @@ parameters:
 			path: app/Services/ImageService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:process\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:saveOrder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:startOrder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeCustomerAddress\\(\\) has parameter \\$customerAddress with no type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderAddresses\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderItems\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeOrderPayment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storePaymentPlan\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingFee\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:storeShippingMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\CreateOrderService\\:\\:validate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Order/CreateOrderService.php
-
-		-
 			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:placed\\(\\)\\.$#"
-			count: 1
-			path: app/Services/Order/OrderService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\Order\\\\OrderService\\:\\:getAddressData\\(\\) has parameter \\$address with no type specified\\.$#"
 			count: 1
 			path: app/Services/Order/OrderService.php
 
@@ -3206,24 +3111,19 @@ parameters:
 			path: app/Services/Order/Validators/ItemsDeclaredValueValidator.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Payment\\\\InvoiceService\\:\\:createAndStoreInvoiceRecord\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/Payment/InvoiceService.php
-
-		-
 			message: "#^Cannot access property \\$id on array\\|object\\|string\\.$#"
 			count: 1
-			path: app/Services/Payment/Providers/PaypalService.php
+			path: app/Services/Payment/V1/Providers/PaypalService.php
 
 		-
 			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
 			count: 1
-			path: app/Services/Payment/Providers/StripeService.php
+			path: app/Services/Payment/V1/Providers/StripeService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Payment\\\\Providers\\\\StripeService\\:\\:getUserPaymentMethods\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
+			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$type\\.$#"
 			count: 1
-			path: app/Services/Payment/Providers/StripeService.php
+			path: app/Services/Payment/V2/Providers/StripeService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:accumulateReportRow\\(\\) has parameter \\$userCards with generic class Illuminate\\\\Support\\\\Collection but does not specify its types\\: TKey, TValue$#"
@@ -3266,16 +3166,6 @@ parameters:
 			path: app/Services/PopReport/PopReportService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSeriesReport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/PopReport/PopReportService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\PopReport\\\\PopReportService\\:\\:updateSetsReport\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Services/PopReport/PopReportService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumber\\:\\:toSql\\(\\) has parameter \\$column with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumber.php
@@ -3284,4 +3174,9 @@ parameters:
 			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumberService\\:\\:get\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumberService.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
 

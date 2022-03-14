@@ -23,16 +23,6 @@ class UserGenerateCustomerNumber extends Command
     protected $description = 'Generate customer number for all users that don\'t have one.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int

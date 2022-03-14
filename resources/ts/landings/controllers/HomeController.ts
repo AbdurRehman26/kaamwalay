@@ -4,10 +4,21 @@ import poweredByAgs from '@shared/assets/poweredByAGS.svg';
 import { CanSetup } from '../interfaces/CanSetup';
 import { mountAtom } from '../utils/mountAtom';
 import { LayoutAtom } from '../atoms/LayoutAtom';
+import { SubmissionButtonAtom } from '../atoms/SubmissionButtonAtom';
 
 export class HomeController extends Controller implements CanSetup<HomeController> {
     public async setup() {
         await mountAtom(LayoutAtom);
+        await mountAtom(
+            SubmissionButtonAtom.clone({
+                props: {
+                    className: 'Home-buttonCta',
+                },
+                options: {
+                    replaceParent: true,
+                },
+            }),
+        );
     }
 
     public getHome() {
@@ -32,6 +43,23 @@ export class HomeController extends Controller implements CanSetup<HomeControlle
             poweredBy.classList.add('Home-poweredBy');
             videoElement.appendChild(poweredBy);
         }
+
+        this.setupHeader();
+    }
+
+    private setupHeader() {
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector<HTMLDivElement>('.page__header');
+            if (header) {
+                if (window.scrollY > 50) {
+                    header.classList.add('page__header--scrolled');
+                } else {
+                    header.classList.remove('page__header--scrolled');
+                }
+            }
+        });
+
+        window.dispatchEvent(new Event('scroll'));
     }
 }
 

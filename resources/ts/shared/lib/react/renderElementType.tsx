@@ -11,5 +11,11 @@ export function renderElementType<T extends ElementType | ReactElement>(
         return <Component {...(props || {})} />;
     }
 
-    return Children;
+    return {
+        ...Children,
+        props: {
+            ...Children.props,
+            ...(props || {}),
+        },
+    };
 }

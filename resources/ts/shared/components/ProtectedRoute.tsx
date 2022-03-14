@@ -42,7 +42,7 @@ export function ProtectedRoute(Component: ElementType, { redirectRoute, roles }:
         }
 
         if (!authenticated || (roles && !hasAtLeastOneRole)) {
-            let link = redirectRoute ?? AuthenticationEnum.SignInRoute;
+            let link = redirectRoute ?? AuthenticationEnum.HomeRoute;
             if (!link.startsWith('http') && !link.startsWith('//')) {
                 link = `${window.location.protocol}//${window.location.host}/${link.replace(/^\//, '')}`;
             }

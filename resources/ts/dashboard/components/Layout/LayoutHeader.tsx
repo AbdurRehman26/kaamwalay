@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setNavigationDrawerOpen } from '@dashboard/redux/slices/dashboardSlice';
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
 import Button from '@mui/material/Button';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { alpha } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 
@@ -85,17 +86,19 @@ const useStyles = makeStyles(
     },
 );
 
-function LayoutHeader() {
+export function LayoutHeader() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const isNavigationDrawerOpen = useAppSelector((state) => state.dashboardSlice.isNavigationDrawerOpen);
-
+    const trigger = useScrollTrigger({
+        disableHysteresis: true,
+    });
     const handleMenuIconClick = useCallback(() => {
         dispatch(setNavigationDrawerOpen(!isNavigationDrawerOpen));
     }, [dispatch, isNavigationDrawerOpen]);
 
     return (
-        <AppBar position="static" className={classes.root} elevation={0}>
+        <AppBar position="sticky" className={classes.root} elevation={trigger ? 4 : 0}>
             <DashboardNavigationDrawer />
             <Toolbar>
                 <IconButton
@@ -137,5 +140,3 @@ function LayoutHeader() {
         </AppBar>
     );
 }
-
-export default LayoutHeader;

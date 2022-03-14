@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Orders;
 
 use App\Models\User;
-use App\Services\Payment\PaymentHandshakeService;
+use App\Services\Payment\V1\PaymentHandshakeService;
 use Illuminate\Console\Command;
 
 class ProcessPaymentHandshake extends Command

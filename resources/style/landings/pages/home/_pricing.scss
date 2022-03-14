@@ -6,7 +6,7 @@
     z-index: 1;
 
     @media screen and (max-width: 1280px) {
-        padding-bottom: 0;
+        padding-bottom: 100px;
     }
     @media screen and (max-width: 699px) {
         padding-top: 84px;
@@ -57,22 +57,21 @@
     object-position: center;
     z-index: -1;
 }
+
 .Home-pricesHolder {
     max-width: 100%;
-    overflow-x: auto;
 }
 
 .Home-prices {
-    width: 100%;
+    max-width: calc(100% - 68px);
     display: flex;
-    margin-top: 64px;
-    min-width: 1248px;
+    margin: 64px 34px 0;
     @media screen and (max-width: 699px) {
         margin-top: 32px;
     }
 
     .Home-priceColumn {
-        width: calc(25% - 24px);
+        width: calc(100% - 24px);
         min-width: 284px;
         margin: 12px;
         background-color: #fff;
@@ -80,6 +79,11 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+
+        @media screen and (max-width: 699px) {
+            width: 100%;
+            margin: 0;
+        }
 
         .Home-buttonCta {
             margin: 0 24px 24px;
@@ -138,6 +142,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        white-space: nowrap;
 
         b {
             margin: 0 4px;

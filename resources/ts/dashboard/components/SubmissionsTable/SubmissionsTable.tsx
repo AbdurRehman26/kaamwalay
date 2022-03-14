@@ -22,8 +22,8 @@ import Grid from '@mui/material/Grid';
 const StyledBox = styled(Box)(
     {
         width: '100%',
-        backgroundColor: '#F9F9F9',
-        border: '1px solid #E0E0E0',
+        backgroundColor: '#f9f9f9',
+        border: '1px solid #e0e0e0',
         borderRadius: '8px',
         padding: '40px 20px',
         marginTop: '15px',
@@ -31,19 +31,10 @@ const StyledBox = styled(Box)(
     { name: 'StyledBox' },
 );
 
-const PaginationFooter = styled(TableRow)(({ theme }) => ({
-    background: 'white',
-    position: 'fixed',
-    left: '72%',
-    bottom: '0',
-    [theme.breakpoints.down('sm')]: {
-        width: '100%',
-        left: '50%',
-    },
-}));
-
-const TableMargin = styled(TableContainer)(({ theme }) => ({
-    marginBottom: theme.spacing(7),
+const PaginationFooter = styled('div')(() => ({
+    backgroundColor: '#fff',
+    position: 'sticky',
+    bottom: 0,
 }));
 
 interface SubmissionsTableProps {
@@ -86,18 +77,20 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
     }
 
     const footer$ = (
-        <TableFooter>
-            <PaginationFooter>
-                <TableRow>
-                    <TablePagination
-                        {...{
-                            ...orders$.paginationProps,
-                            rowsPerPageOptions: [48],
-                        }}
-                    />
-                </TableRow>
-            </PaginationFooter>
-        </TableFooter>
+        <PaginationFooter>
+            <Table>
+                <TableFooter>
+                    <TableRow>
+                        <TablePagination
+                            {...{
+                                ...orders$.paginationProps,
+                                rowsPerPageOptions: [48],
+                            }}
+                        />
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </PaginationFooter>
     );
 
     const items$ = orders$.data?.map((data: OrderEntity) => (
@@ -132,7 +125,9 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
-                            You have no submission's yet.<br></br>Click NEW SUBMISSION to get started.
+                            You have no submission's yet.
+                            <br />
+                            Click NEW SUBMISSION to get started.
                         </Typography>
                     </Grid>
                 </Grid>
@@ -149,18 +144,16 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
     }
 
     return (
-        <>
+        <Box mb={7}>
             {isSm ? (
                 <>
                     {items$}
-                    <TableMargin>
-                        <TableContainer>
-                            <Table>{footer$}</Table>
-                        </TableContainer>
-                    </TableMargin>
+                    <TableContainer>
+                        <Table>{footer$}</Table>
+                    </TableContainer>
                 </>
             ) : (
-                <TableMargin>
+                <>
                     <TableContainer>
                         <Table>
                             <TableHead>
@@ -176,12 +169,11 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
                             </TableHead>
 
                             <TableBody>{items$}</TableBody>
-
-                            {items$.length > 0 ? footer$ : null}
                         </Table>
                     </TableContainer>
-                </TableMargin>
+                    {orders$.pagination.meta.total > orders$.pagination.meta.perPage ? footer$ : null}
+                </>
             )}
-        </>
+        </Box>
     );
 }

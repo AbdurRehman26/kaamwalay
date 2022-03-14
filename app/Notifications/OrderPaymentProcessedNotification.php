@@ -87,9 +87,9 @@ class OrderPaymentProcessedNotification extends Notification
     {
         return $this->order->orderItems()
             ->join('card_products', 'order_items.card_product_id', 'card_products.id')
-            ->join('card_categories', 'card_products.card_category_id', 'card_categories.id')
+            ->leftJoin('card_categories', 'card_products.card_category_id', 'card_categories.id')
             ->groupBy('card_categories.id')
-            ->select(DB::raw('SUM(order_items.quantity) as quantity'), 'card_categories.name')
+            ->select(DB::raw('SUM(order_items.quantity) as quantity'), DB::raw("COALESCE(card_categories.name, 'Added Manually') as name"))
             ->get()
             ->map(function ($values) {
                 return $values['quantity'] . ' ' . $values['name'];

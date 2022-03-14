@@ -13,23 +13,23 @@ use SevenShores\Hubspot\Resources\Owners;
 
 class HubspotService
 {
-  public function getClient(): Client
-  {
-    return new Client(['key' => config('services.hubspot.apiKey')]);
-  }
+    public function getClient(): Client
+    {
+        return new Client(['key' => config('services.hubspot.apiKey')]);
+    }
 
-  /**
-   * @throws \SevenShores\Hubspot\Exceptions\BadRequest
-   */
-  public function addUserAndAssignDeal(User $user): void
-  {
-      try {
-          $hubspotClient = $this->getClient();
+    /**
+     * @throws \SevenShores\Hubspot\Exceptions\BadRequest
+     */
+    public function addUserAndAssignDeal(User $user): void
+    {
+        try {
+            $hubspotClient = $this->getClient();
 
-          $owner = new Owners($hubspotClient);
-          $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
+            $owner = new Owners($hubspotClient);
+            $ownerResponse = $owner->all(['email' => config('services.hubspot.owner_email')]);
 
-          $createDeal = [
+            $createDeal = [
                 [
                   'value' => $user->getFullName() ?: '',
                   'name' => 'dealname',
@@ -48,11 +48,11 @@ class HubspotService
                 ],
               ];
 
-          $deal = new Deals($hubspotClient);
-          $response = $deal->create($createDeal);
+            $deal = new Deals($hubspotClient);
+            $response = $deal->create($createDeal);
 
-          $contact = new Contacts($hubspotClient);
-          $createContact = [
+            $contact = new Contacts($hubspotClient);
+            $createContact = [
               [
                   'property' => 'email',
                   'value' => $user->email ?: '',
@@ -67,10 +67,10 @@ class HubspotService
               ],
           ];
 
-          $contactResponse = $contact->create($createContact);
+            $contactResponse = $contact->create($createContact);
 
-          $associateContact = new CrmAssociations($hubspotClient);
-          $associateContact->create([
+            $associateContact = new CrmAssociations($hubspotClient);
+            $associateContact->create([
           // @phpstan-ignore-next-line
           'fromObjectId' => $contactResponse->vid,
           // @phpstan-ignore-next-line
@@ -78,8 +78,8 @@ class HubspotService
           'category' => 'HUBSPOT_DEFINED',
           'definitionId' => 4,
         ]);
-      } catch (RequestException $exception) {
-          Log::error($exception);
-      }
-  }
+        } catch (RequestException $exception) {
+            Log::error($exception);
+        }
+    }
 }

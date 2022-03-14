@@ -18,6 +18,7 @@ import { SubmissionTableRow } from './SubmissionTableRow';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import { Table } from './styles';
 import Grid from '@mui/material/Grid';
+import { OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 
 const StyledBox = styled(Box)(
     {
@@ -93,23 +94,26 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
         </PaginationFooter>
     );
 
-    const items$ = orders$.data?.map((data: OrderEntity) => (
-        <SubmissionTableRow
-            disabled
-            key={data?.id}
-            id={data?.id}
-            isSm={isSm}
-            orderNumber={data?.orderNumber}
-            serviceLevel={data?.paymentPlan?.price}
-            cardsNumber={data?.numberOfCards}
-            status={data?.orderStatus?.name}
-            datePlaced={data?.createdAt}
-            dateArrived={data?.arrivedAt}
-            invoice={data?.invoice?.path}
-            invoiceNumber={data?.invoice?.invoiceNumber}
-            orderCustomerShipment={data?.orderCustomerShipment}
-        />
-    ));
+    const items$ = orders$.data?.map((data: OrderEntity) => {
+        const status = (OrderStatusMap as Record<number, any>)[data?.orderStatus?.id];
+        return (
+            <SubmissionTableRow
+                disabled
+                key={data?.id}
+                id={data?.id}
+                isSm={isSm}
+                orderNumber={data?.orderNumber}
+                serviceLevel={data?.paymentPlan?.price}
+                cardsNumber={data?.numberOfCards}
+                status={status?.label}
+                datePlaced={data?.createdAt}
+                dateArrived={data?.arrivedAt}
+                invoice={data?.invoice?.path}
+                invoiceNumber={data?.invoice?.invoiceNumber}
+                orderCustomerShipment={data?.orderCustomerShipment}
+            />
+        );
+    });
 
     if (items$.length === 0 && search === '') {
         return (

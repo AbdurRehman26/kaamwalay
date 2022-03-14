@@ -10,5 +10,7 @@ export class PaginationMeta {
     public total!: number;
     public currentPage!: number;
     public lastPage!: number;
+
+    @Type(() => Number)
     public perPage!: number;
 }

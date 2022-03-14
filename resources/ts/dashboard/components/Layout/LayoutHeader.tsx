@@ -86,7 +86,7 @@ const useStyles = makeStyles(
     },
 );
 
-function LayoutHeader() {
+export function LayoutHeader() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const isNavigationDrawerOpen = useAppSelector((state) => state.dashboardSlice.isNavigationDrawerOpen);
@@ -140,5 +140,3 @@ function LayoutHeader() {
         </AppBar>
     );
 }
-
-export default LayoutHeader;

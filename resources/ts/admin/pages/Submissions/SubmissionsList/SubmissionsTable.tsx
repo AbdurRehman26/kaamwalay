@@ -10,13 +10,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { upperFirst } from 'lodash';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import SubmissionsTableRow from '@admin/pages/Submissions/SubmissionsList/SubmissionsTableRow';
+import Button from '@mui/material/Button';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
+import { useRepository } from '@shared/hooks/useRepository';
+import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -27,6 +33,11 @@ interface SubmissionsTableProps {
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
     const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PAYMENT_PENDING], [tabFilter]);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
+
+    const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+
+    const dataExportRepository = useRepository(DataExportRepository);
+    const notifications = useNotifications();
 
     const orders$ = useListAdminOrdersQuery({
         params: {
@@ -41,16 +52,36 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     const totals = orders$.pagination?.meta?.total ?? 0;
 
+    const handleExportData = useCallback(async () => {
+        try {
+            const exportData = await dataExportRepository.export({
+                model: ExportableModelsEnum.Order,
+                filter: {
+                    search,
+                    status: all ? 'all' : tabFilter,
+                },
+            });
+
+            await downloadFromUrl(exportData.fileUrl, `robograding-submissions.xlsx`);
+        } catch (e: any) {
+            notifications.exception(e);
+        }
+    }, [dataExportRepository, search, all, tabFilter, notifications]);
+
     useEffect(
         () => {
-            if (!orders$.isLoading) {
+            if (!orders$.isLoading && isSearchEnabled) {
                 // noinspection JSIgnoredPromiseFromCall
                 orders$.search(toApiPropertiesObject({ search }));
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [search],
+        [search, isSearchEnabled],
     );
+
+    useEffect(() => {
+        setIsSearchEnabled(true);
+    }, []);
 
     if (orders$.isLoading) {
         return (
@@ -62,11 +93,23 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
 
     return (
         <Grid container direction={'column'}>
-            <Box pt={2.5} px={2} pb={2}>
-                <Typography variant={'h6'}>
-                    {heading} {totals > 0 ? `(${totals})` : null}
-                </Typography>
-            </Box>
+            <Grid container pt={2.5} px={2} pb={2} justifyContent={'flex-start'}>
+                <Grid item xs container alignItems={'center'}>
+                    <Typography variant={'h6'}>
+                        {heading} {totals > 0 ? `(${totals})` : null}
+                    </Typography>
+                </Grid>
+                <Grid item xs container justifyContent={'flex-end'} maxWidth={'240px !important'}>
+                    <Button
+                        variant={'outlined'}
+                        color={'primary'}
+                        sx={{ borderRadius: 20, padding: '7px 24px' }}
+                        onClick={handleExportData}
+                    >
+                        Export List
+                    </Button>
+                </Grid>
+            </Grid>
             <TableContainer>
                 <Table>
                     <TableHead>

@@ -33,6 +33,9 @@ const useStyles = makeStyles(
             width: '100%',
             justifyContent: 'center',
             marginTop: '84px',
+            [theme.breakpoints.down('sm')]: {
+                marginTop: '35px',
+            },
         },
         headerTitle: {
             color: '#fff',

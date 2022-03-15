@@ -24,9 +24,10 @@ import { Theme } from '@mui/material/styles';
 import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { getAvailableCredit } from '@dashboard/redux/slices/newSubmissionSlice';
+import Stack from '@mui/material/Stack';
 
 const TOOLTIP_TEXT = `Your balance will never expire. We'll automatically apply your Wallet Balance to eligible orders when you checkout. If you would rather not use your balance, you can deselect it when creating an order. 
-                    \n\nLimitations: Your Wallet Balance cannot be transferred to other accounts. `;
+                    \n\nLimitations: Your Wallet Balance cannot be transferred to other accounts.`;
 
 const useStyles = makeStyles(() => {
     return {
@@ -64,6 +65,7 @@ const useStyles = makeStyles(() => {
         },
     };
 });
+
 export function Wallet() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -87,19 +89,15 @@ export function Wallet() {
 
     if (walletTransactions.data?.length === 0) {
         mainElement = (
-            <Box
-                display={'flex'}
-                flexDirection={'column'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                padding={'16px'}
-            >
+            <Stack p={3} alignItems={'center'} justifyContent={'center'}>
                 <AccountBalanceWalletTwoToneIcon />
-                <Typography sx={{ marginTop: '6px', marginBottom: '6px' }}>No Wallet History</Typography>
-                <Typography variant={'caption'} sx={{ color: 'rgba(0, 0, 0, 0.54)', textAlign: 'center' }}>
+                <Typography mt={1} variant={'subtitle1'} fontWeight={700}>
+                    No Wallet History
+                </Typography>
+                <Typography variant={'caption'} color={'textSecondary'} align={'center'}>
                     You have no wallet history. Add to your wallet to get started.
                 </Typography>
-            </Box>
+            </Stack>
         );
     }
 
@@ -170,7 +168,7 @@ export function Wallet() {
                 ) : null}
             </ListHeader>
 
-            <Grid container direction={'row'} marginTop={'21px'} spacing={2}>
+            <Grid container direction={'row'} marginTop={'21px'} spacing={2} mb={{ xs: 3, md: 5 }}>
                 <Grid item xs={12} sm={8} order={{ xs: 2, sm: 1 }}>
                     <Paper
                         variant={'outlined'}

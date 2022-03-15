@@ -5,8 +5,8 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getServiceLevels, setCustomStep, setServiceLevel } from '../redux/slices/newSubmissionSlice';
 import ServiceLevelItem from './ServiceLevelItem';
 import StepDescription from './StepDescription';
-import { useLocation } from 'react-router-dom';
 import { find } from 'lodash';
+import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 
 const useStyles = makeStyles((theme) => ({
     pageContainer: {
@@ -22,13 +22,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+type InitialValues = {
+    plan: string;
+};
+
 export function SubmissionStep01Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const serviceLevels = useAppSelector((state) => state.newSubmission.step01Data.availableServiceLevels);
-    const { search } = useLocation();
-    const params: any = new URLSearchParams(search);
-    const plan = params?.get('plan');
+    const [query] = useLocationQuery<InitialValues>();
+    const plan = query.plan;
 
     useEffect(() => {
         dispatch(getServiceLevels());

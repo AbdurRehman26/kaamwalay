@@ -110,9 +110,9 @@ function LayoutHeader() {
                     <MenuIcon color={'inherit'} />
                 </IconButton>
 
-                <Link to={'/'} className={classes.brand}>
+                <MuiLink href={'/'} className={classes.brand}>
                     <img src={Logo} alt={'Robograding'} className={classes.brandImage} />
-                </Link>
+                </MuiLink>
                 <Grid container alignItems={'center'} justifyContent={'center'} flexGrow={1}>
                     <Grid container alignItems={'center'} justifyContent={'center'} className={classes.hiddenOnMobile}>
                         <MuiLink className={classes.navLink} href={'/feed'}>

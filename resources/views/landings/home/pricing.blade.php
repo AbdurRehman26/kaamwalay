@@ -51,7 +51,7 @@
                                     </p>
                                 </li>
                             </ul>                            
-                            <div data-atom="submit-button" data-text-color="white" data-button-content="Select & start submission" data-margin="true">
+                            <div data-atom="submit-button" data-button-content="Select & start submission" data-margin="true">
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>

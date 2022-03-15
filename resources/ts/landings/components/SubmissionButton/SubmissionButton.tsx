@@ -9,11 +9,11 @@ import { Theme } from '@mui/material/styles';
 
 interface Props extends ButtonProps {
     buttonContent: string;
-    textColor?: string;
     margin?: boolean;
+    className?: string;
 }
 
-export function SubmissionButton({ textColor, buttonContent, margin, ...rest }: Props) {
+export function SubmissionButton({ buttonContent, margin, className, ...rest }: Props) {
     const isAuthDialogOpen = useSharedSelector((state) => state.authentication.dialogOpened);
     const { authenticated } = useAuth();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
@@ -33,9 +33,8 @@ export function SubmissionButton({ textColor, buttonContent, margin, ...rest }: 
     return (
         <>
             <Button
+                className={className}
                 style={{
-                    color: textColor,
-                    backgroundColor: textColor === 'black' ? '#42E8E0' : '',
                     marginLeft: margin && !isMobile ? '14%' : '',
                 }}
                 onClick={handleOpenDialog}

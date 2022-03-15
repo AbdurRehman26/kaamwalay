@@ -57,7 +57,6 @@ class OrderPaymentService
         $this->storePaymentMethod(
             $this->getPaymentMethod($this->data)
         );
-
         $this->updateOrderCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->updateOrderPaymentMethodDiscount($this->data['payment_method'] ?? []);
         $this->updateWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
@@ -131,8 +130,9 @@ class OrderPaymentService
     protected function updateOrderCouponAndDiscount(array $couponData): void
     {
         if (! empty($couponData['code'])) {
-            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
-            $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+            $coupon = $this->couponService->returnCouponIfValid($couponData['code']);
+            $this->order->coupon_id = $coupon->id;
+            $this->order->discounted_amount = $this->couponService->calculateDiscount($coupon, $this->order);
             $this->order->save();
         }
     }

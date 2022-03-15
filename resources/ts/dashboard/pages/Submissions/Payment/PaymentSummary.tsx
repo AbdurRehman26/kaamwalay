@@ -175,9 +175,11 @@ export function PaymentSummary() {
     );
     const { collectorCoinDiscountPercentage } = useConfiguration();
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+    const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
     const orderSubmission = useAppSelector((state) => state.newSubmission);
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const user$ = useAuth().user;
+    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -257,6 +259,14 @@ export function PaymentSummary() {
                 paymentMethod: {
                     id: paymentMethodID,
                 },
+                ...(couponCode && {
+                    coupon: {
+                        code: couponCode,
+                    },
+                    paymentPlan: {
+                        id: serviceLevelId,
+                    },
+                }),
             });
 
             setIsStripePaymentLoading(false);

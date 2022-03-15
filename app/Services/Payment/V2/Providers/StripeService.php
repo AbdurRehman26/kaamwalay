@@ -31,4 +31,9 @@ class StripeService extends V1StripeService
 
         return false;
     }
+
+    protected function getAmount(Order $order): int
+    {
+        return (int) bcmul((string) $order->grand_total, (string) 100);
+    }
 }

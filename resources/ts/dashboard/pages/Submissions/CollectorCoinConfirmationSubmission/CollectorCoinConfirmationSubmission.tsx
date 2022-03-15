@@ -54,7 +54,7 @@ export function CollectorCoinConfirmationSubmission() {
 
     useEffect(() => {
         if (isPaymentSuccessful) {
-            navigate(`/submissions/${id}/confirmation`);
+            navigate(`/submissions/${id}/view`);
         }
     }, [dispatch, isPaymentSuccessful, id, navigate]);
 

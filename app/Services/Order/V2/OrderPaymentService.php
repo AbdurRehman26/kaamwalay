@@ -159,7 +159,6 @@ class OrderPaymentService
             $this->order->amount_paid_from_wallet = 0;
         }
         $this->order->save();
-
     }
 
     protected function updateGrandTotal(): void

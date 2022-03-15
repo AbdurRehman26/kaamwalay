@@ -14,7 +14,6 @@ use App\Services\Payment\V2\Providers\Contracts\PaymentProviderServiceInterface;
 use App\Services\Payment\V2\Providers\Contracts\PaymentProviderVerificationInterface;
 use Exception;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use TypeError;
 use Web3\Exceptions\ErrorException;

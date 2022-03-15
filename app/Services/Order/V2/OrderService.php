@@ -61,6 +61,9 @@ class OrderService extends V1OrderService
             $paymentBlockchainNetwork,
             $order->grand_total - $this->getCollectorCoinDiscount($order) - $walletAmount - $discountedAmount
         );
+        if ($collectorCoinPrice <= 0) {
+            return 0.0;
+        }
 
         Cache::remember(
             'cc-payment-' . $order->id,

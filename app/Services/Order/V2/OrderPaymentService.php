@@ -12,6 +12,7 @@ use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
+use Faker\Provider\Payment;
 use Throwable;
 
 class OrderPaymentService
@@ -59,8 +60,8 @@ class OrderPaymentService
 
         $this->updateOrderCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->updateOrderPaymentMethodDiscount($this->data['payment_method'] ?? []);
-        $this->updateGrandTotal();
         $this->updateWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
+        $this->updateGrandTotal();
         $this->storeOrderPayment($this->data);
     }
 
@@ -166,6 +167,7 @@ class OrderPaymentService
             + $this->order->shipping_fee
             - $this->order->discounted_amount
             - $this->order->payment_method_discounted_amount
+            - $this->order->amount_paid_from_wallet
         );
 
         GrandTotalValidator::validate($this->order);
@@ -182,6 +184,11 @@ class OrderPaymentService
 
     protected function storePaymentMethod(array $paymentMethod): void
     {
+        if ($this->order->grand_total === (float) $this->data['payment_by_wallet']) {
+            $this->order->payment_method_id = PaymentMethod::getWalletPaymentMethod()->id;
+
+            return;
+        }
         $this->order->payment_method_id = $paymentMethod['id'];
     }
 }

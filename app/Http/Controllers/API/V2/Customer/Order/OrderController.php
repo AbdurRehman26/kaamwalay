@@ -103,11 +103,15 @@ class OrderController extends Controller
 
         try {
             $blockchainNetworkChainId = $request->payment_blockchain_network ?? 1;
-            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $blockchainNetworkChainId);
+            list($amount) = $this->orderService->calculateCollectorCoinPrice(
+                $order,
+                $blockchainNetworkChainId,
+                $request->input('amount_paid_from_wallet')
+            );
 
             return new JsonResponse(
                 [
-                    'value' => $collectorCoinPrice,
+                    'value' => $amount,
                     'wallet' => config('web3networks')[$blockchainNetworkChainId]['collector_coin_wallet'],
                 ],
                 200

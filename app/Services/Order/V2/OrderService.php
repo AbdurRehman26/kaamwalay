@@ -5,6 +5,8 @@ namespace App\Services\Order\V2;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Services\Order\V1\OrderService as V1OrderService;
+use App\Services\Payment\V2\Providers\CollectorCoinService;
+use Illuminate\Support\Facades\Cache;
 
 class OrderService extends V1OrderService
 {
@@ -47,5 +49,33 @@ class OrderService extends V1OrderService
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
+    }
+
+    public function calculateCollectorCoinPrice(
+        Order $order,
+        int $paymentBlockchainNetwork,
+        float $walletAmount = 0.0,
+    ): float {
+        return Cache::remember(
+            'cc-payment-' . $order->id . '-' . $walletAmount,
+            300,
+            function () use ($order, $paymentBlockchainNetwork, $walletAmount) {
+                $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
+                    $paymentBlockchainNetwork,
+                    $order->grand_total - $this->getCollectorCoinDiscount($order) - $walletAmount
+                );
+                json_encode(['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork]);
+
+                return ['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork];
+            }
+        );
+    }
+
+    protected function getCollectorCoinDiscount(Order $order): float
+    {
+        return round(
+            $order->service_fee * config('robograding.collector_coin_discount_percentage') / 100,
+            2
+        );
     }
 }

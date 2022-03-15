@@ -32,6 +32,7 @@ export function PayWithCollectorCoinButton() {
     const notifications = useNotifications();
     const navigate = useNavigate();
     const supportedNetworks = configs?.web3SupportedNetworks?.split(',') ?? [];
+    const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
 
     function getRecipientWalletFromNetwork(networkID: number) {
         switch (networkID) {
@@ -111,15 +112,15 @@ export function PayWithCollectorCoinButton() {
         async function fetchTotalInAGS() {
             const currentChainId = await web3.eth.net.getId();
             if (currentChainId) {
-                dispatch(getTotalInAGS({ orderID, chainID: currentChainId }));
+                dispatch(getTotalInAGS({ orderID, chainID: currentChainId, paymentByWallet: appliedCredit }));
                 return;
             }
 
-            dispatch(getTotalInAGS({ orderID, chainID: 1 }));
+            dispatch(getTotalInAGS({ orderID, chainID: 1, paymentByWallet: appliedCredit }));
         }
 
         fetchTotalInAGS();
-    }, [dispatch, orderID]);
+    }, [dispatch, orderID, appliedCredit]);
 
     return (
         <Button variant={'contained'} disabled={isLoading} onClick={handleClick}>

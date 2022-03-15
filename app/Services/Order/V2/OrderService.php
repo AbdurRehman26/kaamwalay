@@ -56,19 +56,18 @@ class OrderService extends V1OrderService
         int $paymentBlockchainNetwork,
         float $walletAmount = 0.0,
     ): float {
-        return Cache::remember(
+        $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
+            $paymentBlockchainNetwork,
+            $order->grand_total - $this->getCollectorCoinDiscount($order) - $walletAmount
+        );
+
+        Cache::remember(
             'cc-payment-' . $order->id . '-' . $walletAmount,
             300,
-            function () use ($order, $paymentBlockchainNetwork, $walletAmount) {
-                $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
-                    $paymentBlockchainNetwork,
-                    $order->grand_total - $this->getCollectorCoinDiscount($order) - $walletAmount
-                );
-                json_encode(['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork]);
-
-                return ['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork];
-            }
+            fn () => (['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork])
         );
+
+        return $collectorCoinPrice;
     }
 
     protected function getCollectorCoinDiscount(Order $order): float

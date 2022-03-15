@@ -106,7 +106,7 @@ class OrderController extends Controller
             list($amount) = $this->orderService->calculateCollectorCoinPrice(
                 $order,
                 $blockchainNetworkChainId,
-                $request->input('amount_paid_from_wallet')
+                $request->input('payment_by_wallet')
             );
 
             return new JsonResponse(

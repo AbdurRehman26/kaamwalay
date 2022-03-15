@@ -18,10 +18,11 @@ import { useStripe } from '@stripe/react-stripe-js';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
-import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
+import { clearSubmissionState, setPreviewTotal } from '@dashboard/redux/slices/newSubmissionSlice';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -172,8 +173,8 @@ export function PaymentSummary() {
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
+    const { collectorCoinDiscountPercentage } = useConfiguration();
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const paymentMethodDiscountedAmount = useAppSelector((state) => state.newSubmission.paymentMethodDiscountedAmount);
     const orderSubmission = useAppSelector((state) => state.newSubmission);
     const stripePaymentMethod = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const user$ = useAuth().user;
@@ -222,6 +223,21 @@ export function PaymentSummary() {
         ReactGA.plugin.execute('ecommerce', 'send', null);
         ReactGA.plugin.execute('ecommerce', 'clear', null);
     };
+
+    function getPreviewTotal() {
+        const previewTotal =
+            numberOfSelectedCards * serviceLevelPrice -
+            Number(
+                paymentMethodID === 3
+                    ? (Number(collectorCoinDiscountPercentage) / 100) * (numberOfSelectedCards * serviceLevelPrice)
+                    : 0,
+            ) +
+            shippingFee -
+            Number(isCouponApplied ? discountedValue : 0) -
+            appliedCredit;
+        dispatch(setPreviewTotal(previewTotal));
+        return previewTotal;
+    }
 
     const handleConfirmStripePayment = async () => {
         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
@@ -353,11 +369,14 @@ export function PaymentSummary() {
                             />
                         </Typography>
                     </div>
-                    {paymentMethodDiscountedAmount > 0 ? (
+                    {paymentMethodID === 3 ? (
                         <div className={classes.row} style={{ marginTop: '16px' }}>
                             <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
                             <NumberFormat
-                                value={paymentMethodDiscountedAmount}
+                                value={(
+                                    (Number(collectorCoinDiscountPercentage) / 100) *
+                                    (numberOfSelectedCards * serviceLevelPrice)
+                                ).toFixed(2)}
                                 className={classes.rowRightBoldText}
                                 displayType={'text'}
                                 thousandSeparator
@@ -416,7 +435,7 @@ export function PaymentSummary() {
                             &nbsp;
                             {totalInAGS > 0 && paymentMethodID === 3 ? `(${totalInAGS} AGS) ` : null}
                             <NumberFormat
-                                value={grandTotal}
+                                value={getPreviewTotal()}
                                 className={classes.rowRightBoldText}
                                 displayType={'text'}
                                 thousandSeparator

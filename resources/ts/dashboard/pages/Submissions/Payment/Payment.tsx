@@ -36,7 +36,7 @@ import Box from '@mui/material/Box';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { PaymentSummary } from './PaymentSummary';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { PaymentStatusChip } from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 
 const useStyles = makeStyles((theme) => ({

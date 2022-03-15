@@ -11,7 +11,7 @@ import font from '../styles/font.module.css';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { Link, useParams } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
-import { PaymentStatusChip } from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 
 interface SubmissionViewBillingProps {

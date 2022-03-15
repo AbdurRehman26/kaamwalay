@@ -18,7 +18,7 @@ import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { deleteOrder, setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch } from '@dashboard/redux/hooks';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
-import { PaymentStatusChip } from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { SubmissionStatusChip } from '@dashboard/components/SubmissionStatusChip';

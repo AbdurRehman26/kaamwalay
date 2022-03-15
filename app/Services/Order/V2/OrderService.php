@@ -55,10 +55,11 @@ class OrderService extends V1OrderService
         Order $order,
         int $paymentBlockchainNetwork,
         float $walletAmount = 0.0,
+        float $discountedAmount = 0.0,
     ): float {
         $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
             $paymentBlockchainNetwork,
-            $order->grand_total - $this->getCollectorCoinDiscount($order) - $walletAmount
+            $order->grand_total - $this->getCollectorCoinDiscount($order) - $walletAmount - $discountedAmount
         );
 
         Cache::remember(

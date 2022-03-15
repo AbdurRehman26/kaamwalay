@@ -39,10 +39,10 @@ function SubmissionStep05Content() {
             // @ts-ignore
             const currentNetworkID = await web3?.eth?.net?.getId();
             if (currentNetworkID) {
-                dispatch(getTotalInAGS({ orderID, chainID: currentNetworkID }));
+                dispatch(getTotalInAGS({ orderID, chainID: currentNetworkID, paymentByWallet: 0.0 }));
                 return;
             }
-            dispatch(getTotalInAGS({ orderID, chainID: 1 }));
+            dispatch(getTotalInAGS({ orderID, chainID: 1, paymentByWallet: 0.0 }));
         }
         fetchTotalInAGS();
     }, [dispatch, orderID]);

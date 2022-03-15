@@ -152,7 +152,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
                 <TableCell>
-                    {order?.orderStatus.is(OrderStatusEnum.PAYMENT_PENDING) ? 'N/A' : formatCurrency(order.grandTotal)}
+                    {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? 'N/A' : formatCurrency(order.grandTotal)}
                 </TableCell>
                 <TableCell align={'right'}>
                     <SubmissionActionButton
@@ -170,7 +170,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     </IconButton>
 
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                        {order?.orderStatus.is(OrderStatusEnum.PAYMENT_PENDING) ? (
+                        {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? (
                             <>
                                 <MenuItem onClick={() => navigate(`/submissions/${order.id}/view`)}>
                                     View Submission

@@ -41,7 +41,7 @@ export function SubmissionsList() {
                     <SubmissionsTable search={search} tabFilter={OrderStatusEnum.SHIPPED} />
                 </TabContent>
                 <TabContent value={'incomplete'}>
-                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.PAYMENT_PENDING} />
+                    <SubmissionsTable search={search} tabFilter={OrderStatusEnum.INCOMPLETE} />
                 </TabContent>
             </Grid>
         </TabContext>

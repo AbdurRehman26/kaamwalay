@@ -116,7 +116,7 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                         <TableRow>
                             <TableCell variant={'head'}>Submission #</TableCell>
                             <TableCell variant={'head'}>
-                                {tabFilter === OrderStatusEnum.PAYMENT_PENDING ? 'Date Created' : 'Placed'}
+                                {tabFilter === OrderStatusEnum.INCOMPLETE ? 'Date Created' : 'Placed'}
                             </TableCell>
                             <TableCell variant={'head'}>Reviewed</TableCell>
                             <TableCell variant={'head'}>Customer</TableCell>

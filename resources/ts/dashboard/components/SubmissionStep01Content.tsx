@@ -28,6 +28,8 @@ export function SubmissionStep01Content() {
         dispatch(getServiceLevels());
     }, [dispatch]);
 
+    useEffect(() => {}, [serviceLevels]);
+
     return (
         <div className={classes.pageContainer}>
             <StepDescription

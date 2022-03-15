@@ -11,9 +11,10 @@ interface Props extends ButtonProps {
     buttonContent: string;
     textColor?: string;
     margin?: boolean;
+    plan?: string;
 }
 
-export function SubmissionButton({ textColor, buttonContent, margin, ...rest }: Props) {
+export function SubmissionButton({ textColor, buttonContent, margin, plan, ...rest }: Props) {
     const isAuthDialogOpen = useSharedSelector((state) => state.authentication.dialogOpened);
     const { authenticated } = useAuth();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
@@ -26,7 +27,7 @@ export function SubmissionButton({ textColor, buttonContent, margin, ...rest }: 
         if (!authenticated) {
             dispatch(dialogVisibility(true));
         } else {
-            window.location.href = '/dashboard/submissions/new';
+            window.location.href = `/dashboard/submissions/new?plan=${plan}`;
         }
     };
 

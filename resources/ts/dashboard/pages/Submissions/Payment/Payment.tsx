@@ -37,7 +37,7 @@ import { AddressEntity } from '@shared/entities/AddressEntity';
 import { PaymentSummary } from './PaymentSummary';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
-import { PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 
 const useStyles = makeStyles((theme) => ({
     paymentPageContainer: {
@@ -402,6 +402,16 @@ export function Payment() {
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
+    );
+
+    useEffect(
+        () => {
+            if (order.data?.paymentStatus === PaymentStatusEnum.PAID) {
+                navigate('/submissions/' + order.data.id + '/view');
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [order],
     );
 
     useEffect(() => {

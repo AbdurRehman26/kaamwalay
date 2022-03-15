@@ -25,7 +25,7 @@ class GenerateOrderInvoice implements ShouldQueue
         $this->invoiceService->saveInvoicePDF($event->order);
     }
 
-    public function failed(OrderPaid $event, $exception)
+    public function failed(OrderPaid|OrderPlaced $event, $exception)
     {
         Log::error($exception->getMessage(), [
             'Invoice generation failed. Order ID: ' => $event->order->id,

@@ -5,17 +5,15 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import ReactGA from 'react-ga';
+import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { useAuth } from '@shared/hooks/useAuth';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
-import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
-import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
-import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
+import { clearSubmissionState, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
-import { useAuth } from '@shared/hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -157,6 +155,7 @@ function SubmissionSummary() {
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const navigate = useNavigate();
+    const apiService = useInjectable(APIService);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
@@ -166,8 +165,6 @@ function SubmissionSummary() {
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
     const paymentMethodDiscountedAmount = useAppSelector((state) => state.newSubmission.paymentMethodDiscountedAmount);
-    const orderSubmission = useAppSelector((state) => state.newSubmission);
-    const user$ = useAuth().user;
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -192,41 +189,18 @@ function SubmissionSummary() {
         (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
     );
 
-    const sendECommerceDataToGA = () => {
-        ReactGA.plugin.require('ecommerce');
-        ReactGA.event({
-            category: EventCategories.Submissions,
-            action: SubmissionEvents.placed,
-        });
-
-        ReactGA.plugin.execute('ecommerce', 'addItem', {
-            id: String(orderID),
-            name: `${currentSelectedTurnaround} turnaround with $${currentSelectedMaxProtection} insurance`,
-            category: 'Cards',
-            price: String(currentSelectedLevelPrice),
-            quantity: String(numberOfSelectedCards),
-        });
-
-        ReactGA.plugin.execute('ecommerce', 'addTransaction', {
-            id: String(orderID), // Doing these type coercions because GA wants this data as string
-            revenue: String(grandTotal),
-            shipping: String(shippingFee),
-        });
-
-        ReactGA.plugin.execute('ecommerce', 'send', null);
-        ReactGA.plugin.execute('ecommerce', 'clear', null);
-    };
-
     let totalDeclaredValue = 0;
     selectedCards.forEach((selectedCard: any) => {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
-    const handleConfirmStripePayment = async () => {
-        sendECommerceDataToGA();
-        pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
-        pushDataToRefersion(orderSubmission, user$);
-        navigate(`/submissions/${orderID}/confirmation`);
+    const handleConfirmSubmission = async () => {
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/complete-submission`);
+        try {
+            endpoint.post('');
+            dispatch(clearSubmissionState());
+            navigate(`/submissions/${orderID}/confirmation`);
+        } catch (err: any) {}
     };
 
     function getPreviewTotal() {
@@ -254,13 +228,9 @@ function SubmissionSummary() {
             <div className={classes.bodyContainer}>
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
-                        <>
-                            <Button variant="contained" color="primary" onClick={handleConfirmStripePayment}>
-                                Complete Submission
-                            </Button>
-                            {paymentMethodID === 2 ? <PaypalBtn /> : null}
-                            {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
-                        </>
+                        <Button variant="contained" color="primary" onClick={handleConfirmSubmission}>
+                            Complete Submission
+                        </Button>
 
                         <Typography className={classes.greyDescriptionText}>
                             By clicking the above button, you are agreeing to the Robograding{' '}

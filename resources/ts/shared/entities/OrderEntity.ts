@@ -32,6 +32,7 @@ export class OrderEntity extends Entity {
     public shippingFee!: number;
     public serviceFee!: number;
     public customerId!: number;
+    public orderStep!: string;
     public customerNumber!: string;
     public reviewedAt!: string;
     public reviewedBy!: string;

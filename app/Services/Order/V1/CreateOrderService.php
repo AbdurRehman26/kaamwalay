@@ -20,7 +20,7 @@ use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
-use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
+use App\Services\Order\Validators\V1\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -178,7 +178,6 @@ class CreateOrderService
                     'declared_value_per_unit' => $item['declared_value_per_unit'],
                     'declared_value_total' => $item['declared_value_per_unit'],
                 ]);
-              
                 $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending'], auth()->user());
             }
         }

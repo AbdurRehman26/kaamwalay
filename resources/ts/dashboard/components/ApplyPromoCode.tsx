@@ -59,7 +59,6 @@ export function ApplyPromoCode() {
     const selectedCreditCardID = useAppSelector((state) => state.newSubmission.step04Data.selectedCreditCard.id);
     const [showInvalidState, setShowInvalidState] = useState(false);
     const notifications = useNotifications();
-
     const checkCouponCode = useCallback(
         async (newCouponCode: string) => {
             const checkCouponEndpoint = apiService.createEndpoint(
@@ -98,7 +97,9 @@ export function ApplyPromoCode() {
     );
 
     useEffect(() => {
-        handleChange({ target: { value: couponCode } });
+        if (couponCode) {
+            handleChange({ target: { value: couponCode } });
+        }
     }, [couponCode, handleChange, isCouponValid, showInvalidState]);
 
     const handleOnBlur = () => {

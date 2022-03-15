@@ -16,16 +16,20 @@ import SubmissionStep05Content from '../../components/SubmissionStep05Content';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     backStep,
-    createOrder,
     getAvailableCredit,
+    getOrder,
     getSavedAddresses,
     getShippingFee,
     getStatesList,
     nextStep,
     setIsNextDisabled,
     setIsNextLoading,
+    updateCreditAndPromoCode,
+    updateOrderAddresses,
+    updateOrderStep,
 } from '../../redux/slices/newSubmissionSlice';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles({
     pageContentContainer: {
@@ -66,6 +70,34 @@ export function NewSubmission() {
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const notifications = useNotifications();
 
+    const { search } = useLocation();
+    const params: any = new URLSearchParams(search);
+    const orderId = params?.get('orderId');
+
+    useEffect(() => {
+        if (orderId) {
+            dispatch(getOrder(orderId));
+        }
+    }, [dispatch, orderId]);
+
+    useEffect(() => {
+        if (currentStep === 2) {
+            dispatch(getStatesList());
+            dispatch(setIsNextLoading(true));
+            dispatch(getShippingFee(selectedCards));
+            dispatch(setIsNextLoading(false));
+            dispatch(getSavedAddresses());
+            window.scroll(0, 0);
+            pushToDataLayer({ event: 'google-ads-cards-selected' });
+        }
+
+        if (currentStep === 3) {
+            dispatch(getStatesList());
+            dispatch(getAvailableCredit()).unwrap();
+            dispatch(getSavedAddresses()).unwrap();
+        }
+    }, [currentStep, dispatch, selectedCards]);
+
     const getStepContent = useCallback(() => {
         switch (currentStep) {
             case 0:
@@ -79,13 +111,13 @@ export function NewSubmission() {
             case 4:
                 return <SubmissionStep05Content />;
             default:
-                return <h2>yo</h2>;
+                window.location.href = `/dashboard/submissions/${orderId}/view`;
+                return;
         }
-    }, [currentStep]);
+    }, [currentStep, orderId]);
 
     const handleNext = async () => {
         // Executing different stuff before next step loads
-
         if (currentStep === 0) {
             dispatch(setIsNextLoading(true));
             dispatch(nextStep());
@@ -95,14 +127,11 @@ export function NewSubmission() {
         }
 
         if (currentStep === 1) {
-            dispatch(setIsNextLoading(true));
-            await dispatch(getShippingFee(selectedCards));
-            await dispatch(getStatesList());
-            await dispatch(getSavedAddresses());
-            dispatch(nextStep());
-            dispatch(setIsNextLoading(false));
-            window.scroll(0, 0);
-            pushToDataLayer({ event: 'google-ads-cards-selected' });
+            await dispatch(updateOrderStep(currentStep));
+            await dispatch(nextStep());
+            dispatch(getStatesList());
+            dispatch(getAvailableCredit()).unwrap();
+            dispatch(getSavedAddresses()).unwrap();
             return;
         }
 
@@ -115,17 +144,19 @@ export function NewSubmission() {
                         ? ShippingAddressEvents.continuedWithNewAddress
                         : ShippingAddressEvents.continuedWithExisting,
             });
-            dispatch(nextStep());
-            dispatch(setIsNextLoading(false));
-            await dispatch(getAvailableCredit()).unwrap();
-            window.scroll(0, 0);
+            await dispatch(updateOrderAddresses()).then(() => {
+                dispatch(getAvailableCredit()).unwrap();
+                dispatch(setIsNextLoading(false));
+                dispatch(nextStep());
+                window.scroll(0, 0);
+            });
             pushToDataLayer({ event: 'google-ads-shipping-info-submitted' });
             return;
         }
         if (currentStep === 3) {
             try {
                 dispatch(setIsNextLoading(true));
-                await dispatch(createOrder()).unwrap();
+                await dispatch(updateCreditAndPromoCode()).unwrap();
                 ReactGA.event({
                     category: EventCategories.Submissions,
                     action:
@@ -148,6 +179,7 @@ export function NewSubmission() {
 
     const handleBack = async () => {
         window.scroll(0, 0);
+        await dispatch(updateOrderStep(currentStep - 2));
         if (currentStep === 3) {
             await dispatch(getShippingFee(selectedCards));
             await dispatch(getStatesList());

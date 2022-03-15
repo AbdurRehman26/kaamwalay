@@ -1,11 +1,18 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\Order\V1;
 
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Http\Resources\API\V1\Customer\Order\OrderPaymentResource;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\OrderItem;
+use App\Models\OrderItemStatus;
+use App\Models\OrderItemStatusHistory;
+use App\Models\OrderStatus;
+use App\Models\OrderStatusHistory;
+use App\Models\User;
 use App\Services\Payment\V1\Providers\CollectorCoinService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +27,7 @@ class OrderService
         $itemsPerPage = request('per_page');
 
         return QueryBuilder::for(Order::class)
-            ->placed()
+            ->excludeCancelled()
             ->forUser($user)
             ->allowedIncludes(Order::getAllowedIncludes())
             ->allowedFilters(Order::getAllowedFilters())
@@ -122,5 +129,36 @@ class OrderService
         }
 
         return '';
+    }
+
+    public function cancelOrder(Order $order, User $user): void
+    {
+        $this->cancelOrderItems($order);
+
+        $order->order_status_id = OrderStatus::CANCELLED;
+        $order->save();
+
+        OrderStatusHistory::create([
+            'order_id' => $order->id,
+            'order_status_id' => OrderStatus::CANCELLED,
+            'user_id' => $user->id,
+        ]);
+
+        OrderStatusChangedEvent::dispatch($order, OrderStatus::find(OrderStatus::CANCELLED));
+    }
+
+    protected function cancelOrderItems(Order $order): void
+    {
+        $order->orderItems->each(function (OrderItem $orderItem) use ($order) {
+            OrderItemStatusHistory::updateOrCreate([
+                'order_item_id' => $orderItem->id,
+                'order_item_status_id' => OrderItemStatus::CANCELLED,
+                'user_id' => $order->user_id,
+                'notes' => 'User cancelled the order.',
+            ]);
+
+            $orderItem->order_item_status_id = OrderItemStatus::CANCELLED;
+            $orderItem->save();
+        });
     }
 }

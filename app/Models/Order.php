@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
+use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Enums\Order\OrderStepEnum;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 
-class Order extends Model
+class Order extends Model implements Exportable
 {
     use HasFactory, ActivityLog, HasOrderPayments;
 
@@ -53,6 +55,7 @@ class Order extends Model
         'extra_charge_total',
         'refund_total',
         'payment_method_discounted_amount',
+        'order_step',
         'payment_status',
     ];
 
@@ -87,6 +90,7 @@ class Order extends Model
         'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
         'paid_at' => 'datetime',
+        'order_step' => OrderStepEnum::class,
         'payment_status' => OrderPaymentStatusEnum::class,
     ];
 
@@ -156,6 +160,7 @@ class Order extends Model
     {
         return [
             AllowedFilter::partial('order_number'),
+            AllowedFilter::exact('order_status_id'),
         ];
     }
 
@@ -267,9 +272,8 @@ class Order extends Model
         return $query->whereHas(
             'orderStatus',
             function (Builder $query) use ($status) {
-                $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
                 if (! $status || $status === 'all') {
-                    return $query;
+                    return $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
                 }
 
                 return $query
@@ -283,7 +287,11 @@ class Order extends Model
     {
         return $query->whereHas(
             'user',
-            fn ($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere('last_name', 'like', "%$customerName%")
+            fn ($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere(
+                'last_name',
+                'like',
+                "%$customerName%"
+            )
         );
     }
 
@@ -326,15 +334,73 @@ class Order extends Model
 
     public function getGroupedOrderItems(): Collection
     {
-        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('sum(declared_value_per_unit) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
-        ->where('order_id', $this->id)
-        ->groupBy(['card_product_id'])
-        ->get();
+        return OrderItem::select(
+            DB::raw('min(id) as id'),
+            'card_product_id',
+            DB::raw('min(order_id) as order_id'),
+            DB::raw('min(order_item_status_id) as order_item_status_id'),
+            DB::raw('sum(declared_value_per_unit) as declared_value_total'),
+            DB::raw('min(declared_value_per_unit) as declared_value_per_unit'),
+            DB::raw('sum(quantity) as quantity')
+        )
+            ->where('order_id', $this->id)
+            ->groupBy(['card_product_id'])
+            ->get();
     }
 
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+     */
+    public function scopeExcludeCancelled(Builder $query): Builder
+    {
+        return $query->where('order_status_id', '!=', OrderStatus::CANCELLED);
+    }
+
+    /**
+    * @return Builder <Order>
+    */
+    public function exportQuery(): Builder
+    {
+        return self::query();
+    }
+
+    public function exportHeadings(): array
+    {
+        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Status', 'Declared Value', 'Amount Paid'];
+    }
+
+    public function exportFilters(): array
+    {
+        return self::getAllowedAdminFilters();
+    }
+
+    public function exportIncludes(): array
+    {
+        return self::getAllowedAdminIncludes();
+    }
+
+    /**
+     * @param  Order  $row
+     * @return array
+     */
+    public function exportRowMap($row): array
+    {
+        return [
+            $row->order_number,
+            $row->created_at,
+            $row->arrived_at,
+            $row->user->customer_number,
+            $row->orderItems->sum('quantity'),
+            $row->orderStatus->name,
+            $row->orderItems->sum('declared_value_total'),
+            $row->grand_total,
+        ];
     }
 
     public function isCancelled(): bool

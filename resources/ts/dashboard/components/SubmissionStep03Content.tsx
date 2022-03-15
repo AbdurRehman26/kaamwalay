@@ -17,7 +17,6 @@ import ExistingAddress from '@dashboard/components/ExistingAddress';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     getStatesList,
-    resetSelectedExistingAddress,
     setDisableAllShippingInputs,
     setIsNextDisabled,
     setSaveShippingAddress,
@@ -170,18 +169,21 @@ export function SubmissionStep03Content() {
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
-    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
-    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
-    const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
-    const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
-    const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
-    const flat = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.flat);
-    const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
-    const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
-    const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
-    const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
+    const useCustomShippingAddress = useAppSelector(
+        (state) => state.newSubmission.step03Data?.useCustomShippingAddress,
+    );
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data?.existingAddresses);
+    const firstName = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.firstName);
+    const lastName = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.lastName);
+    const address = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.address);
+    const flat = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.flat);
+    const city = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.city);
+    const state = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.state);
+    const zipCode = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.zipCode);
+    const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data?.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const shippingAddress = useAppSelector((state) => state.newSubmission.shippingAddress);
 
     useEffect(
         () => {
@@ -222,6 +224,10 @@ export function SubmissionStep03Content() {
             if (existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddressId !== -1) {
                 dispatch(setIsNextDisabled(false));
             }
+
+            if (shippingAddress && shippingAddress.id !== -1) {
+                dispatch(setIsNextDisabled(false));
+            }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [
@@ -238,7 +244,6 @@ export function SubmissionStep03Content() {
             existingAddresses,
         ],
     );
-
     function onSaveForLater() {
         dispatch(setSaveShippingAddress(!saveForLater));
     }
@@ -274,32 +279,17 @@ export function SubmissionStep03Content() {
             dispatch(getStatesList());
             // If the user has existing addresses but none of them is selected and he didn't pick a custom address either
             // we'll check the first address in the list
-            if (existingAddresses.length !== 0 && selectedExistingAddressId === -1 && !useCustomShippingAddress) {
+            if (
+                existingAddresses.length !== 0 &&
+                selectedExistingAddressId === -1 &&
+                !useCustomShippingAddress &&
+                !shippingAddress?.id
+            ) {
                 dispatch(setSelectedExistingAddress(existingAddresses[0].id));
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [dispatch],
-    );
-
-    useEffect(
-        () => {
-            // Did the user check the 'Use custom address" checkbox?
-            // If he did select it, we'll enable all the text fields and clear everything about the existing selected address
-            // If he didn't check the checkbox and he has multiple saved addresses we'll disable all the inputs until he presses on the checkbox
-            // We only disable the inputs if the user has existing addresses so we don't stop him from adding an address as a first time user, when he has nothing.
-
-            if (useCustomShippingAddress) {
-                dispatch(setDisableAllShippingInputs(false));
-                dispatch(resetSelectedExistingAddress());
-            } else {
-                if (existingAddresses.length !== 0) {
-                    dispatch(setDisableAllShippingInputs(true));
-                }
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [disableAllInputs, useCustomShippingAddress, selectedExistingAddressId],
     );
 
     return (
@@ -322,21 +312,50 @@ export function SubmissionStep03Content() {
                         {existingAddresses.length > 0 ? (
                             <>
                                 <Typography className={classes.sectionLabel}>Existing Addresses</Typography>
-                                <Box marginBottom={'16px'} />
-                                <div className={classes.existingAddressesContainer}>
+                                <Box marginTop={'10px'} />
+                                <div style={{ marginTop: '10px' }} className={classes.existingAddressesContainer}>
                                     {existingAddresses?.map((address: any) => (
                                         <ExistingAddress
+                                            isShippingAddress={false}
+                                            isChecked={false}
                                             key={address.id}
                                             firstName={address.firstName}
                                             lastName={address.lastName}
                                             address={address.address}
                                             flat={address.flat ?? ''}
                                             city={address.city}
-                                            state={address.state.code}
+                                            state={address.state?.code ? address.state.code : address.state}
                                             id={address.id}
                                             zip={address.zipCode}
                                         />
                                     ))}
+                                </div>
+                                <Divider light />
+                            </>
+                        ) : null}
+
+                        {shippingAddress?.id ? (
+                            <>
+                                <Box marginBottom={'16px'} />
+                                <Typography className={classes.sectionLabel}>Selected Shipping Address</Typography>
+                                <div className={classes.existingAddressesContainer}>
+                                    <ExistingAddress
+                                        isShippingAddress={true}
+                                        isChecked={shippingAddress?.id > 0 && selectedExistingAddressId < 0}
+                                        key={shippingAddress.id}
+                                        firstName={shippingAddress.firstName}
+                                        lastName={shippingAddress.lastName}
+                                        address={shippingAddress.address}
+                                        flat={shippingAddress.flat ?? ''}
+                                        city={shippingAddress.city}
+                                        state={
+                                            shippingAddress.state?.code
+                                                ? shippingAddress.state.code
+                                                : shippingAddress.state
+                                        }
+                                        id={shippingAddress.id}
+                                        zip={shippingAddress.zip}
+                                    />
                                 </div>
                                 <Divider light />
                             </>

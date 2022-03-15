@@ -1311,6 +1311,11 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_step\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderCreateResource.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
@@ -1936,34 +1941,34 @@ parameters:
 			path: app/Listeners/API/Admin/OrderItem/OrderItemStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleGraded\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:handleGraded\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handlePlaced\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:handlePlaced\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:handleShipped\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:handleShipped\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:scheduleEmail\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:scheduleEmail\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendAdminEmail\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:sendAdminEmail\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
-			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Listeners\\\\API\\\\Order\\\\V1\\\\OrderStatusChangedListener\\:\\:sendEmail\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: app/Listeners/API/Order/OrderStatusChangedListener.php
+			path: app/Listeners/API/Order/V1/OrderStatusChangedListener.php
 
 		-
 			message: "#^Method App\\\\Listeners\\\\API\\\\Services\\\\GenerateOrderInvoice\\:\\:failed\\(\\) has no return type specified\\.$#"
@@ -3051,9 +3056,9 @@ parameters:
 			path: app/Services/ImageService.php
 
 		-
-			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:placed\\(\\)\\.$#"
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
 			count: 1
-			path: app/Services/Order/OrderService.php
+			path: app/Services/Order/V1/OrderService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has no return type specified\\.$#"

@@ -28,14 +28,12 @@ function OrderReviewSection() {
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
     const discountCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+
     const discountStatement = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountStatement,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const finalShippingAddress =
-        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
-            ? selectedExistingAddress
-            : shippingAddress;
+    const finalShippingAddress = shippingAddress;
 
     return (
         <Paper variant={'outlined'} className={classes.orderReviewSection}>

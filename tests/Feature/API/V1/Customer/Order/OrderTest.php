@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -183,30 +183,6 @@ test('a customer only see own orders', function () {
 
     $response->assertOk();
     $response->assertJsonCount(2, ['data']);
-});
-
-test('a customer does not see payment pending orders', function () {
-    Event::fake([
-        OrderStatusChangedEvent::class,
-    ]);
-    $orders = Order::factory()->for($this->user)
-        ->has(OrderItem::factory())
-        ->count(2)
-        ->state(new Sequence(
-            ['order_status_id' => OrderStatus::PLACED],
-            ['order_status_id' => OrderStatus::PAYMENT_PENDING],
-        ))
-        ->create();
-
-    $orders->each(function ($order) {
-        $this->orderStatusHistoryService->addStatusToOrder($order->order_status_id, $order->id, $order->user_id);
-    });
-
-    $this->actingAs($this->user);
-    $response = $this->getJson('/api/v1/customer/orders');
-
-    $response->assertOk();
-    $response->assertJsonCount(1, ['data']);
 });
 
 test('a customer cannot see order by another customer', function () {
@@ -640,4 +616,25 @@ test('a customer can place order with amount equal to his wallet balance.', func
             'grand_total',
         ],
     ]);
+});
+
+test('a customer can see incomplete orders', function () {
+    Event::fake([
+        OrderStatusChangedEvent::class,
+    ]);
+
+    $orders = Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->count(10)
+        ->create();
+
+    $this->actingAs($this->user);
+    $orders->each(function ($order) {
+        $status = rand(0, 1) ? OrderStatus::PAYMENT_PENDING : OrderStatus::PLACED;
+        $this->orderStatusHistoryService->addStatusToOrder($status, $order->id, $order->user_id);
+    });
+
+    $this->getJson(route('v1.customer.orders.index'))
+        ->assertOk()
+        ->assertJsonCount(10, ['data']);
 });

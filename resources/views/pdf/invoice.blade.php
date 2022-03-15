@@ -349,16 +349,20 @@
                     Billing Address
                 </div>
                 <div class="info-box-content">
-                    @if($shippingAddress->id === $billingAddress->id)
-                        Same as shipping
+                    @if(!empty($billingAddress))
+                        @if($shippingAddress->id === $billingAddress->id)
+                            Same as shipping
+                        @else
+                            {{$billingAddress->getFullName()}}
+                            <br/>
+                            {{$billingAddress->address}}@if($billingAddress->flat), APT # {{ $billingAddress->flat }}@endif
+                            <br/>
+                            {{$billingAddress->city}}, {{$billingAddress->state}} {{$billingAddress->zip}}, {{$billingAddress->country->code}}
+                            <br/>
+                            {{$billingAddress->phone}}
+                        @endif
                     @else
-                        {{$billingAddress->getFullName()}}
-                        <br/>
-                        {{$billingAddress->address}}@if($billingAddress->flat), APT # {{ $billingAddress->flat }}@endif
-                        <br/>
-                        {{$billingAddress->city}}, {{$billingAddress->state}} {{$billingAddress->zip}}, {{$billingAddress->country->code}}
-                        <br/>
-                        {{$billingAddress->phone}}
+                        No billing address found
                     @endif
                 </div>
             </div>

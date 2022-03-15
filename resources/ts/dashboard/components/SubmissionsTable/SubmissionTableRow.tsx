@@ -7,21 +7,21 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import {Moment} from 'moment';
-import React, {MouseEventHandler, useCallback, useMemo, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import { Moment } from 'moment';
+import React, { MouseEventHandler, useCallback, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
-import {ShipmentEntity} from '@shared/entities/ShipmentEntity';
-import {downloadFromUrl} from '@shared/lib/api/downloadFromUrl';
-import {formatDate} from '@shared/lib/datetime/formatDate';
-import {formatCurrency} from '@shared/lib/utils/formatCurrency';
-import {deleteOrder, setOrderCustomerShipment} from '@shared/redux/slices/ordersSlice';
-import {useAppDispatch} from '@dashboard/redux/hooks';
+import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
+import { formatDate } from '@shared/lib/datetime/formatDate';
+import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { deleteOrder, setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
+import { useAppDispatch } from '@dashboard/redux/hooks';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
-import {PaymentStatusChip} from '@dashboard/components/PaymentStatusChip';
-import {PaymentStatusEnum, PaymentStatusMap} from '@shared/constants/PaymentStatusEnum';
-import {OrderStatusEnum} from '@shared/constants/OrderStatusEnum';
-import {SubmissionStatusChip} from '@dashboard/components/SubmissionStatusChip';
+import { PaymentStatusChip } from '@dashboard/components/PaymentStatusChip';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { SubmissionStatusChip } from '@dashboard/components/SubmissionStatusChip';
 import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 
 interface SubmissionTableRowProps {
@@ -249,10 +249,10 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 </MenuItem>
                                 {status === OrderStatusEnum.INCOMPLETE && (
                                     <>
-                                    <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
-                                    Continue Submission
-                                    </MenuItem>
-                                    <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
+                                        <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
+                                            Continue Submission
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
                                     </>
                                 )}
                             </Menu>

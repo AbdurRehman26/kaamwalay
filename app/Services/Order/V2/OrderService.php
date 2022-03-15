@@ -65,10 +65,10 @@ class OrderService extends V1OrderService
             return 0.0;
         }
 
-        Cache::remember(
+        Cache::put(
             'cc-payment-' . $order->id,
-            300,
-            fn () => (['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork])
+            ['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork],
+            300
         );
 
         return $collectorCoinPrice;

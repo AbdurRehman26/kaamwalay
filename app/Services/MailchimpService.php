@@ -233,7 +233,7 @@ class MailchimpService
         while (count($members) < $total_items) {
             try {
                 // @phpstan-ignore-next-line
-                $result = $mailchimpClient->lists->getListMembersInfo($listId, $fields, null, 1000, 2 * $i);
+                $result = $mailchimpClient->lists->getListMembersInfo($listId, $fields, null, 1000, 1000 * $i);
 
                 $total_items = $result->total_items;
                 $members = array_merge($members, $result->members);

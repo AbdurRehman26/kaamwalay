@@ -308,7 +308,7 @@ export const getAvailableCredit = createAsyncThunk('newSubmission/getAvailableCr
 
 export const getTotalInAGS = createAsyncThunk(
     'newSubmission/getTotalInAGS',
-    async (input: { orderID: number; chainID: number; paymentByWallet: number, discountedAmount: number }) => {
+    async (input: { orderID: number; chainID: number; paymentByWallet: number; discountedAmount: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
             `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}&payment_by_wallet=${input.paymentByWallet}&discounted_amount=${input.discountedAmount}`,

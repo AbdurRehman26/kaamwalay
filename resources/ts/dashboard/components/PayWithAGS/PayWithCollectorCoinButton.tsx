@@ -22,7 +22,7 @@ export function PayWithCollectorCoinButton() {
     const configs = useConfiguration();
     const dispatch = useAppDispatch();
     const discountedValue = useAppSelector(
-            (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
+        (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const wallets = {
         // Prod eth mainnet wallet
@@ -115,11 +115,25 @@ export function PayWithCollectorCoinButton() {
         async function fetchTotalInAGS() {
             const currentChainId = await web3.eth.net.getId();
             if (currentChainId) {
-                dispatch(getTotalInAGS({ orderID, chainID: currentChainId, paymentByWallet: appliedCredit, discountedAmount: discountedValue }));
+                dispatch(
+                    getTotalInAGS({
+                        orderID,
+                        chainID: currentChainId,
+                        paymentByWallet: appliedCredit,
+                        discountedAmount: discountedValue,
+                    }),
+                );
                 return;
             }
 
-            dispatch(getTotalInAGS({ orderID, chainID: 1, paymentByWallet: appliedCredit, discountedAmount: discountedValue }));
+            dispatch(
+                getTotalInAGS({
+                    orderID,
+                    chainID: 1,
+                    paymentByWallet: appliedCredit,
+                    discountedAmount: discountedValue,
+                }),
+            );
         }
 
         fetchTotalInAGS();

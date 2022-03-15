@@ -393,6 +393,8 @@ export const verifyOrderStatus = createAsyncThunk(
         paymentByWallet: number;
         paymentMethod: any;
         paymentBlockchainNetwork: any;
+        coupon?: any;
+        paymentPlan?: any;
     }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments`);
@@ -404,6 +406,14 @@ export const verifyOrderStatus = createAsyncThunk(
             paymentBlockchainNetwork: input.paymentBlockchainNetwork,
             paymentByWallet: input.paymentByWallet,
             paymentMethod: input.paymentMethod,
+            ...(input.coupon && {
+                coupon: {
+                    code: input.coupon,
+                },
+                paymentPlan: {
+                    id: input.paymentPlan
+                },
+            }),
         });
         return response.data;
     },

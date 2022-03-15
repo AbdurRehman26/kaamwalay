@@ -36,6 +36,8 @@ export function PayWithCollectorCoinButton() {
     const navigate = useNavigate();
     const supportedNetworks = configs?.web3SupportedNetworks?.split(',') ?? [];
     const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
+    const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
 
     function getRecipientWalletFromNetwork(networkID: number) {
         switch (networkID) {
@@ -89,11 +91,15 @@ export function PayWithCollectorCoinButton() {
                             verifyOrderStatus({
                                 orderID,
                                 txHash: txHash,
-                                paymentByWallet: 0,
+                                paymentByWallet: appliedCredit,
                                 paymentBlockchainNetwork: currentChainId,
                                 paymentMethod: {
                                     id: paymentMethodId,
                                 },
+                                ...(couponCode && {
+                                    coupon: couponCode,
+                                    paymentPlan: serviceLevelId,
+                                }),
                             }),
                         ).unwrap();
                         dispatch(clearSubmissionState());

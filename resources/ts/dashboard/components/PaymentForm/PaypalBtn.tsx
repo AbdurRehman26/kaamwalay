@@ -37,6 +37,8 @@ function PaypalBtn() {
     const numberOfSelectedCards = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
     const orderSubmission = useAppSelector((state) => state.newSubmission);
     const user$ = useAuth().user;
+    const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
 
     const notifications = useNotifications();
     const navigate = useNavigate();
@@ -81,6 +83,14 @@ function PaypalBtn() {
                             paymentMethod: {
                                 id: paymentMethodID,
                             },
+                            ...(couponCode && {
+                                coupon: {
+                                    code: couponCode,
+                                },
+                                paymentPlan: {
+                                    id: serviceLevelId,
+                                },
+                            }),
                         });
                         return response.data.id;
                     },

@@ -486,8 +486,6 @@ export const updateOrderAddresses = createAsyncThunk('newSubmission/updateOrderI
             ? currentSubmission.step03Data.selectedExistingAddress
             : currentSubmission.step03Data.selectedAddress;
 
-    const billingAddress = finalShippingAddress;
-
     const customerAddressId = currentSubmission.step03Data.selectedExistingAddress?.id;
 
     const orderDTO: any = {

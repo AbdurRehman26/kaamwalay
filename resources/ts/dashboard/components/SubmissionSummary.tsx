@@ -4,9 +4,6 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
-import ReactGA from 'react-ga';
-import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
-import { useAuth } from '@shared/hooks/useAuth';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -178,16 +175,6 @@ function SubmissionSummary() {
     function onLevelEditPress() {
         dispatch(setCustomStep(0));
     }
-
-    const currentSelectedTurnaround = useAppSelector(
-        (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
-    );
-    const currentSelectedMaxProtection = useAppSelector(
-        (state) => state.newSubmission.step01Data.selectedServiceLevel.maxProtectionAmount,
-    );
-    const currentSelectedLevelPrice = useAppSelector(
-        (state) => state.newSubmission.step01Data.selectedServiceLevel.price,
-    );
 
     let totalDeclaredValue = 0;
     selectedCards.forEach((selectedCard: any) => {

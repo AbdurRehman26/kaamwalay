@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\API\V2\Customer\Order;
 
-use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;

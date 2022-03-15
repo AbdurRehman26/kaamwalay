@@ -152,11 +152,14 @@ class OrderPaymentService
 
     protected function updateWalletPaymentAmount(float|null $amount): void
     {
-        if (! empty($amount)) {
+        if (! empty($amount) && empty($this->order->amount_paid_from_wallet)) {
             WalletAmountGrandTotalValidator::validate($this->order, $amount);
             $this->order->amount_paid_from_wallet = $amount;
-            $this->order->save();
+        } else {
+            $this->order->amount_paid_from_wallet = 0;
         }
+        $this->order->save();
+
     }
 
     protected function updateGrandTotal(): void

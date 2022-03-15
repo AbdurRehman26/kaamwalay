@@ -62,7 +62,7 @@ class OrderService extends V1OrderService
         );
 
         Cache::remember(
-            'cc-payment-' . $order->id . '-' . $walletAmount,
+            'cc-payment-' . $order->id,
             300,
             fn () => (['amount' => $collectorCoinPrice, 'network' => $paymentBlockchainNetwork])
         );

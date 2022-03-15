@@ -103,7 +103,7 @@ class OrderController extends Controller
 
         try {
             $blockchainNetworkChainId = $request->payment_blockchain_network ?? 1;
-            list($amount) = $this->orderService->calculateCollectorCoinPrice(
+            $amount = $this->orderService->calculateCollectorCoinPrice(
                 $order,
                 $blockchainNetworkChainId,
                 $request->input('payment_by_wallet')

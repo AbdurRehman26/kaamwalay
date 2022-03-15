@@ -59,6 +59,8 @@ class OrderPaymentController extends Controller
             );
         }
 
+        DB::rollBack();
+
         return new JsonResponse(
             $response,
             Response::HTTP_PAYMENT_REQUIRED

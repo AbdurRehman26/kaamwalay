@@ -60,7 +60,7 @@ export function CollectorCoinConfirmationSubmission() {
 
     useRetry(
         async () => {
-            if (!isLoading) {
+            if (!isLoading && data?.orderPayment?.transaction?.completeHash) {
                 await dispatch(
                     getCollectorCoinPaymentStatus({
                         orderID: Number(id),

@@ -209,16 +209,16 @@ class MailchimpService
     protected function cleanDuplicateUsersBetweenListIds(string $keepListId, string $cleanListId): void
     {
         $keepListMembersInfo = $this->getFullListMembers($keepListId);
-        $cleanListMembersInfo = $this->getFullListMembers($cleanListId);
 
-        foreach ($keepListMembersInfo as $keepMember) {
-            $result = array_values($this->filterMembersListById($cleanListMembersInfo, $keepMember->id));
+        $removeData = array_map(function ($element) use ($cleanListId) {
+            return [
+                "method" => "DELETE",
+                "path" => "/lists/$cleanListId/members/$element->id",
+                "operation_id" => $element->id,
+            ];
+        }, $keepListMembersInfo);
 
-            if (count($result) > 0) {
-                \Log::debug("Match found: $keepMember->id");
-                $this->removeDataFromListByHash($keepMember->id, $cleanListId);
-            }
-        }
+        $this->performBatchOperations($removeData);
     }
 
     protected function getFullListMembers(string $listId): array
@@ -249,10 +249,14 @@ class MailchimpService
         return $members;
     }
 
-    protected function filterMembersListById(array $membersList, string $searchId): array
+    protected function performBatchOperations(array $operations): void
     {
-        return array_filter($membersList, function ($member) use ($searchId) {
-            return $member->id === $searchId;
-        });
+        try {
+            $mailchimpClient = $this->getClient();
+            // @phpstan-ignore-next-line
+            $mailchimpClient->batches->start(json_encode(['operations' => $operations]));
+        } catch (RequestException $ex) {
+            Log::error($ex->getResponse()->getBody());
+        }
     }
 }

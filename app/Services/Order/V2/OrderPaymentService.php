@@ -183,7 +183,7 @@ class OrderPaymentService
 
     protected function storePaymentMethod(array $paymentMethod): void
     {
-        if ($this->order->grand_total === (float) $this->data['payment_by_wallet']) {
+        if (! empty($this->data['payment_by_wallet']) && $this->order->grand_total === (float) $this->data['payment_by_wallet']) {
             $this->order->payment_method_id = PaymentMethod::getWalletPaymentMethod()->id;
 
             return;

@@ -32,7 +32,7 @@ function AddedSubmissionCardsMobileSearchView() {
                                 shortName={row.shortName}
                                 name={row.name}
                                 addedMode
-                                reviewMode={true}
+                                reviewMode
                             />
                         </div>
                     </MobileViewListContainer>

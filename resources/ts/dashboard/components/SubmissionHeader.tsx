@@ -2,7 +2,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from '@mui/material/Link';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import Logo from '@shared/assets/robogradingLogo.svg';
 import CustomizedSteppers from './HeaderStepper';
@@ -33,6 +33,9 @@ const useStyles = makeStyles(
             width: '100%',
             justifyContent: 'center',
             marginTop: '84px',
+            [theme.breakpoints.down('sm')]: {
+                marginTop: '35px',
+            },
         },
         headerTitle: {
             color: '#fff',
@@ -65,7 +68,7 @@ function SubmissionHeader() {
         <div className={classes.root}>
             <Container>
                 <div className={classes.logoAndAvatarContainer}>
-                    <Link to={'/'}>
+                    <Link href={'/'}>
                         <img className={classes.headerLogo} src={Logo} alt={'Robograding Logo'} />
                     </Link>
                     <img className={classes.headerAvatar} src={RobogradingAvatar} alt={'Robograding Avatar'} />

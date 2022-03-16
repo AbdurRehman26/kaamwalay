@@ -9,11 +9,12 @@ import { Theme } from '@mui/material/styles';
 
 interface Props extends ButtonProps {
     buttonContent: string;
-    textColor?: string;
     margin?: boolean;
+    className?: string;
+    plan?: string;
 }
 
-export function SubmissionButton({ textColor, buttonContent, margin, ...rest }: Props) {
+export function SubmissionButton({ buttonContent, margin, className, plan, ...rest }: Props) {
     const isAuthDialogOpen = useSharedSelector((state) => state.authentication.dialogOpened);
     const { authenticated } = useAuth();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
@@ -26,16 +27,15 @@ export function SubmissionButton({ textColor, buttonContent, margin, ...rest }: 
         if (!authenticated) {
             dispatch(dialogVisibility(true));
         } else {
-            window.location.href = '/dashboard/submissions/new';
+            window.location.href = `/dashboard/submissions/new?plan=${plan}`;
         }
     };
 
     return (
         <>
             <Button
+                className={className}
                 style={{
-                    color: textColor,
-                    backgroundColor: textColor === 'black' ? '#42E8E0' : '',
                     marginLeft: margin && !isMobile ? '14%' : '',
                 }}
                 onClick={handleOpenDialog}

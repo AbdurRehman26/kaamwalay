@@ -26,11 +26,13 @@ const useStyles = makeStyles(
                 minWidth: 40,
                 width: 40,
                 height: 40,
-                textIndent: -9999,
                 overflow: 'hidden',
                 padding: theme.spacing(1),
+                '& .AuthControls-buttonLabel': {
+                    display: 'none',
+                },
                 '& .MuiButton-startIcon': {
-                    marginRight: -2,
+                    marginRight: -3,
                 },
             },
         },
@@ -88,7 +90,7 @@ export function AuthControls() {
                 className={cx(classes.button, classes.buttonHighlighted, classes.space)}
                 startIcon={<UploadIcon />}
             >
-                Submit
+                <span className={'AuthControls-buttonLabel'}>Submit</span>
             </Button>
             {authenticated ? (
                 <ButtonBase href={'/dashboard'}>
@@ -101,7 +103,7 @@ export function AuthControls() {
                     className={cx(classes.button)}
                     startIcon={<PersonIcon />}
                 >
-                    Log in
+                    <span className={'AuthControls-buttonLabel'}>Log in</span>
                 </Button>
             )}
             <AuthDialog open={isHeaderAuthDialogOpen} onClose={handleAuthDialogClose} subTitle={subTitle} />

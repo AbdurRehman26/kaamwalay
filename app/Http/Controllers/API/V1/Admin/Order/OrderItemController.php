@@ -56,8 +56,6 @@ class OrderItemController extends Controller
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
                 ],
                 Response::HTTP_BAD_REQUEST
             );

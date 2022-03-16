@@ -75,7 +75,7 @@
         }
         &-image {
             width: auto;
-            height: 54px;
+            height: 56px;
             @include breakpoints.down(1059px) {
                 height: 44px;
             }

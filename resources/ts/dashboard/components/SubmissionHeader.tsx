@@ -4,11 +4,8 @@ import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
-import Logo from '@shared/assets/robogradingLogo.svg';
-import MobileLogo from '@shared/assets/robogradingMobileLogo.svg';
+import Logo from '@shared/assets/robogradingMobileLogo.svg';
 import CustomizedSteppers from './HeaderStepper';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Theme } from '@mui/material/styles';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -66,18 +63,13 @@ const useStyles = makeStyles(
 
 function SubmissionHeader() {
     const classes = useStyles();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'));
 
     return (
         <div className={classes.root}>
             <Container>
                 <div className={classes.logoAndAvatarContainer}>
                     <Link to={'/'}>
-                        <img
-                            className={classes.headerLogo}
-                            src={isMobile ? MobileLogo : Logo}
-                            alt={'Robograding Logo'}
-                        />
+                        <img className={classes.headerLogo} src={Logo} alt={'Robograding Logo'} />
                     </Link>
                     <img className={classes.headerAvatar} src={RobogradingAvatar} alt={'Robograding Avatar'} />
                 </div>

@@ -79,16 +79,11 @@
             @include breakpoints.down(1059px) {
                 height: 44px;
             }
-            @include breakpoints.down(md) {
-                display: none;
+            @include breakpoints.down(sm) {
+                height: 40px;
             }
-            &-mobile {
-                display: none;
-                @include breakpoints.down(md) {
-                    display: block;
-                    width: auto;
-                    height: 44px;
-                }
+            @include breakpoints.down(xs) {
+                height: 36px;
             }
         }
     }

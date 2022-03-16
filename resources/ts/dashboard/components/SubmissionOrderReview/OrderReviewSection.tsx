@@ -24,9 +24,6 @@ function OrderReviewSection() {
 
     const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
-    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
-    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
-    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
     const discountCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
 
     const discountStatement = useAppSelector(

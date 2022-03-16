@@ -143,7 +143,7 @@ export function PayWithCollectorCoinButton() {
         }
 
         fetchTotalInAGS();
-    }, [dispatch, orderID, appliedCredit]);
+    }, [dispatch, orderID, appliedCredit, discountedValue]);
 
     return (
         <Button variant={'contained'} disabled={isLoading} onClick={handleClick}>

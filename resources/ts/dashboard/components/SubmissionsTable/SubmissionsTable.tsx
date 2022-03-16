@@ -18,7 +18,6 @@ import { SubmissionTableRow } from './SubmissionTableRow';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import { Table } from './styles';
 import Grid from '@mui/material/Grid';
-import { OrderStatusMap } from '@shared/constants/OrderStatusEnum';
 
 const StyledBox = styled(Box)(
     {

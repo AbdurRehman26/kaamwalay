@@ -14,15 +14,15 @@ function AddedSubmissionCardsMobileSearchView() {
     }
 
     return (
-        <>
-            <TitleContainer>
+        <SearchListRoot>
+            <div className={'SearchList-Title'}>
                 <Typography variant={'subtitle1'} fontWeight={500}>
                     Added Cards
                 </Typography>
-            </TitleContainer>
+            </div>
             {selectedCards.map((row: SearchResultItemCardProps) => (
                 <Fragment key={row.id}>
-                    <MobileViewListContainer>
+                    <div className={'SearchList-Container'}>
                         <div title={row.shortName || row.name}>
                             <SearchResultItemCard
                                 key={row.id}
@@ -35,31 +35,29 @@ function AddedSubmissionCardsMobileSearchView() {
                                 reviewMode
                             />
                         </div>
-                    </MobileViewListContainer>
+                    </div>
                     <Divider light />
                 </Fragment>
             ))}
-        </>
+        </SearchListRoot>
     );
 }
 
 export default AddedSubmissionCardsMobileSearchView;
 
-const TitleContainer = styled('div')(
+const SearchListRoot = styled('div')(
     {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 36,
+        '.SearchList-Title': {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 36,
+        },
+        '.SearchList-Container': {
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: 12,
+        },
     },
-    { name: 'TitleContainer' },
-);
-
-const MobileViewListContainer = styled('div')(
-    {
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: 12,
-    },
-    { name: 'MobileViewListContainer' },
+    { name: 'SearchListRoot' },
 );

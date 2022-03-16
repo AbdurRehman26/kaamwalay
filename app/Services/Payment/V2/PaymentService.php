@@ -122,4 +122,21 @@ class PaymentService extends V1PaymentService
             'notes' => $request['notes'],
         ];
     }
+
+    public function calculateAndSaveFee(Order $order): void
+    {
+        $this->hasProvider($order);
+
+        $providerInstance = resolve($this->providers[
+            $this->order->paymentMethod->code
+        ]);
+
+        $this->order->orderPayments
+            ->map(function (OrderPayment $orderPayment) use ($providerInstance) {
+                $orderPayment->provider_fee = $orderPayment->paymentMethod->isWallet() ? 0 : $providerInstance->calculateFee($orderPayment);
+                $orderPayment->save();
+
+                return $orderPayment;
+            });
+    }
 }

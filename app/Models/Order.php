@@ -259,7 +259,7 @@ class Order extends Model implements Exportable
 
     public function getGrandTotalToBePaidAttribute(): float
     {
-        return $this->grand_total - $this->amount_paid_from_wallet;
+        return $this->grand_total + $this->extra_charge_total - $this->amount_paid_from_wallet - $this->refund_total;
     }
 
     public function getTotalGradedItems(): int

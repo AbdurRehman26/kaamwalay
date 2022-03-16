@@ -59,7 +59,12 @@ class OrderService extends V1OrderService
     ): float {
         $collectorCoinPrice = (new CollectorCoinService)->getCollectorCoinPriceFromUsd(
             $paymentBlockchainNetwork,
-            $order->grand_total - $this->getCollectorCoinDiscount($order) - $walletAmount - $discountedAmount
+            $order->grand_total -
+            $this->getCollectorCoinDiscount($order) -
+            $walletAmount -
+            $discountedAmount -
+            $order->refund_total +
+            $order->extra_charge_total
         );
         if ($collectorCoinPrice <= 0) {
             return 0.0;

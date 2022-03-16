@@ -103,6 +103,8 @@ export interface NewSubmissionSliceState {
     step01Status: any;
     orderID: number;
     grandTotal: number;
+    refundTotal: number;
+    extraChargesTotal: number;
     orderNumber: string;
     couponState: {
         isCouponValid: boolean;
@@ -132,6 +134,8 @@ const initialState: NewSubmissionSliceState = {
     confirmedCollectorCoinPayment: false,
     orderTransactionHash: '',
     grandTotal: 0,
+    refundTotal: 0,
+    extraChargesTotal: 0,
     availableCredit: 0,
     previewTotal: 0,
     appliedCredit: 0,
@@ -757,6 +761,8 @@ export const newSubmissionSlice = createSlice({
         orderToNewSubmission(state: NewSubmissionSliceState, action: PayloadAction<OrderEntity>) {
             state.orderID = action.payload.id;
             state.grandTotal = action.payload.grandTotal;
+            state.refundTotal = action.payload.refundTotal;
+            state.extraChargesTotal = action.payload.extraChargeTotal;
             state.previewTotal = action.payload.grandTotal;
             state.step02Data = {
                 shippingFee: action.payload.shippingFee,

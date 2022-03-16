@@ -168,6 +168,8 @@ export function PaymentSummary() {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
+    const refundTotal = useAppSelector((state) => state.newSubmission.refundTotal);
+    const extraChargesTotal = useAppSelector((state) => state.newSubmission.extraChargesTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const discountedValue = useAppSelector(
@@ -236,6 +238,8 @@ export function PaymentSummary() {
             ) +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
+            refundTotal +
+            extraChargesTotal -
             appliedCredit;
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
@@ -435,6 +439,34 @@ export function PaymentSummary() {
                             prefix={'$'}
                         />
                     </div>
+
+                    {extraChargesTotal > 0 ? (
+                        <div className={classes.row} style={{ marginTop: '16px' }}>
+                            <Typography className={classes.rowLeftText}>Extra Charges: </Typography>
+                            <NumberFormat
+                                value={extraChargesTotal}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                        </div>
+                    ) : null}
+
+                    {refundTotal > 0 ? (
+                        <div className={classes.row} style={{ marginTop: '16px' }}>
+                            <Typography className={classes.rowLeftText}>Refunds: </Typography>
+                            <NumberFormat
+                                value={refundTotal}
+                                className={classes.rowRightBoldText}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'-$'}
+                            />
+                        </div>
+                    ) : null}
                 </div>
                 <Divider light />
 

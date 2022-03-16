@@ -144,7 +144,7 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
     }
 
     return (
-        <Box mb={7}>
+        <Box mb={7} width={'100%'}>
             {isSm ? (
                 <>
                     {items$}

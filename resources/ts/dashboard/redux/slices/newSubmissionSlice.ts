@@ -411,7 +411,7 @@ export const verifyOrderStatus = createAsyncThunk(
                     code: input.coupon,
                 },
                 paymentPlan: {
-                    id: input.paymentPlan
+                    id: input.paymentPlan,
                 },
             }),
         });

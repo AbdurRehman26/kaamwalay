@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
+use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 
-class Order extends Model
+class Order extends Model implements Exportable
 {
     use HasFactory, ActivityLog, HasOrderPayments;
 
@@ -335,6 +336,47 @@ class Order extends Model
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    /**
+     * @return Builder <Order>
+     */
+    public function exportQuery(): Builder
+    {
+        return self::query();
+    }
+
+    public function exportHeadings(): array
+    {
+        return ['Submission #', 'Placed', 'Reviewed', 'Customer', 'Cards', 'Status', 'Declared Value', 'Amount Paid'];
+    }
+
+    public function exportFilters(): array
+    {
+        return self::getAllowedAdminFilters();
+    }
+
+    public function exportIncludes(): array
+    {
+        return self::getAllowedAdminIncludes();
+    }
+
+    /**
+     * @param  Order  $row
+     * @return array
+     */
+    public function exportRowMap($row): array
+    {
+        return [
+            $row->order_number,
+            $row->created_at,
+            $row->arrived_at,
+            $row->user->customer_number,
+            $row->orderItems->sum('quantity'),
+            $row->orderStatus->name,
+            $row->orderItems->sum('declared_value_total'),
+            $row->grand_total,
+        ];
     }
 
     public function isCancelled(): bool

@@ -9,7 +9,7 @@
         <div class="container">
             <h1 class="Home-heroTitle">The fastest, most accurate way to grade your cards.</h1>
             <h2 class="Home-heroSubtitle">Get your cards graded with artificial intelligence.</h2>
-            <div data-atom="submit-button" data-button-content="Grade your cards">
+            <div data-atom="submit-button" data-class-name="Home-buttonCta-darkBg" data-button-content="Grade your cards">
                 {{-- JS runtime actions --}}
             </div>
         </div>

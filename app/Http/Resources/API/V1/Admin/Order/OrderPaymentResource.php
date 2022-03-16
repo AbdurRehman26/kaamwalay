@@ -25,7 +25,6 @@ class OrderPaymentResource extends BaseResource
                 'id' => $this->id,
                 'notes' => $this->notes,
                 'amount' => $this->amount,
-                'order_id' => $this->order_id,
                 'type' => $this->type,
                 'user' => new UserResource($this->user),
                 'created_at' => $this->formatDate($this->created_at),

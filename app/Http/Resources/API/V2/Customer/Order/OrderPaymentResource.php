@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\V2\Customer\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\OrderPayment;
 
 class OrderPaymentResource extends BaseResource
@@ -25,9 +24,7 @@ class OrderPaymentResource extends BaseResource
                 'id' => $this->id,
                 'notes' => $this->notes,
                 'amount' => $this->amount,
-                'order_id' => $this->order_id,
                 'type' => $this->type,
-                'user' => new UserResource($this->user),
                 'created_at' => $this->formatDate($this->created_at),
             ];
         }

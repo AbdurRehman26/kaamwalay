@@ -4,18 +4,7 @@ import { useAppSelector } from '../redux/hooks';
 import { SearchResultItemCardProps } from '../redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
 import { styled } from '@mui/material/styles';
-
-const styles = {
-    label: {
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 500,
-        fontSize: '16px',
-        lineHeight: '24px',
-        letterSpacing: '0.1px',
-        color: 'rgba(0, 0, 0, 0.87)',
-    },
-};
+import { Fragment } from 'react';
 
 function AddedSubmissionCardsMobileSearchView() {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
@@ -27,12 +16,12 @@ function AddedSubmissionCardsMobileSearchView() {
     return (
         <>
             <TitleContainer>
-                <Typography variant={'subtitle2'} sx={styles.label}>
+                <Typography variant={'subtitle1'} fontWeight={500}>
                     Added Cards
                 </Typography>
             </TitleContainer>
             {selectedCards.map((row: SearchResultItemCardProps) => (
-                <>
+                <Fragment key={row.id}>
                     <MobileViewListContainer>
                         <div title={row.shortName || row.name}>
                             <SearchResultItemCard
@@ -48,7 +37,7 @@ function AddedSubmissionCardsMobileSearchView() {
                         </div>
                     </MobileViewListContainer>
                     <Divider light />
-                </>
+                </Fragment>
             ))}
         </>
     );

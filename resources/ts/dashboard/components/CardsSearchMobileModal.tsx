@@ -6,7 +6,7 @@ import React from 'react';
 import CardSubmissionSearchField from '@dashboard/components/CardSubmissionSearchField';
 import CardsSearchResults from '@dashboard/components/CardsSearchResults';
 import { useAppSelector } from '@dashboard/redux/hooks';
-import AddedSubmissionCardsMobileSearchView from '@dashboard/components/AddedSubmissionCardsSearchView';
+import AddedSubmissionCardsMobileSearchView from './AddedSubmissionCardsSearchView';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {

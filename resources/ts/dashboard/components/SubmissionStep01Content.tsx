@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getServiceLevels, setCustomStep, setServiceLevel } from '../redux/slices/newSubmissionSlice';
 import ServiceLevelItem from './ServiceLevelItem';
 import StepDescription from './StepDescription';
-import { find } from 'lodash';
 import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,7 +38,7 @@ export function SubmissionStep01Content() {
 
     useEffect(() => {
         if (plan && serviceLevels.length > 1) {
-            const selectedService: any = find(serviceLevels, (service) => service.id === parseInt(plan));
+            const selectedService: any = serviceLevels.find((service) => service.id === parseInt(plan));
             const { id, price, turnaround, type, maxProtectionAmount } = selectedService;
             dispatch(setServiceLevel({ id, price, turnaround, type, maxProtectionAmount }));
             dispatch(setCustomStep(1));

@@ -59,8 +59,8 @@ class OrderPaymentService
         );
         $this->updateOrderCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->updateOrderPaymentMethodDiscount($this->data['payment_method'] ?? []);
-        $this->updateWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->updateGrandTotal();
+        $this->updateWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->storeOrderPayment($this->data);
     }
 
@@ -167,7 +167,6 @@ class OrderPaymentService
             + $this->order->shipping_fee
             - $this->order->discounted_amount
             - $this->order->payment_method_discounted_amount
-            - $this->order->amount_paid_from_wallet
         );
 
         GrandTotalValidator::validate($this->order);

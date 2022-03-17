@@ -1,4 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import makeStyles from '@mui/styles/makeStyles';
@@ -35,21 +34,34 @@ const useStyles = makeStyles({
         alignItems: 'center',
     },
     buttonsContainer: {
+        position: 'fixed',
         width: '100%',
         display: 'flex',
+        bottom: '0',
         flexDirection: 'row',
+        padding: '10px 10px',
         justifyContent: 'center',
-        marginTop: '40px',
-        marginBottom: '64px',
+        background: '#FFFFFF',
+        boxShadow: '0px 3px 4px rgb(0 0 0 / 14%), 0px 3px 3px rgb(0 0 0 / 12%), 0px 1px 8px rgb(0 0 0 / 20%)',
     },
     nextBtn: {
         color: '#fff',
-        width: ({ currentStep }: any) => (currentStep !== 0 ? '140px' : '224px'),
+        width: '183px',
         height: '48px',
+        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
+        borderRadius: '28px',
     },
     backBtn: {
+        color: '#000',
         marginRight: '12px',
-        color: '#20BFB8',
+        width: '183px',
+        height: '48px',
+        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
+        background: '#F2F2F2',
+        borderRadius: '28px',
+        '&:hover': {
+            background: '#F2F2F2',
+        },
     },
 });
 
@@ -178,10 +190,9 @@ export function NewSubmission() {
                     <div className={classes.buttonsContainer}>
                         {currentStep !== 0 ? (
                             <Button
-                                variant={'text'}
+                                variant={'contained'}
                                 color={'secondary'}
                                 className={classes.backBtn}
-                                startIcon={<ArrowBackIcon />}
                                 onClick={handleBack}
                             >
                                 Back

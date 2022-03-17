@@ -374,7 +374,7 @@ it('can calculate collector coin price for an order', function () {
                 'block_explorer_urls' => ['https://testnet.bscscan.com'],
                 'is_testnet' => true,
                 'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
-                'collector_coin_wallet' => env('TEST_WALLET'),
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
             ],
         ],
         ]);
@@ -477,7 +477,7 @@ test('a customer can place order and pay from wallet totally', function () {
             'id' => $this->shippingMethod->id,
         ],
         'payment_by_wallet' => 34.00,
-    ])->dump();
+    ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

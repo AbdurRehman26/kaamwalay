@@ -27,7 +27,7 @@
                 because humans are doing the grading. With our technology, are able to grade cards 10x faster, and
                 more accurately than the other guys.</p>
 
-            <div data-atom="submit-button" data-text-color="white" data-aos="fade-left" data-aos-easing="ease-in-out" data-aos-delay="200" data-button-content="Start a submission">
+            <div data-atom="submit-button" data-aos="fade-left" data-aos-easing="ease-in-out" data-aos-delay="200" data-button-content="Start a submission">
                 {{-- JS runtime actions --}}
             </div>
         </div>

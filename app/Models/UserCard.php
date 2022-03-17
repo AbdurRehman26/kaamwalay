@@ -54,7 +54,7 @@ class UserCard extends Model
             'searchable_name' => $this->orderItem->cardProduct->getSearchableName(),
             'graded_at' => $this->created_at,
             'certificate_number' => $this->certificate_number,
-            'owner_name' => $this->user->getFullName(),
+            'owner_name' => $this->user->username,
             'grade_nickname' => $this->overall_grade_nickname,
             'overall_grade' => $this->overall_grade,
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
@@ -67,8 +67,8 @@ class UserCard extends Model
     public function shouldBeSearchable():bool
     {
         return (
-            $this->orderItem->order_item_status_id == OrderItemStatus::GRADED
-            && $this->orderItem->order->order_status_id == [OrderStatus::GRADED,OrderStatus::SHIPPED]
+            $this->orderItem->order_item_status_id != OrderItemStatus::GRADED
+            && $this->orderItem->order->order_status_id != [OrderStatus::GRADED,OrderStatus::SHIPPED]
             && OrderItemStatusHistory::where('order_item_status_id', [OrderItemStatus::GRADED])->exists()
         );
     }

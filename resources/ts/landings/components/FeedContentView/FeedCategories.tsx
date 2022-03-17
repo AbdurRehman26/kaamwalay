@@ -1,6 +1,6 @@
 import { connectRefinementList } from 'react-instantsearch-dom';
 import Chip from '@mui/material/Chip';
-import { styled } from '@mui/material/styles';
+import { styled, Theme } from '@mui/material/styles';
 import DoneIcon from '@mui/icons-material/Done';
 import { FeedGridView } from './FeedGridView';
 import { FeedListView } from './FeedListView';
@@ -13,6 +13,10 @@ import { FeedGrade } from './FeedGrade';
 import FeedResultCount from './FeedResultCount';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import theme from '@shared/styles/theme';
+import FeedMobileView from './FeedMobileView';
+import FeedCurrentFilter from './FeedCurrentFilter';
 
 const FeeCategoryBox = styled(Box)(
     {
@@ -20,9 +24,24 @@ const FeeCategoryBox = styled(Box)(
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'stretch',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
 
         '.GradeList': {
             display: 'inline-flex',
+        },
+        '.CategoryChipSelected': {
+            width: '100%',
+            height: '40px',
+            boxSizing: 'border-box',
+            borderRadius: '24px',
+            padding: '10px 10px',
+            cursor: 'pointer',
+            border: '1px solid #20BFB8',
+            backgroundColor: 'rgba(32, 191, 184, 0.08)',
+            color: '#20BFB8',
+            fontWeight: 'bold',
         },
         '.CategoryChip': {
             width: '100%',
@@ -33,6 +52,7 @@ const FeeCategoryBox = styled(Box)(
             borderRadius: '24px',
             padding: '10px 10px',
             cursor: 'pointer',
+            color: 'rgba(0, 0, 0, 0.54)',
         },
         '.GradeListItem': {
             marginLeft: '10px',
@@ -43,24 +63,40 @@ const FeeCategoryBox = styled(Box)(
             alignItems: 'stretch',
         },
         '.GridViewButton': {
+            margin: '15px 15px',
             cursor: 'pointer',
         },
         '.ListViewButton': {
+            margin: '15px 10px',
             cursor: 'pointer',
         },
     },
     { name: 'FeeCategoryBox' },
 );
 
+const styles = {
+    MobileDiv: {
+        [theme.breakpoints.down('sm')]: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'stretch',
+            padding: '20px 10px',
+            borderBottom: '1px solid #E0E0E0',
+        },
+    },
+};
+
 export function FeedCategories() {
     const [toggleView, setToggleView] = useState(true);
-    const RefinementList = ({ items, refine, createURL }) => (
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+
+    const RefinementList = ({ items, refine, createURL }: { items: any; refine: any; createURL: any }) => (
         <Grid>
             <ul className={'GradeList'}>
                 <li>
                     <FeedClearCategories />
                 </li>
-                {items.map((item) => (
+                {items.map((item: any) => (
                     <li className={'GradeListItem'} key={item.label}>
                         <a
                             href={createURL(item.value)}
@@ -69,16 +105,16 @@ export function FeedCategories() {
                                 refine(item.value);
                             }}
                         >
-                            <Chip
-                                style={{
-                                    border: item.isRefined ? '1px solid #20BFB8' : '',
-                                    background: item.isRefined ? 'rgba(32, 191, 184, 0.08)' : '',
-                                }}
-                                className={'CategoryChip'}
-                                icon={<DoneIcon />}
-                                label={item.label}
-                                variant="outlined"
-                            />
+                            {item.isRefined ? (
+                                <Chip
+                                    className={'CategoryChipSelected'}
+                                    icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
+                                    label={item.label}
+                                    variant="outlined"
+                                />
+                            ) : (
+                                <Chip className={'CategoryChip'} label={item.label} variant="outlined" />
+                            )}
                         </a>
                     </li>
                 ))}
@@ -104,8 +140,13 @@ export function FeedCategories() {
                     </Grid>
                 </Grid>
             </FeeCategoryBox>
-            <FeedResultCount />
+            <Grid sx={styles.MobileDiv}>
+                <FeedResultCount />
+                {isSm ? <FeedMobileView /> : ''}
+            </Grid>
+            <FeedCurrentFilter />
             {toggleView ? <FeedGridView /> : <FeedListView />}
+            {isSm ? <FeedListView /> : ''}
         </>
     );
 }

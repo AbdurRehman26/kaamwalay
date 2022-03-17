@@ -54,7 +54,7 @@ class UserCard extends Model
             'searchable_name' => $this->orderItem->cardProduct->getSearchableName(),
             'graded_at' => $this->created_at,
             'certificate_number' => $this->certificate_number,
-            'owner_name' => $this->user->user->username,
+            'owner_name' => $this->user->username,
             'grade_nickname' => $this->overall_grade_nickname,
             'overall_grade' => $this->overall_grade,
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,

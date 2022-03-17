@@ -1,27 +1,32 @@
-import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import styled from '@mui/styles/styled';
 import { connectHitsPerPage } from 'react-instantsearch-dom';
 
+const GridDiv = styled(Grid)({
+    display: 'flex',
+    alignItems: 'stretch',
+
+    '.selectdiv': {
+        backgroundColor: '#F4F4FB',
+    },
+});
+
 export function FeedItemsPerPage() {
-    const HitsPerPage = ({ items, refine, createURL }) => (
-        <div>
-            <Typography>Items per page:</Typography>
-            <ul>
-                {items.map((item) => (
-                    <li key={item.value}>
-                        <a
-                            href={createURL(item.value)}
-                            style={{ fontWeight: item.isRefined ? 'bold' : '' }}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                refine(item.value);
-                            }}
-                        >
-                            {item.label}
-                        </a>
-                    </li>
+    const HitsPerPage = ({ items, refine, currentRefinement }: { items: any; refine: any; currentRefinement: any }) => (
+        <GridDiv>
+            <p>Items per page:</p>
+            <select
+                className={'selectdiv'}
+                value={currentRefinement || ''}
+                onChange={(event) => refine(event.currentTarget.value)}
+            >
+                {items.map((item: any) => (
+                    <option key={item.label} value={item.isRefined ? currentRefinement : item.value}>
+                        {item.label}
+                    </option>
                 ))}
-            </ul>
-        </div>
+            </select>
+        </GridDiv>
     );
     const CustomHitsPerPage = connectHitsPerPage(HitsPerPage);
     return (

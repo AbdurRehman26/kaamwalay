@@ -10,13 +10,14 @@ import theme from '@shared/styles/theme';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 
 const TableDiv = styled(TableContainer)({
     '.TableRow': {
         borderBottom: '1px solid #e0e0e0',
     },
     '.TableCard': {
-        padding: '16px',
+        padding: '10px',
         textAlign: 'left',
     },
     '.TableInfo': {
@@ -27,6 +28,10 @@ const TableDiv = styled(TableContainer)({
     '.TableInfoImage': {
         boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px 0 rgba(0, 0, 0, 0.12),0 1px 1px 0 rgba(0, 0, 0, 0.14)',
         width: '52px',
+        [theme.breakpoints.down('sm')]: {
+            width: '52px',
+            height: '82px',
+        },
     },
     '.TableInfoText': {
         paddingLeft: '14px',
@@ -39,6 +44,7 @@ const TableDiv = styled(TableContainer)({
     },
     '.TableInfoSubHeading': {
         fontSize: '12px',
+        marginBottom: '10px',
     },
     '.TableHead': {
         [theme.breakpoints.down('sm')]: {
@@ -48,16 +54,6 @@ const TableDiv = styled(TableContainer)({
     '.TableGrade': {
         width: '96px',
         textAlign: 'right',
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-    },
-    '.TableGradeMobile': {
-        width: '96px',
-        textAlign: 'right',
-        [theme.breakpoints.down('lg')]: {
-            display: 'none',
-        },
     },
     '.Grade': {
         display: 'inline-flex',
@@ -97,6 +93,29 @@ const TableDiv = styled(TableContainer)({
             display: 'none',
         },
     },
+    '.BottomSectionText': {
+        marginLeft: '5px',
+        fontStyle: 'normal',
+        fontSize: '12px',
+        lineHeight: '16px',
+        letterSpacing: '0.2px',
+        color: '#000000',
+    },
+    '.BottomSectionContent': {
+        fontStyle: 'normal',
+        fontWeight: '500',
+        fontSize: '12px',
+        lineHeight: '16px',
+        letterSpacing: '0.2px',
+        color: 'rgba(0, 0, 0, 0.54)',
+    },
+    '.MobileSection': {
+        display: 'flex',
+        alignItems: 'stretch',
+        [theme.breakpoints.up('lg')]: {
+            display: 'none',
+        },
+    },
 });
 const BoxDiv = styled(Box)({
     '.FeedList': {
@@ -111,9 +130,9 @@ const BoxDiv = styled(Box)({
         overflowX: 'auto',
     },
 });
-const Hits = ({ hits }) => (
+const Hits = ({ hits }: { hits: any }) => (
     <TableDiv>
-        <Table sx={{ minWidth: 650 }} size="small">
+        <Table>
             <TableHead className={'TableHead'}>
                 <TableRow>
                     <TableCell>Card</TableCell>
@@ -124,45 +143,75 @@ const Hits = ({ hits }) => (
                 </TableRow>
             </TableHead>
             <TableBody>
-                {hits.map((hit) => (
+                {hits.map((hit: any) => (
                     <TableRow key={hit.objectID} className={'TableRow'}>
                         <TableCell className={'TableCard'}>
-                            <p className={'TableInfo'}>
+                            <Link to={'/'} key={hit.objectID} className={'TableInfo'}>
                                 <img className={'TableInfoImage'} src={hit.card_image} alt={hit.card_name} />
                                 <div className={'TableInfoText'}>
                                     <Typography className={'TableInfoHeading'}>{hit.card_name}</Typography>
                                     <Typography className={'TableInfoSubHeading'}>{hit.searchable_name}</Typography>
-                                    <Typography></Typography>
-                                </div>
-                                <div className={'TableGradeMobile'}>
-                                    <div className={'Grade'}>
-                                        <Typography className={'GradeLabel'}>{hit.grade_nickname}</Typography>
-                                        <Typography className={'GradeValue'}>{hit.overall_grade}</Typography>
+                                    <div className={'MobileSection'}>
+                                        <Typography className={'BottomSectionContent'}>Date Graded: </Typography>
+                                        <Typography className={'BottomSectionText'}>
+                                            {new Date(hit.graded_at).getDate() +
+                                                '/' +
+                                                (new Date(hit.graded_at).getMonth() + 1) +
+                                                '/' +
+                                                new Date(hit.graded_at).getFullYear() +
+                                                ' '}
+                                            at{' '}
+                                            {(new Date(hit.graded_at).getHours() % 12) +
+                                                ':' +
+                                                new Date(hit.graded_at).getMinutes()}
+                                            {new Date(hit.graded_at).getHours() >= 12 ? 'pm' : 'am'}
+                                        </Typography>
+                                    </div>
+                                    <div className={'MobileSection'}>
+                                        <Typography className={'BottomSectionContent'}>Certificate #:</Typography>
+                                        <Typography className={'BottomSectionText'}>
+                                            {hit.certificate_number}
+                                        </Typography>
+                                    </div>
+                                    <div className={'MobileSection'}>
+                                        <Typography className={'BottomSectionContent'}>Owner: </Typography>
+                                        <Typography className={'BottomSectionText'}>{hit.owner_name}</Typography>
                                     </div>
                                 </div>
-                            </p>
+                            </Link>
                         </TableCell>
                         <TableCell className={'DateCell'}>
-                            <p>
-                                <Typography>08/24/2021</Typography>
-                                <Typography>11:24 AM</Typography>
-                            </p>
+                            <Link to={'/'}>
+                                <Typography>
+                                    {new Date(hit.graded_at).getDate() +
+                                        '/' +
+                                        (new Date(hit.graded_at).getMonth() + 1) +
+                                        '/' +
+                                        new Date(hit.graded_at).getFullYear()}
+                                </Typography>
+                                <Typography>
+                                    {(new Date(hit.graded_at).getHours() % 12) +
+                                        ':' +
+                                        new Date(hit.graded_at).getMinutes()}
+                                    {new Date(hit.graded_at).getHours() >= 12 ? 'pm' : 'am'}
+                                </Typography>
+                            </Link>
                         </TableCell>
                         <TableCell className={'CertificateNoCell'}>
-                            <p>
+                            <Link to={'/'}>
                                 <Typography>{hit.certificate_number}</Typography>
-                            </p>
+                            </Link>
                         </TableCell>
                         <TableCell className={'OwnerNameCell'}>
-                            <p>
+                            <Link to={'/'}>
                                 <Typography>{hit.owner_name}</Typography>
-                            </p>
+                            </Link>
                         </TableCell>
                         <TableCell className={'TableGrade'}>
-                            <p className={'Grade'}>
+                            <Link to={'/'} className={'Grade'}>
                                 <Typography className={'GradeLabel'}>{hit.grade_nickname}</Typography>
                                 <Typography className={'GradeValue'}>{hit.overall_grade}</Typography>
-                            </p>
+                            </Link>
                         </TableCell>
                     </TableRow>
                 ))}

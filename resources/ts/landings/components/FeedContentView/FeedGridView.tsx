@@ -3,6 +3,8 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import theme from '@shared/styles/theme';
+import { Link } from 'react-router-dom';
 
 const GridDiv = styled(Grid)({
     '.GridView': {
@@ -21,6 +23,7 @@ const GridDiv = styled(Grid)({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'stretch',
+        borderBottom: '1px solid #E0E0E0',
     },
     '.GridTextSection': {
         padding: '10px 10px',
@@ -72,9 +75,22 @@ const GridDiv = styled(Grid)({
         width: '170.66px',
         height: '237.78px',
     },
+    '.GridSection': {
+        display: 'flex',
+        alignItems: 'stretch',
+    },
     '.GridBottomSection': {
         width: '100%',
         padding: '10px 10px',
+        borderTop: '1px solid #E0E0E0',
+    },
+    '.BottomSectionText': {
+        marginLeft: '5px',
+        fontStyle: 'normal',
+        fontSize: '12px',
+        lineHeight: '16px',
+        letterSpacing: '0.2px',
+        color: '#000000',
     },
     '.BottomSectionContent': {
         fontStyle: 'normal',
@@ -85,11 +101,15 @@ const GridDiv = styled(Grid)({
         color: 'rgba(0, 0, 0, 0.54)',
     },
 });
-const BoxDiv = styled(Box)({});
-const Hits = ({ hits }) => (
+const BoxDiv = styled(Box)({
+    [theme.breakpoints.down('sm')]: {
+        display: 'none',
+    },
+});
+const Hits = ({ hits }: { hits: any }) => (
     <GridDiv container>
-        {hits.map((hit) => (
-            <p key={hit.objectID}>
+        {hits.map((hit: any) => (
+            <Link to={'/'} key={hit.objectID}>
                 <div className={'GridView'}>
                     <div className={'GridTopSection'}>
                         <div className={'GridTextSection'}>
@@ -105,12 +125,31 @@ const Hits = ({ hits }) => (
                         <img className={'CardImage'} src={hit.card_image} alt={hit.card_name} />
                     </div>
                     <div className={'GridBottomSection'}>
-                        <Typography className={'BottomSectionContent'}>Date Graded: 08/24/2021 at 11:24 AM</Typography>
-                        <Typography className={'BottomSectionContent'}>{hit.certificate_number}</Typography>
-                        <Typography className={'BottomSectionContent'}>{hit.owner_name}</Typography>
+                        <div className={'GridSection'}>
+                            <Typography className={'BottomSectionContent'}>Date Graded: </Typography>
+                            <Typography className={'BottomSectionText'}>
+                                {new Date(hit.graded_at).getDate() +
+                                    '/' +
+                                    (new Date(hit.graded_at).getMonth() + 1) +
+                                    '/' +
+                                    new Date(hit.graded_at).getFullYear() +
+                                    ' '}
+                                at{' '}
+                                {(new Date(hit.graded_at).getHours() % 12) + ':' + new Date(hit.graded_at).getMinutes()}
+                                {new Date(hit.graded_at).getHours() >= 12 ? 'pm' : 'am'}
+                            </Typography>
+                        </div>
+                        <div className={'GridSection'}>
+                            <Typography className={'BottomSectionContent'}>Certificate #:</Typography>
+                            <Typography className={'BottomSectionText'}>{hit.certificate_number}</Typography>
+                        </div>
+                        <div className={'GridSection'}>
+                            <Typography className={'BottomSectionContent'}>Owner: </Typography>
+                            <Typography className={'BottomSectionText'}>{hit.owner_name}</Typography>
+                        </div>
                     </div>
                 </div>
-            </p>
+            </Link>
         ))}
     </GridDiv>
 );

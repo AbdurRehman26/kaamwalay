@@ -2996,11 +2996,6 @@ parameters:
 			path: app/Services/Admin/Coupon/CouponService.php
 
 		-
-			message: "#^Parameter \\#1 \\$coupon of method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponService\\:\\:changeStatus\\(\\) expects App\\\\Models\\\\Coupon, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
-			count: 2
-			path: app/Services/Admin/Coupon/CouponService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\Admin\\\\Coupon\\\\CouponStatusService\\:\\:changeStatus\\(\\) has parameter \\$newCouponStatus with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
 			count: 1
 			path: app/Services/Admin/Coupon/CouponStatusService.php

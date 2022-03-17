@@ -25,6 +25,7 @@ import {
     setIsNextLoading,
 } from '../../redux/slices/newSubmissionSlice';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import theme from '@shared/styles/theme';
 
 const useStyles = makeStyles({
     pageContentContainer: {
@@ -50,6 +51,9 @@ const useStyles = makeStyles({
         height: '48px',
         boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
         borderRadius: '28px',
+        [theme.breakpoints.down('sm')]: {
+            width: ({ currentStep }: any) => (currentStep === 0 ? '100%' : '183px'),
+        },
     },
     backBtn: {
         color: '#000',

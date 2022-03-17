@@ -55,21 +55,31 @@
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.35px;
+    color: #fff;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease-in-out;
+    text-align: center;
+    &:hover {
+        background-color: lighten(#20bfb8, 10%);
+    }
+}
+
+.Home-buttonCta-darkBg {
+    padding: 14px 24px;
+    background-color: #42e8e0;
+    border-radius: 28px;
+    display: inline-block;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.35px;
     color: rgba(0, 0, 0, 0.87);
     text-transform: uppercase;
     transition: background-color 0.2s ease-in-out;
     text-align: center;
-
     &:hover {
-        background-color: lighten(#20bfb8, 10%);
-    }
-
-    &--light {
-        color: #fff;
-
-        &:hover {
-            background-color: darken(#20bfb8, 7%);
-        }
+        background-color: #00fff3;
     }
 }
 
@@ -107,31 +117,25 @@
     @media screen and (max-width: 959px) {
         opacity: 0.5;
     }
-
     &--topLeft {
         left: 64px;
         top: 92px;
     }
-
     &--topRight {
         right: 64px;
         top: 92px;
     }
-
     &--bottomRight {
         right: 64px;
         bottom: 92px;
-
         &.Home-sectionLayer--offset {
             right: -5%;
             bottom: -20%;
         }
     }
-
     &--bottomLeft {
         left: 64px;
         bottom: 92px;
-
         &.Home-sectionLayer--offset {
             left: -25%;
             bottom: -30%;
@@ -145,7 +149,6 @@
     align-items: flex-start;
     justify-content: flex-start;
     padding: 0 40px;
-
     &--half {
         width: 50%;
         @media screen and (max-width: 1199px) {
@@ -158,7 +161,6 @@
             padding: 0 14px;
         }
     }
-
     &--third {
         width: 33.333334%;
         @media screen and (max-width: 1279px) {
@@ -227,7 +229,6 @@
         width: 64px;
         height: 64px;
     }
-
     .material-icons {
         font-size: 64px;
         width: 64px;

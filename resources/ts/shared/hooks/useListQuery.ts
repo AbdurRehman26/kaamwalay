@@ -46,7 +46,7 @@ export function useListQuery<
             const baseConfig = {
                 params: {
                     page: currentPage,
-                    perPage: perPage,
+                    perPage,
                 },
             };
 

@@ -12,18 +12,19 @@ use App\Http\Resources\API\V1\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V1\Customer\Order\OrderResource;
 use App\Models\Order;
-use App\Services\Order\CreateOrderService;
 use App\Services\Order\OrderService;
 use App\Services\Order\Shipping\CustomerShipmentService;
+use App\Services\Order\V1\CreateOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
     public function __construct(
-        private OrderService $orderService,
-        private CreateOrderService $createOrderService
+        protected OrderService $orderService,
+        protected CreateOrderService $createOrderService
     ) {
 //        $this->authorizeResource(Order::class, 'order');
     }
@@ -35,8 +36,10 @@ class OrderController extends Controller
         );
     }
 
-    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
+    public function store(Request $request): OrderCreateResource | JsonResponse
     {
+        $request = resolve(StoreOrderRequest::class);
+
         try {
             $order = $this->createOrderService->create($request->validated());
         } catch (Exception $e) {

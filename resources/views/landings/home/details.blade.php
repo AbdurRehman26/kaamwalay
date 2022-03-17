@@ -14,7 +14,7 @@
                 your grade. This will help you understand your grade way better than traditional grading. You'll
                 know the exact score your card received for centering, surface, corners & edges for the front and
                 back of your card.</p>
-            <div data-atom="submit-button" data-text-color="white" data-button-content="Start a submission">
+            <div data-atom="submit-button" data-button-content="Start a submission">
                     {{-- JS runtime actions --}}
             </div>
         </div>

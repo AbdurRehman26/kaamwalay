@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use App\Enums\Order\OrderPaymentStatusEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -85,7 +86,7 @@ class OrderPayment extends Model
     {
         return $query->join('orders', function ($join) {
             $join->on('orders.id', '=', 'order_payments.order_id')
-                ->whereNotIn('orders.order_status_id', [OrderStatus::PAYMENT_PENDING]);
+                ->where('orders.payment_status', OrderPaymentStatusEnum::PAID->value);
         });
     }
 

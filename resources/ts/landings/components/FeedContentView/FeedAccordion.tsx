@@ -7,7 +7,7 @@ import FeedMobileSortBy from './FeedMobileSortBy';
 import FeedMobileCategories from './FeedMobileCategories';
 import FeedMobileGrade from './FeedMobileGrade';
 
-export function FeedAccordian() {
+export function FeedAccordion() {
     return (
         <div>
             <Accordion>
@@ -38,4 +38,4 @@ export function FeedAccordian() {
     );
 }
 
-export default FeedAccordian;
+export default FeedAccordion;

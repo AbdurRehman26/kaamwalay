@@ -4,12 +4,13 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 export function FeedMobileSortBy() {
-    const SortBy = ({ items, refine }: { items: any; refine: any }) => (
+    const SortBy = ({ items, refine, currentRefinement }: { items: any; refine: any; currentRefinement: any }) => (
         <ul>
-            <RadioGroup defaultValue="Most Recent" name="radio-buttons-group">
+            <RadioGroup>
                 {items.map((item: any) => (
                     <>
                         <FormControlLabel
+                            checked={currentRefinement}
                             value={item.value}
                             control={<Radio />}
                             label={item.label}
@@ -28,10 +29,7 @@ export function FeedMobileSortBy() {
     return (
         <CustomSortBy
             defaultRefinement="local_user_cards"
-            items={[
-                { value: 'local_user_cards_Descending', label: 'Most Recent' },
-                { value: 'local_user_cards_Ascending', label: 'Oldest' },
-            ]}
+            items={[{ value: 'local_user_cards_Ascending', label: 'Oldest' }]}
         />
     );
 }

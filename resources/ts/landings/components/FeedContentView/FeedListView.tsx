@@ -10,7 +10,7 @@ import theme from '@shared/styles/theme';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Link } from 'react-router-dom';
+import { Link, BrowserRouter } from 'react-router-dom';
 
 const TableDiv = styled(TableContainer)({
     '.TableRow': {
@@ -146,7 +146,7 @@ const Hits = ({ hits }: { hits: any }) => (
                 {hits.map((hit: any) => (
                     <TableRow key={hit.objectID} className={'TableRow'}>
                         <TableCell className={'TableCard'}>
-                            <Link to={'/'} key={hit.objectID} className={'TableInfo'}>
+                            <Link to={`feed/${hit.certificate_number}/view`} key={hit.objectID} className={'TableInfo'}>
                                 <img className={'TableInfoImage'} src={hit.card_image} alt={hit.card_name} />
                                 <div className={'TableInfoText'}>
                                     <Typography className={'TableInfoHeading'}>{hit.card_name}</Typography>
@@ -181,7 +181,7 @@ const Hits = ({ hits }: { hits: any }) => (
                             </Link>
                         </TableCell>
                         <TableCell className={'DateCell'}>
-                            <Link to={'/'}>
+                            <Link to={`feed/${hit.certificate_number}/view`}>
                                 <Typography>
                                     {new Date(hit.graded_at).getDate() +
                                         '/' +
@@ -198,17 +198,17 @@ const Hits = ({ hits }: { hits: any }) => (
                             </Link>
                         </TableCell>
                         <TableCell className={'CertificateNoCell'}>
-                            <Link to={'/'}>
+                            <Link to={`feed/${hit.certificate_number}/view`}>
                                 <Typography>{hit.certificate_number}</Typography>
                             </Link>
                         </TableCell>
                         <TableCell className={'OwnerNameCell'}>
-                            <Link to={'/'}>
+                            <Link to={`feed/${hit.certificate_number}/view`}>
                                 <Typography>{hit.owner_name}</Typography>
                             </Link>
                         </TableCell>
                         <TableCell className={'TableGrade'}>
-                            <Link to={'/'} className={'Grade'}>
+                            <Link to={`feed/${hit.certificate_number}/view`} className={'Grade'}>
                                 <Typography className={'GradeLabel'}>{hit.grade_nickname}</Typography>
                                 <Typography className={'GradeValue'}>{hit.overall_grade}</Typography>
                             </Link>
@@ -224,15 +224,17 @@ const CustomHits = connectHits(Hits);
 
 export function FeedListView() {
     return (
-        <BoxDiv>
-            <Grid className={'FeedList'}>
-                <div className={'FeedContainer'}>
-                    <div className={'FeedTableHolder'}>
-                        <CustomHits />
+        <BrowserRouter>
+            <BoxDiv>
+                <Grid className={'FeedList'}>
+                    <div className={'FeedContainer'}>
+                        <div className={'FeedTableHolder'}>
+                            <CustomHits />
+                        </div>
                     </div>
-                </div>
-            </Grid>
-        </BoxDiv>
+                </Grid>
+            </BoxDiv>
+        </BrowserRouter>
     );
 }
 

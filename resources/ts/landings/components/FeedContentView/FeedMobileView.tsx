@@ -8,7 +8,7 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Grid from '@mui/material/Grid';
-import FeedAccordian from './FeedAccordian';
+import FeedAccordion from './FeedAccordion';
 
 const FeedPopModalBox = styled(Box)({
     width: '100%',
@@ -56,7 +56,7 @@ export function FeedMobileView() {
                         </IconButton>
                     </Grid>
                     <Grid>
-                        <FeedAccordian />
+                        <FeedAccordion />
                     </Grid>
                 </FeedPopModalBox>
             </Modal>

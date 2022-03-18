@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import theme from '@shared/styles/theme';
-import { Link } from 'react-router-dom';
+import { Link, BrowserRouter } from 'react-router-dom';
 
 const GridDiv = styled(Grid)({
     '.GridView': {
@@ -109,7 +109,7 @@ const BoxDiv = styled(Box)({
 const Hits = ({ hits }: { hits: any }) => (
     <GridDiv container>
         {hits.map((hit: any) => (
-            <Link to={'/'} key={hit.objectID}>
+            <Link to={`feed/${hit.certificate_number}/view`} key={hit.objectID}>
                 <div className={'GridView'}>
                     <div className={'GridTopSection'}>
                         <div className={'GridTextSection'}>
@@ -158,9 +158,11 @@ const CustomHits = connectHits(Hits);
 
 export function FeedGridView() {
     return (
-        <BoxDiv>
-            <CustomHits />
-        </BoxDiv>
+        <BrowserRouter>
+            <BoxDiv>
+                <CustomHits />
+            </BoxDiv>
+        </BrowserRouter>
     );
 }
 

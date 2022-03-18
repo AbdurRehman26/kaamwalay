@@ -24,7 +24,7 @@ export function FeedCurrentFilter() {
                         </React.Fragment>
                     ) : (
                         <Chip
-                            label={item.label}
+                            label={item.label.replace('grade:', '')}
                             variant="outlined"
                             onClick={(event) => {
                                 event.preventDefault();

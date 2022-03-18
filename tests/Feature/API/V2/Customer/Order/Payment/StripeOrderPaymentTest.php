@@ -143,7 +143,7 @@ test('test payment', function () {
         'payment_provider_reference' => [
             'id' => '12345678',
         ],
-    ])->dump();
+    ]);
 
     $response->assertOk();
     $response->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);

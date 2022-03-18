@@ -3,6 +3,7 @@
 use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
 use App\Models\ShippingMethod;
@@ -327,5 +328,53 @@ test('a customer can place order and pay from wallet totally', function () {
             'shipping_fee',
             'grand_total',
         ],
+    ]);
+});
+
+it('can calculate collector coin price for an order', function () {
+    config([
+        'robograding.web3.supported_networks' => '97',
+    ]);
+
+    config([
+        'web3networks' => [
+            97 => [
+                'chain_id' => '0x61',
+                'chain_name' => 'Binance Smart Chain - Testnet',
+                'native_currency' => [
+                    'name' => 'tBnb',
+                    'symbol' => 'tBNB',
+                    'decimals' => 18,
+                ],
+                'rpc_urls' => ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+                'block_explorer_urls' => ['https://testnet.bscscan.com'],
+                'is_testnet' => true,
+                'collector_coin_token' => '0xb1f5a876724dcfd6408b7647e41fd739f74ec039',
+                'collector_coin_wallet' => config('robograding.web3.test_wallet'),
+            ],
+        ],
+    ]);
+
+    $this->actingAs($this->user);
+    $order = Order::factory()->for($this->user)->create();
+    $paymentMethod = PaymentMethod::factory()->create([
+        'code' => 'collector_coin',
+    ]);
+    OrderItem::factory()->for($order)->create();
+    OrderPayment::factory()->for($order)->for($paymentMethod)->create();
+
+    $response = $this->json(
+        'GET',
+        '/api/v2/customer/orders/' . $order->id . '/collector-coin',
+        [
+            'payment_blockchain_network' => 97,
+            'payment_by_wallet' => 2,
+            'discounted_amount' => 0,
+        ]
+    );
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'value',
     ]);
 });

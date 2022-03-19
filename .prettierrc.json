@@ -12,17 +12,13 @@
     "proseWrap": "always",
     "importOrder": ["^@shared/(.*)$", "^@admin/(.*)$", "^@auth/(.*)$", "^@dashboard/(.*)$", "^[./]"],
     "importOrderSeparation": false,
+    "importOrderSortSpecifiers": true,
+    "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
     "overrides": [
         {
-            "files": ["*.js", "*.jsx"],
+            "files": [",*.ts", "*.tsx"],
             "options": {
-                "parser": "babel-flow"
-            }
-        },
-        {
-            "files": ["*.ts", "*.tsx"],
-            "options": {
-                "parser": "babel-ts"
+                "parser": "typescript"
             }
         }
     ]

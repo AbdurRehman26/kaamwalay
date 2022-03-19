@@ -17,7 +17,7 @@
         "apidoc:start": "cd ./resources/apidocs && yarn start",
         "backup": "aws s3 mv s3://apparel-cdn/apps/robograding/latest s3://apparel-cdn/apps/robograding/v$(node -e \"process.stdout.write(require('./package.json').version)\") --recursive",
         "deploy": "aws s3 cp ./public/apps s3://apparel-cdn/apps/robograding/latest/apps --recursive",
-        "format": "prettier -w .",
+        "format": "prettier -w ./resources",
         "test": "jest",
         "lint": "eslint --cache --ext \".ts,.tsx\" ./resources/ts",
         "lint:fix": "yarn -s lint --fix",

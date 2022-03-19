@@ -1,16 +1,16 @@
 import Button from '@mui/material/Button';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
-import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
-import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
+import { SubmissionsTable } from '@dashboard/components/SubmissionsTable';
 
 const useStyles = makeStyles(
     (theme) => ({

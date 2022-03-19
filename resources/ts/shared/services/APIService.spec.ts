@@ -1,6 +1,6 @@
-import { APIService } from './APIService';
-import { app } from '../lib/app';
 import MockAdapter from 'axios-mock-adapter';
+import { app } from '../lib/app';
+import { APIService } from './APIService';
 
 test('APIService create versioned endpoint [default]', async () => {
     const data = [{ id: 1 }];

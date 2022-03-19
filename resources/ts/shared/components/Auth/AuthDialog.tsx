@@ -1,10 +1,10 @@
-import DialogContent from '@mui/material/DialogContent';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
-import { useState, useCallback } from 'react';
+import DialogContent from '@mui/material/DialogContent';
 import { styled } from '@mui/material/styles';
-import { SignUpContent } from './SignUpContent';
-import { SignInContent } from './SignInContent';
+import { useCallback, useState } from 'react';
 import { DialogHeader } from './DialogHeader';
+import { SignInContent } from './SignInContent';
+import { SignUpContent } from './SignUpContent';
 
 interface Props extends DialogProps {
     title?: string;

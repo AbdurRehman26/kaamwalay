@@ -8,21 +8,21 @@ import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { useAuth } from '@shared/hooks/useAuth';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
+import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
 import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
-import { useConfiguration } from '@shared/hooks/useConfiguration';
-import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { useAuth } from '@shared/hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     container: {

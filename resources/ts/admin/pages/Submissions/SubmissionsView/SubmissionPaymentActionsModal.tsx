@@ -1,10 +1,12 @@
-import CircularProgress from '@mui/material/CircularProgress';
-import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -13,9 +15,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { NumberFormatInput } from '@shared/components/NumberFormat';
 import { addExtraChargeToOrder, refundOrderTransaction } from '@shared/redux/slices/adminOrdersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
-import { DialogStateMap, DialogStateEnum } from './SubmissionTransactionDialogEnum';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import { DialogStateEnum, DialogStateMap } from './SubmissionTransactionDialogEnum';
 
 interface SubmissionPaymentActionsModalProps {
     openState: DialogStateEnum | null;

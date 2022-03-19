@@ -20,10 +20,10 @@ import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { SubmissionReviewCardDialog } from '@dashboard/components/SubmissionReviewCardDialog';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
+    SearchResultItemCardProps,
     changeSelectedCardQty,
     changeSelectedCardValue,
     markCardAsUnselected,
-    SearchResultItemCardProps,
     setCustomStep,
 } from '../redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';

@@ -2,11 +2,11 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { castArray } from 'lodash';
 import { ElementType, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AuthenticationEnum } from '../constants/AuthenticationEnum';
 import { RolesEnum } from '../constants/RolesEnum';
 import { useAuth } from '../hooks/useAuth';
 import { NativeRedirect } from './NativeRedirect';
-import { useLocation } from 'react-router-dom';
 
 interface ProtectedRouteProps {
     redirectRoute?: string;

@@ -1,6 +1,5 @@
-import CircularProgress from '@mui/material/CircularProgress';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -9,12 +8,15 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
+import { ApplyCredit } from '@dashboard/components/ApplyCredit';
+import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -27,8 +29,6 @@ import {
 import PaymentMethodItem from './PaymentMethodItem';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
-import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
-import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {

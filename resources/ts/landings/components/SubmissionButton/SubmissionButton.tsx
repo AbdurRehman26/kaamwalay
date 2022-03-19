@@ -1,11 +1,11 @@
 import Button, { ButtonProps } from '@mui/material/Button';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { AuthDialog } from '@shared/components/Auth/AuthDialog';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
 import { dialogVisibility } from '@shared/redux/slices/authenticationSlice';
-import { AuthDialog } from '@shared/components/Auth/AuthDialog';
-import { useAuth } from '@shared/hooks/useAuth';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Theme } from '@mui/material/styles';
 
 interface Props extends ButtonProps {
     buttonContent: string;

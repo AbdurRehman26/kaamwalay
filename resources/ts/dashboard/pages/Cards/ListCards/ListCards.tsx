@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ListHeader } from '@dashboard/components/ListHeader';
-import { useListUserCardsQuery } from '@shared/redux/hooks/useUserCardsQuery';
 import { bracketParams } from '@shared/lib/api/bracketParams';
+import { useListUserCardsQuery } from '@shared/redux/hooks/useUserCardsQuery';
+import { ListHeader } from '@dashboard/components/ListHeader';
 import { ListCardItems } from '@dashboard/pages/Cards/ListCards/ListCardsItems';
 
 export function ListCards() {

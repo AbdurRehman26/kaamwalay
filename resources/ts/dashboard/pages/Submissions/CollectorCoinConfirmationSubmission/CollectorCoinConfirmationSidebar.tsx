@@ -1,19 +1,19 @@
 import CheckIcon from '@mui/icons-material/Check';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 import { font } from '@shared/styles/utils';
 import { useConfirmationSubmissionSidebarStyles } from './style';
-import CircularProgress from '@mui/material/CircularProgress';
 
 interface CollectorCoinConfirmationSidebarProps {
     orderId: number;
 }
 
-export function CollectorCoinConfirmationSidebar({ orderId }: CollectorCoinConfirmationSidebarProps) {
+export function CollectorCoinConfirmationSidebar({}: CollectorCoinConfirmationSidebarProps) {
     const classes = useConfirmationSubmissionSidebarStyles();
 
     return (

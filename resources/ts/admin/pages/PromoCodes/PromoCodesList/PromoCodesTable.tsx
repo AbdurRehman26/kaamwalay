@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,12 +12,11 @@ import Typography from '@mui/material/Typography';
 import { upperFirst } from 'lodash';
 import React, { useEffect, useMemo } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
+import { PromoCodeStatusEnum, PromoCodeStatusMap } from '@shared/constants/PromoCodeStatusEnum';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
-import { PromoCodeStatusEnum, PromoCodeStatusMap } from '@shared/constants/PromoCodeStatusEnum';
 import { useListAdminPromoCodesQuery } from '@shared/redux/hooks/usePromoCodesQuery';
 import { PromoCodesTableRow } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesTableRow';
-import CircularProgress from '@mui/material/CircularProgress';
 
 interface PromoCodesTableProps {
     tabFilter?: PromoCodeStatusEnum;

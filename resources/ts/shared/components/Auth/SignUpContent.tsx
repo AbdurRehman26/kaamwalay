@@ -1,29 +1,29 @@
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import MuiLink from '@mui/material/Link';
-import { Form, Formik } from 'formik';
 import Typography from '@mui/material/Typography';
-import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
-import { useMemo, useCallback } from 'react';
+import { Form, Formik } from 'formik';
+import { useCallback, useMemo } from 'react';
+import ReactGA from 'react-ga';
 import { FormInput } from '@shared/components/Auth/FormInput';
 import { SubmitButton } from '@shared/components/Auth/SubmitButton';
-import { PopupSignUpValidationRules } from '@shared/components/Auth/validation';
 import { ActionContent, FormRoot } from '@shared/components/Auth/styles';
+import { PopupSignUpValidationRules } from '@shared/components/Auth/validation';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
+import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
+import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { app } from '@shared/lib/app';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import {
+    authenticateCheckAction,
     dialogVisibility,
     headerDialogVisibility,
-    authenticateCheckAction,
 } from '@shared/redux/slices/authenticationSlice';
-import { NotificationsService } from '@shared/services/NotificationsService';
-import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
-import { AuthenticationService } from '@shared/services/AuthenticationService';
-import { app } from '@shared/lib/app';
-import ReactGA from 'react-ga';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
+import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { NotificationsService } from '@shared/services/NotificationsService';
 
 interface Props {
     onContentChange: (isLogin: boolean) => void;

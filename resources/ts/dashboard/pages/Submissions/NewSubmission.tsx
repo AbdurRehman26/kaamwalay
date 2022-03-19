@@ -1,9 +1,12 @@
+import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
@@ -23,9 +26,6 @@ import {
     setIsNextDisabled,
     setIsNextLoading,
 } from '../../redux/slices/newSubmissionSlice';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import LoadingButton from '@mui/lab/LoadingButton';
-import Grid from '@mui/material/Grid';
 
 const useStyles = makeStyles((theme) => ({
     pageContentContainer: {

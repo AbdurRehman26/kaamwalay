@@ -1,27 +1,27 @@
-import makeStyles from '@mui/styles/makeStyles';
+import CloseIcon from '@mui/icons-material/Close';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { APIService } from '@shared/services/APIService';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import {
+    SetCouponInvalidMessage,
     setAppliedCouponData,
     setCouponCode,
     setIsCouponApplied,
     setIsCouponValid,
     setValidCouponId,
-    SetCouponInvalidMessage,
 } from '@dashboard/redux/slices/newSubmissionSlice';
-import InputAdornment from '@mui/material/InputAdornment';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles(
     () => {

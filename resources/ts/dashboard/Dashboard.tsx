@@ -1,10 +1,10 @@
 import React from 'react';
-import { Navigate, Routes, Route, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '@shared/components/ProtectedRoute';
-import { Cards } from './pages/Cards/Cards';
-import { Submissions } from './pages/Submissions';
-import { Profile } from './pages/Profile';
 import { Wallet } from '@dashboard/pages/Wallet';
+import { Cards } from './pages/Cards/Cards';
+import { Profile } from './pages/Profile';
+import { Submissions } from './pages/Submissions';
 
 export function Dashboard() {
     const { search } = useLocation();

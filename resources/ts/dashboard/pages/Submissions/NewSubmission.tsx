@@ -1,5 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect } from 'react';
@@ -26,32 +24,48 @@ import {
     setIsNextLoading,
 } from '../../redux/slices/newSubmissionSlice';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Grid from '@mui/material/Grid';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     pageContentContainer: {
         marginTop: '100px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        flex: '1 1 auto',
+        '& .MuiContainer-root': {
+            flex: '1 1 auto',
+        },
     },
     buttonsContainer: {
+        position: 'sticky',
+        bottom: 0,
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
+        padding: 10,
         justifyContent: 'center',
-        marginTop: '40px',
-        marginBottom: '64px',
+        backgroundColor: '#fff',
+        boxShadow: theme.shadows[4],
     },
-    nextBtn: {
-        color: '#fff',
-        width: ({ currentStep }: any) => (currentStep !== 0 ? '140px' : '224px'),
-        height: '48px',
+    buttonsHolder: {
+        maxWidth: 360,
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '100%',
+        },
     },
-    backBtn: {
-        marginRight: '12px',
-        color: '#20BFB8',
+    buttons: {
+        height: 48,
+        borderRadius: 24,
+        margin: theme.spacing(0, 0.75),
+        boxShadow: theme.shadows[3],
+        maxWidth: 182,
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '100%',
+        },
     },
-});
+}));
 
 export function NewSubmission() {
     const dispatch = useAppDispatch();
@@ -68,8 +82,6 @@ export function NewSubmission() {
 
     const getStepContent = useCallback(() => {
         switch (currentStep) {
-            case 0:
-                return <SubmissionStep01Content />;
             case 1:
                 return <SubmissionStep02Content />;
             case 2:
@@ -79,7 +91,7 @@ export function NewSubmission() {
             case 4:
                 return <SubmissionStep05Content />;
             default:
-                return <h2>yo</h2>;
+                return <SubmissionStep01Content />;
         }
     }, [currentStep]);
 
@@ -176,29 +188,38 @@ export function NewSubmission() {
                     {getStepContent()}
 
                     <div className={classes.buttonsContainer}>
-                        {currentStep !== 0 ? (
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                startIcon={<ArrowBackIcon />}
-                                onClick={handleBack}
-                            >
-                                Back
-                            </Button>
-                        ) : null}
-                        {currentStep !== 4 ? (
-                            <Button
-                                variant={'contained'}
-                                disabled={isNextDisabled || isNextLoading}
-                                color={'primary'}
-                                onClick={handleNext}
-                                className={classes.nextBtn}
-                                startIcon={isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null}
-                            >
-                                Next
-                            </Button>
-                        ) : null}
+                        <Grid
+                            container
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            flexWrap={'nowrap'}
+                            className={classes.buttonsHolder}
+                        >
+                            {currentStep !== 0 ? (
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    className={classes.buttons}
+                                    onClick={handleBack}
+                                    fullWidth
+                                >
+                                    Back
+                                </Button>
+                            ) : null}
+                            {currentStep !== 4 ? (
+                                <LoadingButton
+                                    variant={'contained'}
+                                    disabled={isNextDisabled || isNextLoading}
+                                    color={'primary'}
+                                    onClick={handleNext}
+                                    className={classes.buttons}
+                                    loading={isNextLoading}
+                                    fullWidth
+                                >
+                                    Next
+                                </LoadingButton>
+                            ) : null}
+                        </Grid>
                     </div>
                 </div>
             </StripeContainer>

@@ -9,7 +9,7 @@ beforeEach(function () {
     $this->service = new AutoRefreshDropboxTokenService();
 });
 
-it('implements desired interface')->expect(fn() => $this->service)->toBeInstanceOf(TokenProvider::class);
+it('implements desired interface')->expect(fn () => $this->service)->toBeInstanceOf(TokenProvider::class);
 
 it('generates token', function () {
     $cacheKey = 'ags-dropbox-token';

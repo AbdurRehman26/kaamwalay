@@ -5,7 +5,7 @@
                 Grading Revolution</h4>
             <h3 class="Home-sectionContentHeadline text-center" data-aos="fade-up" data-aos-easing="ease-in-out"
                 data-aos-delay="50">Start your submission, today.</h3>
-            <div data-atom="submit-button" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-delay="100" data-text-color="white" data-button-content="Start a submission">
+            <div data-atom="submit-button" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-delay="100" data-button-content="Start a submission">
                 {{-- JS runtime actions --}}
             </div>
         </div>

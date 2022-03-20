@@ -13,7 +13,7 @@ use App\Http\Resources\API\V1\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\V1\Admin\Order\UserCardCollection;
 use App\Models\Order;
 use App\Services\Admin\Order\ShipmentService;
-use App\Services\Admin\OrderService;
+use App\Services\Admin\V1\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

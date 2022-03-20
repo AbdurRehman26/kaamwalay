@@ -29,7 +29,6 @@ class ListCardProducts extends ListRecords
         return [
             BulkAction::make('reindex')
                 ->action(function (Collection $records) {
-                    // @phpstan-ignore-next-line
                     $records->each->searchable();
                     $this->notify('success', 'Records have been re-indexed on Algolia.');
                 })

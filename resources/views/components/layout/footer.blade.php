@@ -19,7 +19,7 @@
         <div class="Footer-column">
             <h5 class="Footer-columnHeadline">Reach Out</h5>
             <a href="tel:+1 929-209-3925"  class="Footer-columnLink">+1 929-209-3925</a>
-            <a href="mailto:hey@ags.com" class="Footer-columnLink">hey@ags.com</a>
+            <a href="mailto:hey@agscard.com" class="Footer-columnLink">hey@agscard.com</a>
         </div>
 
         <div class="Footer-column Footer-socialLinks">
@@ -30,10 +30,6 @@
 
             <a href="https://twitter.com/agsgrading" class="Footer-socialLink">
                 <img src="{{ asset('assets/images/landings/twitterIcon.svg') }}" alt="" class="Footer-socialLinkImage">
-            </a>
-
-            <a href="https://discord.com/invite/A9pjv5SbtP" class="Footer-socialLink">
-                <img src="{{ asset('assets/images/landings/discordIcon.svg') }}" alt="" class="Footer-socialLinkImage">
             </a>
 
             <a href="https://t.me/collectorcoinofficial" class="Footer-socialLink">

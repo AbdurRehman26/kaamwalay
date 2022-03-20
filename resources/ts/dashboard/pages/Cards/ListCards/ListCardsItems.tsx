@@ -49,7 +49,7 @@ const useStyles = makeStyles(
     (theme) => ({
         paginationFooter: {
             background: 'white',
-            position: 'fixed',
+            position: 'sticky',
             width: '50%',
             left: '32%',
             bottom: '0',
@@ -169,8 +169,9 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
-                            You haven't submitted any cards for grading yet.<br></br>Click the button below to get
-                            started.
+                            You haven't submitted any cards for grading yet.
+                            <br />
+                            Click the button below to get started.
                         </Typography>
                     </Grid>
                     <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>

@@ -21,7 +21,7 @@ beforeEach(function () {
 test('admin can credit amount in customer\'s wallet that doesnt have balance', function () {
     $amount = (float) 50;
     postJson(
-        route('customer.wallet.credit', ['wallet' => $this->customer->wallet]),
+        route('v1.customer.wallet.credit', ['wallet' => $this->customer->wallet]),
         ['amount' => $amount]
     )->assertCreated();
 
@@ -40,7 +40,7 @@ test('admin can credit amount in customer\'s wallet that has balance', function 
     $oldBalance = $newCustomer->wallet->balance;
     $amount = (float) 29;
     postJson(
-        route('customer.wallet.credit', ['wallet' => $newCustomer->wallet]),
+        route('v1.customer.wallet.credit', ['wallet' => $newCustomer->wallet]),
         ['amount' => $amount]
     )->assertCreated();
 

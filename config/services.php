@@ -56,7 +56,9 @@ return [
     ],
 
     'dropbox' => [
-        'token' => env('AGS_DROPBOX_TOKEN'),
+        'app_key' => env('AGS_DROPBOX_APP_KEY'),
+        'app_secret' => env('AGS_DROPBOX_APP_SECRET'),
+        'refresh_token' => env('AGS_DROPBOX_APP_REFRESH_TOKEN'),
         'root_path' => env('AGS_DROPBOX_ROOT_PATH'),
     ],
 

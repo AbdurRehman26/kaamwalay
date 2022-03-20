@@ -12,9 +12,13 @@ interface Props extends ButtonProps {
     margin?: boolean;
     className?: string;
     plan?: string;
+
+    // Coming from landings
+    textColor?: any;
+    aosDelay?: any;
 }
 
-export function SubmissionButton({ buttonContent, margin, className, plan, ...rest }: Props) {
+export function SubmissionButton({ buttonContent, margin, className, plan, textColor, aosDelay, ...rest }: Props) {
     const isAuthDialogOpen = useSharedSelector((state) => state.authentication.dialogOpened);
     const { authenticated } = useAuth();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));

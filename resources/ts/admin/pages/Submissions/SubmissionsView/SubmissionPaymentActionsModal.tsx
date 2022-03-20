@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { NumberFormatInput } from '@shared/components/NumberFormat';
+import { NumberFormatTextField } from '@shared/components/NumberFormatTextField';
 import { addExtraChargeToOrder, refundOrderTransaction } from '@shared/redux/slices/adminOrdersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { DialogStateEnum, DialogStateMap } from './SubmissionTransactionDialogEnum';
@@ -88,7 +88,7 @@ export default function SubmissionPaymentActionsModal({
                     <Typography sx={{ marginBottom: '8px' }} variant={'caption'}>
                         {dialogState?.amountLabel!}
                     </Typography>
-                    <TextField
+                    <NumberFormatTextField
                         value={amount}
                         onChange={handleChangeAmount}
                         size="small"
@@ -96,7 +96,6 @@ export default function SubmissionPaymentActionsModal({
                         placeholder={'0.00'}
                         sx={{ fontWeight: 'bold' }}
                         InputProps={{
-                            inputComponent: NumberFormatInput as any,
                             inputProps: { min: 1, max: 1000000 },
                             startAdornment: <InputAdornment position="start">$</InputAdornment>,
                         }}

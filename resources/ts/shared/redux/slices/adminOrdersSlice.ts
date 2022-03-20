@@ -177,30 +177,27 @@ export const setOrderShipment = createAsyncThunk<
     }
 });
 
-export const addExtraChargeToOrder = createAsyncThunk<
-    {
-        extraCharge: OrderExtraChargeEntity;
-        orderId: number;
-    },
-    AddExtraChargeToOrderDTO
->('addExtraChargeToOrder', async (input: AddExtraChargeToOrderDTO, thunkAPI) => {
-    const ordersRepository = app(OrdersRepository);
+export const addExtraChargeToOrder = createAsyncThunk(
+    'addExtraChargeToOrder',
+    async (input: AddExtraChargeToOrderDTO, thunkAPI) => {
+        const ordersRepository = app(OrdersRepository);
 
-    try {
-        const extraCharge = await ordersRepository.addExtraChargeToOrder(input);
-        NotificationsService.success('Charged successfully!');
-        setTimeout(() => {
-            window.location.reload();
-        }, 500);
-        return {
-            extraCharge: instanceToPlain(extraCharge) as OrderExtraChargeEntity,
-            orderId: input.orderId,
-        };
-    } catch (e: any) {
-        NotificationsService.exception(e);
-        return thunkAPI.rejectWithValue(e);
-    }
-});
+        try {
+            const extraCharge = await ordersRepository.addExtraChargeToOrder(input);
+            NotificationsService.success('Charged successfully!');
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+            return {
+                extraCharge: instanceToPlain(extraCharge) as OrderExtraChargeEntity,
+                orderId: input.orderId,
+            };
+        } catch (e: any) {
+            NotificationsService.exception(e);
+            return thunkAPI.rejectWithValue(e);
+        }
+    },
+);
 
 export const refundOrderTransaction = createAsyncThunk<
     {

@@ -3,13 +3,13 @@
          class="Home-pricingBackground" />
     <div class="container Home-sectionContainer Home-sectionContainer--center-center">
         <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn--center-center" data-aos="fade"
-             data-aos-easing="ease-in-out">
+            >
             <h4 class="Home-sectionContentCaption text-center">Service Levels</h4>
             <h3 class="Home-sectionContentHeadline text-center">Unbeatable Prices and Turnaround Times</h3>
         </div>
 
         <div class="Home-pricesHolder">
-            <div class="Home-prices Home-prices--js" data-aos="fade-up" data-aos-easing="ease-in-out">
+            <div class="Home-prices Home-prices--js" data-aos="fade-up">
                 @foreach($services as $service)
                     <div class="slide-holder">
                         <div class="Home-priceColumn">

@@ -15,6 +15,7 @@ import { plainToInstance } from 'class-transformer';
 import React, { useCallback, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
+import { NumberFormatTextField } from '@shared/components/NumberFormatTextField';
 import { CardsSelectionEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { SubmissionReviewCardDialog } from '@dashboard/components/SubmissionReviewCardDialog';
@@ -124,33 +125,6 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '6px',
     },
 }));
-
-interface NumberFormatCustomProps {
-    inputRef: (instance: NumberFormat | null) => void;
-    onChange: (event: { target: { name: string; value: string } }) => void;
-    name: string;
-}
-
-function NumberFormatCustom(props: NumberFormatCustomProps) {
-    const { inputRef, onChange, ...other } = props;
-
-    return (
-        <NumberFormat
-            {...other}
-            getInputRef={inputRef}
-            onValueChange={(values) => {
-                onChange({
-                    target: {
-                        name: props.name,
-                        value: values.value,
-                    },
-                });
-            }}
-            thousandSeparator
-            isNumericString
-        />
-    );
-}
 
 type AddedSubmissionCardsProps = {
     reviewMode?: boolean;
@@ -318,7 +292,6 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                             id="formatted-numberformat-input"
                                             variant="outlined"
                                             InputProps={{
-                                                inputComponent: NumberFormatCustom as any,
                                                 inputProps: { min: 1 },
                                                 startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                             }}
@@ -381,7 +354,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                     </TableCell>
                                     <TableCell align="right">
                                         {!reviewMode ? (
-                                            <TextField
+                                            <NumberFormatTextField
                                                 value={row.value}
                                                 onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
                                                 name="numberformat"
@@ -389,7 +362,6 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                                 id="formatted-numberformat-input"
                                                 variant="outlined"
                                                 InputProps={{
-                                                    inputComponent: NumberFormatCustom as any,
                                                     inputProps: { min: 1 },
                                                     startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                                 }}

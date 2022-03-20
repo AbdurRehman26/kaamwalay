@@ -75,7 +75,7 @@ export function CollectorCoinConfirmationSubmission() {
     return (
         <Grid container>
             <Grid item className={classes.sidebar}>
-                <CollectorCoinConfirmationSidebar orderId={Number(id)} />
+                <CollectorCoinConfirmationSidebar />
             </Grid>
             <Grid item className={classes.content}>
                 <Box paddingTop={3} paddingBottom={2.5}>

@@ -9,11 +9,7 @@ import React from 'react';
 import { font } from '@shared/styles/utils';
 import { useConfirmationSubmissionSidebarStyles } from './style';
 
-interface CollectorCoinConfirmationSidebarProps {
-    orderId: number;
-}
-
-export function CollectorCoinConfirmationSidebar({}: CollectorCoinConfirmationSidebarProps) {
+export function CollectorCoinConfirmationSidebar() {
     const classes = useConfirmationSubmissionSidebarStyles();
 
     return (

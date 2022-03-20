@@ -82,6 +82,7 @@ const SearchBox = ({ currentRefinement, refine }: { currentRefinement: any; refi
                     <SearchOutlinedIcon />
                 </InputAdornment>
             }
+            disableUnderline
         />
     </form>
 );

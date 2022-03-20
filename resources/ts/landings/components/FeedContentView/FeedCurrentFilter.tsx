@@ -12,6 +12,7 @@ export function FeedCurrentFilter() {
                         <React.Fragment>
                             {item.items.map((nested: any) => (
                                 <Chip
+                                    key={nested.label}
                                     label={nested.label}
                                     variant="outlined"
                                     onClick={(event) => {
@@ -24,6 +25,7 @@ export function FeedCurrentFilter() {
                         </React.Fragment>
                     ) : (
                         <Chip
+                            key={item.label}
                             label={item.label.replace('grade:', '')}
                             variant="outlined"
                             onClick={(event) => {

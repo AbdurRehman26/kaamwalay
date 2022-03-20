@@ -17,6 +17,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import theme from '@shared/styles/theme';
 import FeedMobileView from './FeedMobileView';
 import FeedCurrentFilter from './FeedCurrentFilter';
+import Divider from '@mui/material/Divider';
 
 const FeeCategoryBox = styled(Box)(
     {
@@ -66,7 +67,17 @@ const FeeCategoryBox = styled(Box)(
             margin: '15px 15px',
             cursor: 'pointer',
         },
+        '.GridViewButtonActive': {
+            margin: '15px 15px',
+            cursor: 'pointer',
+            background: '#DCDCDC',
+        },
         '.ListViewButton': {
+            margin: '15px 10px',
+            cursor: 'pointer',
+        },
+        '.ListViewButtonActive': {
+            background: '#DCDCDC',
             margin: '15px 10px',
             cursor: 'pointer',
         },
@@ -132,9 +143,16 @@ export function FeedCategories() {
                 </Grid>
                 <Grid className={'FilterBar'}>
                     <Grid>
-                        <DensitySmallOutlinedIcon className={'ListViewButton'} onClick={() => setToggleView(false)} />
-                        <GridViewOutlinedIcon className={'GridViewButton'} onClick={() => setToggleView(true)} />
+                        <DensitySmallOutlinedIcon
+                            className={toggleView ? 'ListViewButton' : 'ListViewButtonActive'}
+                            onClick={() => setToggleView(false)}
+                        />
+                        <GridViewOutlinedIcon
+                            className={toggleView ? 'GridViewButtonActive' : 'GridViewButton'}
+                            onClick={() => setToggleView(true)}
+                        />
                     </Grid>
+                    <Divider sx={{ margin: '10px', height: '50px' }} orientation="vertical" flexItem />
                     <Grid>
                         <FeedSortBy />
                     </Grid>

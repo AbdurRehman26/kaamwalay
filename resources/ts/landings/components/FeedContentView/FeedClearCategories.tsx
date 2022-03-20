@@ -29,15 +29,18 @@ const styles = {
 };
 
 export function FeedClearCategories() {
-    const ClearRefinements = ({ items, refine }: { items: any; refine: any }) => (
-        <Chip
-            onClick={() => refine(items)}
-            sx={styles.ChipSelected}
-            icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
-            label={'All Categories'}
-            variant="outlined"
-        />
-    );
+    const ClearRefinements = ({ items, refine }: { items: any; refine: any }) =>
+        items.length <= 0 ? (
+            <Chip
+                onClick={() => refine(items)}
+                sx={styles.ChipSelected}
+                icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
+                label={'All Categories'}
+                variant="outlined"
+            />
+        ) : (
+            <Chip onClick={() => refine(items)} sx={styles.Chip} label={'All Categories'} variant="outlined" />
+        );
 
     const CustomClearRefinements = connectCurrentRefinements(ClearRefinements);
     return <CustomClearRefinements />;

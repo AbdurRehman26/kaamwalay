@@ -63,7 +63,11 @@ export function FeedGrade() {
                             event.preventDefault();
                             refine(console.log(event.currentTarget));
                         }}
-                        icon={<CancelRoundedIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
+                        onDelete={(event) => {
+                            event.preventDefault();
+                            refine(console.log(event.currentTarget));
+                        }}
+                        deleteIcon={<CancelRoundedIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
                         className={'RefineGradeChip'}
                     />
                 )}

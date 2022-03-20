@@ -16,13 +16,16 @@ const styles = {
 };
 
 export function FeedResultCount() {
-    const Stats = ({ nbHits }: { nbHits: any }) => (
-        <Typography sx={styles.CountStyle}>{`${nbHits.toLocaleString()}  results`}</Typography>
+    const Stats = ({ nbHits, query }: { nbHits: any; query: any }) => (
+        <Typography sx={styles.CountStyle}>
+            {`${nbHits.toLocaleString()}  results`}
+            {query}
+        </Typography>
     );
 
     const CustomStats = connectStats(Stats);
 
-    return <CustomStats />;
+    return <CustomStats query={undefined} />;
 }
 
 export default FeedResultCount;

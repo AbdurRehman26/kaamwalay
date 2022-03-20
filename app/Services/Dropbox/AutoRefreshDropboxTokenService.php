@@ -3,7 +3,6 @@
 namespace App\Services\Dropbox;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Spatie\Dropbox\TokenProvider;
 
@@ -11,7 +10,7 @@ class AutoRefreshDropboxTokenService implements TokenProvider
 {
     public function getToken(): string
     {
-        return Crypt::decryptString(Cache::remember('ags-dropbox-token', now()->addHours(3)->addMinutes(45), function () {
+        return Cache::remember('ags-dropbox-token', now()->addHours(3)->addMinutes(45), function () {
             $response = Http::asForm()->post('https://api.dropboxapi.com/oauth2/token', [
                 'grant_type' => 'refresh_token',
                 'refresh_token' => config('services.dropbox.refresh_token'),
@@ -19,7 +18,7 @@ class AutoRefreshDropboxTokenService implements TokenProvider
                 'client_secret' => config('services.dropbox.app_secret'),
             ])->json();
 
-            return Crypt::encryptString($response['access_token']);
-        }));
+            return $response['access_token'];
+        });
     }
 }

@@ -23,7 +23,6 @@ it('generates token', function () {
 
     expect($this->service->getToken())->toBe('access_token_by_dropbox');
     expect(Cache::has($cacheKey))->toBeTrue();
-    expect(Cache::get($cacheKey))->not()->toBe('access_token_by_dropbox');
     $this->travelTo(now()->addHours(3)->addMinutes(45)->addSeconds(5));
     expect(Cache::has($cacheKey))->toBeFalse();
 });

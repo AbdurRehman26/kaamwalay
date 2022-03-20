@@ -32,4 +32,9 @@ class CustomerAddressPolicy
     {
         return $customerAddress->user->is($user);
     }
+
+    public function create(User $user)
+    {
+        return true;
+    }
 }

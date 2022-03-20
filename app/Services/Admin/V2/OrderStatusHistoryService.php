@@ -13,33 +13,14 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
-use App\Services\Admin\V1\OrderService;
-use App\Services\AGS\AgsService;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
+use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
 
-class OrderStatusHistoryService
+class OrderStatusHistoryService extends V1OrderStatusHistoryService
 {
-    public function __construct(
-        protected AgsService $agsService,
-        protected OrderService $orderService
-    ) {
-    }
-
-    /**
-     * @return Collection <int, OrderStatusHistory>
-     */
-    public function getAllByOrderId(Order|int $orderId): Collection
-    {
-        return QueryBuilder::for(OrderStatusHistory::class)
-            ->where('order_id', getModelId($orderId))
-            ->allowedIncludes(OrderStatusHistory::getAllowedAdminIncludes())
-            ->get();
-    }
-
     /**
      * @throws OrderCanNotBeMarkedAsGraded|Throwable
      */

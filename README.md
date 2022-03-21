@@ -49,7 +49,7 @@ $ yarn start
 # 2. Admin application
 $ yarn admin:start        # or BUILD_PRESET=admin yarn start
 
-# 3. Auth application
+# 3. AuthDialog application
 $ yarn auth:start         # or BUILD_PRESET=auth yarn start
 ```
 **Note:** Since the frontend it's modular you don't have to start all the application at one, you can start only the

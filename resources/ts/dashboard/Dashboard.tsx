@@ -17,7 +17,7 @@ export function Dashboard() {
     return (
         <Routes>
             <Route path={'/'} element={<Navigate to={redirectSubmissionRoute} replace />} />
-            <Route path={'/submissions/*'} element={ProtectedRoute(Submissions)} />
+            <Route path={'/submissions/*'} element={<Submissions />} />
             <Route path={'/cards/*'} element={ProtectedRoute(Cards)} />
             <Route path={'/profile/*'} element={ProtectedRoute(Profile)} />
             <Route path={'/wallet/*'} element={ProtectedRoute(Wallet)} />

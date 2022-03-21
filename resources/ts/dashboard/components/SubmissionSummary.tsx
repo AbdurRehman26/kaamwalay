@@ -272,9 +272,9 @@ function SubmissionSummary() {
                 notifications.exception(err, 'Payment Failed');
             }
             // Charge was failed by back-end so we try to charge him on the front-end
-            // The reason we try this on the front-end is because maybe the charge failed due to 3D Auth, which needs to be handled by front-end
+            // The reason we try this on the front-end is because maybe the charge failed due to 3D AuthDialog, which needs to be handled by front-end
             const intent = err.response.data.paymentIntent;
-            // Attempting to confirm the payment - this will also raise the 3D Auth popup if required
+            // Attempting to confirm the payment - this will also raise the 3D AuthDialog popup if required
             const chargeResult = await stripe.confirmCardPayment(intent.clientSecret, {
                 // eslint-disable-next-line camelcase
                 payment_method: intent.paymentMethod,

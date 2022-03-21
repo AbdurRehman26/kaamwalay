@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import ReactGA from 'react-ga';
+import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
@@ -12,6 +13,7 @@ import { isException } from '@shared/lib/errors/isException';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { EventService } from '@shared/services/EventService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
@@ -29,6 +31,7 @@ interface StateType {
 type AuthenticatePayload = PayloadAction<AuthenticatedUserEntity, string, any, Error>;
 
 export const authenticateAction = createAsyncThunk('auth/authenticate', async (input: LoginRequestDto, thunkAPI) => {
+    const eventService = app(EventService);
     const authenticationService = app(AuthenticationService);
     const authenticationRepository = app(AuthenticationRepository);
 
@@ -39,14 +42,16 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         pushToDataLayer({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
+        eventService.emit(ApplicationEventsEnum.UserSessionObtained, authenticatedUser);
+
         // serialize class objects to plain objects according redux toolkit error
         return instanceToPlain(authenticatedUser);
     } catch (e: any) {
+        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
+
         if (isAxiosError(e) || isException(e)) {
-            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
             NotificationsService.exception(e);
         } else {
-            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
             NotificationsService.error('Unable to login.');
         }
 
@@ -126,18 +131,10 @@ export const authenticationSlice = createSlice({
         authenticated: false,
         accessToken: null,
         user: null,
-        dialogOpened: false,
-        headerDialogOpened: false,
     } as StateType,
     reducers: {
         updateUserProfileData: (state, action: PayloadAction<UserEntity>) => {
             state.user = action.payload;
-        },
-        dialogVisibility: (state, action: PayloadAction<boolean>) => {
-            state.dialogOpened = action.payload;
-        },
-        headerDialogVisibility: (state, action: PayloadAction<boolean>) => {
-            state.headerDialogOpened = action.payload;
         },
     },
     extraReducers: {
@@ -184,4 +181,4 @@ export const authenticationSlice = createSlice({
     },
 });
 
-export const { updateUserProfileData, dialogVisibility, headerDialogVisibility } = authenticationSlice.actions;
+export const { updateUserProfileData } = authenticationSlice.actions;

@@ -6,6 +6,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
@@ -119,8 +122,18 @@ export default function SubmissionPaymentActionsModal({
                 {openState === 'show-issue-refund' ? (
                     <FormControl fullWidth>
                         <FormControlLabel
-                            control={<Checkbox checked={addToWallet} onChange={handleRefundCredit} color="primary" />}
-                            label="Refund to Customer Wallet"
+                            control={
+                                <>
+                                    <Checkbox checked={addToWallet} onChange={handleRefundCredit} color="primary" />
+                                    <Typography>Credit to Customer Wallet</Typography>
+                                    <Tooltip title='"Selecting this will send credit to a customers Robograding Account. It will not refund the amount to the original form of payment."'>
+                                        <IconButton aria-label="info">
+                                            <InfoOutlinedIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </>
+                            }
+                            label=""
                         />
                     </FormControl>
                 ) : null}

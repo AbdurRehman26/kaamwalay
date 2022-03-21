@@ -8,6 +8,9 @@ import { Repository } from '../Repository';
 export class DataExportRepository extends Repository<ExportDataEntity> {
     readonly endpointPath: string = '/admin/export-data';
     readonly model = ExportDataEntity;
+    readonly endpointConfig = {
+        version: 'v2',
+    };
 
     public async export(input?: ExportDataDTO, config?: AxiosRequestConfig): Promise<ExportDataEntity> {
         const { data } = await this.endpoint.post('', input, config);

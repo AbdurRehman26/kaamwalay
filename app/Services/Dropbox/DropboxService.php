@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Dropbox;
 
 use Exception;
 use Log;
@@ -14,7 +14,8 @@ class DropboxService
 
     public function __construct()
     {
-        $this->client = new Client(config('services.dropbox.token'));
+        // @phpstan-ignore-next-line
+        $this->client = new Client(new AutoRefreshDropboxTokenService());
         $this->rootPath = config('services.dropbox.root_path');
     }
 

@@ -18,7 +18,7 @@ class MailchimpService
     {
         $mailchimpClient = new ApiClient();
         $mailchimpClient->setConfig([
-            'apiKey' => config('services.mailchimp.apiKey'),
+            'apiKey' => config('services.mailchimp.api_key'),
             'server' => config('services.mailchimp.server'),
         ]);
 

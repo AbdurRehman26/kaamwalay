@@ -51,8 +51,15 @@ return [
     ],
 
     'mailchimp' => [
-        'apiKey' => env('MAILCHIMP_API_KEY'),
+        'api_key' => env('MAILCHIMP_API_KEY'),
         'server' => env('MAILCHIMP_SERVER')
+    ],
+
+    'hubspot' => [
+        'api_key' => env('HUBSPOT_API_KEY'),
+        'owner_email' => env('HUBSPOT_OWNER_EMAIL'),
+        'pipeline_id' => env('HUBSPOT_PIPELINE_ID'),
+        'pipline_stage_id' => env('HUBSPOT_PIPELINE_STAGE_ID'),
     ],
 
     'dropbox' => [

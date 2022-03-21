@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class OrderPayment extends Model
 {
@@ -87,6 +88,19 @@ class OrderPayment extends Model
             $join->on('orders.id', '=', 'order_payments.order_id')
                 ->whereNotIn('orders.order_status_id', [OrderStatus::PAYMENT_PENDING]);
         });
+    }
+
+    /**
+     * @param  Builder <OrderPayment> $query
+     * @return Builder <OrderPayment>
+     */
+    public function scopeIgnoreOrdersBySpecificAdmins(Builder $query): Builder
+    {
+        return $query->join('users', function ($join) {
+                $join->on('orders.user_id', '=', 'users.id')
+                    ->whereNotIn('users.email',
+                        Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray());
+            });
     }
 
     public function paymentMethod(): BelongsTo

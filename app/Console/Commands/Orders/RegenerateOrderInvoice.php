@@ -4,7 +4,7 @@ namespace App\Console\Commands\Orders;
 
 use App\Models\Invoice;
 use App\Models\Order;
-use App\Services\Payment\InvoiceService;
+use App\Services\Payment\V1\InvoiceService;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 

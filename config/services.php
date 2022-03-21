@@ -51,12 +51,21 @@ return [
     ],
 
     'mailchimp' => [
-        'apiKey' => env('MAILCHIMP_API_KEY'),
+        'api_key' => env('MAILCHIMP_API_KEY'),
         'server' => env('MAILCHIMP_SERVER')
     ],
 
+    'hubspot' => [
+        'api_key' => env('HUBSPOT_API_KEY'),
+        'owner_email' => env('HUBSPOT_OWNER_EMAIL'),
+        'pipeline_id' => env('HUBSPOT_PIPELINE_ID'),
+        'pipline_stage_id' => env('HUBSPOT_PIPELINE_STAGE_ID'),
+    ],
+
     'dropbox' => [
-        'token' => env('AGS_DROPBOX_TOKEN'),
+        'app_key' => env('AGS_DROPBOX_APP_KEY'),
+        'app_secret' => env('AGS_DROPBOX_APP_SECRET'),
+        'refresh_token' => env('AGS_DROPBOX_APP_REFRESH_TOKEN'),
         'root_path' => env('AGS_DROPBOX_ROOT_PATH'),
     ],
 

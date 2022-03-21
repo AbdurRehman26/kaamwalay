@@ -50,11 +50,10 @@
                                         AGS Slab
                                     </p>
                                 </li>
-                            </ul>
-
-                            <a href="/dashboard/submissions/new?plan={{$service->id}}" class="Home-buttonCta Home-buttonCta--light">
-                                Select & start submission
-                            </a>
+                            </ul>                            
+                            <div data-atom="submit-button" data-plan="{{$service->id}}" data-text-color="white" data-button-content="Select & start submission" data-margin="true">
+                                {{-- JS runtime actions --}}
+                            </div>
                         </div>
                     </div>
                 @endforeach

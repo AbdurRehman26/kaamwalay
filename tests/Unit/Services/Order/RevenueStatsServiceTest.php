@@ -4,7 +4,7 @@ use App\Events\API\Order\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Order\RevenueStatsService;
-use App\Services\Payment\PaymentService;
+use App\Services\Payment\V1\PaymentService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -62,8 +62,8 @@ it('adds daily revenue stats', function () {
     );
 
     $revenueStats = $this->revenueStatsService->addDailyStats($getRandomOrder->created_at->toDateString());
-    expect($revenue)->toBe($revenueStats['revenue']);
-    expect($profit)->toBe($revenueStats['profit']);
+    expect(round($revenue, 2))->toBe(round($revenueStats['revenue'], 2));
+    expect(round($profit, 2))->toBe(round($revenueStats['profit'], 2));
 })->group('revenue-stats');
 
 it('adds monthly revenue stats for the current month', function () {
@@ -87,5 +87,5 @@ it('adds monthly revenue stats for the current month', function () {
     $revenueStats = $this->revenueStatsService->addMonthlyStats(now()->addMonth(-1)->startOfMonth()->toDateString());
 
     expect($revenue)->toBe($revenueStats->revenue);
-    expect($profit)->toBe($revenueStats->profit);
+    expect(round($profit, 2))->toBe(round($revenueStats->profit, 2));
 })->group('revenue-stats');

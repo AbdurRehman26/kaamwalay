@@ -40,10 +40,10 @@ class PopReportService
 
     public function initializePopReportsForCardSeries(): void
     {
-        $cardSeriesIds = CardSeries::pluck('id');
+        $cardSeries = CardSeries::all();
 
-        foreach ($cardSeriesIds as $cardSeriesId) {
-            PopReportsSeries::firstOrCreate([ 'card_series_id' => $cardSeriesId ]);
+        foreach ($cardSeries as $cardSeriesItem) {
+            $this->initializeSeriesPopReport($cardSeriesItem);
         }
     }
 
@@ -52,9 +52,7 @@ class PopReportService
         $cardSets = CardSet::all();
 
         foreach ($cardSets as $cardSet) {
-            PopReportsSet::firstOrCreate([
-                'card_set_id' => $cardSet->id, 'card_series_id' => $cardSet->card_series_id,
-            ]);
+            $this->initializeSetPopReport($cardSet);
         }
     }
 
@@ -65,10 +63,31 @@ class PopReportService
         })->select('card_products.*')->get();
 
         foreach ($cardProducts as $cardProduct) {
-            PopReportsCard::firstOrCreate([
-                'card_product_id' => $cardProduct->id, 'card_set_id' => $cardProduct->card_set_id,
-            ]);
+            $this->initializeCardPopReport($cardProduct);
         }
+    }
+
+    public function initializeCardPopReport(CardProduct $cardProduct): PopReportsCard
+    {
+        return PopReportsCard::firstOrCreate([
+            'card_product_id' => $cardProduct->id,
+            'card_set_id' => $cardProduct->card_set_id,
+        ]);
+    }
+
+    public function initializeSeriesPopReport(CardSeries $cardSeries): PopReportsSeries
+    {
+        return PopReportsSeries::firstOrCreate([
+            'card_series_id' => $cardSeries->id,
+        ]);
+    }
+
+    public function initializeSetPopReport(CardSet $cardSet): PopReportsSet
+    {
+        return PopReportsSet::firstOrCreate([
+            'card_set_id' => $cardSet->id,
+            'card_series_id' => $cardSet->card_series_id,
+        ]);
     }
 
     public function updateAllSeriesReport(): void
@@ -352,8 +371,8 @@ class PopReportService
     }
 
     /**
-     * @param  Builder <CardProduct> $query
-     * @return Builder <CardProduct>
+     * @param  Builder <CardSet>|Builder <CardSeries>|Builder <CardProduct>|Builder <UserCard> $query
+     * @return Builder <CardSet>|Builder <CardSeries>|Builder <CardProduct>|Builder <UserCard>
      */
     protected function isCardInformationComplete(Builder $query): Builder
     {

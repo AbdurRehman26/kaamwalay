@@ -4,8 +4,8 @@ namespace App\Jobs\Admin\Order;
 
 use App\Exceptions\API\Admin\Order\OrderFoldersOnDropboxNotCreated;
 use App\Models\Order;
-use App\Services\Admin\OrderService;
-use App\Services\DropboxService;
+use App\Services\Admin\V1\OrderService;
+use App\Services\Dropbox\DropboxService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

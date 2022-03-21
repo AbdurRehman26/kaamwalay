@@ -67,7 +67,7 @@ it('calculates coupon discount', function () {
     actingAs($this->user);
 
     postJson(
-        route('coupon.discount'),
+        route('v1.coupon.discount'),
         [
             'coupon' => [
                 'id' => $this->coupon->id,
@@ -109,7 +109,7 @@ it('calculates coupon discount of limited usage coupon', function () {
     actingAs($this->user);
 
     postJson(
-        route('coupon.discount'),
+        route('v1.coupon.discount'),
         [
             'coupon' => [
                 'id' => $this->limitedUsageCoupon->id,
@@ -151,7 +151,7 @@ it('can not calculate coupon discount if usage limit is reached', function () {
     CouponLog::factory()->for($this->order)->for($this->user)->for($this->limitedUsageCoupon)->create();
 
     postJson(
-        route('coupon.discount'),
+        route('v1.coupon.discount'),
         [
             'coupon' => [
                 'id' => $this->limitedUsageCoupon->id,

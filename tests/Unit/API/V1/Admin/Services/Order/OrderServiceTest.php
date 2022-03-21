@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
 use App\Models\User;
-use App\Services\Admin\OrderService;
+use App\Services\Admin\V1\OrderService;
 use Illuminate\Foundation\Testing\WithFaker;
 
 uses(WithFaker::class);

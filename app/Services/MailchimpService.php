@@ -148,7 +148,7 @@ class MailchimpService
         }
     }
 
-    public function cleanDuplicateUsersBetweenLists(string $usersListToKeep, string $usersListToClean): void
+    public function deleteDuplicateUsersBetweenLists(string $usersListToKeep, string $usersListToClean): void
     {
         $keepTemplateName = $this->buildListName($usersListToKeep);
         $cleanTemplateName = $this->buildListName($usersListToClean);
@@ -157,7 +157,7 @@ class MailchimpService
         $cleanListId = $this->getListId($cleanTemplateName);
 
         if ($keepListId && $cleanListId) {
-            $this->cleanDuplicateUsersBetweenListIds($keepListId, $cleanListId);
+            $this->deleteDuplicateUsersBetweenListIds($keepListId, $cleanListId);
         }
     }
 
@@ -167,18 +167,6 @@ class MailchimpService
 
         try {
             $hash = md5(strtolower($user->email));
-            // @phpstan-ignore-next-line
-            $mailchimpClient->lists->deleteListMember($listId, $hash);
-        } catch (RequestException $ex) {
-            Log::error($ex->getResponse()->getBody());
-        }
-    }
-
-    protected function removeDataFromListByHash(string $hash, string $listId): void
-    {
-        $mailchimpClient = $this->getClient();
-
-        try {
             // @phpstan-ignore-next-line
             $mailchimpClient->lists->deleteListMember($listId, $hash);
         } catch (RequestException $ex) {
@@ -206,15 +194,15 @@ class MailchimpService
         ];
     }
 
-    protected function cleanDuplicateUsersBetweenListIds(string $keepListId, string $cleanListId): void
+    protected function deleteDuplicateUsersBetweenListIds(string $keepListId, string $cleanListId): void
     {
         $keepListMembersInfo = $this->getFullListMembers($keepListId);
 
         $removeData = array_map(function ($element) use ($cleanListId) {
             return [
-                "method" => "DELETE",
-                "path" => "/lists/$cleanListId/members/$element->id",
-                "operation_id" => $element->id,
+                'method' => 'DELETE',
+                'path' => "/lists/$cleanListId/members/$element->id",
+                'operation_id' => $element->id,
             ];
         }, $keepListMembersInfo);
 

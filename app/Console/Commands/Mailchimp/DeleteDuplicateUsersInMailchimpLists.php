@@ -5,21 +5,21 @@ namespace App\Console\Commands\Mailchimp;
 use App\Services\MailchimpService;
 use Illuminate\Console\Command;
 
-class CleanDuplicateUsersInMailchimpLists extends Command
+class DeleteDuplicateUsersInMailchimpLists extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'mailchimp:clean-duplicate-users';
+    protected $signature = 'mailchimp:delete-duplicate-users';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Clean Duplicate Users in Mailchimp Lists';
+    protected $description = 'Delete duplicate users in Mailchimp lists';
 
     /**
      * Execute the console command.
@@ -29,7 +29,7 @@ class CleanDuplicateUsersInMailchimpLists extends Command
      */
     public function handle(MailchimpService $mailchimpService): int
     {
-        $mailchimpService->cleanDuplicateUsersBetweenLists(MailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS, MailchimpService::LIST_NAME_SIGN_UP_USERS);
+        $mailchimpService->deleteDuplicateUsersBetweenLists(MailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS, MailchimpService::LIST_NAME_SIGN_UP_USERS);
 
         return 0;
     }

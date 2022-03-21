@@ -97,10 +97,12 @@ class OrderPayment extends Model
     public function scopeIgnoreOrdersBySpecificAdmins(Builder $query): Builder
     {
         return $query->join('users', function ($join) {
-                $join->on('orders.user_id', '=', 'users.id')
-                    ->whereNotIn('users.email',
-                        Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray());
-            });
+            $join->on('orders.user_id', '=', 'users.id')
+                    ->whereNotIn(
+                        'users.email',
+                        Str::of(config('robograding.revenue_ignore_orders_admins'))->explode(',')->toArray()
+                    );
+        });
     }
 
     public function paymentMethod(): BelongsTo

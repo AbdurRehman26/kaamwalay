@@ -4,7 +4,8 @@ import { StateType } from './types';
 
 type SlicesType = typeof slices;
 export type GlobalStateType = StateType<SlicesType>;
-export type GlobalStoreType = EnhancedStore<StateType<SlicesType>, any>;
+export type GlobalStoreType = EnhancedStore<GlobalStateType, any, any>;
+
 let globalReduxStore: GlobalStoreType;
 
 export function setGlobalStore(store: EnhancedStore) {
@@ -17,8 +18,6 @@ export function getGlobalStore() {
     return globalReduxStore;
 }
 
-export function GlobalDispatch(
-    ...args: Parameters<GlobalStoreType['dispatch']>
-): ReturnType<GlobalStoreType['dispatch']> {
-    return globalReduxStore.dispatch(...args);
-}
+export const GlobalDispatch: GlobalStoreType['dispatch'] = (action) => {
+    return globalReduxStore.dispatch(action);
+};

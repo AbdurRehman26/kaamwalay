@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
@@ -367,11 +367,11 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/${input.txHash}`);
         const response = await endpoint.post('');
-        const fulfilledReturn = {
+
+        return {
             message: response.data.message,
             transactionHash: input.txHash,
         };
-        return fulfilledReturn;
     },
 );
 
@@ -670,9 +670,6 @@ export const newSubmissionSlice = createSlice({
         },
         [getTotalInAGS.fulfilled as any]: (state, action) => {
             state.totalInAgs = action.payload;
-        },
-        [verifyOrderStatus.fulfilled as any]: (state, action) => {
-            // handle success
         },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;

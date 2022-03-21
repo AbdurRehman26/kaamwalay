@@ -1,4 +1,4 @@
-import { isCustomShipmentProvider, ShipmentProviders } from './ShipmentProviders';
+import { ShipmentProviders, isCustomShipmentProvider } from './ShipmentProviders';
 
 describe('constants/SharedProviders', function () {
     it('should correctly check the custom provider', function () {

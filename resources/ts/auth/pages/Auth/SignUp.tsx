@@ -6,13 +6,13 @@ import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
-import { useAuth } from '@shared/hooks/useAuth';
-import { font } from '@shared/styles/utils';
 import { FormInput } from '@shared/components/Auth/FormInput';
 import SubmitButton from '@shared/components/Auth/SubmitButton';
 import { useStyles } from '@shared/components/Auth/styles';
 import { SignUpValidationRules } from '@shared/components/Auth/validation';
+import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
+import { useAuth } from '@shared/hooks/useAuth';
+import { font } from '@shared/styles/utils';
 
 /**
  *

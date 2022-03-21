@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { CollectorCoinConfirmationSubmission } from './CollectorCoinConfirmationSubmission';
 import { ConfirmationSubmission } from './ConfirmationSubmission';
 import { ListSubmissions } from './ListSubmissions';
 import { NewSubmission } from './NewSubmission';
 import { ViewSubmission } from './ViewSubmission';
-import { CollectorCoinConfirmationSubmission } from './CollectorCoinConfirmationSubmission';
 
 export function Submissions() {
     return (

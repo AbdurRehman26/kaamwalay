@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
-import { Submissions } from './pages/Submissions';
-import { PromoCodes } from './pages/PromoCodes';
 import { Customers } from './pages/Customers';
+import { PromoCodes } from './pages/PromoCodes';
+import { Submissions } from './pages/Submissions';
 
 export function Admin() {
     return (

@@ -3,10 +3,10 @@ import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import FeedIcon from '@mui/icons-material/FeedOutlined';
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
+import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/PersonOutline';
-import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 import StyleIcon from '@mui/icons-material/StyleOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -20,12 +20,12 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { useAuth } from '@shared/hooks/useAuth';
 import { useCallback, useState } from 'react';
 import logo from '@shared/assets/logo.svg';
-import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { cx } from '@shared/lib/utils/cx';
+import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
 
 const useStyles = makeStyles(
     (theme) => ({

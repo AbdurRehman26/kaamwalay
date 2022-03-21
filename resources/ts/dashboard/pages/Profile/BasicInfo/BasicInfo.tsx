@@ -1,21 +1,21 @@
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import React, { useCallback, useEffect, useState } from 'react';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
-import Divider from '@mui/material/Divider';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { BasicInfoRow } from './BasicInfoRow';
-import Box from '@mui/material/Box';
-import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
-import { useAuth } from '@shared/hooks/useAuth';
-import { ChangeUserPictureDialog } from './ChangeUserPictureDialog';
-import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import Paper from '@mui/material/Paper';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@shared/hooks/useAuth';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
+import { BasicInfoRow } from './BasicInfoRow';
+import { ChangeUserPictureDialog } from './ChangeUserPictureDialog';
+import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {

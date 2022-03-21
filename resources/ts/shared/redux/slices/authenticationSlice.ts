@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import ReactGA from 'react-ga';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
@@ -9,13 +9,13 @@ import { UserEntity } from '@shared/entities/UserEntity';
 import { isAxiosError } from '@shared/lib/api/isAxiosError';
 import { app } from '@shared/lib/app';
 import { isException } from '@shared/lib/errors/isException';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { NotificationsService } from '@shared/services/NotificationsService';
+import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
 import { trackFacebookPixelEvent } from '../../lib/utils/trackFacebookPixelEvent';
-import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
 interface StateType {
     checking: boolean;

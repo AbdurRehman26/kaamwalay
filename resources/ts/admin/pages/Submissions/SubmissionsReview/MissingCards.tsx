@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
-import { changeOrderItemsStatus, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
+import { changeOrderItemStatus, changeOrderItemsStatus } from '@shared/redux/slices/adminOrdersSlice';
 import { useAppDispatch } from '../../../redux/hooks';
 import CardItem from './CardItem';
 import CardsList from './CardsList';

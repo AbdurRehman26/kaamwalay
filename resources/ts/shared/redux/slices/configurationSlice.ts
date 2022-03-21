@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
+import { PayloadAction, SerializedError, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import { ConfigurationEntity } from '../../entities/ConfigurationEntity';
 import { app } from '../../lib/app';

@@ -10,16 +10,16 @@ import Typography from '@mui/material/Typography';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { APIService } from '@shared/services/APIService';
 import CustomerStripeCardItem from '@dashboard/components/PaymentForm/CustomerStripeCardItem';
 import useStyles from '@dashboard/components/PaymentForm/style';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { saveStripeCustomerCards } from '@dashboard/redux/slices/newSubmissionSlice';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 
 const CARD_OPTIONS = {
     iconStyle: 'solid',

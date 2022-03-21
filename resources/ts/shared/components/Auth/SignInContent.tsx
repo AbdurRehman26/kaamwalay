@@ -2,29 +2,29 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import MuiLink from '@mui/material/Link';
-import { Form, Formik } from 'formik';
 import Typography from '@mui/material/Typography';
-import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
+import { Form, Formik } from 'formik';
 import { useCallback, useMemo } from 'react';
-import { SignInValidationRules } from '@shared/components/Auth/validation';
+import ReactGA from 'react-ga';
 import { FormInput } from '@shared/components/Auth/FormInput';
 import { SubmitButton } from '@shared/components/Auth/SubmitButton';
 import { ActionContent, FormRoot } from '@shared/components/Auth/styles';
-import { NotificationsService } from '@shared/services/NotificationsService';
+import { SignInValidationRules } from '@shared/components/Auth/validation';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
-import { AuthenticationService } from '@shared/services/AuthenticationService';
-import { app } from '@shared/lib/app';
-import ReactGA from 'react-ga';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
-import { isAxiosError } from '@shared/lib/api/isAxiosError';
-import { isException } from '@shared/lib/errors/isException';
+import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
+import { isAxiosError } from '@shared/lib/api/isAxiosError';
+import { app } from '@shared/lib/app';
+import { isException } from '@shared/lib/errors/isException';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import {
+    authenticateCheckAction,
     dialogVisibility,
     headerDialogVisibility,
-    authenticateCheckAction,
 } from '@shared/redux/slices/authenticationSlice';
+import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
+import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { NotificationsService } from '@shared/services/NotificationsService';
 
 interface Props {
     onContentChange: (isLogin: boolean) => void;

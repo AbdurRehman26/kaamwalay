@@ -1,9 +1,9 @@
 import { Injectable } from '@shared/decorators/Injectable';
-import { Repository } from '@shared/repositories/Repository';
-import { UserEntity } from '@shared/entities/UserEntity';
-import { UpdateUserProfileDTO } from '@shared/dto/UpdateUserProfileDTO';
 import { ChangeUserPasswordDTO } from '@shared/dto/ChangeUserPasswordDTO';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
+import { UpdateUserProfileDTO } from '@shared/dto/UpdateUserProfileDTO';
+import { UserEntity } from '@shared/entities/UserEntity';
+import { Repository } from '@shared/repositories/Repository';
 
 @Injectable('UserRepository')
 export class UserRepository extends Repository<UserEntity> {

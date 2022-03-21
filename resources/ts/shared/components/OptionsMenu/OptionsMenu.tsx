@@ -1,8 +1,8 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import { Children, isValidElement, MouseEvent, PropsWithChildren, ReactNode, useCallback, useState } from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Children, MouseEvent, PropsWithChildren, ReactNode, isValidElement, useCallback, useState } from 'react';
 import { OptionsMenuItemProps } from './OptionsMenuItem';
 
 export interface OptionsMenuProps {

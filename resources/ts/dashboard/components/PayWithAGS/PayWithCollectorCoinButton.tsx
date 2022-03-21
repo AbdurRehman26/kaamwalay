@@ -1,14 +1,14 @@
 import Button from '@mui/material/Button';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
 import contractAbi from '@shared/assets/bscContract.json';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { getCurrentContract, getEthereum } from '@dashboard/components/PayWithAGS/utils';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { clearSubmissionState, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
-import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
-import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 // @ts-ignore
 const web3: any = new Web3(window?.web3?.currentProvider);

@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
+import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
 import { CouponApplicableEntity } from '@shared/entities/CouponApplicableEntity';
+
 export interface NewPromoCodeDialogState {
     showNewPromoCodeDialog: boolean;
     modalTitle: string;

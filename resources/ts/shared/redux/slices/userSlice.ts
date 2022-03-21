@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { app } from '@shared/lib/app';
-import { UserRepository } from '@shared/repositories/UserRepository';
-import { UpdateUserProfileDTO } from '@shared/dto/UpdateUserProfileDTO';
-import { updateUserProfileData } from '@shared/redux/slices/authenticationSlice';
-import { NotificationsService } from '@shared/services/NotificationsService';
 import { ChangeUserPasswordDTO } from '@shared/dto/ChangeUserPasswordDTO';
-import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
+import { UpdateUserProfileDTO } from '@shared/dto/UpdateUserProfileDTO';
+import { app } from '@shared/lib/app';
+import { updateUserProfileData } from '@shared/redux/slices/authenticationSlice';
+import { UserRepository } from '@shared/repositories/UserRepository';
+import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { NotificationsService } from '@shared/services/NotificationsService';
 
 export const updateUserProfile = createAsyncThunk(
     'user/updateProfile',

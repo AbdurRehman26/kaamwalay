@@ -7,6 +7,7 @@ import bluePay from '../../assets/icons/payments/bluepay.svg';
 import cirrus from '../../assets/icons/payments/cirrus.svg';
 import citi from '../../assets/icons/payments/citi.svg';
 import clickbank from '../../assets/icons/payments/clickbank.svg';
+import collectorCoin from '../../assets/icons/payments/collector-coin.svg';
 import dinnersClub from '../../assets/icons/payments/dinners-club.svg';
 import directDebit from '../../assets/icons/payments/direct-debit.svg';
 import discover from '../../assets/icons/payments/discover.svg';
@@ -31,7 +32,6 @@ import wepay from '../../assets/icons/payments/wepay.svg';
 import westernUnion from '../../assets/icons/payments/western-union.svg';
 import wirecard from '../../assets/icons/payments/wirecard.svg';
 import worldpay from '../../assets/icons/payments/worldpay.svg';
-import collectorCoin from '../../assets/icons/payments/collector-coin.svg';
 
 export const ICONS: Record<string, { title: string; icon: string }> = {};
 

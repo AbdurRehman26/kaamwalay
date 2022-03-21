@@ -4,14 +4,14 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect } from 'react';
+import Web3 from 'web3';
+import { AGSPaymentDetailsContainers } from '@dashboard/components/PayWithAGS/PaymentDetailsContainers';
 import OrderReviewSection from '@dashboard/components/SubmissionOrderReview/OrderReviewSection';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { getTotalInAGS } from '@dashboard/redux/slices/newSubmissionSlice';
 import AddedSubmissionCards from './AddedSubmissionCards';
 import StepDescription from './StepDescription';
 import SubmissionSummary from './SubmissionSummary';
-import { AGSPaymentDetailsContainers } from '@dashboard/components/PayWithAGS/PaymentDetailsContainers';
-import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { getTotalInAGS } from '@dashboard/redux/slices/newSubmissionSlice';
-import Web3 from 'web3';
 
 const useStyles = makeStyles({
     stepDescriptionContainer: {

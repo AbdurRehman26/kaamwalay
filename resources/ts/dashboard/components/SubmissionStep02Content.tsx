@@ -1,10 +1,10 @@
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Alert from '@mui/material/Alert';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';

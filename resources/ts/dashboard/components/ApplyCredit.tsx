@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setAppliedCredit } from '@dashboard/redux/slices/newSubmissionSlice';
-import InputAdornment from '@mui/material/InputAdornment';
 
 enum InvalidStateTypes {
     exceedsAvailableCredit,

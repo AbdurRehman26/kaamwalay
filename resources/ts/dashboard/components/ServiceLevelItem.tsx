@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
@@ -6,8 +7,7 @@ import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { EventCategories, ServiceLevelEvents } from '@shared/constants/GAEventsTypes';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setServiceLevel, SubmissionService } from '../redux/slices/newSubmissionSlice';
-import Box from '@mui/material/Box';
+import { SubmissionService, setServiceLevel } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
     (theme) => ({

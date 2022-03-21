@@ -1,9 +1,9 @@
+import { ChangeOrderItemNotesDTO } from '@shared/dto/ChangeOrderItemNotesDTO';
 import { Injectable } from '../../decorators/Injectable';
 import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBatchDto';
 import { ChangeOrderItemStatusDto } from '../../dto/ChangeOrderItemStatusDto';
 import { OrderItemEntity } from '../../entities/OrderItemEntity';
 import { Repository } from '../Repository';
-import { ChangeOrderItemNotesDTO } from '@shared/dto/ChangeOrderItemNotesDTO';
 
 @Injectable('OrderItemsRepository')
 export class OrderItemsRepository extends Repository<OrderItemEntity> {

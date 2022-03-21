@@ -1,18 +1,18 @@
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
 import PersonIcon from '@mui/icons-material/PersonOutline';
-import ButtonBase from '@mui/material/ButtonBase';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import ButtonBase from '@mui/material/ButtonBase';
 import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
+import { useCallback, useState } from 'react';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
-import { useAuth } from '@shared/hooks/useAuth';
-import { cx } from '@shared/lib/utils/cx';
 import { AuthDialog } from '@shared/components/Auth/AuthDialog';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
+import { cx } from '@shared/lib/utils/cx';
 import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
-import { useCallback, useState } from 'react';
 
 const useStyles = makeStyles(
     (theme) => ({

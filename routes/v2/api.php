@@ -66,11 +66,9 @@ Route::prefix('customer')->group(function () {
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
-
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
-
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::apiResource('', OrderController::class)
@@ -80,9 +78,6 @@ Route::prefix('customer')->group(function () {
                     'store' => 'customer.orders.store',
                 ]);
         });
-
-
-
         Route::prefix('coupons')->group(function () {
             Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');
             Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('coupon.discount');

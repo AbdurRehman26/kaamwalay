@@ -593,8 +593,6 @@ export function SubmissionStep03Content() {
                     <SubmissionSummary />
                 </Grid>
             </Grid>
-
-            <Divider light className={classes.divider} />
         </Container>
     );
 }

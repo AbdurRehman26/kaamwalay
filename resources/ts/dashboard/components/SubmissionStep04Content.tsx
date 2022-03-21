@@ -682,8 +682,6 @@ export function SubmissionStep04Content() {
                     <SubmissionSummary />
                 </Grid>
             </Grid>
-
-            <Divider light className={classes.divider} />
         </Container>
     );
 }

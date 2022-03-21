@@ -65,7 +65,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | AuthDialog
+    | Auth
     |--------------------------------------------------------------------------
     |
     | This is the configuration that Filament will use to handle authentication

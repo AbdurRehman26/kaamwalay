@@ -15,6 +15,7 @@ class RevenueStatsService
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forDate($currentDate)
+            ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([
                 'order_payments.order_id',
@@ -24,7 +25,7 @@ class RevenueStatsService
             ->get();
 
         $revenue = RevenueStatsDaily::firstOrCreate(['event_at' => $currentDate]);
-        
+
         Log::info("Calculation For Daily Stats Started");
         $this->addStats($currentDate, $orderPayments, $revenue);
         Log::info("Calculation For Daily Stats Completed");
@@ -36,6 +37,7 @@ class RevenueStatsService
     {
         $orderPayments = OrderPayment::forValidPaidOrders()
             ->forMonth($currentDate)
+            ->ignoreOrdersBySpecificAdmins()
             ->groupBy('order_payments.order_id')
             ->select([
                 'order_payments.order_id',
@@ -45,7 +47,7 @@ class RevenueStatsService
             ->get();
 
         $revenue = RevenueStatsMonthly::firstOrCreate(['event_at' => $currentDate]);
-        
+
         Log::info("Calculation For Monthly Stats Started");
         $this->addStats($currentDate, $orderPayments, $revenue);
         Log::info("Calculation For Monthly Stats Completed");
@@ -74,7 +76,7 @@ class RevenueStatsService
             Log::info("Revenue stats in database ->  Profit: " . $revenue['profit'] . ",  Revenue: " . $revenue['revenue']);
             Log::info("Revenue stats in calculated from Orders ->  Profit: " . $revenueData['profit'] . ",  Revenue: " . $revenueData['revenue']);
             Log::info("Updating Revenue Stats");
-           
+
             $revenue->profit = $revenueData['profit'];
             $revenue->revenue = $revenueData['revenue'];
         }

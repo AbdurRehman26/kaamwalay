@@ -48,10 +48,8 @@ class OrderController extends Controller
         );
     }
 
-    public function store(Request $request): OrderCreateResource | JsonResponse
+    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
     {
-        $request = resolve(StoreOrderRequest::class);
-
         try {
             $order = $this->createOrderService->create($request->validated());
         } catch (Exception $e) {
@@ -139,70 +137,5 @@ class OrderController extends Controller
         $this->orderService->cancelOrder($order, auth()->user());
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
-    }
-
-    public function updateOrderStep(UpdateOrderStepRequest $request, Order $order): JsonResponse
-    {
-        try {
-            $order->order_step = $request->order_step;
-            $order->save();
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        return response()->json(['message' => 'success'], Response::HTTP_OK);
-    }
-
-    public function storeAddresses(UpdateOrderAddressesRequest $request, Order $order): OrderCreateResource | JsonResponse
-    {
-        try {
-            $order = $this->updateAddressOrderService->save($order, $request->validated());
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        return new OrderCreateResource($order);
-    }
-
-    public function storeCreditAndDiscount(CreditAndDiscountRequest $request, Order $order): OrderCreateResource | JsonResponse
-    {
-        try {
-            $order = $this->creditAndDiscountOrderService->save($order, $request->validated());
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        return new OrderCreateResource($order);
-    }
-
-    public function completeSubmission(Order $order): OrderCreateResource | JsonResponse
-    {
-        try {
-            $order = $this->completeOrderSubmissionService->complete($order);
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        return new OrderCreateResource($order);
     }
 }

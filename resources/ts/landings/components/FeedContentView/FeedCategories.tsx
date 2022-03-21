@@ -71,6 +71,10 @@ const FeeCategoryBox = styled(Box)(
             margin: '15px 15px',
             cursor: 'pointer',
             background: '#DCDCDC',
+            fontSize: '40px',
+            padding: '8px',
+            borderRadius: '17px',
+            color: 'rgba(0, 0, 0, 0.38)',
         },
         '.ListViewButton': {
             margin: '15px 10px',
@@ -80,6 +84,10 @@ const FeeCategoryBox = styled(Box)(
             background: '#DCDCDC',
             margin: '15px 10px',
             cursor: 'pointer',
+            fontSize: '40px',
+            padding: '8px',
+            borderRadius: '17px',
+            color: 'rgba(0, 0, 0, 0.38)',
         },
     },
     { name: 'FeeCategoryBox' },
@@ -110,6 +118,7 @@ export function FeedCategories() {
                 {items.map((item: any) => (
                     <li className={'GradeListItem'} key={item.label}>
                         <a
+                            key={item.objectID}
                             href={createURL(item.value)}
                             onClick={(event) => {
                                 event.preventDefault();

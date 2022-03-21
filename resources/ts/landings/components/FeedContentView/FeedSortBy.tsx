@@ -18,6 +18,11 @@ const FeedSortDropdown = styled(Box)(
             marginLeft: '10px',
             color: 'rgba(0, 0, 0, 0.54)',
         },
+        '.MenuItem': {
+            '&:hover': {
+                background: 'blue',
+            },
+        },
     },
     { name: 'FeedSortDropdown' },
 );
@@ -39,8 +44,9 @@ export function FeedSortBy() {
                 {items.map((item: any) => (
                     <MenuItem
                         key={item.label}
-                        style={{ fontWeight: item.isRefined ? 'bold' : '' }}
+                        sx={{ fontWeight: item.isRefined ? 'bold' : '' }}
                         value={item.isRefined ? currentRefinement : item.value}
+                        className={'MenuItem'}
                     >
                         {item.label}
                     </MenuItem>

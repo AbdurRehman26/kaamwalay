@@ -3,13 +3,14 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-export function FeedMobileSortBy() {
-    const MenuSelect = ({ items, refine }: { items: any; currentRefinement: any; refine: any }) => (
+export function FeedMobileGrade() {
+    const MenuSelectMobile = ({ items, refine }: { items: any; currentRefinement: any; refine: any }) => (
         <ul>
             <RadioGroup name="radio-buttons-group">
                 {items.map((item: any) => (
                     <>
                         <FormControlLabel
+                            key={item.objectID}
                             value={item.value}
                             control={<Radio />}
                             label={item.label}
@@ -23,8 +24,8 @@ export function FeedMobileSortBy() {
             </RadioGroup>
         </ul>
     );
-    const CustomMenuSelect = connectMenu(MenuSelect);
-    return <CustomMenuSelect attribute={'grade'} />;
+    const CustomMenuSelectMobile = connectMenu(MenuSelectMobile);
+    return <CustomMenuSelectMobile attribute={'grade'} />;
 }
 
-export default FeedMobileSortBy;
+export default FeedMobileGrade;

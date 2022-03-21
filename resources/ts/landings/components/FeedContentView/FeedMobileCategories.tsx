@@ -4,12 +4,13 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 export function FeedMobileCategories() {
-    const RefinementList = ({ items, refine }: { items: any; refine: any }) => (
+    const RefinementListMobile = ({ items, refine }: { items: any; refine: any }) => (
         <ul>
-            <RadioGroup defaultValue="Pokemon" name="radio-buttons-group">
+            <RadioGroup name="radio-buttons-group">
                 {items.map((item: any) => (
                     <>
                         <FormControlLabel
+                            key={item.label}
                             value={item.value}
                             control={<Radio />}
                             label={item.label}
@@ -23,9 +24,9 @@ export function FeedMobileCategories() {
             </RadioGroup>
         </ul>
     );
-    const CustomRefinementList = connectRefinementList(RefinementList);
+    const CustomRefinementListMobile = connectRefinementList(RefinementListMobile);
 
-    return <CustomRefinementList attribute={'card_category'} />;
+    return <CustomRefinementListMobile attribute={'card_category'} />;
 }
 
 export default FeedMobileCategories;

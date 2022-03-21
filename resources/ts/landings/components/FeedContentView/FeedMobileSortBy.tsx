@@ -11,12 +11,21 @@ export function FeedMobileSortBy({
     feedMobileSortByValue: any;
 }) {
     console.log(feedMobileSortByValue);
-    const SortBy = ({ items, refine, currentRefinement }: { items: any; refine: any; currentRefinement: any }) => (
+    const SortByMobile = ({
+        items,
+        refine,
+        currentRefinement,
+    }: {
+        items: any;
+        refine: any;
+        currentRefinement: any;
+    }) => (
         <ul>
             <RadioGroup>
                 {items.map((item: any) => (
                     <>
                         <FormControlLabel
+                            key={item.objectID}
                             checked={currentRefinement === item.value}
                             value={item.value || feedMobileSortByValue}
                             control={<Radio />}
@@ -32,10 +41,10 @@ export function FeedMobileSortBy({
             </RadioGroup>
         </ul>
     );
-    const CustomSortBy = connectSortBy(SortBy);
+    const CustomSortByMobile = connectSortBy(SortByMobile);
 
     return (
-        <CustomSortBy
+        <CustomSortByMobile
             defaultRefinement="local_user_cards"
             items={[
                 { value: 'local_user_cards_Descending', label: 'Most Recent' },

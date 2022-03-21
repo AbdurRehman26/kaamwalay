@@ -69,8 +69,8 @@ const styles = {
     },
 };
 
-const SearchBox = ({ currentRefinement, refine }: { currentRefinement: any; refine: any }) => (
-    <form noValidate role="search">
+export function FeedSearch() {
+    const SearchBox = ({ currentRefinement, refine }: { currentRefinement: any; refine: any }) => (
         <Input
             sx={styles.InputStyle}
             placeholder="search..."
@@ -84,10 +84,9 @@ const SearchBox = ({ currentRefinement, refine }: { currentRefinement: any; refi
             }
             disableUnderline
         />
-    </form>
-);
-const CustomSearchBox = connectSearchBox(SearchBox);
-export function FeedSearch() {
+    );
+    const CustomSearchBox = connectSearchBox(SearchBox);
+
     return (
         <BoxDiv>
             <Grid className={'FeedHero'}>

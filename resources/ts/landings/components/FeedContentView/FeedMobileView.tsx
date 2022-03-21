@@ -53,12 +53,22 @@ const styles = {
         fontSize: '14px',
         lineHeight: '20px',
         letterSpacing: '0.2px',
-        color: 'rgba(0, 0, 0, 0.54)',
-        background: '#FFFFFF',
+        color: '#FFFFFF',
+        backgroundColor: '#20BFB8!important',
         border: '1px solid rgba(0, 0, 0, 0.18)!important',
         boxSizing: 'border-box',
         borderRadius: '24px',
         padding: '10px 20px',
+        margin: '10px 15px',
+        width: '92%',
+    },
+
+    ModalButtonDiv: {
+        width: '100%',
+        background: '#FFFFFF',
+        boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.14), 0px 3px 3px rgba(0, 0, 0, 0.12), 0px 1px 8px rgba(0, 0, 0, 0.2)',
+        position: 'fixed',
+        bottom: '0',
     },
 };
 
@@ -87,7 +97,9 @@ export function FeedMobileView() {
                             setFeedMobileSortByValue={setFeedMobileSortByValue}
                         />
                     </Grid>
-                    <Button sx={styles.ModalButton}>SEE ALL RESULTS</Button>
+                    <Grid sx={styles.ModalButtonDiv}>
+                        <Button sx={styles.ModalButton}>SEE ALL RESULTS</Button>
+                    </Grid>
                 </FeedPopModalBox>
             </Modal>
         </Box>

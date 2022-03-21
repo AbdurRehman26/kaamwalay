@@ -15,7 +15,7 @@ class HubspotService
 {
     public function getClient(): Client
     {
-        return new Client(['key' => config('services.hubspot.apiKey')]);
+        return new Client(['key' => config('services.hubspot.api_key')]);
     }
 
     /**

@@ -22,6 +22,10 @@ class SendRegisteredUserToHubspot implements ShouldQueue
             return;
         }
 
+        if (! config('services.hubspot.api_key')) {
+            return;
+        }
+
         $this->hubspotService->addUserAndAssignDeal($event->user);
     }
 }

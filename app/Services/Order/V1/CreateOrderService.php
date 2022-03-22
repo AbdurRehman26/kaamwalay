@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V1;
 
+use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\CustomerAddress;
@@ -97,6 +98,7 @@ class CreateOrderService
         $this->storeOrderPayment($this->data);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
+        OrderPlaced::dispatch($this->order);
 
         DB::commit();
     }

@@ -47,7 +47,7 @@ const GridDiv = styled(Grid)({
     '.GridGradeSection': {
         padding: '5px 5px',
         margin: '10px 10px',
-        width: '25%',
+        minWidth: '20%',
         height: '60px',
         background: '#20bfb8',
         borderRadius: '4px',
@@ -59,6 +59,7 @@ const GridDiv = styled(Grid)({
         lineHeight: '12px',
         textAlign: 'center',
         color: '#ffffff',
+        marginTop: '5px',
     },
     '.OverallGrade': {
         fontStyle: 'normal',
@@ -67,6 +68,7 @@ const GridDiv = styled(Grid)({
         lineHeight: '24px',
         textAlign: 'center',
         color: '#ffffff',
+        padding: '6px',
     },
     '.GridImageSection': {
         padding: '10px 10px',

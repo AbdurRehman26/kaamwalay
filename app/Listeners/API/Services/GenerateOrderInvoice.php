@@ -24,12 +24,12 @@ class GenerateOrderInvoice implements ShouldQueue
     /**
      * @throws InvoiceNotUploaded
      */
-    public function handle(OrderPaid|OrderPlaced $event): void
+    public function handle(OrderPlaced $event): void
     {
         $this->invoiceService->saveInvoicePDF($event->order);
     }
 
-    public function failed(OrderPaid|OrderPlaced $event, $exception)
+    public function failed(OrderPlaced $event, $exception)
     {
         Log::error($exception->getMessage(), [
             'Invoice generation failed. Order ID: ' => $event->order->id,

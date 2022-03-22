@@ -123,7 +123,7 @@ function PaypalBtn() {
                             sendECommerceDataToGA();
                             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
                             pushDataToRefersion(orderSubmission, user$);
-                            navigate(`/submissions/${orderID}/confirmation`);
+                            navigate(`/submissions/${orderID}/view`);
                         } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');
                         }

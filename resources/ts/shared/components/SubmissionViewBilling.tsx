@@ -1,9 +1,13 @@
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useMemo } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { AddressEntity } from '../entities/AddressEntity';
 import { OrderPaymentEntity } from '../entities/OrderPaymentEntity';
@@ -16,6 +20,9 @@ interface SubmissionViewBillingProps {
     payment?: OrderPaymentEntity;
     coupon?: OrderCouponEntity;
     paymentMethodId?: number;
+    paymentStatus: PaymentStatusEnum;
+    walletPayment: string;
+    mode: 'customer' | 'admin';
 }
 
 export const useStyles = makeStyles(
@@ -46,10 +53,15 @@ export function SubmissionViewBilling({
     payment,
     coupon,
     paymentMethodId,
+    paymentStatus,
+    walletPayment,
+    mode = 'customer',
 }: SubmissionViewBillingProps) {
     const classes = useStyles();
     const { card, payer } = payment ?? {};
     const hasPayment = [1, 2, 3].includes(Number(paymentMethodId)); // Checking if one of our supported payment methods is on the order
+    const { id } = useParams<'id'>();
+    const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
 
     const { cardIcon, cardBrand } = useMemo(() => {
         if (paymentMethodId === 1) {
@@ -123,27 +135,48 @@ export function SubmissionViewBilling({
                 <Typography variant={'body2'}>{shippingAddress?.getAddressLine2()}</Typography>
                 <Typography variant={'body2'}>{shippingAddress?.phone}</Typography>
             </Grid>
-            {hasPayment ? (
-                <Grid item xs={12} sm={columnWidth}>
-                    <Typography variant={'body1'} className={font.fontWeightMedium}>
-                        Payment Method
-                    </Typography>
+            <Grid item xs={12} sm={columnWidth}>
+                {!isPaid && mode === 'customer' ? (
+                    <>
+                        <Typography variant={'body1'} className={font.fontWeightMedium}>
+                            Payment Status
+                        </Typography>
+                        <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} />
+                        <Box marginTop={2} />
+                        <Typography variant={'body1'} className={font.fontWeightMedium}>
+                            Payment Method
+                            <MuiLink marginLeft={1} component={Link} to={`/submissions/${id}/pay`}>
+                                PAY NOW
+                            </MuiLink>
+                        </Typography>
+                        <Typography variant={'body2'}>Pay Later: Not charged yet</Typography>
+                        {Number(walletPayment) > 0 ? (
+                            <Typography variant={'body2'}>(Credit Applied: ${walletPayment})</Typography>
+                        ) : null}
+                    </>
+                ) : null}
+                {hasPayment ? (
+                    <>
+                        <Typography variant={'body1'} className={font.fontWeightMedium}>
+                            Payment Method
+                        </Typography>
 
-                    <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
-                        {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
-                        <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
-                            <Typography variant={'body2'} color={'textPrimary'}>
-                                {paymentHeading}
-                            </Typography>
-                            {paymentSubheading ? (
-                                <Typography variant={'caption'} color={'textSecondary'}>
-                                    {paymentSubheading}
+                        <Box display={'flex'} alignItems={'center'} width={'100%'} pt={0.5}>
+                            {cardIcon ? <Avatar src={cardIcon} className={classes.paymentAvatar} /> : null}
+                            <Box display={'flex'} flexDirection={'column'} flexGrow={1} paddingLeft={1}>
+                                <Typography variant={'body2'} color={'textPrimary'}>
+                                    {paymentHeading}
                                 </Typography>
-                            ) : null}
+                                {paymentSubheading ? (
+                                    <Typography variant={'caption'} color={'textSecondary'}>
+                                        {paymentSubheading}
+                                    </Typography>
+                                ) : null}
+                            </Box>
                         </Box>
-                    </Box>
-                </Grid>
-            ) : null}
+                    </>
+                ) : null}
+            </Grid>
             <Grid item xs={12} sm={columnWidth}>
                 <Typography variant={'body1'} className={font.fontWeightMedium}>
                     Billing Address

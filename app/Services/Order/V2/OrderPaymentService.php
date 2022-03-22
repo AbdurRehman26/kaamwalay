@@ -54,6 +54,11 @@ class OrderPaymentService
      */
     protected function process(): void
     {
+        // There can be scenarios where order payments exist for an unpaid orders.
+        // 1. 3d Secure card is used and client closed the process
+        // 2. Customer doesn't approve paypal/metamask payment
+        // 3. For any reason, the payment process is not completed.
+        $this->deleteOldOrderPayments();
         $this->storePaymentMethod(
             $this->getPaymentMethod($this->data)
         );
@@ -189,5 +194,10 @@ class OrderPaymentService
             return;
         }
         $this->order->payment_method_id = $paymentMethod['id'];
+    }
+
+    protected function deleteOldOrderPayments()
+    {
+        $this->order->orderPayments()->where('type', OrderPayment::TYPE_ORDER_PAYMENT)->delete();
     }
 }

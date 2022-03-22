@@ -65,8 +65,7 @@ Route::prefix('customer')->group(function () {
 
         Route::prefix('orders')->group(function () {
             Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
-            Route::post('{order}/order-payments', [OrderPaymentController::class, 'store']);
-            Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
+            Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);

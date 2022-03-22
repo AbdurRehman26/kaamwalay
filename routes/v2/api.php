@@ -13,7 +13,6 @@ use App\Http\Controllers\API\V2\Customer\Cards\CardProductController;
 use App\Http\Controllers\API\V2\Customer\Cards\UserCardController;
 use App\Http\Controllers\API\V2\Customer\CouponController;
 use App\Http\Controllers\API\V2\Customer\Order\OrderController;
-use App\Http\Controllers\API\V2\Customer\Order\OrderItemController;
 use App\Http\Controllers\API\V2\Customer\Order\OrderPaymentController;
 use App\Http\Controllers\API\V2\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\V2\Customer\Order\PaymentPlanController;
@@ -67,16 +66,9 @@ Route::prefix('customer')->group(function () {
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
-
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
-
-            Route::post('{order}/addresses', [OrderController::class, 'storeAddresses'])->name('customer.orders.update-addresses');
-            Route::post('{order}/update-credit-discount', [OrderController::class, 'storeCreditAndDiscount'])->name('customer.orders.credit-discount');
-            Route::post('{order}/complete-submission', [OrderController::class, 'completeSubmission'])->name('customer.orders.complete-submission');
-            Route::post('{order}/update-step', [OrderController::class, 'updateOrderStep'])->name('customer.orders.update-step');
-
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::apiResource('', OrderController::class)
@@ -85,15 +77,7 @@ Route::prefix('customer')->group(function () {
                     'index' => 'customer.orders.index',
                     'store' => 'customer.orders.store',
                 ]);
-
-            Route::get('{order}/order-items', [OrderItemController::class, 'index'])->name('customer.orders.order-items.index');
-            Route::post('{order}/order-items', [OrderItemController::class, 'store'])->name('customer.orders.order-items.store');
-            Route::delete('{order}/order-items/{orderItem}', [OrderItemController::class, 'destroy'])->name('customer.orders.order-items.destroy');
-            Route::put('{order}/order-items/{orderItem}', [OrderItemController::class, 'update'])->name('customer.orders.order-items.update');
         });
-
-
-
         Route::prefix('coupons')->group(function () {
             Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');
             Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('coupon.discount');

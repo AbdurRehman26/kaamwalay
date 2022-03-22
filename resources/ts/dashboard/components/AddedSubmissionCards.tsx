@@ -22,11 +22,9 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     changeSelectedCardQty,
     changeSelectedCardValue,
-    deleteOrderItem,
     markCardAsUnselected,
     SearchResultItemCardProps,
     setCustomStep,
-    updateOrderItem,
 } from '../redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
 
@@ -181,9 +179,8 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     );
 
     const handleDeselectCard = useCallback(
-        async (row: { id: number }) => {
+        (row: { id: number }) => {
             ReactGA.event({ category: EventCategories.Cards, action: CardsSelectionEvents.removed });
-            dispatch(deleteOrderItem(row.id));
             dispatch(markCardAsUnselected(row));
         },
         [dispatch],
@@ -192,7 +189,6 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
     function handleChangeCardQty(card: SearchResultItemCardProps, qty: any) {
         const newValue = Math.min(Math.max(qty, 1), 100);
         dispatch(changeSelectedCardQty({ card, qty: newValue }));
-        dispatch(updateOrderItem({ card: card, qty: newValue, declaredValue: card.value }));
     }
 
     function handleChangeCardValue(card: SearchResultItemCardProps, newValue: any) {
@@ -201,7 +197,6 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
         const valueAsInt = parseInt(receivedValue);
         const finalValue = Math.min(Math.max(valueAsInt, 1), 1000000);
         dispatch(changeSelectedCardValue({ card, newValue: finalValue }));
-        dispatch(updateOrderItem({ card: card, qty: card.qty, declaredValue: finalValue }));
     }
 
     const findCard = useCallback(

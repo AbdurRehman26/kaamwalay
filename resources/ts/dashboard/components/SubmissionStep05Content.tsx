@@ -39,12 +39,10 @@ function SubmissionStep05Content() {
             // @ts-ignore
             const currentNetworkID = await web3?.eth?.net?.getId();
             if (currentNetworkID) {
-                dispatch(
-                    getTotalInAGS({ orderID, chainID: currentNetworkID, paymentByWallet: 0.0, discountedAmount: 0.0 }),
-                );
+                dispatch(getTotalInAGS({ orderID, chainID: currentNetworkID }));
                 return;
             }
-            dispatch(getTotalInAGS({ orderID, chainID: 1, paymentByWallet: 0.0, discountedAmount: 0.0 }));
+            dispatch(getTotalInAGS({ orderID, chainID: 1 }));
         }
         fetchTotalInAGS();
     }, [dispatch, orderID]);
@@ -75,8 +73,6 @@ function SubmissionStep05Content() {
                     <SubmissionSummary />
                 </Grid>
             </Grid>
-
-            <Divider light className={classes.divider} />
         </Container>
     );
 }

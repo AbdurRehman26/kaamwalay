@@ -11,7 +11,6 @@ use App\Models\OrderItem;
 use App\Models\OrderPayment;
 use App\Models\PaymentMethod;
 use App\Services\Admin\Order\OrderItemService;
-use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\OrderNumberGeneratorService;
 use App\Services\Order\Shipping\ShippingFeeService;

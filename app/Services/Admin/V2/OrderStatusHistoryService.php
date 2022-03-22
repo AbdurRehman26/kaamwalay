@@ -13,11 +13,11 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
+use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
-use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
 
 class OrderStatusHistoryService extends V1OrderStatusHistoryService
 {

@@ -105,7 +105,7 @@ const styles = {
     },
 };
 
-export function FeedCategories() {
+export function FeedCategories({ query }: { query: any }) {
     const [toggleView, setToggleView] = useState(true);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
@@ -168,7 +168,7 @@ export function FeedCategories() {
                 </Grid>
             </FeeCategoryBox>
             <Grid sx={styles.MobileDiv}>
-                <FeedResultCount />
+                <FeedResultCount query={query} />
                 {isSm ? <FeedMobileView /> : ''}
             </Grid>
             <FeedCurrentFilter />

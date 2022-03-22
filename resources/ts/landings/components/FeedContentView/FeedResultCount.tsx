@@ -15,9 +15,14 @@ const styles = {
     },
 };
 
-export function FeedResultCount() {
+export function FeedResultCount({ query }: { query: any }) {
     const Stats = ({ nbHits }: { nbHits: any }) => (
-        <Typography sx={styles.CountStyle}>{`${nbHits.toLocaleString()}  results`}</Typography>
+        <>
+            <Typography>{query ? `Search results for “${query}”` : ``}</Typography>
+            <Typography sx={styles.CountStyle}>{`${nbHits.toLocaleString()}  ${
+                query ? `results` : `cards`
+            }`}</Typography>
+        </>
     );
 
     const CustomStats = connectStats(Stats);

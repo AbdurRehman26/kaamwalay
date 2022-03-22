@@ -1,5 +1,5 @@
 // TODO: Merge into a general component
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircleOutlined';
 import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
 import CloseIcon from '@mui/icons-material/Close';
@@ -172,7 +172,7 @@ export function DashboardNavigationDrawer() {
                 </ListItem>
                 <ListItem selected={isItemActive('/wallet')} onClick={handleItemPress('/wallet')} button>
                     <StyledListItemIcon>
-                        <AccountBalanceWalletIcon />
+                        <AccountBalanceWalletOutlinedIcon />
                     </StyledListItemIcon>
                     <ListItemText primary={'Wallet'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>

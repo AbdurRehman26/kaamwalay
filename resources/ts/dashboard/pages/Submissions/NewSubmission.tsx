@@ -7,7 +7,6 @@ import ReactGA from 'react-ga';
 import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
 import SubmissionStep02Content from '../../components/SubmissionStep02Content';
@@ -183,46 +182,44 @@ export function NewSubmission() {
     return (
         <>
             <SubmissionHeader />
-            <StripeContainer>
-                <div className={classes.pageContentContainer}>
-                    {getStepContent()}
+            <div className={classes.pageContentContainer}>
+                {getStepContent()}
 
-                    <div className={classes.buttonsContainer}>
-                        <Grid
-                            container
-                            alignItems={'center'}
-                            justifyContent={'center'}
-                            flexWrap={'nowrap'}
-                            className={classes.buttonsHolder}
-                        >
-                            {currentStep !== 0 ? (
-                                <Button
-                                    variant={'contained'}
-                                    color={'inherit'}
-                                    className={classes.buttons}
-                                    onClick={handleBack}
-                                    fullWidth
-                                >
-                                    Back
-                                </Button>
-                            ) : null}
-                            {currentStep !== 4 ? (
-                                <LoadingButton
-                                    variant={'contained'}
-                                    disabled={isNextDisabled || isNextLoading}
-                                    color={'primary'}
-                                    onClick={handleNext}
-                                    className={classes.buttons}
-                                    loading={isNextLoading}
-                                    fullWidth
-                                >
-                                    Next
-                                </LoadingButton>
-                            ) : null}
-                        </Grid>
-                    </div>
+                <div className={classes.buttonsContainer}>
+                    <Grid
+                        container
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        flexWrap={'nowrap'}
+                        className={classes.buttonsHolder}
+                    >
+                        {currentStep !== 0 ? (
+                            <Button
+                                variant={'contained'}
+                                color={'inherit'}
+                                className={classes.buttons}
+                                onClick={handleBack}
+                                fullWidth
+                            >
+                                Back
+                            </Button>
+                        ) : null}
+                        {currentStep !== 4 ? (
+                            <LoadingButton
+                                variant={'contained'}
+                                disabled={isNextDisabled || isNextLoading}
+                                color={'primary'}
+                                onClick={handleNext}
+                                className={classes.buttons}
+                                loading={isNextLoading}
+                                fullWidth
+                            >
+                                Next
+                            </LoadingButton>
+                        ) : null}
+                    </Grid>
                 </div>
-            </StripeContainer>
+            </div>
         </>
     );
 }

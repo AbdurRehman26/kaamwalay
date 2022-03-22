@@ -67,24 +67,14 @@ Route::prefix('customer')->group(function () {
 
         Route::prefix('orders')->group(function () {
             Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
-            Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
+            Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
+            Route::apiResource('/', OrderController::class)->only(['index', 'store']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
-            Route::post('create', [OrderController::class, 'create'])->name('order.store');
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
-
-            Route::get('{orderId}', [OrderController::class, 'show']);
-            Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
-            Route::apiResource('', OrderController::class)
-                ->only(['index', 'store'])
-                ->names([
-                    'index' => 'customer.orders.index',
-                    'store' => 'customer.orders.store',
-                ]);
         });
-
 
         Route::prefix('coupons')->group(function () {
             Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');

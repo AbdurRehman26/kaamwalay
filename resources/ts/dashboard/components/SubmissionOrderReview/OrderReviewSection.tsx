@@ -22,13 +22,13 @@ function OrderReviewSection() {
     );
     const turnaround = useAppSelector((state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround);
 
-    // Payment method data
-    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
+    const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
     const discountCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+
     const discountStatement = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountStatement,
     );
@@ -64,35 +64,14 @@ function OrderReviewSection() {
                     </Typography>
                     <Typography className={classes.greyBodyText}>{`${turnaround} turnaround`}</Typography>
                 </OrderDetailItem>
-                {!isMobile ? <Spacer top={'32px'} /> : null}
-                {paymentMethodId !== 3 ? (
-                    <OrderDetailItem title={'Shipping Address'} editStep={2}>
-                        <Typography
-                            className={classes.darkBodyText}
-                        >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
-                        <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
-                            finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
-                        }`}</Typography>
-                        <Typography
-                            className={classes.darkBodyText}
-                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
-                    </OrderDetailItem>
-                ) : isCouponApplied && paymentMethodId === 3 ? (
+                {isCouponApplied ? (
                     <>
-                        {!isMobile ? <Spacer top={'48px'} /> : null}
+                        {!isMobile ? <Spacer top={'24px'} /> : null}
                         <OrderDetailItem title={'Promo Code'} editStep={3}>
                             <Typography className={classes.darkBodyText}>{discountCode}</Typography>
                             <Typography className={classes.greyBodyText}>{discountStatement}</Typography>
                         </OrderDetailItem>
                     </>
-                ) : null}
-            </div>
-
-            <div className={classes.orderItemsColumn}>
-                {paymentMethodId !== 3 ? (
-                    <OrderDetailItem title={'Return Shipping Method'} editStep={2} spaced>
-                        <Typography className={classes.darkBodyText}>{'Insured Shipping'}</Typography>
-                    </OrderDetailItem>
                 ) : null}
             </div>
 
@@ -108,15 +87,20 @@ function OrderReviewSection() {
                         className={classes.darkBodyText}
                     >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
                 </OrderDetailItem>
-
-                {isCouponApplied && paymentMethodId !== 3 ? (
-                    <>
-                        {!isMobile ? <Spacer top={'48px'} /> : null}
-                        <OrderDetailItem title={'Promo Code'} editStep={3}>
-                            <Typography className={classes.darkBodyText}>{discountCode}</Typography>
-                            <Typography className={classes.greyBodyText}>{discountStatement}</Typography>
-                        </OrderDetailItem>
-                    </>
+            </div>
+            <div className={classes.orderItemsColumn}>
+                {appliedCredit > 0 ? (
+                    <OrderDetailItem title={'Credit Applied'} editStep={3} spaced>
+                        <div className={classes.cardDetailsContainer}>
+                            <NumberFormat
+                                value={appliedCredit}
+                                displayType={'text'}
+                                thousandSeparator
+                                decimalSeparator={'.'}
+                                prefix={'$'}
+                            />
+                        </div>
+                    </OrderDetailItem>
                 ) : null}
             </div>
         </Paper>

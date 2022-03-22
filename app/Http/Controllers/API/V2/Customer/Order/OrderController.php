@@ -63,16 +63,6 @@ class OrderController extends Controller
         $order->save();
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order);
 
-        try {
-        } catch (Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 

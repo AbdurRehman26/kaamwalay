@@ -70,7 +70,12 @@ Route::prefix('customer')->group(function () {
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
-            Route::apiResource('/', OrderController::class)->only(['index', 'store']);
+            Route::apiResource('', OrderController::class)
+                ->only(['index', 'store'])
+                ->names([
+                'index' => 'customer.orders.index',
+                'store' => 'customer.orders.store',
+            ]);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);

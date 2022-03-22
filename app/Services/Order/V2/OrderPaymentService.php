@@ -196,7 +196,7 @@ class OrderPaymentService
         $this->order->payment_method_id = $paymentMethod['id'];
     }
 
-    protected function deleteOldOrderPayments()
+    protected function deleteOldOrderPayments(): void
     {
         $this->order->orderPayments()->where('type', OrderPayment::TYPE_ORDER_PAYMENT)->delete();
     }

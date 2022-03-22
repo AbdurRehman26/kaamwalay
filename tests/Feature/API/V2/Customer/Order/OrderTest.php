@@ -33,6 +33,7 @@ beforeEach(function () {
 
 test('a customer can place order', function () {
     $this->actingAs($this->user);
+    Event::fake();
 
     $response = $this->postJson('/api/v2/customer/orders', [
         'payment_plan' => [
@@ -562,6 +563,7 @@ test('a customer can not pay from wallet if wallet has insufficient balance', fu
 
 test('a customer can place order with amount equal to his wallet balance.', function () {
     $this->actingAs($this->user);
+    Event::fake();
     Wallet::factory()->create([
         'user_id' => $this->user->id,
         'balance' => 314.0,

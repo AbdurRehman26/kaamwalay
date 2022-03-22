@@ -1,6 +1,7 @@
-import useMediaQuery from '@mui/material/useMediaQuery';
+import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -8,16 +9,15 @@ import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { styled, Theme } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
 import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { SubmissionTableRow } from './SubmissionTableRow';
-import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import { Table } from './styles';
-import Grid from '@mui/material/Grid';
 
 const StyledBox = styled(Box)(
     {

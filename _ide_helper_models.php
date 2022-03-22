@@ -28,14 +28,19 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string|null $image_url
+ * @property int $is_enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardProduct[] $cardProducts
  * @property-read int|null $card_products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardRarity[] $cardRarities
+ * @property-read int|null $card_rarities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSeries[] $cardSeries
  * @property-read int|null $card_series_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSet[] $cardSets
  * @property-read int|null $card_sets_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CardSurface[] $cardSurfaces
+ * @property-read int|null $card_surfaces_count
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory enabled()
  * @method static \Database\Factories\CardCategoryFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newModelQuery()
@@ -44,6 +49,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereImageUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereIsEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereUpdatedAt($value)
  */
@@ -110,6 +116,28 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardProduct whereVariantName($value)
  */
 	class CardProduct extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CardRarity
+ *
+ * @property int $id
+ * @property int $card_category_id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CardCategory $cardCategory
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity whereCardCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardRarity whereUpdatedAt($value)
+ */
+	class CardRarity extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -186,6 +214,28 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CardSet whereUpdatedAt($value)
  */
 	class CardSet extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CardSurface
+ *
+ * @property int $id
+ * @property int $card_category_id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CardCategory $cardCategory
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereCardCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardSurface whereUpdatedAt($value)
+ */
+	class CardSurface extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -539,10 +589,11 @@ namespace App\Models{
  * @property int $user_id
  * @property int $payment_plan_id
  * @property int|null $order_status_id
- * @property int $shipping_order_address_id
- * @property int $billing_order_address_id
- * @property int $payment_method_id
- * @property int $shipping_method_id
+ * @property \App\Enums\Order\OrderPaymentStatusEnum $payment_status 0 => pending payment, 1 => paid
+ * @property int|null $shipping_order_address_id
+ * @property int|null $billing_order_address_id
+ * @property int|null $payment_method_id
+ * @property int|null $shipping_method_id
  * @property int|null $coupon_id
  * @property int|null $invoice_id
  * @property int|null $order_shipment_id
@@ -557,11 +608,12 @@ namespace App\Models{
  * @property int|null $graded_by_id
  * @property \Illuminate\Support\Carbon|null $reviewed_at
  * @property \Illuminate\Support\Carbon|null $graded_at
+ * @property \Illuminate\Support\Carbon|null $paid_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $allPayments
  * @property-read int|null $all_payments_count
- * @property-read \App\Models\OrderAddress $billingAddress
+ * @property-read \App\Models\OrderAddress|null $billingAddress
  * @property-read \App\Models\Coupon|null $coupon
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $extraCharges
  * @property-read int|null $extra_charges_count
@@ -581,13 +633,13 @@ namespace App\Models{
  * @property-read \App\Models\OrderStatus|null $orderStatus
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderStatusHistory[] $orderStatusHistory
  * @property-read int|null $order_status_history_count
- * @property-read \App\Models\PaymentMethod $paymentMethod
+ * @property-read \App\Models\PaymentMethod|null $paymentMethod
  * @property-read \App\Models\PaymentPlan $paymentPlan
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $refunds
  * @property-read int|null $refunds_count
  * @property-read \App\Models\User|null $reviewedBy
- * @property-read \App\Models\OrderAddress $shippingAddress
- * @property-read \App\Models\ShippingMethod $shippingMethod
+ * @property-read \App\Models\OrderAddress|null $shippingAddress
+ * @property-read \App\Models\ShippingMethod|null $shippingMethod
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerId(string $customerId)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerName(string $customerName)
@@ -617,9 +669,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderShipmentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaidAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodDiscountedAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentPlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
@@ -906,6 +960,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forDate(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forMonth(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forValidPaidOrders()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment ignoreOrdersBySpecificAdmins()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment query()

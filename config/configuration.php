@@ -37,20 +37,13 @@ return [
         'app_url' => [
             'value' => env('APP_URL'),
         ],
-        'collector_coin_discount_percentage' => [
-            'auth' => true,
-            'value' => env('COLLECTOR_COIN_DISCOUNT_PERCENTAGE', 0),
-        ],
         'stripe_key' => [
-            'auth' => true,
             'value' => env('STRIPE_KEY'),
         ],
         'algolia_app_id' => [
-            'auth' => true,
             'value' => env('ALGOLIA_APP_ID'),
         ],
         'algolia_public_key' => [
-            'auth' => true,
             'value' => env('ALGOLIA_PUBLIC_KEY'),
         ],
         'google_analytics_tracking_code' => [
@@ -59,6 +52,9 @@ return [
         'paypal_client_id' => [
             'auth' => true,
             'value' => env('PAYPAL_CLIENT_ID'),
+        ],
+        'collector_coin_discount_percentage' => [
+            'value' => env('COLLECTOR_COIN_DISCOUNT_PERCENTAGE', 0),
         ],
         'web3_supported_networks' => [
             'auth' => true,

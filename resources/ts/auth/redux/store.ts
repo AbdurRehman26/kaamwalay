@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { Dispatch, configureStore } from '@reduxjs/toolkit';
 import { defaultMiddlewares } from '@shared/redux/middlewares';
 import * as globalSlices from '@shared/redux/slices';
 import { slicesToReducer } from '@shared/redux/slicesToReducer';
@@ -13,5 +13,7 @@ export const store = configureStore({
 
 setGlobalStore(store);
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+type Store = typeof store;
+
+export type RootState = ReturnType<Store['getState']>;
+export type AppDispatch = Dispatch<any>;

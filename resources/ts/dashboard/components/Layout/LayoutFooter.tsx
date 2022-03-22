@@ -1,13 +1,13 @@
-import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
-import { ReactComponent as RobogradingPoweredBy } from '@shared/assets/robogradingPoweredBy.svg';
-import { Link } from 'react-router-dom';
-import Container from '@mui/material/Container';
-import MuiLink from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
 import CallIcon from '@mui/icons-material/CallOutlined';
 import EmailIcon from '@mui/icons-material/EmailOutlined';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import MuiLink from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { ReactComponent as RobogradingPoweredBy } from '@shared/assets/robogradingPoweredBy.svg';
 
 const Root = styled('footer')(({ theme }) => ({
     backgroundColor: '#f2f2f2',

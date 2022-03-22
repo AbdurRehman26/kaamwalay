@@ -1,7 +1,7 @@
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import React from 'react';
 import NumberFormat from 'react-number-format';
 import OrderDetailItem from '@dashboard/components/SubmissionOrderReview/OrderDetailItem';

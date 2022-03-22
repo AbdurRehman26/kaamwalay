@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { StatusChip } from '@shared/components/StatusChip';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderEntity } from '@shared/entities/OrderEntity';
@@ -15,13 +16,12 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { font } from '@shared/styles/utils';
-import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
-import { useOrderStatus } from '@admin/hooks/useOrderStatus';
-import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
-import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { deleteOrder } from '@shared/redux/slices/ordersSlice';
+import { font } from '@shared/styles/utils';
+import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 import { useAppDispatch } from '@admin/redux/hooks';
+import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
+import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;

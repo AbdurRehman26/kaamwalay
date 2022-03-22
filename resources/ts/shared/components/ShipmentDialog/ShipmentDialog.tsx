@@ -1,4 +1,3 @@
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
@@ -7,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import createStyles from '@mui/styles/createStyles';
@@ -15,10 +15,10 @@ import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import * as Yup from 'yup';
 import {
-    getNormalizedShipmentProvider,
-    isCustomShipmentProvider,
     ShipmentProviders,
     ShipmentProvidersList,
+    getNormalizedShipmentProvider,
+    isCustomShipmentProvider,
 } from '@shared/constants/ShipmentProviders';
 
 interface ShipmentDialogProps extends Omit<DialogProps, 'onSubmit'> {

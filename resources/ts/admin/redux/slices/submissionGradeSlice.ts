@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { countDecimals } from '@shared/lib/utils/countDecimals';
 import { APIService } from '@shared/services/APIService';
@@ -15,46 +15,43 @@ export const getAllSubmissions = createAsyncThunk(
 
 export const rejectCard = createAsyncThunk(
     'submissionGrades/rejectCard',
-    async (DTO: { status: string; notes: string; orderID: number; orderItemID: number }, thunkAPI) => {
+    async (DTO: { status: string; notes: string; orderID: number; orderItemID: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
             `admin/orders/${DTO.orderID}/items/${DTO.orderItemID}/change-status`,
         );
-        const response = await endpoint.post('', { status: DTO.status, notes: DTO.notes });
-        return response;
+        return await endpoint.post('', { status: DTO.status, notes: DTO.notes });
     },
 );
 
 export const updateRemoteHumanGrades = createAsyncThunk(
     'submissionGrades/rejectCard',
-    async (DTO: { orderID: number; topLevelID: number; humanGradeValues: any; gradeDelta: number }, thunkAPI) => {
+    async (DTO: { orderID: number; topLevelID: number; humanGradeValues: any; gradeDelta: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`admin/orders/${DTO.orderID}/cards/${DTO.topLevelID}/grades`);
-        const response = await endpoint.put('', {
+        return await endpoint.put('', {
             humanGradeValues: DTO.humanGradeValues,
             gradeDelta: DTO.gradeDelta,
         });
-        return response;
     },
 );
 
 export const markRemoteCardAsGraded = createAsyncThunk(
     'submissionGrades/markRemoteCardAsGraded',
-    async (DTO: { status: string; orderID: number; orderItemID: number }, thunkAPI) => {
+    async (DTO: { status: string; orderID: number; orderItemID: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
             `admin/orders/${DTO.orderID}/items/${DTO.orderItemID}/change-status`,
         );
-        const response = await endpoint.post('', {
+        return await endpoint.post('', {
             status: DTO.status,
         });
-        return response;
     },
 );
 
 export const updateGeneralOrderNotes = createAsyncThunk(
     'submissionGrades/rejectCard',
-    async (DTO: { orderID?: number; notes?: string }, thunkAPI) => {
+    async (DTO: { orderID?: number; notes?: string }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`admin/orders/${DTO.orderID}/notes`);
         await endpoint.put('', {

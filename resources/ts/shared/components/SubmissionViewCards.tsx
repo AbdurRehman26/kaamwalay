@@ -1,11 +1,11 @@
 import Box from '@mui/material/Box';
+import MuiLink from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -13,12 +13,12 @@ import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
+import { RolesEnum } from '../constants/RolesEnum';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
+import { useAuth } from '../hooks/useAuth';
 import { cx } from '../lib/utils/cx';
 import { formatCurrency } from '../lib/utils/formatCurrency';
 import font from '../styles/font.module.css';
-import { useAuth } from '../hooks/useAuth';
-import { RolesEnum } from '../constants/RolesEnum';
 
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];

@@ -6,6 +6,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
+import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
 import { changeOrderItemNotes, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
@@ -14,7 +15,6 @@ import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@admin/redux/hooks';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
 import UnconfirmedCard from './UnconfirmedCard';
-import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 
 interface UnconfirmedCardsProps {
     orderId: number;

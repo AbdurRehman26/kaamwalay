@@ -1,5 +1,5 @@
 import { Transform, TransformationType } from 'class-transformer';
-import moment, { isMoment, Moment } from 'moment';
+import moment, { Moment, isMoment } from 'moment';
 
 export function DateField(): PropertyDecorator {
     return (target, propertyName) => {

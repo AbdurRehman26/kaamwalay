@@ -1,6 +1,7 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import SellIcon from '@mui/icons-material/Sell';
 import StyleIcon from '@mui/icons-material/Style';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -8,7 +9,6 @@ import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { useAppSelector } from '@admin/redux/hooks';
 import LayoutSidebarItem from './LayoutSidebarItem';
-import SellIcon from '@mui/icons-material/Sell';
 
 const useStyles = makeStyles(
     {

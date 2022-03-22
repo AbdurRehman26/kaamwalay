@@ -1,7 +1,7 @@
 import type { ClassConstructor } from 'class-transformer';
 import { cleanPath } from '@shared/lib/strings/cleanPath';
 import { SelfInvoker } from '../interfaces/SelfInvoker';
-import { route, RouteFunc } from '../utils/route';
+import { RouteFunc, route } from '../utils/route';
 import { Controller } from './Controller';
 
 type ActionModule<C> = ClassConstructor<C> | { default: ClassConstructor<C> };

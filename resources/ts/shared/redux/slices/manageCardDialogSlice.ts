@@ -1,10 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
+import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
+import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
+import { CardSetEntity } from '@shared/entities/CardSetEntity';
 import { ManageCardDialogViewEnum } from '../../constants/ManageCardDialogViewEnum';
 import { CardProductEntity } from '../../entities/CardProductEntity';
-import { CardSeriesEntity } from '@shared/entities/CardSeriesEntity';
-import { CardCategoryEntity } from '@shared/entities/CardCategoryEntity';
-import { CardSetEntity } from '@shared/entities/CardSetEntity';
 
 interface ManageCardDialogState {
     open: boolean;

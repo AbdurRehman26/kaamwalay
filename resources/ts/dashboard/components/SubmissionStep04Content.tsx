@@ -1,14 +1,13 @@
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import { AuthDialog } from '@shared/components/AuthDialog/AuthDialog';
+import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
+import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
+import { useAuth } from '@shared/hooks/useAuth';
+import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 import { useAppSelector } from '../redux/hooks';
 import StepDescription from './StepDescription';
-import SubmissionSummary from './SubmissionSummary';
-import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
-import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -78,48 +77,39 @@ const useStyles = makeStyles((theme) => ({
 export function SubmissionStep04Content() {
     const classes = useStyles();
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
+    const { authDialogProps, openAuthDialog } = useAuth();
+    useApplicationEvent(ApplicationEventsEnum.AuthSessionUnauthorized, () => {
+        openAuthDialog();
+    });
 
     return (
-        <Container>
-            <div className={classes.stepDescriptionContainer}>
-                <StepDescription
-                    title={`Enter Payment Details`}
-                    description={'Select your payment method and enter details.'}
-                />
-            </div>
-
-            <Grid container spacing={4}>
-                <Grid item xs={12} md={8}>
-                    <Divider light />
-                    <div className={classes.leftSideContainer}>
-                        {availableCredit > 0 ? (
-                            <div className={classes.shippingMethodContainer}>
-                                <Typography className={classes.sectionLabel} style={{ marginBottom: '3px' }}>
-                                    Apply Credit
-                                </Typography>
-                                <Typography variant={'caption'} className={classes.availableCreditLabel}>
-                                    You have <span style={{ fontWeight: 'bold' }}>${availableCredit}</span> in available
-                                    credit.
-                                </Typography>
-                                <div className={classes.shippingMethodItemContainer} style={{ marginTop: '20px' }}>
-                                    <ApplyCredit />
-                                </div>
-                            </div>
-                        ) : null}
-
-                        <div className={classes.shippingMethodContainer}>
-                            <Typography className={classes.sectionLabel}> Add a Promo Code </Typography>
-                            <div className={classes.shippingMethodItemContainer}>
-                                <ApplyPromoCode />
-                            </div>
+        <>
+            <AuthDialog
+                {...authDialogProps}
+                subtitle={'In order to continue you need to login with a Robograding account.'}
+                internalCloseOnly
+            />
+            <StepDescription
+                title={`Enter Payment Details`}
+                description={'Select your payment method and enter details.'}
+            />
+            <Divider light />
+            <div className={classes.leftSideContainer}>
+                {availableCredit > 0 ? (
+                    <div className={classes.shippingMethodContainer}>
+                        <Typography className={classes.sectionLabel} style={{ marginBottom: '3px' }}>
+                            Apply Credit
+                        </Typography>
+                        <Typography variant={'caption'} className={classes.availableCreditLabel}>
+                            You have <span style={{ fontWeight: 'bold' }}>${availableCredit}</span> in available credit.
+                        </Typography>
+                        <div className={classes.shippingMethodItemContainer} style={{ marginTop: '20px' }}>
+                            <ApplyCredit />
                         </div>
                     </div>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <SubmissionSummary />
-                </Grid>
-            </Grid>
-        </Container>
+                ) : null}
+            </div>
+        </>
     );
 }
 

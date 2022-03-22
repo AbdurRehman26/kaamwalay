@@ -1,6 +1,6 @@
-import { Defer } from '@shared/classes/Defer';
-import { DialogProps } from '@mui/material/Dialog';
 import { ButtonProps } from '@mui/material/Button';
+import { DialogProps } from '@mui/material/Dialog';
+import { Defer } from '@shared/classes/Defer';
 
 export interface ConfirmationDialogContextState {
     isOpen: boolean;

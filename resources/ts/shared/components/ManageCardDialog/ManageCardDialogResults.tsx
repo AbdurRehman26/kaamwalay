@@ -1,16 +1,16 @@
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback } from 'react';
-import { connectStateResults, Hits, Stats } from 'react-instantsearch-dom';
+import { Hits, Stats, connectStateResults } from 'react-instantsearch-dom';
+import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
+import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
+import { font } from '@shared/styles/utils';
+import { useAppDispatch } from '@admin/redux/hooks';
 import ManageCardDialogResultItem from './ManageCardDialogResultItem';
 import ManageCardDialogResultsPagination from './ManageCardDialogResultsPagination';
-import Typography from '@mui/material/Typography';
-import { font } from '@shared/styles/utils';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import { useAppDispatch } from '@admin/redux/hooks';
-import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
-import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
-import Paper from '@mui/material/Paper';
 
 const useStyles = makeStyles(
     (theme) => ({

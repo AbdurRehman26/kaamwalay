@@ -27,7 +27,7 @@ test('a user can get shipping fee', function () {
     ]);
 });
 
-test('an anonymous user can get shipping fee', function () {
+test('a guest can get shipping fee', function () {
     $response = $this->postJson('/api/v1/customer/orders/shipping-fee/', [
         'items' => [
             [

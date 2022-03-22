@@ -35,3 +35,9 @@ test('a user can see specific state', function () {
         'data' => ['id', 'code', 'name'],
     ]);
 });
+
+test('a guest can get states', function () {
+    $response = $this->getJson('/api/v1/customer/addresses/states/');
+
+    $response->assertOk();
+});

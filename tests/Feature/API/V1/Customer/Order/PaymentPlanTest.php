@@ -32,3 +32,9 @@ test('a user can see specific payment plan', function () {
         'data' => ['id', 'price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround'],
     ]);
 });
+
+test('a guest can get payment plans', function () {
+    $response = $this->getJson('/api/v1/customer/orders/payment-plans');
+
+    $response->assertOk();
+});

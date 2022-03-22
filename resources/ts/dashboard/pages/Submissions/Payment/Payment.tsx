@@ -1,6 +1,7 @@
-import CircularProgress from '@mui/material/CircularProgress';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -9,13 +10,24 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
+import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
+import { AddressEntity } from '@shared/entities/AddressEntity';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { APIService } from '@shared/services/APIService';
+import { ApplyCredit } from '@dashboard/components/ApplyCredit';
+import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
+import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
+import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import {
     getAvailableCredit,
     orderToNewSubmission,
@@ -25,19 +37,7 @@ import {
     updateBillingAddressField,
     updatePaymentMethodId,
 } from '@dashboard/redux/slices/newSubmissionSlice';
-import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';
-import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
-import { ApplyCredit } from '@dashboard/components/ApplyCredit';
-import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
-import Box from '@mui/material/Box';
-import { AddressEntity } from '@shared/entities/AddressEntity';
 import { PaymentSummary } from './PaymentSummary';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
-import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 
 const useStyles = makeStyles((theme) => ({
     paymentPageContainer: {

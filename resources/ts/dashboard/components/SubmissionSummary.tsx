@@ -6,12 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
-import { useConfiguration } from '@shared/hooks/useConfiguration';
-import { useInjectable } from '@shared/hooks/useInjectable';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
-import { APIService } from '@shared/services/APIService';
-import { PayWithCollectorCoinButton } from '@dashboard/components/PayWithAGS/PayWithCollectorCoinButton';
-import PaypalBtn from '@dashboard/components/PaymentForm/PaypalBtn';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { clearSubmissionState, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 
@@ -145,26 +140,21 @@ const useStyles = makeStyles((theme) => ({
 
 function SubmissionSummary() {
     const classes = useStyles();
-    const { collectorCoinDiscountPercentage } = useConfiguration();
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
-    const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const navigate = useNavigate();
-    const apiService = useInjectable(APIService);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
-    const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const paymentMethodDiscountedAmount = useAppSelector((state) => state.newSubmission.paymentMethodDiscountedAmount);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -184,12 +174,8 @@ function SubmissionSummary() {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
-    const handleConfirmStripePayment = async () => {
-        const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/complete-submission`);
-
+    const handleCompleteSubmission = async () => {
         try {
-            await endpoint.post('');
-
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
             navigate(`/submissions/${orderID}/confirmation`);
@@ -198,12 +184,7 @@ function SubmissionSummary() {
 
     function getPreviewTotal() {
         const previewTotal =
-            numberOfSelectedCards * serviceLevelPrice -
-            Number(
-                paymentMethodID === 3
-                    ? (Number(collectorCoinDiscountPercentage) / 100) * (numberOfSelectedCards * serviceLevelPrice)
-                    : 0,
-            ) +
+            numberOfSelectedCards * serviceLevelPrice +
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             appliedCredit;
@@ -222,13 +203,9 @@ function SubmissionSummary() {
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            {paymentMethodID === 1 || paymentMethodID === 4 ? (
-                                <Button variant="contained" color="primary" onClick={handleConfirmStripePayment}>
-                                    {'Complete Submission'}
-                                </Button>
-                            ) : null}
-                            {paymentMethodID === 2 ? <PaypalBtn /> : null}
-                            {paymentMethodID === 3 ? <PayWithCollectorCoinButton /> : null}
+                            <Button variant="contained" color="primary" onClick={handleCompleteSubmission}>
+                                {'Complete Submission'}
+                            </Button>
                         </>
 
                         <Typography className={classes.greyDescriptionText}>
@@ -271,19 +248,6 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
-                            {paymentMethodDiscountedAmount > 0 ? (
-                                <div className={classes.row} style={{ marginTop: '16px' }}>
-                                    <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
-                                    <NumberFormat
-                                        value={paymentMethodDiscountedAmount}
-                                        className={classes.rowRightBoldText}
-                                        displayType={'text'}
-                                        thousandSeparator
-                                        decimalSeparator={'.'}
-                                        prefix={'-$'}
-                                    />
-                                </div>
-                            ) : null}
 
                             {appliedCredit > 0 ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>
@@ -335,8 +299,6 @@ function SubmissionSummary() {
                             <div className={classes.row}>
                                 <Typography className={classes.rowLeftText}>Total:</Typography>
                                 <Typography className={classes.rowRightBoldText}>
-                                    &nbsp;
-                                    {totalInAGS > 0 && paymentMethodID === 3 ? `(${totalInAGS} AGS) ` : null}
                                     <NumberFormat
                                         value={grandTotal}
                                         className={classes.rowRightBoldText}
@@ -459,23 +421,6 @@ function SubmissionSummary() {
                                     />
                                 </Typography>
                             </div>
-
-                            {paymentMethodID === 3 ? (
-                                <div className={classes.row} style={{ marginTop: '16px' }}>
-                                    <Typography className={classes.rowLeftText}>Collector Coin Discount: </Typography>
-                                    <NumberFormat
-                                        value={(
-                                            (Number(collectorCoinDiscountPercentage) / 100) *
-                                            (numberOfSelectedCards * serviceLevelPrice)
-                                        ).toFixed(2)}
-                                        className={classes.rowRightBoldText}
-                                        displayType={'text'}
-                                        thousandSeparator
-                                        decimalSeparator={'.'}
-                                        prefix={'-$'}
-                                    />
-                                </div>
-                            ) : null}
 
                             {appliedCredit > 0 ? (
                                 <div className={classes.row} style={{ marginTop: '16px' }}>

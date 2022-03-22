@@ -26,6 +26,8 @@ beforeEach(function () {
         'ags.api/*/certificates/*' => Http::response([]),
     ]);
 
+    Event::fake();
+
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000]);
     $this->cardProduct = CardProduct::factory()->create();

@@ -340,7 +340,10 @@
                             (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
                         @endif
                     @else
-                        No payment found
+                        Pay Later: Not charged yet
+                        @if($order->amount_paid_from_wallet > 0)
+                            (Credit Applied: ${{number_format($order->amount_paid_from_wallet, 2)}})
+                        @endif
                     @endif
                 </div>
             </div>

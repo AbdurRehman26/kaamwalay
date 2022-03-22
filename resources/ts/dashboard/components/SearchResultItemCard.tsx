@@ -138,7 +138,7 @@ function SearchResultItemCard(props: SearchResultItemCardProps) {
 
     const RootComponent = addedMode ? 'div' : ButtonBase;
 
-    const shortNameWithoutHtmlTags = useMemo(() => props.shortName.replace(/<[^>]*>?/gm, ''), [props.shortName]);
+    const shortNameWithoutHtmlTags = useMemo(() => props.shortName?.replace(/<[^>]*>?/gm, ''), [props.shortName]);
     return (
         <>
             <RootComponent className={classes.container} onClick={onSelectCard}>

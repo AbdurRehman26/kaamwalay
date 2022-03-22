@@ -20,6 +20,7 @@ export enum PaymentMethodEvents {
     addedNewStripeCard = 'Added a new stripe card',
     continuedWithStripePayment = 'Continued using stripe payment method',
     continuedWithPaypalPayment = 'Continued using paypal payment method',
+    payLater = 'Customer will pay later',
 }
 
 export enum ShippingAddressEvents {

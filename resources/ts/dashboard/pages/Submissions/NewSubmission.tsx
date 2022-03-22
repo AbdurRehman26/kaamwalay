@@ -1,5 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect } from 'react';
@@ -16,46 +14,58 @@ import SubmissionStep05Content from '../../components/SubmissionStep05Content';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     backStep,
+    createOrder,
     getAvailableCredit,
-    getOrder,
     getSavedAddresses,
     getShippingFee,
     getStatesList,
     nextStep,
     setIsNextDisabled,
     setIsNextLoading,
-    updateCreditAndPromoCode,
-    updateOrderAddresses,
-    updateOrderStep,
 } from '../../redux/slices/newSubmissionSlice';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import { useLocation } from 'react-router-dom';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Grid from '@mui/material/Grid';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     pageContentContainer: {
         marginTop: '100px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        flex: '1 1 auto',
+        '& .MuiContainer-root': {
+            flex: '1 1 auto',
+        },
     },
     buttonsContainer: {
+        position: 'sticky',
+        bottom: 0,
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
+        padding: 10,
         justifyContent: 'center',
-        marginTop: '40px',
-        marginBottom: '64px',
+        backgroundColor: '#fff',
+        boxShadow: theme.shadows[4],
     },
-    nextBtn: {
-        color: '#fff',
-        width: ({ currentStep }: any) => (currentStep !== 0 ? '140px' : '224px'),
-        height: '48px',
+    buttonsHolder: {
+        maxWidth: 360,
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '100%',
+        },
     },
-    backBtn: {
-        marginRight: '12px',
-        color: '#20BFB8',
+    buttons: {
+        height: 48,
+        borderRadius: 24,
+        margin: theme.spacing(0, 0.75),
+        boxShadow: theme.shadows[3],
+        maxWidth: 182,
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '100%',
+        },
     },
-});
+}));
 
 export function NewSubmission() {
     const dispatch = useAppDispatch();
@@ -70,38 +80,8 @@ export function NewSubmission() {
     const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const notifications = useNotifications();
 
-    const { search } = useLocation();
-    const params: any = new URLSearchParams(search);
-    const orderId = params?.get('orderId');
-
-    useEffect(() => {
-        if (orderId) {
-            dispatch(getOrder(orderId));
-        }
-    }, [dispatch, orderId]);
-
-    useEffect(() => {
-        if (currentStep === 2) {
-            dispatch(getStatesList());
-            dispatch(setIsNextLoading(true));
-            dispatch(getShippingFee(selectedCards));
-            dispatch(setIsNextLoading(false));
-            dispatch(getSavedAddresses());
-            window.scroll(0, 0);
-            pushToDataLayer({ event: 'google-ads-cards-selected' });
-        }
-
-        if (currentStep === 3) {
-            dispatch(getStatesList());
-            dispatch(getAvailableCredit()).unwrap();
-            dispatch(getSavedAddresses()).unwrap();
-        }
-    }, [currentStep, dispatch, selectedCards]);
-
     const getStepContent = useCallback(() => {
         switch (currentStep) {
-            case 0:
-                return <SubmissionStep01Content />;
             case 1:
                 return <SubmissionStep02Content />;
             case 2:
@@ -111,13 +91,13 @@ export function NewSubmission() {
             case 4:
                 return <SubmissionStep05Content />;
             default:
-                window.location.href = `/dashboard/submissions/${orderId}/view`;
-                return;
+                return <SubmissionStep01Content />;
         }
-    }, [currentStep, orderId]);
+    }, [currentStep]);
 
     const handleNext = async () => {
         // Executing different stuff before next step loads
+
         if (currentStep === 0) {
             dispatch(setIsNextLoading(true));
             dispatch(nextStep());
@@ -127,11 +107,14 @@ export function NewSubmission() {
         }
 
         if (currentStep === 1) {
-            await dispatch(updateOrderStep(currentStep));
-            await dispatch(nextStep());
-            dispatch(getStatesList());
-            dispatch(getAvailableCredit()).unwrap();
-            dispatch(getSavedAddresses()).unwrap();
+            dispatch(setIsNextLoading(true));
+            await dispatch(getShippingFee(selectedCards));
+            await dispatch(getStatesList());
+            await dispatch(getSavedAddresses());
+            dispatch(nextStep());
+            dispatch(setIsNextLoading(false));
+            window.scroll(0, 0);
+            pushToDataLayer({ event: 'google-ads-cards-selected' });
             return;
         }
 
@@ -144,19 +127,17 @@ export function NewSubmission() {
                         ? ShippingAddressEvents.continuedWithNewAddress
                         : ShippingAddressEvents.continuedWithExisting,
             });
-            await dispatch(updateOrderAddresses()).then(() => {
-                dispatch(getAvailableCredit()).unwrap();
-                dispatch(setIsNextLoading(false));
-                dispatch(nextStep());
-                window.scroll(0, 0);
-            });
+            dispatch(nextStep());
+            dispatch(setIsNextLoading(false));
+            await dispatch(getAvailableCredit()).unwrap();
+            window.scroll(0, 0);
             pushToDataLayer({ event: 'google-ads-shipping-info-submitted' });
             return;
         }
         if (currentStep === 3) {
             try {
                 dispatch(setIsNextLoading(true));
-                await dispatch(updateCreditAndPromoCode()).unwrap();
+                await dispatch(createOrder()).unwrap();
                 ReactGA.event({
                     category: EventCategories.Submissions,
                     action:
@@ -179,7 +160,6 @@ export function NewSubmission() {
 
     const handleBack = async () => {
         window.scroll(0, 0);
-        await dispatch(updateOrderStep(currentStep - 2));
         if (currentStep === 3) {
             await dispatch(getShippingFee(selectedCards));
             await dispatch(getStatesList());
@@ -208,29 +188,38 @@ export function NewSubmission() {
                     {getStepContent()}
 
                     <div className={classes.buttonsContainer}>
-                        {currentStep !== 0 ? (
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                startIcon={<ArrowBackIcon />}
-                                onClick={handleBack}
-                            >
-                                Back
-                            </Button>
-                        ) : null}
-                        {currentStep !== 4 ? (
-                            <Button
-                                variant={'contained'}
-                                disabled={isNextDisabled || isNextLoading}
-                                color={'primary'}
-                                onClick={handleNext}
-                                className={classes.nextBtn}
-                                startIcon={isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null}
-                            >
-                                Next
-                            </Button>
-                        ) : null}
+                        <Grid
+                            container
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            flexWrap={'nowrap'}
+                            className={classes.buttonsHolder}
+                        >
+                            {currentStep !== 0 ? (
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    className={classes.buttons}
+                                    onClick={handleBack}
+                                    fullWidth
+                                >
+                                    Back
+                                </Button>
+                            ) : null}
+                            {currentStep !== 4 ? (
+                                <LoadingButton
+                                    variant={'contained'}
+                                    disabled={isNextDisabled || isNextLoading}
+                                    color={'primary'}
+                                    onClick={handleNext}
+                                    className={classes.buttons}
+                                    loading={isNextLoading}
+                                    fullWidth
+                                >
+                                    Next
+                                </LoadingButton>
+                            ) : null}
+                        </Grid>
                     </div>
                 </div>
             </StripeContainer>

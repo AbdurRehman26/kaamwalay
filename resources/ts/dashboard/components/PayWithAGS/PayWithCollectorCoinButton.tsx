@@ -5,25 +5,21 @@ import { getCurrentContract, getEthereum } from '@dashboard/components/PayWithAG
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { clearSubmissionState, getTotalInAGS, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
+import { useState } from 'react';
+import { clearSubmissionState, verifyOrderStatus } from '@dashboard/redux/slices/newSubmissionSlice';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 // @ts-ignore
-const web3: any = new Web3(window?.ethereum);
+const web3: any = new Web3(window?.web3?.currentProvider);
 
 export function PayWithCollectorCoinButton() {
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const totalInAGS = useAppSelector((state) => state.newSubmission.totalInAgs);
-    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const [isLoading, setIsLoading] = useState(false);
     const configs = useConfiguration();
     const dispatch = useAppDispatch();
-    const discountedValue = useAppSelector(
-        (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
-    );
     const wallets = {
         // Prod eth mainnet wallet
         ethWallet: configs?.web3EthWallet,
@@ -34,10 +30,7 @@ export function PayWithCollectorCoinButton() {
     };
     const notifications = useNotifications();
     const navigate = useNavigate();
-    const supportedNetworks = configs?.web3SupportedNetworks?.split(',') ?? [];
-    const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
-    const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
-    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
+    const supportedNetworks = configs?.web3SupportedNetworks.split(',');
 
     function getRecipientWalletFromNetwork(networkID: number) {
         switch (networkID) {
@@ -56,17 +49,16 @@ export function PayWithCollectorCoinButton() {
 
     async function handleClick() {
         setIsLoading(true);
+
         // @ts-ignore
-        const currentChainId = await web3.eth.net.getId();
+        const currentNetworkID = await web3.eth.net.getId();
         const currentAccounts = await getEthereum().request({ method: 'eth_requestAccounts' });
-        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentChainId, supportedNetworks));
+        const contract = new web3.eth.Contract(contractAbi, getCurrentContract(currentNetworkID, supportedNetworks));
         const balanceResult = await contract.methods.balanceOf(currentAccounts[0]).call();
         const balance = await web3.utils.fromWei(balanceResult, 'ether');
 
         if (balance <= grandTotal) {
             notifications.error("You don't have enough AGS to finish the payment");
-            setIsLoading(false);
-
             return;
         }
 
@@ -74,9 +66,9 @@ export function PayWithCollectorCoinButton() {
             const tx = {
                 from: currentAccounts[0],
                 data: contract.methods
-                    .transfer(getRecipientWalletFromNetwork(currentChainId), web3.utils.toWei(String(totalInAGS)))
+                    .transfer(getRecipientWalletFromNetwork(currentNetworkID), web3.utils.toWei(String(totalInAGS)))
                     .encodeABI(),
-                to: getCurrentContract(currentChainId, supportedNetworks),
+                to: getCurrentContract(currentNetworkID, supportedNetworks),
             };
 
             web3.eth.sendTransaction(tx, async (err: any, txHash: string) => {
@@ -87,21 +79,7 @@ export function PayWithCollectorCoinButton() {
                 setIsLoading(true);
                 setTimeout(async () => {
                     try {
-                        await dispatch(
-                            verifyOrderStatus({
-                                orderID,
-                                txHash: txHash,
-                                paymentByWallet: appliedCredit,
-                                paymentBlockchainNetwork: currentChainId,
-                                paymentMethod: {
-                                    id: paymentMethodId,
-                                },
-                                ...(couponCode && {
-                                    coupon: couponCode,
-                                    paymentPlan: serviceLevelId,
-                                }),
-                            }),
-                        ).unwrap();
+                        await dispatch(verifyOrderStatus({ orderID, txHash: txHash })).unwrap();
                         dispatch(clearSubmissionState());
                         dispatch(invalidateOrders());
                         setIsLoading(false);
@@ -116,34 +94,6 @@ export function PayWithCollectorCoinButton() {
             setIsLoading(false);
         }
     }
-
-    useEffect(() => {
-        async function fetchTotalInAGS() {
-            const currentChainId = await web3.eth.net.getId();
-            if (currentChainId) {
-                dispatch(
-                    getTotalInAGS({
-                        orderID,
-                        chainID: currentChainId,
-                        paymentByWallet: appliedCredit,
-                        discountedAmount: discountedValue,
-                    }),
-                );
-                return;
-            }
-
-            dispatch(
-                getTotalInAGS({
-                    orderID,
-                    chainID: 1,
-                    paymentByWallet: appliedCredit,
-                    discountedAmount: discountedValue,
-                }),
-            );
-        }
-
-        fetchTotalInAGS();
-    }, [dispatch, orderID, appliedCredit, discountedValue]);
 
     return (
         <Button variant={'contained'} disabled={isLoading} onClick={handleClick}>

@@ -339,7 +339,7 @@ export function SubmissionStep04Content() {
         [dispatch],
     );
 
-    useApplicationEvent(ApplicationEventsEnum.UnauthorizedSession, () => {
+    useApplicationEvent(ApplicationEventsEnum.AuthSessionUnauthorized, () => {
         openAuthDialog();
     });
 

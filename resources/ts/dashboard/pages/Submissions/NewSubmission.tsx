@@ -203,7 +203,7 @@ export function NewSubmission() {
         }
     }, [selectedCards, currentStep, dispatch]);
 
-    useApplicationEvent(ApplicationEventsEnum.UserSessionObtained, () => {
+    useApplicationEvent(ApplicationEventsEnum.AuthSessionLogin, () => {
         setMountChildren(false);
         setTimeout(() => {
             setMountChildren(true);

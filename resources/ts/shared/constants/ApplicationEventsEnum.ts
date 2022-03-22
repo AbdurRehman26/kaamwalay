@@ -1,4 +1,4 @@
 export enum ApplicationEventsEnum {
-    UnauthorizedSession = 'auth::session::unauthorized',
-    UserSessionObtained = 'auth::session::signIn',
+    AuthSessionUnauthorized = 'auth::session::unauthorized',
+    AuthSessionLogin = 'auth::session::signIn',
 }

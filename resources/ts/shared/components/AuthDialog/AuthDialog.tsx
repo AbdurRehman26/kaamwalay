@@ -70,7 +70,7 @@ export function AuthDialog({
 
     const handleAuthSuccess = useCallback(
         async function (authenticatedUser: AuthenticatedUserEntity) {
-            eventService.emit(ApplicationEventsEnum.UserSessionObtained, authenticatedUser);
+            eventService.emit(ApplicationEventsEnum.AuthSessionLogin, authenticatedUser);
             await authenticationService.setAccessToken(authenticatedUser.accessToken);
             pushToDataLayer({ event: 'google-ads-authenticated' });
             dispatch(authenticateCheckAction());

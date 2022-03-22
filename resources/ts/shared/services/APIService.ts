@@ -156,7 +156,7 @@ export class APIService {
         }
 
         if (error.response?.status === 401) {
-            this.eventService.emit(ApplicationEventsEnum.UnauthorizedSession);
+            this.eventService.emit(ApplicationEventsEnum.AuthSessionUnauthorized);
         }
 
         throw error;

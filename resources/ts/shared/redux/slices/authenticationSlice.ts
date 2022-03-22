@@ -42,7 +42,7 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         pushToDataLayer({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
-        eventService.emit(ApplicationEventsEnum.UserSessionObtained, authenticatedUser);
+        eventService.emit(ApplicationEventsEnum.AuthSessionLogin, authenticatedUser);
 
         // serialize class objects to plain objects according redux toolkit error
         return instanceToPlain(authenticatedUser);

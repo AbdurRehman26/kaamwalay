@@ -27,12 +27,6 @@ test('a customer can get specific payment method', function () {
     ]);
 });
 
-test('a guest cannot get payment methods', function () {
-    $response = $this->getJson('/api/v1/customer/orders/payment-methods');
-
-    $response->assertUnauthorized();
-});
-
 test('a customer can see only enabled payment methods', function () {
     $paypalPaymentMethod = tap(PaymentMethod::where('code', 'paypal')->first())->update(['is_enabled' => 0]);
     $paymentMethodsCount = PaymentMethod::enabled()->visible()->count();

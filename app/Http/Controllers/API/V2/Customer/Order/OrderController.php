@@ -2,30 +2,25 @@
 
 namespace App\Http\Controllers\API\V2\Customer\Order;
 
+use App\Enums\Order\OrderStepEnum;
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
 use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
-use App\Http\Requests\API\V2\Customer\Order\CreditAndDiscountRequest;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderRequest;
 use App\Http\Requests\API\V2\Customer\Order\UpdateCustomerShipmentRequest;
-use App\Http\Requests\API\V2\Customer\Order\UpdateOrderAddressesRequest;
-use App\Http\Requests\API\V2\Customer\Order\UpdateOrderStepRequest;
 use App\Http\Resources\API\V2\Customer\Order\OrderCollection;
 use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderResource;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Order\Shipping\CustomerShipmentService;
-use App\Services\Order\V2\CompleteOrderSubmissionService;
 use App\Services\Order\V2\CreateOrderService;
-use App\Services\Order\V2\CreditAndDiscountOrderService;
 use App\Services\Order\V2\OrderService;
-use App\Services\Order\V2\UpdateAddressOrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -34,9 +29,8 @@ class OrderController extends Controller
     public function __construct(
         protected OrderService $orderService,
         protected CreateOrderService $createOrderService,
-        protected UpdateAddressOrderService $updateAddressOrderService,
-        protected CreditAndDiscountOrderService $creditAndDiscountOrderService,
-        protected CompleteOrderSubmissionService $completeOrderSubmissionService
+        protected OrderStatusHistoryService $orderStatusHistoryService
+
     ) {
 //        $this->authorizeResource(Order::class, 'order');
     }
@@ -62,6 +56,25 @@ class OrderController extends Controller
         }
 
         return new OrderCreateResource($order);
+    }
+
+    public function completeOrderSubmission(Order $order): JsonResponse
+    {
+        $order->order_step = OrderStepEnum::ORDER_SUBMITTED_STEP;
+        $order->save();
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order);
+        try {
+
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 
     public function show(int $orderId): OrderResource

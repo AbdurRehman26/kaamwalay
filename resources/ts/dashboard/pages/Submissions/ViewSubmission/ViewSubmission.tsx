@@ -13,8 +13,6 @@ import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
 import { ViewSubmissionInformation } from './ViewSubmissionInformation';
 import { ViewSubmissionStatus } from './ViewSubmissionStatus';
-import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
-import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 
 /**
  * View Submission page
@@ -61,10 +59,6 @@ export function ViewSubmission() {
                 invoiceNumber={data?.invoice?.invoiceNumber}
             />
             <Divider />
-            <Box marginTop={'24px'} />
-            {data?.paymentStatus !== PaymentStatusEnum.PAID ? (
-                <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} />
-            ) : null}
             <ViewSubmissionStatus
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}
                 shipmentProvider={data?.orderCustomerShipment?.shippingProvider}
@@ -99,8 +93,6 @@ export function ViewSubmission() {
                 coupon={data?.coupon}
                 payment={data?.orderPayment}
                 paymentMethodId={data?.paymentMethodId}
-                paymentStatus={data?.paymentStatus}
-                walletPayment={data?.amountPaidFromWallet}
             />
             <Box marginTop={'24px'} />
             <Divider />

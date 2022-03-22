@@ -40,7 +40,7 @@ class OrderStatusChangedListener implements ShouldQueue
      * @return void
      */
     public function handle(OrderStatusChangedEvent $event)
-    {
+    {dd(11);
         $this->processEmails($event);
         $this->processPushNotification($event);
     }

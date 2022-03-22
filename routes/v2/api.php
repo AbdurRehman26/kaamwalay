@@ -71,6 +71,7 @@ Route::prefix('customer')->group(function () {
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);
+            Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);
             Route::apiResource('', OrderController::class)
                 ->only(['index', 'store'])
                 ->names([

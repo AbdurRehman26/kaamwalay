@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
@@ -367,11 +367,11 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/${input.txHash}`);
         const response = await endpoint.post('');
-        const fulfilledReturn = {
+
+        return {
             message: response.data.message,
             transactionHash: input.txHash,
         };
-        return fulfilledReturn;
     },
 );
 
@@ -393,7 +393,6 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
         currentSubmission.step03Data.selectedExistingAddress.id !== 0
             ? currentSubmission.step03Data.selectedExistingAddress
             : currentSubmission.step03Data.selectedAddress;
-    const billingAddress = currentSubmission.step04Data.selectedBillingAddress;
 
     const orderDTO = {
         paymentPlan: {
@@ -420,17 +419,6 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     ? false
                     : currentSubmission.step03Data.saveForLater,
         },
-        billingAddress: {
-            firstName: billingAddress.firstName,
-            lastName: billingAddress.lastName,
-            address: billingAddress.address,
-            city: billingAddress.city,
-            state: billingAddress.state.code,
-            zip: billingAddress.zipCode,
-            phone: finalShippingAddress.phoneNumber,
-            flat: billingAddress.flat,
-            sameAsShipping: currentSubmission.step04Data.useShippingAddressAsBillingAddress,
-        },
         customerAddress: {
             id:
                 currentSubmission.step03Data.selectedExistingAddress.id !== -1
@@ -439,14 +427,6 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
         },
         shippingMethod: {
             id: 1,
-        },
-        paymentMethod:
-            currentSubmission.previewTotal === 0 ? null : { id: currentSubmission.step04Data.paymentMethodId },
-        paymentProviderReference: {
-            id:
-                currentSubmission.step04Data.paymentMethodId === 1
-                    ? currentSubmission.step04Data.selectedCreditCard.id
-                    : null,
         },
         coupon: currentSubmission.couponState.isCouponApplied
             ? {
@@ -671,29 +651,10 @@ export const newSubmissionSlice = createSlice({
         [getTotalInAGS.fulfilled as any]: (state, action) => {
             state.totalInAgs = action.payload;
         },
-        [verifyOrderStatus.fulfilled as any]: (state, action) => {
-            // handle success
-        },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;
             state.orderNumber = action.payload.orderNumber;
             state.orderID = action.payload.id;
-            state.step04Data.selectedBillingAddress.address = action.payload.billingAddress.address;
-            state.step04Data.selectedBillingAddress.country = action.payload.billingAddress.country;
-            state.step04Data.selectedBillingAddress.firstName = action.payload.billingAddress.firstName;
-            state.step04Data.selectedBillingAddress.lastName = action.payload.billingAddress.lastName;
-            state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress.flat;
-            state.step04Data.selectedBillingAddress.id = action.payload.billingAddress.id;
-            state.step04Data.selectedCreditCard.expMonth =
-                state.step04Data.paymentMethodId === 1 && state.previewTotal !== 0
-                    ? action?.payload?.orderPayment?.card?.expMonth
-                    : '';
-            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress.phone;
-            state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
-                (currentState: any) => currentState.code === action.payload.billingAddress.state,
-            ) as any;
-            state.step04Data.selectedBillingAddress.zipCode = action.payload.billingAddress.zip;
-            state.step04Data.selectedBillingAddress.city = action.payload.billingAddress.city;
             state.step02Data.selectedCards = action.payload.orderItems.map((orderItem: any) => ({
                 image: orderItem.cardProduct.imagePath,
                 name: orderItem.cardProduct.name,
@@ -720,8 +681,6 @@ export const newSubmissionSlice = createSlice({
             state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
                 ? action.payload.discountedAmount
                 : '';
-            state.paymentMethodDiscountedAmount = action.payload.paymentMethodDiscountedAmount;
-            state.step04Data.paymentMethodId = action.payload.paymentMethodId;
             state.appliedCredit = action.payload.amountPaidFromWallet;
         },
     },

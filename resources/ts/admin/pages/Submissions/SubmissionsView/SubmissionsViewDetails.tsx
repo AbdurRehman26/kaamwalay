@@ -8,12 +8,11 @@ import { Link } from 'react-router-dom';
 import KeyValueTable from '@shared/components/KeyValueTable';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { AddressEntity } from '@shared/entities/AddressEntity';
+import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
 import { DateLike } from '@shared/lib/datetime/DateLike';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
-import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 
 interface SubmissionsViewDetailsProps {
     serviceLevelFee: number;
@@ -38,7 +37,6 @@ interface SubmissionsViewDetailsProps {
     amountPaidFromWallet: string;
     paymentMethodId: number;
     coupon: OrderCouponEntity;
-    paymentStatus?: PaymentStatusEnum;
 }
 
 const useStyles = makeStyles(
@@ -74,7 +72,6 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         paymentMethodId,
         coupon,
         amountPaidFromWallet,
-        paymentStatus,
     } = props;
 
     const classes = useStyles();
@@ -157,8 +154,6 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 coupon={coupon}
                 payment={payment}
                 paymentMethodId={paymentMethodId}
-                paymentStatus={paymentStatus || PaymentStatusEnum.PENDING}
-                walletPayment={amountPaidFromWallet}
             />
         </Grid>
     );

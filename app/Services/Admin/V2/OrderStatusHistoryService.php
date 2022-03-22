@@ -78,7 +78,6 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
                 ],
                 $orderStatusId === OrderStatus::CONFIRMED ? ['arrived_at' => Carbon::now()]: [],
             ));
-
         // TODO: replace find with the model.
         OrderStatusChangedEvent::dispatch(Order::find($orderId), OrderStatus::find($orderStatusId));
 

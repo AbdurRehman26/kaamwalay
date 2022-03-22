@@ -80,7 +80,6 @@ export function SubmissionsView() {
                 payment={data.orderPayment}
                 refundsTotal={String(data?.refundTotal)}
                 extraChargesTotal={String(data?.extraChargeTotal)}
-                paymentStatus={data?.paymentStatus}
             />
             <Divider />
             <RefundsAndExtraCharges

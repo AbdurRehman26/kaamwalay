@@ -3,7 +3,6 @@
 namespace App\Http\Requests\API\V2\Customer\Order;
 
 use App\Http\Requests\API\V1\Customer\Order\StoreOrderRequest as V1StoreOrderRequest;
-use Illuminate\Validation\Rule;
 
 class StoreOrderRequest extends V1StoreOrderRequest
 {
@@ -34,22 +33,8 @@ class StoreOrderRequest extends V1StoreOrderRequest
             'shipping_address.phone' => ['required', 'string'],
             'shipping_address.flat' => ['nullable', 'string'],
             'shipping_address.save_for_later' => ['required', 'boolean'],
-            'billing_address' => ['required', 'array'],
-            'billing_address.first_name' => ['required', 'string'],
-            'billing_address.last_name' => ['required', 'string'],
-            'billing_address.address' => ['required', 'string'],
-            'billing_address.city' => ['required', 'string'],
-            'billing_address.state' => ['required', 'string', 'max:2'],
-            'billing_address.zip' => ['required', 'string'],
-            'billing_address.phone' => ['required', 'string'],
-            'billing_address.flat' => ['nullable', 'string'],
-            'billing_address.same_as_shipping' => ['required', 'boolean'],
             'shipping_method' => ['required', 'array'],
             'shipping_method.id' => ['required', 'integer', 'exists:shipping_methods,id'],
-            'payment_by_wallet' => [
-                'nullable',
-                'numeric',
-            ],
             'coupon.code' => ['sometimes', 'exists:coupons,code'],
         ];
     }

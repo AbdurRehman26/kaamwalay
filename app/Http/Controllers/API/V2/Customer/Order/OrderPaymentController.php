@@ -7,7 +7,6 @@ use App\Exceptions\Services\Payment\PaymentNotVerified;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderPaymentRequest;
 use App\Models\Order;
-use App\Models\OrderPayment;
 use App\Services\Order\V2\OrderPaymentService;
 use App\Services\Payment\V2\PaymentService;
 use Exception;

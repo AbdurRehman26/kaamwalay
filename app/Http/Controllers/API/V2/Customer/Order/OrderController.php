@@ -30,7 +30,6 @@ class OrderController extends Controller
         protected OrderService $orderService,
         protected CreateOrderService $createOrderService,
         protected OrderStatusHistoryService $orderStatusHistoryService
-
     ) {
 //        $this->authorizeResource(Order::class, 'order');
     }
@@ -63,8 +62,8 @@ class OrderController extends Controller
         $order->order_step = OrderStepEnum::ORDER_SUBMITTED_STEP;
         $order->save();
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order);
-        try {
 
+        try {
         } catch (Exception $e) {
             return new JsonResponse(
                 [

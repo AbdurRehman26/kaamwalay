@@ -2,7 +2,6 @@
 
 namespace App\Listeners\API\Services;
 
-use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Services\Payment\V1\InvoiceService;

@@ -22,10 +22,10 @@ import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useState } from 'react';
 import logo from '@shared/assets/logo.svg';
+import { AuthDialog } from '@shared/components/AuthDialog';
 import { useAuth } from '@shared/hooks/useAuth';
-import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { cx } from '@shared/lib/utils/cx';
-import { headerDialogVisibility } from '@shared/redux/slices/authenticationSlice';
+import SubmissionButton from '../SubmissionButton/SubmissionButton';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -71,9 +71,8 @@ const useStyles = makeStyles(
 
 export function DrawerNavigation() {
     const classes = useStyles();
-    const { authenticated, logout } = useAuth();
+    const { authenticated, logout, authDialogProps, openAuthDialog } = useAuth();
     const [isOpen, setOpen] = useState(false);
-    const dispatch = useSharedDispatch();
     const handleOpen = useCallback(() => setOpen(true), [setOpen]);
     const handleClose = useCallback(() => setOpen(false), [setOpen]);
     const handleLogout = useCallback(async () => {
@@ -87,14 +86,6 @@ export function DrawerNavigation() {
         },
         [],
     );
-
-    const handleChange = useCallback(() => {
-        if (!authenticated) {
-            dispatch(headerDialogVisibility(true));
-        } else {
-            window.location.href = '/dashboard/submissions/new';
-        }
-    }, [dispatch, authenticated]);
 
     return (
         <>
@@ -135,27 +126,25 @@ export function DrawerNavigation() {
                                     primaryTypographyProps={{ className: classes.listItemText }}
                                 />
                             </ListItem>
-                            {/*
-                            <ListItem button onClick={handleItemPress('/dashboard')}>
-                                <ListItemText
-                                    primary={'Profile'}
-                                    primaryTypographyProps={{ className: classes.listItemText }}
-                                />
-                            </ListItem>
-                            <ListItem button onClick={handleItemPress('/dashboard')}>
-                                <ListItemText
-                                    primary={'Saved Credit Cards'}
-                                    primaryTypographyProps={{ className: classes.listItemText }}
-                                />
-                            </ListItem>
-                            <ListItem button onClick={handleItemPress('/dashboard')}>
-                                <ListItemText
-                                    primary={'Address Book'}
-                                    primaryTypographyProps={{ className: classes.listItemText }}
-                                />
-                            </ListItem>
-                            */}
 
+                            {/* <ListItem button onClick={handleItemPress('/dashboard')}> */}
+                            {/*    <ListItemText */}
+                            {/*        primary={'Profile'} */}
+                            {/*        primaryTypographyProps={{ className: classes.listItemText }} */}
+                            {/*    /> */}
+                            {/* </ListItem> */}
+                            {/* <ListItem button onClick={handleItemPress('/dashboard')}> */}
+                            {/*    <ListItemText */}
+                            {/*        primary={'Saved Credit Cards'} */}
+                            {/*        primaryTypographyProps={{ className: classes.listItemText }} */}
+                            {/*    /> */}
+                            {/* </ListItem> */}
+                            {/* <ListItem button onClick={handleItemPress('/dashboard')}> */}
+                            {/*    <ListItemText */}
+                            {/*        primary={'Address Book'} */}
+                            {/*        primaryTypographyProps={{ className: classes.listItemText }} */}
+                            {/*    /> */}
+                            {/* </ListItem> */}
                             <Divider className={classes.divider} />
                         </>
                     )}
@@ -181,8 +170,7 @@ export function DrawerNavigation() {
                     <Divider className={classes.divider} />
 
                     <Grid container direction={'column'} alignItems={'center'} justifyContent={'center'}>
-                        <Button
-                            onClick={handleChange}
+                        <SubmissionButton
                             variant={'contained'}
                             color={'primary'}
                             className={cx(classes.button, classes.buttonBackground)}
@@ -191,11 +179,11 @@ export function DrawerNavigation() {
                             disableElevation
                         >
                             Submit Cards
-                        </Button>
+                        </SubmissionButton>
 
                         {!authenticated ? (
                             <Button
-                                onClick={handleChange}
+                                onClick={openAuthDialog}
                                 variant={'text'}
                                 color={'inherit'}
                                 className={classes.button}
@@ -219,6 +207,7 @@ export function DrawerNavigation() {
                     </Grid>
                 </List>
             </Drawer>
+            <AuthDialog {...authDialogProps} />
         </>
     );
 }

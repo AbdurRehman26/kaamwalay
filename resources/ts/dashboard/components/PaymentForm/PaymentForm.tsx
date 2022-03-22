@@ -78,7 +78,9 @@ export function PaymentForm() {
             setShowAddCardModal(false);
         } catch (error: any) {
             setIsCardsListLoading(false);
-            notifications.error("We weren't able to get your existing cards", 'Error');
+            if (error.response?.status !== 401) {
+                notifications.error("We weren't able to get your existing cards", 'Error');
+            }
         }
     };
 
@@ -98,32 +100,39 @@ export function PaymentForm() {
             return;
         }
         setSaveBtnLoading(true);
-        // Get stripe client secret from back-end in order to use it to save the card
-        const requestClientSecret = await endpoint.post('');
+        try {
+            // Get stripe client secret from back-end in order to use it to save the card
+            const requestClientSecret = await endpoint.post('');
 
-        // We're using the client secret now in order to save the card for the customer on stripe
-        const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.clientSecret, {
-            // eslint-disable-next-line camelcase
-            payment_method: {
-                card: elements.getElement(CardElement) as any,
-            },
-        });
-        // The card couldn't be saved to stripe
-        if (result.error) {
-            // Let the user know we couldn't save his card
-            setSaveBtnLoading(false);
-            notifications.error(result.error.message!, 'Error');
-        } else {
-            // The card has been successfully saved to stripe, now we ask the back-end to send us all the stripe cards for this customer
-            // we're then listing them on the page
-            await saveExistingStripeCards();
-            notifications.success('Your card was successfully saved', 'Card saved');
-            setSaveBtnLoading(false);
-            ReactGA.event({
-                category: EventCategories.PaymentMethods,
-                action: PaymentMethodEvents.addedNewStripeCard,
+            // We're using the client secret now in order to save the card for the customer on stripe
+            const result = await stripe.confirmCardSetup(requestClientSecret.data.intent.clientSecret, {
+                // eslint-disable-next-line camelcase
+                payment_method: {
+                    card: elements.getElement(CardElement) as any,
+                },
             });
-            trackFacebookPixelEvent(FacebookPixelEvents.AddPaymentInfo);
+            // The card couldn't be saved to stripe
+            if (result.error) {
+                // Let the user know we couldn't save his card
+                setSaveBtnLoading(false);
+                notifications.error(result.error.message!, 'Error');
+            } else {
+                // The card has been successfully saved to stripe, now we ask the back-end to send us all the stripe cards for this customer
+                // we're then listing them on the page
+                await saveExistingStripeCards();
+                notifications.success('Your card was successfully saved', 'Card saved');
+                setSaveBtnLoading(false);
+                ReactGA.event({
+                    category: EventCategories.PaymentMethods,
+                    action: PaymentMethodEvents.addedNewStripeCard,
+                });
+                trackFacebookPixelEvent(FacebookPixelEvents.AddPaymentInfo);
+            }
+        } catch (e) {
+            console.error(e);
+            // Treat errors.
+        } finally {
+            setSaveBtnLoading(false);
         }
     };
 

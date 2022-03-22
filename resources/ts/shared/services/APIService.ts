@@ -1,7 +1,9 @@
 import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Map } from 'immutable';
+import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { DefaultAPIEndpointOptions } from '@shared/constants/DefaultAPIEndpointOptions';
 import { APIEndpointConfig } from '@shared/interfaces/APIEndpointConfig';
+import { EventService } from '@shared/services/EventService';
 import { Inject } from '../decorators/Inject';
 import { Injectable } from '../decorators/Injectable';
 import { buildUrl } from '../lib/api/buildUrl';
@@ -12,7 +14,10 @@ import { AuthenticationService } from './AuthenticationService';
 
 @Injectable('APIService')
 export class APIService {
-    constructor(@Inject() private authenticationService: AuthenticationService) {}
+    constructor(
+        @Inject(AuthenticationService) private authenticationService: AuthenticationService,
+        @Inject(EventService) private eventService: EventService,
+    ) {}
 
     public attach() {
         Axios.interceptors.request.use(this.requestInterceptor.bind(this));
@@ -44,6 +49,32 @@ export class APIService {
             ...config,
             baseURL: isExternal ? path$ : `/api/${version}/${path$}`,
         });
+    }
+
+    public mergeConfig(base?: AxiosRequestConfig, ...partial: (AxiosRequestConfig | undefined)[]) {
+        const base$ = Map(base ?? {});
+
+        return partial.reduce((target, partialConfig) => target.mergeDeep(Map(partialConfig ?? {})), base$).toJS();
+    }
+
+    public async download(url: string, filename?: string, config?: AxiosRequestConfig) {
+        const { data } = await Axios.get(
+            url,
+            this.mergeConfig(config, {
+                responseType: 'blob',
+            }),
+        );
+
+        const downloadHref = URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = downloadHref;
+        link.download = filename ?? '';
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(downloadHref);
     }
 
     /**
@@ -102,6 +133,7 @@ export class APIService {
         }
 
         response.data = this.objectToCamelCase(response.data);
+        response.status = /\D/.test(String(response.status)) ? response.status : Number(response.status);
 
         if (process.env.NODE_ENV === 'development') {
             this.logResponse(response);
@@ -123,38 +155,16 @@ export class APIService {
             error.message = message;
         }
 
+        if (error.response?.status === 401) {
+            this.eventService.emit(ApplicationEventsEnum.AuthSessionUnauthorized);
+        }
+
         throw error;
-    }
-
-    public mergeConfig(base?: AxiosRequestConfig, ...partial: (AxiosRequestConfig | undefined)[]) {
-        const base$ = Map(base ?? {});
-
-        return partial.reduce((target, partialConfig) => target.mergeDeep(Map(partialConfig ?? {})), base$).toJS();
     }
 
     private isNotExternal(config: AxiosRequestConfig): boolean {
         const baseURL = config.baseURL || '';
         return baseURL.startsWith('/') || baseURL.startsWith(window.location.origin);
-    }
-
-    public async download(url: string, filename?: string, config?: AxiosRequestConfig) {
-        const { data } = await Axios.get(
-            url,
-            this.mergeConfig(config, {
-                responseType: 'blob',
-            }),
-        );
-
-        const downloadHref = URL.createObjectURL(data);
-        const link = document.createElement('a');
-        link.href = downloadHref;
-        link.download = filename ?? '';
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.click();
-        link.remove();
-
-        URL.revokeObjectURL(downloadHref);
     }
 
     private objectToSnakeCase(data: any) {

@@ -42,6 +42,9 @@ class OrderPaymentController extends Controller
             $orderPaymentService->createPayments($order, $request->validated());
 
             $response = $this->paymentService->charge($order, $request->all());
+
+            DB::commit();
+
             if (! empty($response['data'])) {
                 return new JsonResponse($response);
             }
@@ -55,6 +58,8 @@ class OrderPaymentController extends Controller
                 Response::HTTP_PAYMENT_REQUIRED
             );
         }
+
+        DB::rollBack();
 
         return new JsonResponse(
             $response,

@@ -19,7 +19,7 @@ export function CollectorCoinConfirmationSidebar() {
                     <CheckIcon className={classes.successIcon} />
                 </Avatar>
                 <Typography align={'center'} variant={'h6'} className={font.fontWeightBold} gutterBottom>
-                    Submission Initiated!
+                    Submission Payment Submitted!
                 </Typography>
                 <Typography align={'center'} variant={'body2'}>
                     We're currently processing your payment. This can take a few minutes, please wait for further

@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\V1;
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;

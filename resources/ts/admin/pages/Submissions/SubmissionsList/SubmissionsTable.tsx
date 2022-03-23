@@ -31,7 +31,7 @@ interface SubmissionsTableProps {
 }
 
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
-    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PAYMENT_PENDING], [tabFilter]);
+    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.INCOMPLETE], [tabFilter]);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
 
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
@@ -115,7 +115,9 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     <TableHead>
                         <TableRow>
                             <TableCell variant={'head'}>Submission #</TableCell>
-                            <TableCell variant={'head'}>Placed</TableCell>
+                            <TableCell variant={'head'}>
+                                {tabFilter === OrderStatusEnum.INCOMPLETE ? 'Date Created' : 'Placed'}
+                            </TableCell>
                             <TableCell variant={'head'}>Reviewed</TableCell>
                             <TableCell variant={'head'}>Customer</TableCell>
                             <TableCell variant={'head'}>Cards</TableCell>

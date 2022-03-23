@@ -14,7 +14,9 @@ trait HasOrderPayments
      */
     public function firstOrderPayment(): HasOne
     {
-        return $this->hasOne(OrderPayment::class)->oldestOfMany('created_at');
+        return $this->hasOne(OrderPayment::class)
+            ->where('order_payments.type', OrderPayment::TYPE_ORDER_PAYMENT)
+            ->oldestOfMany('created_at');
     }
 
     /**
@@ -30,7 +32,7 @@ trait HasOrderPayments
      */
     public function orderPayments(): HasMany
     {
-        return $this->hasMany(OrderPayment::class);
+        return $this->hasMany(OrderPayment::class)->whereNotNull('payment_method_id');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Order\Validators;
+namespace App\Services\Order\Validators\V1;
 
 use App\Exceptions\API\Customer\Wallet\InvalidCreditAppliedAmountException;
 use App\Models\Order;

@@ -10,7 +10,6 @@ import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@sh
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
 import SubmissionStep02Content from '../../components/SubmissionStep02Content';
@@ -85,8 +84,6 @@ export function NewSubmission() {
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
-    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
-
     const getStepContent = useCallback(() => {
         switch (currentStep) {
             case 1:
@@ -147,10 +144,7 @@ export function NewSubmission() {
                 await dispatch(createOrder()).unwrap();
                 ReactGA.event({
                     category: EventCategories.Submissions,
-                    action:
-                        paymentMethodId === 1
-                            ? PaymentMethodEvents.continuedWithStripePayment
-                            : PaymentMethodEvents.continuedWithPaypalPayment,
+                    action: PaymentMethodEvents.payLater,
                 });
                 dispatch(setIsNextLoading(false));
                 dispatch(nextStep());
@@ -211,7 +205,7 @@ export function NewSubmission() {
     });
 
     return (
-        <StripeContainer>
+        <>
             <SubmissionHeader />
             <div className={classes.pageContentContainer}>{children}</div>
             <div className={classes.buttonsContainer}>
@@ -248,7 +242,7 @@ export function NewSubmission() {
                     ) : null}
                 </Grid>
             </div>
-        </StripeContainer>
+        </>
     );
 }
 

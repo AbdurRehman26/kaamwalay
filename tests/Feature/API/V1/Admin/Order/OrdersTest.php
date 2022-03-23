@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\IncorrectOrderStatus;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\CreateOrderLabel;

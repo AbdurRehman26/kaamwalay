@@ -147,7 +147,7 @@ test('test payment', function () {
 
     $response->assertOk();
     $response->assertJsonPath('data.amount', $this->order->refresh()->grand_total_cents);
-    $totalAmount = $this->order->grand_total_cents;
+    $totalAmount = (int) bcmul($this->order->grand_total, '100');
     $actualFee = round((float) (
         (TestingStripeService::STRIPE_FEE_PERCENTAGE * $totalAmount) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
     ) / 100, 2);

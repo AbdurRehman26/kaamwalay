@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Coupon;
 use App\Models\Invoice;
 use App\Models\Order;
@@ -44,7 +45,7 @@ class OrderFactory extends Factory
     public function withPayment(): OrderFactory
     {
         return $this->afterCreating(function (Order $order) {
-            if ($order->order_status_id !== OrderStatus::PAYMENT_PENDING) {
+            if ($order->payment_status === OrderPaymentStatusEnum::PAID) {
                 $order->orderPayments()->save(
                     OrderPayment::factory()->stripe()->make([
                         'amount' => $order->grand_total,

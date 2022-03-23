@@ -1,7 +1,7 @@
 <?php
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -9,7 +9,6 @@ use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Admin\V1\OrderStatusHistoryService;
-
 use function Pest\Laravel\postJson;
 
 beforeEach(function () {

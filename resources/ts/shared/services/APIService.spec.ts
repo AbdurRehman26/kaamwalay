@@ -10,7 +10,7 @@ test('APIService create versioned endpoint [default]', async () => {
     mock.onGet(/.*/).reply(200, data);
 
     const result = await endpoint.get('');
-    expect(endpoint.defaults.baseURL?.endsWith('/api/v1/users')).toBeTruthy();
+    expect(endpoint.defaults.baseURL?.endsWith('/api/v2/users')).toBeTruthy();
     expect(mock.history.get.length).toBe(1);
     expect(mock.history.get[0].baseURL).toBe(endpoint.defaults.baseURL);
     expect(result.data).toMatchObject(data);
@@ -18,15 +18,15 @@ test('APIService create versioned endpoint [default]', async () => {
     mock.reset();
 });
 
-test('APIService create versioned endpoint [v2]', async () => {
+test('APIService create versioned endpoint [v1]', async () => {
     const data = [{ id: 1 }];
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('users', { version: 'v2' });
+    const endpoint = apiService.createEndpoint('users', { version: 'v1' });
     const mock = new MockAdapter(endpoint);
     mock.onGet(/.*/).reply(200, data);
 
     const result = await endpoint.get('');
-    expect(endpoint.defaults.baseURL?.endsWith('/api/v2/users')).toBeTruthy();
+    expect(endpoint.defaults.baseURL?.endsWith('/api/v1/users')).toBeTruthy();
     expect(mock.history.get.length).toBe(1);
     expect(mock.history.get[0].baseURL).toBe(endpoint.defaults.baseURL);
     expect(result.data).toMatchObject(data);

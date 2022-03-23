@@ -6,7 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
-import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
+import { EventCategories, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
@@ -20,7 +20,6 @@ import SubmissionSummary from '../../components/SubmissionSummary';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     backStep,
-    createOrder,
     getAvailableCredit,
     getSavedAddresses,
     getShippingFee,
@@ -140,16 +139,9 @@ export function NewSubmission() {
         }
         if (currentStep === 3) {
             try {
-                dispatch(setIsNextLoading(true));
-                await dispatch(createOrder()).unwrap();
-                ReactGA.event({
-                    category: EventCategories.Submissions,
-                    action: PaymentMethodEvents.payLater,
-                });
                 dispatch(setIsNextLoading(false));
                 dispatch(nextStep());
                 window.scroll(0, 0);
-                pushToDataLayer({ event: 'google-ads-payment-info-submitted' });
                 return;
             } catch (error: any) {
                 dispatch(setIsNextLoading(false));

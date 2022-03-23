@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { setAppliedCredit } from '@dashboard/redux/slices/newSubmissionSlice';
+import { setAppliedCredit, updatePaymentMethodId } from '@dashboard/redux/slices/newSubmissionSlice';
 
 enum InvalidStateTypes {
     exceedsAvailableCredit,
@@ -27,6 +27,9 @@ export function ApplyCredit() {
             return;
         }
         setLocalAppliedCredit(value);
+        // When using paypal, and we update the applied credit, it won't change the applied credit for that user.
+        // so here, we are resetting the payment method selection
+        dispatch(updatePaymentMethodId(1));
     }
 
     const errorMessage = useMemo(() => {

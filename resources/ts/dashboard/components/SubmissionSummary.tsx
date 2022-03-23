@@ -3,12 +3,14 @@ import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useState } from 'react';
+import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
+import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { clearSubmissionState, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
+import { clearSubmissionState, createOrder, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -150,11 +152,11 @@ function SubmissionSummary() {
     const navigate = useNavigate();
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
-    const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+    const [submitting, setIsSubmitting] = useState(false);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -176,9 +178,15 @@ function SubmissionSummary() {
 
     const handleCompleteSubmission = async () => {
         try {
+            setIsSubmitting(true);
+            const order = await dispatch(createOrder()).unwrap();
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action: PaymentMethodEvents.payLater,
+            });
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
-            navigate(`/submissions/${orderID}/confirmation`);
+            navigate(`/submissions/${order.id}/confirmation`);
         } catch (err: any) {}
     };
 
@@ -203,7 +211,12 @@ function SubmissionSummary() {
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            <Button variant="contained" color="primary" onClick={handleCompleteSubmission}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleCompleteSubmission}
+                                disabled={submitting}
+                            >
                                 {'Complete Submission'}
                             </Button>
                         </>

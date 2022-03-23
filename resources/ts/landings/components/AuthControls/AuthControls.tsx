@@ -6,6 +6,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import dummyLargeAvatar from '@shared/assets/dummyLargeAvatar.png';
+import { AuthDialog } from '@shared/components/AuthDialog';
 import { useAuth } from '@shared/hooks/useAuth';
 import { cx } from '@shared/lib/utils/cx';
 import SubmissionButton from '../SubmissionButton/SubmissionButton';
@@ -49,7 +50,7 @@ const useStyles = makeStyles(
 );
 
 export function AuthControls() {
-    const { checking, authenticated } = useAuth();
+    const { checking, authenticated, openAuthDialog, authDialogProps } = useAuth();
     const classes = useStyles();
 
     if (checking) {
@@ -71,10 +72,17 @@ export function AuthControls() {
                     <Avatar src={dummyLargeAvatar} />
                 </ButtonBase>
             ) : (
-                <Button color={'primary'} className={cx(classes.button)} startIcon={<PersonIcon />}>
+                <Button
+                    color={'primary'}
+                    className={cx(classes.button)}
+                    startIcon={<PersonIcon />}
+                    onClick={openAuthDialog}
+                >
                     <span className={'AuthControls-buttonLabel'}>Log in</span>
                 </Button>
             )}
+
+            <AuthDialog {...authDialogProps} />
         </>
     );
 }

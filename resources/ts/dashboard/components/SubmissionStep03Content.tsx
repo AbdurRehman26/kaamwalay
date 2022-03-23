@@ -11,6 +11,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
+import { useAuth } from '@shared/hooks/useAuth';
 import ExistingAddress from '@dashboard/components/ExistingAddress';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -159,6 +160,7 @@ const schema = yup.object().shape({
 });
 
 export function SubmissionStep03Content() {
+    const { authenticated } = useAuth();
     const disableAllInputs = useAppSelector((state) => state.newSubmission.step03Data.disableAllShippingInputs);
     const classes = useStyles({ disableAllInputs });
     const dispatch = useAppDispatch();
@@ -273,6 +275,9 @@ export function SubmissionStep03Content() {
             // we'll check the first address in the list
             if (existingAddresses.length !== 0 && selectedExistingAddressId === -1 && !useCustomShippingAddress) {
                 dispatch(setSelectedExistingAddress(existingAddresses[0].id));
+            }
+            if (!authenticated) {
+                dispatch(setDisableAllShippingInputs(false));
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -8,9 +8,16 @@ import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
 import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { clearSubmissionState, createOrder, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
+import {
+    clearSubmissionState,
+    createOrder,
+    setCustomStep,
+    setIsNextLoading,
+    setPreviewTotal,
+} from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -142,6 +149,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SubmissionSummary() {
     const classes = useStyles();
+    const notifications = useNotifications();
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
@@ -187,7 +195,11 @@ function SubmissionSummary() {
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
             navigate(`/submissions/${order.id}/confirmation`);
-        } catch (err: any) {}
+        } catch (error: any) {
+            dispatch(setIsNextLoading(false));
+            notifications.exception(error);
+            return;
+        }
     };
 
     function getPreviewTotal() {

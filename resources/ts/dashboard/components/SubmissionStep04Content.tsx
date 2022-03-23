@@ -77,7 +77,14 @@ export function SubmissionStep04Content() {
     const { authenticated, authDialogProps, openAuthDialog } = useAuth();
 
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
-    const finalShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
+    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const finalShippingAddress =
+        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+            ? selectedExistingAddress
+            : shippingAddress;
 
     useApplicationEvent(ApplicationEventsEnum.AuthSessionUnauthorized, () => {
         openAuthDialog();

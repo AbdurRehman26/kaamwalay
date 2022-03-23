@@ -41,6 +41,10 @@ export function ApplyCredit() {
     }, [invalidStateType]);
 
     useEffect(() => {
+        if (appliedCredit > 0 && appliedCredit <= availableCredit) {
+            return;
+        }
+
         if (availableCredit >= previewTotal) {
             dispatch(setAppliedCredit(previewTotal));
             setLocalAppliedCredit(previewTotal);

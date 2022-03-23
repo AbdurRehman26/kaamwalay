@@ -712,15 +712,19 @@ export const newSubmissionSlice = createSlice({
             };
         },
         orderToNewSubmission(state: NewSubmissionSliceState, action: PayloadAction<OrderEntity>) {
-            state.couponState.isCouponApplied = Boolean(action.payload.discountedAmount);
-            state.couponState.couponCode = action.payload.discountedAmount ? action.payload.coupon.code : '';
-            state.couponState.appliedCouponData.id = action.payload.discountedAmount ? action.payload.coupon.id : -1;
-            state.couponState.appliedCouponData.discountStatement = action.payload.discountedAmount
-                ? action.payload.coupon.discountStatement
-                : '';
-            state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
-                ? Number(action.payload.discountedAmount)
-                : 0;
+            state.couponState.isCouponApplied = Boolean(action.payload.coupon);
+            if (Boolean(action.payload.coupon)) {
+                state.couponState.couponCode = action.payload.discountedAmount ? action.payload.coupon.code : '';
+                state.couponState.appliedCouponData.id = action.payload.discountedAmount
+                    ? action.payload.coupon.id
+                    : -1;
+                state.couponState.appliedCouponData.discountStatement = action.payload.discountedAmount
+                    ? action.payload.coupon.discountStatement
+                    : '';
+                state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
+                    ? Number(action.payload.discountedAmount)
+                    : 0;
+            }
             state.orderID = action.payload.id;
             state.grandTotal = action.payload.grandTotal;
             state.refundTotal = action.payload.refundTotal;

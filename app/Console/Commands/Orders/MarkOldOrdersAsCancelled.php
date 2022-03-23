@@ -30,6 +30,7 @@ class MarkOldOrdersAsCancelled extends Command
     public function handle(OrderService $orderService): int
     {
         Event::fake();
+
         try {
             $date = Carbon::parse($this->argument('date'))->toDateString();
 

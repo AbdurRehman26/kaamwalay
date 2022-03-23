@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Orders;
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\User;
@@ -34,20 +35,21 @@ class MarkOldOrdersAsCancelled extends Command
         try {
             $date = Carbon::parse($this->argument('date'))->toDateString();
 
-            $orders = Order::where('order_status_id', '=', OrderStatus::PAYMENT_PENDING)
-                ->whereDate('created_at', '<', $date)
-                ->get();
+            $adminUser = User::admin()->first();
+            Order::where('order_status_id', '=', OrderStatus::PAYMENT_PENDING)
+                ->whereDate('created_at', '<=', $date)
+                ->get()
+                ->tap(function ($collection) {
+                    $this->info('Found ' . $collection->count() . ' Orders');
+                })
+                ->each(fn (Order $order) => $orderService->cancelOrder($order, $adminUser));
 
-            foreach ($orders as $order) {
-                $this->info("Canceling order#: $order->order_number");
-                $orderService->cancelOrder($order, User::admin()->first());
-                $this->info("Canceled order#: $order->order_number");
-            }
+            $this->info('Marked Cancelled!');
         } catch (Exception $e) {
             $this->info('Error while deleting orders');
             $this->info($e->getMessage());
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

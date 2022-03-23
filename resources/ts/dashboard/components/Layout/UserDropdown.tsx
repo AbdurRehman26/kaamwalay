@@ -22,12 +22,11 @@ import { useAuth } from '@shared/hooks/useAuth';
  * @time: 17:08
  */
 export function UserDropdown() {
-    const { logout } = useAuth();
+    const { logout, user, authenticated } = useAuth();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
-    const user$ = useAuth().user;
-    const isAdmin = user$.hasRole(RolesEnum.Admin);
+    const isAdmin = user?.hasRole(RolesEnum.Admin);
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -52,10 +51,14 @@ export function UserDropdown() {
         [navigate, logout],
     );
 
+    if (!authenticated) {
+        return null;
+    }
+
     return (
         <>
             <IconButton onClick={handleUserProfileOpen}>
-                <Avatar src={user$?.profileImage ?? RobogradingAvatar} alt={'Robograding Avatar'} />
+                <Avatar src={user?.profileImage ?? RobogradingAvatar} alt={'Robograding Avatar'} />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

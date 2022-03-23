@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Listeners\API\Order;
+namespace App\Listeners\API\Order\V2;
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Notifications\Order\OrderStatusChangedNotification;
-use App\Services\Admin\V1\OrderService as AdminOrderService;
+use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Services\EmailService;
-use App\Services\Order\OrderService;
+use App\Services\Order\V2\OrderService;
 use App\Services\PopReport\PopReportService;
 use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+
+use function now;
 
 class OrderStatusChangedListener implements ShouldQueue
 {
@@ -65,14 +67,14 @@ class OrderStatusChangedListener implements ShouldQueue
         }
     }
 
-    protected function handlePlaced(OrderStatusChangedEvent $event)
+    protected function handlePlaced(OrderStatusChangedEvent $event): void
     {
         $this->sendEmail(
             $event,
             EmailService::TEMPLATE_SLUG_SUBMISSION_PLACED,
             $this->orderService->getDataForCustomerSubmissionConfirmationEmail($event->order)
         );
-        
+
         $this->sendAdminEmail(
             EmailService::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED,
             $this->adminOrderService->getDataForAdminSubmissionConfirmationEmail($event->order)
@@ -96,7 +98,7 @@ class OrderStatusChangedListener implements ShouldQueue
         ]);
     }
 
-    protected function handleGraded(OrderStatusChangedEvent $event)
+    protected function handleGraded(OrderStatusChangedEvent $event): void
     {
         $this->popReportService->updatePopReportsForOrder($event->order);
 
@@ -107,7 +109,7 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function handleShipped(OrderStatusChangedEvent $event)
+    protected function handleShipped(OrderStatusChangedEvent $event): void
     {
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED, [
             'FIRST_NAME' => $event->order->user->first_name,
@@ -116,7 +118,7 @@ class OrderStatusChangedListener implements ShouldQueue
         ]);
     }
 
-    protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars)
+    protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars): void
     {
         $this->emailService->sendEmail(
             [[$event->order->user->email => $event->order->user->getFullName()]],
@@ -126,7 +128,7 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function sendAdminEmail(string $template, array $vars)
+    protected function sendAdminEmail(string $template, array $vars): void
     {
         $data = User::admin()->get()->map(function ($value) {
             return [$value->email => $value->name];
@@ -139,7 +141,7 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function scheduleEmail(OrderStatusChangedEvent $event, DateTime $sendAt, string $template, array $vars)
+    protected function scheduleEmail(OrderStatusChangedEvent $event, DateTime $sendAt, string $template, array $vars): void
     {
         $this->emailService->scheduleEmail(
             $sendAt,

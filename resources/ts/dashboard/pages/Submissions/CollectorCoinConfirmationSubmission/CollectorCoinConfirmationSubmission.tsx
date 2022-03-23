@@ -54,13 +54,13 @@ export function CollectorCoinConfirmationSubmission() {
 
     useEffect(() => {
         if (isPaymentSuccessful) {
-            navigate(`/submissions/${id}/confirmation`);
+            navigate(`/submissions/${id}/view`);
         }
     }, [dispatch, isPaymentSuccessful, id, navigate]);
 
     useRetry(
         async () => {
-            if (!isLoading) {
+            if (!isLoading && data?.orderPayment?.transaction?.completeHash) {
                 await dispatch(
                     getCollectorCoinPaymentStatus({
                         orderID: Number(id),

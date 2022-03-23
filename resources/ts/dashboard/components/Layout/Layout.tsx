@@ -42,7 +42,7 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
     return (
         <Root>
             {options.has(LayoutFlags.Header) && <LayoutHeader />}
-            <Grid container pt={3.5} flex={'1 1 auto'}>
+            <Grid container pt={3.5} mb={2.5} flex={'1 1 auto'}>
                 <ContainerComponent>
                     <ContentComponent>
                         {options.has(LayoutFlags.Sidebar) ? (

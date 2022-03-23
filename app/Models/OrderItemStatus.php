@@ -15,6 +15,7 @@ class OrderItemStatus extends Model
     public const NOT_ACCEPTED = 3;
     public const CONFIRMED = 4;
     public const GRADED = 5;
+    public const CANCELLED = 6;
 
     /**
      * The attributes that are mass assignable.

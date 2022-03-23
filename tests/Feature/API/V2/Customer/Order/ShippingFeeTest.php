@@ -37,8 +37,21 @@ test('shipping fee needs items', function () {
     ]);
 });
 
-test('a guest cannot get shipping fee', function () {
-    $response = $this->postJson('/api/v2/customer/orders/shipping-fee/');
+test('a guest can get shipping fee', function () {
+    $response = $this->postJson('/api/v2/customer/orders/shipping-fee/', [
+        'items' => [
+            [
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'quantity' => 2,
+                'declared_value_per_unit' => 1000,
+            ],
+        ],
+    ]);
 
-    $response->assertUnauthorized();
+    $response->assertJsonStructure([
+        'data' => ['shipping_fee'],
+    ]);
 });

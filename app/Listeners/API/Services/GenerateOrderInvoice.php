@@ -2,8 +2,8 @@
 
 namespace App\Listeners\API\Services;
 
-use App\Events\API\Customer\Order\OrderPaid;
 use App\Events\API\Customer\Order\OrderPlaced;
+use App\Exceptions\Services\Payment\InvoiceNotUploaded;
 use App\Services\Payment\V1\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -20,12 +20,15 @@ class GenerateOrderInvoice implements ShouldQueue
         //
     }
 
-    public function handle(OrderPaid|OrderPlaced $event): void
+    /**
+     * @throws InvoiceNotUploaded
+     */
+    public function handle(OrderPlaced $event): void
     {
         $this->invoiceService->saveInvoicePDF($event->order);
     }
 
-    public function failed(OrderPaid $event, $exception)
+    public function failed(OrderPlaced $event, $exception)
     {
         Log::error($exception->getMessage(), [
             'Invoice generation failed. Order ID: ' => $event->order->id,

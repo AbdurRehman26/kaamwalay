@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import ProtectedRoute from '@shared/components/ProtectedRoute';
+import Payment from '@dashboard/pages/Submissions/Payment/Payment';
 import { CollectorCoinConfirmationSubmission } from './CollectorCoinConfirmationSubmission';
 import { ConfirmationSubmission } from './ConfirmationSubmission';
 import { ListSubmissions } from './ListSubmissions';
@@ -9,11 +11,15 @@ import { ViewSubmission } from './ViewSubmission';
 export function Submissions() {
     return (
         <Routes>
-            <Route path={''} element={<ListSubmissions />} />
+            <Route path={''} element={ProtectedRoute(ListSubmissions)} />
+            <Route path={'/:id/view'} element={ProtectedRoute(ViewSubmission)} />
+            <Route path={'/:id/confirmation'} element={ProtectedRoute(ConfirmationSubmission)} />
+            <Route path={'/:id/pay'} element={ProtectedRoute(Payment)} />
+            <Route
+                path={'/:id/collector-coin/confirmation'}
+                element={ProtectedRoute(CollectorCoinConfirmationSubmission)}
+            />
             <Route path={'/new'} element={<NewSubmission />} />
-            <Route path={'/:id/view'} element={<ViewSubmission />} />
-            <Route path={'/:id/confirmation'} element={<ConfirmationSubmission />} />
-            <Route path={'/:id/collector-coin/confirmation'} element={<CollectorCoinConfirmationSubmission />} />
         </Routes>
     );
 }

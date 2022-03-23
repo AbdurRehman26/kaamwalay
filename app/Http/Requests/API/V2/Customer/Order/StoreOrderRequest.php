@@ -40,11 +40,11 @@ class StoreOrderRequest extends V1StoreOrderRequest
             'billing_address.same_as_shipping' => ['required', 'boolean'],
             'shipping_method' => ['required', 'array'],
             'shipping_method.id' => ['required', 'integer', 'exists:shipping_methods,id'],
-            'coupon.code' => ['sometimes', 'exists:coupons,code'],
             'payment_by_wallet' => [
                 'nullable',
                 'numeric',
             ],
+            'coupon.code' => ['sometimes', 'exists:coupons,code'],
         ];
     }
 }

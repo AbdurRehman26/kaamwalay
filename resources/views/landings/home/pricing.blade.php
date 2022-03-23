@@ -51,7 +51,7 @@
                                     </p>
                                 </li>
                             </ul>                            
-                            <div data-atom="submit-button" data-plan="{{$service->id}}" data-text-color="white" data-button-content="Select & start submission" data-margin="true">
+                            <div data-atom="submit-button" data-plan="{{$service->id}}" data-text-color="white" data-button-content="Select & start submission">
                                 {{-- JS runtime actions --}}
                             </div>
                         </div>

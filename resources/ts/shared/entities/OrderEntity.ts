@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
 import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
@@ -31,6 +32,7 @@ export class OrderEntity extends Entity {
     public shippingFee!: number;
     public serviceFee!: number;
     public customerId!: number;
+    public orderStep!: string;
     public customerNumber!: string;
     public reviewedAt!: string;
     public reviewedBy!: string;
@@ -38,6 +40,7 @@ export class OrderEntity extends Entity {
     public paymentMethodId!: number;
     public paymentMethodDiscountedAmount!: string;
     public amountPaidFromWallet!: string;
+    public paymentStatus!: PaymentStatusEnum;
 
     @Type(() => OrderCouponEntity)
     public coupon!: OrderCouponEntity;

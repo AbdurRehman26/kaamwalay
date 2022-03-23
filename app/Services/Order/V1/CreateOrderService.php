@@ -2,6 +2,7 @@
 
 namespace App\Services\Order\V1;
 
+use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\CustomerAddress;
@@ -20,7 +21,7 @@ use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\CustomerAddressValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
 use App\Services\Order\Validators\ItemsDeclaredValueValidator;
-use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
+use App\Services\Order\Validators\V1\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -97,6 +98,7 @@ class CreateOrderService
         $this->storeOrderPayment($this->data);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
+        OrderPlaced::dispatch($this->order);
 
         DB::commit();
     }
@@ -178,7 +180,6 @@ class CreateOrderService
                     'declared_value_per_unit' => $item['declared_value_per_unit'],
                     'declared_value_total' => $item['declared_value_per_unit'],
                 ]);
-              
                 $this->orderItemService->changeStatus($this->order, $storedItem, ['status' => 'pending'], auth()->user());
             }
         }

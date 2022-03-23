@@ -10,3 +10,4 @@ export { manageCardDialogSlice as manageCardDialog } from './manageCardDialogSli
 export { adminNewPromoCodeSlice } from './adminNewPromoCodeSlice';
 export { userSlice } from './userSlice';
 export { walletSlice as transactions } from './walletSlice';
+export { pendingOrdersSlice as pendingOrders } from './pendingOrdersSlice';

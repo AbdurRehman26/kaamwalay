@@ -7,6 +7,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import KeyValueTable from '@shared/components/KeyValueTable';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderPaymentEntity } from '@shared/entities/OrderPaymentEntity';
@@ -37,6 +38,8 @@ interface SubmissionsViewDetailsProps {
     amountPaidFromWallet: string;
     paymentMethodId: number;
     coupon: OrderCouponEntity;
+    paymentStatus: PaymentStatusEnum;
+    walletPayment: string;
 }
 
 const useStyles = makeStyles(
@@ -72,6 +75,8 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
         paymentMethodId,
         coupon,
         amountPaidFromWallet,
+        walletPayment,
+        paymentStatus,
     } = props;
 
     const classes = useStyles();
@@ -154,6 +159,9 @@ export function SubmissionsViewDetails(props: SubmissionsViewDetailsProps) {
                 coupon={coupon}
                 payment={payment}
                 paymentMethodId={paymentMethodId}
+                walletPayment={walletPayment}
+                paymentStatus={paymentStatus}
+                mode={'admin'}
             />
         </Grid>
     );

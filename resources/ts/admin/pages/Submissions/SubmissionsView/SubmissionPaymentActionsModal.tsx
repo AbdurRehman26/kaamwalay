@@ -2,6 +2,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Box from '@mui/material/Box';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -122,18 +123,17 @@ export default function SubmissionPaymentActionsModal({
                 {openState === 'show-issue-refund' ? (
                     <FormControl fullWidth>
                         <FormControlLabel
-                            control={
-                                <>
-                                    <Checkbox checked={addToWallet} onChange={handleRefundCredit} color="primary" />
-                                    <Typography>Credit to Customer Wallet</Typography>
+                            control={<Checkbox checked={addToWallet} onChange={handleRefundCredit} color="primary" />}
+                            label={
+                                <Box display={'flex'} alignItems={'center'}>
+                                    <Typography mr={1}>Credit to Customer Wallet</Typography>
                                     <Tooltip title='"Selecting this will send credit to a customers Robograding Account. It will not refund the amount to the original form of payment."'>
                                         <IconButton aria-label="info">
                                             <InfoOutlinedIcon />
                                         </IconButton>
                                     </Tooltip>
-                                </>
+                                </Box>
                             }
-                            label=""
                         />
                     </FormControl>
                 ) : null}

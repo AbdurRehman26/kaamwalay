@@ -21,6 +21,7 @@ use App\Services\Order\V2\CreateOrderService;
 use App\Services\Order\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -135,8 +136,17 @@ class OrderController extends Controller
     public function destroy(Order $order): JsonResponse
     {
         throw_if($order->order_status_id !== OrderStatus::PAYMENT_PENDING, OrderCanNotCanceled::class);
+        try {
+            DB::beginTransaction();
 
-        $this->orderService->cancelOrder($order, auth()->user());
+            $this->orderService->cancelOrder($order, auth()->user());
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return new JsonResponse(['message' => 'Failed to delete order!'], $e->getCode());
+        }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }

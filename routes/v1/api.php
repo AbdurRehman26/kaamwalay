@@ -47,8 +47,18 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('customer')->group(function () {
+    Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
+    Route::prefix('orders')->group(function () {
+        Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
+        Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show']);
+        Route::post('shipping-fee', ShippingFeeController::class);
+    });
+
+    Route::prefix('cards')->group(function () {
+        Route::get('categories', CardCategoryController::class)->name('cards.categories');
+    });
+
     Route::middleware('auth')->group(function () {
-        Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
 
@@ -56,15 +66,16 @@ Route::prefix('customer')->group(function () {
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
 
         Route::prefix('orders')->group(function () {
-            Route::apiResource('payment-plans', PaymentPlanController::class)
-                ->only(['index', 'show']);
-            Route::post('shipping-fee', ShippingFeeController::class);
             Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
-            Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'charge']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
-            Route::apiResource('/', OrderController::class)->only(['index', 'store']);
+            Route::apiResource('', OrderController::class)
+                ->only(['index', 'store'])
+                ->names([
+                'index' => 'customer.orders.index',
+                'store' => 'customer.orders.store',
+            ]);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
@@ -77,9 +88,7 @@ Route::prefix('customer')->group(function () {
 
         Route::prefix('cards')->group(function () {
             Route::get('/', [UserCardController::class, 'index']);
-            Route::get('categories', CardCategoryController::class)->name('cards.categories');
             Route::get('/{userCard}', [UserCardController::class, 'show']);
-
             Route::post('/', [CardProductController::class, 'store']);
         });
         Route::put('profile', [ProfileController::class, 'update']);

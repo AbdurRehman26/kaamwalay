@@ -1,16 +1,24 @@
 // TODO: Merge into a general component
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircleOutlined';
+import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
 import CloseIcon from '@mui/icons-material/Close';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
+import FeedIcon from '@mui/icons-material/FeedOutlined';
+import HomeIcon from '@mui/icons-material/HomeOutlined';
+import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
+import StyleIcon from '@mui/icons-material/StyleOutlined';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -20,14 +28,6 @@ import UserAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setNavigationDrawerOpen } from '@dashboard/redux/slices/dashboardSlice';
-import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
-import StyleIcon from '@mui/icons-material/StyleOutlined';
-import AccountCircleIcon from '@mui/icons-material/AccountCircleOutlined';
-import CreditCardIcon from '@mui/icons-material/CreditCardOutlined';
-import HomeIcon from '@mui/icons-material/HomeOutlined';
-import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
-import FeedIcon from '@mui/icons-material/FeedOutlined';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -172,7 +172,7 @@ export function DashboardNavigationDrawer() {
                 </ListItem>
                 <ListItem selected={isItemActive('/wallet')} onClick={handleItemPress('/wallet')} button>
                     <StyledListItemIcon>
-                        <AccountBalanceWalletIcon />
+                        <AccountBalanceWalletOutlinedIcon />
                     </StyledListItemIcon>
                     <ListItemText primary={'Wallet'} primaryTypographyProps={{ className: classes.listItemText }} />
                 </ListItem>

@@ -5,7 +5,7 @@ const useStyles = makeStyles(
         cardsListContainer: {
             padding: '12px',
             maxHeight: '250px',
-            overflow: 'scroll',
+            overflow: 'auto',
         },
         cardForm: {
             iconStyle: 'solid',
@@ -48,7 +48,7 @@ const useStyles = makeStyles(
             lineHeight: '24px',
             letterSpacing: '0.1px',
             color: 'rgba(0, 0, 0, 0.87)',
-            marginBottom: '24px',
+            marginBottom: '8px',
         },
         addNewCardItemContainer: {
             width: '100%',

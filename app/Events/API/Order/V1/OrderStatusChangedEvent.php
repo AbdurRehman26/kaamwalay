@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\API\Order;
+namespace App\Events\API\Order\V1;
 
 use App\Models\Order;
 use App\Models\OrderStatus;

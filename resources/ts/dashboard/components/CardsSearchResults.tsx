@@ -1,7 +1,9 @@
-import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import { plainToInstance } from 'class-transformer';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -15,11 +17,9 @@ import { font } from '@shared/styles/utils';
 import CustomPagination from '@dashboard/components/CustomPagination';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { markCardAsSelected, markCardAsUnselected } from '@dashboard/redux/slices/newSubmissionSlice';
+import CustomerAddCardDialog from './CustomerAddCardDialog';
 import SearchResultItemCard from './SearchResultItemCard';
 import { SubmissionReviewCardDialog } from './SubmissionReviewCardDialog';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CustomerAddCardDialog from './CustomerAddCardDialog';
 
 const useStyles = makeStyles((theme) => ({
     container: {

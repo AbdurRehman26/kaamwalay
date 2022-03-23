@@ -1,8 +1,8 @@
+import axios from 'axios';
+import { PresignUploadFileDto } from '@shared/dto/PresignUploadFileDto';
 import { Injectable } from '../decorators/Injectable';
 import { UploadFileEntity } from '../entities/UploadFileEntity';
 import { Repository } from './Repository';
-import { PresignUploadFileDto } from '@shared/dto/PresignUploadFileDto';
-import axios from 'axios';
 
 @Injectable('FilesRepository')
 export class FilesRepository extends Repository<UploadFileEntity> {

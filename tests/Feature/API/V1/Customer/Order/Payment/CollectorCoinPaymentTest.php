@@ -29,6 +29,7 @@ beforeEach(function () {
 
 test('collector coin discount is applied', function () {
     $this->actingAs($this->user);
+    Event::fake();
 
     $discountPercentage = 10;
     config(['robograding.collector_coin_discount_percentage' => $discountPercentage]);

@@ -1,18 +1,22 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CircularProgress from '@mui/material/CircularProgress';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
+import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
+import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import SubmissionHeader from '../../components/SubmissionHeader';
 import SubmissionStep01Content from '../../components/SubmissionStep01Content';
 import SubmissionStep02Content from '../../components/SubmissionStep02Content';
 import SubmissionStep03Content from '../../components/SubmissionStep03Content';
 import SubmissionStep04Content from '../../components/SubmissionStep04Content';
 import SubmissionStep05Content from '../../components/SubmissionStep05Content';
+import SubmissionSummary from '../../components/SubmissionSummary';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     backStep,
@@ -25,36 +29,53 @@ import {
     setIsNextDisabled,
     setIsNextLoading,
 } from '../../redux/slices/newSubmissionSlice';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     pageContentContainer: {
         marginTop: '100px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        flex: '1 1 auto',
+        marginBottom: theme.spacing(8),
+        '& .MuiContainer-root': {
+            flex: '1 1 auto',
+        },
     },
     buttonsContainer: {
+        position: 'sticky',
+        bottom: 0,
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
+        padding: 10,
         justifyContent: 'center',
-        marginTop: '40px',
-        marginBottom: '64px',
+        backgroundColor: '#fff',
+        boxShadow: theme.shadows[4],
     },
-    nextBtn: {
-        color: '#fff',
-        width: ({ currentStep }: any) => (currentStep !== 0 ? '140px' : '224px'),
-        height: '48px',
+    buttonsHolder: {
+        maxWidth: 360,
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '100%',
+        },
     },
-    backBtn: {
-        marginRight: '12px',
-        color: '#20BFB8',
+    buttons: {
+        height: 48,
+        borderRadius: 24,
+        margin: theme.spacing(0, 0.75),
+        boxShadow: theme.shadows[3],
+        maxWidth: 182,
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: '100%',
+        },
     },
-});
+}));
 
 export function NewSubmission() {
     const dispatch = useAppDispatch();
+    const notifications = useNotifications();
+
+    const [mountChildren, setMountChildren] = useState(true);
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const classes = useStyles({ currentStep });
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
@@ -63,13 +84,8 @@ export function NewSubmission() {
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
-    const paymentMethodId = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
-    const notifications = useNotifications();
-
     const getStepContent = useCallback(() => {
         switch (currentStep) {
-            case 0:
-                return <SubmissionStep01Content />;
             case 1:
                 return <SubmissionStep02Content />;
             case 2:
@@ -79,7 +95,7 @@ export function NewSubmission() {
             case 4:
                 return <SubmissionStep05Content />;
             default:
-                return <h2>yo</h2>;
+                return <SubmissionStep01Content />;
         }
     }, [currentStep]);
 
@@ -128,10 +144,7 @@ export function NewSubmission() {
                 await dispatch(createOrder()).unwrap();
                 ReactGA.event({
                     category: EventCategories.Submissions,
-                    action:
-                        paymentMethodId === 1
-                            ? PaymentMethodEvents.continuedWithStripePayment
-                            : PaymentMethodEvents.continuedWithPaypalPayment,
+                    action: PaymentMethodEvents.payLater,
                 });
                 dispatch(setIsNextLoading(false));
                 dispatch(nextStep());
@@ -158,6 +171,22 @@ export function NewSubmission() {
         dispatch(backStep());
     };
 
+    const children = mountChildren ? (
+        <Container>
+            <Grid container spacing={4}>
+                <Grid item xs={12} md={currentStep !== 0 ? 8 : 12}>
+                    {getStepContent()}
+                </Grid>
+
+                {currentStep !== 0 ? (
+                    <Grid item xs={12} md={4}>
+                        <SubmissionSummary />
+                    </Grid>
+                ) : null}
+            </Grid>
+        </Container>
+    ) : null;
+
     useEffect(() => {
         if (selectedCards.length === 0 && currentStep === 1) {
             dispatch(setIsNextDisabled(true));
@@ -168,40 +197,51 @@ export function NewSubmission() {
         }
     }, [selectedCards, currentStep, dispatch]);
 
+    useApplicationEvent(ApplicationEventsEnum.AuthSessionLogin, () => {
+        setMountChildren(false);
+        setTimeout(() => {
+            setMountChildren(true);
+        }, 50);
+    });
+
     return (
         <>
             <SubmissionHeader />
-            <StripeContainer>
-                <div className={classes.pageContentContainer}>
-                    {getStepContent()}
-
-                    <div className={classes.buttonsContainer}>
-                        {currentStep !== 0 ? (
-                            <Button
-                                variant={'text'}
-                                color={'secondary'}
-                                className={classes.backBtn}
-                                startIcon={<ArrowBackIcon />}
-                                onClick={handleBack}
-                            >
-                                Back
-                            </Button>
-                        ) : null}
-                        {currentStep !== 4 ? (
-                            <Button
-                                variant={'contained'}
-                                disabled={isNextDisabled || isNextLoading}
-                                color={'primary'}
-                                onClick={handleNext}
-                                className={classes.nextBtn}
-                                startIcon={isNextLoading ? <CircularProgress size={24} color={'secondary'} /> : null}
-                            >
-                                Next
-                            </Button>
-                        ) : null}
-                    </div>
-                </div>
-            </StripeContainer>
+            <div className={classes.pageContentContainer}>{children}</div>
+            <div className={classes.buttonsContainer}>
+                <Grid
+                    container
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    flexWrap={'nowrap'}
+                    className={classes.buttonsHolder}
+                >
+                    {currentStep !== 0 ? (
+                        <Button
+                            variant={'contained'}
+                            color={'inherit'}
+                            className={classes.buttons}
+                            onClick={handleBack}
+                            fullWidth
+                        >
+                            Back
+                        </Button>
+                    ) : null}
+                    {currentStep !== 4 ? (
+                        <LoadingButton
+                            variant={'contained'}
+                            disabled={isNextDisabled || isNextLoading}
+                            color={'primary'}
+                            onClick={handleNext}
+                            className={classes.buttons}
+                            loading={isNextLoading}
+                            fullWidth
+                        >
+                            Next
+                        </LoadingButton>
+                    ) : null}
+                </Grid>
+            </div>
         </>
     );
 }

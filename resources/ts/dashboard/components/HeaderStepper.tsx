@@ -14,9 +14,9 @@ import clsx from 'clsx';
 import React, { useCallback } from 'react';
 import { ReactComponent as Step01Icon } from '@shared/assets/step01Icon.svg';
 import { ReactComponent as Step02Icon } from '@shared/assets/step02Icon.svg';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setCustomStep } from '@dashboard/redux/slices/newSubmissionSlice';
 import { cx } from '@shared/lib/utils/cx';
+import { setCustomStep } from '@dashboard/redux/slices/newSubmissionSlice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
 const ColorlibConnector = withStyles({
     alternativeLabel: {

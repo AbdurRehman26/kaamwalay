@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import { NotificationItem } from '@shared/classes/NotificationItem';
 

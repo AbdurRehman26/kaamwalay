@@ -3,24 +3,26 @@ import React, { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { useAuth } from '@shared/hooks/useAuth';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
 import { useAppSelector } from '@dashboard/redux/hooks';
 import { clearSubmissionState } from '@dashboard/redux/slices/newSubmissionSlice';
-import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
-import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { useAuth } from '@shared/hooks/useAuth';
 
 function PaypalBtn() {
     const contentRef = useRef<HTMLDivElement>(null);
     const apiService = useInjectable(APIService);
     const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
+    const appliedCredit = useAppSelector((state) => state.newSubmission.appliedCredit);
+    const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const currentSelectedTurnaround = useAppSelector(
         (state) => state.newSubmission.step01Data.selectedServiceLevel.turnaround,
     );
@@ -35,6 +37,8 @@ function PaypalBtn() {
     const numberOfSelectedCards = (selectedCards || []).reduce((prev: number, cur) => prev + (cur.qty ?? 1), 0);
     const orderSubmission = useAppSelector((state) => state.newSubmission);
     const user$ = useAuth().user;
+    const couponCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+    const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
 
     const notifications = useNotifications();
     const navigate = useNavigate();
@@ -71,7 +75,23 @@ function PaypalBtn() {
                 .Buttons({
                     createOrder: async function () {
                         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
-                        const response = await endpoint.post('');
+                        const response = await endpoint.post('', {
+                            paymentByWallet: appliedCredit,
+                            // paymentProviderReference: {
+                            //     id: stripePaymentMethod,
+                            // },
+                            paymentMethod: {
+                                id: paymentMethodID,
+                            },
+                            ...(couponCode && {
+                                coupon: {
+                                    code: couponCode,
+                                },
+                                paymentPlan: {
+                                    id: serviceLevelId,
+                                },
+                            }),
+                        });
                         return response.data.id;
                     },
                     onApprove: async function (data: any, actions: any) {
@@ -80,6 +100,7 @@ function PaypalBtn() {
                                 `customer/orders/${orderID}/payments/${data.orderID}`,
                             );
                             const orderData = await endpoint.post('');
+
                             const errorDetail =
                                 Array.isArray(orderData.data.details ?? '') && orderData.data.details[0];
                             if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
@@ -102,7 +123,7 @@ function PaypalBtn() {
                             sendECommerceDataToGA();
                             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
                             pushDataToRefersion(orderSubmission, user$);
-                            navigate(`/submissions/${orderID}/confirmation`);
+                            navigate(`/submissions/${orderID}/view`);
                         } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');
                         }

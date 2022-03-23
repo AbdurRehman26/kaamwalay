@@ -1,26 +1,26 @@
 import SortIcon from '@mui/icons-material/Sort';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import StyleTwoToneIcon from '@mui/icons-material/StyleTwoTone';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import { styled, Theme } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import { TablePagination } from '@shared/components/TablePagination';
-import { bracketParams } from '@shared/lib/api/bracketParams';
-import { useListUserCardsQuery } from '@shared/redux/hooks/useUserCardsQuery';
-import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useNavigate } from 'react-router-dom';
+import { TablePagination } from '@shared/components/TablePagination';
+import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { bracketParams } from '@shared/lib/api/bracketParams';
+import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { useListUserCardsQuery } from '@shared/redux/hooks/useUserCardsQuery';
 import { font } from '@shared/styles/utils';
 import { CardPreview } from '../../../components/CardPreview/CardPreview';
-import Button from '@mui/material/Button';
-import StyleTwoToneIcon from '@mui/icons-material/StyleTwoTone';
 
 const StyledSelect = styled(Select)(
     {

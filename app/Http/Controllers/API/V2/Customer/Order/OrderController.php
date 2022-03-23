@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API\V2\Customer\Order;
 
+use App\Enums\Order\OrderStepEnum;
 use App\Exceptions\API\Customer\Order\CustomerShipmentNotUpdated;
+use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderRequest;
@@ -12,19 +14,22 @@ use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderCustomerShipmentResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderResource;
 use App\Models\Order;
-use App\Services\Order\OrderService;
+use App\Models\OrderStatus;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 use App\Services\Order\Shipping\CustomerShipmentService;
 use App\Services\Order\V2\CreateOrderService;
+use App\Services\Order\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class OrderController extends Controller
 {
     public function __construct(
         protected OrderService $orderService,
-        protected CreateOrderService $createOrderService
+        protected CreateOrderService $createOrderService,
+        protected OrderStatusHistoryService $orderStatusHistoryService
     ) {
 //        $this->authorizeResource(Order::class, 'order');
     }
@@ -36,10 +41,8 @@ class OrderController extends Controller
         );
     }
 
-    public function store(Request $request): OrderCreateResource | JsonResponse
+    public function store(StoreOrderRequest $request): OrderCreateResource | JsonResponse
     {
-        $request = resolve(StoreOrderRequest::class);
-
         try {
             $order = $this->createOrderService->create($request->validated());
         } catch (Exception $e) {
@@ -52,6 +55,15 @@ class OrderController extends Controller
         }
 
         return new OrderCreateResource($order);
+    }
+
+    public function completeOrderSubmission(Order $order): JsonResponse
+    {
+        $order->order_step = OrderStepEnum::ORDER_SUBMITTED_STEP;
+        $order->save();
+        $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $order);
+
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 
     public function show(int $orderId): OrderResource
@@ -91,11 +103,16 @@ class OrderController extends Controller
 
         try {
             $blockchainNetworkChainId = $request->payment_blockchain_network ?? 1;
-            $collectorCoinPrice = $this->orderService->calculateCollectorCoinPrice($order, $blockchainNetworkChainId);
+            $amount = $this->orderService->calculateCollectorCoinPrice(
+                $order,
+                $blockchainNetworkChainId,
+                $request->input('payment_by_wallet'),
+                $request->input('discounted_amount'),
+            );
 
             return new JsonResponse(
                 [
-                    'value' => $collectorCoinPrice,
+                    'value' => $amount,
                     'wallet' => config('web3networks')[$blockchainNetworkChainId]['collector_coin_wallet'],
                 ],
                 200
@@ -110,5 +127,17 @@ class OrderController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function destroy(Order $order): JsonResponse
+    {
+        throw_if($order->order_status_id !== OrderStatus::PAYMENT_PENDING, OrderCanNotCanceled::class);
+
+        $this->orderService->cancelOrder($order, auth()->user());
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 }

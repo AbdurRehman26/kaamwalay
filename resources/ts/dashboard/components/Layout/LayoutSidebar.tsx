@@ -1,9 +1,9 @@
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import StyleIcon from '@mui/icons-material/Style';
+import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
@@ -89,8 +89,8 @@ export function LayoutSidebar() {
 
             <List>
                 <LayoutSidebarItem icon={Inventory2Icon} title={'Submissions'} href={'/submissions'} />
-                <LayoutSidebarItem icon={StyleIcon} title={'Your Cards'} href={'/cards'} />
-                <LayoutSidebarItem icon={AccountBalanceWalletIcon} title={'Wallet'} href={'/wallet'} />
+                <LayoutSidebarItem icon={StyleOutlinedIcon} title={'Your Cards'} href={'/cards'} />
+                <LayoutSidebarItem icon={AccountBalanceWalletOutlinedIcon} title={'Wallet'} href={'/wallet'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Profile'} href={'/profile'} />
 
                 <LayoutSidebarItem

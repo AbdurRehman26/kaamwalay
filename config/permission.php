@@ -135,9 +135,13 @@ return [
         'store' => 'default',
     ],
 
+    /**
+     * When add a new role is important to be added as the last role in the array.
+     * This is important because the roles should match the order across machines.
+     */
     'roles' => [
-        'super-admin' => 'super-admin',
         'admin' => 'admin',
         'customer' => 'customer',
+        'super-admin' => 'super-admin',
     ],
 ];

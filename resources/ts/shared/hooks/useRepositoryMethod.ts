@@ -2,9 +2,9 @@ import { AxiosError } from 'axios';
 import { ClassConstructor } from 'class-transformer';
 import objectHash from 'object-hash';
 import { useCallback, useMemo } from 'react';
+import { UseQueryResult, useQuery } from 'react-query';
 import { Repository } from '../repositories/Repository';
 import { useRepository } from './useRepository';
-import { useQuery, UseQueryResult } from 'react-query';
 
 export type RepositoryKeys<T extends Repository<any>> = keyof Omit<
     T,

@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import TabList from '@mui/lab/TabList';
 import Button from '@mui/material/Button';
@@ -10,17 +11,16 @@ import makeStyles from '@mui/styles/makeStyles';
 import { debounce } from 'lodash';
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { font } from '@shared/styles/utils';
-import AddIcon from '@mui/icons-material/Add';
-import { PromoCodeModal } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodeModal';
+import { useInjectable } from '@shared/hooks/useInjectable';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import {
     setApplicables,
     setDiscountApplicationType,
     setShowNewPromoCodeDialog,
 } from '@shared/redux/slices/adminNewPromoCodeSlice';
-import { useInjectable } from '@shared/hooks/useInjectable';
 import { APIService } from '@shared/services/APIService';
+import { font } from '@shared/styles/utils';
+import { PromoCodeModal } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodeModal';
 
 interface PromoCodesListHeaderProps {
     onSearch?: (query: string) => void;

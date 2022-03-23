@@ -46,6 +46,7 @@ class StoreOrderPaymentRequest extends FormRequest
             'payment_provider_reference' => ['nullable', 'array'],
             'payment_provider_reference.id' => ['nullable', 'string'],
             'coupon.code' => ['sometimes', 'exists:coupons,code'],
+            'payment_plan.id' => ['sometimes', 'exists:payment_plans,id'],
         ];
     }
 }

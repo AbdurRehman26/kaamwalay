@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     orderDetailItemTitleContainer: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'start',
     },
     orderDetailItemTitle: {
         fontFamily: 'Roboto',

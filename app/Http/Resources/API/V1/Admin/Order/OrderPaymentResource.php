@@ -20,6 +20,17 @@ class OrderPaymentResource extends BaseResource
             return [];
         }
 
+        if (empty(json_decode($this->response)) && in_array($this->type, [OrderPayment::TYPE_EXTRA_CHARGE, OrderPayment::TYPE_REFUND])) {
+            return [
+                'id' => $this->id,
+                'notes' => $this->notes,
+                'amount' => $this->amount,
+                'type' => $this->type,
+                'user' => new UserResource($this->user),
+                'created_at' => $this->formatDate($this->created_at),
+            ];
+        }
+
         if ($this->order->paymentMethod->code === 'paypal' && $this->type !== OrderPayment::TYPE_REFUND) {
             return $this->paypalData(json_decode($this->response, associative: true) ?? []);
         } elseif ($this->paymentMethod->isCollectorCoin()) {

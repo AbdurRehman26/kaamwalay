@@ -3,14 +3,14 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useState, MouseEvent } from 'react';
+import React, { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
 import SubmissionPaymentActionsModal from '@admin/pages/Submissions/SubmissionsView/SubmissionPaymentActionsModal';
 import { DialogStateEnum } from '@admin/pages/Submissions/SubmissionsView/SubmissionTransactionDialogEnum';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
-import { UserEntity } from '@shared/entities/UserEntity';
 
 const useStyles = makeStyles(
     (theme) => ({

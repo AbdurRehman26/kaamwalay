@@ -33,8 +33,8 @@ test('a user can see specific payment plan', function () {
     ]);
 });
 
-test('a guest cannot get payment plans', function () {
+test('a guest can get payment plans', function () {
     $response = $this->getJson('/api/v1/customer/orders/payment-plans');
 
-    $response->assertUnauthorized();
+    $response->assertOk();
 });

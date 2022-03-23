@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
 import { OrderRefundEntity } from '@shared/entities/OrderRefundEntity';
 import { OrderItemStatusEnum } from '../constants/OrderItemStatusEnum';
@@ -8,8 +10,8 @@ import { DateField } from '../decorators/DateField';
 import { AddressEntity } from './AddressEntity';
 import { Entity } from './Entity';
 import { InvoiceEntity } from './InvoiceEntity';
-import { OrderLabelEntity } from './OrderLabelEntity';
 import { OrderItemEntity } from './OrderItemEntity';
+import { OrderLabelEntity } from './OrderLabelEntity';
 import { OrderPaymentEntity } from './OrderPaymentEntity';
 import { OrderStatusEntity } from './OrderStatusEntity';
 import { OrderStatusHistoryEntity } from './OrderStatusHistoryEntity';
@@ -18,7 +20,6 @@ import { PaymentPlanEntity } from './PaymentPlanEntity';
 import { ShipmentEntity } from './ShipmentEntity';
 import { ShippingMethodEntity } from './ShippingMethodEntity';
 import { UserEntity } from './UserEntity';
-import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 
 export class OrderEntity extends Entity {
     public orderNumber!: string;
@@ -31,6 +32,7 @@ export class OrderEntity extends Entity {
     public shippingFee!: number;
     public serviceFee!: number;
     public customerId!: number;
+    public orderStep!: string;
     public customerNumber!: string;
     public reviewedAt!: string;
     public reviewedBy!: string;
@@ -38,6 +40,7 @@ export class OrderEntity extends Entity {
     public paymentMethodId!: number;
     public paymentMethodDiscountedAmount!: string;
     public amountPaidFromWallet!: string;
+    public paymentStatus!: PaymentStatusEnum;
 
     @Type(() => OrderCouponEntity)
     public coupon!: OrderCouponEntity;

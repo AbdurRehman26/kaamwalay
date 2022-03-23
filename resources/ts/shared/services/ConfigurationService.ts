@@ -1,7 +1,7 @@
 import { Injectable } from '../decorators/Injectable';
 import { ConfigurationEntity } from '../entities/ConfigurationEntity';
 import { loadConfigurationsAction, setConfig } from '../redux/slices/configurationSlice';
-import { getGlobalStore, GlobalStoreType } from '../redux/store';
+import { GlobalStoreType, getGlobalStore } from '../redux/store';
 
 @Injectable('ConfigurationService')
 export class ConfigurationService {

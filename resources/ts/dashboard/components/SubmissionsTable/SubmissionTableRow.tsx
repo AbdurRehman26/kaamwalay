@@ -8,15 +8,20 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Moment } from 'moment';
-import { MouseEventHandler, useCallback, useState } from 'react';
+import React, { MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
+import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
+import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
-import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
-import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
+import { deleteOrder, setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
+import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
+import { SubmissionStatusChip } from '@dashboard/components/SubmissionStatusChip';
 import { useAppDispatch } from '@dashboard/redux/hooks';
 
 interface SubmissionTableRowProps {
@@ -24,7 +29,7 @@ interface SubmissionTableRowProps {
     orderNumber: string;
     serviceLevel: number;
     cardsNumber: number;
-    status: string;
+    status: OrderStatusEnum;
     invoice?: string;
     invoiceNumber?: string;
     disabled?: boolean;
@@ -32,6 +37,7 @@ interface SubmissionTableRowProps {
     orderCustomerShipment: null | ShipmentEntity;
     datePlaced?: Date | Moment | null;
     dateArrived?: Date | Moment | null;
+    paymentStatus?: PaymentStatusEnum;
 }
 
 enum Options {
@@ -41,6 +47,7 @@ enum Options {
     Delete,
     ViewInstructions,
     ToggleShipmentTrackingModal,
+    ContinueSubmission,
 }
 
 const useStyles = makeStyles(
@@ -96,6 +103,9 @@ const useStyles = makeStyles(
             textDecoration: 'none',
             color: '#000',
         },
+        unpaidOrderTableCell: {
+            border: 'none',
+        },
     },
     { name: 'SubmissionTableRow' },
 );
@@ -112,13 +122,14 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         status,
         orderCustomerShipment,
         isSm,
+        paymentStatus,
     } = props;
 
     const submissionViewUrl = `/submissions/${id}/view`;
     const navigate = useNavigate();
-    const confirm = useConfirmation();
     const classes = useStyles();
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
@@ -127,7 +138,6 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const handleOption = useCallback(
         (option: Options) => async () => {
             handleCloseOptions();
-
             switch (option) {
                 case Options.View:
                     navigate(`/submissions/${id}/view`);
@@ -141,19 +151,21 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 case Options.ToggleShipmentTrackingModal:
                     setShowShipmentTrackingModal(!showShipmentTrackingModal);
                     break;
-                case Options.Delete:
-                    const result = await confirm();
-                    if (result) {
-                        console.log('Delete submission');
-                    }
-                    break;
                 case Options.Download:
                     downloadFromUrl(invoice!, `robograding-${invoiceNumber}.pdf`);
                     break;
+                case Options.Delete:
+                    setShowDeleteModal(!showDeleteModal);
+                    break;
+                case Options.ContinueSubmission:
+                    navigate(`/submissions/new?orderId=${id}`);
+                    break;
             }
         },
-        [handleCloseOptions, navigate, id, showShipmentTrackingModal, confirm, invoice, invoiceNumber],
+        [handleCloseOptions, navigate, id, showDeleteModal, showShipmentTrackingModal, invoice, invoiceNumber],
     );
+
+    const isPaid = useMemo(() => paymentStatus === PaymentStatusEnum.PAID, [paymentStatus]);
 
     const handleShipmentSubmit = useCallback(
         async ({ trackingNumber, shippingProvider }: Record<any, string>) => {
@@ -162,8 +174,24 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [dispatch, id],
     );
 
+    const handleOrderDeleteSubmit = useCallback(
+        async ({ orderId }: Record<any, number>) => {
+            await dispatch(deleteOrder(orderId));
+            window.location.href = '/dashboard/submissions';
+        },
+        [dispatch],
+    );
+
     return (
         <>
+            <OrderDeleteDialog
+                open={showDeleteModal}
+                onClose={handleOption(Options.Delete)}
+                orderNumber={orderNumber}
+                orderId={id}
+                onSubmit={handleOrderDeleteSubmit}
+            />
+
             <ShipmentDialog
                 open={showShipmentTrackingModal}
                 onClose={handleOption(Options.ToggleShipmentTrackingModal)}
@@ -173,53 +201,74 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
             />
 
             {!isSm ? (
-                <TableRow>
-                    <TableCell>
-                        <MuiLink component={Link} to={submissionViewUrl}>
-                            {orderNumber}
-                        </MuiLink>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {`${formatCurrency(serviceLevel)} / Card`}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {cardsNumber}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        <Link to={submissionViewUrl} className={classes.linkText}>
-                            {status}
-                        </Link>
-                    </TableCell>
-                    <TableCell align={'right'}>
-                        <IconButton onClick={handleClickOptions} size="large">
-                            <MoreIcon />
-                        </IconButton>
+                <>
+                    <TableRow className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <MuiLink component={Link} to={submissionViewUrl}>
+                                {orderNumber}
+                            </MuiLink>
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <Link to={submissionViewUrl} className={classes.linkText}>
+                                {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
+                            </Link>
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <PaymentStatusChip
+                                color={paymentStatus || PaymentStatusEnum.PENDING}
+                                label={PaymentStatusMap[paymentStatus || PaymentStatusEnum.PENDING]}
+                            />
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <Link to={submissionViewUrl} className={classes.linkText}>
+                                {`${formatCurrency(serviceLevel)} / Card`}
+                            </Link>
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <Link to={submissionViewUrl} className={classes.linkText}>
+                                {cardsNumber}
+                            </Link>
+                        </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <Link to={submissionViewUrl} className={classes.linkText}>
+                                <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
+                            </Link>
+                        </TableCell>
+                        <TableCell align={'right'} className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                            <IconButton onClick={handleClickOptions} size="large">
+                                <MoreIcon />
+                            </IconButton>
 
-                        <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                            <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
-                                {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                            </MenuItem>
-                            <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
-                            <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
-                            </MenuItem>
-                        </Menu>
-                    </TableCell>
-                </TableRow>
+                            <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                                <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
+                                    {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                </MenuItem>
+                                <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
+                                <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                    {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                </MenuItem>
+                                {status === OrderStatusEnum.INCOMPLETE && (
+                                    <>
+                                        <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
+                                            Continue Submission
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
+                                    </>
+                                )}
+                            </Menu>
+                        </TableCell>
+                    </TableRow>
+                    {!isPaid ? (
+                        <TableRow>
+                            <TableCell colSpan={8}>
+                                <PaymentStatusNotice
+                                    id={id}
+                                    paymentStatus={paymentStatus || PaymentStatusEnum.PENDING}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    ) : null}
+                </>
             ) : (
                 <div className={classes.submissionHolder}>
                     <div className={classes.submissionLeftSide}>
@@ -265,13 +314,27 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </IconButton>
 
                             <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                                <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
-                                    {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                                </MenuItem>
-                                <MenuItem onClick={handleOption(Options.ViewInstructions)}>View Instructions</MenuItem>
-                                <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                    {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
-                                </MenuItem>
+                                {status === OrderStatusEnum.PLACED && (
+                                    <>
+                                        <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
+                                            {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.ViewInstructions)}>
+                                            View Instructions
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                            {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
+                                        </MenuItem>
+                                    </>
+                                )}
+                                {status === OrderStatusEnum.INCOMPLETE && (
+                                    <>
+                                        <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
+                                            Continue Submission
+                                        </MenuItem>
+                                        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
+                                    </>
+                                )}
                             </Menu>
                         </div>
                     </div>

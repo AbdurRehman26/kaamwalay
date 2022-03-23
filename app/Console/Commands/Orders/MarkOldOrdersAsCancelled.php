@@ -36,7 +36,9 @@ class MarkOldOrdersAsCancelled extends Command
                 ->get();
 
             foreach ($orders as $order) {
+                $this->info('Cancelling order #:', $order->order_number);
                 $orderService->cancelOrder($order, User::admin()->first());
+                $this->info('Canceled order #:', $order->order_number);
             }
         } catch (Exception $e) {
             $this->info('Error while deleting orders');

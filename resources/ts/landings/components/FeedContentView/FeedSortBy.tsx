@@ -1,9 +1,9 @@
+import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { connectSortBy } from 'react-instantsearch-dom';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import { connectSortBy } from 'react-instantsearch-dom';
 
 const FeedSortDropdown = styled(Box)(
     {

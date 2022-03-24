@@ -1,16 +1,16 @@
-import { connectHits } from 'react-instantsearch-dom';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
-import theme from '@shared/styles/theme';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import { Link, BrowserRouter } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+import { connectHits } from 'react-instantsearch-dom';
+import { BrowserRouter, Link } from 'react-router-dom';
+import theme from '@shared/styles/theme';
 
 const TableDiv = styled(TableContainer)({
     '.TableRow': {

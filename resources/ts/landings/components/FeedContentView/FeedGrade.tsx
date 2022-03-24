@@ -1,11 +1,11 @@
-import { connectMenu } from 'react-instantsearch-dom';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
+import { connectMenu } from 'react-instantsearch-dom';
 
 const FeedGradeDropdown = styled(Box)(
     {

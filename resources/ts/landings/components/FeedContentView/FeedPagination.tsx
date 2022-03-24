@@ -1,9 +1,9 @@
-import { connectPagination } from 'react-instantsearch-dom';
 import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import { connectPagination } from 'react-instantsearch-dom';
 import theme from '@shared/styles/theme';
 
 const FeedPaginationBox = styled(Box)({

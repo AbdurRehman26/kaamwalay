@@ -1,10 +1,10 @@
-import { connectHits } from 'react-instantsearch-dom';
-import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
+import { connectHits } from 'react-instantsearch-dom';
+import { BrowserRouter, Link } from 'react-router-dom';
 import theme from '@shared/styles/theme';
-import { Link, BrowserRouter } from 'react-router-dom';
 
 const GridDiv = styled(Grid)({
     '.GridView': {

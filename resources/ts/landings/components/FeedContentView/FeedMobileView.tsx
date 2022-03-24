@@ -1,15 +1,15 @@
-import * as React from 'react';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import styled from '@mui/styles/styled';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import IconButton from '@mui/material/IconButton';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Grid from '@mui/material/Grid';
-import FeedAccordion from './FeedAccordion';
+import IconButton from '@mui/material/IconButton';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import styled from '@mui/styles/styled';
+import * as React from 'react';
 import { useState } from 'react';
+import FeedAccordion from './FeedAccordion';
 
 const FeedPopModalBox = styled(Box)({
     width: '100%',

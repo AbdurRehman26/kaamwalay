@@ -1,6 +1,6 @@
-import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import DoneIcon from '@mui/icons-material/Done';
 import Chip from '@mui/material/Chip';
+import { connectCurrentRefinements } from 'react-instantsearch-dom';
 
 const styles = {
     Chip: {

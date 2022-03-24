@@ -1,23 +1,23 @@
-import { connectRefinementList } from 'react-instantsearch-dom';
-import Chip from '@mui/material/Chip';
-import { styled, Theme } from '@mui/material/styles';
+import DensitySmallOutlinedIcon from '@mui/icons-material/DensitySmallOutlined';
 import DoneIcon from '@mui/icons-material/Done';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import { Theme, styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useState } from 'react';
+import { connectRefinementList } from 'react-instantsearch-dom';
+import theme from '@shared/styles/theme';
+import FeedClearCategories from './FeedClearCategories';
+import FeedCurrentFilter from './FeedCurrentFilter';
+import { FeedGrade } from './FeedGrade';
 import { FeedGridView } from './FeedGridView';
 import { FeedListView } from './FeedListView';
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import DensitySmallOutlinedIcon from '@mui/icons-material/DensitySmallOutlined';
-import { useState } from 'react';
-import FeedClearCategories from './FeedClearCategories';
-import FeedSortBy from './FeedSortBy';
-import { FeedGrade } from './FeedGrade';
-import FeedResultCount from './FeedResultCount';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import theme from '@shared/styles/theme';
 import FeedMobileView from './FeedMobileView';
-import FeedCurrentFilter from './FeedCurrentFilter';
-import Divider from '@mui/material/Divider';
+import FeedResultCount from './FeedResultCount';
+import FeedSortBy from './FeedSortBy';
 
 const FeeCategoryBox = styled(Box)(
     {

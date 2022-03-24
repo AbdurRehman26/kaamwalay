@@ -1,8 +1,8 @@
 import Typography from '@mui/material/Typography';
-import theme from '@shared/styles/theme';
-import { connectStats } from 'react-instantsearch-dom';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { connectStats } from 'react-instantsearch-dom';
+import theme from '@shared/styles/theme';
 
 const styles = {
     CountStyle: {

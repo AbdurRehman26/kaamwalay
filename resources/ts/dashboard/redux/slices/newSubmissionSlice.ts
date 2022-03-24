@@ -762,7 +762,6 @@ export const newSubmissionSlice = createSlice({
         },
         [getServiceLevels.fulfilled as any]: (state, action: any) => {
             state.step01Data.availableServiceLevels = action.payload;
-            state.step01Data.selectedServiceLevel = action.payload[0];
             state.step01Data.status = 'success';
         },
         [getServiceLevels.rejected as any]: (state) => {

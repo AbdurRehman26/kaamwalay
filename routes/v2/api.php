@@ -23,6 +23,7 @@ use App\Http\Controllers\API\V2\Customer\ProfileController;
 use App\Http\Controllers\API\V2\Customer\PushNotificationController;
 use App\Http\Controllers\API\V2\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V2\Files\UploadController;
+use App\Http\Controllers\API\V2\Landings\PopReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -101,4 +102,11 @@ Route::prefix('files')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('presign', [UploadController::class, 'presignUpload']);
     });
+});
+
+Route::prefix('pop')->group(function () {
+    Route::get('/categories', [PopReportController::class, 'getCategories']);
+    Route::get('/categories/{cardCategory}', [PopReportController::class, 'getSeriesReport']);
+    Route::get('/categories/{cardCategory}/series/{cardSeries:id}', [PopReportController::class, 'getSetsReport']);
+    Route::get('/categories/{cardCategory}/series/{cardSeries:id}/sets/{cardSet:id}', [PopReportController::class, 'getCardsReport']);
 });

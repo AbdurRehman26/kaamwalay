@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PopReportsSet extends Model
 {
@@ -19,4 +20,12 @@ class PopReportsSet extends Model
     protected $casts = [
         'release_date' => 'date',
     ];
+
+    /**
+     * @return BelongsTo<CardSet, PopReportsSet>
+     */
+    public function cardSet(): BelongsTo
+    {
+        return $this->belongsTo(CardSet::class);
+    }
 }

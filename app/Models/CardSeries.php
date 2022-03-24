@@ -11,6 +11,7 @@ class CardSeries extends Model
 {
     use HasFactory;
 
+    protected $appends = ['release_date'];
     protected $fillable = [
         'card_category_id',
         'name',

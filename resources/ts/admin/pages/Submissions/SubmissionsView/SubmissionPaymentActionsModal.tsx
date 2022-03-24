@@ -127,7 +127,7 @@ export default function SubmissionPaymentActionsModal({
                             label={
                                 <Box display={'flex'} alignItems={'center'}>
                                     <Typography mr={1}>Credit to Customer Wallet</Typography>
-                                    <Tooltip title='"Selecting this will send credit to a customers Robograding Account. It will not refund the amount to the original form of payment."'>
+                                    <Tooltip title="Selecting this will send credit to a customers Robograding Account. It will not refund the amount to the original form of payment.">
                                         <IconButton aria-label="info">
                                             <InfoOutlinedIcon />
                                         </IconButton>

@@ -83,6 +83,7 @@ jobs:
           mysql -u root -proot -e 'CREATE DATABASE IF NOT EXISTS robograding;'
 
       - name: Restore vendor cache
+        id: cache-vendor
         uses: actions/cache@v2
         with:
           path: vendor

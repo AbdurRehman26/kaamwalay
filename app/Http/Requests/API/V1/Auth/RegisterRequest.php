@@ -37,7 +37,6 @@ class RegisterRequest extends FormRequest
                     ->mixedCase()
                     ->numbers(),
             ],
-            'username' => ['sometimes', 'string', 'unique:users', 'max:50'],
             'platform' => [
                 'sometimes',
                 Rule::in(['web', 'ios', 'android']),

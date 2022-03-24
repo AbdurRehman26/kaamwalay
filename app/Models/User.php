@@ -26,11 +26,13 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
+use TaylorNetwork\UsernameGenerator\FindSimilarUsernames;
+use TaylorNetwork\UsernameGenerator\Generator;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
 {
-    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons;
+    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames;
 
     public string $pushNotificationType = 'users';
 
@@ -73,6 +75,8 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     public static function createCustomer(array $data): self
     {
+        $data['username'] = self::generateUserName();
+
         /* @var User $user */
         $user = self::create($data);
 
@@ -191,6 +195,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         }
 
         return $this;
+    }
+
+    public static function generateUserName(): string
+    {
+        return (new Generator())->generate();
     }
 
     public function scopeSignedUpBetween(Builder $query, string $startDate, string $endDate): Builder

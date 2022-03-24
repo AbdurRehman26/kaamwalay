@@ -10,9 +10,6 @@ export class SignUpRequestDto {
     @IsNotEmpty(createErrorMessageOption(ErrorMessages.ShouldNotBeEmpty, 'Name'))
     public fullName!: string;
 
-    @IsNotEmpty(createErrorMessageOption(ErrorMessages.ShouldNotBeEmpty, 'Username'))
-    public username!: string;
-
     @IsNotEmpty(createErrorMessageOption(ErrorMessages.ShouldNotBeEmpty, 'Password'))
     @MinLength(8, createErrorMessageOption(ErrorMessages.ShouldHaveAtLeastNCharacters, 'Password', '8'))
     public password!: string;
@@ -20,4 +17,7 @@ export class SignUpRequestDto {
     @IsNotEmpty(createErrorMessageOption(ErrorMessages.ShouldNotBeEmpty, 'Password confirmation'))
     @MinLength(8, createErrorMessageOption(ErrorMessages.ShouldHaveAtLeastNCharacters, 'Password confirmation', '8'))
     public passwordConfirmation!: string;
+
+    // @IsPhoneNumber('US', createErrorMessageOption(ErrorMessages.ShouldBeValidPhoneNumber, 'Phone'))
+    public phone?: string;
 }

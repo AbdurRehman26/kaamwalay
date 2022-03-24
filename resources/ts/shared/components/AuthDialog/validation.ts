@@ -20,15 +20,12 @@ export const SignInValidationRules = yup.object().shape({
 export const SignUpValidationRules = yup.object().shape({
     email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
     fullName: yup.string().trim().required(RequiredMessage),
-    username: yup.string().trim().required(RequiredMessage),
-    passwordConfirmation: password.oneOf([yup.ref('password'), null], "Passwords doesn't match!"),
     password,
 });
 
 export const PopupSignUpValidationRules = yup.object().shape({
     email: yup.string().trim().required(RequiredMessage).email('Invalid email!'),
     fullName: yup.string().trim().required(RequiredMessage),
-    username: yup.string().trim().required(RequiredMessage),
     password,
 });
 

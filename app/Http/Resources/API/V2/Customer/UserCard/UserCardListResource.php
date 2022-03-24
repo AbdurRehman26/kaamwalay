@@ -2,27 +2,11 @@
 
 namespace App\Http\Resources\API\V2\Customer\UserCard;
 
-use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\CardProduct\CardProductResource;
 use App\Models\UserCard;
-use Illuminate\Http\Request;
+use App\Http\Resources\API\V1\Customer\UserCard\UserCardListResource as V1UserCardListResource;
 
 /** @mixin UserCard */
-class UserCardListResource extends BaseResource
+class UserCardListResource extends V1UserCardListResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array
-     */
-    public function toArray($request)
-    {
-        return [
-            'id' => $this->id,
-            'card_product' => new CardProductResource($this->orderItem->cardProduct),
-            'certificate_number' => $this->certificate_number,
-            'overall_grade' => $this->resource->overall_grade,
-        ];
-    }
+    //
 }

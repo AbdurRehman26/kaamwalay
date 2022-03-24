@@ -1,7 +1,9 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import algoliasearch from 'algoliasearch/lite';
+import algoliaSearch from 'algoliasearch/lite';
+import { useMemo } from 'react';
 import { InstantSearch } from 'react-instantsearch-dom';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import theme from '@shared/styles/theme';
 import FeedItemsPerPage from './FeedItemsPerPage';
 import FeedPagination from './FeedPagination';
@@ -16,11 +18,14 @@ const PaginationBox = styled(Box)({
     },
 });
 
-const searchClient = algoliasearch('UMRTJP4TLQ', '085cc30e0d991ab2aa990615163f86c5');
-
 export function Feed() {
+    const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
+    const searchClient = useMemo(
+        () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
+        [algoliaAppId, algoliaPublicKey],
+    );
     return (
-        <InstantSearch indexName="local_user_cards" searchClient={searchClient}>
+        <InstantSearch indexName={`${appEnv}_user_cards`} searchClient={searchClient}>
             <FeedSearch />
             <PaginationBox>
                 <FeedItemsPerPage />

@@ -12,7 +12,6 @@ const FeedGradeDropdown = styled(Box)(
         '.Select': {
             width: '100%',
             height: '40px',
-            background: '#F4F4FB',
             boxSizing: 'border-box',
             borderRadius: '24px',
             padding: '10px 10px',

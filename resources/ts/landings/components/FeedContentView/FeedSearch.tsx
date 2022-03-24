@@ -31,7 +31,6 @@ const BoxDiv = styled(Box)({
         fontSize: '48px',
         lineHeight: '56px',
         letterSpacing: '0.2px',
-        marginBottom: '4px',
         [theme.breakpoints.down('sm')]: {
             fontSize: '32px',
         },
@@ -70,10 +69,21 @@ const styles = {
             width: '360px',
         },
     },
+
+    ListView: {
+        background: '#FFFFFF',
+        paddingTop: '10px',
+    },
+
+    GridView: {
+        background: 'none',
+        paddingTop: '10px',
+    },
 };
 
 const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { currentRefinement: any; refine: any }) => {
     const [query, setQuery] = useState('');
+    const [background, setBackground] = useState(true);
 
     return (
         <>
@@ -105,9 +115,11 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                     </Grid>
                 </Grid>
             </BoxDiv>
-            <Container>
-                <FeedCategories query={query} />
-            </Container>
+            <Box sx={background ? styles.GridView : styles.ListView}>
+                <Container>
+                    <FeedCategories query={query} setBackground={setBackground} />
+                </Container>
+            </Box>
         </>
     );
 });

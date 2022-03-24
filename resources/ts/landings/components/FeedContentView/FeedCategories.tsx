@@ -47,7 +47,6 @@ const FeeCategoryBox = styled(Box)(
         '.CategoryChip': {
             width: '100%',
             height: '40px',
-            background: '#F4F4FB',
             border: '1px solid rgba(0, 0, 0, 0.18)',
             boxSizing: 'border-box',
             borderRadius: '24px',
@@ -105,43 +104,46 @@ const styles = {
     },
 };
 
-export function FeedCategories({ query }: { query: any }) {
+const CustomRefinementList = connectRefinementList(
+    ({ items, refine, createURL }: { items: any; refine: any; createURL: any }) => {
+        return (
+            <Grid>
+                <ul className={'GradeList'}>
+                    <li>
+                        <FeedClearCategories />
+                    </li>
+                    {items.map((item: any) => (
+                        <li className={'GradeListItem'} key={item.label}>
+                            <a
+                                key={item.objectID}
+                                href={createURL(item.value)}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    refine(item.value);
+                                }}
+                            >
+                                {item.isRefined ? (
+                                    <Chip
+                                        className={'CategoryChipSelected'}
+                                        icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
+                                        label={item.label}
+                                        variant="outlined"
+                                    />
+                                ) : (
+                                    <Chip className={'CategoryChip'} label={item.label} variant="outlined" />
+                                )}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </Grid>
+        );
+    },
+);
+
+export function FeedCategories({ query, setBackground }: { query: any; setBackground: any }) {
     const [toggleView, setToggleView] = useState(true);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-
-    const RefinementList = ({ items, refine, createURL }: { items: any; refine: any; createURL: any }) => (
-        <Grid>
-            <ul className={'GradeList'}>
-                <li>
-                    <FeedClearCategories />
-                </li>
-                {items.map((item: any) => (
-                    <li className={'GradeListItem'} key={item.label}>
-                        <a
-                            key={item.objectID}
-                            href={createURL(item.value)}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                refine(item.value);
-                            }}
-                        >
-                            {item.isRefined ? (
-                                <Chip
-                                    className={'CategoryChipSelected'}
-                                    icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
-                                    label={item.label}
-                                    variant="outlined"
-                                />
-                            ) : (
-                                <Chip className={'CategoryChip'} label={item.label} variant="outlined" />
-                            )}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </Grid>
-    );
-    const CustomRefinementList = connectRefinementList(RefinementList);
 
     return (
         <>
@@ -154,11 +156,17 @@ export function FeedCategories({ query }: { query: any }) {
                     <Grid>
                         <DensitySmallOutlinedIcon
                             className={toggleView ? 'ListViewButton' : 'ListViewButtonActive'}
-                            onClick={() => setToggleView(false)}
+                            onClick={() => {
+                                setToggleView(false);
+                                setBackground(false);
+                            }}
                         />
                         <GridViewOutlinedIcon
                             className={toggleView ? 'GridViewButtonActive' : 'GridViewButton'}
-                            onClick={() => setToggleView(true)}
+                            onClick={() => {
+                                setToggleView(true);
+                                setBackground(true);
+                            }}
                         />
                     </Grid>
                     <Divider sx={{ margin: '10px', height: '50px' }} orientation="vertical" flexItem />

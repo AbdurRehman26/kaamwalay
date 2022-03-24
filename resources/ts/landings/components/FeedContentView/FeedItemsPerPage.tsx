@@ -11,24 +11,27 @@ const GridDiv = styled(Grid)({
     },
 });
 
+const CustomHitsPerPage = connectHitsPerPage(
+    ({ items, refine, currentRefinement }: { items: any; refine: any; currentRefinement: any }) => {
+        return (
+            <GridDiv>
+                <p>Items per page:</p>
+                <select
+                    className={'selectdiv'}
+                    value={currentRefinement || ''}
+                    onChange={(event) => refine(event.currentTarget.value)}
+                >
+                    {items.map((item: any) => (
+                        <option key={item.label} value={item.isRefined ? currentRefinement : item.value}>
+                            {item.label}
+                        </option>
+                    ))}
+                </select>
+            </GridDiv>
+        );
+    },
+);
 export function FeedItemsPerPage() {
-    const HitsPerPage = ({ items, refine, currentRefinement }: { items: any; refine: any; currentRefinement: any }) => (
-        <GridDiv>
-            <p>Items per page:</p>
-            <select
-                className={'selectdiv'}
-                value={currentRefinement || ''}
-                onChange={(event) => refine(event.currentTarget.value)}
-            >
-                {items.map((item: any) => (
-                    <option key={item.label} value={item.isRefined ? currentRefinement : item.value}>
-                        {item.label}
-                    </option>
-                ))}
-            </select>
-        </GridDiv>
-    );
-    const CustomHitsPerPage = connectHitsPerPage(HitsPerPage);
     return (
         <CustomHitsPerPage
             defaultRefinement={50}

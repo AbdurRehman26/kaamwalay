@@ -33,44 +33,46 @@ const FeedGradeDropdown = styled(Box)(
     },
     { name: 'FeedGradeDropdown' },
 );
+const CustomMenuSelect = connectMenu(
+    ({ items, currentRefinement, refine }: { items: any; currentRefinement: any; refine: any }) => {
+        return (
+            <>
+                <Divider sx={{ margin: '0px 20px', height: '40px' }} orientation="vertical" flexItem />
+                <FeedGradeDropdown>
+                    {!currentRefinement ? (
+                        <Select
+                            value={currentRefinement || 'Grade'}
+                            onChange={(event) => refine(event.target.value)}
+                            className={'Select'}
+                        >
+                            <MenuItem sx={{ display: 'none' }} value={'Grade'}>
+                                Grade
+                            </MenuItem>
+                            {items.map((item: any) => (
+                                <MenuItem key={item.label} value={item.isRefined ? currentRefinement : item.value}>
+                                    {item.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    ) : (
+                        <Chip
+                            label={currentRefinement}
+                            variant="outlined"
+                            onDelete={(event) => {
+                                event.preventDefault();
+                                refine(event.currentTarget.value);
+                            }}
+                            deleteIcon={<CancelRoundedIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
+                            className={'RefineGradeChip'}
+                        />
+                    )}
+                </FeedGradeDropdown>
+            </>
+        );
+    },
+);
 
 export function FeedGrade() {
-    const MenuSelect = ({ items, currentRefinement, refine }: { items: any; currentRefinement: any; refine: any }) => (
-        <>
-            <Divider sx={{ margin: '0px 20px', height: '40px' }} orientation="vertical" flexItem />
-            <FeedGradeDropdown>
-                {!currentRefinement ? (
-                    <Select
-                        value={currentRefinement || 'Grade'}
-                        onChange={(event) => refine(event.target.value)}
-                        className={'Select'}
-                    >
-                        <MenuItem sx={{ display: 'none' }} value={'Grade'}>
-                            Grade
-                        </MenuItem>
-                        {items.map((item: any) => (
-                            <MenuItem key={item.label} value={item.isRefined ? currentRefinement : item.value}>
-                                {item.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                ) : (
-                    <Chip
-                        label={currentRefinement}
-                        variant="outlined"
-                        onDelete={(event) => {
-                            event.preventDefault();
-                            refine(event.currentTarget.value);
-                        }}
-                        deleteIcon={<CancelRoundedIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
-                        className={'RefineGradeChip'}
-                    />
-                )}
-            </FeedGradeDropdown>
-        </>
-    );
-
-    const CustomMenuSelect = connectMenu(MenuSelect);
     return <CustomMenuSelect attribute={'grade'} />;
 }
 

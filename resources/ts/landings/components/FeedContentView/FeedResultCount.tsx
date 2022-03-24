@@ -24,9 +24,10 @@ const styles = {
     },
 };
 
-export function FeedResultCount({ query }: { query: any }) {
+const CustomStats = connectStats(({ nbHits, query }: { nbHits: any; query: any }) => {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const Stats = ({ nbHits }: { nbHits: any }) => (
+
+    return (
         <div>
             {isSm ? (
                 <Typography sx={styles.searchValues}>{query ? `Search for “${query}”` : ``}</Typography>
@@ -38,10 +39,10 @@ export function FeedResultCount({ query }: { query: any }) {
             </Typography>
         </div>
     );
+});
 
-    const CustomStats = connectStats(Stats);
-
-    return <CustomStats />;
+export function FeedResultCount({ query }: { query: any }) {
+    return <CustomStats query={query} />;
 }
 
 export default FeedResultCount;

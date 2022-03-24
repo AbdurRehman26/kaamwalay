@@ -98,7 +98,9 @@ export function FeedMobileView() {
                         />
                     </Grid>
                     <Grid sx={styles.ModalButtonDiv}>
-                        <Button sx={styles.ModalButton}>SEE ALL RESULTS</Button>
+                        <Button sx={styles.ModalButton} onClick={handleClose}>
+                            SEE ALL RESULTS
+                        </Button>
                     </Grid>
                 </FeedPopModalBox>
             </Modal>

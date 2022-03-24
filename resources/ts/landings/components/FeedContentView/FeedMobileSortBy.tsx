@@ -35,7 +35,7 @@ export function FeedMobileSortBy({
 }) {
     return (
         <CustomSortByMobile
-            defaultRefinement="local_user_cards"
+            defaultRefinement={'local_user_cards'}
             setFeedMobileSortByValue={setFeedMobileSortByValue}
             feedMobileSortByValue={feedMobileSortByValue}
             items={[

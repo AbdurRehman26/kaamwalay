@@ -108,55 +108,57 @@ const BoxDiv = styled(Box)({
         display: 'none',
     },
 });
-const Hits = ({ hits }: { hits: any }) => (
-    <GridDiv container>
-        {hits.map((hit: any) => (
-            <Link to={`feed/${hit.certificate_number}/view`} key={hit.objectID}>
-                <div className={'GridView'}>
-                    <div className={'GridTopSection'}>
-                        <div className={'GridTextSection'}>
-                            <Typography className={'CardName'}>{hit.card_name}</Typography>
-                            <Typography className={'CardLongName'}>{hit.searchable_name}</Typography>
+const CustomHits = connectHits(({ hits }: { hits: any }) => {
+    return (
+        <GridDiv container>
+            {hits.map((hit: any) => (
+                <Link to={`feed/${hit.certificate_number}/view`} key={hit.objectID}>
+                    <div className={'GridView'}>
+                        <div className={'GridTopSection'}>
+                            <div className={'GridTextSection'}>
+                                <Typography className={'CardName'}>{hit.card_name}</Typography>
+                                <Typography className={'CardLongName'}>{hit.searchable_name}</Typography>
+                            </div>
+                            <div className={'GridGradeSection'}>
+                                <Typography className={'GradeNickName'}>{hit.grade_nickname}</Typography>
+                                <Typography className={'OverallGrade'}>{hit.overall_grade}</Typography>
+                            </div>
                         </div>
-                        <div className={'GridGradeSection'}>
-                            <Typography className={'GradeNickName'}>{hit.grade_nickname}</Typography>
-                            <Typography className={'OverallGrade'}>{hit.overall_grade}</Typography>
+                        <div className={'GridImageSection'}>
+                            <img className={'CardImage'} src={hit.card_image} alt={hit.card_name} />
+                        </div>
+                        <div className={'GridBottomSection'}>
+                            <div className={'GridSection'}>
+                                <Typography className={'BottomSectionContent'}>Date Graded: </Typography>
+                                <Typography className={'BottomSectionText'}>
+                                    {new Date(hit.graded_at).getDate() +
+                                        '/' +
+                                        (new Date(hit.graded_at).getMonth() + 1) +
+                                        '/' +
+                                        new Date(hit.graded_at).getFullYear() +
+                                        ' '}
+                                    at{' '}
+                                    {(new Date(hit.graded_at).getHours() % 12) +
+                                        ':' +
+                                        new Date(hit.graded_at).getMinutes()}
+                                    {new Date(hit.graded_at).getHours() >= 12 ? 'pm' : 'am'}
+                                </Typography>
+                            </div>
+                            <div className={'GridSection'}>
+                                <Typography className={'BottomSectionContent'}>Certificate #:</Typography>
+                                <Typography className={'BottomSectionText'}>{hit.certificate_number}</Typography>
+                            </div>
+                            <div className={'GridSection'}>
+                                <Typography className={'BottomSectionContent'}>Owner: </Typography>
+                                <Typography className={'BottomSectionText'}>{hit.owner_name}</Typography>
+                            </div>
                         </div>
                     </div>
-                    <div className={'GridImageSection'}>
-                        <img className={'CardImage'} src={hit.card_image} alt={hit.card_name} />
-                    </div>
-                    <div className={'GridBottomSection'}>
-                        <div className={'GridSection'}>
-                            <Typography className={'BottomSectionContent'}>Date Graded: </Typography>
-                            <Typography className={'BottomSectionText'}>
-                                {new Date(hit.graded_at).getDate() +
-                                    '/' +
-                                    (new Date(hit.graded_at).getMonth() + 1) +
-                                    '/' +
-                                    new Date(hit.graded_at).getFullYear() +
-                                    ' '}
-                                at{' '}
-                                {(new Date(hit.graded_at).getHours() % 12) + ':' + new Date(hit.graded_at).getMinutes()}
-                                {new Date(hit.graded_at).getHours() >= 12 ? 'pm' : 'am'}
-                            </Typography>
-                        </div>
-                        <div className={'GridSection'}>
-                            <Typography className={'BottomSectionContent'}>Certificate #:</Typography>
-                            <Typography className={'BottomSectionText'}>{hit.certificate_number}</Typography>
-                        </div>
-                        <div className={'GridSection'}>
-                            <Typography className={'BottomSectionContent'}>Owner: </Typography>
-                            <Typography className={'BottomSectionText'}>{hit.owner_name}</Typography>
-                        </div>
-                    </div>
-                </div>
-            </Link>
-        ))}
-    </GridDiv>
-);
-
-const CustomHits = connectHits(Hits);
+                </Link>
+            ))}
+        </GridDiv>
+    );
+});
 
 export function FeedGridView() {
     return (

@@ -27,36 +27,38 @@ const FeedSortDropdown = styled(Box)(
     { name: 'FeedSortDropdown' },
 );
 
-export function FeedSortBy() {
-    const SortBy = ({ items, refine, currentRefinement }: { items: any; refine: any; currentRefinement: any }) => (
-        <FeedSortDropdown>
-            <Typography className={'SortText'}>sort</Typography>
-            <Select
-                value={currentRefinement || 'local_user_cards'}
-                onChange={(event) => refine(event.target.value)}
-                variant={'standard'}
-                className={'Select'}
-                disableUnderline
-            >
-                <MenuItem sx={{ display: 'none' }} value={'local_user_cards'}>
-                    Most Recent
-                </MenuItem>
-                {items.map((item: any) => (
-                    <MenuItem
-                        key={item.label}
-                        sx={{ fontWeight: item.isRefined ? 'bold' : '' }}
-                        value={item.isRefined ? currentRefinement : item.value}
-                        className={'MenuItem'}
-                    >
-                        {item.label}
+const CustomSortBy = connectSortBy(
+    ({ items, refine, currentRefinement }: { items: any; refine: any; currentRefinement: any }) => {
+        return (
+            <FeedSortDropdown>
+                <Typography className={'SortText'}>sort</Typography>
+                <Select
+                    value={currentRefinement || 'local_user_cards'}
+                    onChange={(event) => refine(event.target.value)}
+                    variant={'standard'}
+                    className={'Select'}
+                    disableUnderline
+                >
+                    <MenuItem sx={{ display: 'none' }} value={'local_user_cards'}>
+                        Most Recent
                     </MenuItem>
-                ))}
-            </Select>
-        </FeedSortDropdown>
-    );
+                    {items.map((item: any) => (
+                        <MenuItem
+                            key={item.label}
+                            sx={{ fontWeight: item.isRefined ? 'bold' : '' }}
+                            value={item.isRefined ? currentRefinement : item.value}
+                            className={'MenuItem'}
+                        >
+                            {item.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FeedSortDropdown>
+        );
+    },
+);
 
-    const CustomSortBy = connectSortBy(SortBy);
-
+export function FeedSortBy() {
     return (
         <CustomSortBy
             defaultRefinement="local_user_cards"

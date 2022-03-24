@@ -136,6 +136,7 @@ class OrderController extends Controller
     public function destroy(Order $order): JsonResponse
     {
         throw_if($order->order_status_id !== OrderStatus::PAYMENT_PENDING, OrderCanNotCanceled::class);
+
         try {
             DB::beginTransaction();
 

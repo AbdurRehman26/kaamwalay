@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Orders;
 
-use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\User;

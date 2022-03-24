@@ -1,9 +1,10 @@
-import Chip from '@mui/material/Chip';
-import React from 'react';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
+import { uniqBy } from 'lodash';
+import React from 'react';
+import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import theme from '@shared/styles/theme';
 
 const CurrentRefinementBox = styled(Box)(
@@ -29,35 +30,47 @@ const CurrentRefinementBox = styled(Box)(
     { name: 'CurrentRefinementBox' },
 );
 
-export function FeedCurrentFilter() {
-    const CurrentRefinements = ({ items, refine }: { items: any; refine: any }) => (
+const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) => {
+    const uniqItems = uniqBy(
+        items.map((item) => {
+            if (item.items) {
+                item.items = uniqBy(item.items, 'label');
+            }
+
+            return item;
+        }),
+        'label',
+    );
+
+    return (
         <CurrentRefinementBox>
             <ul className={'CurrentFilterList'}>
-                {items.map((item: any) => (
-                    <li key={item.label}>
+                {uniqItems.map((item: any) => (
+                    <li key={item.value}>
                         {item.items ? (
-                            <React.Fragment>
-                                {item.items.map((nested: any) => (
-                                    <Chip
-                                        key={nested.label}
-                                        label={nested.label}
-                                        variant="outlined"
-                                        onDelete={(event) => {
-                                            event.preventDefault();
-                                            refine(item.value);
-                                        }}
-                                        className={'Chip'}
-                                        deleteIcon={
-                                            <CancelRoundedIcon
-                                                sx={{ color: '#20BFB8!important', fontWeight: 'bold' }}
-                                            />
-                                        }
-                                    />
-                                ))}
-                            </React.Fragment>
+                            item.items.map((nested: any) => (
+                                <Chip
+                                    key={item.label + '-chip-' + nested.label}
+                                    label={nested.label}
+                                    variant="outlined"
+                                    onDelete={(event) => {
+                                        event.preventDefault();
+                                        refine(item.value);
+                                    }}
+                                    className={'Chip'}
+                                    deleteIcon={
+                                        <CancelRoundedIcon
+                                            sx={{
+                                                color: '#20BFB8!important',
+                                                fontWeight: 'bold',
+                                            }}
+                                        />
+                                    }
+                                />
+                            ))
                         ) : (
                             <Chip
-                                key={item.label}
+                                key={item.value}
                                 label={item.label.replace('grade:', '')}
                                 variant="outlined"
                                 onDelete={(event) => {
@@ -75,8 +88,9 @@ export function FeedCurrentFilter() {
             </ul>
         </CurrentRefinementBox>
     );
+});
 
-    const CustomCurrentRefinements = connectCurrentRefinements(CurrentRefinements);
+export function FeedCurrentFilter() {
     return <CustomCurrentRefinements />;
 }
 

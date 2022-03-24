@@ -1,21 +1,20 @@
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import { connectSearchBox } from 'react-instantsearch-dom';
-import { styled, Theme } from '@mui/material/styles';
-import theme from '@shared/styles/theme';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import { useState } from 'react';
+import { connectSearchBox } from 'react-instantsearch-dom';
+import theme from '@shared/styles/theme';
 import FeedCategories from './FeedCategories';
-import Container from '@mui/material/Container';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 const BoxDiv = styled(Box)({
     '.FeedHero': {
         color: 'rgb(255, 255, 255)',
-        backgroundImage: `url(${'/assets/images/feedpage-background.png'})`,
+        backgroundImage: `url(/assets/images/feedpage-background.png)`,
         backgroundRepeat: 'round',
     },
     '.FeedContainer': {
@@ -72,9 +71,10 @@ const styles = {
         },
     },
 };
-const SearchBox = ({ currentRefinement, refine }: { currentRefinement: any; refine: any }) => {
+
+const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { currentRefinement: any; refine: any }) => {
     const [query, setQuery] = useState('');
-    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+
     return (
         <>
             <BoxDiv>
@@ -105,20 +105,14 @@ const SearchBox = ({ currentRefinement, refine }: { currentRefinement: any; refi
                     </Grid>
                 </Grid>
             </BoxDiv>
-            {isSm ? (
-                <Box>
-                    <FeedCategories query={query} />
-                </Box>
-            ) : (
-                <Container>
-                    <FeedCategories query={query} />
-                </Container>
-            )}
+            <Container>
+                <FeedCategories query={query} />
+            </Container>
         </>
     );
-};
+});
+
 export function FeedSearch() {
-    const CustomSearchBox = connectSearchBox(SearchBox);
     return <CustomSearchBox />;
 }
 

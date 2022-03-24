@@ -1,30 +1,31 @@
-import { connectMenu } from 'react-instantsearch-dom';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import { connectMenu } from 'react-instantsearch-dom';
 
-export function FeedMobileGrade() {
-    const MenuSelectMobile = ({ items, refine }: { items: any; currentRefinement: any; refine: any }) => (
+const CustomMenuSelectMobile = connectMenu(({ items, refine }) => {
+    return (
         <ul>
             <RadioGroup name="radio-buttons-group">
                 {items.map((item: any) => (
-                    <>
-                        <FormControlLabel
-                            key={item.objectID}
-                            value={item.value}
-                            control={<Radio />}
-                            label={item.label}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                refine(item.value);
-                            }}
-                        />
-                    </>
+                    <FormControlLabel
+                        key={item.value}
+                        value={item.value}
+                        control={<Radio checked={item.isRefined} />}
+                        label={item.label}
+                        onClick={(event) => {
+                            event.preventDefault();
+                            refine(item.value);
+                            console.log('refine', item.value);
+                        }}
+                    />
                 ))}
             </RadioGroup>
         </ul>
     );
-    const CustomMenuSelectMobile = connectMenu(MenuSelectMobile);
+});
+
+export function FeedMobileGrade() {
     return <CustomMenuSelectMobile attribute={'grade'} />;
 }
 

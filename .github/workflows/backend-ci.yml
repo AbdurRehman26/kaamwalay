@@ -45,6 +45,7 @@ jobs:
           coverage: none
 
       - name: Restore vendor cache
+        id: cache-vendor
         uses: actions/cache@v2
         with:
           path: vendor
@@ -52,6 +53,7 @@ jobs:
           restore-keys: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
 
       - name: Install dependencies
+        if: steps.cache-vendor.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs
 
       - name: Run static analysis
@@ -88,6 +90,7 @@ jobs:
           restore-keys: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
 
       - name: Install dependencies
+        if: steps.cache-vendor.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs
 
       - name: Execute tests

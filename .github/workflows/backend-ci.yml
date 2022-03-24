@@ -26,7 +26,7 @@ jobs:
         with:
           commit_message: Fix styling
 
-  static-analysiss:
+  static-analysis:
     name: Run Static Analysis
     needs: style
     runs-on: ubuntu-latest
@@ -44,10 +44,17 @@ jobs:
             iconv, imagick
           coverage: none
 
+      - name: Restore vendor cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
+          restore-keys: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
+
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs
 
-      - name: Run Static Analysis
+      - name: Run static analysis
         run: vendor/bin/phpstan analyze
 
   tests:
@@ -72,6 +79,13 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
           mysql -u root -proot -e 'CREATE DATABASE IF NOT EXISTS robograding;'
+
+      - name: Restore vendor cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
+          restore-keys: ${{ runner.os }}-backend-${{ hashFiles('composer.lock') }}
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-suggest --ignore-platform-reqs

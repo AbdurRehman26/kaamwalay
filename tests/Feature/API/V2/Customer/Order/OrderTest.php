@@ -263,8 +263,6 @@ test('a customer can filter orders by order number', function () {
 });
 
 test('a customer can not complete review of an order', function () {
-    $this->seed(RolesSeeder::class);
-
     $this->actingAs($this->user);
 
     $order = Order::factory()->for($this->user)->create();
@@ -390,7 +388,7 @@ test('a customer can place order and pay from wallet totally', function () {
             'id' => $this->shippingMethod->id,
         ],
         'payment_by_wallet' => 34.00,
-    ])->dump();
+    ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

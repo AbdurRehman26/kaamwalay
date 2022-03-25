@@ -279,7 +279,8 @@ class PopReportService
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_series_id'])
-            ->paginate($itemsPerPage);
+            ->paginate($itemsPerPage)
+            ->withQueryString();
     }
 
     public function getSetsReport(CardSeries $cardSeries): LengthAwarePaginator
@@ -291,7 +292,8 @@ class PopReportService
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_sets_id'])
-            ->paginate($itemsPerPage);
+            ->paginate($itemsPerPage)
+            ->withQueryString();
     }
 
     public function getCardsReport(CardSet $cardSet): LengthAwarePaginator
@@ -303,7 +305,8 @@ class PopReportService
 
         return QueryBuilder::for($query)
             ->allowedSorts(['card_sets_id'])
-            ->paginate($itemsPerPage);
+            ->paginate($itemsPerPage)
+            ->withQueryString();
     }
 
     public function getSeriesTotalPopulation(CardCategory $cardCategory): mixed

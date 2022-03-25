@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API\V2\Customer\CardCategory;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CardCategoryCollection extends ResourceCollection
 {

@@ -1,17 +1,15 @@
 <?php
 
 use App\Models\CardCategory;
+use App\Models\CardProduct;
 use App\Models\CardSeries;
 use App\Models\CardSet;
-use App\Models\CardProduct;
 use App\Models\PopReportsCard;
 use App\Models\PopReportsSeries;
 use App\Models\PopReportsSet;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
-use function Pest\Laravel\seed;
 
 test('user can receive enabled card categories for pop report page', function () {
     CardCategory::factory()->count(4)

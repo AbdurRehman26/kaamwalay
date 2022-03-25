@@ -2,10 +2,8 @@
 
 namespace App\Http\Resources\API\V2\PopReport\PopReportsSet;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use JsonSerializable;
 
 class PopReportsSetCollection extends ResourceCollection
 {

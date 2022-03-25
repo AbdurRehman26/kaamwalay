@@ -8,7 +8,6 @@ use App\Http\Resources\API\V2\Customer\CardCategory\CardCategoryResource;
 use App\Http\Resources\API\V2\Customer\CardSeries\CardSeriesResource;
 use App\Http\Resources\API\V2\Customer\CardSet\CardSetResource;
 use App\Http\Resources\API\V2\PopReport\PopReportsCard\PopReportsCardResource;
-use App\Http\Resources\API\V2\PopReport\PopReportsSeries\PopReportsSetCollection;
 use App\Http\Resources\API\V2\PopReport\PopReportsSeries\PopReportsSeriesResource;
 use App\Http\Resources\API\V2\PopReport\PopReportsSet\PopReportsSetResource;
 use App\Models\CardCategory;

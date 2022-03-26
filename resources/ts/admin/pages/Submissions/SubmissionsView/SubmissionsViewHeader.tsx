@@ -84,22 +84,19 @@ export function SubmissionsViewHeader({
     );
     const history = useMemo(
         () =>
-            [
-                OrderStatusEnum.INCOMPLETE,
-                OrderStatusEnum.CONFIRMED,
-                OrderStatusEnum.GRADED,
-                OrderStatusEnum.SHIPPED,
-            ].map((status) => {
-                const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
-                const { label, value } = AdminOrderStatusMap[status];
+            [OrderStatusEnum.PLACED, OrderStatusEnum.CONFIRMED, OrderStatusEnum.GRADED, OrderStatusEnum.SHIPPED].map(
+                (status) => {
+                    const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
+                    const { label, value } = AdminOrderStatusMap[status];
 
-                return {
-                    label,
-                    value,
-                    isCompleted: !!item?.createdAt,
-                    completedAt: item?.createdAt,
-                };
-            }),
+                    return {
+                        label,
+                        value,
+                        isCompleted: !!item?.createdAt,
+                        completedAt: item?.createdAt,
+                    };
+                },
+            ),
         [orderStatusHistory],
     );
     const DownloadOrderLabel = useCallback(async () => {

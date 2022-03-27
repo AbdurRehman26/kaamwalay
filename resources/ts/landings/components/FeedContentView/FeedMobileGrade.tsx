@@ -2,11 +2,15 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { connectMenu } from 'react-instantsearch-dom';
+import { useDispatch } from 'react-redux';
+import { setGradeValue } from '../../redux/slices/feedSlice';
 
 const CustomMenuSelectMobile = connectMenu(({ items, refine }) => {
+    const dispatch = useDispatch();
+
     return (
         <ul>
-            <RadioGroup name="radio-buttons-group">
+            <RadioGroup>
                 {items.map((item: any) => (
                     <FormControlLabel
                         key={item.value}
@@ -16,7 +20,7 @@ const CustomMenuSelectMobile = connectMenu(({ items, refine }) => {
                         onClick={(event) => {
                             event.preventDefault();
                             refine(item.value);
-                            console.log('refine', item.value);
+                            dispatch(setGradeValue(item.value));
                         }}
                     />
                 ))}

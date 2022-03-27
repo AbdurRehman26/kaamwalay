@@ -7,13 +7,7 @@ import FeedMobileCategories from './FeedMobileCategories';
 import FeedMobileGrade from './FeedMobileGrade';
 import FeedMobileSortBy from './FeedMobileSortBy';
 
-export function FeedAccordion({
-    setFeedMobileSortByValue,
-    feedMobileSortByValue,
-}: {
-    setFeedMobileSortByValue: any;
-    feedMobileSortByValue: any;
-}) {
+export function FeedAccordion() {
     return (
         <div>
             <Accordion>
@@ -21,10 +15,7 @@ export function FeedAccordion({
                     <Typography>Most Recent</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <FeedMobileSortBy
-                        setFeedMobileSortByValue={setFeedMobileSortByValue}
-                        feedMobileSortByValue={feedMobileSortByValue}
-                    />
+                    <FeedMobileSortBy />
                 </AccordionDetails>
             </Accordion>
             <Accordion>

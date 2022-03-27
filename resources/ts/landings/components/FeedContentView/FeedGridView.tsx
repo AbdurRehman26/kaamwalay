@@ -108,7 +108,7 @@ const BoxDiv = styled(Box)({
         display: 'none',
     },
 });
-const CustomHits = connectHits(({ hits }: { hits: any }) => {
+const CustomHits = connectHits(({ hits }) => {
     return (
         <GridDiv container>
             {hits.map((hit: any) => (

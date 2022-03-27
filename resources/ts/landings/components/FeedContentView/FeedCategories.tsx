@@ -9,7 +9,9 @@ import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
+import { useSelector } from 'react-redux';
 import theme from '@shared/styles/theme';
+import { RootState } from '../../redux/store';
 import FeedClearCategories from './FeedClearCategories';
 import FeedCurrentFilter from './FeedCurrentFilter';
 import { FeedGrade } from './FeedGrade';
@@ -104,52 +106,55 @@ const styles = {
     },
 };
 
-const CustomRefinementList = connectRefinementList(
-    ({ items, refine, createURL }: { items: any; refine: any; createURL: any }) => {
-        return (
-            <Grid>
-                <ul className={'GradeList'}>
-                    <li>
-                        <FeedClearCategories />
+const CustomRefinementList = connectRefinementList(({ items, refine, createURL }) => {
+    return (
+        <Grid>
+            <ul className={'GradeList'}>
+                <li>
+                    <FeedClearCategories />
+                </li>
+                {items.map((item: any) => (
+                    <li className={'GradeListItem'} key={item.label}>
+                        <a
+                            key={item.objectID}
+                            href={createURL(item.value)}
+                            onClick={(event) => {
+                                refine(item.value);
+                                event.preventDefault();
+                            }}
+                        >
+                            {item.isRefined ? (
+                                <Chip
+                                    className={'CategoryChipSelected'}
+                                    icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
+                                    label={item.label}
+                                    variant="outlined"
+                                />
+                            ) : (
+                                <Chip className={'CategoryChip'} label={item.label} variant="outlined" />
+                            )}
+                        </a>
                     </li>
-                    {items.map((item: any) => (
-                        <li className={'GradeListItem'} key={item.label}>
-                            <a
-                                key={item.objectID}
-                                href={createURL(item.value)}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    refine(item.value);
-                                }}
-                            >
-                                {item.isRefined ? (
-                                    <Chip
-                                        className={'CategoryChipSelected'}
-                                        icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
-                                        label={item.label}
-                                        variant="outlined"
-                                    />
-                                ) : (
-                                    <Chip className={'CategoryChip'} label={item.label} variant="outlined" />
-                                )}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </Grid>
-        );
-    },
-);
+                ))}
+            </ul>
+        </Grid>
+    );
+});
 
 export function FeedCategories({ query, setBackground }: { query: any; setBackground: any }) {
     const [toggleView, setToggleView] = useState(true);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const category = useSelector((state: RootState) => state.feed.CategoryValue.category);
 
     return (
         <>
             <FeeCategoryBox>
                 <Grid className={'FilterBar'}>
-                    <CustomRefinementList attribute={'card_category'} />
+                    {category ? (
+                        <CustomRefinementList attribute={'card_category'} defaultRefinement={[category]} />
+                    ) : (
+                        <CustomRefinementList attribute={'card_category'} />
+                    )}
                     <FeedGrade />
                 </Grid>
                 <Grid className={'FilterBar'}>

@@ -119,7 +119,6 @@ const TableDiv = styled(TableContainer)({
 });
 const BoxDiv = styled(Box)({
     '.FeedList': {
-        padding: '20px 0',
         flex: '1 1 auto',
         color: '#000000de',
         backgroundColor: '#ffffff',
@@ -130,7 +129,7 @@ const BoxDiv = styled(Box)({
         overflowX: 'auto',
     },
 });
-const CustomHits = connectHits(({ hits }: { hits: any }) => {
+const CustomHits = connectHits(({ hits }) => {
     return (
         <TableDiv>
             <Table>

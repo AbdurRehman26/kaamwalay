@@ -19,63 +19,51 @@ const FeedPaginationBox = styled(Box)({
     },
 });
 
-const CustomPagination = connectPagination(
-    ({
-        currentRefinement,
-        nbPages,
-        refine,
-        createURL,
-    }: {
-        currentRefinement: any;
-        nbPages: any;
-        refine: any;
-        createURL: any;
-    }) => {
-        return (
-            <FeedPaginationBox>
-                <Typography>
-                    1 - {nbPages} of {currentRefinement}
-                </Typography>
-                <ul className={'PaginationLink'}>
-                    {currentRefinement > 1 ? (
-                        <li>
-                            <a
-                                href={createURL(currentRefinement - 1)}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    refine(currentRefinement - 1);
-                                }}
-                            >
-                                <ChevronLeftOutlinedIcon />
-                            </a>
-                        </li>
-                    ) : (
-                        <li>
+const CustomPagination = connectPagination(({ currentRefinement, nbPages, refine, createURL }) => {
+    return (
+        <FeedPaginationBox>
+            <Typography>
+                1 - {nbPages} of {currentRefinement}
+            </Typography>
+            <ul className={'PaginationLink'}>
+                {currentRefinement > 1 ? (
+                    <li>
+                        <a
+                            href={createURL(currentRefinement - 1)}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                refine(currentRefinement - 1);
+                            }}
+                        >
                             <ChevronLeftOutlinedIcon />
-                        </li>
-                    )}
-                    {currentRefinement < nbPages ? (
-                        <li>
-                            <a
-                                href={createURL(currentRefinement + 1)}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    refine(currentRefinement + 1);
-                                }}
-                            >
-                                <ChevronRightOutlinedIcon />
-                            </a>
-                        </li>
-                    ) : (
-                        <li>
+                        </a>
+                    </li>
+                ) : (
+                    <li>
+                        <ChevronLeftOutlinedIcon />
+                    </li>
+                )}
+                {currentRefinement < nbPages ? (
+                    <li>
+                        <a
+                            href={createURL(currentRefinement + 1)}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                refine(currentRefinement + 1);
+                            }}
+                        >
                             <ChevronRightOutlinedIcon />
-                        </li>
-                    )}
-                </ul>
-            </FeedPaginationBox>
-        );
-    },
-);
+                        </a>
+                    </li>
+                ) : (
+                    <li>
+                        <ChevronRightOutlinedIcon />
+                    </li>
+                )}
+            </ul>
+        </FeedPaginationBox>
+    );
+});
 
 export function FeedPagination() {
     return <CustomPagination />;

@@ -8,7 +8,6 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import styled from '@mui/styles/styled';
 import * as React from 'react';
-import { useState } from 'react';
 import FeedAccordion from './FeedAccordion';
 
 const FeedPopModalBox = styled(Box)({
@@ -76,7 +75,6 @@ export function FeedMobileView() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const [feedMobileSortByValue, setFeedMobileSortByValue] = useState();
 
     return (
         <Box>
@@ -92,10 +90,7 @@ export function FeedMobileView() {
                         </IconButton>
                     </Grid>
                     <Grid>
-                        <FeedAccordion
-                            feedMobileSortByValue={feedMobileSortByValue}
-                            setFeedMobileSortByValue={setFeedMobileSortByValue}
-                        />
+                        <FeedAccordion />
                     </Grid>
                     <Grid sx={styles.ModalButtonDiv}>
                         <Button sx={styles.ModalButton} onClick={handleClose}>

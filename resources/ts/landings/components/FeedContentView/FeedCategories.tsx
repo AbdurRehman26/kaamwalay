@@ -101,7 +101,6 @@ const styles = {
             justifyContent: 'space-between',
             alignItems: 'stretch',
             padding: '20px 10px',
-            borderBottom: '1px solid #E0E0E0',
         },
     },
 };
@@ -184,7 +183,13 @@ export function FeedCategories({ query, setBackground }: { query: any; setBackgr
                 <FeedResultCount query={query} />
                 {isSm ? <FeedMobileView /> : ''}
             </Grid>
-            <FeedCurrentFilter />
+            {isSm ? (
+                <Grid sx={{ borderBottom: '1px solid #E0E0E0' }}>
+                    <FeedCurrentFilter />
+                </Grid>
+            ) : (
+                ''
+            )}
             {toggleView ? <FeedGridView /> : <FeedListView />}
             {isSm ? <FeedListView /> : ''}
         </>

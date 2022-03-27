@@ -3,7 +3,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { connectRefinementList } from 'react-instantsearch-dom';
 import { useDispatch } from 'react-redux';
-import { setCategoryValue } from '../../redux/slices/feedSlice';
+import { setCategoryValue, setFilterIncrement } from '../../redux/slices/feedSlice';
 
 const CustomRefinementListMobile = connectRefinementList(({ items, refine }) => {
     const dispatch = useDispatch();
@@ -21,6 +21,7 @@ const CustomRefinementListMobile = connectRefinementList(({ items, refine }) => 
                             event.preventDefault();
                             refine(item.value);
                             dispatch(setCategoryValue(item.value));
+                            dispatch(setFilterIncrement());
                         }}
                     />
                 ))}

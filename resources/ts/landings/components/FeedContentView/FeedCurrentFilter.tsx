@@ -3,34 +3,35 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import { uniqBy } from 'lodash';
-import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
+import { useDispatch } from 'react-redux';
 import theme from '@shared/styles/theme';
+import { setCategoryValue, setFilterDecrement, setGradeValue } from '../../redux/slices/feedSlice';
 
-const CurrentRefinementBox = styled(Box)(
-    {
-        [theme.breakpoints.up('lg')]: {
-            display: 'none',
-        },
-        '.CurrentFilterList': {
-            display: 'inline-flex',
-        },
-        '.Chip': {
-            width: '100%',
-            height: '40px',
-            background: 'rgba(32, 191, 184, 0.08)',
-            border: '1px solid #20BFB8',
-            boxSizing: 'border-box',
-            borderRadius: '24px',
-            cursor: 'pointer',
-            color: '#20BFB8',
-            fontWeight: 'bold',
-        },
+const CurrentRefinementBox = styled(Box)({
+    paddingBottom: '20px',
+
+    [theme.breakpoints.up('lg')]: {
+        display: 'none',
     },
-    { name: 'CurrentRefinementBox' },
-);
+    '.CurrentFilterList': {
+        display: 'inline-flex',
+    },
+    '.Chip': {
+        width: '100%',
+        height: '40px',
+        background: 'rgba(32, 191, 184, 0.08)',
+        border: '1px solid #20BFB8',
+        boxSizing: 'border-box',
+        borderRadius: '24px',
+        cursor: 'pointer',
+        color: '#20BFB8',
+        fontWeight: 'bold',
+    },
+});
 
 const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) => {
+    const dispatch = useDispatch();
     const uniqItems = uniqBy(
         items.map((item) => {
             if (item.items) {
@@ -56,6 +57,8 @@ const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) =
                                     onDelete={(event) => {
                                         event.preventDefault();
                                         refine(item.value);
+                                        dispatch(setFilterDecrement());
+                                        dispatch(setCategoryValue(''));
                                     }}
                                     className={'Chip'}
                                     deleteIcon={
@@ -76,7 +79,10 @@ const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) =
                                 onDelete={(event) => {
                                     event.preventDefault();
                                     refine(item.value);
+                                    dispatch(setFilterDecrement());
+                                    dispatch(setGradeValue(''));
                                 }}
+                                sx={{ marginLeft: '10px' }}
                                 className={'Chip'}
                                 deleteIcon={
                                     <CancelRoundedIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />

@@ -8,12 +8,15 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import styled from '@mui/styles/styled';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 import FeedAccordion from './FeedAccordion';
 
 const FeedPopModalBox = styled(Box)({
     width: '100%',
     height: '100%',
     backgroundColor: '#FFFFFF',
+    overflowY: 'scroll',
 });
 
 const styles = {
@@ -69,22 +72,36 @@ const styles = {
         position: 'fixed',
         bottom: '0',
     },
+
+    count: {
+        background: '#9A9A9A',
+        color: '#ffffff',
+        borderRadius: '20px',
+        padding: '1px 8px',
+        fontSize: '14px!important',
+    },
 };
 
 export function FeedMobileView() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    const count = useSelector((state: RootState) => state.feed.filterCount.count);
     return (
         <Box>
-            <Button sx={styles.ButtonStyle} onClick={handleOpen} startIcon={<FilterAltOutlinedIcon />}>
+            <Button
+                sx={styles.ButtonStyle}
+                onClick={handleOpen}
+                startIcon={count ? <Typography sx={styles.count}>{count}</Typography> : <FilterAltOutlinedIcon />}
+            >
                 Sort & Filter
             </Button>
             <Modal open={open}>
                 <FeedPopModalBox>
                     <Grid sx={styles.ModalHeader}>
-                        <Typography sx={styles.ModalHeaderHeading}>Sort & Filter</Typography>
+                        <Typography variant="subtitle1" sx={styles.ModalHeaderHeading}>
+                            Sort & Filter
+                        </Typography>
                         <IconButton sx={{ color: 'rgba(0, 0, 0, 0.54)' }} onClick={handleClose}>
                             <CloseOutlinedIcon />
                         </IconButton>

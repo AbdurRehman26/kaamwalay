@@ -3,7 +3,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { connectMenu } from 'react-instantsearch-dom';
 import { useDispatch } from 'react-redux';
-import { setGradeValue } from '../../redux/slices/feedSlice';
+import { setFilterIncrement, setGradeValue } from '../../redux/slices/feedSlice';
 
 const CustomMenuSelectMobile = connectMenu(({ items, refine }) => {
     const dispatch = useDispatch();
@@ -21,6 +21,7 @@ const CustomMenuSelectMobile = connectMenu(({ items, refine }) => {
                             event.preventDefault();
                             refine(item.value);
                             dispatch(setGradeValue(item.value));
+                            dispatch(setFilterIncrement());
                         }}
                     />
                 ))}

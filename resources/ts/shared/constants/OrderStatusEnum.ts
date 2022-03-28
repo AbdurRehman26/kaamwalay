@@ -21,4 +21,5 @@ export const OrderStatusMap = {
 export const AdminOrderStatusMap = {
     ...OrderStatusMap,
     [OrderStatusEnum.INCOMPLETE]: { label: 'Pending', value: 'pending' },
+    [OrderStatusEnum.PLACED]: { label: 'Pending', value: 'pending' },
 };

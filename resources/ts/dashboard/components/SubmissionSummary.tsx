@@ -207,7 +207,6 @@ function SubmissionSummary() {
             shippingFee -
             Number(isCouponApplied ? discountedValue : 0) -
             appliedCredit;
-        console.log(previewTotal);
         dispatch(setPreviewTotal(previewTotal));
         return previewTotal;
     }

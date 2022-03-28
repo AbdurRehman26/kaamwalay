@@ -13,7 +13,7 @@ class GenerateOrderInvoiceListener implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    public $tries = 5;
+    public int $tries = 5;
 
     public function __construct(public InvoiceService $invoiceService)
     {
@@ -23,7 +23,7 @@ class GenerateOrderInvoiceListener implements ShouldQueue
     /**
      * @throws InvoiceNotUploaded
      */
-    public function handle(GenerateOrderInvoice $event)
+    public function handle(GenerateOrderInvoice $event): void
     {
         $order = $event->order;
 

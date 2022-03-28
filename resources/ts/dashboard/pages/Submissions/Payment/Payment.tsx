@@ -474,7 +474,11 @@ export function Payment() {
                         </Typography>
                     </div>
 
-                    <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} />
+                    <PaymentStatusChip
+                        color={paymentStatus}
+                        label={PaymentStatusMap[paymentStatus]}
+                        mode={'customer'}
+                    />
                 </div>
 
                 <Divider light />

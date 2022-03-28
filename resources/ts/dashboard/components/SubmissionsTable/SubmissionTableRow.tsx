@@ -218,6 +218,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             <PaymentStatusChip
                                 color={paymentStatus || PaymentStatusEnum.PENDING}
                                 label={PaymentStatusMap[paymentStatus || PaymentStatusEnum.PENDING]}
+                                mode={'customer'}
                             />
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>

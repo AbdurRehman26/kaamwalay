@@ -3,6 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
@@ -305,9 +306,14 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     </div>
 
                     <div className={classes.submissionRightSide}>
-                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                            Status: <span className={classes.submissionPropertyValue}>{status}</span>
-                        </Typography>
+                        <Stack spacing={2}>
+                            <PaymentStatusChip
+                                color={paymentStatus || PaymentStatusEnum.PENDING}
+                                label={PaymentStatusMap[paymentStatus || PaymentStatusEnum.PENDING]}
+                                mode={'customer'}
+                            />
+                            <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
+                        </Stack>
                         <div className={classes.closeIconContainer}>
                             <IconButton onClick={handleClickOptions} className={classes.closeIconBtn} size="large">
                                 <MoreIcon />

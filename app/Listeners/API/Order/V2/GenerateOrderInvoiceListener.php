@@ -4,7 +4,6 @@ namespace App\Listeners\API\Order\V2;
 
 use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Exceptions\Services\Payment\InvoiceNotUploaded;
-use App\Models\Invoice;
 use App\Services\Payment\V2\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;

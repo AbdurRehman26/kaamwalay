@@ -1,4 +1,4 @@
-import { validate, validateSync, ValidatorOptions } from 'class-validator';
+import { ValidatorOptions, validate, validateSync } from 'class-validator';
 import { ReflectReturnType } from '../constants/ReflectMetadata';
 import { ValidationException } from '../exceptions/ValidationException';
 import { bindParams } from './BindParams';

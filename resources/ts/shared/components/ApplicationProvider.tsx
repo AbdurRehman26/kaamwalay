@@ -5,6 +5,7 @@ import { StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles
 import { EnhancedStore } from '@reduxjs/toolkit';
 import React, { PropsWithChildren, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 import { ConfirmationDialogProvider } from '../contexts/ConfirmationDialogContext';
 import { materialUiTheme } from '../styles/theme';
@@ -12,7 +13,6 @@ import AuthenticationCheck from './AuthenticationCheck';
 import { ConfigurationLoad } from './ConfigurationLoad';
 import { NotificationsContainer } from './NotificationsContainer';
 import { SplashScreen, SplashScreenProps } from './SplashScreen';
-import { ReactQueryDevtools } from 'react-query/devtools';
 
 declare module '@mui/styles/defaultTheme' {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface

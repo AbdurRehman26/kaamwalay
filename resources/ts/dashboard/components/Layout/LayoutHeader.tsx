@@ -1,9 +1,14 @@
+import UploadIcon from '@mui/icons-material/FileUploadOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import Toolbar from '@mui/material/Toolbar';
 import MuiLink from '@mui/material/Link';
+import Toolbar from '@mui/material/Toolbar';
+import { alpha } from '@mui/material/styles';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,11 +17,6 @@ import { DashboardNavigationDrawer } from '@dashboard/components/DashboardNaviga
 import { UserDropdown } from '@dashboard/components/Layout/UserDropdown';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import { setNavigationDrawerOpen } from '@dashboard/redux/slices/dashboardSlice';
-import UploadIcon from '@mui/icons-material/FileUploadOutlined';
-import Button from '@mui/material/Button';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
-import { alpha } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
 
 const useStyles = makeStyles(
     (theme) => ({

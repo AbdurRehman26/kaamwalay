@@ -1,11 +1,11 @@
+import Container from '@mui/material/Container';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect } from 'react';
+import { useLocationQuery } from '@shared/hooks/useLocationQuery';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getServiceLevels, setCustomStep, setServiceLevel } from '../redux/slices/newSubmissionSlice';
 import ServiceLevelItem from './ServiceLevelItem';
 import StepDescription from './StepDescription';
-import { useLocationQuery } from '@shared/hooks/useLocationQuery';
-import Container from '@mui/material/Container';
 
 const useStyles = makeStyles((theme) => ({
     servicesContainer: {

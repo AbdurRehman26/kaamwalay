@@ -1,26 +1,26 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { RetryStrategy, useRetry } from '@shared/hooks/useRetry';
+import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { font } from '@shared/styles/utils';
+import { shortenTxnHash } from '@dashboard/components/PayWithAGS/utils';
+import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
+import { getCollectorCoinPaymentStatus } from '@dashboard/redux/slices/newSubmissionSlice';
 import { CollectorCoinConfirmationSidebar } from './CollectorCoinConfirmationSidebar';
 import { useConfirmationSubmissionStyles } from './style';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
-import TableBody from '@mui/material/TableBody';
-import Paper from '@mui/material/Paper';
-import { shortenTxnHash } from '@dashboard/components/PayWithAGS/utils';
-import Tooltip from '@mui/material/Tooltip';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
-import { RetryStrategy, useRetry } from '@shared/hooks/useRetry';
-import { getCollectorCoinPaymentStatus } from '@dashboard/redux/slices/newSubmissionSlice';
-import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 
 export function CollectorCoinConfirmationSubmission() {
     const { id } = useParams<{ id: string }>();
@@ -54,13 +54,13 @@ export function CollectorCoinConfirmationSubmission() {
 
     useEffect(() => {
         if (isPaymentSuccessful) {
-            navigate(`/submissions/${id}/confirmation`);
+            navigate(`/submissions/${id}/view`);
         }
     }, [dispatch, isPaymentSuccessful, id, navigate]);
 
     useRetry(
         async () => {
-            if (!isLoading) {
+            if (!isLoading && data?.orderPayment?.transaction?.completeHash) {
                 await dispatch(
                     getCollectorCoinPaymentStatus({
                         orderID: Number(id),
@@ -75,7 +75,7 @@ export function CollectorCoinConfirmationSubmission() {
     return (
         <Grid container>
             <Grid item className={classes.sidebar}>
-                <CollectorCoinConfirmationSidebar orderId={Number(id)} />
+                <CollectorCoinConfirmationSidebar />
             </Grid>
             <Grid item className={classes.content}>
                 <Box paddingTop={3} paddingBottom={2.5}>

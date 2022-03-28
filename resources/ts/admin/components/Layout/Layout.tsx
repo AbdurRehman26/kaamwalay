@@ -1,9 +1,9 @@
 import React, { PropsWithChildren } from 'react';
+import { ConfirmationDialog } from '@shared/components/ConfirmationDialog';
 import { useAppSelector } from '@admin/redux/hooks';
 import LayoutHeader from './LayoutHeader';
 import LayoutSidebar from './LayoutSidebar';
 import { Content, SidebarHolder, useContentHolderStyles } from './styles';
-import { ConfirmationDialog } from '@shared/components/ConfirmationDialog';
 
 interface LayoutProps {}
 

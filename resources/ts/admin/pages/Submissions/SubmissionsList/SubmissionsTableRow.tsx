@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { StatusChip } from '@shared/components/StatusChip';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderEntity } from '@shared/entities/OrderEntity';
@@ -15,10 +16,12 @@ import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
+import { deleteOrder } from '@shared/redux/slices/ordersSlice';
 import { font } from '@shared/styles/utils';
-import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
+import { useAppDispatch } from '@admin/redux/hooks';
 import { CustomerCreditDialog } from '../../../components/CustomerCreditDialog';
+import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
 
 interface SubmissionsTableRowProps {
     order: OrderEntity;
@@ -29,6 +32,7 @@ enum Options {
     DownloadOrderLabel,
     ViewGrades,
     CreditCustomer,
+    Delete,
 }
 
 const useStyles = makeStyles(
@@ -51,11 +55,13 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
     const notifications = useNotifications();
     const classes = useStyles();
     const [creditDialog, setCreditDialog] = useState(false);
+    const [displayOrderDeleteDialog, setDisplayOrderDeleteDialog] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const navigate = useNavigate();
     const [statusType, statusLabel] = useOrderStatus(order?.orderStatus);
+    const dispatch = useAppDispatch();
 
     const handleCreditDialogClose = useCallback(() => setCreditDialog(false), []);
 
@@ -86,9 +92,29 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                 case Options.CreditCustomer:
                     setCreditDialog(true);
                     break;
+                case Options.Delete:
+                    setDisplayOrderDeleteDialog(!displayOrderDeleteDialog);
+                    break;
             }
         },
-        [handleCloseOptions, navigate, notifications, order.id, order.invoice, order.orderLabel, order.orderNumber],
+        [
+            handleCloseOptions,
+            displayOrderDeleteDialog,
+            navigate,
+            notifications,
+            order.id,
+            order.invoice,
+            order.orderLabel,
+            order.orderNumber,
+        ],
+    );
+
+    const handleOrderDeleteSubmit = useCallback(
+        async ({ orderId }: Record<any, number>) => {
+            await dispatch(deleteOrder(orderId));
+            window.location.href = '/admin/submissions/incomplete/list';
+        },
+        [dispatch],
     );
 
     return (
@@ -104,8 +130,8 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                         {order.orderNumber}
                     </MuiLink>
                 </TableCell>
-                <TableCell>{formatDate(order.createdAt, 'MM/DD/YYYY')}</TableCell>
-                <TableCell>{formatDate(order.arrivedAt, 'MM/DD/YYYY')}</TableCell>
+                <TableCell>{order.createdAt ? formatDate(order.createdAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
+                <TableCell>{order.arrivedAt ? formatDate(order.arrivedAt, 'MM/DD/YYYY') : 'N/A'}</TableCell>
                 <TableCell>
                     {order.customer?.id && order.customer?.customerNumber ? (
                         <MuiLink
@@ -125,7 +151,9 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     <StatusChip label={statusLabel} color={statusType} />
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
-                <TableCell>{formatCurrency(order.grandTotal)}</TableCell>
+                <TableCell>
+                    {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? 'N/A' : formatCurrency(order.grandTotal)}
+                </TableCell>
                 <TableCell align={'right'}>
                     <SubmissionActionButton
                         orderId={order.id}
@@ -142,26 +170,39 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     </IconButton>
 
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                        <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
-                            {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                        </MenuItem>
+                        {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? (
+                            <>
+                                <MenuItem onClick={() => navigate(`/submissions/${order.id}/view`)}>
+                                    View Submission
+                                </MenuItem>
 
-                        <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
+                                <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
+                            </>
+                        ) : (
+                            <>
+                                <MenuItem onClick={handleOption(Options.Download)} disabled={!order.invoice}>
+                                    {order.invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                </MenuItem>
 
-                        {order?.orderStatus.is(OrderStatusEnum.GRADED) || order?.orderStatus.is(OrderStatusEnum.SHIPPED)
-                            ? [
-                                  <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>
-                                      View Grades
-                                  </MenuItem>,
-                                  <MenuItem
-                                      key={Options.DownloadOrderLabel}
-                                      onClick={handleOption(Options.DownloadOrderLabel)}
-                                      disabled={!order.orderLabel}
-                                  >
-                                      Print Stickers
-                                  </MenuItem>,
-                              ]
-                            : null}
+                                <MenuItem onClick={handleOption(Options.CreditCustomer)}>Credit Customer</MenuItem>
+
+                                {order?.orderStatus.is(OrderStatusEnum.GRADED) ||
+                                order?.orderStatus.is(OrderStatusEnum.SHIPPED)
+                                    ? [
+                                          <MenuItem key={Options.ViewGrades} onClick={handleOption(Options.ViewGrades)}>
+                                              View Grades
+                                          </MenuItem>,
+                                          <MenuItem
+                                              key={Options.DownloadOrderLabel}
+                                              onClick={handleOption(Options.DownloadOrderLabel)}
+                                              disabled={!order.orderLabel}
+                                          >
+                                              Print Stickers
+                                          </MenuItem>,
+                                      ]
+                                    : null}
+                            </>
+                        )}
                     </Menu>
                 </TableCell>
             </TableRow>
@@ -170,6 +211,14 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                 wallet={order.customer?.wallet}
                 open={creditDialog}
                 onClose={handleCreditDialogClose}
+            />
+
+            <OrderDeleteDialog
+                open={displayOrderDeleteDialog}
+                onClose={handleOption(Options.Delete)}
+                orderNumber={order.orderNumber}
+                orderId={order.id}
+                onSubmit={handleOrderDeleteSubmit}
             />
         </>
     );

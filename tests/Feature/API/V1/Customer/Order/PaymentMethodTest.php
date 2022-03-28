@@ -27,10 +27,10 @@ test('a customer can get specific payment method', function () {
     ]);
 });
 
-test('a guest cannot get payment methods', function () {
+test('a guest can get payment methods', function () {
     $response = $this->getJson('/api/v1/customer/orders/payment-methods');
 
-    $response->assertUnauthorized();
+    $response->assertOk();
 });
 
 test('a customer can see only enabled payment methods', function () {

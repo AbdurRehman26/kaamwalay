@@ -9,7 +9,9 @@ import { useParams } from 'react-router-dom';
 import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharges';
 import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
+import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
 import { ViewSubmissionInformation } from './ViewSubmissionInformation';
 import { ViewSubmissionStatus } from './ViewSubmissionStatus';
@@ -59,6 +61,10 @@ export function ViewSubmission() {
                 invoiceNumber={data?.invoice?.invoiceNumber}
             />
             <Divider />
+            <Box marginTop={'24px'} />
+            {data?.paymentStatus !== PaymentStatusEnum.PAID ? (
+                <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} />
+            ) : null}
             <ViewSubmissionStatus
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}
                 shipmentProvider={data?.orderCustomerShipment?.shippingProvider}
@@ -93,6 +99,9 @@ export function ViewSubmission() {
                 coupon={data?.coupon}
                 payment={data?.orderPayment}
                 paymentMethodId={data?.paymentMethodId}
+                paymentStatus={data?.paymentStatus}
+                walletPayment={data?.amountPaidFromWallet}
+                mode={'customer'}
             />
             <Box marginTop={'24px'} />
             <Divider />

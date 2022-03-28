@@ -1,5 +1,6 @@
-import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,17 +13,16 @@ import Typography from '@mui/material/Typography';
 import { upperFirst } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
+import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
 import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { useRepository } from '@shared/hooks/useRepository';
 import { bracketParams } from '@shared/lib/api/bracketParams';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { toApiPropertiesObject } from '@shared/lib/utils/toApiPropertiesObject';
 import { useListAdminOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
-import SubmissionsTableRow from '@admin/pages/Submissions/SubmissionsList/SubmissionsTableRow';
-import Button from '@mui/material/Button';
-import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
-import { useRepository } from '@shared/hooks/useRepository';
 import { DataExportRepository } from '@shared/repositories/Admin/DataExportRepository';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { ExportableModelsEnum } from '@shared/constants/ExportableModelsEnum';
+import SubmissionsTableRow from '@admin/pages/Submissions/SubmissionsList/SubmissionsTableRow';
 
 interface SubmissionsTableProps {
     tabFilter?: OrderStatusEnum;
@@ -31,7 +31,7 @@ interface SubmissionsTableProps {
 }
 
 export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTableProps) {
-    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.PAYMENT_PENDING], [tabFilter]);
+    const status = useMemo(() => OrderStatusMap[tabFilter || OrderStatusEnum.INCOMPLETE], [tabFilter]);
     const heading = all ? 'All' : upperFirst(status?.label ?? '');
 
     const [isSearchEnabled, setIsSearchEnabled] = useState(false);
@@ -115,7 +115,9 @@ export function SubmissionsTable({ tabFilter, all, search }: SubmissionsTablePro
                     <TableHead>
                         <TableRow>
                             <TableCell variant={'head'}>Submission #</TableCell>
-                            <TableCell variant={'head'}>Placed</TableCell>
+                            <TableCell variant={'head'}>
+                                {tabFilter === OrderStatusEnum.INCOMPLETE ? 'Date Created' : 'Placed'}
+                            </TableCell>
                             <TableCell variant={'head'}>Reviewed</TableCell>
                             <TableCell variant={'head'}>Customer</TableCell>
                             <TableCell variant={'head'}>Cards</TableCell>

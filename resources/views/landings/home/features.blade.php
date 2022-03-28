@@ -1,12 +1,12 @@
 <section class="Home-section Home-features">
-    <div class="container Home-sectionContainer Home-sectionContainer--center-center" data-aos="fade-up" data-aos-easing="ease-in-out">
+    <div class="container Home-sectionContainer Home-sectionContainer--center-center" data-aos="fade-up">
         <div class="Home-sectionColumn Home-sectionColumn--half Home-sectionColumn--center-center">
             <h4 class="Home-sectionContentCaption text-center">What You Get</h4>
             <h3 class="Home-sectionContentHeadline text-center">Some of the reasons thousands of collectors have switched to Robograding</h3>
         </div>
     </div>
 
-    <div class="container Home-sectionContainer Home-featuresGrid" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-delay="100">
+    <div class="container Home-sectionContainer Home-featuresGrid" data-aos="fade-up"data-aos-delay="100">
         <div class="Home-sectionColumn Home-sectionColumn--third">
             <div class="Home-featureColumn">
                 <img src="{{ asset('assets/images/landings/home/featureIcon01.svg') }}" alt="" class="Home-featureIcon">

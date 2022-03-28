@@ -25,5 +25,6 @@ class SendOrderPaidUserToMailchimp implements ShouldQueue
         }
 
         $this->mailchimpService->addUserToList($event->order->user, MailchimpService::LIST_NAME_ORDER_PAID_CUSTOMERS);
+        $this->mailchimpService->deleteUserFromList($event->order->user, MailchimpService::LIST_NAME_SIGN_UP_USERS);
     }
 }

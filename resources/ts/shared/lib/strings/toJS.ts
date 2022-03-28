@@ -1,4 +1,4 @@
-import { stringify, StringifyOptions } from './stringify';
+import { StringifyOptions, stringify } from './stringify';
 
 /**
  * Convert the type we send to a plain js object.

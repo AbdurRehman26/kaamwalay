@@ -1,3 +1,4 @@
+import Avatar from '@mui/material/Avatar';
 import ButtonBase from '@mui/material/ButtonBase';
 import Radio, { RadioProps } from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
@@ -6,10 +7,9 @@ import withStyles from '@mui/styles/withStyles';
 import React from 'react';
 import { ReactComponent as ColoredCC } from '@shared/assets/coloredCC.svg';
 import { ReactComponent as PaypalLogo } from '@shared/assets/paypalLogo.svg';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useAppDispatch } from '../redux/hooks';
 import { updatePaymentMethodId } from '../redux/slices/newSubmissionSlice';
-import Avatar from '@mui/material/Avatar';
-import { useConfiguration } from '@shared/hooks/useConfiguration';
 
 const useStyles = makeStyles(
     {

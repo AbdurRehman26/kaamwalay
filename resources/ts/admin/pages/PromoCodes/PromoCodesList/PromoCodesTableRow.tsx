@@ -6,11 +6,11 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { MouseEventHandler, useCallback, useState } from 'react';
-import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { ColoredStatusChip } from '@shared/components/ColoredStatusChip';
+import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
+import { useConfirmation } from '@shared/hooks/useConfirmation';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { changePromoCodeStatus, deletePromoCode } from '@shared/redux/slices/adminPromoCodesSlice';
-import { useConfirmation } from '@shared/hooks/useConfirmation';
 
 interface PromoCodesTableRowProps {
     promoCode: PromoCodeEntity;
@@ -33,7 +33,7 @@ const useStyles = makeStyles(
     { name: 'PromoCodesTableRow' },
 );
 
-export function PromoCodesTableRow({ promoCode, reloadCallback }: PromoCodesTableRowProps) {
+export function PromoCodesTableRow({ promoCode }: PromoCodesTableRowProps) {
     const dispatch = useSharedDispatch();
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);

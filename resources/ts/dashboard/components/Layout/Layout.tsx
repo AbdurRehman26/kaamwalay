@@ -1,16 +1,16 @@
 import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
 import React, { Fragment, PropsWithChildren, useMemo } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 import { ConfirmationDialog } from '@shared/components/ConfirmationDialog';
 import { useAuth } from '@shared/hooks/useAuth';
+import { ContentHolder } from './ContentHolder';
+import { LayoutFooter } from './LayoutFooter';
+import { LayoutHeader } from './LayoutHeader';
 import { LayoutFlags, LayoutOptions } from './LayoutOptions';
 import { LayoutSidebar } from './LayoutSidebar';
-import { ContentHolder } from './ContentHolder';
-import { LayoutHeader } from './LayoutHeader';
 import { Content, SidebarHolder } from './styles';
-import { LayoutFooter } from './LayoutFooter';
-import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
 
 interface LayoutProps {
     routeOptions?: Record<string, LayoutOptions>;
@@ -42,7 +42,7 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
     return (
         <Root>
             {options.has(LayoutFlags.Header) && <LayoutHeader />}
-            <Grid container pt={3.5} flex={'1 1 auto'}>
+            <Grid container pt={3.5} mb={2.5} flex={'1 1 auto'}>
                 <ContainerComponent>
                     <ContentComponent>
                         {options.has(LayoutFlags.Sidebar) ? (

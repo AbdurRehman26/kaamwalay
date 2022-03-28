@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { APIState } from '@shared/types/APIState';
-import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
-import { AdminPromoCodesRepository } from '@shared/repositories/Admin/PromoCodesRepository';
+import { StoreCouponDTO } from '@shared/dto/StoreCouponDTO';
 import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { app } from '@shared/lib/app';
-import { NotificationsService } from '@shared/services/NotificationsService';
-import { StoreCouponDTO } from '@shared/dto/StoreCouponDTO';
 import {
     clearNewPromoCodeState,
     setIsTableLoading,
     setShowNewPromoCodeDialog,
 } from '@shared/redux/slices/adminNewPromoCodeSlice';
+import { AdminPromoCodesRepository } from '@shared/repositories/Admin/PromoCodesRepository';
+import { NotificationsService } from '@shared/services/NotificationsService';
+import { APIState } from '@shared/types/APIState';
+import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
 interface StateType extends APIState<PromoCodeEntity> {}
 

@@ -22,7 +22,8 @@
         <script>
             (function() {
                 AOS.init({
-                    once: true
+                    once: true,
+                    easing: 'ease-in-out'
                 });
             })();
         </script>

@@ -2,11 +2,11 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { castArray } from 'lodash';
 import { ElementType, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AuthenticationEnum } from '../constants/AuthenticationEnum';
 import { RolesEnum } from '../constants/RolesEnum';
 import { useAuth } from '../hooks/useAuth';
 import { NativeRedirect } from './NativeRedirect';
-import { useLocation } from 'react-router-dom';
 
 interface ProtectedRouteProps {
     redirectRoute?: string;
@@ -47,13 +47,12 @@ export function ProtectedRoute(Component: ElementType, { redirectRoute, roles }:
                 link = `${window.location.protocol}//${window.location.host}/${link.replace(/^\//, '')}`;
             }
 
+            const rfsn = new URLSearchParams(search).get('rfsn');
             const url = new URL(link);
-            const params: any = new URLSearchParams(search);
 
             url.searchParams.set('from', window.location.href);
-
-            if (params?.get('rfsn')) {
-                url.searchParams.set('rfsn', params?.get('rfsn'));
+            if (rfsn) {
+                url.searchParams.set('rfsn', rfsn);
             }
 
             return <NativeRedirect to={url.href} />;

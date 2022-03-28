@@ -4,8 +4,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { OutlinedCard } from '@shared/components/OutlinedCard';
-import { useAdminOrderItemGradeData } from './useAdminOrderItemGradeData';
 import { GradeInput } from './GradeInput';
+import { useAdminOrderItemGradeData } from './useAdminOrderItemGradeData';
 
 interface SubmissionsGradeCardGradesProps {
     heading: string;

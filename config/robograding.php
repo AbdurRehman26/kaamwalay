@@ -12,7 +12,7 @@ return [
     */
     'feature_order_extra_charge_enabled' => env('FEATURE_ORDER_EXTRA_CHARGE_ENABLED', false),
 
-    'discounted_price_admins' => env('DISCOUNTED_PRICE_ADMINS', []),
+    'revenue_ignore_orders_admins' => env('REVENUE_IGNORE_ORDERS_ADMINS'),
 
     'collector_coin_discount_percentage' => env('COLLECTOR_COIN_DISCOUNT_PERCENTAGE', 0),
 

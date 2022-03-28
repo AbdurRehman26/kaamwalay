@@ -115,6 +115,7 @@ export function SubmissionsListHeader({ onSearch }: SubmissionsListHeaderProps) 
                 <Tab component={Link} to={'/submissions/reviewed/list'} value={'reviewed'} label="Reviewed" />
                 <Tab component={Link} to={'/submissions/graded/list'} value={'graded'} label="Graded" />
                 <Tab component={Link} to={'/submissions/shipped/list'} value={'shipped'} label="Shipped" />
+                <Tab component={Link} to={'/submissions/incomplete/list'} value={'incomplete'} label="Incomplete" />
             </TabList>
         </Grid>
     );

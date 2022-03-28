@@ -1,10 +1,7 @@
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Alert from '@mui/material/Alert';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
@@ -17,7 +14,6 @@ import AddedSubmissionCards from './AddedSubmissionCards';
 import CardSubmissionSearchField from './CardSubmissionSearchField';
 import CardsSearchResults from './CardsSearchResults';
 import StepDescription from './StepDescription';
-import SubmissionSummary from './SubmissionSummary';
 
 const useStyles = makeStyles({
     stepDescriptionContainer: {
@@ -76,48 +72,37 @@ function SubmissionStep02Content() {
     }
 
     return (
-        <Container>
-            <div className={classes.stepDescriptionContainer}>
-                <StepDescription
-                    title="Add cards to your submission"
-                    description={
-                        'Search for a card below and click the "+" icon, then enter the quantity and value for each card.'
-                    }
-                />
+        <>
+            <StepDescription
+                title="Add cards to your submission"
+                description={
+                    'Search for a card below and click the "+" icon, then enter the quantity and value for each card.'
+                }
+            />
+            <div className={classes.leftSideContainer}>
+                <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
+                    {isMobile ? <CardsSearchMobileModal /> : null}
+                    <CardSubmissionSearchField />
+                    {searchValue !== '' && !isMobile ? <CardsSearchResults /> : null}
+                    <AddedSubmissionCards mobileMode={isMobile} />
+                    {!areSelectedCardsValuesValid() ? (
+                        <>
+                            <Alert severity="error" className={classes.valueAlert}>
+                                Card's value can't be higher than the protection level.
+                            </Alert>
+                            <Alert severity={'info'} className={classes.valueAlert}>
+                                You can easily upgrade your service level by&nbsp;
+                                <Link href={''} onClick={handleEditServiceLevelPress}>
+                                    clicking here
+                                </Link>
+                                .
+                            </Alert>
+                        </>
+                    ) : null}
+                    <Configure hitsPerPage={20} />
+                </InstantSearch>
             </div>
-
-            <Grid container spacing={4}>
-                <Grid item xs={12} md={8}>
-                    <Divider light />
-                    <div className={classes.leftSideContainer}>
-                        <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
-                            {isMobile ? <CardsSearchMobileModal /> : null}
-                            <CardSubmissionSearchField />
-                            {searchValue !== '' && !isMobile ? <CardsSearchResults /> : null}
-                            <AddedSubmissionCards mobileMode={isMobile} />
-                            {!areSelectedCardsValuesValid() ? (
-                                <>
-                                    <Alert severity="error" className={classes.valueAlert}>
-                                        Card's value can't be higher than the protection level.
-                                    </Alert>
-                                    <Alert severity={'info'} className={classes.valueAlert}>
-                                        You can easily upgrade your service level by&nbsp;
-                                        <Link href={''} onClick={handleEditServiceLevelPress}>
-                                            clicking here
-                                        </Link>
-                                        .
-                                    </Alert>
-                                </>
-                            ) : null}
-                            <Configure hitsPerPage={20} />
-                        </InstantSearch>
-                    </div>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <SubmissionSummary />
-                </Grid>
-            </Grid>
-        </Container>
+        </>
     );
 }
 

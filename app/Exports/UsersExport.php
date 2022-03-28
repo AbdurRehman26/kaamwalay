@@ -20,7 +20,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping
 
     public function headings(): array
     {
-        return ['name', 'email', 'phone'];
+        return ['name', 'email', 'phone', 'created_at'];
     }
 
     /**
@@ -33,6 +33,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping
             $row->name,
             $row->email,
             $row->phone,
+            $row->created_at,
         ];
     }
 }

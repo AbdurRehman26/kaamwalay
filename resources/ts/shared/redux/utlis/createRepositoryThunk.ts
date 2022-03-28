@@ -1,4 +1,4 @@
-import { ActionReducerMapBuilder, AsyncThunk, createAsyncThunk, CreateSliceOptions } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, AsyncThunk, CreateSliceOptions, createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosRequestConfig } from 'axios';
 import { ClassConstructor, instanceToPlain } from 'class-transformer';
 import { uniq } from 'lodash';

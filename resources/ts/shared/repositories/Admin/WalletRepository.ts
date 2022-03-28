@@ -1,8 +1,8 @@
+import { plainToInstance } from 'class-transformer';
+import { WalletTransactionHistoryEntity } from '@shared/entities/WalletTransactionHistoryEntity';
 import { Injectable } from '../../decorators/Injectable';
 import { WalletEntity } from '../../entities/WalletEntity';
 import { Repository } from '../Repository';
-import { plainToInstance } from 'class-transformer';
-import { WalletTransactionHistoryEntity } from '@shared/entities/WalletTransactionHistoryEntity';
 
 @Injectable('AdminWalletRepository')
 export class WalletRepository extends Repository<WalletEntity> {

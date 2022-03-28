@@ -10,6 +10,6 @@ export function useOrderStatus(orderStatus: OrderStatusEntity): [statusType: Sta
             return [meta.value, meta.label];
         }
 
-        return ['incomplete', 'Incomplete'];
+        return ['pending', 'Pending'];
     }, [orderStatus?.id]);
 }

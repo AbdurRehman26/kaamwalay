@@ -172,6 +172,8 @@ class OrderPaymentService
             + $this->order->shipping_fee
             - $this->order->discounted_amount
             - $this->order->payment_method_discounted_amount
+            - $this->order->refund_total
+            + $this->order->extra_charge_total
         );
 
         GrandTotalValidator::validate($this->order);

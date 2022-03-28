@@ -7,7 +7,6 @@ import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { useNavigate } from 'react-router-dom';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useAuth } from '@shared/hooks/useAuth';
@@ -156,7 +155,6 @@ const useStyles = makeStyles((theme) => ({
 
 export function PaymentSummary() {
     const classes = useStyles();
-    const navigate = useNavigate();
     const notifications = useNotifications();
     const stripe = useStripe();
     const apiService = useInjectable(APIService);
@@ -287,7 +285,7 @@ export function PaymentSummary() {
             sendECommerceDataToGA();
             pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
             pushDataToRefersion(orderSubmission, user$);
-            navigate(`/submissions`);
+            window.location.href = `/dashboard/submissions/${orderID}/view`;
         } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
@@ -327,7 +325,7 @@ export function PaymentSummary() {
                         });
                         sendECommerceDataToGA();
                         pushDataToRefersion(orderSubmission, user$);
-                        navigate(`/submissions/${orderID}/view`);
+                        window.location.href = `/dashboard/submissions/${orderID}/view`;
                     });
                 }
             }

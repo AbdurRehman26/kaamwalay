@@ -6,7 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useMemo } from 'react';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
-import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
+import { AdminOrderStatusMap, OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderLabelEntity } from '@shared/entities/OrderLabelEntity';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
@@ -86,12 +86,13 @@ export function SubmissionsViewHeader({
         () =>
             [
                 OrderStatusEnum.INCOMPLETE,
+                OrderStatusEnum.PLACED,
                 OrderStatusEnum.CONFIRMED,
                 OrderStatusEnum.GRADED,
                 OrderStatusEnum.SHIPPED,
             ].map((status) => {
                 const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
-                const { label, value } = OrderStatusMap[status];
+                const { label, value } = AdminOrderStatusMap[status];
 
                 return {
                     label,

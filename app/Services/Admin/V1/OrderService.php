@@ -43,6 +43,7 @@ class OrderService
         $itemsPerPage = request('per_page');
 
         return QueryBuilder::for(Order::class)
+            ->excludeCancelled()
             ->allowedFilters(Order::getAllowedAdminFilters())
             ->allowedIncludes(Order::getAllowedAdminIncludes())
             ->allowedSorts(['grand_total'])

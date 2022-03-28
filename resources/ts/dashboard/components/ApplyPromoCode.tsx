@@ -21,6 +21,7 @@ import {
     setIsCouponApplied,
     setIsCouponValid,
     setValidCouponId,
+    updatePaymentMethodId,
 } from '@dashboard/redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles(
@@ -72,6 +73,9 @@ export function ApplyPromoCode() {
                 if (showInvalidState) {
                     setShowInvalidState(false);
                 }
+                // When using paypal, and we update the applied coupon code, it won't change the discount for that user.
+                // so here, we are resetting the payment method selection
+                dispatch(updatePaymentMethodId(1));
             } catch (error: any) {
                 dispatch(SetCouponInvalidMessage(error.message));
                 dispatch(setIsCouponValid(false));

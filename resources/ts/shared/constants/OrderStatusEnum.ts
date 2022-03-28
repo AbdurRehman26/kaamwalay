@@ -17,3 +17,8 @@ export const OrderStatusMap = {
     [OrderStatusEnum.CANCELLED]: { label: 'Cancelled', value: 'cancelled' },
     [OrderStatusEnum.REVIEWED]: { label: 'Reviewed', value: 'reviewed' },
 };
+
+export const AdminOrderStatusMap = {
+    ...OrderStatusMap,
+    [OrderStatusEnum.INCOMPLETE]: { label: 'Pending', value: 'pending' },
+};

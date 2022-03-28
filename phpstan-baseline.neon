@@ -3061,6 +3061,11 @@ parameters:
 			path: app/Services/Order/V1/OrderService.php
 
 		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Admin/V1/OrderService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php

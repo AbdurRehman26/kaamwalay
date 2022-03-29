@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { connectHits } from 'react-instantsearch-dom';
 import { BrowserRouter, Link } from 'react-router-dom';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 import theme from '@shared/styles/theme';
 
 const GridDiv = styled(Grid)({
@@ -131,17 +132,7 @@ const CustomHits = connectHits(({ hits }) => {
                             <div className={'GridSection'}>
                                 <Typography className={'BottomSectionContent'}>Date Graded: </Typography>
                                 <Typography className={'BottomSectionText'}>
-                                    {new Date(hit.graded_at).getDate() +
-                                        '/' +
-                                        (new Date(hit.graded_at).getMonth() + 1) +
-                                        '/' +
-                                        new Date(hit.graded_at).getFullYear() +
-                                        ' '}
-                                    at{' '}
-                                    {(new Date(hit.graded_at).getHours() % 12) +
-                                        ':' +
-                                        new Date(hit.graded_at).getMinutes()}
-                                    {new Date(hit.graded_at).getHours() >= 12 ? 'pm' : 'am'}
+                                    {formatDate(hit.graded_at, 'MM/DD/YYYY')} at {formatDate(hit.graded_at, 'h:mm a')}
                                 </Typography>
                             </div>
                             <div className={'GridSection'}>

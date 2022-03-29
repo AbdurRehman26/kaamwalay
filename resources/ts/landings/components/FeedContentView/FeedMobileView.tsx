@@ -87,6 +87,10 @@ export function FeedMobileView() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const count = useSelector((state: RootState) => state.feed.filterCount.count);
+    const results = useSelector((state: RootState) => state.feed.filterResults.results);
+    const categoryTeal = useSelector((state: RootState) => state.feed.categoryTeal.teal);
+    const gradeTeal = useSelector((state: RootState) => state.feed.gradeTeal.teal);
+
     return (
         <Box>
             <Button
@@ -111,7 +115,7 @@ export function FeedMobileView() {
                     </Grid>
                     <Grid sx={styles.ModalButtonDiv}>
                         <Button sx={styles.ModalButton} onClick={handleClose}>
-                            SEE ALL RESULTS
+                            {gradeTeal || categoryTeal ? `SEE ${results} RESULTS` : `SEE ALL RESULTS`}
                         </Button>
                     </Grid>
                 </FeedPopModalBox>

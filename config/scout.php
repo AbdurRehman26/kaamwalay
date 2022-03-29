@@ -114,7 +114,6 @@ return [
     'algolia' => [
         'id' => env('ALGOLIA_APP_ID', ''),
         'secret' => env('ALGOLIA_SECRET', ''),
-        'public' => env('ALGOLIA_PUBLIC_KEY'),
         'settings_path' => config_path('scout'),
     ],
 

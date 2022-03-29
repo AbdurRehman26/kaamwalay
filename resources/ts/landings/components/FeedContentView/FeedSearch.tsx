@@ -14,7 +14,7 @@ import FeedCategories from './FeedCategories';
 const BoxDiv = styled(Box)({
     '.FeedHero': {
         color: 'rgb(255, 255, 255)',
-        backgroundImage: `url(/assets/images/feedpage-background.png)`,
+        backgroundImage: `url(/assets/images/feedpage-background.jpg)`,
         backgroundRepeat: 'round',
     },
     '.FeedContainer': {
@@ -22,7 +22,7 @@ const BoxDiv = styled(Box)({
         padding: '10px',
     },
     '.FeedHeroText': {
-        padding: '24px 0',
+        padding: '30px 0',
     },
     '.FeedHeroHeading': {
         textAlign: 'center',
@@ -47,8 +47,9 @@ const BoxDiv = styled(Box)({
         },
     },
     '.searchBox': {
+        marginBottom: '20px',
         width: '630px',
-        padding: '10px 20px',
+        padding: '8px 20px',
         borderRadius: '20px',
         color: '#000000',
         [theme.breakpoints.down('sm')]: {

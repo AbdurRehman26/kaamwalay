@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { connectHits } from 'react-instantsearch-dom';
 import { BrowserRouter, Link } from 'react-router-dom';
+import { formatDate } from '@shared/lib/datetime/formatDate';
 import theme from '@shared/styles/theme';
 
 const TableDiv = styled(TableContainer)({
@@ -19,6 +20,9 @@ const TableDiv = styled(TableContainer)({
     '.TableCard': {
         padding: '10px',
         textAlign: 'left',
+        [theme.breakpoints.down('sm')]: {
+            padding: '15px 5px',
+        },
     },
     '.TableInfo': {
         display: 'flex',
@@ -36,6 +40,9 @@ const TableDiv = styled(TableContainer)({
     '.TableInfoText': {
         paddingLeft: '14px',
         maxWidth: '240px',
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: '10px',
+        },
     },
     '.TableInfoHeading': {
         fontWeight: '500',
@@ -54,6 +61,9 @@ const TableDiv = styled(TableContainer)({
     '.TableGrade': {
         width: '96px',
         textAlign: 'right',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
     },
     '.Grade': {
         display: 'inline-flex',
@@ -65,7 +75,26 @@ const TableDiv = styled(TableContainer)({
         backgroundColor: '#42f9ff',
         borderRadius: '4px',
         color: 'transparentize(#000, 0.13)',
+        [theme.breakpoints.down('sm')]: {
+            minWidth: '16%',
+        },
     },
+
+    '.GradeMobile': {
+        display: 'inline-flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minWidth: '16%',
+        height: '64px',
+        backgroundColor: '#42f9ff',
+        borderRadius: '4px',
+        color: 'transparentize(#000, 0.13)',
+        [theme.breakpoints.up('lg')]: {
+            display: 'none',
+        },
+    },
+
     '.GradeLabel': {
         marginBottom: '6px',
         fontSize: '12px',
@@ -158,17 +187,8 @@ const CustomHits = connectHits(({ hits }) => {
                                         <div className={'MobileSection'}>
                                             <Typography className={'BottomSectionContent'}>Date Graded: </Typography>
                                             <Typography className={'BottomSectionText'}>
-                                                {new Date(hit.graded_at).getDate() +
-                                                    '/' +
-                                                    (new Date(hit.graded_at).getMonth() + 1) +
-                                                    '/' +
-                                                    new Date(hit.graded_at).getFullYear() +
-                                                    ' '}
-                                                at{' '}
-                                                {(new Date(hit.graded_at).getHours() % 12) +
-                                                    ':' +
-                                                    new Date(hit.graded_at).getMinutes()}
-                                                {new Date(hit.graded_at).getHours() >= 12 ? 'pm' : 'am'}
+                                                {formatDate(hit.graded_at, 'MM/DD/YYYY')} at{' '}
+                                                {formatDate(hit.graded_at, 'h:mm a')}
                                             </Typography>
                                         </div>
                                         <div className={'MobileSection'}>
@@ -182,23 +202,16 @@ const CustomHits = connectHits(({ hits }) => {
                                             <Typography className={'BottomSectionText'}>{hit.owner_name}</Typography>
                                         </div>
                                     </div>
+                                    <div className={'GradeMobile'}>
+                                        <Typography className={'GradeLabel'}>{hit.grade_nickname}</Typography>
+                                        <Typography className={'GradeValue'}>{hit.overall_grade}</Typography>
+                                    </div>
                                 </Link>
                             </TableCell>
                             <TableCell className={'DateCell'}>
                                 <Link to={`feed/${hit.certificate_number}/view`}>
-                                    <Typography>
-                                        {new Date(hit.graded_at).getDate() +
-                                            '/' +
-                                            (new Date(hit.graded_at).getMonth() + 1) +
-                                            '/' +
-                                            new Date(hit.graded_at).getFullYear()}
-                                    </Typography>
-                                    <Typography>
-                                        {(new Date(hit.graded_at).getHours() % 12) +
-                                            ':' +
-                                            new Date(hit.graded_at).getMinutes()}
-                                        {new Date(hit.graded_at).getHours() >= 12 ? 'pm' : 'am'}
-                                    </Typography>
+                                    <Typography>{formatDate(hit.graded_at, 'MM/DD/YYYY')}</Typography>
+                                    <Typography>{formatDate(hit.graded_at, 'h:mm a')}</Typography>
                                 </Link>
                             </TableCell>
                             <TableCell className={'CertificateNoCell'}>

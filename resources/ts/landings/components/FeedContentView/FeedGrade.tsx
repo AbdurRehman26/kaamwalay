@@ -5,6 +5,7 @@ import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
+import { useState } from 'react';
 import { connectMenu } from 'react-instantsearch-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -20,6 +21,18 @@ const FeedGradeDropdown = styled(Box)(
             cursor: 'pointer',
             color: 'rgba(0, 0, 0, 0.54)',
         },
+
+        '.SelectFocus': {
+            width: '100%',
+            height: '40px',
+            boxSizing: 'border-box',
+            borderRadius: '24px',
+            padding: '10px 10px',
+            cursor: 'pointer',
+            background: '#E3F0F6',
+            color: '#20BFB8',
+        },
+
         '.RefineGradeChip': {
             width: '100%',
             height: '40px',
@@ -36,6 +49,7 @@ const FeedGradeDropdown = styled(Box)(
     { name: 'FeedGradeDropdown' },
 );
 const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
+    const [className, changeClassName] = useState('Select');
     return (
         <>
             <Divider sx={{ margin: '0px 20px', height: '40px' }} orientation="vertical" flexItem />
@@ -44,7 +58,16 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
                     <Select
                         value={currentRefinement || 'Grade'}
                         onChange={(event) => refine(event.target.value)}
-                        className={'Select'}
+                        onFocus={() => {
+                            changeClassName('SelectFocus');
+                        }}
+                        onBlur={() => {
+                            changeClassName('Select');
+                        }}
+                        className={className}
+                        onClose={() => {
+                            changeClassName('Select');
+                        }}
                     >
                         <MenuItem sx={{ display: 'none' }} value={'Grade'}>
                             Grade
@@ -73,7 +96,7 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
 });
 
 export function FeedGrade() {
-    const grade = useSelector((state: RootState) => state.feed.GradeValue.grade);
+    const grade = useSelector((state: RootState) => state.feed.gradeValue.grade);
 
     return <CustomMenuSelect attribute={'grade'} defaultRefinement={grade} />;
 }

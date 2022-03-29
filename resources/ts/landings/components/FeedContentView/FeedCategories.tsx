@@ -100,50 +100,48 @@ const styles = {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'stretch',
-            padding: '20px 10px',
+            padding: '10px 0px',
         },
     },
 };
 
 const CustomRefinementList = connectRefinementList(({ items, refine, createURL }) => {
     return (
-        <Grid>
-            <ul className={'GradeList'}>
-                <li>
-                    <FeedClearCategories />
+        <ul className={'GradeList'}>
+            <li>
+                <FeedClearCategories />
+            </li>
+            {items.map((item: any) => (
+                <li className={'GradeListItem'} key={item.label}>
+                    <a
+                        key={item.objectID}
+                        href={createURL(item.value)}
+                        onClick={(event) => {
+                            refine(item.value);
+                            event.preventDefault();
+                        }}
+                    >
+                        {item.isRefined ? (
+                            <Chip
+                                className={'CategoryChipSelected'}
+                                icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
+                                label={item.label}
+                                variant="outlined"
+                            />
+                        ) : (
+                            <Chip className={'CategoryChip'} label={item.label} variant="outlined" />
+                        )}
+                    </a>
                 </li>
-                {items.map((item: any) => (
-                    <li className={'GradeListItem'} key={item.label}>
-                        <a
-                            key={item.objectID}
-                            href={createURL(item.value)}
-                            onClick={(event) => {
-                                refine(item.value);
-                                event.preventDefault();
-                            }}
-                        >
-                            {item.isRefined ? (
-                                <Chip
-                                    className={'CategoryChipSelected'}
-                                    icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
-                                    label={item.label}
-                                    variant="outlined"
-                                />
-                            ) : (
-                                <Chip className={'CategoryChip'} label={item.label} variant="outlined" />
-                            )}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </Grid>
+            ))}
+        </ul>
     );
 });
 
 export function FeedCategories({ query, setBackground }: { query: any; setBackground: any }) {
     const [toggleView, setToggleView] = useState(true);
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const category = useSelector((state: RootState) => state.feed.CategoryValue.category);
+    const category = useSelector((state: RootState) => state.feed.categoryValue.category);
 
     return (
         <>

@@ -6,7 +6,13 @@ import { uniqBy } from 'lodash';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import { useDispatch } from 'react-redux';
 import theme from '@shared/styles/theme';
-import { setCategoryValue, setFilterDecrement, setGradeValue } from '../../redux/slices/feedSlice';
+import {
+    setCategoryTeal,
+    setCategoryValue,
+    setFilterDecrement,
+    setGradeTeal,
+    setGradeValue,
+} from '../../redux/slices/feedSlice';
 
 const CurrentRefinementBox = styled(Box)({
     paddingBottom: '20px',
@@ -59,6 +65,7 @@ const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) =
                                         refine(item.value);
                                         dispatch(setFilterDecrement());
                                         dispatch(setCategoryValue(''));
+                                        dispatch(setCategoryTeal(false));
                                     }}
                                     className={'Chip'}
                                     deleteIcon={
@@ -81,6 +88,7 @@ const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) =
                                     refine(item.value);
                                     dispatch(setFilterDecrement());
                                     dispatch(setGradeValue(''));
+                                    dispatch(setGradeTeal(false));
                                 }}
                                 sx={{ marginLeft: '10px' }}
                                 className={'Chip'}

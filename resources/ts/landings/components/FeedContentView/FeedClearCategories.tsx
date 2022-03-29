@@ -29,16 +29,14 @@ const styles = {
 };
 
 const CustomClearRefinements = connectCurrentRefinements(({ items, refine }) => {
-    return items.length <= 0 ? (
+    return (
         <Chip
             onClick={() => refine(items)}
-            sx={styles.ChipSelected}
-            icon={<DoneIcon sx={{ color: '#20BFB8!important', fontWeight: 'bold' }} />}
+            sx={items.length > 0 ? styles.Chip : styles.ChipSelected}
+            icon={items.length > 0 ? undefined : <DoneIcon sx={{ color: '#20BFB8!important' }} />}
             label={'All Categories'}
             variant="outlined"
         />
-    ) : (
-        <Chip onClick={() => refine(items)} sx={styles.Chip} label={'All Categories'} variant="outlined" />
     );
 });
 

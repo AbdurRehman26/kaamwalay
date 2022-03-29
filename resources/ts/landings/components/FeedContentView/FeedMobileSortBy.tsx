@@ -7,7 +7,7 @@ import { setSortByValue } from '../../redux/slices/feedSlice';
 import { RootState } from '../../redux/store';
 
 const CustomSortByMobile = connectSortBy(({ items, refine }) => {
-    const sort = useSelector((state: RootState) => state.feed.SortState.sort);
+    const sort = useSelector((state: RootState) => state.feed.sortState.sort);
     const dispatch = useDispatch();
 
     return (

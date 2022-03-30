@@ -76,6 +76,7 @@ test('user can be charged partially from wallet', function () {
     OrderPayment::factory()->create([
         'order_id' => $newOrder->id,
         'payment_method_id' => 1,
+        'created_at' => now()->subMinute(),
     ]);
     OrderPayment::factory()->create([
         'order_id' => $newOrder->id,
@@ -83,7 +84,7 @@ test('user can be charged partially from wallet', function () {
     ]);
 
     postJson("/api/v1/customer/orders/{$newOrder->id}/payments")
-        ->assertOk();
+        ->dump()->assertOk();
     
     expect($this->user->wallet->refresh()->balance)->toBe($oldWalletBalance - $walletAmount);
     expect($this->user->wallet->lastTransaction->amount)->toBe($walletAmount);

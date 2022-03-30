@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\V2\Customer\Vault;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V2\Customer\Vault\VaultItemCollection;
 use App\Http\Resources\API\V2\Customer\Vault\VaultItemResource;
-use App\Models\VaultItem;
+use App\Models\VaultShipmentItem;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -13,7 +13,7 @@ class VaultItemController extends Controller
 {
     public function index(): VaultItemCollection
     {
-        $vaultItems = QueryBuilder::for(VaultItem::class)
+        $vaultItems = QueryBuilder::for(VaultShipmentItem::class)
             ->whereBelongsTo(auth()->user())
             ->allowedFilters([
                 AllowedFilter::exact('status'),
@@ -27,7 +27,7 @@ class VaultItemController extends Controller
         return new VaultItemCollection($vaultItems);
     }
 
-    public function show(VaultItem $vaultItem): VaultItemResource
+    public function show(VaultShipmentItem $vaultItem): VaultItemResource
     {
         $vaultItem->load('userCard', 'order');
 

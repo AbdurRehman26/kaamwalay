@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Enums\Vault\VaultItemStatusEnum;
+use App\Enums\Vault\VaultShipmentItemStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class VaultItem extends Model
+class VaultShipmentItem extends Model
 {
     use HasFactory;
 
@@ -21,7 +21,7 @@ class VaultItem extends Model
     ];
 
     protected $casts = [
-        'status' => VaultItemStatusEnum::class,
+        'status' => VaultShipmentItemStatusEnum::class,
     ];
 
     public function user(): BelongsTo

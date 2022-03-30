@@ -16,7 +16,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('vault_items', function (Blueprint $table) {
+        Schema::create('vault_shipment_items', function (Blueprint $table) {
             $table->id();
 
             $table->foreignIdFor(User::class)
@@ -53,6 +53,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('vault_items');
+        Schema::dropIfExists('vault_shipment_items');
     }
 };

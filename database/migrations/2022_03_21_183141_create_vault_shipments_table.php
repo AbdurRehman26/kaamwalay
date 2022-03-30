@@ -2,7 +2,7 @@
 
 use App\Models\OrderAddress;
 use App\Models\User;
-use App\Models\VaultItem;
+use App\Models\VaultShipmentItem;
 use App\Models\VaultShipmentStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,10 +19,6 @@ return new class extends Migration {
         Schema::create('vault_shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)
-                ->constrained()
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->foreignIdFor(VaultItem::class)
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();

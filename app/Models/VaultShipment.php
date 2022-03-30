@@ -30,11 +30,6 @@ class VaultShipment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function vaultItem(): BelongsTo
-    {
-        return $this->belongsTo(VaultItem::class);
-    }
-
     public function shippingAddress(): BelongsTo
     {
         return $this->belongsTo(OrderAddress::class);
@@ -50,8 +45,8 @@ class VaultShipment extends Model
         return $this->belongsTo(VaultShipmentStatus::class);
     }
 
-    public function vaultItems(): HasMany
+    public function vaultShipmentItems(): HasMany
     {
-        return $this->hasMany(VaultItem::class);
+        return $this->hasMany(VaultShipmentItem::class);
     }
 }

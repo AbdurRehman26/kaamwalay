@@ -5,9 +5,9 @@ namespace App\Http\Resources\API\V2\Customer\Vault;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderResource;
 use App\Http\Resources\API\V2\Customer\UserCard\UserCardResource;
-use App\Models\VaultItem;
+use App\Models\VaultShipmentItem;
 
-/** @mixin VaultItem */
+/** @mixin VaultShipmentItem */
 class VaultItemResource extends BaseResource
 {
     /**

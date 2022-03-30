@@ -38,47 +38,15 @@ class UpdateOrderShippingMethodRequest extends FormRequest
                 'exists:shipping_methods,id',
             ],
             'customer_address_id' => [
-                'nullable',
+                Rule::requiredIf($this->isShippingAddressRequired()),
+                'integer',
                 'exists:customer_addresses,id',
             ],
-            'shipping_address' => [
-                Rule::requiredIf($this->isShippingAddressFieldsRequired()),
-                'array',
-            ],
-            'shipping_address.first_name' => [
-                Rule::requiredIf($this->isShippingAddressFieldsRequired()),
-                'string',
-            ],
-            'shipping_address.last_name' => [
-                Rule::requiredIf($this->isShippingAddressFieldsRequired()),
-                'string',
-            ],
-            'shipping_address.address' => [
-                Rule::requiredIf($this->isShippingAddressFieldsRequired()),
-                'string',
-            ],
-            'shipping_address.city' => [
-                Rule::requiredIf($this->isShippingAddressFieldsRequired()),
-                'string',
-            ],
-            'shipping_address.state' => [
-                Rule::requiredIf($this->isShippingAddressFieldsRequired()),
-                'string',
-                'max:2',
-            ],
-            'shipping_address.zip' => [
-                Rule::requiredIf($this->isShippingAddressFieldsRequired()), 'string',
-            ],
-            'shipping_address.phone' => [
-                Rule::requiredIf($this->isShippingAddressFieldsRequired()), 'string',
-            ],
-            'shipping_address.flat' => ['nullable', 'string'],
         ];
     }
 
-    protected function isShippingAddressFieldsRequired(): bool
+    protected function isShippingAddressRequired(): bool
     {
-        return $this->input('shipping_method_id') === ShippingMethod::INSURED_SHIPPING
-            && empty($this->input('customer_address_id'));
+        return $this->input('shipping_method_id') === ShippingMethod::INSURED_SHIPPING;
     }
 }

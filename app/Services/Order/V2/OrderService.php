@@ -4,6 +4,7 @@ namespace App\Services\Order\V2;
 
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
+use App\Models\ShippingMethod;
 use App\Services\Order\V1\OrderService as V1OrderService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
 use Illuminate\Support\Facades\Cache;
@@ -85,5 +86,12 @@ class OrderService extends V1OrderService
             $order->service_fee * config('robograding.collector_coin_discount_percentage') / 100,
             2
         );
+    }
+
+    public function changeShippingMethod(Order $order, int $shippingMethodId)
+    {
+        $shippingMethod = ShippingMethod::find($shippingMethodId);
+
+        $order->shippingMethod()->associate($shippingMethod);
     }
 }

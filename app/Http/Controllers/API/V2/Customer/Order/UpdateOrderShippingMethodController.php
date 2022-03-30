@@ -9,8 +9,6 @@ use App\Http\Resources\API\V2\Customer\Order\OrderResource;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
-use App\Models\ShippingMethod;
-use App\Services\Order\Shipping\CustomerShipmentService;
 use App\Services\Order\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;

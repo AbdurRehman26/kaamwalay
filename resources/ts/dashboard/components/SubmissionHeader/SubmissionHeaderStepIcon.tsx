@@ -6,8 +6,8 @@ import StyleIcon from '@mui/icons-material/Style';
 import Grid from '@mui/material/Grid';
 import { StepIconProps } from '@mui/material/StepIcon';
 import { styled, useTheme } from '@mui/material/styles';
-import clsx from 'clsx';
 import React, { useMemo } from 'react';
+import { cx } from '@shared/lib/utils/cx';
 
 const Root = styled(Grid)(({ theme }) => ({
     zIndex: 1,
@@ -43,7 +43,7 @@ export function SubmissionHeaderStepIcon({ active, completed, icon }: StepIconPr
     }, [completed, icon, theme.palette.primary.contrastText, theme.palette.primary.main]);
 
     return (
-        <Root container alignItems={'center'} justifyContent={'center'} className={clsx({ active, completed })}>
+        <Root container alignItems={'center'} justifyContent={'center'} className={cx({ active, completed })}>
             {icon$}
         </Root>
     );

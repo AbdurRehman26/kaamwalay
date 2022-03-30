@@ -68,7 +68,7 @@ class UserCard extends Model
     {
         return (
             $this->orderItem->order_item_status_id == OrderItemStatus::GRADED
-            && $this->orderItem->order->order_status_id == [OrderStatus::GRADED,OrderStatus::SHIPPED]
+            && $this->orderItem->order->order_status_id == OrderStatus::SHIPPED
             && OrderItemStatusHistory::where('order_item_status_id', [OrderItemStatus::GRADED])->exists()
         );
     }
@@ -102,9 +102,4 @@ class UserCard extends Model
         }
     }
     
-    public function isCardInformationComplete(): bool
-    {
-        return $this->orderItem->cardProduct->card_category_id &&
-        $this->orderItem->cardProduct->card_set_id && ! is_null($this->orderItem->cardProduct->card_number_order);
-    }
 }

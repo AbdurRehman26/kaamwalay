@@ -10,13 +10,13 @@ import { UserEntity } from '@shared/entities/UserEntity';
 import { isAxiosError } from '@shared/lib/api/isAxiosError';
 import { app } from '@shared/lib/app';
 import { isException } from '@shared/lib/errors/isException';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { EventService } from '@shared/services/EventService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
+import { googleAnalytics } from '../../lib/utils/googleAnalytics';
 import { trackFacebookPixelEvent } from '../../lib/utils/trackFacebookPixelEvent';
 
 interface StateType {
@@ -39,7 +39,7 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         const authenticatedUser = await authenticationRepository.postLogin(input);
         NotificationsService.success('Login successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
-        pushToDataLayer({ event: 'google-ads-authenticated' });
+        googleAnalytics({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
         eventService.emit(ApplicationEventsEnum.AuthSessionLogin, authenticatedUser);
@@ -67,7 +67,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
         const authenticatedUser = await authenticationRepository.postRegister(input);
         NotificationsService.success('Register successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
-        pushToDataLayer({ event: 'google-ads-authenticated' });
+        googleAnalytics({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
         trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
         thunkAPI.dispatch(authenticateCheckAction());

@@ -9,16 +9,16 @@ import { AuthDialog } from '@shared/components/AuthDialog/AuthDialog';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useAuth } from '@shared/hooks/useAuth';
-import { ApplyCredit } from '@dashboard/components/ApplyCredit';
-import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     getAvailableCredit,
     setBillingAddress,
     setIsNextDisabled,
     setUseShippingAddressAsBilling,
-} from '../redux/slices/newSubmissionSlice';
-import StepDescription from './StepDescription';
+} from '../../redux/slices/newSubmissionSlice';
+import { ApplyCredit } from '../ApplyCredit';
+import { ApplyPromoCode } from '../ApplyPromoCode';
+import StepDescription from '../StepDescription';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {

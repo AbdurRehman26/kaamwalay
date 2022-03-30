@@ -7,8 +7,8 @@ import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTyp
 import { useAuth } from '@shared/hooks/useAuth';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { googleAnalytics } from '@shared/lib/utils/googleAnalytics';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
@@ -116,7 +116,7 @@ function PaypalBtn() {
                                 currency: 'USD',
                             });
                             sendECommerceDataToGA();
-                            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+                            googleAnalytics({ event: 'google-ads-purchased', value: grandTotal });
                             pushDataToRefersion(orderSubmission, user$);
                             window.location.href = `/dashboard/submissions/${orderID}/view`;
                         } catch (err: any) {

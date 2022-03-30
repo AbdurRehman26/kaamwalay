@@ -6,7 +6,7 @@ import { ApplicationEventsEnum } from '../../constants/ApplicationEventsEnum';
 import { AuthenticatedUserEntity } from '../../entities/AuthenticatedUserEntity';
 import { useInjectable } from '../../hooks/useInjectable';
 import { useSharedDispatch } from '../../hooks/useSharedDispatch';
-import { pushToDataLayer } from '../../lib/utils/pushToDataLayer';
+import { googleAnalytics } from '../../lib/utils/googleAnalytics';
 import { authenticateCheckAction } from '../../redux/slices/authenticationSlice';
 import { AuthenticationService } from '../../services/AuthenticationService';
 import { EventService } from '../../services/EventService';
@@ -72,7 +72,7 @@ export function AuthDialog({
         async function (authenticatedUser: AuthenticatedUserEntity) {
             eventService.emit(ApplicationEventsEnum.AuthSessionLogin, authenticatedUser);
             await authenticationService.setAccessToken(authenticatedUser.accessToken);
-            pushToDataLayer({ event: 'google-ads-authenticated' });
+            googleAnalytics({ event: 'google-ads-authenticated' });
             dispatch(authenticateCheckAction());
             NotificationsService.success('Login successfully!');
             if (redirectPath) {

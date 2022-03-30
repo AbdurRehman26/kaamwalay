@@ -1,20 +1,22 @@
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
-import * as yup from 'yup';
 import { useAuth } from '@shared/hooks/useAuth';
-import ExistingAddress from '@dashboard/components/ExistingAddress';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
+    getSavedAddresses,
+    getShippingFee,
     getStatesList,
     resetSelectedExistingAddress,
     setDisableAllShippingInputs,
@@ -23,8 +25,10 @@ import {
     setSelectedExistingAddress,
     setUseCustomShippingAddress,
     updateShippingAddressField,
-} from '../redux/slices/newSubmissionSlice';
-import StepDescription from './StepDescription';
+} from '../../redux/slices/newSubmissionSlice';
+import ExistingAddress from '../ExistingAddress';
+import StepDescription from '../StepDescription';
+import { addressValidationSchema } from './addressValidationSchema';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -144,26 +148,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// TODO: Fix duplication
-const schema = yup.object().shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    address: yup.string().required(),
-    flat: yup.string().optional(),
-    city: yup.string().required(),
-    state: yup.object().shape({
-        name: yup.string().required(),
-        id: yup.number().required(),
-    }),
-    zipCode: yup.string().required(),
-    phoneNumber: yup.string().required(),
-});
-
 export function SubmissionStep03Content() {
     const { authenticated } = useAuth();
-    const disableAllInputs = useAppSelector((state) => state.newSubmission.step03Data.disableAllShippingInputs);
-    const classes = useStyles({ disableAllInputs });
     const dispatch = useAppDispatch();
+    const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
+
+    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const disableAllInputs = useAppSelector((state) => state.newSubmission.step03Data.disableAllShippingInputs);
     const saveForLater = useAppSelector((state) => state.newSubmission.step03Data.saveForLater);
 
     const selectedExistingAddressId = useAppSelector(
@@ -182,27 +173,42 @@ export function SubmissionStep03Content() {
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
+    const classes = useStyles({ disableAllInputs });
+
+    function onSaveForLater() {
+        dispatch(setSaveShippingAddress(!saveForLater));
+    }
+
+    function updateField(fieldName: any, newValue: any) {
+        dispatch(updateShippingAddressField({ fieldName, newValue }));
+    }
+
+    function handleUseCustomShippingAddress() {
+        dispatch(setUseCustomShippingAddress(!useCustomShippingAddress));
+        dispatch(setDisableAllShippingInputs(useCustomShippingAddress));
+
+        // If the user is about to disable the checkbox, we'll select the first existing address on the list
+        if (useCustomShippingAddress) {
+            dispatch(setSelectedExistingAddress(existingAddresses[0].id));
+        }
+    }
+
+    function updateShippingState(stateId: any) {
+        const stateLookup = availableStates.find((state: any) => state.id === parseInt(stateId));
+        if (stateLookup) {
+            dispatch(
+                updateShippingAddressField({
+                    fieldName: 'state',
+                    newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
+                }),
+            );
+        }
+    }
+
     useEffect(
         () => {
-            if (existingAddresses.length === 0) {
-                schema
-                    .isValid({
-                        firstName,
-                        lastName,
-                        address,
-                        flat,
-                        city,
-                        state,
-                        zipCode,
-                        phoneNumber,
-                    })
-                    .then((valid) => {
-                        dispatch(setIsNextDisabled(!valid));
-                    });
-            }
-
-            if (existingAddresses.length !== 0 && useCustomShippingAddress) {
-                schema
+            if (existingAddresses.length === 0 || useCustomShippingAddress) {
+                addressValidationSchema
                     .isValid({
                         firstName,
                         lastName,
@@ -237,36 +243,6 @@ export function SubmissionStep03Content() {
             existingAddresses,
         ],
     );
-
-    function onSaveForLater() {
-        dispatch(setSaveShippingAddress(!saveForLater));
-    }
-
-    function updateField(fieldName: any, newValue: any) {
-        dispatch(updateShippingAddressField({ fieldName, newValue }));
-    }
-
-    function handleUseCustomShippingAddress() {
-        dispatch(setUseCustomShippingAddress(!useCustomShippingAddress));
-        dispatch(setDisableAllShippingInputs(useCustomShippingAddress));
-
-        // If the user is about to disable the checkbox, we'll select the first existing address on the list
-        if (useCustomShippingAddress) {
-            dispatch(setSelectedExistingAddress(existingAddresses[0].id));
-        }
-    }
-
-    function updateShippingState(stateId: any) {
-        const stateLookup = availableStates.find((state: any) => state.id === parseInt(stateId));
-        if (stateLookup) {
-            dispatch(
-                updateShippingAddressField({
-                    fieldName: 'state',
-                    newValue: { name: stateLookup.name, id: stateLookup.id, code: stateLookup.code },
-                }),
-            );
-        }
-    }
 
     useEffect(
         () => {
@@ -304,6 +280,24 @@ export function SubmissionStep03Content() {
         [disableAllInputs, useCustomShippingAddress, selectedExistingAddressId],
     );
 
+    useEffect(
+        () => {
+            (async () => {
+                try {
+                    setIsLoadingAddresses(true);
+
+                    await dispatch(getShippingFee(selectedCards));
+                    await dispatch(getStatesList());
+                    await dispatch(getSavedAddresses());
+                } finally {
+                    setIsLoadingAddresses(false);
+                }
+            })();
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
+
     return (
         <>
             <StepDescription
@@ -314,6 +308,11 @@ export function SubmissionStep03Content() {
             <Divider light />
 
             <div className={classes.leftSideContainer}>
+                {isLoadingAddresses ? (
+                    <Grid container alignItems={'center'} justifyContent={'center'} p={3}>
+                        <CircularProgress />
+                    </Grid>
+                ) : null}
                 {existingAddresses.length > 0 ? (
                     <>
                         <Typography className={classes.sectionLabel}>Existing Addresses</Typography>

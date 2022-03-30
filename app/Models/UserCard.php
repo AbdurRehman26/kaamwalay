@@ -101,5 +101,4 @@ class UserCard extends Model
             $this->update($response);
         }
     }
-    
 }

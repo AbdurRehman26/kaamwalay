@@ -136,13 +136,13 @@ export function SubmissionViewBilling({
                 <Typography variant={'body2'}>{shippingAddress?.phone}</Typography>
             </Grid>
             <Grid item xs={12} sm={columnWidth}>
+                <Typography variant={'body1'} className={font.fontWeightMedium}>
+                    Payment Status
+                </Typography>
+                <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} mode={mode} />
+                <Box marginTop={2} />
                 {!isPaid && mode === 'customer' ? (
                     <>
-                        <Typography variant={'body1'} className={font.fontWeightMedium}>
-                            Payment Status
-                        </Typography>
-                        <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} />
-                        <Box marginTop={2} />
                         <Typography variant={'body1'} className={font.fontWeightMedium}>
                             Payment Method
                             <MuiLink marginLeft={1} component={Link} to={`/submissions/${id}/pay`}>

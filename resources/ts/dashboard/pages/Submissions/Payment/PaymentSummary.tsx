@@ -344,7 +344,7 @@ export function PaymentSummary() {
                                 disabled={isStripePaymentLoading}
                                 onClick={handleConfirmStripePayment}
                             >
-                                {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
+                                {isStripePaymentLoading ? 'Loading...' : 'Submit Payment'}
                             </Button>
                         ) : null}
                         {paymentMethodID === 2 ? <PaypalBtn /> : null}

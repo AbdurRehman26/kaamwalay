@@ -15,7 +15,6 @@ trait HasOrderPayments
     public function firstOrderPayment(): HasOne
     {
         return $this->hasOne(OrderPayment::class)
-            ->where('order_payments.type', OrderPayment::TYPE_ORDER_PAYMENT)
             ->oldestOfMany('created_at');
     }
 

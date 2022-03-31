@@ -159,7 +159,6 @@ function SubmissionSummary() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const navigate = useNavigate();
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
-    const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
@@ -318,27 +317,6 @@ function SubmissionSummary() {
                     </>
                 ) : null}
 
-                {currentStep === 4 ? (
-                    <>
-                        <div className={classes.rowsContainer}>
-                            <div className={classes.row}>
-                                <Typography className={classes.rowLeftText}>Total:</Typography>
-                                <Typography className={classes.rowRightBoldText}>
-                                    <NumberFormat
-                                        value={grandTotal}
-                                        className={classes.rowRightBoldText}
-                                        displayType={'text'}
-                                        thousandSeparator
-                                        decimalSeparator={'.'}
-                                        prefix={'$'}
-                                    />
-                                </Typography>
-                            </div>
-                        </div>
-                        <Divider light />
-                    </>
-                ) : null}
-
                 {currentStep === 1 ? (
                     <>
                         <div className={classes.rowsContainer}>
@@ -490,7 +468,7 @@ function SubmissionSummary() {
                         <Divider light />
                     </>
                 ) : null}
-                {currentStep === 2 || currentStep === 3 ? (
+                {currentStep === 2 || currentStep === 3 || currentStep === 4 ? (
                     <>
                         <div className={classes.rowsContainer}>
                             <div className={classes.row}>

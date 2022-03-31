@@ -390,7 +390,7 @@ test('a customer can place order and pay from wallet totally', function () {
             'id' => $this->shippingMethod->id,
         ],
         'payment_by_wallet' => 34.00,
-    ])->dump();
+    ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

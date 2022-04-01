@@ -1,4 +1,4 @@
-export function pushToDataLayer(event: any) {
+export function googleTagManager(event: any) {
     // @ts-ignore
     if (window.dataLayer) {
         // @ts-ignore

@@ -6,21 +6,22 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
-import { EventCategories, PaymentMethodEvents, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
+import { EventCategories, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
-import SubmissionHeader from '../../components/SubmissionHeader';
-import SubmissionStep01Content from '../../components/SubmissionStep01Content';
-import SubmissionStep02Content from '../../components/SubmissionStep02Content';
-import SubmissionStep03Content from '../../components/SubmissionStep03Content';
-import SubmissionStep04Content from '../../components/SubmissionStep04Content';
-import SubmissionStep05Content from '../../components/SubmissionStep05Content';
-import SubmissionSummary from '../../components/SubmissionSummary';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { googleTagManager } from '@shared/lib/utils/googleTagManager';
+import SubmissionHeader from '../../../components/SubmissionHeader/SubmissionHeader';
+import {
+    SubmissionStep01Content,
+    SubmissionStep02Content,
+    SubmissionStep03Content,
+    SubmissionStep04Content,
+    SubmissionStep05Content,
+} from '../../../components/SubmissionSteps';
+import SubmissionSummary from '../../../components/SubmissionSummary';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import {
     backStep,
-    createOrder,
     getAvailableCredit,
     getSavedAddresses,
     getShippingFee,
@@ -28,7 +29,8 @@ import {
     nextStep,
     setIsNextDisabled,
     setIsNextLoading,
-} from '../../redux/slices/newSubmissionSlice';
+} from '../../../redux/slices/newSubmissionSlice';
+import { SubmissionValidator } from './SubmissionValidator';
 
 const useStyles = makeStyles((theme) => ({
     pageContentContainer: {
@@ -101,61 +103,34 @@ export function NewSubmission() {
 
     const handleNext = async () => {
         // Executing different stuff before next step loads
-
-        if (currentStep === 0) {
+        try {
             dispatch(setIsNextLoading(true));
-            dispatch(nextStep());
-            dispatch(setIsNextLoading(false));
-            window.scroll(0, 0);
-            pushToDataLayer({ event: 'google-ads-service-selected' });
-        }
 
-        if (currentStep === 1) {
-            dispatch(setIsNextLoading(true));
-            await dispatch(getShippingFee(selectedCards));
-            await dispatch(getStatesList());
-            await dispatch(getSavedAddresses());
-            dispatch(nextStep());
-            dispatch(setIsNextLoading(false));
-            window.scroll(0, 0);
-            pushToDataLayer({ event: 'google-ads-cards-selected' });
-            return;
-        }
-
-        if (currentStep === 2) {
-            dispatch(setIsNextLoading(true));
-            ReactGA.event({
-                category: EventCategories.ShippingAddresses,
-                action:
-                    selectedExistingAddressId === -1
-                        ? ShippingAddressEvents.continuedWithNewAddress
-                        : ShippingAddressEvents.continuedWithExisting,
-            });
-            dispatch(nextStep());
-            dispatch(setIsNextLoading(false));
-            await dispatch(getAvailableCredit()).unwrap();
-            window.scroll(0, 0);
-            pushToDataLayer({ event: 'google-ads-shipping-info-submitted' });
-            return;
-        }
-        if (currentStep === 3) {
-            try {
-                dispatch(setIsNextLoading(true));
-                await dispatch(createOrder()).unwrap();
+            if (currentStep === 0) {
+                googleTagManager({ event: 'google-ads-service-selected' });
+            } else if (currentStep === 1) {
+                await dispatch(getShippingFee(selectedCards));
+                await dispatch(getStatesList());
+                await dispatch(getSavedAddresses());
+                googleTagManager({ event: 'google-ads-cards-selected' });
+            } else if (currentStep === 2) {
                 ReactGA.event({
-                    category: EventCategories.Submissions,
-                    action: PaymentMethodEvents.payLater,
+                    category: EventCategories.ShippingAddresses,
+                    action:
+                        selectedExistingAddressId === -1
+                            ? ShippingAddressEvents.continuedWithNewAddress
+                            : ShippingAddressEvents.continuedWithExisting,
                 });
-                dispatch(setIsNextLoading(false));
-                dispatch(nextStep());
-                window.scroll(0, 0);
-                pushToDataLayer({ event: 'google-ads-payment-info-submitted' });
-                return;
-            } catch (error: any) {
-                dispatch(setIsNextLoading(false));
-                notifications.exception(error);
-                return;
+                await dispatch(getAvailableCredit()).unwrap();
+                googleTagManager({ event: 'google-ads-shipping-info-submitted' });
             }
+
+            dispatch(nextStep());
+            window.scroll(0, 0);
+        } catch (e) {
+            notifications.exception(e as Error);
+        } finally {
+            dispatch(setIsNextLoading(false));
         }
     };
 
@@ -206,6 +181,7 @@ export function NewSubmission() {
 
     return (
         <>
+            <SubmissionValidator />
             <SubmissionHeader />
             <div className={classes.pageContentContainer}>{children}</div>
             <div className={classes.buttonsContainer}>

@@ -1,3 +1,5 @@
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -7,8 +9,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
@@ -119,7 +123,16 @@ export default function SubmissionPaymentActionsModal({
                     <FormControl fullWidth>
                         <FormControlLabel
                             control={<Checkbox checked={addToWallet} onChange={handleRefundCredit} color="primary" />}
-                            label="Refund to Customer Wallet"
+                            label={
+                                <Box display={'flex'} alignItems={'center'}>
+                                    <Typography mr={1}>Credit to Customer Wallet</Typography>
+                                    <Tooltip title="Selecting this will send credit to a customers Robograding Account. It will not refund the amount to the original form of payment.">
+                                        <IconButton aria-label="info">
+                                            <InfoOutlinedIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
+                            }
                         />
                     </FormControl>
                 ) : null}

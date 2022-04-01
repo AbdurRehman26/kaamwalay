@@ -30,6 +30,7 @@ import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';
 import { useAppDispatch, useAppSelector } from '@dashboard/redux/hooks';
 import {
     getAvailableCredit,
+    getStatesList,
     orderToNewSubmission,
     setBillingAddress,
     setIsNextDisabled,
@@ -397,6 +398,7 @@ export function Payment() {
 
     useEffect(
         () => {
+            dispatch(getStatesList());
             getPaymentMethods();
             dispatch(getAvailableCredit()).unwrap();
         },
@@ -468,11 +470,15 @@ export function Payment() {
                     <div>
                         <Typography variant={'h2'} className={classes.title}>
                             <ArrowBackIcon className={classes.backIcon} onClick={() => navigate(-1)} />
-                            Enter Payment Details
+                            Pay For Submission
                         </Typography>
                     </div>
 
-                    <PaymentStatusChip color={paymentStatus} label={PaymentStatusMap[paymentStatus]} />
+                    <PaymentStatusChip
+                        color={paymentStatus}
+                        label={PaymentStatusMap[paymentStatus]}
+                        mode={'customer'}
+                    />
                 </div>
 
                 <Divider light />

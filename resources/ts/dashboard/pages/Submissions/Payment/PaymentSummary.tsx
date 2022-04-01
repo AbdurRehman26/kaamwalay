@@ -7,15 +7,14 @@ import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { useNavigate } from 'react-router-dom';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
@@ -156,7 +155,6 @@ const useStyles = makeStyles((theme) => ({
 
 export function PaymentSummary() {
     const classes = useStyles();
-    const navigate = useNavigate();
     const notifications = useNotifications();
     const stripe = useStripe();
     const apiService = useInjectable(APIService);
@@ -285,9 +283,9 @@ export function PaymentSummary() {
                 currency: 'USD',
             });
             sendECommerceDataToGA();
-            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+            googleTagManager({ event: 'google-ads-purchased', value: grandTotal });
             pushDataToRefersion(orderSubmission, user$);
-            navigate(`/submissions`);
+            window.location.href = `/dashboard/submissions/${orderID}/view`;
         } catch (err: any) {
             if ('message' in err?.response?.data) {
                 setIsStripePaymentLoading(false);
@@ -327,7 +325,7 @@ export function PaymentSummary() {
                         });
                         sendECommerceDataToGA();
                         pushDataToRefersion(orderSubmission, user$);
-                        navigate(`/submissions/${orderID}/view`);
+                        window.location.href = `/dashboard/submissions/${orderID}/view`;
                     });
                 }
             }
@@ -346,7 +344,7 @@ export function PaymentSummary() {
                                 disabled={isStripePaymentLoading}
                                 onClick={handleConfirmStripePayment}
                             >
-                                {isStripePaymentLoading ? 'Loading...' : 'Complete Submission'}
+                                {isStripePaymentLoading ? 'Loading...' : 'Submit Payment'}
                             </Button>
                         ) : null}
                         {paymentMethodID === 2 ? <PaypalBtn /> : null}

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
@@ -18,6 +19,10 @@ beforeEach(function () {
 test('an admin can update order shipment', function () {
     Event::fake();
 
+    $this->order->update([
+        'payment_status' => OrderPaymentStatusEnum::PAID,
+    ]);
+
     $this->postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment', [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
@@ -33,6 +38,16 @@ test('an admin can update order shipment', function () {
                 'tracking_number',
             ],
         ]);
+});
+
+test('an admin can not update order shipment an unpaid order', function () {
+    Event::fake();
+
+    $this->postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment', [
+        'shipping_provider' => 'usps',
+        'tracking_number' => '9400100000000000000000',
+    ])
+        ->assertUnprocessable();
 });
 
 test('a customer can not update order shipment', function () {

@@ -7,7 +7,7 @@ import ReactGA from 'react-ga';
 import { useNavigate } from 'react-router-dom';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { googleAnalytics } from '@shared/lib/utils/googleAnalytics';
+import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { useListOrdersQuery, usePendingListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import OrderIncompleteSubmissionsDialog from '@dashboard/components/OrderIncompleteSubmissionsDialog';
@@ -60,7 +60,7 @@ export function ListSubmissions() {
             category: EventCategories.Submissions,
             action: SubmissionEvents.initiated,
         });
-        googleAnalytics({ event: 'google-ads-started-submission-process' });
+        googleTagManager({ event: 'google-ads-started-submission-process' });
 
         navigate('/submissions/new');
     }, [navigate]);

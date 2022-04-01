@@ -9,7 +9,7 @@ import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { EventCategories, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useNotifications } from '@shared/hooks/useNotifications';
-import { googleAnalytics } from '@shared/lib/utils/googleAnalytics';
+import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import SubmissionHeader from '../../../components/SubmissionHeader/SubmissionHeader';
 import {
     SubmissionStep01Content,
@@ -107,12 +107,12 @@ export function NewSubmission() {
             dispatch(setIsNextLoading(true));
 
             if (currentStep === 0) {
-                googleAnalytics({ event: 'google-ads-service-selected' });
+                googleTagManager({ event: 'google-ads-service-selected' });
             } else if (currentStep === 1) {
                 await dispatch(getShippingFee(selectedCards));
                 await dispatch(getStatesList());
                 await dispatch(getSavedAddresses());
-                googleAnalytics({ event: 'google-ads-cards-selected' });
+                googleTagManager({ event: 'google-ads-cards-selected' });
             } else if (currentStep === 2) {
                 ReactGA.event({
                     category: EventCategories.ShippingAddresses,
@@ -122,7 +122,7 @@ export function NewSubmission() {
                             : ShippingAddressEvents.continuedWithExisting,
                 });
                 await dispatch(getAvailableCredit()).unwrap();
-                googleAnalytics({ event: 'google-ads-shipping-info-submitted' });
+                googleTagManager({ event: 'google-ads-shipping-info-submitted' });
             }
 
             dispatch(nextStep());

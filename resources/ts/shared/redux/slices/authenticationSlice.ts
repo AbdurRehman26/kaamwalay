@@ -16,7 +16,7 @@ import { EventService } from '@shared/services/EventService';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
 import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
-import { googleAnalytics } from '../../lib/utils/googleAnalytics';
+import { googleTagManager } from '../../lib/utils/googleTagManager';
 import { trackFacebookPixelEvent } from '../../lib/utils/trackFacebookPixelEvent';
 
 interface StateType {
@@ -39,7 +39,7 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         const authenticatedUser = await authenticationRepository.postLogin(input);
         NotificationsService.success('Login successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
-        googleAnalytics({ event: 'google-ads-authenticated' });
+        googleTagManager({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
 
         eventService.emit(ApplicationEventsEnum.AuthSessionLogin, authenticatedUser);
@@ -67,7 +67,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
         const authenticatedUser = await authenticationRepository.postRegister(input);
         NotificationsService.success('Register successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
-        googleAnalytics({ event: 'google-ads-authenticated' });
+        googleTagManager({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
         trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
         thunkAPI.dispatch(authenticateCheckAction());

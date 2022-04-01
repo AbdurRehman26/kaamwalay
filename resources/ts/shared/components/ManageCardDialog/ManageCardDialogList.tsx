@@ -3,12 +3,12 @@ import makeStyles from '@mui/styles/makeStyles';
 import algoliaSearch from 'algoliasearch';
 import React, { ForwardedRef, forwardRef, useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
+import ManagerCardDialogSelectedCardPreview from '@shared/components/ManageCardDialog/ManagerCardDialogSelectedCardPreview';
+import { useAppSelector } from '@admin/redux/hooks';
 import { useConfiguration } from '../../hooks/useConfiguration';
 import ManageCardDialogHeader from './ManageCardDialogHeader';
 import ManageCardDialogResults from './ManageCardDialogResults';
 import ManageCardDialogSearch from './ManageCardDialogSearch';
-import ManagerCardDialogSelectedCardPreview from '@shared/components/ManageCardDialog/ManagerCardDialogSelectedCardPreview';
-import { useAppSelector } from '@admin/redux/hooks';
 
 interface ListCardsViewProps {}
 

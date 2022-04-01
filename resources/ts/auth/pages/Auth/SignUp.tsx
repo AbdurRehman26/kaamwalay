@@ -6,13 +6,13 @@ import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { FormInput } from '@shared/components/AuthDialog/FormInput';
+import SubmitButton from '@shared/components/AuthDialog/SubmitButton';
+import { useStyles } from '@shared/components/AuthDialog/styles';
+import { SignUpValidationRules } from '@shared/components/AuthDialog/validation';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
 import { useAuth } from '@shared/hooks/useAuth';
 import { font } from '@shared/styles/utils';
-import { FormInput } from '@shared/components/Auth/FormInput';
-import SubmitButton from '@shared/components/Auth/SubmitButton';
-import { useStyles } from '@shared/components/Auth/styles';
-import { SignUpValidationRules } from '@shared/components/Auth/validation';
 
 /**
  *
@@ -27,8 +27,8 @@ export function SignUp() {
     const initialState = useMemo<SignUpRequestDto>(
         () => ({
             fullName: '',
-            username: '',
             email: '',
+            phone: '',
             password: '',
             passwordConfirmation: '',
         }),
@@ -36,7 +36,8 @@ export function SignUp() {
     );
 
     const handleSubmit = useCallback(
-        async (values) => {
+        async (values: SignUpRequestDto) => {
+            values = { ...values, passwordConfirmation: values.password };
             await register(values);
         },
         [register],
@@ -57,10 +58,9 @@ export function SignUp() {
                         </Typography>
                     </Box>
                     <FormInput type={'text'} label={'Full name'} name={'fullName'} />
-                    <FormInput type={'text'} label={'Create Username'} name={'username'} />
                     <FormInput type={'text'} label={'Email'} name={'email'} />
+                    <FormInput type={'phone'} label={'Phone Number'} name={'phone'} />
                     <FormInput type={'password'} label={'Create Password'} name={'password'} />
-                    <FormInput type={'password'} label={'Confirm Password'} name={'passwordConfirmation'} />
 
                     <SubmitButton>Sign up</SubmitButton>
 

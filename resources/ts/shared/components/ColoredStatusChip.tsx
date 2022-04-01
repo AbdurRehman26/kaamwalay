@@ -1,5 +1,5 @@
-import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
+import { styled } from '@mui/material/styles';
 
 export const ColoredStatusChip = styled(({ color, textColor, ...rest }: any) => <Chip {...rest} />)(
     ({ theme, color, textColor }) => {

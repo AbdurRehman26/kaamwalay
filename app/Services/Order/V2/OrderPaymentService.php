@@ -9,10 +9,10 @@ use App\Models\PaymentMethod;
 use App\Services\Coupon\CouponService;
 use App\Services\Order\Validators\CouponAppliedValidator;
 use App\Services\Order\Validators\GrandTotalValidator;
-use App\Services\Order\Validators\WalletAmountGrandTotalValidator;
+use App\Services\Order\Validators\V2\WalletAmountGrandTotalValidator;
 use App\Services\Order\Validators\WalletCreditAppliedValidator;
 use Exception;
-use Illuminate\Support\Facades\DB;
+use Faker\Provider\Payment;
 use Throwable;
 
 class OrderPaymentService
@@ -54,19 +54,19 @@ class OrderPaymentService
      */
     protected function process(): void
     {
-        DB::beginTransaction();
-
+        // There can be scenarios where order payments exist for an unpaid orders.
+        // 1. 3d Secure card is used and client closed the process
+        // 2. Customer doesn't approve paypal/metamask payment
+        // 3. For any reason, the payment process is not completed.
+        $this->deleteOldOrderPayments();
         $this->storePaymentMethod(
             $this->getPaymentMethod($this->data)
         );
-
         $this->updateOrderCouponAndDiscount(! empty($this->data['coupon']) ? $this->data['coupon'] : []);
         $this->updateOrderPaymentMethodDiscount($this->data['payment_method'] ?? []);
         $this->updateGrandTotal();
         $this->updateWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
         $this->storeOrderPayment($this->data);
-
-        DB::commit();
     }
 
     public function setOrder(Order $order): self
@@ -101,7 +101,7 @@ class OrderPaymentService
             );
         }
 
-        $orderPayment = OrderPayment::firstOrCreate(collect($orderPaymentData)->except(['response'])->all());
+        $orderPayment = OrderPayment::firstOrNew(collect($orderPaymentData)->except(['response'])->all());
 
         $orderPayment->response = json_encode($response ?? []);
 
@@ -115,24 +115,27 @@ class OrderPaymentService
                 'payment_method_id' => PaymentMethod::getWalletPaymentMethod()->id,
                 'type' => OrderPayment::TYPE_ORDER_PAYMENT,
             ]);
+
+            $partialPayment->created_at = now()->addMinute();
+            $partialPayment->updated_at = now()->addMinute();
             $partialPayment->amount = $this->order->amount_paid_from_wallet;
-            $orderPayment->save();
+            $partialPayment->timestamps = false;
+            $partialPayment->save();
         }
 
         // The next step from here would be to charge the user in the application flow. To make the flow consistent
         // the first order payments can only be either order payment from payment method or wallet and second
         // order payment can be other payments.
-        if ($this->order->extraCharges()->count() > 0) {
-            $this->order->extraCharges()->update(['created_at' => now()->addSecond()]);
-            $this->order->refunds()->update(['created_at' => now()->addSecond()]);
-        }
+        $this->order->extraCharges()->update(['created_at' => now()->addSeconds(5)]);
+        $this->order->refunds()->update(['created_at' => now()->addSeconds(5)]);
     }
 
     protected function updateOrderCouponAndDiscount(array $couponData): void
     {
         if (! empty($couponData['code'])) {
-            $this->order->coupon_id = $this->couponService->returnCouponIfValid($couponData['code'])->id;
-            $this->order->discounted_amount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
+            $coupon = $this->couponService->returnCouponIfValid($couponData['code']);
+            $this->order->coupon_id = $coupon->id;
+            $this->order->discounted_amount = $this->couponService->calculateDiscount($coupon, $this->order);
             $this->order->save();
         }
     }
@@ -155,8 +158,8 @@ class OrderPaymentService
         if (! empty($amount)) {
             WalletAmountGrandTotalValidator::validate($this->order, $amount);
             $this->order->amount_paid_from_wallet = $amount;
-            $this->order->save();
         }
+        $this->order->save();
     }
 
     protected function updateGrandTotal(): void
@@ -167,6 +170,8 @@ class OrderPaymentService
             + $this->order->shipping_fee
             - $this->order->discounted_amount
             - $this->order->payment_method_discounted_amount
+            - $this->order->refund_total
+            + $this->order->extra_charge_total
         );
 
         GrandTotalValidator::validate($this->order);
@@ -183,6 +188,16 @@ class OrderPaymentService
 
     protected function storePaymentMethod(array $paymentMethod): void
     {
+        if (! empty($this->data['payment_by_wallet']) && $this->order->grand_total === (float) $this->data['payment_by_wallet']) {
+            $this->order->payment_method_id = PaymentMethod::getWalletPaymentMethod()->id;
+
+            return;
+        }
         $this->order->payment_method_id = $paymentMethod['id'];
+    }
+
+    protected function deleteOldOrderPayments(): void
+    {
+        $this->order->orderPayments()->where('type', OrderPayment::TYPE_ORDER_PAYMENT)->delete();
     }
 }

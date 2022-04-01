@@ -1,13 +1,13 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import { DropzoneOptions, useDropzone } from 'react-dropzone';
-import { useCallback, useState } from 'react';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
+import { useCallback, useState } from 'react';
+import { DropzoneOptions, useDropzone } from 'react-dropzone';
 
 interface ImageUploaderProps {
     onChange: (file: File | null) => void;

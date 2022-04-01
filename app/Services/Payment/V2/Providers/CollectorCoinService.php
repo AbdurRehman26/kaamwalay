@@ -13,6 +13,7 @@ use App\Services\Payment\V2\Providers\Contracts\PaymentProviderHandshakeInterfac
 use App\Services\Payment\V2\Providers\Contracts\PaymentProviderServiceInterface;
 use App\Services\Payment\V2\Providers\Contracts\PaymentProviderVerificationInterface;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use TypeError;
 use Web3\Exceptions\ErrorException;
@@ -85,8 +86,8 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             $this->initializeWeb3FromOrderPayment($orderPayment);
 
             //Get Collector Coin amount from USD (Order grand total)
-            $response = json_decode($orderPayment->response, true);
-            $data['amount'] = $response['amount'];
+            $response = $this->getPaymentReferenceResponse($order);
+            $data['amount'] = $response['amount'] ?? 0;
             
             $transactionData = $this->getTransaction($data['transaction_hash']);
 
@@ -108,7 +109,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
             return [
                 'message' => $e->getMessage(),
             ];
-        } catch (Exception) {
+        } catch (Exception $exception) {
             return ['message' => 'Unable to handle your request at the moment.'];
         }
     }
@@ -171,7 +172,7 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
     protected function initializeWeb3FromOrderPayment(OrderPayment $orderPayment): void
     {
         // Initialize instance network id and Web3
-        $this->paymentBlockChainNetworkId = json_decode($orderPayment->response, true)['network'];
+        $this->paymentBlockChainNetworkId = $this->getPaymentReferenceResponse($orderPayment->order)['network'] ?? '';
 
         throw_unless(
             in_array($this->paymentBlockChainNetworkId, explode(',', config('robograding.web3.supported_networks'))),
@@ -241,5 +242,10 @@ class CollectorCoinService implements PaymentProviderServiceInterface, PaymentPr
         }
 
         return true;
+    }
+
+    protected function getPaymentReferenceResponse(Order $order): array
+    {
+        return Cache::get('cc-payment-' . $order->id, []);
     }
 }

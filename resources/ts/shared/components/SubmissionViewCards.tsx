@@ -1,11 +1,11 @@
 import Box from '@mui/material/Box';
+import MuiLink from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -13,12 +13,12 @@ import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { getStringTruncated } from '@shared/lib/utils/getStringTruncated';
 import { OrderStatusEnum } from '../constants/OrderStatusEnum';
+import { RolesEnum } from '../constants/RolesEnum';
 import { OrderItemEntity } from '../entities/OrderItemEntity';
+import { useAuth } from '../hooks/useAuth';
 import { cx } from '../lib/utils/cx';
 import { formatCurrency } from '../lib/utils/formatCurrency';
 import font from '../styles/font.module.css';
-import { useAuth } from '../hooks/useAuth';
-import { RolesEnum } from '../constants/RolesEnum';
 
 interface SubmissionViewCardsProps {
     items: OrderItemEntity[];
@@ -136,18 +136,18 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                 <TableCell>
                                     <Box display={'flex'} alignItems={'center'}>
                                         <img
-                                            src={item.cardProduct.imagePath}
+                                            src={item.cardProduct?.imagePath}
                                             className={classes.cardImage}
-                                            alt={item.cardProduct.imagePath}
+                                            alt={item.cardProduct?.imagePath}
                                         />
                                         <Box display={'flex'} flexDirection={'column'} paddingLeft={1}>
-                                            <Typography variant={'body2'}>{item.cardProduct.getName()}</Typography>
-                                            <div title={item.cardProduct.getShortName()}>
+                                            <Typography variant={'body2'}>{item.cardProduct?.getName()}</Typography>
+                                            <div title={item.cardProduct?.getShortName()}>
                                                 <Typography variant={'subtitle2'} className={classes.shortName}>
-                                                    {getStringTruncated(item.cardProduct.getShortName(), 65)}
+                                                    {getStringTruncated(item.cardProduct?.getShortName() || '', 65)}
                                                 </Typography>
                                             </div>
-                                            <Typography variant={'body2'}>{item.cardProduct.getLongName()}</Typography>
+                                            <Typography variant={'body2'}>{item.cardProduct?.getLongName()}</Typography>
 
                                             {!isMobile ? (
                                                 <Box>
@@ -156,7 +156,7 @@ export function SubmissionViewCards({ items, serviceLevelPrice, orderStatusID }:
                                                         color={'textSecondary'}
                                                         className={classes.gutterRight}
                                                     >
-                                                        Card #: {item.cardProduct.cardNumberOrder}
+                                                        Card #: {item.cardProduct?.cardNumberOrder}
                                                     </Typography>
                                                     <Typography
                                                         variant={'caption'}

@@ -8,12 +8,11 @@ enum OrderPaymentStatusEnum: int
     case DUE = 1;
     case PAID = 2;
 
-    public function toString(): string
+    public function isPaid(): bool
     {
         return match ($this) {
-            self::PENDING => 'PENDING',
-            self::DUE => 'DUE',
-            self::PAID => 'PAID',
+            self::PAID => true,
+            default => false,
         };
     }
 }

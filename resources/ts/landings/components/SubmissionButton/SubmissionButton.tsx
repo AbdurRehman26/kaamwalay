@@ -1,54 +1,19 @@
 import Button, { ButtonProps } from '@mui/material/Button';
-import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import { useSharedSelector } from '@shared/hooks/useSharedSelector';
-import { dialogVisibility } from '@shared/redux/slices/authenticationSlice';
-import { AuthDialog } from '@shared/components/Auth/AuthDialog';
-import { useAuth } from '@shared/hooks/useAuth';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Theme } from '@mui/material/styles';
 
-interface Props extends ButtonProps {
-    buttonContent: string;
-    margin?: boolean;
-    className?: string;
+interface Props extends Omit<ButtonProps, 'onClick'> {
     plan?: string;
+    buttonContent?: string;
+
+    // Coming from landings
+    textColor?: any;
+    aosDelay?: any;
 }
 
-export function SubmissionButton({ buttonContent, margin, className, plan, ...rest }: Props) {
-    const isAuthDialogOpen = useSharedSelector((state) => state.authentication.dialogOpened);
-    const { authenticated } = useAuth();
-    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const dispatch = useSharedDispatch();
-    const handleAuthDialogClose = () => {
-        dispatch(dialogVisibility(false));
-    };
-
-    const handleOpenDialog = () => {
-        if (!authenticated) {
-            dispatch(dialogVisibility(true));
-        } else {
-            window.location.href = `/dashboard/submissions/new?plan=${plan}`;
-        }
-    };
-
+export function SubmissionButton({ children, plan, buttonContent, textColor, aosDelay, ...rest }: Props) {
     return (
-        <>
-            <Button
-                className={className}
-                style={{
-                    marginLeft: margin && !isMobile ? '14%' : '',
-                }}
-                onClick={handleOpenDialog}
-                {...rest}
-            >
-                {buttonContent}
-            </Button>
-            <AuthDialog
-                open={isAuthDialogOpen}
-                onClose={handleAuthDialogClose}
-                subTitle="to start a Robograding submission"
-            />
-        </>
+        <Button href={`/dashboard/submissions/new${plan ? `?plan=${plan}` : ''}`} {...rest}>
+            {buttonContent || children}
+        </Button>
     );
 }
 

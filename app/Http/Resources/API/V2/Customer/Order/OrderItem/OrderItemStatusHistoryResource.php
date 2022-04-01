@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V1\Customer\Order\OrderItem;
+namespace App\Http\Resources\API\V2\Customer\Order\OrderItem;
 
 use App\Models\OrderItemStatusHistory;
 use Illuminate\Http\Resources\Json\JsonResource;

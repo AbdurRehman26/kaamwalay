@@ -1,4 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
+import { CardProductEntity } from '@shared/entities/CardProductEntity';
+import { OrderEntity } from '@shared/entities/OrderEntity';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
@@ -25,6 +28,7 @@ export type SearchResultItemCardProps = {
     shortName: string;
     addedMode?: boolean;
     id: number;
+    orderItemId?: number;
     qty?: number;
     value?: number;
 };
@@ -98,6 +102,8 @@ export interface NewSubmissionSliceState {
     step01Status: any;
     orderID: number;
     grandTotal: number;
+    refundTotal: number;
+    extraChargesTotal: number;
     orderNumber: string;
     couponState: {
         isCouponValid: boolean;
@@ -116,6 +122,11 @@ export interface NewSubmissionSliceState {
     step02Data: AddCardsToSubmission;
     step03Data: ShippingSubmissionState;
     step04Data: PaymentSubmissionState;
+    paymentStatus: PaymentStatusEnum;
+    shippingAddress: any;
+    billingAddress: any;
+
+    stepValidations: boolean[];
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -124,6 +135,8 @@ const initialState: NewSubmissionSliceState = {
     confirmedCollectorCoinPayment: false,
     orderTransactionHash: '',
     grandTotal: 0,
+    refundTotal: 0,
+    extraChargesTotal: 0,
     availableCredit: 0,
     previewTotal: 0,
     appliedCredit: 0,
@@ -229,11 +242,11 @@ const initialState: NewSubmissionSliceState = {
         ],
         fetchingStatus: null,
         saveForLater: true,
-        disableAllShippingInputs: false,
+        disableAllShippingInputs: true,
         useCustomShippingAddress: false,
     },
     step04Data: {
-        paymentMethodId: 1,
+        paymentMethodId: 0,
         existingCreditCards: [],
         availableStatesList: [],
         selectedCreditCard: {
@@ -271,6 +284,10 @@ const initialState: NewSubmissionSliceState = {
         existingBillingAddresses: [],
         fetchingStatus: null,
     },
+    paymentStatus: PaymentStatusEnum.PENDING,
+    shippingAddress: [],
+    billingAddress: [],
+    stepValidations: [true, false, false, false, false],
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -297,10 +314,10 @@ export const getAvailableCredit = createAsyncThunk('newSubmission/getAvailableCr
 
 export const getTotalInAGS = createAsyncThunk(
     'newSubmission/getTotalInAGS',
-    async (input: { orderID: number; chainID: number }) => {
+    async (input: { orderID: number; chainID: number; paymentByWallet: number; discountedAmount: number }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(
-            `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}`,
+            `customer/orders/${input.orderID}/collector-coin?payment_blockchain_network=${input?.chainID}&payment_by_wallet=${input.paymentByWallet}&discounted_amount=${input.discountedAmount}`,
         );
         const response = await endpoint.get('');
         return response.data.value;
@@ -367,20 +384,44 @@ export const getCollectorCoinPaymentStatus = createAsyncThunk(
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments/${input.txHash}`);
         const response = await endpoint.post('');
-        const fulfilledReturn = {
+
+        return {
             message: response.data.message,
             transactionHash: input.txHash,
         };
-        return fulfilledReturn;
     },
 );
 
 export const verifyOrderStatus = createAsyncThunk(
     'newSubmission/verifyOrderStatus',
-    async (input: { orderID: number; txHash: string }) => {
+    async (input: {
+        orderID: number;
+        txHash: string;
+        paymentByWallet: number;
+        paymentMethod: any;
+        paymentBlockchainNetwork: any;
+        coupon?: any;
+        paymentPlan?: any;
+    }) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint(`customer/orders/${input.orderID}/payments`);
-        const response = await endpoint.post('', { transactionHash: input.txHash });
+        const response = await endpoint.post('', {
+            transactionHash: input.txHash,
+            paymentProviderReference: {
+                id: input.txHash,
+            },
+            paymentBlockchainNetwork: input.paymentBlockchainNetwork,
+            paymentByWallet: input.paymentByWallet,
+            paymentMethod: input.paymentMethod,
+            ...(input.coupon && {
+                coupon: {
+                    code: input.coupon,
+                },
+                paymentPlan: {
+                    id: input.paymentPlan,
+                },
+            }),
+        });
         return response.data;
     },
 );
@@ -440,14 +481,6 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
         shippingMethod: {
             id: 1,
         },
-        paymentMethod:
-            currentSubmission.previewTotal === 0 ? null : { id: currentSubmission.step04Data.paymentMethodId },
-        paymentProviderReference: {
-            id:
-                currentSubmission.step04Data.paymentMethodId === 1
-                    ? currentSubmission.step04Data.selectedCreditCard.id
-                    : null,
-        },
         coupon: currentSubmission.couponState.isCouponApplied
             ? {
                   code: currentSubmission?.couponState?.couponCode,
@@ -461,6 +494,52 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
     const newOrder = await endpoint.post('', orderDTO);
     return newOrder.data;
 });
+
+export const setOrderItem = createAsyncThunk(
+    'newSubmission/setOrderItem',
+    async (item: CardProductEntity, { getState }: any) => {
+        const apiService = app(APIService);
+        const orderId = getState().newSubmission.orderID;
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderId}/order-items`);
+        const orderItemDto = {
+            cardProductId: item.id,
+            quantity: 1,
+            declaredValuePerUnit: 1,
+        };
+        const newOrderItem = await endpoint.post('', orderItemDto);
+        return newOrderItem.data;
+    },
+);
+
+export const deleteOrderItem = createAsyncThunk(
+    'newSubmission/deletetOrderItem',
+    async (cardProductId: number, { getState }: any) => {
+        const cardProduct = getState().newSubmission.step02Data.selectedCards.filter(
+            (orderItem: any) => orderItem.id === cardProductId,
+        );
+        const apiService = app(APIService);
+        const orderId = getState().newSubmission.orderID;
+        const endpoint = apiService.createEndpoint(
+            `customer/orders/${orderId}/order-items/${cardProduct[0].orderItemId}`,
+        );
+        await endpoint.delete('');
+    },
+);
+
+export const updateOrderItem = createAsyncThunk(
+    'newSubmission/updateOrderItem',
+    async (input: { card: SearchResultItemCardProps; qty?: number; declaredValue?: number }, { getState }: any) => {
+        const apiService = app(APIService);
+        const orderId = getState().newSubmission.orderID;
+        const orderItemId = input.card.orderItemId;
+        const endpoint = apiService.createEndpoint(`customer/orders/${orderId}/order-items/${orderItemId}`);
+        await endpoint.put('', {
+            quantity: input.qty,
+            cardProductId: input.card.id,
+            declaredValuePerUnit: input.declaredValue,
+        });
+    },
+);
 
 export const newSubmissionSlice = createSlice({
     name: 'newSubmission',
@@ -572,6 +651,9 @@ export const newSubmissionSlice = createSlice({
             const lookup = state.step03Data?.existingAddresses?.find((address) => address.id === action.payload);
             if (lookup) {
                 state.step03Data.selectedExistingAddress = lookup;
+            } else {
+                state.step03Data.selectedExistingAddress.id = -1;
+                state.shippingAddress.id = action.payload;
             }
         },
         resetSelectedExistingAddress: (state) => {
@@ -632,14 +714,73 @@ export const newSubmissionSlice = createSlice({
                 },
             };
         },
+        orderToNewSubmission(state: NewSubmissionSliceState, action: PayloadAction<OrderEntity>) {
+            state.couponState.isCouponApplied = Boolean(action.payload.coupon);
+            if (Boolean(action.payload.coupon)) {
+                state.couponState.couponCode = action.payload.discountedAmount ? action.payload.coupon.code : '';
+                state.couponState.appliedCouponData.id = action.payload.discountedAmount
+                    ? action.payload.coupon.id
+                    : -1;
+                state.couponState.appliedCouponData.discountStatement = action.payload.discountedAmount
+                    ? action.payload.coupon.discountStatement
+                    : '';
+                state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
+                    ? Number(action.payload.discountedAmount)
+                    : 0;
+            }
+            state.orderID = action.payload.id;
+            state.grandTotal = action.payload.grandTotal;
+            state.refundTotal = action.payload.refundTotal;
+            state.extraChargesTotal = action.payload.extraChargeTotal;
+            state.previewTotal = action.payload.grandTotal;
+            state.step02Data = {
+                shippingFee: action.payload.shippingFee,
+                isMobileSearchModalOpen: false,
+                searchResults: [],
+                searchValue: '',
+                selectedCards: (action.payload?.orderItems ?? []).map(
+                    (item) =>
+                        ({
+                            id: item.cardProduct.id,
+                            qty: item.quantity,
+                            value: item.declaredValuePerUnit,
+                            name: item.cardProduct?.name ?? '',
+                            longName: item.cardProduct?.longName ?? '',
+                            shortName: item.cardProduct?.shortName ?? '',
+                            image: item.cardProduct?.imagePath ?? '',
+                        } as SearchResultItemCardProps),
+                ),
+            };
+
+            state.step04Data = {
+                ...state.step04Data,
+                paymentMethodId: action.payload.paymentMethodId || 1,
+            };
+            state.appliedCredit = +action.payload.amountPaidFromWallet;
+            state.paymentStatus = action.payload.paymentStatus;
+        },
+        setStepValidation(state, action: PayloadAction<{ step: number; valid: boolean }>) {
+            state.stepValidations[action.payload.step] = action.payload.valid;
+        },
     },
     extraReducers: {
+        [setOrderItem.fulfilled as any]: (state, action: any) => {
+            state.step02Data.selectedCards = action.payload.map((orderItem: any) => ({
+                orderItemId: orderItem.id,
+                image: orderItem.cardProduct?.imagePath,
+                name: orderItem.cardProduct?.name,
+                longName: orderItem.cardProduct?.longName,
+                shortName: orderItem.cardProduct?.shortName,
+                id: orderItem.cardProduct?.id,
+                qty: orderItem.quantity,
+                value: orderItem.declaredValuePerUnit,
+            }));
+        },
         [getServiceLevels.pending as any]: (state) => {
             state.step01Data.status = 'loading';
         },
         [getServiceLevels.fulfilled as any]: (state, action: any) => {
             state.step01Data.availableServiceLevels = action.payload;
-            state.step01Data.selectedServiceLevel = action.payload[0];
             state.step01Data.status = 'success';
         },
         [getServiceLevels.rejected as any]: (state) => {
@@ -664,6 +805,10 @@ export const newSubmissionSlice = createSlice({
         },
         [getSavedAddresses.fulfilled as any]: (state, action) => {
             state.step03Data.existingAddresses = action.payload;
+            if (!action.payload.length) {
+                state.step03Data.disableAllShippingInputs = false;
+                state.step03Data.useCustomShippingAddress = true;
+            }
         },
         [getAvailableCredit.fulfilled as any]: (state, action) => {
             state.availableCredit = action.payload;
@@ -671,29 +816,10 @@ export const newSubmissionSlice = createSlice({
         [getTotalInAGS.fulfilled as any]: (state, action) => {
             state.totalInAgs = action.payload;
         },
-        [verifyOrderStatus.fulfilled as any]: (state, action) => {
-            // handle success
-        },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;
             state.orderNumber = action.payload.orderNumber;
             state.orderID = action.payload.id;
-            state.step04Data.selectedBillingAddress.address = action.payload.billingAddress.address;
-            state.step04Data.selectedBillingAddress.country = action.payload.billingAddress.country;
-            state.step04Data.selectedBillingAddress.firstName = action.payload.billingAddress.firstName;
-            state.step04Data.selectedBillingAddress.lastName = action.payload.billingAddress.lastName;
-            state.step04Data.selectedBillingAddress.flat = action.payload.billingAddress.flat;
-            state.step04Data.selectedBillingAddress.id = action.payload.billingAddress.id;
-            state.step04Data.selectedCreditCard.expMonth =
-                state.step04Data.paymentMethodId === 1 && state.previewTotal !== 0
-                    ? action?.payload?.orderPayment?.card?.expMonth
-                    : '';
-            state.step04Data.selectedBillingAddress.phoneNumber = action.payload.billingAddress.phone;
-            state.step04Data.selectedBillingAddress.state = state.step03Data.availableStatesList.find(
-                (currentState: any) => currentState.code === action.payload.billingAddress.state,
-            ) as any;
-            state.step04Data.selectedBillingAddress.zipCode = action.payload.billingAddress.zip;
-            state.step04Data.selectedBillingAddress.city = action.payload.billingAddress.city;
             state.step02Data.selectedCards = action.payload.orderItems.map((orderItem: any) => ({
                 image: orderItem.cardProduct.imagePath,
                 name: orderItem.cardProduct.name,
@@ -721,7 +847,6 @@ export const newSubmissionSlice = createSlice({
                 ? action.payload.discountedAmount
                 : '';
             state.paymentMethodDiscountedAmount = action.payload.paymentMethodDiscountedAmount;
-            state.step04Data.paymentMethodId = action.payload.paymentMethodId;
             state.appliedCredit = action.payload.amountPaidFromWallet;
         },
     },
@@ -764,4 +889,6 @@ export const {
     setAppliedCredit,
     setPreviewTotal,
     SetCouponInvalidMessage,
+    orderToNewSubmission,
+    setStepValidation,
 } = newSubmissionSlice.actions;

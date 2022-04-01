@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { APIState } from '../../types/APIState';
-import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 import { WalletTransactionEntity } from '@shared/entities/WalletTransactionEntity';
 import { WalletRepository } from '@shared/repositories/WalletRepository';
+import { APIState } from '../../types/APIState';
+import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
 interface StateType extends APIState<WalletTransactionEntity> {}
 

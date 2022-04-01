@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
-import { useListQuery } from '@shared/hooks/useListQuery';
 import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
+import { useListQuery } from '@shared/hooks/useListQuery';
 import { listAdminPromoCodesAction } from '@shared/redux/slices/adminPromoCodesSlice';
 
 export function useListAdminPromoCodesQuery(config?: AxiosRequestConfig) {

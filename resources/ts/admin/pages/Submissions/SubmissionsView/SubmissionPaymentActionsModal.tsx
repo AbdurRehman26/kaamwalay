@@ -1,21 +1,25 @@
-import CircularProgress from '@mui/material/CircularProgress';
-import FormControl from '@mui/material/FormControl';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { NumberFormatInput } from '@shared/components/NumberFormat';
+import { NumberFormatTextField } from '@shared/components/NumberFormatTextField';
 import { addExtraChargeToOrder, refundOrderTransaction } from '@shared/redux/slices/adminOrdersSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
-import { DialogStateMap, DialogStateEnum } from './SubmissionTransactionDialogEnum';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import { DialogStateEnum, DialogStateMap } from './SubmissionTransactionDialogEnum';
 
 interface SubmissionPaymentActionsModalProps {
     openState: DialogStateEnum | null;
@@ -88,7 +92,7 @@ export default function SubmissionPaymentActionsModal({
                     <Typography sx={{ marginBottom: '8px' }} variant={'caption'}>
                         {dialogState?.amountLabel!}
                     </Typography>
-                    <TextField
+                    <NumberFormatTextField
                         value={amount}
                         onChange={handleChangeAmount}
                         size="small"
@@ -96,7 +100,6 @@ export default function SubmissionPaymentActionsModal({
                         placeholder={'0.00'}
                         sx={{ fontWeight: 'bold' }}
                         InputProps={{
-                            inputComponent: NumberFormatInput as any,
                             inputProps: { min: 1, max: 1000000 },
                             startAdornment: <InputAdornment position="start">$</InputAdornment>,
                         }}
@@ -120,7 +123,16 @@ export default function SubmissionPaymentActionsModal({
                     <FormControl fullWidth>
                         <FormControlLabel
                             control={<Checkbox checked={addToWallet} onChange={handleRefundCredit} color="primary" />}
-                            label="Refund to Customer Wallet"
+                            label={
+                                <Box display={'flex'} alignItems={'center'}>
+                                    <Typography mr={1}>Credit to Customer Wallet</Typography>
+                                    <Tooltip title="Selecting this will send credit to a customers Robograding Account. It will not refund the amount to the original form of payment.">
+                                        <IconButton aria-label="info">
+                                            <InfoOutlinedIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
+                            }
                         />
                     </FormControl>
                 ) : null}

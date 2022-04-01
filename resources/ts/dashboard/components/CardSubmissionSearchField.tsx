@@ -1,17 +1,17 @@
+import ArrowBack from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { connectSearchBox } from 'react-instantsearch-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCardsSearchValue, setIsMobileSearchModalOpen } from '../redux/slices/newSubmissionSlice';
-import ArrowBack from '@mui/icons-material/ArrowBack';
-import Typography from '@mui/material/Typography';
 
 const useStyles = makeStyles({
     container: {

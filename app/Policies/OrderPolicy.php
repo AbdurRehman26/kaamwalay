@@ -41,6 +41,6 @@ class OrderPolicy
     public function calculateCollectorCoin(User $user, Order $order)
     {
         return ($user->isAdmin() || $order->user()->is($user))
-        && $order->user->orders()->latest()->first()->is($order);
+        && $order->isPayable('v2');
     }
 }

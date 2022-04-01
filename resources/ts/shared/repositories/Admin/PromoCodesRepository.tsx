@@ -1,7 +1,7 @@
 import { Injectable } from '@shared/decorators/Injectable';
-import { Repository } from '../Repository';
-import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { StoreCouponDTO } from '@shared/dto/StoreCouponDTO';
+import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
+import { Repository } from '../Repository';
 
 @Injectable('AdminPromoCodesRepository')
 export class AdminPromoCodesRepository extends Repository<PromoCodeEntity> {

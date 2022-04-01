@@ -1,6 +1,7 @@
 <?php
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Services\Order\RevenueStatsService;
@@ -30,11 +31,11 @@ beforeEach(function () {
                     OrderStatus::CONFIRMED,
                     OrderStatus::GRADED,
                     OrderStatus::SHIPPED,
-                    OrderStatus::CANCELLED,
                     OrderStatus::REVIEWED,
                 ]),
                 'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
                 'updated_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
+                'payment_status' => $this->faker->randomElement([0,1,2]),
             ];
             }
         ));
@@ -44,7 +45,7 @@ it('adds daily revenue stats', function () {
     $getRandomOrder = $this->orders->random()->first();
 
     $orders = Order::whereDate('created_at', $getRandomOrder->created_at->toDateString())
-        ->where('order_status_id', '<>', OrderStatus::PAYMENT_PENDING)
+        ->where('payment_status', OrderPaymentStatusEnum::PAID->value)
         ->get();
 
     $serviceFee = $orders->sum('service_fee');
@@ -68,7 +69,7 @@ it('adds daily revenue stats', function () {
 
 it('adds monthly revenue stats for the current month', function () {
     $orders = Order::whereBetween('created_at', [now()->addMonth(-1)->startOfMonth(), now()->addMonth(-1)->endOfMonth()])
-        ->where('order_status_id', '<>', OrderStatus::PAYMENT_PENDING)
+        ->where('payment_status', OrderPaymentStatusEnum::PAID->value)
         ->get();
 
     $serviceFee = $orders->sum('service_fee');

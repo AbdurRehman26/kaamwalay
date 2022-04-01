@@ -38,7 +38,7 @@ trait AuthenticatableWithAGS
                 Arr::except($userData, ['pk', 'email']),
                 [
                     'password' => $request->get('password'),
-                    'username' => User::generateUserName(),
+                    'username' => $userData['username'] ?? User::generateUserName(),
                 ]
             )
         );

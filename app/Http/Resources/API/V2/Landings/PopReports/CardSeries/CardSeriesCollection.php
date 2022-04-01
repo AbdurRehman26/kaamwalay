@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\API\V2\PopReport\PopReportsCard;
+namespace App\Http\Resources\API\V2\Landings\PopReports\CardSeries;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PopReportsCardCollection extends ResourceCollection
+class CardSeriesCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

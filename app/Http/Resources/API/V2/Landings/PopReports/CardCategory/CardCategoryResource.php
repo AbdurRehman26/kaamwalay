@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Customer\CardCategory;
+namespace App\Http\Resources\API\V2\Landings\PopReports\CardCategory;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\CardCategory;

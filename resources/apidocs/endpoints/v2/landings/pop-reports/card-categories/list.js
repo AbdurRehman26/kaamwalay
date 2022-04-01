@@ -1,7 +1,7 @@
 /**
  * @api {get} /v2/pop/categories List Card Categories
  * @apiName List Card Categories
- * @apiGroup Landing Card Categories
+ * @apiGroup Landing Pop Reports
  *
  * @apiVersion 2.0.0
  *

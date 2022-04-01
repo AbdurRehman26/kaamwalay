@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Customer\CardSet;
+namespace App\Http\Resources\API\V2\Landings\PopReports\CardSet;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\CardSet;

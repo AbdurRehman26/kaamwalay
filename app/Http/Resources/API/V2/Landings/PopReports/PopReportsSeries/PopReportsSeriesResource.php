@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Resources\API\V2\PopReport\PopReportsCard;
+namespace App\Http\Resources\API\V2\Landings\PopReports\PopReportsSeries;
 
 use App\Http\Resources\API\BaseResource;
-use App\Models\PopReportsCard;
+use App\Models\PopReportsSeries;
 use Illuminate\Http\Request;
 
 /**
- * @mixin PopReportsCard
+ * @mixin PopReportsSeries
  */
-class PopReportsCardResource extends BaseResource
+class PopReportsSeriesResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -21,8 +21,7 @@ class PopReportsCardResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'card_set_id' => $this->card_set_id,
-            'card_product_id' => $this->card_product_id,
+            'card_series_id' => $this->card_series_id,
             'pr' => $this->pr,
             'fr' => $this->fr,
             'good' => $this->good,
@@ -44,11 +43,9 @@ class PopReportsCardResource extends BaseResource
             'gem_mt' => $this->gem_mt,
             'total' => $this->total,
             'total_plus' => $this->total_plus,
-            'name' => $this->card_product_id ? $this->cardProduct->name : null,
-            'image_path' => $this->card_product_id ? $this->cardProduct->image_path : null,
-            'short_name' => $this->card_product_id ? $this->cardProduct->getShortName() : null,
-            'searchable_name' => $this->card_product_id ? $this->cardProduct->getSearchableName() : null,
-            'card_number_order' => $this->card_product_id ? $this->cardProduct->card_number_order : null,
+            'name' => $this->card_series_id ? $this->cardSeries->name : null,
+            'image_path' => $this->card_series_id ? $this->cardSeries->image_path : null,
+            'release_date' => $this->card_series_id ? $this->cardSeries->release_date : null,
         ];
     }
 }

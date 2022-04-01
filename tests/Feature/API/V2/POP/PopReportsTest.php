@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 
 use function Pest\Laravel\getJson;
 
-test('user can receive enabled card categories for pop report page', function () {
+test('a guest can receive enabled card categories for pop report page', function () {
     CardCategory::factory()->count(4)
         ->state(new Sequence(
             ['is_enabled' => true],
@@ -49,7 +49,7 @@ it('returns reports for series', function () {
 
     getJson('/api/v2/pop/categories/1')
         ->assertOk()
-        ->assertJsonCount(2, 'items.data');
+        ->assertJsonCount(2, 'data');
 });
 
 it('returns reports for sets', function () {
@@ -80,7 +80,7 @@ it('returns reports for sets', function () {
 
     getJson('/api/v2/pop/categories/1/series/1')
         ->assertOk()
-        ->assertJsonCount(2, 'items.data');
+        ->assertJsonCount(2, 'data');
 });
 
 it('returns reports for cards', function () {
@@ -114,5 +114,5 @@ it('returns reports for cards', function () {
 
     getJson('/api/v2/pop/categories/1/series/1/sets/1')
         ->assertOk()
-        ->assertJsonCount(2, 'items.data');
+        ->assertJsonCount(2, 'data');
 });

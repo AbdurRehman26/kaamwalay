@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\PopReport\PopReportsSet;
+namespace App\Http\Resources\API\V2\Landings\PopReports\PopReportsSet;
 
 use App\Http\Resources\API\BaseResource;
 use App\Models\PopReportsSet;

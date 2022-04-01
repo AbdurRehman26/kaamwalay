@@ -432,4 +432,16 @@ class Order extends Model implements Exportable
     {
         return $this->coupon()->exists();
     }
+
+    public function hasCreditApplied(): bool
+    {
+        return $this->amount_paid_from_wallet > 0;
+    }
+
+    public function removeCouponApplied(): void
+    {
+        $this->coupon_id = null;
+        $this->discounted_amount = 0;
+        $this->save();
+    }
 }

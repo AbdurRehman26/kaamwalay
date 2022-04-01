@@ -133,10 +133,9 @@ class OrderPaymentService
     protected function updateOrderCouponAndDiscount(array $couponData): void
     {
         if ($this->order->hasCoupon() && empty($couponData['code'])) {
-            $this->order->coupon_id = null;
-            $this->order->save();
+            $this->order->removeCouponApplied();
         }
-        
+
         if (! empty($couponData['code'])) {
             $coupon = $this->couponService->returnCouponIfValid($couponData['code']);
             $this->order->coupon_id = $coupon->id;
@@ -160,6 +159,9 @@ class OrderPaymentService
 
     protected function updateWalletPaymentAmount(float|null $amount): void
     {
+        if ($this->order->hasCreditApplied() && empty($amount)) {
+            $this->order->amount_paid_from_wallet = 0;
+        }
         if (! empty($amount)) {
             WalletAmountGrandTotalValidator::validate($this->order, $amount);
             $this->order->amount_paid_from_wallet = $amount;

@@ -24,8 +24,8 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
     const initialState = useMemo<SignUpRequestDto>(
         () => ({
             fullName: '',
-            username: '',
             email: '',
+            phone: '',
             password: '',
             passwordConfirmation: '',
         }),
@@ -64,11 +64,11 @@ export function SignUpContent({ onViewChange, onAuthSuccess }: AuthDialogContent
                     </FormRoot>
 
                     <FormRoot>
-                        <FormInput type={'text'} label={'Create Username'} name={'username'} />
+                        <FormInput type={'text'} label={'Email'} name={'email'} />
                     </FormRoot>
 
                     <FormRoot>
-                        <FormInput type={'text'} label={'Email'} name={'email'} />
+                        <FormInput type={'phone'} label={'Phone Number'} name={'phone'} />
                     </FormRoot>
 
                     <FormRoot>

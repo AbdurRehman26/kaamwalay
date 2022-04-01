@@ -132,6 +132,11 @@ class OrderPaymentService
 
     protected function updateOrderCouponAndDiscount(array $couponData): void
     {
+        if ($this->order->hasCoupon() && empty($couponData['code'])) {
+            $this->order->coupon_id = null;
+            $this->order->save();
+        }
+        
         if (! empty($couponData['code'])) {
             $coupon = $this->couponService->returnCouponIfValid($couponData['code']);
             $this->order->coupon_id = $coupon->id;

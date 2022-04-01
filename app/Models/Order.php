@@ -427,4 +427,9 @@ class Order extends Model implements Exportable
     {
         return $this->invoice()->exists();
     }
+
+    public function hasCoupon(): bool
+    {
+        return $this->coupon()->exists();
+    }
 }

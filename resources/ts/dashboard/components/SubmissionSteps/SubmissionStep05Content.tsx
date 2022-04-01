@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import makeStyles from '@mui/styles/makeStyles';
-import OrderReviewSection from '@dashboard/components/SubmissionOrderReview/OrderReviewSection';
-import AddedSubmissionCards from './AddedSubmissionCards';
-import StepDescription from './StepDescription';
+import AddedSubmissionCards from '../AddedSubmissionCards';
+import StepDescription from '../StepDescription';
+import OrderReviewSection from '../SubmissionOrderReview/OrderReviewSection';
 
 const useStyles = makeStyles({
     stepDescriptionContainer: {

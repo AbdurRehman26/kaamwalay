@@ -4,8 +4,8 @@ import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import Logo from '@shared/assets/robogradingLogo.svg';
-import CustomizedSteppers from './HeaderStepper';
-import { UserDropdown } from './Layout/UserDropdown';
+import { UserDropdown } from '../Layout/UserDropdown';
+import { SubmissionHeaderStepper } from './SubmissionHeaderStepper';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -78,7 +78,7 @@ function SubmissionHeader() {
                         Submit Cards For Grading
                     </Typography>
                 </div>
-                <CustomizedSteppers />
+                <SubmissionHeaderStepper />
             </Container>
         </div>
     );

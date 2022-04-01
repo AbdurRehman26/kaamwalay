@@ -125,6 +125,8 @@ export interface NewSubmissionSliceState {
     paymentStatus: PaymentStatusEnum;
     shippingAddress: any;
     billingAddress: any;
+
+    stepValidations: boolean[];
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -285,6 +287,7 @@ const initialState: NewSubmissionSliceState = {
     paymentStatus: PaymentStatusEnum.PENDING,
     shippingAddress: [],
     billingAddress: [],
+    stepValidations: [true, false, false, false, false],
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -756,6 +759,9 @@ export const newSubmissionSlice = createSlice({
             state.appliedCredit = +action.payload.amountPaidFromWallet;
             state.paymentStatus = action.payload.paymentStatus;
         },
+        setStepValidation(state, action: PayloadAction<{ step: number; valid: boolean }>) {
+            state.stepValidations[action.payload.step] = action.payload.valid;
+        },
     },
     extraReducers: {
         [setOrderItem.fulfilled as any]: (state, action: any) => {
@@ -809,9 +815,6 @@ export const newSubmissionSlice = createSlice({
         },
         [getTotalInAGS.fulfilled as any]: (state, action) => {
             state.totalInAgs = action.payload;
-        },
-        [verifyOrderStatus.fulfilled as any]: (state, action) => {
-            // handle success
         },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;
@@ -887,4 +890,5 @@ export const {
     setPreviewTotal,
     SetCouponInvalidMessage,
     orderToNewSubmission,
+    setStepValidation,
 } = newSubmissionSlice.actions;

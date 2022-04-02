@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { connectSortBy } from 'react-instantsearch-dom';
 import { useSelector } from 'react-redux';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { RootState } from '../../redux/store';
 
 const FeedSortDropdown = styled(Box)(
@@ -75,12 +76,13 @@ const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
 
 export function FeedSortBy() {
     const sort = useSelector((state: RootState) => state.feed.sortState.sort);
+    const { appEnv } = useConfiguration();
     return (
         <CustomSortBy
-            defaultRefinement={sort ? sort : 'local_user_cards'}
+            defaultRefinement={sort ? sort : `${appEnv}_user_cards`}
             items={[
-                { value: 'local_user_cards_Descending', label: 'Most Recent' },
-                { value: 'local_user_cards_Ascending', label: 'Oldest' },
+                { value: `${appEnv}_user_cards_Descending`, label: 'Most Recent' },
+                { value: `${appEnv}_user_cards_Ascending`, label: 'Oldest' },
             ]}
         />
     );

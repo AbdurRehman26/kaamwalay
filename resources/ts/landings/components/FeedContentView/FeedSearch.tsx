@@ -10,6 +10,8 @@ import { useState } from 'react';
 import { connectSearchBox } from 'react-instantsearch-dom';
 import theme from '@shared/styles/theme';
 import FeedCategories from './FeedCategories';
+import FeedItemsPerPage from './FeedItemsPerPage';
+import FeedPagination from './FeedPagination';
 
 const BoxDiv = styled(Box)({
     '.FeedHero': {
@@ -82,6 +84,15 @@ const styles = {
     },
 };
 
+const PaginationBox = styled(Container)({
+    display: 'flex',
+    padding: '20px 20px',
+    justifyContent: 'flex-end',
+    [theme.breakpoints.down('sm')]: {
+        float: 'none',
+    },
+});
+
 const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { currentRefinement: any; refine: any }) => {
     const [query, setQuery] = useState('');
     const [background, setBackground] = useState(true);
@@ -120,6 +131,10 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                 <Container>
                     <FeedCategories query={query} setBackground={setBackground} />
                 </Container>
+                <PaginationBox sx={background ? styles.GridView : styles.ListView}>
+                    <FeedItemsPerPage />
+                    <FeedPagination />
+                </PaginationBox>
             </Box>
         </>
     );

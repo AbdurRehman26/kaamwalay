@@ -3,6 +3,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { connectSortBy } from 'react-instantsearch-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { setSortByValue } from '../../redux/slices/feedSlice';
 import { RootState } from '../../redux/store';
 
@@ -33,12 +34,14 @@ const CustomSortByMobile = connectSortBy(({ items, refine }) => {
 });
 
 export function FeedMobileSortBy() {
+    const { appEnv } = useConfiguration();
+
     return (
         <CustomSortByMobile
-            defaultRefinement={'local_user_cards'}
+            defaultRefinement={`${appEnv}_user_cards`}
             items={[
-                { value: 'local_user_cards_Descending', label: 'Most Recent' },
-                { value: 'local_user_cards_Ascending', label: 'Oldest' },
+                { value: `${appEnv}_user_cards_Descending`, label: 'Most Recent' },
+                { value: `${appEnv}_user_cards_Ascending`, label: 'Oldest' },
             ]}
         />
     );

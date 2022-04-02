@@ -67,9 +67,9 @@ class UserCard extends Model
     public function shouldBeSearchable():bool
     {
         return (
-            $this->orderItem->order_item_status_id == OrderItemStatus::GRADED
-            && $this->orderItem->order->order_status_id == OrderStatus::SHIPPED
-            && OrderItemStatusHistory::where('order_item_status_id', [OrderItemStatus::GRADED])->exists()
+            $this->orderItem->order_item_status_id === OrderItemStatus::GRADED
+            && $this->orderItem->order->order_status_id === OrderStatus::SHIPPED
+            && OrderItemStatusHistory::where('order_item_status_id', OrderItemStatus::GRADED)->exists()
         );
     }
 

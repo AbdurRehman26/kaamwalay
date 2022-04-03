@@ -10,7 +10,9 @@ use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\CreateOrderLabel;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\OrderStatus;
+use App\Models\UserCard;
 use App\Models\OrderStatusHistory;
 use App\Models\User;
 use App\Services\Admin\V1\OrderStatusHistoryService as V1OrderStatusHistoryService;
@@ -91,6 +93,12 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
         }
 
         if (getModelId($orderStatus) === OrderStatus::SHIPPED) {
+            $orderItemId = OrderItem::where('order_id', $order->id)->pluck('id');
+            foreach($orderItemId as $itemId)
+            {
+                UserCard::where('order_item_id', $itemId)->get()->searchable();
+            }     
+
             $orderStatusHistory->user_id = getModelId($user);
             $orderStatusHistory->notes = $notes;
             $orderStatusHistory->save();

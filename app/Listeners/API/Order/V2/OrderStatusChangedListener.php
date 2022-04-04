@@ -3,10 +3,10 @@
 namespace App\Listeners\API\Order\V2;
 
 use App\Events\API\Order\V1\OrderStatusChangedEvent;
+use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
 use App\Models\UserCard;
-use App\Models\OrderItem;
 use App\Notifications\Order\OrderStatusChangedNotification;
 use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Services\EmailService;

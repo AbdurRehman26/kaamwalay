@@ -344,7 +344,6 @@ export function Payment() {
     );
 
     useEffect(() => {
-        console.log(state);
         schema
             .isValid({
                 firstName,
@@ -357,7 +356,6 @@ export function Payment() {
                 phoneNumber,
             })
             .then((valid) => {
-                console.log({ valid });
                 setIsUpdateAddressButtonEnabled(valid);
                 setIsAddressDataValid(valid);
             });

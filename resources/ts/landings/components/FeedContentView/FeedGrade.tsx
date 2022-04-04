@@ -48,6 +48,13 @@ const FeedGradeDropdown = styled(Box)(
     },
     { name: 'FeedGradeDropdown' },
 );
+
+const styles = {
+    MenuItem: {
+        paddingRight: '30px',
+    },
+};
+
 const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
     const [className, changeClassName] = useState('Select');
     return (
@@ -73,7 +80,11 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
                             Grade
                         </MenuItem>
                         {items.map((item: any) => (
-                            <MenuItem key={item.label} value={item.isRefined ? currentRefinement : item.value}>
+                            <MenuItem
+                                sx={styles.MenuItem}
+                                key={item.label}
+                                value={item.isRefined ? currentRefinement : item.value}
+                            >
                                 {item.label}
                             </MenuItem>
                         ))}

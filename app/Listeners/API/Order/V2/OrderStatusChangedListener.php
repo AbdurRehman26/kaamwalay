@@ -5,6 +5,8 @@ namespace App\Listeners\API\Order\V2;
 use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Models\UserCard;
+use App\Models\OrderItem;
 use App\Notifications\Order\OrderStatusChangedNotification;
 use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Services\EmailService;
@@ -111,6 +113,8 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleShipped(OrderStatusChangedEvent $event): void
     {
+        $this->updateFeedCards($event);
+
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED, [
             'FIRST_NAME' => $event->order->user->first_name,
             'TRACKING_NUMBER' => $event->order->orderShipment->tracking_number,
@@ -157,5 +161,11 @@ class OrderStatusChangedListener implements ShouldQueue
         if ($event->orderStatus->id !== OrderStatus::PAYMENT_PENDING) {
             $event->order->user->notify(new OrderStatusChangedNotification($event->order));
         }
+    }
+
+    protected function updateFeedCards(OrderStatusChangedEvent $event): void
+    {
+        $orderItemId = OrderItem::where('order_id', $event->order->id)->pluck('id');
+        UserCard::whereIn('order_item_id', $orderItemId)->get()->searchable();
     }
 }

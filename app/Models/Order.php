@@ -444,4 +444,14 @@ class Order extends Model implements Exportable
         $this->discounted_amount = 0;
         $this->save();
     }
+
+    public function hasBillingAddress(): bool
+    {
+        return $this->billingAddress()->exists();
+    }
+
+    public function hasSameShippingAndBillingAddresses(): bool
+    {
+        return $this->shippingAddress()->is($this->billingAddress);
+    }
 }

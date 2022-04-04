@@ -8,6 +8,7 @@ use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderRequest;
+use App\Http\Requests\API\V2\Customer\Order\UpdateBillingAddressRequest;
 use App\Http\Requests\API\V2\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Resources\API\V2\Customer\Order\OrderCollection;
 use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
@@ -150,5 +151,15 @@ class OrderController extends Controller
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
+
+    public function updateBillingAddress(Order $order, UpdateBillingAddressRequest $request)
+    {
+        $this->orderService->updateBillingAddress($order, $request->validated());
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Billing Address Updated successfully.',
+        ]);
     }
 }

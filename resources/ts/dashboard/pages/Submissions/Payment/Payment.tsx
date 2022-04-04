@@ -1,5 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
@@ -20,6 +21,7 @@ import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
 import { AddressEntity } from '@shared/entities/AddressEntity';
 import { useInjectable } from '@shared/hooks/useInjectable';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { APIService } from '@shared/services/APIService';
 import { ApplyCredit } from '@dashboard/components/ApplyCredit';
@@ -223,6 +225,12 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 22,
         cursor: 'pointer',
     },
+    billingAddressButtonContainer: {
+        marginTop: '6px',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'end',
+    },
 }));
 
 const GreenCheckbox = withStyles({
@@ -246,7 +254,6 @@ const schema = yup.object().shape({
         id: yup.number().required(),
     }),
     zipCode: yup.string().required(),
-    phoneNumber: yup.string().required(),
 });
 
 function addressFromEntity(address: AddressEntity) {
@@ -299,11 +306,13 @@ export function Payment() {
     const zipCode = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.zipCode);
     const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
-    const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const paymentStatus = useAppSelector((state) => state.newSubmission.paymentStatus);
     const navigate = useNavigate();
+    const [isUpdateAddressButtonEnabled, setIsUpdateAddressButtonEnabled] = useState(false);
+    const [canUseShippingAsBilling, setCanUseShippingAsBilling] = useState(true);
+    const notifications = useNotifications();
 
     const order = useOrderQuery({
         resourceId: Number(id),
@@ -326,7 +335,10 @@ export function Payment() {
         },
     });
 
-    const shippingAddress = useMemo(() => order.data?.shippingAddress || ({} as any), [order.data?.shippingAddress]);
+    const shippingAddress = useMemo(
+        () => order.data?.billingAddress || order.data?.shippingAddress || ({} as any),
+        [order.data?.shippingAddress, order.data?.billingAddress],
+    );
 
     useEffect(() => {
         schema
@@ -338,9 +350,9 @@ export function Payment() {
                 city,
                 state,
                 zipCode,
-                phoneNumber,
             })
             .then((valid) => {
+                setIsUpdateAddressButtonEnabled(valid);
                 setIsAddressDataValid(valid);
             });
     }, [
@@ -351,7 +363,6 @@ export function Payment() {
         city,
         state,
         zipCode,
-        phoneNumber,
         selectedExistingAddress,
         useCustomShippingAddress,
         existingAddresses,
@@ -394,6 +405,24 @@ export function Payment() {
         dispatch(updatePaymentMethodId(response.data[0].id));
         setAvailablePaymentMethods(response.data);
         setArePaymentMethodsLoading(false);
+    }
+
+    async function updateBillingAddress() {
+        setIsUpdateAddressButtonEnabled(false);
+        const endpoint = apiService.createEndpoint(`customer/orders/${id}/update-billing-address`);
+        const response = await endpoint.patch('', {
+            firstName,
+            lastName,
+            address,
+            apt,
+            city,
+            phone: order?.data.shippingAddress.phone,
+            zip: zipCode,
+            state: state.code,
+        });
+        notifications.success(response?.data?.message);
+        setCanUseShippingAsBilling(false);
+        setIsUpdateAddressButtonEnabled(true);
     }
 
     useEffect(
@@ -535,15 +564,17 @@ export function Payment() {
                                         <PaymentForm />
                                     </div>
                                     <div className={classes.billingAddressAsShippingContainer}>
-                                        <FormControlLabel
-                                            control={
-                                                <GreenCheckbox
-                                                    checked={useBillingAddressSameAsShipping}
-                                                    onChange={onUseShippingAddressAsBilling}
-                                                />
-                                            }
-                                            label="Billing address same as shipping"
-                                        />
+                                        {canUseShippingAsBilling ? (
+                                            <FormControlLabel
+                                                control={
+                                                    <GreenCheckbox
+                                                        checked={useBillingAddressSameAsShipping}
+                                                        onChange={onUseShippingAddressAsBilling}
+                                                    />
+                                                }
+                                                label="Billing address same as shipping"
+                                            />
+                                        ) : null}
                                         {useBillingAddressSameAsShipping ? (
                                             <>
                                                 <Typography className={classes.billingAddressTitle}>
@@ -798,6 +829,15 @@ export function Payment() {
                                                                 }}
                                                             />
                                                         </div>
+                                                    </div>
+                                                    <div className={classes.billingAddressButtonContainer}>
+                                                        <Button
+                                                            variant={'contained'}
+                                                            disabled={!isUpdateAddressButtonEnabled}
+                                                            onClick={updateBillingAddress}
+                                                        >
+                                                            Update Billing Address
+                                                        </Button>
                                                     </div>
                                                 </div>
                                             </>

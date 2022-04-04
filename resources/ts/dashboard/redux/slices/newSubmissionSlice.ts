@@ -757,9 +757,31 @@ export const newSubmissionSlice = createSlice({
                 ),
             };
 
+            const billingAddress = action.payload.billingAddress
+                ? action.payload.billingAddress
+                : action.payload.shippingAddress;
+
             state.step04Data = {
                 ...state.step04Data,
                 paymentMethodId: action.payload.paymentMethodId || 1,
+                useShippingAddressAsBillingAddress:
+                    action.payload?.billingAddress?.id === action.payload?.shippingAddress?.id,
+                selectedBillingAddress: {
+                    id: billingAddress?.id,
+                    firstName: billingAddress.firstName,
+                    lastName: billingAddress.lastName,
+                    address: billingAddress.address,
+                    city: billingAddress.city,
+                    state: {
+                        id: 0,
+                        name: '',
+                        code: billingAddress.state,
+                    },
+                    country: billingAddress.country,
+                    zipCode: billingAddress.zip,
+                    phoneNumber: billingAddress.phone,
+                    flat: billingAddress.flat,
+                },
             };
             state.appliedCredit = +action.payload.amountPaidFromWallet;
             state.paymentStatus = action.payload.paymentStatus;

@@ -427,4 +427,31 @@ class Order extends Model implements Exportable
     {
         return $this->invoice()->exists();
     }
+
+    public function hasCoupon(): bool
+    {
+        return $this->coupon()->exists();
+    }
+
+    public function hasCreditApplied(): bool
+    {
+        return $this->amount_paid_from_wallet > 0;
+    }
+
+    public function removeCouponApplied(): void
+    {
+        $this->coupon_id = null;
+        $this->discounted_amount = 0;
+        $this->save();
+    }
+
+    public function hasBillingAddress(): bool
+    {
+        return $this->billingAddress()->exists();
+    }
+
+    public function hasSameShippingAndBillingAddresses(): bool
+    {
+        return $this->shippingAddress()->is($this->billingAddress);
+    }
 }

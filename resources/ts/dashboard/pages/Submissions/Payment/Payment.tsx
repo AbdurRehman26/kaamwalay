@@ -314,6 +314,7 @@ export function Payment() {
     const paymentStatus = useAppSelector((state) => state.newSubmission.paymentStatus);
     const navigate = useNavigate();
     const [isUpdateAddressButtonEnabled, setIsUpdateAddressButtonEnabled] = useState(false);
+    const [canUseShippingAsBilling, setCanUseShippingAsBilling] = useState(true);
     const notifications = useNotifications();
 
     const order = useOrderQuery({
@@ -337,7 +338,10 @@ export function Payment() {
         },
     });
 
-    const shippingAddress = useMemo(() => order.data?.shippingAddress || ({} as any), [order.data?.shippingAddress]);
+    const shippingAddress = useMemo(
+        () => order.data?.billingAddress || order.data?.shippingAddress || ({} as any),
+        [order.data?.shippingAddress, order.data?.billingAddress],
+    );
 
     useEffect(() => {
         console.log(state);
@@ -424,6 +428,7 @@ export function Payment() {
             state: state.code,
         });
         notifications.success(response?.data?.message);
+        setCanUseShippingAsBilling(false);
         setIsUpdateAddressButtonEnabled(true);
     }
 
@@ -566,15 +571,17 @@ export function Payment() {
                                         <PaymentForm />
                                     </div>
                                     <div className={classes.billingAddressAsShippingContainer}>
-                                        <FormControlLabel
-                                            control={
-                                                <GreenCheckbox
-                                                    checked={useBillingAddressSameAsShipping}
-                                                    onChange={onUseShippingAddressAsBilling}
-                                                />
-                                            }
-                                            label="Billing address same as shipping"
-                                        />
+                                        {canUseShippingAsBilling ? (
+                                            <FormControlLabel
+                                                control={
+                                                    <GreenCheckbox
+                                                        checked={useBillingAddressSameAsShipping}
+                                                        onChange={onUseShippingAddressAsBilling}
+                                                    />
+                                                }
+                                                label="Billing address same as shipping"
+                                            />
+                                        ) : null}
                                         {useBillingAddressSameAsShipping ? (
                                             <>
                                                 <Typography className={classes.billingAddressTitle}>

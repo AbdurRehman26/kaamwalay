@@ -1,7 +1,7 @@
 /**
  * @api {get} /v2/pop/categories/{category_id}/series/{series_id}/sets/{set_id}?per_page=2&page=1 List Cards POP Reports
- * @apiName List Cards POP Reports
- * @apiGroup Pop Reports
+ * @apiName List Cards POP Report
+ * @apiGroup Pop Report
  *
  * @apiVersion 2.0.0
  *

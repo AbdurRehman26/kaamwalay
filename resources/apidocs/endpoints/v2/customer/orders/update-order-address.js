@@ -1,5 +1,5 @@
 /**
- * @api {post} /v2/customer/orders/{order}/update-billing-address Update Order Billing Address
+ * @api {patch} /v2/customer/orders/{order}/update-billing-address Update Order Billing Address
  * @apiName Update Order
  * @apiGroup Customer-Orders
  *

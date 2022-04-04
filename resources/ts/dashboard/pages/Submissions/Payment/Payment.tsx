@@ -15,7 +15,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import withStyles from '@mui/styles/withStyles';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import NumberFormat from 'react-number-format';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
@@ -255,7 +254,6 @@ const schema = yup.object().shape({
         id: yup.number().required(),
     }),
     zipCode: yup.string().required(),
-    phoneNumber: yup.string().required(),
 });
 
 function addressFromEntity(address: AddressEntity) {
@@ -308,7 +306,6 @@ export function Payment() {
     const zipCode = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.zipCode);
     const apt = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.flat);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
-    const phoneNumber = useAppSelector((state) => state.newSubmission.step04Data.selectedBillingAddress.phoneNumber);
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const [isAddressDataValid, setIsAddressDataValid] = useState(false);
     const paymentStatus = useAppSelector((state) => state.newSubmission.paymentStatus);
@@ -353,7 +350,6 @@ export function Payment() {
                 city,
                 state,
                 zipCode,
-                phoneNumber,
             })
             .then((valid) => {
                 setIsUpdateAddressButtonEnabled(valid);
@@ -367,7 +363,6 @@ export function Payment() {
         city,
         state,
         zipCode,
-        phoneNumber,
         selectedExistingAddress,
         useCustomShippingAddress,
         existingAddresses,
@@ -421,7 +416,7 @@ export function Payment() {
             address,
             apt,
             city,
-            phone: phoneNumber,
+            phone: order?.data.shippingAddress.phone,
             zip: zipCode,
             state: state.code,
         });
@@ -827,34 +822,6 @@ export function Payment() {
                                                                     updateField('zipCode', e.target.value)
                                                                 }
                                                                 size={'small'}
-                                                                variant={'outlined'}
-                                                                margin="normal"
-                                                                InputLabelProps={{
-                                                                    shrink: true,
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className={classes.inputsRow04}>
-                                                        <div
-                                                            className={classes.fieldContainer}
-                                                            style={{ width: '100%', marginTop: '4px' }}
-                                                        >
-                                                            <Typography className={classes.methodDescription}>
-                                                                Phone Number
-                                                            </Typography>
-                                                            <NumberFormat
-                                                                size={'small'}
-                                                                customInput={TextField}
-                                                                format="+1 (###) ###-####"
-                                                                mask=""
-                                                                style={{ margin: 5, marginLeft: 0 }}
-                                                                placeholder="Enter Phone Number"
-                                                                value={phoneNumber}
-                                                                onChange={(e: any) =>
-                                                                    updateField('phoneNumber', e.target.value)
-                                                                }
-                                                                fullWidth
                                                                 variant={'outlined'}
                                                                 margin="normal"
                                                                 InputLabelProps={{

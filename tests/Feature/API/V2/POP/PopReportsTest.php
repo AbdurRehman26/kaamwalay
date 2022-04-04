@@ -37,9 +37,9 @@ it('returns reports for series', function () {
 
     CardSeries::factory()->count(3)
         ->state(new Sequence(
-            ['card_category_id' => 1],
-            ['card_category_id' => 1],
-            ['card_category_id' => 2],
+            ['id' => 1, 'card_category_id' => 1],
+            ['id' => 2, 'card_category_id' => 1],
+            ['id' => 3, 'card_category_id' => 2],
         ))
         ->create();
 
@@ -61,8 +61,8 @@ it('returns reports for sets', function () {
 
     CardSeries::factory()->count(2)
         ->state(new Sequence(
-            ['card_category_id' => 1],
-            ['card_category_id' => 1],
+            ['id' => 1, 'card_category_id' => 1],
+            ['id' => 2, 'card_category_id' => 1],
         ))
         ->create();
 
@@ -91,12 +91,12 @@ it('returns reports for cards', function () {
     CardCategory::factory()->create(['id' => 1]);
 
     CardSeries::factory()->count(1)
-        ->create(['card_category_id' => 1]);
+        ->create(['id' => 1, 'card_category_id' => 1]);
 
     CardSet::factory()->count(2)
         ->state(new Sequence(
-            ['card_series_id' => 1],
-            ['card_series_id' => 1],
+            ['id' => 1, 'card_series_id' => 1],
+            ['id' => 2, 'card_series_id' => 1],
         ))
         ->create();
 

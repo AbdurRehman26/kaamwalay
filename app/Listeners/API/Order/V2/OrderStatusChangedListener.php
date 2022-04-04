@@ -166,6 +166,7 @@ class OrderStatusChangedListener implements ShouldQueue
     protected function updateFeedCards(OrderStatusChangedEvent $event): void
     {
         $orderItemId = OrderItem::where('order_id', $event->order->id)->pluck('id');
+        // @phpstan-ignore-next-line
         UserCard::whereIn('order_item_id', $orderItemId)->get()->searchable();
     }
 }

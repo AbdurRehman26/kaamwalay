@@ -24,6 +24,9 @@ const FeedSortDropdown = styled(Box)(
             padding: '10px',
             cursor: 'pointer',
             color: '#20BFB8',
+            '& .MuiSvgIcon-root': {
+                color: '#20BFB8',
+            },
         },
         '.SortText': {
             marginLeft: '10px',
@@ -36,6 +39,23 @@ const FeedSortDropdown = styled(Box)(
     },
     { name: 'FeedSortDropdown' },
 );
+
+const styles = {
+    MenuItem: {
+        color: '#000000',
+        paddingRight: '50px',
+        '&:hover': {
+            backgroundColor: 'rgba(32, 191, 184, 0.12)',
+        },
+    },
+    MenuItemSelected: {
+        color: '#20BFB8',
+        paddingRight: '50px',
+        '&:hover': {
+            backgroundColor: 'rgba(32, 191, 184, 0.12)',
+        },
+    },
+};
 
 const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
     const [classN, changeClass] = useState('Select');
@@ -63,7 +83,7 @@ const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
                 {items.map((item: any) => (
                     <MenuItem
                         key={item.label}
-                        sx={{ color: item.isRefined ? '#20BFB8' : '#000000' }}
+                        sx={item.isRefined ? styles.MenuItemSelected : styles.MenuItem}
                         value={item.isRefined ? currentRefinement : item.value}
                     >
                         {item.label}

@@ -655,3 +655,42 @@ test('a customer can see incomplete orders', function () {
         ->assertOk()
         ->assertJsonCount(10, ['data']);
 });
+
+test('a customer can update order billing address', function () {
+    $order = Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->create();
+
+    $this->actingAs($this->user);
+
+    $this->patchJson(route('v2.customer.orders.update-billing-address', ['order' => $order]), [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'address' => $this->faker->address(),
+        'city' => $this->faker->city(),
+        'state' => $this->faker->stateAbbr(),
+        'zip' => $this->faker->postcode(),
+        'phone' => $this->faker->phoneNumber(),
+    ])
+        ->assertOk();
+});
+
+
+test('a customer can not update other user\'s billing address', function () {
+    $order = Order::factory()
+        ->has(OrderItem::factory())
+        ->create();
+
+    $this->actingAs($this->user);
+
+    $this->patchJson(route('v2.customer.orders.update-billing-address', ['order' => $order]), [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'address' => $this->faker->address(),
+        'city' => $this->faker->city(),
+        'state' => $this->faker->stateAbbr(),
+        'zip' => $this->faker->postcode(),
+        'phone' => $this->faker->phoneNumber(),
+    ])
+        ->assertForbidden();
+});

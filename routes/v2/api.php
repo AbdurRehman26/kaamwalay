@@ -52,7 +52,8 @@ Route::prefix('customer')->group(function () {
         Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
         Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show']);
         Route::post('shipping-fee', ShippingFeeController::class);
-        Route::patch('{order}/update-billing-address', [OrderController::class, 'updateBillingAddress']);
+        Route::patch('{order}/update-billing-address', [OrderController::class, 'updateBillingAddress'])
+            ->name('customer.orders.update-billing-address');
     });
     Route::prefix('cards')->group(function () {
         Route::get('categories', CardCategoryController::class)->name('cards.categories');

@@ -153,7 +153,7 @@ class OrderController extends Controller
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 
-    public function updateBillingAddress(Order $order, UpdateBillingAddressRequest $request)
+    public function updateBillingAddress(Order $order, UpdateBillingAddressRequest $request): JsonResponse
     {
         $this->orderService->updateBillingAddress($order, $request->validated());
 

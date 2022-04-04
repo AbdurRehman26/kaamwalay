@@ -121,8 +121,12 @@ export function NewSubmission() {
                             ? ShippingAddressEvents.continuedWithNewAddress
                             : ShippingAddressEvents.continuedWithExisting,
                 });
-                await dispatch(getAvailableCredit()).unwrap();
-                googleTagManager({ event: 'google-ads-shipping-info-submitted' });
+
+                try {
+                    await dispatch(getAvailableCredit()).unwrap();
+                } finally {
+                    googleTagManager({ event: 'google-ads-shipping-info-submitted' });
+                }
             }
 
             dispatch(nextStep());

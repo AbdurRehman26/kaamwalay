@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const { authenticated, authDialogProps, openAuthDialog } = useAuth();
+    const { authenticated, authDialogProps, closeAuthDialog, openAuthDialog } = useAuth();
 
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
     const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
@@ -98,8 +98,13 @@ export function SubmissionStep04Content() {
     }, [dispatch, finalShippingAddress]);
 
     useEffect(() => {
-        if (authenticated) dispatch(getAvailableCredit()).unwrap();
-    }, [dispatch, authenticated]);
+        if (authenticated) {
+            dispatch(getAvailableCredit()).unwrap();
+            closeAuthDialog();
+        } else {
+            openAuthDialog();
+        }
+    }, [dispatch, authenticated, openAuthDialog, closeAuthDialog]);
 
     return (
         <>

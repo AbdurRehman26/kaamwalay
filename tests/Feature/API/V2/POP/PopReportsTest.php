@@ -29,6 +29,10 @@ test('a guest can receive enabled card categories for pop report page', function
 
 it('returns reports for series', function () {
     CardCategory::factory()->count(2)
+        ->state(new Sequence(
+            ['id' => 1],
+            ['id' => 2],
+        ))
         ->create();
 
     CardSeries::factory()->count(3)
@@ -53,7 +57,7 @@ it('returns reports for series', function () {
 });
 
 it('returns reports for sets', function () {
-    CardCategory::factory()->create();
+    CardCategory::factory()->create(['id' => 1]);
 
     CardSeries::factory()->count(2)
         ->state(new Sequence(
@@ -84,7 +88,7 @@ it('returns reports for sets', function () {
 });
 
 it('returns reports for cards', function () {
-    CardCategory::factory()->create();
+    CardCategory::factory()->create(['id' => 1]);
 
     CardSeries::factory()->count(1)
         ->create(['card_category_id' => 1]);

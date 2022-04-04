@@ -757,22 +757,23 @@ export const newSubmissionSlice = createSlice({
                 ...state.step04Data,
                 paymentMethodId: action.payload.paymentMethodId || 1,
                 useShippingAddressAsBillingAddress:
-                    action.payload?.billingAddress?.id === action.payload?.shippingAddress?.id,
+                    action.payload?.billingAddress?.id === action.payload?.shippingAddress?.id ||
+                    !action.payload.billingAddress,
                 selectedBillingAddress: {
                     id: billingAddress?.id,
-                    firstName: billingAddress.firstName,
-                    lastName: billingAddress.lastName,
-                    address: billingAddress.address,
-                    city: billingAddress.city,
+                    firstName: billingAddress?.firstName,
+                    lastName: billingAddress?.lastName,
+                    address: billingAddress?.address,
+                    city: billingAddress?.city,
                     state: {
                         id: 0,
                         name: '',
-                        code: billingAddress.state,
+                        code: billingAddress?.state,
                     },
-                    country: billingAddress.country,
-                    zipCode: billingAddress.zip,
-                    phoneNumber: billingAddress.phone,
-                    flat: billingAddress.flat,
+                    country: billingAddress?.country,
+                    zipCode: billingAddress?.zip,
+                    phoneNumber: billingAddress?.phone,
+                    flat: billingAddress?.flat,
                 },
             };
             state.appliedCredit = +action.payload.amountPaidFromWallet;

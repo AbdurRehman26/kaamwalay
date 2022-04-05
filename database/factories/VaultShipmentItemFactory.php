@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\UserCard;
+use App\Models\VaultShipment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,8 @@ class VaultShipmentItemFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_card_id' => UserCard::factory(),
+            'vault_shipment_id' => VaultShipment::factory(),
         ];
     }
 }

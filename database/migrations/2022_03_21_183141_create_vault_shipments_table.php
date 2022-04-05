@@ -25,12 +25,14 @@ return new class extends Migration {
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignIdFor(OrderAddress::class, 'shipping_address_id')
-                ->constrained()
+            $table->foreignId('shipping_address_id')
+                ->references('id')
+                ->on('order_addresses')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignIdFor(OrderAddress::class, 'billing_address_id')
-                ->constrained()
+            $table->foreignId('billing_address_id')
+                ->references('id')
+                ->on('order_addresses')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->foreignIdFor(VaultShipmentStatus::class)

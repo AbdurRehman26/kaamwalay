@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\VaultShipment;
+use App\Models\VaultShipmentStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,9 @@ class VaultShipmentStatusHistoryFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'vault_shipment_status_id' => VaultShipmentStatus::factory(),
+            'vault_shipment_id' => VaultShipment::factory(),
+            'user_id' => User::factory(),
         ];
     }
 }

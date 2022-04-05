@@ -31,6 +31,10 @@ const FeedGradeDropdown = styled(Box)(
             cursor: 'pointer',
             background: '#E3F0F6',
             color: '#20BFB8',
+
+            '& .MuiSvgIcon-root': {
+                color: '#20BFB8',
+            },
         },
 
         '.RefineGradeChip': {
@@ -51,7 +55,10 @@ const FeedGradeDropdown = styled(Box)(
 
 const styles = {
     MenuItem: {
-        paddingRight: '30px',
+        paddingRight: '50px',
+        '&:hover': {
+            backgroundColor: 'rgba(32, 191, 184, 0.12)',
+        },
     },
 };
 
@@ -71,10 +78,10 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
                         onBlur={() => {
                             changeClassName('Select');
                         }}
-                        className={className}
                         onClose={() => {
                             changeClassName('Select');
                         }}
+                        className={className}
                     >
                         <MenuItem sx={{ display: 'none' }} value={'Grade'}>
                             Grade

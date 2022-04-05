@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\Coupon;
 use App\Models\OrderAddress;
+use App\Models\ShippingMethod;
 use App\Models\User;
-use App\Models\VaultItem;
+use App\Models\VaultShipmentItem;
 use App\Models\VaultShipmentStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,11 +20,8 @@ return new class extends Migration {
     {
         Schema::create('vault_shipments', function (Blueprint $table) {
             $table->id();
+
             $table->foreignIdFor(User::class)
-                ->constrained()
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->foreignIdFor(VaultItem::class)
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
@@ -38,13 +37,28 @@ return new class extends Migration {
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
+            $table->foreignIdFor(Coupon::class)
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignIdFor(ShippingMethod::class)
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
 
-            $table->string('shipment_number');
-            $table->string('shipping_provider')->nullable();
-            $table->string('tracking_url')->nullable();
+            $table->string('shipment_number')->index();
             $table->string('tracking_number')->nullable();
-            $table->timestamp('shipping_date')->nullable();
+            $table->string('tracking_url')->nullable();
+            $table->string('shipping_provider')->nullable();
 
+            $table->decimal('shipping_fee', 10, 2);
+            $table->decimal('payment_method_discount', 10, 2)->default(0);
+            $table->decimal('amount_paid_from_wallet', 10, 2)->default(0);
+            $table->decimal('discounted_amount', 10, 2)->default(0);
+            $table->decimal('grand_total', 10, 2);
+
+            $table->timestamp('shipped_at')->nullable();
             $table->timestamps();
         });
     }

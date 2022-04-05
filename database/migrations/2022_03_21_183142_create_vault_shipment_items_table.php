@@ -16,31 +16,17 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('vault_items', function (Blueprint $table) {
+        Schema::create('vault_shipment_items', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignIdFor(User::class)
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignIdFor(Order::class)
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->foreignIdFor(UserCard::class)
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignIdFor(VaultShipment::class)
-                ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-
-            $table->unsignedTinyInteger('status')
-                ->default(1)
-                ->comment('0 => shipped/selected to be shipped/not in vault, 1 => in vault');
-            $table->unsignedInteger('cards_count');
 
             $table->timestamps();
         });
@@ -53,6 +39,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('vault_items');
+        Schema::dropIfExists('vault_shipment_items');
     }
 };

@@ -1,0 +1,179 @@
+import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableFooter from '@mui/material/TableFooter';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import { Theme, styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useEffect } from 'react';
+import { TablePagination } from '@shared/components/TablePagination';
+import { OrderEntity } from '@shared/entities/OrderEntity';
+import { bracketParams } from '@shared/lib/api/bracketParams';
+import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { VaultShipmentTableRow } from './VaultShipmentTableRow';
+import { Table } from './styles';
+
+const StyledBox = styled(Box)(
+    {
+        width: '100%',
+        backgroundColor: '#f9f9f9',
+        border: '1px solid #e0e0e0',
+        borderRadius: '8px',
+        padding: '40px 20px',
+        marginTop: '15px',
+    },
+    { name: 'StyledBox' },
+);
+
+const PaginationFooter = styled('div')(() => ({
+    backgroundColor: '#fff',
+    position: 'sticky',
+    bottom: 0,
+}));
+
+interface VaulShipmentsTableProps {
+    search?: string;
+}
+
+export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
+    const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+
+    const orders$ = useListOrdersQuery({
+        params: {
+            filter: { orderNumber: search },
+            include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
+            perPage: 48,
+        },
+        ...bracketParams(),
+    });
+
+    useEffect(
+        () => {
+            if (!orders$.isLoading) {
+                // noinspection JSIgnoredPromiseFromCall
+                orders$.search({ orderNumber: search });
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [search],
+    );
+
+    if (orders$.isLoading || orders$.isError) {
+        return (
+            <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
+                {orders$.isLoading ? (
+                    <CircularProgress />
+                ) : (
+                    <Typography color={'error'}>Error loading shipments</Typography>
+                )}
+            </Box>
+        );
+    }
+
+    const footer$ = (
+        <PaginationFooter>
+            <Table>
+                <TableFooter>
+                    <TableRow>
+                        <TablePagination
+                            {...{
+                                ...orders$.paginationProps,
+                                rowsPerPageOptions: [48],
+                            }}
+                        />
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </PaginationFooter>
+    );
+
+    const items$ = orders$.data?.map((data: OrderEntity) => (
+        <VaultShipmentTableRow
+            disabled
+            key={data?.id}
+            id={data?.id}
+            isSm={isSm}
+            orderNumber={data?.orderNumber}
+            serviceLevel={data?.paymentPlan?.price}
+            cardsNumber={data?.numberOfCards}
+            status={data?.orderStatus?.id}
+            datePlaced={data?.createdAt}
+            dateArrived={data?.arrivedAt}
+            invoice={data?.invoice?.path}
+            invoiceNumber={data?.invoice?.invoiceNumber}
+            orderCustomerShipment={data?.orderCustomerShipment}
+            paymentStatus={data?.paymentStatus}
+        />
+    ));
+
+    if (items$.length === 0 && search === '') {
+        return (
+            <StyledBox>
+                <Grid container alignItems={'center'} justifyContent={'center'} rowSpacing={1}>
+                    <Grid item xs={12} container justifyContent={'center'} alignContent={'center'}>
+                        <Inventory2TwoToneIcon />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant={'subtitle1'} fontWeight={500} textAlign={'center'} fontSize={16}>
+                            No Shipments
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
+                            You have no shipments's yet.
+                            <br />
+                            Click NEW SHIPMENT to get startesd.
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </StyledBox>
+        );
+    }
+
+    if (items$.length === 0 && search !== '') {
+        return (
+            <Typography variant={'subtitle2'} marginTop={'10px'}>
+                We didn't find anything for "{search}". Try searching for something else
+            </Typography>
+        );
+    }
+
+    return (
+        <Box mb={7} width={'100%'}>
+            {isSm ? (
+                <>
+                    {items$}
+                    <TableContainer>
+                        <Table>{footer$}</Table>
+                    </TableContainer>
+                </>
+            ) : (
+                <>
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell variant={'head'}>Shipment #</TableCell>
+                                    <TableCell variant={'head'}>Date Created</TableCell>
+                                    <TableCell variant={'head'}>Date Shipped</TableCell>
+                                    <TableCell variant={'head'}>Status</TableCell>
+                                    <TableCell variant={'head'}># Cards</TableCell>
+                                    <TableCell variant={'head'}>Tracking Number</TableCell>
+                                </TableRow>
+                            </TableHead>
+
+                            <TableBody>{items$}</TableBody>
+                        </Table>
+                    </TableContainer>
+                    {orders$.pagination.meta.total > orders$.pagination.meta.perPage ? footer$ : null}
+                </>
+            )}
+        </Box>
+    );
+}

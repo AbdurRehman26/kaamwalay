@@ -1,10 +1,10 @@
+import { camelCase } from 'lodash';
 import { ElementType, Fragment, ReactElement, Suspense } from 'react';
 import { isValidElementType } from 'react-is';
 import ApplicationProvider from '@shared/components/ApplicationProvider';
 import { renderElementType } from '@shared/lib/react/renderElementType';
 import { store } from '../redux/store';
 import { mountAtom } from '../utils/mountAtom';
-import { camelCase } from 'lodash';
 
 type ToType = string | HTMLElement[] | null;
 type LoaderType = ElementType | ReactElement | null;

@@ -1,18 +1,29 @@
+import CloseIcon from '@mui/icons-material/Close';
+import DateAdapter from '@mui/lab/AdapterMoment';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Paper from '@mui/material/Paper';
+import Radio from '@mui/material/Radio';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import moment from 'moment/moment';
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
+import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
+import { ServiceLevelApplicableItemEntity } from '@shared/entities/ServiceLevelApplicableItemEntity';
+import { useInjectable } from '@shared/hooks/useInjectable';
+import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
-import makeStyles from '@mui/styles/makeStyles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
 import {
     clearNewPromoCodeState,
     setCouponablesForApplicables,
@@ -23,24 +34,13 @@ import {
     setDiscountStartDate,
     setDiscountType,
     setDiscountValue,
-    setUsageAllowedType,
     setPromoCodeTextValue,
     setShowNewPromoCodeDialog,
+    setUsageAllowedType,
     toggleSelectedServiceLevel,
 } from '@shared/redux/slices/adminNewPromoCodeSlice';
-import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
-import Radio from '@mui/material/Radio';
-import InputAdornment from '@mui/material/InputAdornment';
-import Checkbox from '@mui/material/Checkbox';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateAdapter from '@mui/lab/AdapterMoment';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
-import { useInjectable } from '@shared/hooks/useInjectable';
-import { APIService } from '@shared/services/APIService';
-import { ServiceLevelApplicableItemEntity } from '@shared/entities/ServiceLevelApplicableItemEntity';
 import { storeCoupon } from '@shared/redux/slices/adminPromoCodesSlice';
-import moment from 'moment/moment';
+import { APIService } from '@shared/services/APIService';
 
 const useStyles = makeStyles(
     () => {

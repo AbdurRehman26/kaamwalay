@@ -2,9 +2,9 @@ import { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { ClassConstructor, ClassTransformOptions, plainToInstance } from 'class-transformer';
 import { PaginatedData } from '../classes/PaginatedData';
 import { Injectable } from '../decorators/Injectable';
+import { APIEndpointConfig } from '../interfaces/APIEndpointConfig';
 import { app } from '../lib/app';
 import { APIService } from '../services/APIService';
-import { APIEndpointConfig } from '../interfaces/APIEndpointConfig';
 
 @Injectable('Repository')
 export abstract class Repository<T> {

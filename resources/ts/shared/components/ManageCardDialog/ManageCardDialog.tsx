@@ -1,14 +1,14 @@
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import makeStyles from '@mui/styles/makeStyles';
+import ManageCardDialogCreateCard from '@shared/components/ManageCardDialog/ManageCardDialogCreateCard';
+import ManageCardDialogCreateSeries from '@shared/components/ManageCardDialog/ManageCardDialogCreateSeries';
+import ManageCardDialogCreateSet from '@shared/components/ManageCardDialog/ManageCardDialogCreateSet';
 import ManageCardDialogEdit from '@shared/components/ManageCardDialog/ManageCardDialogEdit';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { useManageCardDialogState } from '@shared/redux/hooks/useManageCardDialogState';
 import ManageCardDialogList from './ManageCardDialogList';
 import ManageCardDialogView, { ManageCardDialogViewProps } from './ManageCardDialogView';
-import ManageCardDialogCreateCard from '@shared/components/ManageCardDialog/ManageCardDialogCreateCard';
-import ManageCardDialogCreateSeries from '@shared/components/ManageCardDialog/ManageCardDialogCreateSeries';
-import ManageCardDialogCreateSet from '@shared/components/ManageCardDialog/ManageCardDialogCreateSet';
 
 export interface ManageCardDialogProps extends Omit<DialogProps, 'open'> {
     onAdd: ManageCardDialogViewProps['onAdd'];

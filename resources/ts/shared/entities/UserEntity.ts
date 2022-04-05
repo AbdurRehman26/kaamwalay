@@ -1,11 +1,11 @@
 import { Type } from 'class-transformer';
 import { Moment } from 'moment';
+import { WalletEntity } from '@shared/entities/WalletEntity';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { RolesEnum } from '../constants/RolesEnum';
 import { DateField } from '../decorators/DateField';
 import { Entity } from './Entity';
 import { RoleEntity } from './RoleEntity';
-import { WalletEntity } from '@shared/entities/WalletEntity';
 
 export class UserEntity extends Entity {
     public username!: string;

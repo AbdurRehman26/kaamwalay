@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import ReactGA from 'react-ga';
+import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { AuthenticationEvents, EventCategories } from '@shared/constants/GAEventsTypes';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
 import { SignUpRequestDto } from '@shared/dto/SignUpRequestDto';
@@ -11,11 +12,12 @@ import { app } from '@shared/lib/app';
 import { isException } from '@shared/lib/errors/isException';
 import { AuthenticationRepository } from '@shared/repositories/AuthenticationRepository';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
+import { EventService } from '@shared/services/EventService';
 import { NotificationsService } from '@shared/services/NotificationsService';
-import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
-import { trackFacebookPixelEvent } from '../../lib/utils/trackFacebookPixelEvent';
 import { FacebookPixelEvents } from '../../constants/FacebookPixelEvents';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { ResetPasswordRequestDto } from '../../dto/ResetPasswordRequestDto';
+import { googleTagManager } from '../../lib/utils/googleTagManager';
+import { trackFacebookPixelEvent } from '../../lib/utils/trackFacebookPixelEvent';
 
 interface StateType {
     checking: boolean;
@@ -29,6 +31,7 @@ interface StateType {
 type AuthenticatePayload = PayloadAction<AuthenticatedUserEntity, string, any, Error>;
 
 export const authenticateAction = createAsyncThunk('auth/authenticate', async (input: LoginRequestDto, thunkAPI) => {
+    const eventService = app(EventService);
     const authenticationService = app(AuthenticationService);
     const authenticationRepository = app(AuthenticationRepository);
 
@@ -36,17 +39,19 @@ export const authenticateAction = createAsyncThunk('auth/authenticate', async (i
         const authenticatedUser = await authenticationRepository.postLogin(input);
         NotificationsService.success('Login successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.loggedIn });
-        pushToDataLayer({ event: 'google-ads-authenticated' });
+        googleTagManager({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
+
+        eventService.emit(ApplicationEventsEnum.AuthSessionLogin, authenticatedUser);
 
         // serialize class objects to plain objects according redux toolkit error
         return instanceToPlain(authenticatedUser);
     } catch (e: any) {
+        ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
+
         if (isAxiosError(e) || isException(e)) {
-            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
             NotificationsService.exception(e);
         } else {
-            ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.failedLogIn });
             NotificationsService.error('Unable to login.');
         }
 
@@ -62,7 +67,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
         const authenticatedUser = await authenticationRepository.postRegister(input);
         NotificationsService.success('Register successfully!');
         ReactGA.event({ category: EventCategories.Auth, action: AuthenticationEvents.registerSuccess });
-        pushToDataLayer({ event: 'google-ads-authenticated' });
+        googleTagManager({ event: 'google-ads-authenticated' });
         await authenticationService.setAccessToken(authenticatedUser.accessToken);
         trackFacebookPixelEvent(FacebookPixelEvents.CompleteRegistration);
         thunkAPI.dispatch(authenticateCheckAction());
@@ -126,18 +131,10 @@ export const authenticationSlice = createSlice({
         authenticated: false,
         accessToken: null,
         user: null,
-        dialogOpened: false,
-        headerDialogOpened: false,
     } as StateType,
     reducers: {
         updateUserProfileData: (state, action: PayloadAction<UserEntity>) => {
             state.user = action.payload;
-        },
-        dialogVisibility: (state, action: PayloadAction<boolean>) => {
-            state.dialogOpened = action.payload;
-        },
-        headerDialogVisibility: (state, action: PayloadAction<boolean>) => {
-            state.headerDialogOpened = action.payload;
         },
     },
     extraReducers: {
@@ -184,4 +181,4 @@ export const authenticationSlice = createSlice({
     },
 });
 
-export const { updateUserProfileData, dialogVisibility, headerDialogVisibility } = authenticationSlice.actions;
+export const { updateUserProfileData } = authenticationSlice.actions;

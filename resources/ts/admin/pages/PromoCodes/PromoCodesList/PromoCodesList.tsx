@@ -1,16 +1,16 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import PromoCodesListHeader from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesListHeader';
-import { PromoCodesTable } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesTable';
 import { PromoCodeStatusEnum } from '@shared/constants/PromoCodeStatusEnum';
 import { useSharedSelector } from '@shared/hooks/useSharedSelector';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
+import PromoCodesListHeader from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesListHeader';
+import { PromoCodesTable } from '@admin/pages/PromoCodes/PromoCodesList/PromoCodesTable';
 
 const TabContent = styled(TabPanel)(
     {

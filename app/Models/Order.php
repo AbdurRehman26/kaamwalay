@@ -6,6 +6,8 @@ use App\Concerns\ActivityLog;
 use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Enums\Order\OrderStepEnum;
+use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -54,13 +56,14 @@ class Order extends Model implements Exportable
         'extra_charge_total',
         'refund_total',
         'payment_method_discounted_amount',
+        'order_step',
         'payment_status',
     ];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',
@@ -88,6 +91,7 @@ class Order extends Model implements Exportable
         'payment_method_discounted_amount' => 'float',
         'amount_paid_from_wallet' => 'float',
         'paid_at' => 'datetime',
+        'order_step' => OrderStepEnum::class,
         'payment_status' => OrderPaymentStatusEnum::class,
     ];
 
@@ -157,6 +161,7 @@ class Order extends Model implements Exportable
     {
         return [
             AllowedFilter::partial('order_number'),
+            AllowedFilter::exact('order_status_id'),
         ];
     }
 
@@ -238,7 +243,7 @@ class Order extends Model implements Exportable
 
         return $this->order_status_id > OrderStatus::PAYMENT_PENDING
             && ! $this->isCancelled()
-            && $this->payment_status === OrderPaymentStatusEnum::PENDING;
+            && ! $this->payment_status->isPaid();
     }
 
     public function scopePlaced(Builder $query): Builder
@@ -268,9 +273,8 @@ class Order extends Model implements Exportable
         return $query->whereHas(
             'orderStatus',
             function (Builder $query) use ($status) {
-                $query = $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
                 if (! $status || $status === 'all') {
-                    return $query;
+                    return $query->where('id', '>', OrderStatus::PAYMENT_PENDING);
                 }
 
                 return $query
@@ -284,7 +288,11 @@ class Order extends Model implements Exportable
     {
         return $query->whereHas(
             'user',
-            fn ($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere('last_name', 'like', "%$customerName%")
+            fn ($query) => $query->where('first_name', 'like', "%$customerName%")->orWhere(
+                'last_name',
+                'like',
+                "%$customerName%"
+            )
         );
     }
 
@@ -327,10 +335,18 @@ class Order extends Model implements Exportable
 
     public function getGroupedOrderItems(): Collection
     {
-        return OrderItem::select(DB::raw('min(id) as id'), 'card_product_id', DB::raw('min(order_id) as order_id'), DB::raw('min(order_item_status_id) as order_item_status_id'), DB::raw('sum(declared_value_per_unit) as declared_value_total'), DB::raw('min(declared_value_per_unit) as declared_value_per_unit'), DB::raw('sum(quantity) as quantity'))
-        ->where('order_id', $this->id)
-        ->groupBy(['card_product_id'])
-        ->get();
+        return OrderItem::select(
+            DB::raw('min(id) as id'),
+            'card_product_id',
+            DB::raw('min(order_id) as order_id'),
+            DB::raw('min(order_item_status_id) as order_item_status_id'),
+            DB::raw('sum(declared_value_per_unit) as declared_value_total'),
+            DB::raw('min(declared_value_per_unit) as declared_value_per_unit'),
+            DB::raw('sum(quantity) as quantity')
+        )
+            ->where('order_id', $this->id)
+            ->groupBy(['card_product_id'])
+            ->get();
     }
 
     public function coupon(): BelongsTo
@@ -339,8 +355,17 @@ class Order extends Model implements Exportable
     }
 
     /**
+     * @param  Builder <Order> $query
      * @return Builder <Order>
      */
+    public function scopeExcludeCancelled(Builder $query): Builder
+    {
+        return $query->where('order_status_id', '!=', OrderStatus::CANCELLED);
+    }
+
+    /**
+    * @return Builder <Order>
+    */
     public function exportQuery(): Builder
     {
         return self::query();
@@ -386,7 +411,7 @@ class Order extends Model implements Exportable
 
     public function isPaid(): bool
     {
-        return $this->payment_status === OrderPaymentStatusEnum::PAID;
+        return $this->payment_status->isPaid();
     }
 
     public function markAsPaid(): void
@@ -394,5 +419,39 @@ class Order extends Model implements Exportable
         $this->payment_status = OrderPaymentStatusEnum::PAID;
         $this->paid_at = now();
         $this->save();
+
+        GenerateOrderInvoice::dispatch($this);
+    }
+
+    public function hasInvoice(): bool
+    {
+        return $this->invoice()->exists();
+    }
+
+    public function hasCoupon(): bool
+    {
+        return $this->coupon()->exists();
+    }
+
+    public function hasCreditApplied(): bool
+    {
+        return $this->amount_paid_from_wallet > 0;
+    }
+
+    public function removeCouponApplied(): void
+    {
+        $this->coupon_id = null;
+        $this->discounted_amount = 0;
+        $this->save();
+    }
+
+    public function hasBillingAddress(): bool
+    {
+        return $this->billingAddress()->exists();
+    }
+
+    public function hasSameShippingAndBillingAddresses(): bool
+    {
+        return $this->shippingAddress()->is($this->billingAddress);
     }
 }

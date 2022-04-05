@@ -1,18 +1,18 @@
-import makeStyles from '@mui/styles/makeStyles';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from '@dashboard/redux/hooks';
-import Avatar from '@mui/material/Avatar';
-import Chip from '@mui/material/Chip';
-import contractAbi from '@shared/assets/bscContract.json';
-import Web3 from 'web3';
 import Alert from '@mui/material/Alert';
-import { networksMap, shortenWalletAddress, openMetaMaskExtensionLink, getEthereum } from './utils';
-import { useConfiguration } from '@shared/hooks/useConfiguration';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import React, { useCallback, useEffect, useState } from 'react';
+import Web3 from 'web3';
+import contractAbi from '@shared/assets/bscContract.json';
+import { useConfiguration } from '@shared/hooks/useConfiguration';
+import { useAppDispatch } from '@dashboard/redux/hooks';
+import { getEthereum, networksMap, openMetaMaskExtensionLink, shortenWalletAddress } from './utils';
 
 const useStyles = makeStyles(
     () => {
@@ -124,21 +124,21 @@ export function AGSPaymentDetailsContainers() {
                         <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
                             Connected Wallet:{' '}
                         </Typography>
-                        <Chip label={shortenWalletAddress(selectedAccount)}></Chip>
+                        <Chip label={shortenWalletAddress(selectedAccount)} />
                     </Box>
 
                     <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
                         <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
                             AGS Balance:
                         </Typography>
-                        <Chip label={agsBalance}></Chip>
+                        <Chip label={agsBalance} />
                     </Box>
 
                     <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} marginTop={'12px'}>
                         <Typography variant={'caption'} sx={{ fontWeight: 'bold' }}>
                             Selected Blockchain:
                         </Typography>
-                        <Chip label={networksMap[currentNetworkID]?.chainName}></Chip>
+                        <Chip label={networksMap[currentNetworkID]?.chainName} />
                     </Box>
                 </Box>
             );
@@ -211,7 +211,7 @@ export function AGSPaymentDetailsContainers() {
             }
         });
 
-        getEthereum().on('chainChanged', (chainId: number) => {
+        getEthereum().on('chainChanged', () => {
             window.location.reload();
         });
     }

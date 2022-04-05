@@ -2,8 +2,9 @@
 
 namespace App\Services\Admin\V1;
 
-use App\Events\API\Order\OrderStatusChangedEvent;
+use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
+use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Exceptions\API\Admin\OrderCanNotBeMarkedAsReviewed;
 use App\Jobs\Admin\Order\CreateOrderFoldersOnDropbox;
 use App\Jobs\Admin\Order\CreateOrderLabel;
@@ -61,6 +62,11 @@ class OrderStatusHistoryService
         throw_if(
             getModelId($orderStatus) === OrderStatus::GRADED && ! Order::find($orderId)->isEligibleToMarkAsGraded(),
             OrderCanNotBeMarkedAsGraded::class
+        );
+
+        throw_if(
+            getModelId($orderStatus) === OrderStatus::SHIPPED && ! Order::find($orderId)->isPaid(),
+            OrderCanNotBeMarkedAsShipped::class
         );
 
         if ($orderStatusId === OrderStatus::CONFIRMED) {

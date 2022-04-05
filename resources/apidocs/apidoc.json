@@ -1,5 +1,6 @@
 {
     "name": "Robograding API",
+    "version": "2.0.0",
     "description": "API for Robograding platform",
     "title": "Robograding API",
     "url": "https://robograding.com/api",

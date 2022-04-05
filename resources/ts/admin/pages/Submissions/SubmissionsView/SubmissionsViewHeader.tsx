@@ -1,23 +1,23 @@
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useMemo } from 'react';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
-import { OrderStatusEnum, OrderStatusMap } from '@shared/constants/OrderStatusEnum';
+import { AdminOrderStatusMap, OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { OrderLabelEntity } from '@shared/entities/OrderLabelEntity';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '@shared/entities/OrderStatusHistoryEntity';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
-import { OrderLabelEntity } from '@shared/entities/OrderLabelEntity';
+import { UserEntity } from '@shared/entities/UserEntity';
+import { useNotifications } from '@shared/hooks/useNotifications';
+import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { font } from '@shared/styles/utils';
 import { useOrderStatus } from '@admin/hooks/useOrderStatus';
 import SubmissionHeaderMoreButton from '@admin/pages/Submissions/SubmissionsView/SubmissionHeaderMoreButton';
 import { SubmissionActionButton } from '../../../components/SubmissionActionButton';
-import Button from '@mui/material/Button';
-import Icon from '@mui/material/Icon';
-import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { UserEntity } from '@shared/entities/UserEntity';
 
 interface SubmissionViewHeaderProps {
     orderId: number;
@@ -84,22 +84,19 @@ export function SubmissionsViewHeader({
     );
     const history = useMemo(
         () =>
-            [
-                OrderStatusEnum.PAYMENT_PENDING,
-                OrderStatusEnum.CONFIRMED,
-                OrderStatusEnum.GRADED,
-                OrderStatusEnum.SHIPPED,
-            ].map((status) => {
-                const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
-                const { label, value } = OrderStatusMap[status];
+            [OrderStatusEnum.PLACED, OrderStatusEnum.CONFIRMED, OrderStatusEnum.GRADED, OrderStatusEnum.SHIPPED].map(
+                (status) => {
+                    const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
+                    const { label, value } = AdminOrderStatusMap[status];
 
-                return {
-                    label,
-                    value,
-                    isCompleted: !!item?.createdAt,
-                    completedAt: item?.createdAt,
-                };
-            }),
+                    return {
+                        label,
+                        value,
+                        isCompleted: !!item?.createdAt,
+                        completedAt: item?.createdAt,
+                    };
+                },
+            ),
         [orderStatusHistory],
     );
     const DownloadOrderLabel = useCallback(async () => {

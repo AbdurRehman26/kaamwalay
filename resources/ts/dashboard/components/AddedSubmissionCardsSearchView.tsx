@@ -1,11 +1,11 @@
 import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { Fragment } from 'react';
 import { useAppSelector } from '../redux/hooks';
 import { SearchResultItemCardProps } from '../redux/slices/newSubmissionSlice';
 import SearchResultItemCard from './SearchResultItemCard';
-import { Fragment } from 'react';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 
 function AddedSubmissionCardsMobileSearchView() {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);

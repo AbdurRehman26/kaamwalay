@@ -1,12 +1,12 @@
-import { Entity } from './Entity';
 import { Type } from 'class-transformer';
-import { PromoServiceLevelEntity } from '@shared/entities/PromoServiceLevelEntity';
-import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
 import { DiscountApplicationEnums } from '@shared/constants/DiscountApplicationEnum';
 import { DiscountDateTypeEnum } from '@shared/constants/DiscountDateTypeEnum';
+import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
+import { PromoCodeApplicableEntity } from '@shared/entities/PromoCodeApplicableEntity';
 import { PromoCodeStatsEntity } from '@shared/entities/PromoCodeStatsEntity';
 import { PromoCodeStatusEntity } from '@shared/entities/PromoCodeStatusEntity';
-import { PromoCodeApplicableEntity } from '@shared/entities/PromoCodeApplicableEntity';
+import { PromoServiceLevelEntity } from '@shared/entities/PromoServiceLevelEntity';
+import { Entity } from './Entity';
 
 export class PromoCodeEntity extends Entity {
     public promoCode!: string;

@@ -8,7 +8,7 @@ import { useCallback } from 'react';
 import { ManageCardDialogViewEnum } from '@shared/constants/ManageCardDialogViewEnum';
 import { OrderItemStatusEnum } from '@shared/constants/OrderItemStatusEnum';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
-import { changeOrderItemsStatus, changeOrderItemStatus } from '@shared/redux/slices/adminOrdersSlice';
+import { changeOrderItemStatus, changeOrderItemsStatus } from '@shared/redux/slices/adminOrdersSlice';
 import { manageCardDialogActions } from '@shared/redux/slices/manageCardDialogSlice';
 import { useAppDispatch } from '@admin/redux/hooks';
 import CardItem from './CardItem';

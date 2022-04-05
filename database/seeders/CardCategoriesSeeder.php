@@ -14,7 +14,7 @@ class CardCategoriesSeeder extends Seeder
      */
     public function run()
     {
-        
+
         \DB::table('card_categories')->insert([
             [
                 'created_at' => '2021-08-07 21:10:18',
@@ -23,6 +23,6 @@ class CardCategoriesSeeder extends Seeder
                 'updated_at' => '2021-08-07 21:10:18',
             ],
         ]);
-        
+
     }
 }

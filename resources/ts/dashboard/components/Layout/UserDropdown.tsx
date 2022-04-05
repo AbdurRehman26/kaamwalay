@@ -1,8 +1,8 @@
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import StyleIcon from '@mui/icons-material/Style';
 import Avatar from '@mui/material/Avatar';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -12,8 +12,8 @@ import { styled } from '@mui/material/styles';
 import { MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
-import { useAuth } from '@shared/hooks/useAuth';
 import { RolesEnum } from '@shared/constants/RolesEnum';
+import { useAuth } from '@shared/hooks/useAuth';
 
 /**
  * @author: Dumitrana Alinus <alinus@wooter.com>
@@ -22,12 +22,11 @@ import { RolesEnum } from '@shared/constants/RolesEnum';
  * @time: 17:08
  */
 export function UserDropdown() {
-    const { logout } = useAuth();
+    const { logout, user, authenticated } = useAuth();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
-    const user$ = useAuth().user;
-    const isAdmin = user$.hasRole(RolesEnum.Admin);
+    const isAdmin = user?.hasRole(RolesEnum.Admin);
 
     const handleUserProfileOpen = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget),
@@ -52,10 +51,14 @@ export function UserDropdown() {
         [navigate, logout],
     );
 
+    if (!authenticated) {
+        return null;
+    }
+
     return (
         <>
             <IconButton onClick={handleUserProfileOpen}>
-                <Avatar src={user$?.profileImage ?? RobogradingAvatar} alt={'Robograding Avatar'} />
+                <Avatar src={user?.profileImage ?? RobogradingAvatar} alt={'Robograding Avatar'} />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

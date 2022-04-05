@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
@@ -66,7 +67,7 @@ it('fails to charge user', function () {
 })->group('payment');
 
 it('calculates fee', function () {
-    $order = Order::factory()->withPayment()->create();
+    $order = Order::factory(['payment_status' => OrderPaymentStatusEnum::PAID->value])->withPayment()->create();
     $actualFee = round((
         (TestingStripeService::STRIPE_FEE_PERCENTAGE * $order->grand_total_cents) + TestingStripeService::STRIPE_FEE_ADDITIONAL_AMOUNT
     ) / 100, 2);

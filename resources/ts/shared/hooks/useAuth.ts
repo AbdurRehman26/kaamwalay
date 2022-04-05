@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ResetPasswordRequestDto } from '../dto/ResetPasswordRequestDto';
 import { SignUpRequestDto } from '../dto/SignUpRequestDto';
 import { UserEntity } from '../entities/UserEntity';
@@ -21,6 +21,8 @@ export function useAuth() {
     const authenticated = useSharedSelector((state) => state.authentication.authenticated);
     const checking = useSharedSelector((state) => state.authentication.checking);
 
+    const [authDialogOpen, setAuthDialogOpen] = useState(false);
+
     const user$ = useMemo<UserEntity>(() => plainToInstance(UserEntity, user), [user]);
 
     const login = useCallback(
@@ -36,6 +38,9 @@ export function useAuth() {
         [dispatch],
     );
 
+    const openAuthDialog = useCallback(() => setAuthDialogOpen(true), []);
+    const closeAuthDialog = useCallback(() => setAuthDialogOpen(false), []);
+
     return {
         user: user$,
         checkAuth,
@@ -48,5 +53,11 @@ export function useAuth() {
         authenticated,
         checking,
         dispatch,
+        openAuthDialog,
+        closeAuthDialog,
+        authDialogProps: {
+            open: authDialogOpen,
+            onClose: () => setAuthDialogOpen(false),
+        },
     };
 }

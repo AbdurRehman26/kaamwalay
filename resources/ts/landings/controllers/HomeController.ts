@@ -1,10 +1,10 @@
-import { Controller } from '../classes/Controller';
 import scanningVideo from '@shared/assets/heroVideos/scanning.mp4';
 import poweredByAgs from '@shared/assets/poweredByAGS.svg';
-import { CanSetup } from '../interfaces/CanSetup';
-import { mountAtom } from '../utils/mountAtom';
 import { LayoutAtom } from '../atoms/LayoutAtom';
 import { SubmissionButtonAtom } from '../atoms/SubmissionButtonAtom';
+import { Controller } from '../classes/Controller';
+import { CanSetup } from '../interfaces/CanSetup';
+import { mountAtom } from '../utils/mountAtom';
 
 export class HomeController extends Controller implements CanSetup<HomeController> {
     public async setup() {

@@ -1,8 +1,8 @@
+import { AxiosRequestConfig } from 'axios';
+import { ExportDataDTO } from '@shared/dto/ExportDataDTO';
+import { ExportDataEntity } from '@shared/entities/ExportDataEntity';
 import { Injectable } from '../../decorators/Injectable';
 import { Repository } from '../Repository';
-import { ExportDataEntity } from '@shared/entities/ExportDataEntity';
-import { ExportDataDTO } from '@shared/dto/ExportDataDTO';
-import { AxiosRequestConfig } from 'axios';
 
 @Injectable('DataExportRepository')
 export class DataExportRepository extends Repository<ExportDataEntity> {

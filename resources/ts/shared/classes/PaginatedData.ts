@@ -1,4 +1,4 @@
-import { plainToInstance, Type } from 'class-transformer';
+import { Type, plainToInstance } from 'class-transformer';
 import { PaginationLinks } from './PaginationLinks';
 import { PaginationMeta } from './PaginationMeta';
 

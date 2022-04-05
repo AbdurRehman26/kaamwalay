@@ -25,7 +25,18 @@ class CalculateOrderCollectorCoinPriceRequest extends FormRequest
     public function rules()
     {
         return [
-            'payment_blockchain_network' => ['required', 'integer', Rule::in(explode(',', config('robograding.web3.supported_networks')))],
+            'payment_blockchain_network' => [
+                'required',
+                'integer',
+                Rule::in(
+                    explode(
+                        ',',
+                        config('robograding.web3.supported_networks', [])
+                    )
+                ),
+            ],
+            'payment_by_wallet' => ['required', 'numeric'],
+            'discounted_amount' => ['required', 'numeric'],
         ];
     }
 }

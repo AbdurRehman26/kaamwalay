@@ -23,6 +23,7 @@ use App\Http\Controllers\API\V2\Customer\ProfileController;
 use App\Http\Controllers\API\V2\Customer\PushNotificationController;
 use App\Http\Controllers\API\V2\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V2\Files\UploadController;
+use App\Http\Controllers\API\V2\Landings\PopReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,8 +48,18 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('customer')->group(function () {
+    Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
+    Route::prefix('orders')->group(function () {
+        Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
+        Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show']);
+        Route::post('shipping-fee', ShippingFeeController::class);
+        Route::patch('{order}/update-billing-address', [OrderController::class, 'updateBillingAddress'])
+            ->name('customer.orders.update-billing-address');
+    });
+    Route::prefix('cards')->group(function () {
+        Route::get('categories', CardCategoryController::class)->name('cards.categories');
+    });
     Route::middleware('auth')->group(function () {
-        Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
         Route::apiResource('addresses', CustomerAddressController::class)
             ->only(['index', 'show']);
 
@@ -56,20 +67,24 @@ Route::prefix('customer')->group(function () {
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
 
         Route::prefix('orders')->group(function () {
-            Route::apiResource('payment-plans', PaymentPlanController::class)
-                ->only(['index', 'show']);
-            Route::post('shipping-fee', ShippingFeeController::class);
             Route::apiResource('shipping-methods', ShippingMethodController::class)->only(['index', 'show']);
-            Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
+            Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/payments', [OrderPaymentController::class, 'process']);
             Route::post('{order}/payments/{paymentIntentId}', [OrderPaymentController::class, 'verify']);
-            Route::apiResource('/', OrderController::class)->only(['index', 'store']);
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
+            Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
+            Route::get('{orderId}', [OrderController::class, 'show']);
+            Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);
+            Route::apiResource('', OrderController::class)
+                ->only(['index', 'store'])
+                ->names([
+                    'index' => 'customer.orders.index',
+                    'store' => 'customer.orders.store',
+                ]);
         });
-
         Route::prefix('coupons')->group(function () {
             Route::get('{coupon:code}', [CouponController::class, 'show'])->name('coupon.verify');
             Route::post('calculate-discount', [CouponController::class, 'calculateDiscount'])->name('coupon.discount');
@@ -77,7 +92,6 @@ Route::prefix('customer')->group(function () {
 
         Route::prefix('cards')->group(function () {
             Route::get('/', [UserCardController::class, 'index']);
-            Route::get('categories', CardCategoryController::class)->name('cards.categories');
             Route::get('/{userCard}', [UserCardController::class, 'show']);
 
             Route::post('/', [CardProductController::class, 'store']);
@@ -101,4 +115,11 @@ Route::prefix('files')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('presign', [UploadController::class, 'presignUpload']);
     });
+});
+
+Route::prefix('pop')->group(function () {
+    Route::get('/categories', [PopReportController::class, 'getCategories']);
+    Route::get('/categories/{cardCategory}', [PopReportController::class, 'getSeriesReport']);
+    Route::get('/categories/{cardCategory}/series/{cardSeries:id}', [PopReportController::class, 'getSetsReport']);
+    Route::get('/categories/{cardCategory}/series/{cardSeries:id}/sets/{cardSet:id}', [PopReportController::class, 'getCardsReport']);
 });

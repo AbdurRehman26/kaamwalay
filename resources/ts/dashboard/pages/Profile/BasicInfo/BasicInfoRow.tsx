@@ -1,13 +1,13 @@
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import React from 'react';
-import Grid from '@mui/material/Grid';
-import makeStyles from '@mui/styles/makeStyles';
-import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
-import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import React from 'react';
+import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 
 interface BasicInfoRowProps {

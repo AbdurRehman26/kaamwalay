@@ -2,14 +2,13 @@
 import React, { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useInjectable } from '@shared/hooks/useInjectable';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { pushDataToRefersion } from '@shared/lib/utils/pushDataToRefersion';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
 import { trackFacebookPixelEvent } from '@shared/lib/utils/trackFacebookPixelEvent';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { APIService } from '@shared/services/APIService';
@@ -41,7 +40,6 @@ function PaypalBtn() {
     const serviceLevelId = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.id);
 
     const notifications = useNotifications();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const sendECommerceDataToGA = () => {
@@ -77,9 +75,6 @@ function PaypalBtn() {
                         const endpoint = apiService.createEndpoint(`customer/orders/${orderID}/payments`);
                         const response = await endpoint.post('', {
                             paymentByWallet: appliedCredit,
-                            // paymentProviderReference: {
-                            //     id: stripePaymentMethod,
-                            // },
                             paymentMethod: {
                                 id: paymentMethodID,
                             },
@@ -121,9 +116,9 @@ function PaypalBtn() {
                                 currency: 'USD',
                             });
                             sendECommerceDataToGA();
-                            pushToDataLayer({ event: 'google-ads-purchased', value: grandTotal });
+                            googleTagManager({ event: 'google-ads-purchased', value: grandTotal });
                             pushDataToRefersion(orderSubmission, user$);
-                            navigate(`/submissions/${orderID}/view`);
+                            window.location.href = `/dashboard/submissions/${orderID}/view`;
                         } catch (err: any) {
                             notifications.error('Payment could not be processed!', 'Error');
                         }

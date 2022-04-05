@@ -7,13 +7,13 @@ import algoliaSearch from 'algoliasearch';
 import React, { useMemo } from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-dom';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
-import CardsSearchMobileModal from '@dashboard/components/CardsSearchMobileModal';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { backStep, setIsNextDisabled } from '../redux/slices/newSubmissionSlice';
-import AddedSubmissionCards from './AddedSubmissionCards';
-import CardSubmissionSearchField from './CardSubmissionSearchField';
-import CardsSearchResults from './CardsSearchResults';
-import StepDescription from './StepDescription';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { backStep, setIsNextDisabled } from '../../redux/slices/newSubmissionSlice';
+import AddedSubmissionCards from '../AddedSubmissionCards';
+import CardSubmissionSearchField from '../CardSubmissionSearchField';
+import CardsSearchMobileModal from '../CardsSearchMobileModal';
+import CardsSearchResults from '../CardsSearchResults';
+import StepDescription from '../StepDescription';
 
 const useStyles = makeStyles({
     stepDescriptionContainer: {

@@ -37,7 +37,9 @@ export function useAuth() {
         (input: ResetPasswordRequestDto) => dispatch(resetPasswordAction(input)),
         [dispatch],
     );
+
     const openAuthDialog = useCallback(() => setAuthDialogOpen(true), []);
+    const closeAuthDialog = useCallback(() => setAuthDialogOpen(false), []);
 
     return {
         user: user$,
@@ -52,6 +54,7 @@ export function useAuth() {
         checking,
         dispatch,
         openAuthDialog,
+        closeAuthDialog,
         authDialogProps: {
             open: authDialogOpen,
             onClose: () => setAuthDialogOpen(false),

@@ -8,7 +8,6 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @urlParam {Number} wallet resource ID for wallet. E.g. 1
  * @apiSuccess {Object} data Wallet transaction data
  *
  * @apiSuccessExample Success-Response:

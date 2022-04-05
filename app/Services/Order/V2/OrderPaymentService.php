@@ -126,14 +126,16 @@ class OrderPaymentService
         // The next step from here would be to charge the user in the application flow. To make the flow consistent
         // the first order payments can only be either order payment from payment method or wallet and second
         // order payment can be other payments.
-        if ($this->order->extraCharges()->count() > 0) {
-            $this->order->extraCharges()->update(['created_at' => now()->addSecond()]);
-            $this->order->refunds()->update(['created_at' => now()->addSecond()]);
-        }
+        $this->order->extraCharges()->update(['created_at' => now()->addSeconds(5)]);
+        $this->order->refunds()->update(['created_at' => now()->addSeconds(5)]);
     }
 
     protected function updateOrderCouponAndDiscount(array $couponData): void
     {
+        if ($this->order->hasCoupon() && empty($couponData['code'])) {
+            $this->order->removeCouponApplied();
+        }
+
         if (! empty($couponData['code'])) {
             $coupon = $this->couponService->returnCouponIfValid($couponData['code']);
             $this->order->coupon_id = $coupon->id;
@@ -157,6 +159,9 @@ class OrderPaymentService
 
     protected function updateWalletPaymentAmount(float|null $amount): void
     {
+        if ($this->order->hasCreditApplied() && empty($amount)) {
+            $this->order->amount_paid_from_wallet = 0;
+        }
         if (! empty($amount)) {
             WalletAmountGrandTotalValidator::validate($this->order, $amount);
             $this->order->amount_paid_from_wallet = $amount;
@@ -172,6 +177,8 @@ class OrderPaymentService
             + $this->order->shipping_fee
             - $this->order->discounted_amount
             - $this->order->payment_method_discounted_amount
+            - $this->order->refund_total
+            + $this->order->extra_charge_total
         );
 
         GrandTotalValidator::validate($this->order);

@@ -7,6 +7,7 @@ use App\Concerns\Order\HasOrderPayments;
 use App\Contracts\Exportable;
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
+use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -62,7 +63,7 @@ class Order extends Model implements Exportable
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',
@@ -259,7 +260,7 @@ class Order extends Model implements Exportable
 
     public function getGrandTotalToBePaidAttribute(): float
     {
-        return $this->grand_total + $this->extra_charge_total - $this->amount_paid_from_wallet - $this->refund_total;
+        return $this->grand_total - $this->amount_paid_from_wallet;
     }
 
     public function getTotalGradedItems(): int
@@ -418,5 +419,39 @@ class Order extends Model implements Exportable
         $this->payment_status = OrderPaymentStatusEnum::PAID;
         $this->paid_at = now();
         $this->save();
+
+        GenerateOrderInvoice::dispatch($this);
+    }
+
+    public function hasInvoice(): bool
+    {
+        return $this->invoice()->exists();
+    }
+
+    public function hasCoupon(): bool
+    {
+        return $this->coupon()->exists();
+    }
+
+    public function hasCreditApplied(): bool
+    {
+        return $this->amount_paid_from_wallet > 0;
+    }
+
+    public function removeCouponApplied(): void
+    {
+        $this->coupon_id = null;
+        $this->discounted_amount = 0;
+        $this->save();
+    }
+
+    public function hasBillingAddress(): bool
+    {
+        return $this->billingAddress()->exists();
+    }
+
+    public function hasSameShippingAndBillingAddresses(): bool
+    {
+        return $this->shippingAddress()->is($this->billingAddress);
     }
 }

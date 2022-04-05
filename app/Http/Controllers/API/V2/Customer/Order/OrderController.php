@@ -8,6 +8,7 @@ use App\Exceptions\API\Customer\Order\OrderCanNotCanceled;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Order\CalculateOrderCollectorCoinPriceRequest;
 use App\Http\Requests\API\V2\Customer\Order\StoreOrderRequest;
+use App\Http\Requests\API\V2\Customer\Order\UpdateBillingAddressRequest;
 use App\Http\Requests\API\V2\Customer\Order\UpdateCustomerShipmentRequest;
 use App\Http\Resources\API\V2\Customer\Order\OrderCollection;
 use App\Http\Resources\API\V2\Customer\Order\OrderCreateResource;
@@ -21,6 +22,7 @@ use App\Services\Order\V2\CreateOrderService;
 use App\Services\Order\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -136,8 +138,28 @@ class OrderController extends Controller
     {
         throw_if($order->order_status_id !== OrderStatus::PAYMENT_PENDING, OrderCanNotCanceled::class);
 
-        $this->orderService->cancelOrder($order, auth()->user());
+        try {
+            DB::beginTransaction();
+
+            $this->orderService->cancelOrder($order, auth()->user());
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return new JsonResponse(['message' => 'Failed to delete order!'], $e->getCode());
+        }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
+
+    public function updateBillingAddress(Order $order, UpdateBillingAddressRequest $request): JsonResponse
+    {
+        $this->orderService->updateBillingAddress($order, $request->validated());
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Billing Address Updated successfully.',
+        ]);
     }
 }

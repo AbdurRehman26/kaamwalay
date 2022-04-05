@@ -3,12 +3,21 @@ import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useState } from 'react';
+import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
+import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
+import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { clearSubmissionState, setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
+import {
+    clearSubmissionState,
+    createOrder,
+    setCustomStep,
+    setIsNextLoading,
+    setPreviewTotal,
+} from '../redux/slices/newSubmissionSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -140,6 +149,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SubmissionSummary() {
     const classes = useStyles();
+    const notifications = useNotifications();
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
@@ -149,12 +159,11 @@ function SubmissionSummary() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const navigate = useNavigate();
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
-    const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
-    const orderID = useAppSelector((state) => state.newSubmission.orderID);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
+    const [submitting, setIsSubmitting] = useState(false);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -176,10 +185,20 @@ function SubmissionSummary() {
 
     const handleCompleteSubmission = async () => {
         try {
+            setIsSubmitting(true);
+            const order = await dispatch(createOrder()).unwrap();
+            ReactGA.event({
+                category: EventCategories.Submissions,
+                action: PaymentMethodEvents.payLater,
+            });
             dispatch(clearSubmissionState());
             dispatch(invalidateOrders());
-            navigate(`/submissions/${orderID}/confirmation`);
-        } catch (err: any) {}
+            navigate(`/submissions/${order.id}/confirmation`);
+        } catch (error: any) {
+            dispatch(setIsNextLoading(false));
+            notifications.exception(error);
+            return;
+        }
     };
 
     function getPreviewTotal() {
@@ -203,7 +222,12 @@ function SubmissionSummary() {
                 {currentStep === 4 ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            <Button variant="contained" color="primary" onClick={handleCompleteSubmission}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleCompleteSubmission}
+                                disabled={submitting}
+                            >
                                 {'Complete Submission'}
                             </Button>
                         </>
@@ -287,27 +311,6 @@ function SubmissionSummary() {
                                     decimalSeparator={'.'}
                                     prefix={'$'}
                                 />
-                            </div>
-                        </div>
-                        <Divider light />
-                    </>
-                ) : null}
-
-                {currentStep === 4 ? (
-                    <>
-                        <div className={classes.rowsContainer}>
-                            <div className={classes.row}>
-                                <Typography className={classes.rowLeftText}>Total:</Typography>
-                                <Typography className={classes.rowRightBoldText}>
-                                    <NumberFormat
-                                        value={grandTotal}
-                                        className={classes.rowRightBoldText}
-                                        displayType={'text'}
-                                        thousandSeparator
-                                        decimalSeparator={'.'}
-                                        prefix={'$'}
-                                    />
-                                </Typography>
                             </div>
                         </div>
                         <Divider light />
@@ -465,7 +468,7 @@ function SubmissionSummary() {
                         <Divider light />
                     </>
                 ) : null}
-                {currentStep === 2 || currentStep === 3 ? (
+                {currentStep === 2 || currentStep === 3 || currentStep === 4 ? (
                     <>
                         <div className={classes.rowsContainer}>
                             <div className={classes.row}>

@@ -9,6 +9,7 @@ use App\Services\Order\V2\OrderService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Event;
 
 class MarkOldOrdersAsCancelled extends Command
 {
@@ -28,21 +29,26 @@ class MarkOldOrdersAsCancelled extends Command
 
     public function handle(OrderService $orderService): int
     {
+        Event::fake();
+
         try {
             $date = Carbon::parse($this->argument('date'))->toDateString();
 
-            $orders = Order::where('order_status_id', '=', OrderStatus::PAYMENT_PENDING)
-                ->whereDate('created_at', '<', $date)
-                ->get();
+            $adminUser = User::admin()->first();
+            Order::where('order_status_id', '=', OrderStatus::PAYMENT_PENDING)
+                ->whereDate('created_at', '<=', $date)
+                ->get()
+                ->tap(function ($collection) {
+                    $this->info('Found ' . $collection->count() . ' Orders');
+                })
+                ->each(fn (Order $order) => $orderService->cancelOrder($order, $adminUser));
 
-            foreach ($orders as $order) {
-                $orderService->cancelOrder($order, User::admin()->first());
-            }
+            $this->info('Marked Cancelled!');
         } catch (Exception $e) {
             $this->info('Error while deleting orders');
             $this->info($e->getMessage());
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

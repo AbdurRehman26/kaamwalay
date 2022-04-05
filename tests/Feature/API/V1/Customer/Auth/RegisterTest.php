@@ -53,23 +53,6 @@ test('user can not register with duplicate email', function () {
     ]);
 })->group('auth');
 
-test('user can not register with duplicate username', function () {
-    $existingUser = User::factory()->create();
-    $response = $this->postJson('/api/v1/auth/register', [
-        'first_name' => $this->faker->firstName(),
-        'last_name' => $this->faker->lastName(),
-        'email' => $this->faker->safeEmail(),
-        'username' => $existingUser->username,
-        'password' => 'password',
-        'phone' => '',
-    ]);
-
-    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-    $response->assertJsonStructure([
-        'errors' => ['username'],
-    ]);
-})->group('auth');
-
 test('user registration dispatches events and jobs', function () {
     $email = $this->faker->safeEmail();
     $this->postJson('/api/v1/auth/register', [
@@ -150,4 +133,19 @@ test('customer can register and have wallet assigned', function () {
     
     expect($wallet->user_id)->tobe($user->id);
     expect($wallet->balance)->toBe(0.0);
+})->group('auth');
+
+test('customer username is auto generated', function () {
+    $email = $this->faker->safeEmail();
+    $this->postJson('/api/v2/auth/register', [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'email' => $email,
+        'password' => 'passWord1',
+        'password_confirmation' => 'password',
+        'phone' => '',
+    ]);
+    $user = User::whereEmail($email)->first();
+
+    expect($user->username)->not()->toBeEmpty();
 })->group('auth');

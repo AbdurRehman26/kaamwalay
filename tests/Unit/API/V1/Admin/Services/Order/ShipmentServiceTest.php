@@ -18,6 +18,10 @@ it('can update order shipment details', function () {
     $orderItem = OrderItem::factory()->create();
     $order = $orderItem->order;
 
+    $order->update([
+        'payment_status' => \App\Enums\Order\OrderPaymentStatusEnum::PAID,
+    ]);
+
     resolve(ShipmentService::class)->updateShipment($order, $shippingProvider, $trackingNumber);
 
     expect($order->orderShipment)->toBeInstanceOf(OrderShipment::class);

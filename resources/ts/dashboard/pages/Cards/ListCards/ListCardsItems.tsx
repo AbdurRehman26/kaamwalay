@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { TablePagination } from '@shared/components/TablePagination';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { pushToDataLayer } from '@shared/lib/utils/pushToDataLayer';
+import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { useListUserCardsQuery } from '@shared/redux/hooks/useUserCardsQuery';
 import { font } from '@shared/styles/utils';
 import { CardPreview } from '../../../components/CardPreview/CardPreview';
@@ -124,7 +124,7 @@ export function ListCardItems({ search }: ListCardsItemsProps) {
             category: EventCategories.Submissions,
             action: SubmissionEvents.initiated,
         });
-        pushToDataLayer({ event: 'google-ads-started-submission-process' });
+        googleTagManager({ event: 'google-ads-started-submission-process' });
         navigate('/submissions/new');
     }
 

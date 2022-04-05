@@ -31,13 +31,21 @@ beforeEach(function () {
         'order_status_id' => OrderStatus::PLACED,
     ]);
 
-    $this->order->amount_paid_from_wallet = $this->order->grand_total;
+    $grandTotal = $this->order->service_fee
+        + $this->order->shipping_fee
+        - $this->order->discounted_amount
+        - $this->order->payment_method_discounted_amount
+        - $this->order->refund_total
+        + $this->order->extra_charge_total;
+
+    $this->order->amount_paid_from_wallet = $grandTotal;
+    $this->order->grand_total = $grandTotal;
     $this->order->save();
 
 
     Wallet::factory()->create([
         'user_id' => $this->user->id,
-        'balance' => $this->order->grand_total + 1,
+        'balance' => $grandTotal + 1,
     ]);
 
     $this->actingAs($this->user);
@@ -51,6 +59,7 @@ test('user can be charged successfully from wallet', function () {
         'order_id' => $this->order->id,
         'payment_method_id' => $this->paymentMethod->id,
     ]);
+
     postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
         'payment_method' => [
             'id' => $this->paymentMethod->id,
@@ -58,11 +67,12 @@ test('user can be charged successfully from wallet', function () {
         'payment_provider_reference' => [
             'id' => '12345678',
         ],
+        'payment_by_wallet' => $this->order->grand_total,
     ])
         ->assertOk();
 
     expect($this->user->wallet->balance)->toBe((float) 1);
-    expect($this->user->wallet->lastTransaction->amount)->toBe($this->order->grand_total);
+    expect($this->user->wallet->lastTransaction->amount)->toBe(round($this->order->grand_total, 2));
 })->group('payment');
 
 test('user can be charged partially from wallet', function () {

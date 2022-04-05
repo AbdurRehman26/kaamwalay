@@ -263,8 +263,6 @@ test('a customer can filter orders by order number', function () {
 });
 
 test('a customer can not complete review of an order', function () {
-    $this->seed(RolesSeeder::class);
-
     $this->actingAs($this->user);
 
     $order = Order::factory()->for($this->user)->create();
@@ -390,7 +388,7 @@ test('a customer can place order and pay from wallet totally', function () {
             'id' => $this->shippingMethod->id,
         ],
         'payment_by_wallet' => 34.00,
-    ])->dump();
+    ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
@@ -654,4 +652,43 @@ test('a customer can see incomplete orders', function () {
     $this->getJson(route('v2.customer.orders.index'))
         ->assertOk()
         ->assertJsonCount(10, ['data']);
+});
+
+test('a customer can update order billing address', function () {
+    $order = Order::factory()->for($this->user)
+        ->has(OrderItem::factory())
+        ->create();
+
+    $this->actingAs($this->user);
+
+    $this->patchJson(route('v2.customer.orders.update-billing-address', ['order' => $order]), [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'address' => $this->faker->address(),
+        'city' => $this->faker->city(),
+        'state' => $this->faker->stateAbbr(),
+        'zip' => $this->faker->postcode(),
+        'phone' => $this->faker->phoneNumber(),
+    ])
+        ->assertOk();
+});
+
+
+test('a customer can not update other user\'s billing address', function () {
+    $order = Order::factory()
+        ->has(OrderItem::factory())
+        ->create();
+
+    $this->actingAs($this->user);
+
+    $this->patchJson(route('v2.customer.orders.update-billing-address', ['order' => $order]), [
+        'first_name' => $this->faker->firstName(),
+        'last_name' => $this->faker->lastName(),
+        'address' => $this->faker->address(),
+        'city' => $this->faker->city(),
+        'state' => $this->faker->stateAbbr(),
+        'zip' => $this->faker->postcode(),
+        'phone' => $this->faker->phoneNumber(),
+    ])
+        ->assertForbidden();
 });

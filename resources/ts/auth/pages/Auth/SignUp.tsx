@@ -27,8 +27,8 @@ export function SignUp() {
     const initialState = useMemo<SignUpRequestDto>(
         () => ({
             fullName: '',
-            username: '',
             email: '',
+            phone: '',
             password: '',
             passwordConfirmation: '',
         }),
@@ -36,7 +36,8 @@ export function SignUp() {
     );
 
     const handleSubmit = useCallback(
-        async (values) => {
+        async (values: SignUpRequestDto) => {
+            values = { ...values, passwordConfirmation: values.password };
             await register(values);
         },
         [register],
@@ -57,10 +58,9 @@ export function SignUp() {
                         </Typography>
                     </Box>
                     <FormInput type={'text'} label={'Full name'} name={'fullName'} />
-                    <FormInput type={'text'} label={'Create Username'} name={'username'} />
                     <FormInput type={'text'} label={'Email'} name={'email'} />
+                    <FormInput type={'phone'} label={'Phone Number'} name={'phone'} />
                     <FormInput type={'password'} label={'Create Password'} name={'password'} />
-                    <FormInput type={'password'} label={'Confirm Password'} name={'passwordConfirmation'} />
 
                     <SubmitButton>Sign up</SubmitButton>
 

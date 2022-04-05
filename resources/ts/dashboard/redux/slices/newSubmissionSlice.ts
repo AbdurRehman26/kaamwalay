@@ -125,6 +125,8 @@ export interface NewSubmissionSliceState {
     paymentStatus: PaymentStatusEnum;
     shippingAddress: any;
     billingAddress: any;
+
+    stepValidations: boolean[];
 }
 
 const initialState: NewSubmissionSliceState = {
@@ -285,6 +287,7 @@ const initialState: NewSubmissionSliceState = {
     paymentStatus: PaymentStatusEnum.PENDING,
     shippingAddress: [],
     billingAddress: [],
+    stepValidations: [true, false, false, false, false],
 };
 
 export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels', async () => {
@@ -305,8 +308,13 @@ export const getServiceLevels = createAsyncThunk('newSubmission/getServiceLevels
 export const getAvailableCredit = createAsyncThunk('newSubmission/getAvailableCredit', async () => {
     const apiService = app(APIService);
     const endpoint = apiService.createEndpoint('customer/wallet');
-    const response = await endpoint.get('');
-    return response.data.balance;
+
+    try {
+        const response = await endpoint.get('');
+        return response.data.balance;
+    } catch (e) {
+        return 0;
+    }
 });
 
 export const getTotalInAGS = createAsyncThunk(
@@ -712,6 +720,19 @@ export const newSubmissionSlice = createSlice({
             };
         },
         orderToNewSubmission(state: NewSubmissionSliceState, action: PayloadAction<OrderEntity>) {
+            state.couponState.isCouponApplied = Boolean(action.payload.coupon);
+            if (Boolean(action.payload.coupon)) {
+                state.couponState.couponCode = action.payload.discountedAmount ? action.payload.coupon.code : '';
+                state.couponState.appliedCouponData.id = action.payload.discountedAmount
+                    ? action.payload.coupon.id
+                    : -1;
+                state.couponState.appliedCouponData.discountStatement = action.payload.discountedAmount
+                    ? action.payload.coupon.discountStatement
+                    : '';
+                state.couponState.appliedCouponData.discountedAmount = action.payload.discountedAmount
+                    ? Number(action.payload.discountedAmount)
+                    : 0;
+            }
             state.orderID = action.payload.id;
             state.grandTotal = action.payload.grandTotal;
             state.refundTotal = action.payload.refundTotal;
@@ -736,12 +757,38 @@ export const newSubmissionSlice = createSlice({
                 ),
             };
 
+            const billingAddress = action.payload.billingAddress
+                ? action.payload.billingAddress
+                : action.payload.shippingAddress;
+
             state.step04Data = {
                 ...state.step04Data,
                 paymentMethodId: action.payload.paymentMethodId || 1,
+                useShippingAddressAsBillingAddress:
+                    action.payload?.billingAddress?.id === action.payload?.shippingAddress?.id ||
+                    !action.payload.billingAddress,
+                selectedBillingAddress: {
+                    id: billingAddress?.id,
+                    firstName: billingAddress?.firstName,
+                    lastName: billingAddress?.lastName,
+                    address: billingAddress?.address,
+                    city: billingAddress?.city,
+                    state: {
+                        id: 0,
+                        name: '',
+                        code: billingAddress?.state,
+                    },
+                    country: billingAddress?.country,
+                    zipCode: billingAddress?.zip,
+                    phoneNumber: billingAddress?.phone,
+                    flat: billingAddress?.flat,
+                },
             };
             state.appliedCredit = +action.payload.amountPaidFromWallet;
             state.paymentStatus = action.payload.paymentStatus;
+        },
+        setStepValidation(state, action: PayloadAction<{ step: number; valid: boolean }>) {
+            state.stepValidations[action.payload.step] = action.payload.valid;
         },
     },
     extraReducers: {
@@ -762,7 +809,6 @@ export const newSubmissionSlice = createSlice({
         },
         [getServiceLevels.fulfilled as any]: (state, action: any) => {
             state.step01Data.availableServiceLevels = action.payload;
-            state.step01Data.selectedServiceLevel = action.payload[0];
             state.step01Data.status = 'success';
         },
         [getServiceLevels.rejected as any]: (state) => {
@@ -797,9 +843,6 @@ export const newSubmissionSlice = createSlice({
         },
         [getTotalInAGS.fulfilled as any]: (state, action) => {
             state.totalInAgs = action.payload;
-        },
-        [verifyOrderStatus.fulfilled as any]: (state, action) => {
-            // handle success
         },
         [createOrder.fulfilled as any]: (state, action) => {
             state.grandTotal = action.payload.grandTotal;
@@ -875,4 +918,5 @@ export const {
     setPreviewTotal,
     SetCouponInvalidMessage,
     orderToNewSubmission,
+    setStepValidation,
 } = newSubmissionSlice.actions;

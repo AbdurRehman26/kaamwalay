@@ -9,16 +9,16 @@ import { AuthDialog } from '@shared/components/AuthDialog/AuthDialog';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useAuth } from '@shared/hooks/useAuth';
-import { ApplyCredit } from '@dashboard/components/ApplyCredit';
-import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
     getAvailableCredit,
     setBillingAddress,
     setIsNextDisabled,
     setUseShippingAddressAsBilling,
-} from '../redux/slices/newSubmissionSlice';
-import StepDescription from './StepDescription';
+} from '../../redux/slices/newSubmissionSlice';
+import { ApplyCredit } from '../ApplyCredit';
+import { ApplyPromoCode } from '../ApplyPromoCode';
+import StepDescription from '../StepDescription';
 
 const useStyles = makeStyles((theme) => ({
     stepDescriptionContainer: {
@@ -74,10 +74,17 @@ const useStyles = makeStyles((theme) => ({
 export function SubmissionStep04Content() {
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const { authenticated, authDialogProps, openAuthDialog } = useAuth();
+    const { authenticated, authDialogProps, closeAuthDialog, openAuthDialog } = useAuth();
 
     const availableCredit = useAppSelector((state) => state.newSubmission.availableCredit);
-    const finalShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const shippingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress);
+    const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
+    const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
+    const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
+    const finalShippingAddress =
+        existingAddresses.length !== 0 && !useCustomShippingAddress && selectedExistingAddress.id !== 0
+            ? selectedExistingAddress
+            : shippingAddress;
 
     useApplicationEvent(ApplicationEventsEnum.AuthSessionUnauthorized, () => {
         openAuthDialog();
@@ -91,8 +98,13 @@ export function SubmissionStep04Content() {
     }, [dispatch, finalShippingAddress]);
 
     useEffect(() => {
-        if (authenticated) dispatch(getAvailableCredit()).unwrap();
-    }, [dispatch, authenticated]);
+        if (authenticated) {
+            dispatch(getAvailableCredit()).unwrap();
+            closeAuthDialog();
+        } else {
+            openAuthDialog();
+        }
+    }, [dispatch, authenticated, openAuthDialog, closeAuthDialog]);
 
     return (
         <>

@@ -162,7 +162,9 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
                                     <TableCell variant={'head'}>Submission #</TableCell>
                                     <TableCell variant={'head'}>Date Placed</TableCell>
                                     <TableCell variant={'head'}>Payment Status</TableCell>
-                                    <TableCell variant={'head'}>Service Level</TableCell>
+                                    <TableCell variant={'head'} width={120}>
+                                        Service Level
+                                    </TableCell>
                                     <TableCell variant={'head'}># Cards</TableCell>
                                     <TableCell variant={'head'}>Status</TableCell>
                                     <TableCell variant={'head'} />

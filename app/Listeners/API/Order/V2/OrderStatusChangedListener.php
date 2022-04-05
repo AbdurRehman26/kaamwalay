@@ -3,8 +3,10 @@
 namespace App\Listeners\API\Order\V2;
 
 use App\Events\API\Order\V1\OrderStatusChangedEvent;
+use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Models\UserCard;
 use App\Notifications\Order\OrderStatusChangedNotification;
 use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Services\EmailService;
@@ -43,6 +45,7 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         $this->processEmails($event);
         $this->processPushNotification($event);
+        $this->indexCardsForFeed($event);
     }
 
     protected function processEmails(OrderStatusChangedEvent $event): void
@@ -156,6 +159,15 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         if ($event->orderStatus->id !== OrderStatus::PAYMENT_PENDING) {
             $event->order->user->notify(new OrderStatusChangedNotification($event->order));
+        }
+    }
+
+    protected function indexCardsForFeed(OrderStatusChangedEvent $event): void
+    {
+        if ($event->orderStatus->id === OrderStatus::SHIPPED) {
+            $orderItemIds = OrderItem::where('order_id', $event->order->id)->pluck('id');
+            // @phpstan-ignore-next-line
+            UserCard::whereIn('order_item_id', $orderItemIds)->get()->searchable();
         }
     }
 }

@@ -1,3 +1,4 @@
+import { FeedSearchAtom } from '../atoms/FeedSearchAtom';
 import { LayoutAtom } from '../atoms/LayoutAtom';
 import { Controller } from '../classes/Controller';
 import { CanSetup } from '../interfaces/CanSetup';
@@ -8,20 +9,8 @@ class FeedController extends Controller implements CanSetup<FeedController> {
         await mountAtom(LayoutAtom);
     }
 
-    public feedList() {
-        console.log('feed list page');
-
-        const paginationSelect = document.querySelector('.pagination__limit__select');
-
-        paginationSelect?.addEventListener('change', (e) => {
-            const select = e.target as HTMLSelectElement;
-            const selectedOption = select.options[select.selectedIndex];
-
-            const href = new URL(window.location.href);
-            href.searchParams.set('per_page', selectedOption.value);
-            href.searchParams.set('page', '1');
-            window.location.replace(href.toString());
-        });
+    public async feedList() {
+        mountAtom(FeedSearchAtom);
     }
 
     public feedView() {

@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Laravel\Scout\Searchable;
 
 class UserCard extends Model
 {
-    use HasFactory, ActivityLog;
+    use HasFactory, ActivityLog, Searchable;
 
     protected $fillable = [
         'order_item_id',
@@ -38,6 +39,39 @@ class UserCard extends Model
         'graded_at' => 'datetime',
         'grade_delta' => 'float',
     ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = [
+            'id' => $this->order_item_id,
+            'card_name' => $this->orderItem->cardProduct->name,
+            'card_image' => $this->orderItem->cardProduct->image_path,
+            'searchable_name' => $this->orderItem->cardProduct->getSearchableName(),
+            'graded_at' => $this->created_at,
+            'certificate_number' => $this->certificate_number,
+            'owner_name' => $this->user->username,
+            'grade_nickname' => $this->overall_grade_nickname,
+            'overall_grade' => $this->overall_grade,
+            'card_category' => $this->orderItem->cardProduct->cardCategory->name,
+            'grade' => $this->overall_grade_nickname .' '. $this->overall_grade,
+        ];
+
+        return $array;
+    }
+
+    public function shouldBeSearchable():bool
+    {
+        return (
+            $this->orderItem->order_item_status_id === OrderItemStatus::GRADED
+            && $this->orderItem->order->order_status_id === OrderStatus::SHIPPED
+            && OrderItemStatusHistory::where('order_item_status_id', OrderItemStatus::GRADED)->exists()
+        );
+    }
 
     public function user(): BelongsTo
     {

@@ -16,11 +16,17 @@ class VaultShipmentStatus extends Model
         'description',
     ];
 
+    /**
+     * @return HasMany<VaultShipment>
+     */
     public function vaultShipments(): HasMany
     {
         return $this->hasMany(VaultShipment::class);
     }
 
+    /**
+     * @return HasMany<VaultShipmentStatusHistory>
+     */
     public function vaultShipmentStatusHistories(): HasMany
     {
         return $this->hasMany(VaultShipmentStatusHistory::class);

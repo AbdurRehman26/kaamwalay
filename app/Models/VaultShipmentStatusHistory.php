@@ -16,11 +16,17 @@ class VaultShipmentStatusHistory extends Model
         'user_id',
     ];
 
+    /**
+     * @return BelongsTo<VaultShipment, VaultShipmentStatusHistory>
+     */
     public function vaultShipment(): BelongsTo
     {
         return $this->belongsTo(VaultShipment::class);
     }
 
+    /**
+     * @return BelongsTo<VaultShipmentStatus, VaultShipmentStatusHistory>
+     */
     public function vaultShipmentStatus(): BelongsTo
     {
         return $this->belongsTo(VaultShipmentStatus::class);

@@ -16,11 +16,17 @@ class VaultShipmentItem extends Model
         'vault_shipment_id',
     ];
 
+    /**
+     * @return BelongsTo<UserCard, VaultShipmentItem>
+     */
     public function userCard(): BelongsTo
     {
         return $this->belongsTo(UserCard::class);
     }
 
+    /**
+     * @return BelongsTo<VaultShipment, VaultShipmentItem>
+     */
     public function vaultShipment(): BelongsTo
     {
         return $this->belongsTo(VaultShipment::class);

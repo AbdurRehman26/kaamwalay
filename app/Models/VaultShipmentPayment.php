@@ -20,11 +20,17 @@ class VaultShipmentPayment extends Model
         'vault_shipment_id',
     ];
 
+    /**
+     * @return BelongsTo<VaultShipment, VaultShipmentPayment>
+     */
     public function vaultShipment(): BelongsTo
     {
         return $this->belongsTo(VaultShipment::class);
     }
 
+    /**
+     * @return BelongsTo<PaymentMethod, VaultShipmentPayment>
+     */
     public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);

@@ -33,46 +33,73 @@ class VaultShipment extends Model
 
     protected $casts = [];
 
+    /**
+     * @return BelongsTo<User, VaultShipment>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasMany<VaultShipmentItem>
+     */
     public function vaultShipmentItems(): HasMany
     {
         return $this->hasMany(VaultShipmentItem::class);
     }
 
+    /**
+     * @return BelongsTo<OrderAddress, VaultShipment>
+     */
     public function shippingAddress(): BelongsTo
     {
         return $this->belongsTo(OrderAddress::class);
     }
 
+    /**
+     * @return BelongsTo<OrderAddress, VaultShipment>
+     */
     public function billingAddress(): BelongsTo
     {
         return $this->belongsTo(OrderAddress::class);
     }
 
+    /**
+     * @return BelongsTo<VaultShipmentStatus, VaultShipment>
+     */
     public function vaultShipmentStatus(): BelongsTo
     {
         return $this->belongsTo(VaultShipmentStatus::class);
     }
 
+    /**
+     * @return BelongsTo<ShippingMethod, VaultShipment>
+     */
     public function shippingMethod(): BelongsTo
     {
         return $this->belongsTo(ShippingMethod::class);
     }
 
+    /**
+     * @return BelongsTo<Coupon, VaultShipment>
+     */
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
     }
 
+    /**
+     * @return HasMany<VaultShipmentStatusHistory>
+     */
     public function vaultShipmentStatusHistories(): HasMany
     {
         return $this->hasMany(VaultShipmentStatusHistory::class);
     }
 
+    /**
+     * @return HasMany<VaultShipmentPayment>
+     */
     public function vaultShipmentPayments(): HasMany
     {
         return $this->hasMany(VaultShipmentPayment::class);

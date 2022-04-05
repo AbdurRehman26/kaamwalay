@@ -113,13 +113,13 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleShipped(OrderStatusChangedEvent $event): void
     {
-        $this->updateFeedCards($event);
-
         $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED, [
             'FIRST_NAME' => $event->order->user->first_name,
             'TRACKING_NUMBER' => $event->order->orderShipment->tracking_number,
             'TRACKING_URL' => $event->order->orderShipment->tracking_url,
         ]);
+
+        $this->indexCardsForFeed($event);
     }
 
     protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars): void
@@ -163,9 +163,9 @@ class OrderStatusChangedListener implements ShouldQueue
         }
     }
 
-    protected function updateFeedCards(OrderStatusChangedEvent $event): void
+    protected function indexCardsForFeed(OrderStatusChangedEvent $event): void
     {
-        $orderItemId = OrderItem::where('order_id', $event->order->id)->pluck('id');
-        UserCard::whereIn('order_item_id', $orderItemId)->get()->searchable();
+        $orderItemIds = OrderItem::where('order_id', $event->order->id)->pluck('id');
+        UserCard::whereIn('order_item_id', $orderItemIds)->get()->searchable();
     }
 }

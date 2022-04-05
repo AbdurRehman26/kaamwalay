@@ -9,7 +9,6 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { connectHits } from 'react-instantsearch-dom';
-import { BrowserRouter, Link } from 'react-router-dom';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import theme from '@shared/styles/theme';
 
@@ -41,7 +40,7 @@ const TableDiv = styled(TableContainer)({
         paddingLeft: '14px',
         maxWidth: '240px',
         [theme.breakpoints.down('sm')]: {
-            paddingLeft: '10px',
+            padding: '0px 10px',
         },
     },
     '.TableInfoHeading': {
@@ -175,8 +174,8 @@ const CustomHits = connectHits(({ hits }) => {
                     {hits.map((hit: any) => (
                         <TableRow key={hit.objectID} className={'TableRow'}>
                             <TableCell className={'TableCard'}>
-                                <Link
-                                    to={`feed/${hit.certificate_number}/view`}
+                                <a
+                                    href={`feed/${hit.certificate_number}/view`}
                                     key={hit.objectID}
                                     className={'TableInfo'}
                                 >
@@ -206,29 +205,29 @@ const CustomHits = connectHits(({ hits }) => {
                                         <Typography className={'GradeLabel'}>{hit.grade_nickname}</Typography>
                                         <Typography className={'GradeValue'}>{hit.overall_grade}</Typography>
                                     </div>
-                                </Link>
+                                </a>
                             </TableCell>
                             <TableCell className={'DateCell'}>
-                                <Link to={`feed/${hit.certificate_number}/view`}>
+                                <a href={`feed/${hit.certificate_number}/view`}>
                                     <Typography>{formatDate(hit.graded_at, 'MM/DD/YYYY')}</Typography>
                                     <Typography>{formatDate(hit.graded_at, 'h:mm a')}</Typography>
-                                </Link>
+                                </a>
                             </TableCell>
                             <TableCell className={'CertificateNoCell'}>
-                                <Link to={`feed/${hit.certificate_number}/view`}>
+                                <a href={`feed/${hit.certificate_number}/view`}>
                                     <Typography>{hit.certificate_number}</Typography>
-                                </Link>
+                                </a>
                             </TableCell>
                             <TableCell className={'OwnerNameCell'}>
-                                <Link to={`feed/${hit.certificate_number}/view`}>
+                                <a href={`feed/${hit.certificate_number}/view`}>
                                     <Typography>{hit.owner_name}</Typography>
-                                </Link>
+                                </a>
                             </TableCell>
                             <TableCell className={'TableGrade'}>
-                                <Link to={`feed/${hit.certificate_number}/view`} className={'Grade'}>
+                                <a href={`feed/${hit.certificate_number}/view`} className={'Grade'}>
                                     <Typography className={'GradeLabel'}>{hit.grade_nickname}</Typography>
                                     <Typography className={'GradeValue'}>{hit.overall_grade}</Typography>
-                                </Link>
+                                </a>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -240,17 +239,15 @@ const CustomHits = connectHits(({ hits }) => {
 
 export function FeedListView() {
     return (
-        <BrowserRouter>
-            <BoxDiv>
-                <Grid className={'FeedList'}>
-                    <div className={'FeedContainer'}>
-                        <div className={'FeedTableHolder'}>
-                            <CustomHits />
-                        </div>
+        <BoxDiv>
+            <Grid className={'FeedList'}>
+                <div className={'FeedContainer'}>
+                    <div className={'FeedTableHolder'}>
+                        <CustomHits />
                     </div>
-                </Grid>
-            </BoxDiv>
-        </BrowserRouter>
+                </div>
+            </Grid>
+        </BoxDiv>
     );
 }
 

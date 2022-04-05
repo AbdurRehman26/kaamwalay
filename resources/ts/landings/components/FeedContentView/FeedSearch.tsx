@@ -42,14 +42,14 @@ const BoxDiv = styled(Box)({
         fontSize: '16px',
     },
     '.FeedHeroSearchBox': {
-        margin: 'auto',
-        width: '43%',
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: '20px',
         [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
     },
     '.searchBox': {
-        marginBottom: '20px',
         width: '630px',
         padding: '8px 20px',
         borderRadius: '20px',
@@ -109,7 +109,7 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, refine }: { curre
                         <Grid className={'FeedHeroSearchBox'}>
                             <Input
                                 sx={styles.InputStyle}
-                                placeholder="search..."
+                                placeholder="Search..."
                                 type="search"
                                 value={currentRefinement}
                                 onChange={(event) => {

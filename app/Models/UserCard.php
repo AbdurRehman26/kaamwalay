@@ -105,7 +105,7 @@ class UserCard extends Model
     /**
      * @return HasOne<VaultShipmentItem>
      */
-    public function vaultShipmentItems(): HasOne
+    public function vaultShipmentItem(): HasOne
     {
         return $this->hasOne(VaultShipmentItem::class);
     }

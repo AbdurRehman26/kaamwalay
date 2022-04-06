@@ -13,6 +13,7 @@ const styles = {
         lineHeight: '16px',
         letterSpacing: '0.4px',
         color: 'rgba(0, 0, 0, 0.54)',
+        margin: '10px 10px',
         [theme.breakpoints.down('sm')]: {
             margin: '10px 0px',
         },
@@ -23,6 +24,10 @@ const styles = {
         lineHeight: '24px',
         letterSpacing: '0.5px',
         color: 'rgba(0, 0, 0, 0.87)',
+        margin: '10px 10px',
+        [theme.breakpoints.down('sm')]: {
+            margin: '0px 0px',
+        },
     },
 };
 

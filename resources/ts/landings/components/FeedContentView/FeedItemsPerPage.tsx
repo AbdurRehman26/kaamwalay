@@ -1,4 +1,6 @@
 import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import styled from '@mui/styles/styled';
 import { connectHitsPerPage } from 'react-instantsearch-dom';
 
@@ -7,7 +9,8 @@ const GridDiv = styled(Grid)({
     alignItems: 'stretch',
 
     '.selectdiv': {
-        backgroundColor: '#F4F4FB',
+        background: 'transparent',
+        marginLeft: '10px',
     },
 });
 
@@ -15,17 +18,20 @@ const CustomHitsPerPage = connectHitsPerPage(({ items, refine, currentRefinement
     return (
         <GridDiv>
             <p>Items per page:</p>
-            <select
+            <Select
                 className={'selectdiv'}
                 value={currentRefinement || ''}
-                onChange={(event) => refine(event.currentTarget.value)}
+                onChange={(event) => refine(event.target.value)}
+                variant={'standard'}
+                disableUnderline
+                sx={{ marginLeft: '10px' }}
             >
                 {items.map((item: any) => (
-                    <option key={item.label} value={item.isRefined ? currentRefinement : item.value}>
+                    <MenuItem key={item.label} value={item.isRefined ? currentRefinement : item.value}>
                         {item.label}
-                    </option>
+                    </MenuItem>
                 ))}
-            </select>
+            </Select>
         </GridDiv>
     );
 });

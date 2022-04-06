@@ -43,8 +43,9 @@
                                     <div class="pop-list__table-cell--card-content">
                                         <img class="pop-list__table__info-image" src="{{ $cardsReport->image_path }}" alt="Card" width="52" />
                                         <div class="pop-list__table__info-text">
-                                            <p class="pop-list__table__info-heading">{{ $cardsReport->cardProduct->getShortName() }}</p>
+                                            <p class="pop-list__table__info-heading display-desktop">{{ $cardsReport->cardProduct->getShortName() }}</p>
                                             <p class="pop-list__table__info-subheading display-desktop">{{ $cardsReport->cardProduct->getSearchableName() }}</p>
+                                            <p class="pop-list__table__info-heading display-mobile">{{ $cardsReport->cardProduct->name . ' ' . $cardsReport->cardProduct->getShortName() }}</p>
                                             <p class="pop-list__table__info-subheading display-mobile">{{$cardsReport->card_number_order}}</p>
                                         </div>
                                     </div>

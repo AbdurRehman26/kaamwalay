@@ -44,10 +44,9 @@ interface VaulShipmentsTableProps {
 export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-    const orders$ = useListOrdersQuery({
+    const vaultShipments$ = useListOrdersQuery({
         params: {
             filter: { orderNumber: search },
-            include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
             perPage: 48,
         },
         ...bracketParams(),
@@ -55,19 +54,19 @@ export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
 
     useEffect(
         () => {
-            if (!orders$.isLoading) {
+            if (!vaultShipments$.isLoading) {
                 // noinspection JSIgnoredPromiseFromCall
-                orders$.search({ orderNumber: search });
+                vaultShipments$.search({ shipmentNumber: search });
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [search],
     );
 
-    if (orders$.isLoading || orders$.isError) {
+    if (vaultShipments$.isLoading || vaultShipments$.isError) {
         return (
             <Box padding={5} alignItems={'center'} justifyContent={'center'} display={'block'}>
-                {orders$.isLoading ? (
+                {vaultShipments$.isLoading ? (
                     <CircularProgress />
                 ) : (
                     <Typography color={'error'}>Error loading shipments</Typography>
@@ -83,7 +82,7 @@ export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
                     <TableRow>
                         <TablePagination
                             {...{
-                                ...orders$.paginationProps,
+                                ...vaultShipments$.paginationProps,
                                 rowsPerPageOptions: [48],
                             }}
                         />
@@ -93,7 +92,7 @@ export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
         </PaginationFooter>
     );
 
-    const items$ = orders$.data?.map((data: OrderEntity) => (
+    const items$ = vaultShipments$.data?.map((data: OrderEntity) => (
         <VaultShipmentTableRow
             disabled
             key={data?.id}
@@ -171,7 +170,7 @@ export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
                             <TableBody>{items$}</TableBody>
                         </Table>
                     </TableContainer>
-                    {orders$.pagination.meta.total > orders$.pagination.meta.perPage ? footer$ : null}
+                    {vaultShipments$.pagination.meta.total > vaultShipments$.pagination.meta.perPage ? footer$ : null}
                 </>
             )}
         </Box>

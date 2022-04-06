@@ -19,11 +19,11 @@ return new class extends Migration
             $table->id();
 
 
-            $table->foreignIdFor(VaultShipment::class)
+            $table->foreignId('vault_shipment_id')
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignIdFor(PaymentMethod::class)
+            $table->foreignId('payment_method_id')
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

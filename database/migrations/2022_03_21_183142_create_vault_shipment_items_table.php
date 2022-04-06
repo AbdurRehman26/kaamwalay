@@ -19,11 +19,11 @@ return new class extends Migration {
         Schema::create('vault_shipment_items', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignIdFor(UserCard::class)
+            $table->foreignId('user_card_id')
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignIdFor(VaultShipment::class)
+            $table->foreignId('vault_shipment_id')
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

@@ -21,7 +21,7 @@ return new class extends Migration {
         Schema::create('vault_shipments', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignIdFor(User::class)
+            $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
@@ -35,16 +35,16 @@ return new class extends Migration {
                 ->on('order_addresses')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignIdFor(VaultShipmentStatus::class)
+            $table->foreignId('vault_shipment_status_id')
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignIdFor(Coupon::class)
+            $table->foreignId('coupon_id')
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignIdFor(ShippingMethod::class)
+            $table->foreignId('shipping_method_id')
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();

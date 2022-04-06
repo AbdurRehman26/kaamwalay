@@ -31,8 +31,6 @@ class VaultShipment extends Model
         'shipped_at',
     ];
 
-    protected $casts = [];
-
     /**
      * @return BelongsTo<User, VaultShipment>
      */

@@ -87,7 +87,7 @@ return [
     |
     */
 
-    'attributesForFaceting' => ['card_category'],
+    'attributesForFaceting' => ['card_category', 'grade', 'overall_grade'],
 
     /*
     |--------------------------------------------------------------------------
@@ -163,6 +163,6 @@ return [
     | configuration, just use the command `scout:sync` to get remote settings in this file.
     |
     */
-    'ranking' => ['custom'],
     'replicas' => ['staging_user_cards_Ascending', 'staging_user_cards_Descending'],
+    'ranking' => ['custom'],
 ];

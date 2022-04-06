@@ -3,13 +3,12 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { connectHits } from 'react-instantsearch-dom';
-import { BrowserRouter, Link } from 'react-router-dom';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import theme from '@shared/styles/theme';
 
 const GridDiv = styled(Grid)({
     '.GridView': {
-        width: '300px',
+        width: '288px',
         height: '411px',
         background: '#ffffff',
         boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
@@ -17,7 +16,7 @@ const GridDiv = styled(Grid)({
         flex: '1 1 auto',
         display: 'inline-flex',
         flexDirection: 'column',
-        margin: '10px 4px',
+        margin: '10px 10px',
         alignItems: 'center',
     },
     '.GridTopSection': {
@@ -113,7 +112,7 @@ const CustomHits = connectHits(({ hits }) => {
     return (
         <GridDiv container>
             {hits.map((hit: any) => (
-                <Link to={`feed/${hit.certificate_number}/view`} key={hit.objectID}>
+                <a href={`feed/${hit.certificate_number}/view`} key={hit.objectID}>
                     <div className={'GridView'}>
                         <div className={'GridTopSection'}>
                             <div className={'GridTextSection'}>
@@ -145,7 +144,7 @@ const CustomHits = connectHits(({ hits }) => {
                             </div>
                         </div>
                     </div>
-                </Link>
+                </a>
             ))}
         </GridDiv>
     );
@@ -153,11 +152,9 @@ const CustomHits = connectHits(({ hits }) => {
 
 export function FeedGridView() {
     return (
-        <BrowserRouter>
-            <BoxDiv>
-                <CustomHits />
-            </BoxDiv>
-        </BrowserRouter>
+        <BoxDiv>
+            <CustomHits />
+        </BoxDiv>
     );
 }
 

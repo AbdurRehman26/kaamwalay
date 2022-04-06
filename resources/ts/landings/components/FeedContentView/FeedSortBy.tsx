@@ -59,16 +59,17 @@ const styles = {
 
 const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
     const [classN, changeClass] = useState('Select');
+    const { appEnv } = useConfiguration();
 
     return (
         <FeedSortDropdown>
             {classN === 'Select' ? (
-                <Typography className={'SortText'}>sort</Typography>
+                <Typography className={'SortText'}>Sort</Typography>
             ) : (
-                <Typography className={'SortTextSelected'}>sort</Typography>
+                <Typography className={'SortTextSelected'}>Sort</Typography>
             )}
             <Select
-                value={currentRefinement || 'local_user_cards'}
+                value={currentRefinement || `${appEnv}_user_cards`}
                 onChange={(event) => refine(event.target.value)}
                 variant={'standard'}
                 onFocus={() => {
@@ -77,7 +78,7 @@ const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
                 className={classN}
                 disableUnderline
             >
-                <MenuItem sx={{ display: 'none' }} value={'local_user_cards'}>
+                <MenuItem sx={{ display: 'none' }} value={`${appEnv}_user_cards`}>
                     Most Recent
                 </MenuItem>
                 {items.map((item: any) => (

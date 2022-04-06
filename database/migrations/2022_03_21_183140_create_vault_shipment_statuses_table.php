@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('vault_shipment_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('code')->unique();
             $table->string('description')->nullable();
             $table->timestamps();

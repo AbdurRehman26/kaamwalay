@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('user_cards', function (Blueprint $table) {
-            $table->unsignedTinyInteger('status')
+            $table->unsignedTinyInteger('shipping_status')
                 ->nullable()
                 ->after('generated_images')
                 ->comment('0 => in vault, 1 => shipping requested, 2 => shipped');

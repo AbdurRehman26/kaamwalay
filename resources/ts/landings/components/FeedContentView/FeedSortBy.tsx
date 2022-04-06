@@ -64,9 +64,9 @@ const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
     return (
         <FeedSortDropdown>
             {classN === 'Select' ? (
-                <Typography className={'SortText'}>sort</Typography>
+                <Typography className={'SortText'}>Sort</Typography>
             ) : (
-                <Typography className={'SortTextSelected'}>sort</Typography>
+                <Typography className={'SortTextSelected'}>Sort</Typography>
             )}
             <Select
                 value={currentRefinement || `${appEnv}_user_cards`}

@@ -71,9 +71,9 @@ const TableDiv = styled(TableContainer)({
         justifyContent: 'center',
         width: '64px',
         height: '64px',
-        backgroundColor: '#42f9ff',
+        backgroundColor: '#20BFB8',
         borderRadius: '4px',
-        color: 'transparentize(#000, 0.13)',
+        color: '#FFFFFF',
         [theme.breakpoints.down('sm')]: {
             minWidth: '16%',
         },
@@ -98,13 +98,13 @@ const TableDiv = styled(TableContainer)({
         marginBottom: '6px',
         fontSize: '12px',
         lineHeight: '12px',
-        color: 'rgba(0, 0, 0, 0.87)',
+        color: '#FFFFFF',
     },
     '.GradeValue': {
         fontWeight: '700',
         fontSize: '24px',
         lineHeight: '24px',
-        color: 'rgba(0, 0, 0, 0.87)',
+        color: '#FFFFFF',
     },
     '.DateCell': {
         [theme.breakpoints.down('sm')]: {

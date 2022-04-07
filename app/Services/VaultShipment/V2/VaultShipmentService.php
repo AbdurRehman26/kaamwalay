@@ -24,5 +24,4 @@ class VaultShipmentService
             ->defaultSort('-vault_shipments.created_at')
             ->paginate($itemsPerPage);
     }
-
 }

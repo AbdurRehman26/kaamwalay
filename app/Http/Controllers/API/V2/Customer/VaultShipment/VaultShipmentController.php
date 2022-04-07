@@ -11,7 +11,6 @@ class VaultShipmentController extends Controller
     public function __construct(
         protected VaultShipmentService $vaultShipmentService
     ) {
-
     }
 
     public function index(): VaultShipmentCollection
@@ -20,5 +19,4 @@ class VaultShipmentController extends Controller
             $this->vaultShipmentService->getVaultShipments()
         );
     }
-
 }

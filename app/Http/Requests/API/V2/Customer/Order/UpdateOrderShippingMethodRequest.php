@@ -47,6 +47,9 @@ class UpdateOrderShippingMethodRequest extends FormRequest
 
     protected function isShippingAddressRequired(): bool
     {
-        return $this->input('shipping_method_id') === ShippingMethod::INSURED_SHIPPING;
+        return ShippingMethod::where(
+            'id',
+            $this->input('shipping_method_id')
+        )->value('code') === ShippingMethod::INSURED_SHIPPING;
     }
 }

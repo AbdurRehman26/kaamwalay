@@ -30,6 +30,7 @@ class UpdateOrderShippingMethodController extends Controller
 
         try {
             DB::beginTransaction();
+
             if ($request->filled('customer_address_id')) {
                 $customerAddress = CustomerAddress::find($request->input('customer_address_id'));
                 OrderAddress::create($customerAddress->toArray());
@@ -37,7 +38,6 @@ class UpdateOrderShippingMethodController extends Controller
             }
             $orderService->changeShippingMethod($order, $request->input('shipping_method_id'));
 
-            $order->save();
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

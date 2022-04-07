@@ -83,7 +83,7 @@ test('a customer can place order', function () {
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-    ]);
+    ])->dump();
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
@@ -110,8 +110,6 @@ test('an order needs data', function () {
     $response->assertJsonValidationErrors([
         'payment_plan' => 'The payment plan field is required.',
         'items' => 'The items field is required.',
-        'shipping_address' => 'The shipping address field is required.',
-        'billing_address' => 'The billing address field is required.',
         'shipping_method' => 'The shipping method field is required.',
     ]);
 });

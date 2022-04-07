@@ -22,8 +22,6 @@ use App\Http\Controllers\API\V2\Customer\Order\UpdateOrderShippingMethodControll
 use App\Http\Controllers\API\V2\Customer\PaymentCardController;
 use App\Http\Controllers\API\V2\Customer\ProfileController;
 use App\Http\Controllers\API\V2\Customer\PushNotificationController;
-use App\Http\Controllers\API\V2\Customer\Vault\VaultItemController;
-use App\Http\Controllers\API\V2\Customer\Vault\VaultShipmentController;
 use App\Http\Controllers\API\V2\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V2\Files\UploadController;
 use App\Http\Controllers\API\V2\Landings\PopReportController;
@@ -108,9 +106,6 @@ Route::prefix('customer')->group(function () {
             Route::get('/', [WalletController::class, 'getWallet'])->name('wallet.me');
         });
     });
-
-    Route::apiResource('vault-items', VaultItemController::class)->only('index', 'show');
-    Route::apiResource('vault-shipments', VaultShipmentController::class)->only('index');
 });
 
 Route::prefix('configurations')->group(function () {

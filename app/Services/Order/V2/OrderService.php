@@ -6,6 +6,7 @@ use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\ShippingMethod;
+use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\V1\OrderService as V1OrderService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
 use Illuminate\Support\Facades\Cache;
@@ -104,10 +105,35 @@ class OrderService extends V1OrderService
         return $order;
     }
 
-    public function changeShippingMethod(Order $order, int $shippingMethodId)
+    public function changeShippingMethod(Order $order, int $shippingMethodId): void
     {
         $shippingMethod = ShippingMethod::find($shippingMethodId);
 
         $order->shippingMethod()->associate($shippingMethod);
+
+        $this->updateShippingFee(
+            $order,
+            $this->getShippingFeeForShippingMethod($shippingMethod, $order)
+        );
+
+        $order->save();
+    }
+
+    protected function getShippingFeeForShippingMethod(ShippingMethod $shippingMethod, Order $order): float
+    {
+        return match($shippingMethod->code) {
+            ShippingMethod::VAULT_STORAGE => 0.0,
+            ShippingMethod::INSURED_SHIPPING => $this->getInsuredShippingFee($order),
+        };
+    }
+
+    protected function updateShippingFee(Order &$order, $fee): void
+    {
+        $order->shipping_fee = $fee;
+    }
+
+    protected function getInsuredShippingFee(Order $order): float
+    {
+        return ShippingFeeService::calculateForOrder($order);
     }
 }

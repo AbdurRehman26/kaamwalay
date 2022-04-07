@@ -16,6 +16,8 @@ return new class extends Migration
             [
                 'name' => 'Vault Storage',
                 'code' => 'vault_storage',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

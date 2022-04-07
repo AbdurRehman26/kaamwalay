@@ -121,7 +121,7 @@ class OrderService extends V1OrderService
 
     protected function getShippingFeeForShippingMethod(ShippingMethod $shippingMethod, Order $order): float
     {
-        return match($shippingMethod->code) {
+        return match ($shippingMethod->code) {
             ShippingMethod::VAULT_STORAGE => 0.0,
             ShippingMethod::INSURED_SHIPPING => $this->getInsuredShippingFee($order),
         };

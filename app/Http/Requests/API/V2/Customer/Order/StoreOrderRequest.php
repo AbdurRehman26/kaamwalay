@@ -75,6 +75,7 @@ class StoreOrderRequest extends V1StoreOrderRequest
                 'billing_address.same_as_shipping' => ['required', 'boolean'],
             ]);
         }
+
         return $rules;
     }
 

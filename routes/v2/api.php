@@ -109,7 +109,7 @@ Route::prefix('customer')->group(function () {
             Route::apiResource('', VaultShipmentController::class)
                 ->only(['index'])
                 ->names([
-                    'index' => 'customer.orders.index',
+                    'index' => 'customer.vault-shipments.index',
                 ]);
         });
     });

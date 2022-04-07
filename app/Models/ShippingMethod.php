@@ -9,6 +9,9 @@ class ShippingMethod extends Model
 {
     use HasFactory;
 
+    public const INSURED_SHIPPING = 1;
+    public const VAULT_STORAGE = 2;
+
     /**
      * The attributes that are mass assignable.
      *

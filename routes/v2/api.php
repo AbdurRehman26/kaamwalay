@@ -18,9 +18,12 @@ use App\Http\Controllers\API\V2\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\V2\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\V2\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Customer\Order\ShippingMethodController;
+use App\Http\Controllers\API\V2\Customer\Order\UpdateOrderShippingMethodController;
 use App\Http\Controllers\API\V2\Customer\PaymentCardController;
 use App\Http\Controllers\API\V2\Customer\ProfileController;
 use App\Http\Controllers\API\V2\Customer\PushNotificationController;
+use App\Http\Controllers\API\V2\Customer\Vault\VaultItemController;
+use App\Http\Controllers\API\V2\Customer\Vault\VaultShipmentController;
 use App\Http\Controllers\API\V2\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V2\Files\UploadController;
 use App\Http\Controllers\API\V2\Landings\PopReportController;
@@ -61,7 +64,7 @@ Route::prefix('customer')->group(function () {
     });
     Route::middleware('auth')->group(function () {
         Route::apiResource('addresses', CustomerAddressController::class)
-            ->only(['index', 'show']);
+            ->only(['index', 'store', 'show']);
 
         Route::post('payment-cards/setup', [PaymentCardController::class, 'createSetupIntent']);
         Route::get('payment-cards', [PaymentCardController::class, 'index']);
@@ -75,6 +78,7 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
+            Route::put('{order}/shipping-method', UpdateOrderShippingMethodController::class);
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);
@@ -104,6 +108,9 @@ Route::prefix('customer')->group(function () {
             Route::get('/', [WalletController::class, 'getWallet'])->name('wallet.me');
         });
     });
+
+    Route::apiResource('vault-items', VaultItemController::class)->only('index', 'show');
+    Route::apiResource('vault-shipments', VaultShipmentController::class)->only('index');
 });
 
 Route::prefix('configurations')->group(function () {

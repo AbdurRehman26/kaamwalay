@@ -78,7 +78,7 @@ class StoreOrderRequest extends V1StoreOrderRequest
         return $rules;
     }
 
-    protected function areAddressFieldsRequired()
+    protected function areAddressFieldsRequired(): bool
     {
         if ($this->has('shipping_method')) {
             return ShippingMethod::where(

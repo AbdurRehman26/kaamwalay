@@ -7,32 +7,25 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Moment } from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
-import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
-import { PaymentStatusEnum, PaymentStatusMap } from '@shared/constants/PaymentStatusEnum';
-import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
+import { VaultShipmentStatusChip } from '@shared/components/VaultShipmentStatusChip';
+import { VaultShipmentStatusEnum, VaultShipmentStatusMap } from '@shared/constants/VaultShipmentStatusEnum';
 import { formatDate } from '@shared/lib/datetime/formatDate';
-import { SubmissionStatusChip } from '@dashboard/components/SubmissionStatusChip';
 
-interface SubmissionTableRowProps {
+interface VaultShipmentTableRowProps {
     id: number;
-    orderNumber: string;
-    serviceLevel: number;
+    shipmentNumber: string;
     cardsNumber: number;
-    status: OrderStatusEnum;
-    invoice?: string;
-    invoiceNumber?: string;
-    disabled?: boolean;
+    status: VaultShipmentStatusEnum;
+    trackingNumber?: string;
+    trackingUrl?: string;
     isSm?: boolean;
-    orderCustomerShipment: null | ShipmentEntity;
-    datePlaced?: Date | Moment | null;
-    dateArrived?: Date | Moment | null;
-    paymentStatus?: PaymentStatusEnum;
+    dateCreated?: Date | Moment | null;
+    dateShipped?: Date | Moment | null;
 }
 
 const useStyles = makeStyles(
     {
-        submissionHolder: {
+        shipmentHolder: {
             width: '100%',
             borderBottom: '1px solid #ccc',
             display: 'flex',
@@ -41,58 +34,57 @@ const useStyles = makeStyles(
             marginTop: '12px',
             paddingBottom: '12px',
         },
-        submissionLeftSide: {
+        shipmentLeftSide: {
             display: 'flex',
             flexDirection: 'column',
         },
-        submissionRightSide: {
+        shipmentRightSide: {
             display: 'flex',
             flexDirection: 'row',
         },
-        submissionPropertyLabel: {
+        shipmentPropertyLabel: {
             fontWeight: 'bold',
             fontSize: '14px',
             lineHeight: '20px',
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
         },
-        submissionPropertyValue: {
+        shipmentPropertyValue: {
             fontWeight: 'normal',
             fontSize: '14px',
             lineHeight: '20px',
             letterSpacing: '0.2px',
             color: 'rgba(0, 0, 0, 0.87)',
         },
-        orderNumber: {
+        shipmentNumber: {
             fontWeight: 500,
-            fontSize: '16px',
-            lineHeight: '24px',
+            fontSize: '14px',
+            lineHeight: '20px',
             letterSpacing: '0.2px',
             color: '#20BFB8',
             marginBottom: '6px',
-        },
-        closeIconContainer: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-        },
-        closeIconBtn: {
-            paddingTop: 0,
         },
         linkText: {
             textDecoration: 'none',
             color: '#000',
         },
-        unpaidOrderTableCell: {
-            border: 'none',
-        },
     },
-    { name: 'SubmissionTableRow' },
+    { name: 'VaultShipmentTableRow' },
 );
-export function VaultShipmentTableRow(props: SubmissionTableRowProps) {
-    const { id, orderNumber, datePlaced, dateArrived, cardsNumber, status, isSm, paymentStatus } = props;
+export function VaultShipmentTableRow(props: VaultShipmentTableRowProps) {
+    const {
+        id,
+        shipmentNumber,
+        dateCreated,
+        dateShipped,
+        cardsNumber,
+        status,
+        isSm,
+        trackingNumber,
+        trackingUrl = '',
+    } = props;
 
-    const submissionViewUrl = `/submissions/${id}/view`;
+    const shipmentViewUrl = `/vault-shipments/${id}/view`;
     const classes = useStyles();
 
     return (
@@ -101,73 +93,81 @@ export function VaultShipmentTableRow(props: SubmissionTableRowProps) {
                 <>
                     <TableRow>
                         <TableCell>
-                            <Link to={submissionViewUrl} className={classes.linkText}>
-                                {orderNumber}
+                            <Link to={shipmentViewUrl} className={classes.linkText}>
+                                {shipmentNumber}
                             </Link>
                         </TableCell>
                         <TableCell>
-                            <Link to={submissionViewUrl} className={classes.linkText}>
-                                {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
+                            <Link to={shipmentViewUrl} className={classes.linkText}>
+                                {dateCreated ? formatDate(dateCreated, 'MM/DD/YYYY') : '-'}
                             </Link>
                         </TableCell>
                         <TableCell>
-                            <Link to={submissionViewUrl} className={classes.linkText}>
-                                {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
+                            <Link to={shipmentViewUrl} className={classes.linkText}>
+                                {dateShipped ? formatDate(dateShipped, 'MM/DD/YYYY') : '-'}
                             </Link>
                         </TableCell>
                         <TableCell>
-                            <PaymentStatusChip
-                                color={paymentStatus || PaymentStatusEnum.PENDING}
-                                label={PaymentStatusMap[paymentStatus || PaymentStatusEnum.PENDING]}
-                                mode={'customer'}
-                            />
+                            <Link to={shipmentViewUrl} className={classes.linkText}>
+                                <VaultShipmentStatusChip
+                                    color={status || VaultShipmentStatusEnum.PENDING}
+                                    label={VaultShipmentStatusMap[status || VaultShipmentStatusEnum.PENDING]}
+                                />
+                            </Link>
                         </TableCell>
                         <TableCell>
-                            <Link to={submissionViewUrl} className={classes.linkText}>
+                            <Link to={shipmentViewUrl} className={classes.linkText}>
                                 {cardsNumber}
                             </Link>
                         </TableCell>
                         <TableCell>
-                            <MuiLink component={Link} to={submissionViewUrl}>
-                                {cardsNumber}
-                            </MuiLink>
+                            {trackingUrl ? (
+                                <MuiLink component={Link} to={trackingUrl} className={classes.shipmentNumber}>
+                                    {trackingNumber}
+                                </MuiLink>
+                            ) : null}
                         </TableCell>
                     </TableRow>
                 </>
             ) : (
-                <div className={classes.submissionHolder}>
-                    <div className={classes.submissionLeftSide}>
-                        <Typography variant={'subtitle1'} className={classes.submissionPropertyLabel}>
-                            {orderNumber}
+                <div className={classes.shipmentHolder}>
+                    <div className={classes.shipmentLeftSide}>
+                        <Typography variant={'subtitle1'} className={classes.shipmentPropertyLabel}>
+                            {shipmentNumber}
                         </Typography>
 
-                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                        <Typography variant={'caption'} className={classes.shipmentPropertyLabel}>
                             Date Created:{' '}
-                            <span className={classes.submissionPropertyValue}>
-                                {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
+                            <span className={classes.shipmentPropertyValue}>
+                                {dateCreated ? formatDate(dateCreated, 'MM/DD/YYYY') : '-'}
                             </span>
                         </Typography>
 
-                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                        <Typography variant={'caption'} className={classes.shipmentPropertyLabel}>
                             Date Shipped:{' '}
-                            <span className={classes.submissionPropertyValue}>
-                                {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
+                            <span className={classes.shipmentPropertyValue}>
+                                {dateShipped ? formatDate(dateShipped, 'MM/DD/YYYY') : '-'}
                             </span>
                         </Typography>
 
-                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                            # Cards: <span className={classes.submissionPropertyValue}>{cardsNumber}</span>
+                        <Typography variant={'caption'} className={classes.shipmentPropertyLabel}>
+                            # Cards: <span className={classes.shipmentPropertyValue}>{cardsNumber}</span>
                         </Typography>
-                        <Link to={`/submissions/${id}/view`} style={{ textDecoration: 'none' }}>
-                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                                Tracking #: <span className={classes.orderNumber}>{cardsNumber}</span>
-                            </Typography>
-                        </Link>
+                        {trackingUrl ? (
+                            <Link to={trackingUrl} style={{ textDecoration: 'none' }}>
+                                <Typography variant={'caption'} className={classes.shipmentPropertyLabel}>
+                                    Tracking #: <span className={classes.shipmentNumber}>{trackingNumber}</span>
+                                </Typography>
+                            </Link>
+                        ) : null}
                     </div>
 
-                    <div className={classes.submissionRightSide}>
+                    <div className={classes.shipmentRightSide}>
                         <Stack spacing={2}>
-                            <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
+                            <VaultShipmentStatusChip
+                                color={status || VaultShipmentStatusEnum.PENDING}
+                                label={VaultShipmentStatusMap[status || VaultShipmentStatusEnum.PENDING]}
+                            />
                         </Stack>
                     </div>
                 </div>

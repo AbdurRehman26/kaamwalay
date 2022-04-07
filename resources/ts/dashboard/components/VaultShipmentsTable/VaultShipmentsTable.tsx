@@ -13,9 +13,9 @@ import { Theme, styled } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect } from 'react';
 import { TablePagination } from '@shared/components/TablePagination';
-import { OrderEntity } from '@shared/entities/OrderEntity';
+import { VaultShipmentEntity } from '@shared/entities/VaultShipmentEntity';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+import { useListVaultShipmentsQuery } from '@shared/redux/hooks/useVaultShipmentsQuery';
 import { VaultShipmentTableRow } from './VaultShipmentTableRow';
 import { Table } from './styles';
 
@@ -37,16 +37,16 @@ const PaginationFooter = styled('div')(() => ({
     bottom: 0,
 }));
 
-interface VaulShipmentsTableProps {
+interface VaultShipmentsTableProps {
     search?: string;
 }
 
-export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
+export function VaultShipmentsTable({ search }: VaultShipmentsTableProps) {
     const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-    const vaultShipments$ = useListOrdersQuery({
+    const vaultShipments$ = useListVaultShipmentsQuery({
         params: {
-            filter: { orderNumber: search },
+            filter: { shipmentNumber: search },
             perPage: 48,
         },
         ...bracketParams(),
@@ -92,22 +92,18 @@ export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
         </PaginationFooter>
     );
 
-    const items$ = vaultShipments$.data?.map((data: OrderEntity) => (
+    const items$ = vaultShipments$.data?.map((data: VaultShipmentEntity) => (
         <VaultShipmentTableRow
-            disabled
             key={data?.id}
             id={data?.id}
             isSm={isSm}
-            orderNumber={data?.orderNumber}
-            serviceLevel={data?.paymentPlan?.price}
-            cardsNumber={data?.numberOfCards}
-            status={data?.orderStatus?.id}
-            datePlaced={data?.createdAt}
-            dateArrived={data?.arrivedAt}
-            invoice={data?.invoice?.path}
-            invoiceNumber={data?.invoice?.invoiceNumber}
-            orderCustomerShipment={data?.orderCustomerShipment}
-            paymentStatus={data?.paymentStatus}
+            shipmentNumber={data?.shipmentNumber}
+            cardsNumber={data?.cardsNumber}
+            status={data?.status?.id}
+            dateCreated={data?.createdAt}
+            dateShipped={data?.shippedAt}
+            trackingNumber={data?.trackingNumber}
+            trackingUrl={data?.trackingUrl}
         />
     ));
 
@@ -125,9 +121,9 @@ export function VaultShipmentsTable({ search }: VaulShipmentsTableProps) {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant={'body1'} textAlign={'center'} fontSize={12}>
-                            You have no shipments's yet.
+                            You have no shipments yet.
                             <br />
-                            Click NEW SHIPMENT to get startesd.
+                            Click NEW SHIPMENT to get started.
                         </Typography>
                     </Grid>
                 </Grid>

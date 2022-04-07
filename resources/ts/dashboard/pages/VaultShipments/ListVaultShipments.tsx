@@ -3,12 +3,12 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useState } from 'react';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 import { useNavigate } from 'react-router-dom';
-import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+// import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-import { googleTagManager } from '@shared/lib/utils/googleTagManager';
-import { useListOrdersQuery } from '@shared/redux/hooks/useOrdersQuery';
+// import { googleTagManager } from '@shared/lib/utils/googleTagManager';
+import { useListVaultShipmentsQuery } from '@shared/redux/hooks/useVaultShipmentsQuery';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import { VaultShipmentsTable } from '@dashboard/components/VaultShipmentsTable';
 
@@ -34,20 +34,19 @@ export function ListVaultShipments() {
     const [search, setSearch] = useState('');
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-    const orders$ = useListOrdersQuery({
+    const vaultShipments$ = useListVaultShipmentsQuery({
         params: {
-            filter: { orderNumber: search },
-            include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
+            filter: { shipmentNumber: search },
         },
         ...bracketParams(),
     });
 
     const redirectToNewShipment = useCallback(() => {
-        ReactGA.event({
-            category: EventCategories.Submissions,
-            action: SubmissionEvents.initiated,
-        });
-        googleTagManager({ event: 'google-ads-started-submission-process' });
+        // ReactGA.event({
+        //     category: EventCategories.Submissions,
+        //     action: SubmissionEvents.initiated,
+        // });
+        // googleTagManager({ event: 'google-ads-started-submission-process' });
 
         navigate('/vault-shipments/new');
     }, [navigate]);
@@ -69,7 +68,7 @@ export function ListVaultShipments() {
                 noMargin
                 onSearch={setSearch}
                 actions={isMobile ? $newShipment : null}
-                noSearch={orders$.data.length === 0 && search === ''}
+                noSearch={vaultShipments$.data.length === 0 && search === ''}
             >
                 {!isMobile ? $newShipment : null}
             </ListHeader>

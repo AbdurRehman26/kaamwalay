@@ -36,7 +36,7 @@ export function ListVaultShipments() {
 
     const vaultShipments$ = useListVaultShipmentsQuery({
         params: {
-            filter: { shipmentNumber: search },
+            filter: { search: search },
         },
         ...bracketParams(),
     });

@@ -104,6 +104,11 @@ class VaultShipment extends Model
         return $this->hasMany(VaultShipmentPayment::class);
     }
 
+    /**
+     * @param  Builder<VaultShipment>  $query
+     * @param  User  $user
+     * @return Builder<VaultShipment>
+     */
     public function scopeForUser(Builder $query, User $user): Builder
     {
         return $query->where('vault_shipments.user_id', $user->id);

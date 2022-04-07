@@ -46,7 +46,7 @@ export function VaultShipmentsTable({ search }: VaultShipmentsTableProps) {
 
     const vaultShipments$ = useListVaultShipmentsQuery({
         params: {
-            filter: { shipmentNumber: search },
+            filter: { search: search },
             perPage: 48,
         },
         ...bracketParams(),
@@ -56,7 +56,7 @@ export function VaultShipmentsTable({ search }: VaultShipmentsTableProps) {
         () => {
             if (!vaultShipments$.isLoading) {
                 // noinspection JSIgnoredPromiseFromCall
-                vaultShipments$.search({ shipmentNumber: search });
+                vaultShipments$.search({ search: search });
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

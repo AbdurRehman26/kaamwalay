@@ -156,8 +156,7 @@ class CouponService
 
     public function getCouponsNearingExpiry(): Collection
     {
-        return Coupon::where('available_till', '<=', now())
-            ->get();
+        return Coupon::where('available_till', '<=', now())->isActive()->get();
     }
 
     public function expireCoupons(Collection $coupons): void

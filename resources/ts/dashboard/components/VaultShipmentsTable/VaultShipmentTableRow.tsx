@@ -122,7 +122,7 @@ export function VaultShipmentTableRow(props: VaultShipmentTableRowProps) {
                         </TableCell>
                         <TableCell>
                             {trackingUrl ? (
-                                <MuiLink component={Link} to={trackingUrl} className={classes.shipmentNumber}>
+                                <MuiLink target="_blank" href={trackingUrl} className={classes.shipmentNumber}>
                                     {trackingNumber}
                                 </MuiLink>
                             ) : null}
@@ -154,11 +154,11 @@ export function VaultShipmentTableRow(props: VaultShipmentTableRowProps) {
                             # Cards: <span className={classes.shipmentPropertyValue}>{cardsNumber}</span>
                         </Typography>
                         {trackingUrl ? (
-                            <Link to={trackingUrl} style={{ textDecoration: 'none' }}>
+                            <MuiLink target="_blank" href={trackingUrl} style={{ textDecoration: 'none' }}>
                                 <Typography variant={'caption'} className={classes.shipmentPropertyLabel}>
                                     Tracking #: <span className={classes.shipmentNumber}>{trackingNumber}</span>
                                 </Typography>
-                            </Link>
+                            </MuiLink>
                         ) : null}
                     </div>
 

@@ -17,7 +17,7 @@ class VaultShipmentService
         $user = auth()->user();
         $itemsPerPage = request('per_page');
 
-        $query = VaultShipment::query()->forUser($user);
+        $query = VaultShipment::forUser($user);
 
         return QueryBuilder::for($query)
             ->allowedFilters([AllowedFilter::custom('search', new VaultShipmentSearchFilter)])

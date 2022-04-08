@@ -3,11 +3,8 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useState } from 'react';
-// import ReactGA from 'react-ga';
 import { useNavigate } from 'react-router-dom';
-// import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
 import { bracketParams } from '@shared/lib/api/bracketParams';
-// import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import { useListVaultShipmentsQuery } from '@shared/redux/hooks/useVaultShipmentsQuery';
 import { ListHeader } from '@dashboard/components/ListHeader/ListHeader';
 import { VaultShipmentsTable } from '@dashboard/components/VaultShipmentsTable';
@@ -42,13 +39,7 @@ export function ListVaultShipments() {
     });
 
     const redirectToNewShipment = useCallback(() => {
-        // ReactGA.event({
-        //     category: EventCategories.Submissions,
-        //     action: SubmissionEvents.initiated,
-        // });
-        // googleTagManager({ event: 'google-ads-started-submission-process' });
-
-        navigate('/vault-shipments/new');
+        navigate('/cards');
     }, [navigate]);
 
     function handleOnClick() {

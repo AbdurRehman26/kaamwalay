@@ -40,7 +40,7 @@ export function FeedMobileSortBy() {
         <CustomSortByMobile
             defaultRefinement={`${appEnv}_user_cards`}
             items={[
-                { value: `${appEnv}_user_cards_Descending`, label: 'Most Recent' },
+                { value: `${appEnv}_user_cards`, label: 'Most Recent' },
                 { value: `${appEnv}_user_cards_Ascending`, label: 'Oldest' },
             ]}
         />

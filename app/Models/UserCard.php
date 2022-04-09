@@ -56,7 +56,7 @@ class UserCard extends Model
             'certificate_number' => $this->certificate_number,
             'owner_name' => $this->user->username,
             'grade_nickname' => $this->overall_grade_nickname,
-            'overall_grade' => $this->overall_grade,
+            'grade_overall' => $this->overall_grade,
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
             'grade' => $this->overall_grade_nickname .' '. $this->overall_grade,
         ];

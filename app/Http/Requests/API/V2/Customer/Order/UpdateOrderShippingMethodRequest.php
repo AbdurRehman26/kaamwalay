@@ -22,7 +22,7 @@ class UpdateOrderShippingMethodRequest extends FormRequest
         /** @var Order $order */
         $order = $this->route('order');
 
-        return $user->is($order->user) && $order->isPayable('v2');
+        return $user->is($order->user);
     }
 
     /**

@@ -20,6 +20,7 @@ class EmailService
     public const TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER = 'enter-tracking-robograding';
     public const TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED = 'extra-charge-robograding';
     public const TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED = 'admin-new-submission-robograding';
+    public const TEMPLATE_SLUG_CUSTOMER_ORDER_PAID = 'payment-confirmation';
 
     public const SUBJECT = [
         self::TEMPLATE_SLUG_CUSTOMER_WELCOME => 'Welcome to Robograding!',
@@ -33,6 +34,7 @@ class EmailService
         self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED => 'We have issued a refund on your submission.',
         self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED => 'There has been an extra charge on your submission.',
         self::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED => 'New Robograding Submission!',
+        self::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID => 'Thanks you for your payment!',
     ];
 
     /**

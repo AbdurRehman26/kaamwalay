@@ -692,3 +692,34 @@ test('a customer can not update other user\'s billing address', function () {
     ])
         ->assertForbidden();
 });
+
+test('an order needs addresses when shipping method is insured', function () {
+    $this->actingAs($this->user);
+
+    $response = $this->postJson('/api/v2/customer/orders', [
+        'payment_plan' => [
+            'id' => PaymentPlan::factory()->create([
+                'price' => 300,
+                'max_protection_amount' => 1000000,
+            ])->toArray()['id'],
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 50,
+            ],
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+    ])->dump();
+
+    $response->assertJsonValidationErrors([
+        'customer_address' => 'The customer address field is required.',
+        'shipping_address' => 'The shipping address field is required.',
+        'billing_address' => 'The billing address field is required.',
+    ]);
+});

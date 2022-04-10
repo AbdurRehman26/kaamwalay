@@ -26,9 +26,7 @@ beforeEach(function () {
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
     $this->cardProduct = CardProduct::factory()->create();
-    $this->shippingMethod = ShippingMethod::factory()->create([
-        'code' => ShippingMethod::INSURED_SHIPPING,
-    ]);
+    $this->shippingMethod = ShippingMethod::factory()->insured()->create();
     $this->paymentMethod = PaymentMethod::factory()->create();
     $this->orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
 });
@@ -112,6 +110,8 @@ test('an order needs data', function () {
     $response->assertJsonValidationErrors([
         'payment_plan' => 'The payment plan field is required.',
         'items' => 'The items field is required.',
+        'shipping_address' => 'The shipping address field is required.',
+        'billing_address' => 'The billing address field is required.',
         'shipping_method' => 'The shipping method field is required.',
     ]);
 });

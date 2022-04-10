@@ -36,7 +36,13 @@ class UpdateOrderShippingMethodController extends Controller
                 OrderAddress::create($customerAddress->toArray());
                 $order->shippingAddress()->associate($customerAddress);
             }
-            $orderService->changeShippingMethod($order, $request->input('shipping_method_id'));
+
+            $orderService
+                ->changeShippingMethod($order, $request->input('shipping_method_id'))
+                ->updateShippingFee($order)
+                ->recalculateGrandTotal($order);
+
+            $order->save();
 
             DB::commit();
         } catch (Exception $e) {

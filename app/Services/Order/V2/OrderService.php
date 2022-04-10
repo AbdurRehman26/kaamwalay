@@ -105,32 +105,26 @@ class OrderService extends V1OrderService
         return $order;
     }
 
-    public function changeShippingMethod(Order $order, int $shippingMethodId): void
+    public function changeShippingMethod(Order &$order, int $shippingMethodId): self
     {
         $shippingMethod = ShippingMethod::find($shippingMethodId);
 
         $order->shippingMethod()->associate($shippingMethod);
 
-        $this->updateShippingFee(
-            $order,
-            $this->getShippingFeeForShippingMethod($shippingMethod, $order)
-        )
-            ->adjustGrandTotal($order);
-
-        $order->save();
+        return $this;
     }
 
-    protected function getShippingFeeForShippingMethod(ShippingMethod $shippingMethod, Order $order): float
+    protected function getShippingFeeForShippingMethod(Order $order): float
     {
-        return match ($shippingMethod->code) {
+        return match ($order->shippingMethod->code) {
             ShippingMethod::VAULT_STORAGE => 0.0,
             ShippingMethod::INSURED_SHIPPING => $this->getInsuredShippingFee($order),
         };
     }
 
-    protected function updateShippingFee(Order &$order, $fee): self
+    public function updateShippingFee(Order &$order): self
     {
-        $order->shipping_fee = $fee;
+        $order->shipping_fee = $this->getShippingFeeForShippingMethod($order);
 
         return $this;
     }
@@ -140,9 +134,11 @@ class OrderService extends V1OrderService
         return ShippingFeeService::calculateForOrder($order);
     }
 
-    protected function adjustGrandTotal(Order &$order): void
+    public function recalculateGrandTotal(Order &$order): self
     {
         $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee;
         $order->grand_total = $order->service_fee + $order->shipping_fee - $order->discounted_amount - $order->payment_method_discounted_amount;
+
+        return $this;
     }
 }

@@ -29,6 +29,8 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        DB::table('shipping_methods')
+            ->where('code', 'vault_storage')
+            ->delete();
     }
 };

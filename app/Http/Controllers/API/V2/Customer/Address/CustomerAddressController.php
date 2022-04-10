@@ -9,7 +9,7 @@ use App\Models\CustomerAddress;
 
 class CustomerAddressController extends V1CustomerAddressController
 {
-    public function store(StoreCustomerAddressRequest $request)
+    public function store(StoreCustomerAddressRequest $request): CustomerAddressResource
     {
         $customerAddress = new CustomerAddress($request->validated());
 

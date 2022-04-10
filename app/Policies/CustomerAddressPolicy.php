@@ -33,7 +33,7 @@ class CustomerAddressPolicy
         return $customerAddress->user->is($user);
     }
 
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return true;
     }

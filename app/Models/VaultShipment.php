@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 
 class VaultShipment extends Model
 {
@@ -30,6 +32,25 @@ class VaultShipment extends Model
         'grand_total',
         'shipped_at',
     ];
+
+    public static function getAllowedAdminIncludes(): array
+    {
+        return [
+            AllowedInclude::relationship('user'),
+            AllowedInclude::relationship('vaultShipmentStatus'),
+            AllowedInclude::relationship('billingAddress'),
+            AllowedInclude::relationship('shippingAddress'),
+            AllowedInclude::relationship('vaultShipmentItems'),            
+        ];
+    }
+
+    public static function getAllowedAdminFilters(): array
+    {
+        return [
+            AllowedFilter::exact('vault_shipment_status_id'),
+            AllowedFilter::exact('order_status_id'),
+        ];
+    }
 
     /**
      * @return BelongsTo<User, VaultShipment>

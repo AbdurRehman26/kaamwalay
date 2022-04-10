@@ -26,7 +26,9 @@ beforeEach(function () {
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000, 'price' => 10]);
     $this->cardProduct = CardProduct::factory()->create();
-    $this->shippingMethod = ShippingMethod::factory()->create();
+    $this->shippingMethod = ShippingMethod::factory()->create([
+        'code' => ShippingMethod::INSURED_SHIPPING,
+    ]);
     $this->paymentMethod = PaymentMethod::factory()->create();
     $this->orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
 });
@@ -83,7 +85,7 @@ test('a customer can place order', function () {
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-    ])->dump();
+    ]);
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [

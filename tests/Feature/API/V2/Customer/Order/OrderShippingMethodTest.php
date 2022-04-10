@@ -57,3 +57,48 @@ test('order\'s shipping method can be changed from vault to insured shipping', f
     ])->assertOk();
     expect($this->order->refresh()->shippingMethod->code)->toBe(ShippingMethod::INSURED_SHIPPING);
 });
+
+test('when order shipping method is changed from insured to vault, shipping fee is calculated as 0', function () {
+    putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->order]), [
+        'shipping_method_id' => $this->vaultShippingMethod->id,
+    ])->assertOk();
+
+    expect($this->order->refresh()->shipping_fee)->toBe(0.0);
+});
+
+test('when order shipping method is changed from vault to insured, shipping fee is calculated', function () {
+    $order = Order::factory()->for($this->user)->create([
+        'shipping_method_id' => $this->vaultShippingMethod->id,
+        'shipping_fee' => 0,
+    ]);
+
+    OrderItem::factory()->for($order)->create([
+        'declared_value_total' => 100,
+        'quantity' => 2,
+    ]);
+
+    putJson(route('v2.customer.orders.update-shipping-method', ['order' => $order]), [
+        'shipping_method_id' => $this->insuredShippingMethod->id,
+        'customer_address_id' => \App\Models\CustomerAddress::factory()->for($this->user)->create()->id,
+    ])->assertOk();
+
+    expect($order->refresh()->shipping_fee)->toBe(14.0);
+});
+
+test('shipping method can not be changed for paid order', function () {
+    $order = Order::factory()->for($this->user)->create([
+        'shipping_method_id' => $this->vaultShippingMethod->id,
+        'shipping_fee' => 0,
+        'payment_status' => 2,
+    ]);
+
+    OrderItem::factory()->for($order)->create([
+        'declared_value_total' => 100,
+        'quantity' => 2,
+    ]);
+
+    putJson(route('v2.customer.orders.update-shipping-method', ['order' => $order]), [
+        'shipping_method_id' => $this->insuredShippingMethod->id,
+        'customer_address_id' => \App\Models\CustomerAddress::factory()->for($this->user)->create()->id,
+    ])->assertForbidden();
+});

@@ -114,9 +114,7 @@ class OrderService extends V1OrderService
         $this->updateShippingFee(
             $order,
             $this->getShippingFeeForShippingMethod($shippingMethod, $order)
-        );
-
-        $order->save();
+        )->save();
     }
 
     protected function getShippingFeeForShippingMethod(ShippingMethod $shippingMethod, Order $order): float
@@ -127,9 +125,11 @@ class OrderService extends V1OrderService
         };
     }
 
-    protected function updateShippingFee(Order &$order, $fee): void
+    protected function updateShippingFee(Order &$order, $fee): Order
     {
         $order->shipping_fee = $fee;
+
+        return $order;
     }
 
     protected function getInsuredShippingFee(Order $order): float

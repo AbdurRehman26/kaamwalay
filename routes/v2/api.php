@@ -76,7 +76,8 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
-            Route::put('{order}/shipping-method', UpdateOrderShippingMethodController::class);
+            Route::put('{order}/shipping-method', UpdateOrderShippingMethodController::class)
+                ->name('customer.orders.update-shipping-method');
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);

@@ -715,7 +715,7 @@ test('an order needs addresses when shipping method is insured', function () {
         'shipping_method' => [
             'id' => $this->shippingMethod->id,
         ],
-    ])->dump();
+    ]);
 
     $response->assertJsonValidationErrors([
         'customer_address' => 'The customer address field is required.',

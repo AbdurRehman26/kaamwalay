@@ -43,5 +43,5 @@ test('user can store address', function () {
         'zip' => $this->faker->postcode(),
         'phone' => $this->faker->phoneNumber(),
         'flat' => $this->faker->buildingNumber(),
-    ])->dump()->assertCreated();
+    ])->assertCreated();
 });

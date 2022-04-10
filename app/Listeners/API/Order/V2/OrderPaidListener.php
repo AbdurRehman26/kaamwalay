@@ -6,14 +6,9 @@ use App\Events\API\Customer\Order\OrderPaid;
 use App\Services\EmailService;
 use App\Services\Order\V2\OrderService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class OrderPaidListener implements ShouldQueue
 {
-    use InteractsWithQueue;
-
-    public int $tries = 3;
-
     /**
      * Create the event listener.
      *

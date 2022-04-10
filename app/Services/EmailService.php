@@ -34,7 +34,7 @@ class EmailService
         self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED => 'We have issued a refund on your submission.',
         self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED => 'There has been an extra charge on your submission.',
         self::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED => 'New Robograding Submission!',
-        self::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID => 'Thanks you for your payment!',
+        self::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID => 'Thank you for your payment!',
     ];
 
     /**

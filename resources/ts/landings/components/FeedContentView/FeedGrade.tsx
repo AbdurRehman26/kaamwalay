@@ -55,9 +55,17 @@ const FeedGradeDropdown = styled(Box)(
 
 const styles = {
     MenuItem: {
-        paddingRight: '50px',
         '&:hover': {
             backgroundColor: 'rgba(32, 191, 184, 0.12)',
+        },
+    },
+};
+
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: '260px',
+            borderRadius: '8px',
         },
     },
 };
@@ -82,6 +90,7 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
                             changeClassName('Select');
                         }}
                         className={className}
+                        MenuProps={MenuProps}
                     >
                         <MenuItem sx={{ display: 'none' }} value={'Grade'}>
                             Grade

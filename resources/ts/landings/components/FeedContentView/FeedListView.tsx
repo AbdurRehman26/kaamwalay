@@ -86,7 +86,7 @@ const TableDiv = styled(TableContainer)({
         justifyContent: 'center',
         minWidth: '16%',
         height: '64px',
-        backgroundColor: '#42f9ff',
+        backgroundColor: '#20bfb8',
         borderRadius: '4px',
         color: 'transparentize(#000, 0.13)',
         [theme.breakpoints.up('lg')]: {
@@ -203,7 +203,7 @@ const CustomHits = connectHits(({ hits }) => {
                                     </div>
                                     <div className={'GradeMobile'}>
                                         <Typography className={'GradeLabel'}>{hit.grade_nickname}</Typography>
-                                        <Typography className={'GradeValue'}>{hit.overall_grade}</Typography>
+                                        <Typography className={'GradeValue'}>{hit.grade_overall}</Typography>
                                     </div>
                                 </a>
                             </TableCell>
@@ -226,7 +226,7 @@ const CustomHits = connectHits(({ hits }) => {
                             <TableCell className={'TableGrade'}>
                                 <a href={`feed/${hit.certificate_number}/view`} className={'Grade'}>
                                     <Typography className={'GradeLabel'}>{hit.grade_nickname}</Typography>
-                                    <Typography className={'GradeValue'}>{hit.overall_grade}</Typography>
+                                    <Typography className={'GradeValue'}>{hit.grade_overall}</Typography>
                                 </a>
                             </TableCell>
                         </TableRow>

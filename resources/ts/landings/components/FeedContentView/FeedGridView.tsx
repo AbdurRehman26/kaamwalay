@@ -121,7 +121,7 @@ const CustomHits = connectHits(({ hits }) => {
                             </div>
                             <div className={'GridGradeSection'}>
                                 <Typography className={'GradeNickName'}>{hit.grade_nickname}</Typography>
-                                <Typography className={'OverallGrade'}>{hit.overall_grade}</Typography>
+                                <Typography className={'OverallGrade'}>{hit.grade_overall}</Typography>
                             </div>
                         </div>
                         <div className={'GridImageSection'}>

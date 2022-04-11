@@ -182,6 +182,7 @@ class Coupon extends Model
             'couponLogs',
             'users',
             'paymentPlans',
+            'createdBy',
         ];
     }
 }

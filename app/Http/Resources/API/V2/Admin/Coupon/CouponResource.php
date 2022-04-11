@@ -2,13 +2,17 @@
 
 namespace App\Http\Resources\API\V2\Admin\Coupon;
 
-use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V1\Admin\Coupon\CouponApplicableResource;
+use App\Http\Resources\API\V1\Admin\Coupon\CouponLogCollection;
+use App\Http\Resources\API\V1\Admin\Coupon\CouponResource as V1CouponResource;
+use App\Http\Resources\API\V1\Admin\Coupon\CouponStatResource;
+use App\Http\Resources\API\V1\Admin\Coupon\CouponStatusResource;
 use App\Http\Resources\API\V2\Admin\Coupon\Couponable\CustomerCollection;
 use App\Http\Resources\API\V2\Admin\Coupon\Couponable\PaymentPlanCollection;
 use App\Models\Coupon;
 
 /** @mixin Coupon */
-class CouponResource extends BaseResource
+class CouponResource extends V1CouponResource
 {
     /**
      * Transform the resource into an array.
@@ -36,6 +40,7 @@ class CouponResource extends BaseResource
             'coupon_logs' => $this->whenLoaded('couponLogs', CouponLogCollection::class),
             'payment_plans' => $this->whenLoaded('paymentPlans', PaymentPlanCollection::class),
             'users' => $this->whenLoaded('users', CustomerCollection::class),
+            'created_by' => $this->whenLoaded('createdBy', CouponUserResource::class),
         ];
     }
 }

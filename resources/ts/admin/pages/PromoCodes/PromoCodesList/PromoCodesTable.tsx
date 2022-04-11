@@ -30,7 +30,7 @@ export function PromoCodesTable({ tabFilter, all, search }: PromoCodesTableProps
 
     const promoCodes$ = useListAdminPromoCodesQuery({
         params: {
-            include: ['couponStatus', 'couponStats', 'couponApplicable'],
+            include: ['couponStatus', 'couponStats', 'couponApplicable', 'createdBy'],
             filter: {
                 search,
                 status: all ? 'all' : tabFilter,

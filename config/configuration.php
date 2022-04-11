@@ -76,8 +76,8 @@ return [
             'auth' => true,
             'value' => env('TEST_WALLET'),
         ],
-        'card_category_name' => [
-            'value' => env('CARD_CATEGORY_NAME'),
+        'search_card_categories_customer' => [
+            'value' => env('SEARCH_CARD_CATEGORIES_CUSTOMER'),
         ],
     ],
 ];

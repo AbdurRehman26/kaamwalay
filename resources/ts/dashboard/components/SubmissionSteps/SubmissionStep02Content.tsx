@@ -40,7 +40,7 @@ function SubmissionStep02Content() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const dispatch = useAppDispatch();
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
-    const { appEnv, algoliaAppId, algoliaPublicKey, cardCategoryName } = useConfiguration();
+    const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesCustomer } = useConfiguration();
 
     const searchClient = useMemo(
         () => algoliaSearch(algoliaAppId!, algoliaPublicKey!),
@@ -99,10 +99,13 @@ function SubmissionStep02Content() {
                             </Alert>
                         </>
                     ) : null}
-                    {cardCategoryName ? (
+                    {searchCardCategoriesCustomer ? (
                         <Configure
                             hitsPerPage={20}
-                            filters={`card_category_name:${cardCategoryName.replace(/,/g, ' OR card_category_name:')}`}
+                            filters={`card_category_name:${searchCardCategoriesCustomer.replace(
+                                /,/g,
+                                ' OR card_category_name:',
+                            )}`}
                         />
                     ) : (
                         <Configure hitsPerPage={20} />

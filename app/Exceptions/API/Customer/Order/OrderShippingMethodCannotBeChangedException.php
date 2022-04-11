@@ -13,7 +13,7 @@ class OrderShippingMethodCannotBeChangedException extends Exception
     protected $message = 'Shipping method of the order can not be changed once the order is paid.';
 
     /** @var int */
-    protected $code = Response::HTTP_UNAUTHORIZED;
+    protected $code = Response::HTTP_FORBIDDEN;
 
     /**
      * @param Request|array $request

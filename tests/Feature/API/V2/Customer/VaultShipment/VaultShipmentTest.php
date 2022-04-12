@@ -63,7 +63,7 @@ test('a customer only see own vault shipments', function () {
 });
 
 test('a guest cannot see vault shipments', function () {
-    $response = $this->getJson('/api/v2/customer/vault-shipments/');
+    $response = $this->getJson(route('v2.customer.vault-shipments.index'));
 
     $response->assertUnauthorized();
 });

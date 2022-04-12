@@ -2,17 +2,13 @@
 
 namespace App\Http\Resources\API\V2\Admin\Coupon;
 
-use App\Http\Resources\API\V1\Admin\Coupon\CouponApplicableResource;
-use App\Http\Resources\API\V1\Admin\Coupon\CouponLogCollection;
-use App\Http\Resources\API\V1\Admin\Coupon\CouponResource as V1CouponResource;
-use App\Http\Resources\API\V1\Admin\Coupon\CouponStatResource;
-use App\Http\Resources\API\V1\Admin\Coupon\CouponStatusResource;
+use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Coupon\Couponable\CustomerCollection;
 use App\Http\Resources\API\V2\Admin\Coupon\Couponable\PaymentPlanCollection;
 use App\Models\Coupon;
 
 /** @mixin Coupon */
-class CouponResource extends V1CouponResource
+class CouponResource extends BaseResource
 {
     /**
      * Transform the resource into an array.

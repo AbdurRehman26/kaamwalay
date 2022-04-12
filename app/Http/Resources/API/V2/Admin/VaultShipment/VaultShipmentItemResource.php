@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Admin\Vault;
+namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
-use App\Filament\Resources\UserCardResource;
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V1\Admin\UserCard\UserCardResource;
 
 class VaultShipmentItemResource extends BaseResource
 {
@@ -16,7 +16,7 @@ class VaultShipmentItemResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'user_card' => $this->whenLoaded('vaultShipmentItems', UserCardResource::class),
+            'user_card' => new UserCardResource($this->userCard),
         ];
     }
 }

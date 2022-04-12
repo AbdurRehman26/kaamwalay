@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Admin\Vault;
+namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

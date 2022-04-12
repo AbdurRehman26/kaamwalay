@@ -48,7 +48,7 @@ class VaultShipment extends Model
     {
         return [
             AllowedFilter::exact('vault_shipment_status_id'),
-            AllowedFilter::exact('order_status_id'),
+            // AllowedFilter::exact('shipping_status'),
         ];
     }
 

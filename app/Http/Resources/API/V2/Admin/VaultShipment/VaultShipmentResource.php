@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Admin\Vault;
+namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderCustomerResource;
@@ -25,9 +25,10 @@ class VaultShipmentResource extends BaseResource
             'status' => $this->whenLoaded('vaultShipmentStatus', VaultShipmentStatusResource::class),
             'billing_address' => $this->whenLoaded('billingAddress', OrderAddressResource::class),
             'shipping_address' => $this->whenLoaded('shippingAddress', OrderAddressResource::class),
-            'shipment_item' => $this->whenLoaded('vaultShipmentItems', VaultShipmentItemCollection::class),
+            'vault_shipment_item' => $this->whenLoaded('vaultShipmentItems', VaultShipmentItemCollection::class),
             'cards_number' => $this->vaultShipmentItems()->count(),
             'tracking_number' => $this->tracking_number,
+            'shipping_provider' => $this->shipping_provider,
             'tracking_url' => $this->tracking_url,
         ];
     }

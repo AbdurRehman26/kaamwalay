@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Admin\Vault;
+namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
 use App\Http\Resources\API\BaseResource;
 
-class VaultItemResource extends BaseResource
+class VaultShipmentStatusResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
@@ -15,7 +15,10 @@ class VaultItemResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'user_card' => $this->id, 
+            'id' => $this->id,
+            'code' => $this->code,
+            'name' => $this->name,
+            'description' => $this->description
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace App\Services\Admin\V2;
 use App\Models\VaultShipment;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class VaultService {
+class VaultShipmentService {
     protected const LIST_VAULT_PER_PAGE = 15;
 
     public function getVaultCards() {
@@ -22,7 +22,10 @@ class VaultService {
         $vaultShipment->tracking_number = $trackingNumber;
         $vaultShipment->tracking_url = $this->getTrackingUrl($shippingProvider, $trackingNumber);
 
+        // TODO: add status to user card  
         $vaultShipment->save();
+
+        return $vaultShipment;
     }
 
     protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): ?string

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\API\V2\Admin\Vault;
+namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class VaultItemCollection extends ResourceCollection
+class VaultShipmentCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

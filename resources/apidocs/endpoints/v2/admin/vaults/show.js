@@ -1,7 +1,7 @@
 /**
- * @api {get} /v2/admin/vauls/1 Show Vault
- * @apiName Show Vault
- * @apiGroup Admin Vaults
+ * @api {get} /v2/admin/vaultshipments/1 Show Vault Shipment
+ * @apiName Show Vault Shipment
+ * @apiGroup Admin Vault Shipment
  *
  * @apiVersion 2.0.0
  *

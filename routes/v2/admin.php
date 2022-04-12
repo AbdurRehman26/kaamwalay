@@ -89,7 +89,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             ->name('customer.wallet.history');
     });
     
-    // Vault
+    // Vault Shipment
     Route::prefix('vaultshipments')->group(function () {
         Route::get('/', [VaultShipmentController::class, 'index']);
         Route::get('{vaultshipment}', [VaultShipmentController::class, 'show']);

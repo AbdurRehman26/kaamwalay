@@ -1,7 +1,7 @@
 /**
- * @api {post} /v2/admin/orders/1/shipment Update Shipment
- * @apiName Update Shipment
- * @apiGroup Admin Vaults
+ * @api {post} /v2/admin/vaultshipments/1/shipment Update Vault Shipment
+ * @apiName Update Vault Shipment
+ * @apiGroup Admin Vault Shipment
  *
  * @apiVersion 2.0.0
  *

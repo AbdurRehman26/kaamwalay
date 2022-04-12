@@ -3,6 +3,8 @@
 namespace App\Services\Admin\V2;
 
 use App\Models\VaultShipment;
+use App\Models\VaultShipmentStatus;
+use App\Models\VaultShipmentStatusHistory;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class VaultShipmentService {
@@ -17,16 +19,29 @@ class VaultShipmentService {
     }
 
     public function updateShipment(VaultShipment $vaultShipment, $shippingProvider, $trackingNumber) {
-
+        
+        $vaultShipment = VaultShipment::find(19);        
         $vaultShipment->shipping_provider = $shippingProvider;
         $vaultShipment->tracking_number = $trackingNumber;
         $vaultShipment->tracking_url = $this->getTrackingUrl($shippingProvider, $trackingNumber);
+        // status update 
+        // cards status 
+        // shipment status history
+        // card status 
 
         // TODO: add status to user card  
         $vaultShipment->save();
 
+        // VaultShipmentStatusHistory::create([
+        //     'vault_shipment_id' => $vaultShipment->id,
+        //     'vault_shipment_status_id' => VaultShipmentStatus::SHIPPED,
+        //     'user_id' => $vaultShipment->user->id,
+        // ]);
+
         return $vaultShipment;
     }
+
+    //changeshipmentstatus 
 
     protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): ?string
     {

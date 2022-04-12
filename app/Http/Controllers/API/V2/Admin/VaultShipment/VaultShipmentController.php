@@ -26,7 +26,7 @@ class VaultShipmentController extends Controller
     }
 
     public function updateShipment(VaultShipmentRequest $request, VaultShipment $vaultShipment) {
-        dd($vaultShipment);
+        // dd($vaultShipment);
         $result = $this->vaultShipmentService->updateShipment($vaultShipment, $request->shipping_provider, $request->tracking_number);
         return new VaultShipmentResource($result);
     }

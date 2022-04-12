@@ -14,7 +14,7 @@ class ScheduledEmail extends Model
      *
      * @var array
      */
-    protected $fillable = ['send_at', 'payload', 'is_sent'];
+    protected $fillable = ['send_at', 'payload', 'is_sent', 'rescheduling_required', 'rescheduling_check_class'];
 
     /**
      * The attributes that should be cast to native types.
@@ -24,5 +24,11 @@ class ScheduledEmail extends Model
     protected $casts = [
         'send_at' => 'datetime',
         'is_sent' => 'boolean',
+        'rescheduling_required' => 'boolean',
     ];
+
+    public function reschedulingIsRequired(): bool
+    {
+        return $this->rescheduling_required;
+    }
 }

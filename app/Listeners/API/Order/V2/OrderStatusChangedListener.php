@@ -110,6 +110,22 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
             ['ORDER_NUMBER' => $event->order->order_number]
         );
+
+        $this->sendEmail(
+            $event,
+            EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
+            $this->orderService->getDataForCustomerPaymentReminder($event->order)
+        );
+
+        $this->scheduleEmail(
+            $event,
+            now()->addDays(2),
+            EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
+            $this->orderService->getDataForCustomerPaymentReminder($event->order),
+            ['order_id' => $event->order->id],
+            true,
+            'OrderPaymentDueReminder'
+        );
     }
 
     protected function handleShipped(OrderStatusChangedEvent $event): void
@@ -144,14 +160,24 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function scheduleEmail(OrderStatusChangedEvent $event, DateTime $sendAt, string $template, array $vars): void
-    {
+    protected function scheduleEmail(
+        OrderStatusChangedEvent $event,
+        DateTime $sendAt,
+        string $template,
+        array $vars,
+        array $extras = [],
+        bool $reschedulingRequired = false,
+        string $reschedulingCheckClass = null
+    ): void {
         $this->emailService->scheduleEmail(
             $sendAt,
             [[$event->order->user->email => $event->order->user->getFullName()]],
             $this->emailService->getSubjectByTemplate($template),
             $template,
-            $vars
+            $vars,
+            $extras,
+            $reschedulingRequired,
+            $reschedulingCheckClass
         );
     }
 

@@ -577,6 +577,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string|null $order_number
+ * @property \App\Enums\Order\OrderStepEnum $order_step
  * @property float|null $service_fee
  * @property float|null $shipping_fee
  * @property float|null $grand_total
@@ -642,6 +643,7 @@ namespace App\Models{
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerId(string $customerId)
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerName(string $customerName)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order excludeCancelled()
  * @method static \Database\Factories\OrderFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Order forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
@@ -668,6 +670,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderShipmentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStep($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaidAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodDiscountedAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethodId($value)
@@ -939,7 +942,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $order_id
- * @property int $payment_method_id
+ * @property int|null $payment_method_id
  * @property string|null $request
  * @property string|null $response
  * @property string|null $payment_provider_reference_id
@@ -953,7 +956,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\Order $order
- * @property-read \App\Models\PaymentMethod $paymentMethod
+ * @property-read \App\Models\PaymentMethod|null $paymentMethod
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\OrderPaymentFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderPayment forDate(string $date)
@@ -1185,6 +1188,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardProduct $cardProduct
+ * @method static \Database\Factories\PopReportsCardFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsCard query()
@@ -1248,6 +1252,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\CardSeries|null $cardSeries
+ * @method static \Database\Factories\PopReportsSeriesFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSeries query()
@@ -1310,6 +1315,8 @@ namespace App\Models{
  * @property int $total_plus
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CardSet $cardSet
+ * @method static \Database\Factories\PopReportsSetFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PopReportsSet query()
@@ -1397,6 +1404,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon $send_at
  * @property string $payload
  * @property bool $is_sent
+ * @property int $rescheduling_required Decides if this scheduled email needs rescheduling
+ * @property string|null $rescheduling_check_class Class path of class which decides further rescheduling
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\ScheduledEmailFactory factory(...$parameters)
@@ -1407,6 +1416,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereIsSent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail wherePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereReschedulingCheckClass($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereReschedulingRequired($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereSendAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereUpdatedAt($value)
  */
@@ -1545,6 +1556,7 @@ namespace App\Models{
  * @property string|null $certificate_number
  * @property mixed|null $ai_model_numbers
  * @property array|null $generated_images
+ * @property int|null $shipping_status 0 => in vault, 1 => shipping requested, 2 => shipped
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property float|null $grade_delta
@@ -1553,6 +1565,7 @@ namespace App\Models{
  * @property-read \App\Models\OrderItem $orderItem
  * @property-read \App\Models\User $user
  * @property-read \App\Models\UserCardCertificate|null $userCardCertificate
+ * @property-read \App\Models\VaultShipmentItem|null $vaultShipmentItem
  * @method static \Database\Factories\UserCardFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard newQuery()
@@ -1570,6 +1583,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereOverallGradeNickname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereOverallValues($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereRoboGradeValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereShippingStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereUserId($value)
  */
@@ -1622,6 +1636,180 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserDevice whereUserId($value)
  */
 	class UserDevice extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\VaultShipment
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $shipping_address_id
+ * @property int $billing_address_id
+ * @property int $vault_shipment_status_id
+ * @property int|null $coupon_id
+ * @property int $shipping_method_id
+ * @property string $shipment_number
+ * @property string|null $tracking_number
+ * @property string|null $tracking_url
+ * @property string|null $shipping_provider
+ * @property string $shipping_fee
+ * @property string $payment_method_discount
+ * @property string $amount_paid_from_wallet
+ * @property string $discounted_amount
+ * @property string $grand_total
+ * @property string|null $shipped_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\OrderAddress $billingAddress
+ * @property-read \App\Models\Coupon|null $coupon
+ * @property-read \App\Models\OrderAddress $shippingAddress
+ * @property-read \App\Models\ShippingMethod $shippingMethod
+ * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentItem[] $vaultShipmentItems
+ * @property-read int|null $vault_shipment_items_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentPayment[] $vaultShipmentPayments
+ * @property-read int|null $vault_shipment_payments_count
+ * @property-read \App\Models\VaultShipmentStatus $vaultShipmentStatus
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentStatusHistory[] $vaultShipmentStatusHistories
+ * @property-read int|null $vault_shipment_status_histories_count
+ * @method static \Database\Factories\VaultShipmentFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereAmountPaidFromWallet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereBillingAddressId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereCouponId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereDiscountedAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereGrandTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment wherePaymentMethodDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereShipmentNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereShippedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereShippingAddressId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereShippingFee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereShippingMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereShippingProvider($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereTrackingNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereTrackingUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment whereVaultShipmentStatusId($value)
+ */
+	class VaultShipment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\VaultShipmentItem
+ *
+ * @property int $id
+ * @property int $user_card_id
+ * @property int $vault_shipment_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\UserCard $userCard
+ * @property-read \App\Models\VaultShipment $vaultShipment
+ * @method static \Database\Factories\VaultShipmentItemFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem whereUserCardId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentItem whereVaultShipmentId($value)
+ */
+	class VaultShipmentItem extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\VaultShipmentPayment
+ *
+ * @property int $id
+ * @property int $vault_shipment_id
+ * @property int $payment_method_id
+ * @property string|null $request
+ * @property string|null $response
+ * @property string|null $payment_provider_reference_id
+ * @property string $amount
+ * @property string $provider_fee
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\PaymentMethod $paymentMethod
+ * @property-read \App\Models\VaultShipment $vaultShipment
+ * @method static \Database\Factories\VaultShipmentPaymentFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment wherePaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment wherePaymentProviderReferenceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment whereProviderFee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment whereRequest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment whereResponse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentPayment whereVaultShipmentId($value)
+ */
+	class VaultShipmentPayment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\VaultShipmentStatus
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentStatusHistory[] $vaultShipmentStatusHistories
+ * @property-read int|null $vault_shipment_status_histories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipment[] $vaultShipments
+ * @property-read int|null $vault_shipments_count
+ * @method static \Database\Factories\VaultShipmentStatusFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatus whereUpdatedAt($value)
+ */
+	class VaultShipmentStatus extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\VaultShipmentStatusHistory
+ *
+ * @property int $id
+ * @property int $vault_shipment_status_id
+ * @property int $vault_shipment_id
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\VaultShipment $vaultShipment
+ * @property-read \App\Models\VaultShipmentStatus $vaultShipmentStatus
+ * @method static \Database\Factories\VaultShipmentStatusHistoryFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory query()
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory whereVaultShipmentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipmentStatusHistory whereVaultShipmentStatusId($value)
+ */
+	class VaultShipmentStatusHistory extends \Eloquent {}
 }
 
 namespace App\Models{

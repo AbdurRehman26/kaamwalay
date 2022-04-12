@@ -4,6 +4,7 @@ namespace App\Jobs\Email;
 
 use App\Http\APIClients\MandrillClient;
 use App\Models\ScheduledEmail;
+use App\Services\Email\RescheduleEmailCheckInterface;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -38,6 +39,15 @@ class SendScheduledEmail implements ShouldQueue
      */
     public function handle(MandrillClient $mandrillClient)
     {
+        $this->processEmail($mandrillClient);
+        $this->rescheduleEmail();
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function processEmail(MandrillClient $mandrillClient): void
+    {
         $payload = unserialize($this->scheduledEmail->payload);
 
         $response = $mandrillClient->sendEmailWithTemplate(
@@ -57,5 +67,29 @@ class SendScheduledEmail implements ShouldQueue
 
         $this->scheduledEmail->is_sent = 1;
         $this->scheduledEmail->save();
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function rescheduleEmail(): void
+    {
+        if ($this->scheduledEmail->reschedulingIsRequired()) {
+            $className = 'App\\Services\\Email\\ReschedulingCheck\\' . $this->scheduledEmail->rescheduling_check_class;
+            $reschedulingCheckClass = new $className;
+
+            if (! $reschedulingCheckClass instanceof RescheduleEmailCheckInterface) {
+                throw new Exception('Reschedule email needs to implement correct interface.');
+            }
+
+            if (! $reschedulingCheckClass->needsRescheduling($this->scheduledEmail)) {
+                return;
+            }
+
+            $scheduledEmail = $this->scheduledEmail->replicate();
+            $scheduledEmail->send_at = $reschedulingCheckClass->getNextSendAt($this->scheduledEmail);
+            $scheduledEmail->is_sent = 0;
+            $scheduledEmail->save();
+        }
     }
 }

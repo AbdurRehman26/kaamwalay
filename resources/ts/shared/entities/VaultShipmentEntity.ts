@@ -11,7 +11,7 @@ export class VaultShipmentEntity extends Entity {
     public trackingUrl!: string;
 
     @Type(() => VaultShipmentStatusEntity)
-    public status!: VaultShipmentStatusEntity;
+    public vaultShipmentStatus!: VaultShipmentStatusEntity;
 
     @DateField()
     public shippedAt!: Moment;

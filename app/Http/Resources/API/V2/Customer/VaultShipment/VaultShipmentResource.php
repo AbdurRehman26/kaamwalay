@@ -21,10 +21,10 @@ class VaultShipmentResource extends BaseResource
             'shipment_number' => $this->shipment_number,
             'created_at' => $this->formatDate($this->created_at),
             'shipped_at' => $this->formatDate($this->shipped_at),
-            'status' => new VaultShipmentStatusResource($this->vaultShipmentStatus),
             'cards_number' => $this->vaultShipmentItems()->count(),
             'tracking_number' => $this->tracking_number,
             'tracking_url' => $this->tracking_url,
+            'vault_shipment_status' => $this->whenLoaded('vaultShipmentStatus', VaultShipmentStatusResource::class),
         ];
     }
 }

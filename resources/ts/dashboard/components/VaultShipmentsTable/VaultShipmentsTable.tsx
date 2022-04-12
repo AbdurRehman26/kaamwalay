@@ -46,6 +46,7 @@ export function VaultShipmentsTable({ search }: VaultShipmentsTableProps) {
 
     const vaultShipments$ = useListVaultShipmentsQuery({
         params: {
+            include: ['vaultShipmentStatus'],
             filter: { search: search },
             perPage: 48,
         },
@@ -99,7 +100,7 @@ export function VaultShipmentsTable({ search }: VaultShipmentsTableProps) {
             isSm={isSm}
             shipmentNumber={data?.shipmentNumber}
             cardsNumber={data?.cardsNumber}
-            status={data?.status?.id}
+            vaultShipmentStatus={data?.vaultShipmentStatus?.id}
             dateCreated={data?.createdAt}
             dateShipped={data?.shippedAt}
             trackingNumber={data?.trackingNumber}

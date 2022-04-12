@@ -15,13 +15,13 @@ class VaultShipmentService
     {
         /* @var User $user */
         $user = auth()->user();
-        $itemsPerPage = request('per_page');
 
         $query = VaultShipment::forUser($user);
 
         return QueryBuilder::for($query)
             ->allowedFilters([AllowedFilter::custom('search', new VaultShipmentSearchFilter)])
+            ->allowedIncludes(VaultShipment::getAllowedIncludes())
             ->defaultSort('-vault_shipments.created_at')
-            ->paginate($itemsPerPage);
+            ->paginate(request('per_page'));
     }
 }

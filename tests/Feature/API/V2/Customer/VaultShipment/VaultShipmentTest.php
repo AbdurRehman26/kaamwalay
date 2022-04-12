@@ -41,29 +41,17 @@ test('a customer only see own vault shipments', function () {
 
     $this->actingAs($this->user);
 
-    $response = $this->getJson('/api/v2/customer/vault-shipments');
+    $response = $this->getJson(route('v2.customer.vault-shipments.index', ['include[]' => 'vaultShipmentStatus']));
 
     $response->assertOk();
     $response->assertJsonCount(2, ['data']);
-    $response->assertJsonStructure([
-        'data' => [[
-            'cards_number',
-            'created_at',
-            'id',
-            'shipment_number',
-            'shipped_at',
-            'status' => ['id', 'code', 'name', 'description'],
-            'tracking_number',
-            'tracking_url',
-        ]],
-    ]);
     $response->assertJsonFragment([
         'cards_number' => $this->shipments[0]->vaultShipmentItems()->count(),
         'created_at' => $this->shipments[0]->created_at,
         'id' => $this->shipments[0]->id,
         'shipment_number' => $this->shipments[0]->shipment_number,
         'shipped_at' => $this->shipments[0]->shipped_at,
-        'status' => [
+        'vault_shipment_status' => [
             'id' => $this->shipments[0]->vaultShipmentStatus->id,
             'code' => $this->shipments[0]->vaultShipmentStatus->code,
             'name' => $this->shipments[0]->vaultShipmentStatus->name,
@@ -83,29 +71,22 @@ test('a guest cannot see vault shipments', function () {
 test('a customer can search shipments by shipment number', function () {
     $this->actingAs($this->user);
 
-    $response = $this->getJson('/api/v2/customer/vault-shipments?filter[search]=' . $this->shipments[0]->shipment_number);
+    $response = $this->getJson(
+        route('v2.customer.vault-shipments.index', [
+            'filter[search]' => $this->shipments[0]->shipment_number,
+            'include[]' => 'vaultShipmentStatus',
+        ])
+    );
 
     $response->assertOk();
     $response->assertJsonCount(1, ['data']);
-    $response->assertJsonStructure([
-        'data' => [[
-            'cards_number',
-            'created_at',
-            'id',
-            'shipment_number',
-            'shipped_at',
-            'status' => ['id', 'code', 'name', 'description'],
-            'tracking_number',
-            'tracking_url',
-        ]],
-    ]);
     $response->assertJsonFragment([
         'cards_number' => $this->shipments[0]->vaultShipmentItems()->count(),
         'created_at' => $this->shipments[0]->created_at,
         'id' => $this->shipments[0]->id,
         'shipment_number' => $this->shipments[0]->shipment_number,
         'shipped_at' => $this->shipments[0]->shipped_at,
-        'status' => [
+        'vault_shipment_status' => [
             'id' => $this->shipments[0]->vaultShipmentStatus->id,
             'code' => $this->shipments[0]->vaultShipmentStatus->code,
             'name' => $this->shipments[0]->vaultShipmentStatus->name,
@@ -119,29 +100,22 @@ test('a customer can search shipments by shipment number', function () {
 test('a customer can search shipments by item certificate number', function () {
     $this->actingAs($this->user);
 
-    $response = $this->getJson('/api/v2/customer/vault-shipments?filter[search]=' . $this->shipments[0]->vaultShipmentItems[0]->userCard->certificate_number);
+    $response = $this->getJson(
+        route('v2.customer.vault-shipments.index', [
+            'filter[search]' => $this->shipments[0]->vaultShipmentItems[0]->userCard->certificate_number,
+            'include[]' => 'vaultShipmentStatus',
+        ])
+    );
 
     $response->assertOk();
     $response->assertJsonCount(1, ['data']);
-    $response->assertJsonStructure([
-        'data' => [[
-            'cards_number',
-            'created_at',
-            'id',
-            'shipment_number',
-            'shipped_at',
-            'status' => ['id', 'code', 'name', 'description'],
-            'tracking_number',
-            'tracking_url',
-        ]],
-    ]);
     $response->assertJsonFragment([
         'cards_number' => $this->shipments[0]->vaultShipmentItems()->count(),
         'created_at' => $this->shipments[0]->created_at,
         'id' => $this->shipments[0]->id,
         'shipment_number' => $this->shipments[0]->shipment_number,
         'shipped_at' => $this->shipments[0]->shipped_at,
-        'status' => [
+        'vault_shipment_status' => [
             'id' => $this->shipments[0]->vaultShipmentStatus->id,
             'code' => $this->shipments[0]->vaultShipmentStatus->code,
             'name' => $this->shipments[0]->vaultShipmentStatus->name,

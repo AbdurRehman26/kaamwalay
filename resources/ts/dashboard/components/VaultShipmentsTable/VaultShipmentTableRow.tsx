@@ -15,7 +15,7 @@ interface VaultShipmentTableRowProps {
     id: number;
     shipmentNumber: string;
     cardsNumber: number;
-    status: VaultShipmentStatusEnum;
+    vaultShipmentStatus: VaultShipmentStatusEnum;
     trackingNumber?: string;
     trackingUrl?: string;
     isSm?: boolean;
@@ -78,7 +78,7 @@ export function VaultShipmentTableRow(props: VaultShipmentTableRowProps) {
         dateCreated,
         dateShipped,
         cardsNumber,
-        status,
+        vaultShipmentStatus,
         isSm,
         trackingNumber,
         trackingUrl = '',
@@ -110,8 +110,10 @@ export function VaultShipmentTableRow(props: VaultShipmentTableRowProps) {
                         <TableCell>
                             <Link to={shipmentViewUrl} className={classes.linkText}>
                                 <VaultShipmentStatusChip
-                                    color={status || VaultShipmentStatusEnum.PENDING}
-                                    label={VaultShipmentStatusMap[status || VaultShipmentStatusEnum.PENDING]}
+                                    color={vaultShipmentStatus || VaultShipmentStatusEnum.PENDING}
+                                    label={
+                                        VaultShipmentStatusMap[vaultShipmentStatus || VaultShipmentStatusEnum.PENDING]
+                                    }
                                 />
                             </Link>
                         </TableCell>
@@ -165,8 +167,8 @@ export function VaultShipmentTableRow(props: VaultShipmentTableRowProps) {
                     <div className={classes.shipmentRightSide}>
                         <Stack spacing={2}>
                             <VaultShipmentStatusChip
-                                color={status || VaultShipmentStatusEnum.PENDING}
-                                label={VaultShipmentStatusMap[status || VaultShipmentStatusEnum.PENDING]}
+                                color={vaultShipmentStatus || VaultShipmentStatusEnum.PENDING}
+                                label={VaultShipmentStatusMap[vaultShipmentStatus || VaultShipmentStatusEnum.PENDING]}
                             />
                         </Stack>
                     </div>

@@ -15,18 +15,22 @@ class VaultShipmentController extends Controller
     {
     }
 
-    public function index() {
-        $vault = $this->vaultShipmentService->getVaultCards();
-        return new VaultShipmentCollection($vault);
+    public function index(): VaultShipmentCollection
+    {
+        return new VaultShipmentCollection(
+            $this->vaultShipmentService->getVaultCards()
+        );
     }
 
-    public function show(int $vaultId) {
-        $vault = $this->vaultShipmentService->getVault($vaultId);
-        return new VaultShipmentResource($vault); 
+    public function show(VaultShipment $vaultShipment): VaultShipmentResource
+    {
+        return new VaultShipmentResource(
+            $vaultShipment
+        );
     }
 
-    public function updateShipment(VaultShipmentRequest $request, VaultShipment $vaultShipment) {
-        // dd($vaultShipment);
+    public function updateShipment(VaultShipment $vaultShipment, VaultShipmentRequest $request) {
+        dd($vaultShipment);
         $result = $this->vaultShipmentService->updateShipment($vaultShipment, $request->shipping_provider, $request->tracking_number);
         return new VaultShipmentResource($result);
     }

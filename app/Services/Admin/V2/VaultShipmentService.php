@@ -14,12 +14,9 @@ class VaultShipmentService {
         return QueryBuilder::for(VaultShipment::class)->allowedFilters(VaultShipment::getAllowedAdminFilters())->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->paginate((request('per_page', self::LIST_VAULT_PER_PAGE)));
     }
 
-    public function getVault(int $vaultId) {
-        return QueryBuilder::for(VaultShipment::class)->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->findOrFail($vaultId);
-    }
-
     public function updateShipment(VaultShipment $vaultShipment, $shippingProvider, $trackingNumber) {
-        
+
+        dd($vaultShipment);
         $vaultShipment = VaultShipment::find(19);        
         $vaultShipment->shipping_provider = $shippingProvider;
         $vaultShipment->tracking_number = $trackingNumber;
@@ -41,7 +38,7 @@ class VaultShipmentService {
         return $vaultShipment;
     }
 
-    //changeshipmentstatus 
+    //changeShipmentStatus
 
     protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): ?string
     {

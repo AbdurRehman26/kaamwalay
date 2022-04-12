@@ -22,24 +22,12 @@ class ShipmentService
     public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderShipment
     {
         /** @var OrderShipment $orderShipment */
-        $orderShipment = $order->orderShipment;
-
-        if (! empty($orderShipment)) {
-            $orderShipment->update([
-                'shipping_provider' => $shippingProvider,
-                'tracking_number' => $trackingNumber,
-                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
-            ]);
-        } else {
-            $orderShipment = OrderShipment::create([
-                'shipping_provider' => $shippingProvider,
-                'tracking_number' => $trackingNumber,
-                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
-                'shipping_method_id' => $order->shipping_method_id,
-            ]);
-
-            $order->orderShipment()->associate($orderShipment)->save();
-        }
+        $orderShipment = $order->orderShipment()->updateOrCreate([
+            'shipping_provider' => $shippingProvider,
+            'tracking_number' => $trackingNumber,
+            'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
+            'shipping_method_id' => $order->shipping_method_id,
+        ]);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
 

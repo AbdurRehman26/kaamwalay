@@ -9,8 +9,12 @@ use App\Events\API\Admin\Order\UnpaidOrderRefund;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
+use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V1\OrderService as V1OrderService;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -106,5 +110,31 @@ class OrderService extends V1OrderService
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
+    }
+
+    public function shipOrder(Order $order, ShipmentService $shipmentService, array $data)
+    {
+        return match ($order->shippingMethod->code) {
+            ShippingMethod::INSURED_SHIPPING => $shipmentService->updateShipment($order, ...$data),
+            default => $this->storeOrderItemsInVault($order),
+        };
+    }
+
+    protected function storeOrderItemsInVault(Order $order)
+    {
+        $order
+            ->orderItems()
+            ->whereHas('userCard')
+            ->get()
+            ->each(fn (OrderItem $orderItem) => ($orderItem->userCard->storeInVault()));
+
+        /** @var OrderStatusHistoryService $orderStatusHistoryService */
+        $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+
+        $orderStatusHistoryService->addStatusToOrder(
+            OrderStatus::SHIPPED,
+            $order,
+            auth()->user(),
+        );
     }
 }

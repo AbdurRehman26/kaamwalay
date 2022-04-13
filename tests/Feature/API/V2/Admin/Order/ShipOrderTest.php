@@ -33,7 +33,7 @@ test('an admin can ship order when shipping method is insured', function () {
     postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment', [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
-    ])->dump()
+    ])
         ->assertSuccessful()
         ->assertJsonFragment([
             'shipping_provider' => 'usps',

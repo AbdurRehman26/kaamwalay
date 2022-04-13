@@ -6,23 +6,24 @@ use App\Models\VaultShipment;
 use App\Models\VaultShipmentStatus;
 use App\Models\VaultShipmentStatusHistory;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class VaultShipmentService
 {
     protected const LIST_VAULT_PER_PAGE = 15;
 
-    public function getVaultCards(): LengthAwarePaginator
+    public function getVaultShipments(): LengthAwarePaginator
     {
         return QueryBuilder::for(VaultShipment::class)->allowedFilters(VaultShipment::getAllowedAdminFilters())->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->paginate((request('per_page', self::LIST_VAULT_PER_PAGE)));
     }
 
-    public function getVault(int $vaultId)
+    public function getVaultShipment(int $vaultId): Model
     {
         return QueryBuilder::for(VaultShipment::class)->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->findOrFail($vaultId);
     }
 
-    public function updateShipment(VaultShipment $vaultShipment, $shippingProvider, $trackingNumber): VaultShipment
+    public function updateShipment(VaultShipment $vaultShipment, string $shippingProvider, string $trackingNumber): VaultShipment
     {
         $vaultShipment->update([
             'shipping_provider' => $shippingProvider,
@@ -36,7 +37,7 @@ class VaultShipmentService
         return $vaultShipment;
     }
 
-    protected function addVaultShipmentStatusHistory(int $vaultShipmentStatus, VaultShipment $vaultShipment)
+    protected function addVaultShipmentStatusHistory(int $vaultShipmentStatus, VaultShipment $vaultShipment): void
     {
         VaultShipmentStatusHistory::updateOrCreate([
                 'vault_shipment_id' => $vaultShipment->id,

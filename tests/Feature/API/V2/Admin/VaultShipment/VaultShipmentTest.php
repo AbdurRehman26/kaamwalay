@@ -20,17 +20,41 @@ beforeEach(function () {
 });
 
 it('admin can get vault shipment list', function () {
-    $response = $this->getJson('/api/v2/admin/vaultshipments');
+    $response = $this->getJson('/api/v2/admin/vault-shipments');
     $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            [
+                'id',
+                'shipment_number',
+                'shipped_at',
+                'cards_number',
+                'tracking_number',
+                'shipping_provider',
+                'tracking_url',
+            ],
+        ],
+    ]);
 });
 
 it('admin can get single vault shipment', function () {
-    $response = $this->getJson('/api/v2/admin/vaultshipments/'. $this->vault->id);
+    $response = $this->getJson('/api/v2/admin/vault-shipments/'. $this->vault->id);
     $response->assertSuccessful();
+    $response->assertJsonStructure([
+        'data' => [
+            'id',
+            'shipment_number',
+            'shipped_at',
+            'cards_number',
+            'tracking_number',
+            'shipping_provider',
+            'tracking_url',
+        ]
+    ]);
 });
 
      test('an admin update vault shipment', function () {
-         $this->postJson('/api/v2/admin/vaultshipments/'. $this->vault->id .'/shipment', [
+         $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
              'shipping_provider' => 'usps',
              'tracking_number' => '9400100000000000000000',
          ])

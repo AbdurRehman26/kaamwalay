@@ -18,19 +18,21 @@ class VaultShipmentController extends Controller
     public function index(): VaultShipmentCollection
     {
         return new VaultShipmentCollection(
-            $this->vaultShipmentService->getVaultCards()
+            $this->vaultShipmentService->getVaultShipments()
         );
     }
 
     public function show(int $vaultShipmentId): VaultShipmentResource
     {
         return new VaultShipmentResource(
-            $this->vaultShipmentService->getVault($vaultShipmentId)
+            $this->vaultShipmentService->getVaultShipment($vaultShipmentId)
         );
     }
 
-    public function updateShipment(VaultShipment $vaultShipment, VaultShipmentRequest $request) {
+    public function updateShipment(VaultShipment $vaultShipment, VaultShipmentRequest $request): VaultShipmentResource
+    {
         $result = $this->vaultShipmentService->updateShipment($vaultShipment, $request->shipping_provider, $request->tracking_number);
+
         return new VaultShipmentResource($result);
     }
 }

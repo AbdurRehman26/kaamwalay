@@ -4,6 +4,12 @@ namespace App\Http\Resources\API\V2\Admin\VaultShipment;
 
 use App\Http\Resources\API\BaseResource;
 
+/**
+ * @property mixed $id
+ * @property mixed $code
+ * @property mixed $name
+ * @property mixed $description
+ */
 class VaultShipmentStatusResource extends BaseResource
 {
     /**

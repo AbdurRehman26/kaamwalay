@@ -1,5 +1,5 @@
 /**
- * @api {post} /v2/admin/vaultshipments/1/shipment Update Vault Shipment
+ * @api {put} /v2/admin/vault-shipments/1/shipment Update Vault Shipment
  * @apiName Update Vault Shipment
  * @apiGroup Admin Vault Shipment
  *
@@ -8,7 +8,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {Integer} id Vault unique ID
+ * @apiParam {Integer} id Vault Shipment unique ID
  * @apiParamExample {json} Request-Example:
  *      {
  *          "shipping_provider": "usps",

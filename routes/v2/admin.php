@@ -93,7 +93,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::prefix('vault-shipments')->group(function () {
         Route::get('/', [VaultShipmentController::class, 'index']);
         Route::get('{vaultShipment}', [VaultShipmentController::class, 'show']);
-        Route::post('{vaultShipment}/shipment', [VaultShipmentController::class, 'updateShipment']);
+        Route::put('{vaultShipment}/shipment', [VaultShipmentController::class, 'updateShipment']);
     });
 
     

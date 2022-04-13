@@ -41,7 +41,8 @@ class VaultShipment extends Model
             AllowedInclude::relationship('vaultShipmentStatus'),
             AllowedInclude::relationship('billingAddress'),
             AllowedInclude::relationship('shippingAddress'),
-            AllowedInclude::relationship('vaultShipmentItems'),            
+            AllowedInclude::relationship('vaultShipmentItems'),
+            AllowedInclude::relationship('shippingMethod'),
         ];
     }
 
@@ -49,7 +50,7 @@ class VaultShipment extends Model
     {
         return [
             AllowedFilter::exact('vault_shipment_status_id'),
-            // AllowedFilter::exact('shipping_status'),
+            AllowedFilter::exact('shipping_method_id'),
         ];
     }
 

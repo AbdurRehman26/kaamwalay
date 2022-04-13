@@ -115,7 +115,7 @@ class OrderService extends V1OrderService
     public function shipOrder(Order $order, ShipmentService $shipmentService, array $data)
     {
         return match ($order->shippingMethod->code) {
-            ShippingMethod::INSURED_SHIPPING => $shipmentService->updateShipment($order, ...$data),
+            ShippingMethod::INSURED_SHIPPING => $shipmentService->updateShipment($order, $data['shipping_provider'], $data['tracking_number']),
             default => $this->storeOrderItemsInVault($order),
         };
     }
@@ -125,6 +125,7 @@ class OrderService extends V1OrderService
         $order
             ->orderItems()
             ->whereHas('userCard')
+            ->with('userCard')
             ->get()
             ->each(fn (OrderItem $orderItem) => ($orderItem->userCard->storeInVault()));
 

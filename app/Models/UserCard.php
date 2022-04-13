@@ -27,6 +27,7 @@ class UserCard extends Model
         'grading_id',
         'certificate_number',
         'grade_delta',
+        'shipping_status',
     ];
 
     protected $casts = [
@@ -39,6 +40,7 @@ class UserCard extends Model
         'generated_images' => 'array',
         'graded_at' => 'datetime',
         'grade_delta' => 'float',
+        'shipping_status' => UserCardShippingStatus::class,
     ];
 
     /**

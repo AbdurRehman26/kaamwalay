@@ -15,10 +15,6 @@ class ShipmentService
     {
     }
 
-    /**
-     * @throws OrderCanNotBeMarkedAsGraded
-     * @throws Throwable
-     */
     public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderShipment
     {
         /** @var OrderShipment $orderShipment */
@@ -28,6 +24,8 @@ class ShipmentService
             'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
             'shipping_method_id' => $order->shipping_method_id,
         ]);
+
+        $order->orderShipment()->associate($orderShipment)->save();
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
 

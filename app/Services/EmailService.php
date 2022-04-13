@@ -83,9 +83,9 @@ class EmailService
         string $checkClass = null,
         array $extraData = [],
     ): bool {
-//        if (app()->environment('local')) {
-//            return true;
-//        }
+        if (app()->environment('local')) {
+            return true;
+        }
 
         ScheduledEmail::create([
             'send_at' => $sendAt,

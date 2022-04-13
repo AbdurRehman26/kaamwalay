@@ -122,9 +122,9 @@ class OrderStatusChangedListener implements ShouldQueue
             now()->addDays(2),
             EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
             $this->orderService->getDataForCustomerPaymentReminder($event->order),
-            ['order_id' => $event->order->id],
             true,
-            'OrderPaymentDueReminder'
+            'OrderPaymentDueReminderCheck',
+            ['order_id' => $event->order->id],
         );
     }
 
@@ -165,9 +165,9 @@ class OrderStatusChangedListener implements ShouldQueue
         DateTime $sendAt,
         string $template,
         array $vars,
-        array $extras = [],
         bool $reschedulingRequired = false,
-        string $reschedulingCheckClass = null
+        string $checkClass = null,
+        array $extraData = [],
     ): void {
         $this->emailService->scheduleEmail(
             $sendAt,
@@ -175,9 +175,9 @@ class OrderStatusChangedListener implements ShouldQueue
             $this->emailService->getSubjectByTemplate($template),
             $template,
             $vars,
-            $extras,
             $reschedulingRequired,
-            $reschedulingCheckClass
+            $checkClass,
+            $extraData
         );
     }
 

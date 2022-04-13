@@ -1404,19 +1404,21 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon $send_at
  * @property string $payload
  * @property bool $is_sent
- * @property int $rescheduling_required Decides if this scheduled email needs rescheduling
- * @property string|null $rescheduling_check_class Class path of class which decides further rescheduling
+ * @property bool $rescheduling_required Decides if this scheduled email needs rescheduling
+ * @property string|null $check_class Class which decides further sending and rescheduling
+ * @property string|null $extra_data Extra data if needed in check class
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\ScheduledEmailFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereCheckClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereExtraData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereIsSent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail wherePayload($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereReschedulingCheckClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereReschedulingRequired($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereSendAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ScheduledEmail whereUpdatedAt($value)

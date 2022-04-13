@@ -68,7 +68,9 @@ class EmailService
      * @param  string  $subject
      * @param  string  $templateName
      * @param  array  $templateContent
-     *
+     * @param  bool  $reschedulingRequired
+     * @param  string|null  $checkClass
+     * @param  array  $extraData
      * @return bool
      */
     public function scheduleEmail(
@@ -77,9 +79,9 @@ class EmailService
         string $subject,
         string $templateName,
         array $templateContent = [],
-        array $extras = [],
         bool $reschedulingRequired = false,
-        string $reschedulingCheckClass = null,
+        string $checkClass = null,
+        array $extraData = [],
     ): bool {
 //        if (app()->environment('local')) {
 //            return true;
@@ -92,10 +94,10 @@ class EmailService
                 'subject' => $subject,
                 'templateName' => $templateName,
                 'templateContent' => $templateContent,
-                'extras' => $extras,
             ]),
             'rescheduling_required' => $reschedulingRequired,
-            'rescheduling_check_class' => $reschedulingCheckClass,
+            'check_class' => $checkClass,
+            'extra_data' => serialize($extraData),
         ]);
 
         return true;

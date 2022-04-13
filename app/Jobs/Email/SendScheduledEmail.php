@@ -4,7 +4,9 @@ namespace App\Jobs\Email;
 
 use App\Http\APIClients\MandrillClient;
 use App\Models\ScheduledEmail;
-use App\Services\Email\RescheduleEmailCheckInterface;
+use App\Services\Email\CheckInterface;
+use App\Services\Email\ReschedulingCheckInterface;
+use App\Services\Email\ShouldStillSendCheckInterface;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,6 +21,8 @@ class SendScheduledEmail implements ShouldQueue
     protected const QUEUE_NAME = 'emails';
 
     public $tries = 3;
+
+    protected CheckInterface $checkClass;
 
     /**
      * Create a new job instance.
@@ -48,6 +52,19 @@ class SendScheduledEmail implements ShouldQueue
      */
     protected function processEmail(MandrillClient $mandrillClient): void
     {
+        if (! empty($this->scheduledEmail->check_class)) {
+            $checkClass = $this->getCheckClass();
+
+            if ($checkClass instanceof ShouldStillSendCheckInterface) {
+                if (! $checkClass->shouldStillSend($this->scheduledEmail)) {
+                    $this->scheduledEmail->is_sent = 1;
+                    $this->scheduledEmail->save();
+
+                    return;
+                }
+            }
+        }
+
         $payload = unserialize($this->scheduledEmail->payload);
 
         $response = $mandrillClient->sendEmailWithTemplate(
@@ -75,21 +92,31 @@ class SendScheduledEmail implements ShouldQueue
     protected function rescheduleEmail(): void
     {
         if ($this->scheduledEmail->reschedulingIsRequired()) {
-            $className = 'App\\Services\\Email\\ReschedulingCheck\\' . $this->scheduledEmail->rescheduling_check_class;
-            $reschedulingCheckClass = new $className;
+            $checkClass = $this->getCheckClass();
 
-            if (! $reschedulingCheckClass instanceof RescheduleEmailCheckInterface) {
-                throw new Exception('Reschedule email needs to implement correct interface.');
+            if (! $checkClass instanceof ReschedulingCheckInterface) {
+                throw new Exception('Check class needs to implement correct interface.');
             }
 
-            if (! $reschedulingCheckClass->needsRescheduling($this->scheduledEmail)) {
+            if (! $checkClass->needsRescheduling($this->scheduledEmail)) {
                 return;
             }
 
             $scheduledEmail = $this->scheduledEmail->replicate();
-            $scheduledEmail->send_at = $reschedulingCheckClass->getNextSendAt($this->scheduledEmail);
+            $scheduledEmail->send_at = $checkClass->getNextSendAt($this->scheduledEmail);
             $scheduledEmail->is_sent = 0;
             $scheduledEmail->save();
         }
+    }
+
+    protected function getCheckClass(): CheckInterface
+    {
+        if (! empty($this->checkClass)) {
+            return $this->checkClass;
+        }
+
+        $className = 'App\\Services\\Email\\Check\\' . $this->scheduledEmail->check_class;
+
+        return $this->checkClass = new $className;
     }
 }

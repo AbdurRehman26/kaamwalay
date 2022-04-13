@@ -14,7 +14,7 @@ class ScheduledEmail extends Model
      *
      * @var array
      */
-    protected $fillable = ['send_at', 'payload', 'is_sent', 'rescheduling_required', 'rescheduling_check_class'];
+    protected $fillable = ['send_at', 'payload', 'is_sent', 'rescheduling_required', 'check_class', 'extra_data'];
 
     /**
      * The attributes that should be cast to native types.

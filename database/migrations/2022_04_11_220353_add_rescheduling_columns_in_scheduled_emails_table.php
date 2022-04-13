@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::table('scheduled_emails', function (Blueprint $table) {
             $table->after('is_sent', function (Blueprint $table) {
                 $table->boolean('rescheduling_required')->default(false)->comment('Decides if this scheduled email needs rescheduling');
-                $table->string('rescheduling_check_class')->nullable()->comment('Class path of class which decides further rescheduling');
+                $table->string('check_class')->nullable()->comment('Class which decides further sending and rescheduling');
+                $table->longText('extra_data')->nullable()->comment('Extra data if needed in check class');
             });
         });
     }
@@ -30,7 +31,8 @@ return new class extends Migration
     {
         Schema::table('scheduled_emails', function (Blueprint $table) {
             $table->dropColumn('rescheduling_required');
-            $table->dropColumn('rescheduling_check_class');
+            $table->dropColumn('check_class');
+            $table->dropColumn('extra_data');
         });
     }
 };

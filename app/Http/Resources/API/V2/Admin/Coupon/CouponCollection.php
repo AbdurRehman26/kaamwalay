@@ -2,18 +2,9 @@
 
 namespace App\Http\Resources\API\V2\Admin\Coupon;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Http\Resources\API\V1\Admin\Coupon\CouponCollection as V1CouponCollection;
 
-class CouponCollection extends ResourceCollection
+class CouponCollection extends V1CouponCollection
 {
-    /**
-     * Transform the resource collection into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable<int,mixed>|\JsonSerializable
-     */
-    public function toArray($request)
-    {
-        return parent::toArray($request);
-    }
+
 }

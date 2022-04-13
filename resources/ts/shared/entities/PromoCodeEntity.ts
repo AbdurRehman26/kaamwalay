@@ -5,6 +5,7 @@ import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
 import { PromoCodeApplicableEntity } from '@shared/entities/PromoCodeApplicableEntity';
 import { PromoCodeStatsEntity } from '@shared/entities/PromoCodeStatsEntity';
 import { PromoCodeStatusEntity } from '@shared/entities/PromoCodeStatusEntity';
+import { PromoCodeUserEntity } from '@shared/entities/PromoCodeUserEntity';
 import { PromoServiceLevelEntity } from '@shared/entities/PromoServiceLevelEntity';
 import { Entity } from './Entity';
 
@@ -36,4 +37,7 @@ export class PromoCodeEntity extends Entity {
 
     @Type(() => PromoCodeApplicableEntity)
     public couponApplicable!: PromoCodeApplicableEntity;
+
+    @Type(() => PromoCodeUserEntity)
+    public createdBy!: PromoCodeUserEntity;
 }

@@ -5,6 +5,7 @@ import { Wallet } from '@dashboard/pages/Wallet';
 import { Cards } from './pages/Cards/Cards';
 import { Profile } from './pages/Profile';
 import { Submissions } from './pages/Submissions';
+import { VaultShipments } from './pages/VaultShipments';
 
 export function Dashboard() {
     const { search } = useLocation();
@@ -18,6 +19,7 @@ export function Dashboard() {
         <Routes>
             <Route path={'/'} element={<Navigate to={redirectSubmissionRoute} replace />} />
             <Route path={'/submissions/*'} element={<Submissions />} />
+            <Route path={'/vault-shipments/*'} element={<VaultShipments />} />
             <Route path={'/cards/*'} element={ProtectedRoute(Cards)} />
             <Route path={'/profile/*'} element={ProtectedRoute(Profile)} />
             <Route path={'/wallet/*'} element={ProtectedRoute(Wallet)} />

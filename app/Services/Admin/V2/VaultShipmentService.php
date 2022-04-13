@@ -5,40 +5,45 @@ namespace App\Services\Admin\V2;
 use App\Models\VaultShipment;
 use App\Models\VaultShipmentStatus;
 use App\Models\VaultShipmentStatusHistory;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class VaultShipmentService {
+class VaultShipmentService
+{
     protected const LIST_VAULT_PER_PAGE = 15;
 
-    public function getVaultCards() {
+    public function getVaultCards(): LengthAwarePaginator
+    {
         return QueryBuilder::for(VaultShipment::class)->allowedFilters(VaultShipment::getAllowedAdminFilters())->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->paginate((request('per_page', self::LIST_VAULT_PER_PAGE)));
     }
 
-    public function updateShipment(VaultShipment $vaultShipment, $shippingProvider, $trackingNumber) {
+    public function getVault(int $vaultId)
+    {
+        return QueryBuilder::for(VaultShipment::class)->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->findOrFail($vaultId);
+    }
 
-        dd($vaultShipment);
-        $vaultShipment = VaultShipment::find(19);        
-        $vaultShipment->shipping_provider = $shippingProvider;
-        $vaultShipment->tracking_number = $trackingNumber;
-        $vaultShipment->tracking_url = $this->getTrackingUrl($shippingProvider, $trackingNumber);
-        // status update 
-        // cards status 
-        // shipment status history
-        // card status 
+    public function updateShipment(VaultShipment $vaultShipment, $shippingProvider, $trackingNumber): VaultShipment
+    {
+        $vaultShipment->update([
+            'shipping_provider' => $shippingProvider,
+            'tracking_number' => $trackingNumber,
+            'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
+            'vault_shipment_status_id' => VaultShipmentStatus::SHIPPED,
+        ]);
 
-        // TODO: add status to user card  
-        $vaultShipment->save();
-
-        // VaultShipmentStatusHistory::create([
-        //     'vault_shipment_id' => $vaultShipment->id,
-        //     'vault_shipment_status_id' => VaultShipmentStatus::SHIPPED,
-        //     'user_id' => $vaultShipment->user->id,
-        // ]);
-
+        $this->addVaultShipmentStatusHistory(VaultShipmentStatus::SHIPPED, $vaultShipment);
+        
         return $vaultShipment;
     }
 
-    //changeShipmentStatus
+    protected function addVaultShipmentStatusHistory(int $vaultShipmentStatus, VaultShipment $vaultShipment)
+    {
+        VaultShipmentStatusHistory::updateOrCreate([
+                'vault_shipment_id' => $vaultShipment->id,
+                'vault_shipment_status_id' => $vaultShipmentStatus,
+                'user_id' => auth()->user()->id,
+            ]);
+    }
 
     protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): ?string
     {

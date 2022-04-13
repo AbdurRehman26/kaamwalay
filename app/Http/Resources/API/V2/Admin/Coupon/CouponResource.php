@@ -36,6 +36,7 @@ class CouponResource extends BaseResource
             'coupon_logs' => $this->whenLoaded('couponLogs', CouponLogCollection::class),
             'payment_plans' => $this->whenLoaded('paymentPlans', PaymentPlanCollection::class),
             'users' => $this->whenLoaded('users', CustomerCollection::class),
+            'created_by' => $this->whenLoaded('createdBy', CouponUserResource::class),
         ];
     }
 }

@@ -85,6 +85,14 @@ class Coupon extends Model
         return $this->hasMany(CouponLog::class);
     }
 
+    /**
+     * @return BelongsTo<User, Coupon>
+     */
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
     public function users(): MorphToMany
     {
         return $this->morphedByMany(User::class, 'couponables');
@@ -174,6 +182,7 @@ class Coupon extends Model
             'couponLogs',
             'users',
             'paymentPlans',
+            'createdBy',
         ];
     }
 }

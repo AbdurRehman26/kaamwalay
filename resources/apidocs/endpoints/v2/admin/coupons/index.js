@@ -34,6 +34,12 @@
  *                          "id": 4,
  *                          "code": "expired",
  *                          "name": "Expired"
+ *                      },
+ *                      "created_by": {
+ *                          "id": 1,
+ *                          "email": "test@robograding.com",
+ *                          "first_name": "Test",
+ *                          "last_name": "User",
  *                      }
  *                  }
  *               },

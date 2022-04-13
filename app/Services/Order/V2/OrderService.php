@@ -52,6 +52,20 @@ class OrderService extends V1OrderService
         return $data;
     }
 
+    public function getDataForCustomerOrderPaid(Order $order): array
+    {
+        $data = [];
+
+        $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
+
+        $data["SUBMISSION_NUMBER"] = $order->order_number;
+        $data["TOTAL"] = number_format($order->grand_total, 2);
+        $data["BILLING_ADDRESS"] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
+        $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
+
+        return $data;
+    }
+
     public function calculateCollectorCoinPrice(
         Order $order,
         int $paymentBlockchainNetwork,

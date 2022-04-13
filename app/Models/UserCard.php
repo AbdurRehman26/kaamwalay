@@ -47,7 +47,7 @@ class UserCard extends Model
      */
     public function toSearchableArray()
     {
-        $array = [
+        return [
             'id' => $this->order_item_id,
             'card_name' => $this->orderItem->cardProduct->name,
             'card_image' => $this->orderItem->cardProduct->image_path,
@@ -56,12 +56,10 @@ class UserCard extends Model
             'certificate_number' => $this->certificate_number,
             'owner_name' => $this->user->username,
             'grade_nickname' => $this->overall_grade_nickname,
-            'overall_grade' => $this->overall_grade,
+            'grade_overall' => $this->overall_grade,
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
             'grade' => $this->overall_grade_nickname .' '. $this->overall_grade,
         ];
-
-        return $array;
     }
 
     public function shouldBeSearchable():bool

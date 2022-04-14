@@ -7,11 +7,13 @@ import { setFilterIncrement, setGradeTeal, setGradeValue } from '../../redux/sli
 
 const CustomMenuSelectMobile = connectMenu(({ items, refine }) => {
     const dispatch = useDispatch();
+    const getGrade = (item: Record<string, any>) => Number(item.label.split(' ').pop());
+    const grades = items.sort((a, b) => getGrade(a) - getGrade(b));
 
     return (
         <ul>
             <RadioGroup>
-                {items.map((item: any) => (
+                {grades.map((item: any) => (
                     <FormControlLabel
                         key={item.value}
                         value={item.value}

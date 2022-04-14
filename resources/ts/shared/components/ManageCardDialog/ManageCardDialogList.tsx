@@ -27,7 +27,7 @@ const useStyles = makeStyles(
  */
 export const ManageCardDialogList = forwardRef((props: ListCardsViewProps, ref: ForwardedRef<HTMLDivElement>) => {
     const classes = useStyles();
-    const { appEnv, algoliaAppId, algoliaPublicKey } = useConfiguration();
+    const { appEnv, algoliaAppId, algoliaPublicKey, searchCardCategoriesAdmin } = useConfiguration();
     const selectedCard = useAppSelector((state) => state.manageCardDialog.selectedCard);
 
     const searchClient = useMemo(
@@ -35,12 +35,18 @@ export const ManageCardDialogList = forwardRef((props: ListCardsViewProps, ref: 
         [algoliaAppId, algoliaPublicKey],
     );
 
+    const categoryFilters = `card_category_name:${searchCardCategoriesAdmin.replace(/,/g, ' OR card_category_name:')}`;
+
     return (
         <div className={classes.root} ref={ref}>
             <ManageCardDialogHeader />
             <Box p={3}>
                 <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
-                    <Configure hitsPerPage={32} />
+                    {searchCardCategoriesAdmin ? (
+                        <Configure hitsPerPage={32} filters={categoryFilters} />
+                    ) : (
+                        <Configure hitsPerPage={32} />
+                    )}
                     {selectedCard ? <ManagerCardDialogSelectedCardPreview /> : null}
                     <ManageCardDialogSearch />
                     <ManageCardDialogResults />

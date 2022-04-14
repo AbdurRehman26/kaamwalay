@@ -56,7 +56,9 @@ test('an admin can ship order when shipping method is vault', function () {
 
     $this->order->update([
         'payment_status' => OrderPaymentStatusEnum::PAID,
-        'shipping_method_id' => 2,
+        'shipping_method_id' => \App\Models\ShippingMethod::factory()->create([
+            'code' => 'vault_storage',
+        ])->id,
     ]);
 
     postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment')->assertOk();

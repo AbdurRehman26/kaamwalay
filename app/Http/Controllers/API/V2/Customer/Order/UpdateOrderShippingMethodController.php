@@ -33,8 +33,8 @@ class UpdateOrderShippingMethodController extends Controller
 
             if ($request->filled('customer_address_id')) {
                 $customerAddress = CustomerAddress::find($request->input('customer_address_id'));
-                OrderAddress::create($customerAddress->toArray());
-                $order->shippingAddress()->associate($customerAddress);
+                $orderAddress = OrderAddress::create($customerAddress->toArray());
+                $order->shippingAddress()->associate($orderAddress);
             }
 
             $orderService

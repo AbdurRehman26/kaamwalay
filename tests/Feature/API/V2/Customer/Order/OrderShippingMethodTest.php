@@ -107,7 +107,7 @@ test('grand total is recalculated when the shipping method is changed from insur
         'quantity' => 2,
     ]);
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->insuredShippingOrder]), [
-        'shipping_method_id' => $this->vaultShippingOrder->id,
+        'shipping_method_id' => $this->vaultShippingMethod->id,
         'customer_address_id' => CustomerAddress::factory()->for($this->user)->create()->id,
     ])->assertOk();
 
@@ -120,7 +120,7 @@ test('grand total is recalculated when the shipping method is changed from vault
         'quantity' => 2,
     ]);
     putJson(route('v2.customer.orders.update-shipping-method', ['order' => $this->vaultShippingOrder]), [
-        'shipping_method_id' => $this->insuredShippingOrder->id,
+        'shipping_method_id' => $this->insuredShippingMethod->id,
         'customer_address_id' => CustomerAddress::factory()->for($this->user)->create()->id,
     ])->assertOk();
 

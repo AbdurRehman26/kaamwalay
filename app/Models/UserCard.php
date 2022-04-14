@@ -13,6 +13,10 @@ class UserCard extends Model
 {
     use HasFactory, ActivityLog, Searchable;
 
+    public const PENDING = 0;
+    public const SHIPPED = 1;
+    public const IN_VAULT = 2;
+
     protected $fillable = [
         'order_item_id',
         'user_id',
@@ -106,5 +110,11 @@ class UserCard extends Model
     public function vaultShipmentItem(): HasOne
     {
         return $this->hasOne(VaultShipmentItem::class);
+    }
+
+    public function markAsShipped(): bool
+    {
+        $this->shipping_status = self::SHIPPED;
+        return $this->save();
     }
 }

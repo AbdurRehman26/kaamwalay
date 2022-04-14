@@ -15,8 +15,8 @@ beforeEach(function () {
 
     VaultShipment::factory()->create();
 
-    $this->actingAs($this->user);
     $this->vault = VaultShipment::factory()->for($this->otherUser)->create();
+    $this->actingAs($this->user);
 });
 
 it('admin can get vault shipment list', function () {
@@ -67,3 +67,20 @@ it('admin can get single vault shipment', function () {
                  ],
              ]);
      });
+
+    test('vault shipment update with valid data', function () {
+        $this->putJson('/api/v2/admin/vault-shipments/1/shipment', [
+            'shipping_provider' => '',
+            'tracking_number' => '',
+        ])->assertStatus(422);
+    });
+
+    test('a guest can not update shipment', function () {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->putJson('/api/v2/admin/vault-shipments/1/shipment', [
+            'shipping_provider' => 'usps',
+            'tracking_number' => '9400100000000000000000',
+        ])->assertForbidden();
+    });

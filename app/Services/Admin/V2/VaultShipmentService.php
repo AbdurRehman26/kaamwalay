@@ -18,9 +18,9 @@ class VaultShipmentService
         return QueryBuilder::for(VaultShipment::class)->allowedFilters(VaultShipment::getAllowedAdminFilters())->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->paginate((request('per_page', self::LIST_VAULT_PER_PAGE)));
     }
 
-    public function getVaultShipment(int $vaultId): Model
+    public function getVaultShipment(VaultShipment $vaultShipment): Model
     {
-        return QueryBuilder::for(VaultShipment::class)->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->findOrFail($vaultId);
+        return QueryBuilder::for(VaultShipment::class)->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->findOrFail(getModelId($vaultShipment));
     }
 
     public function updateShipment(VaultShipment $vaultShipment, string $shippingProvider, string $trackingNumber): VaultShipment
@@ -31,7 +31,9 @@ class VaultShipmentService
             'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
             'vault_shipment_status_id' => VaultShipmentStatus::SHIPPED,
         ]);
-
+    
+        $vaultShipment->vaultShipmentItems()->get()->each(fn ($item) => $item->userCard->markAsShipped());
+      
         $this->addVaultShipmentStatusHistory(VaultShipmentStatus::SHIPPED, $vaultShipment);
         
         return $vaultShipment;

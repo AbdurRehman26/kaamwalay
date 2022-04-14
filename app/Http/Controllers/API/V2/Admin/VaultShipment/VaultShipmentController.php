@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V2\Admin\VaultShipment;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V2\Admin\VaultShipment\VaultShipmentRequest;
+use App\Http\Requests\API\V2\Admin\VaultShipment\UpdateVaultShipmentRequest;
 use App\Http\Resources\API\V2\Admin\VaultShipment\VaultShipmentCollection;
 use App\Http\Resources\API\V2\Admin\VaultShipment\VaultShipmentResource;
 use App\Models\VaultShipment;
@@ -22,17 +22,15 @@ class VaultShipmentController extends Controller
         );
     }
 
-    public function show(int $vaultShipmentId): VaultShipmentResource
+    public function show(VaultShipment $vaultShipment): VaultShipmentResource
     {
         return new VaultShipmentResource(
-            $this->vaultShipmentService->getVaultShipment($vaultShipmentId)
+            $this->vaultShipmentService->getVaultShipment($vaultShipment)
         );
     }
 
-    public function updateShipment(VaultShipment $vaultShipment, VaultShipmentRequest $request): VaultShipmentResource
+    public function updateShipment(VaultShipment $vaultShipment, UpdateVaultShipmentRequest $request): VaultShipmentResource
     {
-        $result = $this->vaultShipmentService->updateShipment($vaultShipment, $request->shipping_provider, $request->tracking_number);
-
-        return new VaultShipmentResource($result);
+        return new VaultShipmentResource($this->vaultShipmentService->updateShipment($vaultShipment, $request->shipping_provider, $request->tracking_number));
     }
 }

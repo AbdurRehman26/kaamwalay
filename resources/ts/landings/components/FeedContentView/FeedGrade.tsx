@@ -72,6 +72,9 @@ const MenuProps = {
 
 const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
     const [className, changeClassName] = useState('Select');
+    const getGrade = (item: Record<string, any>) => Number(item.label.split(' ').pop());
+    const grades = items.sort((a, b) => getGrade(a) - getGrade(b));
+
     return (
         <>
             <Divider sx={{ margin: '0px 20px', height: '40px' }} orientation="vertical" flexItem />
@@ -95,7 +98,7 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
                         <MenuItem sx={{ display: 'none' }} value={'Grade'}>
                             Grade
                         </MenuItem>
-                        {items.map((item: any) => (
+                        {grades.map((item: any) => (
                             <MenuItem
                                 sx={styles.MenuItem}
                                 key={item.label}

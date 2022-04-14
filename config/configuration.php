@@ -80,6 +80,7 @@ return [
             'value' => env('SEARCH_CARD_CATEGORIES_CUSTOMER'),
         ],
         'search_card_categories_admin' => [
+            'auth' => true,
             'value' => env('SEARCH_CARD_CATEGORIES_ADMIN'),
         ],
     ],

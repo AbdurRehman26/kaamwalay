@@ -137,7 +137,10 @@ it('sorts cards alphabetically', function () {
 });
 
 it('filters cards by name', function () {
-    $searchName = $this->userCards[0]->orderItem->cardProduct->name;
+    $searchName = \Illuminate\Support\Str::random();
+    $this->userCards[0]->orderItem->cardProduct->update([
+        'name' => $searchName,
+    ]);
     $this->getJson('/api/v2/customer/cards?filter[search]=' . $searchName)
         ->assertOk()
         ->assertJsonCount(1, ['data'])

@@ -17,7 +17,7 @@ class CardProductFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->firstName() . rand(0, 10000),
+            'name' => $this->faker->firstName(),
             "edition" => '1st Edition',
             "surface" => 'Reverse Holo',
             "variant" => 'Next Destinies Stage 1 Blisters',

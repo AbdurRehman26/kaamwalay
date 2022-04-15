@@ -8,7 +8,7 @@ import { setFilterIncrement, setGradeTeal, setGradeValue } from '../../redux/sli
 const CustomMenuSelectMobile = connectMenu(({ items, refine }) => {
     const dispatch = useDispatch();
     const getGrade = (item: Record<string, any>) => Number(item.label.split(' ').pop());
-    const grades = items.sort((a, b) => getGrade(a) - getGrade(b)).reverse();
+    const grades = items.sort((a, b) => getGrade(b) - getGrade(a));
 
     return (
         <ul>

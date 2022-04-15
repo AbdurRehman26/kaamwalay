@@ -69,7 +69,7 @@ it('admin can get single vault shipment', function () {
      });
 
     test('vault shipment update with valid data', function () {
-        $this->putJson('/api/v2/admin/vault-shipments/1/shipment', [
+        $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
             'shipping_provider' => '',
             'tracking_number' => '',
         ])->assertStatus(422);
@@ -79,7 +79,7 @@ it('admin can get single vault shipment', function () {
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $this->putJson('/api/v2/admin/vault-shipments/1/shipment', [
+        $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
             'shipping_provider' => 'usps',
             'tracking_number' => '9400100000000000000000',
         ])->assertForbidden();

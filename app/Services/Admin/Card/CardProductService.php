@@ -31,6 +31,7 @@ class CardProductService
         'Spanish',
         'Portuguese',
         '(South) Korean',
+        'Thai',
         'Traditional Chinese',
         'Russian',
         'Polish',

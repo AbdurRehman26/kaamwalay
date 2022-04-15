@@ -128,7 +128,7 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
 export function FeedGrade() {
     const grade = useSelector((state: RootState) => state.feed.gradeValue.grade);
 
-    return <CustomMenuSelect attribute={'grade'} defaultRefinement={grade} />;
+    return <CustomMenuSelect attribute={'grade'} defaultRefinement={grade} limit={20} />;
 }
 
 export default FeedGrade;

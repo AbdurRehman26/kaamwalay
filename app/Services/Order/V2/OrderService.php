@@ -73,16 +73,16 @@ class OrderService extends V1OrderService
         $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
 
-        $data["SUBMISSION_NUMBER"] = $order->order_number;
-        $data["CREDIT_APPLIED"] = number_format($order->amount_paid_from_wallet, 2);
+        $data['SUBMISSION_NUMBER'] = $order->order_number;
+        $data['CREDIT_APPLIED'] = number_format($order->amount_paid_from_wallet, 2);
 
-        $data["SUBTOTAL"] = number_format($order->service_fee, 2);
-        $data["SHIPPING_FEE"] = number_format($order->shipping_fee, 2);
-        $data["TOTAL"] = number_format($order->grand_total, 2);
+        $data['SUBTOTAL'] = number_format($order->service_fee, 2);
+        $data['SHIPPING_FEE'] = number_format($order->shipping_fee, 2);
+        $data['TOTAL'] = number_format($order->grand_total, 2);
 
-        $data["SERVICE_LEVEL"] = $paymentPlan->price;
-        $data["NUMBER_OF_CARDS"] = $orderItems->sum('quantity');
-        $data["DATE"] = $order->created_at->format('m/d/Y');
+        $data['SERVICE_LEVEL'] = $paymentPlan->price;
+        $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');
+        $data['DATE'] = $order->created_at->format('m/d/Y');
 
         return $data;
     }

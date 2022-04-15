@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use App\Enums\UserCard\UserCardShippingStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,10 +13,6 @@ use Laravel\Scout\Searchable;
 class UserCard extends Model
 {
     use HasFactory, ActivityLog, Searchable;
-
-    public const PENDING = 0;
-    public const SHIPPED = 1;
-    public const IN_VAULT = 2;
 
     protected $fillable = [
         'order_item_id',
@@ -114,7 +111,7 @@ class UserCard extends Model
 
     public function markAsShipped(): bool
     {
-        $this->shipping_status = self::SHIPPED;
+        $this->shipping_status = UserCardShippingStatus::SHIPPED;
         return $this->save();
     }
 }

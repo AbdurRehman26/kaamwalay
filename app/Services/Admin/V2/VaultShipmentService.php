@@ -15,12 +15,17 @@ class VaultShipmentService
 
     public function getVaultShipments(): LengthAwarePaginator
     {
-        return QueryBuilder::for(VaultShipment::class)->allowedFilters(VaultShipment::getAllowedAdminFilters())->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->paginate((request('per_page', self::LIST_VAULT_PER_PAGE)));
+        return QueryBuilder::for(VaultShipment::class)
+            ->allowedFilters(VaultShipment::getAllowedAdminFilters())
+            ->allowedIncludes(VaultShipment::getAllowedAdminIncludes())
+            ->paginate((request('per_page', self::LIST_VAULT_PER_PAGE)));
     }
 
-    public function getVaultShipment(VaultShipment $vaultShipment): Model
+    public function getVaultShipment(int $vaultShipmentId): Model
     {
-        return QueryBuilder::for(VaultShipment::class)->allowedIncludes(VaultShipment::getAllowedAdminIncludes())->findOrFail(getModelId($vaultShipment));
+        return QueryBuilder::for(VaultShipment::class)
+            ->allowedIncludes(VaultShipment::getAllowedAdminIncludes())
+            ->findOrFail($vaultShipmentId);
     }
 
     public function updateShipment(VaultShipment $vaultShipment, string $shippingProvider, string $trackingNumber): VaultShipment

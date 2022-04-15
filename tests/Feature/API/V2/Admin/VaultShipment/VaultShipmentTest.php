@@ -54,34 +54,36 @@ it('admin can get single vault shipment', function () {
     ]);
 });
 
-     test('an admin update vault shipment', function () {
-         $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
-             'shipping_provider' => 'usps',
-             'tracking_number' => '9400100000000000000000',
-         ])
-             ->assertSuccessful()
+test('an admin update vault shipment', function () {
+    $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
+        'shipping_provider' => 'usps',
+        'tracking_number' => '9400100000000000000000',
+    ])->assertSuccessful()
+    ->assertJsonStructure([
+        'data' => [
+            'shipping_provider',
+            'tracking_number',
+        ],
+    ]);
+});
 
-             ->assertJsonStructure([
-                 'data' => [
-                     'shipping_provider',
-                     'tracking_number',
-                 ],
-             ]);
-     });
+test('vault shipment update with valid data', function () {
+    $response = $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
+        'shipping_provider' => '',
+        'tracking_number' => '',
+    ]);
+    $response->assertJsonValidationErrors([
+        'shipping_provider' => 'The shipping provider field is required.',
+        'tracking_number' => 'The tracking number field is required.',
+    ]);
+});
 
-    test('vault shipment update with valid data', function () {
-        $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
-            'shipping_provider' => '',
-            'tracking_number' => '',
-        ])->assertStatus(422);
-    });
+test('a guest can not update shipment', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
 
-    test('a guest can not update shipment', function () {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
-            'shipping_provider' => 'usps',
-            'tracking_number' => '9400100000000000000000',
-        ])->assertForbidden();
-    });
+    $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
+        'shipping_provider' => 'usps',
+        'tracking_number' => '9400100000000000000000',
+    ])->assertForbidden();
+});

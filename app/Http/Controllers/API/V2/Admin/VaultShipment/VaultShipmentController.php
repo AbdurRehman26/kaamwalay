@@ -22,10 +22,10 @@ class VaultShipmentController extends Controller
         );
     }
 
-    public function show(VaultShipment $vaultShipment): VaultShipmentResource
+    public function show(int $vaultShipmentId): VaultShipmentResource
     {
         return new VaultShipmentResource(
-            $this->vaultShipmentService->getVaultShipment($vaultShipment)
+            $this->vaultShipmentService->getVaultShipment($vaultShipmentId)
         );
     }
 

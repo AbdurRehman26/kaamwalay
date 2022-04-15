@@ -34,7 +34,7 @@ const CustomMenuSelectMobile = connectMenu(({ items, refine }) => {
 });
 
 export function FeedMobileGrade() {
-    return <CustomMenuSelectMobile attribute={'grade'} />;
+    return <CustomMenuSelectMobile attribute={'grade'} limit={20} />;
 }
 
 export default FeedMobileGrade;

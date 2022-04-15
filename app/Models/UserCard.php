@@ -112,6 +112,7 @@ class UserCard extends Model
     public function markAsShipped(): bool
     {
         $this->shipping_status = UserCardShippingStatus::SHIPPED;
+
         return $this->save();
     }
 }

@@ -49,7 +49,7 @@ it('admin can get single vault shipment', function () {
             'tracking_number',
             'shipping_provider',
             'tracking_url',
-        ]
+        ],
     ]);
 });
 

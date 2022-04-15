@@ -6,5 +6,4 @@ use App\Http\Resources\API\V1\Admin\Coupon\CouponCollection as V1CouponCollectio
 
 class CouponCollection extends V1CouponCollection
 {
-
 }

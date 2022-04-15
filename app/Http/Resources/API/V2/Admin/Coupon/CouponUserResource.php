@@ -24,4 +24,3 @@ class CouponUserResource extends BaseResource
         ];
     }
 }
-

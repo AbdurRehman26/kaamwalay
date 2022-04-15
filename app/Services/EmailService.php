@@ -20,6 +20,7 @@ class EmailService
     public const TEMPLATE_SLUG_CUSTOMER_SHIPMENT_TRACKING_REMINDER = 'enter-tracking-robograding';
     public const TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED = 'extra-charge-robograding';
     public const TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED = 'admin-new-submission-robograding';
+    public const TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER = 'payment-due';
     public const TEMPLATE_SLUG_CUSTOMER_ORDER_PAID = 'payment-confirmation';
 
     public const SUBJECT = [
@@ -34,6 +35,7 @@ class EmailService
         self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_REFUNDED => 'We have issued a refund on your submission.',
         self::TEMPLATE_SLUG_CUSTOMER_SUBMISSION_EXTRA_CHARGED => 'There has been an extra charge on your submission.',
         self::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED => 'New Robograding Submission!',
+        self::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER => 'Your Payment is Due!',
         self::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID => 'Thank you for your payment!',
     ];
 
@@ -66,7 +68,9 @@ class EmailService
      * @param  string  $subject
      * @param  string  $templateName
      * @param  array  $templateContent
-     *
+     * @param  bool  $reschedulingRequired
+     * @param  string|null  $checkClass
+     * @param  array  $extraData
      * @return bool
      */
     public function scheduleEmail(
@@ -74,7 +78,10 @@ class EmailService
         array $recipients,
         string $subject,
         string $templateName,
-        array $templateContent = []
+        array $templateContent = [],
+        bool $reschedulingRequired = false,
+        string $checkClass = null,
+        array $extraData = [],
     ): bool {
         if (app()->environment('local')) {
             return true;
@@ -88,6 +95,9 @@ class EmailService
                 'templateName' => $templateName,
                 'templateContent' => $templateContent,
             ]),
+            'rescheduling_required' => $reschedulingRequired,
+            'check_class' => $checkClass,
+            'extra_data' => serialize($extraData),
         ]);
 
         return true;

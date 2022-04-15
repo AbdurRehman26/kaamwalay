@@ -114,6 +114,7 @@ class UserCard extends Model
     public function storeInVault(): bool
     {
         $this->shipping_status = UserCardShippingStatus::IN_VAULT;
+
         return $this->save();
     }
 }

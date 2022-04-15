@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\API\V2\Admin\Order;
 
+use App\Http\Requests\API\V1\Admin\Order\UpdateOrderPaymentRequest as V1UpdateOrderPaymentRequest;
 use App\Models\Order;
 use App\Models\ShippingMethod;
-use Illuminate\Foundation\Http\FormRequest;
-use App\Http\Requests\API\V1\Admin\Order\UpdateOrderPaymentRequest as V1UpdateOrderPaymentRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateShipmentRequest extends V1UpdateOrderPaymentRequest

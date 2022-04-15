@@ -4,6 +4,7 @@ namespace Tests\Feature\API\V2\Admin\VaultShipment;
 
 use App\Models\User;
 use App\Models\VaultShipment;
+use App\Models\VaultShipmentStatus;
 use Database\Seeders\RolesSeeder;
 
 use function Pest\Laravel\seed;
@@ -13,7 +14,7 @@ beforeEach(function () {
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->otherUser = User::factory()->withRole(config('permission.roles.customer'))->create();
 
-    VaultShipment::factory()->create();
+    VaultShipmentStatus::factory()->create();
 
     $this->vault = VaultShipment::factory()->for($this->otherUser)->create();
     $this->actingAs($this->user);

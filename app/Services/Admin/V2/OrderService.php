@@ -10,6 +10,7 @@ use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\ShippingMethod;
@@ -112,7 +113,7 @@ class OrderService extends V1OrderService
         return $data;
     }
 
-    public function shipOrder(Order $order, ShipmentService $shipmentService, array $data)
+    public function shipOrder(Order $order, ShipmentService $shipmentService, array $data): OrderShipment|bool
     {
         return match ($order->shippingMethod->code) {
             ShippingMethod::INSURED_SHIPPING => $shipmentService->updateShipment($order, $data['shipping_provider'], $data['tracking_number']),
@@ -120,7 +121,7 @@ class OrderService extends V1OrderService
         };
     }
 
-    protected function storeOrderItemsInVault(Order $order)
+    protected function storeOrderItemsInVault(Order $order): bool
     {
         $order
             ->orderItems()
@@ -137,5 +138,7 @@ class OrderService extends V1OrderService
             $order,
             auth()->user(),
         );
+
+        return true;
     }
 }

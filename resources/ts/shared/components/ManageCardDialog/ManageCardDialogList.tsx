@@ -35,15 +35,19 @@ export const ManageCardDialogList = forwardRef((props: ListCardsViewProps, ref: 
         [algoliaAppId, algoliaPublicKey],
     );
 
-    const categoryFilters = `card_category_name:${searchCardCategoriesAdmin.replace(/,/g, ' OR card_category_name:')}`;
-
     return (
         <div className={classes.root} ref={ref}>
             <ManageCardDialogHeader />
             <Box p={3}>
                 <InstantSearch searchClient={searchClient} indexName={`${appEnv}_card_products`}>
                     {searchCardCategoriesAdmin ? (
-                        <Configure hitsPerPage={32} filters={categoryFilters} />
+                        <Configure
+                            hitsPerPage={32}
+                            filters={`card_category_name:${searchCardCategoriesAdmin.replace(
+                                /,/g,
+                                ' OR card_category_name:',
+                            )}`}
+                        />
                     ) : (
                         <Configure hitsPerPage={32} />
                     )}

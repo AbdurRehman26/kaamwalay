@@ -111,21 +111,23 @@ class OrderStatusChangedListener implements ShouldQueue
             ['ORDER_NUMBER' => $event->order->order_number]
         );
 
-        $this->sendEmail(
-            $event,
-            EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
-            $this->orderService->getDataForCustomerPaymentReminder($event->order)
-        );
+        if (! $event->order->isPaid()) {
+            $this->sendEmail(
+                $event,
+                EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
+                $this->orderService->getDataForCustomerPaymentReminder($event->order)
+            );
 
-        $this->scheduleEmail(
-            $event,
-            now()->addDays(2),
-            EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
-            $this->orderService->getDataForCustomerPaymentReminder($event->order),
-            true,
-            'OrderPaymentDueReminderCheck',
-            ['order_id' => $event->order->id],
-        );
+            $this->scheduleEmail(
+                $event,
+                now()->addDays(2),
+                EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
+                $this->orderService->getDataForCustomerPaymentReminder($event->order),
+                true,
+                'OrderPaymentDueReminderCheck',
+                ['order_id' => $event->order->id],
+            );
+        }
     }
 
     protected function handleShipped(OrderStatusChangedEvent $event): void

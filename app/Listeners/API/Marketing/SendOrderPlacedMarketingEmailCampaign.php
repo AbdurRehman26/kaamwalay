@@ -20,11 +20,18 @@ class SendOrderPlacedMarketingEmailCampaign implements ShouldQueue
 
     public function handle(OrderPlaced $event): void
     {
-        if (app()->environment('local')) {
+        $user = $event->order->user;
+
+        /*
+         * Schedule for user only when they place their first order.
+         * Since they have already placed an order, so order count is 1.
+         * Hence we do not schedule if order count >= 2
+         */
+
+        if ($user->orders()->placed()->count() >= 2) {
             return;
         }
 
-        $user = $event->order->user;
         $userEmail = $user->email;
         $userFirstName = $user->first_name ?? '';
 

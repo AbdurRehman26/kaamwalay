@@ -4,9 +4,10 @@ namespace App\Listeners\API\Marketing;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Services\EmailService;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendRegisteredUserMarketingEmailCampaign implements ShouldQueue
+class SendRegisteredUserMarketingEmailCampaign implements ShouldQueue, ShouldBeEncrypted
 {
     /**
      * Create the event listener.
@@ -20,10 +21,6 @@ class SendRegisteredUserMarketingEmailCampaign implements ShouldQueue
 
     public function handle(CustomerRegistered $event): void
     {
-        if (app()->environment('local')) {
-            return;
-        }
-
         $user = $event->user;
         $userEmail = $user->email;
         $userFirstName = $user->first_name ?? '';

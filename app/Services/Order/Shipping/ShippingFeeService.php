@@ -3,6 +3,7 @@
 namespace App\Services\Order\Shipping;
 
 use App\Models\Order;
+use App\Models\ShippingMethod;
 use App\Services\Order\Shipping\Calculators\InsuredShippingFeeCalculator;
 
 class ShippingFeeService
@@ -14,6 +15,9 @@ class ShippingFeeService
 
     public static function calculateForOrder(Order $order): float
     {
-        return InsuredShippingFeeCalculator::calculateForOrder($order);
+        return match ($order->shippingMethod->code) {
+            ShippingMethod::INSURED_SHIPPING => InsuredShippingFeeCalculator::calculateForOrder($order),
+            default => 0.0,
+        };
     }
 }

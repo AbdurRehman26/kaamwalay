@@ -21,6 +21,6 @@ class OrderShippingMethodCannotBeChangedException extends Exception
      */
     public function render($request): JsonResponse
     {
-        return new JsonResponse([ 'error' => $this->message ], $this->code);
+        return new JsonResponse(['error' => $this->message], $this->code);
     }
 }

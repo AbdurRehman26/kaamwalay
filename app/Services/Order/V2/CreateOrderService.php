@@ -184,12 +184,7 @@ class CreateOrderService
 
     protected function storeShippingFee(): void
     {
-        $shippingFee = 0.0;
-        if ($this->order->hasInsuredShipping()) {
-            $shippingFee = ShippingFeeService::calculateForOrder($this->order);
-        }
-
-        $this->order->shipping_fee = $shippingFee;
+        $this->order->shipping_fee = ShippingFeeService::calculateForOrder($this->order);
         $this->order->save();
     }
 

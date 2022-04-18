@@ -4,9 +4,10 @@ namespace App\Listeners\API\Hubspot;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Services\HubspotService;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendRegisteredUserToHubspot implements ShouldQueue
+class SendRegisteredUserToHubspot implements ShouldQueue, ShouldBeEncrypted
 {
     public function __construct(protected HubspotService $hubspotService)
     {

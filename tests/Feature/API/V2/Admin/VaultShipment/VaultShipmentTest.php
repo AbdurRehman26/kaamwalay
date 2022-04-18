@@ -20,7 +20,7 @@ beforeEach(function () {
         [
             'id' => 2,
             'code' => 'shipped',
-            'name' => 'Shipped'
+            'name' => 'Shipped',
         ]
     ))->create();
 

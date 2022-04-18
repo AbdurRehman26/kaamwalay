@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Services\Admin\V2\OrderStatusHistoryService;
-use Throwable;
 
 class ShipmentService
 {

@@ -22,10 +22,10 @@ class CouponDateRange implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        return match ($key) {
-            'available_from' => Carbon::parse($value)->startOfDay()->toDateTimeString(),
-            'available_till' => Carbon::parse($value)->endOfDay()->toDateTimeString(),
-            default => null,
-        };
+            return match ($key) {
+                'available_from' => Carbon::parse($value)->startOfDay()->toDateTimeString(),
+                'available_till' => is_null($value) ? null : Carbon::parse($value)->endOfDay()->toDateTimeString(),
+                default => null,
+            };
     }
 }

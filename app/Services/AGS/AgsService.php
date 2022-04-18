@@ -107,7 +107,7 @@ class AgsService
                 'name' => $data['card']['name'] ?? null,
                 'full_name' => ! empty($data['card']) ? $this->getCardFullName($data['card']) : '',
                 'image_path' => $data['card']['image_path'] ?? null,
-                'type' => 'Pokemon',
+                'type' => $data['card']['category']['name'],
                 'series' => $data['card']['pokemon_serie']['name'] ?? null,
                 'set' => $data['card']['pokemon_set']['name'] ?? null,
                 'release_date' => ! empty($data['card']['pokemon_set']['release_date']) ?
@@ -125,7 +125,7 @@ class AgsService
     protected function getCardFullName(array $card): string
     {
         return Carbon::parse($card['pokemon_set']['release_date'])->year . ' ' .
-            'Pokemon' . ' ' .
+            $card['category']['name'] . ' ' .
             $card['pokemon_serie']['name'] . ' ' .
             $card['pokemon_set']['name'] . ' ' .
             $card['card_number_order'] . ' ' .

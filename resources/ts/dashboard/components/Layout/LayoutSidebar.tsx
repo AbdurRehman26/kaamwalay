@@ -2,6 +2,7 @@ import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalance
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Inventory2Icon from '@mui/icons-material/Inventory2Outlined';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
 import Avatar from '@mui/material/Avatar';
@@ -92,6 +93,11 @@ export function LayoutSidebar() {
                 <LayoutSidebarItem icon={StyleOutlinedIcon} title={'Your Cards'} href={'/cards'} />
                 <LayoutSidebarItem icon={AccountBalanceWalletOutlinedIcon} title={'Wallet'} href={'/wallet'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Profile'} href={'/profile'} />
+                <LayoutSidebarItem
+                    icon={LocalShippingOutlinedIcon}
+                    title={'Vault Shipments'}
+                    href={'/vault-shipments'}
+                />
 
                 <LayoutSidebarItem
                     exact

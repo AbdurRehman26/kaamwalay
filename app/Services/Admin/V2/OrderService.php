@@ -10,7 +10,6 @@ use App\Events\API\Admin\Order\UnpaidOrderRefund;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;

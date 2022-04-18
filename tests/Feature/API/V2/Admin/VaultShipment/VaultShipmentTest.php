@@ -7,6 +7,8 @@ use App\Models\VaultShipment;
 use App\Models\VaultShipmentStatus;
 use Database\Seeders\RolesSeeder;
 
+use Illuminate\Database\Eloquent\Factories\Sequence;
+
 use function Pest\Laravel\seed;
 
 beforeEach(function () {
@@ -14,7 +16,13 @@ beforeEach(function () {
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->otherUser = User::factory()->withRole(config('permission.roles.customer'))->create();
 
-    VaultShipmentStatus::factory()->create();
+    VaultShipmentStatus::factory()->state(new Sequence(
+        [
+            'id' => 2,
+            'code' => 'shipped',
+            'name' => 'Shipped'
+        ]
+    ))->create();
 
     $this->vault = VaultShipment::factory()->for($this->otherUser)->create();
     $this->actingAs($this->user);

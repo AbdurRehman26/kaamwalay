@@ -37,7 +37,7 @@ class VaultShipmentService
             'vault_shipment_status_id' => VaultShipmentStatus::SHIPPED,
         ]);
     
-        $vaultShipment->vaultShipmentItems()->get()->each(fn ($item) => $item->userCard->markAsShipped());
+        $vaultShipment->vaultShipmentItems->each(fn ($item) => $item->userCard->markAsShipped());
       
         $this->addVaultShipmentStatusHistory(VaultShipmentStatus::SHIPPED, $vaultShipment);
         

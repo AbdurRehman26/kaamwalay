@@ -5,6 +5,7 @@ use App\Enums\UserCard\UserCardShippingStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
+use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\UserCard;
 use Database\Seeders\RolesSeeder;
@@ -30,7 +31,7 @@ test('an admin can ship order when shipping method is insured', function () {
         'shipping_method_id' => 1,
     ]);
 
-    postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment', [
+    postJson(route('v2.admin.orders.update-shipment', ['order' => $this->order]), [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])
@@ -56,16 +57,16 @@ test('an admin can ship order when shipping method is vault', function () {
 
     $this->order->update([
         'payment_status' => OrderPaymentStatusEnum::PAID,
-        'shipping_method_id' => \App\Models\ShippingMethod::factory()->create([
+        'shipping_method_id' => ShippingMethod::factory()->create([
             'code' => 'vault_storage',
         ])->id,
     ]);
 
-    postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment')->assertOk();
+    postJson(route('v2.admin.orders.update-shipment', ['order' => $this->order]))->assertOk();
 
     expect($this->order->refresh()->orderShipment)->toBe(null);
     expect($this->userCard->refresh()->shipping_status)->toBe(UserCardShippingStatus::IN_VAULT);
-    expect($this->order->refresh()->order_status_id)->toBe(OrderStatus::SHIPPED);
+    expect($this->order->order_status_id)->toBe(OrderStatus::SHIPPED);
 });
 
 test('shipping details are required when order has insured shipping', function () {
@@ -74,6 +75,6 @@ test('shipping details are required when order has insured shipping', function (
         'shipping_method_id' => 1,
     ]);
 
-    postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment')
+    postJson(route('v2.admin.orders.update-shipment', ['order' => $this->order]))
         ->assertUnprocessable();
 });

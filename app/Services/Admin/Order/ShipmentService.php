@@ -5,7 +5,7 @@ namespace App\Services\Admin\Order;
 use App\Models\Order;
 use App\Models\OrderShipment;
 use App\Models\OrderStatus;
-use App\Services\Admin\V1\OrderStatusHistoryService;
+use App\Services\Admin\V2\OrderStatusHistoryService;
 
 class ShipmentService
 {

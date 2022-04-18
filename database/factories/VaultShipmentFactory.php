@@ -40,7 +40,7 @@ class VaultShipmentFactory extends Factory
             'shipped_at' => $this->faker->dateTime(),
             'tracking_number' => $this->faker->uuid(),
             'shipping_provider' => $this->faker->word(),
-            'shipping_url' => $this->faker->url(),
+            'tracking_url' => $this->faker->url(),
         ]);
     }
 }

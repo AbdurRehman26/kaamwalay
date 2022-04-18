@@ -4,9 +4,10 @@ namespace App\Listeners\API\Mailchimp;
 
 use App\Events\API\Auth\CustomerRegistered;
 use App\Services\MailchimpService;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendRegisteredUserToMailchimp implements ShouldQueue
+class SendRegisteredUserToMailchimp implements ShouldQueue, ShouldBeEncrypted
 {
     /**
      * Create the event listener.

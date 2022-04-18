@@ -20,6 +20,11 @@ const Root = styled(Grid)(({ theme }) => ({
     '&.completed': {
         backgroundColor: theme.palette.primary.main,
     },
+
+    [theme.breakpoints.down('sm')]: {
+        width: 48,
+        height: 48,
+    },
 }));
 
 export function SubmissionHeaderStepIcon({ active, completed, icon }: StepIconProps) {

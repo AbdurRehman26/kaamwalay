@@ -1,0 +1,1 @@
+export { VaultShipmentsTable } from './VaultShipmentsTable';

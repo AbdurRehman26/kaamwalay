@@ -126,6 +126,8 @@ class OrderService
             return ucfirst($orderPayment["card"]["brand"]) . ' ending in ' . $orderPayment["card"]["last4"];
         } elseif (array_key_exists('payer', $orderPayment)) {
             return $orderPayment["payer"]["email"] . "\n" . $orderPayment["payer"]["name"];
+        } elseif (array_key_exists('transaction', $orderPayment)) {
+            return 'Collector Coin';
         }
 
         return '';

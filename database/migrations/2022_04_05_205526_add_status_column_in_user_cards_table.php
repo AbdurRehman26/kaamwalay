@@ -29,7 +29,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('user_cards', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('shipping_status');
         });
     }
 };

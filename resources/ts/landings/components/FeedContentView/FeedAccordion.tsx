@@ -60,7 +60,7 @@ export function FeedAccordion() {
                         Grade {gradeTeal ? <CircleIcon sx={{ fontSize: '12px', color: '#20BFB8' }} /> : null}
                     </Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails sx={{ marginBottom: '60px' }}>
                     <FeedMobileGrade />
                 </AccordionDetails>
             </Accordion>

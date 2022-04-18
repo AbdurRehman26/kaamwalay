@@ -52,7 +52,8 @@ class OrderService extends V1OrderService
         return $data;
     }
 
-    public function getDataForCustomerOrderPaid(Order $order): array {
+    public function getDataForCustomerOrderPaid(Order $order): array
+    {
         $data = [];
 
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();

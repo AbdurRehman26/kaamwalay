@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\V2;
 
+use App\Enums\UserCard\UserCardShippingStatus;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Events\API\Admin\Order\UnpaidOrderExtraCharge;
@@ -15,6 +16,7 @@ use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Models\UserCard;
 use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V1\OrderService as V1OrderService;
 use Illuminate\Support\Facades\DB;
@@ -123,12 +125,15 @@ class OrderService extends V1OrderService
 
     protected function storeOrderItemsInVault(Order $order): bool
     {
-        $order
+        $orderItemIds = $order
             ->orderItems()
             ->whereHas('userCard')
-            ->with('userCard')
             ->get()
-            ->each(fn (OrderItem $orderItem) => ($orderItem->userCard->storeInVault()));
+            ->modelKeys();
+
+        UserCard::whereIn('order_item_id', $orderItemIds)->update([
+            'shipping_status' => UserCardShippingStatus::IN_VAULT,
+        ]);
 
         /** @var OrderStatusHistoryService $orderStatusHistoryService */
         $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);

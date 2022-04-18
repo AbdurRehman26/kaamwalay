@@ -34,7 +34,7 @@ class OrderController extends V1OrderController
             );
         }
 
-        $order->load('orderShipment');
+        $order->refresh()->load('orderShipment');
 
         return new OrderResource($order);
     }

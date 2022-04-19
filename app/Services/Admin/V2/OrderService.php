@@ -127,8 +127,7 @@ class OrderService extends V1OrderService
         $orderItemIds = $order
             ->orderItems()
             ->whereHas('userCard')
-            ->get()
-            ->modelKeys();
+            ->pluck('id');
 
         UserCard::whereIn('order_item_id', $orderItemIds)->update([
             'shipping_status' => UserCardShippingStatus::IN_VAULT,

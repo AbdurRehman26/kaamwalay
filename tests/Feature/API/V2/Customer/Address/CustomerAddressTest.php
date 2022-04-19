@@ -32,16 +32,3 @@ test('user can not receive other user address', function () {
     $response = $this->getJson('/api/v2/customer/addresses/' . $this->addresses[1]->id);
     $response->assertStatus(403);
 });
-
-test('user can store address', function () {
-    postJson(route('v2.addresses.store'), [
-        'first_name' => $this->faker->firstNameMale(),
-        'last_name' => $this->faker->lastName(),
-        'address' => $this->faker->streetAddress(),
-        'city' => $this->faker->city(),
-        'state' => $this->faker->stateAbbr(),
-        'zip' => $this->faker->postcode(),
-        'phone' => $this->faker->phoneNumber(),
-        'flat' => $this->faker->buildingNumber(),
-    ])->assertCreated();
-});

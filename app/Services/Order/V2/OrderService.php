@@ -3,12 +3,14 @@
 namespace App\Services\Order\V2;
 
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\ShippingMethod;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\V1\OrderService as V1OrderService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
 class OrderService extends V1OrderService
@@ -138,6 +140,30 @@ class OrderService extends V1OrderService
     {
         $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee;
         $order->grand_total = $order->service_fee + $order->shipping_fee - $order->discounted_amount - $order->payment_method_discounted_amount;
+
+        return $this;
+    }
+
+    public function processShippingDetails(Order &$order, array $data): self
+    {
+        if ($order->hasInsuredShipping()) {
+            dump($data);
+            if (! empty($data['customer_address']['id'])) {
+                $shippingAddress = OrderAddress::create(CustomerAddress::find($data['customer_address']['id'])->toArray());
+            } else {
+                $shippingAddress = OrderAddress::create($data['shipping_address']);
+            }
+
+            $order->shippingAddress()->associate($shippingAddress);
+            if (! empty($data['shipping_address']['save_for_later']) && empty($data['customer_address']['id'])) {
+                CustomerAddress::create(array_merge(
+                    Arr::except($data['shipping_address'], 'save_for_later'),
+                    [
+                        'user_id' => auth()->user()->id,
+                    ]
+                ));
+            }
+        }
 
         return $this;
     }

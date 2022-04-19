@@ -37,11 +37,18 @@ class UpdateOrderShippingMethodRequest extends FormRequest
                 'required',
                 'exists:shipping_methods,id',
             ],
-            'customer_address_id' => [
-                Rule::requiredIf($this->isShippingAddressRequired()),
-                'integer',
-                'exists:customer_addresses,id',
-            ],
+            'customer_address' => [Rule::requiredIf($this->isShippingAddressRequired()), 'array'],
+            'customer_address.id' => ['nullable', 'integer', 'exists:customer_addresses,id'],
+            'shipping_address' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'array'],
+            'shipping_address.save_for_later' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress())],
+            'shipping_address.first_name' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.last_name' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.address' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.city' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.state' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string', 'max:2'],
+            'shipping_address.zip' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.phone' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.flat' => ['nullable', 'string'],
         ];
     }
 
@@ -51,5 +58,10 @@ class UpdateOrderShippingMethodRequest extends FormRequest
             'id',
             $this->input('shipping_method_id')
         )->value('code') === ShippingMethod::INSURED_SHIPPING;
+    }
+
+    protected function hasNoCustomerAddress(): bool
+    {
+        return empty($this->input('customer_address')['id']);
     }
 }

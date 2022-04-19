@@ -48,7 +48,6 @@
 
     @include breakpoints.down(xs) {
         padding: 0 16px 0 16px;
-        z-index: 0;
         height: 60px;
         align-items: center;
     }

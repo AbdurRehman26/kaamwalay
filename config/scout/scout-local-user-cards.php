@@ -20,10 +20,6 @@ return [
         'card_name',
         'searchable_name',
         'owner_name',
-        'grade_nickname',
-        'overall_grade',
-        'card_category',
-        'grade',
     ],
 
     /*
@@ -40,7 +36,7 @@ return [
     |
     */
 
-    'customRanking' => ['desc(graded_at)', 'desc(certificate_number)'],
+    'customRanking' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -87,7 +83,7 @@ return [
     |
     */
 
-    'attributesForFaceting' => ['card_category', 'grade', 'overall_grade'],
+    'attributesForFaceting' => ['card_category', 'grade', 'grade_overall'],
 
     /*
     |--------------------------------------------------------------------------
@@ -163,6 +159,16 @@ return [
     | configuration, just use the command `scout:sync` to get remote settings in this file.
     |
     */
-    'replicas' => ['local_user_cards_Ascending', 'local_user_cards_Descending'],
-    'ranking' => ['custom'],
+    'replicas' => ['local_user_cards_Ascending'],
+    'ranking' => [
+        'desc(graded_at)',
+        'typo',
+        'geo',
+        'words',
+        'filters',
+        'proximity',
+        'attribute',
+        'exact',
+        'custom',
+    ],
 ];

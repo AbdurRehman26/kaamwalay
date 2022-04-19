@@ -55,15 +55,26 @@ const FeedGradeDropdown = styled(Box)(
 
 const styles = {
     MenuItem: {
-        paddingRight: '50px',
         '&:hover': {
             backgroundColor: 'rgba(32, 191, 184, 0.12)',
         },
     },
 };
 
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: '260px',
+            borderRadius: '8px',
+        },
+    },
+};
+
 const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
     const [className, changeClassName] = useState('Select');
+    const getGrade = (item: Record<string, any>) => Number(item.label.split(' ').pop());
+    const grades = items.sort((a, b) => getGrade(b) - getGrade(a));
+
     return (
         <>
             <Divider sx={{ margin: '0px 20px', height: '40px' }} orientation="vertical" flexItem />
@@ -82,11 +93,12 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
                             changeClassName('Select');
                         }}
                         className={className}
+                        MenuProps={MenuProps}
                     >
                         <MenuItem sx={{ display: 'none' }} value={'Grade'}>
                             Grade
                         </MenuItem>
-                        {items.map((item: any) => (
+                        {grades.map((item: any) => (
                             <MenuItem
                                 sx={styles.MenuItem}
                                 key={item.label}
@@ -116,7 +128,7 @@ const CustomMenuSelect = connectMenu(({ items, currentRefinement, refine }) => {
 export function FeedGrade() {
     const grade = useSelector((state: RootState) => state.feed.gradeValue.grade);
 
-    return <CustomMenuSelect attribute={'grade'} defaultRefinement={grade} />;
+    return <CustomMenuSelect attribute={'grade'} defaultRefinement={grade} limit={20} />;
 }
 
 export default FeedGrade;

@@ -25,6 +25,7 @@ use App\Http\Controllers\API\V2\Customer\PushNotificationController;
 use App\Http\Controllers\API\V2\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V2\Files\UploadController;
 use App\Http\Controllers\API\V2\Landings\PopReportController;
+use App\Http\Controllers\API\V2\Customer\VaultShipment\VaultShipmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -105,6 +106,14 @@ Route::prefix('customer')->group(function () {
         Route::prefix('wallet')->group(function () {
             Route::get('transactions', [WalletController::class, 'getTransactions'])->name('wallet.transactions');
             Route::get('/', [WalletController::class, 'getWallet'])->name('wallet.me');
+        });
+
+        Route::prefix('vault-shipments')->group(function () {
+            Route::apiResource('', VaultShipmentController::class)
+                ->only(['index'])
+                ->names([
+                    'index' => 'customer.vault-shipments.index',
+                ]);
         });
     });
 });

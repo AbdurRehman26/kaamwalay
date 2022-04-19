@@ -249,14 +249,6 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
                                     {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                                 </MenuItem>
-                                {status === OrderStatusEnum.INCOMPLETE && (
-                                    <>
-                                        <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
-                                            Continue Submission
-                                        </MenuItem>
-                                        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
-                                    </>
-                                )}
                             </Menu>
                         </TableCell>
                     </TableRow>
@@ -332,14 +324,6 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                         <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
                                             {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                                         </MenuItem>
-                                    </>
-                                )}
-                                {status === OrderStatusEnum.INCOMPLETE && (
-                                    <>
-                                        <MenuItem onClick={handleOption(Options.ContinueSubmission)}>
-                                            Continue Submission
-                                        </MenuItem>
-                                        <MenuItem onClick={handleOption(Options.Delete)}>Delete</MenuItem>
                                     </>
                                 )}
                             </Menu>

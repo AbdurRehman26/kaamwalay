@@ -38,6 +38,10 @@ const Root = styled('div')(({ theme }) => ({
         height: 2,
         border: 0,
         backgroundColor: theme.palette.primary.main,
+
+        [theme.breakpoints.down('sm')]: {
+            height: 0,
+        },
     },
 }));
 

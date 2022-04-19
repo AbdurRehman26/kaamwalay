@@ -102,7 +102,7 @@ export function FeedSortBy() {
         <CustomSortBy
             defaultRefinement={sort ? sort : `${appEnv}_user_cards`}
             items={[
-                { value: `${appEnv}_user_cards_Descending`, label: 'Most Recent' },
+                { value: `${appEnv}_user_cards`, label: 'Most Recent' },
                 { value: `${appEnv}_user_cards_Ascending`, label: 'Oldest' },
             ]}
         />

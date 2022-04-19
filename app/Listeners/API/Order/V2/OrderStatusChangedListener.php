@@ -2,7 +2,7 @@
 
 namespace App\Listeners\API\Order\V2;
 
-use App\Events\API\Order\V1\OrderStatusChangedEvent;
+use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
@@ -110,6 +110,24 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
             ['ORDER_NUMBER' => $event->order->order_number]
         );
+
+        if (! $event->order->isPaid()) {
+            $this->sendEmail(
+                $event,
+                EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
+                $this->orderService->getDataForCustomerPaymentReminder($event->order)
+            );
+
+            $this->scheduleEmail(
+                $event,
+                now()->addDays(2),
+                EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
+                $this->orderService->getDataForCustomerPaymentReminder($event->order),
+                true,
+                'OrderPaymentDueReminderCheck',
+                ['order_id' => $event->order->id],
+            );
+        }
     }
 
     protected function handleShipped(OrderStatusChangedEvent $event): void
@@ -144,14 +162,24 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function scheduleEmail(OrderStatusChangedEvent $event, DateTime $sendAt, string $template, array $vars): void
-    {
+    protected function scheduleEmail(
+        OrderStatusChangedEvent $event,
+        DateTime $sendAt,
+        string $template,
+        array $vars,
+        bool $reschedulingRequired = false,
+        string $checkClass = null,
+        array $extraData = [],
+    ): void {
         $this->emailService->scheduleEmail(
             $sendAt,
             [[$event->order->user->email => $event->order->user->getFullName()]],
             $this->emailService->getSubjectByTemplate($template),
             $template,
-            $vars
+            $vars,
+            $reschedulingRequired,
+            $checkClass,
+            $extraData
         );
     }
 

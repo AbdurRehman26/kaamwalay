@@ -71,6 +71,11 @@ class UserCard extends Model
         );
     }
 
+    public function wasSearchableBeforeUpdate(): bool
+    {
+        return ! $this->shouldBeSearchable();
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

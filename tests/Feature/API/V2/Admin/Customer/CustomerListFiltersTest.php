@@ -18,12 +18,9 @@ beforeEach(function () {
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))
-        ->state(new Sequence(
-            [
-                'created_at' => now()->subDays(10)->toDateString(),
-            ]
-        ))->create([
+        ->create([
             'first_name' => \Illuminate\Support\Str::random(),
+            'created_at' => now()->subDays(10)->toDateString(),
         ]);
 
 

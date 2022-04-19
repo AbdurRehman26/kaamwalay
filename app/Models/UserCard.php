@@ -62,7 +62,7 @@ class UserCard extends Model
         ];
     }
 
-    public function shouldBeSearchable():bool
+    public function shouldBeSearchable(): bool
     {
         return (
             $this->orderItem->order_item_status_id === OrderItemStatus::GRADED

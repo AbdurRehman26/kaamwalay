@@ -1,12 +1,18 @@
 import Box from '@mui/material/Box';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import { connectSortBy } from 'react-instantsearch-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
+import { setSortByValue } from '../../redux/slices/feedSlice';
 import { RootState } from '../../redux/store';
 
 const FeedSortDropdown = styled(Box)(
@@ -60,8 +66,11 @@ const styles = {
 const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
     const [classN, changeClass] = useState('Select');
     const { appEnv } = useConfiguration();
+    const sort = useSelector((state: RootState) => state.feed.sortState.sort);
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+    const dispatch = useDispatch();
 
-    return (
+    return !isMobile ? (
         <FeedSortDropdown>
             {classN === 'Select' ? (
                 <Typography className={'SortText'}>Sort</Typography>
@@ -92,6 +101,25 @@ const CustomSortBy = connectSortBy(({ items, refine, currentRefinement }) => {
                 ))}
             </Select>
         </FeedSortDropdown>
+    ) : (
+        <ul>
+            <RadioGroup>
+                {items.map((item: any) => (
+                    <FormControlLabel
+                        checked={sort === item.value}
+                        key={item.value}
+                        value={item.value}
+                        control={<Radio />}
+                        label={item.label}
+                        onClick={(event) => {
+                            event.preventDefault();
+                            refine(item.value);
+                            dispatch(setSortByValue(item.value));
+                        }}
+                    />
+                ))}
+            </RadioGroup>
+        </ul>
     );
 });
 

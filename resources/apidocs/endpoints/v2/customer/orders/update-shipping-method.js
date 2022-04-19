@@ -8,8 +8,24 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam { integer } shipping_method_id Resource ID for shipping method
- * @apiParam { integer } [order_address_id] Required if the shipping method is insured
+ * @apiParamExample {json} Request-example
+ *      {
+ *          "shipping_method_id": 1,
+ *          "customer_address": {
+ *              "id": 1,
+ *          }
+ *          "shipping_address": {
+ *              "first_name": "Test",
+ *              "last_name": "Test",
+ *              "address": "Test address",
+ *              "city": "Test",
+ *              "state": "AB",
+ *              "zip": "123A",
+ *              "phone": "1312310913",
+ *              "flat": "43",
+ *              "save_for_later": false
+ *          }
+ *      }
  *
  * @apiSuccess {Object} data
  *

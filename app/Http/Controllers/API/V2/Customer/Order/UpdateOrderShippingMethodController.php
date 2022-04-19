@@ -6,9 +6,7 @@ use App\Exceptions\API\Customer\Order\OrderShippingMethodCannotBeChangedExceptio
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V2\Customer\Order\UpdateOrderShippingMethodRequest;
 use App\Http\Resources\API\V2\Customer\Order\OrderResource;
-use App\Models\CustomerAddress;
 use App\Models\Order;
-use App\Models\OrderAddress;
 use App\Services\Order\V2\OrderService;
 use Exception;
 use Illuminate\Http\JsonResponse;

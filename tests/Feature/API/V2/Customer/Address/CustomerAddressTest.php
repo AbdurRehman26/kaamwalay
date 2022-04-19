@@ -5,7 +5,6 @@ use App\Models\CustomerAddress;
 use Illuminate\Foundation\Testing\WithFaker;
 
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\postJson;
 
 uses(WithFaker::class);
 

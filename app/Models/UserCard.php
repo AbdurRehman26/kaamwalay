@@ -73,7 +73,7 @@ class UserCard extends Model
 
     public function wasSearchableBeforeUpdate(): bool
     {
-        return ! $this->shouldBeSearchable();
+        return $this->shouldBeSearchable();
     }
 
     public function user(): BelongsTo

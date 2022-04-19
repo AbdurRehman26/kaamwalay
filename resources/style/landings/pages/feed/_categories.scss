@@ -1,0 +1,361 @@
+@use '../../../shared/breakpoints';
+
+.feed-categories {
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
+    &__refinement-list {
+        margin: 20px 0px;
+        @include breakpoints.down(768) {
+            display: none;
+        }
+    }
+
+    &__sort-by-container {
+        margin-top: -10px;
+        margin-left: 10px;
+        height: 50px;
+        border-left: 1px solid rgba(224, 224, 224, 1);
+    }
+
+    &__sort-by-text {
+        margin-left: 10px;
+    }
+
+    &__category-list {
+        width: 200px;
+        height: 40px;
+        margin-left: 10px;
+        padding: 10px 35px;
+        display: inline;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        box-sizing: border-box;
+        border-radius: 24px;
+    }
+
+    &__clear-refinements-selected {
+        margin-top: 20px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.2px;
+        color: #20bfb8;
+        width: 160px;
+        height: 40px;
+        margin-left: 10px;
+        padding: 10px 10px;
+        display: inline;
+        background: #e3f0f6;
+        border: 1px solid #20bfb8;
+        box-sizing: border-box;
+        border-radius: 24px;
+    }
+
+    &__clear-refinements-not-selected {
+        margin-top: 20px;
+        text-align: center;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.2px;
+        color: rgba(0, 0, 0, 0.54);
+        width: 160px;
+        height: 40px;
+        margin-left: 10px;
+        padding: 10px 10px;
+        display: inline;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        box-sizing: border-box;
+        border-radius: 24px;
+    }
+
+    &__icon {
+        position: absolute;
+        margin-left: -26px;
+        top: 230px;
+    }
+
+    &__clear-refinements-icon {
+        position: absolute;
+        left: 143px;
+        width: 10px;
+        top: 229px;
+        color: #20bfb8;
+    }
+
+    &__clear-refinements {
+        @include breakpoints.down(768) {
+            display: none;
+        }
+    }
+
+    &__category-name-not-selected {
+        text-align: center;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.2px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    &__dropdown {
+        width: 146px;
+        height: 257px;
+        margin-top: 4px !important;
+        margin-left: 9px !important;
+        background: #ffffff;
+        box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12), 0px 3px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        overflow: auto;
+    }
+
+    &__category-name-selected {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.2px;
+        color: #20bfb8;
+    }
+
+    &__filters {
+        display: flex;
+        align-items: stretch;
+    }
+
+    &__menu-select {
+        border-left: 1px solid rgba(0, 0, 0, 0.18);
+        margin: 22px 10px;
+        @include breakpoints.down(768) {
+            display: none;
+        }
+    }
+
+    &__dropdown-icon {
+        position: absolute;
+        margin-left: 10px;
+        margin-top: -1px;
+    }
+
+    &__grade {
+        margin-left: 10px;
+        padding: 10px 20px;
+        width: 130px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        box-sizing: border-box;
+        border-radius: 24px;
+        text-align: center;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    &__grade-selected {
+        background: #e3f0f6;
+        border: 1px solid #20bfb8;
+        box-sizing: border-box;
+        border-radius: 24px;
+        margin-left: 10px;
+        padding: 10px 20px;
+        width: 140px;
+        text-align: center;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        color: rgba(32, 191, 184, 1);
+    }
+
+    &__close-icon {
+        position: absolute;
+        margin-left: 10px;
+        margin-top: -1px;
+        color: #ffffff;
+        background: rgba(32, 191, 184, 1);
+        border-radius: 10px;
+    }
+
+    &__grade:focus {
+        background-color: #e3f0f6;
+        color: #20bfb8;
+    }
+
+    &__grade-option {
+        background: #ffffff;
+        box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12), 0px 3px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+    }
+
+    &__dropdown-items {
+        padding: 5px 5px;
+        height: 40px;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.25px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+    &__dropdown-items:hover {
+        background-color: #e3f0f6;
+    }
+
+    &__views {
+        display: flex;
+        margin-top: 32px;
+        @include breakpoints.down(768) {
+            display: none;
+        }
+    }
+
+    &__list-view-button {
+        margin-right: 10px;
+    }
+}
+.feed-stats {
+    &__stats-button {
+        position: absolute;
+        width: 382px;
+        height: 48px;
+        top: 600px;
+        background: #20bfb8;
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2);
+        border-radius: 28px;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        letter-spacing: 0.35px;
+        text-transform: uppercase;
+        color: #ffffff;
+    }
+
+    &__text-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    &__current-refinements-list {
+        margin-left: 10px;
+        height: 40px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.2px;
+        color: #20bfb8;
+        background: #edfaf9;
+        border: 1px solid #20bfb8;
+        box-sizing: border-box;
+        border-radius: 24px;
+        padding: 10px 15px;
+        display: none;
+        @include breakpoints.down(768) {
+            display: inline-block;
+        }
+    }
+
+    &__current-refinements-button {
+        background: rgba(32, 191, 184, 1);
+        border-radius: 20px;
+        padding: 2px 8px;
+        color: white;
+        margin-left: 10px;
+    }
+
+    &__heading {
+        padding: 20px 20px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0.5px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    &__close-button {
+        width: 20%;
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 30px;
+    }
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        @include breakpoints.down(768) {
+            padding: 20px 20px;
+        }
+    }
+
+    &__sort-and-filter {
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        box-sizing: border-box;
+        border-radius: 24px;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.2px;
+        color: rgba(0, 0, 0, 0.54);
+        display: none;
+        @include breakpoints.down(768) {
+            width: 50%;
+            display: block;
+        }
+    }
+
+    &__count {
+        background: rgba(154, 154, 154, 1);
+        color: #ffffff;
+        border-radius: 20px;
+        padding: 5px 10px;
+        margin-left: -10px;
+    }
+
+    &__icon {
+        margin-left: -30px;
+        margin-top: -3px;
+        position: absolute;
+    }
+
+    &__text {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 40px;
+        letter-spacing: 0.5px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    &__total {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        letter-spacing: 0.4px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    &__sort-and-filter-mobile {
+        height: 100%;
+        width: 0%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: white;
+        overflow-x: hidden;
+    }
+}

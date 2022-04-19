@@ -140,6 +140,7 @@ export function PromoCodesTableRow({ promoCode }: PromoCodesTableRowProps) {
             </TableCell>
             <TableCell align={'left'}>{promoCode?.couponStats.timesUsed}</TableCell>
             <TableCell align={'left'}>${promoCode?.couponStats.totalDiscount}</TableCell>
+            <TableCell align={'left'}>{promoCode?.createdBy?.email}</TableCell>
             <TableCell align={'right'} className={classes.optionsCell}>
                 <IconButton onClick={handleClickOptions} size="large">
                     <MoreIcon />

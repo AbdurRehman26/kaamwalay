@@ -1,7 +1,7 @@
 <?php
 
 use App\Events\API\Customer\Order\OrderPaid;
-use App\Events\API\Order\V1\OrderStatusChangedEvent;
+use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\OrderStatus;
@@ -106,7 +106,7 @@ test('user can be charged partially from wallet', function () {
         'payment_by_wallet' => 10.00,
     ])
         ->assertOk();
-    
+
     expect($this->user->wallet->refresh()->balance)->toBe($oldWalletBalance - $walletAmount);
     expect($this->user->wallet->lastTransaction->amount)->toBe($walletAmount);
 })->group('payment');

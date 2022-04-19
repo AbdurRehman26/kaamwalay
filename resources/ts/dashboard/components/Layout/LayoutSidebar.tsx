@@ -92,6 +92,11 @@ export function LayoutSidebar() {
                 <LayoutSidebarItem icon={StyleOutlinedIcon} title={'Your Cards'} href={'/cards'} />
                 <LayoutSidebarItem icon={AccountBalanceWalletOutlinedIcon} title={'Wallet'} href={'/wallet'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Profile'} href={'/profile'} />
+                {/* <LayoutSidebarItem*/}
+                {/*    icon={LocalShippingOutlinedIcon}*/}
+                {/*    title={'Vault Shipments'}*/}
+                {/*    href={'/vault-shipments'}*/}
+                {/* />*/}
 
                 <LayoutSidebarItem
                     exact

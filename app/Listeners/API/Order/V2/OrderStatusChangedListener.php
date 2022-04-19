@@ -2,9 +2,11 @@
 
 namespace App\Listeners\API\Order\V2;
 
-use App\Events\API\Order\V1\OrderStatusChangedEvent;
+use App\Events\API\Order\V2\OrderStatusChangedEvent;
+use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;
+use App\Models\UserCard;
 use App\Notifications\Order\OrderStatusChangedNotification;
 use App\Services\Admin\V2\OrderService as AdminOrderService;
 use App\Services\EmailService;
@@ -43,6 +45,7 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         $this->processEmails($event);
         $this->processPushNotification($event);
+        $this->indexCardsForFeed($event);
     }
 
     protected function processEmails(OrderStatusChangedEvent $event): void
@@ -107,6 +110,24 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
             ['ORDER_NUMBER' => $event->order->order_number]
         );
+
+        if (! $event->order->isPaid()) {
+            $this->sendEmail(
+                $event,
+                EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
+                $this->orderService->getDataForCustomerPaymentReminder($event->order)
+            );
+
+            $this->scheduleEmail(
+                $event,
+                now()->addDays(2),
+                EmailService::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER,
+                $this->orderService->getDataForCustomerPaymentReminder($event->order),
+                true,
+                'OrderPaymentDueReminderCheck',
+                ['order_id' => $event->order->id],
+            );
+        }
     }
 
     protected function handleShipped(OrderStatusChangedEvent $event): void
@@ -141,14 +162,24 @@ class OrderStatusChangedListener implements ShouldQueue
         );
     }
 
-    protected function scheduleEmail(OrderStatusChangedEvent $event, DateTime $sendAt, string $template, array $vars): void
-    {
+    protected function scheduleEmail(
+        OrderStatusChangedEvent $event,
+        DateTime $sendAt,
+        string $template,
+        array $vars,
+        bool $reschedulingRequired = false,
+        string $checkClass = null,
+        array $extraData = [],
+    ): void {
         $this->emailService->scheduleEmail(
             $sendAt,
             [[$event->order->user->email => $event->order->user->getFullName()]],
             $this->emailService->getSubjectByTemplate($template),
             $template,
-            $vars
+            $vars,
+            $reschedulingRequired,
+            $checkClass,
+            $extraData
         );
     }
 
@@ -156,6 +187,15 @@ class OrderStatusChangedListener implements ShouldQueue
     {
         if ($event->orderStatus->id !== OrderStatus::PAYMENT_PENDING) {
             $event->order->user->notify(new OrderStatusChangedNotification($event->order));
+        }
+    }
+
+    protected function indexCardsForFeed(OrderStatusChangedEvent $event): void
+    {
+        if ($event->orderStatus->id === OrderStatus::SHIPPED) {
+            $orderItemIds = OrderItem::where('order_id', $event->order->id)->pluck('id');
+            // @phpstan-ignore-next-line
+            UserCard::whereIn('order_item_id', $orderItemIds)->get()->searchable();
         }
     }
 }

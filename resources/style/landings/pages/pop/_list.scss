@@ -126,6 +126,19 @@
                 @apply text-sm;
                 font-weight: 500;
                 line-height: 24px;
+
+                &.display-desktop {
+                    @include breakpoints.down(sm) {
+                        @apply hidden;
+                    }
+                }
+
+                &.display-mobile {
+                    @apply hidden;
+                    @include breakpoints.down(sm) {
+                        @apply block;
+                    }
+                }
             }
 
             &-subheading {

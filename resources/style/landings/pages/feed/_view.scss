@@ -466,3 +466,13 @@
         }
     }
 }
+.feed-pagination-section {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 20px;
+
+    &__pagination {
+        margin-top: -22px;
+        width: 100px;
+    }
+}

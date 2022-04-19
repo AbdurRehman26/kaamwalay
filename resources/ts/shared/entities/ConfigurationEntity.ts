@@ -10,4 +10,6 @@ export class ConfigurationEntity {
     public web3BscWallet!: string;
     public web3EthWallet!: string;
     public web3TestWallet!: string;
+    public searchCardCategoriesCustomer!: string;
+    public searchCardCategoriesAdmin!: string;
 }

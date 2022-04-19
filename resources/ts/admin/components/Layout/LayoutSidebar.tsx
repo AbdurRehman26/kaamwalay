@@ -7,6 +7,7 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
+import { SafeSquareOutline } from '@shared/components/icons/SafeSquareOutline';
 import { useAppSelector } from '@admin/redux/hooks';
 import LayoutSidebarItem from './LayoutSidebarItem';
 
@@ -42,6 +43,7 @@ function LayoutSidebar() {
                 <LayoutSidebarItem icon={AllInboxIcon} title={'Submissions'} href={'/submissions'} />
                 <LayoutSidebarItem icon={SellIcon} title={'Promo Codes'} href={'/promo-codes'} />
                 <LayoutSidebarItem icon={AccountCircleOutlinedIcon} title={'Customers'} href={'/customers'} />
+                <LayoutSidebarItem icon={SafeSquareOutline} title={'Vault Storage'} href={'/vault-storage'} />
                 <LayoutSidebarItem icon={StyleIcon} title={'Cards'} href={'/cards'} comingSoon />
                 <LayoutSidebarItem icon={ReceiptIcon} title={'Ledger'} href={'/ledger'} comingSoon />
             </List>

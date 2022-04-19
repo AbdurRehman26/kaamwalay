@@ -1,12 +1,11 @@
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { Moment } from 'moment';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 
 interface CustomerHistoryRowProps {
-    date: Moment;
+    date: Date;
     description: string;
     amount: number;
 }

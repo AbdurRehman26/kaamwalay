@@ -37,6 +37,9 @@ export function SubmissionsView() {
         },
     });
 
+    // TODO: Implement better in vault check.
+    const inVault = data?.id % 2 === 0;
+
     if (isLoading || !data) {
         return (
             <Box p={4} display={'flex'} alignItems={'center'} justifyContent={'center'} width={'100%'}>
@@ -55,6 +58,7 @@ export function SubmissionsView() {
                 orderShipment={data?.orderShipment}
                 orderLabel={data?.orderLabel}
                 customer={data?.customer}
+                inVault={inVault}
             />
             <Divider />
             <SubmissionsViewDetails

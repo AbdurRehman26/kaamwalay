@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends V1OrderController
 {
-    public function processShipment(UpdateShipmentRequest $request, Order $order, ShipmentService $shipmentService): OrderResource | JsonResponse
+    public function processShipment(UpdateShipmentRequest $request, Order $order): OrderResource | JsonResponse
     {
         try {
             /** @var OrderService $orderService */
@@ -22,7 +22,6 @@ class OrderController extends V1OrderController
 
             $orderService->shipOrder(
                 $order,
-                $shipmentService,
                 $request->only('shipping_provider', 'tracking_number')
             );
         } catch (ShipmentNotUpdated $e) {

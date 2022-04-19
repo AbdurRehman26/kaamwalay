@@ -22,7 +22,9 @@ beforeEach(function () {
             [
                 'created_at' => now()->subDays(10)->toDateString(),
             ]
-        ))->create();
+        ))->create([
+            'first_name' => \Illuminate\Support\Str::random(),
+        ]);
 
 
     $this->orders = Order::factory()->for($this->customer)->state(new Sequence(

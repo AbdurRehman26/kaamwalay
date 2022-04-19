@@ -114,8 +114,11 @@ class OrderService extends V1OrderService
         return $data;
     }
 
-    public function shipOrder(Order $order, ShipmentService $shipmentService, array $data): OrderShipment|bool
+    public function shipOrder(Order $order, array $data): OrderShipment|bool
     {
+        /** @var ShipmentService $shipmentService */
+        $shipmentService = resolve(ShipmentService::class);
+
         return match ($order->shippingMethod->code) {
             ShippingMethod::INSURED_SHIPPING => $shipmentService->updateShipment($order, $data['shipping_provider'], $data['tracking_number']),
             default => $this->storeOrderItemsInVault($order),

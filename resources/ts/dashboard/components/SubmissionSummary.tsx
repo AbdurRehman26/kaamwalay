@@ -2,6 +2,8 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import React, { useState } from 'react';
 import ReactGA from 'react-ga';
@@ -154,6 +156,7 @@ function SubmissionSummary() {
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
@@ -219,7 +222,7 @@ function SubmissionSummary() {
                 </Typography>
             </div>
             <div className={classes.bodyContainer}>
-                {currentStep === 4 ? (
+                {currentStep === 4 && !isMobile ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
                             <Button

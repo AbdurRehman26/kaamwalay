@@ -36,7 +36,7 @@ class OrderController extends V1OrderController
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            
+
             return new JsonResponse(
                 [
                     'error' => $e->getMessage(),

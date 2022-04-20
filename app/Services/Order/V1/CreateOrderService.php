@@ -98,7 +98,6 @@ class CreateOrderService
         $this->storeOrderPayment($this->data);
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::DEFAULT_ORDER_STATUS, $this->order);
-        OrderPlaced::dispatch($this->order);
 
         DB::commit();
     }

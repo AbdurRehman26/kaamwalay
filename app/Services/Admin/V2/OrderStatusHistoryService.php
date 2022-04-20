@@ -47,11 +47,6 @@ class OrderStatusHistoryService extends V1OrderStatusHistoryService
             OrderCanNotBeMarkedAsGraded::class
         );
 
-        throw_if(
-            getModelId($orderStatus) === OrderStatus::SHIPPED && ! Order::find($orderId)->isPaid(),
-            OrderCanNotBeMarkedAsShipped::class
-        );
-
         if ($orderStatusId === OrderStatus::CONFIRMED) {
             $data = $this->orderService->getOrderCertificatesData($order);
 

@@ -29,13 +29,7 @@ class UpdateOrderShippingMethodController extends Controller
         try {
             DB::beginTransaction();
 
-            $orderService
-                ->changeShippingMethod($order, $request->input('shipping_method_id'))
-                ->processShippingDetails($order, $request->validated())
-                ->updateShippingFee($order)
-                ->recalculateGrandTotal($order);
-
-            $order->save();
+            $orderService->processChangeInShippingMethod($order, $request->validated());
 
             DB::commit();
         } catch (Exception $e) {
@@ -43,7 +37,7 @@ class UpdateOrderShippingMethodController extends Controller
 
             return new JsonResponse([
                 'message' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return new OrderResource($order);

@@ -142,7 +142,18 @@ class OrderService extends V1OrderService
         return $order;
     }
 
-    public function changeShippingMethod(Order &$order, int $shippingMethodId): self
+    public function processChangeInShippingMethod(Order $order, array $data): Order
+    {
+        $this->changeShippingMethod($order, $data['shipping_method_id'])
+            ->processShippingDetails($order, $data)
+            ->updateShippingFee($order)
+            ->recalculateGrandTotal($order)
+            ->saveOrder($order);
+
+        return $order;
+    }
+
+    protected function changeShippingMethod(Order &$order, int $shippingMethodId): self
     {
         $shippingMethod = ShippingMethod::find($shippingMethodId);
 
@@ -151,27 +162,14 @@ class OrderService extends V1OrderService
         return $this;
     }
 
-    protected function getShippingFeeForShippingMethod(Order $order): float
+    protected function updateShippingFee(Order &$order): self
     {
-        return match ($order->shippingMethod->code) {
-            ShippingMethod::INSURED_SHIPPING => $this->getInsuredShippingFee($order),
-            default => 0.0,
-        };
-    }
-
-    public function updateShippingFee(Order &$order): self
-    {
-        $order->shipping_fee = $this->getShippingFeeForShippingMethod($order);
+        $order->shipping_fee = $this->getNewShippingFee($order);
 
         return $this;
     }
 
-    protected function getInsuredShippingFee(Order $order): float
-    {
-        return ShippingFeeService::calculateForOrder($order);
-    }
-
-    public function recalculateGrandTotal(Order &$order): self
+    protected function recalculateGrandTotal(Order &$order): self
     {
         $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee;
         $order->grand_total = $order->service_fee + $order->shipping_fee - $order->discounted_amount - $order->payment_method_discounted_amount;
@@ -179,10 +177,9 @@ class OrderService extends V1OrderService
         return $this;
     }
 
-    public function processShippingDetails(Order &$order, array $data): self
+    protected function processShippingDetails(Order &$order, array $data): self
     {
         if ($order->hasInsuredShipping()) {
-            dump($data);
             if (! empty($data['customer_address']['id'])) {
                 $shippingAddress = OrderAddress::create(CustomerAddress::find($data['customer_address']['id'])->toArray());
             } else {
@@ -199,6 +196,18 @@ class OrderService extends V1OrderService
                 ));
             }
         }
+
+        return $this;
+    }
+
+    protected function getNewShippingFee(Order $order): float
+    {
+        return ShippingFeeService::calculateForOrder($order);
+    }
+
+    protected function saveOrder(Order &$order): self
+    {
+        $order->save();
 
         return $this;
     }

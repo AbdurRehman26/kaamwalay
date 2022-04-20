@@ -49,7 +49,7 @@ class StoreOrderRequest extends V1StoreOrderRequest
             'coupon.code' => ['sometimes', 'exists:coupons,code'],
         ];
 
-        if ($this->has('shipping_method') && ! $this->areAddressFieldsRequired()) {
+        if ($this->addressIsNotRequired()) {
             $rules = Arr::except($rules, [
                 'customer_address',
                 'customer_address.id',
@@ -79,13 +79,13 @@ class StoreOrderRequest extends V1StoreOrderRequest
         return $rules;
     }
 
-    protected function areAddressFieldsRequired(): bool
+    protected function addressIsNotRequired(): bool
     {
         if ($this->has('shipping_method')) {
             return ShippingMethod::where(
                 'id',
                 $this->input('shipping_method')['id']
-            )->value('code') === ShippingMethod::INSURED_SHIPPING;
+            )->value('code') === ShippingMethod::VAULT_STORAGE;
         }
 
         return false;

@@ -32,27 +32,28 @@ class UpdateOrderShippingMethodRequest extends FormRequest
      */
     public function rules()
     {
+        $isAddressRequired = $this->isAddressRequired();
         return [
             'shipping_method_id' => [
                 'required',
                 'exists:shipping_methods,id',
             ],
-            'customer_address' => [Rule::requiredIf($this->isShippingAddressRequired()), 'array'],
+            'customer_address' => [Rule::requiredIf($isAddressRequired), 'array'],
             'customer_address.id' => ['nullable', 'integer', 'exists:customer_addresses,id'],
-            'shipping_address' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'array'],
-            'shipping_address.save_for_later' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress())],
-            'shipping_address.first_name' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
-            'shipping_address.last_name' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
-            'shipping_address.address' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
-            'shipping_address.city' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
-            'shipping_address.state' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string', 'max:2'],
-            'shipping_address.zip' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
-            'shipping_address.phone' => [Rule::requiredIf($this->isShippingAddressRequired() && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress()), 'array'],
+            'shipping_address.save_for_later' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress())],
+            'shipping_address.first_name' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.last_name' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.address' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.city' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.state' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress()), 'string', 'max:2'],
+            'shipping_address.zip' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress()), 'string'],
+            'shipping_address.phone' => [Rule::requiredIf($isAddressRequired && $this->hasNoCustomerAddress()), 'string'],
             'shipping_address.flat' => ['nullable', 'string'],
         ];
     }
 
-    protected function isShippingAddressRequired(): bool
+    protected function isAddressRequired(): bool
     {
         return ShippingMethod::where(
             'id',

@@ -2,15 +2,10 @@
 
 use App\Models\CustomerAddress;
 
-use Illuminate\Foundation\Testing\WithFaker;
-
-use function Pest\Laravel\actingAs;
-
-uses(WithFaker::class);
-
 beforeEach(function () {
     $this->addresses = CustomerAddress::factory()->count(2)->create();
-    actingAs($this->addresses->first()->user);
+    $this->user = $this->addresses->first()->user;
+    $this->actingAs($this->user);
 });
 
 test('user can receive addresses', function () {

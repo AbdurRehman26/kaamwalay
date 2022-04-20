@@ -137,7 +137,7 @@ it('sorts cards alphabetically', function () {
 });
 
 it('filters cards by name', function () {
-    $searchName = \Illuminate\Support\Str::random();
+    $searchName = 'test_name';
     $this->userCards[0]->orderItem->cardProduct->update([
         'name' => $searchName,
     ]);

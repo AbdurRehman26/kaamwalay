@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V2\Admin\Order;
 
-use App\Exceptions\API\Admin\Order\ShipmentNotUpdated;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;

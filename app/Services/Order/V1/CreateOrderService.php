@@ -2,7 +2,6 @@
 
 namespace App\Services\Order\V1;
 
-use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
 use App\Models\CustomerAddress;

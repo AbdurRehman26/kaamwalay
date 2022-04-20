@@ -33,6 +33,7 @@ class UpdateOrderShippingMethodRequest extends FormRequest
     public function rules()
     {
         $isAddressRequired = $this->isAddressRequired();
+
         return [
             'shipping_method_id' => [
                 'required',

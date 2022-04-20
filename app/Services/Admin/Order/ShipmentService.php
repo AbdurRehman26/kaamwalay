@@ -2,12 +2,10 @@
 
 namespace App\Services\Admin\Order;
 
-use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsGraded;
 use App\Models\Order;
 use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Services\Admin\V2\OrderStatusHistoryService;
-use Throwable;
 
 class ShipmentService
 {
@@ -15,31 +13,17 @@ class ShipmentService
     {
     }
 
-    /**
-     * @throws OrderCanNotBeMarkedAsGraded
-     * @throws Throwable
-     */
     public function updateShipment(Order $order, string $shippingProvider, string $trackingNumber): OrderShipment
     {
         /** @var OrderShipment $orderShipment */
-        $orderShipment = $order->orderShipment;
+        $orderShipment = $order->orderShipment()->updateOrCreate([
+            'shipping_provider' => $shippingProvider,
+            'tracking_number' => $trackingNumber,
+            'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
+            'shipping_method_id' => $order->shipping_method_id,
+        ]);
 
-        if (! empty($orderShipment)) {
-            $orderShipment->update([
-                'shipping_provider' => $shippingProvider,
-                'tracking_number' => $trackingNumber,
-                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
-            ]);
-        } else {
-            $orderShipment = OrderShipment::create([
-                'shipping_provider' => $shippingProvider,
-                'tracking_number' => $trackingNumber,
-                'tracking_url' => $this->getTrackingUrl($shippingProvider, $trackingNumber),
-                'shipping_method_id' => $order->shipping_method_id,
-            ]);
-
-            $order->orderShipment()->associate($orderShipment)->save();
-        }
+        $order->orderShipment()->associate($orderShipment)->save();
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::SHIPPED, $order);
 

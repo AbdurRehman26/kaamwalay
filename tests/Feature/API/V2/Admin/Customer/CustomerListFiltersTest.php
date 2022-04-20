@@ -18,19 +18,16 @@ beforeEach(function () {
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
 
     $this->customer = User::factory()->withRole(config('permission.roles.customer'))
-        ->state(new Sequence(
-            [
-                'created_at' => now()->subDays(10)->toDateString(),
-            ]
-        ))->create();
-
+        ->create([
+            'first_name' => 'test_first_name',
+            'created_at' => now()->subDays(10)->toDateString(),
+        ]);
 
     $this->orders = Order::factory()->for($this->customer)->state(new Sequence(
         [
             'order_status_id' => 5,
         ]
     ))->count(10)->create();
-
 
     OrderStatusHistory::factory()->count(5)->sequence(
         ['order_status_id' => OrderStatus::PLACED, 'order_id' => $this->orders[0]->id, 'user_id' => $this->customer->id],

@@ -65,13 +65,18 @@ class UserCard extends Model
         ];
     }
 
-    public function shouldBeSearchable():bool
+    public function shouldBeSearchable(): bool
     {
         return (
             $this->orderItem->order_item_status_id === OrderItemStatus::GRADED
             && $this->orderItem->order->order_status_id === OrderStatus::SHIPPED
             && OrderItemStatusHistory::where('order_item_status_id', OrderItemStatus::GRADED)->exists()
         );
+    }
+
+    public function wasSearchableBeforeUpdate(): bool
+    {
+        return $this->shouldBeSearchable();
     }
 
     public function user(): BelongsTo
@@ -114,7 +119,12 @@ class UserCard extends Model
     public function markAsShipped(): bool
     {
         $this->shipping_status = UserCardShippingStatus::SHIPPED;
+        return $this->save();
+    }
 
+    public function storeInVault(): bool
+    {
+        $this->shipping_status = UserCardShippingStatus::IN_VAULT;
         return $this->save();
     }
 }

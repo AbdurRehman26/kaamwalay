@@ -27,6 +27,16 @@ class VaultShipmentResource extends BaseResource
      */
     public function toArray($request)
     {
+        $payments = $this->vaultShipmentPayments->map(function ($item) {
+            if($item->paymentMethod->code === 'paypal') {
+                return $this->paypalData(json_decode($item->response, associative: true) ?? []);
+            } elseif($item->paymentMethod->code === 'stripe'){
+                return $this->stripeData($item->response);
+            } elseif($item->paymentMethod->isCollectorCoin()){
+                return $this->collectorCoinData(json_decode($item->response, associative: true) ?? []);
+            }
+        });
+
         return [
             'id' => $this->id,
             'shipment_number' => $this->shipment_number,
@@ -38,10 +48,47 @@ class VaultShipmentResource extends BaseResource
             'shipping_address' => $this->whenLoaded('shippingAddress', OrderAddressResource::class),
             'vault_shipment_item' => $this->whenLoaded('vaultShipmentItems', VaultShipmentItemCollection::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
+            'payment_method' => $payments,
             'cards_number' => $this->vaultShipmentItems()->count(),
             'tracking_number' => $this->tracking_number,
             'shipping_provider' => $this->shipping_provider,
             'tracking_url' => $this->tracking_url,
+        ];
+    }
+
+    protected function paypalData(array $response): array
+    {
+        return [
+            'payer' => [
+                "email" => $response['payer']['email_address'] ?? "N/A",
+                "name" => $response['payer']['name']['given_name'] ?? "N/A",
+            ],
+        ];
+    }
+
+    protected function stripeData(string $response): array
+    {
+        $providerResponse = json_decode($response);
+        $card = $providerResponse->charges->data[0]->payment_method_details->card;
+        return [
+            'id' => $this->id,
+            'card' => [
+                'brand' => $card?->brand,
+                'exp_month' => $card?->exp_month,
+                'exp_year' => $card?->exp_year,
+                'last4' => $card?->last4,
+            ]
+        ];
+    }
+    
+    protected function collectorCoinData(array $response): array
+    {
+        return [
+            'transaction' => [
+                'amount' => $response['amount'],
+                'hash' => substr($response['txn_hash'], 0, 5) . '...' . substr($response['txn_hash'], -4),
+                'complete_hash' => $response['txn_hash'],
+            ],
         ];
     }
 }

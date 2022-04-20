@@ -185,9 +185,7 @@ export function FeedCategories({ query, setBackground }: { query: any; setBackgr
                 <Grid sx={{ borderBottom: '1px solid #E0E0E0' }}>
                     <FeedCurrentFilter />
                 </Grid>
-            ) : (
-                ''
-            )}
+            ) : null}
             {toggleView ? <FeedGridView /> : <FeedListView />}
             {isSm ? <FeedListView /> : ''}
         </>

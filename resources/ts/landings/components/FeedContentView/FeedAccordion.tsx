@@ -6,9 +6,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import FeedGrade from './FeedGrade';
 import FeedMobileCategories from './FeedMobileCategories';
-import FeedMobileGrade from './FeedMobileGrade';
-import FeedMobileSortBy from './FeedMobileSortBy';
+import FeedSortBy from './FeedSortBy';
 
 export function FeedAccordion() {
     const categoryTeal = useSelector((state: RootState) => state.feed.categoryTeal.teal);
@@ -31,7 +31,7 @@ export function FeedAccordion() {
                     </div>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <FeedMobileSortBy />
+                    <FeedSortBy />
                 </AccordionDetails>
             </Accordion>
             <Accordion>
@@ -61,7 +61,7 @@ export function FeedAccordion() {
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ marginBottom: '60px' }}>
-                    <FeedMobileGrade />
+                    <FeedGrade />
                 </AccordionDetails>
             </Accordion>
         </div>

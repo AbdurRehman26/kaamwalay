@@ -93,7 +93,7 @@ test('a customer can not add order item to order', function () {
 
     $response = $this->postJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items', [
         'card_id' => $newCard->id,
-        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = null),
+        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 100000),
     ]);
     $response->assertStatus(403);
 });
@@ -124,7 +124,7 @@ test('an admin can update order item', function () {
 
     $response = $this->putJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id, [
         'card_id' => $newCard->id,
-        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = null),
+        'value' => $this->faker->randomFloat(nbMaxDecimals: 2, min: 1, max: 100000),
     ]);
     $response->assertStatus(200);
     $response->assertJsonStructure([
@@ -155,7 +155,7 @@ test('a customer can not update order item', function () {
 
     $response = $this->putJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$orderItem->id, [
         'card_id' => $newCard->id,
-        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = null),
+        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 100000),
     ]);
     $response->assertStatus(403);
 });
@@ -171,7 +171,7 @@ test('order item update fails with wrong card parameter', function () {
 
     $response = $this->putJson('/api/v2/admin/orders/' . $orderItem->order_id . '/items/'.$otherItem->id, [
         'card_id' => $newCard->id,
-        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = null),
+        'value' => $this->faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 100000),
     ]);
 
     $response->assertJsonStructure(['error']);

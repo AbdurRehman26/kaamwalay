@@ -16,6 +16,7 @@ use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResour
  * @property mixed $shipping_provider
  * @property mixed $tracking_url
  * @method vaultShipmentItems()
+ * @property mixed $vaultShipmentPayments
  */
 class VaultShipmentResource extends BaseResource
 {

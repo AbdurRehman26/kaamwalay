@@ -29,11 +29,11 @@ class VaultShipmentResource extends BaseResource
     public function toArray($request)
     {
         $payments = $this->vaultShipmentPayments->map(function ($item) {
-            if($item->paymentMethod->code === 'paypal') {
+            if ($item->paymentMethod->code === 'paypal') {
                 return $this->paypalData(json_decode($item->response, associative: true) ?? []);
-            } elseif($item->paymentMethod->code === 'stripe'){
+            } elseif ($item->paymentMethod->code === 'stripe') {
                 return $this->stripeData($item->response);
-            } elseif($item->paymentMethod->isCollectorCoin()){
+            } elseif ($item->paymentMethod->isCollectorCoin()) {
                 return $this->collectorCoinData(json_decode($item->response, associative: true) ?? []);
             }
         });
@@ -71,6 +71,7 @@ class VaultShipmentResource extends BaseResource
     {
         $providerResponse = json_decode($response);
         $card = $providerResponse->charges->data[0]->payment_method_details->card;
+
         return [
             'id' => $this->id,
             'card' => [
@@ -78,7 +79,7 @@ class VaultShipmentResource extends BaseResource
                 'exp_month' => $card?->exp_month,
                 'exp_year' => $card?->exp_year,
                 'last4' => $card?->last4,
-            ]
+            ],
         ];
     }
     

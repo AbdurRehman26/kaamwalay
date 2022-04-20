@@ -5,6 +5,7 @@ namespace App\Services\Order\Shipping;
 use App\Models\Order;
 use App\Models\ShippingMethod;
 use App\Services\Order\Shipping\Calculators\InsuredShippingFeeCalculator;
+use App\Services\Order\Shipping\Calculators\VaultShippingFeeCalculator;
 
 class ShippingFeeService
 {
@@ -17,7 +18,7 @@ class ShippingFeeService
     {
         return match ($order->shippingMethod->code) {
             ShippingMethod::INSURED_SHIPPING => InsuredShippingFeeCalculator::calculateForOrder($order),
-            default => 0.0,
+            default => VaultShippingFeeCalculator::calculateForOrder($order),
         };
     }
 }

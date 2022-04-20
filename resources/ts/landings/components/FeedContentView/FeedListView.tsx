@@ -99,6 +99,7 @@ const TableDiv = styled(TableContainer)({
         fontSize: '12px',
         lineHeight: '12px',
         color: '#FFFFFF',
+        textAlign: 'center',
     },
     '.GradeValue': {
         fontWeight: '700',

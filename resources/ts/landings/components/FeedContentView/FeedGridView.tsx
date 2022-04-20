@@ -24,6 +24,7 @@ const GridDiv = styled(Grid)({
         justifyContent: 'space-between',
         alignItems: 'stretch',
         borderBottom: '1px solid #E0E0E0',
+        overflow: 'hidden',
     },
     '.GridTextSection': {
         padding: '10px 10px',
@@ -35,6 +36,10 @@ const GridDiv = styled(Grid)({
         lineHeight: '24px',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: '190px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     },
     '.CardLongName': {
         fontStyle: 'normal',
@@ -43,6 +48,27 @@ const GridDiv = styled(Grid)({
         lineHeight: '16px',
         letterSpacing: '0.2px',
         color: 'rgba(0, 0, 0, 0.87)',
+        position: 'relative',
+        display: 'inline-block',
+        maxWidth: '100%',
+        maxHeight: '32px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        wordWrap: 'break-word',
+        '&:before': {
+            position: 'absolute',
+            content: '"..."',
+            insetBlockEnd: '0',
+            insetInlineEnd: '0',
+        },
+        '&:after': {
+            content: '""',
+            position: 'absolute',
+            insetInlineEnd: '0',
+            width: '1rem',
+            height: '1rem',
+            background: 'white',
+        },
     },
     '.GridGradeSection': {
         padding: '5px 5px',
@@ -74,7 +100,6 @@ const GridDiv = styled(Grid)({
         padding: '10px 10px',
     },
     '.CardImage': {
-        width: '170.66px',
         height: '237.78px',
     },
     '.GridSection': {

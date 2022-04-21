@@ -454,4 +454,9 @@ class Order extends Model implements Exportable
     {
         return $this->shippingAddress()->is($this->billingAddress);
     }
+
+    public function hasInsuredShipping(): bool
+    {
+        return $this->shippingMethod->code === ShippingMethod::INSURED_SHIPPING;
+    }
 }

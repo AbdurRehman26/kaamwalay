@@ -18,6 +18,7 @@ use App\Http\Controllers\API\V2\Customer\Order\PaymentMethodController;
 use App\Http\Controllers\API\V2\Customer\Order\PaymentPlanController;
 use App\Http\Controllers\API\V2\Customer\Order\ShippingFeeController;
 use App\Http\Controllers\API\V2\Customer\Order\ShippingMethodController;
+use App\Http\Controllers\API\V2\Customer\Order\UpdateOrderShippingMethodController;
 use App\Http\Controllers\API\V2\Customer\PaymentCardController;
 use App\Http\Controllers\API\V2\Customer\ProfileController;
 use App\Http\Controllers\API\V2\Customer\PushNotificationController;
@@ -76,6 +77,8 @@ Route::prefix('customer')->group(function () {
             Route::post('{order}/customer-shipment', [OrderController::class, 'updateCustomerShipment']);
 
             Route::get('{order}/collector-coin', [OrderController::class, 'calculateCollectorCoinPrice']);
+            Route::put('{order}/shipping-method', UpdateOrderShippingMethodController::class)
+                ->name('customer.orders.update-shipping-method');
             Route::delete('{order}', [OrderController::class, 'destroy'])->name('customer.orders.destroy');
             Route::get('{orderId}', [OrderController::class, 'show']);
             Route::post('{order}/complete-submission', [OrderController::class, 'completeOrderSubmission']);

@@ -7,6 +7,7 @@ use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\ShippingMethod;
+use App\Services\EmailService;
 use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\V1\OrderService as V1OrderService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
@@ -210,5 +211,26 @@ class OrderService extends V1OrderService
         $order->save();
 
         return $this;
+    }
+
+    public function getOrderShippedEmailData(Order $order): array
+    {
+        if ($order->hasInsuredShipping()) {
+            return [
+                'data' => [
+                    'FIRST_NAME' => $order->user->first_name,
+                    'TRACKING_NUMBER' => $order->orderShipment->tracking_number,
+                    'TRACKING_URL' => $order->orderShipment->tracking_url,
+                ],
+                'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED,
+            ];
+        }
+
+        return [
+            'data' => [
+                'ORDER_NUMBER' => $order->order_number,
+            ],
+            'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_IN_VAULT,
+        ];
     }
 }

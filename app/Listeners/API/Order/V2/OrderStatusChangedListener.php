@@ -133,7 +133,7 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleShipped(OrderStatusChangedEvent $event): void
     {
-        $emailData = $this->getOrderShippedEmailData($event->order);
+        $emailData = $this->orderService->getOrderShippedEmailData($event->order);
 
         $this->sendEmail($event, $emailData['template'], $emailData['data']);
     }
@@ -196,26 +196,5 @@ class OrderStatusChangedListener implements ShouldQueue
             // @phpstan-ignore-next-line
             UserCard::whereIn('order_item_id', $orderItemIds)->get()->searchable();
         }
-    }
-
-    protected function getOrderShippedEmailData(Order $order): array
-    {
-        if ($order->hasInsuredShipping()) {
-            return [
-                'data' => [
-                    'FIRST_NAME' => $order->user->first_name,
-                    'TRACKING_NUMBER' => $order->orderShipment->tracking_number,
-                    'TRACKING_URL' => $order->orderShipment->tracking_url,
-                ],
-                'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED,
-            ];
-        }
-
-        return [
-            'data' => [
-                'ORDER_NUMBER' => $order->order_number,
-            ],
-            'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_IN_VAULT,
-        ];
     }
 }

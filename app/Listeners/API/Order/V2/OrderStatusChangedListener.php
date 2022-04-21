@@ -3,7 +3,6 @@
 namespace App\Listeners\API\Order\V2;
 
 use App\Events\API\Order\V2\OrderStatusChangedEvent;
-use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\User;

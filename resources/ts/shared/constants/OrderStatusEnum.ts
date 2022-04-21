@@ -6,6 +6,7 @@ export enum OrderStatusEnum {
     SHIPPED = 5,
     CANCELLED = 6,
     REVIEWED = 7,
+    IN_VAULT = 8,
 }
 
 export const OrderStatusMap = {
@@ -16,6 +17,7 @@ export const OrderStatusMap = {
     [OrderStatusEnum.SHIPPED]: { label: 'Shipped', value: 'shipped' },
     [OrderStatusEnum.CANCELLED]: { label: 'Cancelled', value: 'cancelled' },
     [OrderStatusEnum.REVIEWED]: { label: 'Reviewed', value: 'reviewed' },
+    [OrderStatusEnum.IN_VAULT]: { label: 'Stored In Vault', value: 'in_vault' },
 };
 
 export const AdminOrderStatusMap = {

@@ -27,6 +27,7 @@ interface SubmissionActionButtonProps extends ButtonProps {
     shippingProvider?: ShipmentEntity['shippingProvider'];
     trackingNumber?: ShipmentEntity['trackingNumber'];
     buttonOnly?: boolean;
+    inVault?: boolean;
 }
 
 /**
@@ -41,6 +42,7 @@ export function SubmissionActionButton({
     trackingNumber,
     shippingProvider,
     buttonOnly,
+    inVault,
     ...rest
 }: SubmissionActionButtonProps) {
     const classes = useStyles();
@@ -64,8 +66,13 @@ export function SubmissionActionButton({
         },
         [dispatch, orderId],
     );
+
     const handleOpenShipmentDialog = useCallback(() => {
         setIsShipmentDialogOpen(true);
+    }, []);
+
+    const handleMarkStoredInVault = useCallback(() => {
+        // TODO: Mark order as stored in vault
     }, []);
 
     const handleCloseShipmentDialog = useCallback(() => {
@@ -88,7 +95,11 @@ export function SubmissionActionButton({
         );
     }
 
-    if (orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED)) {
+    if (
+        orderStatus.is(OrderStatusEnum.GRADED) ||
+        orderStatus.is(OrderStatusEnum.SHIPPED) ||
+        orderStatus.is(OrderStatusEnum.IN_VAULT)
+    ) {
         return (
             <>
                 <ShipmentDialog
@@ -100,10 +111,16 @@ export function SubmissionActionButton({
                 />
 
                 {orderStatus.is(OrderStatusEnum.GRADED) ? (
-                    <Button {...sharedProps} onClick={handleOpenShipmentDialog}>
-                        Mark Shipped
-                    </Button>
-                ) : (
+                    inVault ? (
+                        <Button {...sharedProps} onClick={handleMarkStoredInVault}>
+                            Mark Stored In Vault
+                        </Button>
+                    ) : (
+                        <Button {...sharedProps} onClick={handleOpenShipmentDialog}>
+                            Mark Shipped
+                        </Button>
+                    )
+                ) : !inVault ? (
                     <>
                         {!buttonOnly ? (
                             <EditTrackingInformation
@@ -115,7 +132,7 @@ export function SubmissionActionButton({
                             Edit Tracking
                         </Button>
                     </>
-                )}
+                ) : null}
             </>
         );
     }

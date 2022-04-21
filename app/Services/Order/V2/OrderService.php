@@ -3,10 +3,15 @@
 namespace App\Services\Order\V2;
 
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\ShippingMethod;
+use App\Services\EmailService;
+use App\Services\Order\Shipping\ShippingFeeService;
 use App\Services\Order\V1\OrderService as V1OrderService;
 use App\Services\Payment\V2\Providers\CollectorCoinService;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
 class OrderService extends V1OrderService
@@ -136,5 +141,96 @@ class OrderService extends V1OrderService
         $order->billingAddress->update($data);
 
         return $order;
+    }
+
+    public function processChangeInShippingMethod(Order $order, array $data): Order
+    {
+        $this->changeShippingMethod($order, $data['shipping_method_id'])
+            ->processShippingDetails($order, $data)
+            ->updateShippingFee($order)
+            ->recalculateGrandTotal($order)
+            ->saveOrder($order);
+
+        return $order;
+    }
+
+    protected function changeShippingMethod(Order &$order, int $shippingMethodId): self
+    {
+        $shippingMethod = ShippingMethod::find($shippingMethodId);
+
+        $order->shippingMethod()->associate($shippingMethod);
+
+        return $this;
+    }
+
+    protected function updateShippingFee(Order &$order): self
+    {
+        $order->shipping_fee = $this->getNewShippingFee($order);
+
+        return $this;
+    }
+
+    protected function recalculateGrandTotal(Order &$order): self
+    {
+        $order->grand_total_before_discount = $order->service_fee + $order->shipping_fee;
+        $order->grand_total = $order->service_fee + $order->shipping_fee - $order->discounted_amount - $order->payment_method_discounted_amount;
+
+        return $this;
+    }
+
+    protected function processShippingDetails(Order &$order, array $data): self
+    {
+        if ($order->hasInsuredShipping()) {
+            if (! empty($data['customer_address']['id'])) {
+                $shippingAddress = OrderAddress::create(CustomerAddress::find($data['customer_address']['id'])->toArray());
+            } else {
+                $shippingAddress = OrderAddress::create($data['shipping_address']);
+            }
+
+            $order->shippingAddress()->associate($shippingAddress);
+            if (! empty($data['shipping_address']['save_for_later']) && empty($data['customer_address']['id'])) {
+                CustomerAddress::create(array_merge(
+                    Arr::except($data['shipping_address'], 'save_for_later'),
+                    [
+                        'user_id' => auth()->user()->id,
+                    ]
+                ));
+            }
+        }
+
+        return $this;
+    }
+
+    protected function getNewShippingFee(Order $order): float
+    {
+        return ShippingFeeService::calculateForOrder($order);
+    }
+
+    protected function saveOrder(Order &$order): self
+    {
+        $order->save();
+
+        return $this;
+    }
+
+    public function getOrderShippedEmailData(Order $order): array
+    {
+        if ($order->hasInsuredShipping()) {
+            return [
+                'data' => [
+                    'FIRST_NAME' => $order->user->first_name,
+                    'TRACKING_NUMBER' => $order->orderShipment->tracking_number,
+                    'TRACKING_URL' => $order->orderShipment->tracking_url,
+                ],
+                'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED,
+            ];
+        }
+
+        return [
+            'data' => [
+                'ORDER_NUMBER' => $order->order_number,
+            ],
+            'template' => EmailService::TEMPLATE_SLUG_SUBMISSION_IN_VAULT,
+        ];
     }
 }

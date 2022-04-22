@@ -1,25 +1,14 @@
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useState } from 'react';
-import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { useNavigate } from 'react-router-dom';
-import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import {
-    clearSubmissionState,
-    createOrder,
-    setCustomStep,
-    setIsNextLoading,
-    setPreviewTotal,
-} from '../redux/slices/newSubmissionSlice';
+import { setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
+import CompleteSubmissonButton from './CompleteSubmissionButton';
+import SubmissionSummmaryDescription from './SubmissionSummmaryDescription';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -151,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SubmissionSummary() {
     const classes = useStyles();
-    const notifications = useNotifications();
+
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
@@ -160,13 +149,11 @@ function SubmissionSummary() {
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
-    const navigate = useNavigate();
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const [submitting, setIsSubmitting] = useState(false);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -185,24 +172,6 @@ function SubmissionSummary() {
     selectedCards.forEach((selectedCard: any) => {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
-
-    const handleCompleteSubmission = async () => {
-        try {
-            setIsSubmitting(true);
-            const order = await dispatch(createOrder()).unwrap();
-            ReactGA.event({
-                category: EventCategories.Submissions,
-                action: PaymentMethodEvents.payLater,
-            });
-            dispatch(clearSubmissionState());
-            dispatch(invalidateOrders());
-            navigate(`/submissions/${order.id}/confirmation`);
-        } catch (error: any) {
-            dispatch(setIsNextLoading(false));
-            notifications.exception(error);
-            return;
-        }
-    };
 
     function getPreviewTotal() {
         const previewTotal =
@@ -225,22 +194,9 @@ function SubmissionSummary() {
                 {currentStep === 4 && !isMobile ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleCompleteSubmission}
-                                disabled={submitting}
-                            >
-                                {'Complete Submission'}
-                            </Button>
+                            <CompleteSubmissonButton buttonText={'Complete Submission'} hasStyle={false} />
                         </>
-
-                        <Typography className={classes.greyDescriptionText}>
-                            By clicking the above button, you are agreeing to the Robograding{' '}
-                            <a href={'/terms-and-conditions'} className={classes.darkDescriptionText}>
-                                Terms and Conditions.
-                            </a>
-                        </Typography>
+                        <SubmissionSummmaryDescription summaryDescription={'the above button'} />
                     </div>
                 ) : null}
 

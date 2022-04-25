@@ -68,7 +68,7 @@ class HubspotService
                 [
                     'property' => 'phone',
                     'value' => $user->phone ?: '',
-                ], 
+                ],
             ];
 
             $contactResponse = $contact->create($createContact);

@@ -20,4 +20,22 @@ class ShippingMethodFactory extends Factory
             'code' => $this->faker->word(),
         ];
     }
+
+    public function insured()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'code' => ShippingMethod::INSURED_SHIPPING,
+            ];
+        });
+    }
+
+    public function vault()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'code' => ShippingMethod::VAULT_STORAGE,
+            ];
+        });
+    }
 }

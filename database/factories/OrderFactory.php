@@ -69,4 +69,13 @@ class OrderFactory extends Factory
             }
         });
     }
+
+    public function insuredShipping()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'shipping_method_id' => ShippingMethod::factory()->insured(),
+            ];
+        });
+    }
 }

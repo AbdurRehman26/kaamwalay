@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\ActivityLog;
+use App\Enums\UserCard\UserCardShippingStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,6 +27,7 @@ class UserCard extends Model
         'grading_id',
         'certificate_number',
         'grade_delta',
+        'shipping_status',
     ];
 
     protected $casts = [
@@ -38,6 +40,7 @@ class UserCard extends Model
         'generated_images' => 'array',
         'graded_at' => 'datetime',
         'grade_delta' => 'float',
+        'shipping_status' => UserCardShippingStatus::class,
     ];
 
     /**
@@ -62,13 +65,18 @@ class UserCard extends Model
         ];
     }
 
-    public function shouldBeSearchable():bool
+    public function shouldBeSearchable(): bool
     {
         return (
             $this->orderItem->order_item_status_id === OrderItemStatus::GRADED
             && $this->orderItem->order->order_status_id === OrderStatus::SHIPPED
             && OrderItemStatusHistory::where('order_item_status_id', OrderItemStatus::GRADED)->exists()
         );
+    }
+
+    public function wasSearchableBeforeUpdate(): bool
+    {
+        return $this->shouldBeSearchable();
     }
 
     public function user(): BelongsTo
@@ -106,5 +114,12 @@ class UserCard extends Model
     public function vaultShipmentItem(): HasOne
     {
         return $this->hasOne(VaultShipmentItem::class);
+    }
+
+    public function storeInVault(): bool
+    {
+        $this->shipping_status = UserCardShippingStatus::IN_VAULT;
+
+        return $this->save();
     }
 }

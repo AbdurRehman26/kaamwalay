@@ -67,7 +67,7 @@ class OrderService extends V1OrderService
     {
         $data = [];
 
-        $paymentPlan = $order->paymentPlan;
+        $paymentPlan = $order->orderPaymentPlan;
         $orderItems = $order->getGroupedOrderItems();
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 

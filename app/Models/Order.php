@@ -37,6 +37,7 @@ class Order extends Model implements Exportable
         'user_id',
         'order_status_id',
         'payment_plan_id',
+        'order_payment_plan_id',
         'shipping_order_address_id',
         'billing_order_address_id',
         'payment_method_id',
@@ -175,6 +176,10 @@ class Order extends Model implements Exportable
         return $this->belongsTo(PaymentPlan::class);
     }
 
+    public function orderPaymentPlan(): BelongsTo
+    {
+        return $this->belongsTo(OrderPaymentPlan::class);
+    }
     public function orderStatus(): BelongsTo
     {
         return $this->belongsTo(OrderStatus::class);

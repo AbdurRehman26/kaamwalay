@@ -74,7 +74,6 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
 
     const rest = !comingSoon
         ? {
-              button: true,
               component: Link,
               to: href,
           }

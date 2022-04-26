@@ -80,7 +80,7 @@ export function SubmissionsViewHeader({
     inVault,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
-    const [statusType, statusLabel] = useOrderStatus(orderStatus);
+    const [statusType, statusLabel] = useOrderStatus(orderStatus, { inVault });
     const notifications = useNotifications();
 
     const sharedProps: any = useMemo(
@@ -95,23 +95,20 @@ export function SubmissionsViewHeader({
 
     const history = useMemo(
         () =>
-            [
-                OrderStatusEnum.PLACED,
-                OrderStatusEnum.CONFIRMED,
-                OrderStatusEnum.GRADED,
-                inVault ? OrderStatusEnum.IN_VAULT : OrderStatusEnum.SHIPPED,
-            ].map((status) => {
-                const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
-                const { label, value } = AdminOrderStatusMap[status];
+            [OrderStatusEnum.PLACED, OrderStatusEnum.CONFIRMED, OrderStatusEnum.GRADED, OrderStatusEnum.SHIPPED].map(
+                (status) => {
+                    const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
+                    const { label, value } = AdminOrderStatusMap[status];
 
-                return {
-                    label,
-                    value,
-                    isCompleted: !!item?.createdAt,
-                    completedAt: item?.createdAt,
-                };
-            }),
-        [inVault, orderStatusHistory],
+                    return {
+                        label,
+                        value,
+                        isCompleted: !!item?.createdAt,
+                        completedAt: item?.createdAt,
+                    };
+                },
+            ),
+        [orderStatusHistory],
     );
 
     const DownloadOrderLabel = useCallback(async () => {

@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import React, { useMemo } from 'react';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { cx } from '@shared/lib/utils/cx';
@@ -43,7 +44,21 @@ export function ViewSubmissionStatus({
     isPaid,
 }: ViewSubmissionStatusProps) {
     const classes = useViewSubmissionStatusStyles();
-    const steps = useMemo(() => Object.values(SubmissionSteps), []);
+    const steps = useMemo(() => {
+        const values = Object.values(SubmissionSteps);
+
+        if (shippingMethod?.code === ShippingMethodType.VaultStorage) {
+            return values.map((step) => {
+                if (step === SubmissionSteps.Shipped) {
+                    return 'Stored in Vault';
+                }
+
+                return step;
+            });
+        }
+
+        return values;
+    }, [shippingMethod?.code]);
 
     const statusDescription = useMemo(() => STATUS_DESCRIPTION_MAP[orderStatus.toLowerCase()], [orderStatus]);
     return (
@@ -66,6 +81,7 @@ export function ViewSubmissionStatus({
                 shippingProvider={shipmentProvider!}
                 shipmentLink={orderShipment?.trackingUrl!}
                 shipmentNumber={orderShipment?.trackingNumber}
+                shippingMethod={shippingMethod}
             />
 
             <SubmissionVaultStorage orderId={orderId} shippingMethod={shippingMethod} canDoActions={!isPaid} />

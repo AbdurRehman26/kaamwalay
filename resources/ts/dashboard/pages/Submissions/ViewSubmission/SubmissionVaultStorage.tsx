@@ -13,7 +13,9 @@ import { useDialogHelper } from '@shared/hooks/useDialogHelper';
 import { useLoadingModal } from '@shared/hooks/useLoadingModal';
 import { useRepository } from '@shared/hooks/useRepository';
 import { delay } from '@shared/lib/utils/delay';
+import { updateOrderShippingMethod } from '@shared/redux/slices/ordersSlice';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
+import { useAppDispatch } from '../../../redux/hooks';
 
 interface Props {
     orderId?: number;
@@ -26,6 +28,8 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
     const selectAddress = useDialogHelper();
     const loadingModal = useLoadingModal();
 
+    const dispatch = useAppDispatch();
+
     const handleSelectAddress = useCallback(
         async ({ address, newAddress }: SelectAddressFormValues) => {
             if (orderId) {
@@ -36,12 +40,14 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
                 });
 
                 try {
-                    await orderRepository.attachShippingAddress({
+                    const { shippingMethod } = await orderRepository.attachShippingAddress({
                         address,
                         orderId,
                         saveForLater: !!newAddress,
                         shippingMethod: ShippingMethodType.InsuredShippingID,
                     });
+
+                    dispatch(updateOrderShippingMethod({ orderId, shippingMethod }));
 
                     loadingModal.setData({
                         state: 'loaded',
@@ -59,7 +65,7 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
                 }
             }
         },
-        [loadingModal, orderId, orderRepository, selectAddress],
+        [dispatch, loadingModal, orderId, orderRepository, selectAddress],
     );
 
     const handleSwitchToVault = useCallback(async () => {
@@ -69,10 +75,13 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
                 message: 'Switching to Insured Shipping...',
             });
             try {
-                await orderRepository.attachShippingAddress({
+                const { shippingMethod } = await orderRepository.attachShippingAddress({
                     orderId,
                     shippingMethod: ShippingMethodType.VaultStorageID,
                 });
+
+                dispatch(updateOrderShippingMethod({ orderId, shippingMethod }));
+
                 loadingModal.setData({
                     state: 'loaded',
                     message: 'Successfully switched to Vault Storage.',
@@ -88,7 +97,7 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
                 loadingModal.close();
             }
         }
-    }, [loadingModal, orderId, orderRepository]);
+    }, [dispatch, loadingModal, orderId, orderRepository]);
 
     const content = useMemo(() => {
         if (shippingMethod?.code === ShippingMethodType.InsuredShipping) {

@@ -76,7 +76,7 @@ export class OrdersRepository extends Repository<OrderEntity> {
     public async setShipment(input: ChangeOrderShipmentDto) {
         const { orderId, shippingProvider, trackingNumber } = input;
         const { data } = await this.endpoint.post(
-            `shipment`,
+            'shipment',
             {
                 shippingProvider,
                 trackingNumber,

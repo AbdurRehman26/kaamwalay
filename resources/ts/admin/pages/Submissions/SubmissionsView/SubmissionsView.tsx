@@ -23,6 +23,7 @@ export function SubmissionsView() {
                     'customer.wallet',
                     'billingAddress',
                     'shippingAddress',
+                    'shippingMethod',
                     'paymentPlan',
                     'orderPayment',
                     'orderStatus',
@@ -38,7 +39,7 @@ export function SubmissionsView() {
         },
     });
 
-    const inVault = data?.shippingMethod.code === ShippingMethodType.VaultStorage;
+    const inVault = data?.shippingMethod?.code === ShippingMethodType.VaultStorage;
 
     if (isLoading || !data) {
         return (

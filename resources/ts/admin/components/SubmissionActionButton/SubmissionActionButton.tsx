@@ -1,9 +1,10 @@
-import Button, { ButtonProps } from '@mui/material/Button';
+import LoadingButton, { LoadingButtonProps } from '@mui/lab/LoadingButton';
 import makeStyles from '@mui/styles/makeStyles';
 import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { setOrderShipment } from '@shared/redux/slices/adminOrdersSlice';
@@ -21,7 +22,7 @@ const useStyles = makeStyles(
     { name: 'SubmissionActionButton' },
 );
 
-interface SubmissionActionButtonProps extends ButtonProps {
+interface SubmissionActionButtonProps extends LoadingButtonProps {
     orderId: number;
     orderStatus: OrderStatusEntity;
     shippingProvider?: ShipmentEntity['shippingProvider'];
@@ -48,6 +49,7 @@ export function SubmissionActionButton({
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const [isShipmentDialogOpen, setIsShipmentDialogOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const sharedProps: any = useMemo(
         () => ({
@@ -55,9 +57,16 @@ export function SubmissionActionButton({
             color: 'primary',
             size: 'large',
             className: classes.button,
+            loading,
             ...rest,
         }),
-        [classes.button, rest],
+        [classes.button, rest, loading],
+    );
+
+    const view$ = (
+        <LoadingButton component={Link} to={`/submissions/${orderId}/view`} {...sharedProps}>
+            View
+        </LoadingButton>
     );
 
     const handleShipmentSubmit = useCallback(
@@ -71,9 +80,11 @@ export function SubmissionActionButton({
         setIsShipmentDialogOpen(true);
     }, []);
 
-    const handleMarkStoredInVault = useCallback(() => {
-        // TODO: Mark order as stored in vault
-    }, []);
+    const handleMarkStoredInVault = useCallback(async () => {
+        setLoading(true);
+        await dispatch(setOrderShipment({ orderId, shippingMethod: { code: ShippingMethodType.VaultStorage } }));
+        setLoading(false);
+    }, [dispatch, orderId]);
 
     const handleCloseShipmentDialog = useCallback(() => {
         setIsShipmentDialogOpen(false);
@@ -81,25 +92,21 @@ export function SubmissionActionButton({
 
     if (!orderStatus || orderStatus.is(OrderStatusEnum.PLACED)) {
         return (
-            <Button component={Link} to={`/submissions/${orderId}/review`} {...sharedProps}>
+            <LoadingButton component={Link} to={`/submissions/${orderId}/review`} {...sharedProps}>
                 Review
-            </Button>
+            </LoadingButton>
         );
     }
 
     if (orderStatus.is(OrderStatusEnum.CONFIRMED)) {
         return (
-            <Button component={Link} to={`/submissions/${orderId}/grade`} {...sharedProps}>
+            <LoadingButton component={Link} to={`/submissions/${orderId}/grade`} {...sharedProps}>
                 Grade
-            </Button>
+            </LoadingButton>
         );
     }
 
-    if (
-        orderStatus.is(OrderStatusEnum.GRADED) ||
-        orderStatus.is(OrderStatusEnum.SHIPPED) ||
-        orderStatus.is(OrderStatusEnum.IN_VAULT)
-    ) {
+    if (orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED)) {
         return (
             <>
                 <ShipmentDialog
@@ -112,13 +119,13 @@ export function SubmissionActionButton({
 
                 {orderStatus.is(OrderStatusEnum.GRADED) ? (
                     inVault ? (
-                        <Button {...sharedProps} onClick={handleMarkStoredInVault}>
+                        <LoadingButton {...sharedProps} onClick={handleMarkStoredInVault}>
                             Mark Stored In Vault
-                        </Button>
+                        </LoadingButton>
                     ) : (
-                        <Button {...sharedProps} onClick={handleOpenShipmentDialog}>
+                        <LoadingButton {...sharedProps} onClick={handleOpenShipmentDialog}>
                             Mark Shipped
-                        </Button>
+                        </LoadingButton>
                     )
                 ) : !inVault ? (
                     <>
@@ -128,20 +135,16 @@ export function SubmissionActionButton({
                                 shippingProvider={shippingProvider}
                             />
                         ) : null}
-                        <Button color={'primary'} onClick={handleOpenShipmentDialog}>
+                        <LoadingButton color={'primary'} onClick={handleOpenShipmentDialog}>
                             Edit Tracking
-                        </Button>
+                        </LoadingButton>
                     </>
-                ) : null}
+                ) : (
+                    view$
+                )}
             </>
         );
     }
 
-    return (
-        <Button component={Link} to={`/submissions/${orderId}/view`} {...sharedProps}>
-            View
-        </Button>
-    );
+    return view$;
 }
-
-export default SubmissionActionButton;

@@ -76,7 +76,7 @@ test('an admin update vault shipment', function () {
 });
 
 test('vault shipment update with valid data', function () {
-    $response = $this->putJson(route('v2.admin.vault-shipments.update-shipment', ['vaultShipment' => $this->vault->id]) , [
+    $response = $this->putJson(route('v2.admin.vault-shipments.update-shipment', ['vaultShipment' => $this->vault->id]), [
         'shipping_provider' => '',
         'tracking_number' => '',
     ]);

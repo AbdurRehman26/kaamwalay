@@ -29,9 +29,9 @@ class VaultShipmentPaymentResource extends BaseResource
 
         if ($this->paymentMethod->code === 'paypal') {
             $response = $this->paypalData(json_decode($this->response, associative: true) ?? []);
-        } elseif($this->paymentMethod->code === 'stripe'){
-          $response = $this->stripeData($this->response);
-        } elseif($this->paymentMethod->isCollectorCoin()){
+        } elseif ($this->paymentMethod->code === 'stripe') {
+            $response = $this->stripeData($this->response);
+        } elseif ($this->paymentMethod->isCollectorCoin()) {
             $response = $this->collectorCoinData(json_decode($this->response, associative: true) ?? []);
         }
 
@@ -53,6 +53,7 @@ class VaultShipmentPaymentResource extends BaseResource
     {
         $providerResponse = json_decode($response);
         $card = $providerResponse->charges->data[0]->payment_method_details->card;
+
         return [
             'id' => $this->id,
             'charged_on' => $this->formatDate($this->updated_at),
@@ -61,7 +62,7 @@ class VaultShipmentPaymentResource extends BaseResource
                 'exp_month' => $card?->exp_month,
                 'exp_year' => $card?->exp_year,
                 'last4' => $card?->last4,
-            ]
+            ],
         ];
     }
     

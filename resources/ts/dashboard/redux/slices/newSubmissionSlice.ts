@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { CardProductEntity } from '@shared/entities/CardProductEntity';
 import { OrderEntity } from '@shared/entities/OrderEntity';
+import { DefaultShippingMethodEntity, ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { app } from '@shared/lib/app';
 import { APIService } from '@shared/services/APIService';
 
@@ -96,6 +97,7 @@ export interface NewSubmissionSliceState {
     orderTransactionHash: string;
     confirmedCollectorCoinPayment: boolean;
     currentStep: number;
+    shippingMethod: ShippingMethodEntity | null;
     previewTotal: number;
     availableCredit: number;
     appliedCredit: number;
@@ -145,6 +147,7 @@ const initialState: NewSubmissionSliceState = {
     isNextDisabled: false,
     isNextLoading: false,
     currentStep: 0,
+    shippingMethod: DefaultShippingMethodEntity,
     couponState: {
         isCouponValid: false,
         couponCode: '',
@@ -338,10 +341,13 @@ export const getStatesList = createAsyncThunk('newSubmission/getStatesList', asy
 
 export const getShippingFee = createAsyncThunk(
     'newSubmission/getShippingFee',
-    async (selectedCards: SearchResultItemCardProps[]) => {
+    async (selectedCards: SearchResultItemCardProps[], thunk) => {
         const apiService = app(APIService);
         const endpoint = apiService.createEndpoint('customer/orders/shipping-fee');
+        const shippingMethod = (thunk.getState() as any).newSubmission.shippingMethod;
+
         const DTO = {
+            shippingMethodId: shippingMethod.id,
             items: selectedCards.map((item) => ({
                 quantity: item.qty,
                 declaredValuePerUnit: item.value,
@@ -432,7 +438,7 @@ export const verifyOrderStatus = createAsyncThunk(
 );
 
 export const createOrder = createAsyncThunk('newSubmission/createOrder', async (_, { getState }: any) => {
-    const currentSubmission: any = getState().newSubmission;
+    const currentSubmission: NewSubmissionSliceState = getState().newSubmission;
     const finalShippingAddress =
         currentSubmission.step03Data.existingAddresses.length !== 0 &&
         !currentSubmission.step03Data.useCustomShippingAddress &&
@@ -484,7 +490,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     : null,
         },
         shippingMethod: {
-            id: 1,
+            id: currentSubmission.shippingMethod?.id ?? 1,
         },
         coupon: currentSubmission.couponState.isCouponApplied
             ? {
@@ -738,6 +744,7 @@ export const newSubmissionSlice = createSlice({
             state.refundTotal = action.payload.refundTotal;
             state.extraChargesTotal = action.payload.extraChargeTotal;
             state.previewTotal = action.payload.grandTotal;
+            state.shippingMethod = action.payload.shippingMethod;
             state.step02Data = {
                 shippingFee: action.payload.shippingFee,
                 isMobileSearchModalOpen: false,
@@ -789,6 +796,15 @@ export const newSubmissionSlice = createSlice({
         },
         setStepValidation(state, action: PayloadAction<{ step: number; valid: boolean }>) {
             state.stepValidations[action.payload.step] = action.payload.valid;
+        },
+
+        setShippingMethod(state, action: PayloadAction<ShippingMethodEntity>) {
+            state.shippingMethod = action.payload;
+        },
+        initializeShippingMethod(state, action: PayloadAction<ShippingMethodEntity>) {
+            if (!state.shippingMethod) {
+                state.shippingMethod = action.payload;
+            }
         },
     },
     extraReducers: {
@@ -919,4 +935,6 @@ export const {
     SetCouponInvalidMessage,
     orderToNewSubmission,
     setStepValidation,
+    setShippingMethod,
+    initializeShippingMethod,
 } = newSubmissionSlice.actions;

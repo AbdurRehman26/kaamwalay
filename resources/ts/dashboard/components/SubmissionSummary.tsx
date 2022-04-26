@@ -8,6 +8,8 @@ import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
 import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
+import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -159,6 +161,10 @@ function SubmissionSummary() {
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const navigate = useNavigate();
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
+    const shippingMethod = useAppSelector(
+        (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
+        (a, b) => a?.id === b?.id && a?.code === b?.code,
+    );
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
@@ -302,7 +308,13 @@ function SubmissionSummary() {
                             ) : null}
 
                             <div className={classes.row} style={{ marginTop: '16px' }}>
-                                <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
+                                    <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                ) : null}
+
+                                {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
+                                    <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
+                                ) : null}
                                 <NumberFormat
                                     value={shippingFee}
                                     className={classes.rowRightBoldText}
@@ -454,7 +466,14 @@ function SubmissionSummary() {
                             ) : null}
 
                             <div className={classes.row} style={{ marginTop: '16px' }}>
-                                <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
+                                    <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                ) : null}
+
+                                {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
+                                    <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
+                                ) : null}
+
                                 <NumberFormat
                                     value={shippingFee}
                                     className={classes.rowRightBoldText}

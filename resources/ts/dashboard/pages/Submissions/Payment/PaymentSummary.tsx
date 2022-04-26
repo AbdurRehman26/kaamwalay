@@ -9,6 +9,8 @@ import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
 import { FacebookPixelEvents } from '@shared/constants/FacebookPixelEvents';
 import { EventCategories, SubmissionEvents } from '@shared/constants/GAEventsTypes';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
+import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useConfiguration } from '@shared/hooks/useConfiguration';
 import { useInjectable } from '@shared/hooks/useInjectable';
@@ -165,6 +167,10 @@ export function PaymentSummary() {
     const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
+    const shippingMethod = useAppSelector(
+        (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
+        (a, b) => a?.id === b?.id && a?.code === b?.code,
+    );
     const grandTotal = useAppSelector((state) => state.newSubmission.grandTotal);
     const refundTotal = useAppSelector((state) => state.newSubmission.refundTotal);
     const extraChargesTotal = useAppSelector((state) => state.newSubmission.extraChargesTotal);
@@ -427,7 +433,14 @@ export function PaymentSummary() {
                     ) : null}
 
                     <div className={classes.row} style={{ marginTop: '16px' }}>
-                        <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                        {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
+                            <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                        ) : null}
+
+                        {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
+                            <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
+                        ) : null}
+
                         <NumberFormat
                             value={shippingFee}
                             className={classes.rowRightBoldText}

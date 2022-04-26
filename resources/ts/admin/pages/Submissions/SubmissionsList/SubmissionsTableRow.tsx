@@ -13,6 +13,7 @@ import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { StatusChip } from '@shared/components/StatusChip';
 import { SafeSquare } from '@shared/components/icons/SafeSquare';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
@@ -119,8 +120,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
         [dispatch],
     );
 
-    // TODO: Implement the right in vault checker.
-    const inVault = order.id % 2 === 0;
+    const inVault = order?.shippingMethod?.code === ShippingMethodType.VaultStorage;
 
     return (
         <>

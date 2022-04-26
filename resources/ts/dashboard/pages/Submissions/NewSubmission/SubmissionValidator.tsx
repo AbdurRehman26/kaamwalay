@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { addressValidationSchema } from '../../../components/SubmissionSteps/addressValidationSchema';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setStepValidation } from '../../../redux/slices/newSubmissionSlice';
@@ -11,6 +12,7 @@ export function SubmissionValidator() {
         (prev, next) => prev.join('') === next.join(''),
     );
 
+    const shippingMethod = useAppSelector((state) => state.newSubmission.shippingMethod);
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
 
     const addressFirstName = useAppSelector(
@@ -64,16 +66,20 @@ export function SubmissionValidator() {
     }, [dispatch, selectedCards]);
 
     useEffect(() => {
-        const valid = addressValidationSchema.isValidSync({
-            firstName: addressFirstName,
-            lastName: addressLastName,
-            address: addressAddress,
-            flat: addressFlat,
-            city: addressCity,
-            state: addressState,
-            zipCode: addressZipCode,
-            phoneNumber: addressPhoneNumber,
-        });
+        let valid: boolean = true;
+        if (shippingMethod?.code === ShippingMethodType.InsuredShipping) {
+            valid = addressValidationSchema.isValidSync({
+                firstName: addressFirstName,
+                lastName: addressLastName,
+                address: addressAddress,
+                flat: addressFlat,
+                city: addressCity,
+                state: addressState,
+                zipCode: addressZipCode,
+                phoneNumber: addressPhoneNumber,
+            });
+        }
+
         dispatch(setStepValidation({ step: 2, valid }));
         dispatch(setStepValidation({ step: 3, valid }));
     }, [
@@ -86,6 +92,7 @@ export function SubmissionValidator() {
         addressState,
         addressZipCode,
         addressPhoneNumber,
+        shippingMethod,
     ]);
 
     useEffect(() => {

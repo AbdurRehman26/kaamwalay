@@ -6,6 +6,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { RefundsAndExtraCharges } from '@shared/components/RefundsAndExtraCharges';
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { useAdminOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { SubmissionsViewDetails } from './SubmissionsViewDetails';
 import { SubmissionsViewHeader } from './SubmissionsViewHeader';
@@ -37,8 +38,7 @@ export function SubmissionsView() {
         },
     });
 
-    // TODO: Implement better in vault check.
-    const inVault = data?.id % 2 === 0;
+    const inVault = data?.shippingMethod.code === ShippingMethodType.VaultStorage;
 
     if (isLoading || !data) {
         return (

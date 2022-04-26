@@ -5,12 +5,12 @@ import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
 
 export function useOrderStatus(
     orderStatus: OrderStatusEntity,
-    { inVault }: Record<string, any> = {},
+    { isVault }: Record<string, any> = {},
 ): [statusType: StatusChipColor, label: string] {
     return useMemo(() => {
         const meta = (AdminOrderStatusMap as Record<number, any>)[orderStatus?.id];
 
-        if (orderStatus.id === OrderStatusEnum.SHIPPED && inVault) {
+        if (orderStatus.id === OrderStatusEnum.SHIPPED && isVault) {
             return [meta.value, 'In Vault'];
         }
 
@@ -19,5 +19,5 @@ export function useOrderStatus(
         }
 
         return ['pending', 'Pending'];
-    }, [inVault, orderStatus.id]);
+    }, [isVault, orderStatus.id]);
 }

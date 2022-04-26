@@ -28,7 +28,7 @@ interface SubmissionViewHeaderProps {
     orderShipment?: ShipmentEntity | null;
     orderLabel?: OrderLabelEntity | null;
     customer: UserEntity | null;
-    inVault?: boolean;
+    isVault?: boolean;
 }
 
 const useStyles = makeStyles(
@@ -77,10 +77,10 @@ export function SubmissionsViewHeader({
     orderShipment,
     customer,
     orderLabel,
-    inVault,
+    isVault,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
-    const [statusType, statusLabel] = useOrderStatus(orderStatus, { inVault });
+    const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
     const notifications = useNotifications();
 
     const sharedProps: any = useMemo(
@@ -98,7 +98,11 @@ export function SubmissionsViewHeader({
             [OrderStatusEnum.PLACED, OrderStatusEnum.CONFIRMED, OrderStatusEnum.GRADED, OrderStatusEnum.SHIPPED].map(
                 (status) => {
                     const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
-                    const { label, value } = AdminOrderStatusMap[status];
+                    let { label, value } = AdminOrderStatusMap[status];
+
+                    if (status === OrderStatusEnum.SHIPPED && isVault) {
+                        label = 'Stored In Vault';
+                    }
 
                     return {
                         label,
@@ -108,7 +112,7 @@ export function SubmissionsViewHeader({
                     };
                 },
             ),
-        [orderStatusHistory],
+        [isVault, orderStatusHistory],
     );
 
     const DownloadOrderLabel = useCallback(async () => {
@@ -128,7 +132,7 @@ export function SubmissionsViewHeader({
                         Submission # <span className={font.fontWeightBold}>{orderNumber}</span>
                     </Typography>
                     <StatusChip color={statusType} label={statusLabel} />
-                    {inVault ? (
+                    {isVault ? (
                         <Button
                             disabled
                             variant={'outlined'}
@@ -156,7 +160,7 @@ export function SubmissionsViewHeader({
                         orderStatus={orderStatus}
                         trackingNumber={orderShipment?.trackingNumber}
                         shippingProvider={orderShipment?.shippingProvider}
-                        inVault={inVault}
+                        inVault={isVault}
                     />
                     <SubmissionHeaderMoreButton orderId={orderId} orderStatus={orderStatus} customer={customer} />
                 </Grid>

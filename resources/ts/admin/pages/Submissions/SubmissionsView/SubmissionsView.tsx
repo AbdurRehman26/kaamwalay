@@ -39,7 +39,7 @@ export function SubmissionsView() {
         },
     });
 
-    const inVault = data?.shippingMethod?.code === ShippingMethodType.VaultStorage;
+    const isVault = data?.shippingMethod?.code === ShippingMethodType.VaultStorage;
 
     if (isLoading || !data) {
         return (
@@ -59,7 +59,7 @@ export function SubmissionsView() {
                 orderShipment={data?.orderShipment}
                 orderLabel={data?.orderLabel}
                 customer={data?.customer}
-                inVault={inVault}
+                isVault={isVault}
             />
             <Divider />
             <SubmissionsViewDetails

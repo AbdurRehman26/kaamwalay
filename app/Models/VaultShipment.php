@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 
@@ -43,6 +44,7 @@ class VaultShipment extends Model
             AllowedInclude::relationship('shippingAddress'),
             AllowedInclude::relationship('vaultShipmentItems'),
             AllowedInclude::relationship('shippingMethod'),
+            AllowedInclude::relationship('vaultShipmentPayments', 'firstVaultShipmentPayment'),
         ];
     }
 
@@ -124,6 +126,15 @@ class VaultShipment extends Model
     public function vaultShipmentPayments(): HasMany
     {
         return $this->hasMany(VaultShipmentPayment::class);
+    }
+
+    /**
+     * @return HasOne<VaultShipmentPayment>
+     */
+    public function firstVaultShipmentPayment(): HasOne
+    {
+        return $this->hasOne(VaultShipmentPayment::class)
+            ->oldestOfMany('created_at');
     }
 
     /**

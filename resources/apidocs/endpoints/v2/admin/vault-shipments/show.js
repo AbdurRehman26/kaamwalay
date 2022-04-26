@@ -8,7 +8,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {Array} [include] For including relationships [user, vaultShipmentStatus, billingAddress, shippingAddress, vaultShipmentItems, shippingMethod]
+ * @apiParam {Array} [include] For including relationships [user, vaultShipmentStatus, billingAddress, shippingAddress, vaultShipmentItems, shippingMethod, vaultShipmentPayments]
  * @apiSuccess {Object} data Vault data
  *
  * @apiSuccessExample Success-Response:

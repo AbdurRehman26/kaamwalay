@@ -91,12 +91,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     
     // Vault Shipment
     Route::prefix('vault-shipments')->group(function () {
-        Route::get('/', [VaultShipmentController::class, 'index']);
-        Route::get('{vaultShipment}', [VaultShipmentController::class, 'show']);
-        Route::put('{vaultShipment}/shipment', [VaultShipmentController::class, 'updateShipment']);
+        Route::get('/', [VaultShipmentController::class, 'index'])->name('admin.vault-shipments.index');
+        Route::get('{vaultShipment}', [VaultShipmentController::class, 'show'])->name('admin.vault-shipments.show');
+        Route::put('{vaultShipment}/shipment', [VaultShipmentController::class, 'updateShipment'])->name('admin.vault-shipments.update-shipment');
     });
 
-    
     Route::post('export-data', DataExportController::class)->name('admin.export-data');
 });
 

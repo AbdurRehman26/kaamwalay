@@ -29,7 +29,7 @@ beforeEach(function () {
 });
 
 it('admin can get vault shipment list', function () {
-    $response = $this->getJson('/api/v2/admin/vault-shipments');
+    $response = $this->getJson(route('v2.admin.vault-shipments.index'));
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
@@ -47,7 +47,7 @@ it('admin can get vault shipment list', function () {
 });
 
 it('admin can get single vault shipment', function () {
-    $response = $this->getJson('/api/v2/admin/vault-shipments/'. $this->vault->id);
+    $response = $this->getJson(route('v2.admin.vault-shipments.show', ['vaultShipment' => $this->vault->id]));
     $response->assertSuccessful();
     $response->assertJsonStructure([
         'data' => [
@@ -63,7 +63,7 @@ it('admin can get single vault shipment', function () {
 });
 
 test('an admin update vault shipment', function () {
-    $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
+    $this->putJson(route('v2.admin.vault-shipments.update-shipment', ['vaultShipment' => $this->vault->id]), [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])->assertSuccessful()
@@ -76,7 +76,7 @@ test('an admin update vault shipment', function () {
 });
 
 test('vault shipment update with valid data', function () {
-    $response = $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
+    $response = $this->putJson(route('v2.admin.vault-shipments.update-shipment', ['vaultShipment' => $this->vault->id]) , [
         'shipping_provider' => '',
         'tracking_number' => '',
     ]);
@@ -90,7 +90,7 @@ test('a guest can not update shipment', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $this->putJson('/api/v2/admin/vault-shipments/'. $this->vault->id .'/shipment', [
+    $this->putJson(route('v2.admin.vault-shipments.update-shipment', ['vaultShipment' => $this->vault->id]), [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',
     ])->assertForbidden();

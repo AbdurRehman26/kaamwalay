@@ -10,7 +10,7 @@
  *
  * @apiParam {Array} [filter[vault_shipment_status]] For filtering records by shipment status. E.g. filter[vault_shipment_status_id]=1
  * @apiParam {Array} [filter[order_status]] For filtering records by order status. E.g. filter[shipping_method_id]=1
- * @apiParam {Array} [include] For including relationships [user, vaultShipmentStatus, billingAddress, shippingAddress, vaultShipmentItems, shippingMethod]
+ * @apiParam {Array} [include] For including relationships [user, vaultShipmentStatus, billingAddress, shippingAddress, vaultShipmentItems, shippingMethod, vaultShipmentPayments]
  * @apiSuccess {Object} data Vault data
  *
  * @apiSuccessExample Success-Response:

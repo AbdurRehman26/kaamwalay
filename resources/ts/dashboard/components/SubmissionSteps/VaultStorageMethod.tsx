@@ -1,9 +1,18 @@
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getShippingFee } from '../../redux/slices/newSubmissionSlice';
 
 export function VaultStorageMethod() {
+    const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(getShippingFee(selectedCards));
+    }, [dispatch, selectedCards]);
+
     return (
         <>
             <Divider />

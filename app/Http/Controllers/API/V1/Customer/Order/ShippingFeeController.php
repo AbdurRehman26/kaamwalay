@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Http\Controllers\Controller;
-use App\Models\ShippingMethod;
 use App\Services\Order\Shipping\ShippingFeeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\API\V1\Customer\Order;
 
 use App\Http\Controllers\Controller;
+use App\Models\ShippingMethod;
 use App\Services\Order\Shipping\ShippingFeeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ShippingFeeController extends Controller
 {
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(Request $request, ?ShippingMethod $shippingMethod): JsonResponse
     {
         $data = $this->validate($request, [
             'items' => 'required|array',
@@ -22,6 +23,7 @@ class ShippingFeeController extends Controller
                 'shipping_fee' => ShippingFeeService::calculate(
                     $preparedData['totalDeclaredValue'],
                     $preparedData['totalNumberOfItems'],
+                    $shippingMethod,
                 ),
             ],
         ]);

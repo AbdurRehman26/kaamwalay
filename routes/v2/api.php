@@ -54,7 +54,7 @@ Route::prefix('customer')->group(function () {
     Route::prefix('orders')->group(function () {
         Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);
         Route::apiResource('payment-plans', PaymentPlanController::class)->only(['index', 'show']);
-        Route::post('shipping-fee', ShippingFeeController::class);
+        Route::post('shipping-fee/{shippingMethod?}', ShippingFeeController::class);
         Route::patch('{order}/update-billing-address', [OrderController::class, 'updateBillingAddress'])
             ->name('customer.orders.update-billing-address');
     });

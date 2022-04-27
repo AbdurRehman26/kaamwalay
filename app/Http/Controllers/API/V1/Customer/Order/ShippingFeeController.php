@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ShippingFeeController extends Controller
 {
-    public function __invoke(Request $request, ?ShippingMethod $shippingMethod): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $data = $this->validate($request, [
             'items' => 'required|array',
@@ -23,7 +23,6 @@ class ShippingFeeController extends Controller
                 'shipping_fee' => ShippingFeeService::calculate(
                     $preparedData['totalDeclaredValue'],
                     $preparedData['totalNumberOfItems'],
-                    $shippingMethod,
                 ),
             ],
         ]);

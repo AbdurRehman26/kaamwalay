@@ -1,5 +1,5 @@
 /**
- * @api {post} /v2/customer/orders/shipping-fee/:shippingMethod? Get shipping fee
+ * @api {post} /v2/customer/orders/shipping-fee Get shipping fee
  * @apiName Get Shipping Fee
  * @apiGroup Customer-Orders
  *
@@ -8,7 +8,7 @@
  * @apiUse header_main
  * @apiUse Authorization
  *
- * @apiParam {Number} shippingMethod unique ID (optional for backward compatibility).
+ * @apiParam {Number} shippingMethodId unique ID (optional for backward compatibility).
  * @apiParam {Array} items Items for shipping fee calculation
  *
  * @apiParamExample {json} Request-Example:
@@ -22,7 +22,8 @@
  *                  "quantity": 2,
  *                  "declared_value_per_unit": 1000
  *              }
- *          ]
+ *          ],
+ *          "shipping_method_id": 1
  *      }
  *
  * @apiSuccess {Object} data Shipping Fee data

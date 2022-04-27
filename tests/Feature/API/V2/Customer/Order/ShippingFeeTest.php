@@ -58,7 +58,7 @@ test('a guest can get shipping fee', function () {
 });
 
 test('shipping fee is calculated based on provided shipping method', function (ShippingMethod $shippingMethod) {
-    $this->postJson('/api/v2/customer/orders/shipping-fee/' . $shippingMethod->id, [
+    $this->postJson('/api/v2/customer/orders/shipping-fee', [
         'items' => [
             [
                 'quantity' => 1,
@@ -69,6 +69,7 @@ test('shipping fee is calculated based on provided shipping method', function (S
                 'declared_value_per_unit' => 1000,
             ],
         ],
+        'shipping_method_id' => $shippingMethod->id,
     ])->assertJsonFragment([
         'shipping_fee' => $shippingMethod->code === ShippingMethod::VAULT_STORAGE ? 0 : 29,
     ]);

@@ -151,13 +151,11 @@ class UserCardService
      * It returns precise value for display.
      * e.g. 8.00 will be converted to 8, 8.50 will be converted to 8.5, 8.125 will be converted to 8.1
      *
-     * @param  string  $value
+     * @param  float  $gradeValue
      * @return float
      */
-    protected function preparePreciseValue(string $value): float
+    protected function preparePreciseValue(float $gradeValue): float
     {
-        $gradeValue = (float) $value;
-
         if (floor($gradeValue) === $gradeValue) {
             return floor($gradeValue);
         } else {

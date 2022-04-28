@@ -23,7 +23,7 @@ class FeedController extends Controller
 
     public function getView(string $certificateId): View
     {
-        $data = $this->agsService->getGradesForPublicPage($certificateId);
+        $data = $this->userCardService->getDataForPublicCardPage($certificateId);
 
         return view('landings.feed.view', $data);
     }

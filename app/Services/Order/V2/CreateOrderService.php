@@ -119,7 +119,7 @@ class CreateOrderService
             'turnaround' => $paymentPlan->turnaround,
         ]);
 
-        $this->order->order_payment_plan_id = $orderPaymentPlan->id;
+        $this->order->paymentPlan()->associate($orderPaymentPlan);
     }
 
     protected function storeShippingMethod(array $shippingMethod): void

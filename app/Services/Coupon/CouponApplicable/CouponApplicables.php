@@ -21,18 +21,13 @@ trait CouponApplicables
         }
     }
 
-    public function getPaymentPlan(array|Order $order): PaymentPlan | OrderPaymentPlan
+    public function getPaymentPlan(array|Order $order): PaymentPlan
     {
         if (! empty($order['payment_plan']['id'])) {
-            if ($order instanceof Order) {
-                return OrderPaymentPlan::find($order['payment_plan']['id']);
-            } else {
-                return PaymentPlan::find($order['payment_plan']['id']);
-            }
+            return PaymentPlan::find($order['payment_plan']['id']);
         }
 
-
-        return $order->paymentPlan;
+        return PaymentPlan::find($order->payment_plan_id);
     }
 
     public function getOrderItems(array|Order $order): array

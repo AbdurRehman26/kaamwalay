@@ -35,6 +35,7 @@ class OrderItemsRelationManager extends HasManyRelationManager
                 TextColumn::make('declared_value_per_unit'),
                 TextColumn::make('declared_value_total'),
                 TextColumn::make('card_product_id'),
+                TextColumn::make('cardProduct.name')->label('Card name'),
             ])
             ->filters([
                 //

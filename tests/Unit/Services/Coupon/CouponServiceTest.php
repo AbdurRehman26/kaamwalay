@@ -9,6 +9,7 @@ use App\Models\CouponStat;
 use App\Models\CouponStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPaymentPlan;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Coupon\CouponService;
@@ -18,6 +19,13 @@ beforeEach(function () {
     $this->couponService = resolve(CouponService::class);
 
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->orderPaymentPlan = OrderPaymentPlan::factory()->create([
+        'id' => $this->paymentPlan->id,
+        'price' => $this->paymentPlan->price,
+        'max_protection_amount' => $this->paymentPlan->max_protection_amount,
+        'turnaround' => $this->paymentPlan->turnaround,
+    ]);
+
     $this->cardProduct = CardProduct::factory()->create();
 
     CouponStatus::factory()->count(2)->create();

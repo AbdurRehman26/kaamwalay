@@ -73,6 +73,7 @@ class Order extends Model implements Exportable
         'grand_total' => 'float',
         'user_id' => 'integer',
         'payment_plan_id' => 'integer',
+        'order_payment_plan_id' => 'integer',
         'order_address_id' => 'integer',
         'shipping_order_address_id' => 'integer',
         'billing_order_address_id' => 'integer',
@@ -107,7 +108,6 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('invoice'),
             AllowedInclude::relationship('orderLabel'),
             AllowedInclude::relationship('paymentPlan'),
-            AllowedInclude::relationship('orderPaymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
             AllowedInclude::relationship('orderPayment', 'firstOrderPayment'),
@@ -174,7 +174,7 @@ class Order extends Model implements Exportable
 
     public function paymentPlan(): BelongsTo
     {
-        return $this->belongsTo(PaymentPlan::class);
+        return $this->belongsTo(OrderPaymentPlan::class, 'order_payment_plan_id');
     }
 
     /**

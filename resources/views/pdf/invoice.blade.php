@@ -249,7 +249,7 @@
                                     </tr>
                                     <tr>
                                         <td class="dt">Service level:</td>
-                                        <td class="dd">${{$order->orderPaymentPlan->price}} / Card</td>
+                                        <td class="dd">${{$order->paymentPlan->price}} / Card</td>
                                     </tr>
                                     <tr>
                                         <td class="dt">No. of Cards: </td>

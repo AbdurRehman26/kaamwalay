@@ -20,7 +20,7 @@ class OrderService extends V1OrderService
     {
         $data = [];
 
-        $paymentPlan = $order->orderPaymentPlan;
+        $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
@@ -75,7 +75,7 @@ class OrderService extends V1OrderService
     {
         $data = [];
 
-        $paymentPlan = $order->orderPaymentPlan;
+        $paymentPlan = $order->paymentPlan;
         $orderItems = $order->getGroupedOrderItems();
 
         $data['SUBMISSION_NUMBER'] = $order->order_number;

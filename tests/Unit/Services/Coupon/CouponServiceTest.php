@@ -9,6 +9,7 @@ use App\Models\CouponStat;
 use App\Models\CouponStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPaymentPlan;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Coupon\CouponService;
@@ -18,6 +19,7 @@ beforeEach(function () {
     $this->couponService = resolve(CouponService::class);
 
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->orderPaymentPlan = OrderPaymentPlan::factory()->create(['max_protection_amount' => 300]);
     $this->cardProduct = CardProduct::factory()->create();
 
     CouponStatus::factory()->count(2)->create();
@@ -51,6 +53,7 @@ beforeEach(function () {
 
     $this->order = Order::factory()
         ->for($this->paymentPlan)
+        ->for($this->orderPaymentPlan)
         ->for($this->coupon)
         ->for($this->user)->create();
 
@@ -66,7 +69,7 @@ it('calculates discount for service level order', function () {
     if ($this->coupon->type === 'fixed') {
         $couponDiscount = (float) ($this->coupon->discount_value) * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
     } elseif ($this->coupon->type === 'flat') {
-        $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+        $serviceFee = $this->orderPaymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $insuredShipping = ShippingFeeService::calculate(
             array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit')),
             array_sum(array_column($this->order->orderItems->toArray(), 'quantity'))
@@ -74,7 +77,7 @@ it('calculates discount for service level order', function () {
 
         $couponDiscount = $serviceFee + $insuredShipping - $this->order->coupon->discount_value;
     } else {
-        $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+        $serviceFee = $this->orderPaymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $couponDiscount = (float) (($this->coupon->discount_value * $serviceFee) / 100);
     }
 
@@ -86,13 +89,12 @@ it('calculates discount for service fee order', function () {
     $this->coupon->couponApplicable()->update(
         ['code' => 'service_fee', 'label' => 'Service Fee']
     );
-
     $discount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
     if ($this->coupon->type === 'fixed') {
         $couponDiscount = (float) $this->coupon->discount_value;
     } elseif ($this->coupon->type === 'flat') {
-        $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+        $serviceFee = $this->orderPaymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $insuredShipping = ShippingFeeService::calculate(
             array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit')),
             array_sum(array_column($this->order->orderItems->toArray(), 'quantity'))
@@ -100,7 +102,7 @@ it('calculates discount for service fee order', function () {
 
         $couponDiscount = $serviceFee + $insuredShipping - $this->order->coupon->discount_value;
     } else {
-        $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+        $serviceFee = $this->orderPaymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
         $couponDiscount = (float) (($this->coupon->discount_value * $serviceFee) / 100);
     }
 
@@ -114,7 +116,7 @@ it('calculates flat discount for order', function () {
 
     $flatDiscount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
-    $serviceFee = $this->paymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
+    $serviceFee = $this->orderPaymentPlan->price * array_sum(array_column($this->order->orderItems->toArray(), 'quantity'));
     $insuredShipping = ShippingFeeService::calculate(
         array_sum(array_column($this->order->orderItems->toArray(), 'declared_value_per_unit')),
         array_sum(array_column($this->order->orderItems->toArray(), 'quantity'))

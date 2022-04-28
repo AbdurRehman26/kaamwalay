@@ -4,6 +4,7 @@ namespace App\Services\Coupon\CouponApplicable;
 
 use App\Models\Coupon;
 use App\Models\Order;
+use App\Models\OrderPaymentPlan;
 use App\Models\PaymentPlan;
 
 trait CouponApplicables
@@ -20,11 +21,16 @@ trait CouponApplicables
         }
     }
 
-    public function getPaymentPlan(array|Order $order): PaymentPlan
+    public function getPaymentPlan(array|Order $order): PaymentPlan | OrderPaymentPlan
     {
         if (! empty($order['payment_plan']['id'])) {
-            return PaymentPlan::find($order['payment_plan']['id']);
+            if ($order instanceof Order) {
+                return OrderPaymentPlan::find($order['payment_plan']['id']);
+            } else {
+                return PaymentPlan::find($order['payment_plan']['id']);
+            }
         }
+
 
         return $order->paymentPlan;
     }

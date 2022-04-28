@@ -202,7 +202,7 @@ class CreateOrderService
 
     protected function storeServiceFee(): void
     {
-        $this->order->service_fee = $this->order->orderPaymentPlan->price * $this->order->orderItems()->sum('quantity');
+        $this->order->service_fee = $this->order->paymentPlan->price * $this->order->orderItems()->sum('quantity');
         $this->order->save();
     }
 

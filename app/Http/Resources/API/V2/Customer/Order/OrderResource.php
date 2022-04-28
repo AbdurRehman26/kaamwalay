@@ -3,13 +3,13 @@
 namespace App\Http\Resources\API\V2\Customer\Order;
 
 use App\Http\Resources\API\BaseResource;
-use App\Http\Resources\API\V2\Admin\Order\OrderPaymentPlan\OrderPaymentPlanResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderShipmentResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V2\Customer\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderItem\OrderItemCollection;
+use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\Order;
@@ -31,7 +31,7 @@ class OrderResource extends BaseResource
             'created_at' => $this->formatDate($this->created_at),
             'customer' => new UserResource($this->user),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),
-            'payment_plan' => new OrderPaymentPlanResource($this->orderPaymentPlan),
+            'payment_plan' => new PaymentPlanResource($this->paymentPlan),
             'shipping_address' => new OrderAddressResource($this->shippingAddress),
             'billing_address' => new OrderAddressResource($this->billingAddress),
             'order_payment' => new OrderPaymentResource($this->firstOrderPayment),

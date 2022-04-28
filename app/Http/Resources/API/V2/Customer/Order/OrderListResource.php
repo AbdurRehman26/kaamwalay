@@ -4,10 +4,10 @@ namespace App\Http\Resources\API\V2\Customer\Order;
 
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderCustomerShipmentResource;
-use App\Http\Resources\API\V2\Admin\Order\OrderPaymentPlan\OrderPaymentPlanResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Models\Order;
 
 /** @mixin Order */
@@ -20,7 +20,7 @@ class OrderListResource extends BaseResource
             'order_number' => $this->order_number,
             'number_of_cards' => (int)$this->orderItems()->sum('quantity'),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
-            'payment_plan' => $this->whenLoaded('orderPaymentPlan', new OrderPaymentPlanResource($this->orderPaymentPlan)),
+            'payment_plan' => $this->whenLoaded('paymentPlan', PaymentPlanResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),

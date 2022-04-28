@@ -168,7 +168,7 @@ class UserCardService
     protected function prepareFrontScanGradesForPublicCardPage(UserCard $userCard): array
     {
         return [
-            'centering' =>  number_format((float) $userCard->human_grade_values['front']['center'], 2),
+            'centering' => number_format((float) $userCard->human_grade_values['front']['center'], 2),
             'surface' => number_format((float) $userCard->human_grade_values['front']['surface'], 2),
             'edges' => number_format((float) $userCard->human_grade_values['front']['edge'], 2),
             'corners' => number_format((float) $userCard->human_grade_values['front']['corner'], 2),

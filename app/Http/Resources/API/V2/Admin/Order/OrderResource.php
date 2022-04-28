@@ -4,9 +4,11 @@ namespace App\Http\Resources\API\V2\Admin\Order;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V1\Admin\Order\OrderResource as V1OrderResource;
 use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
+use App\Http\Resources\API\V2\Admin\Order\OrderPaymentPlan\OrderPaymentPlanResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderAddressResource;
 use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
@@ -30,6 +32,7 @@ use Illuminate\Http\Request;
  * @property mixed $billingAddress
  * @property mixed $shippingAddress
  * @property mixed $paymentPlan
+ * @property mixed $orderPaymentPlan
  * @property mixed $shippingMethod
  * @property mixed $user
  * @property mixed $created_at
@@ -52,7 +55,7 @@ use Illuminate\Http\Request;
  * @method orderStatusHistory()
  * @method getTotalGradedItems()
  */
-class OrderResource extends BaseResource
+class OrderResource extends V1OrderResource
 {
     /**
      * Transform the resource into an array.
@@ -84,7 +87,7 @@ class OrderResource extends BaseResource
             'order_status_history' => $this->whenLoaded('orderStatusHistory', OrderStatusHistoryCollection::class),
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
-            'payment_plan' => $this->whenLoaded('paymentPlan', PaymentPlanResource::class),
+            'payment_plan' => $this->whenLoaded('orderPaymentPlan', new OrderPaymentPlanResource($this->orderPaymentPlan)),
             'shipping_address' => $this->whenLoaded('shippingAddress', OrderAddressResource::class),
             'billing_address' => $this->whenLoaded('billingAddress', OrderAddressResource::class),
             'order_payment' => $this->whenLoaded('firstOrderPayment', OrderPaymentResource::class),

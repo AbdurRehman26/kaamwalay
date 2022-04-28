@@ -107,6 +107,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('invoice'),
             AllowedInclude::relationship('orderLabel'),
             AllowedInclude::relationship('paymentPlan'),
+            AllowedInclude::relationship('orderPaymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
             AllowedInclude::relationship('orderPayment', 'firstOrderPayment'),
@@ -176,10 +177,14 @@ class Order extends Model implements Exportable
         return $this->belongsTo(PaymentPlan::class);
     }
 
+    /**
+     * @return BelongsTo<OrderPaymentPlan, Order>
+     */
     public function orderPaymentPlan(): BelongsTo
     {
         return $this->belongsTo(OrderPaymentPlan::class);
     }
+
     public function orderStatus(): BelongsTo
     {
         return $this->belongsTo(OrderStatus::class);

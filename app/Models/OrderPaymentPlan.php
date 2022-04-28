@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderPaymentPlan extends Model
@@ -14,9 +13,9 @@ class OrderPaymentPlan extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
-    protected $fillable = ['order_id', 'price', 'max_protection_amount', 'turnaround'];
+    protected $fillable = ['price', 'max_protection_amount', 'turnaround'];
 
     /**
      * The attributes that should be cast to native types.

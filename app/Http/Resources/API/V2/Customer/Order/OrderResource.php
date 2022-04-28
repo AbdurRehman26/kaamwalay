@@ -10,7 +10,6 @@ use App\Http\Resources\API\V2\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V2\Customer\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderItem\OrderItemCollection;
-use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Http\Resources\API\V2\Customer\User\UserResource;
 use App\Models\Order;

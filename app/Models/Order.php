@@ -177,14 +177,6 @@ class Order extends Model implements Exportable
         return $this->belongsTo(OrderPaymentPlan::class, 'order_payment_plan_id');
     }
 
-    /**
-     * @return BelongsTo<OrderPaymentPlan, Order>
-     */
-    public function orderPaymentPlan(): BelongsTo
-    {
-        return $this->belongsTo(OrderPaymentPlan::class);
-    }
-
     public function orderStatus(): BelongsTo
     {
         return $this->belongsTo(OrderStatus::class);

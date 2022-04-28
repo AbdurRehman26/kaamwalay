@@ -100,7 +100,7 @@ class UserCardService
     {
         $userCard = UserCard::where('certificate_number', $certificateId)->first();
 
-        if ($userCard->orderItem->order->order_status_id !== OrderStatus::SHIPPED) {
+        if (empty($userCard) || $userCard->orderItem->order->order_status_id !== OrderStatus::SHIPPED) {
             return [
                 'grades_available' => false,
             ];

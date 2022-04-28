@@ -2,18 +2,15 @@
 
 namespace App\Services;
 
-use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Picqer\Barcode\BarcodeGenerator;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 class BarcodeService
 {
-    public static function generate(string $text, string $type, string $label, int $scale): string
+    public static function generate(string $text): string
     {
-        $barCode = new BarcodeGenerator();
-        $barCode->setText($text);
-        $barCode->setType($type);
-        $barCode->setLabel($label);
-        $barCode->setScale($scale);
+        $barCode = new BarcodeGeneratorPNG();
 
-        return $barCode->generate();
+        return base64_encode($barCode->getBarcode($text, BarcodeGenerator::TYPE_CODE_39, 2, 70));
     }
 }

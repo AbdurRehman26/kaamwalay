@@ -8,7 +8,6 @@ use App\Models\Order;
 use App\Services\BarcodeService;
 use App\Services\PDFService;
 use Carbon\Carbon;
-use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -31,7 +30,7 @@ class InvoiceService
     {
         $logoData = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/invoiceLogo.png')));
         $agsLogo = 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('assets/logos/agsLogo.png')));
-        $barcode = 'data:image/png;base64,' . BarcodeService::generate($order->order_number, BarcodeGenerator::Code39, '', 2);
+        $barcode = 'data:image/png;base64,' . BarcodeService::generate($order->order_number);
 
         $orderPayment = $order->firstOrderPayment;
         $paymentResponse = $orderPayment ? json_decode($orderPayment->response) : null;

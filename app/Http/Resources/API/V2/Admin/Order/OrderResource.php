@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\V2\Admin\Order;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
-use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Admin\Order\OrderResource as V1OrderResource;
 use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderItem\OrderItemCollection;
@@ -11,7 +10,6 @@ use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderPaymentPlan\OrderPaymentPlanResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\OrderAddressResource;
-use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;

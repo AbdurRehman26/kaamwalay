@@ -8,7 +8,6 @@ use App\Http\Resources\API\V2\Admin\Order\OrderPaymentPlan\OrderPaymentPlanResou
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusHistoryCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderStatusResource;
 use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
-use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Models\Order;
 
 /** @mixin Order */

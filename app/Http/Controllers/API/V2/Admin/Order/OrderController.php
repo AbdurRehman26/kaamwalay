@@ -16,7 +16,6 @@ use Throwable;
 
 class OrderController extends V1OrderController
 {
-
     public function show(int $orderId): OrderResource
     {
         $orderService = resolve(OrderService::class);

@@ -121,12 +121,12 @@ parameters:
 			path: app/Exceptions/API/Customer/Order/OrderNotPlaced.php
 
 		-
-			message: "#^PHPDoc type array of property App\\\\Exceptions\\\\Handler\\:\\:\\$dontFlash is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Foundation\\\\Exceptions\\\\Handler\\:\\:\\$dontFlash\\.$#"
+			message: "#^PHPDoc type array of property App\\\\Exceptions\\\\Handler\\:\\:\\$dontFlash is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Foundation\\\\Exceptions\\\\Handler\\:\\:\\$dontFlash\\.$#"
 			count: 1
 			path: app/Exceptions/Handler.php
 
 		-
-			message: "#^PHPDoc type array of property App\\\\Exceptions\\\\Handler\\:\\:\\$dontReport is not covariant with PHPDoc type array\\<string\\> of overridden property Illuminate\\\\Foundation\\\\Exceptions\\\\Handler\\:\\:\\$dontReport\\.$#"
+			message: "#^PHPDoc type array of property App\\\\Exceptions\\\\Handler\\:\\:\\$dontReport is not covariant with PHPDoc type array\\<int, class\\-string\\<Throwable\\>\\> of overridden property Illuminate\\\\Foundation\\\\Exceptions\\\\Handler\\:\\:\\$dontReport\\.$#"
 			count: 1
 			path: app/Exceptions/Handler.php
 
@@ -201,44 +201,9 @@ parameters:
 			path: app/Http/Controllers/DashboardController.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\AdminCouponSearchFilter\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
+			message: "#^Parameter \\#1 \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\VaultShipment\\>\\) of method App\\\\Http\\\\Filters\\\\VaultShipmentSearchFilter\\:\\:__invoke\\(\\) should be compatible with parameter \\$query \\(Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\) of method Spatie\\\\QueryBuilder\\\\Filters\\\\Filter\\:\\:__invoke\\(\\)$#"
 			count: 1
-			path: app/Http/Filters/AdminCouponSearchFilter.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\AdminCustomerSearchFilter\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/AdminCustomerSearchFilter.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Http/Filters/AdminOrderSearchFilter.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/AdminOrderSearchFilter.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\AdminOrderSearchFilter\\:\\:__invoke\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: app/Http/Filters/AdminOrderSearchFilter.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: app/Http/Filters/UserCardSearchFilter.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
-			count: 1
-			path: app/Http/Filters/UserCardSearchFilter.php
-
-		-
-			message: "#^Method App\\\\Http\\\\Filters\\\\UserCardSearchFilter\\:\\:__invoke\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: app/Http/Filters/UserCardSearchFilter.php
+			path: app/Http/Filters/VaultShipmentSearchFilter.php
 
 		-
 			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\BaseResource\\:\\:whenIncluded\\(\\) has no return type specified\\.$#"
@@ -571,16 +536,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$internal_notes\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$notes\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderItem\\\\OrderItemResource\\:\\:\\$order_id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderItem/OrderItemResource.php
@@ -776,11 +731,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$payment_status\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$discounted_amount\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
@@ -792,6 +742,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$payment_method_id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$payment_status\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
 
@@ -1316,11 +1271,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCreateResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_step\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Customer/Order/OrderCreateResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderCustomerShipmentResource\\:\\:\\$id\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderCustomerShipmentResource.php
@@ -1486,11 +1436,6 @@ parameters:
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$response\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
 			count: 3
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
@@ -1499,51 +1444,6 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$created_at\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$id\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$response\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
-			count: 5
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Customer\\\\Order\\\\OrderResource\\:\\:\\$amount_paid_from_wallet\\.$#"
@@ -1879,6 +1779,56 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Files\\\\PresignUploadResource\\:\\:getSize\\(\\)\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Files/PresignUploadResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderCreateResource\\:\\:\\$order_step\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderCreateResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$amount\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$created_at\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$notes\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$order\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$paymentMethod\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:\\$type\\.$#"
+			count: 5
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Customer\\\\Order\\\\OrderPaymentResource\\:\\:getPaymentType\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Customer/Order/OrderPaymentResource.php
 
 		-
 			message: "#^Method App\\\\Http\\\\Sorts\\\\AdminCustomerFullNameSort\\:\\:__invoke\\(\\) has parameter \\$query with generic class Illuminate\\\\Database\\\\Eloquent\\\\Builder but does not specify its types\\: TModelClass$#"
@@ -3016,6 +2966,11 @@ parameters:
 			path: app/Services/Admin/Order/ShipmentService.php
 
 		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Admin/V1/OrderService.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:allowedIncludes\\(\\)\\.$#"
 			count: 2
 			path: app/Services/Admin/V1/OrderStatusHistoryService.php
@@ -3056,16 +3011,6 @@ parameters:
 			path: app/Services/ImageService.php
 
 		-
-			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
-			count: 1
-			path: app/Services/Order/V1/OrderService.php
-
-		-
-			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
-			count: 1
-			path: app/Services/Admin/V1/OrderService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\Order\\\\RevenueStatsService\\:\\:addStats\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: app/Services/Order/RevenueStatsService.php
@@ -3104,6 +3049,11 @@ parameters:
 			message: "#^Method App\\\\Services\\\\Order\\\\Shipping\\\\Calculators\\\\InsuredShippingFeeCalculator\\:\\:calculateTotalNumberOfItems\\(\\) has parameter \\$orderItems with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection but does not specify its types\\: TKey, TModel$#"
 			count: 1
 			path: app/Services/Order/Shipping/Calculators/InsuredShippingFeeCalculator.php
+
+		-
+			message: "#^Call to an undefined method Spatie\\\\QueryBuilder\\\\QueryBuilder\\:\\:excludeCancelled\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Order/V1/OrderService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Order\\\\Validators\\\\CustomerAddressValidator\\:\\:validate\\(\\) has no return type specified\\.$#"
@@ -3184,9 +3134,4 @@ parameters:
 			message: "#^Method App\\\\Services\\\\SerialNumberService\\\\SerialNumberService\\:\\:get\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: app/Services/SerialNumberService/SerialNumberService.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Casts\\\\CouponDateRange\\:\\:toDateString\\(\\)\\.$#"
-			count: 2
-			path: app/Http/Resources/API/V2/Admin/Coupon/CouponResource.php
 

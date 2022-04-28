@@ -30,7 +30,6 @@ use Illuminate\Http\Request;
  * @property mixed $billingAddress
  * @property mixed $shippingAddress
  * @property mixed $paymentPlan
- * @property mixed $orderPaymentPlan
  * @property mixed $shippingMethod
  * @property mixed $user
  * @property mixed $created_at

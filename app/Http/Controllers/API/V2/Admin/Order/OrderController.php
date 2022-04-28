@@ -7,7 +7,6 @@ use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 
 class OrderController extends V1OrderController
 {
-
     public function show(int $orderId): OrderResource
     {
         $order = $this->ordersService->getOrder($orderId);

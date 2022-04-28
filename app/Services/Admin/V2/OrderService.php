@@ -106,7 +106,7 @@ class OrderService extends V1OrderService
         $data["DATE"] = $order->created_at->format('m/d/Y');
         $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
-        $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
+        $data["SHIPPING_ADDRESS"] = $order->shippingAddress ? $this->getAddressData($order->shippingAddress) : [];
         $data["BILLING_ADDRESS"] = $order->billingAddress ? $this->getAddressData($order->billingAddress) : [];
 
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);

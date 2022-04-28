@@ -26,8 +26,20 @@ test('a customer can get specific shipping method', function () {
     ]);
 });
 
-test('a guest cannot get shipping methods', function () {
+test('a guest can get shipping methods', function () {
     $response = $this->getJson('/api/v2/customer/orders/shipping-methods');
 
-    $response->assertUnauthorized();
+    $response->assertJsonStructure([
+        'data' => [
+            '*' => ['id', 'code', 'name'],
+        ],
+    ]);
+});
+
+test('a guest can get specific shipping method', function () {
+    $response = $this->getJson('/api/v2/customer/orders/shipping-methods/1');
+
+    $response->assertJsonStructure([
+        'data' => ['id', 'code', 'name'],
+    ]);
 });

@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { useFormikContext } from 'formik';
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
+import { AddressEntity } from '../../entities/AddressEntity';
 import { useRepository } from '../../hooks/useRepository';
 import { UserRepository } from '../../repositories/UserRepository';
 import { Addresses } from './Addresses';
@@ -29,7 +30,11 @@ export function SelectAddressDialogContent() {
         },
     });
 
-    const handleNewAddress = useCallback(() => formik.setFieldValue('newAddress', true), [formik]);
+    const handleNewAddress = useCallback(() => {
+        formik.setFieldValue('newAddress', true);
+        formik.setFieldValue('backup', formik.values.address);
+        formik.setFieldValue('address', new AddressEntity());
+    }, [formik]);
 
     const hasAddresses = !!addresses.data && addresses.data.length > 0;
 

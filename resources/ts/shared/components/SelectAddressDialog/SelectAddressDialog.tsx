@@ -53,7 +53,7 @@ export function SelectAddressDialog({ onSubmit, ...rest }: SelectAddressDialogPr
                     <Divider />
                     <SelectAddressDialogContent />
                     <DialogActions sx={{ px: 3, py: 2.5 }}>
-                        <Button>Cancel</Button>
+                        <Button onClick={() => rest.onClose && rest.onClose({}, 'escapeKeyDown')}>Cancel</Button>
                         <FormikButton variant={'contained'} color={'primary'}>
                             Confirm
                         </FormikButton>

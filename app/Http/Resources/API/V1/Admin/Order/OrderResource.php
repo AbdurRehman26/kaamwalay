@@ -100,14 +100,14 @@ class OrderResource extends BaseResource
         ];
     }
 
-    protected function reviewedBy(Closure $selector): mixed
+    private function reviewedBy(Closure $selector): mixed
     {
         return $this->when($this->order_status_id >= OrderStatus::CONFIRMED, function () use ($selector) {
             return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::CONFIRMED)->latest()->first());
         });
     }
 
-    protected function gradedBy(Closure $selector): mixed
+    private function gradedBy(Closure $selector): mixed
     {
         return $this->when($this->order_status_id >= OrderStatus::GRADED, function () use ($selector) {
             return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::GRADED)->latest()->first());

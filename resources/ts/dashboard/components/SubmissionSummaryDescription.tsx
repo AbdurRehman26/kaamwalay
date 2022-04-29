@@ -6,7 +6,7 @@ interface SubmissionSummaryDescriptionProps {
     summaryDescription: string;
 }
 
-export function SubmissionSummmaryDescription({
+export function SubmissionSummaryDescription({
     summaryDescription,
 }: PropsWithChildren<SubmissionSummaryDescriptionProps>) {
     return (
@@ -19,4 +19,4 @@ export function SubmissionSummmaryDescription({
     );
 }
 
-export default SubmissionSummmaryDescription;
+export default SubmissionSummaryDescription;

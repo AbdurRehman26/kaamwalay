@@ -11,7 +11,7 @@ import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useRepository } from '@shared/hooks/useRepository';
 import { ShippingMethodsRepository } from '@shared/repositories/ShippingMethodsRepository';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { initializeShippingMethod, setShippingMethod } from '../../redux/slices/newSubmissionSlice';
+import { initializeShippingMethod, setIsNextDisabled, setShippingMethod } from '../../redux/slices/newSubmissionSlice';
 import { InsuredShippingMethod } from './InsuredShippingMethod';
 import { ShippingMethod } from './ShippingMethod';
 import { VaultStorageMethod } from './VaultStorageMethod';
@@ -34,7 +34,10 @@ export function ShippingMethods() {
     });
 
     const handleSelectMethod = useCallback(
-        (method: ShippingMethodEntity) => dispatch(setShippingMethod(instanceToPlain(method) as ShippingMethodEntity)),
+        (method: ShippingMethodEntity) => {
+            dispatch(setIsNextDisabled(false));
+            dispatch(setShippingMethod(instanceToPlain(method) as ShippingMethodEntity));
+        },
         [dispatch],
     );
 

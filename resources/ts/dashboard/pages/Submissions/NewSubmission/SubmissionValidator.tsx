@@ -92,7 +92,7 @@ export function SubmissionValidator() {
         addressState,
         addressZipCode,
         addressPhoneNumber,
-        shippingMethod,
+        shippingMethod?.code,
     ]);
 
     useEffect(() => {

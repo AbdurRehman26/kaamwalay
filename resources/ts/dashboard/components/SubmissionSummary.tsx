@@ -10,7 +10,7 @@ import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEnti
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
 import CompleteSubmissionButton from './CompleteSubmissionButton';
-import SubmissionSummmaryDescription from './SubmissionSummmaryDescription';
+import SubmissionSummaryDescription from './SubmissionSummaryDescription';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -202,7 +202,7 @@ function SubmissionSummary() {
                         <>
                             <CompleteSubmissionButton buttonText={'Complete Submission'} hasStyle={false} />
                         </>
-                        <SubmissionSummmaryDescription summaryDescription={'the above button'} />
+                        <SubmissionSummaryDescription summaryDescription={'the above button'} />
                     </div>
                 ) : null}
 

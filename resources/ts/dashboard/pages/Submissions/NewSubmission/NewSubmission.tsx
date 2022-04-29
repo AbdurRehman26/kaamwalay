@@ -22,7 +22,7 @@ import {
     SubmissionStep05Content,
 } from '../../../components/SubmissionSteps';
 import SubmissionSummary from '../../../components/SubmissionSummary';
-import SubmissionSummmaryDescription from '../../../components/SubmissionSummmaryDescription';
+import SubmissionSummaryDescription from '../../../components/SubmissionSummaryDescription';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import {
     backStep,
@@ -169,7 +169,7 @@ export function NewSubmission() {
                 ) : null}
                 {currentStep === 4 && isMobile ? (
                     <Grid display={'flex'} item xs={12}>
-                        <SubmissionSummmaryDescription summaryDescription={'“SUBMIT”'} />
+                        <SubmissionSummaryDescription summaryDescription={'“SUBMIT”'} />
                     </Grid>
                 ) : null}
             </Grid>
@@ -177,13 +177,7 @@ export function NewSubmission() {
     ) : null;
 
     useEffect(() => {
-        if (selectedCards.length === 0 && currentStep === 1) {
-            dispatch(setIsNextDisabled(true));
-        } else {
-            if (currentStep !== 3) {
-                dispatch(setIsNextDisabled(false));
-            }
-        }
+        dispatch(setIsNextDisabled(selectedCards.length === 0 && currentStep === 1));
     }, [selectedCards, currentStep, dispatch]);
 
     useApplicationEvent(ApplicationEventsEnum.AuthSessionLogin, () => {

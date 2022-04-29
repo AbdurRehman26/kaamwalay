@@ -1,4 +1,4 @@
-export class RefundOrderTransactionDTO {
+export class RefundOrderTransactionDto {
     notes!: string;
     amount!: string;
     orderId!: number;

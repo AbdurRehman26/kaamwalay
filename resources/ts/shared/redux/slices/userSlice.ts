@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ChangeUserPasswordDTO } from '@shared/dto/ChangeUserPasswordDTO';
 import { LoginRequestDto } from '@shared/dto/LoginRequestDto';
-import { UpdateUserProfileDTO } from '@shared/dto/UpdateUserProfileDTO';
+import { UpdateUserProfileDto } from '@shared/dto/UpdateUserProfileDto';
 import { app } from '@shared/lib/app';
 import { updateUserProfileData } from '@shared/redux/slices/authenticationSlice';
 import { UserRepository } from '@shared/repositories/UserRepository';
 import { AuthenticationService } from '@shared/services/AuthenticationService';
 import { NotificationsService } from '@shared/services/NotificationsService';
+import { ChangeUserPasswordDto } from '../../dto/ChangeUserPasswordDto';
 
 export const updateUserProfile = createAsyncThunk(
     'user/updateProfile',
-    async (input: UpdateUserProfileDTO, thunkAPI) => {
+    async (input: UpdateUserProfileDto, thunkAPI) => {
         const userRepository = app(UserRepository);
         try {
             const data = await userRepository.updateUserProfile(input);
@@ -39,7 +39,7 @@ export const confirmPasswordWithAGS = createAsyncThunk(
 
 export const updateUserPassword = createAsyncThunk(
     'user/updateUserPassword',
-    async (input: ChangeUserPasswordDTO, thunkAPI) => {
+    async (input: ChangeUserPasswordDto, thunkAPI) => {
         const authenticationService = app(AuthenticationService);
         const userRepository = app(UserRepository);
         try {

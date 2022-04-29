@@ -1,11 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { AddCardToOrderDto } from '@shared/dto/AddCardToOrderDto';
-import { AddExtraChargeToOrderDTO } from '@shared/dto/AddExtraChargeToOrderDTO';
 import { ChangeOrderItemStatusDto } from '@shared/dto/ChangeOrderItemStatusDto';
 import { EditCardOfOrderDto } from '@shared/dto/EditCardOfOrderDto';
-import { EditTransactionNotesDTO } from '@shared/dto/EditTransactionNotesDTO';
-import { RefundOrderTransactionDTO } from '@shared/dto/RefundOrderTransactionDTO';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
 import { OrderItemEntity } from '@shared/entities/OrderItemEntity';
@@ -14,10 +11,13 @@ import { app } from '@shared/lib/app';
 import { OrderItemsRepository } from '@shared/repositories/Admin/OrderItemsRepository';
 import { OrdersRepository } from '@shared/repositories/Admin/OrdersRepository';
 import { APIState } from '@shared/types/APIState';
+import { AddExtraChargeToOrderDto } from '../../dto/AddExtraChargeToOrderDto';
 import { AddOrderStatusHistoryDto } from '../../dto/AddOrderStatusHistoryDto';
-import { ChangeOrderItemNotesDTO } from '../../dto/ChangeOrderItemNotesDTO';
+import { ChangeOrderItemNotesDto } from '../../dto/ChangeOrderItemNotesDto';
 import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBatchDto';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
+import { EditTransactionNotesDto } from '../../dto/EditTransactionNotesDto';
+import { RefundOrderTransactionDto } from '../../dto/RefundOrderTransactionDto';
 import { OrderItemStatusHistoryEntity } from '../../entities/OrderItemStatusHistoryEntity';
 import { OrderStatusEntity } from '../../entities/OrderStatusEntity';
 import { OrderStatusHistoryEntity } from '../../entities/OrderStatusHistoryEntity';
@@ -63,8 +63,8 @@ export const changeOrderItemNotes = createAsyncThunk<
         notes: string;
         internalNotes?: string;
     },
-    ChangeOrderItemNotesDTO
->('changeOrderItemNotes', async (input: ChangeOrderItemNotesDTO, thunkAPI) => {
+    ChangeOrderItemNotesDto
+>('changeOrderItemNotes', async (input: ChangeOrderItemNotesDto, thunkAPI) => {
     const orderItemsRepository = app(OrderItemsRepository);
     try {
         const item = await orderItemsRepository.changeOrderItemNotes(input);
@@ -179,7 +179,7 @@ export const setOrderShipment = createAsyncThunk<
 
 export const addExtraChargeToOrder = createAsyncThunk(
     'addExtraChargeToOrder',
-    async (input: AddExtraChargeToOrderDTO, thunkAPI) => {
+    async (input: AddExtraChargeToOrderDto, thunkAPI) => {
         const ordersRepository = app(OrdersRepository);
 
         try {
@@ -204,8 +204,8 @@ export const refundOrderTransaction = createAsyncThunk<
         extraCharge: OrderRefundEntity;
         orderId: number;
     },
-    RefundOrderTransactionDTO
->('refundOrderTransaction', async (input: RefundOrderTransactionDTO, thunkAPI) => {
+    RefundOrderTransactionDto
+>('refundOrderTransaction', async (input: RefundOrderTransactionDto, thunkAPI) => {
     const ordersRepository = app(OrdersRepository);
 
     try {
@@ -226,7 +226,7 @@ export const refundOrderTransaction = createAsyncThunk<
 
 export const editTransactionNotes = createAsyncThunk(
     'editTransactionNotes',
-    async (input: EditTransactionNotesDTO, thunkAPI) => {
+    async (input: EditTransactionNotesDto, thunkAPI) => {
         const ordersRepository = app(OrdersRepository);
 
         try {

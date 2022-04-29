@@ -1,5 +1,6 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { ClassConstructor, ClassTransformOptions, plainToInstance } from 'class-transformer';
+import { Entity } from '@shared/entities/Entity';
 import { PaginatedData } from '../classes/PaginatedData';
 import { Injectable } from '../decorators/Injectable';
 import { APIEndpointConfig } from '../interfaces/APIEndpointConfig';
@@ -114,5 +115,15 @@ export abstract class Repository<T> {
         }
 
         return PaginatedData.from(this.toEntities(data.data, null, transformModel), data.links, data.meta) as any;
+    }
+
+    static create<T extends Entity>(EntityClass: new () => T, data: Partial<T>): T {
+        const now = new Date();
+
+        return plainToInstance(EntityClass, {
+            createdAt: now,
+            updatedAt: now,
+            ...data,
+        }) as any;
     }
 }

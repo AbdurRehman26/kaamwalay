@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { instanceToPlain } from 'class-transformer';
 import { OrderEntity } from '@shared/entities/OrderEntity';
+import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { OrdersRepository } from '@shared/repositories/OrdersRepository';
 import { ChangeOrderShipmentDto } from '../../dto/ChangeOrderShipmentDto';
 import { ShipmentEntity } from '../../entities/ShipmentEntity';
@@ -52,6 +53,19 @@ export const ordersSlice = createSlice({
     } as StateType,
     reducers: {
         invalidateOrders: ordersThunk.invalidateEntities,
+        updateOrderShippingMethod(
+            state,
+            action: PayloadAction<{
+                orderId: number;
+                shippingMethod: ShippingMethodEntity;
+            }>,
+        ) {
+            if (state.entities[action.payload.orderId]) {
+                state.entities[action.payload.orderId].shippingMethod = instanceToPlain(
+                    action.payload.shippingMethod,
+                ) as ShippingMethodEntity;
+            }
+        },
     },
     extraReducers(builder) {
         ordersThunk.buildReducers(builder);
@@ -63,5 +77,5 @@ export const ordersSlice = createSlice({
         });
     },
 });
-export const { invalidateOrders } = ordersSlice.actions;
+export const { invalidateOrders, updateOrderShippingMethod } = ordersSlice.actions;
 export const { listAction: listOrdersAction, showAction: showOrderAction } = ordersThunk;

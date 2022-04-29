@@ -6,6 +6,8 @@ import { makeStyles } from '@mui/styles';
 import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
+import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
 import { font } from '@shared/styles/utils';
 import { useAppDispatch } from '@dashboard/redux/hooks';
@@ -17,6 +19,7 @@ type SubmissionTrackingStatusProps = {
     invoicePath?: string;
     shipmentNumber?: string;
     shipmentLink?: string;
+    shippingMethod?: ShippingMethodEntity;
 };
 
 const useStyles = makeStyles(
@@ -53,6 +56,7 @@ function SubmissionTrackingStatus({
     orderStatus,
     shipmentNumber,
     shipmentLink,
+    shippingMethod,
 }: SubmissionTrackingStatusProps) {
     const classes = useStyles();
     const { id }: any = useParams();
@@ -73,6 +77,10 @@ function SubmissionTrackingStatus({
     const handleAddTrackingNumber = useCallback(() => {
         setIsShipmentDialogOpen(true);
     }, []);
+
+    if (shippingMethod?.code !== ShippingMethodType.InsuredShipping) {
+        return null;
+    }
 
     if (orderStatus === 'shipped') {
         return (

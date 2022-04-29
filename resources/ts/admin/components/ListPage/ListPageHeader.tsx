@@ -1,6 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
-import Grid from '@mui/material/Grid';
+import Grid, { GridProps } from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
@@ -8,16 +8,15 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 
-interface Props {
+interface Props extends GridProps {
     title: string;
-    value?: string;
     searchField?: boolean;
+    value?: string;
     onSearch?: (search: string) => void;
 }
 
-const Root = styled('header')(({ theme }) => ({
+const Root = styled(Grid)(() => ({
     backgroundColor: '#f9f9f9',
-    padding: theme.spacing(3, 2.5),
     width: '100%',
     borderBottom: '1px solid #e0e0e0',
     '.ListPageHeader-search': {
@@ -39,7 +38,7 @@ const Root = styled('header')(({ theme }) => ({
  * @date: 23.12.2021
  * @time: 21:44
  */
-export function ListPageHeader({ title, searchField, value, onSearch }: Props) {
+export function ListPageHeader({ title, searchField, value, onSearch, children, ...rest }: Props) {
     const [search, setSearch] = useState(value ?? '');
 
     const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
@@ -64,7 +63,7 @@ export function ListPageHeader({ title, searchField, value, onSearch }: Props) {
     }, [value]);
 
     return (
-        <Root>
+        <Root pt={3} pb={3} pl={2.5} pr={2.5} {...rest}>
             <Grid container alignItems={'center'}>
                 <Typography variant={'h4'} fontWeight={500} mr={3}>
                     {title}
@@ -94,6 +93,7 @@ export function ListPageHeader({ title, searchField, value, onSearch }: Props) {
                     />
                 )}
             </Grid>
+            {children}
         </Root>
     );
 }

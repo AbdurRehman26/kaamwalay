@@ -1,18 +1,24 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import React, { useMemo } from 'react';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
+import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { cx } from '@shared/lib/utils/cx';
 import SubmissionTrackingStatus from '@dashboard/pages/Submissions/ViewSubmission/SubmissionTrackingStatus';
+import { SubmissionVaultStorage } from './SubmissionVaultStorage';
 import { ViewSubmissionStatusBar } from './ViewSubmissionStatusBar';
 import { SubmissionSteps } from './data';
 import { useViewSubmissionStatusStyles } from './styles';
 
 interface ViewSubmissionStatusProps {
+    orderId?: number;
     orderStatus: string | SubmissionSteps;
     trackingNumber?: string;
     shipmentProvider?: string;
     orderShipment: ShipmentEntity | null;
+    shippingMethod?: ShippingMethodEntity;
+    isPaid?: boolean;
 }
 
 const STATUS_DESCRIPTION_MAP = {
@@ -29,13 +35,30 @@ const STATUS_DESCRIPTION_MAP = {
  * @constructor
  */
 export function ViewSubmissionStatus({
+    orderId,
     orderStatus,
     shipmentProvider,
     trackingNumber,
     orderShipment,
+    shippingMethod,
+    isPaid,
 }: ViewSubmissionStatusProps) {
     const classes = useViewSubmissionStatusStyles();
-    const steps = useMemo(() => Object.values(SubmissionSteps), []);
+    const steps = useMemo(() => {
+        const values = Object.values(SubmissionSteps);
+
+        if (shippingMethod?.code === ShippingMethodType.VaultStorage) {
+            return values.map((step) => {
+                if (step === SubmissionSteps.Shipped) {
+                    return 'Stored in Vault';
+                }
+
+                return step;
+            });
+        }
+
+        return values;
+    }, [shippingMethod?.code]);
 
     const statusDescription = useMemo(() => STATUS_DESCRIPTION_MAP[orderStatus.toLowerCase()], [orderStatus]);
     return (
@@ -58,7 +81,10 @@ export function ViewSubmissionStatus({
                 shippingProvider={shipmentProvider!}
                 shipmentLink={orderShipment?.trackingUrl!}
                 shipmentNumber={orderShipment?.trackingNumber}
+                shippingMethod={shippingMethod}
             />
+
+            <SubmissionVaultStorage orderId={orderId} shippingMethod={shippingMethod} canDoActions={!isPaid} />
         </Grid>
     );
 }

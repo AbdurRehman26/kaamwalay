@@ -12,6 +12,7 @@ import { useFormikContext } from 'formik';
 import React, { forwardRef, useCallback } from 'react';
 import NumberFormat from 'react-number-format';
 import { useQuery } from 'react-query';
+import { AddressStateEntity } from '../../entities/AddressStateEntity';
 import { useRepository } from '../../hooks/useRepository';
 import { UserRepository } from '../../repositories/UserRepository';
 
@@ -28,6 +29,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
     const handleBack = useCallback(() => {
         if (canGoBack) {
             formik.setFieldValue('newAddress', false);
+            formik.setFieldValue('address', formik.values.backup);
         }
     }, [canGoBack, formik]);
 
@@ -111,8 +113,8 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
                             variant={'outlined'}
                         >
                             <MenuItem value="none">Select a state</MenuItem>
-                            {states.data?.map((item: any) => (
-                                <MenuItem key={item.id} value={item.id}>
+                            {states.data?.map((item: AddressStateEntity) => (
+                                <MenuItem key={item.id} value={item.code}>
                                     {item.code}
                                 </MenuItem>
                             ))}

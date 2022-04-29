@@ -20,10 +20,10 @@ import { useAppDispatch } from '../../../redux/hooks';
 interface Props {
     orderId?: number;
     shippingMethod?: ShippingMethodEntity;
-    canDoActions?: boolean;
+    paid?: boolean;
 }
 
-export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }: Props) {
+export function SubmissionShippingMethod({ orderId, shippingMethod, paid }: Props) {
     const orderRepository = useRepository(OrdersRepository);
     const selectAddress = useDialogHelper();
     const loadingModal = useLoadingModal();
@@ -40,14 +40,14 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
                 });
 
                 try {
-                    const { shippingMethod } = await orderRepository.attachShippingAddress({
+                    const { shippingMethod, shippingAddress } = await orderRepository.attachShippingAddress({
                         address,
                         orderId,
                         saveForLater: !!newAddress,
                         shippingMethod: ShippingMethodType.InsuredShippingID,
                     });
 
-                    dispatch(updateOrderShippingMethod({ orderId, shippingMethod }));
+                    dispatch(updateOrderShippingMethod({ orderId, shippingMethod, shippingAddress }));
 
                     loadingModal.setData({
                         state: 'loaded',
@@ -75,12 +75,12 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
                 message: 'Switching to Insured Shipping...',
             });
             try {
-                const { shippingMethod } = await orderRepository.attachShippingAddress({
+                const { shippingMethod, shippingAddress } = await orderRepository.attachShippingAddress({
                     orderId,
                     shippingMethod: ShippingMethodType.VaultStorageID,
                 });
 
-                dispatch(updateOrderShippingMethod({ orderId, shippingMethod }));
+                dispatch(updateOrderShippingMethod({ orderId, shippingMethod, shippingAddress }));
 
                 loadingModal.setData({
                     state: 'loaded',
@@ -106,7 +106,7 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
                     <Typography variant={'caption'} mb={2} maxWidth={480}>
                         You have opted to have your slabbed cards shipped back to you.
                     </Typography>
-                    {canDoActions ? (
+                    {!paid ? (
                         <Button variant={'outlined'} color={'primary'} onClick={handleSwitchToVault}>
                             Switch to Vault Storage
                         </Button>
@@ -118,11 +118,20 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
         return (
             <>
                 <Typography variant={'caption'} mb={2} maxWidth={480}>
-                    You have opted to store your cards in the AGS Vault, which means they will be stored in a secure
-                    safe within the AGS Card Vault. You can switch to standard insured shipping at any point by clicking
-                    the button below.
+                    {paid ? (
+                        <>
+                            You have opted to store your cards in the AGS Vault, which means they will be stored in a
+                            secure safe within the AGS Card Vault.
+                        </>
+                    ) : (
+                        <>
+                            You have opted to store your cards in the AGS Vault, which means they will be stored in a
+                            secure safe within the AGS Card Vault. You can switch to standard insured shipping at any
+                            point by clicking the button below.
+                        </>
+                    )}
                 </Typography>
-                {canDoActions ? (
+                {!paid ? (
                     <>
                         <Button variant={'outlined'} color={'primary'} {...selectAddress.buttonProps}>
                             Switch to Insured Shipping
@@ -133,7 +142,7 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
             </>
         );
     }, [
-        canDoActions,
+        paid,
         handleSelectAddress,
         handleSwitchToVault,
         selectAddress.buttonProps,
@@ -156,7 +165,7 @@ export function SubmissionVaultStorage({ orderId, shippingMethod, canDoActions }
                     <Typography variant={'h6'} color={'primary'} fontWeight={500}>
                         {shippingMethod?.name ?? 'Insured Shipping'}
                     </Typography>
-                    {!canDoActions && shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
+                    {paid && shippingMethod?.code === ShippingMethodType.VaultStorage ? (
                         <Tooltip
                             title={
                                 <Stack>

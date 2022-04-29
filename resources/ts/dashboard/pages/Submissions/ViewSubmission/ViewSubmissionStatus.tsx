@@ -5,8 +5,8 @@ import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { ShipmentEntity } from '@shared/entities/ShipmentEntity';
 import { ShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { cx } from '@shared/lib/utils/cx';
-import SubmissionTrackingStatus from '@dashboard/pages/Submissions/ViewSubmission/SubmissionTrackingStatus';
-import { SubmissionVaultStorage } from './SubmissionVaultStorage';
+import { SubmissionShippingMethod } from './SubmissionShippingMethod';
+import { SubmissionTrackingStatus } from './SubmissionTrackingStatus';
 import { ViewSubmissionStatusBar } from './ViewSubmissionStatusBar';
 import { SubmissionSteps } from './data';
 import { useViewSubmissionStatusStyles } from './styles';
@@ -84,7 +84,7 @@ export function ViewSubmissionStatus({
                 shippingMethod={shippingMethod}
             />
 
-            <SubmissionVaultStorage orderId={orderId} shippingMethod={shippingMethod} canDoActions={!isPaid} />
+            <SubmissionShippingMethod orderId={orderId} shippingMethod={shippingMethod} paid={isPaid} />
         </Grid>
     );
 }

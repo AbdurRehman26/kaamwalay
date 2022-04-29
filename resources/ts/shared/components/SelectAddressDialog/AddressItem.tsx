@@ -31,10 +31,20 @@ export function AddressItem({ address }: Props) {
                     flexGrow={1}
                     pl={1.5}
                 >
-                    <Typography variant={'body2'}>{address.getFullName()}</Typography>
-                    <Typography variant={'body2'}>{address.getAddress()}</Typography>
-                    <Typography variant={'body2'}>{address.getAddressLine2()}</Typography>
-                    {address.phone && <Typography variant={'body2'}>{address.phone}</Typography>}
+                    <Typography variant={'body2'} align={'left'}>
+                        {address.getFullName()}
+                    </Typography>
+                    <Typography variant={'body2'} align={'left'}>
+                        {address.getAddress()}
+                    </Typography>
+                    <Typography variant={'body2'} align={'left'}>
+                        {address.getAddressLine2()}
+                    </Typography>
+                    {address.phone && (
+                        <Typography variant={'body2'} align={'left'}>
+                            {address.phone}
+                        </Typography>
+                    )}
                 </Grid>
             </Grid>
         </Root>

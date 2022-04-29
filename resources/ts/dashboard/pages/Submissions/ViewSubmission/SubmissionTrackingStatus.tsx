@@ -50,7 +50,7 @@ const useStyles = makeStyles(
     },
 );
 
-function SubmissionTrackingStatus({
+export function SubmissionTrackingStatus({
     trackingNumber,
     shippingProvider,
     orderStatus,
@@ -135,5 +135,3 @@ function SubmissionTrackingStatus({
         </Grid>
     );
 }
-
-export default SubmissionTrackingStatus;

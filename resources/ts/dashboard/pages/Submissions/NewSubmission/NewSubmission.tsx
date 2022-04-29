@@ -168,7 +168,7 @@ export function NewSubmission() {
                     </Grid>
                 ) : null}
                 {currentStep === 4 && isMobile ? (
-                    <Grid item xs={12}>
+                    <Grid display={'flex'} item xs={12}>
                         <SubmissionSummmaryDescription summaryDescription={'“SUBMIT”'} />
                     </Grid>
                 ) : null}

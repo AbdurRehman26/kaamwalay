@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ShippingMethod;
 use App\Models\User;
 
 beforeEach(function () {
@@ -55,3 +56,24 @@ test('a guest can get shipping fee', function () {
         'data' => ['shipping_fee'],
     ]);
 });
+
+test('shipping fee is calculated based on provided shipping method', function (ShippingMethod $shippingMethod) {
+    $this->postJson('/api/v2/customer/orders/shipping-fee', [
+        'items' => [
+            [
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'quantity' => 2,
+                'declared_value_per_unit' => 1000,
+            ],
+        ],
+        'shipping_method_id' => $shippingMethod->id,
+    ])->assertJsonFragment([
+        'shipping_fee' => $shippingMethod->code === ShippingMethod::VAULT_STORAGE ? 0 : 29,
+    ]);
+})->with([
+    fn () => (ShippingMethod::factory()->insured()->create()),
+    fn () => (ShippingMethod::factory()->vault()->create()),
+]);

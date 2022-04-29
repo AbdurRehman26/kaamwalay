@@ -9,6 +9,7 @@ use App\Models\CouponStat;
 use App\Models\CouponStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPaymentPlan;
 use App\Models\PaymentPlan;
 use App\Models\User;
 use App\Services\Coupon\CouponService;
@@ -18,6 +19,13 @@ beforeEach(function () {
     $this->couponService = resolve(CouponService::class);
 
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 300]);
+    $this->orderPaymentPlan = OrderPaymentPlan::factory()->create([
+        'id' => $this->paymentPlan->id,
+        'price' => $this->paymentPlan->price,
+        'max_protection_amount' => $this->paymentPlan->max_protection_amount,
+        'turnaround' => $this->paymentPlan->turnaround,
+    ]);
+
     $this->cardProduct = CardProduct::factory()->create();
 
     CouponStatus::factory()->count(2)->create();
@@ -52,7 +60,10 @@ beforeEach(function () {
     $this->order = Order::factory()
         ->for($this->paymentPlan)
         ->for($this->coupon)
-        ->for($this->user)->create();
+        ->for($this->user)
+        ->create([
+            'payment_plan_id' => $this->paymentPlan->id,
+        ]);
 
     OrderItem::factory()->for($this->order)->count(2)->create();
 
@@ -86,7 +97,6 @@ it('calculates discount for service fee order', function () {
     $this->coupon->couponApplicable()->update(
         ['code' => 'service_fee', 'label' => 'Service Fee']
     );
-
     $discount = $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 
     if ($this->coupon->type === 'fixed') {
@@ -136,7 +146,6 @@ it('gives exception when flat coupon value is greater than order', function () {
     
     $this->couponService->calculateDiscount($this->order->coupon, $this->order);
 })->throws(CouponFlatValueDiscountGreaterThanOrder::class, 'Coupon applied value is greater than your order. Please choose another coupon.');
-
 
 it('calculates stats for coupon', function () {
     $this->order->coupon()->update(['type' => Coupon::TYPE_FIXED]);

@@ -2,21 +2,20 @@
 
 namespace App\Models;
 
-use App\Concerns\Coupons\CanHaveCoupons;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class PaymentPlan extends Model
+class OrderPaymentPlan extends Model
 {
-    use HasFactory, CanHaveCoupons, SoftDeletes;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
-    protected $fillable = ['price', 'price_before_discount', 'discount_percentage', 'max_protection_amount', 'turnaround', 'display_position'];
+    protected $fillable = ['price', 'max_protection_amount', 'turnaround'];
 
     /**
      * The attributes that should be cast to native types.
@@ -26,10 +25,15 @@ class PaymentPlan extends Model
     protected $casts = [
         'id' => 'integer',
         'price' => 'float',
-        'price_before_discount' => 'float',
-        'discount_percentage' => 'string',
         'turnaround' => 'string',
         'max_protection_amount' => 'float',
-        'display_position' => 'integer',
     ];
+
+    /**
+     * @return HasOne<Order>
+     */
+    public function order(): HasOne
+    {
+        return $this->hasOne(Order::class);
+    }
 }

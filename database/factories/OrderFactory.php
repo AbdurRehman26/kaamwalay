@@ -8,6 +8,7 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderPayment;
+use App\Models\OrderPaymentPlan;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentPlan;
@@ -33,6 +34,7 @@ class OrderFactory extends Factory
             'coupon_id' => Coupon::factory()->create(),
             'order_status_id' => OrderStatus::factory(),
             'payment_plan_id' => PaymentPlan::factory(),
+            'order_payment_plan_id' => OrderPaymentPlan::factory(),
             'shipping_order_address_id' => OrderAddress::factory(),
             'billing_order_address_id' => OrderAddress::factory(),
             'payment_method_id' => PaymentMethod::factory(),

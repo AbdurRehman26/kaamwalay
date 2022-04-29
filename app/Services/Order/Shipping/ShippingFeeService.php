@@ -10,9 +10,12 @@ use App\Services\Order\Shipping\Calculators\VaultShippingFeeCalculator;
 
 class ShippingFeeService
 {
-    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems): float
+    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, ?ShippingMethod $shippingMethod = null): float
     {
-        return InsuredShippingFeeCalculator::calculate($totalDeclaredValue, $totalNumberOfItems);
+        return match ($shippingMethod?->code) {
+            ShippingMethod::VAULT_STORAGE => VaultShippingFeeCalculator::calculate(),
+            default => InsuredShippingFeeCalculator::calculate($totalDeclaredValue, $totalNumberOfItems),
+        };
     }
 
     /**

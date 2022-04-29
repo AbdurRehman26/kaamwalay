@@ -32,17 +32,23 @@ const styles = {
         marginTop: 1,
         padding: '12px 36px 12px 36px',
     },
+    payNowButtonConfirmation: {
+        marginTop: 1,
+        padding: '12px 36px 12px 36px',
+        width: '100%',
+    },
 };
 
 interface PaymentPendingNoticeProps {
     id: number;
     paymentStatus: PaymentStatusEnum;
+    hasWidth: boolean;
 }
 
 export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
     const navigate = useNavigate();
 
-    const { id } = props;
+    const { id, hasWidth } = props;
 
     return (
         <Paper
@@ -78,7 +84,7 @@ export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
                 onClick={() => navigate(`/submissions/${id}/pay`)}
                 variant={'contained'}
                 color={'primary'}
-                sx={styles.payNowButton}
+                sx={hasWidth ? styles.payNowButtonConfirmation : styles.payNowButton}
             >
                 pay now
             </Button>

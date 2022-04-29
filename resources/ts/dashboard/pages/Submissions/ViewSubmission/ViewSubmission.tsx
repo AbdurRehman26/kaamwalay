@@ -63,7 +63,7 @@ export function ViewSubmission() {
             <Divider />
             <Box marginTop={'24px'} />
             {data?.paymentStatus !== PaymentStatusEnum.PAID ? (
-                <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} />
+                <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} hasWidth={false} />
             ) : null}
             <ViewSubmissionStatus
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}

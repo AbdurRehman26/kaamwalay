@@ -2,14 +2,17 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { EventCategories, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
+import CompleteSubmissonButton from '../../../components/CompleteSubmissionButton';
 import SubmissionHeader from '../../../components/SubmissionHeader/SubmissionHeader';
 import {
     SubmissionStep01Content,
@@ -19,6 +22,7 @@ import {
     SubmissionStep05Content,
 } from '../../../components/SubmissionSteps';
 import SubmissionSummary from '../../../components/SubmissionSummary';
+import SubmissionSummmaryDescription from '../../../components/SubmissionSummmaryDescription';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import {
     backStep,
@@ -86,6 +90,7 @@ export function NewSubmission() {
     const selectedExistingAddressId = useAppSelector(
         (state) => state.newSubmission.step03Data.selectedExistingAddress.id,
     );
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const getStepContent = useCallback(() => {
         switch (currentStep) {
             case 1:
@@ -162,6 +167,11 @@ export function NewSubmission() {
                         <SubmissionSummary />
                     </Grid>
                 ) : null}
+                {currentStep === 4 && isMobile ? (
+                    <Grid display={'flex'} item xs={12}>
+                        <SubmissionSummmaryDescription summaryDescription={'“SUBMIT”'} />
+                    </Grid>
+                ) : null}
             </Grid>
         </Container>
     ) : null;
@@ -219,6 +229,9 @@ export function NewSubmission() {
                         >
                             Next
                         </LoadingButton>
+                    ) : null}
+                    {currentStep === 4 && isMobile ? (
+                        <CompleteSubmissonButton buttonText={'Submit'} hasStyle={true} />
                     ) : null}
                 </Grid>
             </div>

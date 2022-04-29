@@ -873,9 +873,14 @@ export const newSubmissionSlice = createSlice({
                 qty: orderItem.quantity,
                 value: orderItem.declaredValuePerUnit,
             }));
-            state.step01Data.selectedServiceLevel = state.step01Data.availableServiceLevels.find(
-                (plan) => plan.id === action.payload.paymentPlan.id,
-            ) as any;
+
+            state.step01Data.selectedServiceLevel = {
+                id: action.payload.paymentPlan.id,
+                price: action.payload.paymentPlan.price,
+                turnaround: action.payload.paymentPlan.turnaround,
+                maxProtectionAmount: action.payload.paymentPlan.maxProtectionAmount,
+            } as any;
+
             state.couponState.isCouponValid = Boolean(action.payload.discountedAmount);
             state.couponState.validCouponId = action.payload.discountedAmount ? action.payload.coupon.id : -1;
             state.couponState.isCouponApplied = Boolean(action.payload.discountedAmount);

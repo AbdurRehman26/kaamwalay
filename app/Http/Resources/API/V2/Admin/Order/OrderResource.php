@@ -105,18 +105,4 @@ class OrderResource extends V1OrderResource
             'payment_status' => $this->payment_status,
         ];
     }
-
-    private function reviewedBy(Closure $selector): mixed
-    {
-        return $this->when($this->order_status_id >= OrderStatus::CONFIRMED, function () use ($selector) {
-            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::CONFIRMED)->latest()->first());
-        });
-    }
-
-    private function gradedBy(Closure $selector): mixed
-    {
-        return $this->when($this->order_status_id >= OrderStatus::GRADED, function () use ($selector) {
-            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::GRADED)->latest()->first());
-        });
-    }
 }

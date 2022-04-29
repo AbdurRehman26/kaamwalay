@@ -54,7 +54,7 @@ export function CompleteSubmissonButton({ buttonText, hasStyle }: PropsWithChild
             onClick={handleCompleteSubmission}
             disabled={submitting}
             fullWidth
-            sx={hasStyle ? styles.completeSubmissonButton : null}
+            sx={hasStyle ? styles.completeSubmissonButton : { height: 48 }}
         >
             {buttonText}
         </Button>

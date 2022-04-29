@@ -13,7 +13,6 @@ use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
-use Closure;
 use Illuminate\Http\Request;
 
 /**

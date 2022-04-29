@@ -12,8 +12,8 @@ export class PaginatedData<T> {
     @Type()
     public meta!: PaginationMeta;
 
-    static from<T>(data: T[], links?: PaginationLinks, meta?: PaginationMeta) {
-        const pagination = new PaginatedData();
+    static from<T>(data: T[], links?: PaginationLinks, meta?: PaginationMeta): PaginatedData<T> {
+        const pagination = new PaginatedData<T>();
         pagination.data = data;
         pagination.links = links ?? new PaginationLinks();
         pagination.meta = meta ?? new PaginationMeta();

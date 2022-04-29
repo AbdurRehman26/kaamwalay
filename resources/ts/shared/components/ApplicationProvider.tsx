@@ -11,6 +11,7 @@ import { ConfirmationDialogProvider } from '../contexts/ConfirmationDialogContex
 import { materialUiTheme } from '../styles/theme';
 import AuthenticationCheck from './AuthenticationCheck';
 import { ConfigurationLoad } from './ConfigurationLoad';
+import { GlobalModals } from './GlobalModals';
 import { NotificationsContainer } from './NotificationsContainer';
 import { SplashScreen, SplashScreenProps } from './SplashScreen';
 
@@ -28,6 +29,7 @@ interface ApplicationProviderProps {
     noNotificationsContainer?: boolean;
     noCssBaseline?: boolean;
     noReactQueryDevTools?: boolean;
+    noModals?: boolean;
 }
 
 // Create a client
@@ -51,6 +53,7 @@ export function ApplicationProvider(props: PropsWithChildren<ApplicationProvider
         noNotificationsContainer,
         noCssBaseline,
         noReactQueryDevTools,
+        noModals,
     } = props;
 
     const content = useMemo(
@@ -70,6 +73,7 @@ export function ApplicationProvider(props: PropsWithChildren<ApplicationProvider
                                 {!noNotificationsContainer && <NotificationsContainer />}
                                 {!noCssBaseline && <CssBaseline />}
                                 <ConfirmationDialogProvider>{content}</ConfirmationDialogProvider>
+                                {!noModals && <GlobalModals />}
                             </>
                         </ThemeProvider>
                     </StyledEngineProvider>

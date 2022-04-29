@@ -3,7 +3,7 @@
 namespace App\Http\Resources\API\V2\Admin\Order;
 
 use App\Enums\Order\OrderPaymentStatusEnum;
-use App\Http\Resources\API\BaseResource;
+use App\Http\Resources\API\V1\Admin\Order\OrderResource as V1OrderResource;
 use App\Http\Resources\API\V2\Admin\Coupon\CouponResource;
 use App\Http\Resources\API\V2\Admin\Order\OrderItem\OrderItemCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderLabel\OrderLabelResource;
@@ -13,7 +13,6 @@ use App\Http\Resources\API\V2\Customer\Order\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
-use Closure;
 use Illuminate\Http\Request;
 
 /**
@@ -52,7 +51,7 @@ use Illuminate\Http\Request;
  * @method orderStatusHistory()
  * @method getTotalGradedItems()
  */
-class OrderResource extends BaseResource
+class OrderResource extends V1OrderResource
 {
     /**
      * Transform the resource into an array.
@@ -104,19 +103,5 @@ class OrderResource extends BaseResource
             'amount_paid_from_wallet' => $this->amount_paid_from_wallet,
             'payment_status' => $this->payment_status,
         ];
-    }
-
-    private function reviewedBy(Closure $selector): mixed
-    {
-        return $this->when($this->order_status_id >= OrderStatus::CONFIRMED, function () use ($selector) {
-            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::CONFIRMED)->latest()->first());
-        });
-    }
-
-    private function gradedBy(Closure $selector): mixed
-    {
-        return $this->when($this->order_status_id >= OrderStatus::GRADED, function () use ($selector) {
-            return $selector($this->orderStatusHistory()->where('order_status_id', OrderStatus::GRADED)->latest()->first());
-        });
     }
 }

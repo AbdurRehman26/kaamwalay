@@ -1,4 +1,4 @@
-export class ChangeOrderItemNotesDTO {
+export class ChangeOrderItemNotesDto {
     orderId!: number;
     orderItemId!: number;
     notes?: string;

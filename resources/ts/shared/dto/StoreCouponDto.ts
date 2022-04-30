@@ -1,6 +1,6 @@
 import { DiscountTypeEnums } from '@shared/constants/DiscountTypeEnums';
 
-export class StoreCouponDTO {
+export class StoreCouponDto {
     code!: string;
     type!: DiscountTypeEnums;
     discountValue!: string;

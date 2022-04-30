@@ -122,6 +122,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('extraCharges'),
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
+            AllowedInclude::relationship('shippingMethod'),
         ];
     }
 
@@ -156,6 +157,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('extraCharges'),
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
+            AllowedInclude::relationship('shippingMethod'),
         ];
     }
 

@@ -66,10 +66,13 @@ export function ViewSubmission() {
                 <PaymentStatusNotice id={data?.id} paymentStatus={data?.paymentStatus} />
             ) : null}
             <ViewSubmissionStatus
+                orderId={data?.id}
                 trackingNumber={data?.orderCustomerShipment?.trackingNumber}
                 shipmentProvider={data?.orderCustomerShipment?.shippingProvider}
                 orderStatus={upperFirst(data?.orderStatus.name)}
                 orderShipment={data?.orderShipment}
+                shippingMethod={data?.shippingMethod}
+                isPaid={data?.paymentStatus === PaymentStatusEnum.PAID}
             />
             <Divider />
             <ViewSubmissionInformation

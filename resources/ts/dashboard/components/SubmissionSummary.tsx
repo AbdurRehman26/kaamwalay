@@ -5,10 +5,12 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import NumberFormat from 'react-number-format';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
+import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
-import CompleteSubmissonButton from './CompleteSubmissionButton';
-import SubmissionSummmaryDescription from './SubmissionSummmaryDescription';
+import CompleteSubmissionButton from './CompleteSubmissionButton';
+import SubmissionSummaryDescription from './SubmissionSummaryDescription';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -150,6 +152,10 @@ function SubmissionSummary() {
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
+    const shippingMethod = useAppSelector(
+        (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
+        (a, b) => a?.id === b?.id && a?.code === b?.code,
+    );
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
@@ -194,9 +200,9 @@ function SubmissionSummary() {
                 {currentStep === 4 && !isMobile ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            <CompleteSubmissonButton buttonText={'Complete Submission'} hasStyle={false} />
+                            <CompleteSubmissionButton buttonText={'Complete Submission'} hasStyle={false} />
                         </>
-                        <SubmissionSummmaryDescription summaryDescription={'the above button'} />
+                        <SubmissionSummaryDescription summaryDescription={'the above button'} />
                     </div>
                 ) : null}
 
@@ -261,7 +267,13 @@ function SubmissionSummary() {
                             ) : null}
 
                             <div className={classes.row} style={{ marginTop: '16px' }}>
-                                <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
+                                    <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                ) : null}
+
+                                {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
+                                    <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
+                                ) : null}
                                 <NumberFormat
                                     value={shippingFee}
                                     className={classes.rowRightBoldText}
@@ -413,7 +425,14 @@ function SubmissionSummary() {
                             ) : null}
 
                             <div className={classes.row} style={{ marginTop: '16px' }}>
-                                <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
+                                    <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                ) : null}
+
+                                {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
+                                    <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
+                                ) : null}
+
                                 <NumberFormat
                                     value={shippingFee}
                                     className={classes.rowRightBoldText}

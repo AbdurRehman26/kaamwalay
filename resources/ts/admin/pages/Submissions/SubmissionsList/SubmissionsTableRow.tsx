@@ -1,4 +1,5 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
@@ -10,7 +11,9 @@ import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { StatusChip } from '@shared/components/StatusChip';
+import { SafeSquare } from '@shared/components/icons/SafeSquare';
 import { OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import { OrderEntity } from '@shared/entities/OrderEntity';
 import { useNotifications } from '@shared/hooks/useNotifications';
 import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
@@ -38,7 +41,7 @@ enum Options {
 const useStyles = makeStyles(
     (theme) => ({
         optionsCell: {
-            width: theme.spacing(6),
+            width: theme.spacing(12.5),
             paddingLeft: 0,
         },
     }),
@@ -117,6 +120,8 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
         [dispatch],
     );
 
+    const inVault = order?.shippingMethod?.code === ShippingMethodType.VaultStorage;
+
     return (
         <>
             <TableRow>
@@ -165,9 +170,12 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                     />
                 </TableCell>
                 <TableCell align={'right'} className={classes.optionsCell}>
-                    <IconButton onClick={handleClickOptions} size="large">
-                        <MoreIcon />
-                    </IconButton>
+                    <Grid container alignItems={'center'} justifyContent={'flex-end'}>
+                        {inVault ? <SafeSquare color={'primary'} sx={{ mr: 1 }} /> : null}
+                        <IconButton onClick={handleClickOptions} size="large">
+                            <MoreIcon />
+                        </IconButton>
+                    </Grid>
 
                     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
                         {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? (

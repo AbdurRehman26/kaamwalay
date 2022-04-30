@@ -1,4 +1,4 @@
-import { ChangeOrderItemNotesDTO } from '@shared/dto/ChangeOrderItemNotesDTO';
+import { ChangeOrderItemNotesDto } from '@shared/dto/ChangeOrderItemNotesDto';
 import { Injectable } from '../../decorators/Injectable';
 import { ChangeOrderItemStatusBatchDto } from '../../dto/ChangeOrderItemStatusBatchDto';
 import { ChangeOrderItemStatusDto } from '../../dto/ChangeOrderItemStatusDto';
@@ -25,7 +25,7 @@ export class OrderItemsRepository extends Repository<OrderItemEntity> {
         return this.toEntity(data);
     }
 
-    public async changeOrderItemNotes(input: ChangeOrderItemNotesDTO) {
+    public async changeOrderItemNotes(input: ChangeOrderItemNotesDto) {
         const { orderId, orderItemId, notes, internalNotes } = input;
         const { data } = await this.endpoint.put(
             `${orderItemId}/notes`,

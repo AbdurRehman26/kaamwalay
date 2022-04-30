@@ -3,6 +3,8 @@ import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlin
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -41,6 +43,7 @@ interface PaymentPendingNoticeProps {
 
 export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
     const navigate = useNavigate();
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const { id } = props;
 
@@ -75,6 +78,7 @@ export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {
                 {PaymentNoticeTextMap[props.paymentStatus]}
             </Typography>
             <Button
+                fullWidth={isMobile}
                 onClick={() => navigate(`/submissions/${id}/pay`)}
                 variant={'contained'}
                 color={'primary'}

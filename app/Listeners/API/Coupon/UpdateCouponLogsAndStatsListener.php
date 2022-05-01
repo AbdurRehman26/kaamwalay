@@ -33,6 +33,6 @@ class UpdateCouponLogsAndStatsListener implements ShouldQueue
         }
 
         $this->couponService->updateCouponLogs($event->order);
-        $this->couponService->updateCouponStats($event->order->coupon);
+        $this->couponService->updateCouponStats($event->order);
     }
 }

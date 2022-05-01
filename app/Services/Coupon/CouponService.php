@@ -44,13 +44,13 @@ class CouponService
         ]);
     }
 
-    public function updateCouponStats(Coupon $coupon): void
+    public function updateCouponStats(Order $order): void
     {
-        $couponStat = CouponStat::updateOrCreate(['coupon_id' => $coupon->id]);
+        $couponStat = CouponStat::updateOrCreate(['coupon_id' => $order->coupon->id]);
         $orderCouponLog = Order::join('coupon_logs', 'coupon_logs.order_id', 'orders.id')
-                            ->where('orders.coupon_id', $coupon->id);
-
-        $couponStat->times_used = CouponLog::whereCouponId($coupon->id)->count();
+                            ->where('orders.coupon_id', $order->coupon->id);
+        $couponStat->times_used = CouponLog::whereCouponId($order->coupon->id)->count();
+        $couponStat->total_cards = Order::find($order->id)->orderItems()->sum('quantity');
         $couponStat->total_revenue = $orderCouponLog->sum('grand_total');
         $couponStat->total_discount = $orderCouponLog->sum('discounted_amount');
         $couponStat->save();

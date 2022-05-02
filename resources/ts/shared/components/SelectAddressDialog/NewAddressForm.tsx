@@ -47,7 +47,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
             </Grid>
 
             <Grid container spacing={3} mt={'1px'}>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
                         label={'First Name'}
@@ -57,7 +57,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
                         onBlur={formik.handleBlur}
                     />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
                         label={'Last Name'}
@@ -68,7 +68,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
                     />
                 </Grid>
 
-                <Grid item xs={9}>
+                <Grid item xs={12} sm={9}>
                     <TextField
                         fullWidth
                         label={'Address'}
@@ -78,7 +78,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
                         onBlur={formik.handleBlur}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={3}>
                     <TextField
                         fullWidth
                         label={'Apt #'}
@@ -89,7 +89,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
                     />
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={4}>
                     <TextField
                         fullWidth
                         label={'City'}
@@ -99,7 +99,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
                         onBlur={formik.handleBlur}
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={4}>
                     <FormControl fullWidth>
                         <InputLabel id={'states-list'}>State</InputLabel>
                         <Select
@@ -121,7 +121,7 @@ export const NewAddressForm = forwardRef<unknown, Props>(function NewAddressForm
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={4}>
                     <TextField
                         fullWidth
                         label={'Zip Code'}

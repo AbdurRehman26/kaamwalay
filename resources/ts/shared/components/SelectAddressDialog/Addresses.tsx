@@ -10,7 +10,7 @@ export function Addresses({ addresses }: Props) {
     return (
         <Grid container spacing={3} mb={3}>
             {addresses?.map((address, index) => (
-                <Grid item xs={6} key={index}>
+                <Grid item xs={12} sm={6} key={index}>
                     <AddressItem address={address} />
                 </Grid>
             ))}

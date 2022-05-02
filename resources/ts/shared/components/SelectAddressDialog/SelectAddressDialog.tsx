@@ -6,6 +6,8 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { Form, Formik } from 'formik';
 import { useCallback } from 'react';
 import { AddressEntity } from '../../entities/AddressEntity';
@@ -27,6 +29,7 @@ interface SelectAddressDialogProps extends Omit<DialogProps, 'onSubmit'> {
 }
 
 export function SelectAddressDialog({ onSubmit, ...rest }: SelectAddressDialogProps) {
+    const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const handleSubmit = useCallback(
         async (values) => {
             await onSubmit(values);
@@ -39,9 +42,9 @@ export function SelectAddressDialog({ onSubmit, ...rest }: SelectAddressDialogPr
     );
 
     return (
-        <Dialog fullWidth maxWidth={'sm'} {...rest}>
+        <Dialog fullWidth fullScreen={isDownSm} maxWidth={'sm'} {...rest}>
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-                <Form>
+                <Grid component={Form} container direction={'column'} flex={'1 1 auto'}>
                     <Grid container alignItems={'center'} py={2} pl={3} pr={2}>
                         <Typography variant={'h6'} fontWeight={500} flexGrow={1}>
                             Confirm Your Shipping Address
@@ -58,7 +61,7 @@ export function SelectAddressDialog({ onSubmit, ...rest }: SelectAddressDialogPr
                             Confirm
                         </FormikButton>
                     </DialogActions>
-                </Form>
+                </Grid>
             </Formik>
         </Dialog>
     );

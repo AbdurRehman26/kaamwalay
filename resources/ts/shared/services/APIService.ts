@@ -179,15 +179,28 @@ export class APIService {
         try {
             const url = cleanPath(`${response.config.baseURL}/${response.config.url}`);
             console.groupCollapsed(`HTTP Request: ${response.config.method?.toUpperCase()} ${url}`);
-            console.log('params:', response.config.params);
-            console.log('headers:', response.config.headers);
 
+            console.groupCollapsed('Params');
+            console.log(response.config.params);
+            console.groupEnd();
+
+            console.groupCollapsed('Headers');
+            console.log(response.config.headers);
+            console.groupEnd();
+
+            console.groupCollapsed('Body');
             if (response.data?.data && Array.isArray(response.data?.data)) {
                 console.table([response.data.meta]);
                 console.table(response.data.data);
             } else {
                 console.log(response.data);
             }
+            console.groupEnd();
+
+            console.groupCollapsed('Trace');
+            console.trace();
+            console.groupEnd();
+
             console.groupEnd();
         } catch (e) {
             // pass

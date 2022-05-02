@@ -1,4 +1,4 @@
-export class EditTransactionNotesDTO {
+export class EditTransactionNotesDto {
     orderId!: string | number;
     transactionId!: string | number;
     notes!: string;

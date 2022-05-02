@@ -39,9 +39,9 @@ export function SelectAddressDialog({ onSubmit, ...rest }: SelectAddressDialogPr
     );
 
     return (
-        <Dialog fullWidth maxWidth={'sm'} {...rest}>
+        <Dialog fullWidth fullScreen maxWidth={'sm'} {...rest}>
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-                <Form>
+                <Grid component={Form} container direction={'column'} flex={'1 1 auto'}>
                     <Grid container alignItems={'center'} py={2} pl={3} pr={2}>
                         <Typography variant={'h6'} fontWeight={500} flexGrow={1}>
                             Confirm Your Shipping Address
@@ -58,7 +58,7 @@ export function SelectAddressDialog({ onSubmit, ...rest }: SelectAddressDialogPr
                             Confirm
                         </FormikButton>
                     </DialogActions>
-                </Form>
+                </Grid>
             </Formik>
         </Dialog>
     );

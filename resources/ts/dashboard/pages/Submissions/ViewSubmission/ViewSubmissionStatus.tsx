@@ -25,8 +25,10 @@ const STATUS_DESCRIPTION_MAP = {
     placed: 'Your submission has been placed. The next step is to ship the cards to us. Once we receive the shipment arrives we will begin grading your cards.',
     confirmed:
         'We have reviewed your cards and will start grading them soon. You will receive an email as soon as grading is complete.',
-    graded: 'Your cards have been graded! You can see all grades in the “Your Cards” tab. We are now preparing your cards for return shipment.',
+    graded: 'Your cards have been graded! You can see all grades in "Your Cards" tab. We are now preparing your cards for return shipment.',
     shipped: 'Your cards have been shipped back to you! They should arrive at your doorstep in the next few days.',
+    shippedVaultStorage:
+        'Your cards have been stored in the AGS vault! You can now see all your grades in "Your Cards" tab.',
 } as any;
 
 /**
@@ -43,37 +45,40 @@ export function ViewSubmissionStatus({
     shippingMethod,
     isPaid,
 }: ViewSubmissionStatusProps) {
+    const isVaultStorage = shippingMethod?.code === ShippingMethodType.VaultStorage;
+
     const classes = useViewSubmissionStatusStyles();
-    const steps = useMemo(() => {
-        const values = Object.values(SubmissionSteps);
+    const steps = useMemo(() => Object.values(SubmissionSteps), []);
 
-        if (shippingMethod?.code === ShippingMethodType.VaultStorage) {
-            return values.map((step) => {
-                if (step === SubmissionSteps.Shipped) {
-                    return 'Stored in Vault';
-                }
-
-                return step;
-            });
+    const statusTitle = useMemo(() => {
+        if (orderStatus.toLowerCase() === 'shipped' && isVaultStorage) {
+            return 'Stored in Vault';
         }
 
-        return values;
-    }, [shippingMethod?.code]);
+        return orderStatus;
+    }, [isVaultStorage, orderStatus]);
 
-    const statusDescription = useMemo(() => STATUS_DESCRIPTION_MAP[orderStatus.toLowerCase()], [orderStatus]);
+    const statusDescription = useMemo(() => {
+        if (orderStatus.toLowerCase() === 'shipped' && isVaultStorage) {
+            return STATUS_DESCRIPTION_MAP.shippedVaultStorage;
+        }
+
+        return STATUS_DESCRIPTION_MAP[orderStatus.toLowerCase()];
+    }, [isVaultStorage, orderStatus]);
+
     return (
         <Grid container direction={'column'} className={classes.root}>
             <Typography variant={'body2'} className={cx(classes.fontMedium, classes.textGutter)}>
                 Status:
             </Typography>
             <Typography variant={'h6'} color={'primary'} className={cx(classes.fontMedium, classes.textGutter)}>
-                {orderStatus}
+                {statusTitle}
             </Typography>
             <Typography variant={'caption'} color={'primary'} className={cx(classes.textGutter, classes.darkText)}>
                 {statusDescription}
             </Typography>
 
-            <ViewSubmissionStatusBar steps={steps} currentStep={orderStatus} />
+            <ViewSubmissionStatusBar steps={steps} currentStep={orderStatus} isVaultStorage={isVaultStorage} />
 
             <SubmissionTrackingStatus
                 trackingNumber={trackingNumber!}

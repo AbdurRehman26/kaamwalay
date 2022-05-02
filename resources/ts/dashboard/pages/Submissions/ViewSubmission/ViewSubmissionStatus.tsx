@@ -25,10 +25,10 @@ const STATUS_DESCRIPTION_MAP = {
     placed: 'Your submission has been placed. The next step is to ship the cards to us. Once we receive the shipment arrives we will begin grading your cards.',
     confirmed:
         'We have reviewed your cards and will start grading them soon. You will receive an email as soon as grading is complete.',
-    graded: 'Your cards have been graded! You can see all grades in "Your Cards" tab. We are now preparing your cards for return shipment.',
+    graded: 'Your cards have been graded! We are now preparing your cards for shipment. You can see all grades in "Your Cards" tab, once they are shipped.',
     gradedVaultStorage:
         'Your cards have been graded! We are now preparing your cards for vault storage. You can see all grades in "Your Cards" tab, once they are stored in the vault.',
-    shipped: 'Your cards have been shipped back to you! They should arrive at your doorstep in the next few days.',
+    shipped: 'Your cards have been shipped! You can now see all your grades in "Your Cards" tab.',
     shippedVaultStorage:
         'Your cards have been stored in the AGS vault! You can now see all your grades in "Your Cards" tab.',
 } as any;

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { Moment } from 'moment';
+import { CustomerEntity } from '@shared/entities/CustomerEntity';
 import { VaultShipmentStatusEntity } from '@shared/entities/VaultShipmentStatusEntity';
 import { DateField } from '../decorators/DateField';
 import { Entity } from './Entity';
@@ -13,6 +13,9 @@ export class VaultShipmentEntity extends Entity {
     @Type(() => VaultShipmentStatusEntity)
     public vaultShipmentStatus!: VaultShipmentStatusEntity;
 
+    @Type(() => CustomerEntity)
+    public customer?: CustomerEntity | null;
+
     @DateField()
-    public shippedAt!: Moment;
+    public shippedAt!: Date;
 }

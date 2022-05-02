@@ -5,6 +5,7 @@ namespace App\Http\Resources\API\V1\Admin\Order;
 use App\Http\Resources\API\BaseResource;
 use App\Http\Resources\API\V1\Admin\Order\OrderLabel\OrderLabelResource;
 use App\Http\Resources\API\V1\Customer\Order\Invoice\InvoiceResource;
+use App\Http\Resources\API\V1\Customer\Order\ShippingMethod\ShippingMethodResource;
 use Illuminate\Http\Request;
 
 class OrderListResource extends BaseResource
@@ -33,6 +34,7 @@ class OrderListResource extends BaseResource
             'created_at' => $this->formatDate($this->created_at),
             'order_customer_shipment' => $this->whenLoaded('orderCustomerShipment', OrderCustomerShipmentResource::class),
             'order_shipment' => $this->whenLoaded('orderShipment', OrderShipmentResource::class),
+            'shipping_method' => $this->whenLoaded('shippingMethod', ShippingMethodResource::class),
         ];
     }
 }

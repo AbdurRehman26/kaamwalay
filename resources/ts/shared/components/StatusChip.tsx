@@ -9,6 +9,8 @@ const colorsMap = {
     graded: '#81d5f9',
     shipped: '#8feca9',
     // eslint-disable-next-line camelcase
+    in_vault: '#8feca9',
+    // eslint-disable-next-line camelcase
     pending_payment: '#e1e1e1',
 };
 

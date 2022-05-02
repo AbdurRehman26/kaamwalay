@@ -1,5 +1,5 @@
 import { Injectable } from '@shared/decorators/Injectable';
-import { StoreCouponDTO } from '@shared/dto/StoreCouponDTO';
+import { StoreCouponDto } from '@shared/dto/StoreCouponDto';
 import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { Repository } from '../Repository';
 
@@ -8,7 +8,7 @@ export class AdminPromoCodesRepository extends Repository<PromoCodeEntity> {
     readonly endpointPath: string = 'admin/coupons';
     readonly model = PromoCodeEntity;
 
-    async storeCoupon(input: StoreCouponDTO) {
+    async storeCoupon(input: StoreCouponDto) {
         const { data } = await this.endpoint.post(``, input);
         return data;
     }

@@ -17,7 +17,7 @@ beforeEach(function () {
     $this->user = User::factory()->create();
     $this->paymentPlan = PaymentPlan::factory()->create(['max_protection_amount' => 1000000]);
     $this->cardProduct = CardProduct::factory()->create();
-    $this->shippingMethod = ShippingMethod::factory()->create();
+    $this->shippingMethod = ShippingMethod::factory()->insured()->create();
     $this->paymentMethod = PaymentMethod::factory()->create([
         'code' => 'collector_coin',
     ]);

@@ -1,5 +1,4 @@
 import { Type } from 'class-transformer';
-import { Moment } from 'moment';
 import { WalletEntity } from '@shared/entities/WalletEntity';
 import { nameInitials } from '@shared/lib/strings/initials';
 import { RolesEnum } from '../constants/RolesEnum';
@@ -21,7 +20,7 @@ export class UserEntity extends Entity {
     public wallet!: WalletEntity;
 
     @DateField()
-    public emailVerifiedAt!: Moment;
+    public emailVerifiedAt!: Date;
 
     @Type(() => RoleEntity)
     public roles!: RoleEntity[];

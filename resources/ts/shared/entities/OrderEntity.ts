@@ -1,5 +1,4 @@
 import { Type } from 'class-transformer';
-import { Moment } from 'moment';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { OrderCouponEntity } from '@shared/entities/OrderCouponEntity';
 import { OrderExtraChargeEntity } from '@shared/entities/OrderExtraChargeEntity';
@@ -88,7 +87,7 @@ export class OrderEntity extends Entity {
     public orderShipment!: ShipmentEntity | null;
 
     @DateField()
-    public arrivedAt!: Moment;
+    public arrivedAt!: Date;
 
     @Type(() => InvoiceEntity)
     public invoice!: InvoiceEntity | null;

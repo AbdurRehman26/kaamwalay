@@ -98,8 +98,13 @@ export const useViewSubmissionStatusBarStyles = makeStyles(
                 zIndex: 10,
             },
             [theme.breakpoints.down('sm')]: {
-                fontSize: '12px',
-                marginLeft: '14px',
+                fontSize: 12,
+                marginLeft: 14,
+            },
+            [theme.breakpoints.down(400)]: {
+                fontSize: 8,
+                marginLeft: 8,
+                whiteSpace: 'nowrap',
             },
         },
         itemActive: {

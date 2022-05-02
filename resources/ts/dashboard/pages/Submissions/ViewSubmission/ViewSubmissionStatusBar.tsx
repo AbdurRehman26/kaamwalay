@@ -4,6 +4,7 @@ import { cx } from '@shared/lib/utils/cx';
 import { useViewSubmissionStatusBarStyles } from './styles';
 
 interface ViewSubmissionStatusBarProps {
+    isVaultStorage?: boolean;
     currentStep: string;
     steps: string[];
 }
@@ -13,10 +14,19 @@ interface ViewSubmissionStatusBarProps {
  * @private
  * @constructor
  */
-export function ViewSubmissionStatusBar({ currentStep, steps }: ViewSubmissionStatusBarProps) {
+export function ViewSubmissionStatusBar({ currentStep, steps, isVaultStorage }: ViewSubmissionStatusBarProps) {
     const styleOptions = useMemo(() => ({ itemWidth: 100 / steps.length }), [steps.length]);
-    const classes = useViewSubmissionStatusBarStyles(styleOptions);
     const stepIndex = useMemo(() => steps.indexOf(currentStep), [steps, currentStep]);
+
+    const classes = useViewSubmissionStatusBarStyles(styleOptions);
+
+    const getLabel = (step: string) => {
+        if (step.toLowerCase() === 'shipped' && isVaultStorage) {
+            return 'Stored in Vault';
+        }
+
+        return step;
+    };
 
     return (
         <nav className={classes.root}>
@@ -24,7 +34,7 @@ export function ViewSubmissionStatusBar({ currentStep, steps }: ViewSubmissionSt
                 <div className={classes.itemHolder} key={index}>
                     <div className={cx(classes.item, { [classes.itemActive]: index <= stepIndex })}>
                         <Typography variant={'body2'} className={classes.label}>
-                            {step}
+                            {getLabel(step)}
                         </Typography>
                     </div>
                 </div>

@@ -37,6 +37,7 @@ class Order extends Model implements Exportable
         'user_id',
         'order_status_id',
         'payment_plan_id',
+        'order_payment_plan_id',
         'shipping_order_address_id',
         'billing_order_address_id',
         'payment_method_id',
@@ -72,6 +73,7 @@ class Order extends Model implements Exportable
         'grand_total' => 'float',
         'user_id' => 'integer',
         'payment_plan_id' => 'integer',
+        'order_payment_plan_id' => 'integer',
         'order_address_id' => 'integer',
         'shipping_order_address_id' => 'integer',
         'billing_order_address_id' => 'integer',
@@ -120,6 +122,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('extraCharges'),
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
+            AllowedInclude::relationship('shippingMethod'),
         ];
     }
 
@@ -154,6 +157,7 @@ class Order extends Model implements Exportable
             AllowedInclude::relationship('extraCharges'),
             AllowedInclude::relationship('refunds'),
             AllowedInclude::relationship('coupon'),
+            AllowedInclude::relationship('shippingMethod'),
         ];
     }
 
@@ -172,7 +176,7 @@ class Order extends Model implements Exportable
 
     public function paymentPlan(): BelongsTo
     {
-        return $this->belongsTo(PaymentPlan::class);
+        return $this->belongsTo(OrderPaymentPlan::class, 'order_payment_plan_id');
     }
 
     public function orderStatus(): BelongsTo
@@ -453,5 +457,10 @@ class Order extends Model implements Exportable
     public function hasSameShippingAndBillingAddresses(): bool
     {
         return $this->shippingAddress()->is($this->billingAddress);
+    }
+
+    public function hasInsuredShipping(): bool
+    {
+        return $this->shippingMethod->code === ShippingMethod::INSURED_SHIPPING;
     }
 }

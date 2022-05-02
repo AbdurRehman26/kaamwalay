@@ -132,11 +132,9 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleShipped(OrderStatusChangedEvent $event): void
     {
-        $this->sendEmail($event, EmailService::TEMPLATE_SLUG_SUBMISSION_SHIPPED, [
-            'FIRST_NAME' => $event->order->user->first_name,
-            'TRACKING_NUMBER' => $event->order->orderShipment->tracking_number,
-            'TRACKING_URL' => $event->order->orderShipment->tracking_url,
-        ]);
+        $emailData = $this->orderService->getOrderShippedEmailData($event->order);
+
+        $this->sendEmail($event, $emailData['template'], $emailData['data']);
     }
 
     protected function sendEmail(OrderStatusChangedEvent $event, string $template, array $vars): void

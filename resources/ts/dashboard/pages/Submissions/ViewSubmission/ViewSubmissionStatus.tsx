@@ -26,6 +26,8 @@ const STATUS_DESCRIPTION_MAP = {
     confirmed:
         'We have reviewed your cards and will start grading them soon. You will receive an email as soon as grading is complete.',
     graded: 'Your cards have been graded! You can see all grades in "Your Cards" tab. We are now preparing your cards for return shipment.',
+    gradedVaultStorage:
+        'Your cards have been graded! We are now preparing your cards for vault storage. You can see all grades in "Your Cards" tab, once they are stored in the vault.',
     shipped: 'Your cards have been shipped back to you! They should arrive at your doorstep in the next few days.',
     shippedVaultStorage:
         'Your cards have been stored in the AGS vault! You can now see all your grades in "Your Cards" tab.',
@@ -61,6 +63,10 @@ export function ViewSubmissionStatus({
     const statusDescription = useMemo(() => {
         if (orderStatus.toLowerCase() === 'shipped' && isVaultStorage) {
             return STATUS_DESCRIPTION_MAP.shippedVaultStorage;
+        }
+
+        if (orderStatus.toLowerCase() === 'graded' && isVaultStorage) {
+            return STATUS_DESCRIPTION_MAP.gradedVaultStorage;
         }
 
         return STATUS_DESCRIPTION_MAP[orderStatus.toLowerCase()];

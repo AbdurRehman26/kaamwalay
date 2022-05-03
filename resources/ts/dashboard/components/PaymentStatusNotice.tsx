@@ -44,7 +44,7 @@ const styles = {
 interface PaymentPendingNoticeProps {
     id: number;
     paymentStatus: PaymentStatusEnum;
-    hasWidth: boolean;
+    hasWidth?: boolean;
 }
 
 export default function PaymentStatusNotice(props: PaymentPendingNoticeProps) {

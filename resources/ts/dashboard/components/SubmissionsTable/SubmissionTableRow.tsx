@@ -1,4 +1,5 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
+import ButtonBase from '@mui/material/ButtonBase';
 import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
@@ -9,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Moment } from 'moment';
-import React, { MouseEventHandler, useCallback, useMemo, useState } from 'react';
+import React, { MouseEvent, MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
@@ -61,10 +62,13 @@ const useStyles = makeStyles(
             justifyContent: 'space-between',
             marginTop: '12px',
             paddingBottom: '12px',
+            alignItems: 'flex-start',
         },
         submissionLeftSide: {
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'start',
+            textAlign: 'start',
         },
         submissionRightSide: {
             display: 'flex',
@@ -106,6 +110,10 @@ const useStyles = makeStyles(
         },
         unpaidOrderTableCell: {
             border: 'none',
+
+            '&:hover': {
+                cursor: 'pointer',
+            },
         },
     },
     { name: 'SubmissionTableRow' },
@@ -132,12 +140,19 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-    const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
+    const handleClickOptions = useCallback<MouseEventHandler>(
+        (e) => {
+            e.stopPropagation();
+            setAnchorEl(e.target as Element);
+        },
+        [setAnchorEl],
+    );
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const dispatch = useAppDispatch();
 
     const handleOption = useCallback(
-        (option: Options) => async () => {
+        (option: Options) => async (e: MouseEvent<HTMLElement>) => {
+            e.stopPropagation();
             handleCloseOptions();
             switch (option) {
                 case Options.View:
@@ -183,6 +198,10 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [dispatch],
     );
 
+    const handleRowClick = useCallback<MouseEventHandler>(() => {
+        navigate(submissionViewUrl);
+    }, [navigate, submissionViewUrl]);
+
     return (
         <>
             <OrderDeleteDialog
@@ -203,7 +222,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
 
             {!isSm ? (
                 <>
-                    <TableRow className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                    <TableRow className={isPaid ? '' : classes.unpaidOrderTableCell} onClick={handleRowClick}>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
                             <MuiLink component={Link} to={submissionViewUrl}>
                                 {orderNumber}
@@ -264,7 +283,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                     ) : null}
                 </>
             ) : (
-                <div className={classes.submissionHolder}>
+                <ButtonBase className={classes.submissionHolder} onClick={handleRowClick}>
                     <div className={classes.submissionLeftSide}>
                         <Link to={`/submissions/${id}/view`} style={{ textDecoration: 'none' }}>
                             <Typography variant={'subtitle1'} className={classes.orderNumber}>
@@ -329,7 +348,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Menu>
                         </div>
                     </div>
-                </div>
+                </ButtonBase>
             )}
         </>
     );

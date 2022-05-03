@@ -6,6 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import React, { useCallback, useMemo } from 'react';
 import { StatusChip } from '@shared/components/StatusChip';
 import { StatusProgressBar } from '@shared/components/StatusProgressBar';
+import { SafeSquare } from '@shared/components/icons/SafeSquare';
 import { AdminOrderStatusMap, OrderStatusEnum } from '@shared/constants/OrderStatusEnum';
 import { OrderLabelEntity } from '@shared/entities/OrderLabelEntity';
 import { OrderStatusEntity } from '@shared/entities/OrderStatusEntity';
@@ -27,6 +28,7 @@ interface SubmissionViewHeaderProps {
     orderShipment?: ShipmentEntity | null;
     orderLabel?: OrderLabelEntity | null;
     customer: UserEntity | null;
+    isVault?: boolean;
 }
 
 const useStyles = makeStyles(
@@ -56,6 +58,13 @@ const useStyles = makeStyles(
                 background: '#424242',
             },
         },
+        vaultButton: {
+            marginLeft: theme.spacing(1.5),
+            textTransform: 'capitalize',
+            borderColor: '#d7d7d7',
+            color: `${theme.palette.text.primary} !important`,
+            height: theme.spacing(4),
+        },
     }),
     { name: 'SubmissionViewHeader' },
 );
@@ -68,9 +77,10 @@ export function SubmissionsViewHeader({
     orderShipment,
     customer,
     orderLabel,
+    isVault,
 }: SubmissionViewHeaderProps) {
     const classes = useStyles();
-    const [statusType, statusLabel] = useOrderStatus(orderStatus);
+    const [statusType, statusLabel] = useOrderStatus(orderStatus, { isVault });
     const notifications = useNotifications();
 
     const sharedProps: any = useMemo(
@@ -82,12 +92,17 @@ export function SubmissionsViewHeader({
         }),
         [classes.printButton],
     );
+
     const history = useMemo(
         () =>
             [OrderStatusEnum.PLACED, OrderStatusEnum.CONFIRMED, OrderStatusEnum.GRADED, OrderStatusEnum.SHIPPED].map(
                 (status) => {
                     const item = (orderStatusHistory ?? []).find((item) => item.orderStatusId === status);
-                    const { label, value } = AdminOrderStatusMap[status];
+                    let { label, value } = AdminOrderStatusMap[status];
+
+                    if (status === OrderStatusEnum.SHIPPED && isVault) {
+                        label = 'Stored In Vault';
+                    }
 
                     return {
                         label,
@@ -97,8 +112,9 @@ export function SubmissionsViewHeader({
                     };
                 },
             ),
-        [orderStatusHistory],
+        [isVault, orderStatusHistory],
     );
+
     const DownloadOrderLabel = useCallback(async () => {
         if (!orderLabel) {
             notifications.error('Order Label is generating at the moment, try again in some minutes!');
@@ -116,6 +132,17 @@ export function SubmissionsViewHeader({
                         Submission # <span className={font.fontWeightBold}>{orderNumber}</span>
                     </Typography>
                     <StatusChip color={statusType} label={statusLabel} />
+                    {isVault ? (
+                        <Button
+                            disabled
+                            variant={'outlined'}
+                            color={'inherit'}
+                            startIcon={<SafeSquare color={'primary'} />}
+                            className={classes.vaultButton}
+                        >
+                            Vault Storage
+                        </Button>
+                    ) : null}
                 </Grid>
                 <Grid container item xs alignItems={'center'} justifyContent={'flex-end'}>
                     {orderStatus.is(OrderStatusEnum.GRADED) || orderStatus.is(OrderStatusEnum.SHIPPED) ? (
@@ -133,6 +160,7 @@ export function SubmissionsViewHeader({
                         orderStatus={orderStatus}
                         trackingNumber={orderShipment?.trackingNumber}
                         shippingProvider={orderShipment?.shippingProvider}
+                        inVault={isVault}
                     />
                     <SubmissionHeaderMoreButton orderId={orderId} orderStatus={orderStatus} customer={customer} />
                 </Grid>

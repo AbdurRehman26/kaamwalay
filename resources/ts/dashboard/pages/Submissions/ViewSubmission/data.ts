@@ -15,7 +15,7 @@ export const SubmissionDetails: Record<SubmissionSteps, string[]> = {
         'You will receive an email as soon as grading is complete.',
     ],
     Graded: [
-        'Your cards have been graded! You can see all grades in the "Your Cards" tab.',
+        'Your cards have been graded! You can see all grades in "Your Cards" tab.',
         'We are now preparing your cards for return shipment.',
     ],
     Shipped: ['We have sent out the return shipment. You can track your shipment here:'],

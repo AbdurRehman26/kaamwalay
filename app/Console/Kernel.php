@@ -6,6 +6,7 @@ use App\Console\Commands\Coupon\ActivateCoupons;
 use App\Console\Commands\Coupon\ExpireCoupons;
 use App\Console\Commands\Orders\ProcessPaymentHandshake;
 use App\Console\Commands\RevenueStats\UpdateRevenueStats;
+use App\Console\Commands\RevenueStats\UpdateUnpaidStats;
 use App\Console\Commands\SendScheduledEmails;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -23,6 +24,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
         $schedule->command(UpdateRevenueStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
+            ->dailyAt('00:20');
+        $schedule->command(UpdateUnpaidStats::class, [Carbon::now()->subDays(1)->format('Y-m-d')])
             ->dailyAt('00:20');
         $schedule->command(SendScheduledEmails::class)->everyFifteenMinutes();
         $schedule->command(ActivateCoupons::class)->everyThirtyMinutes();

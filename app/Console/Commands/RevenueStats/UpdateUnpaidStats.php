@@ -42,7 +42,7 @@ class UpdateUnpaidStats extends Command
 
         $unpaidMonthlyStats = $unpaidOrdersStatsService->addMonthlyUnpaidStats($currentDate);
 
-        if (!app()->environment('local')) {
+        if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new UnpaidOrdersStatsUpdated($unpaidDailyStats, $unpaidMonthlyStats));
         }

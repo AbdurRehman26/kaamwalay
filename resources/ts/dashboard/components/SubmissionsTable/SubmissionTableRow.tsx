@@ -203,9 +203,14 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [dispatch],
     );
 
-    const handleRowClick = useCallback<MouseEventHandler>(() => {
-        navigate(submissionViewUrl);
-    }, [navigate, submissionViewUrl]);
+    const handleRowClick = useCallback<MouseEventHandler>(
+        (e) => {
+            if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
+                navigate(submissionViewUrl);
+            }
+        },
+        [navigate, submissionViewUrl],
+    );
 
     return (
         <>

@@ -2,9 +2,9 @@
 
 namespace App\Notifications;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
-use Carbon\Carbon;
 
 class UnpaidOrdersStatsUpdated extends Notification
 {

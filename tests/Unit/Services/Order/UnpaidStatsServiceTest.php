@@ -54,8 +54,7 @@ it('adds monthly unpaid stats for the current month', function () {
         ->where('payment_status', OrderPaymentStatusEnum::PENDING->value)
         ->sum('grand_total');
 
-        $unpaidMonthlyStats = $this->unpaidStatsService->addMonthlyUnpaidStats(now()->addMonth(-1)->startOfMonth()->toDateString());
+    $unpaidMonthlyStats = $this->unpaidStatsService->addMonthlyUnpaidStats(now()->addMonth(-1)->startOfMonth()->toDateString());
 
-        expect($orders)->toBe($unpaidMonthlyStats['unpaidTotal']);
-    
+    expect($orders)->toBe($unpaidMonthlyStats['unpaidTotal']);
 })->group('unpaid-stats');

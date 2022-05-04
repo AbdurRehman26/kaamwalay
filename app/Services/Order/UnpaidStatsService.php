@@ -2,8 +2,8 @@
 
 namespace App\Services\Order;
 
-use App\Models\Order;
 use App\Enums\Order\OrderPaymentStatusEnum;
+use App\Models\Order;
 
 class UnpaidStatsService
 {
@@ -33,14 +33,14 @@ class UnpaidStatsService
             ];
     }
 
-    protected function monthlyOrdersCount(string $currentDate): int 
+    protected function monthlyOrdersCount(string $currentDate): int
     {
         return Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
         ->forMonth($currentDate)
         ->count();
     }
 
-    protected function dailyOrdersCount(string $currentDate): int 
+    protected function dailyOrdersCount(string $currentDate): int
     {
         return Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
         ->forDate($currentDate)

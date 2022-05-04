@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands\RevenueStats;
 
-use Illuminate\Console\Command;
 use App\Notifications\UnpaidOrdersStatsUpdated;
 use App\Services\Order\UnpaidStatsService;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
@@ -32,7 +32,8 @@ class UpdateUnpaidStats extends Command
      */
     public function handle(UnpaidStatsService $unpaidOrdersStatsService): int
     {
-        $currentDate = (Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1)
+        $currentDate = (
+            Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1)
         )->format('Y-m-d');
 
         $this->log('Unpaid Stats Daily for Date : ' . $currentDate . ' Starting');
@@ -43,7 +44,7 @@ class UpdateUnpaidStats extends Command
 
         $unpaidMonthlyStats = $unpaidOrdersStatsService->addMonthlyUnpaidStats($currentDate);
 
-        if (!app()->environment('local')) {
+        if (! app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new UnpaidOrdersStatsUpdated($unpaidDailyStats, $unpaidMonthlyStats));
         }

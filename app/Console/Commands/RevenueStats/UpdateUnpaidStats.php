@@ -32,9 +32,7 @@ class UpdateUnpaidStats extends Command
      */
     public function handle(UnpaidStatsService $unpaidOrdersStatsService): int
     {
-        $currentDate = (
-            Carbon::parse($this->argument('date')) ?? Carbon::now()->subDays(1)
-        )->format('Y-m-d');
+        $currentDate = (Carbon::parse($this->argument('date')))->format('Y-m-d');
 
         $this->log('Unpaid Stats Daily for Date : ' . $currentDate . ' Starting');
 
@@ -44,7 +42,7 @@ class UpdateUnpaidStats extends Command
 
         $unpaidMonthlyStats = $unpaidOrdersStatsService->addMonthlyUnpaidStats($currentDate);
 
-        if (! app()->environment('local')) {
+        if (!app()->environment('local')) {
             Notification::route('slack', config('services.slack.channel_webhooks.closes_ags'))
                 ->notify(new UnpaidOrdersStatsUpdated($unpaidDailyStats, $unpaidMonthlyStats));
         }

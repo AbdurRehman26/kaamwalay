@@ -13,7 +13,7 @@ class UnpaidOrdersStatsUpdated extends Notification
      *
      * @return void
      */
-    public function __construct(public $unpaidDailyStats, public $unpaidMonthlyStats)
+    public function __construct(public array $unpaidDailyStats, public array $unpaidMonthlyStats)
     {
         //
     }
@@ -24,12 +24,12 @@ class UnpaidOrdersStatsUpdated extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable)
     {
         return ['slack'];
     }
 
-    public function toSlack($notifiable)
+    public function toSlack(mixed $notifiable): SlackMessage
     {
         $monthYear = Carbon::parse($this->unpaidMonthlyStats['Date'])->format('F-Y');
 

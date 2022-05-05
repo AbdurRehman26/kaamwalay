@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderController extends Controller
 {
     public function __construct(
-        private OrderService $ordersService
+        protected OrderService $ordersService
     ) {
     }
 

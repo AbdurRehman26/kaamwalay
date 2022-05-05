@@ -155,8 +155,6 @@ test('test payment', function () {
     expect($actualFee)->toBe($this->order->firstOrderPayment->provider_fee);
 })->group('payment');
 
-
-
 test('payment requires valid payment method', function () {
     $this->order->update([
         'refund_total' => 0,

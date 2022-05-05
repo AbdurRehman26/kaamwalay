@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\CouponLog;
+use App\Models\CouponStat;
+use App\Models\Order;
 use Illuminate\Database\Seeder;
+use Log;
 
 class UpdateTotalCardsInCouponStat extends Seeder
 {
@@ -14,7 +17,15 @@ class UpdateTotalCardsInCouponStat extends Seeder
      */
     public function run()
     {
-        //
+        $couponLogs = CouponLog::all();
+        foreach($couponLogs as $log){
+            $totalCards = 0;
+            $couponStat = CouponStat::find($log->coupon_id);
+            $cards = Order::find($log->order_id)->orderItems()->sum('quantity');
+            $totalCards += $cards;
+            $couponStat->total_cards = $totalCards;
+            $couponStat->save();
+        }
     }
 }
 

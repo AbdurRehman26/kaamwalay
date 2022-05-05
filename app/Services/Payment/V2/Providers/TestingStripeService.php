@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment\V2\Providers;
 
+use App\Exceptions\Services\Payment\FailedPaymentException;
 use App\Models\Order;
 use App\Models\OrderPayment;
 use App\Models\User;
@@ -36,6 +37,9 @@ class TestingStripeService implements PaymentProviderServiceInterface, PaymentPr
             return [
                 'payment_intent' => $this->incompletePaymentResponse($paymentData),
             ];
+        }
+        if (empty($paymentData['payment_intent_id'])) {
+            throw new FailedPaymentException('Invalid Payment Method, please select a valid Payment Method.');
         }
         $response = $this->successfulPaymentResponse($paymentData);
 

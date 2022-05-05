@@ -48,7 +48,6 @@ export function SubmissionsTable({ search }: SubmissionsTableProps) {
         params: {
             filter: { orderNumber: search },
             include: ['paymentPlan', 'invoice', 'orderStatus', 'orderCustomerShipment'],
-            // perPage: 48,
         },
         ...bracketParams(),
     });

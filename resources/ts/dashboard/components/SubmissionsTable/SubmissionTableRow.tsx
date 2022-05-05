@@ -107,10 +107,6 @@ const useStyles = makeStyles(
             closeIconBtn: {
                 paddingTop: 0,
             },
-            linkText: {
-                textDecoration: 'none',
-                color: '#000',
-            },
             unpaidOrderTableCell: {
                 border: 'none',
             },

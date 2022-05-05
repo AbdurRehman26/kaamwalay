@@ -6,7 +6,7 @@ use App\Services\Order\Shipping\ShippingFeeService;
 
 test('shipping fee is calculated correctly', function () {
     /** @var Order $order */
-    $order = Order::factory()->create();
+    $order = Order::factory()->insuredShipping()->create();
 
     OrderItem::factory()
         ->for($order)

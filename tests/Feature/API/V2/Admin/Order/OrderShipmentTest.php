@@ -21,6 +21,7 @@ test('an admin can update order shipment', function () {
 
     $this->order->update([
         'payment_status' => OrderPaymentStatusEnum::PAID,
+        'shipping_method_id' => 1,
     ]);
 
     $this->postJson('/api/v2/admin/orders/' . $this->order->id . '/shipment', [
@@ -34,8 +35,10 @@ test('an admin can update order shipment', function () {
         ])
         ->assertJsonStructure([
             'data' => [
-                'shipping_provider',
-                'tracking_number',
+                'order_shipment' => [
+                    'shipping_provider',
+                    'tracking_number',
+                ],
             ],
         ]);
 });

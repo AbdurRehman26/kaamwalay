@@ -258,6 +258,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 <PaymentStatusNotice
                                     id={id}
                                     paymentStatus={paymentStatus || PaymentStatusEnum.PENDING}
+                                    hasWidth={false}
                                 />
                             </TableCell>
                         </TableRow>

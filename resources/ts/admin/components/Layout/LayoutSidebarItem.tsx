@@ -1,5 +1,5 @@
 import Chip from '@mui/material/Chip';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
@@ -28,7 +28,7 @@ const useStyles = makeStyles(
             '& $icon, & $title': {
                 color: theme.palette.primary.main,
             },
-            '&& $title$title': {
+            '& $title .MuiListItemText-primary': {
                 fontWeight: '500 !important',
             },
         },
@@ -74,14 +74,13 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
 
     const rest = !comingSoon
         ? {
-              button: true,
               component: Link,
               to: href,
           }
         : {};
 
     return (
-        <ListItem selected={isActive} {...(rest as any)} classes={itemClasses}>
+        <ListItemButton selected={isActive} {...(rest as any)} classes={itemClasses}>
             <ListItemIcon className={classes.iconHolder}>
                 <Icon className={classes.icon} />
             </ListItemIcon>
@@ -91,7 +90,7 @@ function LayoutSidebarItem(props: SidebarMenuItemProps) {
                     <Chip className={classes.chip} color={'secondary'} label={'Coming Soon'} size={'small'} />
                 </ListItemSecondaryAction>
             ) : null}
-        </ListItem>
+        </ListItemButton>
     );
 }
 

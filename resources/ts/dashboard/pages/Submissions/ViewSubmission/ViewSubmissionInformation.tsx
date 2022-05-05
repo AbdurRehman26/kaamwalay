@@ -72,7 +72,7 @@ export function ViewSubmissionInformation({
                     </TableRow>
                     <TableRow>
                         <TableCell variant={'head'} component={'th'}>
-                            Shipping Method
+                            Shipping/Storage
                         </TableCell>
                         <TableCell>{shippingMethod}</TableCell>
                     </TableRow>
@@ -170,7 +170,7 @@ export function ViewSubmissionInformation({
                     ) : null}
                     <TableRow>
                         <TableCell variant={'head'} component={'th'}>
-                            Insured Shipping
+                            {shippingMethod}
                         </TableCell>
                         <TableCell>{formatCurrency(shippingFee)}</TableCell>
                     </TableRow>

@@ -1,0 +1,1 @@
+export { VaultShipment } from './VaultShipment';

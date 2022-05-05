@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { StoreCouponDTO } from '@shared/dto/StoreCouponDTO';
 import { PromoCodeEntity } from '@shared/entities/PromoCodeEntity';
 import { app } from '@shared/lib/app';
 import {
@@ -10,6 +9,7 @@ import {
 import { AdminPromoCodesRepository } from '@shared/repositories/Admin/PromoCodesRepository';
 import { NotificationsService } from '@shared/services/NotificationsService';
 import { APIState } from '@shared/types/APIState';
+import { StoreCouponDto } from '../../dto/StoreCouponDto';
 import { createRepositoryThunk } from '../utlis/createRepositoryThunk';
 
 interface StateType extends APIState<PromoCodeEntity> {}
@@ -49,7 +49,7 @@ export const deletePromoCode = createAsyncThunk('deletePromoCode', async (input:
     }
 });
 
-export const storeCoupon = createAsyncThunk('storeCoupon', async (input: StoreCouponDTO, thunkAPI) => {
+export const storeCoupon = createAsyncThunk('storeCoupon', async (input: StoreCouponDto, thunkAPI) => {
     const promoCodesRepository = app(AdminPromoCodesRepository);
     try {
         thunkAPI.dispatch(setIsTableLoading(true));

@@ -9,8 +9,10 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderPayment;
+use App\Models\OrderPaymentPlan;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
+use App\Models\PaymentPlan;
 use App\Services\Admin\Order\OrderItemService;
 use App\Services\Admin\V1\OrderStatusHistoryService;
 use App\Services\Coupon\CouponService;
@@ -109,6 +111,16 @@ class CreateOrderService
     protected function storePaymentPlan(array $paymentPlan): void
     {
         $this->order->payment_plan_id = $paymentPlan['id'];
+
+        $paymentPlan = PaymentPlan::find($paymentPlan['id']);
+
+        $orderPaymentPlan = OrderPaymentPlan::create([
+            'price' => $paymentPlan->price,
+            'max_protection_amount' => $paymentPlan->max_protection_amount,
+            'turnaround' => $paymentPlan->turnaround,
+        ]);
+
+        $this->order->paymentPlan()->associate($orderPaymentPlan);
     }
 
     protected function storeShippingMethod(array $shippingMethod): void

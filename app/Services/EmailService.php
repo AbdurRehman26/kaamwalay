@@ -23,6 +23,7 @@ class EmailService
     public const TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED = 'admin-new-submission-robograding';
     public const TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER = 'payment-due';
     public const TEMPLATE_SLUG_CUSTOMER_ORDER_PAID = 'payment-confirmation';
+    public const TEMPLATE_SLUG_SUBMISSION_IN_VAULT = 'customer-stored-in-vault';
     /* Transactional End */
 
     /* Marketing Start */
@@ -56,6 +57,7 @@ class EmailService
         self::TEMPLATE_SLUG_ADMIN_SUBMISSION_PLACED => 'New Robograding Submission!',
         self::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER => 'Your Payment is Due!',
         self::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID => 'Thank you for your payment!',
+        self::TEMPLATE_SLUG_SUBMISSION_IN_VAULT => 'Your cards are in AGS Vault!',
 
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_WHAT_HAPPENED => 'What happened?',
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_NOT_SURE_YET => 'Not sure yet?',

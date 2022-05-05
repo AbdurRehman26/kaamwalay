@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\V2;
 
+use App\Enums\UserCard\UserCardShippingStatus;
 use App\Events\API\Admin\Order\ExtraChargeSuccessful;
 use App\Events\API\Admin\Order\RefundSuccessful;
 use App\Events\API\Admin\Order\UnpaidOrderExtraCharge;
@@ -9,8 +10,13 @@ use App\Events\API\Admin\Order\UnpaidOrderRefund;
 use App\Exceptions\API\Admin\Order\FailedExtraCharge;
 use App\Http\Resources\API\V2\Customer\Order\OrderPaymentResource;
 use App\Models\Order;
+use App\Models\OrderShipment;
+use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
+use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Models\UserCard;
+use App\Services\Admin\Order\ShipmentService;
 use App\Services\Admin\V1\OrderService as V1OrderService;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -100,11 +106,45 @@ class OrderService extends V1OrderService
         $data["DATE"] = $order->created_at->format('m/d/Y');
         $data["TOTAL_DECLARED_VALUE"] = number_format($order->orderItems->sum('declared_value_per_unit'), 2);
 
-        $data["SHIPPING_ADDRESS"] = $this->getAddressData($order->shippingAddress);
+        $data["SHIPPING_ADDRESS"] = $order->shippingAddress ? $this->getAddressData($order->shippingAddress) : [];
         $data["BILLING_ADDRESS"] = $order->billingAddress ? $this->getAddressData($order->billingAddress) : [];
 
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
         return $data;
+    }
+
+    public function shipOrder(Order $order, array $data): OrderShipment|bool
+    {
+        /** @var ShipmentService $shipmentService */
+        $shipmentService = resolve(ShipmentService::class);
+
+        return match ($order->shippingMethod->code) {
+            ShippingMethod::INSURED_SHIPPING => $shipmentService->updateShipment($order, $data['shipping_provider'], $data['tracking_number']),
+            default => $this->storeOrderItemsInVault($order),
+        };
+    }
+
+    protected function storeOrderItemsInVault(Order $order): bool
+    {
+        $orderItemIds = $order
+            ->orderItems()
+            ->whereHas('userCard')
+            ->pluck('id');
+
+        UserCard::whereIn('order_item_id', $orderItemIds)->update([
+            'shipping_status' => UserCardShippingStatus::IN_VAULT,
+        ]);
+
+        /** @var OrderStatusHistoryService $orderStatusHistoryService */
+        $orderStatusHistoryService = resolve(OrderStatusHistoryService::class);
+
+        $orderStatusHistoryService->addStatusToOrder(
+            OrderStatus::SHIPPED,
+            $order,
+            auth()->user(),
+        );
+
+        return true;
     }
 }

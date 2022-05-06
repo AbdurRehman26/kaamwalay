@@ -4,7 +4,6 @@ namespace Tests\Feature\API\V2\Admin\VaultShipment;
 
 use App\Models\User;
 use App\Models\VaultShipment;
-use App\Models\VaultShipmentStatus;
 use Database\Seeders\RolesSeeder;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -15,14 +14,6 @@ beforeEach(function () {
     seed(RolesSeeder::class);
     $this->user = User::factory()->withRole(config('permission.roles.admin'))->create();
     $this->otherUser = User::factory()->withRole(config('permission.roles.customer'))->create();
-
-    VaultShipmentStatus::factory()->state(new Sequence(
-        [
-            'id' => 2,
-            'code' => 'shipped',
-            'name' => 'Shipped',
-        ]
-    ))->create();
 
     $this->vault = VaultShipment::factory()->for($this->otherUser)->create();
     $this->actingAs($this->user);

@@ -1,9 +1,9 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Stack from '@mui/material/Stack';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
@@ -55,7 +55,6 @@ const useStyles = makeStyles(
     {
         submissionHolder: {
             width: '100%',
-            borderBottom: '1px solid #ccc',
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -258,78 +257,100 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 <PaymentStatusNotice
                                     id={id}
                                     paymentStatus={paymentStatus || PaymentStatusEnum.PENDING}
+                                    hasWidth={false}
                                 />
                             </TableCell>
                         </TableRow>
                     ) : null}
                 </>
             ) : (
-                <div className={classes.submissionHolder}>
-                    <div className={classes.submissionLeftSide}>
-                        <Link to={`/submissions/${id}/view`} style={{ textDecoration: 'none' }}>
-                            <Typography variant={'subtitle1'} className={classes.orderNumber}>
-                                {orderNumber}
+                <>
+                    <div className={classes.submissionHolder}>
+                        <div className={classes.submissionLeftSide}>
+                            <Link to={`/submissions/${id}/view`} style={{ textDecoration: 'none' }}>
+                                <Typography variant={'subtitle1'} className={classes.orderNumber}>
+                                    {orderNumber}
+                                </Typography>
+                            </Link>
+
+                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                                Date Placed:{' '}
+                                <span className={classes.submissionPropertyValue}>
+                                    {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
+                                </span>
                             </Typography>
-                        </Link>
 
-                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                            Date Placed:{' '}
-                            <span className={classes.submissionPropertyValue}>
-                                {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
-                            </span>
-                        </Typography>
+                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                                Date Confirmed:{' '}
+                                <span className={classes.submissionPropertyValue}>
+                                    {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
+                                </span>
+                            </Typography>
 
-                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                            Date Confirmed:{' '}
-                            <span className={classes.submissionPropertyValue}>
-                                {dateArrived ? formatDate(dateArrived, 'MM/DD/YYYY') : '-'}
-                            </span>
-                        </Typography>
+                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                                Service Level:{' '}
+                                <span className={classes.submissionPropertyValue}>
+                                    {`${formatCurrency(serviceLevel)} / Card`}
+                                </span>
+                            </Typography>
 
-                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                            Service Level:{' '}
-                            <span className={classes.submissionPropertyValue}>
-                                {`${formatCurrency(serviceLevel)} / Card`}
-                            </span>
-                        </Typography>
+                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                                # Cards: <span className={classes.submissionPropertyValue}>{cardsNumber}</span>
+                            </Typography>
+                        </div>
 
-                        <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
-                            # Cards: <span className={classes.submissionPropertyValue}>{cardsNumber}</span>
-                        </Typography>
+                        <div className={classes.submissionRightSide}>
+                            <div className={classes.closeIconContainer}>
+                                <IconButton onClick={handleClickOptions} className={classes.closeIconBtn} size="large">
+                                    <MoreIcon />
+                                </IconButton>
+
+                                <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
+                                    {status === OrderStatusEnum.PLACED && (
+                                        <>
+                                            <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
+                                                {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
+                                            </MenuItem>
+                                            <MenuItem onClick={handleOption(Options.ViewInstructions)}>
+                                                View Instructions
+                                            </MenuItem>
+                                            <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
+                                                {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking
+                                                #
+                                            </MenuItem>
+                                        </>
+                                    )}
+                                </Menu>
+                            </div>
+                        </div>
                     </div>
-
-                    <div className={classes.submissionRightSide}>
-                        <Stack spacing={2}>
+                    <Grid container pb={3} sx={{ borderBottom: '1px solid #ccc' }}>
+                        <Grid xs={6}>
+                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                                Payment:
+                            </Typography>{' '}
                             <PaymentStatusChip
                                 color={paymentStatus || PaymentStatusEnum.PENDING}
                                 label={PaymentStatusMap[paymentStatus || PaymentStatusEnum.PENDING]}
                                 mode={'customer'}
                             />
+                        </Grid>
+                        <Grid xs={6}>
+                            <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
+                                Status:
+                            </Typography>{' '}
                             <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
-                        </Stack>
-                        <div className={classes.closeIconContainer}>
-                            <IconButton onClick={handleClickOptions} className={classes.closeIconBtn} size="large">
-                                <MoreIcon />
-                            </IconButton>
-
-                            <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseOptions}>
-                                {status === OrderStatusEnum.PLACED && (
-                                    <>
-                                        <MenuItem onClick={handleOption(Options.Download)} disabled={!invoice}>
-                                            {invoice ? 'Download' : 'Generating'}&nbsp;Packing Slip
-                                        </MenuItem>
-                                        <MenuItem onClick={handleOption(Options.ViewInstructions)}>
-                                            View Instructions
-                                        </MenuItem>
-                                        <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
-                                            {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
-                                        </MenuItem>
-                                    </>
-                                )}
-                            </Menu>
-                        </div>
-                    </div>
-                </div>
+                        </Grid>
+                        {!isPaid ? (
+                            <Grid mt={3}>
+                                <PaymentStatusNotice
+                                    id={id}
+                                    paymentStatus={paymentStatus || PaymentStatusEnum.PENDING}
+                                />
+                            </Grid>
+                        ) : null}
+                    </Grid>
+                </>
             )}
         </>
     );

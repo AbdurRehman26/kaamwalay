@@ -139,9 +139,9 @@ export function SubmissionActionButton({
                             Edit Tracking
                         </LoadingButton>
                     </>
-                ) : (
+                ) : !orderStatus.is(OrderStatusEnum.SHIPPED) ? (
                     view$
-                )}
+                ) : null}
             </>
         );
     }

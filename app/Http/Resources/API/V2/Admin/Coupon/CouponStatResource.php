@@ -6,6 +6,7 @@ use App\Http\Resources\API\BaseResource;
 
 /**
  * @property int $times_used
+ * @property int $total_cards
  * @property float $total_discount
  * @property float $total_revenue
  */

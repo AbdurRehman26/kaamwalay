@@ -17,14 +17,20 @@ class UpdateTotalCardsInCouponStat extends Seeder
      */
     public function run()
     {
-        $couponLogs = CouponLog::all();
+        $couponLogs = CouponLog::select('coupon_id')->groupBy('coupon_id')->get()->toArray();
         foreach($couponLogs as $log){
+
+            $couponStat = CouponStat::find($log['coupon_id']);
+            $orders = Order::where('coupon_id', $log['coupon_id'])->get();
             $totalCards = 0;
-            $couponStat = CouponStat::find($log->coupon_id);
-            $cards = Order::find($log->order_id)->orderItems()->sum('quantity');
-            $totalCards += $cards;
-            $couponStat->total_cards = $totalCards;
-            $couponStat->save();
+
+            foreach($orders as $order) {
+                $cards = Order::find($order->id)->orderItems()->sum('quantity');
+                $totalCards += $cards;
+                $couponStat->total_cards = $totalCards;
+                $couponStat->save();
+                Log::info('Total Cards updated for Coupon :: ' . $log['coupon_id']);
+            }
         }
     }
 }

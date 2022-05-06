@@ -156,7 +156,7 @@ it('calculates stats for coupon', function () {
     $this->order->save();
 
     $this->couponService->updateCouponLogs($this->order);
-    $this->couponService->updateCouponStats($this->order->coupon);
+    $this->couponService->updateCouponStats($this->order);
     $couponStat = CouponStat::whereCouponId($this->order->coupon->id)->first();
 
     expect((int)$couponStat->times_used)->toBe(1);

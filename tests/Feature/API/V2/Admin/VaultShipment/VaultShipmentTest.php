@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\VaultShipment;
 use Database\Seeders\RolesSeeder;
 
-use Illuminate\Database\Eloquent\Factories\Sequence;
 
 use function Pest\Laravel\seed;
 

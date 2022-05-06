@@ -49,7 +49,7 @@ class CouponService
         $orderLogs = CouponLog::whereCouponId($order->coupon->id)->get();
 
         $totalCards = 0;
-        foreach($orderLogs as $log) {
+        foreach ($orderLogs as $log) {
             $cards = Order::find($log->order_id)->orderItems()->sum('quantity');
             $totalCards += $cards;
         }

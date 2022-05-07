@@ -16,7 +16,7 @@ class UnpaidStatsService
 
         return [
                 'unpaidTotal' => $unpaidOrders,
-                'Date' => $currentDate,
+                'date' => $currentDate,
                 'totalOrders' => $this->dailyOrdersCount($currentDate),
             ];
     }
@@ -30,7 +30,7 @@ class UnpaidStatsService
 
         return [
                 'unpaidTotal' => $unpaidOrders,
-                'Date' => $currentDate,
+                'date' => $currentDate,
                 'totalOrders' => $this->monthlyOrdersCount($currentDate),
             ];
     }

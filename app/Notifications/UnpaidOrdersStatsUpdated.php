@@ -31,10 +31,10 @@ class UnpaidOrdersStatsUpdated extends Notification
 
     public function toSlack(mixed $notifiable): SlackMessage
     {
-        $monthYear = Carbon::parse($this->unpaidMonthlyStats['Date'])->format('F-Y');
+        $monthYear = Carbon::parse($this->unpaidMonthlyStats['date'])->format('F-Y');
 
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
-            ->content("Unpaid Stats \n Date: {$this->unpaidDailyStats['Date']}, Unpaid: \${$this->unpaidDailyStats['unpaidTotal']} ({$this->unpaidDailyStats['totalOrders']}) \n Month: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaidTotal']} ({$this->unpaidMonthlyStats['totalOrders']})");
+            ->content("Unpaid Stats \n Date: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaidTotal']} ({$this->unpaidDailyStats['totalOrders']}) \n Month: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaidTotal']} ({$this->unpaidMonthlyStats['totalOrders']})");
     }
 }

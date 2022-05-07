@@ -20,6 +20,7 @@ return [
         'card_name',
         'searchable_name',
         'owner_name',
+        'certificate_number'
     ],
 
     /*
@@ -170,5 +171,13 @@ return [
         'attribute',
         'exact',
         'custom',
+    ],
+    'maxFacetHits' => 20,
+    'renderingContent' => [
+        'facetOrdering' => [
+            'facets' => [
+                'order' => [],
+            ],
+        ],
     ],
 ];

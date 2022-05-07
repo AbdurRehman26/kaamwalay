@@ -26,12 +26,11 @@ beforeEach(function () {
                         OrderStatus::PLACED,
                         OrderStatus::CONFIRMED,
                         OrderStatus::GRADED,
-                        OrderStatus::SHIPPED,
                         OrderStatus::REVIEWED,
                     ]),
                     'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
                     'updated_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
-                    'payment_status' => $this->faker->randomElement([0]),
+                    'payment_status' => $this->faker->randomElement([0,1]),
                 ];
             }
         ));
@@ -40,8 +39,9 @@ beforeEach(function () {
 it('adds daily unpaid stats', function () {
     $getRandomOrder = $this->orders->random()->first();
 
-    $orders = Order::whereDate('created_at', $getRandomOrder->created_at->toDateString())
-        ->where('payment_status', OrderPaymentStatusEnum::PENDING->value)
+    $orders = Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
+        ->orWhere('payment_status', OrderPaymentStatusEnum::DUE->value)
+        ->forDate($getRandomOrder->created_at->toDateString())
         ->sum('grand_total');
 
     $unpaidDailyStats = $this->unpaidStatsService->addDailyUnpaidStats($getRandomOrder->created_at->toDateString());
@@ -50,11 +50,14 @@ it('adds daily unpaid stats', function () {
 })->group('unpaid-stats');
 
 it('adds monthly unpaid stats for the current month', function () {
-    $orders = Order::whereBetween('created_at', [now()->addMonth(-1)->startOfMonth(), now()->addMonth(-1)->endOfMonth()])
-        ->where('payment_status', OrderPaymentStatusEnum::PENDING->value)
+    $getRandomOrder = $this->orders->random()->first();
+
+    $orders = Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
+        ->orWhere('payment_status', OrderPaymentStatusEnum::DUE->value)
+        ->forMonth($getRandomOrder->created_at->toDateString())
         ->sum('grand_total');
 
-    $unpaidMonthlyStats = $this->unpaidStatsService->addMonthlyUnpaidStats(now()->addMonth(-1)->startOfMonth()->toDateString());
+    $unpaidMonthlyStats = $this->unpaidStatsService->addMonthlyUnpaidStats($getRandomOrder->created_at->toDateString());
 
     expect($orders)->toBe($unpaidMonthlyStats['unpaidTotal']);
 })->group('unpaid-stats');

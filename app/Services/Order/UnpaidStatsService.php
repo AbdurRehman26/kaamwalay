@@ -10,6 +10,7 @@ class UnpaidStatsService
     public function addDailyUnpaidStats(string $currentDate): array
     {
         $unpaidOrders = Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
+            ->orWhere('payment_status', OrderPaymentStatusEnum::DUE->value)
             ->forDate($currentDate)
             ->sum('grand_total');
 
@@ -23,6 +24,7 @@ class UnpaidStatsService
     public function addMonthlyUnpaidStats(string $currentDate): array
     {
         $unpaidOrders = Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
+            ->orWhere('payment_status', OrderPaymentStatusEnum::DUE->value)
             ->forMonth($currentDate)
             ->sum('grand_total');
 
@@ -36,6 +38,7 @@ class UnpaidStatsService
     protected function monthlyOrdersCount(string $currentDate): int
     {
         return Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
+        ->orWhere('payment_status', OrderPaymentStatusEnum::DUE->value)
         ->forMonth($currentDate)
         ->count();
     }
@@ -43,6 +46,7 @@ class UnpaidStatsService
     protected function dailyOrdersCount(string $currentDate): int
     {
         return Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
+        ->orWhere('payment_status', OrderPaymentStatusEnum::DUE->value)
         ->forDate($currentDate)
         ->count();
     }

@@ -172,12 +172,4 @@ return [
         'exact',
         'custom',
     ],
-    'maxFacetHits' => 20,
-    'renderingContent' => [
-        'facetOrdering' => [
-            'facets' => [
-                'order' => [],
-            ],
-        ],
-    ],
 ];

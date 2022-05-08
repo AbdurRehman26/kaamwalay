@@ -312,7 +312,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         return $this->profile_image;
     }
 
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }

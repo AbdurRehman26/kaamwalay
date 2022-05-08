@@ -2,6 +2,8 @@
 version: '3'
 services:
     laravel.test:
+        extra_hosts:
+          - 'host.docker.internal:host-gateway'
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile

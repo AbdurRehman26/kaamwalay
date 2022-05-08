@@ -19,7 +19,11 @@ class LoginController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
     {
-        if (! ($token = auth()->attempt($request->only('email', 'password')))) {
+        // Allow login with email and password any active user.
+        $data = array_merge($request->only('email', 'password'), ['active' => true]);
+        $token = auth()->attempt($data);
+
+        if (! $token) {
             $token = $this->loginAGS($request);
         }
 
@@ -35,8 +39,10 @@ class LoginController extends Controller
         );
     }
 
-    public function authenticateAndUpdateAgsUserToken(LoginRequest $request, CustomerProfileService $customerProfileService): JsonResponse
-    {
+    public function authenticateAndUpdateAgsUserToken(
+        LoginRequest $request,
+        CustomerProfileService $customerProfileService
+    ): JsonResponse {
         try {
             $response = $this->agsService->login(data: $request->validated());
 
@@ -56,11 +62,11 @@ class LoginController extends Controller
         }
 
         return new JsonResponse(
-            [ 'message' => 'User authenticated successfully.' ],
+            ['message' => 'User authenticated successfully.'],
             Response::HTTP_OK,
         );
     }
-    
+
     public function me(): JsonResponse
     {
         return new JsonResponse([

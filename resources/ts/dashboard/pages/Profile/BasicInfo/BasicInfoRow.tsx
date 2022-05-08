@@ -1,3 +1,4 @@
+import LoadingButton from '@mui/lab/LoadingButton';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -6,7 +7,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import RobogradingAvatar from '@shared/assets/dummyAvatar.svg';
 import { useAuth } from '@shared/hooks/useAuth';
 
@@ -88,13 +89,25 @@ export function BasicInfoRow(props: BasicInfoRowProps) {
         shown,
         children,
         onEdit,
+        onCancel,
         hideDivider,
         onSave,
         showProfilePic,
         isSaveBtnDisabled,
         onProfilePicPress,
     } = props;
-    const user$ = useAuth().user;
+
+    const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
+
+    const handleSave = useCallback(async () => {
+        try {
+            setLoading(true);
+            await onSave();
+        } finally {
+            setLoading(false);
+        }
+    }, [onSave]);
 
     return (
         <>
@@ -128,7 +141,7 @@ export function BasicInfoRow(props: BasicInfoRowProps) {
                             {showProfilePic ? (
                                 <Box paddingRight={'12px'}>
                                     <ButtonBase onClick={onProfilePicPress}>
-                                        <Avatar src={user$?.profileImage || RobogradingAvatar} />
+                                        <Avatar src={user?.profileImage || RobogradingAvatar} />
                                     </ButtonBase>
                                 </Box>
                             ) : null}
@@ -140,18 +153,19 @@ export function BasicInfoRow(props: BasicInfoRowProps) {
                 <div className={classes.editContainer}>
                     {children}
                     <div className={classes.buttonsContainer}>
-                        <Button variant={'text'} color={'secondary'} className={classes.cancelBtn} onClick={onEdit}>
+                        <Button variant={'text'} color={'secondary'} className={classes.cancelBtn} onClick={onCancel}>
                             Cancel
                         </Button>
-                        <Button
+                        <LoadingButton
+                            loading={loading}
                             variant={'contained'}
                             disabled={isSaveBtnDisabled}
                             color={'primary'}
                             className={classes.saveBtn}
-                            onClick={onSave}
+                            onClick={handleSave}
                         >
                             Save
-                        </Button>
+                        </LoadingButton>
                     </div>
                 </div>
             )}

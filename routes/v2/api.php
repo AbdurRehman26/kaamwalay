@@ -6,6 +6,7 @@ use App\Http\Controllers\API\V2\Auth\LoginController;
 use App\Http\Controllers\API\V2\Auth\RegisterController;
 use App\Http\Controllers\API\V2\Auth\ResetPasswordController;
 use App\Http\Controllers\API\V2\ConfigurationsController;
+use App\Http\Controllers\API\V2\Customer\AccountController;
 use App\Http\Controllers\API\V2\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\V2\Customer\Address\StateController;
 use App\Http\Controllers\API\V2\Customer\Cards\CardCategoryController;
@@ -114,6 +115,11 @@ Route::prefix('customer')->group(function () {
                 ->names([
                     'index' => 'customer.vault-shipments.index',
                 ]);
+        });
+
+        Route::prefix('account')->group(function () {
+            Route::post('deactivate', [AccountController::class, 'deactivateAccount']);
+            Route::post('delete', [AccountController::class, 'deleteAccount']);
         });
     });
 });

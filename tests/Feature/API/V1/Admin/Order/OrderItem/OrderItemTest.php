@@ -24,6 +24,7 @@ beforeEach(function () {
         'email' => $this->faker->safeEmail(),
         'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
+        'active' => true,
     ]);
 });
 
@@ -46,6 +47,7 @@ test('a customer can not get order items information', function () {
         'email' => $this->faker->safeEmail(),
         'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
+        'active' => true,
     ]);
 
     $this->actingAs($customerUser);
@@ -85,6 +87,7 @@ test('a customer can not add order item to order', function () {
         'email' => $this->faker->safeEmail(),
         'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
+        'active' => true,
     ]);
 
     $this->actingAs($customerUser);
@@ -147,6 +150,7 @@ test('a customer can not update order item', function () {
         'email' => $this->faker->safeEmail(),
         'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
+        'active' => true,
     ]);
 
     $this->actingAs($customerUser);
@@ -197,6 +201,7 @@ test('a customer can not update an order item status', function () {
         'email' => $this->faker->safeEmail(),
         'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
+        'active' => true,
     ]);
 
     $this->actingAs($customerUser);
@@ -268,6 +273,7 @@ test('a customer can not mark multiple order items as pending', function () {
         'email' => $this->faker->safeEmail(),
         'username' => $this->faker->userName(),
         'password' => bcrypt('password'),
+        'active' => true,
     ]);
 
     $this->actingAs($customerUser);

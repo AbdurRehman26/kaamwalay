@@ -1,23 +1,16 @@
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useState } from 'react';
-import ReactGA from 'react-ga';
 import NumberFormat from 'react-number-format';
-import { useNavigate } from 'react-router-dom';
-import { EventCategories, PaymentMethodEvents } from '@shared/constants/GAEventsTypes';
-import { useNotifications } from '@shared/hooks/useNotifications';
-import { invalidateOrders } from '@shared/redux/slices/ordersSlice';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
+import { DefaultShippingMethodEntity } from '@shared/entities/ShippingMethodEntity';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import {
-    clearSubmissionState,
-    createOrder,
-    setCustomStep,
-    setIsNextLoading,
-    setPreviewTotal,
-} from '../redux/slices/newSubmissionSlice';
+import { setCustomStep, setPreviewTotal } from '../redux/slices/newSubmissionSlice';
+import CompleteSubmissionButton from './CompleteSubmissionButton';
+import SubmissionSummaryDescription from './SubmissionSummaryDescription';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -149,21 +142,24 @@ const useStyles = makeStyles((theme) => ({
 
 function SubmissionSummary() {
     const classes = useStyles();
-    const notifications = useNotifications();
+
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const protectionLimit = useAppSelector(
         (state) => state.newSubmission?.step01Data?.selectedServiceLevel.maxProtectionAmount,
     );
+    const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
     const selectedCards = useAppSelector((state) => state.newSubmission.step02Data.selectedCards);
     const dispatch = useAppDispatch();
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
-    const navigate = useNavigate();
     const shippingFee = useAppSelector((state) => state.newSubmission.step02Data.shippingFee);
+    const shippingMethod = useAppSelector(
+        (state) => state.newSubmission.shippingMethod || DefaultShippingMethodEntity,
+        (a, b) => a?.id === b?.id && a?.code === b?.code,
+    );
     const discountedValue = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountedAmount,
     );
     const isCouponApplied = useAppSelector((state) => state.newSubmission.couponState.isCouponApplied);
-    const [submitting, setIsSubmitting] = useState(false);
 
     const numberOfSelectedCards =
         selectedCards.length !== 0
@@ -183,24 +179,6 @@ function SubmissionSummary() {
         totalDeclaredValue += (selectedCard?.qty ?? 1) * (selectedCard?.value ?? 0);
     });
 
-    const handleCompleteSubmission = async () => {
-        try {
-            setIsSubmitting(true);
-            const order = await dispatch(createOrder()).unwrap();
-            ReactGA.event({
-                category: EventCategories.Submissions,
-                action: PaymentMethodEvents.payLater,
-            });
-            dispatch(clearSubmissionState());
-            dispatch(invalidateOrders());
-            navigate(`/submissions/${order.id}/confirmation`);
-        } catch (error: any) {
-            dispatch(setIsNextLoading(false));
-            notifications.exception(error);
-            return;
-        }
-    };
-
     function getPreviewTotal() {
         const previewTotal =
             numberOfSelectedCards * serviceLevelPrice +
@@ -219,25 +197,12 @@ function SubmissionSummary() {
                 </Typography>
             </div>
             <div className={classes.bodyContainer}>
-                {currentStep === 4 ? (
+                {currentStep === 4 && !isMobile ? (
                     <div className={classes.paymentActionsContainer}>
                         <>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleCompleteSubmission}
-                                disabled={submitting}
-                            >
-                                {'Complete Submission'}
-                            </Button>
+                            <CompleteSubmissionButton buttonText={'Complete Submission'} hasStyle={false} />
                         </>
-
-                        <Typography className={classes.greyDescriptionText}>
-                            By clicking the above button, you are agreeing to the Robograding{' '}
-                            <a href={'/terms-and-conditions'} className={classes.darkDescriptionText}>
-                                Terms and Conditions.
-                            </a>
-                        </Typography>
+                        <SubmissionSummaryDescription summaryDescription={'the above button'} />
                     </div>
                 ) : null}
 
@@ -302,7 +267,13 @@ function SubmissionSummary() {
                             ) : null}
 
                             <div className={classes.row} style={{ marginTop: '16px' }}>
-                                <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
+                                    <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                ) : null}
+
+                                {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
+                                    <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
+                                ) : null}
                                 <NumberFormat
                                     value={shippingFee}
                                     className={classes.rowRightBoldText}
@@ -454,7 +425,14 @@ function SubmissionSummary() {
                             ) : null}
 
                             <div className={classes.row} style={{ marginTop: '16px' }}>
-                                <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                {shippingMethod?.code === ShippingMethodType.InsuredShipping ? (
+                                    <Typography className={classes.rowLeftText}>Insured Shipping: </Typography>
+                                ) : null}
+
+                                {shippingMethod?.code === ShippingMethodType.VaultStorage ? (
+                                    <Typography className={classes.rowLeftText}>Storage Fee: </Typography>
+                                ) : null}
+
                                 <NumberFormat
                                     value={shippingFee}
                                     className={classes.rowRightBoldText}

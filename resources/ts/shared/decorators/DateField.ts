@@ -1,5 +1,5 @@
 import { Transform, TransformationType } from 'class-transformer';
-import moment, { Moment, isMoment } from 'moment';
+import { Moment, isMoment } from 'moment';
 
 export function DateField(): PropertyDecorator {
     return (target, propertyName) => {
@@ -19,8 +19,15 @@ export function DateField(): PropertyDecorator {
                     return null;
                 }
             } else if (type === TransformationType.PLAIN_TO_CLASS) {
-                const date = typeof value === 'string' ? new Date(value) : value;
-                return moment(date);
+                if (isMoment(value)) {
+                    return (value as Moment).toDate();
+                }
+
+                if (value instanceof Date) {
+                    return value;
+                }
+
+                return new Date(value);
             }
 
             return value;

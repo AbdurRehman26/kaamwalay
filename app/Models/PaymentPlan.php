@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Concerns\Coupons\CanHaveCoupons;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentPlan extends Model
 {
-    use HasFactory, CanHaveCoupons;
+    use HasFactory, CanHaveCoupons, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

@@ -1,7 +1,7 @@
 import MoreIcon from '@mui/icons-material/MoreVert';
+import ButtonBase from '@mui/material/ButtonBase';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import MuiLink from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
@@ -9,8 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { Moment } from 'moment';
-import React, { MouseEventHandler, useCallback, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { MouseEvent, MouseEventHandler, useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import OrderDeleteDialog from '@shared/components/Orders/OrderDeleteDialog';
 import { PaymentStatusChip } from '@shared/components/PaymentStatusChip';
 import ShipmentDialog from '@shared/components/ShipmentDialog/ShipmentDialog';
@@ -49,67 +49,78 @@ enum Options {
     ViewInstructions,
     ToggleShipmentTrackingModal,
     ContinueSubmission,
+    PayNow,
 }
 
 const useStyles = makeStyles(
-    (theme) => ({
-        submissionHolder: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: '12px',
-            paddingBottom: '12px',
-        },
-        submissionLeftSide: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        submissionRightSide: {
-            display: 'flex',
-            flexDirection: 'row',
-        },
-        submissionPropertyLabel: {
-            fontWeight: 'bold',
-            fontSize: '14px',
-            lineHeight: '20px',
-            letterSpacing: '0.2px',
-            color: 'rgba(0, 0, 0, 0.87)',
-            [theme.breakpoints.down('sm')]: {
-                letterSpacing: '0',
+    (theme) => {
+        return {
+            submissionHolder: {
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: '12px',
+                paddingBottom: '12px',
+                alignItems: 'flex-start',
             },
-        },
-        submissionPropertyValue: {
-            fontWeight: 'normal',
-            fontSize: '14px',
-            lineHeight: '20px',
-            letterSpacing: '0.2px',
-            color: 'rgba(0, 0, 0, 0.87)',
-        },
-        orderNumber: {
-            fontWeight: 500,
-            fontSize: '16px',
-            lineHeight: '24px',
-            letterSpacing: '0.2px',
-            color: '#20BFB8',
-            marginBottom: '6px',
-        },
-        closeIconContainer: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-        },
-        closeIconBtn: {
-            paddingTop: 0,
-        },
-        linkText: {
-            textDecoration: 'none',
-            color: '#000',
-        },
-        unpaidOrderTableCell: {
-            border: 'none',
-        },
-    }),
+            submissionLeftSide: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'start',
+                textAlign: 'start',
+            },
+            submissionRightSide: {
+                display: 'flex',
+                flexDirection: 'row',
+            },
+            submissionPropertyLabel: {
+                fontWeight: 'bold',
+                fontSize: '14px',
+                lineHeight: '20px',
+                letterSpacing: '0.2px',
+                color: 'rgba(0, 0, 0, 0.87)',
+                [theme.breakpoints.down('sm')]: {
+                    letterSpacing: '0',
+                },
+            },
+            submissionPropertyValue: {
+                fontWeight: 'normal',
+                fontSize: '14px',
+                lineHeight: '20px',
+                letterSpacing: '0.2px',
+                color: 'rgba(0, 0, 0, 0.87)',
+            },
+            orderNumber: {
+                letterSpacing: '0.2px',
+                color: '#20BFB8',
+                fontSize: '0.875rem',
+
+                [theme.breakpoints.down('sm')]: {
+                    fontWeight: 500,
+                    fontSize: '16px',
+                    lineHeight: '24px',
+                    marginBottom: '6px',
+                },
+            },
+            closeIconContainer: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+            },
+            closeIconBtn: {
+                paddingTop: 0,
+            },
+            unpaidOrderTableCell: {
+                border: 'none',
+            },
+            clickable: {
+                '&:hover': {
+                    cursor: 'pointer',
+                },
+            },
+        };
+    },
     { name: 'SubmissionTableRow' },
 );
 export function SubmissionTableRow(props: SubmissionTableRowProps) {
@@ -134,12 +145,19 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     const [showShipmentTrackingModal, setShowShipmentTrackingModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-    const handleClickOptions = useCallback<MouseEventHandler>((e) => setAnchorEl(e.target as Element), [setAnchorEl]);
+    const handleClickOptions = useCallback<MouseEventHandler>(
+        (e) => {
+            e.stopPropagation();
+            setAnchorEl(e.target as Element);
+        },
+        [setAnchorEl],
+    );
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const dispatch = useAppDispatch();
 
     const handleOption = useCallback(
-        (option: Options) => async () => {
+        (option: Options) => async (e: MouseEvent<HTMLElement>) => {
+            e.stopPropagation();
             handleCloseOptions();
             switch (option) {
                 case Options.View:
@@ -163,6 +181,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 case Options.ContinueSubmission:
                     navigate(`/submissions/new?orderId=${id}`);
                     break;
+                case Options.PayNow:
+                    navigate(`/submissions/${id}/pay`);
+                    break;
             }
         },
         [handleCloseOptions, navigate, id, showDeleteModal, showShipmentTrackingModal, invoice, invoiceNumber],
@@ -185,6 +206,15 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
         [dispatch],
     );
 
+    const handleRowClick = useCallback<MouseEventHandler>(
+        (e) => {
+            if ((e.target as Element).getAttribute('aria-hidden') !== 'true') {
+                navigate(submissionViewUrl);
+            }
+        },
+        [navigate, submissionViewUrl],
+    );
+
     return (
         <>
             <OrderDeleteDialog
@@ -205,16 +235,17 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
 
             {!isSm ? (
                 <>
-                    <TableRow className={isPaid ? '' : classes.unpaidOrderTableCell}>
+                    <TableRow
+                        className={`${classes.clickable} ${isPaid ? '' : classes.unpaidOrderTableCell}`}
+                        onClick={handleRowClick}
+                    >
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
-                            <MuiLink component={Link} to={submissionViewUrl}>
+                            <Typography variant={'body1'} className={classes.orderNumber}>
                                 {orderNumber}
-                            </MuiLink>
+                            </Typography>
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
-                            <Link to={submissionViewUrl} className={classes.linkText}>
-                                {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
-                            </Link>
+                            {datePlaced ? formatDate(datePlaced, 'MM/DD/YYYY') : '-'}
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
                             <PaymentStatusChip
@@ -224,19 +255,11 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             />
                         </TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
-                            <Link to={submissionViewUrl} className={classes.linkText}>
-                                {`${formatCurrency(serviceLevel)} / Card`}
-                            </Link>
+                            {`${formatCurrency(serviceLevel)} / Card`}
                         </TableCell>
+                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>{cardsNumber}</TableCell>
                         <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
-                            <Link to={submissionViewUrl} className={classes.linkText}>
-                                {cardsNumber}
-                            </Link>
-                        </TableCell>
-                        <TableCell className={isPaid ? '' : classes.unpaidOrderTableCell}>
-                            <Link to={submissionViewUrl} className={classes.linkText}>
-                                <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
-                            </Link>
+                            <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
                         </TableCell>
                         <TableCell align={'right'} className={isPaid ? '' : classes.unpaidOrderTableCell}>
                             <IconButton onClick={handleClickOptions} size="large">
@@ -251,6 +274,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
                                     {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                                 </MenuItem>
+                                {!isPaid ? <MenuItem onClick={handleOption(Options.PayNow)}>Pay Now</MenuItem> : null}
                             </Menu>
                         </TableCell>
                     </TableRow>
@@ -260,6 +284,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 <PaymentStatusNotice
                                     id={id}
                                     paymentStatus={paymentStatus || PaymentStatusEnum.PENDING}
+                                    hasWidth={false}
                                 />
                             </TableCell>
                         </TableRow>
@@ -267,13 +292,11 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 </>
             ) : (
                 <>
-                    <div className={classes.submissionHolder}>
+                    <ButtonBase className={classes.submissionHolder} onClick={handleRowClick}>
                         <div className={classes.submissionLeftSide}>
-                            <Link to={`/submissions/${id}/view`} style={{ textDecoration: 'none' }}>
-                                <Typography variant={'subtitle1'} className={classes.orderNumber}>
-                                    {orderNumber}
-                                </Typography>
-                            </Link>
+                            <Typography variant={'subtitle1'} className={classes.orderNumber}>
+                                {orderNumber}
+                            </Typography>
 
                             <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
                                 Date Placed:{' '}
@@ -320,14 +343,17 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                                 {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking
                                                 #
                                             </MenuItem>
+                                            {!isPaid ? (
+                                                <MenuItem onClick={handleOption(Options.PayNow)}>Pay Now</MenuItem>
+                                            ) : null}
                                         </>
                                     )}
                                 </Menu>
                             </div>
                         </div>
-                    </div>
+                    </ButtonBase>
                     <Grid container justifyContent={'space-between'} pb={3} sx={{ borderBottom: '1px solid #ccc' }}>
-                        <Grid>
+                        <Grid onClick={handleRowClick}>
                             <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
                                 Payment:
                             </Typography>
@@ -337,7 +363,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 mode={'customer'}
                             />
                         </Grid>
-                        <Grid>
+                        <Grid onClick={handleRowClick}>
                             <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
                                 Status:
                             </Typography>

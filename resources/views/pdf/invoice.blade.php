@@ -306,13 +306,17 @@
                     Shipping Address
                 </div>
                 <div class="info-box-content">
-                    {{$shippingAddress->getFullName()}}
-                    <br/>
-                    {{$shippingAddress->address}}@if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
-                    <br/>
-                    {{$shippingAddress->city}}, {{$shippingAddress->state}} {{$shippingAddress->zip}}, {{$shippingAddress->country->code}}
-                    <br/>
-                    {{$shippingAddress->phone}}
+                    @if(!empty($shippingAddress))
+                        {{$shippingAddress->getFullName()}}
+                        <br/>
+                        {{$shippingAddress->address}}@if($shippingAddress->flat), APT # {{ $shippingAddress->flat }}@endif
+                        <br/>
+                        {{$shippingAddress->city}}, {{$shippingAddress->state}} {{$shippingAddress->zip}}, {{$shippingAddress->country->code}}
+                        <br/>
+                        {{$shippingAddress->phone}}
+                    @else
+                        No shipping address found
+                    @endif
                 </div>
             </div>
             <div class="info-box pr-10">

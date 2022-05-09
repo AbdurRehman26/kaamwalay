@@ -26,7 +26,7 @@ trait CouponApplicables
             return PaymentPlan::find($order['payment_plan']['id']);
         }
 
-        return $order->paymentPlan;
+        return PaymentPlan::find($order->payment_plan_id);
     }
 
     public function getOrderItems(array|Order $order): array

@@ -465,11 +465,19 @@ class Order extends Model implements Exportable
         return $this->shippingMethod->code === ShippingMethod::INSURED_SHIPPING;
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+    */
     public function scopeForDate(Builder $query, string $date): Builder
     {
         return $query->whereDate('created_at', $date);
     }
 
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+    */
     public function scopeForMonth(Builder $query, string $date): Builder
     {
         $monthStart = Carbon::parse($date)->firstOfMonth();

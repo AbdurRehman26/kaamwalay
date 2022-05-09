@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class UnpaidOrdersStatsUpdated extends Notification
+class UnpaidOrdersStats extends Notification
 {
     /**
      * Create a new notification instance.
@@ -35,6 +35,6 @@ class UnpaidOrdersStatsUpdated extends Notification
 
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
-            ->content("Unpaid Stats \n Date: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaidTotal']} ({$this->unpaidDailyStats['totalOrders']}) \n Month: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaidTotal']} ({$this->unpaidMonthlyStats['totalOrders']})");
+            ->content("Unpaid Orders Stats\nDate: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaidTotal']} ({$this->unpaidDailyStats['totalOrders']}) \n Month: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaidTotal']} ({$this->unpaidMonthlyStats['totalOrders']})");
     }
 }

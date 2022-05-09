@@ -4,7 +4,7 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Events\API\Order\V1\OrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Services\Order\UnpaidStatsService;
+use App\Services\Order\UnpaidOrdersStatsService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -15,7 +15,7 @@ beforeEach(function () {
     Event::fake([
         OrderStatusChangedEvent::class,
     ]);
-    $this->unpaidStatsService = resolve(UnpaidStatsService::class);
+    $this->unpaidOrdersStatsService = resolve(UnpaidOrdersStatsService::class);
 
     $this->orders = Order::factory()
         ->count(100)
@@ -36,28 +36,26 @@ beforeEach(function () {
         ));
 });
 
-it('adds daily unpaid stats', function () {
+it('calculates daily unpaid orders stats', function () {
     $getRandomOrder = $this->orders->random()->first();
 
-    $orders = Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
-        ->orWhere('payment_status', OrderPaymentStatusEnum::DUE->value)
+    $orders = Order::where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
         ->forDate($getRandomOrder->created_at->toDateString())
         ->sum('grand_total');
 
-    $unpaidDailyStats = $this->unpaidStatsService->addDailyUnpaidStats($getRandomOrder->created_at->toDateString());
+    $unpaidDailyStats = $this->unpaidOrdersStatsService->calculateDailyStats($getRandomOrder->created_at->toDateString());
 
     expect($orders)->toBe($unpaidDailyStats['unpaidTotal']);
-})->group('unpaid-stats');
+})->group('unpaid-orders-stats');
 
-it('adds monthly unpaid stats for the current month', function () {
+it('calculates monthly unpaid orders stats for the current month', function () {
     $getRandomOrder = $this->orders->random()->first();
 
-    $orders = Order::where('payment_status', OrderPaymentStatusEnum::PENDING->value)
-        ->orWhere('payment_status', OrderPaymentStatusEnum::DUE->value)
+    $orders = Order::where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
         ->forMonth($getRandomOrder->created_at->toDateString())
         ->sum('grand_total');
 
-    $unpaidMonthlyStats = $this->unpaidStatsService->addMonthlyUnpaidStats($getRandomOrder->created_at->toDateString());
+    $unpaidMonthlyStats = $this->unpaidOrdersStatsService->calculateMonthlyStats($getRandomOrder->created_at->toDateString());
 
     expect($orders)->toBe($unpaidMonthlyStats['unpaidTotal']);
-})->group('unpaid-stats');
+})->group('unpaid-orders-stats');

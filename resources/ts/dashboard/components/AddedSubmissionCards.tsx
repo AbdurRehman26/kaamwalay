@@ -356,7 +356,7 @@ function AddedSubmissionCards(props: AddedSubmissionCardsProps) {
                                         {!reviewMode ? (
                                             <NumberFormatTextField
                                                 value={row.value}
-                                                onChange={(e) => handleChangeCardValue(row, Number(e.target.value))}
+                                                onChange={(e) => handleChangeCardValue(row, e.target.value)}
                                                 name="numberformat"
                                                 size="small"
                                                 id="formatted-numberformat-input"

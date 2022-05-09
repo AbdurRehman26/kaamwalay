@@ -49,6 +49,7 @@ enum Options {
     ViewInstructions,
     ToggleShipmentTrackingModal,
     ContinueSubmission,
+    PayNow,
 }
 
 const useStyles = makeStyles(
@@ -160,6 +161,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                 case Options.ContinueSubmission:
                     navigate(`/submissions/new?orderId=${id}`);
                     break;
+                case Options.PayNow:
+                    navigate(`/submissions/${id}/pay`);
+                    break;
             }
         },
         [handleCloseOptions, navigate, id, showDeleteModal, showShipmentTrackingModal, invoice, invoiceNumber],
@@ -248,6 +252,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 <MenuItem onClick={handleOption(Options.ToggleShipmentTrackingModal)}>
                                     {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking #
                                 </MenuItem>
+                                {!isPaid ? <MenuItem onClick={handleOption(Options.PayNow)}>Pay Now</MenuItem> : null}
                             </Menu>
                         </TableCell>
                     </TableRow>
@@ -318,6 +323,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                                 {orderCustomerShipment === null ? 'Add' : 'Edit'}&nbsp;Shipment Tracking
                                                 #
                                             </MenuItem>
+                                            {!isPaid ? (
+                                                <MenuItem onClick={handleOption(Options.PayNow)}>Pay Now</MenuItem>
+                                            ) : null}
                                         </>
                                     )}
                                 </Menu>

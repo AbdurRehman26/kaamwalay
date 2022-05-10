@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\VaultShipment;
 use Database\Seeders\RolesSeeder;
 
-
 use function Pest\Laravel\seed;
 
 beforeEach(function () {

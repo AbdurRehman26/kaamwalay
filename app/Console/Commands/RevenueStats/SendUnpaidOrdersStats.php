@@ -28,6 +28,7 @@ class SendUnpaidOrdersStats extends Command
     /**
      * Execute the console command.
      *
+     * @param  UnpaidOrdersStatsService  $unpaidOrdersStatsService
      * @return int
      */
     public function handle(UnpaidOrdersStatsService $unpaidOrdersStatsService): int

@@ -154,3 +154,19 @@ test('test payment', function () {
 
     expect($actualFee)->toBe($this->order->firstOrderPayment->provider_fee);
 })->group('payment');
+
+test('payment requires valid payment method', function () {
+    $this->order->update([
+        'refund_total' => 0,
+        'extra_charge_total' => 0,
+    ]);
+
+    $this->postJson("/api/v2/customer/orders/{$this->order->id}/payments", [
+        'payment_method' => [
+            'id' => $this->paymentMethod->id,
+        ],
+        'payment_provider_reference' => [
+            'id' => '',
+        ],
+    ])->assertStatus(Response::HTTP_PAYMENT_REQUIRED);
+})->group('payment');

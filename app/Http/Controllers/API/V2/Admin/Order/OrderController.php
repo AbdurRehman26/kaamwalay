@@ -49,4 +49,11 @@ class OrderController extends V1OrderController
 
         return new OrderResource($order);
     }
+
+    public function show(int $orderId): OrderResource
+    {
+        $order = $this->ordersService->getOrder($orderId);
+
+        return new OrderResource($order);
+    }
 }

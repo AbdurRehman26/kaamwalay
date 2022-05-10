@@ -80,6 +80,9 @@ const useStyles = makeStyles(
                 lineHeight: '20px',
                 letterSpacing: '0.2px',
                 color: 'rgba(0, 0, 0, 0.87)',
+                [theme.breakpoints.down('sm')]: {
+                    letterSpacing: '0',
+                },
             },
             submissionPropertyValue: {
                 fontWeight: 'normal',
@@ -349,21 +352,21 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </div>
                         </div>
                     </ButtonBase>
-                    <Grid container pb={3} sx={{ borderBottom: '1px solid #ccc' }}>
-                        <Grid xs={6} onClick={handleRowClick}>
+                    <Grid container justifyContent={'space-between'} pb={3} sx={{ borderBottom: '1px solid #ccc' }}>
+                        <Grid onClick={handleRowClick}>
                             <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
                                 Payment:
-                            </Typography>{' '}
+                            </Typography>
                             <PaymentStatusChip
                                 color={paymentStatus || PaymentStatusEnum.PENDING}
                                 label={PaymentStatusMap[paymentStatus || PaymentStatusEnum.PENDING]}
                                 mode={'customer'}
                             />
                         </Grid>
-                        <Grid xs={6} onClick={handleRowClick}>
+                        <Grid onClick={handleRowClick}>
                             <Typography variant={'caption'} className={classes.submissionPropertyLabel}>
                                 Status:
-                            </Typography>{' '}
+                            </Typography>
                             <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
                         </Grid>
                         {!isPaid ? (

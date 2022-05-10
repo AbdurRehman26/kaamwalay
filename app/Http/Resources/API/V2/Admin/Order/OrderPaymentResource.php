@@ -86,7 +86,6 @@ class OrderPaymentResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'card' => null,
             'amount' => $this->amount,
             'notes' => $this->notes,
             'type' => $this->getPaymentType($this->type),

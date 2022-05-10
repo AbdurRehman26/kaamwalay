@@ -30,6 +30,12 @@
  *                      "available_till": "2021-12-21T10:17:01.000000Z",
  *                      "is_permanent": false,
  *                      "usage_allowed_per_user": null,
+ *                      "coupon_stats": {
+ *                          "times_used": 3,
+ *                          "total_cards": 6,
+ *                          "total_discount": "4869.55",
+ *                          "total_revenue": "9085.45"
+ *                      },
  *                      "coupon_status": {
  *                          "id": 4,
  *                          "code": "expired",

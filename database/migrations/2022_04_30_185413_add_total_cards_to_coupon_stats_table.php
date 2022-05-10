@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('coupon_stats', function (Blueprint $table) {
             $table->unsignedInteger('total_cards')
-                ->default(0)->after('total_revenue');
+                ->default(0)->after('times_used');
         });
     }
 

@@ -47,10 +47,10 @@ class VaultShipmentService
     protected function addVaultShipmentStatusHistory(int $vaultShipmentStatus, VaultShipment $vaultShipment): void
     {
         VaultShipmentStatusHistory::updateOrCreate([
-                'vault_shipment_id' => $vaultShipment->id,
-                'vault_shipment_status_id' => $vaultShipmentStatus,
-                'user_id' => auth()->user()->id,
-            ]);
+            'vault_shipment_id' => $vaultShipment->id,
+            'vault_shipment_status_id' => $vaultShipmentStatus,
+            'user_id' => auth()->user()->id,
+        ]);
     }
 
     protected function getTrackingUrl(string $shippingProvider, string $trackingNumber): ?string

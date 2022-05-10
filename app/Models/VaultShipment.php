@@ -133,8 +133,7 @@ class VaultShipment extends Model
      */
     public function firstVaultShipmentPayment(): HasOne
     {
-        return $this->hasOne(VaultShipmentPayment::class)
-            ->oldestOfMany('created_at');
+        return $this->hasOne(VaultShipmentPayment::class)->oldestOfMany('created_at');
     }
 
     /**

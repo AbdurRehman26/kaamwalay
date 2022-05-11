@@ -9,6 +9,7 @@ use App\Enums\Order\OrderPaymentStatusEnum;
 use App\Enums\Order\OrderStepEnum;
 use App\Events\API\Order\V2\GenerateOrderInvoice;
 use App\Http\Filters\AdminOrderSearchFilter;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -462,5 +463,26 @@ class Order extends Model implements Exportable
     public function hasInsuredShipping(): bool
     {
         return $this->shippingMethod->code === ShippingMethod::INSURED_SHIPPING;
+    }
+
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+    */
+    public function scopeForDate(Builder $query, string $date): Builder
+    {
+        return $query->whereDate('created_at', $date);
+    }
+
+    /**
+     * @param  Builder <Order> $query
+     * @return Builder <Order>
+    */
+    public function scopeForMonth(Builder $query, string $date): Builder
+    {
+        $monthStart = Carbon::parse($date)->firstOfMonth();
+        $monthEnd = Carbon::parse($date)->endOfMonth();
+
+        return $query->whereBetween('created_at', [$monthStart, $monthEnd]);
     }
 }

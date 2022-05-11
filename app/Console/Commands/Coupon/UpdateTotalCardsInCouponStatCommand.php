@@ -7,7 +7,6 @@ use App\Models\CouponStat;
 use App\Models\Order;
 use DB;
 use Illuminate\Console\Command;
-use Log;
 
 class UpdateTotalCardsInCouponStatCommand extends Command
 {
@@ -16,14 +15,14 @@ class UpdateTotalCardsInCouponStatCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'coupons:update-total-cards';
+    protected $signature = 'coupons:update-total-cards-stats';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'This command will update total cards ordered using a specific coupon';
+    protected $description = 'This command updates total cards stats for coupons';
 
     /**
      * Execute the console command.
@@ -32,23 +31,21 @@ class UpdateTotalCardsInCouponStatCommand extends Command
      */
     public function handle()
     {
-        $couponLogs = CouponLog::select('coupon_id')->groupBy('coupon_id')->get();
-        foreach ($couponLogs as $log) {
+        CouponLog::select('coupon_id')->distinct()->get()->each(function (CouponLog $couponLog) {
             $totalCards = 0;
             Order::join('order_items', 'order_items.order_id', 'orders.id')
-            ->where('orders.coupon_id', $log['coupon_id'])
-            ->select(DB::raw('SUM(order_items.quantity) as quantity'))
-            ->get()->each(function ($item) use ($totalCards, $log) {
-                // @phpstan-ignore-next-line
-                $totalCards += $item->quantity;
-                $couponStat = CouponStat::find($log['coupon_id']);
-                if ($couponStat) {
-                    $couponStat->total_cards = $totalCards;
-                    $couponStat->save();
-                    Log::info('Total Cards updated for Coupon :: ' . $log['coupon_id']);
-                }
-            });
-        }
+                ->where('orders.coupon_id', $couponLog->coupon_id)
+                ->select(DB::raw('SUM(order_items.quantity) as quantity'))
+                ->each(function ($item) use ($totalCards, $couponLog) {
+                    $totalCards += $item->quantity;
+                    $couponStat = CouponStat::find($couponLog->coupon_id);
+                    if ($couponStat) {
+                        $couponStat->total_cards = $totalCards;
+                        $couponStat->save();
+                        $this->info('Total cards stat updated for coupon:' . $couponLog->coupon_id);
+                    }
+                });
+        });
 
         return Command::SUCCESS;
     }

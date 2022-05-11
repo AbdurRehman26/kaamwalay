@@ -367,19 +367,19 @@ class AgsService
         return $this->client->createCardLabel($data);
     }
 
-    public function deactivateAccount(User $user): mixed
+    public function deactivateProfile(User $user): mixed
     {
         if ($user->ags_access_token) {
-            return $this->client->deactivateAccount($user->ags_access_token);
+            return $this->client->deactivateProfile($user->ags_access_token);
         }
 
         return null;
     }
 
-    public function deleteAccount(User $user): mixed
+    public function deleteProfile(User $user): mixed
     {
         if ($user->ags_access_token) {
-            return $this->client->deleteAccount($user->ags_access_token);
+            return $this->client->deleteProfile($user->ags_access_token);
         }
 
         return null;

@@ -11,10 +11,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useSharedDispatch } from '@shared/hooks/useSharedDispatch';
 import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/userSlice';
-import { AccountInfo } from './AccountInfo';
 import { BasicInfoRow } from './BasicInfoRow';
 import { ChangeUserPictureDialog } from './ChangeUserPictureDialog';
 import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
+import { ProfileActions } from './ProfileActions';
 import { SettingsSection } from './SettingsSection';
 
 const useStyles = makeStyles((theme) => ({
@@ -534,7 +534,7 @@ export function BasicInfo() {
                 </BasicInfoRow>
             </SettingsSection>
 
-            <AccountInfo />
+            <ProfileActions />
         </>
     );
 }

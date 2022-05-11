@@ -19,8 +19,7 @@ class LoginController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
     {
-        // Allow login with email and password any active user.
-        $data = array_merge($request->only('email', 'password'), ['active' => true]);
+        $data = array_merge($request->only('email', 'password'), ['is_active' => true]);
         $token = auth()->attempt($data);
 
         if (! $token) {

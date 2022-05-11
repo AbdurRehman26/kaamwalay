@@ -9,7 +9,8 @@ class AllowActiveUser
 {
     public function handle(Request $request, Closure $next): mixed
     {
-        if (! $request->user()->isActive()) {
+        $user = $request->user();
+        if (! $user->is_active) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 

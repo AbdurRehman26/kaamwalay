@@ -35,25 +35,25 @@ class UserAccountDeletedListener implements ShouldQueue
         $userId = $event->userId;
 
         // Delete all customer addresses
-        CustomerAddress::query()->where('user_id', $userId)->delete();
+        CustomerAddress::where('user_id', $userId)->delete();
 
         /**
          * @var $orders Collection
          */
-        $orders = Order::query()->where('user_id', $userId)->get();
-        $shippingAddresses = $orders->pluck('shipping_order_address_id')->filter()->values()->toArray();
-        $billingAddresses = $orders->pluck('billing_order_address_id')->filter()->values()->toArray();
+        $orders = Order::where('user_id', $userId)->get();
+        $shippingAddressesIds = $orders->pluck('shipping_order_address_id')->filter()->values()->toArray();
+        $billingAddressesIds = $orders->pluck('billing_order_address_id')->filter()->values()->toArray();
 
         // Detach addresses from orders
-        Order::query()->where('user_id', $userId)->update([
+        Order::where('user_id', $userId)->update([
             'shipping_order_address_id' => null,
             'billing_order_address_id' => null,
         ]);
 
         // Delete all order addresses that are assigned to user's orders
-        OrderAddress::query()->whereIn(
+        OrderAddress::whereIn(
             'id',
-            array_unique(array_merge($shippingAddresses, $billingAddresses))
+            array_unique(array_merge($shippingAddressesIds, $billingAddressesIds))
         )->delete();
 
         /**
@@ -67,7 +67,7 @@ class UserAccountDeletedListener implements ShouldQueue
             'stripe_id' => null,
             'pm_type' => null,
             'pm_last_four' => null,
-            'active' => false,
+            'is_active' => false,
         ]);
 
         $user->delete();

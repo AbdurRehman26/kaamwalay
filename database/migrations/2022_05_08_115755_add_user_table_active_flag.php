@@ -12,7 +12,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('users', static function (Blueprint $table) {
-            $table->boolean('active')->default(true);
+            $table->boolean('is_active')->nullable()->default(true)->after('phone');
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropColumns('users', ['active']);
+        Schema::dropColumns('users', ['is_active']);
     }
 };

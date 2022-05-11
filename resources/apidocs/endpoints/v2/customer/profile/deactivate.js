@@ -1,7 +1,7 @@
 /**
- * @api {post} /v2/customer/account/deactivate Deactivate Customer Account
- * @apiName Deactivate Customer Account
- * @apiGroup Customer-Account
+ * @api {post} /v2/customer/profile/deactivate Deactivate Customer Profile
+ * @apiName Deactivate Customer Profile
+ * @apiGroup Customer-Profile
  *
  * @apiVersion 2.0.0
  *

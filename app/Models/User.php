@@ -42,7 +42,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'active'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -60,7 +60,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         'id' => 'integer',
         'email_verified_at' => 'datetime',
         'ags_access_token' => 'encrypted',
-        'active' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     /**
@@ -78,6 +78,9 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public static function createCustomer(array $data): self
     {
         $data['username'] = self::generateUserName();
+        if (! isset($data['is_active'])) {
+            $data['is_active'] = true;
+        }
 
         /* @var User $user */
         $user = self::create($data);
@@ -92,6 +95,10 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     public static function createAdmin(array $data): self
     {
+        if (! isset($data['is_active'])) {
+            $data['is_active'] = true;
+        }
+
         $user = self::create($data);
 
         $user->assignRole(Role::findByName(config('permission.roles.admin')));
@@ -310,10 +317,5 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->profile_image;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->active;
     }
 }

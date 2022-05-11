@@ -1,7 +1,7 @@
 /**
- * @api {post} /v2/customer/account/delete Delete Customer Account
- * @apiName Delete Customer Account
- * @apiGroup Customer-Account
+ * @api {post} /v2/customer/profile/delete Delete Customer Profile
+ * @apiName Delete Customer Profile
+ * @apiGroup Customer-Profile
  *
  * @apiVersion 2.0.0
  *

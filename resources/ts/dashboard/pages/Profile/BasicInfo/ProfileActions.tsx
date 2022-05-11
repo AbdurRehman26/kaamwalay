@@ -9,7 +9,7 @@ import { useRepository } from '@shared/hooks/useRepository';
 import { UserRepository } from '@shared/repositories/UserRepository';
 import { SettingsSection } from './SettingsSection';
 
-export function AccountInfo() {
+export function ProfileActions() {
     const userRepository = useRepository(UserRepository);
     const confirm = useConfirmation();
     const { logout } = useAuth();
@@ -34,7 +34,7 @@ export function AccountInfo() {
 
         try {
             if (result) {
-                await userRepository.deleteAccount();
+                await userRepository.deleteProfile();
                 logout();
             }
         } finally {
@@ -59,7 +59,7 @@ export function AccountInfo() {
 
         try {
             if (result) {
-                await userRepository.deactivateAccount();
+                await userRepository.deactivateProfile();
                 logout();
             }
         } finally {

@@ -6,7 +6,6 @@ use App\Http\Controllers\API\V2\Auth\LoginController;
 use App\Http\Controllers\API\V2\Auth\RegisterController;
 use App\Http\Controllers\API\V2\Auth\ResetPasswordController;
 use App\Http\Controllers\API\V2\ConfigurationsController;
-use App\Http\Controllers\API\V2\Customer\AccountController;
 use App\Http\Controllers\API\V2\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\V2\Customer\Address\StateController;
 use App\Http\Controllers\API\V2\Customer\Cards\CardCategoryController;
@@ -47,7 +46,7 @@ Route::prefix('auth')->group(function () {
     Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
     Route::post('password/change', [ChangePasswordController::class, 'change']);
-    Route::get('me', [LoginController::class, 'me'])->middleware('auth');
+    Route::middleware('auth')->get('me', [LoginController::class, 'me']);
 });
 
 Route::prefix('customer')->group(function () {
@@ -117,9 +116,9 @@ Route::prefix('customer')->group(function () {
                 ]);
         });
 
-        Route::prefix('account')->group(function () {
-            Route::post('deactivate', [AccountController::class, 'deactivateAccount']);
-            Route::post('delete', [AccountController::class, 'deleteAccount']);
+        Route::prefix('profile')->group(function () {
+            Route::post('deactivate', [ProfileController::class, 'deactivateProfile']);
+            Route::post('delete', [ProfileController::class, 'deleteProfile']);
         });
     });
 });

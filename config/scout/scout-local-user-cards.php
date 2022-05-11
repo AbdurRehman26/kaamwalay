@@ -17,9 +17,9 @@ return [
     */
 
     'searchableAttributes' => [
-        'card_name', 
-        'searchable_name', 
-        'owner_name', 
+        'card_name',
+        'searchable_name',
+        'owner_name',
         'certificate_number'
     ],
 

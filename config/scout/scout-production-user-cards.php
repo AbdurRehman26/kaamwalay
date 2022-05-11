@@ -160,6 +160,7 @@ return [
     | configuration, just use the command `scout:sync` to get remote settings in this file.
     |
     */
+    'allowTyposOnNumericTokens' => false,
     'replicas' => ['production_user_cards_Ascending'],
     'ranking' => [
         'desc(graded_at)',

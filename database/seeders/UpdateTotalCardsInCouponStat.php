@@ -21,8 +21,7 @@ class UpdateTotalCardsInCouponStat extends Seeder
         $couponLogs = CouponLog::select('coupon_id')->groupBy('coupon_id')->get();
         foreach ($couponLogs as $log) {
             $totalCards = 0;
-            Order::join('coupon_logs', 'coupon_logs.order_id', 'orders.id')
-            ->join('order_items', 'order_items.order_id', 'orders.id')
+            Order::join('order_items', 'order_items.order_id', 'orders.id')
             ->where('orders.coupon_id', $log['coupon_id'])
             ->select(DB::raw('SUM(order_items.quantity) as quantity'))
             ->get()->each(function ($item) use ($totalCards, $log) {

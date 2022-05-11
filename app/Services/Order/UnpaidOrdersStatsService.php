@@ -14,9 +14,9 @@ class UnpaidOrdersStatsService
             ->sum('grand_total');
 
         return [
-            'unpaidTotal' => $unpaidOrders,
+            'unpaid_total' => $unpaidOrders,
             'date' => $currentDate,
-            'totalOrders' => $this->dailyOrdersCount($currentDate),
+            'total_orders' => $this->dailyOrdersCount($currentDate),
         ];
     }
 
@@ -26,13 +26,14 @@ class UnpaidOrdersStatsService
             ->sum('grand_total');
 
         return [
-            'unpaidTotal' => $unpaidOrders,
+            'unpaid_total' => $unpaidOrders,
             'date' => $currentDate,
-            'totalOrders' => $this->monthlyOrdersCount($currentDate),
+            'total_orders' => $this->monthlyOrdersCount($currentDate),
         ];
     }
 
     /**
+     * @param  string  $currentDate
      * @return Builder<Order>
     */
     public function dailyUnpaidOrders(string $currentDate): Builder
@@ -42,6 +43,7 @@ class UnpaidOrdersStatsService
     }
 
     /**
+     * @param  string  $currentDate
      * @return Builder<Order>
     */
     public function monthlyUnpaidOrders(string $currentDate): Builder

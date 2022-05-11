@@ -35,6 +35,6 @@ class UnpaidOrdersStats extends Notification
 
         return (new SlackMessage)
             ->from('Robograding', ':robot_face:')
-            ->content("Unpaid Orders Stats\nDate: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaidTotal']} ({$this->unpaidDailyStats['totalOrders']}) \n Month: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaidTotal']} ({$this->unpaidMonthlyStats['totalOrders']})");
+            ->content("Unpaid Orders Stats\nDate: {$this->unpaidDailyStats['date']}, Unpaid: \${$this->unpaidDailyStats['unpaid_total']} ({$this->unpaidDailyStats['total_orders']}) \n Month: {$monthYear}, Unpaid: \${$this->unpaidMonthlyStats['unpaid_total']} ({$this->unpaidMonthlyStats['total_orders']})");
     }
 }

@@ -17,9 +17,9 @@ return [
     */
 
     'searchableAttributes' => [
-        'card_name',
-        'searchable_name',
-        'owner_name',
+        'card_name', 
+        'searchable_name', 
+        'owner_name', 
         'certificate_number'
     ],
 
@@ -160,6 +160,7 @@ return [
     | configuration, just use the command `scout:sync` to get remote settings in this file.
     |
     */
+    'allowTyposOnNumericTokens' => false,
     'replicas' => ['local_user_cards_Ascending'],
     'ranking' => [
         'desc(graded_at)',

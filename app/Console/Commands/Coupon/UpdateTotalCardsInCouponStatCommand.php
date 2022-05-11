@@ -42,7 +42,7 @@ class UpdateTotalCardsInCouponStatCommand extends Command
                 // @phpstan-ignore-next-line
                 $totalCards += $item->quantity;
                 $couponStat = CouponStat::find($log['coupon_id']);
-                if($couponStat){
+                if ($couponStat) {
                     $couponStat->total_cards = $totalCards;
                     $couponStat->save();
                     Log::info('Total Cards updated for Coupon :: ' . $log['coupon_id']);

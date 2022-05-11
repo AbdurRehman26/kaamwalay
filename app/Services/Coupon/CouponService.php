@@ -45,7 +45,7 @@ class CouponService
     }
 
     public function updateCouponStats(Coupon $coupon): void
-    {   
+    {
         $couponStat = CouponStat::updateOrCreate(['coupon_id' => $coupon->id]);
         $orderCouponLog = Order::join('coupon_logs', 'coupon_logs.order_id', 'orders.id')
         ->join('order_items', 'order_items.order_id', 'orders.id')

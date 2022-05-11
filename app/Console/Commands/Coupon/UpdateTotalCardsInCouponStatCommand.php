@@ -1,22 +1,36 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Console\Commands\Coupon;
 
 use App\Models\CouponLog;
 use App\Models\CouponStat;
 use App\Models\Order;
 use DB;
-use Illuminate\Database\Seeder;
+use Illuminate\Console\Command;
 use Log;
 
-class UpdateTotalCardsInCouponStat extends Seeder
+class UpdateTotalCardsInCouponStatCommand extends Command
 {
     /**
-     * Run the database seeds.
+     * The name and signature of the console command.
      *
-     * @return void
+     * @var string
      */
-    public function run()
+    protected $signature = 'coupons:update-total-cards';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'This command will update total cards ordered using a specific coupon';
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
     {
         $couponLogs = CouponLog::select('coupon_id')->groupBy('coupon_id')->get();
         foreach ($couponLogs as $log) {
@@ -25,6 +39,7 @@ class UpdateTotalCardsInCouponStat extends Seeder
             ->where('orders.coupon_id', $log['coupon_id'])
             ->select(DB::raw('SUM(order_items.quantity) as quantity'))
             ->get()->each(function ($item) use ($totalCards, $log) {
+                // @phpstan-ignore-next-line
                 $totalCards += $item->quantity;
                 $couponStat = CouponStat::find($log['coupon_id']);
                 if($couponStat){
@@ -34,7 +49,7 @@ class UpdateTotalCardsInCouponStat extends Seeder
                 }
             });
         }
+
+        return Command::SUCCESS;
     }
 }
-
-

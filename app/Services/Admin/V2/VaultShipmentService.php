@@ -5,6 +5,7 @@ namespace App\Services\Admin\V2;
 use App\Models\VaultShipment;
 use App\Models\VaultShipmentStatus;
 use App\Models\VaultShipmentStatusHistory;
+use App\Services\EmailService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -41,6 +42,18 @@ class VaultShipmentService
       
         $this->addVaultShipmentStatusHistory(VaultShipmentStatus::SHIPPED, $vaultShipment);
         
+        $this->emailService->sendEmail(
+            [[$vaultShipment->user->email => $vaultShipment->user->getFullName()]],
+            $this->emailService->getSubjectByTemplate(EmailService::TEMPLATE_SLUG_SHIPPED_FROM_VAULT),
+            EmailService::TEMPLATE_SLUG_SHIPPED_FROM_VAULT,
+            // $this->orderService->getDataForCustomerOrderPaid($event->order)
+            [
+                'FIRST_NAME' => $vaultShipment->user->first_name,
+                'TRACKING_NUMBER' => $vaultShipment->tracking_number,
+                'TRACKING_URL' => $vaultShipment->tracking_url,
+            ]
+        );
+
         return $vaultShipment;
     }
 

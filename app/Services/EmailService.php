@@ -91,9 +91,9 @@ class EmailService
         string $templateName,
         array $templateContent = []
     ): void {
-        if (app()->environment('local')) {
-            return;
-        }
+        // if (app()->environment('local')) {
+        //     return;
+        // }
 
         SendEmail::dispatch($recipients, $subject, $templateName, $templateContent);
     }

@@ -46,7 +46,7 @@ Route::prefix('auth')->group(function () {
     Route::post('password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:5');
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
     Route::post('password/change', [ChangePasswordController::class, 'change']);
-    Route::get('me', [LoginController::class, 'me'])->middleware('auth');
+    Route::middleware('auth')->get('me', [LoginController::class, 'me']);
 });
 
 Route::prefix('customer')->group(function () {
@@ -114,6 +114,11 @@ Route::prefix('customer')->group(function () {
                 ->names([
                     'index' => 'customer.vault-shipments.index',
                 ]);
+        });
+
+        Route::prefix('profile')->group(function () {
+            Route::post('deactivate', [ProfileController::class, 'deactivateProfile']);
+            Route::post('delete', [ProfileController::class, 'deleteProfile']);
         });
     });
 });

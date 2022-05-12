@@ -4,6 +4,7 @@ namespace App\Services\AGS;
 
 use App\Http\APIClients\AGSClient;
 use App\Http\Resources\API\Services\AGS\CardGradeResource;
+use App\Models\User;
 use Carbon\Carbon;
 
 class AgsService
@@ -364,5 +365,23 @@ class AgsService
     public function createCardLabel(array $data): array
     {
         return $this->client->createCardLabel($data);
+    }
+
+    public function deactivateProfile(User $user): mixed
+    {
+        if ($user->ags_access_token) {
+            return $this->client->deactivateProfile($user->ags_access_token);
+        }
+
+        return null;
+    }
+
+    public function deleteProfile(User $user): mixed
+    {
+        if ($user->ags_access_token) {
+            return $this->client->deleteProfile($user->ags_access_token);
+        }
+
+        return null;
     }
 }

@@ -206,4 +206,30 @@ class AGSClient
 
         return [];
     }
+
+    public function deactivateProfile(string $token): array
+    {
+        $data = [
+            'is_active' => false,
+        ];
+
+        $response = Http::withToken($token)->patch(url: $this->getBaseUrl() . '/users/me/', data: $data);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponseWithCode(response: $response, route: '/users/me/', payload: $data);
+    }
+
+    public function deleteProfile(string $token): array
+    {
+        $response = Http::withToken($token)->delete(url: $this->getBaseUrl() . '/users/me/');
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return $this->handleErrorResponseWithCode(response: $response, route: '/users/me/');
+    }
 }

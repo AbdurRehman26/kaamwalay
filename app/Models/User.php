@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
@@ -32,7 +33,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject, Exportable, ExportableWithSort, FilamentUser, HasAvatar
 {
-    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames;
+    use HasRoles, HasFactory, Notifiable, Billable, CanResetPassword, CanHaveCoupons, FindSimilarUsernames, SoftDeletes;
 
     public string $pushNotificationType = 'users';
 
@@ -41,7 +42,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -59,6 +60,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
         'id' => 'integer',
         'email_verified_at' => 'datetime',
         'ags_access_token' => 'encrypted',
+        'is_active' => 'boolean',
     ];
 
     /**
@@ -76,6 +78,9 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public static function createCustomer(array $data): self
     {
         $data['username'] = self::generateUserName();
+        if (! isset($data['is_active'])) {
+            $data['is_active'] = true;
+        }
 
         /* @var User $user */
         $user = self::create($data);
@@ -90,6 +95,10 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
 
     public static function createAdmin(array $data): self
     {
+        if (! isset($data['is_active'])) {
+            $data['is_active'] = true;
+        }
+
         $user = self::create($data);
 
         $user->assignRole(Role::findByName(config('permission.roles.admin')));

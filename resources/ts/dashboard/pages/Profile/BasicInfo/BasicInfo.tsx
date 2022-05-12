@@ -1,10 +1,8 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import Paper from '@mui/material/Paper';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
@@ -16,6 +14,8 @@ import { updateUserPassword, updateUserProfile } from '@shared/redux/slices/user
 import { BasicInfoRow } from './BasicInfoRow';
 import { ChangeUserPictureDialog } from './ChangeUserPictureDialog';
 import { ConfirmUserPasswordDialog } from './ConfirmUserPasswordDialog';
+import { ProfileActions } from './ProfileActions';
+import { SettingsSection } from './SettingsSection';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -381,14 +381,7 @@ export function BasicInfo() {
             </Typography>
 
             <Divider className={classes.divider} />
-
-            <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Box paddingLeft={'16px'} paddingTop={'24px'}>
-                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                        Basic Info
-                    </Typography>
-                </Box>
-
+            <SettingsSection headline={'Basic Info'}>
                 <BasicInfoRow
                     label={'photo'}
                     value={'Personalize your account with a photo'}
@@ -509,44 +502,39 @@ export function BasicInfo() {
                     </div>
                 </BasicInfoRow>
                 <BasicInfoRow label={'customer id'} value={user$?.customerNumber || '-'} shown={false} hideDivider />
-            </Paper>
+            </SettingsSection>
 
-            <Paper className={classes.mainContainer} variant={'outlined'}>
-                <Box paddingLeft={'16px'} paddingTop={'24px'}>
-                    <Typography variant={'h1'} className={classes.subHeadingLabel}>
-                        Contact Info
-                    </Typography>
-                </Box>
-                <div className={classes.emptyStateContainer}>
-                    <BasicInfoRow label={'Email'} value={user$?.email || '-'} shown={false} />
+            <SettingsSection headline={'Contact Info'}>
+                <BasicInfoRow label={'Email'} value={user$?.email || '-'} shown={false} />
 
-                    <BasicInfoRow
-                        label={'Phone'}
-                        value={user$?.phone || '-'}
-                        shown={showPhone}
-                        onSave={onNewPhoneSave}
-                        onEdit={handleOnPhoneEdit}
-                        onCancel={handleOnPhoneEdit}
-                        hideDivider
-                        isSaveBtnDisabled={isNewPhoneSaveDisabled}
-                    >
-                        <div className={classes.editInputsContainer}>
-                            <Typography variant={'subtitle1'} className={classes.valueLabel}>
-                                Change Phone Number
-                            </Typography>
+                <BasicInfoRow
+                    label={'Phone'}
+                    value={user$?.phone || '-'}
+                    shown={showPhone}
+                    onSave={onNewPhoneSave}
+                    onEdit={handleOnPhoneEdit}
+                    onCancel={handleOnPhoneEdit}
+                    hideDivider
+                    isSaveBtnDisabled={isNewPhoneSaveDisabled}
+                >
+                    <div className={classes.editInputsContainer}>
+                        <Typography variant={'subtitle1'} className={classes.valueLabel}>
+                            Change Phone Number
+                        </Typography>
 
-                            <CustomTextField
-                                label="Confirm New Phone Number"
-                                rows={1}
-                                value={newPhone}
-                                onChange={onPhoneChange}
-                                className={classes.textField}
-                                fullWidth
-                            />
-                        </div>
-                    </BasicInfoRow>
-                </div>
-            </Paper>
+                        <CustomTextField
+                            label="Confirm New Phone Number"
+                            rows={1}
+                            value={newPhone}
+                            onChange={onPhoneChange}
+                            className={classes.textField}
+                            fullWidth
+                        />
+                    </div>
+                </BasicInfoRow>
+            </SettingsSection>
+
+            <ProfileActions />
         </>
     );
 }

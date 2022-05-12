@@ -4,15 +4,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import React, { useCallback, useState } from 'react';
 import { useNotifications } from '../../hooks/useNotifications';
 
 interface NotesDialogProps extends Omit<DialogProps, 'onSubmit'> {
     heading: string;
     description: string;
-    extraData?: Record<string, any>;
     onSubmitNotes(notes: string, extraData: Record<string, any>): any;
+    extraData?: Record<string, any>;
+    textFieldProps?: TextFieldProps;
 }
 
 /**
@@ -21,7 +22,15 @@ interface NotesDialogProps extends Omit<DialogProps, 'onSubmit'> {
  * @date: 11.09.2021
  * @time: 04:46
  */
-export function NotesDialog({ heading, description, onSubmitNotes, extraData, onClose, ...rest }: NotesDialogProps) {
+export function NotesDialog({
+    heading,
+    description,
+    onSubmitNotes,
+    extraData,
+    onClose,
+    textFieldProps,
+    ...rest
+}: NotesDialogProps) {
     const notifications = useNotifications();
 
     const [loading, setLoading] = useState(false);
@@ -60,6 +69,7 @@ export function NotesDialog({ heading, description, onSubmitNotes, extraData, on
                     placeholder={'Notes'}
                     value={value}
                     onChange={handleChange}
+                    {...textFieldProps}
                 />
             </DialogContent>
             <DialogActions>

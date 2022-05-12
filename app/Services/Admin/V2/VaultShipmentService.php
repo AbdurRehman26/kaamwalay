@@ -70,7 +70,7 @@ class VaultShipmentService
         };
     }
 
-    protected function sendEmail(VaultShipment $vaultShipment)
+    protected function sendEmail(VaultShipment $vaultShipment): void
     {
         $this->emailService->sendEmail(
             [[$vaultShipment->user->email => $vaultShipment->user->getFullName()]],

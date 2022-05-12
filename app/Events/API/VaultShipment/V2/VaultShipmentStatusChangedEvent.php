@@ -16,7 +16,8 @@ class VaultShipmentStatusChangedEvent
      * @return void
      */
     public function __construct(
-        public VaultShipment $vaultShipment
+        public VaultShipment $vaultShipment,
+        public int $vaultShipmentStatus
     ) {
     }
 }

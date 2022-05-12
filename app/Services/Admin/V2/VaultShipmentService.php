@@ -12,6 +12,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class VaultShipmentService
 {
+    public function __construct(protected EmailService $emailService)
+    {
+    }
     protected const LIST_VAULT_PER_PAGE = 15;
 
     public function getVaultShipments(): LengthAwarePaginator
@@ -42,17 +45,7 @@ class VaultShipmentService
       
         $this->addVaultShipmentStatusHistory(VaultShipmentStatus::SHIPPED, $vaultShipment);
         
-        $this->emailService->sendEmail(
-            [[$vaultShipment->user->email => $vaultShipment->user->getFullName()]],
-            $this->emailService->getSubjectByTemplate(EmailService::TEMPLATE_SLUG_SHIPPED_FROM_VAULT),
-            EmailService::TEMPLATE_SLUG_SHIPPED_FROM_VAULT,
-            // $this->orderService->getDataForCustomerOrderPaid($event->order)
-            [
-                'FIRST_NAME' => $vaultShipment->user->first_name,
-                'TRACKING_NUMBER' => $vaultShipment->tracking_number,
-                'TRACKING_URL' => $vaultShipment->tracking_url,
-            ]
-        );
+        $this->sendEmail($vaultShipment);
 
         return $vaultShipment;
     }
@@ -75,5 +68,18 @@ class VaultShipmentService
             'dhlexpress' => 'https://www.dhl.com/us-en/home/tracking/tracking-express.html?submit=1&tracking-id=' . $trackingNumber,
             default => null,
         };
+    }
+
+    protected function sendEmail(VaultShipment $vaultShipment){
+        $this->emailService->sendEmail(
+            [[$vaultShipment->user->email => $vaultShipment->user->getFullName()]],
+            $this->emailService->getSubjectByTemplate(EmailService::TEMPLATE_SLUG_SHIPPED_FROM_VAULT),
+            EmailService::TEMPLATE_SLUG_SHIPPED_FROM_VAULT,
+            [
+                'FIRST_NAME' => $vaultShipment->user->first_name,
+                'TRACKING_NUMBER' => $vaultShipment->tracking_number,
+                'TRACKING_URL' => $vaultShipment->tracking_url,
+            ]
+        );
     }
 }

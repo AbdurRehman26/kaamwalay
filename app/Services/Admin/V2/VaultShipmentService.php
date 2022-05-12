@@ -70,7 +70,8 @@ class VaultShipmentService
         };
     }
 
-    protected function sendEmail(VaultShipment $vaultShipment){
+    protected function sendEmail(VaultShipment $vaultShipment)
+    {
         $this->emailService->sendEmail(
             [[$vaultShipment->user->email => $vaultShipment->user->getFullName()]],
             $this->emailService->getSubjectByTemplate(EmailService::TEMPLATE_SLUG_SHIPPED_FROM_VAULT),

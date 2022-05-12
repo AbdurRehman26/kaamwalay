@@ -15,6 +15,7 @@ class CouponStat extends Model
         'times_used',
         'total_discount',
         'total_revenue',
+        'total_cards',
     ];
 
     public function coupon(): BelongsTo

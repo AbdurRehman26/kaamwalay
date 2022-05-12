@@ -77,6 +77,7 @@ export function PromoCodesTable({ tabFilter, all, search }: PromoCodesTableProps
                             <TableCell variant={'head'}>Date</TableCell>
                             <TableCell variant={'head'}>Status</TableCell>
                             <TableCell variant={'head'}>Times Used</TableCell>
+                            <TableCell variant={'head'}>Total Cards</TableCell>
                             <TableCell variant={'head'}>Total Discounts</TableCell>
                             <TableCell variant={'head'}>Created By</TableCell>
                             <TableCell variant={'head'} />

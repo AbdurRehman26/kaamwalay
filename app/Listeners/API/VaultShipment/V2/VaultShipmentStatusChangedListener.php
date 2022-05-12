@@ -30,7 +30,7 @@ class VaultShipmentStatusChangedListener implements ShouldQueue
      */
     public function handle(VaultShipmentStatusChangedEvent $event)
     {
-        switch ($event->vaultShipmentStatus){
+        switch ($event->vaultShipmentStatus) {
             case VaultShipmentStatus::SHIPPED:
                 $this->handleShipped($event);
 
@@ -38,7 +38,7 @@ class VaultShipmentStatusChangedListener implements ShouldQueue
         }
     }
 
-    protected function handleShipped(VaultShipmentStatusChangedEvent $event): void 
+    protected function handleShipped(VaultShipmentStatusChangedEvent $event): void
     {
         $this->emailService->sendEmail(
             [[$event->vaultShipment->user->email => $event->vaultShipment->user->getFullName()]],

@@ -4,7 +4,6 @@ namespace Tests\Feature\API\V2\Admin\VaultShipment;
 
 use App\Models\User;
 use App\Models\VaultShipment;
-use App\Services\EmailService;
 use Bus;
 use Database\Seeders\RolesSeeder;
 

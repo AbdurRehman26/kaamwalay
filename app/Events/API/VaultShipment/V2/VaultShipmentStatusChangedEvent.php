@@ -3,6 +3,7 @@
 namespace App\Events\API\VaultShipment\V2;
 
 use App\Models\VaultShipment;
+use App\Models\VaultShipmentStatus;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -17,7 +18,7 @@ class VaultShipmentStatusChangedEvent
      */
     public function __construct(
         public VaultShipment $vaultShipment,
-        public int $vaultShipmentStatus
+        public VaultShipmentStatus $vaultShipmentStatus
     ) {
     }
 }

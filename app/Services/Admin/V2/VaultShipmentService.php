@@ -42,7 +42,7 @@ class VaultShipmentService
       
         $this->addVaultShipmentStatusHistory(VaultShipmentStatus::SHIPPED, $vaultShipment);
         
-        VaultShipmentStatusChangedEvent::dispatch($vaultShipment, VaultShipmentStatus::SHIPPED);
+        VaultShipmentStatusChangedEvent::dispatch($vaultShipment, VaultShipmentStatus::find(VaultShipmentStatus::SHIPPED));
 
         return $vaultShipment;
     }

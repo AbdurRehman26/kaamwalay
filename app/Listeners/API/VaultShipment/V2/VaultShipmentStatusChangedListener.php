@@ -30,11 +30,8 @@ class VaultShipmentStatusChangedListener implements ShouldQueue
      */
     public function handle(VaultShipmentStatusChangedEvent $event)
     {
-        switch ($event->vaultShipmentStatus) {
-            case VaultShipmentStatus::SHIPPED:
-                $this->handleShipped($event);
-
-                break;
+        if ($event->vaultShipmentStatus->id === VaultShipmentStatus::SHIPPED) {
+            $this->handleShipped($event);
         }
     }
 

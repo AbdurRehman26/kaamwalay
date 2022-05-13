@@ -30,7 +30,8 @@ class LoginController extends Controller
             $token = $this->loginAGS($request);
         }
 
-        throw_if(auth()->user()->is_active === 0, UserIsDeactivated::class);
+        $isActive = auth()->user()->is_active;
+        throw_if(! is_null($isActive) && ! $isActive, UserIsDeactivated::class);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
 

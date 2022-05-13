@@ -25,11 +25,12 @@ class LoginController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         $token = auth()->attempt($request->only('email', 'password'));
-        throw_if(! auth()->user()->is_active, UserIsDeactivated::class);
 
         if (! $token) {
             $token = $this->loginAGS($request);
         }
+
+        throw_if(auth()->user()->is_active === 0, UserIsDeactivated::class);
 
         CreateUserDeviceJob::dispatch(auth()->user(), $request->validated()['platform'] ?? null);
 

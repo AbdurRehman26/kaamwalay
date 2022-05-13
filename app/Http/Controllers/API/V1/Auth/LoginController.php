@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Concerns\AGS\AuthenticatableWithAGS;
 use App\Exceptions\API\Auth\AuthenticationException;
+use App\Exceptions\API\Customer\UserIsDeactivated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Auth\LoginRequest;
 use App\Http\Resources\API\V1\Customer\User\UserResource;
@@ -12,15 +13,19 @@ use App\Services\CustomerProfileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class LoginController extends Controller
 {
     use AuthenticatableWithAGS;
 
+    /**
+     * @throws Throwable
+     */
     public function login(LoginRequest $request): JsonResponse
     {
-        $data = array_merge($request->only('email', 'password'), ['is_active' => true]);
-        $token = auth()->attempt($data);
+        $token = auth()->attempt($request->only('email', 'password'));
+        throw_if(! auth()->user()->is_active, UserIsDeactivated::class);
 
         if (! $token) {
             $token = $this->loginAGS($request);

@@ -59,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#fff',
         boxShadow: theme.shadows[4],
     },
+    buttonsContainerMobile: {
+        width: '100%',
+        padding: 10,
+        position: 'static',
+        bottom: 0,
+    },
     buttonsHolder: {
         maxWidth: 360,
         [theme.breakpoints.down('sm')]: {
@@ -192,7 +198,7 @@ export function NewSubmission() {
             <SubmissionValidator />
             <SubmissionHeader />
             <div className={classes.pageContentContainer}>{children}</div>
-            <div className={classes.buttonsContainer}>
+            <div className={currentStep === 1 ? classes.buttonsContainerMobile : classes.buttonsContainer}>
                 <Grid
                     container
                     alignItems={'center'}

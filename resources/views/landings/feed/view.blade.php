@@ -58,6 +58,11 @@
         </script>
     </x-slot>
     @if($grades_available)
+        @if($is_fake)
+            <section class="feed-view__warning">
+                This card is under suspicious authenticity. Do NOT purchase or trade this card. If you already purchased this card, please contact seller / marketplace to issue a refund. We have identified the issue for future submissions and are working on resolving the issue with the submitter.
+            </section>
+        @endif
         <header class="feed-view__header">
             <div class="feed-view__header__overlay">
                 <img class="feed-view__header__overlay-background" src="{{ asset('assets/images/pokemon-wallpaper.jpeg') }}"

@@ -108,6 +108,7 @@ class UserCardService
 
         return [
             'grades_available' => true,
+            'is_fake' => $userCard->is_fake,
             'certificate_id' => $userCard->certificate_number,
             'grade' => $this->prepareGradeForPublicCardPage($userCard),
             'card' => [

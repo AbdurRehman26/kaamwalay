@@ -60,7 +60,7 @@
     @if($grades_available)
         @if($is_fake)
             <section class="feed-view__warning">
-                This card is under suspicious authenticity. Do NOT purchase or trade this card. If you already purchased this card, please contact seller / marketplace to issue a refund. We have identified the issue for future submissions and are working on resolving the issue with the submitter.
+                WARNING: This card is an altered shadowless card with a fake 1st edition stamp. Do not purchase or trade this card. If you have purchased or traded for this card, please request a refund immediately and report it right away.
             </section>
         @endif
         <header class="feed-view__header">

@@ -290,6 +290,8 @@ namespace App\Models{
  * @property-read \App\Models\CouponStatus $couponStatus
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponStatusHistory[] $couponStatusHistories
  * @property-read int|null $coupon_status_histories_count
+ * @property-read \App\Models\User $createdBy
+ * @property-read \App\Models\User $createdBy
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlan[] $paymentPlans
  * @property-read int|null $payment_plans_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
@@ -589,6 +591,7 @@ namespace App\Models{
  * @property float $refund_total This will hold the cumulative value of all the refunds per order
  * @property int $user_id
  * @property int $payment_plan_id
+ * @property int|null $order_payment_plan_id
  * @property int|null $order_status_id
  * @property \App\Enums\Order\OrderPaymentStatusEnum $payment_status 0 => pending payment, 1 => paid
  * @property int|null $shipping_order_address_id
@@ -634,7 +637,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderStatusHistory[] $orderStatusHistory
  * @property-read int|null $order_status_history_count
  * @property-read \App\Models\PaymentMethod|null $paymentMethod
- * @property-read \App\Models\PaymentPlan $paymentPlan
+ * @property-read \App\Models\OrderPaymentPlan|null $paymentPlan
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $refunds
  * @property-read int|null $refunds_count
  * @property-read \App\Models\User|null $reviewedBy
@@ -668,6 +671,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderCustomerShipmentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderPaymentPlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderShipmentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStep($value)
@@ -686,7 +690,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
  */
-	class Order extends \Eloquent {}
+	class Order extends \Eloquent implements \App\Contracts\Exportable {}
 }
 
 namespace App\Models{
@@ -985,6 +989,31 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\OrderPaymentPlan
+ *
+ * @property int $id
+ * @property float $price
+ * @property float $max_protection_amount
+ * @property string $turnaround
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Order|null $order
+ * @method static \Database\Factories\OrderPaymentPlanFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan whereMaxProtectionAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan whereTurnaround($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderPaymentPlan whereUpdatedAt($value)
+ */
+	class OrderPaymentPlan extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\OrderShipment
  *
  * @property int $id
@@ -1138,13 +1167,16 @@ namespace App\Models{
  * @property int $display_position
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupons
  * @property-read int|null $coupons_count
  * @method static \Database\Factories\PaymentPlanFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newQuery()
+ * @method static \Illuminate\Database\Query\Builder|PaymentPlan onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan query()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDiscountPercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDisplayPosition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereId($value)
@@ -1153,6 +1185,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan wherePriceBeforeDiscount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereTurnaround($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|PaymentPlan withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|PaymentPlan withoutTrashed()
  */
 	class PaymentPlan extends \Eloquent {}
 }
@@ -1539,7 +1573,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  */
-	class User extends \Eloquent {}
+	class User extends \Eloquent implements \Tymon\JWTAuth\Contracts\JWTSubject, \App\Contracts\Exportable, \App\Contracts\ExportableWithSort, \Filament\Models\Contracts\FilamentUser, \Filament\Models\Contracts\HasAvatar {}
 }
 
 namespace App\Models{
@@ -1558,7 +1592,8 @@ namespace App\Models{
  * @property string|null $certificate_number
  * @property mixed|null $ai_model_numbers
  * @property array|null $generated_images
- * @property int|null $shipping_status 0 => in vault, 1 => shipping requested, 2 => shipped
+ * @property \App\Enums\UserCard\UserCardShippingStatus|null $shipping_status 0 => in vault, 1 => shipping requested, 2 => shipped
+ * @property bool|null $is_fake
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property float|null $grade_delta
@@ -1580,6 +1615,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereGradingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereHumanGradeValues($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereIsFake($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereOrderItemId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereOverallGrade($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCard whereOverallGradeNickname($value)
@@ -1676,6 +1712,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VaultShipmentStatusHistory[] $vaultShipmentStatusHistories
  * @property-read int|null $vault_shipment_status_histories_count
  * @method static \Database\Factories\VaultShipmentFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|VaultShipment query()

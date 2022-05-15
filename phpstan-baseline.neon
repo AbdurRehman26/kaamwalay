@@ -671,6 +671,40 @@ parameters:
 			path: app/Http/Resources/API/V1/Admin/Order/OrderListResource.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$orderItems\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$grand_total\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$arrived_at\\.$#"
+			count: 2
+			path: app/Http/Resources/API/V2/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$created_at\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$grand_total_to_be_paid\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/OrderListResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Order\\\\OrderListResource\\:\\:\\$order_number\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/OrderListResource.php
+		-
 			message: "#^Method App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderPaymentCollection\\:\\:toArray\\(\\) return type with generic interface Illuminate\\\\Contracts\\\\Support\\\\Arrayable does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderPaymentCollection.php
@@ -749,6 +783,11 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$payment_status\\.$#"
 			count: 1
 			path: app/Http/Resources/API/V1/Admin/Order/OrderResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V2\\\\Admin\\\\Order\\\\OrderResource\\:\\:\\$grand_total_to_be_paid\\.$#"
+			count: 1
+			path: app/Http/Resources/API/V2/Admin/Order/OrderResource.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Http\\\\Resources\\\\API\\\\V1\\\\Admin\\\\Order\\\\OrderShipmentResource\\:\\:\\$id\\.$#"

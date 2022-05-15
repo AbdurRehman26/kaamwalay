@@ -92,7 +92,7 @@ export function ViewSubmission() {
                 shippingFee={data?.shippingFee}
                 refundsTotal={data?.refundTotal}
                 extraChargesTotal={data?.extraChargeTotal}
-                total={data?.grandTotal}
+                total={data?.grandTotalToBePaid}
             />
             <Divider />
             <Box marginTop={'24px'} />

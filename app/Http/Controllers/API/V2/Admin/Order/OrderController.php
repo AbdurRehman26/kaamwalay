@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V2\Admin\Order;
 use App\Exceptions\API\Admin\Order\OrderCanNotBeMarkedAsShipped;
 use App\Http\Controllers\API\V1\Admin\Order\OrderController as V1OrderController;
 use App\Http\Requests\API\V2\Admin\Order\UpdateShipmentRequest;
+use App\Http\Resources\API\V2\Admin\Order\OrderListCollection;
 use App\Http\Resources\API\V2\Admin\Order\OrderResource;
 use App\Models\Order;
 use App\Services\Admin\V2\OrderService;
@@ -48,6 +49,13 @@ class OrderController extends V1OrderController
         $order->refresh()->load('orderShipment');
 
         return new OrderResource($order);
+    }
+
+    public function index(): OrderListCollection
+    {
+        $orders = $this->ordersService->getOrders();
+
+        return new OrderListCollection($orders);
     }
 
     public function show(int $orderId): OrderResource

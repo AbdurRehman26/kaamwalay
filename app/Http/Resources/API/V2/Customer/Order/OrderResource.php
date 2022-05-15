@@ -28,6 +28,7 @@ class OrderResource extends BaseResource
             'service_fee' => $this->service_fee,
             'shipping_fee' => $this->shipping_fee,
             'grand_total' => $this->grand_total,
+            'grand_total_to_be_paid' => $this->grand_total_to_be_paid,
             'created_at' => $this->formatDate($this->created_at),
             'customer' => new UserResource($this->user),
             'shipping_method' => new ShippingMethodResource($this->shippingMethod),

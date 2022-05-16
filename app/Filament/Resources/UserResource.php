@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\BelongsToSelect;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -65,6 +66,8 @@ class UserResource extends Resource
                     ->maxLength(255),
                 TextInput::make('pm_last_four')
                     ->maxLength(4),
+                BelongsToSelect::make('salesman')
+                    ->relationship('salesman', 'email')->nullable()->searchable(),
                 Forms\Components\BelongsToManyMultiSelect::make('role')
                     ->relationship('roles', 'name'),
             ]);

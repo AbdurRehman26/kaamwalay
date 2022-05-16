@@ -6,6 +6,7 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use Filament\Forms;
+use Filament\Forms\Components\BelongsToSelect;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -32,12 +33,9 @@ class OrderResource extends Resource
                 TextInput::make('payment_plan_id')
                     ->required(),
                 TextInput::make('order_status_id'),
-                TextInput::make('shipping_order_address_id')
-                    ->required(),
-                TextInput::make('billing_order_address_id')
-                    ->required(),
-                TextInput::make('payment_method_id')
-                    ->required(),
+                TextInput::make('shipping_order_address_id'),
+                TextInput::make('billing_order_address_id'),
+                TextInput::make('payment_method_id'),
                 TextInput::make('shipping_method_id')
                     ->required(),
                 TextInput::make('coupon_id'),
@@ -61,6 +59,8 @@ class OrderResource extends Resource
                 TextInput::make('invoice_id'),
                 Forms\Components\Textarea::make('notes')
                     ->maxLength(65535),
+                BelongsToSelect::make('salesman')
+                    ->relationship('salesman', 'email')->nullable()->searchable(),
             ]);
     }
 

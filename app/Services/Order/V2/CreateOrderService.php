@@ -95,6 +95,7 @@ class CreateOrderService
         $this->storeServiceFee();
         $this->storeGrandTotal();
         $this->storeWalletPaymentAmount(! empty($this->data['payment_by_wallet']) ? $this->data['payment_by_wallet'] : null);
+        $this->storeSalesman();
 
         $this->orderStatusHistoryService->addStatusToOrder(OrderStatus::PLACED, $this->order);
         OrderPlaced::dispatch($this->order);
@@ -283,5 +284,10 @@ class CreateOrderService
             $this->order->amount_paid_from_wallet = $amount;
             $this->order->save();
         }
+    }
+
+    protected function storeSalesman(): void
+    {
+        $this->order->salesman()->associate($this->order->user->salesman)->save();
     }
 }

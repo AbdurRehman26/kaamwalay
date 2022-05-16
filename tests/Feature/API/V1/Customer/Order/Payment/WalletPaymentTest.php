@@ -55,7 +55,6 @@ test('user can be charged successfully from wallet', function () {
         'payment_method_id' => $this->paymentMethod->id,
     ]);
     postJson("/api/v1/customer/orders/{$this->order->id}/payments")
-        ->dump()
         ->assertOk();
 
     expect($this->user->wallet->balance)->toBe((float) 1);

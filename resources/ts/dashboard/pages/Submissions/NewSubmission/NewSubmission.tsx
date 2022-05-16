@@ -198,7 +198,13 @@ export function NewSubmission() {
             <SubmissionValidator />
             <SubmissionHeader />
             <div className={classes.pageContentContainer}>{children}</div>
-            <div className={currentStep === 1 ? classes.buttonsContainerMobile : classes.buttonsContainer}>
+            <div
+                className={
+                    (currentStep === 1 || currentStep === 2) && isMobile
+                        ? classes.buttonsContainerMobile
+                        : classes.buttonsContainer
+                }
+            >
                 <Grid
                     container
                     alignItems={'center'}

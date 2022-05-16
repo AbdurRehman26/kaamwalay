@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Customer\Address\State;
 
+use App\Http\Resources\API\V1\Country\CountryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StateResource extends JsonResource
@@ -18,6 +19,7 @@ class StateResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
+            'country' => new CountryResource($this->country),
         ];
     }
 }

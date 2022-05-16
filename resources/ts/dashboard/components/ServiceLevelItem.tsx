@@ -50,6 +50,7 @@ const useStyles = makeStyles(
         maxValueContainer: {
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'end',
             maxHeight: '64px',
             padding: 0,
         },

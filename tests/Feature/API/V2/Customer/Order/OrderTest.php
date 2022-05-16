@@ -727,7 +727,8 @@ test('an order needs addresses when shipping method is insured', function () {
 });
 
 test('an order has salesman if customer has a salesman assigned', function () {
-    $this->user->update(['salesman_id' => 1]);
+    $salesman = User::factory()->create();
+    $this->user->salesman()->associate($salesman)->save();
     $this->actingAs($this->user);
 
     Event::fake();
@@ -782,5 +783,5 @@ test('an order has salesman if customer has a salesman assigned', function () {
         ],
     ]);
     $response->assertSuccessful();
-    assertDatabaseHas('orders', ['id' => $response->json('data.id'), 'salesman_id' => 1]);
+    assertDatabaseHas('orders', ['id' => $response->json('data.id'), 'salesman_id' => $salesman->id]);
 });

@@ -28,6 +28,7 @@ class UserCard extends Model
         'certificate_number',
         'grade_delta',
         'shipping_status',
+        'is_fake',
     ];
 
     protected $casts = [
@@ -41,6 +42,7 @@ class UserCard extends Model
         'graded_at' => 'datetime',
         'grade_delta' => 'float',
         'shipping_status' => UserCardShippingStatus::class,
+        'is_fake' => 'boolean',
     ];
 
     /**

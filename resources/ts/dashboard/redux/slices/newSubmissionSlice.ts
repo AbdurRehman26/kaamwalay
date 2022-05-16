@@ -745,6 +745,11 @@ export const newSubmissionSlice = createSlice({
             state.extraChargesTotal = action.payload.extraChargeTotal;
             state.previewTotal = action.payload.grandTotal;
             state.shippingMethod = action.payload.shippingMethod;
+
+            state.step01Data.selectedServiceLevel = {
+                type: 'card',
+                ...action.payload.originalPaymentPlan,
+            };
             state.step02Data = {
                 shippingFee: action.payload.shippingFee,
                 isMobileSearchModalOpen: false,

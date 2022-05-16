@@ -144,6 +144,7 @@ class Order extends Model implements Exportable
         return [
             AllowedInclude::relationship('invoice'),
             AllowedInclude::relationship('paymentPlan'),
+            AllowedInclude::relationship('originalPaymentPlan'),
             AllowedInclude::relationship('orderItems'),
             AllowedInclude::relationship('orderStatus'),
             AllowedInclude::relationship('orderPayment', 'firstOrderPayment'),
@@ -177,6 +178,14 @@ class Order extends Model implements Exportable
     public function paymentPlan(): BelongsTo
     {
         return $this->belongsTo(OrderPaymentPlan::class, 'order_payment_plan_id');
+    }
+
+    /**
+     * @return BelongsTo<PaymentPlan, Order>
+     */
+    public function originalPaymentPlan(): BelongsTo
+    {
+        return $this->belongsTo(PaymentPlan::class, 'payment_plan_id');
     }
 
     public function orderStatus(): BelongsTo

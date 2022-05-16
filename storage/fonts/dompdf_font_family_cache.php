@@ -79,10 +79,10 @@ return array (
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
   'roboto' => array(
-      '300' => $fontDir . '/roboto_300_080df75d218a8ebe8b75f6ba7182d343',
-      'normal' => $fontDir . '/roboto_normal_ad149bced3f7c2e0ff246c3940f6b965',
-      '500' => $fontDir . '/roboto_500_c0c6c1120627790ec9badfa2417cf776',
-      'bold' => $fontDir . '/roboto_bold_1e8a2cb64c7c487395e1622e750f0d0e',
+    '300' => $fontDir . '/roboto_300_080df75d218a8ebe8b75f6ba7182d343',
+    'normal' => $fontDir . '/roboto_normal_ad149bced3f7c2e0ff246c3940f6b965',
+    '500' => $fontDir . '/roboto_500_c0c6c1120627790ec9badfa2417cf776',
+    'bold' => $fontDir . '/roboto_bold_1e8a2cb64c7c487395e1622e750f0d0e',
   ),
 );
 }; ?>

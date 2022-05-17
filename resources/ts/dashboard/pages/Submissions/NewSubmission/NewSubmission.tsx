@@ -88,6 +88,7 @@ export function NewSubmission() {
     const notifications = useNotifications();
 
     const [mountChildren, setMountChildren] = useState(true);
+    const [mobileBrowser, setMobileBrowser] = useState(false);
     const currentStep = useAppSelector((state) => state.newSubmission.currentStep);
     const classes = useStyles({ currentStep });
     const isNextDisabled = useAppSelector((state) => state.newSubmission.isNextDisabled);
@@ -161,6 +162,15 @@ export function NewSubmission() {
         dispatch(backStep());
     };
 
+    useEffect(() => {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+            setMobileBrowser(true);
+        } else {
+            setMobileBrowser(false);
+        }
+    }, [mobileBrowser]);
+
     const children = mountChildren ? (
         <Container>
             <Grid container spacing={4}>
@@ -198,13 +208,7 @@ export function NewSubmission() {
             <SubmissionValidator />
             <SubmissionHeader />
             <div className={classes.pageContentContainer}>{children}</div>
-            <div
-                className={
-                    (currentStep === 1 || currentStep === 2) && isMobile
-                        ? classes.buttonsContainerMobile
-                        : classes.buttonsContainer
-                }
-            >
+            <div className={mobileBrowser ? classes.buttonsContainerMobile : classes.buttonsContainer}>
                 <Grid
                     container
                     alignItems={'center'}

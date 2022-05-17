@@ -28,6 +28,7 @@ function OrderReviewSection() {
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const selectedExistingAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedExistingAddress);
     const discountCode = useAppSelector((state) => state.newSubmission.couponState.couponCode);
+    const shippingMethod = useAppSelector((state) => state.newSubmission.shippingMethod);
 
     const discountStatement = useAppSelector(
         (state) => state.newSubmission.couponState.appliedCouponData.discountStatement,
@@ -74,20 +75,21 @@ function OrderReviewSection() {
                     </>
                 ) : null}
             </div>
-
-            <div className={classes.orderItemsColumn}>
-                <OrderDetailItem title={'Shipping Address'} editStep={2}>
-                    <Typography
-                        className={classes.darkBodyText}
-                    >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
-                    <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
-                        finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
-                    }`}</Typography>
-                    <Typography
-                        className={classes.darkBodyText}
-                    >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
-                </OrderDetailItem>
-            </div>
+            {shippingMethod?.name !== 'Vault Storage' ? (
+                <div className={classes.orderItemsColumn}>
+                    <OrderDetailItem title={'Shipping Address'} editStep={2}>
+                        <Typography
+                            className={classes.darkBodyText}
+                        >{`${finalShippingAddress.firstName} ${finalShippingAddress.lastName}`}</Typography>
+                        <Typography className={classes.darkBodyText}>{`${finalShippingAddress.address} ${
+                            finalShippingAddress?.flat ? `apt: ${finalShippingAddress.flat}` : ''
+                        }`}</Typography>
+                        <Typography
+                            className={classes.darkBodyText}
+                        >{`${finalShippingAddress.city}, ${finalShippingAddress.state.code} ${finalShippingAddress.zipCode}, US`}</Typography>
+                    </OrderDetailItem>
+                </div>
+            ) : null}
             <div className={classes.orderItemsColumn}>
                 {appliedCredit > 0 ? (
                     <OrderDetailItem title={'Credit Applied'} editStep={3} spaced>

@@ -256,7 +256,7 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                                     </TableCell>
                                     <TableCell align={'right'}>
                                         <Typography variant={'body2'} align={'right'} className={font.fontWeightMedium}>
-                                            {formatCurrency(data.grandTotalToBePaid)}
+                                            {formatCurrency(data.grandTotal)}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>

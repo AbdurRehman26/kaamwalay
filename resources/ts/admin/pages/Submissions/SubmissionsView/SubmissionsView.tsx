@@ -74,7 +74,7 @@ export function SubmissionsView() {
                 declaredValue={data.totalDeclaredValue}
                 serviceFee={data.serviceFee}
                 shippingFee={data.shippingFee}
-                grandTotal={data.grandTotalToBePaid}
+                grandTotal={data.grandTotal}
                 customerId={data.customer?.id}
                 customerNumber={data.customer?.customerNumber}
                 customerName={data.customer?.getFullName()}

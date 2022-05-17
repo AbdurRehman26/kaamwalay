@@ -26,7 +26,6 @@ export class OrderEntity extends Entity {
     public totalDeclaredValue!: number;
     public discountedAmount!: string;
     public grandTotal!: number;
-    public grandTotalToBePaid!: number;
     public extraChargeTotal!: number;
     public refundTotal!: number;
     public shippingFee!: number;

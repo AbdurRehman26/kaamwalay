@@ -157,9 +157,7 @@ export function SubmissionsTableRow({ order }: SubmissionsTableRowProps) {
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalDeclaredValue)}</TableCell>
                 <TableCell>
-                    {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE)
-                        ? 'N/A'
-                        : formatCurrency(order.grandTotalToBePaid)}
+                    {order?.orderStatus.is(OrderStatusEnum.INCOMPLETE) ? 'N/A' : formatCurrency(order.grandTotal)}
                 </TableCell>
                 <TableCell align={'right'}>
                     <SubmissionActionButton

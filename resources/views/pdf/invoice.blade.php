@@ -431,7 +431,7 @@
                                     Total:
                                 </td>
                                 <td class="info-content">
-                                    ${{number_format($order->grand_total_to_be_paid, 2)}}
+                                    ${{number_format(($order->grand_total - $order->amount_paid_from_wallet), 2)}}
                                 </td>
                             </tr>
                         </tbody>

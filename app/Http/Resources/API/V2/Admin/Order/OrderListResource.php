@@ -8,6 +8,15 @@ use App\Http\Resources\API\V2\Customer\Order\Invoice\InvoiceResource;
 use App\Http\Resources\API\V2\Customer\Order\ShippingMethod\ShippingMethodResource;
 use Illuminate\Http\Request;
 
+/**
+ * @property mixed $id
+ * @property mixed $order_number
+ * @property mixed $grand_total
+ * @property mixed $amount_paid_from_wallet
+ * @property mixed $arrived_at
+ * @property mixed $created_at
+ * @method orderItems()
+ */
 class OrderListResource extends BaseResource
 {
     /**
@@ -23,8 +32,7 @@ class OrderListResource extends BaseResource
             'order_number' => $this->order_number,
             'number_of_cards' => $this->orderItems->sum('quantity'),
             'total_declared_value' => $this->orderItems->sum('declared_value_total'),
-            'grand_total' => $this->grand_total,
-            'grand_total_to_be_paid' => $this->grand_total_to_be_paid,
+            'grand_total' => $this->grand_total - $this->amount_paid_from_wallet,
             'customer' => $this->whenLoaded('user', OrderCustomerResource::class),
             'order_status' => $this->whenLoaded('orderStatus', OrderStatusResource::class),
             'invoice' => $this->whenLoaded('invoice', InvoiceResource::class),

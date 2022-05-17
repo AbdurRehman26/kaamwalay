@@ -291,7 +291,6 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CouponStatusHistory[] $couponStatusHistories
  * @property-read int|null $coupon_status_histories_count
  * @property-read \App\Models\User $createdBy
- * @property-read \App\Models\User $createdBy
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlan[] $paymentPlans
  * @property-read int|null $payment_plans_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
@@ -393,6 +392,7 @@ namespace App\Models{
  * @property int $id
  * @property int $coupon_id
  * @property int $times_used
+ * @property int $total_cards
  * @property string $total_discount
  * @property string $total_revenue
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -405,6 +405,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStat whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStat whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStat whereTimesUsed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CouponStat whereTotalCards($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStat whereTotalDiscount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStat whereTotalRevenue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CouponStat whereUpdatedAt($value)
@@ -602,6 +603,7 @@ namespace App\Models{
  * @property int|null $invoice_id
  * @property int|null $order_shipment_id
  * @property int|null $order_customer_shipment_id
+ * @property int|null $salesman_id
  * @property string|null $auto_saved_at
  * @property \Illuminate\Support\Carbon|null $arrived_at
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -641,6 +643,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPayment[] $refunds
  * @property-read int|null $refunds_count
  * @property-read \App\Models\User|null $reviewedBy
+ * @property-read \App\Models\User|null $salesman
  * @property-read \App\Models\OrderAddress|null $shippingAddress
  * @property-read \App\Models\ShippingMethod|null $shippingMethod
  * @property-read \App\Models\User $user
@@ -648,6 +651,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order customerName(string $customerName)
  * @method static \Illuminate\Database\Eloquent\Builder|Order excludeCancelled()
  * @method static \Database\Factories\OrderFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order forDate(string $date)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order forMonth(string $date)
  * @method static \Illuminate\Database\Eloquent\Builder|Order forUser(\App\Models\User $user)
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
@@ -683,6 +688,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereRefundTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereReviewedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereSalesmanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereServiceFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingFee($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingMethodId($value)
@@ -1516,12 +1522,14 @@ namespace App\Models{
  * @property string $username
  * @property string $password
  * @property string|null $phone
+ * @property bool|null $is_active
  * @property string|null $profile_image
  * @property string|null $remember_token
  * @property mixed|null $ags_access_token
+ * @property int|null $salesman_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string|null $stripe_id
  * @property string|null $pm_type
  * @property string|null $pm_last_four
@@ -1541,6 +1549,7 @@ namespace App\Models{
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
+ * @property-read User|null $salesman
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Cashier\Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
  * @property-read \App\Models\Wallet|null $wallet
@@ -1549,6 +1558,7 @@ namespace App\Models{
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
@@ -1562,6 +1572,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
@@ -1569,9 +1580,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePmType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProfileImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSalesmanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
+ * @method static \Illuminate\Database\Query\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
  */
 	class User extends \Eloquent implements \Tymon\JWTAuth\Contracts\JWTSubject, \App\Contracts\Exportable, \App\Contracts\ExportableWithSort, \Filament\Models\Contracts\FilamentUser, \Filament\Models\Contracts\HasAvatar {}
 }
@@ -1701,6 +1715,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\OrderAddress $billingAddress
  * @property-read \App\Models\Coupon|null $coupon
+ * @property-read \App\Models\VaultShipmentPayment|null $firstVaultShipmentPayment
  * @property-read \App\Models\OrderAddress $shippingAddress
  * @property-read \App\Models\ShippingMethod $shippingMethod
  * @property-read \App\Models\User $user

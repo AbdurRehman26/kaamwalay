@@ -45,7 +45,7 @@ class RefundSuccessfulListener implements ShouldQueue
                 'ORDER_NUMBER' => $order->order_number,
                 'REFUNDED_AMOUNT' => number_format($event->data['amount'], 2),
                 'REFUNDED_AMOUNT_TOTAL' => number_format($order->refund_total, 2),
-                'TOTAL_AMOUNT' => number_format($order->grand_total, 2),
+                'TOTAL_AMOUNT' => number_format(($order->grand_total - $order->amount_paid_from_wallet), 2),
                 'SUB_TOTAL' => number_format($order->service_fee, 2),
                 'SHIPPING_FEE' => number_format($order->shipping_fee, 2),
                 'EXTRA_CHARGE_TOTAL' => $order->extra_charge_total ? '$' . number_format($order->extra_charge_total, 2) : 'N/A',

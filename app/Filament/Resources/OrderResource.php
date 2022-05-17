@@ -12,6 +12,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrderResource extends Resource
 {
@@ -60,7 +61,10 @@ class OrderResource extends Resource
                 Forms\Components\Textarea::make('notes')
                     ->maxLength(65535),
                 BelongsToSelect::make('salesman')
-                    ->relationship('salesman', 'email')->nullable()->searchable(),
+                    // @phpstan-ignore-next-line
+                    ->relationship('salesman', 'email', fn (Builder $query) => $query->salesman())
+                    ->nullable()
+                    ->searchable(),
             ]);
     }
 

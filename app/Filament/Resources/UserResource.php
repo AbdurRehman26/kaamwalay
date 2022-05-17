@@ -11,6 +11,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class UserResource extends Resource
@@ -67,7 +68,10 @@ class UserResource extends Resource
                 TextInput::make('pm_last_four')
                     ->maxLength(4),
                 BelongsToSelect::make('salesman')
-                    ->relationship('salesman', 'email')->nullable()->searchable(),
+                    // @phpstan-ignore-next-line
+                    ->relationship('salesman', 'email', fn (Builder $query) => $query->salesman())
+                    ->nullable()
+                    ->searchable(),
                 Forms\Components\BelongsToManyMultiSelect::make('role')
                     ->relationship('roles', 'name'),
             ]);

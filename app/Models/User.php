@@ -17,6 +17,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -42,7 +43,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'username', 'phone', 'password', 'customer_number', 'profile_image', 'ags_access_token', 'is_active', 'salesman_id'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -132,6 +133,14 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     }
 
     /**
+     * @return BelongsTo<User, User>
+     */
+    public function salesman()
+    {
+        return $this->belongsTo(User::class, 'salesman_id');
+    }
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -169,6 +178,11 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     public function isCustomer(): bool
     {
         return $this->hasRole(config('permission.roles.customer'));
+    }
+
+    public function isSalesman(): bool
+    {
+        return $this->hasRole(config('permission.roles.salesman'));
     }
 
     public function getNameAttribute(): string
@@ -235,6 +249,15 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
     {
         // @phpstan-ignore-next-line
         return $query->role(Role::findByName(config('permission.roles.customer')));
+    }
+
+    /**
+     * @param  Builder <User> $query
+     * @return Builder <User>
+     */
+    public function scopeSalesman(Builder $query): Builder
+    {
+        return $query->role(Role::findByName(config('permission.roles.salesman')));
     }
 
     public function sendPasswordResetNotification($token)

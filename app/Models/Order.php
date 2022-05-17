@@ -60,6 +60,7 @@ class Order extends Model implements Exportable
         'payment_method_discounted_amount',
         'order_step',
         'payment_status',
+        'salesman_id',
     ];
 
     /**
@@ -357,6 +358,14 @@ class Order extends Model implements Exportable
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    /**
+     * @return BelongsTo<User, Order>
+     */
+    public function salesman(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'salesman_id');
     }
 
     /**

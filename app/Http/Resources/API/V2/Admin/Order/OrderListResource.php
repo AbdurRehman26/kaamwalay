@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
  * @property mixed $amount_paid_from_wallet
  * @property mixed $arrived_at
  * @property mixed $created_at
- * @method orderItems()
+ * @property mixed $orderItems
  */
 class OrderListResource extends BaseResource
 {

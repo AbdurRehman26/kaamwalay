@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin\V2;
 
+use App\Events\API\VaultShipment\V2\VaultShipmentStatusChangedEvent;
 use App\Models\VaultShipment;
 use App\Models\VaultShipmentStatus;
 use App\Models\VaultShipmentStatusHistory;
@@ -41,6 +42,8 @@ class VaultShipmentService
       
         $this->addVaultShipmentStatusHistory(VaultShipmentStatus::SHIPPED, $vaultShipment);
         
+        VaultShipmentStatusChangedEvent::dispatch($vaultShipment, VaultShipmentStatus::find(VaultShipmentStatus::SHIPPED));
+
         return $vaultShipment;
     }
 

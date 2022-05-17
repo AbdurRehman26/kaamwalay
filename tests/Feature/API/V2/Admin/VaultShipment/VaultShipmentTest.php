@@ -4,7 +4,9 @@ namespace Tests\Feature\API\V2\Admin\VaultShipment;
 
 use App\Models\User;
 use App\Models\VaultShipment;
+use Bus;
 use Database\Seeders\RolesSeeder;
+use Event;
 
 use function Pest\Laravel\seed;
 
@@ -52,6 +54,8 @@ it('admin can get single vault shipment', function () {
 });
 
 test('an admin update vault shipment', function () {
+    Bus::fake();
+    Event::fake(VaultShipmentStatusChangedEvent::class);
     $this->putJson(route('v2.admin.vault-shipments.update-shipment', ['vaultShipment' => $this->vault->id]), [
         'shipping_provider' => 'usps',
         'tracking_number' => '9400100000000000000000',

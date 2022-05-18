@@ -63,8 +63,7 @@ class OrderResource extends Resource
                 BelongsToSelect::make('salesman')
                     // @phpstan-ignore-next-line
                     ->relationship('salesman', 'email', fn (Builder $query) => $query->salesman())
-                    ->nullable()
-                    ->searchable(),
+                    ->nullable(),
             ]);
     }
 

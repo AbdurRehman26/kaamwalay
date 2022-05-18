@@ -257,7 +257,7 @@ class User extends Authenticatable implements JWTSubject, Exportable, Exportable
      */
     public function scopeSalesman(Builder $query): Builder
     {
-        return $query->role(Role::findByName(config('permission.roles.salesman')));
+        return $query->role(Role::findByName(config('permission.roles.salesman'), 'api'));
     }
 
     public function sendPasswordResetNotification($token)

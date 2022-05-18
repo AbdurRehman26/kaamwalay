@@ -21,6 +21,7 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { deleteOrder, setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
+import PayNowStatusNotice from '@dashboard/components/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
 import { SubmissionStatusChip } from '@dashboard/components/SubmissionStatusChip';
 import { useAppDispatch } from '@dashboard/redux/hooks';
@@ -36,7 +37,7 @@ interface SubmissionTableRowProps {
     disabled?: boolean;
     isSm?: boolean;
     orderCustomerShipment: null | ShipmentEntity;
-    datePlaced?: Date | Moment | null;
+    datePlaced?: Date | null;
     dateArrived?: Date | Moment | null;
     paymentStatus?: PaymentStatusEnum;
 }
@@ -154,6 +155,9 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
     );
     const handleCloseOptions = useCallback(() => setAnchorEl(null), [setAnchorEl]);
     const dispatch = useAppDispatch();
+
+    const endTime = datePlaced ? new Date(new Date(datePlaced).getTime() + 86400000) : 0;
+    const timeInMs = datePlaced && new Date() <= endTime ? new Date(datePlaced).getTime() + 86400000 : 0;
 
     const handleOption = useCallback(
         (option: Options) => async (e: MouseEvent<HTMLElement>) => {
@@ -278,7 +282,18 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Menu>
                         </TableCell>
                     </TableRow>
-                    {!isPaid ? (
+                    {timeInMs !== 0 ? (
+                        <TableRow>
+                            <TableCell colSpan={8}>
+                                <PayNowStatusNotice
+                                    id={id}
+                                    countdownTimestampMs={timeInMs}
+                                    hasConfirmationPage={false}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    ) : null}
+                    {!isPaid && timeInMs === 0 ? (
                         <TableRow>
                             <TableCell colSpan={8}>
                                 <PaymentStatusNotice
@@ -369,7 +384,16 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                             </Typography>
                             <SubmissionStatusChip color={status} label={OrderStatusEnum[status]} />
                         </Grid>
-                        {!isPaid ? (
+                        {timeInMs !== 0 ? (
+                            <Grid mt={3}>
+                                <PayNowStatusNotice
+                                    id={id}
+                                    countdownTimestampMs={timeInMs}
+                                    hasConfirmationPage={false}
+                                />
+                            </Grid>
+                        ) : null}
+                        {!isPaid && timeInMs === 0 ? (
                             <Grid mt={3}>
                                 <PaymentStatusNotice
                                     id={id}

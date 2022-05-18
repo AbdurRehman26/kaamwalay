@@ -46,6 +46,7 @@
         "class-transformer": "0.5.1",
         "class-validator": "0.13.2",
         "classnames": "2.3.1",
+        "dayjs": "^1.11.2",
         "debug": "4.3.4",
         "formik": "2.2.9",
         "hash.js": "1.1.7",
@@ -59,8 +60,8 @@
         "object-hash": "3.0.0",
         "os-browserify": "^0.3.0",
         "polished": "4.1.4",
-        "qs": "6.10.3",
         "process": "^0.11.10",
+        "qs": "6.10.3",
         "react": "17.0.2",
         "react-awesome-lightbox": "1.8.1",
         "react-dom": "17.0.2",
@@ -79,9 +80,9 @@
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
         "svgo": "2.8.0",
-        "yargs": "17.4.0",
         "url": "^0.11.0",
         "web3": "^1.7.1",
+        "yargs": "17.4.0",
         "yup": "0.32.11"
     },
     "devDependencies": {

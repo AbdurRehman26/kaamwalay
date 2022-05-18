@@ -76,7 +76,7 @@ function OrderReviewSection() {
                     </>
                 ) : null}
             </div>
-            {shippingMethod?.id !== ShippingMethodType.VaultStorageID ? (
+            {shippingMethod?.code !== ShippingMethodType.VaultStorage ? (
                 <div className={classes.orderItemsColumn}>
                     <OrderDetailItem title={'Shipping Address'} editStep={2}>
                         <Typography

@@ -4,6 +4,7 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import React from 'react';
 import NumberFormat from 'react-number-format';
+import { ShippingMethodType } from '@shared/constants/ShippingMethodType';
 import OrderDetailItem from '@dashboard/components/SubmissionOrderReview/OrderDetailItem';
 import Spacer from '@dashboard/components/SubmissionOrderReview/Spacer';
 import useStyles from '@dashboard/components/SubmissionOrderReview/style';
@@ -75,7 +76,7 @@ function OrderReviewSection() {
                     </>
                 ) : null}
             </div>
-            {shippingMethod?.name !== 'Vault Storage' ? (
+            {shippingMethod?.id !== ShippingMethodType.VaultStorageID ? (
                 <div className={classes.orderItemsColumn}>
                     <OrderDetailItem title={'Shipping Address'} editStep={2}>
                         <Typography

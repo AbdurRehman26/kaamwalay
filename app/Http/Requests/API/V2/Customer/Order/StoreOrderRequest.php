@@ -30,7 +30,7 @@ class StoreOrderRequest extends V1StoreOrderRequest
             'shipping_address.phone' => ['required', 'string'],
             'shipping_address.flat' => ['nullable', 'string'],
             'shipping_address.save_for_later' => ['required', 'boolean'],
-            'shipping_address.country_id' => ['required', 'integer'],
+            'shipping_address.country_id' => ['sometimes', 'nullable', 'exists:countries,id'],
             'billing_address' => ['required', 'array'],
             'billing_address.first_name' => ['required', 'string'],
             'billing_address.last_name' => ['required', 'string'],
@@ -41,7 +41,7 @@ class StoreOrderRequest extends V1StoreOrderRequest
             'billing_address.phone' => ['required', 'string'],
             'billing_address.flat' => ['nullable', 'string'],
             'billing_address.same_as_shipping' => ['required', 'boolean'],
-            'billing_address.country_id' => ['required', 'integer'],
+            'billing_address.country_id' => ['sometimes', 'nullable', 'exists:countries,id'],
             'shipping_method' => ['required', 'array'],
             'shipping_method.id' => ['required', 'integer', 'exists:shipping_methods,id'],
             'payment_by_wallet' => [

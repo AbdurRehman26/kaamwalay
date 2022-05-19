@@ -56,7 +56,7 @@ class OrderPaymentProcessedNotification extends Notification
         $customerFullName = $this->order->user->getFullName();
 
         if (empty($customerFullName)) {
-            $customerFullName = $this->order->shippingAddress->getFullName();
+            $customerFullName = $this->order->shippingAddress?->getFullName();
         }
 
         return "$customerFullName, {$this->order->grand_total}, $paymentCode, {$this->order->order_number}, $totalCards";

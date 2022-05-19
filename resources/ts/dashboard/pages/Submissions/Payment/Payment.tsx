@@ -26,6 +26,7 @@ import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { APIService } from '@shared/services/APIService';
 import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
+import PayNowStatusNotice from '@dashboard/components/PayNowStatusNotice';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';
@@ -52,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '100%',
         justifyContent: 'space-between',
         marginBottom: 20,
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
+        },
     },
     leftSideContainer: {
         marginTop: '12px',
@@ -340,6 +344,9 @@ export function Payment() {
         [order.data?.shippingAddress, order.data?.billingAddress],
     );
 
+    const endTime = new Date(new Date(order.data?.createdAt).getTime() + 86400000);
+    const timeInMs = new Date() <= endTime ? new Date(order.data?.createdAt).getTime() + 86400000 : 0;
+
     useEffect(() => {
         schema
             .isValid({
@@ -502,12 +509,22 @@ export function Payment() {
                             Pay For Submission
                         </Typography>
                     </div>
-
-                    <PaymentStatusChip
-                        color={paymentStatus}
-                        label={PaymentStatusMap[paymentStatus]}
-                        mode={'customer'}
-                    />
+                    {timeInMs !== 0 ? (
+                        <Grid mt={'20px'}>
+                            <PayNowStatusNotice
+                                id={order.data?.id}
+                                countdownTimestampMs={timeInMs}
+                                hasConfirmationPage={false}
+                                hasPay={true}
+                            />
+                        </Grid>
+                    ) : (
+                        <PaymentStatusChip
+                            color={paymentStatus}
+                            label={PaymentStatusMap[paymentStatus]}
+                            mode={'customer'}
+                        />
+                    )}
                 </div>
 
                 <Divider light />

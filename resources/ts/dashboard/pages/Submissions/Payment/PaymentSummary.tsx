@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
@@ -498,8 +499,12 @@ export function PaymentSummary() {
                         </Typography>
                     </div>
                 </div>
-                <Divider light />
             </div>
+            <Box sx={{ background: '#F5F5F5', padding: '15px' }}>
+                <Typography sx={{ fontSize: '12px', background: '#F5F5F5' }}>
+                    You will earn <b>${(getPreviewTotal() * 5) / 100}</b> in credit by paying now.
+                </Typography>
+            </Box>
         </Paper>
     );
 }

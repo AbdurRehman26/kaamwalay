@@ -270,7 +270,12 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
             </Paper>
             {timeInMs !== 0 ? (
                 <Grid mt={'20px'}>
-                    <PayNowStatusNotice id={orderId} countdownTimestampMs={timeInMs} hasConfirmationPage={true} />
+                    <PayNowStatusNotice
+                        id={orderId}
+                        countdownTimestampMs={timeInMs}
+                        hasConfirmationPage={true}
+                        hasPay={false}
+                    />
                 </Grid>
             ) : null}
             {data?.paymentStatus !== PaymentStatusEnum.PAID && timeInMs === 0 ? (

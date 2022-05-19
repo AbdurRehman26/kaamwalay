@@ -15,14 +15,11 @@ function getRemainingHours(nowDayjs: any, timestampDayjs: any) {
     return padWithZeros(hours, 2);
 }
 
-function getRemainingDays(nowDayjs: any, timestampDayjs: any) {
-    const days = timestampDayjs.diff(nowDayjs, 'days');
-    return days.toString();
-}
-
 function padWithZeros(number: any, minLength: any) {
     const numberString = number.toString();
-    if (numberString.length >= minLength) return numberString;
+    if (numberString.length >= minLength) {
+        return numberString;
+    }
     return '0'.repeat(minLength - numberString.length) + numberString;
 }
 
@@ -34,7 +31,6 @@ export function getRemainingTimeUntilMsTimestamp(timestampMs: any) {
             seconds: '00',
             minutes: '00',
             hours: '00',
-            days: '00',
         };
     }
 
@@ -42,7 +38,6 @@ export function getRemainingTimeUntilMsTimestamp(timestampMs: any) {
         seconds: getRemainingSeconds(nowDayjs, timestampDayjs),
         minutes: getRemainingMinutes(nowDayjs, timestampDayjs),
         hours: getRemainingHours(nowDayjs, timestampDayjs),
-        days: getRemainingDays(nowDayjs, timestampDayjs),
     };
 }
 

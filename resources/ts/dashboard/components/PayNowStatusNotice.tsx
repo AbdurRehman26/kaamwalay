@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
@@ -9,6 +10,18 @@ import { useNavigate } from 'react-router-dom';
 import { getRemainingTimeUntilMsTimestamp } from './Counter';
 
 const CardDiv = styled(Card)({
+    border: '1px solid rgba(218, 102, 18, 1)',
+
+    '.BoldTitle': {
+        color: '#DA6612',
+    },
+});
+
+const PaperDiv = styled(Paper)({
+    border: '1px solid rgba(218, 102, 18, 1)',
+    padding: '15px 15px',
+    background: 'rgba(218, 102, 18, 0.08)',
+
     '.BoldTitle': {
         color: '#DA6612',
     },
@@ -39,17 +52,17 @@ interface PayNowProps {
     id: number;
     countdownTimestampMs: number;
     hasConfirmationPage: boolean;
+    hasPay: boolean;
 }
 
 export default function PaynowStatusNotice(props: PayNowProps) {
     const navigate = useNavigate();
-    const { id, countdownTimestampMs, hasConfirmationPage } = props;
+    const { id, countdownTimestampMs, hasConfirmationPage, hasPay } = props;
 
     const defaultRemainingTime = {
         seconds: '00',
         minutes: '00',
         hours: '00',
-        days: '00',
     };
 
     const [remainingTime, setRemainingTime] = useState(defaultRemainingTime);
@@ -64,9 +77,22 @@ export default function PaynowStatusNotice(props: PayNowProps) {
     function updateRemainingTime(countdown: any) {
         setRemainingTime(getRemainingTimeUntilMsTimestamp(countdown));
     }
+    if (hasPay === true) {
+        return (
+            <PaperDiv>
+                <Typography sx={{ fontSize: '12px' }}>
+                    <b className={'BoldTitle'}>Earn 5% </b>
+                    <b>in the credit by paying in the next</b> {''}
+                    <b className={'BoldTitle'}>
+                        {remainingTime.hours}h : {remainingTime.minutes}m : {remainingTime.seconds}s
+                    </b>
+                </Typography>
+            </PaperDiv>
+        );
+    }
 
     return (
-        <CardDiv sx={{ border: '1px solid rgba(218, 102, 18, 1)' }}>
+        <CardDiv>
             {hasConfirmationPage ? (
                 <Grid sx={styles.cardTitle}>
                     <Typography sx={{ fontSize: '20px' }}>

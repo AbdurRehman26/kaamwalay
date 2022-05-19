@@ -289,6 +289,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                     id={id}
                                     countdownTimestampMs={timeInMs}
                                     hasConfirmationPage={false}
+                                    hasPay={false}
                                 />
                             </TableCell>
                         </TableRow>
@@ -390,6 +391,7 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                     id={id}
                                     countdownTimestampMs={timeInMs}
                                     hasConfirmationPage={false}
+                                    hasPay={false}
                                 />
                             </Grid>
                         ) : null}

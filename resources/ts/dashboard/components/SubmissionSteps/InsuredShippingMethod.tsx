@@ -366,11 +366,34 @@ export function InsuredShippingMethod() {
                     </div>
                     <Box marginBottom={'16px'} />
                     <div className={classes.inputsRow01}>
-                        <div className={classes.fieldContainer} style={{ width: '47%' }}>
-                            <Typography className={classes.methodDescription}>First Name</Typography>
+                        <div className={classes.fieldContainer} style={{ width: '100%' }}>
+                            <Typography className={classes.methodDescription}>Country</Typography>
+                            <Select
+                                fullWidth
+                                native
+                                disabled={disableAllInputs}
+                                value={state.id || 'none'}
+                                onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
+                                placeholder={'Select Country'}
+                                variant={'outlined'}
+                                style={{ height: '43px' }}
+                            >
+                                <option value="none">Select a country</option>
+                                {availableStates.map((item: any) => (
+                                    <option key={item.id} value={item.id}>
+                                        {item.code}
+                                    </option>
+                                ))}
+                            </Select>
+                        </div>
+                    </div>
+
+                    <div className={classes.inputsRow02}>
+                        <div className={classes.fieldContainer} style={{ width: '100%' }}>
+                            <Typography className={classes.methodDescription}>Full Name</Typography>
                             <TextField
                                 style={{ margin: 8, marginLeft: 0 }}
-                                placeholder="Enter First Name"
+                                placeholder="Enter Full Name"
                                 disabled={disableAllInputs}
                                 value={firstName}
                                 onChange={(e: any) => updateField('firstName', e.target.value)}
@@ -383,7 +406,7 @@ export function InsuredShippingMethod() {
                                 }}
                             />
                         </div>
-                        <div className={classes.fieldContainer} style={{ width: '47%' }}>
+                        {/* <div className={classes.fieldContainer} style={{ width: '47%' }}>
                             <Typography className={classes.methodDescription}>Last Name</Typography>
                             <TextField
                                 style={{ margin: 8, marginLeft: 0 }}
@@ -399,12 +422,15 @@ export function InsuredShippingMethod() {
                                     shrink: true,
                                 }}
                             />
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className={classes.inputsRow02}>
-                        <div className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}>
-                            <Typography className={classes.methodDescription}>Address</Typography>
+                        <div
+                            className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}
+                            style={{ width: '100%' }}
+                        >
+                            <Typography className={classes.methodDescription}>Address Line #1</Typography>
                             <TextField
                                 style={{ margin: 8, marginLeft: 0 }}
                                 placeholder="Enter Street Address"
@@ -420,7 +446,7 @@ export function InsuredShippingMethod() {
                                 }}
                             />
                         </div>
-                        {!isMobile ? (
+                        {/* {!isMobile ? (
                             <div className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}>
                                 <Typography className={classes.methodDescription}>Apt # (optional)</Typography>
                                 <TextField
@@ -438,7 +464,49 @@ export function InsuredShippingMethod() {
                                     }}
                                 />
                             </div>
-                        ) : null}
+                        ) : null} */}
+                    </div>
+
+                    <div className={classes.inputsRow02}>
+                        <div
+                            className={`${classes.fieldContainer} ${classes.addressFieldContainer}`}
+                            style={{ width: '100%' }}
+                        >
+                            <Typography className={classes.methodDescription}>Address Line #2 (Optional)</Typography>
+                            <TextField
+                                style={{ margin: 8, marginLeft: 0 }}
+                                placeholder="Enter apt, suite, building, floor etc."
+                                fullWidth
+                                disabled={disableAllInputs}
+                                value={address}
+                                onChange={(e: any) => updateField('address', e.target.value)}
+                                size={'small'}
+                                variant={'outlined'}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
+                        {/* {!isMobile ? (
+                            <div className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}>
+                                <Typography className={classes.methodDescription}>Apt # (optional)</Typography>
+                                <TextField
+                                    style={{ margin: 8, marginLeft: 0 }}
+                                    placeholder="Apt #"
+                                    fullWidth
+                                    disabled={disableAllInputs}
+                                    value={flat}
+                                    onChange={(e: any) => updateField('flat', e.target.value)}
+                                    size={'small'}
+                                    variant={'outlined'}
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </div>
+                        ) : null} */}
                     </div>
 
                     <div className={classes.inputsRow02}>

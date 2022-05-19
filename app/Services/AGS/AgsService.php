@@ -101,9 +101,7 @@ class AgsService
                 empty($data['results'][0]['back_scan'])
             )
         ) {
-            return [
-                'grades_available' => [],
-            ];
+            return [];
         }
 
         return $this->prepareGeneratedImagesForPublicPage($data['results'][0]);

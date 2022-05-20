@@ -156,13 +156,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function PaymentSummary() {
+interface PaymentSummaryProps {
+    timeInMs: number;
+}
+
+export function PaymentSummary(props: PaymentSummaryProps) {
     const classes = useStyles();
     const notifications = useNotifications();
     const stripe = useStripe();
     const apiService = useInjectable(APIService);
     const dispatch = useAppDispatch();
 
+    const { timeInMs } = props;
     const [isStripePaymentLoading, setIsStripePaymentLoading] = useState(false);
     const serviceLevelPrice = useAppSelector((state) => state.newSubmission?.step01Data?.selectedServiceLevel.price);
     const paymentMethodID = useAppSelector((state) => state.newSubmission.step04Data.paymentMethodId);
@@ -500,11 +505,13 @@ export function PaymentSummary() {
                     </div>
                 </div>
             </div>
-            <Box sx={{ background: '#F5F5F5', padding: '15px' }}>
-                <Typography sx={{ fontSize: '12px', background: '#F5F5F5' }}>
-                    You will earn <b>${(getPreviewTotal() * 5) / 100}</b> in credit by paying now.
-                </Typography>
-            </Box>
+            {timeInMs !== 0 ? (
+                <Box sx={{ background: '#F5F5F5', padding: '15px' }}>
+                    <Typography sx={{ fontSize: '12px', background: '#F5F5F5' }}>
+                        You will earn <b>${(getPreviewTotal() * 5) / 100}</b> in credit by paying now.
+                    </Typography>
+                </Box>
+            ) : null}
         </Paper>
     );
 }

@@ -24,7 +24,7 @@
 
             $(function() {
                 $('.feed-view__slider--js').slick({
-                    infinite: true,
+                    infinite: false,
                     arrows: true,
                     dots: false,
                     speed: 300,
@@ -58,6 +58,11 @@
         </script>
     </x-slot>
     @if($grades_available)
+        @if($is_fake)
+            <section class="feed-view__warning">
+                WARNING: This card is an altered shadowless card with a fake 1st edition stamp. Do not purchase or trade this card. If you have purchased or traded for this card, please request a refund immediately and report it right away.
+            </section>
+        @endif
         <header class="feed-view__header">
             <div class="feed-view__header__overlay">
                 <img class="feed-view__header__overlay-background" src="{{ asset('assets/images/pokemon-wallpaper.jpeg') }}"

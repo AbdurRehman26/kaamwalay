@@ -143,5 +143,6 @@ return [
         'admin' => 'admin',
         'customer' => 'customer',
         'super-admin' => 'super-admin',
+        'salesman' => 'salesman',
     ],
 ];

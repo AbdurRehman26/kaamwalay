@@ -15,6 +15,8 @@ use App\Services\Admin\V2\OrderStatusHistoryService;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\WithFaker;
 
+use function Pest\Laravel\assertDatabaseHas;
+
 uses(WithFaker::class);
 
 beforeEach(function () {
@@ -722,4 +724,64 @@ test('an order needs addresses when shipping method is insured', function () {
         'shipping_address' => 'The shipping address field is required.',
         'billing_address' => 'The billing address field is required.',
     ]);
+});
+
+test('an order has salesman if customer has a salesman assigned', function () {
+    $salesman = User::factory()->create();
+    $this->user->salesman()->associate($salesman)->save();
+    $this->actingAs($this->user);
+
+    Event::fake();
+
+    $response = $this->postJson('/api/v2/customer/orders', [
+        'payment_plan' => [
+            'id' => $this->paymentPlan->id,
+        ],
+        'items' => [
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+            [
+                'card_product' => [
+                    'id' => $this->cardProduct->id,
+                ],
+                'quantity' => 1,
+                'declared_value_per_unit' => 500,
+            ],
+        ],
+        'shipping_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'save_for_later' => true,
+        ],
+        'billing_address' => [
+            'first_name' => 'First',
+            'last_name' => 'Last',
+            'address' => 'Test address',
+            'city' => 'Test',
+            'state' => 'AB',
+            'zip' => '12345',
+            'phone' => '1234567890',
+            'flat' => '43',
+            'same_as_shipping' => true,
+        ],
+        'customer_address' => [
+            'id' => null,
+        ],
+        'shipping_method' => [
+            'id' => $this->shippingMethod->id,
+        ],
+    ]);
+    $response->assertSuccessful();
+    assertDatabaseHas('orders', ['id' => $response->json('data.id'), 'salesman_id' => $salesman->id]);
 });

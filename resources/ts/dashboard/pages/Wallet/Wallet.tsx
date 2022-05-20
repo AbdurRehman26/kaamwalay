@@ -95,7 +95,7 @@ export function Wallet() {
                     No Wallet History
                 </Typography>
                 <Typography variant={'caption'} color={'textSecondary'} align={'center'}>
-                    You have no wallet history. Add to your wallet to get started.
+                    No funds have been added to your wallet, yet.
                 </Typography>
             </Stack>
         );

@@ -64,7 +64,7 @@ class OrderService extends V1OrderService
         $orderPayment = OrderPaymentResource::make($order->firstOrderPayment)->resolve();
 
         $data["SUBMISSION_NUMBER"] = $order->order_number;
-        $data["TOTAL"] = number_format($order->grand_total, 2);
+        $data["TOTAL"] = number_format(($order->grand_total - $order->amount_paid_from_wallet), 2);
         $data["BILLING_ADDRESS"] = ! empty($order->billingAddress) ? $this->getAddressData($order->billingAddress) : [];
         $data["PAYMENT_METHOD"] = $this->getOrderPaymentText($orderPayment);
 
@@ -83,7 +83,7 @@ class OrderService extends V1OrderService
 
         $data['SUBTOTAL'] = number_format($order->service_fee, 2);
         $data['SHIPPING_FEE'] = number_format($order->shipping_fee, 2);
-        $data['TOTAL'] = number_format($order->grand_total, 2);
+        $data['TOTAL'] = number_format(($order->grand_total - $order->amount_paid_from_wallet), 2);
 
         $data['SERVICE_LEVEL'] = $paymentPlan->price;
         $data['NUMBER_OF_CARDS'] = $orderItems->sum('quantity');

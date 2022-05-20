@@ -15,22 +15,18 @@ const CardDiv = styled(Card)({
     '.BoldTitle': {
         color: '#DA6612',
     },
-    '.payNowButton': {
+    '.PayNowButton': {
         marginTop: 1,
         padding: '12px 36px 12px 36px',
     },
-    '.payNowButtonConfirmation': {
+    '.PayNowButtonConfirmation': {
         marginTop: 1,
         padding: '12px 36px 12px 36px',
         width: '100%',
     },
-    '.cardTitle': {
+    '.CardTitle': {
         background: '#DA6612',
         color: '#ffffff',
-        padding: '15px 15px',
-    },
-    '.cardHeader': {
-        background: 'rgba(218, 102, 18, 0.08)',
         padding: '15px 15px',
     },
 });
@@ -91,7 +87,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
     return (
         <CardDiv>
             {hasConfirmationPage ? (
-                <Grid className={'cardTitle'}>
+                <Grid className={'CardTitle'}>
                     <Typography sx={{ fontSize: '20px' }}>
                         Pay in the next{' '}
                         <b>
@@ -133,7 +129,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
                     onClick={() => navigate(`/submissions/${id}/pay`)}
                     variant={'contained'}
                     color={'primary'}
-                    className={hasConfirmationPage ? 'payNowButtonConfirmation' : 'payNowButton'}
+                    className={hasConfirmationPage ? 'PayNowButtonConfirmation' : 'PayNowButton'}
                 >
                     PAY NOW
                 </Button>

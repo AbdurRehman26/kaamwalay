@@ -1,6 +1,6 @@
 /**
- * @api {get} /v2/customer/addresses/states List States
- * @apiName List States
+ * @api {get} /v2/customer/addresses/countries List Countries
+ * @apiName List Countries
  * @apiGroup Customer-Addresses
  *
  * @apiVersion 2.0.0
@@ -16,18 +16,21 @@
  *          "data": [
  *              {
  *                  "id": 1,
- *                  "code": "AL",
- *                  "name": "Alabama"
+ *                  "code": "US",
+ *                  "name": "United States",
+ *                  "is_enabled": 1
  *              },
  *              {
  *                  "id": 2,
- *                  "code": "AK",
- *                  "name": "Alaska"
+ *                  "code": "AU",
+ *                  "name": "Australia",
+ *                  "is_enabled": 1
  *              },
  *              {
  *                  "id": 3,
- *                  "code": "AS",
- *                  "name": "American Samoa"
+ *                  "code": "CA",
+ *                  "name": "Canada",
+ *                  "is_enabled": 1
  *              }
  *          ]
  *      }

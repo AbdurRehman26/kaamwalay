@@ -15,6 +15,24 @@ const CardDiv = styled(Card)({
     '.BoldTitle': {
         color: '#DA6612',
     },
+    '.payNowButton': {
+        marginTop: 1,
+        padding: '12px 36px 12px 36px',
+    },
+    '.payNowButtonConfirmation': {
+        marginTop: 1,
+        padding: '12px 36px 12px 36px',
+        width: '100%',
+    },
+    '.cardTitle': {
+        background: '#DA6612',
+        color: '#ffffff',
+        padding: '15px 15px',
+    },
+    '.cardHeader': {
+        background: 'rgba(218, 102, 18, 0.08)',
+        padding: '15px 15px',
+    },
 });
 
 const PaperDiv = styled(Paper)({
@@ -26,27 +44,6 @@ const PaperDiv = styled(Paper)({
         color: '#DA6612',
     },
 });
-
-const styles = {
-    payNowButton: {
-        marginTop: 1,
-        padding: '12px 36px 12px 36px',
-    },
-    payNowButtonConfirmation: {
-        marginTop: 1,
-        padding: '12px 36px 12px 36px',
-        width: '100%',
-    },
-    cardTitle: {
-        background: '#DA6612',
-        color: '#ffffff',
-        padding: '15px 15px',
-    },
-    cardHeader: {
-        background: 'rgba(218, 102, 18, 0.08)',
-        padding: '15px 15px',
-    },
-};
 
 interface PayNowProps {
     id: number;
@@ -94,7 +91,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
     return (
         <CardDiv>
             {hasConfirmationPage ? (
-                <Grid sx={styles.cardTitle}>
+                <Grid className={'cardTitle'}>
                     <Typography sx={{ fontSize: '20px' }}>
                         Pay in the next{' '}
                         <b>
@@ -136,7 +133,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
                     onClick={() => navigate(`/submissions/${id}/pay`)}
                     variant={'contained'}
                     color={'primary'}
-                    sx={hasConfirmationPage ? styles.payNowButtonConfirmation : styles.payNowButton}
+                    className={hasConfirmationPage ? 'payNowButtonConfirmation' : 'payNowButton'}
                 >
                     PAY NOW
                 </Button>

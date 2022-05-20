@@ -26,6 +26,7 @@ function padWithZeros(number: any, minLength: any) {
 export function getRemainingTimeUntilMsTimestamp(timestampMs: any) {
     const timestampDayjs = dayjs(timestampMs);
     const nowDayjs = dayjs();
+
     if (timestampDayjs.isBefore(nowDayjs)) {
         return {
             seconds: '00',

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getRemainingTimeUntilMsTimestamp } from './Counter';
+import { getRemainingTimeUntilMsTimestamp } from '@shared/components/Counter';
 
 const CardDiv = styled(Card)({
     border: '1px solid rgba(218, 102, 18, 1)',

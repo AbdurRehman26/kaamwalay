@@ -5,8 +5,8 @@ namespace App\Listeners\API\Order\V2;
 use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
-use App\Models\User;
 use App\Models\ShippingMethod;
+use App\Models\User;
 use App\Models\UserCard;
 use App\Notifications\Order\OrderStatusChangedNotification;
 use App\Services\Admin\V2\OrderService as AdminOrderService;
@@ -104,7 +104,7 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleGraded(OrderStatusChangedEvent $event): void
     {
-        $shippingMethod = ShippingMethod::where('id',$event->order->shipping_method_id)->first();
+        $shippingMethod = ShippingMethod::where('id', $event->order->shipping_method_id)->first();
         $this->popReportService->updatePopReportsForOrder($event->order);
 
         $this->sendEmail(
@@ -112,7 +112,7 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
             [
                 'ORDER_NUMBER' => $event->order->order_number,
-                'SHIPPING_METHOD' => $shippingMethod->code
+                'SHIPPING_METHOD' => $shippingMethod->code,
             ]
         );
 

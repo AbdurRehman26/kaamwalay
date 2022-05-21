@@ -70,6 +70,7 @@ export interface ShippingSubmissionState {
     existingAddresses: Address[] | [];
     selectedAddress: Address;
     availableStatesList: { name: string; code: string; id: number }[];
+    availableCountriesList: [];
     saveForLater: boolean;
     fetchingStatus: string | null;
     disableAllShippingInputs: boolean;
@@ -236,6 +237,7 @@ const initialState: NewSubmissionSliceState = {
             isDefaultShipping: false,
             isDefaultBilling: false,
         },
+        availableCountriesList: [],
         availableStatesList: [
             {
                 name: '',
@@ -337,6 +339,13 @@ export const getStatesList = createAsyncThunk('newSubmission/getStatesList', asy
     const endpoint = apiService.createEndpoint('customer/addresses/states');
     const americanStates = await endpoint.get('');
     return americanStates.data;
+});
+
+export const getCountriesList = createAsyncThunk('newSubmission/getCountriesList', async () => {
+    const apiService = app(APIService);
+    const endpoint = apiService.createEndpoint('customer/addresses/countries');
+    const countries = await endpoint.get('');
+    return countries.data;
 });
 
 export const getShippingFee = createAsyncThunk(
@@ -617,6 +626,7 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.saveForLater = action.payload;
         },
         updateShippingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
+            console.log('AA ', action.payload.newValue);
             // @ts-ignore
             state.step03Data.selectedAddress[action.payload.fieldName] = action.payload.newValue;
         },

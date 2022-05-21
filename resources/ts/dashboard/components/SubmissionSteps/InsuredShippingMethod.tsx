@@ -170,6 +170,7 @@ export function InsuredShippingMethod() {
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
+    const availableCountries = useAppSelector((state) => state.newSubmission.step03Data?.availableCountriesList);
     const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
     const classes = useStyles({ disableAllInputs });
@@ -203,6 +204,10 @@ export function InsuredShippingMethod() {
             );
         }
     }
+
+    // function getCountriesList() {
+
+    // }
 
     useEffect(
         () => {
@@ -372,14 +377,14 @@ export function InsuredShippingMethod() {
                                 fullWidth
                                 native
                                 disabled={disableAllInputs}
-                                value={state.id || 'none'}
+                                value={'none'}
                                 onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
                                 placeholder={'Select Country'}
                                 variant={'outlined'}
                                 style={{ height: '43px' }}
                             >
                                 <option value="none">Select a country</option>
-                                {availableStates.map((item: any) => (
+                                {availableCountries.map((item: any) => (
                                     <option key={item.id} value={item.id}>
                                         {item.code}
                                     </option>

@@ -514,8 +514,8 @@ export function Payment() {
                             <PayNowStatusNotice
                                 id={order.data?.id}
                                 countdownTimestampMs={timeInMs}
-                                hasConfirmationPage={false}
-                                hasPay={true}
+                                isConfirmationPage={false}
+                                isPayPage={true}
                             />
                         </Grid>
                     ) : (

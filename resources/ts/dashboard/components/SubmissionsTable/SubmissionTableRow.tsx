@@ -288,8 +288,8 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 <PayNowStatusNotice
                                     id={id}
                                     countdownTimestampMs={timeInMs}
-                                    hasConfirmationPage={false}
-                                    hasPay={false}
+                                    isConfirmationPage={false}
+                                    isPayPage={false}
                                 />
                             </TableCell>
                         </TableRow>
@@ -390,8 +390,8 @@ export function SubmissionTableRow(props: SubmissionTableRowProps) {
                                 <PayNowStatusNotice
                                     id={id}
                                     countdownTimestampMs={timeInMs}
-                                    hasConfirmationPage={false}
-                                    hasPay={false}
+                                    isConfirmationPage={false}
+                                    isPayPage={false}
                                 />
                             </Grid>
                         ) : null}

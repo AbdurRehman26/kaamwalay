@@ -273,8 +273,8 @@ export function ConfirmationSubmissionSidebar({ orderId }: ConfirmationSubmissio
                     <PayNowStatusNotice
                         id={orderId}
                         countdownTimestampMs={timeInMs}
-                        hasConfirmationPage={true}
-                        hasPay={false}
+                        isConfirmationPage={true}
+                        isPayPage={false}
                     />
                 </Grid>
             ) : null}

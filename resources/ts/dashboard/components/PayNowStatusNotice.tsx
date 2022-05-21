@@ -44,13 +44,13 @@ const PaperDiv = styled(Paper)({
 interface PayNowProps {
     id: number;
     countdownTimestampMs: number;
-    hasConfirmationPage: boolean;
-    hasPay: boolean;
+    isConfirmationPage: boolean;
+    isPayPage: boolean;
 }
 
 export default function PaynowStatusNotice(props: PayNowProps) {
     const navigate = useNavigate();
-    const { id, countdownTimestampMs, hasConfirmationPage, hasPay } = props;
+    const { id, countdownTimestampMs, isConfirmationPage, isPayPage } = props;
 
     const defaultRemainingTime = {
         seconds: '00',
@@ -70,7 +70,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
     function updateRemainingTime(countdown: any) {
         setRemainingTime(getRemainingTimeUntilMsTimestamp(countdown));
     }
-    if (hasPay === true) {
+    if (isPayPage === true) {
         return (
             <PaperDiv>
                 <Typography sx={{ fontSize: '12px' }}>
@@ -86,7 +86,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
 
     return (
         <CardDiv>
-            {hasConfirmationPage ? (
+            {isConfirmationPage ? (
                 <Grid className={'CardTitle'}>
                     <Typography sx={{ fontSize: '20px' }}>
                         Pay in the next{' '}
@@ -98,7 +98,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
                 </Grid>
             ) : null}
             <CardContent sx={{ background: 'rgba(218, 102, 18, 0.08)' }}>
-                {hasConfirmationPage ? (
+                {isConfirmationPage ? (
                     <>
                         <Typography variant="body2">
                             If you choose to pay now you <b>EARN 5%</b> in credit to go towards any future order.
@@ -129,7 +129,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
                     onClick={() => navigate(`/submissions/${id}/pay`)}
                     variant={'contained'}
                     color={'primary'}
-                    className={hasConfirmationPage ? 'PayNowButtonConfirmation' : 'PayNowButton'}
+                    className={isConfirmationPage ? 'PayNowButtonConfirmation' : 'PayNowButton'}
                 >
                     PAY NOW
                 </Button>

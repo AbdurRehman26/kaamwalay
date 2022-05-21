@@ -71,8 +71,8 @@ export function ViewSubmission() {
                     <PayNowStatusNotice
                         id={data?.id}
                         countdownTimestampMs={timeInMs}
-                        hasConfirmationPage={false}
-                        hasPay={false}
+                        isConfirmationPage={false}
+                        isPayPage={false}
                     />
                 </Grid>
             ) : null}

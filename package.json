@@ -60,8 +60,8 @@
         "object-hash": "3.0.0",
         "os-browserify": "^0.3.0",
         "polished": "4.1.4",
-        "process": "^0.11.10",
         "qs": "6.10.3",
+        "process": "^0.11.10",
         "react": "17.0.2",
         "react-awesome-lightbox": "1.8.1",
         "react-dom": "17.0.2",
@@ -80,9 +80,9 @@
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
         "svgo": "2.8.0",
+        "yargs": "17.4.0",
         "url": "^0.11.0",
         "web3": "^1.7.1",
-        "yargs": "17.4.0",
         "yup": "0.32.11"
     },
     "devDependencies": {

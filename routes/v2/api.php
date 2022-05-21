@@ -6,6 +6,7 @@ use App\Http\Controllers\API\V2\Auth\LoginController;
 use App\Http\Controllers\API\V2\Auth\RegisterController;
 use App\Http\Controllers\API\V2\Auth\ResetPasswordController;
 use App\Http\Controllers\API\V2\ConfigurationsController;
+use App\Http\Controllers\API\V2\Customer\Address\CountryController;
 use App\Http\Controllers\API\V2\Customer\Address\CustomerAddressController;
 use App\Http\Controllers\API\V2\Customer\Address\StateController;
 use App\Http\Controllers\API\V2\Customer\Cards\CardCategoryController;
@@ -22,10 +23,10 @@ use App\Http\Controllers\API\V2\Customer\Order\UpdateOrderShippingMethodControll
 use App\Http\Controllers\API\V2\Customer\PaymentCardController;
 use App\Http\Controllers\API\V2\Customer\ProfileController;
 use App\Http\Controllers\API\V2\Customer\PushNotificationController;
+use App\Http\Controllers\API\V2\Customer\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Customer\Wallet\WalletController;
 use App\Http\Controllers\API\V2\Files\UploadController;
 use App\Http\Controllers\API\V2\Landings\PopReportController;
-use App\Http\Controllers\API\V2\Customer\VaultShipment\VaultShipmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,6 +51,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('customer')->group(function () {
+    Route::apiResource('addresses/countries', CountryController::class)->only(['index']);
     Route::apiResource('addresses/states', StateController::class)->only(['index', 'show']);
     Route::prefix('orders')->group(function () {
         Route::apiResource('payment-methods', PaymentMethodController::class)->only(['index', 'show']);

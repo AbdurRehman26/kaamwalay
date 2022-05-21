@@ -24,4 +24,9 @@ class Country extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function scopeEnabled($query)
+    {
+        return $query->where('is_enabled', true);
+    }
 }

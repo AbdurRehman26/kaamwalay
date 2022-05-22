@@ -16,6 +16,7 @@ use App\Http\Controllers\API\V2\Admin\Order\OrderPaymentController;
 use App\Http\Controllers\API\V2\Admin\Order\OrderRefundController;
 use App\Http\Controllers\API\V2\Admin\Order\UserCardController;
 use App\Http\Controllers\API\V2\Admin\OrderStatusHistoryController;
+use App\Http\Controllers\API\V2\Admin\VaultShipment\VaultShipmentController;
 use App\Http\Controllers\API\V2\Admin\Wallet\CustomerWalletController;
 use App\Http\Controllers\API\V2\Auth\Admin\LoginController;
 use App\Http\Controllers\API\V2\DataExportController;
@@ -87,6 +88,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('{wallet}/history', [CustomerWalletController::class, 'getTransactionsHistory'])
             ->name('customer.wallet.history');
     });
+    
+    // Vault Shipment
+    Route::prefix('vault-shipments')->group(function () {
+        Route::get('/', [VaultShipmentController::class, 'index'])->name('admin.vault-shipments.index');
+        Route::get('{vaultShipment}', [VaultShipmentController::class, 'show'])->name('admin.vault-shipments.show');
+        Route::put('{vaultShipment}/shipment', [VaultShipmentController::class, 'updateShipment'])->name('admin.vault-shipments.update-shipment');
+    });
 
     Route::post('export-data', DataExportController::class)->name('admin.export-data');
 });
+

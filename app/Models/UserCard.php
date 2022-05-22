@@ -118,6 +118,13 @@ class UserCard extends Model
         return $this->hasOne(VaultShipmentItem::class);
     }
 
+    public function markAsShipped(): bool
+    {
+        $this->shipping_status = UserCardShippingStatus::SHIPPED;
+
+        return $this->save();
+    }
+
     public function storeInVault(): bool
     {
         $this->shipping_status = UserCardShippingStatus::IN_VAULT;

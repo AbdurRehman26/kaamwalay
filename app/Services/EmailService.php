@@ -24,6 +24,7 @@ class EmailService
     public const TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER = 'payment-due';
     public const TEMPLATE_SLUG_CUSTOMER_ORDER_PAID = 'payment-confirmation';
     public const TEMPLATE_SLUG_SUBMISSION_IN_VAULT = 'customer-stored-in-vault';
+    public const TEMPLATE_SLUG_SHIPPED_FROM_VAULT = 'shipped-from-vault';
     /* Transactional End */
 
     /* Marketing Start */
@@ -58,6 +59,7 @@ class EmailService
         self::TEMPLATE_CUSTOMER_PAYMENT_DUE_REMINDER => 'Your Payment is Due!',
         self::TEMPLATE_SLUG_CUSTOMER_ORDER_PAID => 'Thank you for your payment!',
         self::TEMPLATE_SLUG_SUBMISSION_IN_VAULT => 'Your cards are in AGS Vault!',
+        self::TEMPLATE_SLUG_SHIPPED_FROM_VAULT => 'Your cards have shipped from AGS Vault!',
 
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_WHAT_HAPPENED => 'What happened?',
         self::TEMPLATE_SLUG_MARKETING_REGISTERED_NOT_SURE_YET => 'Not sure yet?',

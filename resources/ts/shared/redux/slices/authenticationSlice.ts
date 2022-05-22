@@ -77,7 +77,7 @@ export const registerAction = createAsyncThunk('auth/register', async (input: Si
     }
 });
 
-export const authenticateCheckAction = createAsyncThunk('auth/check', async () => {
+export const authenticateCheckAction = createAsyncThunk('auth/check', async (input, thunkAPI) => {
     const authenticationService = app(AuthenticationService);
     const authenticationRepository = app(AuthenticationRepository);
     const accessToken = await authenticationService.getAccessToken();
@@ -85,11 +85,16 @@ export const authenticateCheckAction = createAsyncThunk('auth/check', async () =
         return null;
     }
 
-    const user = await authenticationRepository.whoami();
-    return {
-        accessToken,
-        user: instanceToPlain(user),
-    };
+    try {
+        const user = await authenticationRepository.whoami();
+        return {
+            accessToken,
+            user: instanceToPlain(user),
+        };
+    } catch (e: any) {
+        thunkAPI.dispatch(revokeAuthAction());
+        return thunkAPI.rejectWithValue(e);
+    }
 });
 
 export const revokeAuthAction = createAsyncThunk('auth/revoke', async () => {

@@ -5,7 +5,6 @@ namespace App\Listeners\API\Order\V2;
 use App\Events\API\Order\V2\OrderStatusChangedEvent;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
-use App\Models\ShippingMethod;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Notifications\Order\OrderStatusChangedNotification;

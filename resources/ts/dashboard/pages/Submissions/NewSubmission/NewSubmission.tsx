@@ -11,6 +11,7 @@ import { ApplicationEventsEnum } from '@shared/constants/ApplicationEventsEnum';
 import { EventCategories, ShippingAddressEvents } from '@shared/constants/GAEventsTypes';
 import { useApplicationEvent } from '@shared/hooks/useApplicationEvent';
 import { useNotifications } from '@shared/hooks/useNotifications';
+import { cx } from '@shared/lib/utils/cx';
 import { googleTagManager } from '@shared/lib/utils/googleTagManager';
 import CompleteSubmissonButton from '../../../components/CompleteSubmissionButton';
 import SubmissionHeader from '../../../components/SubmissionHeader/SubmissionHeader';
@@ -60,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[4],
     },
     buttonsContainerMobile: {
-        padding: 10,
         position: 'static',
     },
     buttonsHolder: {
@@ -199,7 +199,7 @@ export function NewSubmission() {
             <div
                 className={
                     (currentStep === 1 || currentStep === 2 || currentStep === 3) && isMobile
-                        ? classes.buttonsContainerMobile
+                        ? cx(classes.buttonsContainer, classes.buttonsContainerMobile)
                         : classes.buttonsContainer
                 }
             >

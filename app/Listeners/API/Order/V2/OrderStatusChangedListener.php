@@ -104,7 +104,6 @@ class OrderStatusChangedListener implements ShouldQueue
 
     protected function handleGraded(OrderStatusChangedEvent $event): void
     {
-        $shippingMethod = ShippingMethod::where('id', $event->order->shipping_method_id)->first();
         $this->popReportService->updatePopReportsForOrder($event->order);
 
         $this->sendEmail(
@@ -112,7 +111,7 @@ class OrderStatusChangedListener implements ShouldQueue
             EmailService::TEMPLATE_SLUG_SUBMISSION_GRADED,
             [
                 'ORDER_NUMBER' => $event->order->order_number,
-                'SHIPPING_METHOD' => $shippingMethod->code,
+                'SHIPPING_METHOD' => $event->order->shippingMethod->code,
             ]
         );
 

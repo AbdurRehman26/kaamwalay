@@ -39,7 +39,7 @@ beforeEach(function () {
 it('calculates daily unpaid orders stats', function () {
     $getRandomOrder = $this->orders->random()->first();
 
-    $orders = Order::where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+    $orders = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
         ->forDate($getRandomOrder->created_at->toDateString())
         ->sum('grand_total');
 
@@ -51,7 +51,7 @@ it('calculates daily unpaid orders stats', function () {
 it('calculates monthly unpaid orders stats for the current month', function () {
     $getRandomOrder = $this->orders->random()->first();
 
-    $orders = Order::where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
+    $orders = Order::placed()->where('payment_status', '!=', OrderPaymentStatusEnum::PAID->value)
         ->forMonth($getRandomOrder->created_at->toDateString())
         ->sum('grand_total');
 

@@ -78,4 +78,8 @@ return [
         'beams_secret_key' => env('PUSHER_BEAMS_SECRET_KEY'),
     ],
 
+    'easyship' => [
+        'key' => env('EASYSHIP_API_KEY'),
+    ],
+
 ];

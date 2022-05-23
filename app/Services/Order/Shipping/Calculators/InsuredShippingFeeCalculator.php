@@ -17,15 +17,19 @@ class InsuredShippingFeeCalculator
         );
     }
 
-    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems): float
+    public static function calculate(int $totalDeclaredValue, int $totalNumberOfItems, array $shippingAddress = ['country_code' => 'US']): float
     {
-        self::$shippingFee = self::calculateBasicShippingFee($totalDeclaredValue, $totalNumberOfItems);
+        if ($shippingAddress['country_code'] === 'US') {
+            self::$shippingFee = self::calculateBasicShippingFee($totalDeclaredValue, $totalNumberOfItems);
 
-        if (self::additionalShippingFeeIsApplicable($totalDeclaredValue, $totalNumberOfItems)) {
-            self::$shippingFee += self::calculateAdditionalShippingFee($totalDeclaredValue, $totalNumberOfItems);
+            if (self::additionalShippingFeeIsApplicable($totalDeclaredValue, $totalNumberOfItems)) {
+                self::$shippingFee += self::calculateAdditionalShippingFee($totalDeclaredValue, $totalNumberOfItems);
+            }
+
+            return self::$shippingFee;
+        } else {
+            return InternationalInsuredShippingFeeCalculator::calculate($totalNumberOfItems, $shippingAddress);
         }
-
-        return self::$shippingFee;
     }
 
     protected static function calculateTotalDeclaredValue(Collection $orderItems): int

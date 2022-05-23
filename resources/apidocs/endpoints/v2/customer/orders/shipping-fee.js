@@ -10,6 +10,7 @@
  *
  * @apiParam {Number} shippingMethodId unique ID (optional for backward compatibility).
  * @apiParam {Array} items Items for shipping fee calculation
+ * @apiParam {Array} shipping_address Shipping Address details for fee calculation in international shipping (optional for national shippings)
  *
  * @apiParamExample {json} Request-Example:
  *      {
@@ -23,7 +24,17 @@
  *                  "declared_value_per_unit": 1000
  *              }
  *          ],
- *          "shipping_method_id": 1
+ *          "shipping_method_id": 1,
+ *          "shipping_address": {
+ *              "first_name": "test",
+ *              "last_name": "test",
+ *              "address": "1234 Test St",
+ *              "city": "Vancouver",
+ *              "state": "BC",
+ *              "zip": "123 ABC",
+ *              "phone": "123-456-7890",
+ *              "country_code": "CA"
+ *          }
  *      }
  *
  * @apiSuccess {Object} data Shipping Fee data

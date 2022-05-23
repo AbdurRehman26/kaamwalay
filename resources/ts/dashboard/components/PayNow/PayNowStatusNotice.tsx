@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getRemainingTime } from '@shared/components/Counter';
+import PayNowHeading from './PayNowHeading';
 
 const CardDiv = styled(Card)({
     border: '1px solid rgba(218, 102, 18, 1)',
@@ -29,6 +30,9 @@ const CardDiv = styled(Card)({
         color: '#ffffff',
         padding: '15px 15px',
     },
+    '.Title': {
+        color: '#FFFFFF',
+    },
 });
 
 const PaperDiv = styled(Paper)({
@@ -48,7 +52,7 @@ interface PayNowProps {
     isPayPage: boolean;
 }
 
-export default function PaynowStatusNotice(props: PayNowProps) {
+export default function PayNowStatusNotice(props: PayNowProps) {
     const navigate = useNavigate();
     const { id, countdownTimestampMs, isConfirmationPage, isPayPage } = props;
 
@@ -76,9 +80,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
                 <Typography sx={{ fontSize: '12px' }}>
                     <b className={'BoldTitle'}>Earn 5% </b>
                     <b>in the credit by paying in the next</b> {''}
-                    <b className={'BoldTitle'}>
-                        {remainingTime.hours}h : {remainingTime.minutes}m : {remainingTime.seconds}s
-                    </b>
+                    <PayNowHeading remainingTime={remainingTime} hasClass={true} />
                 </Typography>
             </PaperDiv>
         );
@@ -89,11 +91,8 @@ export default function PaynowStatusNotice(props: PayNowProps) {
             {isConfirmationPage ? (
                 <Grid className={'CardTitle'}>
                     <Typography sx={{ fontSize: '20px' }}>
-                        Pay in the next{' '}
-                        <b>
-                            {remainingTime.hours}h : {remainingTime.minutes}m : {remainingTime.seconds}s
-                        </b>{' '}
-                        and get <b>5% back</b> in AGS credit.
+                        Pay in the next <PayNowHeading remainingTime={remainingTime} hasClass={false} /> and get{' '}
+                        <b>5% back</b> in AGS credit.
                     </Typography>
                 </Grid>
             ) : null}
@@ -112,10 +111,7 @@ export default function PaynowStatusNotice(props: PayNowProps) {
                     <>
                         <Typography sx={{ fontSize: '20px' }}>
                             <b>Payment Pending: </b>Pay in the next{' '}
-                            <b className={'BoldTitle'}>
-                                {remainingTime.hours}h : {remainingTime.minutes}m : {remainingTime.seconds}s
-                            </b>{' '}
-                            and get
+                            <PayNowHeading remainingTime={remainingTime} hasClass={true} /> and get
                             <b className={'BoldTitle'}> 5% back</b> in AGS credit.
                         </Typography>
                         <Typography variant="body2" mt={2} mb={2}>

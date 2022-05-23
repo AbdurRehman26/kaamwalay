@@ -11,7 +11,7 @@ import { SubmissionViewBilling } from '@shared/components/SubmissionViewBilling'
 import { SubmissionViewCards } from '@shared/components/SubmissionViewCards';
 import { PaymentStatusEnum } from '@shared/constants/PaymentStatusEnum';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
-import PayNowStatusNotice from '@dashboard/components/PayNowStatusNotice';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
 import { ViewSubmissionHeader } from './ViewSubmissionHeader';
 import { ViewSubmissionInformation } from './ViewSubmissionInformation';

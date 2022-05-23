@@ -17,7 +17,7 @@ import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { font } from '@shared/styles/utils';
-import PayNowStatusNotice from '@dashboard/components/PayNowStatusNotice';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
 import { useConfirmationSubmissionSidebarStyles } from './style';
 

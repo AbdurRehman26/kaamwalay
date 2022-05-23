@@ -21,7 +21,7 @@ import { downloadFromUrl } from '@shared/lib/api/downloadFromUrl';
 import { formatDate } from '@shared/lib/datetime/formatDate';
 import { formatCurrency } from '@shared/lib/utils/formatCurrency';
 import { deleteOrder, setOrderCustomerShipment } from '@shared/redux/slices/ordersSlice';
-import PayNowStatusNotice from '@dashboard/components/PayNowStatusNotice';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import PaymentStatusNotice from '@dashboard/components/PaymentStatusNotice';
 import { SubmissionStatusChip } from '@dashboard/components/SubmissionStatusChip';
 import { useAppDispatch } from '@dashboard/redux/hooks';

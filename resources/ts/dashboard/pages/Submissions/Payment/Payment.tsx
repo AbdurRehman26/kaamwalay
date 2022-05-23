@@ -26,7 +26,7 @@ import { useOrderQuery } from '@shared/redux/hooks/useOrderQuery';
 import { APIService } from '@shared/services/APIService';
 import { ApplyCredit } from '@dashboard/components/ApplyCredit';
 import { ApplyPromoCode } from '@dashboard/components/ApplyPromoCode';
-import PayNowStatusNotice from '@dashboard/components/PayNowStatusNotice';
+import PayNowStatusNotice from '@dashboard/components/PayNow/PayNowStatusNotice';
 import { PaymentForm } from '@dashboard/components/PaymentForm';
 import StripeContainer from '@dashboard/components/PaymentForm/StripeContainer';
 import PaymentMethodItem from '@dashboard/components/PaymentMethodItem';

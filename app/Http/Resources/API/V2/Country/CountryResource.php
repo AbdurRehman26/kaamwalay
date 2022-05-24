@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int $id
  * @property string $code
  * @property string $name
+ * @property string $is_enabled
  */
 class CountryResource extends JsonResource
 {

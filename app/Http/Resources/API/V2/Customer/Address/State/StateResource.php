@@ -3,8 +3,12 @@
 namespace App\Http\Resources\API\V2\Customer\Address\State;
 
 use App\Http\Resources\API\V1\Country\CountryResource;
+use App\Models\State;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin State
+ */
 class StateResource extends JsonResource
 {
     /**

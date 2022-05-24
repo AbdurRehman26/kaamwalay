@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,7 @@ class Country extends Model
      *
      * @var array
      */
-    protected $fillable = ['code', 'name'];
+    protected $fillable = ['code', 'name', 'is_enabled'];
 
     /**
      * The attributes that should be cast to native types.
@@ -23,9 +24,10 @@ class Country extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'is_enabled' => 'boolean',
     ];
 
-    public function scopeEnabled($query)
+    public function scopeEnabled(Builder $query): Builder
     {
         return $query->where('is_enabled', true);
     }

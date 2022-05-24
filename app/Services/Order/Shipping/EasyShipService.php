@@ -3,6 +3,7 @@
 namespace App\Services\Order\Shipping;
 
 use App\Http\APIClients\EasyShipClient;
+use App\Models\ShippingMetric;
 use Log;
 
 class EasyShipService
@@ -33,10 +34,6 @@ class EasyShipService
     public const MAX_CARDS_PER_SLIP = 4;
     public const MAX_CARDS_PER_BOX = 42;
 
-    public const BOX_DEFAULT_RATE_CANADA = 47.3;
-    public const SLIP_DEFAULT_RATE_CANADA = 26.33; //Taken from sample request average
-    public const BOX_DEFAULT_RATE_AUSTRALIA = 55.65;
-    public const SLIP_DEFAULT_RATE_AUSTRALIA = 24.55; //Taken from sample request average
 
     public function calculatePackageWeight(int $cardsNumber, int $packageType): float
     {
@@ -89,35 +86,18 @@ class EasyShipService
 
     public function calculateDefaultPrice(array $parcels, string $countryCode): float
     {
+        $shippingMetrics = ShippingMetric::join('countries', 'countries.id', '=', 'shipping_metrics.country_id')->where('countries.code', $countryCode)->first();
         $price = 0;
 
         foreach ($parcels as $parcel) {
             if ($parcel['box'] === self::BOX_DIMENSIONS) {
-                $price += self::getBoxDefaultPrice($countryCode);
+                $price += $shippingMetrics->box_default_value;
             } else {
-                $price += self::getSlipDefaultPrice($countryCode);
+                $price += $shippingMetrics->slip_default_value;
             }
         }
 
         return $price;
-    }
-
-    protected function getBoxDefaultPrice(string $countryCode): float
-    {
-        if ($countryCode === 'AU') {
-            return self::BOX_DEFAULT_RATE_AUSTRALIA;
-        }
-
-        return self::BOX_DEFAULT_RATE_CANADA;
-    }
-
-    protected function getSlipDefaultPrice(string $countryCode): float
-    {
-        if ($countryCode === 'AU') {
-            return self::SLIP_DEFAULT_RATE_AUSTRALIA;
-        }
-
-        return self::SLIP_DEFAULT_RATE_CANADA;
     }
 
     protected function getParcelItems(int $itemsNumber): array

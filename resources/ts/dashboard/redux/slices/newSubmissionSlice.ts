@@ -43,9 +43,10 @@ export interface AddCardsToSubmission {
 }
 
 export interface Address {
-    firstName: string;
-    lastName: string;
+    fullName: string;
+    lastName?: string;
     address: string;
+    otherAddress?: string;
     flat?: string;
     city: string;
     country: { name: string; code: string; id: number };
@@ -70,7 +71,7 @@ export interface ShippingSubmissionState {
     existingAddresses: Address[] | [];
     selectedAddress: Address;
     availableStatesList: { name: string; code: string; id: number }[];
-    availableCountriesList: [];
+    availableCountriesList: { name: string; code: string; id: number }[];
     saveForLater: boolean;
     fetchingStatus: string | null;
     disableAllShippingInputs: boolean;
@@ -192,7 +193,7 @@ const initialState: NewSubmissionSliceState = {
     step03Data: {
         existingAddresses: [],
         selectedAddress: {
-            firstName: '',
+            fullName: '',
             lastName: '',
             address: '',
             flat: '',
@@ -215,7 +216,7 @@ const initialState: NewSubmissionSliceState = {
             isDefaultBilling: false,
         },
         selectedExistingAddress: {
-            firstName: '',
+            fullName: '',
             lastName: '',
             address: '',
             flat: '',
@@ -237,7 +238,13 @@ const initialState: NewSubmissionSliceState = {
             isDefaultShipping: false,
             isDefaultBilling: false,
         },
-        availableCountriesList: [],
+        availableCountriesList: [
+            {
+                name: '',
+                code: '',
+                id: 0,
+            },
+        ],
         availableStatesList: [
             {
                 name: '',
@@ -264,7 +271,7 @@ const initialState: NewSubmissionSliceState = {
         saveForLater: true,
         useShippingAddressAsBillingAddress: true,
         selectedBillingAddress: {
-            firstName: '',
+            fullName: '',
             lastName: '',
             address: '',
             flat: '',
@@ -334,9 +341,11 @@ export const getTotalInAGS = createAsyncThunk(
     },
 );
 
-export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async () => {
+export const getStatesList = createAsyncThunk('newSubmission/getStatesList', async (input?: { countryId: number }) => {
     const apiService = app(APIService);
-    const endpoint = apiService.createEndpoint('customer/addresses/states');
+    const endpoint = apiService.createEndpoint(
+        `customer/addresses/states?country_id= ${input?.countryId ? input?.countryId : 1}`,
+    );
     const americanStates = await endpoint.get('');
     return americanStates.data;
 });
@@ -468,7 +477,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
             declaredValuePerUnit: selectedCard.value,
         })),
         shippingAddress: {
-            firstName: finalShippingAddress.firstName,
+            fullName: finalShippingAddress.fullName,
             lastName: finalShippingAddress.lastName,
             address: finalShippingAddress.address,
             city: finalShippingAddress.city,
@@ -482,7 +491,7 @@ export const createOrder = createAsyncThunk('newSubmission/createOrder', async (
                     : currentSubmission.step03Data.saveForLater,
         },
         billingAddress: {
-            firstName: billingAddress.firstName,
+            fullName: billingAddress.fullName,
             lastName: billingAddress.lastName,
             address: billingAddress.address,
             city: billingAddress.city,
@@ -626,7 +635,6 @@ export const newSubmissionSlice = createSlice({
             state.step03Data.saveForLater = action.payload;
         },
         updateShippingAddressField: (state, action: PayloadAction<{ fieldName: string; newValue: any }>) => {
-            console.log('AA ', action.payload.newValue);
             // @ts-ignore
             state.step03Data.selectedAddress[action.payload.fieldName] = action.payload.newValue;
         },
@@ -786,7 +794,7 @@ export const newSubmissionSlice = createSlice({
                     !action.payload.billingAddress,
                 selectedBillingAddress: {
                     id: billingAddress?.id,
-                    firstName: billingAddress?.firstName,
+                    fullName: billingAddress?.firstName,
                     lastName: billingAddress?.lastName,
                     address: billingAddress?.address,
                     city: billingAddress?.city,
@@ -853,6 +861,9 @@ export const newSubmissionSlice = createSlice({
         },
         [getStatesList.rejected as any]: (state) => {
             state.step03Data.fetchingStatus = 'failed';
+        },
+        [getCountriesList.fulfilled as any]: (state, action) => {
+            state.step03Data.availableCountriesList = action.payload;
         },
         [getShippingFee.fulfilled as any]: (state, action) => {
             state.step02Data.shippingFee = action.payload;

@@ -15,6 +15,7 @@ import NumberFormat from 'react-number-format';
 import { useAuth } from '@shared/hooks/useAuth';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
+    getCountriesList,
     getSavedAddresses,
     getShippingFee,
     getStatesList,
@@ -161,13 +162,15 @@ export function InsuredShippingMethod() {
     );
     const useCustomShippingAddress = useAppSelector((state) => state.newSubmission.step03Data.useCustomShippingAddress);
     const existingAddresses = useAppSelector((state) => state.newSubmission.step03Data.existingAddresses);
-    const firstName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.firstName);
-    const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
+    const fullName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.fullName);
+    // const lastName = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.lastName);
     const address = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.address);
+    const otherAddress = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.otherAddress);
     const flat = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.flat);
     const city = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.city);
     const state = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.state);
     const zipCode = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.zipCode);
+    // const country = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.country);
     const phoneNumber = useAppSelector((state) => state.newSubmission.step03Data.selectedAddress?.phoneNumber);
     const availableStates = useAppSelector((state) => state.newSubmission.step03Data?.availableStatesList);
     const availableCountries = useAppSelector((state) => state.newSubmission.step03Data?.availableCountriesList);
@@ -205,18 +208,28 @@ export function InsuredShippingMethod() {
         }
     }
 
-    // function getCountriesList() {
-
-    // }
+    function updateShippingCountry(countryId: any) {
+        const country = availableCountries.find((country: any) => country.id === parseInt(countryId));
+        if (country) {
+            dispatch(
+                updateShippingAddressField({
+                    fieldName: 'country',
+                    newValue: { name: country.name, id: country.id, code: country.code },
+                }),
+            );
+            dispatch(getStatesList({ countryId }));
+        }
+    }
 
     useEffect(
         () => {
             if (existingAddresses.length === 0 || useCustomShippingAddress) {
                 addressValidationSchema
                     .isValid({
-                        firstName,
-                        lastName,
+                        fullName,
+                        // lastName,
                         address,
+                        otherAddress,
                         flat,
                         city,
                         state,
@@ -234,17 +247,17 @@ export function InsuredShippingMethod() {
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [
-            firstName,
-            lastName,
+            fullName,
+            // lastName,
             address,
             flat,
             city,
             state,
             zipCode,
             phoneNumber,
-            useCustomShippingAddress,
-            selectedExistingAddressId,
-            existingAddresses,
+            // useCustomShippingAddress,
+            // selectedExistingAddressId,
+            // existingAddresses,
         ],
     );
 
@@ -292,6 +305,7 @@ export function InsuredShippingMethod() {
 
                     await dispatch(getShippingFee(selectedCards));
                     await dispatch(getStatesList());
+                    await dispatch(getCountriesList());
                     await dispatch(getSavedAddresses());
                 } finally {
                     setIsLoadingAddresses(false);
@@ -317,7 +331,7 @@ export function InsuredShippingMethod() {
                         {existingAddresses?.map((address: any) => (
                             <ExistingAddress
                                 key={address.id}
-                                firstName={address.firstName}
+                                firstName={address.fullName}
                                 lastName={address.lastName}
                                 address={address.address}
                                 flat={address.flat ?? ''}
@@ -369,19 +383,20 @@ export function InsuredShippingMethod() {
                             label="Save for later"
                         />
                     </div>
-                    <Box marginBottom={'16px'} />
+                    {/* <Box marginBottom={'16px'} /> */}
                     <div className={classes.inputsRow01}>
                         <div className={classes.fieldContainer} style={{ width: '100%' }}>
                             <Typography className={classes.methodDescription}>Country</Typography>
                             <Select
                                 fullWidth
                                 native
+                                key={availableCountries[0].id}
+                                defaultValue={availableCountries[0].id}
                                 disabled={disableAllInputs}
-                                value={'none'}
-                                onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
+                                onChange={(e: any) => updateShippingCountry(e.nativeEvent.target.value)}
                                 placeholder={'Select Country'}
                                 variant={'outlined'}
-                                style={{ height: '43px' }}
+                                style={{ height: '43px', marginTop: 6 }}
                             >
                                 <option value="none">Select a country</option>
                                 {availableCountries.map((item: any) => (
@@ -392,7 +407,7 @@ export function InsuredShippingMethod() {
                             </Select>
                         </div>
                     </div>
-
+                    <Box marginBottom={'16px'} />
                     <div className={classes.inputsRow02}>
                         <div className={classes.fieldContainer} style={{ width: '100%' }}>
                             <Typography className={classes.methodDescription}>Full Name</Typography>
@@ -400,8 +415,8 @@ export function InsuredShippingMethod() {
                                 style={{ margin: 8, marginLeft: 0 }}
                                 placeholder="Enter Full Name"
                                 disabled={disableAllInputs}
-                                value={firstName}
-                                onChange={(e: any) => updateField('firstName', e.target.value)}
+                                value={fullName}
+                                onChange={(e: any) => updateField('fullName', e.target.value)}
                                 fullWidth
                                 size={'small'}
                                 variant={'outlined'}
@@ -411,23 +426,6 @@ export function InsuredShippingMethod() {
                                 }}
                             />
                         </div>
-                        {/* <div className={classes.fieldContainer} style={{ width: '47%' }}>
-                            <Typography className={classes.methodDescription}>Last Name</Typography>
-                            <TextField
-                                style={{ margin: 8, marginLeft: 0 }}
-                                placeholder="Enter Last Name"
-                                disabled={disableAllInputs}
-                                value={lastName}
-                                onChange={(e: any) => updateField('lastName', e.target.value)}
-                                fullWidth
-                                size={'small'}
-                                variant={'outlined'}
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </div> */}
                     </div>
 
                     <div className={classes.inputsRow02}>
@@ -451,25 +449,6 @@ export function InsuredShippingMethod() {
                                 }}
                             />
                         </div>
-                        {/* {!isMobile ? (
-                            <div className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}>
-                                <Typography className={classes.methodDescription}>Apt # (optional)</Typography>
-                                <TextField
-                                    style={{ margin: 8, marginLeft: 0 }}
-                                    placeholder="Apt #"
-                                    fullWidth
-                                    disabled={disableAllInputs}
-                                    value={flat}
-                                    onChange={(e: any) => updateField('flat', e.target.value)}
-                                    size={'small'}
-                                    variant={'outlined'}
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </div>
-                        ) : null} */}
                     </div>
 
                     <div className={classes.inputsRow02}>
@@ -483,8 +462,8 @@ export function InsuredShippingMethod() {
                                 placeholder="Enter apt, suite, building, floor etc."
                                 fullWidth
                                 disabled={disableAllInputs}
-                                value={address}
-                                onChange={(e: any) => updateField('address', e.target.value)}
+                                value={otherAddress}
+                                onChange={(e: any) => updateField('otherAddress', e.target.value)}
                                 size={'small'}
                                 variant={'outlined'}
                                 margin="normal"
@@ -493,28 +472,9 @@ export function InsuredShippingMethod() {
                                 }}
                             />
                         </div>
-                        {/* {!isMobile ? (
-                            <div className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}>
-                                <Typography className={classes.methodDescription}>Apt # (optional)</Typography>
-                                <TextField
-                                    style={{ margin: 8, marginLeft: 0 }}
-                                    placeholder="Apt #"
-                                    fullWidth
-                                    disabled={disableAllInputs}
-                                    value={flat}
-                                    onChange={(e: any) => updateField('flat', e.target.value)}
-                                    size={'small'}
-                                    variant={'outlined'}
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </div>
-                        ) : null} */}
                     </div>
 
-                    <div className={classes.inputsRow02}>
+                    {/* <div className={classes.inputsRow02}>
                         {isMobile ? (
                             <div className={`${classes.fieldContainer} ${classes.aptFieldContainer}`}>
                                 <Typography className={classes.methodDescription}>Apt # (optional)</Typography>
@@ -534,7 +494,7 @@ export function InsuredShippingMethod() {
                                 />
                             </div>
                         ) : null}
-                    </div>
+                    </div> */}
 
                     {isMobile ? (
                         <div className={classes.inputsRow03}>
@@ -581,23 +541,40 @@ export function InsuredShippingMethod() {
 
                         <div className={`${classes.fieldContainer} ${classes.stateFieldContainer}`}>
                             <Typography className={classes.methodDescription}>State</Typography>
-                            <Select
-                                fullWidth
-                                native
-                                disabled={disableAllInputs}
-                                value={state.id || 'none'}
-                                onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
-                                placeholder={'Select State'}
-                                variant={'outlined'}
-                                style={{ height: '43px' }}
-                            >
-                                <option value="none">Select a state</option>
-                                {availableStates.map((item: any) => (
-                                    <option key={item.id} value={item.id}>
-                                        {item.code}
-                                    </option>
-                                ))}
-                            </Select>
+                            {availableStates.length > 0 ? (
+                                <Select
+                                    fullWidth
+                                    native
+                                    disabled={disableAllInputs}
+                                    value={state.id || 'none'}
+                                    onChange={(e: any) => updateShippingState(e.nativeEvent.target.value)}
+                                    placeholder={'Select State'}
+                                    variant={'outlined'}
+                                    style={{ height: '43px' }}
+                                >
+                                    <option value="none">Select a state</option>
+                                    {availableStates.map((item: any) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.code}
+                                        </option>
+                                    ))}
+                                </Select>
+                            ) : (
+                                <TextField
+                                    style={{ marginTop: 2 }}
+                                    placeholder="Enter State"
+                                    fullWidth
+                                    disabled={disableAllInputs}
+                                    value={state.name}
+                                    onChange={(e: any) => updateField('state', e.target.value)}
+                                    size={'small'}
+                                    variant={'outlined'}
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            )}
                         </div>
                         <div className={`${classes.fieldContainer} ${classes.zipFieldContainer}`}>
                             <Typography className={classes.methodDescription}>Zip Code</Typography>

@@ -5,6 +5,7 @@ namespace App\Services\Order\V2;
 use App\Events\API\Customer\Order\OrderPlaced;
 use App\Exceptions\API\Admin\Order\OrderItem\OrderItemDoesNotBelongToOrder;
 use App\Exceptions\API\Admin\OrderStatusHistoryWasAlreadyAssigned;
+use App\Models\Country;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -143,6 +144,7 @@ class CreateOrderService
         if (! empty($customerAddress['id'])) {
             $shippingAddress = OrderAddress::create(CustomerAddress::find($customerAddress['id'])->toArray());
         } else {
+            $shippingAddress['country_id'] = Country::whereCode($shippingAddress['country_code'] ?? 'US')->first()->id;
             $shippingAddress = OrderAddress::create($shippingAddress);
         }
 
@@ -151,6 +153,7 @@ class CreateOrderService
         if ($billingAddress['same_as_shipping']) {
             $this->order->billingAddress()->associate($shippingAddress);
         } else {
+            $billingAddress['country_id'] = Country::whereCode($billingAddress['country_code'] ?? 'US')->first()->id;
             $billingAddress = OrderAddress::create($billingAddress);
             $this->order->billingAddress()->associate($billingAddress);
         }

@@ -4,6 +4,7 @@ namespace App\Services\Order\Shipping;
 
 use App\Http\APIClients\EasyShipClient;
 use App\Models\ShippingMetric;
+use Illuminate\Support\Facades\Cache;
 use Log;
 
 class EasyShipService
@@ -86,7 +87,11 @@ class EasyShipService
 
     public function calculateDefaultPrice(array $parcels, string $countryCode): float
     {
-        $shippingMetrics = ShippingMetric::join('countries', 'countries.id', '=', 'shipping_metrics.country_id')->where('countries.code', $countryCode)->first();
+        $shippingMetrics = Cache::remember(
+            'shipping-metrics-' . $countryCode,
+            now()->addMonth(),
+            fn () => ShippingMetric::join('countries', 'countries.id', '=', 'shipping_metrics.country_id')->where('countries.code', $countryCode)->first()
+        );
         $price = 0;
 
         foreach ($parcels as $parcel) {

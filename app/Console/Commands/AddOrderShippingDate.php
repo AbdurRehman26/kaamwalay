@@ -46,7 +46,7 @@ class AddOrderShippingDate extends Command
         }
 
         $this->info("Shipping date for orders Generated. ");
+
         return 0;
     }
-
 }

@@ -28,7 +28,7 @@ class AddOrderShippingDate extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $orders = Order::where('order_status_id', OrderStatus::SHIPPED)
             ->where('shipped_at', null)
@@ -46,5 +46,7 @@ class AddOrderShippingDate extends Command
         }
 
         $this->info("Shipping date for orders Generated. ");
+        return 0;
     }
+
 }

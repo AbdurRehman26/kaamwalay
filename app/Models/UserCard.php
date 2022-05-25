@@ -64,6 +64,7 @@ class UserCard extends Model
             'grade_overall' => $this->overall_grade,
             'card_category' => $this->orderItem->cardProduct->cardCategory->name,
             'grade' => $this->overall_grade_nickname .' '. $this->overall_grade,
+            'shipped_at' => $this->orderItem->order->shipped_at,
         ];
     }
 

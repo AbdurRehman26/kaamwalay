@@ -48,7 +48,7 @@ class InternationalInsuredShippingFeeCalculator
             "city" => "Staten Island",
             "postal_code" => "10307",
             "country_alpha2" => "US",
-            "country_name" => "AGS Submissions",
+            "contact_name" => "AGS Submissions",
             "contact_phone" => "(347) 850 2720",
         ];
     }
@@ -57,6 +57,7 @@ class InternationalInsuredShippingFeeCalculator
     {
         return [
             "line_1" => $shippingAddress['address'],
+            "line_2" => array_key_exists('address_2', $shippingAddress) ? $shippingAddress['address_2'] : null,
             "state" => $shippingAddress['state'],
             "city" => $shippingAddress['city'],
             "postal_code" => $shippingAddress['zip'],

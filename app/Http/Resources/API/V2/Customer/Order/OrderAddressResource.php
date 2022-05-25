@@ -16,6 +16,7 @@ class OrderAddressResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'address' => $this->address,
+            'address_2' => $this->address_2,
             'city' => $this->city,
             'state' => $this->state,
             'zip' => $this->zip,
